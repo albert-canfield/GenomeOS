@@ -1073,6 +1073,88 @@ def cmd_protein(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_flow(args: argparse.Namespace) -> int:
+    """Walk one gene upward: sequence → regulation → RNA → protein → cell → tissue → organism."""
+    from genomeos.coords import Locus
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome.regulatory import ccre_index, count_in, load_ccres
+    from genomeos.lib import LIBRARIES, KnowledgeBase
+    from genomeos.runtime import coding_sequence, splice, translate
+
+    gff = args.gff3 or default_gencode({args.chrom})
+    if not gff:
+        print("no annotation for that chromosome locally")
+        return 1
+    ann = Annotation.from_gff3(gff, {args.chrom})
+    genome = IndexedGenome(args.genome)
+    try:
+        g = ann.gene(args.symbol)
+    except KeyError:
+        print(f"{args.symbol} not on {args.chrom}")
+        return 1
+    m = ann.to_module("flow")
+    txs = [t for t in m.entities[g.id].transcripts if t.cds_segments]
+    canon = next((t for t in txs if "Ensembl_canonical" in t.tags), txs[0] if txs else None)
+    print(f"1 DNA        {g.symbol} {g.locus}  {g.locus.length:,} bp  [curated: GENCODE]")
+    head = str(genome.fetch(Locus(args.chrom, g.locus.start, g.locus.start + 60)))
+    print(f"             {head}…")
+    # regulation: ENCODE elements around the TSS and inside the gene; CpG island at the promoter
+    tss = g.locus.end if g.locus.strand.value == "-" else g.locus.start
+    idx = ccre_index(load_ccres(args.chrom))
+    near = count_in(idx, tss - 2000, tss + 2000) if idx else {}
+    inside = count_in(idx, g.locus.start, g.locus.end) if idx else {}
+    prom = str(genome.fetch(Locus(args.chrom, max(0, tss - 500), tss + 500)))
+    c_, g_, cg = prom.count("C"), prom.count("G"), prom.count("CG")
+    island = c_ and g_ and (c_ + g_) / len(prom) > 0.5 and cg * len(prom) / (c_ * g_) > 0.6
+    print(f"2 regulation promoter CpG island: {'yes' if island else 'no'} [predicted]")
+    print(
+        f"             ENCODE elements ±2 kb of TSS: {near or 'none'}; inside the gene: "
+        f"{sum(inside.values()) if inside else 0} [curated: ENCODE]"
+    )
+    # RNA
+    if canon is None:
+        print("3 RNA        no coding transcript")
+        genome.close()
+        return 0
+    mrna = splice(genome, canon)
+    cds_nt = len(coding_sequence(genome, canon))
+    print(
+        f"3 RNA        {len(g.transcripts)} transcripts; canonical {canon.attrs.get('name', canon.id)}: "
+        f"{len(canon.exons)} exons"
+    )
+    print(f"             spliced to {len(mrna):,} nt mRNA, CDS {cds_nt:,} nt  [curated: GENCODE]")
+    # protein
+    prot = translate(coding_sequence(genome, canon), initiator=True)
+    print(f"4 protein    {len(prot)} aa: {prot[:40]}…  [translated by GenomeOS from the DNA above]")
+    try:
+        from genomeos.molecules import uniprot_entry
+
+        u = uniprot_entry(g.symbol)
+        if u:
+            ident = sum(1 for a, b in zip(prot, u.sequence, strict=False) if a == b) / max(
+                len(prot), len(u.length and u.sequence)
+            )
+            print(
+                f"             UniProt {u.accession} {u.name}: {u.length} aa, identity {ident:.1%}  [curated]"
+            )
+    except Exception as e:  # noqa: BLE001
+        print(f"             (UniProt unavailable: {e})")
+    # cell behaviour: libraries
+    kb = KnowledgeBase() if KnowledgeBase.available() else None
+    libs = kb.libraries_of(g.symbol) if kb else []
+    layers = {}
+    for lib_id in libs:
+        layers.setdefault(LIBRARIES[lib_id].layer, []).append(lib_id.split(".", 1)[1])
+    print(f"5 cell       libraries (GO/Reactome by data): core {', '.join(layers.get('core', [])) or '-'}")
+    print(f"             timer {', '.join(layers.get('timer', [])) or '-'}")
+    print(f"6 tissue     blueprint {', '.join(layers.get('blueprint', [])) or '-'}")
+    print(f"             systems {', '.join(layers.get('systems', [])) or '-'}")
+    print("7 organism   see `genomeos twin` (a person's state), `genomeos organism` (lineage),")
+    print("             `genomeos anatomy --compare` (the whole genome's organisation)")
+    genome.close()
+    return 0
+
+
 def cmd_libs(args: argparse.Namespace) -> int:
     from genomeos.lib import KnowledgeBase
 
@@ -1422,6 +1504,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.add_argument("--no-structure", action="store_true")
     p.set_defaults(fn=cmd_protein)
+
+    p = sub.add_parser(
+        "flow", help="walk one gene upward: DNA → regulation → RNA → protein → cell → tissue → organism"
+    )
+    p.add_argument("symbol")
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--gff3")
+    p.set_defaults(fn=cmd_flow)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)
