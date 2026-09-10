@@ -14,7 +14,9 @@ for a first estimate. Validation on a real 30x BAM is pending (docs/PROGRESS.md)
 from __future__ import annotations
 
 import gzip
+import io
 import struct
+import urllib.request
 from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
@@ -55,6 +57,26 @@ def iter_fastq(path: str | Path) -> Iterator[str]:
             seq = fh.readline().strip()
             fh.readline()
             fh.readline()
+            yield seq
+
+
+def iter_fastq_url(url: str, chunk: int = 1 << 20) -> Iterator[str]:
+    """Stream a (gzipped) FASTQ over HTTP: nothing is written to disk.
+
+    Reads arrive in sequencer order, which is effectively random with respect
+    to the genome, so the first N reads are an unbiased sample. Stop early by
+    breaking out of the iterator; the connection is closed on exit."""
+    req = urllib.request.Request(url, headers={"User-Agent": "GenomeOS/0.1 (stream)"})
+    with urllib.request.urlopen(req, timeout=120) as resp:  # noqa: S310  (https URL from the caller)
+        raw = resp if not url.endswith(".gz") else gzip.GzipFile(fileobj=io.BufferedReader(resp, chunk))
+        text = io.TextIOWrapper(raw, encoding="ascii", errors="replace")
+        while True:
+            header = text.readline()
+            if not header:
+                return
+            seq = text.readline().strip()
+            text.readline()
+            text.readline()
             yield seq
 
 
@@ -122,6 +144,10 @@ def estimate(
 
 
 def estimate_file(path: str | Path, **kw) -> TelomereEstimate:
+    """FASTQ/BAM on disk, or an http(s) URL to a FASTQ streamed without saving it."""
     p = str(path)
-    reads = iter_bam(p) if p.endswith(".bam") else iter_fastq(p)
+    if p.startswith(("http://", "https://")):
+        reads = iter_fastq_url(p)
+    else:
+        reads = iter_bam(p) if p.endswith(".bam") else iter_fastq(p)
     return estimate(reads, **kw)

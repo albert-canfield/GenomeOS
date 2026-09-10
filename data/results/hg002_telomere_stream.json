@@ -1,0 +1,22 @@
+{
+  "result": "hg002_telomere_stream",
+  "sample": "HG002 (GIAB, NIST Illumina 2x250bp, lane D1_S1_L001 R1)",
+  "source_url": "https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/data/AshkenazimTrio/HG002_NA24385_son/NIST_Illumina_2x250bps/reads/D1_S1_L001_R1_001.fastq.gz",
+  "method": "TelSeq-style: reads with >=7 TTAGGG/CCCTAA repeats / all reads x genome / 92 ends",
+  "reads": 2000000,
+  "telomeric_reads": 175,
+  "mean_read_length": 248.3,
+  "telomere_bp": 2948,
+  "fraction": 8.75e-05,
+  "seconds": 12,
+  "disk_used_bytes": 0,
+  "evidence": {
+    "kind": "experimental",
+    "source": "Ding et al. 2014, Nucleic Acids Res 42:e75 (TelSeq)"
+  },
+  "confidence": 0.5,
+  "date": "2026-09-10",
+  "note": "streamed over HTTP, nothing saved; HG002 was in his 40s when sampled; 2.9 kb TelSeq \u2248 6 kb Southern-equivalent, within the adult leukocyte range",
+  "scale": "TelSeq scale. Ding et al. 2014 report TelSeq lengths roughly half of Southern-blot lengths (r\u22480.6); Southern-equivalent \u2248 2\u00d7 (inferred).",
+  "southern_equivalent_bp_inferred": 5896
+}

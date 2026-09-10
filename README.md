@@ -123,6 +123,10 @@ scripts/fetch_reference.sh hg002     # a real individual's diploid genome (open 
 ```
 See [docs/DATA.md](docs/DATA.md) for every open dataset and its verified URL.
 
+## Storage principle
+
+Stream, distil, discard: raw data is streamed or downloaded once, every real-data run leaves a small committed summary under `data/results/`, and the raw file is deleted (`genomeos data status|distil|clean`). See [docs/STORAGE.md](docs/STORAGE.md).
+
 ## Documents
 
 - [docs/GENOME-AS-CODE.md](docs/GENOME-AS-CODE.md) — the reverse-engineering guide: timers, blueprint, parts list, system integration
@@ -132,6 +136,7 @@ See [docs/DATA.md](docs/DATA.md) for every open dataset and its verified URL.
 - [docs/BIOLANG-v0.1.md](docs/BIOLANG-v0.1.md) — the language
 - [docs/LANDSCAPE.md](docs/LANDSCAPE.md) — existing systems (research pass, Sept 2026) and what GenomeOS adds
 - [docs/DATA.md](docs/DATA.md) — open genome data for testing, URLs verified
+- [docs/STORAGE.md](docs/STORAGE.md) — stream, distil, discard: keeping the project small on disk
 - [docs/ROADMAP.md](docs/ROADMAP.md) — from a molecular cell to a digital twin
 
 ## Principles

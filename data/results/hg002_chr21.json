@@ -1,0 +1,30 @@
+{
+  "result": "hg002_chr21",
+  "date": "2026-09-10",
+  "sample": "HG002 GIAB v4.2.1 benchmark, chr21",
+  "variants": 55210,
+  "snv": 46454,
+  "phased": 0,
+  "hap1": {
+    "applied": 23850,
+    "snv": 19321,
+    "indel": 4529,
+    "skipped_overlap": 1,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -1791
+  },
+  "hap2": {
+    "applied": 55086,
+    "snv": 46356,
+    "indel": 8730,
+    "skipped_overlap": 4,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 607
+  },
+  "subset_file": "data/results/HG002_chr21.vcf",
+  "inputs": [
+    "data/reference/HG002_GRCh38_benchmark.vcf.gz",
+    "data/twins/HG002_chr21.fa"
+  ],
+  "describe": "haplotype statistics plus a chr21-only VCF; the 156 MB VCF and 94 MB FASTA are then disposable"
+}

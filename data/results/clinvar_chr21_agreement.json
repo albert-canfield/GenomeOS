@@ -1,0 +1,73 @@
+{
+  "result": "clinvar_chr21_agreement",
+  "date": "2026-09-10",
+  "dataset": "ClinVar chr21 (all records with a single molecular consequence)",
+  "agreement": {
+    "missense_variant": {
+      "n": 19821,
+      "agree": 19702,
+      "rate": 0.994
+    },
+    "synonymous_variant": {
+      "n": 7373,
+      "agree": 7132,
+      "rate": 0.9673
+    },
+    "frameshift_variant": {
+      "n": 1194,
+      "agree": 1185,
+      "rate": 0.9925
+    },
+    "nonsense": {
+      "n": 795,
+      "agree": 792,
+      "rate": 0.9962
+    }
+  },
+  "confusion_top": [
+    [
+      "synonymous_variant->missense_variant",
+      176
+    ],
+    [
+      "missense_variant->splice_site",
+      85
+    ],
+    [
+      "synonymous_variant->splice_site",
+      32
+    ],
+    [
+      "synonymous_variant->nonsense",
+      29
+    ],
+    [
+      "missense_variant->nonsense",
+      14
+    ],
+    [
+      "missense_variant->stop_lost",
+      10
+    ],
+    [
+      "missense_variant->5_prime_UTR_variant",
+      7
+    ],
+    [
+      "frameshift_variant->splice_site",
+      4
+    ],
+    [
+      "missense_variant->start_lost",
+      3
+    ],
+    [
+      "frameshift_variant->complex_indel",
+      3
+    ]
+  ],
+  "inputs": [
+    "data/reference/clinvar.vcf.gz"
+  ],
+  "describe": "consequence agreement table; the 193 MB genome-wide ClinVar VCF is then disposable"
+}

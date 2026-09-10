@@ -488,6 +488,25 @@ def cmd_telomere(args: argparse.Namespace) -> int:
     from genomeos.genome.telomere import estimate_file
 
     est = estimate_file(args.reads, k=args.k, max_reads=args.max_reads)
+    if args.save:
+        from genomeos.results import save_result
+
+        p = est.parameter
+        path = save_result(
+            args.save,
+            {
+                "source": args.reads,
+                "reads": est.reads,
+                "telomeric_reads": est.telomeric_reads,
+                "mean_read_length": round(est.read_length, 1),
+                "telomere_bp": round(est.telomere_bp),
+                "fraction": est.fraction,
+                "k": args.k,
+                "confidence": p.confidence,
+                "evidence": {"kind": p.evidence.kind.value, "source": p.evidence.source},
+            },
+        )
+        print(f"  saved {path}")
     print(
         f"{args.reads}: {est.reads:,} reads, {est.telomeric_reads:,} telomeric ({est.fraction:.2e}), "
         f"mean read length {est.read_length:.0f}"
@@ -636,6 +655,44 @@ def cmd_organism(args: argparse.Namespace) -> int:
         print("  " + line)
     src = lin.module.parameters["ab_cycle_min"].evidence.source
     print(f"  cycle times: [experimental] {src}")
+    return 0
+
+
+def cmd_data(args: argparse.Namespace) -> int:
+    from genomeos import storage
+    from genomeos.results import list_results
+
+    if args.data_cmd == "status":
+        st = storage.status()
+        print("data directories:")
+        for name, size in st["dirs"].items():
+            print(f"  {name:<12} {storage.human(size):>10}")
+        print("largest files:")
+        for path, size in st["largest"][:8]:
+            print(f"  {storage.human(size):>10}  {path}")
+        d = st["disk"]
+        print(f"disk: {storage.human(d['free'])} free of {storage.human(d['total'])}")
+        print(f"result summaries: {st['results']}")
+        print("distillers:")
+        for name, m in storage.manifest().items():
+            print(f"  {name:<26} {'summary ok ' if m['summary_exists'] else 'no summary '} {m['describe']}")
+        return 0
+    if args.data_cmd == "distil":
+        for name, what in storage.distil(args.only, force=args.force):
+            print(f"  {name:<26} {what}")
+        return 0
+    if args.data_cmd == "clean":
+        rows = storage.clean(dry_run=not args.yes)
+        total = sum(size for _, size, _ in rows)
+        for path, size, action in rows:
+            print(f"  {action:<13} {storage.human(size):>10}  {path}")
+        print(
+            f"  {'would free' if not args.yes else 'freed'} {storage.human(total)}"
+            + ("" if args.yes else "  (add --yes to delete)")
+        )
+        return 0
+    for r in list_results():
+        print(f"  {r['name']:<28} {r['date']}  {storage.human(r['size']):>8}  keys: {', '.join(r['keys'])}")
     return 0
 
 
@@ -834,10 +891,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--limit", type=int, default=10)
     p.set_defaults(fn=cmd_clock)
 
-    p = sub.add_parser("telomere", help="telomere length from sequencing reads (FASTQ or BAM)")
+    p = sub.add_parser(
+        "telomere", help="telomere length from reads: FASTQ/BAM on disk, or a FASTQ URL streamed"
+    )
     p.add_argument("reads")
     p.add_argument("-k", type=int, default=7, help="TTAGGG repeats per read to call it telomeric")
     p.add_argument("--max-reads", type=int)
+    p.add_argument("--save", metavar="NAME", help="write a result summary to data/results/NAME.json")
     p.set_defaults(fn=cmd_telomere)
 
     p = sub.add_parser("debug", help="step a module or a cell with breakpoints and an evidence trace")
@@ -883,6 +943,19 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--minutes", type=float, default=150.0)
     p.add_argument("--depth", type=int, default=2)
     p.set_defaults(fn=cmd_organism)
+
+    data = sub.add_parser("data", help="storage economics: status, distil, clean, results").add_subparsers(
+        dest="data_cmd", required=True
+    )
+    data.add_parser("status", help="disk use and what can be distilled")
+    p = data.add_parser("distil", help="turn raw downloads into result summaries")
+    p.add_argument("--only", nargs="*")
+    p.add_argument("--force", action="store_true", help="recompute existing summaries")
+    p = data.add_parser("clean", help="delete raw inputs that already have a summary")
+    p.add_argument("--yes", action="store_true", help="actually delete (default is a dry run)")
+    data.add_parser("results", help="list result summaries")
+    for sp in data.choices.values():
+        sp.set_defaults(fn=cmd_data)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)
