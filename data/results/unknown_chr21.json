@@ -9,51 +9,57 @@
       "blocks": 15,
       "bp": 6155943
     },
-    "unique_intergenic": {
-      "blocks": 73,
-      "bp": 3824271
+    "regulatory": {
+      "blocks": 177,
+      "bp": 3650278
     },
-    "long_orf": {
-      "blocks": 75,
-      "bp": 3068050
+    "unique_intergenic": {
+      "blocks": 52,
+      "bp": 2954806
     },
     "centromere": {
       "blocks": 1,
       "bp": 2349840
     },
-    "unclassified": {
-      "blocks": 175,
-      "bp": 1290137
+    "long_orf": {
+      "blocks": 38,
+      "bp": 2272721
     },
     "satellite_array": {
       "blocks": 6,
       "bp": 1221853
     },
+    "unclassified": {
+      "blocks": 113,
+      "bp": 763454
+    },
     "mixed_intergenic": {
-      "blocks": 14,
-      "bp": 1063984
+      "blocks": 9,
+      "bp": 758052
     },
     "interspersed_repeat": {
-      "blocks": 19,
-      "bp": 836849
+      "blocks": 7,
+      "bp": 413871
     },
     "promoter_like": {
-      "blocks": 46,
-      "bp": 833363
+      "blocks": 17,
+      "bp": 210383
     },
     "interspersed_repeat_SINE": {
-      "blocks": 22,
-      "bp": 169029
+      "blocks": 11,
+      "bp": 62118
     }
   },
-  "classified_fraction": 0.938,
+  "classified_fraction": 0.9633,
   "high_copy_threshold": 40,
   "patterns": [
     "telomeric_repeat",
     "cenp_b_box",
     "alu_core",
-    "poly_a_tail"
+    "poly_a_tail",
+    "ctcf_core"
   ],
+  "ccres_used": 13356,
   "blocks": [
     {
       "start": 0,
@@ -76,6 +82,10 @@
       "evidence": "curated",
       "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.004,
         "n_fraction": 0.043,
         "gc": 0.386,
         "tandem_fraction": 0.002,
@@ -105,6 +115,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 7,
+          "DNase-H3K4me3": 3,
+          "CTCF-only": 4
+        },
+        "ccre_per_10kb": 0.477,
         "n_fraction": 0.0,
         "gc": 0.351,
         "tandem_fraction": 0.01,
@@ -135,6 +151,10 @@
       "evidence": "inferred",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.037,
         "n_fraction": 0.368,
         "gc": 0.384,
         "tandem_fraction": 0.006,
@@ -164,6 +184,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "CTCF-only": 3,
+          "dELS": 23,
+          "DNase-H3K4me3": 3
+        },
+        "ccre_per_10kb": 1.101,
         "n_fraction": 0.0,
         "gc": 0.352,
         "tandem_fraction": 0.011,
@@ -254,6 +280,12 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 9,
+          "CTCF-only": 1,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.515,
         "n_fraction": 0.0,
         "gc": 0.345,
         "tandem_fraction": 0.011,
@@ -284,6 +316,13 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 15,
+          "CTCF-only": 1,
+          "DNase-H3K4me3": 4,
+          "pELS": 3
+        },
+        "ccre_per_10kb": 1.08,
         "n_fraction": 0.0,
         "gc": 0.353,
         "tandem_fraction": 0.009,
@@ -313,6 +352,11 @@
       "evidence": "inferred",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.244,
         "n_fraction": 0.244,
         "gc": 0.371,
         "tandem_fraction": 0.002,
@@ -345,6 +389,10 @@
       "evidence": "curated",
       "confidence": 1.0,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.105,
         "n_fraction": 0.788
       },
       "patterns": {},
@@ -358,6 +406,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "CTCF-only": 4,
+          "dELS": 8,
+          "DNase-H3K4me3": 4
+        },
+        "ccre_per_10kb": 0.957,
         "n_fraction": 0.0,
         "gc": 0.352,
         "tandem_fraction": 0.014,
@@ -401,6 +455,12 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "DNase-H3K4me3": 1,
+          "dELS": 6
+        },
+        "ccre_per_10kb": 0.531,
         "n_fraction": 0.0,
         "gc": 0.335,
         "tandem_fraction": 0.008,
@@ -430,6 +490,14 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 1,
+          "DNase-H3K4me3": 1,
+          "dELS": 11,
+          "CTCF-only": 3
+        },
+        "ccre_per_10kb": 1.136,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.009,
@@ -459,6 +527,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 17,
+          "DNase-H3K4me3": 2,
+          "CTCF-only": 2
+        },
+        "ccre_per_10kb": 1.409,
         "n_fraction": 0.0,
         "gc": 0.347,
         "tandem_fraction": 0.008,
@@ -489,6 +563,11 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 17,
+          "CTCF-only": 2
+        },
+        "ccre_per_10kb": 1.331,
         "n_fraction": 0.0,
         "gc": 0.409,
         "tandem_fraction": 0.01,
@@ -519,6 +598,12 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 6,
+          "DNase-H3K4me3": 3,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.752,
         "n_fraction": 0.0,
         "gc": 0.344,
         "tandem_fraction": 0.01,
@@ -548,6 +633,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 8,
+          "CTCF-only": 3,
+          "DNase-H3K4me3": 3
+        },
+        "ccre_per_10kb": 1.057,
         "n_fraction": 0.0,
         "gc": 0.395,
         "tandem_fraction": 0.009,
@@ -577,6 +668,12 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "CTCF-only": 2,
+          "dELS": 19,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 1.662,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.012,
@@ -603,10 +700,15 @@
       "start": 27232834,
       "end": 27358884,
       "length": 126050,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 30,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 2.459,
         "n_fraction": 0.0,
         "gc": 0.357,
         "tandem_fraction": 0.009,
@@ -665,6 +767,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 16
+        },
+        "ccre_per_10kb": 1.306,
         "n_fraction": 0.0,
         "gc": 0.404,
         "tandem_fraction": 0.012,
@@ -694,6 +800,13 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 15,
+          "DNase-H3K4me3": 1,
+          "pELS": 6,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 1.903,
         "n_fraction": 0.0,
         "gc": 0.357,
         "tandem_fraction": 0.012,
@@ -783,6 +896,11 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.182,
         "n_fraction": 0.0,
         "gc": 0.353,
         "tandem_fraction": 0.01,
@@ -809,10 +927,16 @@
       "start": 16903160,
       "end": 17009977,
       "length": 106817,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 16,
+          "CTCF-only": 5,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 2.06,
         "n_fraction": 0.0,
         "gc": 0.349,
         "tandem_fraction": 0.006,
@@ -851,10 +975,17 @@
       "start": 31736407,
       "end": 31840340,
       "length": 103933,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "dELS": 22,
+          "CTCF-only": 3,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 2.694,
         "n_fraction": 0.0,
         "gc": 0.431,
         "tandem_fraction": 0.021,
@@ -872,7 +1003,8 @@
         }
       },
       "patterns": {
-        "poly_a_tail": 13
+        "poly_a_tail": 13,
+        "ctcf_core": 1
       },
       "similar_to": []
     },
@@ -913,6 +1045,11 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "dELS": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.304,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.015,
@@ -943,6 +1080,13 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "CTCF-only": 3,
+          "dELS": 7,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 1.231,
         "n_fraction": 0.0,
         "gc": 0.36,
         "tandem_fraction": 0.006,
@@ -972,6 +1116,13 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 2,
+          "dELS": 11,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.548,
         "n_fraction": 0.0,
         "gc": 0.341,
         "tandem_fraction": 0.011,
@@ -1001,6 +1152,12 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 15,
+          "DNase-H3K4me3": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.968,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.011,
@@ -1027,10 +1184,15 @@
       "start": 26710598,
       "end": 26800963,
       "length": 90365,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 34,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 3.873,
         "n_fraction": 0.0,
         "gc": 0.387,
         "tandem_fraction": 0.01,
@@ -1056,10 +1218,16 @@
       "start": 25791417,
       "end": 25880534,
       "length": 89117,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 27,
+          "DNase-H3K4me3": 1,
+          "CTCF-only": 2
+        },
+        "ccre_per_10kb": 3.366,
         "n_fraction": 0.0,
         "gc": 0.414,
         "tandem_fraction": 0.014,
@@ -1090,6 +1258,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 8,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 1.019,
         "n_fraction": 0.0,
         "gc": 0.364,
         "tandem_fraction": 0.011,
@@ -1120,6 +1293,11 @@
       "evidence": "curated",
       "confidence": 1.0,
       "features": {
+        "ccre": {
+          "dELS": 19,
+          "DNase-H3K4me3": 2
+        },
+        "ccre_per_10kb": 2.461,
         "n_fraction": 0.586
       },
       "patterns": {},
@@ -1133,6 +1311,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "dELS": 4,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 0.845,
         "n_fraction": 0.0,
         "gc": 0.358,
         "tandem_fraction": 0.006,
@@ -1158,10 +1342,16 @@
       "start": 19494989,
       "end": 19576088,
       "length": 81099,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "CTCF-only": 2,
+          "DNase-H3K4me3": 3,
+          "dELS": 13
+        },
+        "ccre_per_10kb": 2.22,
         "n_fraction": 0.0,
         "gc": 0.358,
         "tandem_fraction": 0.011,
@@ -1204,6 +1394,12 @@
       "evidence": "curated",
       "confidence": 1.0,
       "features": {
+        "ccre": {
+          "dELS": 8,
+          "DNase-H3K4me3": 1,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.269,
         "n_fraction": 0.634
       },
       "patterns": {},
@@ -1230,6 +1426,11 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "dELS": 3,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.509,
         "n_fraction": 0.0,
         "gc": 0.357,
         "tandem_fraction": 0.01,
@@ -1259,6 +1460,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 6
+        },
+        "ccre_per_10kb": 0.778,
         "n_fraction": 0.0,
         "gc": 0.366,
         "tandem_fraction": 0.01,
@@ -1284,10 +1489,14 @@
       "start": 28252155,
       "end": 28328737,
       "length": 76582,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 26
+        },
+        "ccre_per_10kb": 3.395,
         "n_fraction": 0.0,
         "gc": 0.365,
         "tandem_fraction": 0.009,
@@ -1344,6 +1553,11 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "DNase-H3K4me3": 2
+        },
+        "ccre_per_10kb": 0.398,
         "n_fraction": 0.0,
         "gc": 0.428,
         "tandem_fraction": 0.008,
@@ -1371,6 +1585,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 4,
+          "DNase-H3K4me3": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.937,
         "n_fraction": 0.0,
         "gc": 0.353,
         "tandem_fraction": 0.009,
@@ -1400,6 +1620,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 13,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.875,
         "n_fraction": 0.0,
         "gc": 0.347,
         "tandem_fraction": 0.008,
@@ -1430,6 +1655,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 9
+        },
+        "ccre_per_10kb": 1.265,
         "n_fraction": 0.0,
         "gc": 0.348,
         "tandem_fraction": 0.009,
@@ -1460,6 +1689,12 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "CTCF-only": 4,
+          "dELS": 8
+        },
+        "ccre_per_10kb": 1.83,
         "n_fraction": 0.0,
         "gc": 0.428,
         "tandem_fraction": 0.011,
@@ -1490,6 +1725,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.141,
         "n_fraction": 0.0,
         "gc": 0.343,
         "tandem_fraction": 0.011,
@@ -1519,6 +1758,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "dELS": 11
+        },
+        "ccre_per_10kb": 1.724,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.01,
@@ -1549,6 +1793,10 @@
       "evidence": "curated",
       "confidence": 1.0,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 2
+        },
+        "ccre_per_10kb": 0.29,
         "n_fraction": 0.725
       },
       "patterns": {},
@@ -1575,6 +1823,12 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1,
+          "dELS": 6,
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.181,
         "n_fraction": 0.0,
         "gc": 0.37,
         "tandem_fraction": 0.007,
@@ -1600,10 +1854,17 @@
       "start": 15627367,
       "end": 15694299,
       "length": 66932,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "dELS": 20,
+          "CTCF-only": 2,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 3.735,
         "n_fraction": 0.0,
         "gc": 0.369,
         "tandem_fraction": 0.01,
@@ -1627,10 +1888,16 @@
       "start": 39802286,
       "end": 39867325,
       "length": 65039,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 14,
+          "CTCF-only": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 2.46,
         "n_fraction": 0.0,
         "gc": 0.431,
         "tandem_fraction": 0.01,
@@ -1660,6 +1927,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 5
+        },
+        "ccre_per_10kb": 0.786,
         "n_fraction": 0.0,
         "gc": 0.366,
         "tandem_fraction": 0.003,
@@ -1689,6 +1960,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 0.633,
         "n_fraction": 0.0,
         "gc": 0.377,
         "tandem_fraction": 0.007,
@@ -1718,6 +1993,13 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "dELS": 1,
+          "CTCF-only": 1,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.635,
         "n_fraction": 0.0,
         "gc": 0.373,
         "tandem_fraction": 0.007,
@@ -1741,10 +2023,15 @@
       "start": 23890541,
       "end": 23953173,
       "length": 62632,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "dELS": 11
+        },
+        "ccre_per_10kb": 2.076,
         "n_fraction": 0.0,
         "gc": 0.373,
         "tandem_fraction": 0.012,
@@ -1775,6 +2062,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 5,
+          "pELS": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 1.144,
         "n_fraction": 0.0,
         "gc": 0.358,
         "tandem_fraction": 0.011,
@@ -1801,10 +2094,15 @@
       "start": 41582887,
       "end": 41642257,
       "length": 59370,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "dELS": 51
+        },
+        "ccre_per_10kb": 8.759,
         "n_fraction": 0.002,
         "gc": 0.49,
         "tandem_fraction": 0.01,
@@ -1835,6 +2133,11 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 3,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.679,
         "n_fraction": 0.0,
         "gc": 0.358,
         "tandem_fraction": 0.008,
@@ -1864,6 +2167,10 @@
       "evidence": "curated",
       "confidence": 1.0,
       "features": {
+        "ccre": {
+          "PLS": 1
+        },
+        "ccre_per_10kb": 0.174,
         "n_fraction": 0.87
       },
       "patterns": {},
@@ -1877,6 +2184,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 4,
+          "CTCF-only": 2
+        },
+        "ccre_per_10kb": 1.087,
         "n_fraction": 0.0,
         "gc": 0.336,
         "tandem_fraction": 0.012,
@@ -1919,6 +2231,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 0.751,
         "n_fraction": 0.0,
         "gc": 0.359,
         "tandem_fraction": 0.009,
@@ -1962,6 +2278,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.384,
         "n_fraction": 0.0,
         "gc": 0.336,
         "tandem_fraction": 0.004,
@@ -2002,6 +2322,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.194,
         "n_fraction": 0.0,
         "gc": 0.522,
         "tandem_fraction": 0.007,
@@ -2088,6 +2412,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "CTCF-only": 3,
+          "dELS": 5
+        },
+        "ccre_per_10kb": 1.769,
         "n_fraction": 0.0,
         "gc": 0.381,
         "tandem_fraction": 0.016,
@@ -2105,7 +2435,8 @@
         }
       },
       "patterns": {
-        "poly_a_tail": 4
+        "poly_a_tail": 4,
+        "ctcf_core": 1
       },
       "similar_to": []
     },
@@ -2113,10 +2444,15 @@
       "start": 17450104,
       "end": 17500434,
       "length": 50330,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 27,
+          "pELS": 2
+        },
+        "ccre_per_10kb": 5.762,
         "n_fraction": 0.0,
         "gc": 0.417,
         "tandem_fraction": 0.023,
@@ -2143,10 +2479,14 @@
       "start": 39929397,
       "end": 39979684,
       "length": 50287,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 35
+        },
+        "ccre_per_10kb": 6.96,
         "n_fraction": 0.0,
         "gc": 0.438,
         "tandem_fraction": 0.006,
@@ -2176,6 +2516,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.201,
         "n_fraction": 0.0,
         "gc": 0.521,
         "tandem_fraction": 0.007,
@@ -2205,6 +2549,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "DNase-H3K4me3": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 0.622,
         "n_fraction": 0.0,
         "gc": 0.375,
         "tandem_fraction": 0.009,
@@ -2230,10 +2580,14 @@
       "start": 27675024,
       "end": 27722326,
       "length": 47302,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 10
+        },
+        "ccre_per_10kb": 2.114,
         "n_fraction": 0.0,
         "gc": 0.361,
         "tandem_fraction": 0.008,
@@ -2260,10 +2614,17 @@
       "start": 30216097,
       "end": 30263379,
       "length": 47282,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 2,
+          "dELS": 17,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 4.441,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.01,
@@ -2293,6 +2654,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 5,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.272,
         "n_fraction": 0.0,
         "gc": 0.353,
         "tandem_fraction": 0.009,
@@ -2322,6 +2688,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 0.636,
         "n_fraction": 0.0,
         "gc": 0.347,
         "tandem_fraction": 0.006,
@@ -2351,6 +2721,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 5
+        },
+        "ccre_per_10kb": 1.079,
         "n_fraction": 0.0,
         "gc": 0.345,
         "tandem_fraction": 0.006,
@@ -2437,6 +2811,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 3,
+          "dELS": 6
+        },
+        "ccre_per_10kb": 1.967,
         "n_fraction": 0.0,
         "gc": 0.346,
         "tandem_fraction": 0.007,
@@ -2466,6 +2845,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 3,
+          "DNase-H3K4me3": 2
+        },
+        "ccre_per_10kb": 1.096,
         "n_fraction": 0.0,
         "gc": 0.343,
         "tandem_fraction": 0.012,
@@ -2492,10 +2876,15 @@
       "start": 39083832,
       "end": 39127567,
       "length": 43735,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 43,
+          "pELS": 2
+        },
+        "ccre_per_10kb": 10.289,
         "n_fraction": 0.0,
         "gc": 0.474,
         "tandem_fraction": 0.009,
@@ -2521,10 +2910,16 @@
       "start": 27448640,
       "end": 27492117,
       "length": 43477,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "dELS": 6,
+          "DNase-H3K4me3": 2
+        },
+        "ccre_per_10kb": 2.07,
         "n_fraction": 0.0,
         "gc": 0.355,
         "tandem_fraction": 0.01,
@@ -2550,10 +2945,15 @@
       "start": 39128040,
       "end": 39171129,
       "length": 43089,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 17,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 4.177,
         "n_fraction": 0.0,
         "gc": 0.433,
         "tandem_fraction": 0.009,
@@ -2583,6 +2983,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "CTCF-only": 4,
+          "dELS": 3
+        },
+        "ccre_per_10kb": 1.653,
         "n_fraction": 0.0,
         "gc": 0.37,
         "tandem_fraction": 0.009,
@@ -2641,6 +3046,12 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1,
+          "dELS": 3,
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.207,
         "n_fraction": 0.0,
         "gc": 0.344,
         "tandem_fraction": 0.01,
@@ -2659,7 +3070,8 @@
       },
       "patterns": {
         "alu_core": 1,
-        "poly_a_tail": 2
+        "poly_a_tail": 2,
+        "ctcf_core": 1
       },
       "similar_to": []
     },
@@ -2671,6 +3083,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.492,
         "n_fraction": 0.0,
         "gc": 0.352,
         "tandem_fraction": 0.009,
@@ -2700,6 +3117,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.253,
         "n_fraction": 0.0,
         "gc": 0.354,
         "tandem_fraction": 0.003,
@@ -2727,6 +3148,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "CTCF-only": 2
+        },
+        "ccre_per_10kb": 0.762,
         "n_fraction": 0.0,
         "gc": 0.36,
         "tandem_fraction": 0.011,
@@ -2752,10 +3178,15 @@
       "start": 37526358,
       "end": 37563991,
       "length": 37633,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "CTCF-only": 2,
+          "dELS": 29
+        },
+        "ccre_per_10kb": 8.237,
         "n_fraction": 0.0,
         "gc": 0.458,
         "tandem_fraction": 0.008,
@@ -2785,6 +3216,11 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.545,
         "n_fraction": 0.0,
         "gc": 0.533,
         "tandem_fraction": 0.009,
@@ -2810,10 +3246,15 @@
       "start": 44712286,
       "end": 44748866,
       "length": 36580,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 4,
+          "dELS": 15
+        },
+        "ccre_per_10kb": 5.194,
         "n_fraction": 0.0,
         "gc": 0.487,
         "tandem_fraction": 0.014,
@@ -2839,10 +3280,15 @@
       "start": 32044633,
       "end": 32080313,
       "length": 35680,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 13,
+          "DNase-H3K4me3": 4
+        },
+        "ccre_per_10kb": 4.765,
         "n_fraction": 0.0,
         "gc": 0.445,
         "tandem_fraction": 0.01,
@@ -2868,10 +3314,14 @@
       "start": 28836786,
       "end": 28872190,
       "length": 35404,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 9
+        },
+        "ccre_per_10kb": 2.542,
         "n_fraction": 0.0,
         "gc": 0.387,
         "tandem_fraction": 0.012,
@@ -2926,10 +3376,16 @@
       "start": 27492261,
       "end": 27526697,
       "length": 34436,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1,
+          "dELS": 6,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 2.323,
         "n_fraction": 0.0,
         "gc": 0.354,
         "tandem_fraction": 0.015,
@@ -2955,10 +3411,16 @@
       "start": 43821500,
       "end": 43855889,
       "length": 34389,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 20,
+          "CTCF-only": 1,
+          "pELS": 3
+        },
+        "ccre_per_10kb": 6.979,
         "n_fraction": 0.0,
         "gc": 0.512,
         "tandem_fraction": 0.015,
@@ -2988,6 +3450,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.878,
         "n_fraction": 0.0,
         "gc": 0.378,
         "tandem_fraction": 0.005,
@@ -3013,10 +3480,14 @@
       "start": 26801635,
       "end": 26835686,
       "length": 34051,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 26
+        },
+        "ccre_per_10kb": 7.636,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.01,
@@ -3046,6 +3517,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 6
+        },
+        "ccre_per_10kb": 1.78,
         "n_fraction": 0.0,
         "gc": 0.37,
         "tandem_fraction": 0.009,
@@ -3071,10 +3546,16 @@
       "start": 15696581,
       "end": 15729897,
       "length": 33316,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 5,
+          "pELS": 2,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 2.401,
         "n_fraction": 0.0,
         "gc": 0.384,
         "tandem_fraction": 0.009,
@@ -3100,10 +3581,17 @@
       "start": 42615094,
       "end": 42648270,
       "length": 33176,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 2,
+          "dELS": 19,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 6.933,
         "n_fraction": 0.0,
         "gc": 0.499,
         "tandem_fraction": 0.02,
@@ -3127,10 +3615,15 @@
       "start": 34039762,
       "end": 34072888,
       "length": 33126,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 5,
+          "pELS": 2
+        },
+        "ccre_per_10kb": 2.113,
         "n_fraction": 0.0,
         "gc": 0.421,
         "tandem_fraction": 0.011,
@@ -3160,6 +3653,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.605,
         "n_fraction": 0.0,
         "gc": 0.361,
         "tandem_fraction": 0.011,
@@ -3259,7 +3756,9 @@
           "unique": 1.0
         }
       },
-      "patterns": {},
+      "patterns": {
+        "ctcf_core": 1
+      },
       "similar_to": []
     },
     {
@@ -3293,10 +3792,15 @@
       "start": 33078298,
       "end": 33110866,
       "length": 32568,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 10,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 3.378,
         "n_fraction": 0.0,
         "gc": 0.451,
         "tandem_fraction": 0.015,
@@ -3322,10 +3826,16 @@
       "start": 41954022,
       "end": 41986292,
       "length": 32270,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 5,
+          "dELS": 21
+        },
+        "ccre_per_10kb": 8.367,
         "n_fraction": 0.0,
         "gc": 0.485,
         "tandem_fraction": 0.011,
@@ -3351,10 +3861,17 @@
       "start": 46005050,
       "end": 46037051,
       "length": 32001,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 23,
+          "CTCF-only": 1,
+          "pELS": 4,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 9.062,
         "n_fraction": 0.0,
         "gc": 0.488,
         "tandem_fraction": 0.005,
@@ -3384,6 +3901,11 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "dELS": 3
+        },
+        "ccre_per_10kb": 1.279,
         "n_fraction": 0.0,
         "gc": 0.418,
         "tandem_fraction": 0.01,
@@ -3413,6 +3935,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.64,
         "n_fraction": 0.0,
         "gc": 0.371,
         "tandem_fraction": 0.006,
@@ -3438,10 +3964,16 @@
       "start": 31840858,
       "end": 31871858,
       "length": 31000,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 2,
+          "CTCF-only": 1,
+          "dELS": 9
+        },
+        "ccre_per_10kb": 3.871,
         "n_fraction": 0.0,
         "gc": 0.431,
         "tandem_fraction": 0.027,
@@ -3468,10 +4000,14 @@
       "start": 26678976,
       "end": 26709929,
       "length": 30953,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 7
+        },
+        "ccre_per_10kb": 2.261,
         "n_fraction": 0.0,
         "gc": 0.372,
         "tandem_fraction": 0.01,
@@ -3497,10 +4033,16 @@
       "start": 42315530,
       "end": 42346356,
       "length": 30826,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 2,
+          "dELS": 17
+        },
+        "ccre_per_10kb": 6.488,
         "n_fraction": 0.0,
         "gc": 0.46,
         "tandem_fraction": 0.011,
@@ -3528,6 +4070,10 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.325,
         "n_fraction": 0.0,
         "gc": 0.399,
         "tandem_fraction": 0.006,
@@ -3551,10 +4097,16 @@
       "start": 25608530,
       "end": 25639257,
       "length": 30727,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 5,
+          "dELS": 3,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 2.929,
         "n_fraction": 0.0,
         "gc": 0.406,
         "tandem_fraction": 0.01,
@@ -3580,10 +4132,16 @@
       "start": 45942454,
       "end": 45972921,
       "length": 30467,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1,
+          "dELS": 26,
+          "pELS": 1
+        },
+        "ccre_per_10kb": 9.19,
         "n_fraction": 0.0,
         "gc": 0.512,
         "tandem_fraction": 0.004,
@@ -3609,10 +4167,15 @@
       "start": 31593723,
       "end": 31624033,
       "length": 30310,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4,
+          "CTCF-only": 4
+        },
+        "ccre_per_10kb": 2.639,
         "n_fraction": 0.0,
         "gc": 0.462,
         "tandem_fraction": 0.019,
@@ -3638,10 +4201,16 @@
       "start": 46605208,
       "end": 46635196,
       "length": 29988,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 9,
+          "dELS": 16
+        },
+        "ccre_per_10kb": 8.67,
         "n_fraction": 0.0,
         "gc": 0.43,
         "tandem_fraction": 0.009,
@@ -3668,10 +4237,16 @@
       "start": 31088017,
       "end": 31117984,
       "length": 29967,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 4,
+          "CTCF-only": 1,
+          "dELS": 6
+        },
+        "ccre_per_10kb": 3.671,
         "n_fraction": 0.0,
         "gc": 0.426,
         "tandem_fraction": 0.013,
@@ -3697,10 +4272,17 @@
       "start": 34615323,
       "end": 34645006,
       "length": 29683,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 1,
+          "dELS": 15,
+          "CTCF-only": 3
+        },
+        "ccre_per_10kb": 6.738,
         "n_fraction": 0.0,
         "gc": 0.448,
         "tandem_fraction": 0.006,
@@ -3726,10 +4308,16 @@
       "start": 30289514,
       "end": 30319123,
       "length": 29609,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "dELS": 5,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 3.04,
         "n_fraction": 0.0,
         "gc": 0.353,
         "tandem_fraction": 0.006,
@@ -3757,6 +4345,12 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "dELS": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.386,
         "n_fraction": 0.0,
         "gc": 0.379,
         "tandem_fraction": 0.005,
@@ -3782,10 +4376,18 @@
       "start": 33123947,
       "end": 33152613,
       "length": 28666,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 12,
+          "CTCF-only": 1,
+          "DNase-H3K4me3": 1,
+          "pELS": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 5.582,
         "n_fraction": 0.0,
         "gc": 0.466,
         "tandem_fraction": 0.012,
@@ -3811,10 +4413,14 @@
       "start": 21694640,
       "end": 21723292,
       "length": 28652,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 6
+        },
+        "ccre_per_10kb": 2.094,
         "n_fraction": 0.0,
         "gc": 0.339,
         "tandem_fraction": 0.01,
@@ -3840,10 +4446,16 @@
       "start": 45004753,
       "end": 45033332,
       "length": 28579,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 3,
+          "dELS": 38
+        },
+        "ccre_per_10kb": 14.696,
         "n_fraction": 0.0,
         "gc": 0.536,
         "tandem_fraction": 0.004,
@@ -3873,6 +4485,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.35,
         "n_fraction": 0.0,
         "gc": 0.354,
         "tandem_fraction": 0.007,
@@ -3898,10 +4514,14 @@
       "start": 5087867,
       "end": 5116340,
       "length": 28473,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 6
+        },
+        "ccre_per_10kb": 2.107,
         "n_fraction": 0.0,
         "gc": 0.583,
         "tandem_fraction": 0.006,
@@ -3918,17 +4538,24 @@
           "unique": 0.6
         }
       },
-      "patterns": {},
+      "patterns": {
+        "ctcf_core": 1
+      },
       "similar_to": []
     },
     {
       "start": 41113078,
       "end": 41141492,
       "length": 28414,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 10,
+          "CTCF-only": 2
+        },
+        "ccre_per_10kb": 4.223,
         "n_fraction": 0.0,
         "gc": 0.466,
         "tandem_fraction": 0.011,
@@ -3987,6 +4614,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "pELS": 2
+        },
+        "ccre_per_10kb": 0.709,
         "n_fraction": 0.0,
         "gc": 0.339,
         "tandem_fraction": 0.01,
@@ -4016,6 +4647,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.355,
         "n_fraction": 0.0,
         "gc": 0.342,
         "tandem_fraction": 0.011,
@@ -4039,10 +4674,16 @@
       "start": 41651976,
       "end": 41679180,
       "length": 27204,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 17,
+          "pELS": 4,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 8.087,
         "n_fraction": 0.0,
         "gc": 0.506,
         "tandem_fraction": 0.015,
@@ -4068,10 +4709,15 @@
       "start": 31566113,
       "end": 31593204,
       "length": 27091,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4,
+          "CTCF-only": 2
+        },
+        "ccre_per_10kb": 2.215,
         "n_fraction": 0.0,
         "gc": 0.459,
         "tandem_fraction": 0.019,
@@ -4101,6 +4747,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.743,
         "n_fraction": 0.0,
         "gc": 0.359,
         "tandem_fraction": 0.013,
@@ -4130,6 +4780,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.375,
         "n_fraction": 0.0,
         "gc": 0.397,
         "tandem_fraction": 0.003,
@@ -4157,6 +4811,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.762,
         "n_fraction": 0.0,
         "gc": 0.456,
         "tandem_fraction": 0.01,
@@ -4186,6 +4844,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.384,
         "n_fraction": 0.0,
         "gc": 0.34,
         "tandem_fraction": 0.006,
@@ -4209,10 +4871,14 @@
       "start": 43366576,
       "end": 43392477,
       "length": 25901,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 13
+        },
+        "ccre_per_10kb": 5.019,
         "n_fraction": 0.0,
         "gc": 0.576,
         "tandem_fraction": 0.009,
@@ -4236,10 +4902,16 @@
       "start": 24814809,
       "end": 24840549,
       "length": 25740,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 2,
+          "dELS": 3,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 2.331,
         "n_fraction": 0.0,
         "gc": 0.37,
         "tandem_fraction": 0.009,
@@ -4294,10 +4966,14 @@
       "start": 27590679,
       "end": 27616284,
       "length": 25605,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 6
+        },
+        "ccre_per_10kb": 2.343,
         "n_fraction": 0.0,
         "gc": 0.366,
         "tandem_fraction": 0.008,
@@ -4323,10 +4999,14 @@
       "start": 37564776,
       "end": 37590318,
       "length": 25542,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 11
+        },
+        "ccre_per_10kb": 4.307,
         "n_fraction": 0.0,
         "gc": 0.435,
         "tandem_fraction": 0.012,
@@ -4352,10 +5032,16 @@
       "start": 26573314,
       "end": 26598629,
       "length": 25315,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 1,
+          "dELS": 7
+        },
+        "ccre_per_10kb": 3.555,
         "n_fraction": 0.0,
         "gc": 0.368,
         "tandem_fraction": 0.009,
@@ -4381,10 +5067,16 @@
       "start": 42925630,
       "end": 42950927,
       "length": 25297,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 4,
+          "dELS": 26
+        },
+        "ccre_per_10kb": 12.254,
         "n_fraction": 0.0,
         "gc": 0.46,
         "tandem_fraction": 0.015,
@@ -4415,6 +5107,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 1.589,
         "n_fraction": 0.0,
         "gc": 0.38,
         "tandem_fraction": 0.007,
@@ -4444,6 +5140,11 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.195,
         "n_fraction": 0.0,
         "gc": 0.37,
         "tandem_fraction": 0.005,
@@ -4469,10 +5170,16 @@
       "start": 20803816,
       "end": 20828126,
       "length": 24310,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "CTCF-only": 1,
+          "dELS": 3
+        },
+        "ccre_per_10kb": 2.057,
         "n_fraction": 0.0,
         "gc": 0.362,
         "tandem_fraction": 0.009,
@@ -4500,6 +5207,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 2
+        },
+        "ccre_per_10kb": 0.826,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.009,
@@ -4525,10 +5236,17 @@
       "start": 45379635,
       "end": 45403808,
       "length": 24173,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "CTCF-only": 4,
+          "dELS": 16,
+          "DNase-H3K4me3": 2,
+          "pELS": 2
+        },
+        "ccre_per_10kb": 9.928,
         "n_fraction": 0.0,
         "gc": 0.532,
         "tandem_fraction": 0.004,
@@ -4554,10 +5272,16 @@
       "start": 36295702,
       "end": 36319791,
       "length": 24089,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 2,
+          "dELS": 9
+        },
+        "ccre_per_10kb": 4.982,
         "n_fraction": 0.0,
         "gc": 0.467,
         "tandem_fraction": 0.021,
@@ -4583,10 +5307,16 @@
       "start": 26845409,
       "end": 26869390,
       "length": 23981,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 5,
+          "dELS": 8
+        },
+        "ccre_per_10kb": 5.838,
         "n_fraction": 0.0,
         "gc": 0.411,
         "tandem_fraction": 0.011,
@@ -4614,6 +5344,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.84,
         "n_fraction": 0.0,
         "gc": 0.355,
         "tandem_fraction": 0.004,
@@ -4695,10 +5429,17 @@
       "start": 44262216,
       "end": 44285837,
       "length": 23621,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 6,
+          "DNase-H3K4me3": 4,
+          "dELS": 3,
+          "PLS": 2
+        },
+        "ccre_per_10kb": 6.35,
         "n_fraction": 0.0,
         "gc": 0.53,
         "tandem_fraction": 0.015,
@@ -4755,6 +5496,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.427,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.006,
@@ -4778,10 +5523,14 @@
       "start": 46572746,
       "end": 46596134,
       "length": 23388,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 5
+        },
+        "ccre_per_10kb": 2.138,
         "n_fraction": 0.0,
         "gc": 0.403,
         "tandem_fraction": 0.005,
@@ -4807,10 +5556,14 @@
       "start": 38356906,
       "end": 38380026,
       "length": 23120,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 7
+        },
+        "ccre_per_10kb": 3.028,
         "n_fraction": 0.0,
         "gc": 0.42,
         "tandem_fraction": 0.003,
@@ -4855,7 +5608,8 @@
         }
       },
       "patterns": {
-        "poly_a_tail": 1
+        "poly_a_tail": 1,
+        "ctcf_core": 1
       },
       "similar_to": []
     },
@@ -4867,6 +5621,12 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "CTCF-only": 1,
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.321,
         "n_fraction": 0.0,
         "gc": 0.357,
         "tandem_fraction": 0.008,
@@ -4919,10 +5679,16 @@
       "start": 38333421,
       "end": 38355915,
       "length": 22494,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "CTCF-only": 1,
+          "dELS": 14
+        },
+        "ccre_per_10kb": 8.002,
         "n_fraction": 0.0,
         "gc": 0.465,
         "tandem_fraction": 0.006,
@@ -4946,10 +5712,16 @@
       "start": 42782229,
       "end": 42804339,
       "length": 22110,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 3,
+          "dELS": 15
+        },
+        "ccre_per_10kb": 8.593,
         "n_fraction": 0.0,
         "gc": 0.491,
         "tandem_fraction": 0.009,
@@ -4973,10 +5745,16 @@
       "start": 44818779,
       "end": 44840635,
       "length": 21856,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "dELS": 7,
+          "CTCF-only": 3
+        },
+        "ccre_per_10kb": 5.49,
         "n_fraction": 0.0,
         "gc": 0.512,
         "tandem_fraction": 0.009,
@@ -5002,10 +5780,14 @@
       "start": 41776433,
       "end": 41798224,
       "length": 21791,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 18
+        },
+        "ccre_per_10kb": 8.26,
         "n_fraction": 0.0,
         "gc": 0.455,
         "tandem_fraction": 0.023,
@@ -5023,7 +5805,8 @@
         }
       },
       "patterns": {
-        "poly_a_tail": 6
+        "poly_a_tail": 6,
+        "ctcf_core": 1
       },
       "similar_to": []
     },
@@ -5035,6 +5818,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.463,
         "n_fraction": 0.0,
         "gc": 0.385,
         "tandem_fraction": 0.008,
@@ -5060,10 +5847,16 @@
       "start": 20403511,
       "end": 20424948,
       "length": 21437,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1,
+          "CTCF-only": 1,
+          "dELS": 3
+        },
+        "ccre_per_10kb": 2.332,
         "n_fraction": 0.0,
         "gc": 0.38,
         "tandem_fraction": 0.005,
@@ -5087,10 +5880,15 @@
       "start": 33381153,
       "end": 33402571,
       "length": 21418,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 25,
+          "pELS": 4
+        },
+        "ccre_per_10kb": 13.54,
         "n_fraction": 0.0,
         "gc": 0.482,
         "tandem_fraction": 0.022,
@@ -5117,10 +5915,15 @@
       "start": 46072248,
       "end": 46093263,
       "length": 21015,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 17,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 8.565,
         "n_fraction": 0.0,
         "gc": 0.497,
         "tandem_fraction": 0.009,
@@ -5146,10 +5949,14 @@
       "start": 33359864,
       "end": 33380795,
       "length": 20931,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 20
+        },
+        "ccre_per_10kb": 9.555,
         "n_fraction": 0.0,
         "gc": 0.447,
         "tandem_fraction": 0.015,
@@ -5196,7 +6003,8 @@
         }
       },
       "patterns": {
-        "poly_a_tail": 1
+        "poly_a_tail": 1,
+        "ctcf_core": 1
       },
       "similar_to": []
     },
@@ -5208,6 +6016,10 @@
       "evidence": "inferred",
       "confidence": 0.3,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 0.968,
         "n_fraction": 0.0,
         "gc": 0.387,
         "tandem_fraction": 0.009,
@@ -5262,10 +6074,15 @@
       "start": 41539326,
       "end": 41559124,
       "length": 19798,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "dELS": 4
+        },
+        "ccre_per_10kb": 2.526,
         "n_fraction": 0.0,
         "gc": 0.432,
         "tandem_fraction": 0.016,
@@ -5290,6 +6107,10 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.507,
         "n_fraction": 0.0,
         "gc": 0.562,
         "tandem_fraction": 0.008,
@@ -5330,10 +6151,14 @@
       "start": 39323218,
       "end": 39342278,
       "length": 19060,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 9
+        },
+        "ccre_per_10kb": 4.722,
         "n_fraction": 0.0,
         "gc": 0.435,
         "tandem_fraction": 0.017,
@@ -5358,6 +6183,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 0.526,
         "n_fraction": 0.0,
         "gc": 0.437,
         "tandem_fraction": 0.004,
@@ -5376,10 +6205,16 @@
       "start": 28228667,
       "end": 28247425,
       "length": 18758,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 2,
+          "pELS": 1,
+          "dELS": 5
+        },
+        "ccre_per_10kb": 4.265,
         "n_fraction": 0.0,
         "gc": 0.355,
         "tandem_fraction": 0.006,
@@ -5411,10 +6246,14 @@
       "start": 42174297,
       "end": 42192830,
       "length": 18533,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 9
+        },
+        "ccre_per_10kb": 4.856,
         "n_fraction": 0.0,
         "gc": 0.453,
         "tandem_fraction": 0.018,
@@ -5439,6 +6278,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.551,
         "n_fraction": 0.0,
         "gc": 0.465,
         "tandem_fraction": 0.013,
@@ -5463,6 +6306,11 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 1.105,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.003,
@@ -5481,10 +6329,14 @@
       "start": 36016546,
       "end": 36034533,
       "length": 17987,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 7
+        },
+        "ccre_per_10kb": 3.892,
         "n_fraction": 0.0,
         "gc": 0.487,
         "tandem_fraction": 0.012,
@@ -5531,6 +6383,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 0.56,
         "n_fraction": 0.0,
         "gc": 0.34,
         "tandem_fraction": 0.002,
@@ -5549,10 +6405,15 @@
       "start": 14658821,
       "end": 14676684,
       "length": 17863,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "dELS": 3
+        },
+        "ccre_per_10kb": 2.239,
         "n_fraction": 0.0,
         "gc": 0.352,
         "tandem_fraction": 0.008,
@@ -5571,10 +6432,14 @@
       "start": 42581440,
       "end": 42599279,
       "length": 17839,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 13
+        },
+        "ccre_per_10kb": 7.287,
         "n_fraction": 0.0,
         "gc": 0.544,
         "tandem_fraction": 0.009,
@@ -5595,10 +6460,14 @@
       "start": 43304709,
       "end": 43322416,
       "length": 17707,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 19
+        },
+        "ccre_per_10kb": 10.73,
         "n_fraction": 0.0,
         "gc": 0.543,
         "tandem_fraction": 0.004,
@@ -5621,6 +6490,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 1.721,
         "n_fraction": 0.0,
         "gc": 0.376,
         "tandem_fraction": 0.005,
@@ -5667,6 +6540,11 @@
       "evidence": "predicted",
       "confidence": 0.6,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "dELS": 1
+        },
+        "ccre_per_10kb": 1.186,
         "n_fraction": 0.0,
         "gc": 0.417,
         "tandem_fraction": 0.026,
@@ -5692,6 +6570,12 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "dELS": 1,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.782,
         "n_fraction": 0.0,
         "gc": 0.441,
         "tandem_fraction": 0.015,
@@ -5714,6 +6598,11 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1,
+          "dELS": 2
+        },
+        "ccre_per_10kb": 1.795,
         "n_fraction": 0.0,
         "gc": 0.369,
         "tandem_fraction": 0.009,
@@ -5734,10 +6623,15 @@
       "start": 30320315,
       "end": 30337012,
       "length": 16697,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "dELS": 3
+        },
+        "ccre_per_10kb": 3.593,
         "n_fraction": 0.0,
         "gc": 0.361,
         "tandem_fraction": 0.012,
@@ -5758,10 +6652,15 @@
       "start": 43034494,
       "end": 43050899,
       "length": 16405,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "dELS": 5
+        },
+        "ccre_per_10kb": 3.657,
         "n_fraction": 0.0,
         "gc": 0.533,
         "tandem_fraction": 0.013,
@@ -5774,7 +6673,8 @@
         "composition": {}
       },
       "patterns": {
-        "poly_a_tail": 1
+        "poly_a_tail": 1,
+        "ctcf_core": 1
       },
       "similar_to": []
     },
@@ -5782,10 +6682,14 @@
       "start": 38307357,
       "end": 38323634,
       "length": 16277,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 14
+        },
+        "ccre_per_10kb": 8.601,
         "n_fraction": 0.0,
         "gc": 0.415,
         "tandem_fraction": 0.01,
@@ -5806,10 +6710,15 @@
       "start": 38788917,
       "end": 38805114,
       "length": 16197,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 15,
+          "pELS": 5
+        },
+        "ccre_per_10kb": 12.348,
         "n_fraction": 0.0,
         "gc": 0.462,
         "tandem_fraction": 0.006,
@@ -5830,10 +6739,15 @@
       "start": 24192924,
       "end": 24209059,
       "length": 16135,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2,
+          "DNase-H3K4me3": 2
+        },
+        "ccre_per_10kb": 2.479,
         "n_fraction": 0.0,
         "gc": 0.355,
         "tandem_fraction": 0.023,
@@ -5858,6 +6772,11 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.86,
         "n_fraction": 0.0,
         "gc": 0.339,
         "tandem_fraction": 0.007,
@@ -5882,6 +6801,11 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 1.259,
         "n_fraction": 0.0,
         "gc": 0.448,
         "tandem_fraction": 0.022,
@@ -5900,10 +6824,16 @@
       "start": 43996420,
       "end": 44012279,
       "length": 15859,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 11,
+          "pELS": 2,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 8.828,
         "n_fraction": 0.0,
         "gc": 0.49,
         "tandem_fraction": 0.009,
@@ -5924,10 +6854,16 @@
       "start": 43703238,
       "end": 43719060,
       "length": 15822,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 11,
+          "pELS": 4,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 10.113,
         "n_fraction": 0.0,
         "gc": 0.508,
         "tandem_fraction": 0.018,
@@ -5952,6 +6888,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 1.269,
         "n_fraction": 0.0,
         "gc": 0.382,
         "tandem_fraction": 0.015,
@@ -5970,10 +6910,15 @@
       "start": 41037362,
       "end": 41053099,
       "length": 15737,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "dELS": 7
+        },
+        "ccre_per_10kb": 5.084,
         "n_fraction": 0.0,
         "gc": 0.425,
         "tandem_fraction": 0.012,
@@ -5992,10 +6937,16 @@
       "start": 10397778,
       "end": 10413466,
       "length": 15688,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 2,
+          "dELS": 2,
+          "PLS": 2
+        },
+        "ccre_per_10kb": 3.825,
         "n_fraction": 0.0,
         "gc": 0.462,
         "tandem_fraction": 0.014,
@@ -6042,6 +6993,11 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.283,
         "n_fraction": 0.0,
         "gc": 0.357,
         "tandem_fraction": 0.015,
@@ -6086,10 +7042,16 @@
       "start": 43288280,
       "end": 43303193,
       "length": 14913,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 15,
+          "DNase-H3K4me3": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 12.07,
         "n_fraction": 0.0,
         "gc": 0.557,
         "tandem_fraction": 0.005,
@@ -6108,10 +7070,14 @@
       "start": 41717975,
       "end": 41732792,
       "length": 14817,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 12
+        },
+        "ccre_per_10kb": 8.099,
         "n_fraction": 0.0,
         "gc": 0.516,
         "tandem_fraction": 0.011,
@@ -6130,10 +7096,14 @@
       "start": 15354216,
       "end": 15368954,
       "length": 14738,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 6
+        },
+        "ccre_per_10kb": 4.071,
         "n_fraction": 0.0,
         "gc": 0.364,
         "tandem_fraction": 0.006,
@@ -6158,6 +7128,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "pELS": 2
+        },
+        "ccre_per_10kb": 1.366,
         "n_fraction": 0.0,
         "gc": 0.442,
         "tandem_fraction": 0.005,
@@ -6178,10 +7152,15 @@
       "start": 9767339,
       "end": 9781847,
       "length": 14508,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 5,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 4.136,
         "n_fraction": 0.0,
         "gc": 0.45,
         "tandem_fraction": 0.006,
@@ -6200,10 +7179,15 @@
       "start": 46057576,
       "end": 46072084,
       "length": 14508,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "dELS": 16
+        },
+        "ccre_per_10kb": 13.096,
         "n_fraction": 0.0,
         "gc": 0.542,
         "tandem_fraction": 0.011,
@@ -6248,6 +7232,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 0.692,
         "n_fraction": 0.0,
         "gc": 0.34,
         "tandem_fraction": 0.01,
@@ -6266,10 +7254,14 @@
       "start": 39730759,
       "end": 39745182,
       "length": 14423,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 7
+        },
+        "ccre_per_10kb": 4.853,
         "n_fraction": 0.0,
         "gc": 0.436,
         "tandem_fraction": 0.014,
@@ -6288,10 +7280,15 @@
       "start": 30620850,
       "end": 30635205,
       "length": 14355,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 2.09,
         "n_fraction": 0.0,
         "gc": 0.386,
         "tandem_fraction": 0.01,
@@ -6312,10 +7309,14 @@
       "start": 41697336,
       "end": 41711460,
       "length": 14124,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 12
+        },
+        "ccre_per_10kb": 8.496,
         "n_fraction": 0.0,
         "gc": 0.497,
         "tandem_fraction": 0.003,
@@ -6334,10 +7335,15 @@
       "start": 23968747,
       "end": 23982644,
       "length": 13897,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 2.159,
         "n_fraction": 0.0,
         "gc": 0.367,
         "tandem_fraction": 0.007,
@@ -6359,10 +7365,14 @@
       "start": 41054111,
       "end": 41068008,
       "length": 13897,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 2.878,
         "n_fraction": 0.0,
         "gc": 0.461,
         "tandem_fraction": 0.015,
@@ -6383,10 +7393,14 @@
       "start": 43344347,
       "end": 43358054,
       "length": 13707,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 21
+        },
+        "ccre_per_10kb": 15.321,
         "n_fraction": 0.0,
         "gc": 0.564,
         "tandem_fraction": 0.01,
@@ -6398,7 +7412,9 @@
         "alu_per_kb": 0.073,
         "composition": {}
       },
-      "patterns": {},
+      "patterns": {
+        "ctcf_core": 1
+      },
       "similar_to": []
     },
     {
@@ -6427,10 +7443,16 @@
       "start": 42817780,
       "end": 42831039,
       "length": 13259,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 2,
+          "dELS": 5,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 6.034,
         "n_fraction": 0.0,
         "gc": 0.419,
         "tandem_fraction": 0.015,
@@ -6449,10 +7471,14 @@
       "start": 41562958,
       "end": 41576134,
       "length": 13176,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 7
+        },
+        "ccre_per_10kb": 5.313,
         "n_fraction": 0.0,
         "gc": 0.461,
         "tandem_fraction": 0.015,
@@ -6473,10 +7499,15 @@
       "start": 46669252,
       "end": 46682339,
       "length": 13087,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "CTCF-only": 2,
+          "dELS": 3
+        },
+        "ccre_per_10kb": 3.821,
         "n_fraction": 0.0,
         "gc": 0.414,
         "tandem_fraction": 0.007,
@@ -6497,10 +7528,15 @@
       "start": 46039807,
       "end": 46052595,
       "length": 12788,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 6,
+          "pELS": 4
+        },
+        "ccre_per_10kb": 7.82,
         "n_fraction": 0.0,
         "gc": 0.493,
         "tandem_fraction": 0.006,
@@ -6519,10 +7555,14 @@
       "start": 33311420,
       "end": 33324131,
       "length": 12711,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 3.147,
         "n_fraction": 0.0,
         "gc": 0.371,
         "tandem_fraction": 0.055,
@@ -6541,10 +7581,15 @@
       "start": 32247266,
       "end": 32259803,
       "length": 12537,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 9,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 7.976,
         "n_fraction": 0.0,
         "gc": 0.462,
         "tandem_fraction": 0.017,
@@ -6609,10 +7654,15 @@
       "start": 45577697,
       "end": 45589963,
       "length": 12266,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1,
+          "dELS": 2
+        },
+        "ccre_per_10kb": 2.446,
         "n_fraction": 0.0,
         "gc": 0.513,
         "tandem_fraction": 0.001,
@@ -6724,10 +7774,17 @@
       "start": 42350997,
       "end": 42362281,
       "length": 11284,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 3,
+          "dELS": 6,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 9.748,
         "n_fraction": 0.0,
         "gc": 0.486,
         "tandem_fraction": 0.005,
@@ -6746,10 +7803,16 @@
       "start": 36995075,
       "end": 37006149,
       "length": 11074,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2,
+          "DNase-H3K4me3": 1,
+          "pELS": 1
+        },
+        "ccre_per_10kb": 3.612,
         "n_fraction": 0.0,
         "gc": 0.459,
         "tandem_fraction": 0.017,
@@ -6796,6 +7859,11 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "CTCF-only": 2
+        },
+        "ccre_per_10kb": 2.801,
         "n_fraction": 0.0,
         "gc": 0.387,
         "tandem_fraction": 0.007,
@@ -6814,10 +7882,16 @@
       "start": 30337694,
       "end": 30348398,
       "length": 10704,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "dELS": 2,
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 5.605,
         "n_fraction": 0.0,
         "gc": 0.397,
         "tandem_fraction": 0.013,
@@ -6838,10 +7912,15 @@
       "start": 41409420,
       "end": 41420019,
       "length": 10599,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 3.774,
         "n_fraction": 0.0,
         "gc": 0.407,
         "tandem_fraction": 0.019,
@@ -6860,10 +7939,15 @@
       "start": 44979274,
       "end": 44989863,
       "length": 10589,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "dELS": 13
+        },
+        "ccre_per_10kb": 13.221,
         "n_fraction": 0.0,
         "gc": 0.636,
         "tandem_fraction": 0.003,
@@ -6882,10 +7966,15 @@
       "start": 44751047,
       "end": 44761528,
       "length": 10481,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 10,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 10.495,
         "n_fraction": 0.0,
         "gc": 0.554,
         "tandem_fraction": 0.008,
@@ -6907,10 +7996,14 @@
       "start": 42462020,
       "end": 42472485,
       "length": 10465,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 15
+        },
+        "ccre_per_10kb": 14.333,
         "n_fraction": 0.0,
         "gc": 0.463,
         "tandem_fraction": 0.011,
@@ -6932,10 +8025,14 @@
       "start": 44875810,
       "end": 44885947,
       "length": 10137,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 14
+        },
+        "ccre_per_10kb": 13.811,
         "n_fraction": 0.0,
         "gc": 0.488,
         "tandem_fraction": 0.009,
@@ -6956,10 +8053,16 @@
       "start": 39515519,
       "end": 39525582,
       "length": 10063,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4,
+          "DNase-H3K4me3": 1,
+          "pELS": 2
+        },
+        "ccre_per_10kb": 6.956,
         "n_fraction": 0.0,
         "gc": 0.431,
         "tandem_fraction": 0.01,
@@ -7006,6 +8109,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 1.041,
         "n_fraction": 0.0,
         "gc": 0.382,
         "tandem_fraction": 0.011,
@@ -7074,6 +8181,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.104,
         "n_fraction": 0.0,
         "gc": 0.426,
         "tandem_fraction": 0.004,
@@ -7092,10 +8203,15 @@
       "start": 42965363,
       "end": 42974327,
       "length": 8964,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 7,
+          "dELS": 8
+        },
+        "ccre_per_10kb": 16.734,
         "n_fraction": 0.0,
         "gc": 0.507,
         "tandem_fraction": 0.019,
@@ -7116,10 +8232,14 @@
       "start": 42955803,
       "end": 42964638,
       "length": 8835,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 11
+        },
+        "ccre_per_10kb": 12.45,
         "n_fraction": 0.0,
         "gc": 0.485,
         "tandem_fraction": 0.034,
@@ -7140,10 +8260,14 @@
       "start": 38979791,
       "end": 38988566,
       "length": 8775,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 19
+        },
+        "ccre_per_10kb": 21.652,
         "n_fraction": 0.0,
         "gc": 0.481,
         "tandem_fraction": 0.009,
@@ -7162,10 +8286,14 @@
       "start": 45625675,
       "end": 45634429,
       "length": 8754,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 4.569,
         "n_fraction": 0.0,
         "gc": 0.524,
         "tandem_fraction": 0.002,
@@ -7184,10 +8312,16 @@
       "start": 43856342,
       "end": 43865080,
       "length": 8738,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 10,
+          "pELS": 3,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 16.022,
         "n_fraction": 0.0,
         "gc": 0.522,
         "tandem_fraction": 0.019,
@@ -7208,10 +8342,14 @@
       "start": 43987592,
       "end": 43996321,
       "length": 8729,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 3.437,
         "n_fraction": 0.0,
         "gc": 0.551,
         "tandem_fraction": 0.018,
@@ -7237,6 +8375,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 1.155,
         "n_fraction": 0.0,
         "gc": 0.457,
         "tandem_fraction": 0.0,
@@ -7255,10 +8397,16 @@
       "start": 34737204,
       "end": 34745724,
       "length": 8520,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 5,
+          "dELS": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 8.216,
         "n_fraction": 0.0,
         "gc": 0.48,
         "tandem_fraction": 0.012,
@@ -7281,6 +8429,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 1.175,
         "n_fraction": 0.0,
         "gc": 0.342,
         "tandem_fraction": 0.005,
@@ -7345,10 +8497,15 @@
       "start": 24114352,
       "end": 24122805,
       "length": 8453,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "dELS": 3
+        },
+        "ccre_per_10kb": 4.732,
         "n_fraction": 0.0,
         "gc": 0.318,
         "tandem_fraction": 0.012,
@@ -7415,10 +8572,16 @@
       "start": 32612881,
       "end": 32621083,
       "length": 8202,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 3,
+          "dELS": 2
+        },
+        "ccre_per_10kb": 7.315,
         "n_fraction": 0.0,
         "gc": 0.446,
         "tandem_fraction": 0.009,
@@ -7463,10 +8626,14 @@
       "start": 41531116,
       "end": 41539205,
       "length": 8089,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 3.709,
         "n_fraction": 0.0,
         "gc": 0.483,
         "tandem_fraction": 0.005,
@@ -7511,6 +8678,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.265,
         "n_fraction": 0.0,
         "gc": 0.362,
         "tandem_fraction": 0.016,
@@ -7555,6 +8726,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.286,
         "n_fraction": 0.0,
         "gc": 0.407,
         "tandem_fraction": 0.006,
@@ -7595,10 +8770,15 @@
       "start": 45226560,
       "end": 45234307,
       "length": 7747,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 5.163,
         "n_fraction": 0.0,
         "gc": 0.445,
         "tandem_fraction": 0.008,
@@ -7641,10 +8821,14 @@
       "start": 36090414,
       "end": 36098089,
       "length": 7675,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 5
+        },
+        "ccre_per_10kb": 6.515,
         "n_fraction": 0.0,
         "gc": 0.431,
         "tandem_fraction": 0.019,
@@ -7663,10 +8847,15 @@
       "start": 8987430,
       "end": 8995097,
       "length": 7667,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 13,
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 18.26,
         "n_fraction": 0.0,
         "gc": 0.496,
         "tandem_fraction": 0.009,
@@ -7755,10 +8944,16 @@
       "start": 42396122,
       "end": 42403446,
       "length": 7324,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 8,
+          "dELS": 4
+        },
+        "ccre_per_10kb": 17.75,
         "n_fraction": 0.0,
         "gc": 0.438,
         "tandem_fraction": 0.017,
@@ -7779,10 +8974,16 @@
       "start": 42304389,
       "end": 42311666,
       "length": 7277,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "CTCF-only": 1,
+          "DNase-H3K4me3": 3,
+          "dELS": 6
+        },
+        "ccre_per_10kb": 13.742,
         "n_fraction": 0.0,
         "gc": 0.55,
         "tandem_fraction": 0.004,
@@ -7849,6 +9050,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 1.38,
         "n_fraction": 0.0,
         "gc": 0.375,
         "tandem_fraction": 0.01,
@@ -7867,10 +9072,15 @@
       "start": 44340692,
       "end": 44347766,
       "length": 7074,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 5,
+          "pELS": 1
+        },
+        "ccre_per_10kb": 8.482,
         "n_fraction": 0.0,
         "gc": 0.501,
         "tandem_fraction": 0.009,
@@ -7891,10 +9101,14 @@
       "start": 45364972,
       "end": 45371931,
       "length": 6959,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 9
+        },
+        "ccre_per_10kb": 12.933,
         "n_fraction": 0.0,
         "gc": 0.549,
         "tandem_fraction": 0.002,
@@ -7913,10 +9127,15 @@
       "start": 17894485,
       "end": 17901262,
       "length": 6777,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 2.951,
         "n_fraction": 0.0,
         "gc": 0.404,
         "tandem_fraction": 0.004,
@@ -7935,10 +9154,15 @@
       "start": 25772460,
       "end": 25779130,
       "length": 6670,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2,
+          "DNase-H3K4me3": 2
+        },
+        "ccre_per_10kb": 5.997,
         "n_fraction": 0.0,
         "gc": 0.411,
         "tandem_fraction": 0.012,
@@ -7963,6 +9187,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "PLS": 1
+        },
+        "ccre_per_10kb": 1.507,
         "n_fraction": 0.0,
         "gc": 0.41,
         "tandem_fraction": 0.008,
@@ -8007,6 +9235,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.53,
         "n_fraction": 0.0,
         "gc": 0.578,
         "tandem_fraction": 0.006,
@@ -8025,10 +9257,15 @@
       "start": 44463452,
       "end": 44469928,
       "length": 6476,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 2,
+          "dELS": 2
+        },
+        "ccre_per_10kb": 6.177,
         "n_fraction": 0.0,
         "gc": 0.546,
         "tandem_fraction": 0.059,
@@ -8117,6 +9354,10 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 1.584,
         "n_fraction": 0.0,
         "gc": 0.581,
         "tandem_fraction": 0.01,
@@ -8135,10 +9376,16 @@
       "start": 42193434,
       "end": 42199688,
       "length": 6254,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4,
+          "pELS": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 9.594,
         "n_fraction": 0.0,
         "gc": 0.451,
         "tandem_fraction": 0.0,
@@ -8201,10 +9448,16 @@
       "start": 43762307,
       "end": 43768292,
       "length": 5985,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4,
+          "pELS": 5,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 16.708,
         "n_fraction": 0.0,
         "gc": 0.566,
         "tandem_fraction": 0.016,
@@ -8223,10 +9476,16 @@
       "start": 43783573,
       "end": 43789512,
       "length": 5939,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "CTCF-only": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 8.419,
         "n_fraction": 0.0,
         "gc": 0.513,
         "tandem_fraction": 0.029,
@@ -8267,10 +9526,15 @@
       "start": 44843827,
       "end": 44849584,
       "length": 5757,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1,
+          "dELS": 9
+        },
+        "ccre_per_10kb": 17.37,
         "n_fraction": 0.0,
         "gc": 0.571,
         "tandem_fraction": 0.01,
@@ -8293,6 +9557,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 1.756,
         "n_fraction": 0.0,
         "gc": 0.439,
         "tandem_fraction": 0.017,
@@ -8311,10 +9579,15 @@
       "start": 42057278,
       "end": 42062958,
       "length": 5680,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 7,
+          "pELS": 6
+        },
+        "ccre_per_10kb": 22.887,
         "n_fraction": 0.0,
         "gc": 0.55,
         "tandem_fraction": 0.002,
@@ -8421,10 +9694,14 @@
       "start": 34718227,
       "end": 34723806,
       "length": 5579,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 3.585,
         "n_fraction": 0.0,
         "gc": 0.487,
         "tandem_fraction": 0.028,
@@ -8491,6 +9768,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 1.839,
         "n_fraction": 0.0,
         "gc": 0.339,
         "tandem_fraction": 0.003,
@@ -8553,10 +9834,14 @@
       "start": 28896386,
       "end": 28901778,
       "length": 5392,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 3.709,
         "n_fraction": 0.0,
         "gc": 0.386,
         "tandem_fraction": 0.009,
@@ -8645,6 +9930,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 1.873,
         "n_fraction": 0.0,
         "gc": 0.38,
         "tandem_fraction": 0.015,
@@ -8663,10 +9952,15 @@
       "start": 42366541,
       "end": 42371839,
       "length": 5298,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "dELS": 1
+        },
+        "ccre_per_10kb": 7.55,
         "n_fraction": 0.0,
         "gc": 0.532,
         "tandem_fraction": 0.004,
@@ -8729,10 +10023,14 @@
       "start": 36627435,
       "end": 36632680,
       "length": 5245,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 3.813,
         "n_fraction": 0.0,
         "gc": 0.471,
         "tandem_fraction": 0.015,
@@ -8744,17 +10042,25 @@
         "alu_per_kb": 0.381,
         "composition": {}
       },
-      "patterns": {},
+      "patterns": {
+        "ctcf_core": 1
+      },
       "similar_to": []
     },
     {
       "start": 14210955,
       "end": 14216111,
       "length": 5156,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 2,
+          "pELS": 3,
+          "dELS": 2
+        },
+        "ccre_per_10kb": 13.576,
         "n_fraction": 0.0,
         "gc": 0.34,
         "tandem_fraction": 0.023,
@@ -8795,10 +10101,15 @@
       "start": 46156047,
       "end": 46161147,
       "length": 5100,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "dELS": 2
+        },
+        "ccre_per_10kb": 7.843,
         "n_fraction": 0.0,
         "gc": 0.593,
         "tandem_fraction": 0.007,
@@ -8819,10 +10130,14 @@
       "start": 6564489,
       "end": 6569560,
       "length": 5071,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 3.944,
         "n_fraction": 0.0,
         "gc": 0.616,
         "tandem_fraction": 0.011,
@@ -8834,17 +10149,25 @@
         "alu_per_kb": 0.0,
         "composition": {}
       },
-      "patterns": {},
+      "patterns": {
+        "ctcf_core": 1
+      },
       "similar_to": []
     },
     {
       "start": 34663902,
       "end": 34668965,
       "length": 5063,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "pELS": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 5.925,
         "n_fraction": 0.0,
         "gc": 0.438,
         "tandem_fraction": 0.009,
@@ -8863,10 +10186,15 @@
       "start": 33072413,
       "end": 33077447,
       "length": 5034,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "dELS": 2
+        },
+        "ccre_per_10kb": 5.959,
         "n_fraction": 0.0,
         "gc": 0.458,
         "tandem_fraction": 0.004,
@@ -8885,10 +10213,14 @@
       "start": 45044380,
       "end": 45049405,
       "length": 5025,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 5.97,
         "n_fraction": 0.0,
         "gc": 0.43,
         "tandem_fraction": 0.0,
@@ -8907,10 +10239,14 @@
       "start": 45635344,
       "end": 45640308,
       "length": 4964,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 8.058,
         "n_fraction": 0.0,
         "gc": 0.546,
         "tandem_fraction": 0.064,
@@ -8929,10 +10265,15 @@
       "start": 41734454,
       "end": 41739368,
       "length": 4914,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4,
+          "pELS": 1
+        },
+        "ccre_per_10kb": 10.175,
         "n_fraction": 0.0,
         "gc": 0.488,
         "tandem_fraction": 0.022,
@@ -8951,10 +10292,16 @@
       "start": 29019374,
       "end": 29024254,
       "length": 4880,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 4,
+          "dELS": 1
+        },
+        "ccre_per_10kb": 12.295,
         "n_fraction": 0.0,
         "gc": 0.455,
         "tandem_fraction": 0.015,
@@ -9047,6 +10394,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 2.139,
         "n_fraction": 0.0,
         "gc": 0.473,
         "tandem_fraction": 0.018,
@@ -9111,10 +10462,15 @@
       "start": 44478493,
       "end": 44482984,
       "length": 4491,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "dELS": 4
+        },
+        "ccre_per_10kb": 13.36,
         "n_fraction": 0.0,
         "gc": 0.542,
         "tandem_fraction": 0.0,
@@ -9148,17 +10504,24 @@
         "alu_per_kb": 0.0,
         "composition": {}
       },
-      "patterns": {},
+      "patterns": {
+        "ctcf_core": 1
+      },
       "similar_to": []
     },
     {
       "start": 36990236,
       "end": 36994642,
       "length": 4406,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 2,
+          "pELS": 4
+        },
+        "ccre_per_10kb": 13.618,
         "n_fraction": 0.0,
         "gc": 0.49,
         "tandem_fraction": 0.005,
@@ -9225,6 +10588,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 2.311,
         "n_fraction": 0.0,
         "gc": 0.335,
         "tandem_fraction": 0.0,
@@ -9289,10 +10656,14 @@
       "start": 42450497,
       "end": 42454803,
       "length": 4306,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 9.289,
         "n_fraction": 0.0,
         "gc": 0.52,
         "tandem_fraction": 0.003,
@@ -9337,6 +10708,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 2.329,
         "n_fraction": 0.0,
         "gc": 0.361,
         "tandem_fraction": 0.005,
@@ -9392,7 +10767,9 @@
         "alu_per_kb": 0.0,
         "composition": {}
       },
-      "patterns": {},
+      "patterns": {
+        "ctcf_core": 1
+      },
       "similar_to": []
     },
     {
@@ -9403,6 +10780,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 2.382,
         "n_fraction": 0.0,
         "gc": 0.311,
         "tandem_fraction": 0.034,
@@ -9471,6 +10852,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "DNase-H3K4me3": 1
+        },
+        "ccre_per_10kb": 2.441,
         "n_fraction": 0.0,
         "gc": 0.372,
         "tandem_fraction": 0.022,
@@ -9491,10 +10876,14 @@
       "start": 44995185,
       "end": 44999139,
       "length": 3954,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2
+        },
+        "ccre_per_10kb": 5.058,
         "n_fraction": 0.0,
         "gc": 0.662,
         "tandem_fraction": 0.0,
@@ -9513,10 +10902,16 @@
       "start": 41358091,
       "end": 41361956,
       "length": 3865,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "pELS": 5,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 18.111,
         "n_fraction": 0.0,
         "gc": 0.549,
         "tandem_fraction": 0.0,
@@ -9583,6 +10978,10 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 2.681,
         "n_fraction": 0.0,
         "gc": 0.401,
         "tandem_fraction": 0.007,
@@ -9673,6 +11072,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 2.826,
         "n_fraction": 0.0,
         "gc": 0.579,
         "tandem_fraction": 0.004,
@@ -9691,10 +11094,14 @@
       "start": 42913304,
       "end": 42916802,
       "length": 3498,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 8.576,
         "n_fraction": 0.0,
         "gc": 0.502,
         "tandem_fraction": 0.004,
@@ -9713,10 +11120,15 @@
       "start": 36079389,
       "end": 36082858,
       "length": 3469,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 2
+        },
+        "ccre_per_10kb": 8.648,
         "n_fraction": 0.0,
         "gc": 0.409,
         "tandem_fraction": 0.022,
@@ -9741,6 +11153,10 @@
       "evidence": "predicted",
       "confidence": 0.6,
       "features": {
+        "ccre": {
+          "CTCF-only": 1
+        },
+        "ccre_per_10kb": 3.014,
         "n_fraction": 0.0,
         "gc": 0.483,
         "tandem_fraction": 0.019,
@@ -9761,10 +11177,16 @@
       "start": 43779805,
       "end": 43783122,
       "length": 3317,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2,
+          "pELS": 2,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 15.074,
         "n_fraction": 0.0,
         "gc": 0.477,
         "tandem_fraction": 0.016,
@@ -9805,10 +11227,15 @@
       "start": 29073797,
       "end": 29077059,
       "length": 3262,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 6
+        },
+        "ccre_per_10kb": 21.459,
         "n_fraction": 0.0,
         "gc": 0.424,
         "tandem_fraction": 0.008,
@@ -9827,10 +11254,14 @@
       "start": 46132851,
       "end": 46136081,
       "length": 3230,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 5
+        },
+        "ccre_per_10kb": 15.48,
         "n_fraction": 0.0,
         "gc": 0.589,
         "tandem_fraction": 0.028,
@@ -9961,10 +11392,15 @@
       "start": 31732874,
       "end": 31735731,
       "length": 2857,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 14.001,
         "n_fraction": 0.0,
         "gc": 0.461,
         "tandem_fraction": 0.02,
@@ -9989,6 +11425,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 3.531,
         "n_fraction": 0.0,
         "gc": 0.521,
         "tandem_fraction": 0.025,
@@ -10009,10 +11449,14 @@
       "start": 44765767,
       "end": 44768579,
       "length": 2812,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 10.669,
         "n_fraction": 0.0,
         "gc": 0.613,
         "tandem_fraction": 0.0,
@@ -10035,6 +11479,10 @@
       "evidence": "predicted",
       "confidence": 0.6,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 3.559,
         "n_fraction": 0.0,
         "gc": 0.511,
         "tandem_fraction": 0.0,
@@ -10053,10 +11501,15 @@
       "start": 41879482,
       "end": 41882204,
       "length": 2722,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 1,
+          "pELS": 5
+        },
+        "ccre_per_10kb": 22.043,
         "n_fraction": 0.0,
         "gc": 0.467,
         "tandem_fraction": 0.007,
@@ -10101,6 +11554,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 3.729,
         "n_fraction": 0.0,
         "gc": 0.474,
         "tandem_fraction": 0.01,
@@ -10123,6 +11580,10 @@
       "evidence": "predicted",
       "confidence": 0.6,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 3.798,
         "n_fraction": 0.0,
         "gc": 0.477,
         "tandem_fraction": 0.009,
@@ -10145,6 +11606,10 @@
       "evidence": "predicted",
       "confidence": 0.5,
       "features": {
+        "ccre": {
+          "PLS": 1
+        },
+        "ccre_per_10kb": 3.998,
         "n_fraction": 0.0,
         "gc": 0.588,
         "tandem_fraction": 0.008,
@@ -10163,10 +11628,14 @@
       "start": 23810116,
       "end": 23812611,
       "length": 2495,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 8.016,
         "n_fraction": 0.0,
         "gc": 0.385,
         "tandem_fraction": 0.022,
@@ -10200,7 +11669,9 @@
         "alu_per_kb": 0.0,
         "composition": {}
       },
-      "patterns": {},
+      "patterns": {
+        "ctcf_core": 1
+      },
       "similar_to": []
     },
     {
@@ -10229,10 +11700,15 @@
       "start": 44495519,
       "end": 44497892,
       "length": 2373,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "dELS": 4
+        },
+        "ccre_per_10kb": 25.284,
         "n_fraction": 0.0,
         "gc": 0.514,
         "tandem_fraction": 0.0,
@@ -10255,6 +11731,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 4.288,
         "n_fraction": 0.0,
         "gc": 0.404,
         "tandem_fraction": 0.0,
@@ -10273,10 +11753,16 @@
       "start": 45979411,
       "end": 45981726,
       "length": 2315,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 1,
+          "pELS": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 12.959,
         "n_fraction": 0.0,
         "gc": 0.541,
         "tandem_fraction": 0.041,
@@ -10299,6 +11785,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 4.421,
         "n_fraction": 0.0,
         "gc": 0.466,
         "tandem_fraction": 0.0,
@@ -10339,10 +11829,14 @@
       "start": 29175889,
       "end": 29178095,
       "length": 2206,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 13.599,
         "n_fraction": 0.0,
         "gc": 0.382,
         "tandem_fraction": 0.039,
@@ -10383,10 +11877,15 @@
       "start": 44483400,
       "end": 44485462,
       "length": 2062,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 2,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 14.549,
         "n_fraction": 0.0,
         "gc": 0.546,
         "tandem_fraction": 0.0,
@@ -10475,6 +11974,10 @@
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 5.504,
         "n_fraction": 0.0,
         "gc": 0.688,
         "tandem_fraction": 0.0,
@@ -10515,10 +12018,14 @@
       "start": 44348295,
       "end": 44350071,
       "length": 1776,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "PLS": 2
+        },
+        "ccre_per_10kb": 11.261,
         "n_fraction": 0.0,
         "gc": 0.615,
         "tandem_fraction": 0.0,
@@ -10633,6 +12140,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 6.39,
         "n_fraction": 0.0,
         "gc": 0.64,
         "tandem_fraction": 0.0,
@@ -10673,10 +12184,14 @@
       "start": 42447684,
       "end": 42449210,
       "length": 1526,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 3
+        },
+        "ccre_per_10kb": 19.659,
         "n_fraction": 0.0,
         "gc": 0.522,
         "tandem_fraction": 0.039,
@@ -10695,10 +12210,15 @@
       "start": 39726085,
       "end": 39727608,
       "length": 1523,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 1,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 13.132,
         "n_fraction": 0.0,
         "gc": 0.515,
         "tandem_fraction": 0.0,
@@ -10717,10 +12237,15 @@
       "start": 45642180,
       "end": 45643660,
       "length": 1480,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 4,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 33.784,
         "n_fraction": 0.0,
         "gc": 0.761,
         "tandem_fraction": 0.0,
@@ -10739,10 +12264,14 @@
       "start": 45050903,
       "end": 45052300,
       "length": 1397,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 4
+        },
+        "ccre_per_10kb": 28.633,
         "n_fraction": 0.0,
         "gc": 0.499,
         "tandem_fraction": 0.0,
@@ -10765,6 +12294,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "pELS": 1
+        },
+        "ccre_per_10kb": 7.299,
         "n_fraction": 0.0,
         "gc": 0.487,
         "tandem_fraction": 0.0,
@@ -10783,10 +12316,15 @@
       "start": 44298648,
       "end": 44300016,
       "length": 1368,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3,
+          "PLS": 1
+        },
+        "ccre_per_10kb": 29.24,
         "n_fraction": 0.0,
         "gc": 0.577,
         "tandem_fraction": 0.035,
@@ -10853,6 +12391,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 7.782,
         "n_fraction": 0.0,
         "gc": 0.552,
         "tandem_fraction": 0.012,
@@ -10897,6 +12439,10 @@
       "evidence": "none",
       "confidence": 0.0,
       "features": {
+        "ccre": {
+          "dELS": 1
+        },
+        "ccre_per_10kb": 8.718,
         "n_fraction": 0.0,
         "gc": 0.53,
         "tandem_fraction": 0.04,
@@ -10917,10 +12463,14 @@
       "start": 15065936,
       "end": 15067069,
       "length": 1133,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "pELS": 3
+        },
+        "ccre_per_10kb": 26.478,
         "n_fraction": 0.0,
         "gc": 0.37,
         "tandem_fraction": 0.0,
@@ -10939,10 +12489,14 @@
       "start": 41303097,
       "end": 41304211,
       "length": 1114,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "regulatory",
+      "evidence": "curated",
+      "confidence": 0.7,
       "features": {
+        "ccre": {
+          "dELS": 2
+        },
+        "ccre_per_10kb": 17.953,
         "n_fraction": 0.0,
         "gc": 0.508,
         "tandem_fraction": 0.036,

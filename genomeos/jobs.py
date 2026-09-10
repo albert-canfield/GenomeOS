@@ -39,6 +39,13 @@ CATALOG: dict[str, dict] = {
         "result": "unknown_chr21",
         "count": lambda r: 1 if r else 0,
     },
+    "unknown_genome_wide": {
+        "argv": [sys.executable, "scripts/unknown_genome_wide.py"],
+        "describe": "Every human chromosome: stream, classify the UNKNOWN blocks, keep the summary, discard.",
+        "total": 25,
+        "result": "unknown_genome_wide",
+        "count": lambda r: len(r.get("chromosomes", {})),
+    },
     "distil": {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "distil"],
         "describe": "Turn any raw downloads present into result summaries.",
