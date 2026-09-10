@@ -73,6 +73,27 @@ svg.chart{width:100%;height:280px;display:block}
 .kpi div span{font-size:12px;color:var(--muted)}
 .scroll{max-height:420px;overflow:auto}
 .hint{font-size:12px;color:var(--muted);margin-top:6px}
+/* icons + hover explanations */
+.ic{display:inline-block;width:1.15em;text-align:center;margin-right:6px;font-style:normal}
+nav button .ic{margin-right:5px}
+[data-tip]{position:relative;cursor:help}
+[data-tip]::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:20;min-width:220px;max-width:340px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;font-weight:400;line-height:1.4;white-space:normal;box-shadow:0 6px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity .12s,transform .12s}
+[data-tip]:hover::after,[data-tip]:focus-within::after{opacity:1;transform:translateY(0)}
+[data-tip].tip-right::after{left:auto;right:0}
+.help{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--line);color:var(--muted);font-size:11px;margin-left:6px;vertical-align:middle;cursor:help}
+.help:hover{color:var(--ink);border-color:var(--accent)}
+.card h2{display:flex;align-items:center;gap:6px}
+.intro{display:flex;gap:14px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px}
+.intro .big{font-size:26px;line-height:1}
+.intro b{display:block;margin-bottom:2px}
+.intro .muted{font-size:12px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px}
+.step .n{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;text-align:center;line-height:20px;font-size:11px;margin-right:6px}
+.step .ic{font-size:16px}
+label{display:inline-flex;align-items:center;gap:4px}
+button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
+#start .card{margin-bottom:16px}
 .unc{margin-top:10px;font-size:12px}
 .unc table{font-size:12px}
 .unc .lbl{display:inline-block;width:64px;text-align:right;padding-right:6px}
@@ -83,36 +104,64 @@ svg.chart{width:100%;height:280px;display:block}
 <header>
   <h1>GenomeOS <span id="version"></span></h1>
   <nav>
-    <button data-tab="genome" class="active">Genome</button>
-    <button data-tab="program">Program</button>
-    <button data-tab="age">Ageing</button>
-    <button data-tab="twin">Twin</button>
-    <button data-tab="space">Space</button>
-    <button data-tab="debug">Debugger</button>
-    <button data-tab="libs">Libraries</button>
+    <button data-tab="start" class="active" data-tip="Start here: what GenomeOS is, what each area does, and a suggested first walk-through."><i class="ic">🧭</i>Start</button>
+    <button data-tab="genome" data-tip="Load real DNA (FASTA), look at any region, translate it to protein and find open reading frames."><i class="ic">🧬</i>Genome</button>
+    <button data-tab="program" data-tip="Write biology as code in BioLang, compile it to BioIR and run the regulatory network through time."><i class="ic">📝</i>Program</button>
+    <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
+    <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
+    <button data-tab="space" data-tip="Development in space: morphogen gradients, the segmentation clock and germ-layer choice."><i class="ic">🌱</i>Space</button>
+    <button data-tab="debug" data-tip="Step a model with biological breakpoints and get an explanation, with evidence, of what drove each value."><i class="ic">🔍</i>Debugger</button>
+    <button data-tab="libs" data-tip="The reusable 'libraries' the genome contains, in five layers, with membership computed from Gene Ontology and Reactome."><i class="ic">📚</i>Libraries</button>
   </nav>
 </header>
 <main>
 
+<!-- ================= START ================= -->
+<section id="start" class="active">
+  <div class="card">
+    <h2><i class="ic">🧭</i>Start here</h2>
+    <div class="intro"><span class="big">🧬</span><div><b>GenomeOS is an executable model of biology.</b><span class="muted">DNA is the source, BioLang is the language you write biology in, and the runtime plays it forward through time. Every rule carries its evidence and a confidence, so the interface always tells you how much of what you see is measured and how much is inferred. Hover any icon or <span class="help">?</span> for an explanation.</span></div></div>
+    <h2>The areas</h2>
+    <div class="steps">
+      <div class="step"><i class="ic">🧬</i><b>Genome</b> — raw DNA. Pick a file, fetch a region, translate it, find open reading frames. Real human chromosome 21 and the mitochondrial genome are included.</div>
+      <div class="step"><i class="ic">📝</i><b>Program</b> — biology as code. Genes, proteins and rules in BioLang; compile checks references and evidence; run draws the trajectory.</div>
+      <div class="step"><i class="ic">⏳</i><b>Ageing</b> — the timers. Telomere attrition, somatic mutations, epigenetic age and senescence for a chosen cell type and environment.</div>
+      <div class="step"><i class="ic">👥</i><b>Twin</b> — one person. Measured state (streamed from real data), variants in timer genes, forks and side-by-side futures.</div>
+      <div class="step"><i class="ic">🌱</i><b>Space</b> — development. A morphogen source patterns a field of cells; the segmentation clock lays down segments; germ layers form along a gradient.</div>
+      <div class="step"><i class="ic">🔍</i><b>Debugger</b> — why. Stop when a condition is met and read the rules and evidence behind the value.</div>
+      <div class="step"><i class="ic">📚</i><b>Libraries</b> — the parts list. 45 reusable modules the genome contains, verified against curated databases.</div>
+    </div>
+    <h2 style="margin-top:16px">A first walk-through</h2>
+    <div class="steps">
+      <div class="step"><span class="n">1</span>Open <b>Genome</b>, keep the mitochondrial genome, press <b>Translate</b>: the real COX1 protein appears from the DNA.</div>
+      <div class="step"><span class="n">2</span>Open <b>Program</b>: the repressilator (a synthetic 3-gene oscillator) runs on arrival. Change <code>max: 200</code> to <code>max: 50</code> and press <b>Run</b>.</div>
+      <div class="step"><span class="n">3</span>Open <b>Ageing</b>, set mutagen × to 2 and press <b>Simulate</b>, then <b>Compare with baseline</b>.</div>
+      <div class="step"><span class="n">4</span>Open <b>Twin</b>, fork HG002 with <code>TERT:nonsense</code> and <b>Run</b> A against B.</div>
+      <div class="step"><span class="n">5</span>Open <b>Debugger</b> and press <b>Run to breakpoint</b>: it stops when LacI passes 30 and explains why, with sources.</div>
+    </div>
+    <div class="hint" style="margin-top:12px">Evidence pills: <span class="pill experimental">experimental</span> measured in the lab · <span class="pill curated">curated</span> from a curated database · <span class="pill predicted">predicted</span> from a model · <span class="pill inferred">inferred</span> an estimate · <span class="pill none">none</span> a placeholder. Confidence runs 0 to 1.</div>
+  </div>
+</section>
+
 <!-- ================= GENOME ================= -->
-<section id="genome" class="active">
+<section id="genome">
   <div class="grid cols-2">
     <div class="card">
-      <h2>Sequence store</h2>
+      <h2><i class="ic">💾</i>Sequence store<span class="help" data-tip="Every FASTA under data/ (demo, real chromosomes, other species). Load reads the whole sequence and reports length, GC content, unknown bases (N) and telomeric TTAGGG repeats on each strand.">?</span></h2>
       <div class="row">
         <select id="g-file"></select>
-        <button class="primary" id="g-load">Load</button>
+        <button class="primary" id="g-load" data-tip="Read the selected FASTA and summarise every sequence in it."><i class="ic">📂</i>Load</button>
         <span class="muted" id="g-status"></span>
       </div>
       <div id="g-summary"></div>
       <div class="hint">Files under data/. Fetch real chromosomes with scripts/fetch_reference.sh.</div>
     </div>
     <div class="card">
-      <h2>Fetch a locus</h2>
+      <h2><i class="ic">📍</i>Fetch a locus<span class="help" data-tip="A locus is chromosome:start-end(strand), 0-based. Fetch shows the bases coloured by letter; Translate reads them as codons with the chosen genetic code (the mitochondrial code differs at four codons).">?</span></h2>
       <div class="row">
         <input id="g-locus" placeholder="chrM:5903-7445(+)" style="width:220px" class="mono">
-        <button class="ghost" id="g-fetch">Fetch</button>
-        <button class="ghost" id="g-translate">Translate</button>
+        <button class="ghost" id="g-fetch" data-tip="Show the bases at the locus (max 20,000 bp)."><i class="ic">📍</i>Fetch</button>
+        <button class="ghost" id="g-translate" data-tip="Fetch and translate the locus in frame 1 with the selected genetic code."><i class="ic">🧪</i>Translate</button>
         <select id="g-table"><option value="standard">standard code</option><option value="mito">mitochondrial code</option></select>
       </div>
       <div id="g-seq" class="seq"></div>
@@ -120,10 +169,10 @@ svg.chart{width:100%;height:280px;display:block}
     </div>
   </div>
   <div class="card" style="margin-top:16px">
-    <h2>Open reading frames</h2>
+    <h2><i class="ic">🔎</i>Open reading frames<span class="help" data-tip="Scans both strands and all three frames for start codon … stop codon stretches at least min-aa long. On the mitochondrial genome with the mito code the hits are the real MT-CO1, MT-CO2, MT-ATP6 proteins. Click a locus to view it.">?</span></h2>
     <div class="row">
-      <label>min aa <input id="g-minaa" type="number" value="50" min="10"></label>
-      <button class="ghost" id="g-orfs">Find ORFs</button>
+      <label data-tip="Minimum protein length to report, in amino acids.">min aa <input id="g-minaa" type="number" value="50" min="10"></label>
+      <button class="ghost" id="g-orfs" data-tip="Scan the loaded sequence for open reading frames on both strands (a whole chromosome takes a few seconds)."><i class="ic">🔎</i>Find ORFs</button>
       <span class="muted" id="g-orf-status"></span>
     </div>
     <div class="scroll"><table id="g-orf-table"></table></div>
@@ -134,32 +183,32 @@ svg.chart{width:100%;height:280px;display:block}
 <section id="program">
   <div class="grid cols-2">
     <div class="card">
-      <h2>BioLang source</h2>
+      <h2><i class="ic">📝</i>BioLang source<span class="help" data-tip="Declarative biology: gene, protein, region, cell_type, event and rule blocks with evidence and confidence. Compile checks that every rule points at a declared entity and reports confidence per kind; Run integrates the regulatory network.">?</span></h2>
       <div class="row">
         <select id="p-file"></select>
-        <button class="ghost" id="p-open">Open</button>
-        <button class="primary" id="p-compile">Compile</button>
-        <button class="primary" id="p-run">Run</button>
+        <button class="ghost" id="p-open" data-tip="Load the selected .bio file into the editor."><i class="ic">📂</i>Open</button>
+        <button class="primary" id="p-compile" data-tip="Parse the source to BioIR and report entities, rules, confidence and unknowns."><i class="ic">✅</i>Compile</button>
+        <button class="primary" id="p-run" data-tip="Integrate the network for the given hours (RK4) from the initial levels; the context gates rules by cell type."><i class="ic">▶️</i>Run</button>
       </div>
       <textarea id="p-src" spellcheck="false"></textarea>
       <div class="row" style="margin-top:10px">
-        <label>hours <input id="p-hours" type="number" value="60" min="1"></label>
-        <label>dt <input id="p-dt" type="number" value="0.01" step="0.001"></label>
-        <label>initial <input id="p-init" placeholder="TetR=10, LacI=0" style="width:170px" class="mono"></label>
-        <label>context <input id="p-ctx" placeholder="cell_type=neuron" style="width:150px" class="mono"></label>
+        <label data-tip="Simulated time in hours.">hours <input id="p-hours" type="number" value="60" min="1"></label>
+        <label data-tip="Integration step in hours; smaller is more accurate and slower.">dt <input id="p-dt" type="number" value="0.01" step="0.001"></label>
+        <label data-tip="Starting levels, e.g. TetR=10 kicks the oscillator off its symmetric zero state.">initial <input id="p-init" placeholder="TetR=10, LacI=0" style="width:170px" class="mono"></label>
+        <label data-tip="Key=value context for rule gating, e.g. cell_type=Neuron silences genes that type does not express.">context <input id="p-ctx" placeholder="cell_type=neuron" style="width:150px" class="mono"></label>
       </div>
       <div id="p-msg" class="err"></div>
     </div>
     <div>
       <div class="card">
-        <h2>Trajectory</h2>
+        <h2><i class="ic">📈</i>Trajectory<span class="help" data-tip="mRNA and protein levels over time for every species in the module. Peaks count how many times each species oscillated. Below it, the uncertainty table says how grounded the simulation is at each biological level.">?</span></h2>
         <svg class="chart" id="p-chart"></svg>
         <div class="legend" id="p-legend"></div>
         <div class="hint" id="p-runinfo"></div>
         <div id="p-unc" class="unc"></div>
       </div>
       <div class="card" style="margin-top:16px">
-        <h2>Compile report</h2>
+        <h2><i class="ic">✅</i>Compile report<span class="help" data-tip="Counts of entities, rules, parameters and UNKNOWN regions, mean confidence per kind, and the rules whose evidence is weak. UNKNOWN is a legal value: the compiler never invents a function for a region.">?</span></h2>
         <div id="p-report" class="muted">Compile a module to see entities, rules, confidence and unknowns.</div>
       </div>
     </div>
@@ -170,29 +219,29 @@ svg.chart{width:100%;height:280px;display:block}
 <section id="age">
   <div class="grid cols-2">
     <div class="card">
-      <h2>Cell population</h2>
+      <h2><i class="ic">🧫</i>Cell population<span class="help" data-tip="Which cell type, how many years, how many cells, and the random seed. Each cell has its own telomere length, mutation count, epigenetic pace and senescence state.">?</span></h2>
       <div class="row">
-        <label>cell type <select id="a-type"></select></label>
+        <label data-tip="Fibroblast (skin), hematopoietic stem (blood), colon crypt stem (gut) and neuron differ in division rate, telomerase and mutation rate.">cell type <select id="a-type"></select></label>
         <label>years <input id="a-years" type="number" value="90" min="1" max="120"></label>
         <label>cells <input id="a-cells" type="number" value="500" min="10" max="5000"></label>
-        <label>seed <input id="a-seed" type="number" value="1"></label>
+        <label data-tip="Random seed: same seed, same run.">seed <input id="a-seed" type="number" value="1"></label>
       </div>
-      <h2 style="margin-top:14px">Environment</h2>
+      <h2 style="margin-top:14px"><i class="ic">🌡️</i>Environment<span class="help" data-tip="Multipliers on the population average: proliferation (inflammation, injury), mutagen exposure (smoking, UV) and epigenetic pace (biological years per calendar year).">?</span></h2>
       <div class="row">
-        <label>proliferation ×<input id="a-prolif" type="number" value="1" step="0.1" min="0"></label>
-        <label>mutagen ×<input id="a-mutagen" type="number" value="1" step="0.1" min="0"></label>
-        <label>epigenetic pace <input id="a-pace" type="number" value="1" step="0.05" min="0.3"></label>
+        <label data-tip="Division rate multiplier; 2 = cells divide twice as often.">proliferation ×<input id="a-prolif" type="number" value="1" step="0.1" min="0"></label>
+        <label data-tip="Mutation rate multiplier; 2 = twice the somatic mutations per year.">mutagen ×<input id="a-mutagen" type="number" value="1" step="0.1" min="0"></label>
+        <label data-tip="Biological years per calendar year for the methylation clock; 1.2 ages 20% faster.">epigenetic pace <input id="a-pace" type="number" value="1" step="0.05" min="0.3"></label>
       </div>
-      <div class="row"><button class="primary" id="a-run">Simulate</button><button class="ghost" id="a-compare">Compare with baseline</button><span class="muted" id="a-status"></span></div>
+      <div class="row"><button class="primary" id="a-run" data-tip="Run the population forward and draw the three clocks."><i class="ic">▶️</i>Simulate</button><button class="ghost" id="a-compare" data-tip="Run again with the current settings and overlay the previous run as a dashed baseline."><i class="ic">⚖️</i>Compare with baseline</button><span class="muted" id="a-status"></span></div>
       <div class="kpi" id="a-kpi"></div>
       <div id="a-unc" class="unc"></div>
-      <h2>Parameters and evidence</h2>
+      <h2><i class="ic">📎</i>Parameters and evidence<span class="help" data-tip="Every number the model used, with its unit, the kind of evidence, the source (paper or database) and a confidence. Low-confidence rows are the ones to challenge first.">?</span></h2>
       <div class="scroll"><table id="a-evidence"></table></div>
     </div>
     <div>
-      <div class="card"><h2>Mean telomere length (bp)</h2><svg class="chart" id="a-c1"></svg><div class="legend" id="a-l1"></div></div>
-      <div class="card" style="margin-top:16px"><h2>Senescent fraction</h2><svg class="chart" id="a-c2"></svg><div class="legend" id="a-l2"></div></div>
-      <div class="card" style="margin-top:16px"><h2>Somatic mutations per cell · epigenetic age</h2><svg class="chart" id="a-c3"></svg><div class="legend" id="a-l3"></div></div>
+      <div class="card"><h2><i class="ic">🧵</i>Mean telomere length (bp)<span class="help" data-tip="Chromosome ends shorten with each division unless telomerase compensates. Blood and skin lose roughly 25–35 bp per year; the model is calibrated to that.">?</span></h2><svg class="chart" id="a-c1"></svg><div class="legend" id="a-l1"></div></div>
+      <div class="card" style="margin-top:16px"><h2><i class="ic">🛑</i>Senescent fraction<span class="help" data-tip="Cells that stopped dividing. The hazard rises as the mean telomere approaches the Hayflick range and with accumulated mutations; a few percent of cells by old age is realistic.">?</span></h2><svg class="chart" id="a-c2"></svg><div class="legend" id="a-l2"></div></div>
+      <div class="card" style="margin-top:16px"><h2><i class="ic">🧮</i>Somatic mutations per cell · epigenetic age<span class="help" data-tip="Mutations accumulate at a tissue-specific rate per year (Cagan 2022). Epigenetic age drifts at each cell's own pace around the environment setting; it is shown ×30 to share the axis.">?</span></h2><svg class="chart" id="a-c3"></svg><div class="legend" id="a-l3"></div></div>
     </div>
   </div>
 </section>
@@ -201,42 +250,42 @@ svg.chart{width:100%;height:280px;display:block}
 <section id="twin">
   <div class="grid cols-2">
     <div class="card">
-      <h2>Twins</h2>
+      <h2><i class="ic">👥</i>Twins<span class="help" data-tip="Saved twins under data/twins. HG002 is a real, openly consented genome; its telomere and epigenetic age were streamed from public sequencing data. A twin with a parent is a fork.">?</span></h2>
       <div id="t-list" class="scroll"></div>
-      <h2 style="margin-top:14px">New twin</h2>
+      <h2 style="margin-top:14px"><i class="ic">➕</i>New twin<span class="help" data-tip="Create a twin from a name and measured state: chronological age, mean telomere length (bp, Southern scale) and epigenetic age (years). Runs start from this state, not from birth.">?</span></h2>
       <div class="row">
         <label>name <input id="t-name" placeholder="HG002" style="width:110px"></label>
         <label>age <input id="t-age" type="number" value="45"></label>
         <label>telomere bp <input id="t-tel" type="number" value="7200"></label>
         <label>epigenetic age <input id="t-epi" type="number" value="47"></label>
-        <button class="ghost" id="t-new">Create</button>
+        <button class="ghost" id="t-new" data-tip="Save a new twin with this measured state."><i class="ic">➕</i>Create</button>
       </div>
-      <h2 style="margin-top:14px">Fork with a change</h2>
+      <h2 style="margin-top:14px"><i class="ic">🍴</i>Fork with a change<span class="help" data-tip="Copy a twin and change one thing: a variant written as GENE:consequence (for example TERT:nonsense or TP53:frameshift_variant), or the environment. Loss-of-function in timer or maintenance library genes changes the ageing parameters with inferred evidence.">?</span></h2>
       <div class="row">
         <label>from <select id="t-from"></select></label>
         <label>as <input id="t-newname" placeholder="HG002_TERT" style="width:130px"></label>
-        <label>variants <input id="t-variants" placeholder="TERT:nonsense, TP53:frameshift_variant" style="width:260px" class="mono"></label>
+        <label data-tip="Comma-separated GENE:consequence, e.g. TERT:nonsense, TP53:frameshift_variant. Only loss-of-function in timer/maintenance genes has a modelled effect.">variants <input id="t-variants" placeholder="TERT:nonsense, TP53:frameshift_variant" style="width:260px" class="mono"></label>
       </div>
       <div class="row">
         <label>mutagen ×<input id="t-mutagen" type="number" step="0.1" placeholder="1"></label>
         <label>pace <input id="t-pace" type="number" step="0.05" placeholder="1"></label>
-        <button class="ghost" id="t-fork">Fork</button>
+        <button class="ghost" id="t-fork" data-tip="Copy the twin with the variants and environment changes, and save it."><i class="ic">🍴</i>Fork</button>
         <span class="muted" id="t-status"></span>
       </div>
       <div class="hint">Variants in timer or maintenance library genes change ageing parameters with <span class="pill inferred">inferred</span> evidence; anything else is recorded but has no modelled effect yet.</div>
-      <h2 style="margin-top:14px">Measurements (streamed, distilled)</h2>
+      <h2 style="margin-top:14px"><i class="ic">📡</i>Measurements (streamed, distilled)<span class="help" data-tip="Results obtained by streaming real sequencing data over the network without storing it: telomere length from reads, epigenetic clocks from nanopore methylation calls, and calibrations fitted from them. Apply writes them into a twin's measured state.">?</span></h2>
       <div id="t-results" class="scroll"></div>
-      <div class="row" style="margin-top:8px"><label>apply to <select id="t-measure-twin"></select></label><button class="ghost" id="t-measure">Apply measured state</button></div>
+      <div class="row" style="margin-top:8px"><label>apply to <select id="t-measure-twin"></select></label><button class="ghost" id="t-measure" data-tip="Write the streamed measurements (telomere, epigenetic age) into this twin."><i class="ic">📡</i>Apply measured state</button></div>
     </div>
     <div class="card">
-      <h2>Run and compare</h2>
+      <h2><i class="ic">⚖️</i>Run and compare<span class="help" data-tip="Run twin A and twin B forward for the same years in the same cell type and compare each clock at the end. The delta table is B minus A; the uncertainty table applies to B.">?</span></h2>
       <div class="row">
         <label>A <select id="t-a"></select></label>
         <label>B <select id="t-b"></select></label>
         <label>cell type <select id="t-type"></select></label>
         <label>years <input id="t-years" type="number" value="30"></label>
         <label>cells <input id="t-cells" type="number" value="300"></label>
-        <button class="primary" id="t-run">Run</button>
+        <button class="primary" id="t-run" data-tip="Run A and B forward and compare their clocks."><i class="ic">▶️</i>Run</button>
       </div>
       <svg class="chart" id="t-c1"></svg><div class="legend" id="t-l1"></div>
       <svg class="chart" id="t-c2"></svg><div class="legend" id="t-l2"></div>
@@ -249,12 +298,12 @@ svg.chart{width:100%;height:280px;display:block}
 <!-- ================= SPACE ================= -->
 <section id="space">
   <div class="card">
-    <h2>Developmental models</h2>
+    <h2><i class="ic">🌱</i>Developmental models<span class="help" data-tip="French flag: a morphogen diffuses from the left edge and cells choose blue, white or red by thresholds (Wolpert 1969). Segmentation: an HES7 oscillator freezes as the FGF wavefront passes, one segment per period. Gastrulation: SOX2, TBXT and SOX17 compete along a NODAL gradient.">?</span></h2>
     <div class="row">
       <select id="s-model"><option value="flag">French flag (Wolpert 1969)</option><option value="segmentation">Segmentation clock (HES7 / FGF wavefront)</option><option value="gastrulation">Gastrulation (SOX2 / TBXT / SOX17 vs NODAL)</option></select>
-      <label>width <input id="s-width" type="number" value="60" min="20" max="200"></label>
-      <label>hours <input id="s-hours" type="number" value="100" min="5" max="400"></label>
-      <button class="primary" id="s-run">Run</button>
+      <label data-tip="Number of cells along the axis.">width <input id="s-width" type="number" value="60" min="20" max="200"></label>
+      <label data-tip="How long development runs; more hours, more segments.">hours <input id="s-hours" type="number" value="100" min="5" max="400"></label>
+      <button class="primary" id="s-run" data-tip="Run the selected developmental model for the given hours and draw the field of cells."><i class="ic">▶️</i>Run</button>
       <span class="muted" id="s-status"></span>
     </div>
     <div id="s-canvas" class="mono" style="line-height:1.1;letter-spacing:1px;margin:10px 0;overflow-x:auto"></div>
@@ -268,29 +317,29 @@ svg.chart{width:100%;height:280px;display:block}
 <section id="debug">
   <div class="grid cols-2">
     <div class="card">
-      <h2>Target</h2>
+      <h2><i class="ic">🎯</i>Target<span class="help" data-tip="Debug the BioLang module from the Program tab, or a single cell of a chosen type. Breakpoints are conditions on state: species levels for a module (LacI > 30), clocks for a cell (divisions >= 10, telomere_bp < 7000, senescent == true).">?</span></h2>
       <div class="row">
         <select id="d-kind"><option value="network">BioLang module (from the Program tab)</option><option value="ageing">Cell ageing (one cell)</option></select>
         <select id="d-type"></select>
       </div>
       <div class="row">
-        <label>breakpoints <input id="d-bp" placeholder="LacI > 30, TetR > 50" style="width:260px" class="mono"></label>
+        <label data-tip="Comma-separated conditions: name, operator (> >= < <= == !=), number. Stops at the first that becomes true.">breakpoints <input id="d-bp" placeholder="LacI > 30, TetR > 50" style="width:260px" class="mono"></label>
         <label>initial <input id="d-init" placeholder="TetR=10" style="width:120px" class="mono"></label>
         <label>until <input id="d-until" type="number" value="100"></label>
       </div>
       <div class="row">
-        <label>explain <input id="d-explain" placeholder="lacI.mRNA, LacI" style="width:200px" class="mono"></label>
-        <button class="primary" id="d-run">Run to breakpoint</button>
+        <label data-tip="Species to explain at the stop, e.g. lacI.mRNA (transcription terms) or LacI (translation and decay).">explain <input id="d-explain" placeholder="lacI.mRNA, LacI" style="width:200px" class="mono"></label>
+        <button class="primary" id="d-run" data-tip="Step until a breakpoint condition is met (or the limit), then explain."><i class="ic">⏯️</i>Run to breakpoint</button>
         <span class="muted" id="d-status"></span>
       </div>
       <div class="hint">Network breakpoints compare species levels (e.g. <span class="mono">LacI &gt; 30</span>); ageing breakpoints use <span class="mono">age, telomere_bp, divisions, somatic_mutations, epigenetic_age, senescent</span>.</div>
-      <h2 style="margin-top:14px">State at stop</h2>
+      <h2 style="margin-top:14px"><i class="ic">⏸️</i>State at stop<span class="help" data-tip="Every state variable at the moment the run stopped.">?</span></h2>
       <div id="d-state" class="mono"></div>
     </div>
     <div class="card">
-      <h2>Explanation with evidence</h2>
+      <h2><i class="ic">💡</i>Explanation with evidence<span class="help" data-tip="For each species you asked about: the terms driving its rate right now (activation, inhibition, decay, translation), largest first, each with the rule's evidence kind, source and confidence.">?</span></h2>
       <div id="d-explain-out" class="scroll"></div>
-      <h2 style="margin-top:14px">Event trace</h2>
+      <h2 style="margin-top:14px"><i class="ic">🧾</i>Event trace<span class="help" data-tip="For a cell: the discrete events that happened (divisions, senescence) with the parameter and source responsible.">?</span></h2>
       <div id="d-trace" class="scroll"></div>
     </div>
   </div>
@@ -299,7 +348,7 @@ svg.chart{width:100%;height:280px;display:block}
 <!-- ================= LIBRARIES ================= -->
 <section id="libs">
   <div class="card">
-    <h2>The libraries in the genome</h2>
+    <h2><i class="ic">📚</i>The libraries in the genome<span class="help" data-tip="Five layers: core (what every cell needs), blueprint (body plan and organs), timer (construction and maintenance clocks), systems (how tissues talk), parts (the inventory). Click a library to see its representative genes, scale, source and notes; search by gene symbol.">?</span></h2>
     <div class="row">
       <input id="l-search" placeholder="search library, gene or purpose" style="width:320px">
       <span class="muted" id="l-count"></span>
@@ -327,6 +376,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.classList.toggle('active', x === b));
   document.querySelectorAll('main section').forEach(s => s.classList.toggle('active', s.id === b.dataset.tab));
   location.hash = b.dataset.tab;
+  document.querySelectorAll('nav button').forEach(x => x.blur());
   // first visit to a simulation tab runs its default example
   if (!autoRan.has(b.dataset.tab)) {
     autoRan.add(b.dataset.tab);
