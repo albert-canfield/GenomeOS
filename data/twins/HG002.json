@@ -1,0 +1,21 @@
+{
+  "name": "HG002",
+  "genome": "data/twins/HG002_chr21.fa",
+  "vcf": "data/reference/HG002_GRCh38_benchmark.vcf.gz",
+  "sex": "male",
+  "measured": {
+    "chronological_age": 45.0,
+    "telomere_bp": 7200.0,
+    "epigenetic_age": 47.0,
+    "notes": ""
+  },
+  "environment": {
+    "proliferation_factor": 1.0,
+    "mutagen_factor": 1.0,
+    "epigenetic_pace": 1.0
+  },
+  "variants": [],
+  "modifiers": {},
+  "parent": "",
+  "note": ""
+}

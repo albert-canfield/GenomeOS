@@ -1,0 +1,692 @@
+"""GenomeOS light web UI: a stdlib HTTP server exposing the runtime as JSON.
+
+    genomeos serve            # http://127.0.0.1:8765
+
+Binds to localhost only. File access is restricted to the project's data/
+directory. No external dependencies; the page is a single static HTML file.
+"""
+
+from __future__ import annotations
+
+import json
+import threading
+import webbrowser
+from functools import lru_cache
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+from genomeos import __version__
+from genomeos.genome import Locus, Sequence, read_fasta
+from genomeos.lang import BioLangError, parse
+from genomeos.lib import LIBRARIES
+from genomeos.runtime import (
+    CELL_TYPES,
+    STANDARD_CODE,
+    VERTEBRATE_MITOCHONDRIAL_CODE,
+    CellRuntime,
+    Environment,
+    NetworkRuntime,
+    find_orfs,
+)
+
+STATIC = Path(__file__).parent / "static"
+TABLES = {"standard": STANDARD_CODE, "mito": VERTEBRATE_MITOCHONDRIAL_CODE}
+
+
+@lru_cache(maxsize=8)
+def _read_fasta_cached(path: str) -> dict[str, Sequence]:
+    return read_fasta(path)
+
+
+class ApiError(Exception):
+    def __init__(self, message: str, status: int = 400) -> None:
+        super().__init__(message)
+        self.status = status
+
+
+class Api:
+    """All endpoints as plain methods so they can be unit-tested without HTTP."""
+
+    def __init__(self, root: Path) -> None:
+        self.root = root.resolve()
+        self.data_dir = self.root / "data"
+
+    # ---- helpers -------------------------------------------------------
+
+    def _safe(self, rel: str) -> Path:
+        p = (self.root / rel).resolve()
+        if self.data_dir not in p.parents and p != self.data_dir:
+            raise ApiError("path outside data/ is not allowed", 403)
+        if not p.is_file():
+            raise ApiError(f"no such file: {rel}", 404)
+        return p
+
+    @staticmethod
+    def _load(path: str) -> dict[str, Sequence]:
+        return _read_fasta_cached(path)
+
+    # ---- files -----------------------------------------------------------
+
+    def files(self) -> dict:
+        genomes, modules = [], []
+        if self.data_dir.is_dir():
+            for p in sorted(self.data_dir.rglob("*")):
+                if not p.is_file():
+                    continue
+                rel = str(p.relative_to(self.root))
+                if p.name.endswith((".fa", ".fa.gz", ".fasta", ".fasta.gz", ".fna", ".fna.gz")):
+                    genomes.append({"path": rel, "size": p.stat().st_size})
+                elif p.suffix == ".bio":
+                    modules.append({"path": rel, "size": p.stat().st_size})
+        return {"genomes": genomes, "modules": modules, "version": __version__}
+
+    def module_source(self, rel: str) -> dict:
+        return {"path": rel, "source": self._safe(rel).read_text()}
+
+    # ---- genome ----------------------------------------------------------
+
+    def genome_info(self, rel: str) -> dict:
+        path = self._safe(rel)
+        rows = []
+        for name, seq in self._load(str(path)).items():
+            fwd, rev = seq.telomeric_repeats()
+            rows.append(
+                {
+                    "chromosome": name,
+                    "length_bp": len(seq),
+                    "gc": round(seq.gc_content(), 4),
+                    "n_fraction": round(seq.n_fraction(), 4),
+                    "ttaggg_fwd": fwd,
+                    "ttaggg_rev": rev,
+                }
+            )
+        return {"path": rel, "sequences": rows, "total_bp": sum(r["length_bp"] for r in rows)}
+
+    def genome_fetch(self, rel: str, locus: str) -> dict:
+        path = self._safe(rel)
+        seqs = self._load(str(path))
+        try:
+            loc = Locus.parse(locus)
+        except Exception as e:  # noqa: BLE001
+            raise ApiError(f"bad locus {locus!r}: {e}") from None
+        if loc.chrom not in seqs:
+            raise ApiError(f"no chromosome {loc.chrom!r} in {rel}", 404)
+        if loc.length > 20000:
+            raise ApiError("window limited to 20,000 bp")
+        seq = seqs[loc.chrom][loc.start : loc.end]
+        if loc.strand.value == "-":
+            seq = seq.reverse_complement()
+        return {"locus": str(loc), "sequence": str(seq), "gc": round(seq.gc_content(), 4)}
+
+    def genome_orfs(self, rel: str, min_aa: int = 50, table: str = "standard", limit: int = 500) -> dict:
+        path = self._safe(rel)
+        if table not in TABLES:
+            raise ApiError(f"table must be one of {sorted(TABLES)}")
+        out = []
+        for name, seq in self._load(str(path)).items():
+            for orf in find_orfs(seq, chrom=name, min_aa=min_aa, table=TABLES[table]):
+                out.append(
+                    {
+                        "locus": str(orf.locus),
+                        "chrom": orf.locus.chrom,
+                        "start": orf.locus.start,
+                        "end": orf.locus.end,
+                        "strand": orf.locus.strand.value,
+                        "length_aa": orf.length_aa,
+                        "protein": orf.protein,
+                    }
+                )
+        out.sort(key=lambda o: -o["length_aa"])
+        return {"count": len(out), "orfs": out[:limit], "truncated": len(out) > limit}
+
+    # ---- program ---------------------------------------------------------
+
+    def compile(self, source: str) -> dict:
+        try:
+            module = parse(source, name_hint="editor")
+        except BioLangError as e:
+            return {"ok": False, "error": str(e)}
+        return {
+            "ok": True,
+            "module": module.to_dict(),
+            "report": {
+                "entities": len(module.entities),
+                "rules": len(module.rules),
+                "parameters": len(module.parameters),
+                "confidence": module.confidence_report(),
+                "unknown": [
+                    {"id": u.id, "locus": str(u.locus) if u.locus else None} for u in module.unknowns()
+                ],
+                "weak_rules": [
+                    {
+                        "id": r.id,
+                        "confidence": r.confidence,
+                        "evidence": r.evidence.kind.value,
+                        "source": r.evidence.source,
+                    }
+                    for r in module.rules
+                    if r.confidence < 0.5
+                ],
+            },
+        }
+
+    def run(
+        self,
+        source: str,
+        hours: float = 50.0,
+        dt: float = 0.01,
+        initial: dict | None = None,
+        context: dict | None = None,
+        seed: int | None = None,
+        points: int = 600,
+    ) -> dict:
+        try:
+            module = parse(source, name_hint="editor")
+        except BioLangError as e:
+            return {"ok": False, "error": str(e)}
+        hours = min(max(float(hours), 0.1), 2000.0)
+        dt = min(max(float(dt), 1e-4), 1.0)
+        vm = NetworkRuntime(module, context=context or {}, seed=seed)
+        steps = int(round(hours / dt))
+        record_every = max(1, steps // points)
+        traj = vm.run(
+            hours=hours,
+            dt=dt,
+            initial={k: float(v) for k, v in (initial or {}).items()},
+            record_every=record_every,
+        )
+        return {
+            "ok": True,
+            "module": module.name,
+            "active_rules": len(vm.active_rules),
+            "total_rules": len(module.rules),
+            "times": traj.times,
+            "species": traj.species,
+            "levels": traj.levels,
+            "peaks": {s: traj.peaks(s) for s in traj.species},
+        }
+
+    # ---- ageing ----------------------------------------------------------
+
+    def age(
+        self,
+        cell_type: str = "fibroblast",
+        years: float = 90,
+        cells: int = 500,
+        seed: int = 1,
+        proliferation: float = 1.0,
+        mutagen: float = 1.0,
+        pace: float = 1.0,
+    ) -> dict:
+        if cell_type not in CELL_TYPES:
+            raise ApiError(f"cell_type must be one of {sorted(CELL_TYPES)}")
+        years = min(max(float(years), 1), 120)
+        cells = min(max(int(cells), 10), 5000)
+        env = Environment(
+            proliferation_factor=float(proliferation),
+            mutagen_factor=float(mutagen),
+            epigenetic_pace=float(pace),
+        )
+        rt = CellRuntime(seed=int(seed), env=env)
+        reports = rt.simulate_tissue(cell_type, years, n_cells=cells, dt_years=0.5, report_every_years=1.0)
+        return {
+            "cell_type": cell_type,
+            "cells": cells,
+            "years": years,
+            "reports": [
+                {
+                    "age": r.age_years,
+                    "senescent": r.senescent_fraction,
+                    "telomere_bp": r.mean_telomere_bp,
+                    "mutations": r.mean_mutations,
+                    "epigenetic_age": r.mean_epigenetic_age,
+                }
+                for r in reports
+            ],
+            "evidence": [
+                {
+                    "name": p.name,
+                    "value": p.value,
+                    "unit": p.unit,
+                    "confidence": p.confidence,
+                    "kind": p.evidence.kind.value,
+                    "source": p.evidence.source,
+                    "note": p.evidence.note,
+                }
+                for p in rt.evidence_table(cell_type)
+            ],
+            "cell_types": sorted(CELL_TYPES),
+            "uncertainty": __import__("genomeos.runtime.uncertainty", fromlist=["report_for_ageing"])
+            .report_for_ageing(rt.evidence_table(cell_type))
+            .to_dict(),
+        }
+
+    # ---- twins ------------------------------------------------------------
+
+    def twins(self) -> dict:
+        from genomeos.twin import Twin
+
+        d = self.root / "data" / "twins"
+        out = []
+        if d.is_dir():
+            for p in sorted(d.glob("*.json")):
+                try:
+                    t = Twin.load(p)
+                except Exception:  # noqa: BLE001
+                    continue
+                out.append(
+                    {
+                        "name": t.name,
+                        "parent": t.parent,
+                        "age": t.measured.chronological_age,
+                        "telomere_bp": t.measured.telomere_bp,
+                        "epigenetic_age": t.measured.epigenetic_age,
+                        "variants": [f"{v.gene}:{v.consequence}" for v in t.variants],
+                        "modifiers": t.modifiers,
+                        "note": t.note,
+                    }
+                )
+        return {"twins": out}
+
+    def twin_fork(
+        self,
+        name: str,
+        new_name: str,
+        variants: list[str],
+        mutagen: float | None,
+        pace: float | None,
+        note: str = "",
+    ) -> dict:
+        from genomeos.twin import Twin
+
+        src = self.root / "data" / "twins" / f"{name}.json"
+        if not src.is_file():
+            raise ApiError(f"no twin {name!r}", 404)
+        if not new_name.replace("_", "").replace("-", "").isalnum():
+            raise ApiError("new name must be alphanumeric with _ or -")
+        t = Twin.load(src).fork(new_name, note)
+        applied = {}
+        for spec in variants:
+            gene, _, cons = spec.partition(":")
+            if gene:
+                applied[spec] = t.add_variant(gene.strip(), (cons or "nonsense").strip())
+        if mutagen is not None:
+            t.environment.mutagen_factor = float(mutagen)
+        if pace is not None:
+            t.environment.epigenetic_pace = float(pace)
+        t.save(self.root / "data" / "twins")
+        return {"ok": True, "twin": new_name, "applied": applied, "modifiers": t.modifiers}
+
+    def twin_new(
+        self,
+        name: str,
+        age: float,
+        telomere: float | None,
+        epigenetic_age: float | None,
+        sex: str = "unknown",
+    ) -> dict:
+        from genomeos.twin import Twin
+        from genomeos.twin.twin import MeasuredState
+
+        if not name.replace("_", "").replace("-", "").isalnum():
+            raise ApiError("name must be alphanumeric with _ or -")
+        t = Twin(name, sex=sex, measured=MeasuredState(float(age), telomere, epigenetic_age))
+        t.save(self.root / "data" / "twins")
+        return {"ok": True, "twin": name}
+
+    def twin_run(
+        self,
+        names: list[str],
+        cell_type: str = "fibroblast",
+        years: float = 40,
+        cells: int = 300,
+        seed: int = 1,
+    ) -> dict:
+        from genomeos.twin import Twin, diff_runs
+
+        if cell_type not in CELL_TYPES:
+            raise ApiError(f"cell_type must be one of {sorted(CELL_TYPES)}")
+        runs = []
+        for name in names[:2]:
+            src = self.root / "data" / "twins" / f"{name}.json"
+            if not src.is_file():
+                raise ApiError(f"no twin {name!r}", 404)
+            t = Twin.load(src)
+            runs.append(
+                t.run(cell_type, years=min(float(years), 100), cells=min(int(cells), 3000), seed=int(seed))
+            )
+        out = {"runs": [r.to_dict() for r in runs]}
+        if len(runs) == 2:
+            out["diff"] = diff_runs(runs[0], runs[1])
+        return out
+
+    # ---- development (space) --------------------------------------------
+
+    def develop(self, model: str, width: int = 60, hours: float = 100.0) -> dict:
+        width = min(max(int(width), 20), 200)
+        hours = min(max(float(hours), 5), 400)
+        if model == "flag":
+            from genomeos.runtime.spatial import french_flag
+
+            rt = french_flag(width=width, height=6, hours=hours)
+            return {
+                "model": "flag",
+                "rows": rt.type_map(),
+                "bands": rt.bands_along_x(),
+                "census": rt.census(),
+                "profile": rt.fields["morphogen"].profile_x(),
+                "parameters": [
+                    {
+                        "name": q.name,
+                        "value": q.value,
+                        "kind": q.evidence.kind.value,
+                        "source": q.evidence.source,
+                        "confidence": q.confidence,
+                    }
+                    for q in rt.parameters
+                ],
+            }
+        if model == "segmentation":
+            from genomeos.runtime.segmentation import run_segmentation
+
+            r = run_segmentation(length=width, hours=hours)
+            cells = ["A" if ph < 3.14159265 else "P" for ph in r.frozen_phase if ph == ph]
+            return {
+                "model": "segmentation",
+                "period_h": r.period_h,
+                "count": r.count,
+                "expected": r.expected,
+                "segments": r.segments,
+                "cells": cells,
+                "fgf": r.fields["fgf"],
+                "uncertainty": r.uncertainty().to_dict(),
+            }
+        if model == "gastrulation":
+            from genomeos.runtime.gastrulation import run_gastrulation
+
+            r = run_gastrulation(cells=min(width, 120), hours=min(hours, 60))
+            return {
+                "model": "gastrulation",
+                "fates": r.fates,
+                "positions": r.positions,
+                "proportions": r.proportions(),
+                "uncertainty": r.uncertainty().to_dict(),
+            }
+        raise ApiError("model must be flag, segmentation or gastrulation")
+
+    # ---- debugger -----------------------------------------------------------
+
+    def debug(
+        self,
+        source: str,
+        breakpoints: list[str],
+        initial: dict | None,
+        until: float = 100.0,
+        explain: list[str] | None = None,
+        cell_type: str | None = None,
+    ) -> dict:
+        from genomeos.runtime.debugger import AgeingDebugger, NetworkDebugger
+
+        if cell_type:
+            if cell_type not in CELL_TYPES:
+                raise ApiError(f"cell_type must be one of {sorted(CELL_TYPES)}")
+            dbg = AgeingDebugger(cell_type, seed=1)
+            for b in breakpoints:
+                try:
+                    dbg.add_breakpoint(b)
+                except ValueError as e:
+                    raise ApiError(str(e)) from None
+            hit = dbg.step(years=min(float(until), 120))
+            return {
+                "ok": True,
+                "kind": "ageing",
+                "hit": str(hit) if hit else None,
+                "time": dbg.session.time,
+                "state": dbg.session.state,
+                "trace": [
+                    {
+                        "time": line.time,
+                        "subject": line.subject,
+                        "message": line.message,
+                        "evidence": line.evidence,
+                        "confidence": line.confidence,
+                    }
+                    for line in dbg.session.trace[-40:]
+                ],
+                "explain": [
+                    {
+                        "time": line.time,
+                        "subject": line.subject,
+                        "message": line.message,
+                        "evidence": line.evidence,
+                        "confidence": line.confidence,
+                    }
+                    for line in dbg.explain()
+                ],
+            }
+        try:
+            module = parse(source, name_hint="editor")
+        except BioLangError as e:
+            return {"ok": False, "error": str(e)}
+        dbg = NetworkDebugger(module)
+        if initial:
+            dbg.set_initial({k: float(v) for k, v in initial.items()})
+        for b in breakpoints:
+            try:
+                dbg.add_breakpoint(b)
+            except ValueError as e:
+                raise ApiError(str(e)) from None
+        hit = dbg.run_until_break(max_hours=min(float(until), 1000))
+        targets = explain or ([hit.variable] if hit else [])
+        expl = {
+            sp: [
+                {
+                    "time": line.time,
+                    "subject": line.subject,
+                    "message": line.message,
+                    "evidence": line.evidence,
+                    "confidence": line.confidence,
+                }
+                for line in dbg.explain(sp)
+            ]
+            for sp in targets
+            if sp in dbg.session.state
+        }
+        return {
+            "ok": True,
+            "kind": "network",
+            "hit": str(hit) if hit else None,
+            "time": dbg.session.time,
+            "state": dbg.session.state,
+            "explain": expl,
+        }
+
+    # ---- libraries -------------------------------------------------------
+
+    def libs(self) -> dict:
+        return {
+            "libraries": [
+                {
+                    "id": l.id,
+                    "layer": l.layer,
+                    "purpose": l.purpose,
+                    "genes": list(l.genes),
+                    "scale": l.scale,
+                    "source": l.source,
+                    "note": l.note,
+                }
+                for l in LIBRARIES.values()
+            ]
+        }
+
+
+class Handler(BaseHTTPRequestHandler):
+    api: Api  # set by serve()
+
+    def log_message(self, fmt: str, *args) -> None:  # quieter console
+        if self.server.verbose:  # type: ignore[attr-defined]
+            super().log_message(fmt, *args)
+
+    def _json(self, payload: dict, status: int = 200) -> None:
+        body = json.dumps(payload).encode()
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _static(self, name: str) -> None:
+        p = (STATIC / name).resolve()
+        if STATIC.resolve() not in p.parents or not p.is_file():
+            self._json({"error": "not found"}, 404)
+            return
+        body = p.read_bytes()
+        ctype = "text/html; charset=utf-8" if p.suffix == ".html" else "application/octet-stream"
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _q(self, qs: dict, key: str, default=None):
+        return qs.get(key, [default])[0]
+
+    def do_GET(self) -> None:  # noqa: N802
+        u = urlparse(self.path)
+        qs = parse_qs(u.query)
+        try:
+            if u.path in ("/", "/index.html"):
+                return self._static("index.html")
+            if u.path == "/api/files":
+                return self._json(self.api.files())
+            if u.path == "/api/module":
+                return self._json(self.api.module_source(self._q(qs, "path", "")))
+            if u.path == "/api/genome/info":
+                return self._json(self.api.genome_info(self._q(qs, "path", "")))
+            if u.path == "/api/genome/fetch":
+                return self._json(self.api.genome_fetch(self._q(qs, "path", ""), self._q(qs, "locus", "")))
+            if u.path == "/api/genome/orfs":
+                return self._json(
+                    self.api.genome_orfs(
+                        self._q(qs, "path", ""),
+                        int(self._q(qs, "min_aa", 50)),
+                        self._q(qs, "table", "standard"),
+                    )
+                )
+            if u.path == "/api/libs":
+                return self._json(self.api.libs())
+            if u.path == "/api/twins":
+                return self._json(self.api.twins())
+            if u.path == "/api/develop":
+                return self._json(
+                    self.api.develop(
+                        self._q(qs, "model", "flag"),
+                        int(self._q(qs, "width", 60)),
+                        float(self._q(qs, "hours", 100)),
+                    )
+                )
+            if u.path == "/api/age":
+                kw = {k: v[0] for k, v in qs.items()}
+                return self._json(self.api.age(**kw))
+            return self._json({"error": "not found"}, 404)
+        except ApiError as e:
+            return self._json({"error": str(e)}, e.status)
+        except Exception as e:  # noqa: BLE001
+            return self._json({"error": f"{type(e).__name__}: {e}"}, 500)
+
+    def do_POST(self) -> None:  # noqa: N802
+        u = urlparse(self.path)
+        length = int(self.headers.get("Content-Length", "0"))
+        try:
+            body = json.loads(self.rfile.read(length) or b"{}")
+            if u.path == "/api/compile":
+                return self._json(self.api.compile(body.get("source", "")))
+            if u.path == "/api/debug":
+                return self._json(
+                    self.api.debug(
+                        body.get("source", ""),
+                        body.get("breakpoints", []),
+                        body.get("initial"),
+                        body.get("until", 100),
+                        body.get("explain"),
+                        body.get("cell_type"),
+                    )
+                )
+            if u.path == "/api/twin/new":
+                return self._json(
+                    self.api.twin_new(
+                        body.get("name", ""),
+                        body.get("age", 0),
+                        body.get("telomere"),
+                        body.get("epigenetic_age"),
+                        body.get("sex", "unknown"),
+                    )
+                )
+            if u.path == "/api/twin/fork":
+                return self._json(
+                    self.api.twin_fork(
+                        body.get("name", ""),
+                        body.get("new_name", ""),
+                        body.get("variants", []),
+                        body.get("mutagen"),
+                        body.get("pace"),
+                        body.get("note", ""),
+                    )
+                )
+            if u.path == "/api/twin/run":
+                return self._json(
+                    self.api.twin_run(
+                        body.get("names", []),
+                        body.get("cell_type", "fibroblast"),
+                        body.get("years", 40),
+                        body.get("cells", 300),
+                        body.get("seed", 1),
+                    )
+                )
+            if u.path == "/api/run":
+                return self._json(
+                    self.api.run(
+                        body.get("source", ""),
+                        body.get("hours", 50),
+                        body.get("dt", 0.01),
+                        body.get("initial"),
+                        body.get("context"),
+                        body.get("seed"),
+                    )
+                )
+            return self._json({"error": "not found"}, 404)
+        except ApiError as e:
+            return self._json({"error": str(e)}, e.status)
+        except Exception as e:  # noqa: BLE001
+            return self._json({"error": f"{type(e).__name__}: {e}"}, 500)
+
+
+def make_server(
+    root: Path, host: str = "127.0.0.1", port: int = 8765, verbose: bool = False
+) -> ThreadingHTTPServer:
+    Handler.api = Api(root)
+    srv = ThreadingHTTPServer((host, port), Handler)
+    srv.verbose = verbose  # type: ignore[attr-defined]
+    return srv
+
+
+def serve(
+    root: Path | None = None,
+    host: str = "127.0.0.1",
+    port: int = 8765,
+    open_browser: bool = False,
+    verbose: bool = False,
+) -> None:
+    srv = make_server(root or Path.cwd(), host, port, verbose)
+    url = f"http://{host}:{port}/"
+    print(f"GenomeOS {__version__} web UI at {url}  (Ctrl-C to stop)")
+    if open_browser:
+        threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+    try:
+        srv.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        srv.server_close()

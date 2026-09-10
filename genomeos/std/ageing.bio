@@ -1,0 +1,33 @@
+# bio.std.ageing — the maintenance timers as declarative events.
+# Mirrors the parameters of genomeos.runtime.cell so that a BioLang module can
+# import the same evidence-carrying facts the ageing runtime uses.
+module bio.std.ageing
+
+event divide {
+  rate: 0.5 /yr
+  when: cell_type = any
+  effect: telomere_bp -= 70 bp
+  effect: divisions += 1
+  evidence: experimental "Harley, Futcher & Greider 1990, Nature 345:458"
+  confidence: 0.8
+}
+
+event mutate {
+  rate: 30 /yr
+  effect: somatic_mutations += 1
+  evidence: experimental "Cagan et al. 2022, Nature 604:517"
+  confidence: 0.6
+}
+
+event senesce {
+  rate: 0.02 /yr
+  when: telomere_short = true
+  effect: senescent = 1
+  evidence: experimental "Hayflick & Moorhead 1961, Exp Cell Res 25:585"
+  confidence: 0.5
+}
+
+param telomere_at_birth_bp = 10000 bp {
+  evidence: experimental "Factor-Litvak et al. 2016, Pediatrics 137:e20153927"
+  confidence: 0.7
+}

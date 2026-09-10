@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+.DS_Store
+
+# Downloaded datasets and generated artefacts never go in the repository.
+# Fetch them with scripts/fetch_reference.sh (see docs/DATA.md).
+data/reference/
+data/knowledge/
+data/cache/
+data/twins/*.fa
+data/twins/*.fa.fai
+*.fa.gz
+*.fa.fai
+*.vcf.gz
+*.series_matrix.txt.gz

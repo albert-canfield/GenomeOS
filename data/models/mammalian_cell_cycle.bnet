@@ -1,0 +1,15 @@
+# Mammalian cell cycle, Fauré, Naldi, Chaouiya & Thieffry 2006 (Bioinformatics 22:e124).
+# 10-node Boolean model. CycD is the input (growth factors). With CycD = 0 the
+# network settles into a G1-arrest fixed point (Rb, p27, Cdh1 on); with CycD = 1
+# it enters a cyclic attractor: the cell cycle.
+targets, factors
+CycD,  CycD
+Rb,    (!CycD & !CycE & !CycA & !CycB) | (p27 & !CycD & !CycB)
+E2F,   (!Rb & !CycA & !CycB) | (p27 & !Rb & !CycB)
+CycE,  E2F & !Rb
+CycA,  (E2F & !Rb & !Cdc20 & !(Cdh1 & UbcH10)) | (CycA & !Rb & !Cdc20 & !(Cdh1 & UbcH10))
+p27,   (!CycD & !CycE & !CycA & !CycB) | (p27 & !(CycE & CycA) & !CycB & !CycD)
+Cdc20, CycB
+Cdh1,  (!CycA & !CycB) | Cdc20 | (p27 & !CycB)
+UbcH10, !Cdh1 | (Cdh1 & UbcH10 & (Cdc20 | CycA | CycB))
+CycB,  !Cdc20 & !Cdh1
