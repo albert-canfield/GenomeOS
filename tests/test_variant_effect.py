@@ -21,7 +21,17 @@ from genomeos.runtime import classify, classify_all
 
 GFF = default_gencode({"chr21", "chrM"}) or Path("missing")
 CHR21 = Path("data/reference/chr21.fa.gz")
-CLINVAR = Path("data/reference/clinvar_chr21_MT.vcf")
+CLINVAR = next(
+    (
+        p
+        for p in (
+            Path("data/reference/clinvar_chr21_MT.vcf"),
+            Path("data/results/clinvar_chr21_coding.vcf.gz"),
+        )
+        if p.exists()
+    ),
+    Path("missing"),
+)
 
 
 def _toy():
