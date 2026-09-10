@@ -13,7 +13,7 @@
 
   function resize() {
     const r = canvas.parentElement.getBoundingClientRect();
-    canvas.width = Math.floor(r.width); canvas.height = 440; mini.width = Math.floor(r.width); mini.height = 26;
+    canvas.width = Math.floor(r.width); canvas.height = Math.max(440, Math.floor(window.innerHeight - 420)); canvas.style.height = canvas.height + 'px'; mini.width = Math.floor(r.width); mini.height = 26;
     draw();
   }
   window.addEventListener('resize', resize);
@@ -89,10 +89,14 @@
     for (let p = Math.ceil(st.view[0] / step) * step; p < st.view[1]; p += step) {
       const x = X(p); ctx.fillStyle = line; ctx.fillRect(x, 0, 1, H); ctx.fillStyle = muted(); ctx.fillText(fmtPos(p), x + 3, 12);
     }
-    const geneH = span < 2e6 ? 26 : 12, gapY = 4;
-    const yPlus = 22, rowsPlus = Math.max(1, st.tracks.plus);
+    // use the whole height: split it among the packed rows of the three tracks
+    const rowsPlus = Math.max(1, st.tracks.plus), rowsMinus = Math.max(1, st.tracks.minus), rowsOther = Math.max(1, st.tracks.other);
+    const totalRows = rowsPlus + rowsMinus + rowsOther;
+    const gapY = 4, labels = 3 * 18 + 22;
+    const geneH = Math.max(10, Math.min(120, (H - labels) / totalRows - gapY));
+    const yPlus = 22;
     const yMinus = yPlus + rowsPlus * (geneH + gapY) + 18;
-    const yOther = yMinus + Math.max(1, st.tracks.minus) * (geneH + gapY) + 18;
+    const yOther = yMinus + rowsMinus * (geneH + gapY) + 18;
     ctx.fillStyle = muted(); ctx.fillText('+ strand', 4, yPlus - 4); ctx.fillText('− strand', 4, yMinus - 4); ctx.fillText('sequence elements & UNKNOWN', 4, yOther - 4);
     st.hitboxes = [];
     const bs = st.data.blocks;
@@ -117,8 +121,8 @@
       if (w > 30) { ctx.fillStyle = m ? muted() : '#fff'; ctx.font = 'bold 11px system-ui'; ctx.fillText(b.name + (b.attrs.gene_type !== 'protein_coding' ? ' · ' + b.attrs.gene_type : ''), x0 + 4, y + 11); }
       // transcripts inside when zoomed
       const ts = (st.kids[b.id] || []).filter(t => t.type === 'transcript');
-      if (span < 2e6 && ts.length && h >= 26) {
-        const showN = Math.min(ts.length, Math.max(1, Math.floor((h - 14) / 4)));
+      if (span < 2e6 && ts.length && h >= 22) {
+        const showN = Math.min(ts.length, Math.max(1, Math.floor((h - 14) / 5)));
         const subH = (h - 14) / showN;
         for (const t of ts) {
           if (t._sub >= showN) break;
