@@ -241,6 +241,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label><input type="checkbox" value="cpg_island" checked> CpG island</label>
       <label><input type="checkbox" value="repeat" checked> repeat</label>
       <label><input type="checkbox" value="gap" checked> gap</label>
+      <button class="ghost" id="b-investigate" data-tip="Run `genomeos unknown` on this chromosome as a background job: every UNKNOWN block is classified (repeats learned from the chromosome's own k-mers, tandem repeats, open reading frames, CpG islands, named patterns). Results label the UNKNOWN blocks here and appear under Progress."><i class="ic">🔬</i>Investigate UNKNOWN</button>
       <label style="margin-left:auto" data-tip="Edit mode: drag a gene, transcript or exon to propose a move. The server checks plausibility: inside its parent, no overlap on the same strand, reading frame kept for exons. Accepted moves are proposals with predicted evidence."><input type="checkbox" id="b-mode"> <span id="b-modelabel">view mode</span></label>
     </div>
     <div id="b-summary" style="margin:6px 0 8px"></div>
@@ -737,6 +738,7 @@ $('#t-measure').onclick = async () => {
   try { const r = await api('/api/twin/measure', {name: $('#t-measure-twin').value}); $('#t-status').textContent = `applied to ${r.twin}: ${JSON.stringify(r.applied)}`; loadTwins(); }
   catch (e) { $('#t-status').textContent = e.message; }
 };
+$('#b-investigate').onclick = async () => { try { const r = await api('/api/jobs/start', {name: 'unknown_chr21'}); $('#b-status').textContent = `investigation ${r.job.state}: see Progress`; } catch (e) { $('#b-status').textContent = e.message; } };
 $('#t-new').onclick = async () => {
   try { await api('/api/twin/new', {name: $('#t-name').value.trim(), age: +$('#t-age').value, telomere: $('#t-tel').value ? +$('#t-tel').value : null, epigenetic_age: $('#t-epi').value ? +$('#t-epi').value : null}); $('#t-status').textContent = 'created'; loadTwins(); }
   catch (e) { $('#t-status').textContent = e.message; }

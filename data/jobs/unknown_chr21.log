@@ -1,0 +1,41 @@
+  counting 16-mers over the chromosome
+  1/446 blocks (5,011,798 bp -> gap)
+  26/446 blocks (111,853 bp -> coding_remnant)
+  51/446 blocks (74,665 bp -> coding_remnant)
+  76/446 blocks (51,315 bp -> coding_remnant)
+  101/446 blocks (37,633 bp -> coding_remnant)
+  126/446 blocks (30,953 bp -> coding_remnant)
+  151/446 blocks (26,031 bp -> coding_remnant)
+  176/446 blocks (22,537 bp -> coding_remnant)
+  201/446 blocks (17,866 bp -> coding_remnant)
+  226/446 blocks (14,817 bp -> coding_remnant)
+  251/446 blocks (11,511 bp -> coding_remnant)
+  276/446 blocks (8,520 bp -> coding_remnant)
+  301/446 blocks (7,250 bp -> coding_remnant)
+  326/446 blocks (5,599 bp -> unclassified)
+  351/446 blocks (4,914 bp -> coding_remnant)
+  376/446 blocks (3,954 bp -> coding_remnant)
+  401/446 blocks (2,722 bp -> promoter_like)
+  426/446 blocks (1,620 bp -> promoter_like)
+  446/446 blocks (1,002 bp -> unclassified)
+chr21: 446 UNKNOWN blocks, 20,813,319 bp
+  classified 97.5%
+class           blocks  bp          share
+--------------  ------  ----------  -----
+coding_remnant  354     11,773,843  56.6%
+gap             15      6,155,943   29.6%
+centromere      1       2,349,840   11.3%
+unclassified    69      512,048     2.5% 
+promoter_like   7       21,645      0.1% 
+largest blocks:
+  chr21:0-5011798           5,011,798 bp  gap                    conf=1.0  gc=None tandem=None highcopy=None orf=None
+  chr21:10649835-12999675   2,349,840 bp  centromere             conf=0.7  gc=0.386 tandem=0.002 highcopy=0.814 orf=16707
+  chr21:19900043-20193596     293,553 bp  coding_remnant         conf=0.4  gc=0.351 tandem=0.01 highcopy=0.107 orf=572
+  chr21:7829632-8101250       271,618 bp  coding_remnant         conf=0.4  gc=0.384 tandem=0.006 highcopy=0.365 orf=17250
+  chr21:24547942-24811402     263,460 bp  coding_remnant         conf=0.4  gc=0.352 tandem=0.011 highcopy=0.107 orf=168
+  chr21:5709737-5972923       263,186 bp  coding_remnant         conf=0.4  gc=0.404 tandem=0.005 highcopy=0.108 orf=16715
+  chr21:7142308-7385057       242,749 bp  coding_remnant         conf=0.4  gc=0.377 tandem=0.003 highcopy=0.413 orf=16751
+  chr21:23490724-23704247     213,523 bp  coding_remnant         conf=0.4  gc=0.345 tandem=0.011 highcopy=0.101 orf=193
+  chr21:22669586-22882581     212,995 bp  coding_remnant         conf=0.4  gc=0.353 tandem=0.009 highcopy=0.109 orf=327
+  chr21:5243903-5448586       204,683 bp  coding_remnant         conf=0.4  gc=0.371 tandem=0.002 highcopy=0.415 orf=16705
+  saved data/results/unknown_chr21.json

@@ -1,0 +1,65 @@
+{
+  "result": "unknown_chrM",
+  "date": "2026-09-10",
+  "chrom": "chrM",
+  "unknown_blocks": 2,
+  "unknown_bp": 1122,
+  "by_class": {
+    "unclassified": {
+      "blocks": 2,
+      "bp": 1122
+    }
+  },
+  "classified_fraction": 0.0,
+  "high_copy_threshold": 40,
+  "patterns": [
+    "telomeric_repeat",
+    "cenp_b_box",
+    "alu_core",
+    "poly_a_tail"
+  ],
+  "blocks": [
+    {
+      "start": 0,
+      "end": 576,
+      "length": 576,
+      "class": "unclassified",
+      "evidence": "none",
+      "confidence": 0.0,
+      "features": {
+        "n_fraction": 0.0,
+        "gc": 0.464,
+        "tandem_fraction": 0.017,
+        "low_complexity_fraction": 0.0,
+        "high_copy_fraction": 0.0,
+        "cpg_islands": 0,
+        "longest_orf_aa": 0,
+        "periodicity_171": 0.0,
+        "composition": {}
+      },
+      "patterns": {},
+      "similar_to": []
+    },
+    {
+      "start": 16023,
+      "end": 16569,
+      "length": 546,
+      "class": "unclassified",
+      "evidence": "none",
+      "confidence": 0.0,
+      "features": {
+        "n_fraction": 0.0,
+        "gc": 0.469,
+        "tandem_fraction": 0.0,
+        "low_complexity_fraction": 0.0,
+        "high_copy_fraction": 0.0,
+        "cpg_islands": 0,
+        "longest_orf_aa": 0,
+        "periodicity_171": 0.0,
+        "composition": {}
+      },
+      "patterns": {},
+      "similar_to": []
+    }
+  ]
+}

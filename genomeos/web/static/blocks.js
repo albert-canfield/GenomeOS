@@ -143,7 +143,8 @@
         }
       }
     } else {
-      ctx.fillStyle = col; ctx.globalAlpha = m ? 0.15 : (b.type === 'unknown' ? 0.35 : 0.9);
+      const ucol = {interspersed_repeat: '#bf8700', interspersed_repeat_SINE: '#bf8700', tandem_repeat: '#e3b341', low_complexity: '#9a6700', long_orf: '#d1242f', satellite_array: '#7a5901', mixed_intergenic: '#6e7681', unique_intergenic: '#8b949e', promoter_like: '#1a7f37', centromere: '#0e8a8a', telomere: '#0e8a8a', gene_desert: '#3d444d'};
+      ctx.fillStyle = (b.type === 'unknown' && b.attrs.class && ucol[b.attrs.class]) || col; ctx.globalAlpha = m ? 0.15 : (b.type === 'unknown' ? (b.attrs.class ? 0.6 : 0.35) : 0.9);
       ctx.fillRect(x0, y + (b.type === 'unknown' ? h * 0.3 : 0), w, b.type === 'unknown' ? h * 0.4 : h);
       if (b.id === st.sel) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(x0, y, w, h); }
       if (w > 40 && h >= 20) { ctx.fillStyle = m ? muted() : '#fff'; ctx.font = '10px system-ui'; ctx.fillText(b.name, x0 + 3, y + 13); }
@@ -245,7 +246,8 @@
       ${par ? `<div class="muted">inside ${par.type} <b>${par.name}</b></div>` : ''}
       ${kids.length ? `<div class="muted">contains ${Object.entries(kids.reduce((a, k) => (a[k.type] = (a[k.type] || 0) + 1, a), {})).map(([k, v]) => `${v} ${k}`).join(', ')}</div>` : ''}
       ${Object.keys(b.attrs).length ? `<div class="muted" style="font-size:12px">${Object.entries(b.attrs).map(([k, v]) => `${k}=${v}`).join(' · ')}</div>` : ''}
-      ${b.type === 'unknown' ? '<div class="hint">UNKNOWN: no annotated gene here. In a human chromosome this space carries most of the regulation (enhancers, insulators) that we cannot yet read from sequence alone.</div>' : ''}
+      ${b.type === 'unknown' && b.attrs.class ? `<div class="hint">Investigated: <b>${b.attrs.class}</b> (${b.evidence}, conf ${b.confidence}). ${b.attrs.patterns ? 'patterns: ' + b.attrs.patterns + '. ' : ''}${b.attrs.similar_to ? 'similar to ' + b.attrs.similar_to : ''}</div>` : ''}
+      ${b.type === 'unknown' && !b.attrs.class ? '<div class="hint">UNKNOWN: no annotated gene here. In a human chromosome this space carries most of the regulation (enhancers, insulators) that we cannot yet read from sequence alone.</div>' : ''}
       <div class="row" style="margin-top:6px"><button class="ghost" id="b-zoomto"><i class="ic">🔍</i>Zoom to</button></div>`;
     $('#b-zoomto').onclick = () => { const pad = (b.end - b.start) * 0.15; st.view = [Math.max(0, b.start - pad), Math.min(st.length, b.end + pad)]; scheduleLoad(); };
   }
