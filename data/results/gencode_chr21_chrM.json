@@ -1,0 +1,14 @@
+{
+  "result": "gencode_chr21_chrM",
+  "date": "2026-09-10",
+  "subset_file": "data/results/gencode_v50_chr21_chrM.gff3.gz",
+  "lines": 127438,
+  "chromosomes": [
+    "chr21",
+    "chrM"
+  ],
+  "inputs": [
+    "data/reference/gencode.v50.annotation.gff3.gz"
+  ],
+  "describe": "chr21 + chrM rows of GENCODE 50; the 153 MB genome-wide file is then disposable"
+}

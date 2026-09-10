@@ -24,6 +24,7 @@ from pathlib import Path
 from genomeos.ir import Evidence, EvidenceKind, Parameter
 
 ADULT = 20.0
+PACKAGED = Path(__file__).resolve().parent / "data"  # coefficient tables ship with the package
 HORVATH_INTERCEPT = 0.695507258  # "(Intercept)" row of Horvath 2013 Additional file 3
 CLOCK_EVIDENCE = {
     "horvath2013": Evidence(
@@ -59,14 +60,14 @@ class Clock:
         return cls(name, intercept, coefs, transform)
 
     @staticmethod
-    def horvath(path: str | Path = "data/knowledge/Horvath1.csv") -> Clock:
+    def horvath(path: str | Path = PACKAGED / "Horvath1.csv") -> Clock:
         c = Clock.from_csv(path, "horvath2013", "horvath")
         if c.intercept == 0.0:
             c.intercept = HORVATH_INTERCEPT
         return c
 
     @staticmethod
-    def hannum(path: str | Path = "data/knowledge/Hannum.csv") -> Clock:
+    def hannum(path: str | Path = PACKAGED / "Hannum.csv") -> Clock:
         return Clock.from_csv(path, "hannum2013", "linear")  # Hannum's model has no intercept
 
     def predict(self, betas: dict[str, float]) -> ClockResult:
