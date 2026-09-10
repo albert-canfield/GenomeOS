@@ -96,10 +96,10 @@ def _distil_clock_geo() -> dict:
 def _distil_clinvar() -> dict:
     from collections import Counter
 
-    from genomeos.genome import Annotation, IndexedGenome, Variant, iter_vcf
+    from genomeos.genome import Annotation, IndexedGenome, Variant, default_gencode, iter_vcf
     from genomeos.runtime import classify_all
 
-    ann = Annotation.from_gff3(DATA / "reference" / "gencode.v50.annotation.gff3.gz", {"chr21"})
+    ann = Annotation.from_gff3(default_gencode({"chr21"}), {"chr21"})
     m = ann.to_module("chr21")
     genome = IndexedGenome(DATA / "reference" / "chr21.fa.gz")
     coding = {}
@@ -198,7 +198,27 @@ def _distil_hg002_chr21() -> dict:
     return out
 
 
+def _distil_gencode_subset() -> dict:
+    import gzip
+
+    src = DATA / "reference" / "gencode.v50.annotation.gff3.gz"
+    dst = DATA / "results" / "gencode_v50_chr21_chrM.gff3.gz"
+    n = 0
+    with gzip.open(src, "rt") as fi, gzip.open(dst, "wt") as fo:
+        for line in fi:
+            if line.startswith("#") or line.split("\t", 1)[0] in ("chr21", "chrM"):
+                fo.write(line)
+                n += 1
+    return {"subset_file": str(dst), "lines": n, "chromosomes": ["chr21", "chrM"]}
+
+
 DISTILLERS: list[Distiller] = [
+    Distiller(
+        "gencode_chr21_chrM",
+        [DATA / "reference" / "gencode.v50.annotation.gff3.gz"],
+        _distil_gencode_subset,
+        "chr21 + chrM rows of GENCODE 50; the 153 MB genome-wide file is then disposable",
+    ),
     Distiller(
         "clock_GSE41169",
         [DATA / "knowledge" / "GSE41169_series_matrix.txt.gz"],

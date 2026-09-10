@@ -5,11 +5,21 @@ from pathlib import Path
 
 import pytest
 
-from genomeos.genome import Annotation, Chromosome, Genome, IndexedGenome, Locus, Sequence, Variant, iter_vcf
+from genomeos.genome import (
+    Annotation,
+    Chromosome,
+    Genome,
+    IndexedGenome,
+    Locus,
+    Sequence,
+    Variant,
+    default_gencode,
+    iter_vcf,
+)
 from genomeos.ir import Transcript
 from genomeos.runtime import classify, classify_all
 
-GFF = Path("data/reference/gencode.v50.annotation.gff3.gz")
+GFF = default_gencode({"chr21", "chrM"}) or Path("missing")
 CHR21 = Path("data/reference/chr21.fa.gz")
 CLINVAR = Path("data/reference/clinvar_chr21_MT.vcf")
 

@@ -48,9 +48,20 @@ class KnowledgeBase:
 
     @staticmethod
     def distilled() -> dict | None:
+        """The distilled membership: data/results if present, else the copy shipped in the package."""
+        import gzip
+        import json
+
         from genomeos.results import load_result
 
-        return load_result("library_members")
+        r = load_result("library_members")
+        if r is not None:
+            return r
+        packaged = Path(__file__).resolve().parent / "data" / "members.json.gz"
+        if packaged.exists():
+            with gzip.open(packaged, "rt") as fh:
+                return json.load(fh)
+        return None
 
     @cached_property
     def go(self) -> Ontology:

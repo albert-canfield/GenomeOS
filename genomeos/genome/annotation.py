@@ -17,6 +17,19 @@ from genomeos.ir import Evidence, EvidenceKind, Gene, Module, Transcript
 
 from .sequence import Locus, Strand
 
+GENCODE_FULL = Path("data/reference/gencode.v50.annotation.gff3.gz")
+GENCODE_SUBSET = Path("data/results/gencode_v50_chr21_chrM.gff3.gz")  # distilled: chr21 + chrM only
+
+
+def default_gencode(chroms: set[str] | None = None) -> Path | None:
+    """Genome-wide GENCODE if present, else the distilled chr21+chrM subset when it covers `chroms`."""
+    if GENCODE_FULL.exists():
+        return GENCODE_FULL
+    if GENCODE_SUBSET.exists() and (chroms is None or chroms <= {"chr21", "chrM"}):
+        return GENCODE_SUBSET
+    return None
+
+
 GENCODE_EVIDENCE = Evidence(EvidenceKind.CURATED, "GENCODE 50 (GRCh38.p14)", note="Ensembl/HAVANA annotation")
 ENSEMBL_EVIDENCE = Evidence(EvidenceKind.CURATED, "Ensembl GFF3", note="Ensembl gene build")
 

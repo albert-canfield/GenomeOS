@@ -1,4 +1,4 @@
-from .annotation import Annotation, iter_gff3
+from .annotation import Annotation, default_gencode, iter_gff3
 from .fasta import iter_fasta, read_fasta
 from .genome import Chromosome, Genome
 from .index import IndexedGenome, write_fai
@@ -13,6 +13,7 @@ __all__ = [
     "iter_vcf",
     "write_haplotypes",
     "Annotation",
+    "default_gencode",
     "iter_gff3",
     "Sequence",
     "Locus",

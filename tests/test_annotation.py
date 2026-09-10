@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from genomeos.genome import Annotation, Genome
+from genomeos.genome import Annotation, Genome, default_gencode
 from genomeos.runtime import (
     STANDARD_CODE,
     VERTEBRATE_MITOCHONDRIAL_CODE,
@@ -15,7 +15,7 @@ from genomeos.runtime import (
     translate_transcript,
 )
 
-GFF = Path("data/reference/gencode.v50.annotation.gff3.gz")
+GFF = default_gencode({"chr21", "chrM"}) or Path("missing")
 CHRM = Path("data/reference/chrM.fa.gz")
 CHR21 = Path("data/reference/chr21.fa.gz")
 needs_data = pytest.mark.skipif(
