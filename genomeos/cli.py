@@ -1030,6 +1030,50 @@ def cmd_unknown(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_protein(args: argparse.Namespace) -> int:
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.molecules import protein_report
+
+    ann = genome = None
+    if args.chrom:
+        gff = default_gencode({args.chrom})
+        if gff:
+            ann = Annotation.from_gff3(gff, {args.chrom})
+            genome = IndexedGenome(args.genome)
+    r = protein_report(args.symbol, ann, genome, structure=not args.no_structure)
+    if genome:
+        genome.close()
+    if r["ours"]:
+        o = r["ours"]
+        print(f"{args.symbol}: our translation of {o['transcript']}: {o['length']} aa")
+        print(f"  ({o['coding_transcripts']} coding transcripts annotated)")
+    u = r["uniprot"]
+    if not u:
+        print("  no reviewed UniProt entry")
+        return 1
+    print(f"  UniProt {u['accession']} {u['name']}: {u['length']} aa  [{u['evidence']}]")
+    if r.get("agreement"):
+        a = r["agreement"]
+        print(
+            f"  agreement with our translation: identity {a['identity']:.1%}, same length {a['same_length']}"
+        )
+    if u["location"]:
+        print(f"  location: {u['location'][:120]}")
+    if u["function"]:
+        print(f"  function: {u['function'][:240]}…")
+    for f in u["features"][:12]:
+        print(f"    {f['type']:<20} {f['start']:>5}-{f['end']:<5} {f['description'][:50]}")
+    s = r.get("structure")
+    if s:
+        print(
+            f"  AlphaFold {s['entry']} ({s['version']}): {s['length']} residues, mean pLDDT {s['mean_plddt']}"
+        )
+        print(
+            f"    {s['confident_fraction']:.0%} confident (>=70), Rg {s['radius_of_gyration_A']} Å  [predicted]"
+        )
+    return 0
+
+
 def cmd_libs(args: argparse.Namespace) -> int:
     from genomeos.lib import KnowledgeBase
 
@@ -1370,6 +1414,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--max-blocks", type=int)
     p.add_argument("--save")
     p.set_defaults(fn=cmd_unknown)
+
+    p = sub.add_parser(
+        "protein", help="a gene's protein: our translation, UniProt record, AlphaFold structure"
+    )
+    p.add_argument("symbol")
+    p.add_argument("--chrom", help="chromosome for our own translation (e.g. chr21)")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--no-structure", action="store_true")
+    p.set_defaults(fn=cmd_protein)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)

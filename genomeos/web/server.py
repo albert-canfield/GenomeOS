@@ -765,6 +765,27 @@ class Api:
             "packet": agent_packet(str(t), ranked, types, targets),
         }
 
+    # ---- molecules ------------------------------------------------------------
+
+    def protein(self, gene: str, chrom: str | None) -> dict:
+        from genomeos.genome import IndexedGenome, default_gencode
+        from genomeos.molecules import protein_report
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        ann = genome = None
+        if chrom:
+            gff = default_gencode({chrom})
+            if gff:
+                ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+                fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+                genome = IndexedGenome(fa) if fa.exists() else None
+        try:
+            return protein_report(gene.upper(), ann, genome, structure=True, coords=True)
+        finally:
+            if genome:
+                genome.close()
+
     # ---- libraries -------------------------------------------------------
 
     def libs(self) -> dict:
@@ -859,6 +880,8 @@ class Handler(BaseHTTPRequestHandler):
                         int(self._q(qs, "end", 0)),
                     )
                 )
+            if u.path == "/api/protein":
+                return self._json(self.api.protein(self._q(qs, "gene", ""), self._q(qs, "chrom")))
             if u.path == "/api/cancer":
                 return self._json(self.api.cancer_knowledge(self._q(qs, "gene"), int(self._q(qs, "top", 30))))
             if u.path == "/api/jobs":

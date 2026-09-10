@@ -3,35 +3,36 @@
   26/446 blocks (111,853 bp -> long_orf)
   51/446 blocks (74,665 bp -> unique_intergenic)
   76/446 blocks (51,315 bp -> long_orf)
-  101/446 blocks (37,633 bp -> promoter_like)
-  126/446 blocks (30,953 bp -> unique_intergenic)
+  101/446 blocks (37,633 bp -> regulatory)
+  126/446 blocks (30,953 bp -> regulatory)
   151/446 blocks (26,031 bp -> unique_intergenic)
   176/446 blocks (22,537 bp -> unique_intergenic)
   201/446 blocks (17,866 bp -> unclassified)
-  226/446 blocks (14,817 bp -> long_orf)
+  226/446 blocks (14,817 bp -> regulatory)
   251/446 blocks (11,511 bp -> long_orf)
-  276/446 blocks (8,520 bp -> unclassified)
+  276/446 blocks (8,520 bp -> regulatory)
   301/446 blocks (7,250 bp -> unclassified)
   326/446 blocks (5,599 bp -> unclassified)
-  351/446 blocks (4,914 bp -> unclassified)
-  376/446 blocks (3,954 bp -> long_orf)
-  401/446 blocks (2,722 bp -> promoter_like)
+  351/446 blocks (4,914 bp -> regulatory)
+  376/446 blocks (3,954 bp -> regulatory)
+  401/446 blocks (2,722 bp -> regulatory)
   426/446 blocks (1,620 bp -> promoter_like)
   446/446 blocks (1,002 bp -> unclassified)
 chr21: 446 UNKNOWN blocks, 20,813,319 bp
-  classified 93.8%
+  classified 96.3%
 class                     blocks  bp         share
 ------------------------  ------  ---------  -----
 gap                       15      6,155,943  29.6%
-unique_intergenic         73      3,824,271  18.4%
-long_orf                  75      3,068,050  14.7%
+regulatory                177     3,650,278  17.5%
+unique_intergenic         52      2,954,806  14.2%
 centromere                1       2,349,840  11.3%
-unclassified              175     1,290,137  6.2% 
+long_orf                  38      2,272,721  10.9%
 satellite_array           6       1,221,853  5.9% 
-mixed_intergenic          14      1,063,984  5.1% 
-interspersed_repeat       19      836,849    4.0% 
-promoter_like             46      833,363    4.0% 
-interspersed_repeat_SINE  22      169,029    0.8% 
+unclassified              113     763,454    3.7% 
+mixed_intergenic          9       758,052    3.6% 
+interspersed_repeat       7       413,871    2.0% 
+promoter_like             17      210,383    1.0% 
+interspersed_repeat_SINE  11      62,118     0.3% 
 largest blocks:
   chr21:0-5011798           5,011,798 bp  gap                    conf=1.0
       gc=None tandem=None highcopy=None orf=None
