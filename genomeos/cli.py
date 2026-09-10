@@ -748,6 +748,42 @@ def cmd_methylation(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_signals(args: argparse.Namespace) -> int:
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode, learn_signals, scan
+    from genomeos.genome.signals import SignalSet
+
+    if args.signals_cmd == "learn":
+        gff = args.gff3 or default_gencode({args.chrom})
+        ann = Annotation.from_gff3(gff, {args.chrom})
+        genome = IndexedGenome(args.genome)
+        sig = learn_signals(ann, genome, args.chrom)
+        genome.close()
+        out = Path(args.output or f"data/results/signals_{args.chrom}.json")
+        sig.save(out)
+        st = sig.stats
+        print(f"learned from {st['transcripts']} transcripts, {st['introns']} introns on {args.chrom}")
+        for k, v in sig.stats.items():
+            if k not in ("chromosome", "transcripts", "introns"):
+                print(f"  {k:<28} {v}")
+        for name, p in sig.pwms.items():
+            print(f"  {name:<18} consensus {p.consensus}  ({p.examples} examples)")
+        print(f"  saved {out}")
+        return 0
+    sig = SignalSet.load(args.signals)
+    genome = IndexedGenome(args.genome)
+    from genomeos.coords import Locus
+
+    loc = Locus.parse(args.locus)
+    seq = genome.fetch(Locus(loc.chrom, loc.start, loc.end))
+    genome.close()
+    hits = scan(seq, sig, min_relative=args.min_relative)
+    print(f"{loc}: {len(hits)} signal hits at relative score >= {args.min_relative}")
+    for h in hits[: args.limit]:
+        where = f"{loc.chrom}:{loc.start + h.pos}"
+        print(f"  {where:<20} {h.strand.value}  {h.signal:<16} score {h.score:6.2f}  rel {h.relative:.2f}")
+    return 0
+
+
 def cmd_libs(args: argparse.Namespace) -> int:
     from genomeos.lib import KnowledgeBase
 
@@ -1021,6 +1057,23 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--min-coverage", type=int, default=5)
     p.add_argument("--save", metavar="NAME")
     p.set_defaults(fn=cmd_methylation)
+
+    sig = sub.add_parser(
+        "signals", help="the genome's delimiters: learn PWMs from annotation, scan raw DNA"
+    ).add_subparsers(dest="signals_cmd", required=True)
+    p = sig.add_parser("learn", help="learn splice/start signals from a chromosome's annotation")
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--gff3")
+    p.add_argument("-o", "--output")
+    p.set_defaults(fn=cmd_signals)
+    p = sig.add_parser("scan", help="score a locus with learned signals")
+    p.add_argument("locus")
+    p.add_argument("--signals", default="data/results/signals_chr21.json")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--min-relative", type=float, default=0.8)
+    p.add_argument("--limit", type=int, default=40)
+    p.set_defaults(fn=cmd_signals)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)
