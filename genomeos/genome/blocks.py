@@ -237,10 +237,12 @@ def blocks_for_window(
                     0.9,
                 )
             )
+    ccres_all = None
     if (end - start) <= ELEMENT_WINDOW:
         from genomeos.genome.regulatory import EVIDENCE, load_ccres
 
-        for c in load_ccres(chrom):
+        ccres_all = load_ccres(chrom)
+        for c in ccres_all:
             if c.end > start and c.start < end:
                 blocks.append(
                     Block(
@@ -254,6 +256,34 @@ def blocks_for_window(
                         "curated",
                         0.8,
                         {"cls": c.cls, "ctcf_bound": c.ctcf_bound, "source": EVIDENCE},
+                    )
+                )
+    # nodes: domains inferred from CTCF boundaries (any window size)
+    from genomeos.genome.domains import infer_domains
+    from genomeos.genome.regulatory import load_ccres as _load
+
+    ccres_dom = ccres_all if ccres_all is not None else _load(chrom)
+    if ccres_dom and chrom_length:
+        for d in infer_domains(chrom, chrom_length, ccres_dom, annotation):
+            if d.end > start and d.start < end:
+                blocks.append(
+                    Block(
+                        d.id,
+                        "domain",
+                        d.start,
+                        d.end,
+                        ".",
+                        f"node {d.id.split(':')[1]}",
+                        None,
+                        "inferred",
+                        0.4,
+                        {
+                            "coding_genes": d.coding_genes,
+                            "genes": ", ".join(d.genes[:12]) + ("…" if len(d.genes) > 12 else ""),
+                            "promoters": d.promoters,
+                            "enhancers": d.enhancers,
+                            "note": "CTCF-only sites as boundaries; no Hi-C",
+                        },
                     )
                 )
     _apply_unknown_classes(blocks, chrom)

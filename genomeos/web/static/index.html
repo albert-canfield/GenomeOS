@@ -47,6 +47,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .pill.experimental{color:var(--ok);border-color:var(--ok)}
 .pill.curated{color:var(--c6);border-color:var(--c6)}
 .pill.predicted{color:var(--c4);border-color:var(--c4)}
+.pill.derived{color:var(--c1);border-color:var(--c1)}
 .pill.inferred{color:var(--warn);border-color:var(--warn)}
 .pill.none{color:var(--bad);border-color:var(--bad)}
 .bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
@@ -123,6 +124,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="genome" data-tip="Load real DNA (FASTA), look at any region, translate it to protein and find open reading frames."><i class="ic">🧬</i>Genome</button>
     <button data-tab="anatomy" data-tip="Count the blocks and elements of a chromosome: what the bases are spent on, gene structure, layout, sequence elements. Compare genomes to see how DNA is organised."><i class="ic">🧱</i>Anatomy</button>
     <button data-tab="blocks" data-tip="A 2-D map of the blocks of a chromosome, to scale and nested: genes containing transcripts containing exons, the UNKNOWN space between genes, islands, repeats and gaps. Zoom, pan, search, filter, and propose moves in edit mode."><i class="ic">🧩</i>Blocks</button>
+    <button data-tab="flow" data-tip="How a gene becomes a protein: DNA locus with exons, the spliced mRNA (UTRs and coding sequence), and the translated residues, linked base to codon to residue. Drop a single-base change on the DNA and see what it does to the protein."><i class="ic">🔁</i>Flow</button>
     <button data-tab="program" data-tip="Write biology as code in BioLang, compile it to BioIR and run the regulatory network through time."><i class="ic">📝</i>Program</button>
     <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
@@ -444,11 +446,33 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       </div>
       <div id="m-info"><span class="muted">Load a gene.</span></div>
     </div>
+    <div class="card" style="grid-column:1/-1">
+      <h2><i class="ic">🕸️</i>Protein definition<span class="help" data-tip="Everything the public databases know about this protein, compiled into one object keyed by its UniProt accession: genomic origin and transcripts (Ensembl), sequence, isoforms, domains, modifications and diseases (UniProt, InterPro), experimental structures with their method (PDB), the predicted structure (AlphaFold), pathways (Reactome), associations (STRING) and where it is expressed (Human Protein Atlas). Each section carries its source, evidence kind and confidence. Compiled once, then read from the local knowledge cache.">?</span>
+        <span class="muted" id="m-def-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+      <div id="m-def"><span class="muted">Load a gene to compile its definition.</span></div>
+    </div>
     <div class="card">
       <h2><i class="ic">🧊</i>Structure (AlphaFold)<span class="help" data-tip="C-alpha backbone of the predicted model, rotating. Colour is the model's own confidence per residue (pLDDT): blue high, teal confident, yellow low, red very low. Low-confidence stretches are usually disordered regions, not errors.">?</span></h2>
       <div id="m-struct" class="muted">no structure loaded</div>
       <canvas id="m-canvas" style="width:100%;height:420px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-top:8px"></canvas>
     </div>
+  </div>
+</section>
+
+<!-- ================= FLOW ================= -->
+<section id="flow">
+  <div class="card">
+    <h2><i class="ic">🔁</i>DNA → RNA → protein<span class="help" data-tip="Three lanes to scale. DNA: the gene span with exons (purple) and coding parts (red). RNA: the mature mRNA after splicing, 5'UTR | CDS | 3'UTR with exon junctions as white ticks. Protein: one bar per residue coloured by chemistry (grey hydrophobic, green polar, red acidic, blue basic, yellow special). Hover any lane to see the same position in the other two.">?</span></h2>
+    <div class="row">
+      <label>gene <input id="f-gene" value="APP" style="width:110px" class="mono"></label>
+      <label data-tip="Chromosome with local sequence and annotation: chr21 and chrM.">chromosome <input id="f-chrom" value="chr21" style="width:80px" class="mono"></label>
+      <label data-tip="One base change on the plus strand of the reference, 1-based: POSITION REF>ALT. Example for APP A673T: 25897620 C>T on chr21 (minus-strand gene, so C>T on the chromosome reads G>A in the mRNA: GCA→ACA)."><span>variant</span> <input id="f-variant" placeholder="25897620 C>T" style="width:150px" class="mono"></label>
+      <button class="primary" id="f-load" data-tip="Trace the canonical transcript of this gene from the local sequence."><i class="ic">🔁</i>Trace</button>
+      <span class="muted" id="f-status"></span>
+    </div>
+    <canvas id="f-canvas" style="width:100%;height:260px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-top:8px"></canvas>
+    <div id="f-hover" style="margin-top:6px;font-size:12.5px"><span class="muted">hover a lane</span></div>
+    <div id="f-summary" style="margin-top:8px;font-size:12.5px;line-height:1.6"><span class="muted">Trace a gene. Every step is derived from the reference sequence with the evidence shown; the protein is what GenomeOS translates, which the Molecules tab checks against UniProt.</span></div>
   </div>
 </section>
 
@@ -579,10 +603,11 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.blur());
   if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadProgress(); }
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
+  if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
   // first visit to a simulation tab runs its default example
   if (!autoRan.has(b.dataset.tab)) {
     autoRan.add(b.dataset.tab);
-    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run', molecules: '#m-load'}[b.dataset.tab];
+    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run', molecules: '#m-load', flow: '#f-load'}[b.dataset.tab];
     if (first) setTimeout(async () => { await ready; if (b.dataset.tab === 'debug' && !$('#d-bp').value) { $('#d-bp').value = 'LacI > 30'; $('#d-init').value = 'TetR=10'; $('#d-explain').value = 'lacI.mRNA'; } $(first).click(); }, 300);
   }
 });
@@ -979,5 +1004,6 @@ window.addEventListener('resize', () => { /* charts are viewBox-scaled; nothing 
 </script>
 <script src="/static/blocks.js"></script>
 <script src="/static/molecules.js"></script>
+<script src="/static/flow.js"></script>
 </body>
 </html>

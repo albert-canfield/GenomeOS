@@ -25,7 +25,41 @@
   function tick() { if (spin) angle += 0.012; draw(); if ($('#molecules').classList.contains('active')) requestAnimationFrame(tick); else setTimeout(() => requestAnimationFrame(tick), 500); }
   requestAnimationFrame(tick);
   canvas.onclick = () => { spin = !spin; };
+  function pill(sec) { const k = sec && sec.evidence || 'none'; return `<span class="pill ${k === 'curated' ? 'curated' : k === 'predicted' ? 'predicted' : k === 'experimental' ? 'measured' : 'none'}" data-tip="${(sec && sec.source || '').replace(/"/g, '')} · confidence ${sec ? sec.confidence : 0}">${k}</span>`; }
+  function renderDefinition(d) {
+    const s = d.sections || {}; const id = (s.identity || {}).items;
+    if (!id) { $('#m-def').innerHTML = `<span class="muted">no reviewed UniProt entry${s.identity && s.identity.error ? ': ' + s.identity.error : ''}</span>`; return; }
+    const go = (s.genomic_origin || {}).items; const iso = (s.isoforms || {}).items || []; const fn = (s.function || {}).items || {};
+    const dom = (s.domains || {}).items || {}; const exp = s.structures_experimental || {}; const pred = s.structures_predicted || {};
+    const pw = (s.pathways || {}).items || []; const it = (s.interactions || {}); const its = it.items || []; const ex = (s.expression || {}).items || {};
+    const dis = (s.diseases || {}).items || []; const mods = (s.modifications || {}).items || [];
+    const methods = {}; for (const x of exp.items || []) methods[x.method] = (methods[x.method] || 0) + 1;
+    const cov = d.coverage || {}; const covRow = Object.entries(cov).map(([k, v]) => `<span class="chip" style="opacity:${v ? 1 : .45}" data-tip="${k.replace(/_/g, ' ')}">${v ? '✓' : '·'} ${k.replace(/_/g, ' ')}</span>`).join(' ');
+    const canon = go ? (go.transcripts.find(t => t.canonical) || {}) : {};
+    const ntpm = ex.tissue_ntpm ? Object.entries(ex.tissue_ntpm).sort((a, b) => b[1] - a[1]).slice(0, 8) : [];
+    const sec = (title, body, p) => `<div style="margin-top:8px"><b>${title}</b> ${p}<div style="font-size:12.5px;margin-top:2px">${body}</div></div>`;
+    $('#m-def').innerHTML = `
+      <div style="font-size:12px;margin-bottom:6px">${covRow}</div>
+      <div><b>${d.id}</b> ${id.name} · ${id.length} aa · ${id.existence || ''} ${pill(s.identity)}</div>
+      ${go ? sec('Genomic origin', `${go.gene_id} ${go.locus} · ${go.transcripts.length} transcripts → ${go.protein_products} protein products; canonical ${canon.name || '?'} (${canon.protein_length || '?'} aa). Gene → transcripts → isoforms, never gene → protein.`, pill(s.genomic_origin)) : sec('Genomic origin', `<span class="muted">${(s.genomic_origin || {}).error || 'not fetched'}</span>`, pill(s.genomic_origin))}
+      ${sec('Isoforms (UniProt)', iso.length ? iso.map(i => `<span class="mono">${i.id}</span>${i.name ? ' ' + i.name : ''}${i.status === 'Displayed' ? ' <span class="muted">(canonical sequence)</span>' : ''}`).join(' · ') : '<span class="muted">one form recorded</span>', pill(s.isoforms))}
+      ${sec('Function', `${(fn.summary || [])[0] ? fn.summary[0].slice(0, 400) + (fn.summary[0].length > 400 ? '…' : '') : '<span class="muted">not characterised</span>'}${fn.location && fn.location.length ? `<div class="muted">location: ${fn.location.slice(0, 5).join('; ')}</div>` : ''}`, pill(s.function))}
+      ${sec('Domains', `${(dom.interpro || []).map(x => `<span class="chip" data-tip="${x.id}">${x.name || x.id}</span>`).join(' ') || '<span class="muted">none</span>'}${dom.features && dom.features.length ? `<div class="muted">${dom.features.length} annotated features (domains, regions, sites)</div>` : ''}`, pill(s.domains))}
+      ${sec('Modifications', mods.length ? `${mods.length} sites: ${Object.entries(mods.reduce((a, f) => { a[f.type] = (a[f.type] || 0) + 1; return a; }, {})).map(([k, v]) => `${k} ${v}`).join(', ')}` : '<span class="muted">none recorded</span>', pill(s.modifications))}
+      ${sec('Structures', `experimental <b>${exp.count || 0}</b> ${Object.keys(methods).length ? '(' + Object.entries(methods).map(([k, v]) => `${k} ${v}`).join(', ') + ')' : ''} ${pill(exp)} · predicted <b>${(pred.items || []).length}</b> ${pill(pred)} <span class="muted">— predicted is never treated as observed</span>`, '')}
+      ${sec('Pathways (Reactome)', pw.length ? pw.slice(0, 12).map(x => `<span class="chip" data-tip="${x.id}">${x.name}</span>`).join(' ') + (pw.length > 12 ? ` <span class="muted">+${pw.length - 12} more</span>` : '') : '<span class="muted">none</span>', pill(s.pathways))}
+      ${sec('Associations (STRING ≥ 0.7)', its.length ? its.slice(0, 20).map(x => `<span class="chip" data-tip="combined ${x.score}; experimental ${x.experimental}, database ${x.database}, text-mining ${x.textmining}${x.physical_evidence ? ' · experimental support' : ''}" style="${x.physical_evidence ? '' : 'opacity:.6'}">${x.partner}</span>`).join(' ') + ` <span class="muted">${its.length} total, ${its.filter(x => x.physical_evidence).length} with experimental support; dimmed = association without physical evidence</span>` : `<span class="muted">${it.error || 'none'}</span>`, pill(it))}
+      ${sec('Expression (Human Protein Atlas)', ex.tissue_specificity ? `${ex.tissue_specificity}; ${ex.tissue_distribution || ''}; main location ${(ex.subcellular_main || []).join(', ') || '?'}; cell types: ${ex.cell_type_specificity || '?'}${ntpm.length ? `<table style="margin-top:4px">${ntpm.map(([k, v]) => `<tr><td>${k}</td><td class="num mono">${v.toFixed(0)} nTPM</td></tr>`).join('')}</table>` : ''}` : `<span class="muted">${(s.expression || {}).error || 'not fetched'}</span>`, pill(s.expression))}
+      ${dis.length ? sec('Diseases (UniProt)', dis.map(x => `<span class="chip" data-tip="${(x.description || '').replace(/"/g, '')}">${x.name}${x.mim ? ' · MIM ' + x.mim : ''}</span>`).join(' '), pill(s.diseases)) : ''}
+      ${d.states && d.states.length ? `<div class="muted" style="margin-top:8px;font-size:12px">${d.states.length} ProteinState records derived (protein × tissue/cell type × level × location); the definition above is what the protein <i>is</i>, a state is where it is and how much.</div>` : ''}`;
+  }
+  window.moleculesDefinition = async function (gene) {
+    $('#m-def-status').textContent = 'compiling from Ensembl, UniProt, STRING, HPA…';
+    try { const d = await window.api(`/api/protein_definition?gene=${encodeURIComponent(gene)}`); renderDefinition(d); $('#m-def-status').textContent = 'from local knowledge cache after the first compile'; }
+    catch (e) { $('#m-def-status').textContent = e.message; }
+  };
   window.moleculesLoad = async function (gene, chrom) {
+    window.moleculesDefinition(gene);
     $('#m-status').textContent = 'fetching UniProt and AlphaFold…';
     try {
       const r = await window.api(`/api/protein?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom || '')}`);

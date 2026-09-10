@@ -1030,9 +1030,118 @@ def cmd_unknown(args: argparse.Namespace) -> int:
     return 0
 
 
+def _print_definition(d: dict) -> None:
+    s = d["sections"]
+    ident = s["identity"]["items"] or {}
+    print(
+        f"{d['id'] or d['gene']}  {ident.get('name', '')}  {ident.get('length', '?')} aa  "
+        f"[{s['identity']['evidence']}: {s['identity']['source']}]"
+    )
+    if ident.get("existence"):
+        print(f"  existence: {ident['existence']}")
+    go = (s.get("genomic_origin") or {}).get("items")
+    if go:
+        canon = next((t for t in go["transcripts"] if t["canonical"]), None)
+        print(
+            f"  origin: {go['gene_id']} {go['locus']}; {len(go['transcripts'])} transcripts, "
+            f"{go['protein_products']} protein products; canonical {canon['name'] if canon else '?'} "
+            f"[{s['genomic_origin']['evidence']}]"
+        )
+    iso = s.get("isoforms", {}).get("items") or []
+    print(f"  isoforms (UniProt): {len(iso)}  {', '.join(i['id'] for i in iso[:6])}")
+    fn = (s.get("function") or {}).get("items") or {}
+    if fn.get("summary"):
+        print(f"  function: {fn['summary'][0][:220]}…")
+    if fn.get("location"):
+        print(f"  location: {'; '.join(fn['location'][:4])}")
+    dom = (s.get("domains") or {}).get("items") or {}
+    print(
+        f"  domains: {len(dom.get('interpro', []))} InterPro entries, {len(dom.get('features', []))} features"
+        f"  [{s.get('domains', {}).get('evidence')}]"
+    )
+    print(f"  modifications: {len(s.get('modifications', {}).get('items') or [])} sites")
+    exp = s.get("structures_experimental", {})
+    pred = s.get("structures_predicted", {})
+    methods: dict[str, int] = {}
+    for x in exp.get("items") or []:
+        methods[x["method"]] = methods.get(x["method"], 0) + 1
+    print(
+        f"  structures: experimental {exp.get('count', 0)} {dict(sorted(methods.items()))} "
+        f"[experimental: PDB]; predicted {len(pred.get('items') or [])} [predicted: AlphaFold]"
+    )
+    pw = s.get("pathways", {}).get("items") or []
+    print(f"  pathways (Reactome): {len(pw)}  {'; '.join(p['name'] for p in pw[:3])}")
+    it = s.get("interactions", {})
+    items = it.get("items") or []
+    phys = sum(1 for x in items if x["physical_evidence"])
+    print(
+        f"  interactions (STRING ≥0.7): {len(items)}, {phys} with experimental support  "
+        f"[{it.get('evidence')}]{'  (' + it['error'] + ')' if it.get('error') else ''}"
+    )
+    ex = s.get("expression", {})
+    e = ex.get("items") or {}
+    if e:
+        print(
+            f"  expression (HPA): {e.get('tissue_specificity')}; {e.get('tissue_distribution')}; "
+            f"location {', '.join(e.get('subcellular_main') or []) or '?'}; "
+            f"cell types: {e.get('cell_type_specificity')}"
+        )
+        if e.get("tissue_ntpm"):
+            top = sorted(e["tissue_ntpm"].items(), key=lambda kv: -kv[1])[:5]
+            print("    " + ", ".join(f"{k} {v:.0f}" for k, v in top))
+    dis = s.get("diseases", {}).get("items") or []
+    if dis:
+        print(f"  diseases (UniProt): {len(dis)}  {'; '.join(x['name'] for x in dis[:4] if x['name'])}")
+    cov = d.get("coverage", {})
+    print("  coverage: " + "  ".join(f"{k} {'✓' if v else '·'}" for k, v in cov.items()))
+
+
+def cmd_proteome(args: argparse.Namespace) -> int:
+    from genomeos.molecules.proteome import QUESTIONS, compile_chromosome
+    from genomeos.results import save_result
+
+    r = compile_chromosome(args.chrom, args.gff3, args.limit)
+    print(
+        f"{args.chrom}: {r['coding_genes']} coding genes compiled in {r['seconds']} s; "
+        f"{len(r['no_reviewed_entry'])} without a reviewed UniProt entry"
+    )
+    print(
+        _table(
+            [
+                {
+                    "question": q,
+                    "proteins": r["coverage_counts"][q],
+                    "fraction": f"{r['coverage_fraction'][q]:.1%}"
+                    if r["coverage_fraction"][q] is not None
+                    else "-",
+                }
+                for q in QUESTIONS
+            ],
+            ["question", "proteins", "fraction"],
+        )
+    )
+    if not args.limit:
+        save_result(f"proteome_{args.chrom}", r)
+        print(f"  saved data/results/proteome_{args.chrom}.json")
+    return 0
+
+
 def cmd_protein(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
     from genomeos.molecules import protein_report
+
+    if args.compile:
+        from genomeos.molecules import compile_protein, states_from_definition
+
+        d = compile_protein(args.symbol, refresh=args.refresh)
+        _print_definition(d)
+        st = states_from_definition(d)
+        if st:
+            print(
+                f"  {len(st)} ProteinState records derivable (tissue / cell type levels), "
+                f"e.g. {st[0].to_dict()}"
+            )
+        return 0
 
     ann = genome = None
     if args.chrom:
@@ -1152,6 +1261,56 @@ def cmd_flow(args: argparse.Namespace) -> int:
     print("7 organism   see `genomeos twin` (a person's state), `genomeos organism` (lineage),")
     print("             `genomeos anatomy --compare` (the whole genome's organisation)")
     genome.close()
+    return 0
+
+
+def cmd_domains(args: argparse.Namespace) -> int:
+    from genomeos.genome import Annotation, Genome, default_gencode
+    from genomeos.genome.domains import infer_domains, summarise
+    from genomeos.genome.regulatory import load_ccres
+    from genomeos.results import save_result
+
+    ccres = load_ccres(args.chrom)
+    if not ccres:
+        print(
+            f"no ENCODE elements for {args.chrom}; run `genomeos data distil --only encode_ccres_chr21` "
+            "or the genome-wide job"
+        )
+        return 1
+    genome = Genome.from_fasta(args.genome)
+    length = genome.chromosomes[args.chrom].length
+    ann = Annotation.from_gff3(args.gff3 or default_gencode({args.chrom}), {args.chrom})
+    doms = infer_domains(args.chrom, length, ccres, ann)
+    s = summarise(doms)
+    print(
+        f"{args.chrom}: {s['domains']} domains from CTCF-only boundaries; "
+        f"median {s['size_median']:,} bp, max {s['size_max']:,} bp"
+    )
+    print(
+        f"  coding genes per domain: median {s['coding_genes_per_domain_median']}, "
+        f"max {s['largest_gene_count']}; {s['domains_without_coding_genes']} domains without coding genes; "
+        f"enhancers per domain median {s['enhancers_per_domain_median']}"
+    )
+    print(f"  [{s['evidence']}] conf={s['confidence']}")
+    print(
+        _table(
+            [
+                {
+                    "domain": d.id,
+                    "start": f"{d.start:,}",
+                    "size": f"{d.length:,}",
+                    "coding": d.coding_genes,
+                    "promoters": d.promoters,
+                    "enhancers": d.enhancers,
+                    "genes": (", ".join(d.genes[:6]) + ("…" if len(d.genes) > 6 else "")),
+                }
+                for d in sorted(doms, key=lambda d: -d.coding_genes)[: args.top]
+            ],
+            ["domain", "start", "size", "coding", "promoters", "enhancers", "genes"],
+        )
+    )
+    save_result(f"domains_{args.chrom}", {**s, "domains": [d.to_dict() for d in doms]})
+    print(f"  saved data/results/domains_{args.chrom}.json")
     return 0
 
 
@@ -1499,6 +1658,12 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser(
         "protein", help="a gene's protein: our translation, UniProt record, AlphaFold structure"
     )
+    p.add_argument(
+        "--compile",
+        action="store_true",
+        help="compile the full definition: Ensembl, UniProt, InterPro, PDB, AlphaFold, Reactome, STRING, HPA",
+    )
+    p.add_argument("--refresh", action="store_true", help="ignore the local knowledge cache")
     p.add_argument("symbol")
     p.add_argument("--chrom", help="chromosome for our own translation (e.g. chr21)")
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
@@ -1513,6 +1678,19 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.add_argument("--gff3")
     p.set_defaults(fn=cmd_flow)
+
+    p = sub.add_parser("proteome", help="compile every protein of a chromosome; keep the coverage summary")
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--gff3")
+    p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
+    p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser("domains", help="nodes above genes: domains inferred from CTCF boundaries")
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--gff3")
+    p.add_argument("--top", type=int, default=12)
+    p.set_defaults(fn=cmd_domains)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)

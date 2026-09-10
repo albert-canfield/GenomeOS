@@ -4,7 +4,7 @@
 (function () {
   const $ = s => document.querySelector(s);
   const COLORS = {gene: '#1f6feb', transcript: '#4c8dff', exon: '#8250df', cds: '#d1242f', unknown: '#57606a',
-                  cpg_island: '#1a7f37', repeat: '#bf8700', telomere: '#0e8a8a', gap: '#30363d', ccre: '#2ea043'};
+                  cpg_island: '#1a7f37', repeat: '#bf8700', telomere: '#0e8a8a', gap: '#30363d', ccre: '#2ea043', domain: '#6639ba'};
   const CCRE_COLORS = {PLS: '#2ea043', pELS: '#e3b341', dELS: '#d29922', 'CTCF-only': '#39c5c5', 'DNase-H3K4me3': '#4c8dff'};
   const st = {path: null, chrom: null, length: 0, view: [0, 1], data: null, sel: null, filter: new Set(), highlight: null,
               mode: 'view', edits: [], drag: null, hover: null, query: ''};
@@ -47,16 +47,16 @@
     st.byId = byId;
     const top = bs.filter(b => b.type === 'gene' || (!b.parent && b.type !== 'gene'));
     // each track: list of rows; each row: array of end positions for packing
-    const tracks = {plus: [], minus: [], other: []};
+    const tracks = {domain: [], plus: [], minus: [], other: []};
     for (const b of top.sort((a, c) => a.start - c.start)) {
-      const key = b.type !== 'gene' ? 'other' : b.strand === '+' ? 'plus' : 'minus';
+      const key = b.type === 'domain' ? 'domain' : b.type !== 'gene' ? 'other' : b.strand === '+' ? 'plus' : 'minus';
       const t = tracks[key];
       let placed = false;
       for (let i = 0; i < t.length; i++) { if (t[i].end <= b.start) { t[i].end = b.end; b._row = i; placed = true; break; } }
       if (!placed) { t.push({end: b.end}); b._row = t.length - 1; }
       b._track = key;
     }
-    st.tracks = {plus: tracks.plus.length, minus: tracks.minus.length, other: tracks.other.length};
+    st.tracks = {domain: tracks.domain.length, plus: tracks.plus.length, minus: tracks.minus.length, other: tracks.other.length};
     // transcripts inside gene rows
     const kids = {};
     for (const b of bs) if (b.parent) (kids[b.parent] = kids[b.parent] || []).push(b);
@@ -97,16 +97,18 @@
     const totalRows = rowsPlus + rowsMinus + rowsOther;
     const gapY = 4, labels = 3 * 18 + 22;
     const geneH = Math.max(10, Math.min(120, (H - labels) / totalRows - gapY));
-    const yPlus = 22;
+    const domainH = 12, rowsDomain = st.tracks.domain;
+    const yDomain = 22;
+    const yPlus = 22 + (rowsDomain ? rowsDomain * (domainH + gapY) + 18 : 0);
     const yMinus = yPlus + rowsPlus * (geneH + gapY) + 18;
     const yOther = yMinus + rowsMinus * (geneH + gapY) + 18;
-    ctx.fillStyle = muted(); ctx.fillText('+ strand', 4, yPlus - 4); ctx.fillText('− strand', 4, yMinus - 4); ctx.fillText('sequence elements & UNKNOWN', 4, yOther - 4);
+    ctx.fillStyle = muted(); if (rowsDomain) ctx.fillText('nodes: domains between CTCF boundaries (inferred)', 4, yDomain - 4); ctx.fillText('+ strand', 4, yPlus - 4); ctx.fillText('− strand', 4, yMinus - 4); ctx.fillText('sequence elements & UNKNOWN', 4, yOther - 4);
     st.hitboxes = [];
     const bs = st.data.blocks;
     for (const b of bs) {
       if (b.parent || !visible(b)) continue;
-      const y = b._track === 'plus' ? yPlus + b._row * (geneH + gapY) : b._track === 'minus' ? yMinus + b._row * (geneH + gapY) : yOther + b._row * (geneH + gapY);
-      drawBlock(b, y, geneH, span);
+      const y = b._track === 'domain' ? yDomain + b._row * (domainH + gapY) : b._track === 'plus' ? yPlus + b._row * (geneH + gapY) : b._track === 'minus' ? yMinus + b._row * (geneH + gapY) : yOther + b._row * (geneH + gapY);
+      drawBlock(b, y, b._track === 'domain' ? domainH : geneH, span);
     }
     if (st.drag) { ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(0, 0, W, H); const b = st.drag.block; const x = X(st.drag.newStart), w = Math.max(2, (b.end - b.start) / span * W); ctx.strokeStyle = st.drag.ok ? '#3fb950' : '#ff6b66'; ctx.lineWidth = 2; ctx.strokeRect(x, st.drag.y, w, geneH); ctx.fillStyle = st.drag.ok ? '#3fb950' : '#ff6b66'; ctx.fillText(`${b.name} → ${fmtPos(st.drag.newStart)} ${st.drag.ok ? '' : '(' + st.drag.reasons.join('; ') + ')'}`, Math.min(x, W - 300), st.drag.y - 4); }
     drawMini();
@@ -162,7 +164,7 @@
     const d = st.data; if (!d) return;
     classSummary();
     const span = d.end - d.start;
-    const types = ['gene', 'transcript', 'exon', 'cds', 'unknown', 'ccre', 'cpg_island', 'repeat', 'telomere', 'gap'];
+    const types = ['domain', 'gene', 'transcript', 'exon', 'cds', 'unknown', 'ccre', 'cpg_island', 'repeat', 'telomere', 'gap'];
     const rows = [];
     for (const t of types) {
       const iv = d.blocks.filter(b => b.type === t).map(b => [Math.max(d.start, b.start), Math.min(d.end, b.end)]).filter(([a, b]) => b > a).sort((a, b) => a[0] - b[0]);

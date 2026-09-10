@@ -29,8 +29,29 @@ walks one gene through all of them with the evidence at each step.
 | Chromosome, Genome | `Chromosome`, `Genome`, `IndexedGenome` | linear now; pangenome graph is the design target |
 | Allele | `Variant.alts` + haplotypes from `apply_variants` | worth promoting to its own BioIR entity when twins carry both haplotypes as first-class objects |
 | Gene, Transcript, Protein | `Gene`, `Transcript`, `Protein` | from GENCODE/Ensembl; protein sequence by our translation, checked against UniProt |
-| RegulatoryElement | `Region` (role may be UNKNOWN) and ENCODE cCRE blocks | the next BioIR entity to add explicitly, with class (promoter, enhancer, insulator) and the genes it reaches; then `Domain` above it |
+| RegulatoryElement | `Region` (role may be UNKNOWN) and ENCODE cCRE blocks | the next BioIR entity to add explicitly, with class (promoter, enhancer, insulator) and the genes it reaches |
+| Domain (node) | `genomeos.genome.domains.Domain`: intervals between CTCF-only boundaries, with the genes, promoters and enhancers inside; a lane in the block map | inferred, 0.4; Hi-C would make it curated |
 | CellState | `CellState` (ageing runtime) and `CellType` (identity) | state and identity are kept separate on purpose |
+
+## Where the DNA–RNA–protein relationship lives
+
+The relationship has one home: `genomeos/flow/trace.py`. `trace(genome,
+transcript)` builds a `CentralDogmaTrace` that maps every genomic base to
+its position in the spliced mRNA, its codon and its residue, and back
+(`residue_of(pos)`, `genomic_of_residue(n)`), and can trace one base change
+upward (`substitute(pos, ref, alt)` → synonymous / missense / nonsense /
+start lost, with HGVS c. and p. names). Everything above uses it:
+
+| consumer | what it does with the trace |
+|---|---|
+| `genomeos flow GENE` | prints the walk with sizes and evidence |
+| `/api/flow`, the **Flow** tab | three lanes to scale (DNA with exons, mRNA with UTRs and CDS, residues by chemistry), linked on hover; a variant box shows what one base does to the protein |
+| Molecules tab | checks our translation against UniProt, then shows the compiled protein definition (see docs/PROTEIN.md) |
+| variant classifier | the coding consequence is the same computation |
+
+Checked on APP: chr21:25,897,620 C>T on the plus strand of a minus-strand
+gene reads G>A in the mRNA, codon 673 GCA→ACA, p.Ala673Thr, the protective
+Icelandic variant.
 
 ## From ATGCG… to a protein: the executable piece
 

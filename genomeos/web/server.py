@@ -786,6 +786,58 @@ class Api:
             if genome:
                 genome.close()
 
+    def protein_definition(self, gene: str, refresh: bool = False) -> dict:
+        """The federated protein definition (cached locally after the first compile)."""
+        from genomeos.molecules import compile_protein, states_from_definition
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        d = compile_protein(gene.upper(), refresh=refresh)
+        d = dict(d)
+        d["states"] = [st.to_dict() for st in states_from_definition(d)][:40]
+        return d
+
+    def flow(self, gene: str, chrom: str, variant: str | None) -> dict:
+        """DNA → RNA → protein trace of a gene's canonical transcript, optionally with one base change."""
+        from genomeos.flow import trace_gene
+        from genomeos.genome import IndexedGenome, default_gencode
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        if not chrom or not default_gencode({chrom}):
+            raise ApiError(f"no local annotation for {chrom or '?'}; chr21 and chrM are local")
+        ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+        fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+        if not fa.exists():
+            raise ApiError(f"no local sequence for {chrom}")
+        try:
+            g = ann.gene(gene.upper())
+        except KeyError as e:
+            raise ApiError(f"{gene} not on {chrom}") from e
+        module = ann.to_module("flow")
+        genome = IndexedGenome(fa)
+        try:
+            tr = trace_gene(genome, g, module.entities[g.id].transcripts)
+        finally:
+            genome.close()
+        if tr is None:
+            raise ApiError(f"{gene} has no transcripts")
+        out = tr.to_dict()
+        out["gene_start"], out["gene_end"] = g.locus.start, g.locus.end
+        out["transcripts"] = len(g.transcripts)
+        if variant:
+            try:
+                pos, change = (
+                    variant.replace(",", "").split(":")[-1].split(maxsplit=1)
+                    if " " in variant
+                    else (variant.split(":")[-1][:-3], variant[-3:])
+                )
+                ref, alt = change.upper().split(">")
+                out["variant"] = tr.substitute(int(pos) - 1, ref, alt)  # user gives 1-based
+            except (ValueError, IndexError) as e:
+                raise ApiError("variant format: POSITION REF>ALT, e.g. 25897620 G>A (1-based)") from e
+        return out
+
     # ---- libraries -------------------------------------------------------
 
     def libs(self) -> dict:
@@ -878,6 +930,16 @@ class Handler(BaseHTTPRequestHandler):
                         self._q(qs, "chrom", ""),
                         int(self._q(qs, "start", 0)),
                         int(self._q(qs, "end", 0)),
+                    )
+                )
+            if u.path == "/api/protein_definition":
+                return self._json(
+                    self.api.protein_definition(self._q(qs, "gene", ""), self._q(qs, "refresh", "") == "1")
+                )
+            if u.path == "/api/flow":
+                return self._json(
+                    self.api.flow(
+                        self._q(qs, "gene", ""), self._q(qs, "chrom", "chr21"), self._q(qs, "variant")
                     )
                 )
             if u.path == "/api/protein":

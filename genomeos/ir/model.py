@@ -113,8 +113,18 @@ class Transcript(Entity):
 
 @dataclass(slots=True)
 class Protein(Entity):
+    """A protein definition: what the molecule is. One protein in one place at one
+    time is a ProteinState (genomeos.molecules.compiler), kept separate on purpose.
+    Gene → Transcript(s) → Protein isoform(s) → modified states; never Gene → Protein."""
+
     sequence: str = ""
     half_life_h: float | _Unknown = UNKNOWN
+    accession: str = ""  # UniProt accession, the primary external identifier
+    isoforms: list[str] = field(default_factory=list)  # UniProt isoform ids (P04637-1, ...)
+    domains: list[dict] = field(default_factory=list)  # {id, name} InterPro, or {type, start, end}
+    structures: list[dict] = field(default_factory=list)  # {source: PDB|AlphaFold, id, method, ...}
+    pathways: list[str] = field(default_factory=list)  # Reactome ids
+    interactions: list[str] = field(default_factory=list)  # partner symbols with evidence kept in the source
 
     def __post_init__(self) -> None:
         self.kind = "protein"
