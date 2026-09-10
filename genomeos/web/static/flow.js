@@ -11,7 +11,7 @@
   function canvas() { return $('#f-canvas'); }
   function geom() {
     const c = canvas(); const W = c.clientWidth, H = c.clientHeight;
-    return {W, H, pad: 70, dnaY: 40, rnaY: H / 2, protY: H - 40, laneH: 22};
+    return {W, H, pad: 70, dnaY: 56, rnaY: H / 2 + 6, protY: H - 40, laneH: 22};
   }
   function xDNA(pos) { const d = st.data, g = geom(); return g.pad + (pos - d.gene_start) / (d.gene_end - d.gene_start) * (g.W - 2 * g.pad); }
   function xRNA(i) { const d = st.data, g = geom(); return g.pad + i / d.mrna_length * (g.W - 2 * g.pad); }
@@ -29,6 +29,7 @@
     const muted = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#777';
     ctx.font = '12px system-ui'; ctx.fillStyle = muted; ctx.textAlign = 'left';
     ctx.fillText(`1 DNA  ${d.chrom} ${d.strand}`, 6, g.dnaY - 16);
+    if (d.regulation) ctx.fillText('regulation', 6, g.dnaY - 30);
     ctx.fillText('2 RNA  mRNA', 6, g.rnaY - 16);
     ctx.fillText('3 protein', 6, g.protY - 16);
     // DNA lane: gene span, exons as bars
@@ -46,6 +47,16 @@
         const ga = d.mrna_to_genomic[a], gb = d.mrna_to_genomic[b - 1];
         const x0 = xDNA(Math.min(ga, gb)), x1 = xDNA(Math.max(ga, gb) + 1);
         ctx.fillStyle = '#d1242f'; ctx.fillRect(x0, g.dnaY - 9, Math.max(1.5, x1 - x0), 18);
+      }
+    }
+    // regulation: promoter (green) and enhancers (amber) that reach this gene, above the DNA lane
+    const reg = d.regulation;
+    if (reg) {
+      for (const e of [...reg.promoters, ...reg.enhancers]) {
+        if (e.end < d.gene_start - 2000 || e.start > d.gene_end + 2000) continue;
+        const x0 = xDNA(Math.max(d.gene_start, e.start)), x1 = xDNA(Math.min(d.gene_end, e.end));
+        ctx.fillStyle = e.class === 'enhancer' ? '#e3b341' : '#2ea043';
+        ctx.fillRect(x0 - 1, g.dnaY - 20, Math.max(2, x1 - x0), 7);
       }
     }
     // splice lines exon → mRNA
@@ -132,6 +143,7 @@
       const ev = d.evidence;
       $('#f-summary').innerHTML = `
         <div><b>1 DNA</b> ${d.chrom}:${(d.gene_start + 1).toLocaleString()}–${d.gene_end.toLocaleString()} (${d.strand}) · ${(d.gene_end - d.gene_start).toLocaleString()} bp · ${d.exons.length} exons <span class="pill curated">${ev.exons}</span></div>
+        ${d.regulation ? `<div><b>1b regulation</b> node ${d.regulation.domain ? d.regulation.domain.id : '?'}${d.regulation.domain ? ` (${(d.regulation.domain.length / 1000).toFixed(0)} kb, ${d.regulation.domain.coding_genes} coding genes)` : ''}: ${d.regulation.promoters.length} promoter element${d.regulation.promoters.length === 1 ? '' : 's'}, ${d.regulation.enhancers_in_domain} enhancers can reach it (${d.regulation.enhancers_nearest_to_this_gene} nearest to this gene, ${d.regulation.enhancers_inside_gene} inside the gene), ${d.regulation.insulators_bounding.length} bounding insulators <span class="pill curated">curated: ENCODE elements</span> <span class="pill inferred">inferred: reach bounded by the CTCF domain</span><div class="muted" style="font-size:11.5px">green tick = promoter, amber = enhancer, drawn where they fall in the gene span; the full list is in <span class="mono">genomeos regulation --gene ${d.gene}</span></div></div>` : ''}
         <div><b>2 RNA</b> spliced mRNA ${d.mrna_length.toLocaleString()} nt = 5'UTR ${d.utr5} + CDS ${d.cds_length} + 3'UTR ${d.utr3}; introns removed: ${((d.gene_end - d.gene_start) - d.mrna_length).toLocaleString()} bp (${(100 - d.mrna_length / (d.gene_end - d.gene_start) * 100).toFixed(1)}% of the gene) <span class="pill derived">${ev.mrna}</span></div>
         <div><b>3 protein</b> ${d.protein_length} aa, ${d.codon_table} code${d.tags.length ? ' · ' + d.tags.join(', ') : ''} <span class="pill derived">${ev.protein}</span>
           <div class="mono" style="font-size:11px;word-break:break-all;max-height:64px;overflow:auto;margin-top:4px">${d.protein}</div></div>

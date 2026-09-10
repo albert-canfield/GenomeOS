@@ -14,6 +14,7 @@ from .model import (
     Parameter,
     Protein,
     Region,
+    RegulatoryElement,
     Rule,
     Transcript,
 )
@@ -33,6 +34,7 @@ __all__ = [
     "Parameter",
     "Protein",
     "Region",
+    "RegulatoryElement",
     "Rule",
     "Transcript",
     "Locus",

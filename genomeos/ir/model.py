@@ -88,6 +88,25 @@ class Region(Entity):
 
 
 @dataclass(slots=True)
+class RegulatoryElement(Entity):
+    """A promoter, enhancer or insulator and the genes it reaches.
+
+    `targets` are {gene, distance, basis}; an enhancer's reach is bounded by the
+    domain (CTCF boundaries) it sits in, and each target carries its own basis:
+    "promoter of" (curated), "nearest TSS in domain" or "same domain" (inferred).
+    """
+
+    locus: Locus | None = None
+    cls: str = "unknown"  # promoter | enhancer | insulator | open_chromatin | unknown
+    targets: list[dict] = field(default_factory=list)
+    domain: str = ""  # node id that bounds its reach
+    source: str = ""
+
+    def __post_init__(self) -> None:
+        self.kind = "regulatory_element"
+
+
+@dataclass(slots=True)
 class Gene(Entity):
     symbol: str = ""
     locus: Locus | None = None

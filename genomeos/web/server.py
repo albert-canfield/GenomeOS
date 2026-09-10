@@ -861,6 +861,17 @@ class Api:
         out = tr.to_dict()
         out["gene_start"], out["gene_end"] = g.locus.start, g.locus.end
         out["transcripts"] = len(g.transcripts)
+        from genomeos.genome.regulation import regulation_of
+        from genomeos.genome.regulatory import load_ccres
+
+        ccres = load_ccres(chrom)
+        if ccres:
+            fai = IndexedGenome(fa)
+            try:
+                length = fai.lengths[chrom]
+            finally:
+                fai.close()
+            out["regulation"] = regulation_of(g.symbol, chrom, ccres, ann, length)
         if variant:
             try:
                 pos, change = (

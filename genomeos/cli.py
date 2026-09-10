@@ -1322,6 +1322,17 @@ def cmd_flow(args: argparse.Namespace) -> int:
         f"             ENCODE elements ±2 kb of TSS: {near or 'none'}; inside the gene: "
         f"{sum(inside.values()) if inside else 0} [curated: ENCODE]"
     )
+    if idx:
+        from genomeos.genome.regulation import regulation_of
+
+        reg = regulation_of(g.symbol, args.chrom, load_ccres(args.chrom), ann, genome.lengths[args.chrom])
+        dom = reg["domain"]
+        print(
+            f"             node {dom['id'] if dom else '?'}: {reg['enhancers_in_domain']} enhancers can "
+            f"reach it ({reg['enhancers_nearest_to_this_gene']} nearest to this gene), "
+            f"{len(reg['promoters'])} promoter elements, {len(reg['insulators_bounding'])} bounding "
+            f"insulators [inferred: reach bounded by CTCF domain]"
+        )
     # RNA
     if canon is None:
         print("3 RNA        no coding transcript")
@@ -1363,6 +1374,64 @@ def cmd_flow(args: argparse.Namespace) -> int:
     print("7 organism   see `genomeos twin` (a person's state), `genomeos organism` (lineage),")
     print("             `genomeos anatomy --compare` (the whole genome's organisation)")
     genome.close()
+    return 0
+
+
+def cmd_regulation(args: argparse.Namespace) -> int:
+    from genomeos.genome import Annotation, Genome, default_gencode
+    from genomeos.genome.regulation import regulation_of
+    from genomeos.genome.regulatory import load_ccres
+
+    ccres = load_ccres(args.chrom)
+    if not ccres:
+        print(f"no ENCODE elements for {args.chrom}")
+        return 1
+    genome = Genome.from_fasta(args.genome)
+    ann = Annotation.from_gff3(args.gff3 or default_gencode({args.chrom}), {args.chrom})
+    try:
+        r = regulation_of(args.gene, args.chrom, ccres, ann, genome.chromosomes[args.chrom].length)
+    except KeyError:
+        print(f"{args.gene} not on {args.chrom}")
+        return 1
+    d = r["domain"]
+    print(f"{r['gene']} TSS {args.chrom}:{r['tss']:,} ({r['strand']})")
+    if d:
+        print(
+            f"  node {d['id']}: {d['start']:,}-{d['end']:,} ({d['length']:,} bp), {d['coding_genes']} coding "
+            f"genes, {d['enhancers']} enhancer-like elements  [{d['evidence'][:40]}…] conf={d['confidence']}"
+        )
+        print(f"  genes sharing the node: {', '.join(d['genes'][:10])}{'…' if len(d['genes']) > 10 else ''}")
+    print(
+        f"  promoter elements: {len(r['promoters'])}  "
+        + "; ".join(
+            f"{p['id']} ({p['class']}, {p['distance']} bp, conf {p['confidence']})" for p in r["promoters"]
+        )
+    )
+    print(
+        f"  enhancers that can reach it: {r['enhancers_in_domain']} in the node, "
+        f"{r['enhancers_nearest_to_this_gene']} nearest to this gene, "
+        f"{r['enhancers_inside_gene']} inside the gene"
+    )
+    print(f"  insulators bounding the node: {len(r['insulators_bounding'])}")
+    print(
+        _table(
+            [
+                {
+                    "element": e["id"],
+                    "class": e["class"],
+                    "position": f"{e['start']:,}",
+                    "distance": f"{e['distance']:,}",
+                    "where": "intragenic" if e["intragenic"] else "outside",
+                    "basis": e["basis"],
+                    "conf": e["confidence"],
+                }
+                for e in r["enhancers"][: args.top]
+            ],
+            ["element", "class", "position", "distance", "where", "basis", "conf"],
+        )
+    )
+    for k, v in r["evidence"].items():
+        print(f"  [{k}: {v}]")
     return 0
 
 
@@ -1797,6 +1866,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser(
+        "regulation", help="the regulatory input of a gene: promoter, enhancers in its node, insulators"
+    )
+    p.add_argument("--gene", required=True)
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--gff3")
+    p.add_argument("--top", type=int, default=15)
+    p.set_defaults(fn=cmd_regulation)
 
     p = sub.add_parser("domains", help="nodes above genes: domains inferred from CTCF boundaries")
     p.add_argument("--chrom", default="chr21")

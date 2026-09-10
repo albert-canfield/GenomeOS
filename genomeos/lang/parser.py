@@ -38,12 +38,13 @@ from genomeos.ir import (
     Parameter,
     Protein,
     Region,
+    RegulatoryElement,
     Rule,
     Transcript,
 )
 
 _ACTIONS = {a.value: a for a in Action}
-_KINDS = ("gene", "protein", "region", "rule", "param", "cell_type", "event", "transcript")
+_KINDS = ("gene", "protein", "region", "element", "rule", "param", "cell_type", "event", "transcript")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
 _PARAM = re.compile(r"^(\w[\w.]*)\s*=\s*([-+0-9.eE]+)\s*([^\s{]*)\s*$")
 _EFFECT = re.compile(r"^(\w+)\s*(\+=|-=|\*=|=)\s*([-+0-9.eE]+)\s*(.*)$")
@@ -273,6 +274,24 @@ def _compile_block(b: Block, module: Module) -> None:
         if "locus" in p:
             r.locus = Locus.parse(p["locus"])
         module.add(r)
+    elif b.kind == "element":
+        el = RegulatoryElement(
+            id=b.header,
+            kind="regulatory_element",
+            evidence=ev,
+            confidence=conf,
+            cls=p.get("class", "unknown"),
+        )
+        if "locus" in p:
+            el.locus = Locus.parse(p["locus"])
+        if "domain" in p:
+            el.domain = p["domain"]
+        if "targets" in p:
+            el.targets = [
+                {"gene": t, "basis": p.get("basis", "stated"), "confidence": conf}
+                for t in _list(p["targets"])
+            ]
+        module.add(el)
     elif b.kind == "cell_type":
         module.add(
             CellType(

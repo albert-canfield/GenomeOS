@@ -12,7 +12,7 @@ walks one gene through all of them with the evidence at each step.
 | layer | what carries it | where in GenomeOS | evidence |
 |---|---|---|---|
 | DNA sequence | bases, loci, chromosomes, an individual's alleles | `Sequence`, `Locus`, `Chromosome`, `Genome`, `IndexedGenome`, `Variant` (VCF) | curated (assembly), measured (a person's VCF) |
-| regulation | promoters, enhancers, CTCF boundaries, CpG islands, motifs that name required factors | `Region` / UNKNOWN blocks, ENCODE cCREs, pattern file, learned signals | curated (ENCODE), predicted (patterns) |
+| regulation | promoters, enhancers, CTCF boundaries, CpG islands, motifs that name required factors | `RegulatoryElement` with targets bounded by the CTCF domain (`genomeos regulation`), ENCODE cCREs, pattern file, learned signals | curated (ENCODE), inferred (targets), predicted (patterns) |
 | RNA | transcripts and isoforms, exons spliced to mRNA, non-coding RNA classes | `Transcript` (GENCODE), `splice()`, `transcribe()`, anatomy counts of ncRNA | curated |
 | protein | translation with the right genetic code and initiators, UniProt record, AlphaFold structure | `translate_transcript()`, `Protein`, molecules layer | curated (UniProt), predicted (AlphaFold) |
 | cell behaviour | rules with context, libraries the gene belongs to, cell-type expression | `Rule`, `CellType`, `Module.active_rules()`, `KnowledgeBase.libraries_of()`, network runtime | curated (GO/Reactome), inferred |
@@ -29,7 +29,7 @@ walks one gene through all of them with the evidence at each step.
 | Chromosome, Genome | `Chromosome`, `Genome`, `IndexedGenome` | linear now; pangenome graph is the design target |
 | Allele | `Variant.alts` + haplotypes from `apply_variants` | worth promoting to its own BioIR entity when twins carry both haplotypes as first-class objects |
 | Gene, Transcript, Protein | `Gene`, `Transcript`, `Protein` | from GENCODE/Ensembl; protein sequence by our translation, checked against UniProt |
-| RegulatoryElement | `Region` (role may be UNKNOWN) and ENCODE cCRE blocks | the next BioIR entity to add explicitly, with class (promoter, enhancer, insulator) and the genes it reaches |
+| RegulatoryElement | `RegulatoryElement` (BioIR) with class, locus, the node that bounds it and `targets` with a basis each; BioLang `element` block; `genomeos regulation --gene G` | ENCODE gives the elements (curated); the targets are inferred: a promoter reaches the TSS within 1 kb (0.8), an enhancer reaches the coding genes of its CTCF domain, nearest TSS first (0.4, others 0.25) |
 | Domain (node) | `genomeos.genome.domains.Domain`: intervals between CTCF-only boundaries, with the genes, promoters and enhancers inside; a lane in the block map | inferred, 0.4; Hi-C would make it curated |
 | CellState | `CellState` (ageing runtime) and `CellType` (identity) | state and identity are kept separate on purpose |
 
@@ -48,6 +48,10 @@ start lost, with HGVS c. and p. names). Everything above uses it:
 | `/api/flow`, the **Flow** tab | three lanes to scale (DNA with exons, mRNA with UTRs and CDS, residues by chemistry), linked on hover; a variant box shows what one base does to the protein |
 | Molecules tab | checks our translation against UniProt, then shows the compiled protein definition (see docs/PROTEIN.md) |
 | variant classifier | the coding consequence is the same computation |
+
+The regulation layer is drawn above the DNA lane in the Flow tab. APP sits
+alone in its node (chr21:D91, 175 kb): one promoter element, 98 enhancers
+can reach it, 89 of them inside the gene, two CTCF insulators bound the node.
 
 Checked on APP: chr21:25,897,620 C>T on the plus strand of a minus-strand
 gene reads G>A in the mRNA, codon 673 GCA→ACA, p.Ala673Thr, the protective
