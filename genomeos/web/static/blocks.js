@@ -4,8 +4,9 @@
 (function () {
   const $ = s => document.querySelector(s);
   const COLORS = {gene: '#1f6feb', transcript: '#4c8dff', exon: '#8250df', cds: '#d1242f', unknown: '#57606a',
-                  cpg_island: '#1a7f37', repeat: '#bf8700', telomere: '#0e8a8a', gap: '#30363d'};
-  const st = {path: null, chrom: null, length: 0, view: [0, 1], data: null, sel: null, filter: new Set(),
+                  cpg_island: '#1a7f37', repeat: '#bf8700', telomere: '#0e8a8a', gap: '#30363d', ccre: '#2ea043'};
+  const CCRE_COLORS = {PLS: '#2ea043', pELS: '#e3b341', dELS: '#d29922', 'CTCF-only': '#39c5c5', 'DNase-H3K4me3': '#4c8dff'};
+  const st = {path: null, chrom: null, length: 0, view: [0, 1], data: null, sel: null, filter: new Set(), highlight: null,
               mode: 'view', edits: [], drag: null, hover: null, query: ''};
   const canvas = $('#b-canvas'), ctx = canvas.getContext('2d');
   const mini = $('#b-mini'), mctx = mini.getContext('2d');
@@ -70,7 +71,9 @@
     if (st.filter.size && !st.filter.has(b.type)) return false;
     return b.end > st.view[0] && b.start < st.view[1];
   }
+  const classOf = b => (b.type === 'unknown' && b.attrs.class) ? 'unknown:' + b.attrs.class : (b.type === 'ccre' ? 'ccre:' + b.attrs.cls : b.type);
   function isMuted(b) {
+    if (st.highlight) return classOf(b) !== st.highlight && !(b.parent && st.highlight === 'gene' && b.type !== 'gene' && false);
     if (st.query) { const q = st.query.toLowerCase(); const hit = (b.name || '').toLowerCase().includes(q) || (st.byId[b.parent]?.name || '').toLowerCase().includes(q) || (st.byId[st.byId[b.parent]?.parent]?.name || '').toLowerCase().includes(q); if (!hit) return true; }
     if (st.sel) { const s = st.byId[st.sel]; const chain = new Set([b.id, b.parent, st.byId[b.parent]?.parent]); const related = chain.has(s.id) || s.parent === b.id || st.byId[s.parent]?.parent === b.id || b.parent === s.id || st.byId[b.parent]?.parent === s.id; if (!related) return true; }
     return false;
@@ -114,7 +117,7 @@
     const x0 = Math.max(-2, X(b.start)), x1 = Math.min(W + 2, X(b.end)), w = Math.max(1.5, x1 - x0);
     const m = isMuted(b);
     ctx.globalAlpha = m ? 0.18 : 1;
-    const col = COLORS[b.type] || '#999';
+    let col = COLORS[b.type] || '#999';
     if (b.type === 'gene') {
       ctx.fillStyle = col; ctx.globalAlpha = m ? 0.12 : 0.22; ctx.fillRect(x0, y, w, h); ctx.globalAlpha = m ? 0.18 : 1;
       ctx.strokeStyle = b.id === st.sel ? '#fff' : col; ctx.lineWidth = b.id === st.sel ? 2 : 1; ctx.strokeRect(x0 + 0.5, y + 0.5, w - 1, h - 1);
@@ -143,6 +146,7 @@
         }
       }
     } else {
+      if (b.type === 'ccre') col = CCRE_COLORS[b.attrs.cls] || col;
       const ucol = {interspersed_repeat: '#bf8700', interspersed_repeat_SINE: '#bf8700', tandem_repeat: '#e3b341', low_complexity: '#9a6700', long_orf: '#d1242f', satellite_array: '#7a5901', mixed_intergenic: '#6e7681', unique_intergenic: '#8b949e', promoter_like: '#1a7f37', centromere: '#0e8a8a', telomere: '#0e8a8a', gene_desert: '#3d444d'};
       ctx.fillStyle = (b.type === 'unknown' && b.attrs.class && ucol[b.attrs.class]) || col; ctx.globalAlpha = m ? 0.15 : (b.type === 'unknown' ? (b.attrs.class ? 0.6 : 0.35) : 0.9);
       ctx.fillRect(x0, y + (b.type === 'unknown' ? h * 0.3 : 0), w, b.type === 'unknown' ? h * 0.4 : h);
@@ -156,8 +160,9 @@
   // coverage of the loaded window by block type (union of intervals, so overlapping genes count once)
   function summary() {
     const d = st.data; if (!d) return;
+    classSummary();
     const span = d.end - d.start;
-    const types = ['gene', 'transcript', 'exon', 'cds', 'unknown', 'cpg_island', 'repeat', 'telomere', 'gap'];
+    const types = ['gene', 'transcript', 'exon', 'cds', 'unknown', 'ccre', 'cpg_island', 'repeat', 'telomere', 'gap'];
     const rows = [];
     for (const t of types) {
       const iv = d.blocks.filter(b => b.type === t).map(b => [Math.max(d.start, b.start), Math.min(d.end, b.end)]).filter(([a, b]) => b > a).sort((a, b) => a[0] - b[0]);
@@ -167,8 +172,21 @@
       if (iv.length) rows.push({t, n: iv.length, bp, pct: bp / span * 100});
     }
     const note = d.coarse ? ' · zoom under 3 Mb to count transcripts, exons, CDS, repeats and islands' : '';
-    $('#b-summary').innerHTML = `<div class="muted" style="font-size:12px;margin-bottom:4px">coverage of ${st.chrom}:${d.start.toLocaleString()}-${d.end.toLocaleString()} (${fmtPos(span)})${note}</div>` +
-      `<div style="display:flex;flex-wrap:wrap;gap:6px 14px">` + rows.map(r => `<span data-tip="${r.n} ${r.t} block(s) cover ${r.bp.toLocaleString()} bp of this window (overlaps counted once)"><i class="ic" style="width:10px;height:10px;display:inline-block;background:${COLORS[r.t]};border-radius:2px;margin-right:4px"></i>${r.t} <b>${r.pct >= 10 ? r.pct.toFixed(0) : r.pct.toFixed(r.pct >= 1 ? 1 : 2)}%</b> <span class="muted">(${r.n})</span></span>`).join('') + '</div>';
+    $('#b-summary').innerHTML = `<div class="muted" style="font-size:12px;margin-bottom:4px">share of bases in ${st.chrom}:${d.start.toLocaleString()}-${d.end.toLocaleString()} (${fmtPos(span)}) by block type and UNKNOWN class; overlaps counted once; click a chip to highlight${note}</div>`;
+  }
+
+  // summary of block types and UNKNOWN classes in the loaded window; click a chip to highlight all of that kind
+  function classSummary() {
+    const d = st.data; const span = d.end - d.start;
+    const groups = {};
+    for (const b of d.blocks) { const a = Math.max(d.start, b.start), e = Math.min(d.end, b.end); if (e <= a) continue; const k = classOf(b); const g = groups[k] = groups[k] || {n: 0, bp: 0, iv: []}; g.n++; g.iv.push([a, e]); }
+    for (const g of Object.values(groups)) { g.iv.sort((a, b) => a[0] - b[0]); let cur = null, bp = 0; for (const [a, b] of g.iv) { if (!cur || a > cur[1]) { if (cur) bp += cur[1] - cur[0]; cur = [a, b]; } else cur[1] = Math.max(cur[1], b); } if (cur) bp += cur[1] - cur[0]; g.bp = bp; }
+    const keys = Object.keys(groups).sort((a, b) => groups[b].bp - groups[a].bp);
+    const ucol = {interspersed_repeat: '#bf8700', interspersed_repeat_SINE: '#bf8700', tandem_repeat: '#e3b341', low_complexity: '#9a6700', long_orf: '#d1242f', satellite_array: '#7a5901', mixed_intergenic: '#6e7681', unique_intergenic: '#8b949e', promoter_like: '#1a7f37', centromere: '#0e8a8a', telomere: '#0e8a8a', gene_desert: '#3d444d', regulatory: '#2ea043'};
+    const colorFor = k => k.startsWith('unknown:') ? (ucol[k.slice(8)] || '#57606a') : k.startsWith('ccre:') ? (CCRE_COLORS[k.slice(5)] || '#2ea043') : (COLORS[k] || '#999');
+    const label = k => k.startsWith('unknown:') ? 'UNKNOWN · ' + k.slice(8) : k.startsWith('ccre:') ? 'ENCODE ' + k.slice(5) : k;
+    $('#b-classes').innerHTML = keys.map(k => `<span class="chip${st.highlight === k ? ' on' : ''}" data-key="${k}" data-tip="Click to highlight every ${label(k)} block and mute the rest; click again to clear."><i style="background:${colorFor(k)}"></i>${label(k)} <b>${(groups[k].bp / span * 100).toFixed(groups[k].bp / span >= 0.1 ? 0 : 1)}%</b> <span class="muted">(${groups[k].n})</span></span>`).join('');
+    $('#b-classes').querySelectorAll('.chip').forEach(c => c.onclick = () => { st.highlight = st.highlight === c.dataset.key ? null : c.dataset.key; classSummary(); draw(); });
   }
 
   function drawMini() {
@@ -248,8 +266,9 @@
       ${Object.keys(b.attrs).length ? `<div class="muted" style="font-size:12px">${Object.entries(b.attrs).map(([k, v]) => `${k}=${v}`).join(' · ')}</div>` : ''}
       ${b.type === 'unknown' && b.attrs.class ? `<div class="hint">Investigated: <b>${b.attrs.class}</b> (${b.evidence}, conf ${b.confidence}). ${b.attrs.patterns ? 'patterns: ' + b.attrs.patterns + '. ' : ''}${b.attrs.similar_to ? 'similar to ' + b.attrs.similar_to : ''}</div>` : ''}
       ${b.type === 'unknown' && !b.attrs.class ? '<div class="hint">UNKNOWN: no annotated gene here. In a human chromosome this space carries most of the regulation (enhancers, insulators) that we cannot yet read from sequence alone.</div>' : ''}
-      <div class="row" style="margin-top:6px"><button class="ghost" id="b-zoomto"><i class="ic">🔍</i>Zoom to</button></div>`;
+      <div class="row" style="margin-top:6px"><button class="ghost" id="b-zoomto"><i class="ic">🔍</i>Zoom to</button><button class="ghost" id="b-hl"><i class="ic">💡</i>${st.highlight === classOf(b) ? 'Clear highlight' : 'Highlight all ' + (b.type === 'unknown' && b.attrs.class ? b.attrs.class : b.type)}</button></div>`;
     $('#b-zoomto').onclick = () => { const pad = (b.end - b.start) * 0.15; st.view = [Math.max(0, b.start - pad), Math.min(st.length, b.end + pad)]; scheduleLoad(); };
+    $('#b-hl').onclick = () => { st.highlight = st.highlight === classOf(b) ? null : classOf(b); classSummary(); draw(); showInfo(b, false); };
   }
 
   // ---- controls

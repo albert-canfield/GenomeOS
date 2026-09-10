@@ -215,7 +215,30 @@ def _distil_gencode_subset() -> dict:
     return {"subset_file": str(dst), "lines": n, "chromosomes": ["chr21", "chrM"]}
 
 
+def _distil_ccres_chr21() -> dict:
+    from genomeos.genome.regulatory import save_ccres, stream_ccres, summarise
+
+    elements = stream_ccres({"chr21", "chrM"})
+    by_chrom: dict[str, list] = {}
+    for c in elements:
+        by_chrom.setdefault(c.chrom, []).append(c)
+    out: dict = {
+        "rows_streamed_from": "https://downloads.wenglab.org/V3/GRCh38-cCREs.bed",
+        "disk_used_bytes": 0,
+    }
+    for chrom, els in by_chrom.items():
+        p = save_ccres(chrom, els)
+        out[chrom] = {**summarise(els), "file": str(p)}
+    return out
+
+
 DISTILLERS: list[Distiller] = [
+    Distiller(
+        "encode_ccres_chr21",
+        [],
+        _distil_ccres_chr21,
+        "ENCODE cCREs streamed (64 MB) and kept only for chr21/chrM: promoters, enhancers, CTCF sites",
+    ),
     Distiller(
         "gencode_chr21_chrM",
         [DATA / "reference" / "gencode.v50.annotation.gff3.gz"],

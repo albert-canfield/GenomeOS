@@ -237,6 +237,25 @@ def blocks_for_window(
                     0.9,
                 )
             )
+    if (end - start) <= ELEMENT_WINDOW:
+        from genomeos.genome.regulatory import EVIDENCE, load_ccres
+
+        for c in load_ccres(chrom):
+            if c.end > start and c.start < end:
+                blocks.append(
+                    Block(
+                        f"ccre:{c.id}",
+                        "ccre",
+                        c.start,
+                        c.end,
+                        ".",
+                        f"{c.label}",
+                        None,
+                        "curated",
+                        0.8,
+                        {"cls": c.cls, "ctcf_bound": c.ctcf_bound, "source": EVIDENCE},
+                    )
+                )
     _apply_unknown_classes(blocks, chrom)
     return {
         "chrom": chrom,

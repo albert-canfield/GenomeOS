@@ -21,6 +21,7 @@ block first, with the evidence that produced each label.
 | promoter_like | a CpG island in a block ≤ 20 kb, or ≥ 2 islands per 100 kb | predicted |
 | mixed_intergenic | blocks ≥ 20 kb are read in 5 kb windows; a mix of interspersed repeats and unique sequence | predicted |
 | unique_intergenic | ≥ 70% of windows unique and non-repetitive: the space where regulation is expected | inferred |
+| regulatory | ENCODE candidate regulatory elements (promoter-like, enhancer-like) at ≥ 2 per 10 kb: experimental chromatin evidence, checked before every sequence-only rule | curated |
 | gene_desert | ≥ 500 kb with nothing above | inferred |
 | unclassified | none of the above dominates | none |
 
@@ -36,30 +37,33 @@ it more.
 Among the 60 largest blocks, pairs that share many 20-mers are reported as
 duplication candidates (`similar_to`).
 
-## Chromosome 21, first run (55 s)
+## Chromosome 21 (85 s, with ENCODE evidence)
 
 | class | blocks | bp | share of UNKNOWN |
 |---|---|---|---|
 | gap (assembly N runs) | 15 | 6.16 Mb | 29.6% |
-| unique intergenic | 73 | 3.82 Mb | 18.4% |
-| long ORF (250–2,500 aa; transposon ORFs, pseudogenes, unannotated) | 75 | 3.07 Mb | 14.7% |
+| regulatory (ENCODE cCRE-dense) | 177 | 3.65 Mb | 17.5% |
+| unique intergenic | 52 | 2.95 Mb | 14.2% |
 | centromere (CENP-B boxes, 81% high-copy k-mers) | 1 | 2.35 Mb | 11.3% |
-| satellite array (stop-free frame > 2,500 aa) | 6 | 1.22 Mb | 5.9% |
-| mixed intergenic | 14 | 1.06 Mb | 5.1% |
-| interspersed repeat | 19 | 0.84 Mb | 4.0% |
-| promoter-like | 46 | 0.83 Mb | 4.0% |
-| unclassified | 175 | 1.29 Mb | 6.2% |
+| long ORF (transposon ORFs, pseudogenes, unannotated) | 38 | 2.27 Mb | 10.9% |
+| satellite array | 6 | 1.22 Mb | 5.9% |
+| mixed intergenic | 9 | 0.76 Mb | 3.6% |
+| interspersed repeat | 7 | 0.41 Mb | 2.0% |
+| promoter-like (CpG island) | 17 | 0.21 Mb | 1.0% |
+| unclassified | 113 | 0.76 Mb | 3.7% |
 
-Inside blocks of 20 kb or more, 28% of 5 kb windows are interspersed repeat
-and 72% unique; Alu density has a median of 0.18 per kb and peaks at 2 per kb.
-The centromere of chromosome 21 (chr21:10.65–13.0 Mb) is found from its CENP-B
-boxes alone.
+96.3% of the UNKNOWN bases now carry a class. Chromosome 21 has 13,356 ENCODE
+elements (9,981 distal enhancer-like, 2,158 proximal, 482 promoter-like, 385
+CTCF-only, 350 open-chromatin), kept as a 150 KB file distilled from the
+64 MB registry.
 
-A lesson learned on the way: exact 16-mer counting finds only *young* repeat
-copies. Most Alu and L1 copies are 10–20% diverged, so their 16-mers are no
-longer shared and the first version saw the intergenic space as 99% unique.
-Mismatch-tolerant matching of the Alu 5' core (up to 7 substitutions in 36
-bases, zero hits in 200 kb of random sequence) is what recovers the old copies.
+Two lessons learned on the way. Exact 16-mer counting finds only *young*
+repeat copies; most Alu and L1 copies are 10–20% diverged, so the first
+version saw the intergenic space as 99% unique, and mismatch-tolerant
+matching of the Alu 5' core (up to 7 substitutions in 36 bases, zero hits in
+200 kb of random sequence) recovered them. And sequence alone cannot see
+regulation: adding one experimental layer (chromatin) moved 17.5% of the
+UNKNOWN space from "unique" to "regulatory" with curated evidence.
 
 ## Where it shows
 

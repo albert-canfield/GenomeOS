@@ -270,10 +270,13 @@ def composition(seq: str, counts: array | None, window: int = 5000) -> dict[str,
 
 
 def classify_block(
-    seq: str, counts: array | None, patterns: list[Pattern]
+    seq: str, counts: array | None, patterns: list[Pattern], ccre: dict[str, int] | None = None
 ) -> tuple[str, str, float, dict, dict]:
     n = len(seq)
     f: dict[str, Any] = {}
+    if ccre:
+        f["ccre"] = dict(ccre)
+        f["ccre_per_10kb"] = round(sum(ccre.values()) / n * 10_000, 3)
     f["n_fraction"] = round(seq.count("N") / n, 3) if n else 0.0
     if f["n_fraction"] > 0.5:
         return "gap", "curated", 1.0, f, {}
@@ -310,6 +313,13 @@ def classify_block(
             by_class[p.cls] = (c, p.evidence, p.confidence)
     if "telomere" in by_class:
         return "telomere", by_class["telomere"][1], by_class["telomere"][2], f, hits
+    # experimental chromatin evidence beats every sequence-only rule below
+    if (
+        ccre
+        and f.get("ccre_per_10kb", 0) >= 2
+        and (ccre.get("PLS", 0) + ccre.get("pELS", 0) + ccre.get("dELS", 0)) >= 2
+    ):
+        return "regulatory", "curated", 0.7, f, hits
     if "centromere" in by_class:
         return "centromere", by_class["centromere"][1], by_class["centromere"][2], f, hits
     if f["tandem_fraction"] > 0.5:
@@ -375,8 +385,11 @@ def investigate(
     progress=None,
     max_blocks: int | None = None,
 ) -> dict[str, Any]:
+    from genomeos.genome.regulatory import ccre_index, count_in, load_ccres
+
     s = str(Sequence(str(seq)))
     patterns = patterns if patterns is not None else load_patterns()
+    ccres = ccre_index(load_ccres(chrom))
     if progress:
         progress("counting 16-mers over the chromosome")
     counts = kmer_table(s)
@@ -384,7 +397,8 @@ def investigate(
     if max_blocks:
         blocks = blocks[:max_blocks]
     for i, b in enumerate(blocks):
-        cls, ev, conf, f, hits = classify_block(s[b.start : b.end], counts, patterns)
+        cc = count_in(ccres, b.start, b.end) if ccres else None
+        cls, ev, conf, f, hits = classify_block(s[b.start : b.end], counts, patterns, cc)
         b.cls, b.evidence, b.confidence, b.features, b.patterns = cls, ev, conf, f, hits
         if progress and (i % 25 == 0 or i == len(blocks) - 1):
             progress(f"{i + 1}/{len(blocks)} blocks ({b.length:,} bp -> {cls})")
@@ -416,5 +430,6 @@ def investigate(
         else None,
         "high_copy_threshold": HIGH_COPY,
         "patterns": [p.name for p in patterns],
+        "ccres_used": len(ccres),
         "blocks": [b.to_dict() for b in blocks],
     }

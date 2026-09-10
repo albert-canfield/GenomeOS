@@ -66,6 +66,9 @@ svg.chart{width:100%;height:280px;display:block}
 .lib .purpose{color:var(--muted)}
 .lib .detail{display:none;margin-top:8px;font-size:12.5px}
 .lib.open .detail{display:block}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border:1px solid var(--line);border-radius:999px;font-size:12px;cursor:pointer;background:var(--bg)}
+.chip i{display:inline-block;width:10px;height:10px;border-radius:2px}
+.chip.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
 .gene{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:1px 6px;border:1px solid var(--line);border-radius:4px;margin:2px 3px 2px 0;background:var(--panel)}
 .note{font-size:12px;color:var(--muted);margin-top:8px}
 .kpi{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px}
@@ -238,13 +241,15 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label><input type="checkbox" value="exon" checked> exon</label>
       <label><input type="checkbox" value="cds" checked> CDS</label>
       <label><input type="checkbox" value="unknown" checked> UNKNOWN</label>
+      <label data-tip="ENCODE candidate regulatory elements from chromatin data: promoter-like (PLS), enhancer-like (pELS/dELS), CTCF sites, open chromatin. Experimental evidence about the space between genes."><input type="checkbox" value="ccre" checked> ENCODE element</label>
       <label><input type="checkbox" value="cpg_island" checked> CpG island</label>
       <label><input type="checkbox" value="repeat" checked> repeat</label>
       <label><input type="checkbox" value="gap" checked> gap</label>
       <button class="ghost" id="b-investigate" data-tip="Run `genomeos unknown` on this chromosome as a background job: every UNKNOWN block is classified (repeats learned from the chromosome's own k-mers, tandem repeats, open reading frames, CpG islands, named patterns). Results label the UNKNOWN blocks here and appear under Progress."><i class="ic">🔬</i>Investigate UNKNOWN</button>
       <label style="margin-left:auto" data-tip="Edit mode: drag a gene, transcript or exon to propose a move. The server checks plausibility: inside its parent, no overlap on the same strand, reading frame kept for exons. Accepted moves are proposals with predicted evidence."><input type="checkbox" id="b-mode"> <span id="b-modelabel">view mode</span></label>
     </div>
-    <div id="b-summary" style="margin:6px 0 8px"></div>
+    <div id="b-summary" style="margin:6px 0 4px"></div>
+    <div id="b-classes" class="row" style="gap:6px;margin-bottom:8px" data-tip="Block types and investigated UNKNOWN classes in the loaded window, by share of bases. Click a chip to highlight all blocks of that kind."></div>
     <div style="position:relative"><canvas id="b-canvas" style="width:100%;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></canvas></div>
     <canvas id="b-mini" style="width:100%;height:26px;display:block;margin-top:6px;border-radius:6px;background:var(--bg)"></canvas>
     <div class="grid cols-2" style="margin-top:12px">

@@ -1,0 +1,28 @@
+{
+  "result": "encode_ccres_chr21",
+  "date": "2026-09-10",
+  "rows_streamed_from": "https://downloads.wenglab.org/V3/GRCh38-cCREs.bed",
+  "disk_used_bytes": 0,
+  "chr21": {
+    "elements": 13356,
+    "by_class": {
+      "dELS": 9981,
+      "CTCF-only": 385,
+      "PLS": 482,
+      "DNase-H3K4me3": 350,
+      "pELS": 2158
+    },
+    "bp_by_class": {
+      "dELS": 2749047,
+      "CTCF-only": 97243,
+      "PLS": 135190,
+      "DNase-H3K4me3": 92993,
+      "pELS": 559256
+    },
+    "ctcf_bound": 5460,
+    "evidence": "ENCODE SCREEN registry of cCREs v3 (chromatin: DNase, H3K4me3, H3K27ac, CTCF)",
+    "file": "data/results/ccres_chr21.bed.gz"
+  },
+  "inputs": [],
+  "describe": "ENCODE cCREs streamed (64 MB) and kept only for chr21/chrM: promoters, enhancers, CTCF sites"
+}
