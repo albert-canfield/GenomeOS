@@ -154,6 +154,8 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div class="step"><span class="n">3</span>Open <b>Ageing</b>, set mutagen × to 2 and press <b>Simulate</b>, then <b>Compare with baseline</b>.</div>
       <div class="step"><span class="n">4</span>Open <b>Twin</b>, fork HG002 with <code>TERT:nonsense</code> and <b>Run</b> A against B.</div>
       <div class="step"><span class="n">5</span>Open <b>Debugger</b> and press <b>Run to breakpoint</b>: it stops when LacI passes 30 and explains why, with sources.</div>
+      <div class="step"><span class="n">6</span>Open <b>Anatomy</b>: the mitochondrion, human chromosome 21 and worm chromosome III appear side by side. Hover a measure for what it means.</div>
+      <div class="step"><span class="n">7</span>Open <b>Progress</b> to watch background jobs (the whole-genome inventory) fill in, and to read the task log.</div>
     </div>
     <div class="hint" style="margin-top:12px">Evidence pills: <span class="pill experimental">experimental</span> measured in the lab · <span class="pill curated">curated</span> from a curated database · <span class="pill predicted">predicted</span> from a model · <span class="pill inferred">inferred</span> an estimate · <span class="pill none">none</span> a placeholder. Confidence runs 0 to 1.</div>
   </div>
@@ -715,10 +717,25 @@ $('#an-compare').onclick = async () => {
   try {
     const r = await api('/api/anatomy');
     const A = r.anatomies;
-    const rows = [['length (Mb)', a => (a.length / 1e6).toFixed(3)], ['coding genes', a => a.genes.protein_coding], ['genes per Mb', a => a.layout.coding_genes_per_mb], ['CDS fraction', a => (a.composition_fraction.cds * 100).toFixed(1) + '%'], ['intron fraction', a => (a.composition_fraction.intron * 100).toFixed(1) + '%'], ['intergenic fraction', a => (a.composition_fraction.intergenic * 100).toFixed(1) + '%'], ['exons / transcript', a => a.structure.exons_per_transcript_median], ['intron median (bp)', a => a.structure.intron_length_median], ['gene median (bp)', a => a.structure.gene_length_median], ['protein median (aa)', a => a.structure.protein_length_aa_median], ['single-exon genes', a => a.structure.single_exon_fraction], ['spacing median (bp)', a => a.layout.intergenic_spacing_median], ['GC', a => a.sequence.gc], ['CpG islands', a => a.elements.cpg_islands]];
+    const rows = [
+      ['length (Mb)', a => (a.length / 1e6).toFixed(3), 'Total bases in the sequence, gaps included.'],
+      ['coding genes', a => a.genes.protein_coding, 'Genes annotated as protein-coding.'],
+      ['genes per Mb', a => a.layout.coding_genes_per_mb, 'Coding genes per million non-gap bases: how densely the genome is packed.'],
+      ['CDS fraction', a => (a.composition_fraction.cds * 100).toFixed(1) + '%', 'Share of bases that actually encode protein.'],
+      ['intron fraction', a => (a.composition_fraction.intron * 100).toFixed(1) + '%', 'Share of bases inside genes but spliced out (introns, plus non-coding gene bodies).'],
+      ['intergenic fraction', a => (a.composition_fraction.intergenic * 100).toFixed(1) + '%', 'Share of bases outside any annotated gene.'],
+      ['exons / transcript', a => a.structure.exons_per_transcript_median, 'Median number of exons in a canonical transcript: the block count per gene.'],
+      ['intron median (bp)', a => a.structure.intron_length_median, 'Median intron length: the spacing between blocks.'],
+      ['gene median (bp)', a => a.structure.gene_length_median, 'Median span of a coding gene from first to last base.'],
+      ['protein median (aa)', a => a.structure.protein_length_aa_median, 'Median protein length in amino acids: proteins are similar in size across genomes.'],
+      ['single-exon genes', a => a.structure.single_exon_fraction, 'Fraction of coding genes with no intron at all.'],
+      ['spacing median (bp)', a => a.layout.intergenic_spacing_median, 'Median distance between neighbouring coding genes.'],
+      ['GC', a => a.sequence.gc, 'Fraction of G and C bases; shapes which elements can exist (CpG islands, isochores).'],
+      ['CpG islands', a => a.elements.cpg_islands, 'CpG-rich stretches of ≥400 bp: promoter markers in mammals, not in the worm.'],
+    ];
     $('#an-status').textContent = 'three genomes, side by side';
     $('#an-bar').innerHTML = A.map(a => `<div class="muted" style="margin-top:6px">${a.name}</div>` + compBar(a.composition_bp, a.length)).join('');
-    $('#an-out').innerHTML = `<div class="card" style="grid-column:1/-1"><table><tr><th>measure</th>${A.map(a => `<th class="num">${a.name}</th>`).join('')}</tr>${rows.map(([l, f]) => `<tr><td>${l}</td>${A.map(a => `<td class="num">${f(a) ?? '-'}</td>`).join('')}</tr>`).join('')}</table></div>`;
+    $('#an-out').innerHTML = `<div class="card" style="grid-column:1/-1"><table><tr><th>measure</th>${A.map(a => `<th class="num">${a.name}</th>`).join('')}</tr>${rows.map(([l, f, tip]) => `<tr><td data-tip="${tip}">${l} <span class="help">?</span></td>${A.map(a => `<td class="num">${f(a) ?? '-'}</td>`).join('')}</tr>`).join('')}</table></div>`;
     $('#an-lessons').innerHTML = r.lessons.map(l => `<div>• ${l}</div>`).join('');
   } catch (e) { $('#an-status').textContent = e.message; }
 };

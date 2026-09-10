@@ -431,6 +431,264 @@
         "human chr5: 895 coding genes in 181.54 Mb (4.94 per Mb); 0.9% of bases code for protein; median transcript has 8.0 exons and introns of 2164 bp; neighbours {'tandem': 482, 'convergent': 206, 'divergent': 206}."
       ],
       "seconds": 72
+    },
+    "chr6": {
+      "name": "human chr6",
+      "length": 170805979,
+      "composition_bp": {
+        "intergenic": 47358287,
+        "intron": 112301314,
+        "cds": 1884246,
+        "gap": 727455,
+        "noncoding_exon_or_utr": 8534677
+      },
+      "composition_fraction": {
+        "intergenic": 0.2773,
+        "intron": 0.6575,
+        "cds": 0.011,
+        "gap": 0.0043,
+        "noncoding_exon_or_utr": 0.05
+      },
+      "sequence": {
+        "gc": 0.3961,
+        "n_fraction": 0.0043,
+        "cpg_obs_exp": 0.228,
+        "gc_100kb_min": 0.325,
+        "gc_100kb_max": 0.554,
+        "gaps": 14,
+        "gap_bp": 727455
+      },
+      "elements": {
+        "cpg_islands": 1998,
+        "cpg_island_bp": 1311000,
+        "homopolymer_runs_ge12": 36477,
+        "microsatellites_dinuc_ge20bp": 6319,
+        "telomeric_blocks": 8,
+        "telomeric_bp": 186
+      },
+      "genes": {
+        "total": 4232,
+        "by_type": {
+          "lncRNA": 1990,
+          "protein_coding": 1052,
+          "processed_pseudogene": 581,
+          "snRNA": 107,
+          "misc_RNA": 105,
+          "transcribed_processed_pseudogene": 76,
+          "unprocessed_pseudogene": 74,
+          "miRNA": 67,
+          "transcribed_unprocessed_pseudogene": 63,
+          "snoRNA": 41,
+          "TEC": 33,
+          "rRNA_pseudogene": 26
+        },
+        "strand_plus": 2135,
+        "strand_minus": 2097,
+        "protein_coding": 1052,
+        "transcripts_per_coding_gene_mean": 12.53,
+        "transcripts_per_coding_gene_max": 135
+      },
+      "structure": {
+        "canonical_transcripts": 1032,
+        "exons_per_transcript_median": 7.0,
+        "exons_per_transcript_max": 146,
+        "single_exon_fraction": 0.101,
+        "exon_length_median": 137,
+        "intron_length_median": 1708,
+        "intron_length_max": 478750,
+        "gene_length_median": 27459.0,
+        "gene_length_max": 1987380,
+        "protein_length_aa_median": 393.0,
+        "introns_total": 9177
+      },
+      "layout": {
+        "coding_genes_per_mb": 6.19,
+        "intergenic_spacing_median": 29076,
+        "intergenic_spacing_max": 3982307,
+        "neighbour_orientation": {
+          "tandem": 522,
+          "convergent": 265,
+          "divergent": 264
+        },
+        "overlapping_coding_pairs": 266,
+        "nested_coding_genes": 53
+      },
+      "lessons": [
+        "human chr6: 1052 coding genes in 170.81 Mb (6.19 per Mb); 1.1% of bases code for protein; median transcript has 7.0 exons and introns of 1708 bp; neighbours {'tandem': 522, 'convergent': 265, 'divergent': 264}."
+      ],
+      "seconds": 73
+    },
+    "chr7": {
+      "name": "human chr7",
+      "length": 159345973,
+      "composition_bp": {
+        "intergenic": 44923611,
+        "intron": 104898676,
+        "cds": 1750974,
+        "gap": 375790,
+        "noncoding_exon_or_utr": 7396922
+      },
+      "composition_fraction": {
+        "intergenic": 0.2819,
+        "intron": 0.6583,
+        "cds": 0.011,
+        "gap": 0.0024,
+        "noncoding_exon_or_utr": 0.0464
+      },
+      "sequence": {
+        "gc": 0.407,
+        "n_fraction": 0.0024,
+        "cpg_obs_exp": 0.247,
+        "gc_100kb_min": 0.329,
+        "gc_100kb_max": 0.614,
+        "gaps": 16,
+        "gap_bp": 375790
+      },
+      "elements": {
+        "cpg_islands": 2156,
+        "cpg_island_bp": 1462600,
+        "homopolymer_runs_ge12": 38359,
+        "microsatellites_dinuc_ge20bp": 5856,
+        "telomeric_blocks": 14,
+        "telomeric_bp": 462
+      },
+      "genes": {
+        "total": 3958,
+        "by_type": {
+          "lncRNA": 1654,
+          "protein_coding": 935,
+          "processed_pseudogene": 514,
+          "misc_RNA": 143,
+          "transcribed_unprocessed_pseudogene": 139,
+          "unprocessed_pseudogene": 116,
+          "snRNA": 84,
+          "miRNA": 78,
+          "transcribed_processed_pseudogene": 72,
+          "TR_V_gene": 57,
+          "snoRNA": 39,
+          "TEC": 38
+        },
+        "strand_plus": 2075,
+        "strand_minus": 1883,
+        "protein_coding": 935,
+        "transcripts_per_coding_gene_mean": 14.27,
+        "transcripts_per_coding_gene_max": 189
+      },
+      "structure": {
+        "canonical_transcripts": 923,
+        "exons_per_transcript_median": 8,
+        "exons_per_transcript_max": 82,
+        "single_exon_fraction": 0.046,
+        "exon_length_median": 132.0,
+        "intron_length_median": 1838,
+        "intron_length_max": 657297,
+        "gene_length_median": 34736,
+        "gene_length_max": 2304997,
+        "protein_length_aa_median": 442,
+        "introns_total": 8877
+      },
+      "layout": {
+        "coding_genes_per_mb": 5.88,
+        "intergenic_spacing_median": 29771,
+        "intergenic_spacing_max": 6525289,
+        "neighbour_orientation": {
+          "tandem": 489,
+          "convergent": 223,
+          "divergent": 222
+        },
+        "overlapping_coding_pairs": 221,
+        "nested_coding_genes": 46
+      },
+      "lessons": [
+        "human chr7: 935 coding genes in 159.35 Mb (5.88 per Mb); 1.1% of bases code for protein; median transcript has 8 exons and introns of 1838 bp; neighbours {'tandem': 489, 'convergent': 223, 'divergent': 222}."
+      ],
+      "seconds": 74
+    },
+    "chr8": {
+      "name": "human chr8",
+      "length": 145138636,
+      "composition_bp": {
+        "intergenic": 40009902,
+        "intron": 97268254,
+        "cds": 1278068,
+        "gap": 370500,
+        "noncoding_exon_or_utr": 6211912
+      },
+      "composition_fraction": {
+        "intergenic": 0.2757,
+        "intron": 0.6702,
+        "cds": 0.0088,
+        "gap": 0.0026,
+        "noncoding_exon_or_utr": 0.0428
+      },
+      "sequence": {
+        "gc": 0.4016,
+        "n_fraction": 0.0026,
+        "cpg_obs_exp": 0.23,
+        "gc_100kb_min": 0.322,
+        "gc_100kb_max": 0.611,
+        "gaps": 12,
+        "gap_bp": 370500
+      },
+      "elements": {
+        "cpg_islands": 1540,
+        "cpg_island_bp": 1102400,
+        "homopolymer_runs_ge12": 29959,
+        "microsatellites_dinuc_ge20bp": 5342,
+        "telomeric_blocks": 5,
+        "telomeric_bp": 96
+      },
+      "genes": {
+        "total": 3265,
+        "by_type": {
+          "lncRNA": 1606,
+          "protein_coding": 706,
+          "processed_pseudogene": 433,
+          "miRNA": 88,
+          "snRNA": 84,
+          "misc_RNA": 81,
+          "unprocessed_pseudogene": 77,
+          "transcribed_processed_pseudogene": 47,
+          "transcribed_unprocessed_pseudogene": 40,
+          "snoRNA": 33,
+          "TEC": 29,
+          "rRNA_pseudogene": 28
+        },
+        "strand_plus": 1593,
+        "strand_minus": 1672,
+        "protein_coding": 706,
+        "transcripts_per_coding_gene_mean": 14.35,
+        "transcripts_per_coding_gene_max": 202
+      },
+      "structure": {
+        "canonical_transcripts": 696,
+        "exons_per_transcript_median": 7.0,
+        "exons_per_transcript_max": 86,
+        "single_exon_fraction": 0.037,
+        "exon_length_median": 134,
+        "intron_length_median": 2067,
+        "intron_length_max": 682658,
+        "gene_length_median": 38114.0,
+        "gene_length_max": 2059620,
+        "protein_length_aa_median": 413.0,
+        "introns_total": 6283
+      },
+      "layout": {
+        "coding_genes_per_mb": 4.88,
+        "intergenic_spacing_median": 30563.5,
+        "intergenic_spacing_max": 3897049,
+        "neighbour_orientation": {
+          "divergent": 170,
+          "tandem": 366,
+          "convergent": 169
+        },
+        "overlapping_coding_pairs": 149,
+        "nested_coding_genes": 29
+      },
+      "lessons": [
+        "human chr8: 706 coding genes in 145.14 Mb (4.88 per Mb); 0.9% of bases code for protein; median transcript has 7.0 exons and introns of 2067 bp; neighbours {'divergent': 170, 'tandem': 366, 'convergent': 169}."
+      ],
+      "seconds": 59
     }
   },
   "assembly": "GRCh38 (UCSC hg38) + GENCODE 50",
