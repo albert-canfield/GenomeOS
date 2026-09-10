@@ -548,6 +548,34 @@ class Api:
         t.save(self.root / "data" / "twins")
         return {"ok": True, "twin": name, "applied": applied}
 
+    # ---- anatomy ----------------------------------------------------------
+
+    def anatomy(self, rel: str | None, chrom: str | None) -> dict:
+        from genomeos.genome import Annotation, anatomy_of, default_gencode, design_lessons
+        from genomeos.results import load_result
+
+        if not rel:
+            r = load_result("anatomy_comparison", self.root / "data" / "results")
+            if not r:
+                raise ApiError("no saved comparison", 404)
+            return r
+        path = self._safe(rel)
+        seqs = self._load(str(path))
+        chrom = chrom or next(iter(seqs))
+        if chrom not in seqs:
+            raise ApiError(f"no chromosome {chrom!r}", 404)
+        ann = None
+        gff = default_gencode({chrom}) if chrom.startswith("chr") else None
+        if "celegans" in rel:
+            g = self.root / "data" / "reference" / "celegans" / "WBcel235.63.gff3.gz"
+            gff = g if g.exists() else None
+        if gff:
+            ann = Annotation.from_gff3(gff, {chrom})
+        a = anatomy_of(f"{path.name} {chrom}", seqs[chrom], ann, chrom if ann else None)
+        d = a.to_dict()
+        d["lessons"] = design_lessons([a]) if ann else []
+        return d
+
     # ---- libraries -------------------------------------------------------
 
     def libs(self) -> dict:
@@ -627,6 +655,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/results":
                 return self._json(self.api.results())
+            if u.path == "/api/anatomy":
+                return self._json(self.api.anatomy(self._q(qs, "path"), self._q(qs, "chrom")))
             if u.path == "/api/develop":
                 return self._json(
                     self.api.develop(

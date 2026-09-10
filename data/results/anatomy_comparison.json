@@ -1,0 +1,246 @@
+{
+  "result": "anatomy_comparison",
+  "date": "2026-09-10",
+  "anatomies": [
+    {
+      "name": "human mtDNA (chrM)",
+      "length": 16569,
+      "composition_bp": {
+        "intergenic": 1211,
+        "intron": 0,
+        "cds": 11341,
+        "gap": 0,
+        "noncoding_exon_or_utr": 4017
+      },
+      "composition_fraction": {
+        "intergenic": 0.0731,
+        "intron": 0.0,
+        "cds": 0.6845,
+        "gap": 0.0,
+        "noncoding_exon_or_utr": 0.2424
+      },
+      "sequence": {
+        "gc": 0.4436,
+        "n_fraction": 0.0001,
+        "cpg_obs_exp": 0.641,
+        "gc_100kb_min": 0.444,
+        "gc_100kb_max": 0.444,
+        "gaps": 0,
+        "gap_bp": 0
+      },
+      "elements": {
+        "cpg_islands": 0,
+        "cpg_island_bp": 0,
+        "homopolymer_runs_ge12": 0,
+        "microsatellites_dinuc_ge20bp": 0,
+        "telomeric_blocks": 0,
+        "telomeric_bp": 0
+      },
+      "genes": {
+        "total": 37,
+        "by_type": {
+          "Mt_tRNA": 22,
+          "protein_coding": 13,
+          "Mt_rRNA": 2
+        },
+        "strand_plus": 28,
+        "strand_minus": 9,
+        "protein_coding": 13,
+        "transcripts_per_coding_gene_mean": 1,
+        "transcripts_per_coding_gene_max": 1
+      },
+      "structure": {
+        "canonical_transcripts": 13,
+        "exons_per_transcript_median": 1,
+        "exons_per_transcript_max": 1,
+        "single_exon_fraction": 1.0,
+        "exon_length_median": 784,
+        "intron_length_median": null,
+        "intron_length_max": null,
+        "gene_length_median": 784,
+        "gene_length_max": 1812,
+        "protein_length_aa_median": 261,
+        "introns_total": 0
+      },
+      "layout": {
+        "coding_genes_per_mb": 784.6,
+        "intergenic_spacing_median": 96,
+        "intergenic_spacing_max": 392,
+        "neighbour_orientation": {
+          "tandem": 10,
+          "convergent": 1,
+          "divergent": 1
+        },
+        "overlapping_coding_pairs": 3,
+        "nested_coding_genes": 0
+      }
+    },
+    {
+      "name": "human chr21",
+      "length": 46709983,
+      "composition_bp": {
+        "intergenic": 14311793,
+        "intron": 23263410,
+        "cds": 364024,
+        "gap": 6621300,
+        "noncoding_exon_or_utr": 2149456
+      },
+      "composition_fraction": {
+        "intergenic": 0.3064,
+        "intron": 0.498,
+        "cds": 0.0078,
+        "gap": 0.1418,
+        "noncoding_exon_or_utr": 0.046
+      },
+      "sequence": {
+        "gc": 0.4094,
+        "n_fraction": 0.1418,
+        "cpg_obs_exp": 0.321,
+        "gc_100kb_min": 0.235,
+        "gc_100kb_max": 0.6,
+        "gaps": 43,
+        "gap_bp": 6621300
+      },
+      "elements": {
+        "cpg_islands": 573,
+        "cpg_island_bp": 449400,
+        "homopolymer_runs_ge12": 7919,
+        "microsatellites_dinuc_ge20bp": 1577,
+        "telomeric_blocks": 5,
+        "telomeric_bp": 192
+      },
+      "genes": {
+        "total": 1133,
+        "by_type": {
+          "lncRNA": 590,
+          "protein_coding": 221,
+          "processed_pseudogene": 123,
+          "unprocessed_pseudogene": 29,
+          "miRNA": 29,
+          "TEC": 26,
+          "misc_RNA": 24,
+          "snRNA": 21,
+          "artifact": 19,
+          "transcribed_processed_pseudogene": 14,
+          "snoRNA": 14,
+          "transcribed_unprocessed_pseudogene": 13
+        },
+        "strand_plus": 571,
+        "strand_minus": 562,
+        "protein_coding": 221,
+        "transcripts_per_coding_gene_mean": 13.1,
+        "transcripts_per_coding_gene_max": 122
+      },
+      "structure": {
+        "canonical_transcripts": 220,
+        "exons_per_transcript_median": 6.0,
+        "exons_per_transcript_max": 47,
+        "single_exon_fraction": 0.25,
+        "exon_length_median": 137.0,
+        "intron_length_median": 1953.0,
+        "intron_length_max": 323564,
+        "gene_length_median": 31988,
+        "gene_length_max": 1216867,
+        "protein_length_aa_median": 316.5,
+        "introns_total": 1818
+      },
+      "layout": {
+        "coding_genes_per_mb": 5.51,
+        "intergenic_spacing_median": 22980,
+        "intergenic_spacing_max": 4028799,
+        "neighbour_orientation": {
+          "tandem": 116,
+          "convergent": 52,
+          "divergent": 52
+        },
+        "overlapping_coding_pairs": 39,
+        "nested_coding_genes": 11
+      }
+    },
+    {
+      "name": "C. elegans III",
+      "length": 13783801,
+      "composition_bp": {
+        "intergenic": 3830777,
+        "intron": 5378609,
+        "cds": 3555622,
+        "gap": 0,
+        "noncoding_exon_or_utr": 1018793
+      },
+      "composition_fraction": {
+        "intergenic": 0.2779,
+        "intron": 0.3902,
+        "cds": 0.258,
+        "gap": 0.0,
+        "noncoding_exon_or_utr": 0.0739
+      },
+      "sequence": {
+        "gc": 0.3566,
+        "n_fraction": 0.0,
+        "cpg_obs_exp": 1.049,
+        "gc_100kb_min": 0.323,
+        "gc_100kb_max": 0.387,
+        "gaps": 0,
+        "gap_bp": 0
+      },
+      "elements": {
+        "cpg_islands": 220,
+        "cpg_island_bp": 110000,
+        "homopolymer_runs_ge12": 1145,
+        "microsatellites_dinuc_ge20bp": 166,
+        "telomeric_blocks": 3,
+        "telomeric_bp": 54
+      },
+      "genes": {
+        "total": 3859,
+        "by_type": {
+          "protein_coding": 2640,
+          "ncRNA": 764,
+          "pseudogene": 180,
+          "piRNA": 78,
+          "tRNA": 64,
+          "snoRNA": 54,
+          "lincRNA": 29,
+          "miRNA": 27,
+          "snRNA": 13,
+          "antisense_RNA": 10
+        },
+        "strand_plus": 1937,
+        "strand_minus": 1922,
+        "protein_coding": 2640,
+        "transcripts_per_coding_gene_mean": 1.62,
+        "transcripts_per_coding_gene_max": 22
+      },
+      "structure": {
+        "canonical_transcripts": 2640,
+        "exons_per_transcript_median": 5.0,
+        "exons_per_transcript_max": 48,
+        "single_exon_fraction": 0.025,
+        "exon_length_median": 174,
+        "intron_length_median": 95,
+        "intron_length_max": 86515,
+        "gene_length_median": 2347.0,
+        "gene_length_max": 87197,
+        "protein_length_aa_median": 334.0,
+        "introns_total": 14213
+      },
+      "layout": {
+        "coding_genes_per_mb": 191.53,
+        "intergenic_spacing_median": 718,
+        "intergenic_spacing_max": 58619,
+        "neighbour_orientation": {
+          "divergent": 623,
+          "tandem": 1394,
+          "convergent": 622
+        },
+        "overlapping_coding_pairs": 440,
+        "nested_coding_genes": 99
+      }
+    }
+  ],
+  "lessons": [
+    "human mtDNA (chrM): 13 coding genes in 0.02 Mb (784.6 per Mb); 68.5% of bases code for protein; median transcript has 1 exons and no introns; neighbours {'tandem': 10, 'convergent': 1, 'divergent': 1}.",
+    "human chr21: 221 coding genes in 46.71 Mb (5.51 per Mb); 0.8% of bases code for protein; median transcript has 6.0 exons and introns of 1953 bp; neighbours {'tandem': 116, 'convergent': 52, 'divergent': 52}.",
+    "C. elegans III: 2640 coding genes in 13.78 Mb (191.53 per Mb); 25.8% of bases code for protein; median transcript has 5.0 exons and introns of 95 bp; neighbours {'divergent': 623, 'tandem': 1394, 'convergent': 622}."
+  ]
+}

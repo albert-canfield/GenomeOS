@@ -1,3 +1,4 @@
+from .anatomy import Anatomy, anatomy_of, design_lessons
 from .annotation import Annotation, default_gencode, iter_gff3
 from .fasta import iter_fasta, read_fasta
 from .genome import Chromosome, Genome
@@ -18,6 +19,9 @@ __all__ = [
     "apply_variants",
     "iter_vcf",
     "write_haplotypes",
+    "Anatomy",
+    "anatomy_of",
+    "design_lessons",
     "Annotation",
     "default_gencode",
     "iter_gff3",

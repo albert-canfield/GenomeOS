@@ -106,6 +106,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   <nav>
     <button data-tab="start" class="active" data-tip="Start here: what GenomeOS is, what each area does, and a suggested first walk-through."><i class="ic">🧭</i>Start</button>
     <button data-tab="genome" data-tip="Load real DNA (FASTA), look at any region, translate it to protein and find open reading frames."><i class="ic">🧬</i>Genome</button>
+    <button data-tab="anatomy" data-tip="Count the blocks and elements of a chromosome: what the bases are spent on, gene structure, layout, sequence elements. Compare genomes to see how DNA is organised."><i class="ic">🧱</i>Anatomy</button>
     <button data-tab="program" data-tip="Write biology as code in BioLang, compile it to BioIR and run the regulatory network through time."><i class="ic">📝</i>Program</button>
     <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
@@ -124,6 +125,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <h2>The areas</h2>
     <div class="steps">
       <div class="step"><i class="ic">🧬</i><b>Genome</b> — raw DNA. Pick a file, fetch a region, translate it, find open reading frames. Real human chromosome 21 and the mitochondrial genome are included.</div>
+      <div class="step"><i class="ic">🧱</i><b>Anatomy</b> — the inventory. Counts coding, UTR, intron and intergenic bases, exons and introns, gene density and layout, CpG islands and repeats; compares mitochondrion, human and worm.</div>
       <div class="step"><i class="ic">📝</i><b>Program</b> — biology as code. Genes, proteins and rules in BioLang; compile checks references and evidence; run draws the trajectory.</div>
       <div class="step"><i class="ic">⏳</i><b>Ageing</b> — the timers. Telomere attrition, somatic mutations, epigenetic age and senescence for a chosen cell type and environment.</div>
       <div class="step"><i class="ic">👥</i><b>Twin</b> — one person. Measured state (streamed from real data), variants in timer genes, forks and side-by-side futures.</div>
@@ -176,6 +178,23 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <span class="muted" id="g-orf-status"></span>
     </div>
     <div class="scroll"><table id="g-orf-table"></table></div>
+  </div>
+</section>
+
+<!-- ================= ANATOMY ================= -->
+<section id="anatomy">
+  <div class="card">
+    <h2><i class="ic">🧱</i>Genome anatomy<span class="help" data-tip="Given a sequence and its annotation, every base is assigned to one bucket (protein-coding, other exon/UTR, intron, intergenic, gap) and the gene models are counted: exons per transcript, intron and gene lengths, single-exon genes, transcripts per gene, gene density, spacing, neighbour orientation, overlaps and nesting. From the sequence alone: GC, CpG islands, homopolymers, microsatellites, telomeric blocks.">?</span></h2>
+    <div class="row">
+      <select id="an-file"></select>
+      <label data-tip="Chromosome or sequence name inside the file.">chromosome <input id="an-chrom" placeholder="chrM" style="width:100px" class="mono"></label>
+      <button class="primary" id="an-run" data-tip="Inventory this sequence (a whole human chromosome takes ~20 s)."><i class="ic">🧮</i>Count</button>
+      <button class="ghost" id="an-compare" data-tip="Show the saved side-by-side comparison of the mitochondrion, human chr21 and worm chromosome III."><i class="ic">⚖️</i>Compare genomes</button>
+      <span class="muted" id="an-status"></span>
+    </div>
+    <div id="an-bar" style="margin:10px 0"></div>
+    <div id="an-out" class="grid cols-2"></div>
+    <div id="an-lessons" class="hint"></div>
   </div>
 </section>
 
@@ -380,7 +399,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   // first visit to a simulation tab runs its default example
   if (!autoRan.has(b.dataset.tab)) {
     autoRan.add(b.dataset.tab);
-    const first = {space: '#s-run', debug: '#d-run'}[b.dataset.tab];
+    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare'}[b.dataset.tab];
     if (first) setTimeout(async () => { await ready; if (b.dataset.tab === 'debug' && !$('#d-bp').value) { $('#d-bp').value = 'LacI > 30'; $('#d-init').value = 'TetR=10'; $('#d-explain').value = 'lacI.mRNA'; } $(first).click(); }, 300);
   }
 });
@@ -422,6 +441,8 @@ const ready = (async () => {
   files = await api('/api/files');
   $('#version').textContent = 'v' + files.version;
   $('#g-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path} (${fmt(g.size)} B)</option>`).join('');
+  $('#an-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path}</option>`).join('');
+  const anPref = files.genomes.find(g => g.path.includes('chrM')); if (anPref) { $('#an-file').value = anPref.path; $('#an-chrom').value = 'chrM'; }
   $('#p-file').innerHTML = files.modules.map(m => `<option value="${m.path}">${m.path}</option>`).join('');
   if (files.modules.length) { const d = defaultModule(); $('#p-file').value = d.path; await openModule(d.path); $('#p-init').value = 'TetR=10'; $('#p-run').click(); $('#p-compile').click(); }
   const pref = files.genomes.find(g => g.path.includes('chrM')) || files.genomes[0];
@@ -629,6 +650,39 @@ $('#d-run').onclick = async () => {
     else $('#d-explain-out').innerHTML = r.explain.map(evLine).join('');
     $('#d-trace').innerHTML = (r.trace || []).map(evLine).join('') || '<span class="muted">no discrete events for a network run</span>';
   } catch (e) { $('#d-status').textContent = e.message; }
+};
+
+// ---- anatomy
+const bucketColor = {cds: '#1f6feb', noncoding_exon_or_utr: '#8250df', intron: '#bf8700', intergenic: '#57606a', gap: '#30363d', unannotated: '#57606a'};
+function compBar(comp, total) {
+  return `<div style="display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--line)">${Object.entries(comp).map(([k, v]) => `<div title="${k}: ${(v / total * 100).toFixed(1)}%" style="width:${v / total * 100}%;background:${bucketColor[k] || '#999'}"></div>`).join('')}</div>
+  <div class="legend">${Object.entries(comp).map(([k, v]) => `<span><i style="background:${bucketColor[k] || '#999'}"></i>${k} ${(v / total * 100).toFixed(1)}%</span>`).join('')}</div>`;
+}
+function kvTable(title, obj) {
+  if (!obj || !Object.keys(obj).length) return '';
+  return `<div class="card"><h2>${title}</h2><table>${Object.entries(obj).map(([k, v]) => `<tr><td class="mono">${k}</td><td class="num">${typeof v === 'object' ? JSON.stringify(v) : v}</td></tr>`).join('')}</table></div>`;
+}
+$('#an-run').onclick = async () => {
+  $('#an-status').textContent = 'counting…';
+  try {
+    const r = await api(`/api/anatomy?path=${encodeURIComponent($('#an-file').value)}&chrom=${encodeURIComponent($('#an-chrom').value)}`);
+    $('#an-status').textContent = `${r.name}: ${fmt(r.length)} bp`;
+    $('#an-bar').innerHTML = compBar(r.composition_bp, r.length);
+    $('#an-out').innerHTML = kvTable('Sequence', r.sequence) + kvTable('Elements', r.elements) + kvTable('Genes', r.genes) + kvTable('Structure', r.structure) + kvTable('Layout', r.layout);
+    $('#an-lessons').innerHTML = (r.lessons || []).map(l => `<div>• ${l}</div>`).join('');
+  } catch (e) { $('#an-status').textContent = e.message; }
+};
+$('#an-compare').onclick = async () => {
+  $('#an-status').textContent = 'loading…';
+  try {
+    const r = await api('/api/anatomy');
+    const A = r.anatomies;
+    const rows = [['length (Mb)', a => (a.length / 1e6).toFixed(3)], ['coding genes', a => a.genes.protein_coding], ['genes per Mb', a => a.layout.coding_genes_per_mb], ['CDS fraction', a => (a.composition_fraction.cds * 100).toFixed(1) + '%'], ['intron fraction', a => (a.composition_fraction.intron * 100).toFixed(1) + '%'], ['intergenic fraction', a => (a.composition_fraction.intergenic * 100).toFixed(1) + '%'], ['exons / transcript', a => a.structure.exons_per_transcript_median], ['intron median (bp)', a => a.structure.intron_length_median], ['gene median (bp)', a => a.structure.gene_length_median], ['protein median (aa)', a => a.structure.protein_length_aa_median], ['single-exon genes', a => a.structure.single_exon_fraction], ['spacing median (bp)', a => a.layout.intergenic_spacing_median], ['GC', a => a.sequence.gc], ['CpG islands', a => a.elements.cpg_islands]];
+    $('#an-status').textContent = 'three genomes, side by side';
+    $('#an-bar').innerHTML = A.map(a => `<div class="muted" style="margin-top:6px">${a.name}</div>` + compBar(a.composition_bp, a.length)).join('');
+    $('#an-out').innerHTML = `<div class="card" style="grid-column:1/-1"><table><tr><th>measure</th>${A.map(a => `<th class="num">${a.name}</th>`).join('')}</tr>${rows.map(([l, f]) => `<tr><td>${l}</td>${A.map(a => `<td class="num">${f(a) ?? '-'}</td>`).join('')}</tr>`).join('')}</table></div>`;
+    $('#an-lessons').innerHTML = r.lessons.map(l => `<div>• ${l}</div>`).join('');
+  } catch (e) { $('#an-status').textContent = e.message; }
 };
 
 // ---- libraries

@@ -784,6 +784,77 @@ def cmd_signals(args: argparse.Namespace) -> int:
     return 0
 
 
+def _anatomy_table(anatomies: list) -> str:
+    rows = []
+    keys = [
+        ("length (Mb)", lambda a: f"{a.length / 1e6:.3f}"),
+        ("coding genes", lambda a: a.genes.get("protein_coding", "-")),
+        ("genes per Mb", lambda a: a.layout.get("coding_genes_per_mb", "-")),
+        ("CDS fraction", lambda a: f"{a.composition_fraction().get('cds', 0):.1%}"),
+        ("intron fraction", lambda a: f"{a.composition_fraction().get('intron', 0):.1%}"),
+        ("intergenic fraction", lambda a: f"{a.composition_fraction().get('intergenic', 0):.1%}"),
+        ("exons / transcript", lambda a: a.structure.get("exons_per_transcript_median", "-")),
+        ("intron median (bp)", lambda a: a.structure.get("intron_length_median", "-")),
+        ("gene median (bp)", lambda a: a.structure.get("gene_length_median", "-")),
+        ("protein median (aa)", lambda a: a.structure.get("protein_length_aa_median", "-")),
+        ("single-exon genes", lambda a: a.structure.get("single_exon_fraction", "-")),
+        ("transcripts / gene", lambda a: a.genes.get("transcripts_per_coding_gene_mean", "-")),
+        ("spacing median (bp)", lambda a: a.layout.get("intergenic_spacing_median", "-")),
+        ("overlapping pairs", lambda a: a.layout.get("overlapping_coding_pairs", "-")),
+        ("GC", lambda a: a.sequence.get("gc", "-")),
+        ("CpG islands", lambda a: a.elements.get("cpg_islands", "-")),
+        ("homopolymers >=12", lambda a: a.elements.get("homopolymer_runs_ge12", "-")),
+    ]
+    for label, fn in keys:
+        rows.append({"measure": label, **{a.name: fn(a) for a in anatomies}})
+    return _table(rows, ["measure", *[a.name for a in anatomies]])
+
+
+def cmd_anatomy(args: argparse.Namespace) -> int:
+    from genomeos.genome import Annotation, Genome, anatomy_of, default_gencode, design_lessons
+    from genomeos.results import load_result, save_result
+
+    if args.compare:
+        from genomeos.genome.anatomy import Anatomy
+
+        r = load_result("anatomy_comparison")
+        if not r:
+            print("no saved comparison; run `genomeos anatomy` on genomes with --save first")
+            return 1
+        ans = [Anatomy(**{k: v for k, v in d.items() if k != "composition_fraction"}) for d in r["anatomies"]]
+        print(_anatomy_table(ans))
+        print()
+        for line in r["lessons"]:
+            print("  " + line)
+        return 0
+    genome = Genome.from_fasta(args.fasta)
+    chrom = args.chrom or next(iter(genome.chromosomes))
+    seq = genome.chromosomes[chrom].sequence
+    ann = None
+    gff = args.gff3 or (default_gencode({chrom}) if chrom.startswith("chr") else None)
+    if gff:
+        ann = Annotation.from_gff3(gff, {chrom})
+    a = anatomy_of(args.name or f"{Path(args.fasta).stem} {chrom}", seq, ann, chrom if ann else None)
+    d = a.to_dict()
+    print(f"{a.name}: {a.length:,} bp")
+    print("composition:")
+    for k, v in a.composition_bp.items():
+        bar = "█" * int(v / a.length * 40)
+        print(f"  {k:<24} {v:>12,} bp  {v / a.length:6.1%}  {bar}")
+    for section in ("sequence", "elements", "genes", "structure", "layout"):
+        if d[section]:
+            print(f"{section}:")
+            for k, v in d[section].items():
+                print(f"  {k:<36} {v}")
+    if ann:
+        for line in design_lessons([a]):
+            print("lesson: " + line)
+    if args.save:
+        save_result(args.save, d)
+        print(f"saved data/results/{args.save}.json")
+    return 0
+
+
 def cmd_libs(args: argparse.Namespace) -> int:
     from genomeos.lib import KnowledgeBase
 
@@ -1074,6 +1145,18 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--min-relative", type=float, default=0.8)
     p.add_argument("--limit", type=int, default=40)
     p.set_defaults(fn=cmd_signals)
+
+    p = sub.add_parser(
+        "anatomy",
+        help="count the blocks and elements of a chromosome; --compare shows saved genomes side by side",
+    )
+    p.add_argument("fasta", nargs="?")
+    p.add_argument("--chrom")
+    p.add_argument("--gff3")
+    p.add_argument("--name")
+    p.add_argument("--save", metavar="NAME")
+    p.add_argument("--compare", action="store_true")
+    p.set_defaults(fn=cmd_anatomy)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)

@@ -10,7 +10,7 @@ git push -u origin dev
 title="${1:-Promote dev to main}"
 pr=$(gh pr list --base main --head dev --json number -q '.[0].number')
 if [ -z "$pr" ]; then
-  gh pr create --base main --head dev --title "$title" --body "Tested on dev; CI green. 🤖 Generated with [Claude Code](https://claude.com/claude-code)"
+  gh pr create --base main --head dev --title "$title" --body "Tested on dev; CI green."
 fi
 gh pr checks dev --watch --interval 15
 gh pr merge dev --merge --delete-branch=false
