@@ -1,0 +1,8 @@
+##fileformat=VCFv4.2
+##source=GenomeOS demo: synthetic normal/tumour pair on chr21 (not a real patient)
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	DEMO
+chr21	15000000	.	A	G	.	PASS	.	GT	0/1
+chr21	30000000	.	C	T	.	PASS	.	GT	1/1
+chr21	34792138	.	G	C	.	PASS	.	GT	0/1
+chr21	25881673	.	G	C	.	PASS	.	GT	0/1
+chr21	31659775	.	G	A	.	PASS	.	GT	0/1

@@ -1,0 +1,7196 @@
+{
+  "result": "cancer_msk_impact_2017",
+  "date": "2026-09-10",
+  "study": "msk_impact_2017",
+  "samples": 10945,
+  "cancer_types": {
+    "Non-Small Cell Lung Cancer": 1668,
+    "Breast Cancer": 1337,
+    "Colorectal Cancer": 1007,
+    "Prostate Cancer": 717,
+    "Glioma": 553,
+    "Pancreatic Cancer": 502,
+    "Soft Tissue Sarcoma": 443,
+    "Bladder Cancer": 423,
+    "Melanoma": 365,
+    "Renal Cell Carcinoma": 361,
+    "Hepatobiliary Cancer": 355,
+    "Esophagogastric Cancer": 341,
+    "Germ Cell Tumor": 288,
+    "Thyroid Cancer": 231,
+    "Ovarian Cancer": 224,
+    "Endometrial Cancer": 218,
+    "Head and Neck Cancer": 186,
+    "Cancer of Unknown Primary": 186,
+    "Skin Cancer, Non-Melanoma": 148,
+    "Gastrointestinal Stromal Tumor": 137,
+    "Bone Cancer": 134,
+    "Mature B-Cell Neoplasms": 134,
+    "Salivary Gland Cancer": 114,
+    "Mesothelioma": 107,
+    "Uterine Sarcoma": 93,
+    "Small Cell Lung Cancer": 82,
+    "Peripheral Nervous System": 80,
+    "Appendiceal Cancer": 79,
+    "Cervical Cancer": 50,
+    "CNS Cancer": 48,
+    "Gastrointestinal Neuroendocrine Tumor": 46,
+    "Small Bowel Cancer": 35,
+    "Anal Cancer": 32,
+    "Mature T and NK Neoplasms": 29,
+    "Adrenocortical Carcinoma": 25,
+    "Histiocytosis": 22,
+    "Sex Cord Stromal Tumor": 19,
+    "Thymic Tumor": 18,
+    "Nerve Sheath Tumor": 16,
+    "Ampullary Cancer": 16,
+    "Ampullary Carcinoma": 9,
+    "Miscellaneous Neuroepithelial Tumor": 9,
+    "Penile Cancer": 7,
+    "Miscellaneous Brain Tumor": 6,
+    "Embryonal Tumor": 6,
+    "Sellar Tumor": 5,
+    "Non-Hodgkin Lymphoma": 5,
+    "Hodgkin Lymphoma": 5,
+    "Vaginal Cancer": 4,
+    "Pheochromocytoma": 4,
+    "Retinoblastoma": 4,
+    "Pineal Tumor": 3,
+    "Gestational Trophoblastic Disease": 3,
+    "Wilms Tumor": 2,
+    "Mastocytosis": 1,
+    "Adrenocortical Adenoma": 1,
+    "T-Lymphoblastic Leukemia/Lymphoma": 1,
+    "Leukemia": 1
+  },
+  "panel": [
+    "AKT1",
+    "ALK",
+    "APC",
+    "AR",
+    "ARID1A",
+    "ARID2",
+    "ASXL1",
+    "ATM",
+    "ATR",
+    "ATRX",
+    "AXIN1",
+    "AXIN2",
+    "BAP1",
+    "BRAF",
+    "BRCA1",
+    "BRCA2",
+    "CCND1",
+    "CDH1",
+    "CDK4",
+    "CDKN2A",
+    "CEBPA",
+    "CHEK2",
+    "CIC",
+    "CREBBP",
+    "CTNNB1",
+    "DAXX",
+    "DNMT3A",
+    "EGFR",
+    "EP300",
+    "ERBB2",
+    "ERBB3",
+    "ESR1",
+    "EZH2",
+    "FBXW7",
+    "FGFR1",
+    "FGFR2",
+    "FGFR3",
+    "FLT3",
+    "FOXA1",
+    "FUBP1",
+    "GATA3",
+    "GLI1",
+    "GNA11",
+    "GNAQ",
+    "GNAS",
+    "H3-3A",
+    "HRAS",
+    "IDH1",
+    "IDH2",
+    "JAK2",
+    "KDM5C",
+    "KDM6A",
+    "KEAP1",
+    "KIT",
+    "KMT2C",
+    "KMT2D",
+    "KRAS",
+    "MAP2K1",
+    "MEN1",
+    "MET",
+    "MLH1",
+    "MSH2",
+    "MSH6",
+    "MTOR",
+    "MYC",
+    "MYCN",
+    "NF1",
+    "NF2",
+    "NFE2L2",
+    "NKX2-1",
+    "NOTCH1",
+    "NOTCH2",
+    "NPM1",
+    "NRAS",
+    "PALB2",
+    "PBRM1",
+    "PDGFRA",
+    "PIK3CA",
+    "PMS2",
+    "POLE",
+    "PTCH1",
+    "PTEN",
+    "RB1",
+    "RBM10",
+    "RET",
+    "RNF43",
+    "ROS1",
+    "RUNX1",
+    "SETD2",
+    "SF3B1",
+    "SMAD4",
+    "SMARCA4",
+    "SMO",
+    "SOX2",
+    "SPOP",
+    "SRSF2",
+    "STAT3",
+    "STK11",
+    "SUFU",
+    "TERT",
+    "TET2",
+    "TGFBR2",
+    "TP53",
+    "TP63",
+    "TSC1",
+    "TSC2",
+    "U2AF1",
+    "VHL",
+    "WT1",
+    "ZNRF3"
+  ],
+  "genes": {
+    "AKT1": {
+      "samples_mutated": 174,
+      "frequency": 0.0159,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0531,
+        "Bladder Cancer": 0.026,
+        "Mesothelioma": 0.0093,
+        "Endometrial Cancer": 0.0596,
+        "Colorectal Cancer": 0.0149,
+        "Glioma": 0.0072,
+        "Prostate Cancer": 0.0084,
+        "Cervical Cancer": 0.04,
+        "Ovarian Cancer": 0.0134,
+        "Non-Small Cell Lung Cancer": 0.0084,
+        "Cancer of Unknown Primary": 0.0376,
+        "Melanoma": 0.011,
+        "Appendiceal Cancer": 0.0506,
+        "Renal Cell Carcinoma": 0.0055,
+        "Head and Neck Cancer": 0.0108,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Esophagogastric Cancer": 0.0088,
+        "Thyroid Cancer": 0.0043,
+        "Hepatobiliary Cancer": 0.0028,
+        "CNS Cancer": 0.0417,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Pancreatic Cancer": 0.002,
+        "Germ Cell Tumor": 0.0035,
+        "Uterine Sarcoma": 0.0108
+      },
+      "hotspots": [
+        [
+          "E17K",
+          111
+        ],
+        [
+          "Q79K",
+          3
+        ],
+        [
+          "E40K",
+          2
+        ],
+        [
+          "W80R",
+          2
+        ],
+        [
+          "R222H",
+          2
+        ],
+        [
+          "P68_C77dup",
+          2
+        ],
+        [
+          "X59_splice",
+          2
+        ],
+        [
+          "M306I",
+          1
+        ]
+      ]
+    },
+    "ALK": {
+      "samples_mutated": 327,
+      "frequency": 0.0299,
+      "by_cancer_type": {
+        "Breast Cancer": 0.015,
+        "Bladder Cancer": 0.0426,
+        "Non-Small Cell Lung Cancer": 0.0438,
+        "Esophagogastric Cancer": 0.0352,
+        "Salivary Gland Cancer": 0.0088,
+        "Prostate Cancer": 0.0112,
+        "Germ Cell Tumor": 0.0069,
+        "Glioma": 0.0253,
+        "Skin Cancer, Non-Melanoma": 0.1081,
+        "Endometrial Cancer": 0.055,
+        "Colorectal Cancer": 0.0407,
+        "Melanoma": 0.0959,
+        "Thyroid Cancer": 0.0173,
+        "Cancer of Unknown Primary": 0.0323,
+        "Peripheral Nervous System": 0.1375,
+        "Ovarian Cancer": 0.0089,
+        "Adrenocortical Carcinoma": 0.04,
+        "Small Cell Lung Cancer": 0.1098,
+        "Soft Tissue Sarcoma": 0.0226,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+        "Head and Neck Cancer": 0.0323,
+        "Appendiceal Cancer": 0.038,
+        "Pancreatic Cancer": 0.012,
+        "Mature B-Cell Neoplasms": 0.0299,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Bone Cancer": 0.0149,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Renal Cell Carcinoma": 0.0055,
+        "Small Bowel Cancer": 0.0857,
+        "Hepatobiliary Cancer": 0.0028
+      },
+      "hotspots": [
+        [
+          "R1275Q",
+          7
+        ],
+        [
+          "R395H",
+          6
+        ],
+        [
+          "R291C",
+          6
+        ],
+        [
+          "F1174L",
+          4
+        ],
+        [
+          "G689W",
+          3
+        ],
+        [
+          "E668K",
+          3
+        ],
+        [
+          "R401*",
+          3
+        ],
+        [
+          "P475S",
+          3
+        ]
+      ]
+    },
+    "ARID1A": {
+      "samples_mutated": 875,
+      "frequency": 0.0799,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.3165,
+        "Bladder Cancer": 0.2695,
+        "Ovarian Cancer": 0.1562,
+        "Breast Cancer": 0.0539,
+        "Esophagogastric Cancer": 0.129,
+        "Thyroid Cancer": 0.039,
+        "Skin Cancer, Non-Melanoma": 0.1284,
+        "Hepatobiliary Cancer": 0.1718,
+        "Small Cell Lung Cancer": 0.061,
+        "Cancer of Unknown Primary": 0.1452,
+        "Salivary Gland Cancer": 0.1053,
+        "Glioma": 0.0488,
+        "Non-Small Cell Lung Cancer": 0.0809,
+        "Melanoma": 0.0767,
+        "Soft Tissue Sarcoma": 0.0135,
+        "Renal Cell Carcinoma": 0.0388,
+        "Colorectal Cancer": 0.0824,
+        "Appendiceal Cancer": 0.038,
+        "Prostate Cancer": 0.0126,
+        "Gastrointestinal Stromal Tumor": 0.0219,
+        "Cervical Cancer": 0.04,
+        "Head and Neck Cancer": 0.0645,
+        "Uterine Sarcoma": 0.0108,
+        "Germ Cell Tumor": 0.0104,
+        "Pancreatic Cancer": 0.0956,
+        "Peripheral Nervous System": 0.025,
+        "Mature B-Cell Neoplasms": 0.1269,
+        "Bone Cancer": 0.0224,
+        "Mesothelioma": 0.0093,
+        "Anal Cancer": 0.0625,
+        "Small Bowel Cancer": 0.0857,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217
+      },
+      "hotspots": [
+        [
+          "D1850Gfs*4",
+          20
+        ],
+        [
+          "D1850Tfs*33",
+          17
+        ],
+        [
+          "R1276*",
+          11
+        ],
+        [
+          "R693*",
+          10
+        ],
+        [
+          "F2141Sfs*59",
+          9
+        ],
+        [
+          "G276Efs*87",
+          8
+        ],
+        [
+          "R1989*",
+          8
+        ],
+        [
+          "Q802Sfs*15",
+          7
+        ]
+      ]
+    },
+    "AR": {
+      "samples_mutated": 264,
+      "frequency": 0.0241,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.0318,
+        "Bladder Cancer": 0.0355,
+        "Small Cell Lung Cancer": 0.061,
+        "Head and Neck Cancer": 0.0215,
+        "Prostate Cancer": 0.046,
+        "Endometrial Cancer": 0.0642,
+        "Skin Cancer, Non-Melanoma": 0.0473,
+        "Hepatobiliary Cancer": 0.0085,
+        "Glioma": 0.0145,
+        "Melanoma": 0.0493,
+        "Colorectal Cancer": 0.0427,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Esophagogastric Cancer": 0.0352,
+        "Uterine Sarcoma": 0.0323,
+        "Breast Cancer": 0.0127,
+        "Cervical Cancer": 0.02,
+        "Ovarian Cancer": 0.0089,
+        "Bone Cancer": 0.0149,
+        "Appendiceal Cancer": 0.0253,
+        "Small Bowel Cancer": 0.0571,
+        "Cancer of Unknown Primary": 0.0323,
+        "Pancreatic Cancer": 0.01,
+        "Germ Cell Tumor": 0.0069,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "CNS Cancer": 0.0208,
+        "Renal Cell Carcinoma": 0.0028
+      },
+      "hotspots": [
+        [
+          "H875Y",
+          11
+        ],
+        [
+          "L702H",
+          10
+        ],
+        [
+          "Q58L",
+          8
+        ],
+        [
+          "G473dup",
+          6
+        ],
+        [
+          "T878A",
+          6
+        ],
+        [
+          "W742C",
+          4
+        ],
+        [
+          "Q488*",
+          3
+        ],
+        [
+          "G578*",
+          3
+        ]
+      ]
+    },
+    "ARID2": {
+      "samples_mutated": 376,
+      "frequency": 0.0344,
+      "by_cancer_type": {
+        "Hepatobiliary Cancer": 0.031,
+        "Endometrial Cancer": 0.0596,
+        "Breast Cancer": 0.0239,
+        "Bladder Cancer": 0.0591,
+        "Ovarian Cancer": 0.0179,
+        "Non-Small Cell Lung Cancer": 0.045,
+        "Esophagogastric Cancer": 0.0205,
+        "Skin Cancer, Non-Melanoma": 0.1351,
+        "Melanoma": 0.1014,
+        "Thyroid Cancer": 0.0346,
+        "Colorectal Cancer": 0.0516,
+        "Uterine Sarcoma": 0.043,
+        "Glioma": 0.0398,
+        "Soft Tissue Sarcoma": 0.0158,
+        "Prostate Cancer": 0.0098,
+        "Cervical Cancer": 0.06,
+        "Pancreatic Cancer": 0.008,
+        "Head and Neck Cancer": 0.0323,
+        "Adrenocortical Carcinoma": 0.08,
+        "Germ Cell Tumor": 0.0069,
+        "Renal Cell Carcinoma": 0.0166,
+        "Small Cell Lung Cancer": 0.0122,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Gastrointestinal Stromal Tumor": 0.0219,
+        "Mesothelioma": 0.0187,
+        "Cancer of Unknown Primary": 0.0323,
+        "Small Bowel Cancer": 0.0857,
+        "Salivary Gland Cancer": 0.0175,
+        "CNS Cancer": 0.0208,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217
+      },
+      "hotspots": [
+        [
+          "S297F",
+          7
+        ],
+        [
+          "Q1313*",
+          6
+        ],
+        [
+          "Q1411*",
+          4
+        ],
+        [
+          "E393K",
+          4
+        ],
+        [
+          "T426M",
+          4
+        ],
+        [
+          "X258_splice",
+          3
+        ],
+        [
+          "S139L",
+          3
+        ],
+        [
+          "R274*",
+          3
+        ]
+      ]
+    },
+    "ATRX": {
+      "samples_mutated": 507,
+      "frequency": 0.0463,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0567,
+        "Small Cell Lung Cancer": 0.1463,
+        "Glioma": 0.2297,
+        "Uterine Sarcoma": 0.2151,
+        "Skin Cancer, Non-Melanoma": 0.0811,
+        "Non-Small Cell Lung Cancer": 0.0486,
+        "Esophagogastric Cancer": 0.0205,
+        "Breast Cancer": 0.0135,
+        "Prostate Cancer": 0.0112,
+        "Soft Tissue Sarcoma": 0.0632,
+        "Colorectal Cancer": 0.0387,
+        "Thyroid Cancer": 0.013,
+        "Melanoma": 0.0986,
+        "Head and Neck Cancer": 0.0269,
+        "Cancer of Unknown Primary": 0.0591,
+        "Pancreatic Cancer": 0.0438,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Hepatobiliary Cancer": 0.0056,
+        "Peripheral Nervous System": 0.1375,
+        "CNS Cancer": 0.0208,
+        "Cervical Cancer": 0.04,
+        "Renal Cell Carcinoma": 0.0194,
+        "Endometrial Cancer": 0.0275,
+        "Ovarian Cancer": 0.0223,
+        "Bone Cancer": 0.0299,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+        "Anal Cancer": 0.0312,
+        "Adrenocortical Carcinoma": 0.08,
+        "Small Bowel Cancer": 0.0286,
+        "Appendiceal Cancer": 0.0127
+      },
+      "hotspots": [
+        [
+          "F2113Sfs*9",
+          6
+        ],
+        [
+          "K1583Nfs*22",
+          5
+        ],
+        [
+          "K1045*",
+          5
+        ],
+        [
+          "T1582Nfs*19",
+          4
+        ],
+        [
+          "X2109_splice",
+          3
+        ],
+        [
+          "R1426*",
+          3
+        ],
+        [
+          "R907*",
+          3
+        ],
+        [
+          "R840Kfs*9",
+          3
+        ]
+      ]
+    },
+    "ATR": {
+      "samples_mutated": 278,
+      "frequency": 0.0254,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.0505,
+        "Bladder Cancer": 0.0757,
+        "Non-Small Cell Lung Cancer": 0.033,
+        "Small Cell Lung Cancer": 0.0732,
+        "Breast Cancer": 0.0232,
+        "Uterine Sarcoma": 0.0108,
+        "Head and Neck Cancer": 0.043,
+        "Prostate Cancer": 0.0126,
+        "Colorectal Cancer": 0.0357,
+        "Skin Cancer, Non-Melanoma": 0.0878,
+        "Glioma": 0.0253,
+        "Cancer of Unknown Primary": 0.043,
+        "Melanoma": 0.0548,
+        "Renal Cell Carcinoma": 0.0083,
+        "Soft Tissue Sarcoma": 0.009,
+        "Mesothelioma": 0.0093,
+        "Esophagogastric Cancer": 0.0293,
+        "Salivary Gland Cancer": 0.0175,
+        "Germ Cell Tumor": 0.0035,
+        "Pancreatic Cancer": 0.002,
+        "Hepatobiliary Cancer": 0.0141,
+        "Ovarian Cancer": 0.0045,
+        "Small Bowel Cancer": 0.0571,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Cervical Cancer": 0.02,
+        "Mature B-Cell Neoplasms": 0.0075
+      },
+      "hotspots": [
+        [
+          "V959A",
+          3
+        ],
+        [
+          "R1653Q",
+          3
+        ],
+        [
+          "R989C",
+          3
+        ],
+        [
+          "G1795Efs*29",
+          2
+        ],
+        [
+          "G720D",
+          2
+        ],
+        [
+          "A1406V",
+          2
+        ],
+        [
+          "Q1286H",
+          2
+        ],
+        [
+          "E148*",
+          2
+        ]
+      ]
+    },
+    "ATM": {
+      "samples_mutated": 533,
+      "frequency": 0.0487,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.1101,
+        "Non-Small Cell Lung Cancer": 0.0725,
+        "Breast Cancer": 0.0359,
+        "Skin Cancer, Non-Melanoma": 0.1284,
+        "Germ Cell Tumor": 0.0069,
+        "Thyroid Cancer": 0.0433,
+        "Bladder Cancer": 0.1064,
+        "Head and Neck Cancer": 0.0323,
+        "Colorectal Cancer": 0.0745,
+        "Cancer of Unknown Primary": 0.043,
+        "Melanoma": 0.063,
+        "Hepatobiliary Cancer": 0.0761,
+        "Prostate Cancer": 0.0349,
+        "Glioma": 0.0253,
+        "Small Bowel Cancer": 0.2,
+        "Soft Tissue Sarcoma": 0.0248,
+        "Salivary Gland Cancer": 0.0439,
+        "Pancreatic Cancer": 0.0279,
+        "Uterine Sarcoma": 0.0108,
+        "Adrenocortical Carcinoma": 0.04,
+        "Small Cell Lung Cancer": 0.0488,
+        "Renal Cell Carcinoma": 0.0332,
+        "Mature B-Cell Neoplasms": 0.0746,
+        "Esophagogastric Cancer": 0.0235,
+        "Appendiceal Cancer": 0.0506,
+        "Ovarian Cancer": 0.0089,
+        "Mesothelioma": 0.0093,
+        "Histiocytosis": 0.0455,
+        "Bone Cancer": 0.0075,
+        "Mature T and NK Neoplasms": 0.0345
+      },
+      "hotspots": [
+        [
+          "R337C",
+          16
+        ],
+        [
+          "K2811Sfs*46",
+          6
+        ],
+        [
+          "R250*",
+          6
+        ],
+        [
+          "R3008C",
+          5
+        ],
+        [
+          "S2489F",
+          4
+        ],
+        [
+          "L2877F",
+          4
+        ],
+        [
+          "R3008H",
+          4
+        ],
+        [
+          "R337H",
+          4
+        ]
+      ]
+    },
+    "APC": {
+      "samples_mutated": 1121,
+      "frequency": 0.1024,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.052,
+        "Colorectal Cancer": 0.7438,
+        "Breast Cancer": 0.0194,
+        "Skin Cancer, Non-Melanoma": 0.1081,
+        "Prostate Cancer": 0.0697,
+        "Glioma": 0.0271,
+        "Esophagogastric Cancer": 0.0381,
+        "Non-Small Cell Lung Cancer": 0.048,
+        "Pancreatic Cancer": 0.0159,
+        "Thyroid Cancer": 0.0346,
+        "Melanoma": 0.0904,
+        "Small Bowel Cancer": 0.3429,
+        "Ovarian Cancer": 0.0179,
+        "Gastrointestinal Neuroendocrine Tumor": 0.1522,
+        "Bone Cancer": 0.0149,
+        "Hepatobiliary Cancer": 0.0254,
+        "Cancer of Unknown Primary": 0.0753,
+        "Head and Neck Cancer": 0.0161,
+        "Uterine Sarcoma": 0.0108,
+        "Mesothelioma": 0.0093,
+        "Germ Cell Tumor": 0.0069,
+        "Soft Tissue Sarcoma": 0.0203,
+        "Renal Cell Carcinoma": 0.0111,
+        "Small Cell Lung Cancer": 0.0488,
+        "Endometrial Cancer": 0.055,
+        "Anal Cancer": 0.0312,
+        "Appendiceal Cancer": 0.1013,
+        "Cervical Cancer": 0.02,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Peripheral Nervous System": 0.025,
+        "CNS Cancer": 0.0208
+      },
+      "hotspots": [
+        [
+          "T1556Nfs*3",
+          54
+        ],
+        [
+          "R876*",
+          46
+        ],
+        [
+          "R1450*",
+          45
+        ],
+        [
+          "R216*",
+          34
+        ],
+        [
+          "R213*",
+          31
+        ],
+        [
+          "E1309Dfs*4",
+          30
+        ],
+        [
+          "S1465Wfs*3",
+          26
+        ],
+        [
+          "R232*",
+          25
+        ]
+      ]
+    },
+    "ASXL1": {
+      "samples_mutated": 239,
+      "frequency": 0.0218,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0112,
+        "Bladder Cancer": 0.0236,
+        "Hepatobiliary Cancer": 0.0254,
+        "Skin Cancer, Non-Melanoma": 0.1284,
+        "Non-Small Cell Lung Cancer": 0.0168,
+        "Glioma": 0.0235,
+        "Colorectal Cancer": 0.0437,
+        "Prostate Cancer": 0.0223,
+        "Small Bowel Cancer": 0.1143,
+        "Esophagogastric Cancer": 0.0147,
+        "Ovarian Cancer": 0.0179,
+        "Cancer of Unknown Primary": 0.0108,
+        "Uterine Sarcoma": 0.0323,
+        "Endometrial Cancer": 0.055,
+        "Thyroid Cancer": 0.013,
+        "Renal Cell Carcinoma": 0.0139,
+        "Head and Neck Cancer": 0.0484,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Melanoma": 0.0548,
+        "Salivary Gland Cancer": 0.0088,
+        "Small Cell Lung Cancer": 0.0366,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Pancreatic Cancer": 0.006,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Mature T and NK Neoplasms": 0.0345
+      },
+      "hotspots": [
+        [
+          "G646Wfs*12",
+          16
+        ],
+        [
+          "G645Vfs*58",
+          5
+        ],
+        [
+          "R693*",
+          4
+        ],
+        [
+          "E635Rfs*15",
+          3
+        ],
+        [
+          "E356D",
+          2
+        ],
+        [
+          "G1376Vfs*74",
+          2
+        ],
+        [
+          "G1150E",
+          2
+        ],
+        [
+          "G668C",
+          2
+        ]
+      ]
+    },
+    "CDK4": {
+      "samples_mutated": 44,
+      "frequency": 0.004,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0015,
+        "Skin Cancer, Non-Melanoma": 0.0135,
+        "Prostate Cancer": 0.0014,
+        "Non-Small Cell Lung Cancer": 0.0066,
+        "Adrenocortical Carcinoma": 0.08,
+        "Melanoma": 0.0247,
+        "Colorectal Cancer": 0.006,
+        "Renal Cell Carcinoma": 0.0028,
+        "Bladder Cancer": 0.0071,
+        "Bone Cancer": 0.0149,
+        "Endometrial Cancer": 0.0046,
+        "Cancer of Unknown Primary": 0.0054,
+        "Small Cell Lung Cancer": 0.0244,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "R24L",
+          6
+        ],
+        [
+          "R24H",
+          4
+        ],
+        [
+          "R24C",
+          2
+        ],
+        [
+          "R283Q",
+          2
+        ],
+        [
+          "R55C",
+          2
+        ],
+        [
+          "D196H",
+          1
+        ],
+        [
+          "R255H",
+          1
+        ],
+        [
+          "E184K",
+          1
+        ]
+      ]
+    },
+    "BAP1": {
+      "samples_mutated": 285,
+      "frequency": 0.026,
+      "by_cancer_type": {
+        "Mesothelioma": 0.3925,
+        "Bladder Cancer": 0.0591,
+        "Hepatobiliary Cancer": 0.093,
+        "Breast Cancer": 0.012,
+        "Renal Cell Carcinoma": 0.133,
+        "Cervical Cancer": 0.06,
+        "Glioma": 0.009,
+        "Melanoma": 0.0795,
+        "Non-Small Cell Lung Cancer": 0.0186,
+        "Prostate Cancer": 0.0112,
+        "Skin Cancer, Non-Melanoma": 0.0203,
+        "Esophagogastric Cancer": 0.0176,
+        "Ovarian Cancer": 0.0089,
+        "Colorectal Cancer": 0.0149,
+        "Adrenocortical Carcinoma": 0.04,
+        "Anal Cancer": 0.0312,
+        "Endometrial Cancer": 0.0183,
+        "Salivary Gland Cancer": 0.0088,
+        "Cancer of Unknown Primary": 0.0269,
+        "Pancreatic Cancer": 0.004,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Head and Neck Cancer": 0.0054,
+        "Uterine Sarcoma": 0.0108,
+        "Appendiceal Cancer": 0.0127
+      },
+      "hotspots": [
+        [
+          "X577_splice",
+          4
+        ],
+        [
+          "Y173C",
+          4
+        ],
+        [
+          "X686_splice",
+          4
+        ],
+        [
+          "S460*",
+          4
+        ],
+        [
+          "X126_splice",
+          4
+        ],
+        [
+          "V27Cfs*45",
+          3
+        ],
+        [
+          "C91F",
+          3
+        ],
+        [
+          "X146_splice",
+          3
+        ]
+      ]
+    },
+    "BRAF": {
+      "samples_mutated": 564,
+      "frequency": 0.0515,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.0522,
+        "Anal Cancer": 0.0312,
+        "Thyroid Cancer": 0.381,
+        "Glioma": 0.0307,
+        "Colorectal Cancer": 0.1182,
+        "Bladder Cancer": 0.0402,
+        "Melanoma": 0.3151,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Prostate Cancer": 0.0167,
+        "Germ Cell Tumor": 0.0069,
+        "Pancreatic Cancer": 0.0259,
+        "Soft Tissue Sarcoma": 0.0135,
+        "Endometrial Cancer": 0.0413,
+        "Hepatobiliary Cancer": 0.031,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Peripheral Nervous System": 0.025,
+        "Cancer of Unknown Primary": 0.0591,
+        "Uterine Sarcoma": 0.0215,
+        "Small Cell Lung Cancer": 0.0366,
+        "Ovarian Cancer": 0.0134,
+        "Cervical Cancer": 0.02,
+        "Small Bowel Cancer": 0.1714,
+        "Gastrointestinal Neuroendocrine Tumor": 0.087,
+        "Esophagogastric Cancer": 0.0147,
+        "Breast Cancer": 0.003,
+        "Histiocytosis": 0.2727,
+        "Appendiceal Cancer": 0.0127,
+        "Mature B-Cell Neoplasms": 0.0373,
+        "CNS Cancer": 0.0208,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Bone Cancer": 0.0075,
+        "Head and Neck Cancer": 0.0054,
+        "Salivary Gland Cancer": 0.0175
+      },
+      "hotspots": [
+        [
+          "V600E",
+          295
+        ],
+        [
+          "G469A",
+          24
+        ],
+        [
+          "K601E",
+          19
+        ],
+        [
+          "D594N",
+          17
+        ],
+        [
+          "D594G",
+          14
+        ],
+        [
+          "V600K",
+          14
+        ],
+        [
+          "G466E",
+          7
+        ],
+        [
+          "G466V",
+          6
+        ]
+      ]
+    },
+    "AXIN1": {
+      "samples_mutated": 142,
+      "frequency": 0.013,
+      "by_cancer_type": {
+        "Hepatobiliary Cancer": 0.0338,
+        "Bladder Cancer": 0.0213,
+        "Breast Cancer": 0.009,
+        "Prostate Cancer": 0.0098,
+        "Germ Cell Tumor": 0.0104,
+        "Non-Small Cell Lung Cancer": 0.0102,
+        "Colorectal Cancer": 0.0199,
+        "Esophagogastric Cancer": 0.0205,
+        "Bone Cancer": 0.0075,
+        "Skin Cancer, Non-Melanoma": 0.0608,
+        "Melanoma": 0.0247,
+        "Head and Neck Cancer": 0.0108,
+        "Uterine Sarcoma": 0.0108,
+        "Adrenocortical Carcinoma": 0.04,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Thyroid Cancer": 0.0043,
+        "Glioma": 0.0072,
+        "Ovarian Cancer": 0.0134,
+        "Cervical Cancer": 0.02,
+        "Pancreatic Cancer": 0.012,
+        "Endometrial Cancer": 0.0183,
+        "Salivary Gland Cancer": 0.0088,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Cancer of Unknown Primary": 0.0108,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Renal Cell Carcinoma": 0.0055,
+        "Small Cell Lung Cancer": 0.0244,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "G508Vfs*197",
+          6
+        ],
+        [
+          "R723*",
+          3
+        ],
+        [
+          "K603Q",
+          2
+        ],
+        [
+          "H534Q",
+          2
+        ],
+        [
+          "A40T",
+          2
+        ],
+        [
+          "X821_splice",
+          2
+        ],
+        [
+          "Q732_E733delinsR*",
+          2
+        ],
+        [
+          "A747V",
+          2
+        ]
+      ]
+    },
+    "BRCA2": {
+      "samples_mutated": 399,
+      "frequency": 0.0365,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0804,
+        "Endometrial Cancer": 0.0688,
+        "Small Cell Lung Cancer": 0.0488,
+        "Non-Small Cell Lung Cancer": 0.0312,
+        "Breast Cancer": 0.0366,
+        "Skin Cancer, Non-Melanoma": 0.1149,
+        "Hepatobiliary Cancer": 0.0169,
+        "Prostate Cancer": 0.0488,
+        "Esophagogastric Cancer": 0.0352,
+        "Glioma": 0.0289,
+        "Head and Neck Cancer": 0.0269,
+        "Soft Tissue Sarcoma": 0.0158,
+        "Colorectal Cancer": 0.0586,
+        "Melanoma": 0.0849,
+        "Pancreatic Cancer": 0.0319,
+        "Cancer of Unknown Primary": 0.043,
+        "Ovarian Cancer": 0.0134,
+        "Salivary Gland Cancer": 0.0351,
+        "Appendiceal Cancer": 0.0127,
+        "Bone Cancer": 0.0149,
+        "Uterine Sarcoma": 0.0645,
+        "Renal Cell Carcinoma": 0.0083,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Mesothelioma": 0.0093,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Anal Cancer": 0.0312,
+        "Small Bowel Cancer": 0.0571
+      },
+      "hotspots": [
+        [
+          "N1784Tfs*7",
+          6
+        ],
+        [
+          "E2981Rfs*37",
+          4
+        ],
+        [
+          "R2842C",
+          4
+        ],
+        [
+          "K3416Nfs*11",
+          3
+        ],
+        [
+          "P2107S",
+          3
+        ],
+        [
+          "X2659_splice",
+          3
+        ],
+        [
+          "S1013*",
+          2
+        ],
+        [
+          "S1461F",
+          2
+        ]
+      ]
+    },
+    "CDKN2A": {
+      "samples_mutated": 472,
+      "frequency": 0.0431,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0662,
+        "Breast Cancer": 0.0165,
+        "Salivary Gland Cancer": 0.0175,
+        "Esophagogastric Cancer": 0.1056,
+        "Skin Cancer, Non-Melanoma": 0.2027,
+        "Hepatobiliary Cancer": 0.0225,
+        "Non-Small Cell Lung Cancer": 0.0719,
+        "Endometrial Cancer": 0.0275,
+        "CNS Cancer": 0.0208,
+        "Head and Neck Cancer": 0.086,
+        "Melanoma": 0.1425,
+        "Cancer of Unknown Primary": 0.0753,
+        "Glioma": 0.0217,
+        "Soft Tissue Sarcoma": 0.0181,
+        "Bone Cancer": 0.0149,
+        "Ovarian Cancer": 0.0179,
+        "Uterine Sarcoma": 0.0108,
+        "Adrenocortical Carcinoma": 0.04,
+        "Cervical Cancer": 0.06,
+        "Pancreatic Cancer": 0.1315,
+        "Thyroid Cancer": 0.013,
+        "Renal Cell Carcinoma": 0.0055,
+        "Colorectal Cancer": 0.0179,
+        "Mesothelioma": 0.0093,
+        "Small Cell Lung Cancer": 0.0122,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Prostate Cancer": 0.0028,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "R80*",
+          42
+        ],
+        [
+          "R58*",
+          34
+        ],
+        [
+          "H83Y",
+          32
+        ],
+        [
+          "W110*",
+          14
+        ],
+        [
+          "Y44*",
+          11
+        ],
+        [
+          "P114L",
+          11
+        ],
+        [
+          "X51_splice",
+          9
+        ],
+        [
+          "E88*",
+          9
+        ]
+      ]
+    },
+    "CCND1": {
+      "samples_mutated": 57,
+      "frequency": 0.0052,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.0734,
+        "Ovarian Cancer": 0.0089,
+        "Esophagogastric Cancer": 0.0029,
+        "Head and Neck Cancer": 0.0054,
+        "Prostate Cancer": 0.0028,
+        "Skin Cancer, Non-Melanoma": 0.0068,
+        "Breast Cancer": 0.003,
+        "Glioma": 0.0018,
+        "Pancreatic Cancer": 0.002,
+        "Colorectal Cancer": 0.005,
+        "Uterine Sarcoma": 0.0108,
+        "Non-Small Cell Lung Cancer": 0.0054,
+        "Bladder Cancer": 0.0095,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Mature B-Cell Neoplasms": 0.0373,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Melanoma": 0.0055
+      },
+      "hotspots": [
+        [
+          "T286I",
+          5
+        ],
+        [
+          "P287S",
+          3
+        ],
+        [
+          "E279*",
+          2
+        ],
+        [
+          "W150C",
+          2
+        ],
+        [
+          "E36Q",
+          2
+        ],
+        [
+          "D289del",
+          2
+        ],
+        [
+          "Q261*",
+          1
+        ],
+        [
+          "I161V",
+          1
+        ]
+      ]
+    },
+    "CDH1": {
+      "samples_mutated": 360,
+      "frequency": 0.0329,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0378,
+        "Breast Cancer": 0.1444,
+        "Esophagogastric Cancer": 0.0792,
+        "Endometrial Cancer": 0.0367,
+        "Thyroid Cancer": 0.013,
+        "Non-Small Cell Lung Cancer": 0.0114,
+        "Ovarian Cancer": 0.0045,
+        "Skin Cancer, Non-Melanoma": 0.0743,
+        "Glioma": 0.0181,
+        "Prostate Cancer": 0.0126,
+        "Colorectal Cancer": 0.0248,
+        "Melanoma": 0.0247,
+        "Hepatobiliary Cancer": 0.0169,
+        "Pancreatic Cancer": 0.006,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Appendiceal Cancer": 0.038,
+        "Salivary Gland Cancer": 0.0175,
+        "Cancer of Unknown Primary": 0.0161,
+        "Renal Cell Carcinoma": 0.0028,
+        "Head and Neck Cancer": 0.0215,
+        "Cervical Cancer": 0.02,
+        "Small Cell Lung Cancer": 0.0122,
+        "Small Bowel Cancer": 0.0286,
+        "Mature B-Cell Neoplasms": 0.0075
+      },
+      "hotspots": [
+        [
+          "Q23*",
+          10
+        ],
+        [
+          "X278_splice",
+          6
+        ],
+        [
+          "X522_splice",
+          6
+        ],
+        [
+          "M1?",
+          4
+        ],
+        [
+          "X440_splice",
+          4
+        ],
+        [
+          "X722_splice",
+          3
+        ],
+        [
+          "Q346*",
+          3
+        ],
+        [
+          "Q706*",
+          3
+        ]
+      ]
+    },
+    "AXIN2": {
+      "samples_mutated": 156,
+      "frequency": 0.0143,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0378,
+        "Uterine Sarcoma": 0.0215,
+        "Small Cell Lung Cancer": 0.0122,
+        "Breast Cancer": 0.006,
+        "Non-Small Cell Lung Cancer": 0.0156,
+        "Glioma": 0.0163,
+        "Colorectal Cancer": 0.0447,
+        "Skin Cancer, Non-Melanoma": 0.0541,
+        "Endometrial Cancer": 0.0413,
+        "Melanoma": 0.011,
+        "Hepatobiliary Cancer": 0.0056,
+        "Head and Neck Cancer": 0.0215,
+        "Esophagogastric Cancer": 0.0117,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Cancer of Unknown Primary": 0.0215,
+        "Ovarian Cancer": 0.0045,
+        "Prostate Cancer": 0.0042,
+        "Pancreatic Cancer": 0.006,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Bone Cancer": 0.0075
+      },
+      "hotspots": [
+        [
+          "N666Qfs*41",
+          5
+        ],
+        [
+          "G665Afs*24",
+          5
+        ],
+        [
+          "E405Gfs*56",
+          4
+        ],
+        [
+          "S493L",
+          3
+        ],
+        [
+          "A417Rfs*41",
+          3
+        ],
+        [
+          "S244L",
+          3
+        ],
+        [
+          "P455S",
+          2
+        ],
+        [
+          "G572S",
+          2
+        ]
+      ]
+    },
+    "BRCA1": {
+      "samples_mutated": 216,
+      "frequency": 0.0197,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0662,
+        "Esophagogastric Cancer": 0.0176,
+        "Breast Cancer": 0.018,
+        "Uterine Sarcoma": 0.0108,
+        "Glioma": 0.0253,
+        "Prostate Cancer": 0.0112,
+        "Colorectal Cancer": 0.0278,
+        "Non-Small Cell Lung Cancer": 0.0216,
+        "Skin Cancer, Non-Melanoma": 0.0676,
+        "Thyroid Cancer": 0.0173,
+        "Germ Cell Tumor": 0.0035,
+        "Ovarian Cancer": 0.0179,
+        "Head and Neck Cancer": 0.0269,
+        "Melanoma": 0.0411,
+        "Cervical Cancer": 0.02,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Endometrial Cancer": 0.0275,
+        "Renal Cell Carcinoma": 0.0028,
+        "Histiocytosis": 0.0455,
+        "Peripheral Nervous System": 0.025,
+        "Soft Tissue Sarcoma": 0.009,
+        "Cancer of Unknown Primary": 0.0161,
+        "Pancreatic Cancer": 0.008,
+        "Small Cell Lung Cancer": 0.0244,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Bone Cancer": 0.0075,
+        "Salivary Gland Cancer": 0.0088,
+        "Hepatobiliary Cancer": 0.0056
+      },
+      "hotspots": [
+        [
+          "K654Sfs*47",
+          4
+        ],
+        [
+          "S1551C",
+          2
+        ],
+        [
+          "T710I",
+          2
+        ],
+        [
+          "R841W",
+          2
+        ],
+        [
+          "X71_splice",
+          2
+        ],
+        [
+          "E597*",
+          2
+        ],
+        [
+          "E1258D",
+          2
+        ],
+        [
+          "L512F",
+          2
+        ]
+      ]
+    },
+    "CTNNB1": {
+      "samples_mutated": 347,
+      "frequency": 0.0317,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.1606,
+        "Bladder Cancer": 0.0473,
+        "Non-Small Cell Lung Cancer": 0.0318,
+        "Cancer of Unknown Primary": 0.043,
+        "Colorectal Cancer": 0.0655,
+        "Melanoma": 0.074,
+        "Prostate Cancer": 0.0349,
+        "Hepatobiliary Cancer": 0.1211,
+        "Esophagogastric Cancer": 0.0176,
+        "Breast Cancer": 0.0037,
+        "Ovarian Cancer": 0.0179,
+        "Uterine Sarcoma": 0.0215,
+        "Adrenocortical Carcinoma": 0.2,
+        "Thyroid Cancer": 0.0087,
+        "Glioma": 0.0072,
+        "Peripheral Nervous System": 0.0125,
+        "Cervical Cancer": 0.04,
+        "Small Bowel Cancer": 0.0857,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Appendiceal Cancer": 0.0127,
+        "Mesothelioma": 0.0093,
+        "Renal Cell Carcinoma": 0.0055,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Pancreatic Cancer": 0.0299,
+        "Salivary Gland Cancer": 0.0088
+      },
+      "hotspots": [
+        [
+          "S37F",
+          30
+        ],
+        [
+          "T41A",
+          20
+        ],
+        [
+          "S45P",
+          19
+        ],
+        [
+          "S45F",
+          18
+        ],
+        [
+          "S33F",
+          16
+        ],
+        [
+          "S33C",
+          14
+        ],
+        [
+          "G34R",
+          12
+        ],
+        [
+          "D32V",
+          9
+        ]
+      ]
+    },
+    "EGFR": {
+      "samples_mutated": 636,
+      "frequency": 0.0581,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.2446,
+        "Hepatobiliary Cancer": 0.0113,
+        "Endometrial Cancer": 0.0413,
+        "Ovarian Cancer": 0.0045,
+        "Skin Cancer, Non-Melanoma": 0.0676,
+        "Glioma": 0.132,
+        "Bladder Cancer": 0.0449,
+        "Breast Cancer": 0.0142,
+        "Head and Neck Cancer": 0.0215,
+        "Soft Tissue Sarcoma": 0.009,
+        "Melanoma": 0.0658,
+        "Colorectal Cancer": 0.0218,
+        "Small Cell Lung Cancer": 0.0244,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Uterine Sarcoma": 0.0108,
+        "Prostate Cancer": 0.0056,
+        "Germ Cell Tumor": 0.0139,
+        "Renal Cell Carcinoma": 0.0111,
+        "Cancer of Unknown Primary": 0.0323,
+        "Peripheral Nervous System": 0.0125,
+        "Esophagogastric Cancer": 0.0088,
+        "Appendiceal Cancer": 0.0127,
+        "Pancreatic Cancer": 0.008,
+        "Adrenocortical Carcinoma": 0.04,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Mature T and NK Neoplasms": 0.069,
+        "Anal Cancer": 0.0312,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "L858R",
+          131
+        ],
+        [
+          "E746_A750del",
+          117
+        ],
+        [
+          "T790M",
+          57
+        ],
+        [
+          "A289V",
+          16
+        ],
+        [
+          "L861Q",
+          15
+        ],
+        [
+          "G719A",
+          15
+        ],
+        [
+          "E709K",
+          12
+        ],
+        [
+          "R108K",
+          10
+        ]
+      ]
+    },
+    "CIC": {
+      "samples_mutated": 319,
+      "frequency": 0.0291,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0496,
+        "Soft Tissue Sarcoma": 0.0271,
+        "Breast Cancer": 0.0127,
+        "Non-Small Cell Lung Cancer": 0.0228,
+        "Prostate Cancer": 0.0112,
+        "Esophagogastric Cancer": 0.0411,
+        "Glioma": 0.1392,
+        "Colorectal Cancer": 0.0477,
+        "Skin Cancer, Non-Melanoma": 0.0743,
+        "Appendiceal Cancer": 0.0127,
+        "Endometrial Cancer": 0.055,
+        "Hepatobiliary Cancer": 0.0141,
+        "Melanoma": 0.0658,
+        "Renal Cell Carcinoma": 0.0111,
+        "Cancer of Unknown Primary": 0.0376,
+        "Uterine Sarcoma": 0.0108,
+        "Head and Neck Cancer": 0.0161,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Pancreatic Cancer": 0.01,
+        "Small Cell Lung Cancer": 0.0244,
+        "Ovarian Cancer": 0.0045,
+        "Thyroid Cancer": 0.0043,
+        "Peripheral Nervous System": 0.0125,
+        "Small Bowel Cancer": 0.0571,
+        "Germ Cell Tumor": 0.0035
+      },
+      "hotspots": [
+        [
+          "R215W",
+          8
+        ],
+        [
+          "P1597Hfs*23",
+          7
+        ],
+        [
+          "P1248Hfs*54",
+          7
+        ],
+        [
+          "S1117Kfs*34",
+          5
+        ],
+        [
+          "R202W",
+          5
+        ],
+        [
+          "P509Hfs*14",
+          4
+        ],
+        [
+          "T377M",
+          3
+        ],
+        [
+          "P1116Qfs*45",
+          3
+        ]
+      ]
+    },
+    "CREBBP": {
+      "samples_mutated": 447,
+      "frequency": 0.0408,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.1584,
+        "Non-Small Cell Lung Cancer": 0.0396,
+        "Small Cell Lung Cancer": 0.1341,
+        "Uterine Sarcoma": 0.0108,
+        "Head and Neck Cancer": 0.043,
+        "Glioma": 0.0271,
+        "Thyroid Cancer": 0.0303,
+        "Mesothelioma": 0.0374,
+        "Colorectal Cancer": 0.0487,
+        "Melanoma": 0.0658,
+        "Breast Cancer": 0.0239,
+        "Skin Cancer, Non-Melanoma": 0.1149,
+        "Germ Cell Tumor": 0.0278,
+        "Anal Cancer": 0.0938,
+        "Esophagogastric Cancer": 0.0352,
+        "Endometrial Cancer": 0.055,
+        "Prostate Cancer": 0.0153,
+        "Cancer of Unknown Primary": 0.0968,
+        "Ovarian Cancer": 0.0134,
+        "Hepatobiliary Cancer": 0.0141,
+        "Adrenocortical Carcinoma": 0.04,
+        "Soft Tissue Sarcoma": 0.009,
+        "Salivary Gland Cancer": 0.0351,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Cervical Cancer": 0.04,
+        "Peripheral Nervous System": 0.025,
+        "Mature B-Cell Neoplasms": 0.3134,
+        "CNS Cancer": 0.0208,
+        "Pancreatic Cancer": 0.008,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+        "Bone Cancer": 0.0075,
+        "Small Bowel Cancer": 0.0571,
+        "Histiocytosis": 0.0455,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Renal Cell Carcinoma": 0.0028
+      },
+      "hotspots": [
+        [
+          "I1084Sfs*15",
+          13
+        ],
+        [
+          "S1680del",
+          11
+        ],
+        [
+          "R1446H",
+          5
+        ],
+        [
+          "P1423Lfs*36",
+          5
+        ],
+        [
+          "X406_splice",
+          4
+        ],
+        [
+          "L524Wfs*6",
+          4
+        ],
+        [
+          "R1446C",
+          4
+        ],
+        [
+          "R1360*",
+          4
+        ]
+      ]
+    },
+    "ERBB2": {
+      "samples_mutated": 323,
+      "frequency": 0.0295,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.1277,
+        "Non-Small Cell Lung Cancer": 0.0336,
+        "Esophagogastric Cancer": 0.0381,
+        "Small Cell Lung Cancer": 0.0122,
+        "Breast Cancer": 0.0456,
+        "Thyroid Cancer": 0.0043,
+        "Cancer of Unknown Primary": 0.0376,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Endometrial Cancer": 0.0505,
+        "Cervical Cancer": 0.08,
+        "Colorectal Cancer": 0.0427,
+        "Glioma": 0.0145,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Hepatobiliary Cancer": 0.0085,
+        "Melanoma": 0.0301,
+        "Prostate Cancer": 0.0098,
+        "Pancreatic Cancer": 0.006,
+        "Germ Cell Tumor": 0.0069,
+        "Salivary Gland Cancer": 0.0263,
+        "Head and Neck Cancer": 0.0108,
+        "Renal Cell Carcinoma": 0.0166,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Small Bowel Cancer": 0.1429,
+        "Ovarian Cancer": 0.0179,
+        "Peripheral Nervous System": 0.0125,
+        "Anal Cancer": 0.0312,
+        "Appendiceal Cancer": 0.0127
+      },
+      "hotspots": [
+        [
+          "S310F",
+          49
+        ],
+        [
+          "Y772_A775dup",
+          32
+        ],
+        [
+          "L755S",
+          22
+        ],
+        [
+          "R678Q",
+          18
+        ],
+        [
+          "G778_P780dup",
+          15
+        ],
+        [
+          "S310Y",
+          10
+        ],
+        [
+          "V842I",
+          10
+        ],
+        [
+          "V777L",
+          10
+        ]
+      ]
+    },
+    "EP300": {
+      "samples_mutated": 340,
+      "frequency": 0.0311,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.1182,
+        "Germ Cell Tumor": 0.0104,
+        "Endometrial Cancer": 0.078,
+        "Cervical Cancer": 0.06,
+        "Anal Cancer": 0.1562,
+        "Ovarian Cancer": 0.0179,
+        "Breast Cancer": 0.015,
+        "Skin Cancer, Non-Melanoma": 0.1149,
+        "Prostate Cancer": 0.0112,
+        "Glioma": 0.0289,
+        "Soft Tissue Sarcoma": 0.0248,
+        "Non-Small Cell Lung Cancer": 0.0252,
+        "Head and Neck Cancer": 0.0645,
+        "Salivary Gland Cancer": 0.0263,
+        "Thyroid Cancer": 0.013,
+        "Colorectal Cancer": 0.0526,
+        "Hepatobiliary Cancer": 0.0085,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Melanoma": 0.0548,
+        "Esophagogastric Cancer": 0.0117,
+        "Renal Cell Carcinoma": 0.0194,
+        "Mesothelioma": 0.0187,
+        "Small Bowel Cancer": 0.0857,
+        "Small Cell Lung Cancer": 0.061,
+        "Mature B-Cell Neoplasms": 0.0597,
+        "Uterine Sarcoma": 0.0108,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Cancer of Unknown Primary": 0.043,
+        "Bone Cancer": 0.0149,
+        "Pancreatic Cancer": 0.006,
+        "CNS Cancer": 0.0208
+      },
+      "hotspots": [
+        [
+          "M1470Cfs*26",
+          10
+        ],
+        [
+          "H2324Pfs*55",
+          7
+        ],
+        [
+          "X541_splice",
+          4
+        ],
+        [
+          "D1399N",
+          4
+        ],
+        [
+          "P1869L",
+          3
+        ],
+        [
+          "Q1455H",
+          3
+        ],
+        [
+          "R1645*",
+          3
+        ],
+        [
+          "R1462*",
+          2
+        ]
+      ]
+    },
+    "DAXX": {
+      "samples_mutated": 128,
+      "frequency": 0.0117,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.0078,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Thyroid Cancer": 0.0173,
+        "Skin Cancer, Non-Melanoma": 0.0473,
+        "Breast Cancer": 0.0075,
+        "Prostate Cancer": 0.0014,
+        "Endometrial Cancer": 0.0275,
+        "Melanoma": 0.0247,
+        "Glioma": 0.0145,
+        "Uterine Sarcoma": 0.0215,
+        "Head and Neck Cancer": 0.0108,
+        "Colorectal Cancer": 0.0119,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Hepatobiliary Cancer": 0.0056,
+        "Cancer of Unknown Primary": 0.0323,
+        "Pancreatic Cancer": 0.0538,
+        "Germ Cell Tumor": 0.0069,
+        "Bladder Cancer": 0.0118,
+        "Salivary Gland Cancer": 0.0088,
+        "CNS Cancer": 0.0417,
+        "Renal Cell Carcinoma": 0.0055,
+        "Bone Cancer": 0.0075,
+        "Esophagogastric Cancer": 0.0029,
+        "Adrenocortical Carcinoma": 0.04
+      },
+      "hotspots": [
+        [
+          "R526H",
+          4
+        ],
+        [
+          "Q638*",
+          3
+        ],
+        [
+          "S675F",
+          3
+        ],
+        [
+          "E454*",
+          3
+        ],
+        [
+          "L98Vfs*13",
+          2
+        ],
+        [
+          "A313S",
+          2
+        ],
+        [
+          "R263H",
+          2
+        ],
+        [
+          "A103Sfs*40",
+          2
+        ]
+      ]
+    },
+    "CHEK2": {
+      "samples_mutated": 90,
+      "frequency": 0.0082,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0045,
+        "Non-Small Cell Lung Cancer": 0.0102,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Colorectal Cancer": 0.0079,
+        "Renal Cell Carcinoma": 0.0139,
+        "Bladder Cancer": 0.0426,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Prostate Cancer": 0.0042,
+        "Melanoma": 0.0137,
+        "Esophagogastric Cancer": 0.0059,
+        "Hepatobiliary Cancer": 0.0056,
+        "Endometrial Cancer": 0.0229,
+        "Ovarian Cancer": 0.0045,
+        "Germ Cell Tumor": 0.0069,
+        "Appendiceal Cancer": 0.0253,
+        "Head and Neck Cancer": 0.0108,
+        "Small Cell Lung Cancer": 0.0122,
+        "Cancer of Unknown Primary": 0.0054,
+        "Glioma": 0.0036
+      },
+      "hotspots": [
+        [
+          "X282_splice",
+          4
+        ],
+        [
+          "V198L",
+          2
+        ],
+        [
+          "G306R",
+          2
+        ],
+        [
+          "L226F",
+          2
+        ],
+        [
+          "R180H",
+          2
+        ],
+        [
+          "X366_splice",
+          2
+        ],
+        [
+          "Q487*",
+          2
+        ],
+        [
+          "R346C",
+          2
+        ]
+      ]
+    },
+    "DNMT3A": {
+      "samples_mutated": 168,
+      "frequency": 0.0153,
+      "by_cancer_type": {
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Breast Cancer": 0.0157,
+        "Endometrial Cancer": 0.0275,
+        "Glioma": 0.0289,
+        "Mesothelioma": 0.0093,
+        "Non-Small Cell Lung Cancer": 0.0204,
+        "Colorectal Cancer": 0.0189,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Thyroid Cancer": 0.0303,
+        "Uterine Sarcoma": 0.0108,
+        "Bladder Cancer": 0.0378,
+        "Prostate Cancer": 0.007,
+        "Ovarian Cancer": 0.0045,
+        "Mature T and NK Neoplasms": 0.3448,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Pancreatic Cancer": 0.004,
+        "Hepatobiliary Cancer": 0.0085,
+        "Small Cell Lung Cancer": 0.0244,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Renal Cell Carcinoma": 0.0055,
+        "Small Bowel Cancer": 0.0286,
+        "Cancer of Unknown Primary": 0.0108,
+        "Melanoma": 0.0192
+      },
+      "hotspots": [
+        [
+          "R882H",
+          6
+        ],
+        [
+          "X427_splice",
+          3
+        ],
+        [
+          "Q402*",
+          3
+        ],
+        [
+          "R882C",
+          2
+        ],
+        [
+          "R167W",
+          2
+        ],
+        [
+          "P59Rfs*13",
+          2
+        ],
+        [
+          "R326L",
+          2
+        ],
+        [
+          "R201H",
+          2
+        ]
+      ]
+    },
+    "CEBPA": {
+      "samples_mutated": 39,
+      "frequency": 0.0036,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0037,
+        "Esophagogastric Cancer": 0.0029,
+        "Melanoma": 0.0055,
+        "Skin Cancer, Non-Melanoma": 0.0203,
+        "Non-Small Cell Lung Cancer": 0.0042,
+        "Bladder Cancer": 0.0071,
+        "Hepatobiliary Cancer": 0.0056,
+        "Glioma": 0.0018,
+        "Ovarian Cancer": 0.0089,
+        "Renal Cell Carcinoma": 0.0028,
+        "Colorectal Cancer": 0.006,
+        "Small Cell Lung Cancer": 0.0244,
+        "Prostate Cancer": 0.0014,
+        "Mature B-Cell Neoplasms": 0.0149
+      },
+      "hotspots": [
+        [
+          "H195_P196dup",
+          2
+        ],
+        [
+          "D168N",
+          1
+        ],
+        [
+          "Q207H",
+          1
+        ],
+        [
+          "P14L",
+          1
+        ],
+        [
+          "P180S",
+          1
+        ],
+        [
+          "G223R",
+          1
+        ],
+        [
+          "F31L",
+          1
+        ],
+        [
+          "E290K",
+          1
+        ]
+      ]
+    },
+    "ESR1": {
+      "samples_mutated": 234,
+      "frequency": 0.0214,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0927,
+        "Small Cell Lung Cancer": 0.061,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Head and Neck Cancer": 0.0054,
+        "Glioma": 0.0072,
+        "Non-Small Cell Lung Cancer": 0.0138,
+        "Endometrial Cancer": 0.055,
+        "Colorectal Cancer": 0.0308,
+        "Prostate Cancer": 0.0042,
+        "Ovarian Cancer": 0.0089,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Melanoma": 0.0219,
+        "Renal Cell Carcinoma": 0.0028,
+        "Esophagogastric Cancer": 0.0088,
+        "Bladder Cancer": 0.0095,
+        "Cancer of Unknown Primary": 0.0215,
+        "Pancreatic Cancer": 0.004
+      },
+      "hotspots": [
+        [
+          "D538G",
+          46
+        ],
+        [
+          "Y537S",
+          23
+        ],
+        [
+          "E380Q",
+          13
+        ],
+        [
+          "Y537C",
+          11
+        ],
+        [
+          "Y537N",
+          9
+        ],
+        [
+          "L536H",
+          6
+        ],
+        [
+          "S432L",
+          3
+        ],
+        [
+          "S463P",
+          3
+        ]
+      ]
+    },
+    "FBXW7": {
+      "samples_mutated": 344,
+      "frequency": 0.0314,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.0246,
+        "Endometrial Cancer": 0.1514,
+        "Hepatobiliary Cancer": 0.0085,
+        "Soft Tissue Sarcoma": 0.0113,
+        "Bladder Cancer": 0.0946,
+        "Cervical Cancer": 0.08,
+        "Colorectal Cancer": 0.1142,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Breast Cancer": 0.0105,
+        "Glioma": 0.0127,
+        "Esophagogastric Cancer": 0.0381,
+        "Ovarian Cancer": 0.0089,
+        "Small Bowel Cancer": 0.1429,
+        "Head and Neck Cancer": 0.0699,
+        "Germ Cell Tumor": 0.0035,
+        "Salivary Gland Cancer": 0.0175,
+        "Mature B-Cell Neoplasms": 0.0299,
+        "Mesothelioma": 0.0187,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Thyroid Cancer": 0.0043,
+        "Prostate Cancer": 0.0028,
+        "Melanoma": 0.0247,
+        "Cancer of Unknown Primary": 0.0161,
+        "Appendiceal Cancer": 0.0633,
+        "Pancreatic Cancer": 0.006,
+        "Small Cell Lung Cancer": 0.0244,
+        "CNS Cancer": 0.0417,
+        "Anal Cancer": 0.0312,
+        "Bone Cancer": 0.0075,
+        "Renal Cell Carcinoma": 0.0055
+      },
+      "hotspots": [
+        [
+          "R465H",
+          32
+        ],
+        [
+          "R465C",
+          26
+        ],
+        [
+          "R505C",
+          24
+        ],
+        [
+          "R479Q",
+          17
+        ],
+        [
+          "S668Vfs*39",
+          9
+        ],
+        [
+          "R658*",
+          6
+        ],
+        [
+          "R278*",
+          6
+        ],
+        [
+          "R505G",
+          6
+        ]
+      ]
+    },
+    "FGFR3": {
+      "samples_mutated": 231,
+      "frequency": 0.0211,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.2766,
+        "Skin Cancer, Non-Melanoma": 0.0878,
+        "Salivary Gland Cancer": 0.0088,
+        "Glioma": 0.0145,
+        "Melanoma": 0.0356,
+        "Esophagogastric Cancer": 0.0088,
+        "Non-Small Cell Lung Cancer": 0.0096,
+        "Colorectal Cancer": 0.0218,
+        "Head and Neck Cancer": 0.0269,
+        "Cervical Cancer": 0.04,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Prostate Cancer": 0.0042,
+        "Uterine Sarcoma": 0.0108,
+        "Breast Cancer": 0.0045,
+        "Renal Cell Carcinoma": 0.0083,
+        "Endometrial Cancer": 0.0229,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Ovarian Cancer": 0.0045,
+        "Cancer of Unknown Primary": 0.0269,
+        "Bone Cancer": 0.0075,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "S249C",
+          76
+        ],
+        [
+          "R248C",
+          23
+        ],
+        [
+          "Y373C",
+          19
+        ],
+        [
+          "G380R",
+          8
+        ],
+        [
+          "V754M",
+          4
+        ],
+        [
+          "M528I",
+          4
+        ],
+        [
+          "R399C",
+          3
+        ],
+        [
+          "K650E",
+          2
+        ]
+      ]
+    },
+    "EZH2": {
+      "samples_mutated": 106,
+      "frequency": 0.0097,
+      "by_cancer_type": {
+        "Esophagogastric Cancer": 0.0088,
+        "Breast Cancer": 0.0067,
+        "Cervical Cancer": 0.02,
+        "Uterine Sarcoma": 0.0215,
+        "Melanoma": 0.0356,
+        "Bone Cancer": 0.0075,
+        "Non-Small Cell Lung Cancer": 0.006,
+        "Hepatobiliary Cancer": 0.0056,
+        "Glioma": 0.0145,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Salivary Gland Cancer": 0.0088,
+        "Head and Neck Cancer": 0.0161,
+        "Colorectal Cancer": 0.006,
+        "Prostate Cancer": 0.0014,
+        "Renal Cell Carcinoma": 0.0111,
+        "Bladder Cancer": 0.0189,
+        "Mature B-Cell Neoplasms": 0.0896,
+        "Ovarian Cancer": 0.0045,
+        "Endometrial Cancer": 0.0229,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Cancer of Unknown Primary": 0.0161,
+        "Thyroid Cancer": 0.0043,
+        "Small Bowel Cancer": 0.0286,
+        "Small Cell Lung Cancer": 0.0244
+      },
+      "hotspots": [
+        [
+          "Y646N",
+          6
+        ],
+        [
+          "Y646H",
+          3
+        ],
+        [
+          "Y646F",
+          3
+        ],
+        [
+          "Q653E",
+          2
+        ],
+        [
+          "S652F",
+          2
+        ],
+        [
+          "E396K",
+          2
+        ],
+        [
+          "T53M",
+          2
+        ],
+        [
+          "S652C",
+          2
+        ]
+      ]
+    },
+    "ERBB3": {
+      "samples_mutated": 265,
+      "frequency": 0.0242,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.0826,
+        "Bladder Cancer": 0.0946,
+        "Breast Cancer": 0.0209,
+        "Colorectal Cancer": 0.0447,
+        "Hepatobiliary Cancer": 0.0282,
+        "Esophagogastric Cancer": 0.0645,
+        "Prostate Cancer": 0.0139,
+        "Salivary Gland Cancer": 0.0175,
+        "Non-Small Cell Lung Cancer": 0.0102,
+        "Soft Tissue Sarcoma": 0.009,
+        "Skin Cancer, Non-Melanoma": 0.0608,
+        "Melanoma": 0.0384,
+        "Small Bowel Cancer": 0.1429,
+        "Head and Neck Cancer": 0.0323,
+        "Glioma": 0.0127,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+        "Renal Cell Carcinoma": 0.0139,
+        "Cancer of Unknown Primary": 0.043,
+        "Mature B-Cell Neoplasms": 0.0299,
+        "Ovarian Cancer": 0.0045,
+        "Pancreatic Cancer": 0.002,
+        "Thyroid Cancer": 0.0043,
+        "Peripheral Nervous System": 0.0125,
+        "Cervical Cancer": 0.02,
+        "Small Cell Lung Cancer": 0.0366
+      },
+      "hotspots": [
+        [
+          "V104M",
+          18
+        ],
+        [
+          "E928G",
+          15
+        ],
+        [
+          "V104L",
+          11
+        ],
+        [
+          "A232V",
+          10
+        ],
+        [
+          "D297Y",
+          8
+        ],
+        [
+          "S846I",
+          7
+        ],
+        [
+          "G284R",
+          7
+        ],
+        [
+          "K329E",
+          7
+        ]
+      ]
+    },
+    "FGFR2": {
+      "samples_mutated": 165,
+      "frequency": 0.0151,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0307,
+        "Germ Cell Tumor": 0.0069,
+        "Breast Cancer": 0.0097,
+        "Renal Cell Carcinoma": 0.0028,
+        "Endometrial Cancer": 0.078,
+        "Melanoma": 0.0712,
+        "Colorectal Cancer": 0.0248,
+        "Non-Small Cell Lung Cancer": 0.009,
+        "Prostate Cancer": 0.0014,
+        "Skin Cancer, Non-Melanoma": 0.0676,
+        "Head and Neck Cancer": 0.0323,
+        "Hepatobiliary Cancer": 0.0085,
+        "Adrenocortical Carcinoma": 0.04,
+        "Cancer of Unknown Primary": 0.0269,
+        "Esophagogastric Cancer": 0.0176,
+        "Glioma": 0.009,
+        "Cervical Cancer": 0.04,
+        "Salivary Gland Cancer": 0.0175,
+        "Mesothelioma": 0.0093,
+        "Ovarian Cancer": 0.0089,
+        "Pancreatic Cancer": 0.008,
+        "Small Cell Lung Cancer": 0.0122,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "C382R",
+          10
+        ],
+        [
+          "N549K",
+          10
+        ],
+        [
+          "S252W",
+          8
+        ],
+        [
+          "R210Q",
+          4
+        ],
+        [
+          "K659N",
+          3
+        ],
+        [
+          "S252L",
+          2
+        ],
+        [
+          "E718K",
+          2
+        ],
+        [
+          "R203H",
+          2
+        ]
+      ]
+    },
+    "FOXA1": {
+      "samples_mutated": 217,
+      "frequency": 0.0198,
+      "by_cancer_type": {
+        "Esophagogastric Cancer": 0.0029,
+        "Breast Cancer": 0.0396,
+        "Non-Small Cell Lung Cancer": 0.0078,
+        "Prostate Cancer": 0.1158,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Glioma": 0.0145,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Colorectal Cancer": 0.0089,
+        "Bladder Cancer": 0.0449,
+        "Hepatobiliary Cancer": 0.0085,
+        "Mesothelioma": 0.0093,
+        "Uterine Sarcoma": 0.0108,
+        "Endometrial Cancer": 0.0138,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Cancer of Unknown Primary": 0.0269,
+        "Bone Cancer": 0.0075,
+        "Renal Cell Carcinoma": 0.0028,
+        "Small Cell Lung Cancer": 0.0244,
+        "Head and Neck Cancer": 0.0108,
+        "Salivary Gland Cancer": 0.0175,
+        "Pancreatic Cancer": 0.004
+      },
+      "hotspots": [
+        [
+          "H247R",
+          4
+        ],
+        [
+          "I176V",
+          4
+        ],
+        [
+          "F254_N256delinsY",
+          3
+        ],
+        [
+          "R219S",
+          3
+        ],
+        [
+          "F266L",
+          3
+        ],
+        [
+          "S242_Y243delinsCS",
+          3
+        ],
+        [
+          "S355L",
+          3
+        ],
+        [
+          "H247Y",
+          3
+        ]
+      ]
+    },
+    "FLT3": {
+      "samples_mutated": 176,
+      "frequency": 0.0161,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0082,
+        "Endometrial Cancer": 0.0459,
+        "Germ Cell Tumor": 0.0069,
+        "Bladder Cancer": 0.026,
+        "Non-Small Cell Lung Cancer": 0.0156,
+        "Melanoma": 0.0849,
+        "Glioma": 0.0127,
+        "Soft Tissue Sarcoma": 0.0181,
+        "Colorectal Cancer": 0.0209,
+        "Hepatobiliary Cancer": 0.0028,
+        "Skin Cancer, Non-Melanoma": 0.0811,
+        "Head and Neck Cancer": 0.0269,
+        "Prostate Cancer": 0.0126,
+        "Adrenocortical Carcinoma": 0.04,
+        "Cancer of Unknown Primary": 0.0323,
+        "Esophagogastric Cancer": 0.0029,
+        "Ovarian Cancer": 0.0089,
+        "Peripheral Nervous System": 0.0125,
+        "Renal Cell Carcinoma": 0.0028,
+        "Uterine Sarcoma": 0.0108,
+        "Pancreatic Cancer": 0.004,
+        "Small Cell Lung Cancer": 0.0488,
+        "Mesothelioma": 0.0093
+      },
+      "hotspots": [
+        [
+          "P986Afs*27",
+          3
+        ],
+        [
+          "S638L",
+          3
+        ],
+        [
+          "E708K",
+          3
+        ],
+        [
+          "G822E",
+          2
+        ],
+        [
+          "E77K",
+          2
+        ],
+        [
+          "M578I",
+          2
+        ],
+        [
+          "G617V",
+          2
+        ],
+        [
+          "E800K",
+          2
+        ]
+      ]
+    },
+    "FUBP1": {
+      "samples_mutated": 121,
+      "frequency": 0.0111,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.026,
+        "Melanoma": 0.0301,
+        "Glioma": 0.0561,
+        "Colorectal Cancer": 0.0159,
+        "Non-Small Cell Lung Cancer": 0.0084,
+        "Renal Cell Carcinoma": 0.0083,
+        "Esophagogastric Cancer": 0.0029,
+        "Breast Cancer": 0.003,
+        "Endometrial Cancer": 0.0229,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Skin Cancer, Non-Melanoma": 0.0541,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Prostate Cancer": 0.0028,
+        "Small Bowel Cancer": 0.0857,
+        "Cancer of Unknown Primary": 0.0161,
+        "Germ Cell Tumor": 0.0035,
+        "Hepatobiliary Cancer": 0.0056,
+        "Bone Cancer": 0.0075
+      },
+      "hotspots": [
+        [
+          "I301Yfs*22",
+          6
+        ],
+        [
+          "S11Lfs*43",
+          5
+        ],
+        [
+          "R430C",
+          3
+        ],
+        [
+          "I301Nfs*4",
+          2
+        ],
+        [
+          "X569_splice",
+          2
+        ],
+        [
+          "R344Q",
+          2
+        ],
+        [
+          "K77Lfs*23",
+          2
+        ],
+        [
+          "X526_splice",
+          2
+        ]
+      ]
+    },
+    "FGFR1": {
+      "samples_mutated": 117,
+      "frequency": 0.0107,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0236,
+        "Breast Cancer": 0.0067,
+        "Melanoma": 0.0164,
+        "Bone Cancer": 0.0075,
+        "Non-Small Cell Lung Cancer": 0.0138,
+        "Glioma": 0.0235,
+        "Colorectal Cancer": 0.0179,
+        "Hepatobiliary Cancer": 0.0056,
+        "Skin Cancer, Non-Melanoma": 0.0473,
+        "CNS Cancer": 0.0208,
+        "Soft Tissue Sarcoma": 0.0113,
+        "Pancreatic Cancer": 0.008,
+        "Prostate Cancer": 0.0014,
+        "Appendiceal Cancer": 0.0127,
+        "Germ Cell Tumor": 0.0035,
+        "Esophagogastric Cancer": 0.0059,
+        "Cervical Cancer": 0.04,
+        "Renal Cell Carcinoma": 0.0083,
+        "Peripheral Nervous System": 0.0125,
+        "Cancer of Unknown Primary": 0.0054,
+        "Head and Neck Cancer": 0.0054,
+        "Endometrial Cancer": 0.0046
+      },
+      "hotspots": [
+        [
+          "N577K",
+          9
+        ],
+        [
+          "K687E",
+          4
+        ],
+        [
+          "R840*",
+          3
+        ],
+        [
+          "P181S",
+          2
+        ],
+        [
+          "S437N",
+          2
+        ],
+        [
+          "R91W",
+          2
+        ],
+        [
+          "D166dup",
+          2
+        ],
+        [
+          "E834K",
+          2
+        ]
+      ]
+    },
+    "GATA3": {
+      "samples_mutated": 291,
+      "frequency": 0.0266,
+      "by_cancer_type": {
+        "Breast Cancer": 0.1406,
+        "Non-Small Cell Lung Cancer": 0.018,
+        "Skin Cancer, Non-Melanoma": 0.0135,
+        "Esophagogastric Cancer": 0.0088,
+        "Bladder Cancer": 0.026,
+        "Melanoma": 0.0247,
+        "Colorectal Cancer": 0.0189,
+        "Appendiceal Cancer": 0.0253,
+        "Prostate Cancer": 0.0028,
+        "Ovarian Cancer": 0.0045,
+        "Renal Cell Carcinoma": 0.0083,
+        "Germ Cell Tumor": 0.0035,
+        "Cancer of Unknown Primary": 0.0215,
+        "Glioma": 0.0036,
+        "Small Cell Lung Cancer": 0.0244,
+        "Endometrial Cancer": 0.0229,
+        "Cervical Cancer": 0.04,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Head and Neck Cancer": 0.0054,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Hepatobiliary Cancer": 0.0028
+      },
+      "hotspots": [
+        [
+          "P408Afs*99",
+          33
+        ],
+        [
+          "D335Gfs*17",
+          18
+        ],
+        [
+          "N331Efs*21",
+          8
+        ],
+        [
+          "R366*",
+          7
+        ],
+        [
+          "M293K",
+          5
+        ],
+        [
+          "P135Rfs*60",
+          4
+        ],
+        [
+          "S436Pfs*39",
+          3
+        ],
+        [
+          "S137L",
+          3
+        ]
+      ]
+    },
+    "IDH2": {
+      "samples_mutated": 68,
+      "frequency": 0.0062,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.0138,
+        "Breast Cancer": 0.0037,
+        "Glioma": 0.0253,
+        "Non-Small Cell Lung Cancer": 0.0024,
+        "Cancer of Unknown Primary": 0.0161,
+        "Hepatobiliary Cancer": 0.0169,
+        "Colorectal Cancer": 0.007,
+        "Bladder Cancer": 0.0095,
+        "Prostate Cancer": 0.0014,
+        "Uterine Sarcoma": 0.0108,
+        "Bone Cancer": 0.0075,
+        "Mature T and NK Neoplasms": 0.2759,
+        "Melanoma": 0.0055,
+        "Pancreatic Cancer": 0.002,
+        "Renal Cell Carcinoma": 0.0028,
+        "Head and Neck Cancer": 0.0108,
+        "Small Bowel Cancer": 0.0286,
+        "Skin Cancer, Non-Melanoma": 0.0068,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Salivary Gland Cancer": 0.0088
+      },
+      "hotspots": [
+        [
+          "R172K",
+          14
+        ],
+        [
+          "R172G",
+          7
+        ],
+        [
+          "R172W",
+          5
+        ],
+        [
+          "T146Lfs*15",
+          4
+        ],
+        [
+          "R172S",
+          3
+        ],
+        [
+          "R362Q",
+          2
+        ],
+        [
+          "V161I",
+          1
+        ],
+        [
+          "F192L",
+          1
+        ]
+      ]
+    },
+    "HRAS": {
+      "samples_mutated": 99,
+      "frequency": 0.009,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0045,
+        "Salivary Gland Cancer": 0.0439,
+        "Non-Small Cell Lung Cancer": 0.003,
+        "Thyroid Cancer": 0.0346,
+        "Melanoma": 0.0274,
+        "Skin Cancer, Non-Melanoma": 0.0473,
+        "Head and Neck Cancer": 0.0323,
+        "Cancer of Unknown Primary": 0.0054,
+        "Soft Tissue Sarcoma": 0.009,
+        "Prostate Cancer": 0.0084,
+        "Bladder Cancer": 0.0449,
+        "Esophagogastric Cancer": 0.0059,
+        "Endometrial Cancer": 0.0092,
+        "Cervical Cancer": 0.02,
+        "Colorectal Cancer": 0.0079,
+        "Glioma": 0.0018,
+        "Pancreatic Cancer": 0.004,
+        "Small Cell Lung Cancer": 0.0122,
+        "Renal Cell Carcinoma": 0.0028,
+        "Peripheral Nervous System": 0.0125
+      },
+      "hotspots": [
+        [
+          "Q61R",
+          20
+        ],
+        [
+          "Q61K",
+          14
+        ],
+        [
+          "G13R",
+          7
+        ],
+        [
+          "G12D",
+          5
+        ],
+        [
+          "Q61L",
+          4
+        ],
+        [
+          "G13V",
+          3
+        ],
+        [
+          "R73H",
+          3
+        ],
+        [
+          "G12V",
+          2
+        ]
+      ]
+    },
+    "GNAQ": {
+      "samples_mutated": 78,
+      "frequency": 0.0071,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0378,
+        "Endometrial Cancer": 0.0229,
+        "Melanoma": 0.0877,
+        "Germ Cell Tumor": 0.0035,
+        "Non-Small Cell Lung Cancer": 0.0036,
+        "Colorectal Cancer": 0.007,
+        "Uterine Sarcoma": 0.0108,
+        "Glioma": 0.0018,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Prostate Cancer": 0.0028,
+        "Cancer of Unknown Primary": 0.0054,
+        "Breast Cancer": 0.0007,
+        "Skin Cancer, Non-Melanoma": 0.0068
+      },
+      "hotspots": [
+        [
+          "Q209P",
+          13
+        ],
+        [
+          "Q209L",
+          11
+        ],
+        [
+          "R183Q",
+          4
+        ],
+        [
+          "R247*",
+          2
+        ],
+        [
+          "R37H",
+          2
+        ],
+        [
+          "R149Q",
+          2
+        ],
+        [
+          "R114*",
+          2
+        ],
+        [
+          "Y285C",
+          2
+        ]
+      ]
+    },
+    "IDH1": {
+      "samples_mutated": 322,
+      "frequency": 0.0294,
+      "by_cancer_type": {
+        "Small Cell Lung Cancer": 0.0366,
+        "Hepatobiliary Cancer": 0.1352,
+        "Glioma": 0.3255,
+        "Germ Cell Tumor": 0.0035,
+        "Esophagogastric Cancer": 0.0059,
+        "Melanoma": 0.0329,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Colorectal Cancer": 0.0129,
+        "Breast Cancer": 0.0045,
+        "Endometrial Cancer": 0.0183,
+        "Non-Small Cell Lung Cancer": 0.0102,
+        "Ovarian Cancer": 0.0089,
+        "Prostate Cancer": 0.007,
+        "Bone Cancer": 0.0522,
+        "Small Bowel Cancer": 0.0286,
+        "Bladder Cancer": 0.0142,
+        "Cancer of Unknown Primary": 0.0161,
+        "Salivary Gland Cancer": 0.0088,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Appendiceal Cancer": 0.0127,
+        "Pancreatic Cancer": 0.004,
+        "Thyroid Cancer": 0.0043
+      },
+      "hotspots": [
+        [
+          "R132H",
+          169
+        ],
+        [
+          "R132C",
+          70
+        ],
+        [
+          "R132G",
+          9
+        ],
+        [
+          "R132L",
+          8
+        ],
+        [
+          "R132S",
+          4
+        ],
+        [
+          "G8S",
+          2
+        ],
+        [
+          "D160E",
+          2
+        ],
+        [
+          "I5Sfs*7",
+          2
+        ]
+      ]
+    },
+    "GNAS": {
+      "samples_mutated": 157,
+      "frequency": 0.0143,
+      "by_cancer_type": {
+        "Small Cell Lung Cancer": 0.0122,
+        "Ovarian Cancer": 0.0089,
+        "Esophagogastric Cancer": 0.0235,
+        "Bladder Cancer": 0.0189,
+        "Colorectal Cancer": 0.0288,
+        "Hepatobiliary Cancer": 0.0056,
+        "Prostate Cancer": 0.0098,
+        "Glioma": 0.0072,
+        "Small Bowel Cancer": 0.0857,
+        "Skin Cancer, Non-Melanoma": 0.0135,
+        "Bone Cancer": 0.0075,
+        "Appendiceal Cancer": 0.3165,
+        "Non-Small Cell Lung Cancer": 0.0108,
+        "Pancreatic Cancer": 0.0398,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Breast Cancer": 0.0052,
+        "Cervical Cancer": 0.04,
+        "Endometrial Cancer": 0.0046,
+        "Cancer of Unknown Primary": 0.0376,
+        "Head and Neck Cancer": 0.0108,
+        "Melanoma": 0.0055,
+        "Renal Cell Carcinoma": 0.0055
+      },
+      "hotspots": [
+        [
+          "R201H",
+          48
+        ],
+        [
+          "R201C",
+          39
+        ],
+        [
+          "Q227K",
+          3
+        ],
+        [
+          "R201S",
+          3
+        ],
+        [
+          "R160C",
+          3
+        ],
+        [
+          "Q227L",
+          3
+        ],
+        [
+          "Y130C",
+          3
+        ],
+        [
+          "E327K",
+          2
+        ]
+      ]
+    },
+    "GLI1": {
+      "samples_mutated": 180,
+      "frequency": 0.0164,
+      "by_cancer_type": {
+        "Breast Cancer": 0.009,
+        "Glioma": 0.0163,
+        "Esophagogastric Cancer": 0.0176,
+        "Colorectal Cancer": 0.0298,
+        "Non-Small Cell Lung Cancer": 0.0216,
+        "Soft Tissue Sarcoma": 0.0113,
+        "Hepatobiliary Cancer": 0.0141,
+        "Uterine Sarcoma": 0.0108,
+        "Bladder Cancer": 0.0189,
+        "Prostate Cancer": 0.0056,
+        "Ovarian Cancer": 0.0179,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Skin Cancer, Non-Melanoma": 0.0473,
+        "Melanoma": 0.0575,
+        "Endometrial Cancer": 0.0321,
+        "Germ Cell Tumor": 0.0069,
+        "Thyroid Cancer": 0.0043,
+        "Head and Neck Cancer": 0.0108,
+        "Pancreatic Cancer": 0.012,
+        "Renal Cell Carcinoma": 0.0083,
+        "Small Cell Lung Cancer": 0.0244,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Small Bowel Cancer": 0.0286,
+        "Cancer of Unknown Primary": 0.0161,
+        "Bone Cancer": 0.0149
+      },
+      "hotspots": [
+        [
+          "G274Afs*6",
+          16
+        ],
+        [
+          "R72W",
+          2
+        ],
+        [
+          "R171Q",
+          2
+        ],
+        [
+          "R380Q",
+          2
+        ],
+        [
+          "D917Y",
+          2
+        ],
+        [
+          "R265W",
+          2
+        ],
+        [
+          "R113Q",
+          2
+        ],
+        [
+          "P194L",
+          2
+        ]
+      ]
+    },
+    "GNA11": {
+      "samples_mutated": 62,
+      "frequency": 0.0057,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.0229,
+        "Melanoma": 0.0575,
+        "Colorectal Cancer": 0.0129,
+        "Prostate Cancer": 0.0014,
+        "Breast Cancer": 0.003,
+        "Non-Small Cell Lung Cancer": 0.0042,
+        "Thyroid Cancer": 0.0087,
+        "Hepatobiliary Cancer": 0.0028,
+        "Glioma": 0.0036,
+        "Cancer of Unknown Primary": 0.0108,
+        "Skin Cancer, Non-Melanoma": 0.0135,
+        "CNS Cancer": 0.0208,
+        "Small Cell Lung Cancer": 0.0122
+      },
+      "hotspots": [
+        [
+          "Q209L",
+          18
+        ],
+        [
+          "G208Afs*16",
+          2
+        ],
+        [
+          "R210W",
+          2
+        ],
+        [
+          "E294K",
+          1
+        ],
+        [
+          "S211L",
+          1
+        ],
+        [
+          "Q209P",
+          1
+        ],
+        [
+          "Y128H",
+          1
+        ],
+        [
+          "S326*",
+          1
+        ]
+      ]
+    },
+    "JAK2": {
+      "samples_mutated": 125,
+      "frequency": 0.0114,
+      "by_cancer_type": {
+        "Breast Cancer": 0.006,
+        "Prostate Cancer": 0.0084,
+        "Non-Small Cell Lung Cancer": 0.0222,
+        "Glioma": 0.009,
+        "Bladder Cancer": 0.026,
+        "Melanoma": 0.0274,
+        "Cancer of Unknown Primary": 0.0323,
+        "Colorectal Cancer": 0.0109,
+        "Head and Neck Cancer": 0.0269,
+        "Uterine Sarcoma": 0.0108,
+        "Renal Cell Carcinoma": 0.0055,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Endometrial Cancer": 0.0275,
+        "Esophagogastric Cancer": 0.0088,
+        "Small Cell Lung Cancer": 0.0122,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Pancreatic Cancer": 0.004,
+        "Thyroid Cancer": 0.0087,
+        "Ovarian Cancer": 0.0045,
+        "Mature B-Cell Neoplasms": 0.0075
+      },
+      "hotspots": [
+        [
+          "S1035L",
+          3
+        ],
+        [
+          "R487C",
+          3
+        ],
+        [
+          "L1088S",
+          2
+        ],
+        [
+          "L697R",
+          2
+        ],
+        [
+          "E10Q",
+          2
+        ],
+        [
+          "N457Mfs*22",
+          2
+        ],
+        [
+          "G921S",
+          2
+        ],
+        [
+          "S507*",
+          2
+        ]
+      ]
+    },
+    "H3-3A": {
+      "samples_mutated": 28,
+      "frequency": 0.0026,
+      "by_cancer_type": {
+        "Glioma": 0.0199,
+        "Bladder Cancer": 0.0095,
+        "Breast Cancer": 0.0007,
+        "Skin Cancer, Non-Melanoma": 0.0068,
+        "Colorectal Cancer": 0.004,
+        "Cancer of Unknown Primary": 0.0108,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Melanoma": 0.0027,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Esophagogastric Cancer": 0.0029
+      },
+      "hotspots": [
+        [
+          "G35V",
+          4
+        ],
+        [
+          "K28M",
+          4
+        ],
+        [
+          "G35R",
+          3
+        ],
+        [
+          "L62del",
+          1
+        ],
+        [
+          "R64Qfs*16",
+          1
+        ],
+        [
+          "R50L",
+          1
+        ],
+        [
+          "R73Q",
+          1
+        ],
+        [
+          "I63S",
+          1
+        ]
+      ]
+    },
+    "KMT2D": {
+      "samples_mutated": 851,
+      "frequency": 0.0778,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0359,
+        "Ovarian Cancer": 0.0446,
+        "Bladder Cancer": 0.2553,
+        "Esophagogastric Cancer": 0.0997,
+        "Endometrial Cancer": 0.1881,
+        "Hepatobiliary Cancer": 0.0451,
+        "Salivary Gland Cancer": 0.0702,
+        "Non-Small Cell Lung Cancer": 0.0713,
+        "Skin Cancer, Non-Melanoma": 0.2703,
+        "Gastrointestinal Stromal Tumor": 0.0365,
+        "Head and Neck Cancer": 0.1559,
+        "Anal Cancer": 0.125,
+        "Prostate Cancer": 0.0474,
+        "Cervical Cancer": 0.14,
+        "Glioma": 0.0488,
+        "Colorectal Cancer": 0.0924,
+        "Melanoma": 0.137,
+        "Renal Cell Carcinoma": 0.0222,
+        "Thyroid Cancer": 0.0346,
+        "Germ Cell Tumor": 0.0243,
+        "Soft Tissue Sarcoma": 0.0293,
+        "Bone Cancer": 0.0299,
+        "Adrenocortical Carcinoma": 0.08,
+        "Cancer of Unknown Primary": 0.0968,
+        "Small Cell Lung Cancer": 0.2195,
+        "Pancreatic Cancer": 0.0458,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0652,
+        "Peripheral Nervous System": 0.0125,
+        "CNS Cancer": 0.0208,
+        "Mature B-Cell Neoplasms": 0.3806,
+        "Appendiceal Cancer": 0.038,
+        "Mesothelioma": 0.0093,
+        "Small Bowel Cancer": 0.1429,
+        "Uterine Sarcoma": 0.0108
+      },
+      "hotspots": [
+        [
+          "P2354Lfs*30",
+          17
+        ],
+        [
+          "P647Hfs*283",
+          9
+        ],
+        [
+          "G1235Vfs*95",
+          8
+        ],
+        [
+          "P648Tfs*2",
+          5
+        ],
+        [
+          "R2685*",
+          4
+        ],
+        [
+          "Q2800*",
+          4
+        ],
+        [
+          "R5432W",
+          4
+        ],
+        [
+          "P2894S",
+          4
+        ]
+      ]
+    },
+    "KMT2C": {
+      "samples_mutated": 642,
+      "frequency": 0.0587,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0815,
+        "Bladder Cancer": 0.1418,
+        "Esophagogastric Cancer": 0.0381,
+        "Small Cell Lung Cancer": 0.0854,
+        "Hepatobiliary Cancer": 0.0535,
+        "Colorectal Cancer": 0.0606,
+        "Germ Cell Tumor": 0.0174,
+        "Prostate Cancer": 0.0586,
+        "Anal Cancer": 0.0312,
+        "Endometrial Cancer": 0.1055,
+        "Skin Cancer, Non-Melanoma": 0.2095,
+        "Ovarian Cancer": 0.0223,
+        "Glioma": 0.0344,
+        "Head and Neck Cancer": 0.0591,
+        "Non-Small Cell Lung Cancer": 0.0564,
+        "Melanoma": 0.1342,
+        "Thyroid Cancer": 0.026,
+        "Soft Tissue Sarcoma": 0.0113,
+        "Cervical Cancer": 0.14,
+        "Uterine Sarcoma": 0.0215,
+        "Cancer of Unknown Primary": 0.0753,
+        "Pancreatic Cancer": 0.0319,
+        "Peripheral Nervous System": 0.025,
+        "Gastrointestinal Stromal Tumor": 0.0292,
+        "Renal Cell Carcinoma": 0.0416,
+        "Salivary Gland Cancer": 0.0439,
+        "Mature B-Cell Neoplasms": 0.0299,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "CNS Cancer": 0.0417,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Small Bowel Cancer": 0.0286,
+        "Mesothelioma": 0.0093
+      },
+      "hotspots": [
+        [
+          "F4496Lfs*21",
+          5
+        ],
+        [
+          "S2816Ifs*6",
+          4
+        ],
+        [
+          "R4549C",
+          4
+        ],
+        [
+          "R2884*",
+          4
+        ],
+        [
+          "R3507*",
+          4
+        ],
+        [
+          "R2066*",
+          3
+        ],
+        [
+          "X2481_splice",
+          3
+        ],
+        [
+          "R4590H",
+          3
+        ]
+      ]
+    },
+    "KDM6A": {
+      "samples_mutated": 345,
+      "frequency": 0.0315,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.3428,
+        "Breast Cancer": 0.0165,
+        "Salivary Gland Cancer": 0.1228,
+        "Anal Cancer": 0.0312,
+        "Glioma": 0.0036,
+        "Skin Cancer, Non-Melanoma": 0.0541,
+        "Endometrial Cancer": 0.0321,
+        "Prostate Cancer": 0.0237,
+        "Non-Small Cell Lung Cancer": 0.0186,
+        "Cancer of Unknown Primary": 0.0323,
+        "Colorectal Cancer": 0.0218,
+        "Melanoma": 0.0192,
+        "Small Bowel Cancer": 0.0571,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Hepatobiliary Cancer": 0.0169,
+        "Head and Neck Cancer": 0.0376,
+        "Renal Cell Carcinoma": 0.0139,
+        "Appendiceal Cancer": 0.0253,
+        "Ovarian Cancer": 0.0045,
+        "Uterine Sarcoma": 0.0215,
+        "Esophagogastric Cancer": 0.0117,
+        "CNS Cancer": 0.0417,
+        "Soft Tissue Sarcoma": 0.009,
+        "Pancreatic Cancer": 0.0299,
+        "Mesothelioma": 0.028,
+        "Cervical Cancer": 0.02,
+        "Small Cell Lung Cancer": 0.0122,
+        "Thyroid Cancer": 0.0043,
+        "Germ Cell Tumor": 0.0035,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Gastrointestinal Stromal Tumor": 0.0073
+      },
+      "hotspots": [
+        [
+          "Q641*",
+          5
+        ],
+        [
+          "X189_splice",
+          4
+        ],
+        [
+          "X1336_splice",
+          4
+        ],
+        [
+          "Y362*",
+          3
+        ],
+        [
+          "M1384Kfs*8",
+          3
+        ],
+        [
+          "Q555*",
+          3
+        ],
+        [
+          "Q271*",
+          3
+        ],
+        [
+          "X944_splice",
+          3
+        ]
+      ]
+    },
+    "KDM5C": {
+      "samples_mutated": 221,
+      "frequency": 0.0202,
+      "by_cancer_type": {
+        "Esophagogastric Cancer": 0.0235,
+        "Endometrial Cancer": 0.0642,
+        "Non-Small Cell Lung Cancer": 0.027,
+        "Hepatobiliary Cancer": 0.0141,
+        "Skin Cancer, Non-Melanoma": 0.0541,
+        "Uterine Sarcoma": 0.0108,
+        "Glioma": 0.0217,
+        "Cancer of Unknown Primary": 0.0108,
+        "Germ Cell Tumor": 0.0139,
+        "Colorectal Cancer": 0.0238,
+        "Bladder Cancer": 0.0307,
+        "CNS Cancer": 0.0208,
+        "Head and Neck Cancer": 0.0108,
+        "Breast Cancer": 0.012,
+        "Pancreatic Cancer": 0.008,
+        "Renal Cell Carcinoma": 0.0914,
+        "Thyroid Cancer": 0.0216,
+        "Ovarian Cancer": 0.0134,
+        "Small Bowel Cancer": 0.0286,
+        "Melanoma": 0.0164,
+        "Small Cell Lung Cancer": 0.0244,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Prostate Cancer": 0.0042,
+        "Appendiceal Cancer": 0.0127,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Salivary Gland Cancer": 0.0263
+      },
+      "hotspots": [
+        [
+          "R198*",
+          4
+        ],
+        [
+          "R1165C",
+          3
+        ],
+        [
+          "R681*",
+          3
+        ],
+        [
+          "L394Afs*11",
+          2
+        ],
+        [
+          "R154H",
+          2
+        ],
+        [
+          "P1555S",
+          2
+        ],
+        [
+          "P1273L",
+          2
+        ],
+        [
+          "D182Y",
+          2
+        ]
+      ]
+    },
+    "KEAP1": {
+      "samples_mutated": 349,
+      "frequency": 0.0319,
+      "by_cancer_type": {
+        "Esophagogastric Cancer": 0.0059,
+        "Bladder Cancer": 0.0165,
+        "Non-Small Cell Lung Cancer": 0.1499,
+        "Small Cell Lung Cancer": 0.0366,
+        "Anal Cancer": 0.0312,
+        "Colorectal Cancer": 0.0109,
+        "Thyroid Cancer": 0.0216,
+        "Glioma": 0.009,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Cancer of Unknown Primary": 0.1237,
+        "Endometrial Cancer": 0.0275,
+        "Breast Cancer": 0.0037,
+        "Hepatobiliary Cancer": 0.0197,
+        "Uterine Sarcoma": 0.0108,
+        "Germ Cell Tumor": 0.0035,
+        "Renal Cell Carcinoma": 0.0166,
+        "Mesothelioma": 0.0093,
+        "Prostate Cancer": 0.0028,
+        "Melanoma": 0.0027,
+        "Skin Cancer, Non-Melanoma": 0.0135,
+        "Pancreatic Cancer": 0.002,
+        "Cervical Cancer": 0.02,
+        "Head and Neck Cancer": 0.0215,
+        "Ovarian Cancer": 0.0045
+      },
+      "hotspots": [
+        [
+          "R362Q",
+          4
+        ],
+        [
+          "R601L",
+          4
+        ],
+        [
+          "X511_splice",
+          4
+        ],
+        [
+          "G333C",
+          3
+        ],
+        [
+          "R320L",
+          3
+        ],
+        [
+          "G603V",
+          3
+        ],
+        [
+          "E192K",
+          3
+        ],
+        [
+          "M409*",
+          3
+        ]
+      ]
+    },
+    "KRAS": {
+      "samples_mutated": 1643,
+      "frequency": 0.1501,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0686,
+        "Endometrial Cancer": 0.1972,
+        "Non-Small Cell Lung Cancer": 0.2692,
+        "Germ Cell Tumor": 0.1111,
+        "Colorectal Cancer": 0.432,
+        "Cervical Cancer": 0.22,
+        "Ovarian Cancer": 0.0893,
+        "Pancreatic Cancer": 0.7371,
+        "Esophagogastric Cancer": 0.0792,
+        "Hepatobiliary Cancer": 0.0817,
+        "Thyroid Cancer": 0.0303,
+        "Glioma": 0.0108,
+        "Prostate Cancer": 0.0126,
+        "Cancer of Unknown Primary": 0.2258,
+        "Appendiceal Cancer": 0.6709,
+        "Small Bowel Cancer": 0.6,
+        "Gastrointestinal Neuroendocrine Tumor": 0.1304,
+        "Soft Tissue Sarcoma": 0.0135,
+        "Breast Cancer": 0.0082,
+        "Melanoma": 0.0192,
+        "Head and Neck Cancer": 0.0108,
+        "Skin Cancer, Non-Melanoma": 0.0135,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Renal Cell Carcinoma": 0.0083,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Anal Cancer": 0.0312,
+        "Histiocytosis": 0.0455,
+        "Bone Cancer": 0.0075,
+        "Small Cell Lung Cancer": 0.0122,
+        "Salivary Gland Cancer": 0.0088
+      },
+      "hotspots": [
+        [
+          "G12D",
+          444
+        ],
+        [
+          "G12V",
+          371
+        ],
+        [
+          "G12C",
+          262
+        ],
+        [
+          "G13D",
+          133
+        ],
+        [
+          "G12A",
+          89
+        ],
+        [
+          "G12R",
+          72
+        ],
+        [
+          "Q61H",
+          54
+        ],
+        [
+          "G12S",
+          41
+        ]
+      ]
+    },
+    "MAP2K1": {
+      "samples_mutated": 102,
+      "frequency": 0.0093,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0142,
+        "Breast Cancer": 0.0045,
+        "Prostate Cancer": 0.0028,
+        "Melanoma": 0.0493,
+        "Mesothelioma": 0.0093,
+        "Colorectal Cancer": 0.0169,
+        "Histiocytosis": 0.1818,
+        "Non-Small Cell Lung Cancer": 0.0108,
+        "Ovarian Cancer": 0.0045,
+        "Small Bowel Cancer": 0.0857,
+        "Anal Cancer": 0.0312,
+        "Glioma": 0.0108,
+        "Cancer of Unknown Primary": 0.0161,
+        "Esophagogastric Cancer": 0.0059,
+        "Hepatobiliary Cancer": 0.0113,
+        "Endometrial Cancer": 0.0138,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Renal Cell Carcinoma": 0.0055
+      },
+      "hotspots": [
+        [
+          "K57N",
+          10
+        ],
+        [
+          "E203K",
+          10
+        ],
+        [
+          "K57E",
+          6
+        ],
+        [
+          "Q56P",
+          4
+        ],
+        [
+          "E102_I103del",
+          3
+        ],
+        [
+          "K57T",
+          3
+        ],
+        [
+          "G128D",
+          3
+        ],
+        [
+          "C121S",
+          2
+        ]
+      ]
+    },
+    "KIT": {
+      "samples_mutated": 287,
+      "frequency": 0.0262,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0355,
+        "Gastrointestinal Stromal Tumor": 0.6496,
+        "Hepatobiliary Cancer": 0.0113,
+        "Skin Cancer, Non-Melanoma": 0.0608,
+        "Non-Small Cell Lung Cancer": 0.0198,
+        "Germ Cell Tumor": 0.1076,
+        "Endometrial Cancer": 0.0321,
+        "Colorectal Cancer": 0.0258,
+        "Glioma": 0.0145,
+        "Melanoma": 0.063,
+        "Head and Neck Cancer": 0.0215,
+        "Ovarian Cancer": 0.0179,
+        "Prostate Cancer": 0.0042,
+        "Esophagogastric Cancer": 0.0147,
+        "Adrenocortical Carcinoma": 0.04,
+        "Soft Tissue Sarcoma": 0.0135,
+        "Breast Cancer": 0.006,
+        "Appendiceal Cancer": 0.0127,
+        "Small Cell Lung Cancer": 0.0488,
+        "Anal Cancer": 0.0312,
+        "Cancer of Unknown Primary": 0.0161
+      },
+      "hotspots": [
+        [
+          "N822K",
+          11
+        ],
+        [
+          "W557_K558del",
+          11
+        ],
+        [
+          "L576P",
+          10
+        ],
+        [
+          "V654A",
+          8
+        ],
+        [
+          "D579del",
+          8
+        ],
+        [
+          "A502_Y503dup",
+          8
+        ],
+        [
+          "K642E",
+          6
+        ],
+        [
+          "V559D",
+          5
+        ]
+      ]
+    },
+    "MET": {
+      "samples_mutated": 228,
+      "frequency": 0.0208,
+      "by_cancer_type": {
+        "Esophagogastric Cancer": 0.0117,
+        "Breast Cancer": 0.0067,
+        "Non-Small Cell Lung Cancer": 0.0468,
+        "Endometrial Cancer": 0.0229,
+        "Prostate Cancer": 0.007,
+        "Melanoma": 0.074,
+        "Salivary Gland Cancer": 0.0175,
+        "Bone Cancer": 0.0075,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Colorectal Cancer": 0.0149,
+        "Glioma": 0.0325,
+        "Head and Neck Cancer": 0.0323,
+        "Small Bowel Cancer": 0.0571,
+        "Renal Cell Carcinoma": 0.0277,
+        "Cancer of Unknown Primary": 0.043,
+        "Uterine Sarcoma": 0.0323,
+        "Ovarian Cancer": 0.0089,
+        "Bladder Cancer": 0.0331,
+        "Germ Cell Tumor": 0.0069,
+        "Thyroid Cancer": 0.0043,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Small Cell Lung Cancer": 0.061,
+        "Pancreatic Cancer": 0.004,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Peripheral Nervous System": 0.0125
+      },
+      "hotspots": [
+        [
+          "X1010_splice",
+          17
+        ],
+        [
+          "X963_splice",
+          11
+        ],
+        [
+          "D1010H",
+          6
+        ],
+        [
+          "D1010N",
+          6
+        ],
+        [
+          "D1010Y",
+          3
+        ],
+        [
+          "G181E",
+          3
+        ],
+        [
+          "X1007_splice",
+          3
+        ],
+        [
+          "D1010fs",
+          3
+        ]
+      ]
+    },
+    "MEN1": {
+      "samples_mutated": 178,
+      "frequency": 0.0163,
+      "by_cancer_type": {
+        "Thyroid Cancer": 0.0303,
+        "Breast Cancer": 0.0217,
+        "Mesothelioma": 0.0093,
+        "Colorectal Cancer": 0.0129,
+        "Non-Small Cell Lung Cancer": 0.0162,
+        "Hepatobiliary Cancer": 0.0141,
+        "Skin Cancer, Non-Melanoma": 0.0405,
+        "Melanoma": 0.0301,
+        "Endometrial Cancer": 0.0138,
+        "Glioma": 0.0072,
+        "Pancreatic Cancer": 0.0777,
+        "Bladder Cancer": 0.0236,
+        "Bone Cancer": 0.0075,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+        "Esophagogastric Cancer": 0.0147,
+        "Salivary Gland Cancer": 0.0088,
+        "Uterine Sarcoma": 0.0215,
+        "Prostate Cancer": 0.007,
+        "Renal Cell Carcinoma": 0.0028,
+        "Cancer of Unknown Primary": 0.0215,
+        "Head and Neck Cancer": 0.0054,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "X267_splice",
+          4
+        ],
+        [
+          "R521Gfs*43",
+          4
+        ],
+        [
+          "X224_splice",
+          3
+        ],
+        [
+          "S38F",
+          3
+        ],
+        [
+          "R319W",
+          3
+        ],
+        [
+          "R465*",
+          3
+        ],
+        [
+          "S606Vfs*78",
+          2
+        ],
+        [
+          "K120del",
+          2
+        ]
+      ]
+    },
+    "NF2": {
+      "samples_mutated": 185,
+      "frequency": 0.0169,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0075,
+        "Ovarian Cancer": 0.0223,
+        "Cancer of Unknown Primary": 0.0591,
+        "Thyroid Cancer": 0.026,
+        "Esophagogastric Cancer": 0.0088,
+        "Non-Small Cell Lung Cancer": 0.0144,
+        "Endometrial Cancer": 0.0183,
+        "Mesothelioma": 0.1402,
+        "Melanoma": 0.0247,
+        "Skin Cancer, Non-Melanoma": 0.0541,
+        "Glioma": 0.0108,
+        "Soft Tissue Sarcoma": 0.009,
+        "Colorectal Cancer": 0.0179,
+        "Uterine Sarcoma": 0.0215,
+        "CNS Cancer": 0.2292,
+        "Renal Cell Carcinoma": 0.0665,
+        "Bladder Cancer": 0.026,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Cervical Cancer": 0.02,
+        "Peripheral Nervous System": 0.0125,
+        "Head and Neck Cancer": 0.0054,
+        "Hepatobiliary Cancer": 0.0056,
+        "Pancreatic Cancer": 0.004,
+        "Germ Cell Tumor": 0.0035,
+        "Anal Cancer": 0.0312
+      },
+      "hotspots": [
+        [
+          "X525_splice",
+          6
+        ],
+        [
+          "R57*",
+          5
+        ],
+        [
+          "X149_splice",
+          3
+        ],
+        [
+          "R262*",
+          3
+        ],
+        [
+          "P135L",
+          3
+        ],
+        [
+          "X39_splice",
+          3
+        ],
+        [
+          "Y144*",
+          3
+        ],
+        [
+          "X80_splice",
+          2
+        ]
+      ]
+    },
+    "MTOR": {
+      "samples_mutated": 311,
+      "frequency": 0.0284,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0567,
+        "Non-Small Cell Lung Cancer": 0.0312,
+        "Esophagogastric Cancer": 0.0264,
+        "Breast Cancer": 0.018,
+        "Ovarian Cancer": 0.0223,
+        "Thyroid Cancer": 0.013,
+        "Cancer of Unknown Primary": 0.0591,
+        "Skin Cancer, Non-Melanoma": 0.0946,
+        "Gastrointestinal Stromal Tumor": 0.0219,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Endometrial Cancer": 0.0826,
+        "Melanoma": 0.0521,
+        "Salivary Gland Cancer": 0.0263,
+        "Glioma": 0.0199,
+        "Head and Neck Cancer": 0.0215,
+        "Colorectal Cancer": 0.0457,
+        "Small Cell Lung Cancer": 0.061,
+        "Germ Cell Tumor": 0.0139,
+        "Prostate Cancer": 0.0126,
+        "Renal Cell Carcinoma": 0.072,
+        "Mature B-Cell Neoplasms": 0.0299,
+        "Appendiceal Cancer": 0.0253,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Cervical Cancer": 0.02,
+        "Hepatobiliary Cancer": 0.0085,
+        "Anal Cancer": 0.0312,
+        "Small Bowel Cancer": 0.0571,
+        "Pancreatic Cancer": 0.002
+      },
+      "hotspots": [
+        [
+          "T1977K",
+          6
+        ],
+        [
+          "S2215F",
+          5
+        ],
+        [
+          "A1459D",
+          5
+        ],
+        [
+          "S2215Y",
+          4
+        ],
+        [
+          "E1799K",
+          4
+        ],
+        [
+          "T1977I",
+          3
+        ],
+        [
+          "F1888I",
+          3
+        ],
+        [
+          "V2006F",
+          3
+        ]
+      ]
+    },
+    "MSH6": {
+      "samples_mutated": 157,
+      "frequency": 0.0143,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0082,
+        "Bladder Cancer": 0.0307,
+        "Cervical Cancer": 0.02,
+        "Glioma": 0.0271,
+        "Melanoma": 0.0274,
+        "Skin Cancer, Non-Melanoma": 0.0676,
+        "Esophagogastric Cancer": 0.0088,
+        "Germ Cell Tumor": 0.0035,
+        "Head and Neck Cancer": 0.0161,
+        "Cancer of Unknown Primary": 0.0215,
+        "Non-Small Cell Lung Cancer": 0.006,
+        "Colorectal Cancer": 0.0328,
+        "Hepatobiliary Cancer": 0.0085,
+        "Uterine Sarcoma": 0.0108,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Renal Cell Carcinoma": 0.0166,
+        "Thyroid Cancer": 0.0087,
+        "Endometrial Cancer": 0.0413,
+        "Appendiceal Cancer": 0.0127,
+        "Prostate Cancer": 0.0084,
+        "Pancreatic Cancer": 0.008,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Small Bowel Cancer": 0.0571,
+        "Ovarian Cancer": 0.0045,
+        "Mesothelioma": 0.0093,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Bone Cancer": 0.0075
+      },
+      "hotspots": [
+        [
+          "F1088Lfs*5",
+          16
+        ],
+        [
+          "E807K",
+          3
+        ],
+        [
+          "R959H",
+          3
+        ],
+        [
+          "E1234*",
+          3
+        ],
+        [
+          "A1055T",
+          3
+        ],
+        [
+          "T767I",
+          2
+        ],
+        [
+          "X153_splice",
+          2
+        ],
+        [
+          "F1104Lfs*11",
+          2
+        ]
+      ]
+    },
+    "NF1": {
+      "samples_mutated": 591,
+      "frequency": 0.054,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0591,
+        "Esophagogastric Cancer": 0.0381,
+        "Endometrial Cancer": 0.0642,
+        "Bladder Cancer": 0.0733,
+        "Ovarian Cancer": 0.0402,
+        "Non-Small Cell Lung Cancer": 0.0695,
+        "Head and Neck Cancer": 0.0161,
+        "Cancer of Unknown Primary": 0.0538,
+        "Hepatobiliary Cancer": 0.0366,
+        "Skin Cancer, Non-Melanoma": 0.1284,
+        "Prostate Cancer": 0.0209,
+        "Melanoma": 0.2,
+        "Glioma": 0.132,
+        "Colorectal Cancer": 0.0467,
+        "Small Bowel Cancer": 0.1143,
+        "Salivary Gland Cancer": 0.0351,
+        "Thyroid Cancer": 0.0346,
+        "Germ Cell Tumor": 0.0035,
+        "Gastrointestinal Stromal Tumor": 0.073,
+        "Cervical Cancer": 0.04,
+        "Adrenocortical Carcinoma": 0.16,
+        "Uterine Sarcoma": 0.0215,
+        "Soft Tissue Sarcoma": 0.0271,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+        "Renal Cell Carcinoma": 0.0139,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Anal Cancer": 0.0625,
+        "Appendiceal Cancer": 0.0253,
+        "Pancreatic Cancer": 0.01,
+        "Small Cell Lung Cancer": 0.0366,
+        "Peripheral Nervous System": 0.0125,
+        "Mesothelioma": 0.0093,
+        "Bone Cancer": 0.0075
+      },
+      "hotspots": [
+        [
+          "R440*",
+          10
+        ],
+        [
+          "I679Dfs*21",
+          8
+        ],
+        [
+          "Y2285Tfs*5",
+          7
+        ],
+        [
+          "R2450*",
+          6
+        ],
+        [
+          "R1241*",
+          5
+        ],
+        [
+          "X1477_splice",
+          4
+        ],
+        [
+          "X1066_splice",
+          4
+        ],
+        [
+          "R416*",
+          4
+        ]
+      ]
+    },
+    "MLH1": {
+      "samples_mutated": 113,
+      "frequency": 0.0103,
+      "by_cancer_type": {
+        "Cervical Cancer": 0.02,
+        "Endometrial Cancer": 0.0459,
+        "Renal Cell Carcinoma": 0.0139,
+        "Thyroid Cancer": 0.0043,
+        "Glioma": 0.0217,
+        "Prostate Cancer": 0.0098,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Colorectal Cancer": 0.0179,
+        "Melanoma": 0.0219,
+        "Head and Neck Cancer": 0.0161,
+        "Non-Small Cell Lung Cancer": 0.0048,
+        "Ovarian Cancer": 0.0089,
+        "Bladder Cancer": 0.0165,
+        "Small Cell Lung Cancer": 0.0244,
+        "Germ Cell Tumor": 0.0035,
+        "Breast Cancer": 0.0045,
+        "Peripheral Nervous System": 0.0125,
+        "Esophagogastric Cancer": 0.0117,
+        "Hepatobiliary Cancer": 0.0028,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Cancer of Unknown Primary": 0.0215,
+        "Pancreatic Cancer": 0.006,
+        "Bone Cancer": 0.0075
+      },
+      "hotspots": [
+        [
+          "X264_splice",
+          4
+        ],
+        [
+          "R100*",
+          3
+        ],
+        [
+          "X182_splice",
+          3
+        ],
+        [
+          "R497Gfs*11",
+          2
+        ],
+        [
+          "S368L",
+          2
+        ],
+        [
+          "E717K",
+          2
+        ],
+        [
+          "T82A",
+          2
+        ],
+        [
+          "E433Q",
+          2
+        ]
+      ]
+    },
+    "MSH2": {
+      "samples_mutated": 142,
+      "frequency": 0.013,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0037,
+        "Pancreatic Cancer": 0.004,
+        "Ovarian Cancer": 0.0134,
+        "Uterine Sarcoma": 0.0215,
+        "Glioma": 0.0235,
+        "Endometrial Cancer": 0.0367,
+        "Non-Small Cell Lung Cancer": 0.0138,
+        "Melanoma": 0.0247,
+        "Prostate Cancer": 0.007,
+        "Colorectal Cancer": 0.0248,
+        "Cancer of Unknown Primary": 0.0215,
+        "Bladder Cancer": 0.0402,
+        "Adrenocortical Carcinoma": 0.04,
+        "Skin Cancer, Non-Melanoma": 0.0473,
+        "Esophagogastric Cancer": 0.0117,
+        "Head and Neck Cancer": 0.0215,
+        "Thyroid Cancer": 0.0043,
+        "Hepatobiliary Cancer": 0.0056,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Cervical Cancer": 0.02,
+        "Small Cell Lung Cancer": 0.0244,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "R680*",
+          3
+        ],
+        [
+          "E580*",
+          3
+        ],
+        [
+          "L94V",
+          2
+        ],
+        [
+          "P622S",
+          2
+        ],
+        [
+          "X71_splice",
+          2
+        ],
+        [
+          "P196L",
+          2
+        ],
+        [
+          "Q252*",
+          2
+        ],
+        [
+          "Q493P",
+          2
+        ]
+      ]
+    },
+    "NFE2L2": {
+      "samples_mutated": 150,
+      "frequency": 0.0137,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0075,
+        "Head and Neck Cancer": 0.0753,
+        "Non-Small Cell Lung Cancer": 0.0258,
+        "Skin Cancer, Non-Melanoma": 0.0405,
+        "Glioma": 0.009,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Bladder Cancer": 0.0378,
+        "Colorectal Cancer": 0.0089,
+        "Hepatobiliary Cancer": 0.0169,
+        "Ovarian Cancer": 0.0089,
+        "Cancer of Unknown Primary": 0.0108,
+        "Endometrial Cancer": 0.0459,
+        "Thyroid Cancer": 0.0087,
+        "Melanoma": 0.0164,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Esophagogastric Cancer": 0.0059,
+        "Renal Cell Carcinoma": 0.0139,
+        "Prostate Cancer": 0.0014,
+        "Pancreatic Cancer": 0.01,
+        "Anal Cancer": 0.0625,
+        "Small Cell Lung Cancer": 0.0244
+      },
+      "hotspots": [
+        [
+          "R34Q",
+          7
+        ],
+        [
+          "E79Q",
+          6
+        ],
+        [
+          "G31E",
+          5
+        ],
+        [
+          "R34G",
+          5
+        ],
+        [
+          "E82D",
+          5
+        ],
+        [
+          "D29H",
+          5
+        ],
+        [
+          "E79K",
+          4
+        ],
+        [
+          "G31A",
+          4
+        ]
+      ]
+    },
+    "NKX2-1": {
+      "samples_mutated": 80,
+      "frequency": 0.0073,
+      "by_cancer_type": {
+        "Germ Cell Tumor": 0.0035,
+        "Hepatobiliary Cancer": 0.0056,
+        "Breast Cancer": 0.0045,
+        "Prostate Cancer": 0.0028,
+        "Colorectal Cancer": 0.0129,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Melanoma": 0.0219,
+        "Glioma": 0.0054,
+        "Non-Small Cell Lung Cancer": 0.0156,
+        "Head and Neck Cancer": 0.0054,
+        "Esophagogastric Cancer": 0.0088,
+        "Bladder Cancer": 0.0024,
+        "Skin Cancer, Non-Melanoma": 0.0068,
+        "Pancreatic Cancer": 0.008,
+        "Cancer of Unknown Primary": 0.0108,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Anal Cancer": 0.0312,
+        "Small Bowel Cancer": 0.0571
+      },
+      "hotspots": [
+        [
+          "A102V",
+          3
+        ],
+        [
+          "G266S",
+          2
+        ],
+        [
+          "G104E",
+          2
+        ],
+        [
+          "R287C",
+          2
+        ],
+        [
+          "X155_splice",
+          2
+        ],
+        [
+          "G115Afs*10",
+          2
+        ],
+        [
+          "R208*",
+          2
+        ],
+        [
+          "T38R",
+          1
+        ]
+      ]
+    },
+    "MYCN": {
+      "samples_mutated": 92,
+      "frequency": 0.0084,
+      "by_cancer_type": {
+        "Skin Cancer, Non-Melanoma": 0.0473,
+        "Salivary Gland Cancer": 0.0088,
+        "Melanoma": 0.0301,
+        "Non-Small Cell Lung Cancer": 0.009,
+        "Colorectal Cancer": 0.0129,
+        "Glioma": 0.0072,
+        "Bladder Cancer": 0.0142,
+        "Pancreatic Cancer": 0.004,
+        "Small Bowel Cancer": 0.0571,
+        "Head and Neck Cancer": 0.0215,
+        "Renal Cell Carcinoma": 0.0028,
+        "Breast Cancer": 0.0037,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Mesothelioma": 0.028,
+        "Endometrial Cancer": 0.0229,
+        "Esophagogastric Cancer": 0.0029,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Small Cell Lung Cancer": 0.0244,
+        "Cancer of Unknown Primary": 0.0108,
+        "Bone Cancer": 0.0075,
+        "Peripheral Nervous System": 0.0375,
+        "Germ Cell Tumor": 0.0035
+      },
+      "hotspots": [
+        [
+          "P44L",
+          10
+        ],
+        [
+          "P45Rfs*86",
+          3
+        ],
+        [
+          "D396N",
+          2
+        ],
+        [
+          "R373Q",
+          2
+        ],
+        [
+          "P365Q",
+          2
+        ],
+        [
+          "T403M",
+          2
+        ],
+        [
+          "K446E",
+          1
+        ],
+        [
+          "L440F",
+          1
+        ]
+      ]
+    },
+    "MYC": {
+      "samples_mutated": 81,
+      "frequency": 0.0074,
+      "by_cancer_type": {
+        "Glioma": 0.0054,
+        "Prostate Cancer": 0.0056,
+        "Non-Small Cell Lung Cancer": 0.009,
+        "Colorectal Cancer": 0.0109,
+        "Breast Cancer": 0.0037,
+        "Endometrial Cancer": 0.0183,
+        "Salivary Gland Cancer": 0.0263,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Bladder Cancer": 0.0142,
+        "Ovarian Cancer": 0.0134,
+        "Mature B-Cell Neoplasms": 0.0821,
+        "Cancer of Unknown Primary": 0.0108,
+        "Renal Cell Carcinoma": 0.0028,
+        "Head and Neck Cancer": 0.0108,
+        "Small Bowel Cancer": 0.0286,
+        "Melanoma": 0.0055,
+        "Pancreatic Cancer": 0.002,
+        "Hepatobiliary Cancer": 0.0028,
+        "Esophagogastric Cancer": 0.0029,
+        "Soft Tissue Sarcoma": 0.0023
+      },
+      "hotspots": [
+        [
+          "S161L",
+          5
+        ],
+        [
+          "S452F",
+          3
+        ],
+        [
+          "P74Q",
+          2
+        ],
+        [
+          "V7M",
+          2
+        ],
+        [
+          "V34L",
+          2
+        ],
+        [
+          "P260S",
+          1
+        ],
+        [
+          "N375T",
+          1
+        ],
+        [
+          "E137D",
+          1
+        ]
+      ]
+    },
+    "PIK3CA": {
+      "samples_mutated": 1355,
+      "frequency": 0.1238,
+      "by_cancer_type": {
+        "Breast Cancer": 0.3523,
+        "Endometrial Cancer": 0.4128,
+        "Bladder Cancer": 0.2317,
+        "Colorectal Cancer": 0.1917,
+        "Non-Small Cell Lung Cancer": 0.0713,
+        "Anal Cancer": 0.2812,
+        "Ovarian Cancer": 0.1027,
+        "Skin Cancer, Non-Melanoma": 0.1419,
+        "Head and Neck Cancer": 0.1989,
+        "Esophagogastric Cancer": 0.0704,
+        "Cervical Cancer": 0.3,
+        "Salivary Gland Cancer": 0.0965,
+        "Uterine Sarcoma": 0.0323,
+        "Glioma": 0.123,
+        "Cancer of Unknown Primary": 0.0914,
+        "Hepatobiliary Cancer": 0.0423,
+        "Germ Cell Tumor": 0.0208,
+        "Prostate Cancer": 0.0335,
+        "Soft Tissue Sarcoma": 0.0384,
+        "Thyroid Cancer": 0.0606,
+        "Bone Cancer": 0.0224,
+        "Renal Cell Carcinoma": 0.0388,
+        "Small Cell Lung Cancer": 0.0488,
+        "Melanoma": 0.0438,
+        "Mesothelioma": 0.0187,
+        "Appendiceal Cancer": 0.0886,
+        "Pancreatic Cancer": 0.0339,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Small Bowel Cancer": 0.0857,
+        "Mature B-Cell Neoplasms": 0.0075
+      },
+      "hotspots": [
+        [
+          "E545K",
+          304
+        ],
+        [
+          "H1047R",
+          300
+        ],
+        [
+          "E542K",
+          216
+        ],
+        [
+          "H1047L",
+          41
+        ],
+        [
+          "N345K",
+          41
+        ],
+        [
+          "R88Q",
+          31
+        ],
+        [
+          "C420R",
+          30
+        ],
+        [
+          "E726K",
+          28
+        ]
+      ]
+    },
+    "POLE": {
+      "samples_mutated": 276,
+      "frequency": 0.0252,
+      "by_cancer_type": {
+        "Hepatobiliary Cancer": 0.0169,
+        "Bladder Cancer": 0.0733,
+        "Breast Cancer": 0.0165,
+        "Endometrial Cancer": 0.0642,
+        "Thyroid Cancer": 0.013,
+        "Soft Tissue Sarcoma": 0.0113,
+        "Skin Cancer, Non-Melanoma": 0.0608,
+        "Glioma": 0.0181,
+        "Non-Small Cell Lung Cancer": 0.0312,
+        "Cervical Cancer": 0.04,
+        "Colorectal Cancer": 0.0477,
+        "Renal Cell Carcinoma": 0.0083,
+        "Germ Cell Tumor": 0.0104,
+        "Prostate Cancer": 0.0112,
+        "Ovarian Cancer": 0.0045,
+        "Melanoma": 0.0658,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Uterine Sarcoma": 0.0215,
+        "Pancreatic Cancer": 0.006,
+        "Cancer of Unknown Primary": 0.0215,
+        "Small Bowel Cancer": 0.0857,
+        "Esophagogastric Cancer": 0.0235,
+        "Salivary Gland Cancer": 0.0088,
+        "Small Cell Lung Cancer": 0.0488,
+        "Head and Neck Cancer": 0.0323,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Bone Cancer": 0.0075
+      },
+      "hotspots": [
+        [
+          "E18K",
+          8
+        ],
+        [
+          "V411L",
+          8
+        ],
+        [
+          "P286R",
+          7
+        ],
+        [
+          "L698Cfs*94",
+          3
+        ],
+        [
+          "E575K",
+          2
+        ],
+        [
+          "R821C",
+          2
+        ],
+        [
+          "E1698K",
+          2
+        ],
+        [
+          "A581T",
+          2
+        ]
+      ]
+    },
+    "NOTCH2": {
+      "samples_mutated": 257,
+      "frequency": 0.0235,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0402,
+        "Breast Cancer": 0.0209,
+        "Skin Cancer, Non-Melanoma": 0.2095,
+        "Endometrial Cancer": 0.0275,
+        "Non-Small Cell Lung Cancer": 0.0204,
+        "Melanoma": 0.0658,
+        "Colorectal Cancer": 0.0248,
+        "CNS Cancer": 0.0208,
+        "Ovarian Cancer": 0.0134,
+        "Mesothelioma": 0.0093,
+        "Cancer of Unknown Primary": 0.043,
+        "Germ Cell Tumor": 0.0069,
+        "Head and Neck Cancer": 0.0538,
+        "Glioma": 0.0271,
+        "Pancreatic Cancer": 0.0139,
+        "Hepatobiliary Cancer": 0.0056,
+        "Soft Tissue Sarcoma": 0.0203,
+        "Uterine Sarcoma": 0.0108,
+        "Mature B-Cell Neoplasms": 0.0672,
+        "Esophagogastric Cancer": 0.0088,
+        "Renal Cell Carcinoma": 0.0166,
+        "Prostate Cancer": 0.007,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Anal Cancer": 0.0625,
+        "Bone Cancer": 0.0075,
+        "Small Cell Lung Cancer": 0.0366,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "A3F",
+          7
+        ],
+        [
+          "P6Rfs*27",
+          3
+        ],
+        [
+          "X994_splice",
+          2
+        ],
+        [
+          "S1609F",
+          2
+        ],
+        [
+          "R1630C",
+          2
+        ],
+        [
+          "H2374Y",
+          2
+        ],
+        [
+          "Q2308E",
+          2
+        ],
+        [
+          "G397W",
+          2
+        ]
+      ]
+    },
+    "NRAS": {
+      "samples_mutated": 251,
+      "frequency": 0.0229,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.0275,
+        "Ovarian Cancer": 0.0223,
+        "Hepatobiliary Cancer": 0.0197,
+        "Thyroid Cancer": 0.1602,
+        "Colorectal Cancer": 0.0437,
+        "Cancer of Unknown Primary": 0.0376,
+        "Head and Neck Cancer": 0.0161,
+        "Germ Cell Tumor": 0.0347,
+        "Melanoma": 0.2137,
+        "Pancreatic Cancer": 0.008,
+        "Glioma": 0.0072,
+        "Skin Cancer, Non-Melanoma": 0.0135,
+        "Non-Small Cell Lung Cancer": 0.012,
+        "Bladder Cancer": 0.0189,
+        "Soft Tissue Sarcoma": 0.0158,
+        "Esophagogastric Cancer": 0.0059,
+        "Breast Cancer": 0.0022,
+        "Salivary Gland Cancer": 0.0088,
+        "Small Cell Lung Cancer": 0.0122
+      },
+      "hotspots": [
+        [
+          "Q61R",
+          80
+        ],
+        [
+          "Q61K",
+          57
+        ],
+        [
+          "G12D",
+          21
+        ],
+        [
+          "Q61L",
+          18
+        ],
+        [
+          "Q61H",
+          11
+        ],
+        [
+          "G13R",
+          6
+        ],
+        [
+          "G13D",
+          5
+        ],
+        [
+          "G12S",
+          4
+        ]
+      ]
+    },
+    "NOTCH1": {
+      "samples_mutated": 449,
+      "frequency": 0.041,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.03,
+        "Bladder Cancer": 0.0615,
+        "Endometrial Cancer": 0.0642,
+        "Skin Cancer, Non-Melanoma": 0.3108,
+        "Head and Neck Cancer": 0.1613,
+        "Salivary Gland Cancer": 0.1491,
+        "Prostate Cancer": 0.0181,
+        "Esophagogastric Cancer": 0.0645,
+        "Breast Cancer": 0.0239,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Glioma": 0.0669,
+        "Melanoma": 0.063,
+        "Colorectal Cancer": 0.0596,
+        "Renal Cell Carcinoma": 0.0277,
+        "Thyroid Cancer": 0.013,
+        "Hepatobiliary Cancer": 0.0141,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Cancer of Unknown Primary": 0.0806,
+        "Uterine Sarcoma": 0.0108,
+        "Adrenocortical Carcinoma": 0.04,
+        "Small Cell Lung Cancer": 0.1585,
+        "Ovarian Cancer": 0.0179,
+        "Pancreatic Cancer": 0.01,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "CNS Cancer": 0.0208,
+        "Mesothelioma": 0.0093,
+        "Small Bowel Cancer": 0.0857,
+        "Bone Cancer": 0.0075,
+        "Mature T and NK Neoplasms": 0.069,
+        "Anal Cancer": 0.0312,
+        "Appendiceal Cancer": 0.0127
+      },
+      "hotspots": [
+        [
+          "F357del",
+          7
+        ],
+        [
+          "E424K",
+          5
+        ],
+        [
+          "Y550*",
+          4
+        ],
+        [
+          "R365C",
+          4
+        ],
+        [
+          "T1997M",
+          3
+        ],
+        [
+          "X481_splice",
+          3
+        ],
+        [
+          "F436del",
+          3
+        ],
+        [
+          "I471T",
+          3
+        ]
+      ]
+    },
+    "NPM1": {
+      "samples_mutated": 34,
+      "frequency": 0.0031,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0047,
+        "Endometrial Cancer": 0.0092,
+        "Prostate Cancer": 0.0028,
+        "Colorectal Cancer": 0.003,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Melanoma": 0.011,
+        "Non-Small Cell Lung Cancer": 0.0036,
+        "Ovarian Cancer": 0.0089,
+        "Glioma": 0.0036,
+        "Thyroid Cancer": 0.0043,
+        "Uterine Sarcoma": 0.0108,
+        "Breast Cancer": 0.0015,
+        "Small Cell Lung Cancer": 0.0122,
+        "Skin Cancer, Non-Melanoma": 0.0068,
+        "Renal Cell Carcinoma": 0.0028,
+        "Bone Cancer": 0.0149,
+        "Esophagogastric Cancer": 0.0029
+      },
+      "hotspots": [
+        [
+          "E131del",
+          2
+        ],
+        [
+          "P14L",
+          2
+        ],
+        [
+          "S195F",
+          2
+        ],
+        [
+          "D168_E169del",
+          2
+        ],
+        [
+          "E184D",
+          1
+        ],
+        [
+          "D246N",
+          1
+        ],
+        [
+          "S48T",
+          1
+        ],
+        [
+          "R277W",
+          1
+        ]
+      ]
+    },
+    "PBRM1": {
+      "samples_mutated": 376,
+      "frequency": 0.0344,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.078,
+        "Esophagogastric Cancer": 0.0469,
+        "Non-Small Cell Lung Cancer": 0.0264,
+        "Renal Cell Carcinoma": 0.2632,
+        "Breast Cancer": 0.0105,
+        "Hepatobiliary Cancer": 0.0789,
+        "Mesothelioma": 0.0374,
+        "Skin Cancer, Non-Melanoma": 0.0676,
+        "Melanoma": 0.0658,
+        "Colorectal Cancer": 0.0357,
+        "Salivary Gland Cancer": 0.0088,
+        "Uterine Sarcoma": 0.0215,
+        "Adrenocortical Carcinoma": 0.04,
+        "Thyroid Cancer": 0.013,
+        "Cancer of Unknown Primary": 0.0484,
+        "Glioma": 0.0325,
+        "Soft Tissue Sarcoma": 0.0113,
+        "Ovarian Cancer": 0.0134,
+        "Prostate Cancer": 0.0084,
+        "Pancreatic Cancer": 0.0159,
+        "Endometrial Cancer": 0.0229,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Germ Cell Tumor": 0.0035,
+        "Head and Neck Cancer": 0.0215,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Small Cell Lung Cancer": 0.0122,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "I279Yfs*4",
+          9
+        ],
+        [
+          "R710*",
+          6
+        ],
+        [
+          "E1189Rfs*6",
+          5
+        ],
+        [
+          "N258Kfs*6",
+          4
+        ],
+        [
+          "X79_splice",
+          4
+        ],
+        [
+          "I279Nfs*8",
+          4
+        ],
+        [
+          "R1160*",
+          4
+        ],
+        [
+          "X856_splice",
+          4
+        ]
+      ]
+    },
+    "PALB2": {
+      "samples_mutated": 147,
+      "frequency": 0.0134,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0355,
+        "Germ Cell Tumor": 0.0069,
+        "Breast Cancer": 0.0127,
+        "Esophagogastric Cancer": 0.0117,
+        "Skin Cancer, Non-Melanoma": 0.0608,
+        "Prostate Cancer": 0.0098,
+        "Non-Small Cell Lung Cancer": 0.0162,
+        "Endometrial Cancer": 0.0275,
+        "Colorectal Cancer": 0.0209,
+        "Glioma": 0.0181,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Ovarian Cancer": 0.0045,
+        "Melanoma": 0.0219,
+        "Cancer of Unknown Primary": 0.0161,
+        "Bone Cancer": 0.0075,
+        "Hepatobiliary Cancer": 0.0085,
+        "Renal Cell Carcinoma": 0.0055,
+        "Head and Neck Cancer": 0.0161,
+        "Pancreatic Cancer": 0.002,
+        "Small Cell Lung Cancer": 0.0122,
+        "Small Bowel Cancer": 0.0286,
+        "Mature B-Cell Neoplasms": 0.0075
+      },
+      "hotspots": [
+        [
+          "M296*",
+          4
+        ],
+        [
+          "N280Tfs*8",
+          4
+        ],
+        [
+          "P918A",
+          2
+        ],
+        [
+          "E1011K",
+          2
+        ],
+        [
+          "G998E",
+          2
+        ],
+        [
+          "D848H",
+          2
+        ],
+        [
+          "S1155C",
+          2
+        ],
+        [
+          "E12*",
+          2
+        ]
+      ]
+    },
+    "PMS2": {
+      "samples_mutated": 72,
+      "frequency": 0.0066,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.009,
+        "Esophagogastric Cancer": 0.0147,
+        "Endometrial Cancer": 0.0183,
+        "Melanoma": 0.0219,
+        "Colorectal Cancer": 0.0099,
+        "Skin Cancer, Non-Melanoma": 0.0203,
+        "Ovarian Cancer": 0.0045,
+        "Breast Cancer": 0.0022,
+        "Uterine Sarcoma": 0.0108,
+        "Head and Neck Cancer": 0.0161,
+        "Bladder Cancer": 0.0189,
+        "Glioma": 0.0018,
+        "Small Cell Lung Cancer": 0.0122,
+        "Prostate Cancer": 0.0042,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Small Bowel Cancer": 0.0286,
+        "Germ Cell Tumor": 0.0035,
+        "Thyroid Cancer": 0.0043,
+        "Mesothelioma": 0.0093
+      },
+      "hotspots": [
+        [
+          "E5K",
+          3
+        ],
+        [
+          "E109Kfs*3",
+          3
+        ],
+        [
+          "R20Q",
+          2
+        ],
+        [
+          "X236_splice",
+          2
+        ],
+        [
+          "Y268Tfs*39",
+          2
+        ],
+        [
+          "R315Q",
+          2
+        ],
+        [
+          "S587N",
+          1
+        ],
+        [
+          "R563Q",
+          1
+        ]
+      ]
+    },
+    "PDGFRA": {
+      "samples_mutated": 235,
+      "frequency": 0.0215,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.0402,
+        "Melanoma": 0.0548,
+        "Glioma": 0.0452,
+        "Colorectal Cancer": 0.0328,
+        "Thyroid Cancer": 0.0043,
+        "Breast Cancer": 0.0142,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Skin Cancer, Non-Melanoma": 0.0473,
+        "Appendiceal Cancer": 0.0127,
+        "Prostate Cancer": 0.0056,
+        "Gastrointestinal Stromal Tumor": 0.1095,
+        "Endometrial Cancer": 0.0275,
+        "Esophagogastric Cancer": 0.0147,
+        "Small Cell Lung Cancer": 0.0244,
+        "Adrenocortical Carcinoma": 0.04,
+        "Ovarian Cancer": 0.0089,
+        "Peripheral Nervous System": 0.05,
+        "Germ Cell Tumor": 0.0035,
+        "Cancer of Unknown Primary": 0.0269,
+        "Bladder Cancer": 0.0165,
+        "Renal Cell Carcinoma": 0.0111,
+        "Head and Neck Cancer": 0.0054,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Hepatobiliary Cancer": 0.0028
+      },
+      "hotspots": [
+        [
+          "D842V",
+          10
+        ],
+        [
+          "R340W",
+          3
+        ],
+        [
+          "V859M",
+          3
+        ],
+        [
+          "D135N",
+          3
+        ],
+        [
+          "N659K",
+          2
+        ],
+        [
+          "R804Q",
+          2
+        ],
+        [
+          "T440M",
+          2
+        ],
+        [
+          "X855_splice",
+          2
+        ]
+      ]
+    },
+    "RNF43": {
+      "samples_mutated": 249,
+      "frequency": 0.0228,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0067,
+        "Bladder Cancer": 0.0355,
+        "Non-Small Cell Lung Cancer": 0.0126,
+        "Colorectal Cancer": 0.0824,
+        "Glioma": 0.0145,
+        "Prostate Cancer": 0.0153,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Ovarian Cancer": 0.0089,
+        "Adrenocortical Carcinoma": 0.04,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Head and Neck Cancer": 0.0108,
+        "Melanoma": 0.0329,
+        "Endometrial Cancer": 0.0505,
+        "Uterine Sarcoma": 0.0108,
+        "Appendiceal Cancer": 0.038,
+        "Renal Cell Carcinoma": 0.0055,
+        "Pancreatic Cancer": 0.0677,
+        "Cancer of Unknown Primary": 0.0108,
+        "Esophagogastric Cancer": 0.0293,
+        "Germ Cell Tumor": 0.0035,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+        "Hepatobiliary Cancer": 0.0141,
+        "Small Bowel Cancer": 0.0286,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Small Cell Lung Cancer": 0.0122
+      },
+      "hotspots": [
+        [
+          "G659Vfs*41",
+          49
+        ],
+        [
+          "P660Sfs*87",
+          7
+        ],
+        [
+          "R371*",
+          6
+        ],
+        [
+          "R132*",
+          5
+        ],
+        [
+          "W200Sfs*60",
+          4
+        ],
+        [
+          "R219C",
+          3
+        ],
+        [
+          "R145*",
+          3
+        ],
+        [
+          "P154L",
+          3
+        ]
+      ]
+    },
+    "PTEN": {
+      "samples_mutated": 665,
+      "frequency": 0.0608,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.3165,
+        "Non-Small Cell Lung Cancer": 0.0342,
+        "Bladder Cancer": 0.0213,
+        "Breast Cancer": 0.0703,
+        "Esophagogastric Cancer": 0.0323,
+        "Uterine Sarcoma": 0.043,
+        "Thyroid Cancer": 0.0823,
+        "Head and Neck Cancer": 0.0645,
+        "Skin Cancer, Non-Melanoma": 0.0405,
+        "Prostate Cancer": 0.0628,
+        "Glioma": 0.2387,
+        "Cancer of Unknown Primary": 0.0323,
+        "Anal Cancer": 0.125,
+        "Germ Cell Tumor": 0.0382,
+        "Melanoma": 0.0986,
+        "Renal Cell Carcinoma": 0.0637,
+        "Colorectal Cancer": 0.0626,
+        "Salivary Gland Cancer": 0.0175,
+        "Soft Tissue Sarcoma": 0.0248,
+        "Hepatobiliary Cancer": 0.0169,
+        "Pancreatic Cancer": 0.0239,
+        "Ovarian Cancer": 0.058,
+        "Small Cell Lung Cancer": 0.061,
+        "Gastrointestinal Stromal Tumor": 0.0365,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Mature B-Cell Neoplasms": 0.0299,
+        "Cervical Cancer": 0.04,
+        "Mesothelioma": 0.0093
+      },
+      "hotspots": [
+        [
+          "T319*",
+          35
+        ],
+        [
+          "R130Q",
+          33
+        ],
+        [
+          "K267Rfs*9",
+          23
+        ],
+        [
+          "R130*",
+          19
+        ],
+        [
+          "R233*",
+          16
+        ],
+        [
+          "R130G",
+          15
+        ],
+        [
+          "X70_splice",
+          15
+        ],
+        [
+          "X268_splice",
+          13
+        ]
+      ]
+    },
+    "ROS1": {
+      "samples_mutated": 334,
+      "frequency": 0.0305,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.0312,
+        "Breast Cancer": 0.0172,
+        "Skin Cancer, Non-Melanoma": 0.1959,
+        "Soft Tissue Sarcoma": 0.0181,
+        "Bladder Cancer": 0.0449,
+        "Germ Cell Tumor": 0.0139,
+        "Prostate Cancer": 0.0098,
+        "Melanoma": 0.1479,
+        "Colorectal Cancer": 0.0397,
+        "Glioma": 0.0325,
+        "Small Bowel Cancer": 0.0571,
+        "Esophagogastric Cancer": 0.0147,
+        "Ovarian Cancer": 0.0179,
+        "Head and Neck Cancer": 0.0538,
+        "Uterine Sarcoma": 0.0538,
+        "Small Cell Lung Cancer": 0.0854,
+        "Bone Cancer": 0.0224,
+        "Gastrointestinal Stromal Tumor": 0.0365,
+        "Endometrial Cancer": 0.0367,
+        "Renal Cell Carcinoma": 0.0139,
+        "Cervical Cancer": 0.02,
+        "Cancer of Unknown Primary": 0.0269,
+        "Mature T and NK Neoplasms": 0.069,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Peripheral Nervous System": 0.025,
+        "Pancreatic Cancer": 0.01,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Hepatobiliary Cancer": 0.0085,
+        "Adrenocortical Carcinoma": 0.04,
+        "Appendiceal Cancer": 0.0127
+      },
+      "hotspots": [
+        [
+          "G1628E",
+          5
+        ],
+        [
+          "Q2160*",
+          3
+        ],
+        [
+          "R2184I",
+          3
+        ],
+        [
+          "E1902K",
+          3
+        ],
+        [
+          "E1548K",
+          3
+        ],
+        [
+          "S819F",
+          3
+        ],
+        [
+          "R2269*",
+          2
+        ],
+        [
+          "D725N",
+          2
+        ]
+      ]
+    },
+    "RB1": {
+      "samples_mutated": 512,
+      "frequency": 0.0468,
+      "by_cancer_type": {
+        "Ovarian Cancer": 0.0312,
+        "Endometrial Cancer": 0.0505,
+        "Bladder Cancer": 0.1253,
+        "Breast Cancer": 0.0322,
+        "Small Cell Lung Cancer": 0.6341,
+        "Gastrointestinal Stromal Tumor": 0.0584,
+        "Non-Small Cell Lung Cancer": 0.057,
+        "Cancer of Unknown Primary": 0.0806,
+        "Head and Neck Cancer": 0.043,
+        "Uterine Sarcoma": 0.1183,
+        "Glioma": 0.085,
+        "Thyroid Cancer": 0.0303,
+        "Hepatobiliary Cancer": 0.0169,
+        "Skin Cancer, Non-Melanoma": 0.1351,
+        "Salivary Gland Cancer": 0.0263,
+        "Prostate Cancer": 0.0321,
+        "Small Bowel Cancer": 0.0857,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0652,
+        "Colorectal Cancer": 0.0199,
+        "Adrenocortical Carcinoma": 0.08,
+        "Melanoma": 0.0466,
+        "Soft Tissue Sarcoma": 0.0406,
+        "Bone Cancer": 0.0224,
+        "Renal Cell Carcinoma": 0.0083,
+        "Appendiceal Cancer": 0.0253,
+        "Esophagogastric Cancer": 0.0147,
+        "Pancreatic Cancer": 0.0279,
+        "CNS Cancer": 0.0208,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Cervical Cancer": 0.04
+      },
+      "hotspots": [
+        [
+          "X474_splice",
+          8
+        ],
+        [
+          "R251*",
+          8
+        ],
+        [
+          "R467*",
+          7
+        ],
+        [
+          "X654_splice",
+          7
+        ],
+        [
+          "X203_splice",
+          7
+        ],
+        [
+          "X500_splice",
+          7
+        ],
+        [
+          "X830_splice",
+          7
+        ],
+        [
+          "Q471*",
+          6
+        ]
+      ]
+    },
+    "SF3B1": {
+      "samples_mutated": 223,
+      "frequency": 0.0204,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0172,
+        "Esophagogastric Cancer": 0.0147,
+        "Hepatobiliary Cancer": 0.0225,
+        "Salivary Gland Cancer": 0.0263,
+        "Skin Cancer, Non-Melanoma": 0.0541,
+        "Prostate Cancer": 0.0042,
+        "Non-Small Cell Lung Cancer": 0.0198,
+        "Bladder Cancer": 0.0426,
+        "Small Bowel Cancer": 0.0571,
+        "Colorectal Cancer": 0.0248,
+        "Melanoma": 0.1233,
+        "Endometrial Cancer": 0.0229,
+        "Head and Neck Cancer": 0.0161,
+        "Mesothelioma": 0.028,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Thyroid Cancer": 0.0043,
+        "Glioma": 0.0145,
+        "Peripheral Nervous System": 0.0375,
+        "Bone Cancer": 0.0149,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Uterine Sarcoma": 0.0108,
+        "Renal Cell Carcinoma": 0.0166,
+        "Cervical Cancer": 0.06,
+        "Pancreatic Cancer": 0.012,
+        "Cancer of Unknown Primary": 0.0108,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Small Cell Lung Cancer": 0.0122
+      },
+      "hotspots": [
+        [
+          "K700E",
+          21
+        ],
+        [
+          "R625H",
+          20
+        ],
+        [
+          "R625C",
+          16
+        ],
+        [
+          "E902K",
+          5
+        ],
+        [
+          "E860K",
+          4
+        ],
+        [
+          "K741N",
+          3
+        ],
+        [
+          "E902Q",
+          3
+        ],
+        [
+          "E873K",
+          3
+        ]
+      ]
+    },
+    "RET": {
+      "samples_mutated": 201,
+      "frequency": 0.0184,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.0276,
+        "Small Cell Lung Cancer": 0.0122,
+        "Endometrial Cancer": 0.0459,
+        "Ovarian Cancer": 0.0134,
+        "Breast Cancer": 0.0075,
+        "Prostate Cancer": 0.0084,
+        "Thyroid Cancer": 0.0563,
+        "Colorectal Cancer": 0.0248,
+        "Skin Cancer, Non-Melanoma": 0.1081,
+        "Esophagogastric Cancer": 0.0323,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Melanoma": 0.0438,
+        "Head and Neck Cancer": 0.0161,
+        "Bladder Cancer": 0.0165,
+        "Adrenocortical Carcinoma": 0.04,
+        "Glioma": 0.0108,
+        "Cervical Cancer": 0.02,
+        "Cancer of Unknown Primary": 0.043,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Renal Cell Carcinoma": 0.0111,
+        "Germ Cell Tumor": 0.0035,
+        "Hepatobiliary Cancer": 0.0028,
+        "Pancreatic Cancer": 0.006,
+        "Mature T and NK Neoplasms": 0.0345,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Mesothelioma": 0.0093
+      },
+      "hotspots": [
+        [
+          "M918T",
+          7
+        ],
+        [
+          "R67C",
+          3
+        ],
+        [
+          "R114H",
+          2
+        ],
+        [
+          "R57W",
+          2
+        ],
+        [
+          "V303M",
+          2
+        ],
+        [
+          "C634R",
+          2
+        ],
+        [
+          "E61K",
+          2
+        ],
+        [
+          "E632_L633del",
+          2
+        ]
+      ]
+    },
+    "RUNX1": {
+      "samples_mutated": 165,
+      "frequency": 0.0151,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0426,
+        "Breast Cancer": 0.0344,
+        "Prostate Cancer": 0.0056,
+        "Salivary Gland Cancer": 0.0526,
+        "Germ Cell Tumor": 0.0069,
+        "Endometrial Cancer": 0.0505,
+        "Non-Small Cell Lung Cancer": 0.0108,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Colorectal Cancer": 0.0179,
+        "Melanoma": 0.0301,
+        "Adrenocortical Carcinoma": 0.04,
+        "Glioma": 0.0163,
+        "Small Cell Lung Cancer": 0.0244,
+        "Pancreatic Cancer": 0.008,
+        "Cancer of Unknown Primary": 0.0108,
+        "Hepatobiliary Cancer": 0.0028,
+        "Esophagogastric Cancer": 0.0088,
+        "CNS Cancer": 0.0208,
+        "Head and Neck Cancer": 0.0054
+      },
+      "hotspots": [
+        [
+          "D123Gfs*15",
+          5
+        ],
+        [
+          "R204Q",
+          4
+        ],
+        [
+          "N96Tfs*26",
+          3
+        ],
+        [
+          "R169Kfs*44",
+          3
+        ],
+        [
+          "P357Rfs*237",
+          3
+        ],
+        [
+          "X269_splice",
+          3
+        ],
+        [
+          "A134P",
+          2
+        ],
+        [
+          "G367D",
+          2
+        ]
+      ]
+    },
+    "PTCH1": {
+      "samples_mutated": 226,
+      "frequency": 0.0206,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0284,
+        "Non-Small Cell Lung Cancer": 0.0132,
+        "Colorectal Cancer": 0.0487,
+        "Skin Cancer, Non-Melanoma": 0.1419,
+        "Head and Neck Cancer": 0.0161,
+        "Breast Cancer": 0.012,
+        "Glioma": 0.0253,
+        "Esophagogastric Cancer": 0.0264,
+        "Soft Tissue Sarcoma": 0.0158,
+        "Prostate Cancer": 0.0098,
+        "Endometrial Cancer": 0.0505,
+        "Cancer of Unknown Primary": 0.0376,
+        "Germ Cell Tumor": 0.0069,
+        "Ovarian Cancer": 0.0179,
+        "Renal Cell Carcinoma": 0.0055,
+        "Mesothelioma": 0.0093,
+        "Melanoma": 0.0521,
+        "Bone Cancer": 0.0224,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Appendiceal Cancer": 0.0253,
+        "Pancreatic Cancer": 0.006,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Hepatobiliary Cancer": 0.0085,
+        "Thyroid Cancer": 0.0043,
+        "Cervical Cancer": 0.02,
+        "Small Bowel Cancer": 0.0571
+      },
+      "hotspots": [
+        [
+          "S1203Afs*52",
+          18
+        ],
+        [
+          "R1308Efs*64",
+          9
+        ],
+        [
+          "L39Cfs*41",
+          3
+        ],
+        [
+          "N97Tfs*20",
+          3
+        ],
+        [
+          "E1273K",
+          2
+        ],
+        [
+          "R1025H",
+          2
+        ],
+        [
+          "L485Pfs*12",
+          2
+        ],
+        [
+          "S1176F",
+          2
+        ]
+      ]
+    },
+    "SETD2": {
+      "samples_mutated": 456,
+      "frequency": 0.0417,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0638,
+        "Small Cell Lung Cancer": 0.061,
+        "Non-Small Cell Lung Cancer": 0.0558,
+        "Breast Cancer": 0.0165,
+        "Skin Cancer, Non-Melanoma": 0.0878,
+        "Glioma": 0.0561,
+        "Salivary Gland Cancer": 0.0175,
+        "Melanoma": 0.0822,
+        "Prostate Cancer": 0.0126,
+        "Colorectal Cancer": 0.0437,
+        "Mesothelioma": 0.1215,
+        "Hepatobiliary Cancer": 0.0282,
+        "Soft Tissue Sarcoma": 0.0113,
+        "Esophagogastric Cancer": 0.0205,
+        "Renal Cell Carcinoma": 0.1884,
+        "Head and Neck Cancer": 0.0269,
+        "Cervical Cancer": 0.02,
+        "Cancer of Unknown Primary": 0.0591,
+        "Endometrial Cancer": 0.055,
+        "Uterine Sarcoma": 0.0108,
+        "Pancreatic Cancer": 0.0359,
+        "Bone Cancer": 0.0224,
+        "Thyroid Cancer": 0.026,
+        "Ovarian Cancer": 0.0089,
+        "Gastrointestinal Stromal Tumor": 0.0365,
+        "Appendiceal Cancer": 0.0253,
+        "Germ Cell Tumor": 0.0035,
+        "Adrenocortical Carcinoma": 0.08,
+        "Peripheral Nervous System": 0.0125,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Mature T and NK Neoplasms": 0.0345,
+        "CNS Cancer": 0.0208
+      },
+      "hotspots": [
+        [
+          "S2382Lfs*29",
+          6
+        ],
+        [
+          "R1407Gfs*5",
+          5
+        ],
+        [
+          "T305Nfs*4",
+          4
+        ],
+        [
+          "R1625C",
+          4
+        ],
+        [
+          "X1572_splice",
+          3
+        ],
+        [
+          "Q1667*",
+          3
+        ],
+        [
+          "Y1666C",
+          3
+        ],
+        [
+          "R1625H",
+          3
+        ]
+      ]
+    },
+    "RBM10": {
+      "samples_mutated": 299,
+      "frequency": 0.0273,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.1064,
+        "Non-Small Cell Lung Cancer": 0.0833,
+        "Cancer of Unknown Primary": 0.0538,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Colorectal Cancer": 0.0218,
+        "Thyroid Cancer": 0.0519,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Germ Cell Tumor": 0.0035,
+        "Melanoma": 0.0301,
+        "Breast Cancer": 0.0082,
+        "Head and Neck Cancer": 0.0161,
+        "Small Cell Lung Cancer": 0.0244,
+        "Uterine Sarcoma": 0.0215,
+        "Esophagogastric Cancer": 0.0147,
+        "Glioma": 0.009,
+        "Renal Cell Carcinoma": 0.0028,
+        "Hepatobiliary Cancer": 0.0056,
+        "Endometrial Cancer": 0.0321,
+        "Pancreatic Cancer": 0.0159,
+        "Small Bowel Cancer": 0.0286,
+        "Salivary Gland Cancer": 0.0175,
+        "Prostate Cancer": 0.0014
+      },
+      "hotspots": [
+        [
+          "X812_splice",
+          5
+        ],
+        [
+          "Q571*",
+          4
+        ],
+        [
+          "X165_splice",
+          4
+        ],
+        [
+          "R153*",
+          4
+        ],
+        [
+          "X487_splice",
+          4
+        ],
+        [
+          "S252del",
+          3
+        ],
+        [
+          "E662*",
+          3
+        ],
+        [
+          "S703L",
+          3
+        ]
+      ]
+    },
+    "TERT": {
+      "samples_mutated": 1460,
+      "frequency": 0.1334,
+      "by_cancer_type": {
+        "Mesothelioma": 0.0467,
+        "Bladder Cancer": 0.669,
+        "Cervical Cancer": 0.06,
+        "Pancreatic Cancer": 0.012,
+        "Non-Small Cell Lung Cancer": 0.0396,
+        "Skin Cancer, Non-Melanoma": 0.3378,
+        "Thyroid Cancer": 0.5931,
+        "Soft Tissue Sarcoma": 0.1264,
+        "Head and Neck Cancer": 0.2204,
+        "Cancer of Unknown Primary": 0.086,
+        "Glioma": 0.6582,
+        "Hepatobiliary Cancer": 0.1408,
+        "Germ Cell Tumor": 0.0069,
+        "Uterine Sarcoma": 0.0215,
+        "Melanoma": 0.4849,
+        "Salivary Gland Cancer": 0.0877,
+        "Colorectal Cancer": 0.0367,
+        "Breast Cancer": 0.0217,
+        "Endometrial Cancer": 0.0596,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Renal Cell Carcinoma": 0.1053,
+        "Ovarian Cancer": 0.058,
+        "CNS Cancer": 0.0625,
+        "Adrenocortical Carcinoma": 0.12,
+        "Bone Cancer": 0.0597,
+        "Prostate Cancer": 0.007,
+        "Small Cell Lung Cancer": 0.0488,
+        "Anal Cancer": 0.0312,
+        "Esophagogastric Cancer": 0.0117,
+        "Peripheral Nervous System": 0.025,
+        "Small Bowel Cancer": 0.0286,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Appendiceal Cancer": 0.0127
+      },
+      "hotspots": [
+        [
+          "Promoter",
+          1358
+        ],
+        [
+          "E280K",
+          3
+        ],
+        [
+          "A276T",
+          3
+        ],
+        [
+          "R446H",
+          3
+        ],
+        [
+          "E113Rfs*15",
+          3
+        ],
+        [
+          "R277K",
+          2
+        ],
+        [
+          "R470H",
+          2
+        ],
+        [
+          "A210V",
+          2
+        ]
+      ]
+    },
+    "SMO": {
+      "samples_mutated": 132,
+      "frequency": 0.0121,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0165,
+        "Endometrial Cancer": 0.0367,
+        "Breast Cancer": 0.0075,
+        "Skin Cancer, Non-Melanoma": 0.0608,
+        "Melanoma": 0.0329,
+        "Non-Small Cell Lung Cancer": 0.015,
+        "Colorectal Cancer": 0.0278,
+        "Germ Cell Tumor": 0.0069,
+        "Esophagogastric Cancer": 0.0117,
+        "Glioma": 0.0145,
+        "Prostate Cancer": 0.0028,
+        "Salivary Gland Cancer": 0.0088,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "CNS Cancer": 0.0208,
+        "Renal Cell Carcinoma": 0.0055,
+        "Hepatobiliary Cancer": 0.0028,
+        "Thyroid Cancer": 0.0043,
+        "Head and Neck Cancer": 0.0161,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Cervical Cancer": 0.02,
+        "Pancreatic Cancer": 0.002,
+        "Small Bowel Cancer": 0.0286,
+        "Cancer of Unknown Primary": 0.0054
+      },
+      "hotspots": [
+        [
+          "P694Lfs*82",
+          14
+        ],
+        [
+          "S428F",
+          3
+        ],
+        [
+          "R512L",
+          3
+        ],
+        [
+          "M424T",
+          2
+        ],
+        [
+          "E194K",
+          2
+        ],
+        [
+          "R772C",
+          2
+        ],
+        [
+          "X307_splice",
+          2
+        ],
+        [
+          "L23dup",
+          2
+        ]
+      ]
+    },
+    "SMARCA4": {
+      "samples_mutated": 465,
+      "frequency": 0.0425,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.0872,
+        "Bladder Cancer": 0.0922,
+        "Esophagogastric Cancer": 0.0469,
+        "Breast Cancer": 0.0172,
+        "Small Cell Lung Cancer": 0.0488,
+        "Non-Small Cell Lung Cancer": 0.0863,
+        "Hepatobiliary Cancer": 0.0254,
+        "Ovarian Cancer": 0.0134,
+        "Skin Cancer, Non-Melanoma": 0.1351,
+        "Germ Cell Tumor": 0.0069,
+        "Glioma": 0.047,
+        "Colorectal Cancer": 0.0606,
+        "Head and Neck Cancer": 0.0323,
+        "Salivary Gland Cancer": 0.0088,
+        "Soft Tissue Sarcoma": 0.0068,
+        "CNS Cancer": 0.0208,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+        "Melanoma": 0.0575,
+        "Cancer of Unknown Primary": 0.129,
+        "Bone Cancer": 0.0224,
+        "Peripheral Nervous System": 0.05,
+        "Mature B-Cell Neoplasms": 0.0299,
+        "Renal Cell Carcinoma": 0.0194,
+        "Appendiceal Cancer": 0.0127,
+        "Pancreatic Cancer": 0.0199,
+        "Cervical Cancer": 0.04,
+        "Thyroid Cancer": 0.013,
+        "Prostate Cancer": 0.0056,
+        "Small Bowel Cancer": 0.0286
+      },
+      "hotspots": [
+        [
+          "T910M",
+          13
+        ],
+        [
+          "R1189Q",
+          5
+        ],
+        [
+          "R1243W",
+          4
+        ],
+        [
+          "R1093*",
+          4
+        ],
+        [
+          "E821K",
+          4
+        ],
+        [
+          "M272Cfs*31",
+          4
+        ],
+        [
+          "M781I",
+          3
+        ],
+        [
+          "L1161Sfs*3",
+          3
+        ]
+      ]
+    },
+    "SMAD4": {
+      "samples_mutated": 466,
+      "frequency": 0.0426,
+      "by_cancer_type": {
+        "Endometrial Cancer": 0.0229,
+        "Esophagogastric Cancer": 0.0821,
+        "Colorectal Cancer": 0.1579,
+        "Breast Cancer": 0.0165,
+        "Ovarian Cancer": 0.0089,
+        "Non-Small Cell Lung Cancer": 0.0342,
+        "Hepatobiliary Cancer": 0.0845,
+        "Cervical Cancer": 0.04,
+        "Bladder Cancer": 0.0284,
+        "Cancer of Unknown Primary": 0.0376,
+        "Skin Cancer, Non-Melanoma": 0.0203,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Germ Cell Tumor": 0.0035,
+        "Small Bowel Cancer": 0.1143,
+        "Glioma": 0.0072,
+        "Pancreatic Cancer": 0.1912,
+        "Appendiceal Cancer": 0.1392,
+        "Melanoma": 0.011,
+        "Renal Cell Carcinoma": 0.0028,
+        "Prostate Cancer": 0.0084,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Head and Neck Cancer": 0.0054,
+        "Small Cell Lung Cancer": 0.0122
+      },
+      "hotspots": [
+        [
+          "R361H",
+          39
+        ],
+        [
+          "R361C",
+          29
+        ],
+        [
+          "A118V",
+          10
+        ],
+        [
+          "R445*",
+          10
+        ],
+        [
+          "D537G",
+          9
+        ],
+        [
+          "Q534*",
+          9
+        ],
+        [
+          "E520*",
+          5
+        ],
+        [
+          "S32*",
+          5
+        ]
+      ]
+    },
+    "STK11": {
+      "samples_mutated": 372,
+      "frequency": 0.034,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0189,
+        "Non-Small Cell Lung Cancer": 0.1589,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Glioma": 0.0108,
+        "Breast Cancer": 0.012,
+        "Esophagogastric Cancer": 0.0176,
+        "Colorectal Cancer": 0.0099,
+        "Thyroid Cancer": 0.013,
+        "Cancer of Unknown Primary": 0.086,
+        "Head and Neck Cancer": 0.0108,
+        "Prostate Cancer": 0.0056,
+        "Adrenocortical Carcinoma": 0.04,
+        "Hepatobiliary Cancer": 0.0197,
+        "Anal Cancer": 0.0625,
+        "Skin Cancer, Non-Melanoma": 0.0541,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Endometrial Cancer": 0.0229,
+        "Pancreatic Cancer": 0.006,
+        "Cervical Cancer": 0.04,
+        "Small Cell Lung Cancer": 0.0122,
+        "Melanoma": 0.0027,
+        "Appendiceal Cancer": 0.0127,
+        "Small Bowel Cancer": 0.0286,
+        "Ovarian Cancer": 0.0045
+      },
+      "hotspots": [
+        [
+          "X155_splice",
+          13
+        ],
+        [
+          "E223*",
+          11
+        ],
+        [
+          "X307_splice",
+          10
+        ],
+        [
+          "S216F",
+          9
+        ],
+        [
+          "X245_splice",
+          8
+        ],
+        [
+          "Y60*",
+          7
+        ],
+        [
+          "P281Rfs*6",
+          6
+        ],
+        [
+          "X288_splice",
+          5
+        ]
+      ]
+    },
+    "SUFU": {
+      "samples_mutated": 61,
+      "frequency": 0.0056,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0095,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Mesothelioma": 0.0187,
+        "Head and Neck Cancer": 0.0108,
+        "Prostate Cancer": 0.0028,
+        "Glioma": 0.0108,
+        "Hepatobiliary Cancer": 0.0056,
+        "Colorectal Cancer": 0.007,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Bone Cancer": 0.0149,
+        "Endometrial Cancer": 0.0092,
+        "Non-Small Cell Lung Cancer": 0.0054,
+        "Melanoma": 0.0247,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Breast Cancer": 0.0015,
+        "Cervical Cancer": 0.02,
+        "Cancer of Unknown Primary": 0.0054,
+        "Esophagogastric Cancer": 0.0029
+      },
+      "hotspots": [
+        [
+          "A25Gfs*23",
+          5
+        ],
+        [
+          "R123C",
+          3
+        ],
+        [
+          "D66Y",
+          2
+        ],
+        [
+          "G11D",
+          2
+        ],
+        [
+          "P51L",
+          2
+        ],
+        [
+          "R239W",
+          2
+        ],
+        [
+          "E260D",
+          1
+        ],
+        [
+          "T13Wfs*29",
+          1
+        ]
+      ]
+    },
+    "SOX2": {
+      "samples_mutated": 65,
+      "frequency": 0.0059,
+      "by_cancer_type": {
+        "Non-Small Cell Lung Cancer": 0.0078,
+        "Bladder Cancer": 0.0165,
+        "Colorectal Cancer": 0.0109,
+        "Breast Cancer": 0.0037,
+        "Prostate Cancer": 0.0014,
+        "Ovarian Cancer": 0.0089,
+        "Uterine Sarcoma": 0.0108,
+        "Peripheral Nervous System": 0.0125,
+        "Glioma": 0.0072,
+        "Cancer of Unknown Primary": 0.0108,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Endometrial Cancer": 0.0229,
+        "Skin Cancer, Non-Melanoma": 0.0203,
+        "Renal Cell Carcinoma": 0.0028,
+        "Melanoma": 0.0055,
+        "Germ Cell Tumor": 0.0035,
+        "Esophagogastric Cancer": 0.0029,
+        "Head and Neck Cancer": 0.0054
+      },
+      "hotspots": [
+        [
+          "R98Q",
+          2
+        ],
+        [
+          "S83L",
+          2
+        ],
+        [
+          "E93K",
+          2
+        ],
+        [
+          "A99V",
+          2
+        ],
+        [
+          "P253Lfs*21",
+          2
+        ],
+        [
+          "G20Afs*26",
+          2
+        ],
+        [
+          "P196H",
+          1
+        ],
+        [
+          "M102I",
+          1
+        ]
+      ]
+    },
+    "SPOP": {
+      "samples_mutated": 140,
+      "frequency": 0.0128,
+      "by_cancer_type": {
+        "Cancer of Unknown Primary": 0.0269,
+        "Breast Cancer": 0.009,
+        "Endometrial Cancer": 0.0505,
+        "Prostate Cancer": 0.0907,
+        "Colorectal Cancer": 0.006,
+        "Glioma": 0.0072,
+        "Ovarian Cancer": 0.0134,
+        "Skin Cancer, Non-Melanoma": 0.0203,
+        "Non-Small Cell Lung Cancer": 0.0054,
+        "Esophagogastric Cancer": 0.0088,
+        "Bladder Cancer": 0.0142,
+        "Appendiceal Cancer": 0.0253,
+        "Pancreatic Cancer": 0.004,
+        "Renal Cell Carcinoma": 0.0028,
+        "Mesothelioma": 0.0093,
+        "Melanoma": 0.0082,
+        "Adrenocortical Carcinoma": 0.04,
+        "Cervical Cancer": 0.02,
+        "Small Cell Lung Cancer": 0.0122
+      },
+      "hotspots": [
+        [
+          "F133L",
+          20
+        ],
+        [
+          "F133V",
+          10
+        ],
+        [
+          "F102C",
+          8
+        ],
+        [
+          "W131G",
+          4
+        ],
+        [
+          "E78K",
+          4
+        ],
+        [
+          "E50K",
+          4
+        ],
+        [
+          "Y87N",
+          3
+        ],
+        [
+          "S80R",
+          2
+        ]
+      ]
+    },
+    "STAT3": {
+      "samples_mutated": 77,
+      "frequency": 0.007,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0165,
+        "Breast Cancer": 0.0037,
+        "Appendiceal Cancer": 0.0127,
+        "Ovarian Cancer": 0.0179,
+        "Glioma": 0.0072,
+        "Prostate Cancer": 0.0098,
+        "Non-Small Cell Lung Cancer": 0.0054,
+        "Thyroid Cancer": 0.0043,
+        "Endometrial Cancer": 0.0092,
+        "Skin Cancer, Non-Melanoma": 0.0405,
+        "Colorectal Cancer": 0.0079,
+        "Hepatobiliary Cancer": 0.0028,
+        "Melanoma": 0.0082,
+        "CNS Cancer": 0.0208,
+        "Mature B-Cell Neoplasms": 0.0522,
+        "Soft Tissue Sarcoma": 0.0045,
+        "Small Bowel Cancer": 0.0286,
+        "Cancer of Unknown Primary": 0.0108,
+        "Esophagogastric Cancer": 0.0029
+      },
+      "hotspots": [
+        [
+          "E616del",
+          4
+        ],
+        [
+          "E616G",
+          3
+        ],
+        [
+          "S614R",
+          2
+        ],
+        [
+          "R31W",
+          2
+        ],
+        [
+          "S458F",
+          2
+        ],
+        [
+          "Q91*",
+          2
+        ],
+        [
+          "S319N",
+          1
+        ],
+        [
+          "E444K",
+          1
+        ]
+      ]
+    },
+    "SRSF2": {
+      "samples_mutated": 42,
+      "frequency": 0.0038,
+      "by_cancer_type": {
+        "Glioma": 0.0036,
+        "Non-Small Cell Lung Cancer": 0.0054,
+        "Germ Cell Tumor": 0.0035,
+        "Bladder Cancer": 0.0118,
+        "Breast Cancer": 0.003,
+        "Anal Cancer": 0.0312,
+        "Hepatobiliary Cancer": 0.0056,
+        "Melanoma": 0.0055,
+        "Endometrial Cancer": 0.0046,
+        "Cancer of Unknown Primary": 0.0161,
+        "Colorectal Cancer": 0.005,
+        "Soft Tissue Sarcoma": 0.0023,
+        "Renal Cell Carcinoma": 0.0028,
+        "Esophagogastric Cancer": 0.0029,
+        "Mature B-Cell Neoplasms": 0.0224,
+        "Head and Neck Cancer": 0.0054
+      },
+      "hotspots": [
+        [
+          "K197N",
+          3
+        ],
+        [
+          "R125H",
+          2
+        ],
+        [
+          "T25S",
+          2
+        ],
+        [
+          "A166S",
+          2
+        ],
+        [
+          "S54F",
+          1
+        ],
+        [
+          "S132R",
+          1
+        ],
+        [
+          "R167Q",
+          1
+        ],
+        [
+          "S147W",
+          1
+        ]
+      ]
+    },
+    "TP53": {
+      "samples_mutated": 4538,
+      "frequency": 0.4146,
+      "by_cancer_type": {
+        "Breast Cancer": 0.4136,
+        "Endometrial Cancer": 0.5321,
+        "Non-Small Cell Lung Cancer": 0.5498,
+        "Hepatobiliary Cancer": 0.2676,
+        "Esophagogastric Cancer": 0.7009,
+        "Bladder Cancer": 0.3948,
+        "Ovarian Cancer": 0.7098,
+        "Germ Cell Tumor": 0.1146,
+        "Small Cell Lung Cancer": 0.8659,
+        "Uterine Sarcoma": 0.3656,
+        "Gastrointestinal Stromal Tumor": 0.0657,
+        "Pancreatic Cancer": 0.5717,
+        "Prostate Cancer": 0.3026,
+        "Glioma": 0.396,
+        "Skin Cancer, Non-Melanoma": 0.5135,
+        "Colorectal Cancer": 0.719,
+        "Renal Cell Carcinoma": 0.1496,
+        "Head and Neck Cancer": 0.4409,
+        "Thyroid Cancer": 0.1732,
+        "Cancer of Unknown Primary": 0.4516,
+        "Soft Tissue Sarcoma": 0.1986,
+        "Mesothelioma": 0.1028,
+        "Anal Cancer": 0.0938,
+        "Melanoma": 0.2055,
+        "Cervical Cancer": 0.2,
+        "Salivary Gland Cancer": 0.2105,
+        "Small Bowel Cancer": 0.5429,
+        "Appendiceal Cancer": 0.3544,
+        "Gastrointestinal Neuroendocrine Tumor": 0.2174,
+        "Bone Cancer": 0.1493,
+        "Adrenocortical Carcinoma": 0.36,
+        "Mature B-Cell Neoplasms": 0.2313,
+        "Peripheral Nervous System": 0.0125,
+        "Mature T and NK Neoplasms": 0.1379
+      },
+      "hotspots": [
+        [
+          "R175H",
+          209
+        ],
+        [
+          "R248Q",
+          152
+        ],
+        [
+          "R273H",
+          137
+        ],
+        [
+          "R273C",
+          125
+        ],
+        [
+          "R248W",
+          113
+        ],
+        [
+          "R213*",
+          101
+        ],
+        [
+          "R282W",
+          97
+        ],
+        [
+          "R342*",
+          89
+        ]
+      ]
+    },
+    "TSC2": {
+      "samples_mutated": 261,
+      "frequency": 0.0238,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0209,
+        "Ovarian Cancer": 0.0179,
+        "Non-Small Cell Lung Cancer": 0.0204,
+        "Thyroid Cancer": 0.0173,
+        "Germ Cell Tumor": 0.0139,
+        "Endometrial Cancer": 0.0688,
+        "Esophagogastric Cancer": 0.0235,
+        "Glioma": 0.0271,
+        "Bladder Cancer": 0.0402,
+        "Colorectal Cancer": 0.0318,
+        "Skin Cancer, Non-Melanoma": 0.0811,
+        "Hepatobiliary Cancer": 0.031,
+        "Uterine Sarcoma": 0.043,
+        "Melanoma": 0.0356,
+        "Gastrointestinal Stromal Tumor": 0.0146,
+        "Renal Cell Carcinoma": 0.036,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0652,
+        "Cervical Cancer": 0.04,
+        "Small Bowel Cancer": 0.0571,
+        "Adrenocortical Carcinoma": 0.08,
+        "Prostate Cancer": 0.0056,
+        "Soft Tissue Sarcoma": 0.0158,
+        "Pancreatic Cancer": 0.0139,
+        "Small Cell Lung Cancer": 0.0244,
+        "Appendiceal Cancer": 0.0127,
+        "Salivary Gland Cancer": 0.0088,
+        "Head and Neck Cancer": 0.0269,
+        "Cancer of Unknown Primary": 0.0269,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Mature T and NK Neoplasms": 0.0345
+      },
+      "hotspots": [
+        [
+          "R1639H",
+          3
+        ],
+        [
+          "R406K",
+          2
+        ],
+        [
+          "R1409Q",
+          2
+        ],
+        [
+          "A77T",
+          2
+        ],
+        [
+          "A1429S",
+          2
+        ],
+        [
+          "A1195V",
+          2
+        ],
+        [
+          "E234K",
+          2
+        ],
+        [
+          "G654Lfs*2",
+          2
+        ]
+      ]
+    },
+    "U2AF1": {
+      "samples_mutated": 92,
+      "frequency": 0.0084,
+      "by_cancer_type": {
+        "Mesothelioma": 0.0093,
+        "Endometrial Cancer": 0.0413,
+        "Breast Cancer": 0.0022,
+        "Bladder Cancer": 0.0213,
+        "Cancer of Unknown Primary": 0.0161,
+        "Non-Small Cell Lung Cancer": 0.021,
+        "Colorectal Cancer": 0.0089,
+        "Prostate Cancer": 0.0028,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Hepatobiliary Cancer": 0.0056,
+        "Esophagogastric Cancer": 0.0029,
+        "Skin Cancer, Non-Melanoma": 0.0135,
+        "Cervical Cancer": 0.04,
+        "Head and Neck Cancer": 0.0108,
+        "Renal Cell Carcinoma": 0.0028,
+        "Pancreatic Cancer": 0.004,
+        "Melanoma": 0.0055,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Small Bowel Cancer": 0.0286,
+        "Thyroid Cancer": 0.0043
+      },
+      "hotspots": [
+        [
+          "S34F",
+          46
+        ],
+        [
+          "N170S",
+          2
+        ],
+        [
+          "S231L",
+          2
+        ],
+        [
+          "R156H",
+          2
+        ],
+        [
+          "K15R",
+          1
+        ],
+        [
+          "R203H",
+          1
+        ],
+        [
+          "N170Y",
+          1
+        ],
+        [
+          "R183W",
+          1
+        ]
+      ]
+    },
+    "TGFBR2": {
+      "samples_mutated": 176,
+      "frequency": 0.0161,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0378,
+        "Ovarian Cancer": 0.0134,
+        "Esophagogastric Cancer": 0.0117,
+        "Glioma": 0.0108,
+        "Breast Cancer": 0.009,
+        "Uterine Sarcoma": 0.0215,
+        "Colorectal Cancer": 0.0387,
+        "Non-Small Cell Lung Cancer": 0.0162,
+        "Small Bowel Cancer": 0.0571,
+        "Head and Neck Cancer": 0.0215,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Endometrial Cancer": 0.0183,
+        "Germ Cell Tumor": 0.0035,
+        "Melanoma": 0.0356,
+        "Pancreatic Cancer": 0.0279,
+        "Skin Cancer, Non-Melanoma": 0.0203,
+        "Prostate Cancer": 0.0028,
+        "Soft Tissue Sarcoma": 0.0113,
+        "Appendiceal Cancer": 0.0633,
+        "Cervical Cancer": 0.04,
+        "Renal Cell Carcinoma": 0.0028,
+        "Mature B-Cell Neoplasms": 0.0149,
+        "Cancer of Unknown Primary": 0.0108,
+        "Anal Cancer": 0.0625,
+        "Hepatobiliary Cancer": 0.0056
+      },
+      "hotspots": [
+        [
+          "R553H",
+          5
+        ],
+        [
+          "R553C",
+          4
+        ],
+        [
+          "R485H",
+          4
+        ],
+        [
+          "K153Afs*3",
+          3
+        ],
+        [
+          "D471N",
+          3
+        ],
+        [
+          "R520*",
+          3
+        ],
+        [
+          "X177_splice",
+          2
+        ],
+        [
+          "S320*",
+          2
+        ]
+      ]
+    },
+    "TSC1": {
+      "samples_mutated": 193,
+      "frequency": 0.0176,
+      "by_cancer_type": {
+        "Bladder Cancer": 0.0804,
+        "Hepatobiliary Cancer": 0.0085,
+        "Non-Small Cell Lung Cancer": 0.0174,
+        "Endometrial Cancer": 0.0367,
+        "Esophagogastric Cancer": 0.0235,
+        "Melanoma": 0.0411,
+        "Gastrointestinal Stromal Tumor": 0.0219,
+        "Soft Tissue Sarcoma": 0.009,
+        "Cancer of Unknown Primary": 0.0269,
+        "Renal Cell Carcinoma": 0.0471,
+        "Pancreatic Cancer": 0.006,
+        "Glioma": 0.0199,
+        "Breast Cancer": 0.0097,
+        "Ovarian Cancer": 0.0045,
+        "Uterine Sarcoma": 0.0108,
+        "Skin Cancer, Non-Melanoma": 0.0338,
+        "Colorectal Cancer": 0.0248,
+        "Salivary Gland Cancer": 0.0088,
+        "Prostate Cancer": 0.0014,
+        "Thyroid Cancer": 0.0043,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Head and Neck Cancer": 0.0054,
+        "Anal Cancer": 0.0312,
+        "Small Cell Lung Cancer": 0.0122
+      },
+      "hotspots": [
+        [
+          "N891Kfs*13",
+          4
+        ],
+        [
+          "P645S",
+          3
+        ],
+        [
+          "Q527*",
+          3
+        ],
+        [
+          "X305_splice",
+          3
+        ],
+        [
+          "R509*",
+          3
+        ],
+        [
+          "Q516*",
+          2
+        ],
+        [
+          "Y185*",
+          2
+        ],
+        [
+          "T360N",
+          2
+        ]
+      ]
+    },
+    "TET2": {
+      "samples_mutated": 250,
+      "frequency": 0.0228,
+      "by_cancer_type": {
+        "Breast Cancer": 0.0127,
+        "Bladder Cancer": 0.0496,
+        "Non-Small Cell Lung Cancer": 0.0174,
+        "Small Cell Lung Cancer": 0.0366,
+        "Skin Cancer, Non-Melanoma": 0.0946,
+        "Ovarian Cancer": 0.0268,
+        "Melanoma": 0.0658,
+        "Thyroid Cancer": 0.0087,
+        "Glioma": 0.0217,
+        "Colorectal Cancer": 0.0298,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Cervical Cancer": 0.04,
+        "Endometrial Cancer": 0.0413,
+        "Pancreatic Cancer": 0.006,
+        "Head and Neck Cancer": 0.0323,
+        "Renal Cell Carcinoma": 0.0222,
+        "Hepatobiliary Cancer": 0.0085,
+        "Prostate Cancer": 0.0056,
+        "Esophagogastric Cancer": 0.0235,
+        "Mature B-Cell Neoplasms": 0.0522,
+        "Mature T and NK Neoplasms": 0.6552,
+        "Cancer of Unknown Primary": 0.0323,
+        "Peripheral Nervous System": 0.0125,
+        "Adrenocortical Carcinoma": 0.04,
+        "Small Bowel Cancer": 0.0286,
+        "Mesothelioma": 0.0093,
+        "Salivary Gland Cancer": 0.0088,
+        "Gastrointestinal Stromal Tumor": 0.0073
+      },
+      "hotspots": [
+        [
+          "R1516*",
+          4
+        ],
+        [
+          "R550*",
+          4
+        ],
+        [
+          "I1762R",
+          3
+        ],
+        [
+          "S1599F",
+          2
+        ],
+        [
+          "H800Q",
+          2
+        ],
+        [
+          "E887K",
+          2
+        ],
+        [
+          "G92R",
+          2
+        ],
+        [
+          "R1440Q",
+          2
+        ]
+      ]
+    },
+    "WT1": {
+      "samples_mutated": 92,
+      "frequency": 0.0084,
+      "by_cancer_type": {
+        "Hepatobiliary Cancer": 0.0056,
+        "Soft Tissue Sarcoma": 0.0068,
+        "Colorectal Cancer": 0.0089,
+        "Melanoma": 0.0274,
+        "Non-Small Cell Lung Cancer": 0.0144,
+        "Small Bowel Cancer": 0.0571,
+        "Glioma": 0.0108,
+        "Skin Cancer, Non-Melanoma": 0.027,
+        "Cancer of Unknown Primary": 0.0161,
+        "Breast Cancer": 0.0052,
+        "Prostate Cancer": 0.0056,
+        "Renal Cell Carcinoma": 0.0028,
+        "Bladder Cancer": 0.0118,
+        "Endometrial Cancer": 0.0046,
+        "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+        "Ovarian Cancer": 0.0045,
+        "Esophagogastric Cancer": 0.0088,
+        "Mature B-Cell Neoplasms": 0.0075,
+        "Head and Neck Cancer": 0.0108,
+        "Pancreatic Cancer": 0.002,
+        "Appendiceal Cancer": 0.0127
+      },
+      "hotspots": [
+        [
+          "T358M",
+          3
+        ],
+        [
+          "D3N",
+          2
+        ],
+        [
+          "T225M",
+          2
+        ],
+        [
+          "R355K",
+          2
+        ],
+        [
+          "P132Rfs*26",
+          2
+        ],
+        [
+          "E65*",
+          2
+        ],
+        [
+          "R458Q",
+          2
+        ],
+        [
+          "W146*",
+          2
+        ]
+      ]
+    },
+    "VHL": {
+      "samples_mutated": 202,
+      "frequency": 0.0185,
+      "by_cancer_type": {
+        "Renal Cell Carcinoma": 0.4709,
+        "Non-Small Cell Lung Cancer": 0.003,
+        "Pancreatic Cancer": 0.01,
+        "Thyroid Cancer": 0.0043,
+        "Small Cell Lung Cancer": 0.0122,
+        "Colorectal Cancer": 0.002,
+        "Melanoma": 0.0027,
+        "Hepatobiliary Cancer": 0.0028,
+        "Prostate Cancer": 0.0042,
+        "Bladder Cancer": 0.0118,
+        "Skin Cancer, Non-Melanoma": 0.0068,
+        "Breast Cancer": 0.0007,
+        "Ovarian Cancer": 0.0045,
+        "Cancer of Unknown Primary": 0.0054,
+        "Glioma": 0.0018,
+        "Bone Cancer": 0.0075
+      },
+      "hotspots": [
+        [
+          "X114_splice",
+          13
+        ],
+        [
+          "X155_splice",
+          5
+        ],
+        [
+          "R161*",
+          5
+        ],
+        [
+          "P86S",
+          4
+        ],
+        [
+          "S80R",
+          4
+        ],
+        [
+          "W117L",
+          3
+        ],
+        [
+          "S65P",
+          3
+        ],
+        [
+          "L89P",
+          3
+        ]
+      ]
+    },
+    "TP63": {
+      "samples_mutated": 183,
+      "frequency": 0.0167,
+      "by_cancer_type": {
+        "Head and Neck Cancer": 0.0323,
+        "Thyroid Cancer": 0.0173,
+        "Skin Cancer, Non-Melanoma": 0.0608,
+        "Non-Small Cell Lung Cancer": 0.021,
+        "Glioma": 0.0181,
+        "Melanoma": 0.1342,
+        "Germ Cell Tumor": 0.0035,
+        "Breast Cancer": 0.0097,
+        "Colorectal Cancer": 0.0218,
+        "Hepatobiliary Cancer": 0.0028,
+        "Soft Tissue Sarcoma": 0.009,
+        "Prostate Cancer": 0.007,
+        "Renal Cell Carcinoma": 0.0028,
+        "Bladder Cancer": 0.0284,
+        "Endometrial Cancer": 0.0183,
+        "Cancer of Unknown Primary": 0.0161,
+        "Ovarian Cancer": 0.0045,
+        "Gastrointestinal Stromal Tumor": 0.0073,
+        "Mesothelioma": 0.0093
+      },
+      "hotspots": [
+        [
+          "R379C",
+          5
+        ],
+        [
+          "E609K",
+          5
+        ],
+        [
+          "Q70*",
+          3
+        ],
+        [
+          "D398N",
+          3
+        ],
+        [
+          "R376C",
+          3
+        ],
+        [
+          "R393Q",
+          3
+        ],
+        [
+          "Q523*",
+          2
+        ],
+        [
+          "S184L",
+          2
+        ]
+      ]
+    }
+  },
+  "evidence": {
+    "kind": "experimental",
+    "source": "cBioPortal msk_impact_2017 (tumour sequencing), via public REST API"
+  },
+  "confidence": 0.8,
+  "seconds": 21,
+  "disk_used_bytes": 0
+}

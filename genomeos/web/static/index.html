@@ -119,11 +119,13 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="start" class="active" data-tip="Start here: what GenomeOS is, what each area does, and a suggested first walk-through."><i class="ic">🧭</i>Start</button>
     <button data-tab="genome" data-tip="Load real DNA (FASTA), look at any region, translate it to protein and find open reading frames."><i class="ic">🧬</i>Genome</button>
     <button data-tab="anatomy" data-tip="Count the blocks and elements of a chromosome: what the bases are spent on, gene structure, layout, sequence elements. Compare genomes to see how DNA is organised."><i class="ic">🧱</i>Anatomy</button>
+    <button data-tab="blocks" data-tip="A 2-D map of the blocks of a chromosome, to scale and nested: genes containing transcripts containing exons, the UNKNOWN space between genes, islands, repeats and gaps. Zoom, pan, search, filter, and propose moves in edit mode."><i class="ic">🧩</i>Blocks</button>
     <button data-tab="program" data-tip="Write biology as code in BioLang, compile it to BioIR and run the regulatory network through time."><i class="ic">📝</i>Program</button>
     <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
     <button data-tab="space" data-tip="Development in space: morphogen gradients, the segmentation clock and germ-layer choice."><i class="ic">🌱</i>Space</button>
     <button data-tab="debug" data-tip="Step a model with biological breakpoints and get an explanation, with evidence, of what drove each value."><i class="ic">🔍</i>Debugger</button>
+    <button data-tab="cancer" data-tip="Healthy versus tumour: somatic differences graded against cBioPortal driver knowledge, suggested cancer types, cell-surface targets, and a task packet for an AI agent."><i class="ic">🎗️</i>Cancer</button>
     <button data-tab="progress" data-tip="What is running now, what has been done, and every measurement obtained so far."><i class="ic">📊</i>Progress</button>
     <button data-tab="libs" data-tip="The reusable 'libraries' the genome contains, in five layers, with membership computed from Gene Ontology and Reactome."><i class="ic">📚</i>Libraries</button>
   </nav>
@@ -132,6 +134,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 
 <!-- ================= START ================= -->
 <section id="start" class="active">
+  <canvas id="helix" style="width:100%;height:110px;display:block;margin:-4px 0 12px" data-tip="The double helix, spinning: two antiparallel strands held by base pairs (A–T, C–G). Every block the interface shows is a stretch of this."></canvas>
   <div class="card">
     <h2><i class="ic">🧭</i>Start here</h2>
     <div class="intro"><span class="big">🧬</span><div><b>GenomeOS is an executable model of biology.</b><span class="muted">DNA is the source, BioLang is the language you write biology in, and the runtime plays it forward through time. Every rule carries its evidence and a confidence, so the interface always tells you how much of what you see is measured and how much is inferred. Hover any icon or <span class="help">?</span> for an explanation.</span></div></div>
@@ -139,11 +142,13 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div class="steps">
       <div class="step"><i class="ic">🧬</i><b>Genome</b> — raw DNA. Pick a file, fetch a region, translate it, find open reading frames. Real human chromosome 21 and the mitochondrial genome are included.</div>
       <div class="step"><i class="ic">🧱</i><b>Anatomy</b> — the inventory. Counts coding, UTR, intron and intergenic bases, exons and introns, gene density and layout, CpG islands and repeats; compares mitochondrion, human and worm.</div>
+      <div class="step"><i class="ic">🧩</i><b>Blocks</b> — the map. Every delimited block of a chromosome drawn to scale and nested; click for details, search a gene, mute everything but one type, and in edit mode drag blocks to propose a new layout with plausibility checks.</div>
       <div class="step"><i class="ic">📝</i><b>Program</b> — biology as code. Genes, proteins and rules in BioLang; compile checks references and evidence; run draws the trajectory.</div>
       <div class="step"><i class="ic">⏳</i><b>Ageing</b> — the timers. Telomere attrition, somatic mutations, epigenetic age and senescence for a chosen cell type and environment.</div>
       <div class="step"><i class="ic">👥</i><b>Twin</b> — one person. Measured state (streamed from real data), variants in timer genes, forks and side-by-side futures.</div>
       <div class="step"><i class="ic">🌱</i><b>Space</b> — development. A morphogen source patterns a field of cells; the segmentation clock lays down segments; germ layers form along a gradient.</div>
       <div class="step"><i class="ic">🔍</i><b>Debugger</b> — why. Stop when a condition is met and read the rules and evidence behind the value.</div>
+      <div class="step"><i class="ic">🎗️</i><b>Cancer</b> — the same genome, changed. Compare a person's normal and tumour samples: somatic variants, consequences, driver frequencies and hotspots from 10,945 tumours, suggested cancer types, reachable surface targets, and a packet for a focused AI agent.</div>
       <div class="step"><i class="ic">📊</i><b>Progress</b> — jobs running in the background with live progress, the project's task log, and the measurements obtained so far.</div>
       <div class="step"><i class="ic">📚</i><b>Libraries</b> — the parts list. 45 reusable modules the genome contains, verified against curated databases.</div>
     </div>
@@ -211,6 +216,43 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div id="an-bar" style="margin:10px 0"></div>
     <div id="an-out" class="grid cols-2"></div>
     <div id="an-lessons" class="hint"></div>
+  </div>
+</section>
+
+<!-- ================= BLOCKS ================= -->
+<section id="blocks">
+  <div class="card">
+    <h2><i class="ic">🧩</i>Block map<span class="help" data-tip="Rows: + strand genes, − strand genes, then sequence elements and UNKNOWN spans. A gene box contains its transcripts (canonical first) as lines with exons as bars: red = coding, purple = UTR. Widths are to scale. Wheel to zoom, drag to pan, click the minimap to jump.">?</span></h2>
+    <div class="row">
+      <select id="b-file"></select>
+      <label data-tip="Chromosome name inside the file.">chromosome <input id="b-chrom" placeholder="chr21" style="width:90px" class="mono"></label>
+      <button class="primary" id="b-load" data-tip="Load the chromosome's blocks (genes for the whole chromosome; transcripts and exons appear when zoomed under 3 Mb)."><i class="ic">📂</i>Load</button>
+      <button class="ghost" id="b-zoomout" data-tip="Show the whole chromosome."><i class="ic">🗺️</i>Whole</button>
+      <label data-tip="Type a gene name and press Enter to jump; while typing, everything else is muted.">search <input id="b-search" placeholder="APP" style="width:120px" class="mono"></label>
+      <span class="muted" id="b-status"></span>
+    </div>
+    <div class="row" id="b-filters" data-tip="Show only these block types; everything else is muted.">
+      <span class="muted">show:</span>
+      <label><input type="checkbox" value="gene" checked> gene</label>
+      <label><input type="checkbox" value="transcript" checked> transcript</label>
+      <label><input type="checkbox" value="exon" checked> exon</label>
+      <label><input type="checkbox" value="cds" checked> CDS</label>
+      <label><input type="checkbox" value="unknown" checked> UNKNOWN</label>
+      <label><input type="checkbox" value="cpg_island" checked> CpG island</label>
+      <label><input type="checkbox" value="repeat" checked> repeat</label>
+      <label><input type="checkbox" value="gap" checked> gap</label>
+      <label style="margin-left:auto" data-tip="Edit mode: drag a gene, transcript or exon to propose a move. The server checks plausibility: inside its parent, no overlap on the same strand, reading frame kept for exons. Accepted moves are proposals with predicted evidence."><input type="checkbox" id="b-mode"> <span id="b-modelabel">view mode</span></label>
+    </div>
+    <div id="b-summary" style="margin:6px 0 8px"></div>
+    <div style="position:relative"><canvas id="b-canvas" style="width:100%;height:440px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></canvas></div>
+    <canvas id="b-mini" style="width:100%;height:26px;display:block;margin-top:6px;border-radius:6px;background:var(--bg)"></canvas>
+    <div class="grid cols-2" style="margin-top:12px">
+      <div class="card"><h2><i class="ic">ℹ️</i>Block<span class="help" data-tip="Details of the block under the mouse or the selected one: type, coordinates, size, evidence, what it is inside of and what it contains.">?</span></h2><div id="b-info"><span class="muted">Click a block.</span></div></div>
+      <div class="card"><h2><i class="ic">✏️</i>Proposed layout<span class="help" data-tip="Moves accepted in edit mode. They are design proposals (evidence predicted, confidence 0.3), never observations. Export gives them as JSON; Reset discards them.">?</span></h2>
+        <div id="b-verdict"></div><div id="b-edits"></div>
+        <div class="row" style="margin-top:8px"><button class="ghost" id="b-export"><i class="ic">📤</i>Export</button><button class="ghost" id="b-reset"><i class="ic">↩️</i>Reset</button></div>
+        <pre id="b-export-out" class="mono" style="font-size:11px;max-height:160px;overflow:auto"></pre></div>
+    </div>
   </div>
 </section>
 
@@ -380,6 +422,37 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   </div>
 </section>
 
+<!-- ================= CANCER ================= -->
+<section id="cancer">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2><i class="ic">⚖️</i>Healthy vs tumour<span class="help" data-tip="Pick the normal and tumour VCFs of the same person (files under data/). Somatic = in the tumour, not in the normal. Each somatic variant is classified against the gene models and graded with cBioPortal driver frequencies and hotspots.">?</span></h2>
+      <div class="row">
+        <label data-tip="Germline sample: blood or normal tissue.">normal <select id="c-normal"></select></label>
+        <label data-tip="Tumour sample of the same person.">tumour <select id="c-tumour"></select></label>
+        <label data-tip="Chromosome to analyse (chr21 and chrM have annotation locally).">chromosome <input id="c-chrom" value="chr21" style="width:80px" class="mono"></label>
+        <button class="primary" id="c-run" data-tip="Run the comparison."><i class="ic">▶️</i>Compare</button>
+        <span class="muted" id="c-status"></span>
+      </div>
+      <div class="hint">The demo pair is synthetic (a RUNX1 truncation, an APP missense and a silent SOD1 change on chromosome 21), not a real patient.</div>
+      <h2 style="margin-top:12px"><i class="ic">🧬</i>Somatic variants, ranked<span class="help" data-tip="Score = consequence severity + driver frequency + hotspot bonus. Evidence lines cite the study and numbers.">?</span></h2>
+      <div id="c-ranked" class="scroll"></div>
+      <h2 style="margin-top:12px"><i class="ic">🏷️</i>Suggested cancer types<span class="help" data-tip="Enrichment of the sample's mutated drivers per cancer type in the study. A suggestion with inferred evidence, never a diagnosis.">?</span></h2>
+      <div id="c-types"></div>
+      <h2 style="margin-top:12px"><i class="ic">🎯</i>Surface targets<span class="help" data-tip="Altered genes whose products are on the plasma membrane or cell surface (GO), the only place a designed binder reaches from outside.">?</span></h2>
+      <div id="c-targets"></div>
+      <div class="row" style="margin-top:8px"><button class="ghost" id="c-packet" data-tip="Show the JSON task packet for an AI agent: inputs, constraints, minimal prompt, expected output schema."><i class="ic">📦</i>Agent packet</button></div>
+      <pre id="c-packet-out" class="mono" style="font-size:11px;max-height:220px;overflow:auto"></pre>
+    </div>
+    <div class="card">
+      <h2><i class="ic">📚</i>Driver knowledge (cBioPortal, distilled)<span class="help" data-tip="A 110-gene driver panel across MSK-IMPACT 2017: 10,945 tumours of 58 cancer types, fetched once from the public REST API and kept as a 100 KB summary. Click a gene for its hotspots and cancer types.">?</span></h2>
+      <div class="row"><label>gene <input id="c-gene" placeholder="KRAS" style="width:100px" class="mono"></label><button class="ghost" id="c-lookup"><i class="ic">🔎</i>Look up</button><span class="muted" id="c-kstatus"></span></div>
+      <div id="c-genedetail"></div>
+      <div id="c-genes" class="scroll" style="max-height:520px"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= PROGRESS ================= -->
 <section id="progress">
   <div class="grid cols-2">
@@ -415,6 +488,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 
 <script>
 const $ = s => document.querySelector(s);
+window.initialHash = location.hash;  // keep deep links (e.g. #blocks?locus=...) before tab switching rewrites the hash
 let inflight = 0;
 const api = async (path, body) => {
   inflight++; document.getElementById('busy').classList.add('on');
@@ -428,6 +502,44 @@ const api = async (path, body) => {
 const fmt = n => Number(n).toLocaleString('en-US');
 const colors = ['--c1','--c2','--c3','--c4','--c5','--c6'].map(v => getComputedStyle(document.documentElement).getPropertyValue(v).trim());
 
+// ---- spinning double helix (Start page)
+(function helix() {
+  const c = document.getElementById('helix'); if (!c) return;
+  const ctx = c.getContext('2d');
+  const pair = {A: 'T', T: 'A', C: 'G', G: 'C'};
+  const col = {A: '#3fb950', C: '#4c8dff', G: '#e3b341', T: '#ff6b66'};
+  const seq = 'ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAGTTAGGGTTAGGGACGTACGATCGATCGGCTAGCTAGGCATCGATC'.split('');
+  let t0 = performance.now();
+  function frame(now) {
+    const r = c.getBoundingClientRect(); if (c.width !== Math.floor(r.width)) { c.width = Math.floor(r.width); c.height = 110; }
+    const W = c.width, H = c.height, mid = H / 2, amp = H * 0.36, n = Math.max(20, Math.floor(W / 14));
+    const phase = ((now - t0) / 1000) * 1.6;
+    ctx.clearRect(0, 0, W, H);
+    const pts = [];
+    for (let i = 0; i <= n; i++) {
+      const x = i / n * W, a = i * 0.42 + phase;
+      pts.push({x, y1: mid + Math.sin(a) * amp, y2: mid + Math.sin(a + Math.PI) * amp, z1: Math.cos(a), z2: Math.cos(a + Math.PI), b: seq[i % seq.length]});
+    }
+    // rungs (base pairs), drawn back to front by depth
+    for (const p of pts) {
+      const depth = (p.z1 + 1) / 2;
+      ctx.globalAlpha = 0.35 + 0.5 * depth; ctx.lineWidth = 1 + depth;
+      const g = ctx.createLinearGradient(p.x, p.y1, p.x, p.y2); g.addColorStop(0, col[p.b]); g.addColorStop(1, col[pair[p.b]]);
+      ctx.strokeStyle = g; ctx.beginPath(); ctx.moveTo(p.x, p.y1); ctx.lineTo(p.x, p.y2); ctx.stroke();
+    }
+    for (const [k, zk] of [['y2', 'z2'], ['y1', 'z1']]) {
+      ctx.beginPath();
+      pts.forEach((p, i) => { i ? ctx.lineTo(p.x, p[k]) : ctx.moveTo(p.x, p[k]); });
+      ctx.lineWidth = 3; ctx.globalAlpha = 0.9; ctx.strokeStyle = k === 'y1' ? '#8250df' : '#1f6feb'; ctx.stroke();
+      for (const p of pts) { const d = (p[zk] + 1) / 2; ctx.globalAlpha = 0.4 + 0.6 * d; ctx.fillStyle = k === 'y1' ? '#b083ff' : '#4c8dff'; ctx.beginPath(); ctx.arc(p.x, p[k], 1.6 + 2.2 * d, 0, Math.PI * 2); ctx.fill(); }
+    }
+    ctx.globalAlpha = 1;
+    if (document.getElementById('start').classList.contains('active')) requestAnimationFrame(frame); else setTimeout(() => requestAnimationFrame(frame), 500);
+  }
+  frame(performance.now());  // first frame synchronously, then animate
+  requestAnimationFrame(frame);
+})();
+
 // ---- tabs
 const autoRan = new Set();
 document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
@@ -436,14 +548,15 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
   if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadProgress(); }
+  if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   // first visit to a simulation tab runs its default example
   if (!autoRan.has(b.dataset.tab)) {
     autoRan.add(b.dataset.tab);
-    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare'}[b.dataset.tab];
+    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run'}[b.dataset.tab];
     if (first) setTimeout(async () => { await ready; if (b.dataset.tab === 'debug' && !$('#d-bp').value) { $('#d-bp').value = 'LacI > 30'; $('#d-init').value = 'TetR=10'; $('#d-explain').value = 'lacI.mRNA'; } $(first).click(); }, 300);
   }
 });
-if (location.hash) { const b = document.querySelector(`nav button[data-tab="${location.hash.slice(1)}"]`); if (b) b.click(); }
+if (location.hash) { const b = document.querySelector(`nav button[data-tab="${location.hash.slice(1).split('?')[0]}"]`); if (b) b.click(); }
 
 // ---- SVG line chart
 function lineChart(svg, legendEl, times, series, opts = {}) {
@@ -482,12 +595,16 @@ const ready = (async () => {
   $('#version').textContent = 'v' + files.version;
   $('#g-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path} (${fmt(g.size)} B)</option>`).join('');
   $('#an-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path}</option>`).join('');
+  const vopts = (files.vcfs || []).map(v => `<option value="${v.path}">${v.path}</option>`).join('');
+  $('#c-normal').innerHTML = vopts; $('#c-tumour').innerHTML = vopts;
+  const cn = (files.vcfs || []).find(v => v.path.includes('cancer_normal')), ct = (files.vcfs || []).find(v => v.path.includes('cancer_tumour'));
+  if (cn) $('#c-normal').value = cn.path; if (ct) $('#c-tumour').value = ct.path;
   const anPref = files.genomes.find(g => g.path.includes('chrM')); if (anPref) { $('#an-file').value = anPref.path; $('#an-chrom').value = 'chrM'; }
   $('#p-file').innerHTML = files.modules.map(m => `<option value="${m.path}">${m.path}</option>`).join('');
   if (files.modules.length) { const d = defaultModule(); $('#p-file').value = d.path; await openModule(d.path); $('#p-init').value = 'TetR=10'; $('#p-run').click(); $('#p-compile').click(); }
   const pref = files.genomes.find(g => g.path.includes('chrM')) || files.genomes[0];
   if (pref) { $('#g-file').value = pref.path; await loadGenome(); if (pref.path.includes('chrM')) { $('#g-locus').value = 'chrM:5903-7445(+)'; $('#g-table').value = 'mito'; $('#g-translate').click(); } }
-  loadLibs(); initAge(); loadTwins(); loadResults();
+  loadLibs(); initAge(); loadTwins(); loadResults(); window.api = api; if (window.blocksInit) window.blocksInit(files); loadCancer();
 })();
 
 // ---- genome
@@ -775,6 +892,37 @@ async function loadProgress() {
   $('#p-rows').innerHTML = '<table><tr><th>task</th><th>status</th><th>evidence</th></tr>' + p.rows.map(r => `<tr><td><b>${r.task}</b></td><td><span class="pstatus ${r.status.startsWith('done') ? 'done' : 'progress'}">${r.status}</span></td><td class="muted" style="font-size:12px">${r.evidence}</td></tr>`).join('') + '</table>';
 }
 
+// ---- cancer
+async function loadCancer() {
+  try {
+    const k = await api('/api/cancer?top=40');
+    $('#c-kstatus').textContent = `${k.study}: ${fmt(k.samples)} tumours`;
+    $('#c-genes').innerHTML = '<table><tr><th>gene</th><th class="num">mutated</th><th>top change</th><th>cancer types</th></tr>' + k.genes.map(g => `<tr><td class="mono"><a href="#" data-gene="${g.gene}">${g.gene}</a></td><td class="num">${(g.frequency * 100).toFixed(1)}%</td><td class="mono">${g.hotspots[0] ? g.hotspots[0][0] : ''}</td><td class="muted" style="font-size:12px">${g.top_types.map(([t, f]) => `${t} ${(f * 100).toFixed(0)}%`).join(' · ')}</td></tr>`).join('') + '</table>';
+    $('#c-genes').querySelectorAll('a[data-gene]').forEach(a => a.onclick = e => { e.preventDefault(); $('#c-gene').value = a.dataset.gene; $('#c-lookup').click(); });
+  } catch (e) { $('#c-kstatus').textContent = e.message; }
+}
+$('#c-lookup').onclick = async () => {
+  try {
+    const g = await api(`/api/cancer?gene=${encodeURIComponent($('#c-gene').value.trim().toUpperCase())}`);
+    $('#c-genedetail').innerHTML = `<div class="note"><b>${g.gene}</b> mutated in <b>${(g.frequency * 100).toFixed(1)}%</b> of ${fmt(g.samples)} tumours <span class="pill experimental">experimental</span></div>
+      <div class="muted" style="font-size:12px">hotspots: ${g.hotspots.map(h => `${h[0]} ×${h[1]}`).join(', ')}</div>
+      <table>${Object.entries(g.by_cancer_type).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([t, f]) => `<tr><td>${t}</td><td><div class="bar" style="display:inline-block;width:120px;vertical-align:middle"><i style="width:${(f * 100).toFixed(0)}%"></i></div></td><td class="num">${(f * 100).toFixed(1)}%</td></tr>`).join('')}</table>`;
+  } catch (e) { $('#c-genedetail').innerHTML = `<span class="err">${e.message}</span>`; }
+};
+let lastPacket = null;
+$('#c-run').onclick = async () => {
+  $('#c-status').textContent = 'comparing…';
+  try {
+    const r = await api('/api/cancer/compare', {normal: $('#c-normal').value, tumour: $('#c-tumour').value, chrom: $('#c-chrom').value.trim()});
+    $('#c-status').textContent = `${r.somatic} somatic variant(s)`;
+    $('#c-ranked').innerHTML = r.ranked.length ? '<table><tr><th>gene</th><th>consequence</th><th>change</th><th class="num">driver</th><th>hotspot</th><th class="num">score</th></tr>' + r.ranked.map(s => `<tr><td class="mono">${s.gene || '-'}</td><td>${s.consequence || '-'}</td><td class="mono">${s.protein_change || ''}</td><td class="num">${s.driver_frequency ? (s.driver_frequency * 100).toFixed(1) + '%' : '-'}</td><td>${s.hotspot ? '<span class="pill experimental">hotspot</span>' : ''}</td><td class="num">${s.score}</td></tr>${s.evidence.length ? `<tr><td colspan="6" class="muted" style="font-size:11.5px">${s.evidence.join(' · ')}</td></tr>` : ''}`).join('') + '</table>' : '<span class="muted">no somatic variants</span>';
+    $('#c-types').innerHTML = r.types.length ? '<table>' + r.types.map(t => `<tr><td>${t.cancer_type}</td><td class="num">${t.log_enrichment >= 0 ? '+' : ''}${t.log_enrichment}</td><td><span class="pill inferred">inferred</span></td></tr>`).join('') + '</table>' : '<span class="muted">no driver evidence to suggest a type</span>';
+    $('#c-targets').innerHTML = r.targets.length ? r.targets.map(t => `<span class="gene">${t.gene}</span> <span class="muted">${t.location} (conf ${t.confidence})</span>`).join('<br>') : '<span class="muted">none of the altered genes encodes a surface protein</span>';
+    lastPacket = r.packet; $('#c-packet-out').textContent = '';
+  } catch (e) { $('#c-status').textContent = e.message; }
+};
+$('#c-packet').onclick = () => { $('#c-packet-out').textContent = lastPacket ? JSON.stringify(lastPacket, null, 1) : 'run a comparison first'; };
+
 // ---- libraries
 let libs = [];
 async function loadLibs() { libs = (await api('/api/libs')).libraries; renderLibs(''); }
@@ -797,5 +945,6 @@ function renderLibs(q) {
 $('#l-search').oninput = e => renderLibs(e.target.value);
 window.addEventListener('resize', () => { /* charts are viewBox-scaled; nothing to do */ });
 </script>
+<script src="/static/blocks.js"></script>
 </body>
 </html>

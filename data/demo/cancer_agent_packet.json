@@ -1,0 +1,110 @@
+{
+ "task": "From the somatic alterations of one tumour, choose the best cell-surface target for a designed binder and state what the binder would carry, with the evidence for each step.",
+ "sample": "data/demo/cancer_tumour.vcf",
+ "inputs": {
+  "somatic_variants_ranked": [
+   {
+    "chrom": "chr21",
+    "pos": 34792137,
+    "ref": "G",
+    "alt": "C",
+    "gene": "RUNX1",
+    "consequence": "nonsense",
+    "protein_change": "Y389*",
+    "driver_frequency": 0.0151,
+    "hotspot": false,
+    "score": 1.4,
+    "evidence": [
+     "RUNX1 mutated in 1.5% of 10945 tumours (cBioPortal msk_impact_2017)"
+    ]
+   },
+   {
+    "chrom": "chr21",
+    "pos": 25881672,
+    "ref": "G",
+    "alt": "C",
+    "gene": "APP",
+    "consequence": "missense_variant",
+    "protein_change": "N770K",
+    "driver_frequency": null,
+    "hotspot": false,
+    "score": 0.5,
+    "evidence": []
+   },
+   {
+    "chrom": "chr21",
+    "pos": 31659774,
+    "ref": "G",
+    "alt": "A",
+    "gene": "SOD1",
+    "consequence": "synonymous_variant",
+    "protein_change": "=",
+    "driver_frequency": null,
+    "hotspot": false,
+    "score": 0.05,
+    "evidence": []
+   }
+  ],
+  "suggested_cancer_types": [
+   {
+    "cancer_type": "Salivary Gland Cancer",
+    "log_enrichment": 1.053,
+    "samples_in_study": 114,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   },
+   {
+    "cancer_type": "Endometrial Cancer",
+    "log_enrichment": 1.016,
+    "samples_in_study": 218,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   },
+   {
+    "cancer_type": "Bladder Cancer",
+    "log_enrichment": 0.862,
+    "samples_in_study": 423,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   },
+   {
+    "cancer_type": "Adrenocortical Carcinoma",
+    "log_enrichment": 0.806,
+    "samples_in_study": 25,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   },
+   {
+    "cancer_type": "Breast Cancer",
+    "log_enrichment": 0.673,
+    "samples_in_study": 1337,
+    "evidence": "inferred from per-type driver frequencies (cBioPortal); suggestion, not diagnosis"
+   }
+  ],
+  "surface_targets": [
+   {
+    "gene": "APP",
+    "location": "plasma membrane / cell surface",
+    "evidence": "GO cellular component annotation (goa_human)",
+    "confidence": 0.7
+   }
+  ]
+ },
+ "constraints": [
+  "Use only the evidence in inputs; mark any external knowledge as 'assumption'.",
+  "Prefer targets altered in the tumour and absent from the normal sample.",
+  "Report confidence per claim on a 0-1 scale; never present a prediction as a measurement.",
+  "This is a research analysis, not clinical advice."
+ ],
+ "expected_output": {
+  "target_gene": "string",
+  "why": "string",
+  "confidence": "0-1",
+  "payload_options": [
+   "string"
+  ],
+  "risks": [
+   "string"
+  ],
+  "next_experiments": [
+   "string"
+  ]
+ },
+ "minimal_prompt": "You are given a ranked list of somatic variants of a tumour, suggested cancer types, and the altered genes whose products sit on the cell surface. Choose one target for a designed protein binder that would reach tumour cells but not healthy ones, justify it from the inputs, say what payload it should carry (toxin, immune recruiter, radionuclide, or a gene/RNA cargo) and list risks and the next experiments. Answer in the expected_output JSON."
+}
