@@ -42,9 +42,15 @@ class KnowledgeBase:
 
     @classmethod
     def available(cls, knowledge_dir: Path = DEFAULT_KNOWLEDGE, genes_tsv: Path = DEFAULT_GENES) -> bool:
-        return all(
-            (knowledge_dir / f).exists() for f in ("go-basic.obo", "goa_human.gaf.gz", "Ensembl2Reactome.txt")
-        )
+        """GO files present, plus either the Reactome mapping or the distilled membership summary."""
+        go_ok = all((knowledge_dir / f).exists() for f in ("go-basic.obo", "goa_human.gaf.gz"))
+        return go_ok and ((knowledge_dir / "Ensembl2Reactome.txt").exists() or cls.distilled() is not None)
+
+    @staticmethod
+    def distilled() -> dict | None:
+        from genomeos.results import load_result
+
+        return load_result("library_members")
 
     @cached_property
     def go(self) -> Ontology:
@@ -78,6 +84,10 @@ class KnowledgeBase:
 
     def reactome_members(self, lib: Library) -> set[str]:
         out: set[str] = set()
+        if not (self.knowledge_dir / "Ensembl2Reactome.txt").exists():
+            # the raw mapping was discarded after distillation: use the summary (GO ∪ Reactome members)
+            d = self.distilled()
+            return set(d["members"].get(lib.id, [])) - self.go_members(lib) if d else set()
         for needle in lib.reactome:
             pid = self.reactome.id_of(needle)
             if pid:
@@ -89,7 +99,8 @@ class KnowledgeBase:
 
     def verify(self, lib: Library) -> Verification:
         unknown = tuple(t for t in lib.go_terms if t not in self.go or self.go.terms[t].obsolete)
-        unknown += tuple(n for n in lib.reactome if self.reactome.id_of(n) is None)
+        if (self.knowledge_dir / "Ensembl2Reactome.txt").exists():
+            unknown += tuple(n for n in lib.reactome if self.reactome.id_of(n) is None)
         checked = tuple(g for g in lib.genes if g not in lib.noncoding)
         members = self.members(lib)
         missing = tuple(g for g in checked if g not in members)
