@@ -29,6 +29,31 @@ organisation principles directly. Numbers below are from
 | CpG islands | 0 | 573 | 220 (the worm does not methylate CpG, so islands are not promoters there) |
 | homopolymer runs ≥12 | 0 | 7,919 | 1,145 |
 
+## The whole human genome (GRCh38, all 25 chromosomes, streamed and discarded)
+
+Result: `data/results/anatomy_hg38_by_chromosome.json`. Each chromosome was
+downloaded, counted and deleted; total disk use never exceeded one chromosome.
+
+| measure | value |
+|---|---|
+| bases | 3.088 Gb (4.9% assembly gaps) |
+| coding genes | 20,107 (78,733 genes of all types) |
+| protein-coding bases | 37.4 Mb = **1.21%** |
+| intron and non-coding gene bodies | 1,892 Mb = **61.3%** |
+| intergenic | 861 Mb = 27.9% |
+| other exonic (UTR, ncRNA exons) | 147 Mb = 4.8% |
+| exons per canonical transcript | median 8 |
+| intron median by chromosome | 842 bp (chr19) to 2,683 bp |
+| coding-gene density | chr19 25.3 per Mb and chr17 14.3 the densest; chr13, chr18 and chrY under 3.5 |
+| CpG islands (≥400 bp) | 39,410 |
+
+So the human design spends roughly one base in eighty on protein, six in ten
+on the inside of genes that is spliced away, and three in ten between genes.
+The gene-dense chromosomes (19, 17) have the shortest introns; the sparse ones
+the longest: density and intron size move together, which says that the
+budget is one number (bases per gene) partitioned between introns and
+spacing.
+
 ## What the comparison says
 
 1. **There are three ways to organise a genome, and they are budgets.** The

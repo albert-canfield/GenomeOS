@@ -17,5 +17,7 @@ report its confidence before the next begins.
 | 0.8 ✅ debugger | **Debugger and IDE**: step, breakpoints on biological conditions, evidence trace | a differentiation event can be explained back to its rules and sources |
 | 1.0 ◐ search only | **BioForge**: design under constraints, in-silico experiments, confidence-scored predictions | an external group reproduces a published perturbation result from a BioLang module |
 
+| 1.x | **BioLang as an engine**: the language, IR, VM and standard library packaged on their own (`bio run | check | compile | test | repl`), embeddable, with GenomeOS as the first application | a `.bio` program runs without GenomeOS installed |
+
 Not on the roadmap: wet-lab synthesis or any translation of designs into
 real organisms. GenomeOS stops at simulation and analysis.

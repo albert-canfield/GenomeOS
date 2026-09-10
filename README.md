@@ -2,6 +2,12 @@
 
 **An executable model of biology.**
 
+**Ambition.** GenomeOS is built to become the software geneticists reach
+for first: to work, research, investigate and build. A real bio-engineering
+tool that understands the biological code rather than a viewer of it. Every
+feature is judged by that bar: does it help a geneticist decode, model or
+build, and does it say how sure it is.
+
 GenomeOS treats a genome as source material and biology as a runtime. It is not a
 DNA editor and not a genome browser. It is the layer that sits *between* sequence
 and simulation: a compiler that turns a real genome plus scientific knowledge into
@@ -141,6 +147,22 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 - [docs/SEQUENCE-GRAMMAR.md](docs/SEQUENCE-GRAMMAR.md) — the genome's own delimiters, measured, and how BioLang builds on them
 - [docs/GENOME-ANATOMY.md](docs/GENOME-ANATOMY.md) — counting the blocks of three genomes, and the budgets for building one from zero
 - [docs/ROADMAP.md](docs/ROADMAP.md) — from a molecular cell to a digital twin
+
+## Goals
+
+1. **Decode.** Take real genomes and let their blocks, elements and rules
+   emerge from the data (anatomy, signals, libraries), with evidence and
+   uncertainty on everything.
+2. **Model.** Run biology forward through time, from a specific genome and a
+   measured state: cells, ageing, development, twins.
+3. **Build.** Design under constraints in silico, and eventually produce the
+   budgets and layouts a genome built from zero would need.
+4. **BioLang as an engine.** Today BioLang is one part of GenomeOS, developed
+   here. The long-term goal is for BioLang to stand on its own the way Node
+   stands for JavaScript: an engine and toolchain people use to write, script,
+   compile and run biology, with GenomeOS as its first application. How to get
+   there is open; the architecture keeps the boundaries that make it possible
+   (see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), "BioLang as a separable engine").
 
 ## Principles
 
