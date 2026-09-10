@@ -39,3 +39,20 @@ def test_p53_loss_reduces_senescence():
     a = base.run("fibroblast", years=30, cells=400, seed=5)
     b = p53.run("fibroblast", years=30, cells=400, seed=5)
     assert b.final.senescent_fraction < a.final.senescent_fraction
+
+
+def test_twin_uses_saved_calibration(tmp_path, monkeypatch):
+    import genomeos.twin.twin as tw
+
+    monkeypatch.setattr(
+        "genomeos.results.load_result",
+        lambda name, results_dir=None: (
+            {"fitted_divisions_per_year": 9.0, "evidence": {"source": "t"}, "confidence": 0.4}
+            if name.startswith("calibration_")
+            else None
+        ),
+    )
+    base = tw.Twin("Y", measured=tw.MeasuredState(chronological_age=40, telomere_bp=7000))
+    fast = base.run("hematopoietic_stem", years=20, cells=200, seed=1, use_calibration=True)
+    slow = base.run("hematopoietic_stem", years=20, cells=200, seed=1, use_calibration=False)
+    assert fast.final.mean_telomere_bp < slow.final.mean_telomere_bp

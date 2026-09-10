@@ -1,0 +1,16 @@
+{
+  "result": "calibration_hematopoietic_stem_attrition",
+  "date": "2026-09-10",
+  "cell_type": "hematopoietic_stem",
+  "age_years": 45,
+  "measured_bp": 5896,
+  "source": "HG002 streamed TelSeq estimate (hg002_telomere_stream), Southern-equivalent \u00d72, age \u224845 y assumed",
+  "fitted_divisions_per_year": 3.8,
+  "net_bp_per_year": 91.2,
+  "evidence": {
+    "kind": "inferred",
+    "source": "calibrated to HG002 streamed TelSeq estimate (hg002_telomere_stream), Southern-equivalent \u00d72, age \u224845 y assumed",
+    "note": "5896 bp at 45 y; birth 10000 bp; 60 bp/division \u00d7 0.40 kept"
+  },
+  "confidence": 0.4
+}

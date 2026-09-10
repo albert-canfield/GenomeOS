@@ -502,6 +502,52 @@ class Api:
             "explain": expl,
         }
 
+    # ---- measurements (distilled results) -------------------------------
+
+    def results(self) -> dict:
+        from genomeos.results import list_results, load_result
+
+        out = []
+        for r in list_results(self.root / "data" / "results"):
+            d = load_result(r["name"], self.root / "data" / "results") or {}
+            out.append(
+                {
+                    "name": r["name"],
+                    "date": r["date"],
+                    "size": r["size"],
+                    "summary": {
+                        k: v
+                        for k, v in d.items()
+                        if isinstance(v, int | float | str) and k not in ("result",)
+                    },
+                }
+            )
+        return {"results": out}
+
+    def twin_measure(self, name: str) -> dict:
+        """Apply the streamed HG002 measurements (telomere, methylation) to a twin's measured state."""
+        from genomeos.results import load_result
+        from genomeos.twin import Twin
+
+        src = self.root / "data" / "twins" / f"{name}.json"
+        if not src.is_file():
+            raise ApiError(f"no twin {name!r}", 404)
+        t = Twin.load(src)
+        applied = {}
+        tel = load_result("hg002_telomere_stream", self.root / "data" / "results")
+        if tel:
+            t.measured.telomere_bp = float(tel["southern_equivalent_bp_inferred"])
+            applied["telomere_bp"] = t.measured.telomere_bp
+        meth = load_result("hg002_methylation_stream", self.root / "data" / "results")
+        if meth:
+            t.measured.epigenetic_age = float(meth["horvath_age"])
+            applied["epigenetic_age"] = t.measured.epigenetic_age
+        t.measured.notes = (
+            "measured state from streamed GIAB data: " + ", ".join(applied) if applied else t.measured.notes
+        )
+        t.save(self.root / "data" / "twins")
+        return {"ok": True, "twin": name, "applied": applied}
+
     # ---- libraries -------------------------------------------------------
 
     def libs(self) -> dict:
@@ -579,6 +625,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.libs())
             if u.path == "/api/twins":
                 return self._json(self.api.twins())
+            if u.path == "/api/results":
+                return self._json(self.api.results())
             if u.path == "/api/develop":
                 return self._json(
                     self.api.develop(
@@ -614,6 +662,8 @@ class Handler(BaseHTTPRequestHandler):
                         body.get("cell_type"),
                     )
                 )
+            if u.path == "/api/twin/measure":
+                return self._json(self.api.twin_measure(body.get("name", "")))
             if u.path == "/api/twin/new":
                 return self._json(
                     self.api.twin_new(
