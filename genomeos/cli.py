@@ -939,6 +939,79 @@ def cmd_cancer(args: argparse.Namespace) -> int:
             )
         )
         return 0
+    if args.cancer_cmd == "tumour":
+        from genomeos.cancer import analyse, tumour_packet
+
+        a = analyse(
+            args.vcf,
+            set(args.chrom) if args.chrom else None,
+            k,
+            deep=args.deep,
+            pathways=not args.no_pathways,
+            log=sys.stdout,
+        )
+        mb = a["mutation_burden"]
+        print(
+            f"{args.vcf}: {a['variants_total']} variants, {a['annotated']} annotated by VEP; "
+            f"{a['likely_germline']} set aside as likely germline; {a['somatic_candidates']} somatic "
+            f"candidates, {a['coding_somatic']} coding"
+        )
+        print(f"  mutation burden: {mb['per_megabase']} coding/Mb [{mb['evidence']}; {mb['assumption']}]")
+        print(
+            _table(
+                [
+                    {
+                        "gene": r["gene"] or "-",
+                        "consequence": r["consequence"],
+                        "change": r["protein_change"] or "-",
+                        "driver": f"{r['driver_frequency']:.1%}" if r["driver_frequency"] else "-",
+                        "hotspot": "yes" if r["hotspot"] else "",
+                        "COSMIC": "yes" if r["cosmic"] else "",
+                        "damage": r["sift"] or r["polyphen"] or "-",
+                        "score": f"{r['score']:.2f}",
+                    }
+                    for r in a["ranked"][:15]
+                ],
+                ["gene", "consequence", "change", "driver", "hotspot", "COSMIC", "damage", "score"],
+            )
+        )
+        if a["germline_set_aside"]:
+            print(
+                "  likely germline (population frequency): "
+                + ", ".join(
+                    f"{g['gene'] or g['chrom'] + ':' + str(g['pos'])} {g['gnomad_af']:.2g}"
+                    for g in a["germline_set_aside"][:8]
+                )
+            )
+        for p in a["mutant_peptides"]:
+            if "error" in p:
+                print(f"  peptide {p['error']}")
+            else:
+                print(
+                    f"  peptide {p['gene']} {p['change']}: {p['wild_type']} → {p['mutant']} "
+                    f"(residues {p['window'][0]}-{p['window'][1]})"
+                )
+        for e in a["pathway_effects"]:
+            if "error" in e:
+                print(f"  pathway {e['gene']}: {e['error']}")
+            else:
+                w = e["most_affected"]
+                print(
+                    f"  pathway {e['gene']} {e['change']} treated as absent: {e['reactions_lost']} reactions "
+                    f"lost over {e['pathways_checked']} pathways"
+                    + (f"; most affected {w['name']} ({w['fraction_lost']:.0%})" if w else "")
+                )
+        print("suggested cancer types (inferred):")
+        for t_ in a["suggested_cancer_types"]:
+            print(f"  {t_['cancer_type']:<36} enrichment {t_['log_enrichment']:+.2f}")
+        print(
+            "cell-surface products among altered genes:",
+            ", ".join(x["gene"] for x in a["surface_targets"]) or "none",
+        )
+        if args.packet:
+            Path(args.packet).write_text(json.dumps(tumour_packet(a), indent=1))
+            print(f"agent packet written to {args.packet}")
+        return 0
     # compare
     from genomeos.cancer import agent_packet, annotate, somatic, suggest_cancer_type, surface_targets
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
@@ -1804,6 +1877,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("symbol")
     p = can.add_parser("types", help="cancer types in the distilled study")
     p.add_argument("--top", type=int, default=30)
+    p = can.add_parser(
+        "tumour", help="tumour DNA alone: VEP annotation, germline estimate, drivers, peptides, pathways"
+    )
+    p.add_argument("--vcf", required=True)
+    p.add_argument("--chrom", nargs="*")
+    p.add_argument(
+        "--deep", type=int, default=5, help="top coding variants to trace to peptides and pathways"
+    )
+    p.add_argument("--no-pathways", action="store_true")
+    p.add_argument("--packet", help="write the AI-agent task packet (JSON)")
     p = can.add_parser("compare", help="somatic variants of a tumour vs the same person's normal sample")
     p.add_argument("--normal", required=True)
     p.add_argument("--tumour", required=True)

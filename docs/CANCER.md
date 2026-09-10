@@ -72,6 +72,28 @@ that pipeline: from two genomes to a graded list of what is different and
 what is reachable. Binder design and anything involving a patient is outside
 this project and belongs to laboratories and clinicians.
 
+## Tumour alone: no matched normal
+
+`genomeos cancer tumour --vcf T.vcf --packet packet.json` takes the tumour's
+DNA by itself. What changes without the normal sample, and how each gap is
+handled:
+
+| step | with a normal | tumour alone | evidence |
+|---|---|---|---|
+| somatic vs germline | subtraction | gnomAD population frequency ≥ 1% → likely inherited, set aside; rare germline variants cannot be told apart | inferred |
+| consequence | local gene models (chr21, chrM) | Ensembl VEP REST on any chromosome: consequence, gene, HGVS c./p., SIFT, PolyPhen, COSMIC ids, gnomAD; cached per variant in `data/knowledge/vep/` | curated / predicted |
+| drivers | cBioPortal frequencies and hotspots | same | curated |
+| burden | – | coding somatic variants per Mb, assuming a whole exome; the assumption is written into the result | inferred |
+| protein | – | mutant peptide window around each top missense change, from the UniProt canonical sequence (neoantigen candidates; HLA binding not predicted) | derived |
+| pathways | – | a truncated driver is treated as absent and run through its Reactome pathways: reactions lost, most affected pathway | curated + inferred |
+
+The score adds severity, driver frequency, hotspot, COSMIC presence and
+predicted damage; likely-germline variants are kept in the packet but
+scaled down and listed separately so the agent does not build on them. The
+packet asks for driver events, cancer type, a surface target with payload,
+neoantigen candidates, risks and next experiments, each with confidence.
+The Cancer tab has a "Tumour alone" form for the same run.
+
 ## Next
 
 - Copy-number and structural variants from cBioPortal (`_cna`,

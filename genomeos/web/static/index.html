@@ -514,6 +514,14 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
         <span class="muted" id="c-status"></span>
       </div>
       <div class="hint">The demo pair is synthetic (a RUNX1 truncation, an APP missense and a silent SOD1 change on chromosome 21), not a real patient.</div>
+      <h2 style="margin-top:12px"><i class="ic">🧪</i>Tumour alone<span class="help" data-tip="No normal sample: every variant is annotated through Ensembl VEP on any chromosome (consequence, gene, protein change, SIFT/PolyPhen, COSMIC, gnomAD frequency). Variants common in the population are set aside as likely inherited. The top coding hits are traced to the mutant peptide window and, for truncations, to the pathway reactions lost. Needs the internet; cached per variant afterwards.">?</span></h2>
+      <div class="row">
+        <label data-tip="Any VCF under data/. Chromosomes beyond chr21 work: VEP runs on Ensembl's servers.">tumour VCF <select id="c-tvcf"></select></label>
+        <label data-tip="How many top coding variants to trace to peptides and pathways.">trace top <input id="c-deep" type="number" value="5" style="width:60px"></label>
+        <button class="primary" id="c-trun" data-tip="Annotate, grade and trace the tumour's variants."><i class="ic">🧪</i>Analyse</button>
+        <span class="muted" id="c-tstatus"></span>
+      </div>
+      <div id="c-tout"></div>
       <h2 style="margin-top:12px"><i class="ic">🧬</i>Somatic variants, ranked<span class="help" data-tip="Score = consequence severity + driver frequency + hotspot bonus. Evidence lines cite the study and numbers.">?</span></h2>
       <div id="c-ranked" class="scroll"></div>
       <h2 style="margin-top:12px"><i class="ic">🏷️</i>Suggested cancer types<span class="help" data-tip="Enrichment of the sample's mutated drivers per cancer type in the study. A suggestion with inferred evidence, never a diagnosis.">?</span></h2>
@@ -690,9 +698,29 @@ const ready = (async () => {
   $('#g-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path} (${fmt(g.size)} B)</option>`).join('');
   $('#an-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path}</option>`).join('');
   const vopts = (files.vcfs || []).map(v => `<option value="${v.path}">${v.path}</option>`).join('');
-  $('#c-normal').innerHTML = vopts; $('#c-tumour').innerHTML = vopts;
+  $('#c-normal').innerHTML = vopts; $('#c-tumour').innerHTML = vopts; $('#c-tvcf').innerHTML = vopts;
   const cn = (files.vcfs || []).find(v => v.path.includes('cancer_normal')), ct = (files.vcfs || []).find(v => v.path.includes('cancer_tumour'));
-  if (cn) $('#c-normal').value = cn.path; if (ct) $('#c-tumour').value = ct.path;
+  if (cn) $('#c-normal').value = cn.path; if (ct) { $('#c-tumour').value = ct.path; $('#c-tvcf').value = ct.path; }
+  $('#c-trun').onclick = async () => {
+    $('#c-tstatus').textContent = 'annotating through VEP, grading, tracing…'; $('#c-tout').innerHTML = '';
+    try {
+      const a = await api('/api/cancer/tumour', {vcf: $('#c-tvcf').value, deep: +$('#c-deep').value || 5});
+      $('#c-tstatus').textContent = `${a.variants_total} variants · ${a.annotated} annotated · ${a.likely_germline} likely germline · ${a.somatic_candidates} somatic candidates (${a.coding_somatic} coding)`;
+      const mb = a.mutation_burden;
+      const rows = a.ranked.slice(0, 20).map(r => `<tr><td><b>${r.gene || '-'}</b></td><td>${r.consequence}</td><td class="mono">${r.protein_change || '-'}</td><td class="num">${r.driver_frequency ? (r.driver_frequency * 100).toFixed(1) + '%' : '-'}</td><td>${r.hotspot ? '🔥' : ''}${r.cosmic.length ? ' COSMIC' : ''}</td><td class="muted">${r.sift || r.polyphen || ''}</td><td class="num">${r.score.toFixed(2)}</td></tr>`).join('');
+      $('#c-tout').innerHTML = `
+        <div class="muted" style="font-size:12px">mutation burden ${mb.per_megabase} coding/Mb <span class="pill inferred">inferred</span> <span data-tip="${mb.assumption}">(assumption: whole exome)</span> · ${mb.note}</div>
+        <table style="margin-top:6px"><tr><th>gene</th><th>consequence</th><th>change</th><th>driver</th><th></th><th>damage</th><th>score</th></tr>${rows}</table>
+        ${a.germline_set_aside.length ? `<div class="muted" style="font-size:12px;margin-top:6px">set aside as likely germline (population frequency): ${a.germline_set_aside.slice(0, 8).map(g => `${g.gene || g.chrom + ':' + g.pos} ${g.gnomad_af.toPrecision(2)}`).join(', ')}</div>` : ''}
+        ${a.mutant_peptides.map(p => p.error ? `<div class="muted">peptide: ${p.error}</div>` : `<div style="font-size:12.5px;margin-top:4px"><b>${p.gene} ${p.change}</b> peptide window ${p.window[0]}–${p.window[1]}: <span class="mono">${p.wild_type}</span> → <span class="mono">${p.mutant}</span> <span class="pill derived">derived</span> <span class="muted">${p.note}</span></div>`).join('')}
+        ${a.pathway_effects.map(e => e.error ? `<div class="muted">pathway ${e.gene}: ${e.error}</div>` : `<div style="font-size:12.5px;margin-top:4px"><b>${e.gene} ${e.change}</b> treated as absent: ${e.reactions_lost} reactions lost over ${e.pathways_checked} pathways${e.most_affected ? `; most affected ${e.most_affected.name} (${(e.most_affected.fraction_lost * 100).toFixed(0)}%)` : ''} <span class="pill inferred">inferred</span></div>`).join('')}
+        <div style="margin-top:6px"><b>suggested cancer types</b> <span class="pill inferred">inferred</span>: ${a.suggested_cancer_types.map(t => `${t.cancer_type} (${t.log_enrichment >= 0 ? '+' : ''}${t.log_enrichment.toFixed(2)})`).join(', ') || 'none'}</div>
+        <div><b>surface targets</b>: ${a.surface_targets.map(x => x.gene).join(', ') || 'none'}</div>
+        <div class="row" style="margin-top:8px"><button class="ghost" id="c-tpacket"><i class="ic">📦</i>Agent packet</button></div>
+        <pre id="c-tpacket-out" class="mono" style="font-size:11px;max-height:220px;overflow:auto"></pre>`;
+      $('#c-tpacket').onclick = () => { $('#c-tpacket-out').textContent = JSON.stringify(a.packet, null, 1); };
+    } catch (e) { $('#c-tstatus').textContent = e.message; }
+  };
   const anPref = files.genomes.find(g => g.path.includes('chrM')); if (anPref) { $('#an-file').value = anPref.path; $('#an-chrom').value = 'chrM'; }
   $('#p-file').innerHTML = files.modules.map(m => `<option value="${m.path}">${m.path}</option>`).join('');
   if (files.modules.length) { const d = defaultModule(); $('#p-file').value = d.path; await openModule(d.path); $('#p-init').value = 'TetR=10'; $('#p-run').click(); $('#p-compile').click(); }

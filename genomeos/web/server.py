@@ -734,6 +734,15 @@ class Api:
             "evidence": k["evidence"],
         }
 
+    def cancer_tumour(self, vcf: str, deep: int = 5) -> dict:
+        """Tumour-only pipeline on a local VCF; the packet is included."""
+        from genomeos.cancer import analyse, tumour_packet
+
+        path = self._safe(vcf)
+        a = analyse(str(path), deep=deep)
+        a["packet"] = tumour_packet(a)
+        return a
+
     def cancer_compare(self, normal: str, tumour: str, genome: str, chrom: str) -> dict:
         from genomeos.cancer import agent_packet, annotate, somatic, suggest_cancer_type, surface_targets
         from genomeos.genome import Annotation, IndexedGenome, default_gencode
@@ -1027,6 +1036,8 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
             if u.path == "/api/compile":
                 return self._json(self.api.compile(body.get("source", "")))
+            if u.path == "/api/cancer/tumour":
+                return self._json(self.api.cancer_tumour(body.get("vcf", ""), int(body.get("deep", 5))))
             if u.path == "/api/cancer/compare":
                 return self._json(
                     self.api.cancer_compare(
