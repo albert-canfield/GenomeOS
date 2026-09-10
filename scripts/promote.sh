@@ -12,6 +12,11 @@ pr=$(gh pr list --base main --head dev --json number -q '.[0].number')
 if [ -z "$pr" ]; then
   gh pr create --base main --head dev --title "$title" --body "Tested on dev; CI green."
 fi
+# the workflow can take a few seconds to register after the push; wait for it before watching
+for i in $(seq 1 12); do
+  gh pr checks dev > /dev/null 2>&1 && break
+  sleep 5
+done
 gh pr checks dev --watch --interval 15
 gh pr merge dev --merge --delete-branch=false
 git fetch -q origin main
