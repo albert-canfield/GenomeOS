@@ -142,6 +142,22 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 - [docs/GENOME-ANATOMY.md](docs/GENOME-ANATOMY.md) — counting the blocks of three genomes, and the budgets for building one from zero
 - [docs/ROADMAP.md](docs/ROADMAP.md) — from a molecular cell to a digital twin
 
+## Goals
+
+1. **Decode.** Take real genomes and let their blocks, elements and rules
+   emerge from the data (anatomy, signals, libraries), with evidence and
+   uncertainty on everything.
+2. **Model.** Run biology forward through time, from a specific genome and a
+   measured state: cells, ageing, development, twins.
+3. **Build.** Design under constraints in silico, and eventually produce the
+   budgets and layouts a genome built from zero would need.
+4. **BioLang as an engine.** Today BioLang is one part of GenomeOS, developed
+   here. The long-term goal is for BioLang to stand on its own the way Node
+   stands for JavaScript: an engine and toolchain people use to write, script,
+   compile and run biology, with GenomeOS as its first application. How to get
+   there is open; the architecture keeps the boundaries that make it possible
+   (see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), "BioLang as a separable engine").
+
 ## Principles
 
 1. **Lossless genome.** The whole sequence is kept, not a gene list. Internally

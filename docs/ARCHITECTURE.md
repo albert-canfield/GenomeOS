@@ -139,3 +139,43 @@ biological conditions (`break when telomere < 5000`,
 `break when cell.type == cardiomyocyte`), and an explanation trace that
 follows a differentiation event back through the rules and evidence that
 produced it. The evidence fields in BioIR exist so that this trace is possible.
+
+## 10. BioLang as a separable engine (goal, 2026-09-10)
+
+GenomeOS builds the language, but the language should be able to leave home.
+The picture to keep in mind:
+
+```
+today                                   later
+─────                                   ─────
+GenomeOS                                biolang        (engine + toolchain, like Node)
+├── genomeos.lang    parser             ├── parser, IR, VM, std library, package manager
+├── genomeos.ir      BioIR              ├── `bio run | check | compile | test | repl`
+├── genomeos.runtime engines            └── embeddable API (Python first, others later)
+├── genomeos.std     prelude
+└── everything else  (data, twins,      GenomeOS       (an application on the engine:
+    web UI, knowledge, results)         genome decoding, twins, anatomy, web UI)
+```
+
+Boundaries we keep now so that the split is possible without a rewrite:
+
+1. **BioIR JSON is the contract.** Anything that talks to the engines does so
+   through `Module.to_dict()` / `from_dict()`. Nothing in the language layer
+   reads GenomeOS data paths (`data/…`) or results.
+2. **Engines take a Module and return a Trajectory or a typed result.** No
+   engine reaches into the CLI, the web server or the knowledge files.
+3. **Standard library in BioLang, not Python.** What a program needs from the
+   environment (cell types, ageing events, signals) is written as `bio.std.*`
+   modules with evidence, so a future `biolang` package ships them unchanged.
+4. **One thin entry point.** `genomeos bio FILE` (planned, v0.3) runs a file's
+   `experiment` blocks; a `bio` alias is a one-line rename. The web UI and the
+   other commands are GenomeOS features on top, never dependencies of the run.
+5. **No dependencies in the language core.** Parser, IR and built-in engines
+   stay pure Python; heavier engines (process-bigraph, roadrunner, MaBoSS) are
+   adapters behind the same interfaces.
+
+The step that turns the language into a runtime is the v0.3 program layer:
+`experiment` and `organism` blocks (context, bootstrap state, clamps, run,
+breakpoints, observe, assert, report, fork and compare), executed by a small
+scheduler that maps clauses onto the engines. After that, the engine can be
+packaged separately with its own tests, and GenomeOS becomes its first user.
