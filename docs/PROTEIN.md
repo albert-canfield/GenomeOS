@@ -110,6 +110,14 @@ The Reactome content is curated; the reachability logic is inferred at 0.6,
 because it ignores kinetics and treats inhibitors as reported, not applied.
 The Molecules tab runs it: click a pathway chip with a gene loaded.
 
+Across all 46 pathways TP53 belongs to (`data/results/knockout_TP53.json`),
+144 reachable reactions are lost without it. The most dependent are the
+regulation of TP53 activity through phosphorylation (18 of 21 reactions,
+86%), association with co-factors (80%), methylation (67%) and acetylation
+(64%); pathways where p53 is one input among many, such as ALK fusion
+signalling, lose 2 to 3%. The ranking is what a reachability model can say;
+how much each loss matters in a given cell needs the rates it does not have.
+
 ## BioLang importer
 
 `genomeos protein TP53 --bio` writes the compiled definition as a BioLang
