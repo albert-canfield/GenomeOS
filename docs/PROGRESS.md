@@ -1,0 +1,34 @@
+# Action plan progress
+
+Updated as each task is completed (tests + lint green before moving on).
+
+| Task | Status | Evidence |
+|---|---|---|
+| 0.0 tooling: ruff lint + format, progress file | done | `uv run ruff check .` clean, 30 tests |
+| 1.1 GFF3 → BioIR (GENCODE 50) | done | `genomeos annotate`, `genomeos gene`; chr21+chrM parse in 8 s; 2,703 complete coding transcripts translate with zero internal stops; 2 of 2,705 GENCODE models start off-ATG (NCAM2-201, DSCAM-203) |
+| 1.2 random-access FASTA | done | `genomeos index`; samtools-compatible `.fai`; 10,000 random fetches on chr21 in <1 s, identical to in-memory |
+| 1.3 VCF → diploid HG002 chr21 | done | `genomeos twin build`; 55,210 PASS variants, 0 reference mismatches; GIAB genotypes are unphased so het ALT goes to hap2 by policy |
+| 1.4 alternative start codons | done | AUU/AUA/AUC/GUG initiators for mtDNA; all 13 mitochondrial proteins at published lengths (MT-ND2 347 aa starts AUU) |
+| 1.5 GO/Reactome → library membership | done | `genomeos libs --data/--verify/--gene`; Reactome membership propagated up the hierarchy; catalogue agreement 95.5% (20 of ~440 genes are developmental TFs / stem-cell markers that human GO annotates only as "regulation of transcription"); two of my original GO ids were obsolete and were caught by the data |
+| 1.6 variant effect on CDS | done | `genomeos variant`; ClinVar chr21: >90% agreement for nonsense, missense, synonymous, frameshift (ClinVar calls truncating frameshifts "nonsense"); APP chr21:25897620 C>T → A673T, the known protective variant |
+| 2.2 CellType from Cell Ontology | done (module) | `CellTypes` loads 2,900+ CL terms, lineage, search, compiles to BioIR entities |
+| 2.3 SBML engine (BioModels) | done (in-house) | `genomeos/runtime/sbml.py`: MathML evaluator + RK4; BIOMD0000000012 (Elowitz repressilator) parses, assignment rules evaluate to published values, proteins oscillate; libRoadRunner has no Python 3.14 wheel yet, so the adapter is deferred and the engine keeps the same `run()` contract |
+| 2.4 Boolean network engine | done (in-house) | `genomeos/runtime/boolean.py`: BoolNet files, sync/async update, attractors, export to BioIR rules; Fauré 2006 mammalian cell cycle gives the G1-arrest fixed point without CycD and a cyclic attractor with it |
+| 2.5 process-bigraph spike | go | `genomeos/runtime/compose.py` (optional extra `compose`): NetworkProcess + AgeingProcess run in one Composite on a shared clock; registration is `core.register_link`, updates are additive deltas; decision: adopt as the scheduler for Phase 4 composition |
+| 2.6 ligand-receptor protocol | done | `genomeos/knowledge/ligand_receptor.py`: CellPhoneDB → 1,500+ `binds` rules with classification context; CXCL12–CXCR4, EGF–EGFR, DLL4–NOTCH1, TGFB1–TGFBR2 present |
+| 2.1 BioLang v0.2 | done | nested `transcript` blocks, `cell_type` (expresses → context silencing), `event` (rate, when, effects), `import` with `bio.std.*` prelude (`cell_types`, `ageing`) and relative paths; v0.1 files unchanged; `genomeos check --context cell_type=X` reports active rules and silenced genes |
+| 2.2 CellType CLI | done | `genomeos cells --search/--lineage`; 2,900+ Cell Ontology types compile to BioIR |
+| 3.2 telomere length from reads | done (synthetic validation) | `genomeos/genome/telomere.py`: TelSeq-style estimator over FASTQ or BAM (stdlib BGZF decoding); recovers a known 8 kb telomere from synthetic reads; a real 30x HG002 BAM (~100 GB) is not downloaded, so real-data validation is pending |
+| 3.3 BioTwin fork / run / diff | done | `genomeos/twin/twin.py`: JSON twins with measured state (age, telomere, epigenetic age) and environment; runs start from the measured state; LoF variants in timer/maintenance library genes modify parameters with `inferred` evidence and lowered confidence; TERT LoF → faster attrition, TP53 LoF → less senescence |
+| 3.4 AlphaGenome adapter | done (mock-tested) | `genomeos/predict/alphagenome_adapter.py` (optional extra `predict`, alphagenome 0.9.0 installed); emits `predicted` rules capped at confidence 0.7; live call needs ALPHAGENOME_API_KEY (not set) |
+| 3.5 uncertainty per level | done | `genomeos/runtime/uncertainty.py`: molecular / cellular / tissue / organism with UNKNOWN distinct from low; printed by `genomeos run` and `genomeos age`, attached to twin runs |
+| 3.1 epigenetic age | done, validated on real data | `genomeos clock`; Horvath 2013 (353 CpGs, intercept 0.6955) and Hannum 2013 (71 CpGs) from published coefficients, no dependencies (biolearn needs torch, unavailable on 3.14); GEO GSE41169 whole blood: Horvath r > 0.8, MAE < 10 y (e.g. 65 → 65.4, 32 → 30.0) |
+| 4.1 spatial engine | done (in-house) | `genomeos/runtime/spatial.py`: 2-D diffusion/decay fields, sources, cells with fate rules; Wolpert French flag forms blue/white/red bands in order from one source |
+| UI: Twin view + uncertainty | done | web UI gains a Twin tab (create, fork with variants/environment, run A vs B, diff, uncertainty) and uncertainty tables on Program and Ageing |
+| 4.2 segmentation clock | done | `data/demo/segmentation_clock.bio` (HES7 loop, FGF wavefront, period 5 h from Matsuda 2020) + `runtime/segmentation.py` clock-and-wavefront; segment count = frozen cells / (speed × period) within one segment; halving the clock rate halves the count |
+| 4.3 gastrulation | done | `data/demo/gastrulation.bio` tristable SOX2/TBXT/SOX17 switch read against a clamped NODAL gradient; endoderm → mesoderm → ectoderm in order; proportions within the stated (confidence 0.3) expectations; the module reports itself as low confidence because its mutual-repression rules are inferred |
+| 4.4 debugger | done | `runtime/debugger.py`: breakpoints (`TetR > 50`, `divisions >= 10`), step, `explain()` lists the terms driving a species with rule evidence and confidence, ageing events traced to their parameters |
+| 5a second organism | done | Ensembl GFF3 dialect supported; C. elegans WBcel235 chromosome III: >2,000 protein-coding genes, >97% of coding transcripts translate cleanly, `lin-12` found |
+| 5b minimal organism | done (early embryo) | `genomeos organism`: invariant early lineage from a zygote bootstrap with Sulston 1983 cycle times in `data/demo/celegans_lineage.bio`; 2-cell → 4-cell (ABa, ABp, EMS, P2) at ~22 min → founders AB/MS/E/C/D/P4 → ~24 cells at 100 min |
+| 5c BioForge | done | `genomeos forge`: random-restart log-space search over gene/rule/parameter knobs with hard constraints; retunes the repressilator period to a target within 15% while keeping oscillation; all changed values become `predicted: BioForge search` at confidence ≤ 0.3 |
+| UI: Space + Debugger | done | web UI gains Space (French flag, segmentation, gastrulation) and Debugger (breakpoints, state, explanation with evidence, event trace) |

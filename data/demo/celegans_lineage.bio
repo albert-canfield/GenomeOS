@@ -1,0 +1,14 @@
+# Early C. elegans embryonic lineage timing (20 °C), Sulston et al. 1983.
+# Cell-cycle lengths per founder lineage feed genomeos.organism.celegans.
+module organism.celegans.lineage
+
+param ab_cycle_min = 20 min { evidence: experimental "Sulston et al. 1983, Dev Biol 100:64 (AB blastomeres ~20 min early)"; confidence: 0.6 }
+param ab_lengthening = 1.12 { evidence: inferred "AB cycles lengthen ~10% per round"; confidence: 0.3 }
+param p1_cycle_min = 22 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.6 }
+param ems_cycle_min = 25 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.6 }
+param ms_cycle_min = 30 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
+param e_cycle_min = 42 min { evidence: experimental "Sulston et al. 1983 (E lineage divides slowly)"; confidence: 0.6 }
+param c_cycle_min = 38 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
+param d_cycle_min = 55 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
+param p_cycle_min = 28 min { evidence: experimental "Sulston et al. 1983 (P2, P3 germline precursors)"; confidence: 0.5 }
+param total_e_cells_at_hatching = 20 { evidence: experimental "Sulston et al. 1983"; confidence: 0.9 }

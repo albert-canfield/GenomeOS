@@ -1,0 +1,31 @@
+# Germ-layer choice as a tristable switch read against a NODAL gradient.
+# Endoderm (SOX17) needs high NODAL, mesoderm (TBXT) intermediate, ectoderm
+# (SOX2) is the default at low NODAL. Mutual repression makes the choice sharp.
+module development.gastrulation
+import bio.std.cell_types
+
+gene SOX2  { max: 10; basal: 0.5; produces: Sox2;  evidence: curated "GENCODE 50"; confidence: 0.9 }
+gene TBXT  { max: 10; basal: 0.05; produces: Tbxt;  evidence: curated "GENCODE 50"; confidence: 0.9 }
+gene SOX17 { max: 10; basal: 0.05; produces: Sox17; evidence: curated "GENCODE 50"; confidence: 0.9 }
+gene NODAL { max: 0;  basal: 0.0; produces: Nodal; evidence: curated "GENCODE 50"; confidence: 0.9 }
+
+protein Sox2  { half_life: 2; evidence: curated "UniProt P48431"; confidence: 0.8 }
+protein Tbxt  { half_life: 2; evidence: curated "UniProt O15178"; confidence: 0.8 }
+protein Sox17 { half_life: 2; evidence: curated "UniProt Q9H6I2"; confidence: 0.8 }
+protein Nodal { half_life: 1; evidence: curated "UniProt Q96S42"; confidence: 0.8 }
+
+# NODAL drives mesendoderm; high NODAL drives endoderm
+rule Nodal activates TBXT  { strength: 1.0; threshold: 1.0; hill: 2; evidence: experimental "Conlon et al. 1994, Development 120:1919"; confidence: 0.8 }
+rule Nodal activates SOX17 { strength: 1.0; threshold: 3.0; hill: 4; evidence: experimental "Kanai-Azuma et al. 2002, Development 129:2367"; confidence: 0.7 }
+# mutual repression among the three fates
+rule Tbxt inhibits SOX2   { strength: 1.0; threshold: 2.0; hill: 3; evidence: curated "Thomson et al. 2011, Cell 145:875"; confidence: 0.7 }
+rule Sox2 inhibits TBXT   { strength: 1.0; threshold: 4.0; hill: 3; evidence: curated "Thomson et al. 2011"; confidence: 0.7 }
+rule Sox17 inhibits TBXT  { strength: 1.0; threshold: 2.0; hill: 3; evidence: inferred "endoderm excludes mesoderm program"; confidence: 0.4 }
+rule Sox17 inhibits SOX2  { strength: 1.0; threshold: 2.0; hill: 3; evidence: inferred "endoderm excludes ectoderm program"; confidence: 0.4 }
+rule Tbxt inhibits SOX17  { strength: 0.6; threshold: 4.0; hill: 3; evidence: inferred "mesoderm dampens endoderm"; confidence: 0.4 }
+
+param translation_rate = 2 { evidence: inferred "dimensionless"; confidence: 0.3 }
+param mrna_half_life = 0.5 h { evidence: inferred "dimensionless"; confidence: 0.3 }
+param expected_ectoderm = 0.45 { evidence: inferred "order of magnitude; germ-layer proportions vary by stage"; confidence: 0.3 }
+param expected_mesoderm = 0.35 { evidence: inferred "order of magnitude"; confidence: 0.3 }
+param expected_endoderm = 0.20 { evidence: inferred "order of magnitude"; confidence: 0.3 }

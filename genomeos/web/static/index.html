@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GenomeOS</title>
+<style>
+:root{
+  --bg:#f6f7f9;--panel:#ffffff;--ink:#16181d;--muted:#5d6570;--line:#e3e6ea;
+  --accent:#1f6feb;--accent-ink:#ffffff;--ok:#1a7f37;--warn:#b35900;--bad:#c2261f;
+  --c1:#1f6feb;--c2:#d1242f;--c3:#1a7f37;--c4:#8250df;--c5:#bf8700;--c6:#0e8a8a;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0f1115;--panel:#171a21;--ink:#e6e8eb;--muted:#9aa3ad;--line:#2a2f38;
+  --accent:#4c8dff;--c1:#4c8dff;--c2:#ff6b66;--c3:#3fb950;--c4:#b083ff;--c5:#e3b341;--c6:#39c5c5;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{display:flex;align-items:center;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:2}
+header h1{font-size:16px;margin:0;letter-spacing:.3px}
+header h1 span{color:var(--muted);font-weight:400;margin-left:8px;font-size:12px}
+nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav button{background:transparent;border:1px solid transparent;color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer;font:inherit}
+nav button.active{background:var(--bg);border-color:var(--line);color:var(--ink)}
+main{padding:16px 20px;max-width:1280px;margin:0 auto}
+section{display:none}section.active{display:block}
+.grid{display:grid;gap:16px}
+.cols-2{grid-template-columns:1fr 1fr}
+@media(max-width:900px){.cols-2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+label{color:var(--muted);font-size:12px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=number]{width:90px}
+textarea{width:100%;min-height:360px;font:12.5px/1.5 var(--mono);resize:vertical;white-space:pre;tab-size:2}
+button.primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:7px 14px;cursor:pointer;font:inherit}
+button.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit}
+button:disabled{opacity:.5;cursor:default}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:12px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.mono{font-family:var(--mono);font-size:12px}
+.muted{color:var(--muted)}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;border:1px solid var(--line);color:var(--muted)}
+.pill.experimental{color:var(--ok);border-color:var(--ok)}
+.pill.curated{color:var(--c6);border-color:var(--c6)}
+.pill.predicted{color:var(--c4);border-color:var(--c4)}
+.pill.inferred{color:var(--warn);border-color:var(--warn)}
+.pill.none{color:var(--bad);border-color:var(--bad)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.err{color:var(--bad);font-family:var(--mono);font-size:12px;white-space:pre-wrap}
+.ok{color:var(--ok)}
+svg.chart{width:100%;height:280px;display:block}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.seq{font-family:var(--mono);font-size:12px;word-break:break-all;line-height:1.6;max-height:220px;overflow:auto}
+.seq b{font-weight:400}
+.seq .A{color:var(--c3)}.seq .C{color:var(--c1)}.seq .G{color:var(--c5)}.seq .T{color:var(--c2)}.seq .N{color:var(--muted)}
+.layer{margin-bottom:18px}
+.layer h3{font-size:14px;margin:0 0 8px;text-transform:capitalize}
+.lib{padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:var(--bg);cursor:pointer}
+.lib .id{font-family:var(--mono);font-size:12px}
+.lib .purpose{color:var(--muted)}
+.lib .detail{display:none;margin-top:8px;font-size:12.5px}
+.lib.open .detail{display:block}
+.gene{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:1px 6px;border:1px solid var(--line);border-radius:4px;margin:2px 3px 2px 0;background:var(--panel)}
+.note{font-size:12px;color:var(--muted);margin-top:8px}
+.kpi{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px}
+.kpi div b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.kpi div span{font-size:12px;color:var(--muted)}
+.scroll{max-height:420px;overflow:auto}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.unc{margin-top:10px;font-size:12px}
+.unc table{font-size:12px}
+.unc .lbl{display:inline-block;width:64px;text-align:right;padding-right:6px}
+.unc .high{color:var(--ok)}.unc .medium{color:var(--warn)}.unc .low{color:var(--bad)}.unc .UNKNOWN{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>GenomeOS <span id="version"></span></h1>
+  <nav>
+    <button data-tab="genome" class="active">Genome</button>
+    <button data-tab="program">Program</button>
+    <button data-tab="age">Ageing</button>
+    <button data-tab="twin">Twin</button>
+    <button data-tab="space">Space</button>
+    <button data-tab="debug">Debugger</button>
+    <button data-tab="libs">Libraries</button>
+  </nav>
+</header>
+<main>
+
+<!-- ================= GENOME ================= -->
+<section id="genome" class="active">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2>Sequence store</h2>
+      <div class="row">
+        <select id="g-file"></select>
+        <button class="primary" id="g-load">Load</button>
+        <span class="muted" id="g-status"></span>
+      </div>
+      <div id="g-summary"></div>
+      <div class="hint">Files under data/. Fetch real chromosomes with scripts/fetch_reference.sh.</div>
+    </div>
+    <div class="card">
+      <h2>Fetch a locus</h2>
+      <div class="row">
+        <input id="g-locus" placeholder="chrM:5903-7445(+)" style="width:220px" class="mono">
+        <button class="ghost" id="g-fetch">Fetch</button>
+        <button class="ghost" id="g-translate">Translate</button>
+        <select id="g-table"><option value="standard">standard code</option><option value="mito">mitochondrial code</option></select>
+      </div>
+      <div id="g-seq" class="seq"></div>
+      <div id="g-prot" class="mono" style="margin-top:8px;word-break:break-all"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2>Open reading frames</h2>
+    <div class="row">
+      <label>min aa <input id="g-minaa" type="number" value="50" min="10"></label>
+      <button class="ghost" id="g-orfs">Find ORFs</button>
+      <span class="muted" id="g-orf-status"></span>
+    </div>
+    <div class="scroll"><table id="g-orf-table"></table></div>
+  </div>
+</section>
+
+<!-- ================= PROGRAM ================= -->
+<section id="program">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2>BioLang source</h2>
+      <div class="row">
+        <select id="p-file"></select>
+        <button class="ghost" id="p-open">Open</button>
+        <button class="primary" id="p-compile">Compile</button>
+        <button class="primary" id="p-run">Run</button>
+      </div>
+      <textarea id="p-src" spellcheck="false"></textarea>
+      <div class="row" style="margin-top:10px">
+        <label>hours <input id="p-hours" type="number" value="60" min="1"></label>
+        <label>dt <input id="p-dt" type="number" value="0.01" step="0.001"></label>
+        <label>initial <input id="p-init" placeholder="TetR=10, LacI=0" style="width:170px" class="mono"></label>
+        <label>context <input id="p-ctx" placeholder="cell_type=neuron" style="width:150px" class="mono"></label>
+      </div>
+      <div id="p-msg" class="err"></div>
+    </div>
+    <div>
+      <div class="card">
+        <h2>Trajectory</h2>
+        <svg class="chart" id="p-chart"></svg>
+        <div class="legend" id="p-legend"></div>
+        <div class="hint" id="p-runinfo"></div>
+        <div id="p-unc" class="unc"></div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h2>Compile report</h2>
+        <div id="p-report" class="muted">Compile a module to see entities, rules, confidence and unknowns.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AGEING ================= -->
+<section id="age">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2>Cell population</h2>
+      <div class="row">
+        <label>cell type <select id="a-type"></select></label>
+        <label>years <input id="a-years" type="number" value="90" min="1" max="120"></label>
+        <label>cells <input id="a-cells" type="number" value="500" min="10" max="5000"></label>
+        <label>seed <input id="a-seed" type="number" value="1"></label>
+      </div>
+      <h2 style="margin-top:14px">Environment</h2>
+      <div class="row">
+        <label>proliferation ×<input id="a-prolif" type="number" value="1" step="0.1" min="0"></label>
+        <label>mutagen ×<input id="a-mutagen" type="number" value="1" step="0.1" min="0"></label>
+        <label>epigenetic pace <input id="a-pace" type="number" value="1" step="0.05" min="0.3"></label>
+      </div>
+      <div class="row"><button class="primary" id="a-run">Simulate</button><button class="ghost" id="a-compare">Compare with baseline</button><span class="muted" id="a-status"></span></div>
+      <div class="kpi" id="a-kpi"></div>
+      <div id="a-unc" class="unc"></div>
+      <h2>Parameters and evidence</h2>
+      <div class="scroll"><table id="a-evidence"></table></div>
+    </div>
+    <div>
+      <div class="card"><h2>Mean telomere length (bp)</h2><svg class="chart" id="a-c1"></svg><div class="legend" id="a-l1"></div></div>
+      <div class="card" style="margin-top:16px"><h2>Senescent fraction</h2><svg class="chart" id="a-c2"></svg><div class="legend" id="a-l2"></div></div>
+      <div class="card" style="margin-top:16px"><h2>Somatic mutations per cell · epigenetic age</h2><svg class="chart" id="a-c3"></svg><div class="legend" id="a-l3"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TWIN ================= -->
+<section id="twin">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2>Twins</h2>
+      <div id="t-list" class="scroll"></div>
+      <h2 style="margin-top:14px">New twin</h2>
+      <div class="row">
+        <label>name <input id="t-name" placeholder="HG002" style="width:110px"></label>
+        <label>age <input id="t-age" type="number" value="45"></label>
+        <label>telomere bp <input id="t-tel" type="number" value="7200"></label>
+        <label>epigenetic age <input id="t-epi" type="number" value="47"></label>
+        <button class="ghost" id="t-new">Create</button>
+      </div>
+      <h2 style="margin-top:14px">Fork with a change</h2>
+      <div class="row">
+        <label>from <select id="t-from"></select></label>
+        <label>as <input id="t-newname" placeholder="HG002_TERT" style="width:130px"></label>
+        <label>variants <input id="t-variants" placeholder="TERT:nonsense, TP53:frameshift_variant" style="width:260px" class="mono"></label>
+      </div>
+      <div class="row">
+        <label>mutagen ×<input id="t-mutagen" type="number" step="0.1" placeholder="1"></label>
+        <label>pace <input id="t-pace" type="number" step="0.05" placeholder="1"></label>
+        <button class="ghost" id="t-fork">Fork</button>
+        <span class="muted" id="t-status"></span>
+      </div>
+      <div class="hint">Variants in timer or maintenance library genes change ageing parameters with <span class="pill inferred">inferred</span> evidence; anything else is recorded but has no modelled effect yet.</div>
+    </div>
+    <div class="card">
+      <h2>Run and compare</h2>
+      <div class="row">
+        <label>A <select id="t-a"></select></label>
+        <label>B <select id="t-b"></select></label>
+        <label>cell type <select id="t-type"></select></label>
+        <label>years <input id="t-years" type="number" value="30"></label>
+        <label>cells <input id="t-cells" type="number" value="300"></label>
+        <button class="primary" id="t-run">Run</button>
+      </div>
+      <svg class="chart" id="t-c1"></svg><div class="legend" id="t-l1"></div>
+      <svg class="chart" id="t-c2"></svg><div class="legend" id="t-l2"></div>
+      <div id="t-diff"></div>
+      <div id="t-unc" class="unc"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SPACE ================= -->
+<section id="space">
+  <div class="card">
+    <h2>Developmental models</h2>
+    <div class="row">
+      <select id="s-model"><option value="flag">French flag (Wolpert 1969)</option><option value="segmentation">Segmentation clock (HES7 / FGF wavefront)</option><option value="gastrulation">Gastrulation (SOX2 / TBXT / SOX17 vs NODAL)</option></select>
+      <label>width <input id="s-width" type="number" value="60" min="20" max="200"></label>
+      <label>hours <input id="s-hours" type="number" value="100" min="5" max="400"></label>
+      <button class="primary" id="s-run">Run</button>
+      <span class="muted" id="s-status"></span>
+    </div>
+    <div id="s-canvas" class="mono" style="line-height:1.1;letter-spacing:1px;margin:10px 0;overflow-x:auto"></div>
+    <svg class="chart" id="s-chart" style="height:180px"></svg><div class="legend" id="s-legend"></div>
+    <div id="s-info" class="hint"></div>
+    <div id="s-unc" class="unc"></div>
+  </div>
+</section>
+
+<!-- ================= DEBUGGER ================= -->
+<section id="debug">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2>Target</h2>
+      <div class="row">
+        <select id="d-kind"><option value="network">BioLang module (from the Program tab)</option><option value="ageing">Cell ageing (one cell)</option></select>
+        <select id="d-type"></select>
+      </div>
+      <div class="row">
+        <label>breakpoints <input id="d-bp" placeholder="LacI > 30, TetR > 50" style="width:260px" class="mono"></label>
+        <label>initial <input id="d-init" placeholder="TetR=10" style="width:120px" class="mono"></label>
+        <label>until <input id="d-until" type="number" value="100"></label>
+      </div>
+      <div class="row">
+        <label>explain <input id="d-explain" placeholder="lacI.mRNA, LacI" style="width:200px" class="mono"></label>
+        <button class="primary" id="d-run">Run to breakpoint</button>
+        <span class="muted" id="d-status"></span>
+      </div>
+      <div class="hint">Network breakpoints compare species levels (e.g. <span class="mono">LacI &gt; 30</span>); ageing breakpoints use <span class="mono">age, telomere_bp, divisions, somatic_mutations, epigenetic_age, senescent</span>.</div>
+      <h2 style="margin-top:14px">State at stop</h2>
+      <div id="d-state" class="mono"></div>
+    </div>
+    <div class="card">
+      <h2>Explanation with evidence</h2>
+      <div id="d-explain-out" class="scroll"></div>
+      <h2 style="margin-top:14px">Event trace</h2>
+      <div id="d-trace" class="scroll"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LIBRARIES ================= -->
+<section id="libs">
+  <div class="card">
+    <h2>The libraries in the genome</h2>
+    <div class="row">
+      <input id="l-search" placeholder="search library, gene or purpose" style="width:320px">
+      <span class="muted" id="l-count"></span>
+    </div>
+    <div id="l-list"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const api = async (path, body) => {
+  const r = await fetch(path, body ? {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)} : undefined);
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || r.statusText);
+  return j;
+};
+const fmt = n => Number(n).toLocaleString('en-US');
+const colors = ['--c1','--c2','--c3','--c4','--c5','--c6'].map(v => getComputedStyle(document.documentElement).getPropertyValue(v).trim());
+
+// ---- tabs
+const autoRan = new Set();
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('active', x === b));
+  document.querySelectorAll('main section').forEach(s => s.classList.toggle('active', s.id === b.dataset.tab));
+  location.hash = b.dataset.tab;
+  // first visit to a simulation tab runs its default example
+  if (!autoRan.has(b.dataset.tab)) {
+    autoRan.add(b.dataset.tab);
+    const first = {space: '#s-run', debug: '#d-run'}[b.dataset.tab];
+    if (first) setTimeout(async () => { await ready; if (b.dataset.tab === 'debug' && !$('#d-bp').value) { $('#d-bp').value = 'LacI > 30'; $('#d-init').value = 'TetR=10'; $('#d-explain').value = 'lacI.mRNA'; } $(first).click(); }, 300);
+  }
+});
+if (location.hash) { const b = document.querySelector(`nav button[data-tab="${location.hash.slice(1)}"]`); if (b) b.click(); }
+
+// ---- SVG line chart
+function lineChart(svg, legendEl, times, series, opts = {}) {
+  const W = svg.clientWidth || 600, H = svg.clientHeight || 280, m = {l:52, r:14, t:12, b:28};
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.innerHTML = '';
+  const xs = times, xmin = Math.min(...xs), xmax = Math.max(...xs);
+  let ymin = opts.ymin ?? Infinity, ymax = opts.ymax ?? -Infinity;
+  if (!isFinite(ymin) || !isFinite(ymax)) series.forEach(s => s.values.forEach(v => { if (opts.ymin == null) ymin = Math.min(ymin, v); if (opts.ymax == null) ymax = Math.max(ymax, v); }));
+  if (ymax === ymin) ymax = ymin + 1;
+  const X = x => m.l + (x - xmin) / (xmax - xmin || 1) * (W - m.l - m.r);
+  const Y = y => H - m.b - (y - ymin) / (ymax - ymin) * (H - m.t - m.b);
+  const ns = 'http://www.w3.org/2000/svg', el = (t, a) => { const e = document.createElementNS(ns, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const line = getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
+  const muted = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+  for (let i = 0; i <= 4; i++) {
+    const y = ymin + (ymax - ymin) * i / 4;
+    svg.appendChild(el('line', {x1:m.l, x2:W - m.r, y1:Y(y), y2:Y(y), stroke:line}));
+    const t = el('text', {x:m.l - 6, y:Y(y) + 4, 'text-anchor':'end', 'font-size':11, fill:muted}); t.textContent = opts.yfmt ? opts.yfmt(y) : (Math.abs(y) >= 100 ? fmt(Math.round(y)) : y.toFixed(2)); svg.appendChild(t);
+  }
+  for (let i = 0; i <= 5; i++) {
+    const x = xmin + (xmax - xmin) * i / 5;
+    const t = el('text', {x:X(x), y:H - 8, 'text-anchor':'middle', 'font-size':11, fill:muted}); t.textContent = (Math.round(x * 10) / 10) + (opts.xunit || ''); svg.appendChild(t);
+  }
+  series.forEach((s, i) => {
+    const d = s.values.map((v, k) => (k ? 'L' : 'M') + X(xs[k]).toFixed(1) + ' ' + Y(v).toFixed(1)).join(' ');
+    svg.appendChild(el('path', {d, fill:'none', stroke:s.color || colors[i % colors.length], 'stroke-width':1.8, 'stroke-dasharray': s.dash ? '5 4' : 'none'}));
+  });
+  if (legendEl) legendEl.innerHTML = series.map((s, i) => `<span><i style="background:${s.color || colors[i % colors.length]}"></i>${s.name}</span>`).join('');
+}
+
+// ---- init: file lists
+let files = {genomes:[], modules:[]};
+const defaultModule = () => (files.modules.find(m => m.path.includes('repressilator')) || files.modules[0]);
+const ready = (async () => {
+  files = await api('/api/files');
+  $('#version').textContent = 'v' + files.version;
+  $('#g-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path} (${fmt(g.size)} B)</option>`).join('');
+  $('#p-file').innerHTML = files.modules.map(m => `<option value="${m.path}">${m.path}</option>`).join('');
+  if (files.modules.length) { const d = defaultModule(); $('#p-file').value = d.path; await openModule(d.path); $('#p-init').value = 'TetR=10'; $('#p-run').click(); $('#p-compile').click(); }
+  const pref = files.genomes.find(g => g.path.includes('chrM')) || files.genomes[0];
+  if (pref) { $('#g-file').value = pref.path; await loadGenome(); if (pref.path.includes('chrM')) { $('#g-locus').value = 'chrM:5903-7445(+)'; $('#g-table').value = 'mito'; $('#g-translate').click(); } }
+  loadLibs(); initAge(); loadTwins();
+})();
+
+// ---- genome
+let currentGenome = null;
+async function loadGenome() {
+  const path = $('#g-file').value; if (!path) return;
+  $('#g-status').textContent = 'loading…';
+  try {
+    const info = await api('/api/genome/info?path=' + encodeURIComponent(path));
+    currentGenome = path;
+    $('#g-status').textContent = '';
+    $('#g-summary').innerHTML = `<div class="kpi"><div><b>${fmt(info.total_bp)}</b><span>bp total</span></div><div><b>${info.sequences.length}</b><span>sequence(s)</span></div></div>
+      <table><tr><th>chromosome</th><th class="num">length bp</th><th class="num">GC</th><th class="num">N</th><th class="num">TTAGGG +/−</th></tr>
+      ${info.sequences.map(s => `<tr><td class="mono">${s.chromosome}</td><td class="num">${fmt(s.length_bp)}</td><td class="num">${s.gc.toFixed(3)}</td><td class="num">${s.n_fraction.toFixed(3)}</td><td class="num">${s.ttaggg_fwd}/${s.ttaggg_rev}</td></tr>`).join('')}</table>`;
+    if (!$('#g-locus').value) $('#g-locus').value = info.sequences[0].chromosome + ':0-600(+)';
+  } catch (e) { $('#g-status').textContent = e.message; }
+}
+$('#g-load').onclick = loadGenome;
+const colorSeq = s => s.replace(/[ACGTN]/g, c => `<b class="${c}">${c}</b>`);
+async function fetchLocus() {
+  if (!currentGenome) return null;
+  try {
+    const r = await api(`/api/genome/fetch?path=${encodeURIComponent(currentGenome)}&locus=${encodeURIComponent($('#g-locus').value)}`);
+    $('#g-seq').innerHTML = `<div class="muted" style="margin-bottom:4px">${r.locus} · ${fmt(r.sequence.length)} bp · GC ${r.gc}</div>` + colorSeq(r.sequence);
+    return r.sequence;
+  } catch (e) { $('#g-seq').innerHTML = `<span class="err">${e.message}</span>`; return null; }
+}
+$('#g-fetch').onclick = () => { $('#g-prot').textContent = ''; fetchLocus(); };
+// client-side translation so the page can show the protein of any window
+const AA = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG', B = 'UCAG';
+const CODE = {}; for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) for (let k = 0; k < 4; k++) CODE[B[i] + B[j] + B[k]] = AA[16 * i + 4 * j + k];
+const MITO = Object.assign({}, CODE, {UGA:'W', AUA:'M', AGA:'*', AGG:'*'});
+$('#g-translate').onclick = async () => {
+  const s = await fetchLocus(); if (!s) return;
+  const t = $('#g-table').value === 'mito' ? MITO : CODE, rna = s.replace(/T/g, 'U');
+  let p = ''; for (let i = 0; i + 3 <= rna.length; i += 3) p += t[rna.slice(i, i + 3)] || 'X';
+  $('#g-prot').innerHTML = `<span class="muted">protein (${p.replace(/\*.*$/, '').length} aa to first stop, ${$('#g-table').value} code):</span><br>${p}`;
+};
+$('#g-orfs').onclick = async () => {
+  if (!currentGenome) return;
+  $('#g-orf-status').textContent = 'scanning… (a full chromosome takes a few seconds)';
+  try {
+    const r = await api(`/api/genome/orfs?path=${encodeURIComponent(currentGenome)}&min_aa=${$('#g-minaa').value}&table=${$('#g-table').value}`);
+    $('#g-orf-status').textContent = `${fmt(r.count)} ORFs${r.truncated ? ' (showing longest 500)' : ''}`;
+    $('#g-orf-table').innerHTML = `<tr><th>locus</th><th class="num">aa</th><th>protein</th></tr>` + r.orfs.map(o =>
+      `<tr><td class="mono"><a href="#" data-locus="${o.locus}">${o.locus}</a></td><td class="num">${o.length_aa}</td><td class="mono">${o.protein.slice(0, 70)}${o.protein.length > 70 ? '…' : ''}</td></tr>`).join('');
+    $('#g-orf-table').querySelectorAll('a').forEach(a => a.onclick = ev => { ev.preventDefault(); $('#g-locus').value = a.dataset.locus; $('#g-translate').click(); window.scrollTo(0, 0); });
+  } catch (e) { $('#g-orf-status').textContent = e.message; }
+};
+
+// ---- program
+async function openModule(path) { const r = await api('/api/module?path=' + encodeURIComponent(path)); $('#p-src').value = r.source; }
+$('#p-open').onclick = () => openModule($('#p-file').value);
+const kv = s => Object.fromEntries(s.split(',').map(x => x.trim()).filter(Boolean).map(x => x.split('=').map(y => y.trim())));
+$('#p-compile').onclick = async () => {
+  const r = await api('/api/compile', {source: $('#p-src').value});
+  if (!r.ok) { $('#p-msg').textContent = r.error; return; }
+  $('#p-msg').textContent = '';
+  const rep = r.report, conf = rep.confidence;
+  $('#p-report').innerHTML = `<div class="kpi"><div><b>${rep.entities}</b><span>entities</span></div><div><b>${rep.rules}</b><span>rules</span></div><div><b>${rep.parameters}</b><span>parameters</span></div><div><b>${rep.unknown.length}</b><span>UNKNOWN regions</span></div></div>
+    <table>${Object.entries(conf).map(([k, v]) => `<tr><td style="width:90px">${k}</td><td><div class="bar"><i style="width:${(v * 100).toFixed(0)}%"></i></div></td><td class="num" style="width:50px">${v.toFixed(2)}</td></tr>`).join('')}</table>
+    ${rep.unknown.length ? `<div class="note">UNKNOWN: ${rep.unknown.map(u => `<span class="mono">${u.id}${u.locus ? ' @ ' + u.locus : ''}</span>`).join(', ')}</div>` : ''}
+    ${rep.weak_rules.length ? `<div class="note">rules with confidence &lt; 0.5: ${rep.weak_rules.map(w => `<span class="mono">${w.id}</span> <span class="pill ${w.evidence}">${w.evidence}</span>`).join(' · ')}</div>` : ''}
+    <div class="note ok">compiled to BioIR v${r.module.bioir_version}: <span class="mono">${r.module.name}</span></div>`;
+};
+$('#p-run').onclick = async () => {
+  $('#p-msg').textContent = ''; $('#p-runinfo').textContent = 'running…';
+  try {
+    const r = await api('/api/run', {source: $('#p-src').value, hours: +$('#p-hours').value, dt: +$('#p-dt').value, initial: kv($('#p-init').value), context: kv($('#p-ctx').value)});
+    if (!r.ok) { $('#p-msg').textContent = r.error; $('#p-runinfo').textContent = ''; return; }
+    lineChart($('#p-chart'), $('#p-legend'), r.times, r.species.map(s => ({name: `${s} (${r.peaks[s]} peaks)`, values: r.levels[s]})), {xunit: 'h', ymin: 0});
+    $('#p-runinfo').textContent = `${r.module}: ${r.active_rules}/${r.total_rules} rules active · ${r.times.length} samples`;
+    renderUnc($('#p-unc'), r.uncertainty);
+  } catch (e) { $('#p-msg').textContent = e.message; $('#p-runinfo').textContent = ''; }
+};
+
+// ---- ageing
+let baseline = null;
+async function initAge() { const r = await api('/api/age?years=1&cells=10'); $('#a-type').innerHTML = r.cell_types.map(t => `<option>${t}</option>`).join(''); $('#a-type').value = 'fibroblast'; runAge(); }
+function ageParams() { return `cell_type=${$('#a-type').value}&years=${$('#a-years').value}&cells=${$('#a-cells').value}&seed=${$('#a-seed').value}&proliferation=${$('#a-prolif').value}&mutagen=${$('#a-mutagen').value}&pace=${$('#a-pace').value}`; }
+async function runAge(compare) {
+  $('#a-status').textContent = 'simulating…';
+  try {
+    const r = await api('/api/age?' + ageParams());
+    $('#a-status').textContent = '';
+    const t = r.reports.map(x => x.age), last = r.reports[r.reports.length - 1];
+    const series = key => [{name: `${r.cell_type} (this run)`, values: r.reports.map(x => x[key])}].concat(compare && baseline ? [{name: `${baseline.cell_type} (baseline)`, values: baseline.reports.map(x => x[key]), dash: true, color: colors[1]}] : []);
+    lineChart($('#a-c1'), $('#a-l1'), t, series('telomere_bp'), {xunit: 'y'});
+    lineChart($('#a-c2'), $('#a-l2'), t, series('senescent'), {xunit: 'y', ymin: 0, yfmt: v => (v * 100).toFixed(0) + '%'});
+    lineChart($('#a-c3'), $('#a-l3'), t, [{name: 'mutations per cell', values: r.reports.map(x => x.mutations)}, {name: 'epigenetic age ×30', values: r.reports.map(x => x.epigenetic_age * 30), color: colors[3]}], {xunit: 'y', ymin: 0});
+    $('#a-kpi').innerHTML = `<div><b>${fmt(Math.round(last.telomere_bp))}</b><span>bp telomere at ${last.age} y</span></div><div><b>${(last.senescent * 100).toFixed(1)}%</b><span>senescent</span></div><div><b>${fmt(Math.round(last.mutations))}</b><span>mutations/cell</span></div><div><b>${last.epigenetic_age.toFixed(1)}</b><span>epigenetic age</span></div>`;
+    $('#a-evidence').innerHTML = `<tr><th>parameter</th><th class="num">value</th><th>evidence</th><th class="num">conf.</th></tr>` + r.evidence.map(p =>
+      `<tr><td class="mono">${p.name}</td><td class="num">${p.value} ${p.unit}</td><td><span class="pill ${p.kind}">${p.kind}</span> <span class="muted">${p.source}</span>${p.note ? `<div class="muted" style="font-size:11.5px">${p.note}</div>` : ''}</td><td class="num">${p.confidence.toFixed(1)}</td></tr>`).join('');
+    renderUnc($('#a-unc'), r.uncertainty);
+    if (!compare) baseline = r;
+  } catch (e) { $('#a-status').textContent = e.message; }
+}
+$('#a-run').onclick = () => runAge(false);
+$('#a-compare').onclick = () => runAge(true);
+
+// ---- uncertainty widget
+function renderUnc(el, unc) {
+  if (!unc) { el.innerHTML = ''; return; }
+  el.innerHTML = '<table><tr><th>level</th><th>confidence</th><th class="num">items</th><th>weakest</th></tr>' +
+    Object.entries(unc).map(([lv, r]) => `<tr><td>${lv}</td><td>${r.confidence == null ? '<span class="UNKNOWN">UNKNOWN</span>' :
+      `<div class="bar" style="display:inline-block;width:90px;vertical-align:middle"><i style="width:${(r.confidence * 100).toFixed(0)}%"></i></div> <span class="${r.label}">${r.confidence.toFixed(2)} ${r.label}</span>`}</td><td class="num">${r.items}</td><td class="mono">${r.weakest || ''}</td></tr>`).join('') + '</table>';
+}
+
+// ---- twins
+let twins = [];
+async function loadTwins() {
+  twins = (await api('/api/twins')).twins;
+  $('#t-list').innerHTML = twins.length ? `<table><tr><th>name</th><th>parent</th><th class="num">age</th><th class="num">telomere</th><th class="num">epi. age</th><th>variants</th></tr>` +
+    twins.map(t => `<tr><td class="mono">${t.name}</td><td class="mono">${t.parent || ''}</td><td class="num">${t.age}</td><td class="num">${t.telomere_bp ?? ''}</td><td class="num">${t.epigenetic_age ?? ''}</td><td class="mono">${t.variants.join(', ')}</td></tr>`).join('') + '</table>'
+    : '<div class="muted">No twins yet. Create one below.</div>';
+  const opts = twins.map(t => `<option>${t.name}</option>`).join('');
+  ['#t-from', '#t-a', '#t-b'].forEach(sel => { const cur = $(sel).value; $(sel).innerHTML = opts; if (cur) $(sel).value = cur; });
+  if (twins.length > 1) $('#t-b').value = twins[1].name;
+  if (!$('#t-type').options.length) { const r = await api('/api/age?years=1&cells=10'); $('#t-type').innerHTML = r.cell_types.map(x => `<option>${x}</option>`).join(''); $('#t-type').value = 'hematopoietic_stem'; }
+}
+$('#t-new').onclick = async () => {
+  try { await api('/api/twin/new', {name: $('#t-name').value.trim(), age: +$('#t-age').value, telomere: $('#t-tel').value ? +$('#t-tel').value : null, epigenetic_age: $('#t-epi').value ? +$('#t-epi').value : null}); $('#t-status').textContent = 'created'; loadTwins(); }
+  catch (e) { $('#t-status').textContent = e.message; }
+};
+$('#t-fork').onclick = async () => {
+  try {
+    const r = await api('/api/twin/fork', {name: $('#t-from').value, new_name: $('#t-newname').value.trim(), variants: $('#t-variants').value.split(',').map(x => x.trim()).filter(Boolean), mutagen: $('#t-mutagen').value ? +$('#t-mutagen').value : null, pace: $('#t-pace').value ? +$('#t-pace').value : null});
+    $('#t-status').textContent = `forked ${r.twin}; modifiers ${JSON.stringify(r.modifiers)}`; await loadTwins(); $('#t-b').value = r.twin;
+  } catch (e) { $('#t-status').textContent = e.message; }
+};
+$('#t-run').onclick = async () => {
+  $('#t-diff').textContent = 'running…';
+  try {
+    const names = [$('#t-a').value]; if ($('#t-b').value && $('#t-b').value !== $('#t-a').value) names.push($('#t-b').value);
+    const r = await api('/api/twin/run', {names, cell_type: $('#t-type').value, years: +$('#t-years').value, cells: +$('#t-cells').value});
+    const t = r.runs[0].reports.map(x => x.age_years);
+    const series = key => r.runs.map((run, i) => ({name: run.twin, values: run.reports.map(x => x[key]), color: colors[i], dash: i === 1}));
+    lineChart($('#t-c1'), $('#t-l1'), t, series('mean_telomere_bp'), {xunit: 'y'});
+    lineChart($('#t-c2'), $('#t-l2'), t, series('senescent_fraction'), {xunit: 'y', ymin: 0, yfmt: v => (v * 100).toFixed(0) + '%'});
+    $('#t-diff').innerHTML = r.diff ? `<table><tr><th>clock</th><th class="num">${r.runs[0].twin}</th><th class="num">${r.runs[1].twin}</th><th class="num">delta</th></tr>` +
+      Object.entries(r.diff).map(([k, v]) => `<tr><td>${k}</td><td class="num">${v.a.toFixed(2)}</td><td class="num">${v.b.toFixed(2)}</td><td class="num ${v.delta < 0 ? 'ok' : v.delta > 0 ? 'err' : ''}">${v.delta >= 0 ? '+' : ''}${v.delta.toFixed(2)}</td></tr>`).join('') + '</table>' : '';
+    renderUnc($('#t-unc'), r.runs[r.runs.length - 1].uncertainty);
+  } catch (e) { $('#t-diff').textContent = e.message; }
+};
+
+// ---- space
+const fateColor = {blue: '#1f6feb', white: '#c9d1d9', red: '#d1242f', A: '#8250df', P: '#bf8700', endoderm: '#bf8700', mesoderm: '#d1242f', ectoderm: '#1f6feb', undifferentiated: '#666', presomitic: '#666'};
+function cellsRow(cells) { return `<div>${cells.map(c => `<span style="display:inline-block;width:9px;height:14px;background:${fateColor[c] || '#666'};margin-right:1px" title="${c}"></span>`).join('')}</div>`; }
+$('#s-run').onclick = async () => {
+  $('#s-status').textContent = 'running…';
+  try {
+    const r = await api(`/api/develop?model=${$('#s-model').value}&width=${$('#s-width').value}&hours=${$('#s-hours').value}`);
+    $('#s-status').textContent = '';
+    if (r.model === 'flag') {
+      $('#s-canvas').innerHTML = r.rows.map(row => cellsRow(row.split('').map(ch => ({b: 'blue', w: 'white', r: 'red'})[ch] || 'undifferentiated'))).join('');
+      lineChart($('#s-chart'), $('#s-legend'), r.profile.map((_, i) => i), [{name: 'morphogen', values: r.profile}], {xunit: '', ymin: 0});
+      $('#s-info').innerHTML = `bands: ${r.bands.map(b => `${b[0]} ${b[1]}–${b[2]}`).join(' · ')} · thresholds: ${r.parameters.map(p => `${p.name}=${p.value} <span class="pill ${p.kind}">${p.kind}</span>`).join(' ')}`;
+      renderUnc($('#s-unc'), null);
+    } else if (r.model === 'segmentation') {
+      $('#s-canvas').innerHTML = cellsRow(r.cells) + `<div class="muted" style="font-size:11px">A = anterior half, P = posterior half of each segment; ${r.count} segments (expected ${r.expected.toFixed(1)} at period ${r.period_h} h)</div>`;
+      lineChart($('#s-chart'), $('#s-legend'), r.fgf.map((_, i) => i), [{name: 'FGF (wavefront)', values: r.fgf}], {xunit: '', ymin: 0});
+      $('#s-info').textContent = `segments: ${r.segments.map(s => `${s[0]}–${s[1]}`).join(', ')}`;
+      renderUnc($('#s-unc'), r.uncertainty);
+    } else {
+      $('#s-canvas').innerHTML = cellsRow(r.fates) + `<div class="muted" style="font-size:11px">NODAL source at the left · proportions ${Object.entries(r.proportions).map(([k, v]) => `${k} ${(v * 100).toFixed(0)}%`).join(', ')}</div>`;
+      $('#s-chart').innerHTML = ''; $('#s-legend').innerHTML = ''; $('#s-info').textContent = '';
+      renderUnc($('#s-unc'), r.uncertainty);
+    }
+  } catch (e) { $('#s-status').textContent = e.message; }
+};
+
+// ---- debugger
+$('#d-kind').onchange = () => { $('#d-type').hidden = $('#d-kind').value !== 'ageing'; };
+$('#d-type').hidden = true;
+(async () => { const r = await api('/api/age?years=1&cells=10'); $('#d-type').innerHTML = r.cell_types.map(x => `<option>${x}</option>`).join(''); })();
+const evLine = l => `<div><span class="muted">t=${(+l.time).toFixed(2)}</span> <b class="mono">${l.subject}</b> ${l.message}${l.evidence ? ` <span class="pill ${l.evidence.split(':')[0]}">${l.evidence.split(':')[0]}</span> <span class="muted">${l.evidence.split(':').slice(1).join(':')}</span>` : ''}${l.confidence != null ? ` <span class="muted">conf ${(+l.confidence).toFixed(2)}</span>` : ''}</div>`;
+$('#d-run').onclick = async () => {
+  $('#d-status').textContent = 'running…';
+  try {
+    const body = {breakpoints: $('#d-bp').value.split(',').map(x => x.trim()).filter(Boolean), until: +$('#d-until').value};
+    if ($('#d-kind').value === 'ageing') body.cell_type = $('#d-type').value;
+    else { if (!$('#p-src').value) { await ready; const d = defaultModule(); if (d) await openModule(d.path); } body.source = $('#p-src').value; body.initial = kv($('#d-init').value); body.explain = $('#d-explain').value.split(',').map(x => x.trim()).filter(Boolean); }
+    const r = await api('/api/debug', body);
+    if (!r.ok) { $('#d-status').textContent = r.error; return; }
+    $('#d-status').textContent = r.hit ? `stopped at breakpoint ${r.hit} (t=${r.time.toFixed(2)})` : `ran to the end (t=${r.time.toFixed(2)}), no breakpoint hit`;
+    $('#d-state').innerHTML = Object.entries(r.state).map(([k, v]) => `${k}=${(+v).toFixed(3)}`).join('  ');
+    if (r.kind === 'network') $('#d-explain-out').innerHTML = Object.entries(r.explain).map(([sp, lines]) => `<div class="note"><b>${sp}</b></div>` + lines.map(evLine).join('')).join('') || '<span class="muted">add species to explain</span>';
+    else $('#d-explain-out').innerHTML = r.explain.map(evLine).join('');
+    $('#d-trace').innerHTML = (r.trace || []).map(evLine).join('') || '<span class="muted">no discrete events for a network run</span>';
+  } catch (e) { $('#d-status').textContent = e.message; }
+};
+
+// ---- libraries
+let libs = [];
+async function loadLibs() { libs = (await api('/api/libs')).libraries; renderLibs(''); }
+function renderLibs(q) {
+  q = q.toLowerCase();
+  const hit = l => !q || l.id.includes(q) || l.purpose.toLowerCase().includes(q) || l.genes.some(g => g.toLowerCase().includes(q)) || (l.note || '').toLowerCase().includes(q);
+  const layers = ['core', 'blueprint', 'timer', 'systems', 'parts'];
+  const shown = libs.filter(hit);
+  $('#l-count').textContent = `${shown.length} of ${libs.length} libraries`;
+  $('#l-list').innerHTML = layers.map(layer => {
+    const ls = shown.filter(l => l.layer === layer); if (!ls.length) return '';
+    return `<div class="layer"><h3>${layer} <span class="muted" style="font-weight:400">· ${ls.length}</span></h3>` + ls.map(l =>
+      `<div class="lib" data-id="${l.id}"><span class="id">${l.id}</span> <span class="purpose">— ${l.purpose}</span>
+       <div class="detail">${l.genes.length ? `<div>${l.genes.map(g => `<span class="gene">${g}</span>`).join('')}</div>` : ''}
+       ${l.scale ? `<div class="note">scale: ${l.scale}</div>` : ''}<div class="note">source: ${l.source}</div>${l.note ? `<div class="note">${l.note}</div>` : ''}</div></div>`).join('') + '</div>';
+  }).join('');
+  $('#l-list').querySelectorAll('.lib').forEach(d => d.onclick = () => d.classList.toggle('open'));
+  if (q) $('#l-list').querySelectorAll('.lib').forEach(d => d.classList.add('open'));
+}
+$('#l-search').oninput = e => renderLibs(e.target.value);
+window.addEventListener('resize', () => { /* charts are viewBox-scaled; nothing to do */ });
+</script>
+</body>
+</html>

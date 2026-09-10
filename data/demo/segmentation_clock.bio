@@ -1,0 +1,21 @@
+# The segmentation clock as declarative biology. The runtime
+# (genomeos.runtime.segmentation) reads these parameters and evidence.
+module development.segmentation_clock
+import bio.std.cell_types
+
+gene HES7 { max: 1; basal: 0.0; produces: Hes7; evidence: curated "GENCODE 50"; confidence: 0.9 }
+gene LFNG { max: 1; produces: Lfng; evidence: curated "GENCODE 50"; confidence: 0.9 }
+gene FGF8 { max: 1; produces: Fgf8; evidence: curated "GENCODE 50"; confidence: 0.9 }
+protein Hes7 { half_life: 0.37; evidence: experimental "Hirata et al. 2004, Nat Genet 36:750"; confidence: 0.8 }
+protein Lfng { evidence: curated "UniProt Q8NES3"; confidence: 0.8 }
+protein Fgf8 { evidence: curated "UniProt P55075"; confidence: 0.8 }
+
+# the core negative-feedback loop with transcriptional delay
+rule Hes7 inhibits HES7 { strength: 1.0; threshold: 0.5; hill: 3; evidence: experimental "Bessho et al. 2003, Genes Dev 17:1451"; confidence: 0.9 }
+rule Hes7 inhibits LFNG { strength: 1.0; threshold: 0.5; hill: 3; evidence: experimental "Bessho et al. 2003"; confidence: 0.8 }
+# FGF from the posterior growth zone keeps cells oscillating (the wavefront)
+rule Fgf8 activates HES7 { strength: 1.0; threshold: 0.3; hill: 2; evidence: experimental "Dubrulle et al. 2001, Cell 106:219"; confidence: 0.8 }
+
+param period_h = 5.0 h { evidence: experimental "Matsuda et al. 2020, Science 369:1450 (human iPSC-derived PSM ~5 h)"; confidence: 0.8 }
+param wavefront_speed = 0.6 cells/h { evidence: inferred "GenomeOS v0.1 estimate from somite size/period"; confidence: 0.3 }
+param fgf_threshold = 0.3 a.u. { evidence: inferred "GenomeOS v0.1 estimate"; confidence: 0.3 }

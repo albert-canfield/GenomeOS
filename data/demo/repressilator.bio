@@ -1,0 +1,82 @@
+# The repressilator: three genes, each repressing the next in a ring.
+# Elowitz & Leibler, Nature 403:335 (2000). The first synthetic genetic
+# oscillator and the canonical "hello world" of genetic circuit design.
+#
+# Run:  genomeos run data/demo/repressilator.bio --hours 60 --init TetR=10
+
+module synthetic.repressilator
+
+gene tetR {
+  max: 200        # transcription rate when unrepressed (a.u./h)
+  basal: 0.2      # leaky transcription
+  produces: TetR
+  evidence: experimental "Elowitz & Leibler 2000"
+  confidence: 0.9
+}
+
+gene lacI {
+  max: 200
+  basal: 0.2
+  produces: LacI
+  evidence: experimental "Elowitz & Leibler 2000"
+  confidence: 0.9
+}
+
+gene cI {
+  max: 200
+  basal: 0.2
+  produces: CI
+  evidence: experimental "Elowitz & Leibler 2000"
+  confidence: 0.9
+}
+
+protein TetR { evidence: experimental "Elowitz & Leibler 2000"; confidence: 0.9 }
+protein LacI { evidence: experimental "Elowitz & Leibler 2000"; confidence: 0.9 }
+protein CI   { evidence: experimental "Elowitz & Leibler 2000"; confidence: 0.9 }
+
+rule LacI inhibits tetR {
+  strength: 1.0
+  threshold: 1.0
+  hill: 2
+  when: host = any
+  evidence: experimental "Elowitz & Leibler 2000"
+  confidence: 0.9
+}
+
+rule TetR inhibits cI {
+  strength: 1.0
+  threshold: 1.0
+  hill: 2
+  evidence: experimental "Elowitz & Leibler 2000"
+  confidence: 0.9
+}
+
+rule CI inhibits lacI {
+  strength: 1.0
+  threshold: 1.0
+  hill: 2
+  evidence: experimental "Elowitz & Leibler 2000"
+  confidence: 0.9
+}
+
+# Dimensionless parameters from the original paper's model (Box 1):
+# time in units of mRNA lifetime, beta = protein/mRNA decay ratio = 5.
+param mrna_half_life = 0.693 h {
+  evidence: inferred "Elowitz & Leibler 2000, dimensionless model"
+  confidence: 0.5
+}
+param protein_half_life = 0.139 h {
+  evidence: inferred "Elowitz & Leibler 2000, beta = 5"
+  confidence: 0.5
+}
+param translation_rate = 5 {
+  evidence: inferred "Elowitz & Leibler 2000, beta = 5"
+  confidence: 0.5
+}
+
+# An honest placeholder: a region we know exists but whose function we do not.
+region upstream_element {
+  locus: plasmid:0-120
+  role: unknown
+  evidence: none
+}

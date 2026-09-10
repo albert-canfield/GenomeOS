@@ -1,0 +1,35 @@
+# BioLang v0.2 demo: the same regulatory rules read differently in two cell types.
+module demo.cell_context
+import bio.std.cell_types
+import bio.std.ageing
+
+gene NKX2-5 {
+  symbol: NKX2-5
+  max: 50; basal: 0.1
+  produces: Nkx2-5
+  transcript NKX2-5-201 { exons: chr5:173232109-173233366, chr5:173234555-173235310; cds: chr5:173232700-173233366, chr5:173234555-173235000 }
+  evidence: curated "GENCODE 50"; confidence: 0.9
+}
+gene MYH6 { max: 80; basal: 0.05; produces: Myh6; evidence: curated "GENCODE 50"; confidence: 0.9 }
+gene SYN1 { max: 80; basal: 0.05; produces: Syn1; evidence: curated "GENCODE 50"; confidence: 0.9 }
+
+protein Nkx2-5 { evidence: curated "UniProt P52952"; confidence: 0.9 }
+protein Myh6 { evidence: curated "UniProt P13533"; confidence: 0.9 }
+protein Syn1 { evidence: curated "UniProt P17600"; confidence: 0.9 }
+
+cell_type Cardiomyocyte2 {
+  parent: Cardiomyocyte
+  expresses: NKX2-5, MYH6
+  evidence: curated "Cell Ontology CL:0000746"; confidence: 0.8
+}
+cell_type Neuron2 {
+  parent: Neuron
+  expresses: SYN1
+  evidence: curated "Cell Ontology CL:0000540"; confidence: 0.8
+}
+
+rule Nkx2-5 activates MYH6 {
+  strength: 1.0; threshold: 5; hill: 2
+  when: cell_type = Cardiomyocyte2
+  evidence: experimental "Lints et al. 1993"; confidence: 0.7
+}

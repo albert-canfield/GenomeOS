@@ -1,0 +1,10 @@
+# bio.std.cell_types — a small starter set; the full inventory comes from the
+# Cell Ontology (genomeos cells) and is imported as CellType entities.
+module bio.std.cell_types
+
+cell_type Cell { ontology: CL:0000000; evidence: curated "Cell Ontology"; confidence: 0.9 }
+cell_type StemCell { parent: Cell; ontology: CL:0000034; evidence: curated "Cell Ontology"; confidence: 0.9 }
+cell_type Fibroblast { parent: Cell; ontology: CL:0000057; evidence: curated "Cell Ontology"; confidence: 0.9 }
+cell_type Neuron { parent: Cell; ontology: CL:0000540; evidence: curated "Cell Ontology"; confidence: 0.9 }
+cell_type Cardiomyocyte { parent: Cell; ontology: CL:0000746; evidence: curated "Cell Ontology"; confidence: 0.9 }
+cell_type HematopoieticStemCell { parent: StemCell; ontology: CL:0000037; evidence: curated "Cell Ontology"; confidence: 0.9 }
