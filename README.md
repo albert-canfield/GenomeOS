@@ -93,7 +93,9 @@ records the evidence per task. Highlights:
 - epigenetic clocks validated on real blood methylation (Horvath r > 0.8); telomere estimator; digital twins that fork, run and diff
 - development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient, the C. elegans early lineage from a zygote
 - a debugger with biological breakpoints and evidence traces, and BioForge design search whose outputs are labelled predicted
-- RNA and proteins: transcripts per gene, our translation checked against UniProt, domains and function, AlphaFold structures with per-residue confidence
+- the DNA → RNA → protein relationship as one traceable object: every base mapped to its mRNA position, codon and residue and back, with the consequence of a single-base change (Flow tab, `genomeos flow`)
+- a federated protein compiler: Ensembl, UniProt, InterPro, PDB, AlphaFold, Reactome, STRING and the Human Protein Atlas compiled into one definition per protein keyed by UniProt accession, evidence and confidence per section, predicted never treated as observed (`genomeos protein X --compile`, docs/PROTEIN.md)
+- nodes above genes: domains between CTCF boundaries with the genes and enhancers inside (`genomeos domains`)
 - a local web UI with a dozen views, including a Progress tab with live background jobs and the project's task log
 
 ## Quick start
@@ -110,14 +112,16 @@ uv run ruff check .
 ```
 
 More commands: `annotate`, `gene`, `index`, `variant`, `twin build|new|fork|run`,
-`clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`.
+`clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`,
+`flow`, `domains`, `protein --compile`, `proteome`, `unknown`, `cancer`, `design`.
 Optional extras: `uv sync --extra compose` (process-bigraph), `--extra predict`
 (AlphaGenome client, needs `ALPHAGENOME_API_KEY`), `--extra clocks` (biolearn, needs torch).
 
-The web UI is a single HTML page served by the standard library: Genome
-(load, fetch a locus, translate, find ORFs), Program (BioLang editor with
-compile report and trajectory chart), Ageing (clocks, environment, evidence,
-compare with baseline) and Libraries (search the genome's libraries).
+The web UI is a single HTML page served by the standard library: Start,
+Genome, Anatomy, Blocks (2-D block map with domains, genes, UNKNOWN classes
+and ENCODE elements), Flow (DNA → RNA → protein, linked lanes), Program,
+Ageing, Twin, Space, Debugger, Molecules (protein definition and AlphaFold
+structure), Cancer, Progress and Libraries.
 
 To work with a real human chromosome:
 
