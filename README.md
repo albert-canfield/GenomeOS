@@ -2,6 +2,12 @@
 
 **An executable model of biology.**
 
+**Ambition.** GenomeOS is built to become the software geneticists reach
+for first: to work, research, investigate and build. A real bio-engineering
+tool that understands the biological code rather than a viewer of it. Every
+feature is judged by that bar: does it help a geneticist decode, model or
+build, and does it say how sure it is.
+
 GenomeOS treats a genome as source material and biology as a runtime. It is not a
 DNA editor and not a genome browser. It is the layer that sits *between* sequence
 and simulation: a compiler that turns a real genome plus scientific knowledge into
