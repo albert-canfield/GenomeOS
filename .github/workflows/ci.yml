@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: uv sync --extra compose
+      - name: Lint
+        run: uv run ruff check . && uv run ruff format --check .
+      - name: Cache reference data
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/reference/chrM.fa.gz
+            data/reference/chr21.fa.gz
+            data/knowledge/go-basic.obo
+            data/knowledge/goa_human.gaf.gz
+            data/knowledge/cl-basic.obo
+          key: refdata-v1
+      - name: Fetch small reference data (~60 MB; distilled summaries cover the rest)
+        run: |
+          mkdir -p data/reference data/knowledge
+          [ -s data/reference/chrM.fa.gz ] || curl -sL --fail -o data/reference/chrM.fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chrM.fa.gz
+          [ -s data/reference/chr21.fa.gz ] || curl -sL --fail -o data/reference/chr21.fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chr21.fa.gz
+          [ -s data/knowledge/go-basic.obo ] || curl -sL --fail -o data/knowledge/go-basic.obo https://current.geneontology.org/ontology/go-basic.obo
+          [ -s data/knowledge/goa_human.gaf.gz ] || curl -sL --fail -o data/knowledge/goa_human.gaf.gz https://current.geneontology.org/annotations/goa_human.gaf.gz
+          [ -s data/knowledge/cl-basic.obo ] || curl -sL --fail -o data/knowledge/cl-basic.obo http://purl.obolibrary.org/obo/cl/cl-basic.obo
+      - name: Test
+        run: uv run pytest -q -rs

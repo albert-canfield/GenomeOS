@@ -121,7 +121,10 @@ def _distil_clinvar() -> dict:
     total: Counter[str] = Counter()
     agree: Counter[str] = Counter()
     confusion: Counter[str] = Counter()
-    for v in iter_vcf(DATA / "reference" / "clinvar_chr21_MT.vcf", {"21"}, pass_only=False):
+    clinvar = DATA / "reference" / "clinvar_chr21_MT.vcf"
+    if not clinvar.exists():
+        clinvar = DATA / "results" / "clinvar_chr21_coding.vcf.gz"
+    for v in iter_vcf(clinvar, {"21"}, pass_only=False):
         info = dict(kv.split("=", 1) for kv in v.info.split(";") if "=" in kv)
         labels = {x.split("|")[1] for x in info.get("MC", "").split(",") if "|" in x}
         if len(labels) != 1 or not labels & wanted or len(v.alts) != 1:

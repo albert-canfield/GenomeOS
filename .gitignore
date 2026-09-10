@@ -18,4 +18,5 @@ data/twins/*.fa.fai
 *.fa.gz
 *.fa.fai
 *.vcf.gz
+!data/results/*.vcf.gz
 *.series_matrix.txt.gz
