@@ -1068,9 +1068,8 @@ def cmd_protein(args: argparse.Namespace) -> int:
         print(
             f"  AlphaFold {s['entry']} ({s['version']}): {s['length']} residues, mean pLDDT {s['mean_plddt']}"
         )
-        print(
-            f"    {s['confident_fraction']:.0%} confident (>=70), Rg {s['radius_of_gyration_A']} Å  [predicted]"
-        )
+        print(f"    {s['confident_fraction']:.0%} confident (>=70), Rg {s['radius_of_gyration_A']} Å")
+        print("    [predicted]")
     return 0
 
 
