@@ -1,0 +1,136 @@
+"""Background jobs started from the UI or CLI, with progress visible.
+
+A job is a subprocess writing a log under data/jobs/<name>.log. Progress is
+read from the log and, where a job writes a result file incrementally, from
+that file. Only whitelisted jobs can be started (no arbitrary commands).
+"""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+import time
+from dataclasses import dataclass
+from pathlib import Path
+
+JOBS_DIR = Path("data/jobs")
+
+# name -> (argv, total-steps hint, result name whose keys count progress)
+CATALOG: dict[str, dict] = {
+    "anatomy_genome_wide": {
+        "argv": [sys.executable, "scripts/anatomy_genome_wide.py"],
+        "describe": "Every human chromosome: download, count the blocks, delete; keep one summary.",
+        "total": 25,
+        "result": "anatomy_hg38_by_chromosome",
+        "count": lambda r: len(r.get("chromosomes", {})),
+    },
+    "signals_learn_chr21": {
+        "argv": [sys.executable, "-m", "genomeos.cli", "signals", "learn", "--chrom", "chr21"],
+        "describe": "Learn the splice and start signals from chromosome 21.",
+        "total": 1,
+        "result": "signals_chr21",
+        "count": lambda r: 1 if r else 0,
+    },
+    "distil": {
+        "argv": [sys.executable, "-m", "genomeos.cli", "data", "distil"],
+        "describe": "Turn any raw downloads present into result summaries.",
+        "total": 1,
+        "result": None,
+        "count": None,
+    },
+}
+
+
+@dataclass(slots=True)
+class JobStatus:
+    name: str
+    describe: str
+    state: str  # idle | running | done | failed
+    started: float | None
+    finished: float | None
+    done: int
+    total: int
+    last_lines: list[str]
+
+    def to_dict(self) -> dict:
+        return {
+            "name": self.name,
+            "describe": self.describe,
+            "state": self.state,
+            "started": self.started,
+            "finished": self.finished,
+            "done": self.done,
+            "total": self.total,
+            "fraction": round(self.done / self.total, 3) if self.total else None,
+            "last_lines": self.last_lines,
+        }
+
+
+_running: dict[str, subprocess.Popen] = {}
+
+
+def _meta_path(name: str) -> Path:
+    return JOBS_DIR / f"{name}.json"
+
+
+def start(name: str, root: Path = Path(".")) -> JobStatus:
+    if name not in CATALOG:
+        raise KeyError(f"unknown job {name!r}; known: {sorted(CATALOG)}")
+    if name in _running and _running[name].poll() is None:
+        return status(name, root)
+    JOBS_DIR.mkdir(parents=True, exist_ok=True)
+    log = JOBS_DIR / f"{name}.log"
+    fh = open(log, "w")  # noqa: SIM115  (the subprocess owns the handle)
+    proc = subprocess.Popen(CATALOG[name]["argv"], cwd=root, stdout=fh, stderr=subprocess.STDOUT)  # noqa: S603
+    _running[name] = proc
+    _meta_path(name).write_text(
+        json.dumps({"pid": proc.pid, "started": time.time(), "finished": None, "code": None})
+    )
+    return status(name, root)
+
+
+def status(name: str, root: Path = Path(".")) -> JobStatus:
+    spec = CATALOG[name]
+    meta = json.loads(_meta_path(name).read_text()) if _meta_path(name).exists() else {}
+    proc = _running.get(name)
+    state = "idle"
+    if proc is not None:
+        code = proc.poll()
+        if code is None:
+            state = "running"
+        else:
+            state = "done" if code == 0 else "failed"
+            if meta.get("finished") is None:
+                meta.update({"finished": time.time(), "code": code})
+                _meta_path(name).write_text(json.dumps(meta))
+    elif meta:
+        state = "done" if meta.get("code") == 0 else "failed" if meta.get("code") is not None else "unknown"
+    done = 0
+    if spec.get("result") and spec.get("count"):
+        from genomeos.results import load_result
+
+        rp = root / "data" / "results" / f"{spec['result']}.json"
+        r = load_result(spec["result"], root / "data" / "results")
+        done = spec["count"](r) if r else 0
+        # a job started outside this process (CLI, nohup) shows as running while its result keeps changing
+        if (
+            state in ("idle", "unknown")
+            and rp.exists()
+            and done < spec["total"]
+            and time.time() - rp.stat().st_mtime < 600
+        ):
+            state = "running"
+        if state in ("idle", "unknown") and done >= spec["total"]:
+            state = "done"
+    elif state == "done":
+        done = spec["total"]
+    log = JOBS_DIR / f"{name}.log"
+    lines = log.read_text().splitlines()[-6:] if log.exists() else []
+    return JobStatus(
+        name, spec["describe"], state, meta.get("started"), meta.get("finished"), done, spec["total"], lines
+    )
+
+
+def all_status(root: Path = Path(".")) -> list[JobStatus]:
+    return [status(name, root) for name in CATALOG]
