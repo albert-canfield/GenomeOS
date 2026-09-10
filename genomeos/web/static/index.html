@@ -224,6 +224,9 @@ svg.chart{width:100%;height:280px;display:block}
         <span class="muted" id="t-status"></span>
       </div>
       <div class="hint">Variants in timer or maintenance library genes change ageing parameters with <span class="pill inferred">inferred</span> evidence; anything else is recorded but has no modelled effect yet.</div>
+      <h2 style="margin-top:14px">Measurements (streamed, distilled)</h2>
+      <div id="t-results" class="scroll"></div>
+      <div class="row" style="margin-top:8px"><label>apply to <select id="t-measure-twin"></select></label><button class="ghost" id="t-measure">Apply measured state</button></div>
     </div>
     <div class="card">
       <h2>Run and compare</h2>
@@ -373,7 +376,7 @@ const ready = (async () => {
   if (files.modules.length) { const d = defaultModule(); $('#p-file').value = d.path; await openModule(d.path); $('#p-init').value = 'TetR=10'; $('#p-run').click(); $('#p-compile').click(); }
   const pref = files.genomes.find(g => g.path.includes('chrM')) || files.genomes[0];
   if (pref) { $('#g-file').value = pref.path; await loadGenome(); if (pref.path.includes('chrM')) { $('#g-locus').value = 'chrM:5903-7445(+)'; $('#g-table').value = 'mito'; $('#g-translate').click(); } }
-  loadLibs(); initAge(); loadTwins();
+  loadLibs(); initAge(); loadTwins(); loadResults();
 })();
 
 // ---- genome
@@ -490,10 +493,22 @@ async function loadTwins() {
     twins.map(t => `<tr><td class="mono">${t.name}</td><td class="mono">${t.parent || ''}</td><td class="num">${t.age}</td><td class="num">${t.telomere_bp ?? ''}</td><td class="num">${t.epigenetic_age ?? ''}</td><td class="mono">${t.variants.join(', ')}</td></tr>`).join('') + '</table>'
     : '<div class="muted">No twins yet. Create one below.</div>';
   const opts = twins.map(t => `<option>${t.name}</option>`).join('');
-  ['#t-from', '#t-a', '#t-b'].forEach(sel => { const cur = $(sel).value; $(sel).innerHTML = opts; if (cur) $(sel).value = cur; });
+  ['#t-from', '#t-a', '#t-b', '#t-measure-twin'].forEach(sel => { const cur = $(sel).value; $(sel).innerHTML = opts; if (cur) $(sel).value = cur; });
   if (twins.length > 1) $('#t-b').value = twins[1].name;
   if (!$('#t-type').options.length) { const r = await api('/api/age?years=1&cells=10'); $('#t-type').innerHTML = r.cell_types.map(x => `<option>${x}</option>`).join(''); $('#t-type').value = 'hematopoietic_stem'; }
 }
+async function loadResults() {
+  const r = await api('/api/results');
+  const rows = r.results.filter(x => x.name.includes('telomere') || x.name.includes('methylation') || x.name.includes('calibration') || x.name.includes('clock'));
+  $('#t-results').innerHTML = rows.length ? '<table><tr><th>result</th><th>date</th><th>key numbers</th></tr>' + rows.map(x => {
+    const keys = ['telomere_bp', 'southern_equivalent_bp_inferred', 'horvath_age', 'hannum_age', 'probes_covered', 'fitted_divisions_per_year', 'net_bp_per_year', 'reads', 'seconds'].filter(k => k in x.summary);
+    return `<tr><td class="mono">${x.name}</td><td>${x.date}</td><td class="mono">${keys.map(k => `${k}=${x.summary[k]}`).join('  ')}</td></tr>`;
+  }).join('') + '</table>' : '<span class="muted">no measurements yet</span>';
+}
+$('#t-measure').onclick = async () => {
+  try { const r = await api('/api/twin/measure', {name: $('#t-measure-twin').value}); $('#t-status').textContent = `applied to ${r.twin}: ${JSON.stringify(r.applied)}`; loadTwins(); }
+  catch (e) { $('#t-status').textContent = e.message; }
+};
 $('#t-new').onclick = async () => {
   try { await api('/api/twin/new', {name: $('#t-name').value.trim(), age: +$('#t-age').value, telomere: $('#t-tel').value ? +$('#t-tel').value : null, epigenetic_age: $('#t-epi').value ? +$('#t-epi').value : null}); $('#t-status').textContent = 'created'; loadTwins(); }
   catch (e) { $('#t-status').textContent = e.message; }

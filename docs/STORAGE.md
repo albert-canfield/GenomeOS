@@ -30,7 +30,11 @@ genomeos data results         list summaries
 | `clock_GSE41169` | GEO methylation matrix (184 MB) | ~15 KB |
 | `clinvar_chr21_agreement` | genome-wide ClinVar VCF (185 MB) | ~2 KB (chr21 subset 22 MB kept for the variant test) |
 | `library_members` | Reactome mapping (175 MB) | ~300 KB |
-| `hg002_chr21` | HG002 benchmark VCF (149 MB) + haplotype FASTA (91 MB) | ~5 MB chr21-only VCF |
+| `hg002_chr21` | HG002 benchmark VCF (149 MB) + haplotype FASTA (91 MB) | ~2 MB chr21-only VCF |
+| `gencode_chr21_chrM` | genome-wide GENCODE 50 (153 MB) | 1.9 MB subset |
+| `clinvar_chr21_coding` | ClinVar chr21 (22 MB subset) | 1.1 MB coding records |
+| `hg002_methylation_stream` | two nanopore bedMethyl files (1.2 GB), streamed | 0 bytes on disk; ~30 KB of betas at 418 clock CpGs |
+| `clock_probes_hg38.json` (packaged) | Illumina 450k manifest (29 MB) | 13 KB |
 
 What must stay for the code to run: the chr21 and chrM reference (58 MB), the
 GENCODE annotation (153 MB, used by many tests), GO (31 MB + 15 MB), and the

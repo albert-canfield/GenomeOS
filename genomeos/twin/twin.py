@@ -97,9 +97,16 @@ class Twin:
     # ---- run -------------------------------------------------------------
 
     def run(
-        self, cell_type: str = "fibroblast", years: float = 40.0, cells: int = 500, seed: int = 1
+        self,
+        cell_type: str = "fibroblast",
+        years: float = 40.0,
+        cells: int = 500,
+        seed: int = 1,
+        use_calibration: bool = True,
     ) -> TwinRun:
         base = CELL_TYPES[cell_type]
+        if use_calibration:
+            base = _calibrated(base)
         params = _modified_params(base, self.modifiers)
         env = copy.copy(self.environment)
         if "epigenetic_pace" in self.modifiers:
@@ -145,6 +152,30 @@ class Twin:
             *rt.evidence_table(cell_type)[4:],
         ]
         return TwinRun(self.name, cell_type, reports, report_for_ageing(evidence), dict(self.modifiers))
+
+
+def _calibrated(base: CellTypeParams) -> CellTypeParams:
+    """Apply a saved attrition calibration (genomeos calibrate) for this cell type, if any."""
+    from genomeos.results import load_result
+
+    r = load_result(f"calibration_{base.name}_attrition")
+    if not r:
+        return base
+    ev = r.get("evidence", {})
+    fitted = Parameter(
+        "divisions_per_year",
+        float(r["fitted_divisions_per_year"]),
+        "1/yr",
+        Evidence(EvidenceKind.INFERRED, ev.get("source", "calibration"), note=ev.get("note", "")),
+        float(r.get("confidence", 0.4)),
+    )
+    return CellTypeParams(
+        base.name,
+        fitted,
+        base.telomere_loss_per_division_bp,
+        base.mutations_per_year,
+        base.telomerase_compensation,
+    )
 
 
 def _modified_params(base: CellTypeParams, modifiers: dict[str, float]) -> CellTypeParams:

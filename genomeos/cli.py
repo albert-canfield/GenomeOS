@@ -696,6 +696,58 @@ def cmd_data(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_calibrate(args: argparse.Namespace) -> int:
+    from genomeos.twin.calibrate import calibrate_attrition
+
+    cal = calibrate_attrition(args.cell_type, args.age, args.measured, args.source)
+    print(f"{args.cell_type}: measured {args.measured:.0f} bp at {args.age:.0f} y")
+    print(f"  fitted divisions_per_year = {cal.fitted_divisions_per_year:.3f}")
+    print(f"  net attrition {cal.net_bp_per_year:.1f} bp/yr")
+    print(f"  saved as calibration_{args.cell_type}_attrition; twin runs of this cell type now use it")
+    ev = cal.parameter.evidence
+    print(f"  [{ev.kind.value}] {ev.source}  conf={cal.parameter.confidence}")
+    return 0
+
+
+def cmd_methylation(args: argparse.Namespace) -> int:
+    from genomeos.twin.clocks import Clock
+    from genomeos.twin.methylation import load_probes, summarise
+
+    probes = load_probes()
+    summary = summarise(
+        args.sources,
+        probes,
+        min_coverage=args.min_coverage,
+        progress=lambda n: print(f"  {n:,} rows scanned", flush=True),
+    )
+    print(f"{summary.rows_scanned:,} bedMethyl rows scanned")
+    print(
+        f"  {summary.probes_covered}/{summary.probes_total} clock CpGs covered (>= {args.min_coverage} reads)"
+    )
+    for clock in (Clock.horvath(), Clock.hannum()):
+        r = clock.predict(summary.betas)
+        conf = r.parameter.confidence
+        print(f"  {clock.name:<12} {r.age:5.1f} y  (coverage {r.coverage:.0%}, conf {conf:.2f})")
+    if args.save:
+        from genomeos.results import save_result
+
+        h = Clock.horvath().predict(summary.betas)
+        p = save_result(
+            args.save,
+            {
+                "sources": args.sources,
+                "rows_scanned": summary.rows_scanned,
+                "probes_covered": summary.probes_covered,
+                "horvath_age": round(h.age, 2),
+                "hannum_age": round(Clock.hannum().predict(summary.betas).age, 2),
+                "betas": {k: round(v, 4) for k, v in summary.betas.items()},
+                "disk_used_bytes": 0,
+            },
+        )
+        print(f"  saved {p}")
+    return 0
+
+
 def cmd_libs(args: argparse.Namespace) -> int:
     from genomeos.lib import KnowledgeBase
 
@@ -956,6 +1008,19 @@ def build_parser() -> argparse.ArgumentParser:
     data.add_parser("results", help="list result summaries")
     for sp in data.choices.values():
         sp.set_defaults(fn=cmd_data)
+
+    p = sub.add_parser("calibrate", help="fit an ageing parameter to a measurement (rules from data)")
+    p.add_argument("--cell-type", default="hematopoietic_stem", choices=sorted(CELL_TYPES))
+    p.add_argument("--age", type=float, required=True)
+    p.add_argument("--measured", type=float, required=True, help="mean telomere length, bp (Southern scale)")
+    p.add_argument("--source", required=True, help="where the measurement comes from")
+    p.set_defaults(fn=cmd_calibrate)
+
+    p = sub.add_parser("methylation", help="clock CpG methylation from bedMethyl files or URLs (streamed)")
+    p.add_argument("sources", nargs="+", help="bedMethyl paths or http(s) URLs; haplotype files are pooled")
+    p.add_argument("--min-coverage", type=int, default=5)
+    p.add_argument("--save", metavar="NAME")
+    p.set_defaults(fn=cmd_methylation)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)
