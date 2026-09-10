@@ -45,6 +45,54 @@
         }
       },
       "seconds": 372
+    },
+    "chr2": {
+      "unknown_blocks": 1943,
+      "unknown_bp": 64057848,
+      "classified_fraction": 0.9618,
+      "by_class": {
+        "regulatory": {
+          "blocks": 1137,
+          "bp": 28470480
+        },
+        "long_orf": {
+          "blocks": 124,
+          "bp": 13944861
+        },
+        "interspersed_repeat": {
+          "blocks": 156,
+          "bp": 4993498
+        },
+        "unique_intergenic": {
+          "blocks": 76,
+          "bp": 4988386
+        },
+        "mixed_intergenic": {
+          "blocks": 48,
+          "bp": 4428161
+        },
+        "unclassified": {
+          "blocks": 319,
+          "bp": 2444698
+        },
+        "centromere": {
+          "blocks": 1,
+          "bp": 2150554
+        },
+        "gap": {
+          "blocks": 6,
+          "bp": 1752835
+        },
+        "promoter_like": {
+          "blocks": 33,
+          "bp": 651834
+        },
+        "interspersed_repeat_SINE": {
+          "blocks": 43,
+          "bp": 232541
+        }
+      },
+      "seconds": 418
     }
   }
 }

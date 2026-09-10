@@ -6,8 +6,9 @@
   unless CI (lint + tests) is green.
 - `dev` is where all work happens. Commit freely; CI runs on every push so
   breakage is visible early.
-- When a piece of work on `dev` is complete and tested, open a pull request
-  `dev -> main` (or run `scripts/promote.sh`), let CI pass, and merge.
+- When a piece of work on `dev` is complete and tested, Albert opens the pull
+  request `dev -> main` manually and merges it once CI is green. Automated
+  sessions commit and push to `dev` only; `scripts/promote.sh` is for manual use.
 
 ```
 git switch dev                 # work here
