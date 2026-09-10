@@ -32,6 +32,13 @@ CATALOG: dict[str, dict] = {
         "result": "signals_chr21",
         "count": lambda r: 1 if r else 0,
     },
+    "unknown_chr21": {
+        "argv": [sys.executable, "-m", "genomeos.cli", "unknown", "--chrom", "chr21"],
+        "describe": "Classify every UNKNOWN block of chromosome 21, largest first.",
+        "total": 1,
+        "result": "unknown_chr21",
+        "count": lambda r: 1 if r else 0,
+    },
     "distil": {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "distil"],
         "describe": "Turn any raw downloads present into result summaries.",

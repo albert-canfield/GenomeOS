@@ -237,6 +237,7 @@ def blocks_for_window(
                     0.9,
                 )
             )
+    _apply_unknown_classes(blocks, chrom)
     return {
         "chrom": chrom,
         "start": start,
@@ -246,6 +247,36 @@ def blocks_for_window(
         "blocks": [b.to_dict() for b in blocks],
         "counts": _counts(blocks),
     }
+
+
+def _apply_unknown_classes(blocks: list[Block], chrom: str) -> None:
+    """If `genomeos unknown` has classified this chromosome, label the UNKNOWN blocks with its findings."""
+    from genomeos.results import load_result
+
+    r = load_result(f"unknown_{chrom}")
+    if not r:
+        return
+    by_start = {(b["start"], b["end"]): b for b in r["blocks"]}
+    for b in blocks:
+        if b.type != "unknown":
+            continue
+        hit = by_start.get((b.start, b.end))
+        if not hit:
+            # window-clipped unknown spans: find the classified block containing this one
+            hit = next((c for c in r["blocks"] if c["start"] <= b.start and b.end <= c["end"]), None)
+        if hit and hit["class"] != "unclassified":
+            b.name = f"UNKNOWN · {hit['class']}"
+            b.evidence = hit["evidence"]
+            b.confidence = hit["confidence"]
+            b.attrs.update(
+                {
+                    "class": hit["class"],
+                    **{f"f_{k}": v for k, v in hit["features"].items()},
+                    "patterns": ", ".join(f"{k}×{v}" for k, v in hit["patterns"].items()) or "",
+                }
+            )
+            if hit.get("similar_to"):
+                b.attrs["similar_to"] = "; ".join(hit["similar_to"][:3])
 
 
 def _counts(blocks: list[Block]) -> dict[str, int]:

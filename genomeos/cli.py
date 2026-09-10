@@ -983,6 +983,53 @@ def cmd_cancer(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_unknown(args: argparse.Namespace) -> int:
+    from genomeos.genome import Annotation, Genome, default_gencode
+    from genomeos.genome.unknown import investigate, load_patterns
+    from genomeos.results import save_result
+
+    genome = Genome.from_fasta(args.genome)
+    chrom = args.chrom or next(iter(genome.chromosomes))
+    gff = args.gff3 or default_gencode({chrom})
+    ann = Annotation.from_gff3(gff, {chrom})
+    patterns = load_patterns(args.patterns) if args.patterns else load_patterns()
+    r = investigate(
+        genome.chromosomes[chrom].sequence,
+        ann,
+        chrom,
+        patterns,
+        min_size=args.min_size,
+        progress=lambda m: print(f"  {m}", flush=True),
+        max_blocks=args.max_blocks,
+    )
+    print(f"{chrom}: {r['unknown_blocks']} UNKNOWN blocks, {r['unknown_bp']:,} bp")
+    print(f"  classified {r['classified_fraction']:.1%}")
+    print(
+        _table(
+            [
+                {
+                    "class": k,
+                    "blocks": v["blocks"],
+                    "bp": f"{v['bp']:,}",
+                    "share": f"{v['bp'] / r['unknown_bp']:.1%}",
+                }
+                for k, v in r["by_class"].items()
+            ],
+            ["class", "blocks", "bp", "share"],
+        )
+    )
+    print("largest blocks:")
+    for b in r["blocks"][:10]:
+        f = b["features"]
+        where = f"{chrom}:{b['start']}-{b['end']}"
+        feats = f"gc={f.get('gc')} tandem={f.get('tandem_fraction')} highcopy={f.get('high_copy_fraction')}"
+        print(f"  {where:<24} {b['length']:>10,} bp  {b['class']:<22} conf={b['confidence']:.1f}")
+        print(f"      {feats} orf={f.get('longest_orf_aa')}")
+    name = args.save or f"unknown_{chrom}"
+    print(f"  saved {save_result(name, r)}")
+    return 0
+
+
 def cmd_libs(args: argparse.Namespace) -> int:
     from genomeos.lib import KnowledgeBase
 
@@ -1311,6 +1358,18 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--packet", help="write the AI-agent task packet (JSON)")
     for sp in can.choices.values():
         sp.set_defaults(fn=cmd_cancer)
+
+    p = sub.add_parser(
+        "unknown", help="investigate UNKNOWN blocks: classify the space between genes, largest first"
+    )
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--chrom")
+    p.add_argument("--gff3")
+    p.add_argument("--patterns", help="TSV of named motifs (name, class, regex, evidence, confidence, note)")
+    p.add_argument("--min-size", type=int, default=1000)
+    p.add_argument("--max-blocks", type=int)
+    p.add_argument("--save")
+    p.set_defaults(fn=cmd_unknown)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)

@@ -1,0 +1,5 @@
+# name	class	regex	evidence	confidence	note
+telomeric_repeat	telomere	(?:TTAGGG){4,}|(?:CCCTAA){4,}	curated	0.9	human telomere unit; Moyzis et al. 1988
+cenp_b_box	centromere	TTCGTTGGAA[AG]CGGGA	curated	0.7	CENP-B box of alpha-satellite monomers (Masumoto et al. 1989); one hit per ~171 bp in centromeric arrays
+alu_core	interspersed_repeat_SINE	GGCCGGGCGCGGTGGCTCA	curated	0.8	5' core of the Alu consensus (~300 bp SINE, ~1.2 M copies; Deininger 2011)
+poly_a_tail	repeat_tail	A{20,}|T{20,}	inferred	0.5	poly(A) tails mark the 3' end of retrotransposed elements
