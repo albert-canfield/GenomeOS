@@ -94,6 +94,17 @@ nav button .ic{margin-right:5px}
 label{display:inline-flex;align-items:center;gap:4px}
 button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 #start .card{margin-bottom:16px}
+#busy{position:fixed;left:0;top:0;height:3px;width:100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);background-size:200% 100%;animation:busy 1s linear infinite;z-index:50;display:none}
+#busy.on{display:block}
+@keyframes busy{from{background-position:200% 0}to{background-position:-200% 0}}
+.prog{height:10px;background:var(--line);border-radius:5px;overflow:hidden;margin:6px 0}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .4s}
+.prog.running i{background:linear-gradient(90deg,var(--accent),var(--c6))}
+.state{font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--line)}
+.state.running{color:var(--warn);border-color:var(--warn)}.state.done{color:var(--ok);border-color:var(--ok)}.state.failed{color:var(--bad);border-color:var(--bad)}.state.idle{color:var(--muted)}
+.log{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:pre-wrap;max-height:90px;overflow:auto;margin-top:4px}
+.pstatus{font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.pstatus.done{color:var(--ok);border-color:var(--ok)}.pstatus.progress{color:var(--warn);border-color:var(--warn)}
 .unc{margin-top:10px;font-size:12px}
 .unc table{font-size:12px}
 .unc .lbl{display:inline-block;width:64px;text-align:right;padding-right:6px}
@@ -101,6 +112,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 </style>
 </head>
 <body>
+<div id="busy"></div>
 <header>
   <h1>GenomeOS <span id="version"></span></h1>
   <nav>
@@ -112,6 +124,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
     <button data-tab="space" data-tip="Development in space: morphogen gradients, the segmentation clock and germ-layer choice."><i class="ic">🌱</i>Space</button>
     <button data-tab="debug" data-tip="Step a model with biological breakpoints and get an explanation, with evidence, of what drove each value."><i class="ic">🔍</i>Debugger</button>
+    <button data-tab="progress" data-tip="What is running now, what has been done, and every measurement obtained so far."><i class="ic">📊</i>Progress</button>
     <button data-tab="libs" data-tip="The reusable 'libraries' the genome contains, in five layers, with membership computed from Gene Ontology and Reactome."><i class="ic">📚</i>Libraries</button>
   </nav>
 </header>
@@ -131,6 +144,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div class="step"><i class="ic">👥</i><b>Twin</b> — one person. Measured state (streamed from real data), variants in timer genes, forks and side-by-side futures.</div>
       <div class="step"><i class="ic">🌱</i><b>Space</b> — development. A morphogen source patterns a field of cells; the segmentation clock lays down segments; germ layers form along a gradient.</div>
       <div class="step"><i class="ic">🔍</i><b>Debugger</b> — why. Stop when a condition is met and read the rules and evidence behind the value.</div>
+      <div class="step"><i class="ic">📊</i><b>Progress</b> — jobs running in the background with live progress, the project's task log, and the measurements obtained so far.</div>
       <div class="step"><i class="ic">📚</i><b>Libraries</b> — the parts list. 45 reusable modules the genome contains, verified against curated databases.</div>
     </div>
     <h2 style="margin-top:16px">A first walk-through</h2>
@@ -364,6 +378,25 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   </div>
 </section>
 
+<!-- ================= PROGRESS ================= -->
+<section id="progress">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2><i class="ic">⚙️</i>Jobs<span class="help" data-tip="Long computations run in the background as separate processes; this panel polls their progress every few seconds. Jobs write their outcome to data/results, never raw data.">?</span></h2>
+      <div id="j-list"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🧬</i>Whole-genome inventory<span class="help" data-tip="The anatomy of every human chromosome, streamed one at a time: downloaded, counted, deleted. Rows appear as chromosomes finish.">?</span></h2>
+      <div id="j-genome" class="scroll"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2><i class="ic">🗺️</i>Project progress<span class="help" data-tip="The task log the project keeps in docs/PROGRESS.md: what was built, its status, and the evidence that it works.">?</span></h2>
+    <div id="p-summary" class="kpi"></div>
+    <div id="p-rows" class="scroll" style="max-height:520px"></div>
+  </div>
+</section>
+
 <!-- ================= LIBRARIES ================= -->
 <section id="libs">
   <div class="card">
@@ -380,11 +413,15 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 
 <script>
 const $ = s => document.querySelector(s);
+let inflight = 0;
 const api = async (path, body) => {
-  const r = await fetch(path, body ? {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)} : undefined);
-  const j = await r.json();
-  if (!r.ok) throw new Error(j.error || r.statusText);
-  return j;
+  inflight++; document.getElementById('busy').classList.add('on');
+  try {
+    const r = await fetch(path, body ? {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)} : undefined);
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || r.statusText);
+    return j;
+  } finally { if (--inflight === 0) document.getElementById('busy').classList.remove('on'); }
 };
 const fmt = n => Number(n).toLocaleString('en-US');
 const colors = ['--c1','--c2','--c3','--c4','--c5','--c6'].map(v => getComputedStyle(document.documentElement).getPropertyValue(v).trim());
@@ -396,6 +433,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('main section').forEach(s => s.classList.toggle('active', s.id === b.dataset.tab));
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
+  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadProgress(); }
   // first visit to a simulation tab runs its default example
   if (!autoRan.has(b.dataset.tab)) {
     autoRan.add(b.dataset.tab);
@@ -684,6 +722,41 @@ $('#an-compare').onclick = async () => {
     $('#an-lessons').innerHTML = r.lessons.map(l => `<div>• ${l}</div>`).join('');
   } catch (e) { $('#an-status').textContent = e.message; }
 };
+
+// ---- progress
+let jobTimer = null;
+const when = ts => ts ? new Date(ts * 1000).toLocaleTimeString() : '';
+async function loadJobs() {
+  try {
+    const r = await api('/api/jobs');
+    $('#j-list').innerHTML = r.jobs.map(j => `<div style="margin-bottom:12px">
+      <div class="row" style="margin-bottom:2px"><b class="mono">${j.name}</b> <span class="state ${j.state}">${j.state}</span>
+        ${j.state !== 'running' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
+        ${j.finished ? `<span class="muted">finished ${when(j.finished)}</span>` : ''}</div>
+      <div class="muted" style="font-size:12px">${j.describe}</div>
+      ${j.total > 1 ? `<div class="prog ${j.state}"><i style="width:${(j.fraction || 0) * 100}%"></i></div><div class="muted" style="font-size:11px">${j.done} of ${j.total}</div>` : ''}
+      ${j.last_lines.length ? `<div class="log">${j.last_lines.join('\n')}</div>` : ''}</div>`).join('');
+    $('#j-list').querySelectorAll('button[data-job]').forEach(b => b.onclick = async () => { await api('/api/jobs/start', {name: b.dataset.job}); loadJobs(); });
+    const running = r.jobs.some(j => j.state === 'running');
+    clearTimeout(jobTimer);
+    if (running) jobTimer = setTimeout(() => { loadJobs(); loadGenomeWide(); }, 5000);
+  } catch (e) { $('#j-list').textContent = e.message; }
+}
+async function loadGenomeWide() {
+  try {
+    const g = await api('/api/anatomy/genome');
+    const c = g.composition_bp, tot = Object.values(c).reduce((a, b) => a + b, 0);
+    $('#j-genome').innerHTML = `<div class="kpi"><div><b>${g.done}/${g.total}</b><span>chromosomes</span></div><div><b>${fmt(g.coding_genes)}</b><span>coding genes so far</span></div><div><b>${(g.genome_bp / 1e9).toFixed(2)} Gb</b><span>counted</span></div><div><b>${(c.cds / tot * 100).toFixed(2)}%</b><span>protein code</span></div></div>
+      <div class="prog"><i style="width:${g.done / g.total * 100}%"></i></div>
+      <table><tr><th>chr</th><th class="num">Mb</th><th class="num">genes</th><th class="num">genes/Mb</th><th class="num">CDS</th><th class="num">intron</th><th class="num">intergenic</th><th class="num">exons</th><th class="num">intron bp</th><th class="num">CpG isl.</th><th class="num">s</th></tr>` +
+      g.table.map(r => `<tr><td class="mono">${r.chrom}</td><td class="num">${r.length_mb}</td><td class="num">${fmt(r.coding_genes)}</td><td class="num">${r.genes_per_mb}</td><td class="num">${(r.cds * 100).toFixed(2)}%</td><td class="num">${(r.intron * 100).toFixed(0)}%</td><td class="num">${(r.intergenic * 100).toFixed(0)}%</td><td class="num">${r.exons ?? ''}</td><td class="num">${r.intron_median ?? ''}</td><td class="num">${fmt(r.cpg_islands)}</td><td class="num">${r.seconds ?? ''}</td></tr>`).join('') + '</table>';
+  } catch (e) { $('#j-genome').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function loadProgress() {
+  const p = await api('/api/progress');
+  $('#p-summary').innerHTML = `<div><b>${p.done}</b><span>tasks done</span></div><div><b>${p.count - p.done}</b><span>in progress / partial</span></div><div><b>${p.count}</b><span>tasks logged</span></div>`;
+  $('#p-rows').innerHTML = '<table><tr><th>task</th><th>status</th><th>evidence</th></tr>' + p.rows.map(r => `<tr><td><b>${r.task}</b></td><td><span class="pstatus ${r.status.startsWith('done') ? 'done' : 'progress'}">${r.status}</span></td><td class="muted" style="font-size:12px">${r.evidence}</td></tr>`).join('') + '</table>';
+}
 
 // ---- libraries
 let libs = [];

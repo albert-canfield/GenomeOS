@@ -87,7 +87,7 @@ records the evidence per task. Highlights:
 - epigenetic clocks validated on real blood methylation (Horvath r > 0.8); telomere estimator; digital twins that fork, run and diff
 - development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient, the C. elegans early lineage from a zygote
 - a debugger with biological breakpoints and evidence traces, and BioForge design search whose outputs are labelled predicted
-- a local web UI with seven views
+- a local web UI with nine views, including a Progress tab with live background jobs and the project's task log
 
 ## Quick start
 

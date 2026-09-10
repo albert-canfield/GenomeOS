@@ -576,6 +576,83 @@ class Api:
         d["lessons"] = design_lessons([a]) if ann else []
         return d
 
+    # ---- progress: jobs, project log ------------------------------------
+
+    def jobs(self) -> dict:
+        from genomeos import jobs
+
+        return {"jobs": [j.to_dict() for j in jobs.all_status(self.root)]}
+
+    def job_start(self, name: str) -> dict:
+        from genomeos import jobs
+
+        try:
+            return {"ok": True, "job": jobs.start(name, self.root).to_dict()}
+        except KeyError as e:
+            raise ApiError(str(e)) from None
+
+    def progress(self) -> dict:
+        """The project's progress table (docs/PROGRESS.md) as rows."""
+        p = self.root / "docs" / "PROGRESS.md"
+        rows = []
+        if p.exists():
+            for line in p.read_text().splitlines():
+                if (
+                    not line.startswith("|")
+                    or set(line.strip("| ")) <= {"-", " ", "|"}
+                    or line.startswith("| Task")
+                ):
+                    continue
+                cells = [c.strip() for c in line.strip().strip("|").split("|")]
+                if len(cells) >= 3:
+                    rows.append({"task": cells[0], "status": cells[1], "evidence": cells[2]})
+        return {
+            "rows": rows,
+            "count": len(rows),
+            "done": sum(1 for r in rows if r["status"].startswith("done")),
+        }
+
+    def genome_wide(self) -> dict:
+        from genomeos.results import load_result
+
+        r = load_result("anatomy_hg38_by_chromosome", self.root / "data" / "results")
+        if not r:
+            raise ApiError("no genome-wide inventory yet", 404)
+        chroms = r["chromosomes"]
+        table = []
+        for name, d in chroms.items():
+            f = d["composition_fraction"]
+            table.append(
+                {
+                    "chrom": name,
+                    "length_mb": round(d["length"] / 1e6, 1),
+                    "coding_genes": d["genes"]["protein_coding"],
+                    "genes_per_mb": d["layout"]["coding_genes_per_mb"],
+                    "cds": f["cds"],
+                    "intron": f["intron"],
+                    "intergenic": f["intergenic"],
+                    "gap": f["gap"],
+                    "exons": d["structure"]["exons_per_transcript_median"],
+                    "intron_median": d["structure"]["intron_length_median"],
+                    "cpg_islands": d["elements"]["cpg_islands"],
+                    "seconds": d.get("seconds"),
+                }
+            )
+        total_len = sum(d["length"] for d in chroms.values())
+        totals = {
+            k: sum(d["composition_bp"].get(k, 0) for d in chroms.values())
+            for k in ("cds", "intron", "intergenic", "gap", "noncoding_exon_or_utr")
+        }
+        return {
+            "assembly": r.get("assembly"),
+            "done": len(chroms),
+            "total": 25,
+            "table": table,
+            "genome_bp": total_len,
+            "coding_genes": sum(d["genes"]["protein_coding"] for d in chroms.values()),
+            "composition_bp": totals,
+        }
+
     # ---- libraries -------------------------------------------------------
 
     def libs(self) -> dict:
@@ -655,6 +732,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/results":
                 return self._json(self.api.results())
+            if u.path == "/api/jobs":
+                return self._json(self.api.jobs())
+            if u.path == "/api/progress":
+                return self._json(self.api.progress())
+            if u.path == "/api/anatomy/genome":
+                return self._json(self.api.genome_wide())
             if u.path == "/api/anatomy":
                 return self._json(self.api.anatomy(self._q(qs, "path"), self._q(qs, "chrom")))
             if u.path == "/api/develop":
@@ -681,6 +764,8 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
             if u.path == "/api/compile":
                 return self._json(self.api.compile(body.get("source", "")))
+            if u.path == "/api/jobs/start":
+                return self._json(self.api.job_start(body.get("name", "")))
             if u.path == "/api/debug":
                 return self._json(
                     self.api.debug(
