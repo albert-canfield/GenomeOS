@@ -244,7 +244,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label style="margin-left:auto" data-tip="Edit mode: drag a gene, transcript or exon to propose a move. The server checks plausibility: inside its parent, no overlap on the same strand, reading frame kept for exons. Accepted moves are proposals with predicted evidence."><input type="checkbox" id="b-mode"> <span id="b-modelabel">view mode</span></label>
     </div>
     <div id="b-summary" style="margin:6px 0 8px"></div>
-    <div style="position:relative"><canvas id="b-canvas" style="width:100%;height:440px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></canvas></div>
+    <div style="position:relative"><canvas id="b-canvas" style="width:100%;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></canvas></div>
     <canvas id="b-mini" style="width:100%;height:26px;display:block;margin-top:6px;border-radius:6px;background:var(--bg)"></canvas>
     <div class="grid cols-2" style="margin-top:12px">
       <div class="card"><h2><i class="ic">ℹ️</i>Block<span class="help" data-tip="Details of the block under the mouse or the selected one: type, coordinates, size, evidence, what it is inside of and what it contains.">?</span></h2><div id="b-info"><span class="muted">Click a block.</span></div></div>
