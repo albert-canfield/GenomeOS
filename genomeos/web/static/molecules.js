@@ -47,17 +47,33 @@
       ${sec('Domains', `${(dom.interpro || []).map(x => `<span class="chip" data-tip="${x.id}">${x.name || x.id}</span>`).join(' ') || '<span class="muted">none</span>'}${dom.features && dom.features.length ? `<div class="muted">${dom.features.length} annotated features (domains, regions, sites)</div>` : ''}`, pill(s.domains))}
       ${sec('Modifications', mods.length ? `${mods.length} sites: ${Object.entries(mods.reduce((a, f) => { a[f.type] = (a[f.type] || 0) + 1; return a; }, {})).map(([k, v]) => `${k} ${v}`).join(', ')}` : '<span class="muted">none recorded</span>', pill(s.modifications))}
       ${sec('Structures', `experimental <b>${exp.count || 0}</b> ${Object.keys(methods).length ? '(' + Object.entries(methods).map(([k, v]) => `${k} ${v}`).join(', ') + ')' : ''} ${pill(exp)} · predicted <b>${(pred.items || []).length}</b> ${pill(pred)} <span class="muted">— predicted is never treated as observed</span>`, '')}
-      ${sec('Pathways (Reactome)', pw.length ? pw.slice(0, 12).map(x => `<span class="chip" data-tip="${x.id}">${x.name}</span>`).join(' ') + (pw.length > 12 ? ` <span class="muted">+${pw.length - 12} more</span>` : '') : '<span class="muted">none</span>', pill(s.pathways))}
+      ${sec('Pathways (Reactome)', pw.length ? pw.slice(0, 12).map(x => `<span class="chip" data-pw="${x.id}" data-tip="${x.id} · click to run with ${d.gene} knocked out">${x.name}</span>`).join(' ') + (pw.length > 12 ? ` <span class="muted">+${pw.length - 12} more</span>` : '') : '<span class="muted">none</span>', pill(s.pathways))}
       ${sec('Associations (STRING ≥ 0.7)', its.length ? its.slice(0, 20).map(x => `<span class="chip" data-tip="combined ${x.score}; experimental ${x.experimental}, database ${x.database}, text-mining ${x.textmining}${x.physical_evidence ? ' · experimental support' : ''}" style="${x.physical_evidence ? '' : 'opacity:.6'}">${x.partner}</span>`).join(' ') + ` <span class="muted">${its.length} total, ${its.filter(x => x.physical_evidence).length} with experimental support; dimmed = association without physical evidence</span>` : `<span class="muted">${it.error || 'none'}</span>`, pill(it))}
       ${sec('Expression (Human Protein Atlas)', ex.tissue_specificity ? `${ex.tissue_specificity}; ${ex.tissue_distribution || ''}; main location ${(ex.subcellular_main || []).join(', ') || '?'}; cell types: ${ex.cell_type_specificity || '?'}${ntpm.length ? `<table style="margin-top:4px">${ntpm.map(([k, v]) => `<tr><td>${k}</td><td class="num mono">${v.toFixed(0)} nTPM</td></tr>`).join('')}</table>` : ''}` : `<span class="muted">${(s.expression || {}).error || 'not fetched'}</span>`, pill(s.expression))}
       ${dis.length ? sec('Diseases (UniProt)', dis.map(x => `<span class="chip" data-tip="${(x.description || '').replace(/"/g, '')}">${x.name}${x.mim ? ' · MIM ' + x.mim : ''}</span>`).join(' '), pill(s.diseases)) : ''}
       ${d.states && d.states.length ? `<div class="muted" style="margin-top:8px;font-size:12px">${d.states.length} ProteinState records derived (protein × tissue/cell type × level × location); the definition above is what the protein <i>is</i>, a state is where it is and how much.</div>` : ''}`;
   }
+  window.moleculesPathway = async function (id, ko) {
+    $('#m-pw-status').textContent = 'fetching Reactome export and running…';
+    try {
+      const d = await window.api(`/api/pathway?id=${encodeURIComponent(id)}${ko ? '&knockout=' + encodeURIComponent(ko) : ''}`);
+      const s = d.summary, k = d.knockout;
+      $('#m-pw-status').textContent = `${s.name} · Reactome v${s.version}`;
+      const lostIds = new Set(k ? k.reactions_lost.map(r => r.id) : []);
+      $('#m-pw-out').innerHTML = `
+        <div><b>${s.pathway}</b> ${s.name} <span class="pill curated">curated</span> · ${s.species} entities (${s.proteins} proteins), ${s.reactions} reactions, ${s.reactions_reachable_from_sources} reachable from the pathway's inputs, ${s.catalysed} catalysed, ${s.inhibited} inhibited</div>
+        ${k ? `<div style="margin-top:6px"><b>knockout ${k.symbol || k.knockout}</b> <span class="pill inferred">inferred</span> <span class="muted">${k.logic} · confidence ${k.confidence}</span><br>${k.entities_containing.length} entities contain it · <b>${k.reactions_lost.length} of ${k.reactions_reachable_baseline} reachable reactions lost (${(k.fraction_lost * 100).toFixed(0)}%)</b> · ${k.products_unreachable.length} products can no longer be made${k.products_unreachable.length ? ': <span class="muted">' + k.products_unreachable.slice(0, 8).join('; ') + (k.products_unreachable.length > 8 ? '…' : '') + '</span>' : ''}</div>` : ''}
+        <table style="margin-top:8px;font-size:12px"><tr><th></th><th>reaction</th><th>inputs</th><th>outputs</th><th>catalyst / inhibitor</th></tr>
+        ${d.reactions.map(r => `<tr style="${lostIds.has(r.id) ? 'color:var(--bad)' : ''}"><td>${lostIds.has(r.id) ? '✗' : '✓'}</td><td>${r.name}</td><td class="muted">${r.inputs.join(' + ')}</td><td class="muted">${r.outputs.join(' + ')}</td><td class="muted">${r.catalysts.map(c => '⚙ ' + c).concat(r.inhibitors.map(i => '⊣ ' + i)).join('; ')}</td></tr>`).join('')}</table>`;
+    } catch (e) { $('#m-pw-status').textContent = e.message; }
+  };
   window.moleculesDefinition = async function (gene) {
     $('#m-def-status').textContent = 'compiling from Ensembl, UniProt, STRING, HPA…';
     try { const d = await window.api(`/api/protein_definition?gene=${encodeURIComponent(gene)}`); renderDefinition(d); $('#m-def-status').textContent = 'from local knowledge cache after the first compile'; }
     catch (e) { $('#m-def-status').textContent = e.message; }
+    $('#m-def').querySelectorAll('[data-pw]').forEach(c => c.onclick = () => { $('#m-pw').value = c.dataset.pw; $('#m-ko').value = gene; window.moleculesPathway(c.dataset.pw, gene); });
   };
+  document.addEventListener('DOMContentLoaded', () => { const b = $('#m-pw-run'); if (b) b.onclick = () => window.moleculesPathway($('#m-pw').value.trim(), $('#m-ko').value.trim()); });
   window.moleculesLoad = async function (gene, chrom) {
     window.moleculesDefinition(gene);
     $('#m-status').textContent = 'fetching UniProt and AlphaFold…';

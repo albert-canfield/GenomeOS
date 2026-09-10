@@ -304,8 +304,11 @@ def string_network(symbol: str, min_score: float = 0.7, limit: int = 50) -> list
                 "physical_evidence": r.get("escore", 0) >= 0.4,
             }
         )
-    out.sort(key=lambda x: -x["score"])
-    return out
+    best: dict[str, dict[str, Any]] = {}
+    for x in out:
+        if x["partner"] not in best or x["score"] > best[x["partner"]]["score"]:
+            best[x["partner"]] = x
+    return sorted(best.values(), key=lambda x: -x["score"])
 
 
 def hpa_entry(ensembl_gene_id: str) -> dict[str, Any]:
@@ -477,3 +480,43 @@ def states_from_definition(defn: dict[str, Any]) -> list[ProteinState]:
             ProteinState(pid, localisation=loc, evidence="experimental: HPA subcellular", confidence=0.7)
         )
     return out
+
+
+def to_biolang(defn: dict[str, Any], max_items: int = 12) -> str:
+    """One BioLang `protein` block from a compiled definition (the importer's output)."""
+    s = defn["sections"]
+    ident = (s.get("identity") or {}).get("items") or {}
+    if not ident:
+        return f"# {defn['gene']}: no reviewed UniProt entry\n"
+    dom = (s.get("domains") or {}).get("items") or {}
+    names = [d["name"] for d in dom.get("interpro", []) if d.get("name")][:max_items]
+    pw = [x["id"] for x in (s.get("pathways") or {}).get("items") or []][:max_items]
+    inter = [x["partner"] for x in (s.get("interactions") or {}).get("items") or [] if x["physical_evidence"]]
+    iso = [i["id"] for i in (s.get("isoforms") or {}).get("items") or []]
+    pdb = [x["id"] for x in (s.get("structures_experimental") or {}).get("items") or []][:max_items]
+    af = [f"AF-{x['id']}" for x in (s.get("structures_predicted") or {}).get("items") or []]
+    fn = ((s.get("function") or {}).get("items") or {}).get("summary") or []
+    sources = "UniProt, Ensembl, InterPro, PDB, AlphaFold, Reactome, STRING, HPA"
+    lines = [f"# {ident.get('name')} — compiled from {sources}"]
+    if fn:
+        lines.append("# " + fn[0][:160].replace("\n", " "))
+    props = [
+        f"accession: {ident['accession']}",
+        f"sequence: {ident['sequence']}",
+    ]
+    if iso:
+        props.append(f"isoforms: {', '.join(iso)}")
+    if names:
+        props.append(f"domains: {', '.join(names)}")
+    if pw:
+        props.append(f"pathways: {', '.join(pw)}")
+    if inter:
+        props.append(f"interactions: {', '.join(inter[:max_items])}")
+    if pdb or af:
+        props.append(f"structures: {', '.join(pdb + af)}")
+    props.append('evidence: curated "UniProtKB/Swiss-Prot; InterPro; Reactome; PDB; STRING physical channel"')
+    props.append(f"confidence: {min(v['confidence'] for v in s.values() if v.get('items'))}")
+    lines.append(f"protein {defn['gene']} {{")
+    lines.extend(f"  {x};" for x in props)
+    lines.append("}")
+    return "\n".join(lines) + "\n"

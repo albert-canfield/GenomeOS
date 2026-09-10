@@ -16,12 +16,27 @@
   --accent:#4c8dff;--c1:#4c8dff;--c2:#ff6b66;--c3:#3fb950;--c4:#b083ff;--c5:#e3b341;--c6:#39c5c5;}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{display:flex;align-items:center;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:2}
-header h1{font-size:16px;margin:0;letter-spacing:.3px}
+header{display:flex;align-items:center;gap:8px 16px;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:2}
+header h1{font-size:16px;margin:0;letter-spacing:.3px;white-space:nowrap}
 header h1 span{color:var(--muted);font-weight:400;margin-left:8px;font-size:12px}
-nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
-nav button{background:transparent;border:1px solid transparent;color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer;font:inherit}
+/* tab strip: one row that never wraps; when the window is too narrow it scrolls sideways, and faded edges say so */
+.tabs{position:relative;flex:1 1 auto;min-width:0}
+.tabs::before,.tabs::after{content:'';position:absolute;top:0;bottom:0;width:36px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:1}
+.tabs::before{left:0;background:linear-gradient(90deg,var(--panel),transparent)}
+.tabs::after{right:0;background:linear-gradient(270deg,var(--panel),transparent)}
+.tabs.l::before,.tabs.r::after{opacity:1}
+nav{display:flex;gap:2px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;white-space:nowrap;background:transparent;border:1px solid transparent;color:var(--muted);padding:6px 11px;border-radius:6px;cursor:pointer;font:inherit}
+nav>button:first-child{margin-left:auto}  /* right-aligned when there is room; the auto margin drops to 0 once the strip overflows, so nothing becomes unreachable */
+nav button:hover{color:var(--ink)}
 nav button.active{background:var(--bg);border-color:var(--line);color:var(--ink)}
+nav [data-tip]{cursor:pointer}
+nav [data-tip]::after{display:none}  /* the strip clips its overflow, so nav tips are drawn in #navtip instead */
+#navtip{position:fixed;z-index:20;max-width:340px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.4;box-shadow:0 6px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity .12s,transform .12s}
+#navtip.on{opacity:1;transform:translateY(0)}
+@media(max-width:1500px){header{flex-wrap:wrap;gap:6px 16px}.tabs{flex-basis:100%}nav>button:first-child{margin-left:0}}
+@media(max-width:600px){header{padding:8px 12px}nav button{padding:6px 9px}nav button .ic{margin-right:3px}}
 main{padding:16px 20px;max-width:1280px;margin:0 auto}
 section{display:none}section.active{display:block}
 .grid{display:grid;gap:16px}
@@ -119,7 +134,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 <div id="busy"></div>
 <header>
   <h1>GenomeOS <span id="version"></span></h1>
-  <nav>
+  <div class="tabs"><nav>
     <button data-tab="start" class="active" data-tip="Start here: what GenomeOS is, what each area does, and a suggested first walk-through."><i class="ic">🧭</i>Start</button>
     <button data-tab="genome" data-tip="Load real DNA (FASTA), look at any region, translate it to protein and find open reading frames."><i class="ic">🧬</i>Genome</button>
     <button data-tab="anatomy" data-tip="Count the blocks and elements of a chromosome: what the bases are spent on, gene structure, layout, sequence elements. Compare genomes to see how DNA is organised."><i class="ic">🧱</i>Anatomy</button>
@@ -134,7 +149,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="cancer" data-tip="Healthy versus tumour: somatic differences graded against cBioPortal driver knowledge, suggested cancer types, cell-surface targets, and a task packet for an AI agent."><i class="ic">🎗️</i>Cancer</button>
     <button data-tab="progress" data-tip="What is running now, what has been done, and every measurement obtained so far."><i class="ic">📊</i>Progress</button>
     <button data-tab="libs" data-tip="The reusable 'libraries' the genome contains, in five layers, with membership computed from Gene Ontology and Reactome."><i class="ic">📚</i>Libraries</button>
-  </nav>
+  </nav></div>
 </header>
 <main>
 
@@ -451,6 +466,16 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
         <span class="muted" id="m-def-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
       <div id="m-def"><span class="muted">Load a gene to compile its definition.</span></div>
     </div>
+    <div class="card" style="grid-column:1/-1">
+      <h2><i class="ic">▶️</i>Run a pathway<span class="help" data-tip="Reactome's pathway export has no rate laws, so it is executed as a reachability graph: a reaction fires when every input and catalyst is present, and its products become available. Knocking a protein out removes every entity that contains it and shows which reactions and products are lost. Click a pathway chip above to run it with the loaded gene knocked out.">?</span>
+        <span class="muted" id="m-pw-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+      <div class="row">
+        <label>pathway <input id="m-pw" placeholder="R-HSA-69541" style="width:140px" class="mono"></label>
+        <label data-tip="Gene symbol or UniProt accession to remove from the pathway.">knockout <input id="m-ko" placeholder="TP53" style="width:110px" class="mono"></label>
+        <button class="primary" id="m-pw-run" data-tip="Fetch the pathway (cached after the first time) and run the reachability with the knockout."><i class="ic">▶️</i>Run</button>
+      </div>
+      <div id="m-pw-out"><span class="muted">no pathway run yet</span></div>
+    </div>
     <div class="card">
       <h2><i class="ic">🧊</i>Structure (AlphaFold)<span class="help" data-tip="C-alpha backbone of the predicted model, rotating. Colour is the model's own confidence per residue (pLDDT): blue high, teal confident, yellow low, red very low. Low-confidence stretches are usually disordered regions, not errors.">?</span></h2>
       <div id="m-struct" class="muted">no structure loaded</div>
@@ -601,6 +626,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('main section').forEach(s => s.classList.toggle('active', s.id === b.dataset.tab));
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
+  b.scrollIntoView({block: 'nearest', inline: 'nearest'});
   if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadProgress(); }
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
@@ -612,6 +638,19 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   }
 });
 if (location.hash) { const b = document.querySelector(`nav button[data-tab="${location.hash.slice(1).split('?')[0]}"]`); if (b) b.click(); }
+
+// ---- tab strip: fade the edges while it can scroll, turn the wheel sideways, and draw tips in a fixed layer (the strip clips its own overflow)
+(function tabStrip() {
+  const strip = document.querySelector('.tabs'), nav = strip.querySelector('nav');
+  const edges = () => { strip.classList.toggle('l', nav.scrollLeft > 2); strip.classList.toggle('r', nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2); };
+  nav.addEventListener('scroll', edges); window.addEventListener('resize', edges); edges();
+  nav.addEventListener('wheel', e => { if (nav.scrollWidth > nav.clientWidth && Math.abs(e.deltaY) > Math.abs(e.deltaX)) { nav.scrollLeft += e.deltaY; e.preventDefault(); } }, {passive: false});
+  const tip = document.createElement('div'); tip.id = 'navtip'; document.body.appendChild(tip);
+  const show = b => { tip.textContent = b.dataset.tip; const r = b.getBoundingClientRect(); tip.style.top = (r.bottom + 6) + 'px'; tip.style.left = Math.max(8, Math.min(r.left, innerWidth - tip.offsetWidth - 8)) + 'px'; tip.classList.add('on'); };
+  const hide = () => tip.classList.remove('on');
+  nav.querySelectorAll('button[data-tip]').forEach(b => { b.addEventListener('mouseenter', () => show(b)); b.addEventListener('focus', () => show(b)); for (const ev of ['mouseleave', 'blur', 'click']) b.addEventListener(ev, hide); });
+  nav.addEventListener('scroll', hide);
+})();
 
 // ---- SVG line chart
 function lineChart(svg, legendEl, times, series, opts = {}) {

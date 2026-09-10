@@ -245,6 +245,21 @@ def _compile_block(b: Block, module: Module) -> None:
             pr.half_life_h = _float(p["half_life"], "half_life", b.line)
         if "sequence" in p:
             pr.sequence = p["sequence"]
+        if "accession" in p:
+            pr.accession = p["accession"]
+        if "isoforms" in p:
+            pr.isoforms = _list(p["isoforms"])
+        if "domains" in p:
+            pr.domains = [{"name": d} for d in _list(p["domains"])]
+        if "pathways" in p:
+            pr.pathways = _list(p["pathways"])
+        if "interactions" in p:
+            pr.interactions = _list(p["interactions"])
+        if "structures" in p:
+            pr.structures = [
+                {"source": "PDB" if not x.startswith("AF-") else "AlphaFold", "id": x}
+                for x in _list(p["structures"])
+            ]
         module.add(pr)
     elif b.kind == "region":
         role = p.get("role", "unknown")

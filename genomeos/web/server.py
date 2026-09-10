@@ -797,6 +797,42 @@ class Api:
         d["states"] = [st.to_dict() for st in states_from_definition(d)][:40]
         return d
 
+    def pathway(self, pathway_id: str, knockout: str | None) -> dict:
+        """A Reactome pathway as a reachability graph, optionally with one protein removed."""
+        import re
+
+        from genomeos.molecules.reactome import PathwayModel, fetch_pathway
+
+        if not re.fullmatch(r"R-HSA-\d+", pathway_id or ""):
+            raise ApiError("pathway id must look like R-HSA-69541")
+        model = PathwayModel.from_sbml(fetch_pathway(pathway_id))
+        out = {
+            "summary": model.summary(),
+            "reactions": [
+                {
+                    "id": r.reactome_id or r.id,
+                    "name": r.name,
+                    "inputs": [model.species[x].name for x in r.inputs],
+                    "outputs": [model.species[x].name for x in r.outputs],
+                    "catalysts": [model.species[x].name for x in r.catalysts],
+                    "inhibitors": [model.species[x].name for x in r.inhibitors],
+                }
+                for r in model.reactions
+            ],
+        }
+        if knockout:
+            acc = knockout.upper()
+            if not re.fullmatch(r"[A-NR-Z][0-9][A-Z0-9]{3}[0-9]([A-Z][A-Z0-9]{2}[0-9])?", acc):
+                from genomeos.molecules import compile_protein
+
+                ident = compile_protein(acc, sources={"uniprot"})["sections"].get("identity", {}).get("items")
+                if not ident:
+                    raise ApiError(f"no reviewed UniProt entry for {knockout}")
+                acc = ident["accession"]
+            out["knockout"] = model.knockout(acc)
+            out["knockout"]["symbol"] = knockout.upper()
+        return out
+
     def flow(self, gene: str, chrom: str, variant: str | None) -> dict:
         """DNA → RNA → protein trace of a gene's canonical transcript, optionally with one base change."""
         from genomeos.flow import trace_gene
@@ -936,6 +972,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(
                     self.api.protein_definition(self._q(qs, "gene", ""), self._q(qs, "refresh", "") == "1")
                 )
+            if u.path == "/api/pathway":
+                return self._json(self.api.pathway(self._q(qs, "id", ""), self._q(qs, "knockout")))
             if u.path == "/api/flow":
                 return self._json(
                     self.api.flow(

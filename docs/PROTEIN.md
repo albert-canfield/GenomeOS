@@ -86,6 +86,38 @@ its source and confidence. From there the reaction and pathway parts of the
 graph (Reactome also exports SBML, which the runtime already executes) turn
 knowledge into execution.
 
+## From knowledge to execution: running a pathway
+
+Reactome exports every pathway as SBML (`ContentService/exporter/event/ID.sbml`),
+with species annotated by the UniProt parts they contain and reactions with
+inputs, outputs, catalysts and inhibitors, but **no rate laws**. So it is
+not integrated like a BioModels file; it is run as a reachability graph
+(`genomeos.molecules.reactome.PathwayModel`): a reaction fires when every
+input and catalyst is present, its outputs become present, repeat to a
+fixpoint. A knockout removes every entity containing the protein and
+reports the reactions and products that are lost.
+
+```
+genomeos pathway R-HSA-69541 --knockout TP53
+genomeos pathway --gene TP53 --knockout TP53      # every pathway TP53 belongs to, ranked by loss
+```
+
+Stabilization of p53 (Reactome v97): 28 entities, 15 reactions, 13 reachable
+from the pathway's inputs. Without TP53, 6 of the 13 are lost (MDM2 binds
+TP53, CHEK2 and ATM phosphorylation, ubiquitination and translocation) and
+the phosphorylated and ubiquitinated p53 tetramers can no longer be made.
+The Reactome content is curated; the reachability logic is inferred at 0.6,
+because it ignores kinetics and treats inhibitors as reported, not applied.
+The Molecules tab runs it: click a pathway chip with a gene loaded.
+
+## BioLang importer
+
+`genomeos protein TP53 --bio` writes the compiled definition as a BioLang
+`protein` block (accession, sequence, isoforms, domains, pathways,
+interactions with physical evidence, structures), so a program can carry
+real protein knowledge with its evidence and confidence. The parser accepts
+these properties on any `protein` block.
+
 ## Storage
 
 Stream, distil, discard applies: one compiled definition is small enough

@@ -1096,6 +1096,103 @@ def _print_definition(d: dict) -> None:
     print("  coverage: " + "  ".join(f"{k} {'✓' if v else '·'}" for k, v in cov.items()))
 
 
+def _accession_for(symbol_or_acc: str) -> str:
+    import re
+
+    if re.fullmatch(r"[A-NR-Z][0-9][A-Z0-9]{3}[0-9]([A-Z][A-Z0-9]{2}[0-9])?", symbol_or_acc):
+        return symbol_or_acc
+    from genomeos.molecules import compile_protein
+
+    d = compile_protein(symbol_or_acc, sources={"uniprot"})
+    ident = d["sections"].get("identity", {}).get("items")
+    if not ident:
+        raise SystemExit(f"no reviewed UniProt entry for {symbol_or_acc}")
+    return ident["accession"]
+
+
+def cmd_pathway(args: argparse.Namespace) -> int:
+    from genomeos.molecules.reactome import PathwayModel, fetch_pathway
+    from genomeos.results import save_result
+
+    ids = list(args.ids)
+    if args.gene:
+        from genomeos.molecules import compile_protein
+
+        d = compile_protein(args.gene)
+        ids += [x["id"] for x in (d["sections"].get("pathways", {}).get("items") or [])][: args.limit]
+        print(f"{args.gene}: {len(ids)} Reactome pathways from the compiled definition")
+    if not ids:
+        print("give pathway ids (R-HSA-…) or --gene SYMBOL")
+        return 1
+    acc = _accession_for(args.knockout) if args.knockout else None
+    rows = []
+    for pid in ids:
+        try:
+            model = PathwayModel.from_sbml(fetch_pathway(pid))
+        except Exception as e:  # noqa: BLE001
+            print(f"  {pid}: unavailable ({str(e)[:80]})")
+            continue
+        s = model.summary()
+        if acc:
+            k = model.knockout(acc)
+            rows.append(
+                {
+                    "pathway": pid,
+                    "name": s["name"][:50],
+                    "reactions": s["reactions"],
+                    "reachable": s["reactions_reachable_from_sources"],
+                    "lost": len(k["reactions_lost"]),
+                    "fraction_lost": f"{k['fraction_lost']:.0%}",
+                    "unreachable_products": len(k["products_unreachable"]),
+                }
+            )
+            if len(ids) == 1 or args.verbose:
+                print(
+                    f"{pid} {s['name']}: {s['species']} species ({s['proteins']} proteins), "
+                    f"{s['reactions']} reactions, {s['reactions_reachable_from_sources']} reachable "
+                    f"from sources  [{s['evidence']} v{s['version']}]"
+                )
+                print(
+                    f"  knockout {acc}: {len(k['entities_containing'])} entities contain it; "
+                    f"{len(k['reactions_lost'])} reactions lost ({k['fraction_lost']:.0%}), "
+                    f"{len(k['products_unreachable'])} products unreachable  [{k['logic']}] "
+                    f"conf={k['confidence']}"
+                )
+                for r in k["reactions_lost"][:15]:
+                    print(f"    ✗ {r['name']}  ({r['id']})")
+                for sp in k["products_unreachable"][:10]:
+                    print(f"    · {sp}")
+        else:
+            rows.append(
+                {
+                    "pathway": pid,
+                    "name": s["name"][:50],
+                    "species": s["species"],
+                    "proteins": s["proteins"],
+                    "reactions": s["reactions"],
+                    "reachable": s["reactions_reachable_from_sources"],
+                    "catalysed": s["catalysed"],
+                    "inhibited": s["inhibited"],
+                }
+            )
+    if len(rows) > 1:
+        key = "lost" if acc else "reactions"
+        rows.sort(key=lambda r: -r[key])
+        print(_table(rows, list(rows[0].keys())))
+    if args.gene and acc:
+        save_result(
+            f"knockout_{args.gene.upper()}",
+            {
+                "gene": args.gene.upper(),
+                "accession": acc,
+                "pathways": rows,
+                "evidence": "curated: Reactome; logic inferred (reachability)",
+            },
+        )
+        print(f"  saved data/results/knockout_{args.gene.upper()}.json")
+    return 0
+
+
 def cmd_proteome(args: argparse.Namespace) -> int:
     from genomeos.molecules.proteome import QUESTIONS, compile_chromosome
     from genomeos.results import save_result
@@ -1130,6 +1227,11 @@ def cmd_protein(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
     from genomeos.molecules import protein_report
 
+    if args.bio:
+        from genomeos.molecules import compile_protein, to_biolang
+
+        print(to_biolang(compile_protein(args.symbol, refresh=args.refresh)), end="")
+        return 0
     if args.compile:
         from genomeos.molecules import compile_protein, states_from_definition
 
@@ -1664,6 +1766,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="compile the full definition: Ensembl, UniProt, InterPro, PDB, AlphaFold, Reactome, STRING, HPA",
     )
     p.add_argument("--refresh", action="store_true", help="ignore the local knowledge cache")
+    p.add_argument(
+        "--bio", action="store_true", help="emit the compiled definition as a BioLang protein block"
+    )
     p.add_argument("symbol")
     p.add_argument("--chrom", help="chromosome for our own translation (e.g. chr21)")
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
@@ -1678,6 +1783,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.add_argument("--gff3")
     p.set_defaults(fn=cmd_flow)
+
+    p = sub.add_parser("pathway", help="run a Reactome pathway as a reachability graph; knock a protein out")
+    p.add_argument("ids", nargs="*", help="Reactome pathway ids, e.g. R-HSA-69541")
+    p.add_argument("--gene", help="use every pathway of this gene's compiled definition")
+    p.add_argument("--knockout", help="gene symbol or UniProt accession to remove")
+    p.add_argument("--limit", type=int, default=50)
+    p.add_argument("-v", "--verbose", action="store_true")
+    p.set_defaults(fn=cmd_pathway)
 
     p = sub.add_parser("proteome", help="compile every protein of a chromosome; keep the coverage summary")
     p.add_argument("--chrom", default="chr21")
