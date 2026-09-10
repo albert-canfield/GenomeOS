@@ -128,6 +128,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
     <button data-tab="space" data-tip="Development in space: morphogen gradients, the segmentation clock and germ-layer choice."><i class="ic">🌱</i>Space</button>
     <button data-tab="debug" data-tip="Step a model with biological breakpoints and get an explanation, with evidence, of what drove each value."><i class="ic">🔍</i>Debugger</button>
+    <button data-tab="molecules" data-tip="RNA and proteins: a gene's transcripts, our translated protein checked against UniProt, its domains and function, and the AlphaFold 3-D structure coloured by per-residue confidence."><i class="ic">🧫</i>Molecules</button>
     <button data-tab="cancer" data-tip="Healthy versus tumour: somatic differences graded against cBioPortal driver knowledge, suggested cancer types, cell-surface targets, and a task packet for an AI agent."><i class="ic">🎗️</i>Cancer</button>
     <button data-tab="progress" data-tip="What is running now, what has been done, and every measurement obtained so far."><i class="ic">📊</i>Progress</button>
     <button data-tab="libs" data-tip="The reusable 'libraries' the genome contains, in five layers, with membership computed from Gene Ontology and Reactome."><i class="ic">📚</i>Libraries</button>
@@ -151,6 +152,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div class="step"><i class="ic">👥</i><b>Twin</b> — one person. Measured state (streamed from real data), variants in timer genes, forks and side-by-side futures.</div>
       <div class="step"><i class="ic">🌱</i><b>Space</b> — development. A morphogen source patterns a field of cells; the segmentation clock lays down segments; germ layers form along a gradient.</div>
       <div class="step"><i class="ic">🔍</i><b>Debugger</b> — why. Stop when a condition is met and read the rules and evidence behind the value.</div>
+      <div class="step"><i class="ic">🧫</i><b>Molecules</b> — RNA and proteins. Transcripts of a gene, our translation checked against UniProt, domains and function, and the AlphaFold structure with confidence per residue.</div>
       <div class="step"><i class="ic">🎗️</i><b>Cancer</b> — the same genome, changed. Compare a person's normal and tumour samples: somatic variants, consequences, driver frequencies and hotspots from 10,945 tumours, suggested cancer types, reachable surface targets, and a packet for a focused AI agent.</div>
       <div class="step"><i class="ic">📊</i><b>Progress</b> — jobs running in the background with live progress, the project's task log, and the measurements obtained so far.</div>
       <div class="step"><i class="ic">📚</i><b>Libraries</b> — the parts list. 45 reusable modules the genome contains, verified against curated databases.</div>
@@ -428,6 +430,28 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   </div>
 </section>
 
+<!-- ================= MOLECULES ================= -->
+<section id="molecules">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2><i class="ic">🧫</i>Protein<span class="help" data-tip="Type a gene symbol. GenomeOS translates its canonical transcript (when the chromosome is local), fetches the reviewed UniProt record (curated: function, location, domains) and the AlphaFold model (predicted, with pLDDT confidence per residue). Nothing is stored except a small structure cache.">?</span></h2>
+      <div class="row">
+        <label>gene <input id="m-gene" value="APP" style="width:110px" class="mono"></label>
+        <label data-tip="Chromosome for our own translation; chr21 and chrM are local.">chromosome <input id="m-chrom" value="chr21" style="width:80px" class="mono"></label>
+        <label data-tip="Residue number to mark on the structure, e.g. 673 for APP A673T.">residue <input id="m-residue" type="number" placeholder="673" style="width:80px"></label>
+        <button class="primary" id="m-load" data-tip="Fetch UniProt and AlphaFold for this gene."><i class="ic">🔎</i>Load</button>
+        <span class="muted" id="m-status"></span>
+      </div>
+      <div id="m-info"><span class="muted">Load a gene.</span></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🧊</i>Structure (AlphaFold)<span class="help" data-tip="C-alpha backbone of the predicted model, rotating. Colour is the model's own confidence per residue (pLDDT): blue high, teal confident, yellow low, red very low. Low-confidence stretches are usually disordered regions, not errors.">?</span></h2>
+      <div id="m-struct" class="muted">no structure loaded</div>
+      <canvas id="m-canvas" style="width:100%;height:420px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-top:8px"></canvas>
+    </div>
+  </div>
+</section>
+
 <!-- ================= CANCER ================= -->
 <section id="cancer">
   <div class="grid cols-2">
@@ -558,7 +582,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   // first visit to a simulation tab runs its default example
   if (!autoRan.has(b.dataset.tab)) {
     autoRan.add(b.dataset.tab);
-    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run'}[b.dataset.tab];
+    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run', molecules: '#m-load'}[b.dataset.tab];
     if (first) setTimeout(async () => { await ready; if (b.dataset.tab === 'debug' && !$('#d-bp').value) { $('#d-bp').value = 'LacI > 30'; $('#d-init').value = 'TetR=10'; $('#d-explain').value = 'lacI.mRNA'; } $(first).click(); }, 300);
   }
 });
@@ -908,6 +932,7 @@ async function loadCancer() {
     $('#c-genes').querySelectorAll('a[data-gene]').forEach(a => a.onclick = e => { e.preventDefault(); $('#c-gene').value = a.dataset.gene; $('#c-lookup').click(); });
   } catch (e) { $('#c-kstatus').textContent = e.message; }
 }
+$('#m-load').onclick = () => window.moleculesLoad($('#m-gene').value.trim(), $('#m-chrom').value.trim());
 $('#c-lookup').onclick = async () => {
   try {
     const g = await api(`/api/cancer?gene=${encodeURIComponent($('#c-gene').value.trim().toUpperCase())}`);
@@ -953,5 +978,6 @@ $('#l-search').oninput = e => renderLibs(e.target.value);
 window.addEventListener('resize', () => { /* charts are viewBox-scaled; nothing to do */ });
 </script>
 <script src="/static/blocks.js"></script>
+<script src="/static/molecules.js"></script>
 </body>
 </html>

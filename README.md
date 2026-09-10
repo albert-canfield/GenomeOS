@@ -93,7 +93,8 @@ records the evidence per task. Highlights:
 - epigenetic clocks validated on real blood methylation (Horvath r > 0.8); telomere estimator; digital twins that fork, run and diff
 - development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient, the C. elegans early lineage from a zygote
 - a debugger with biological breakpoints and evidence traces, and BioForge design search whose outputs are labelled predicted
-- a local web UI with nine views, including a Progress tab with live background jobs and the project's task log
+- RNA and proteins: transcripts per gene, our translation checked against UniProt, domains and function, AlphaFold structures with per-residue confidence
+- a local web UI with a dozen views, including a Progress tab with live background jobs and the project's task log
 
 ## Quick start
 
@@ -146,6 +147,7 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 - [docs/LESSONS.md](docs/LESSONS.md) — what the core has learned from data, and where it is embedded
 - [docs/SEQUENCE-GRAMMAR.md](docs/SEQUENCE-GRAMMAR.md) — the genome's own delimiters, measured, and how BioLang builds on them
 - [docs/GENOME-ANATOMY.md](docs/GENOME-ANATOMY.md) — counting the blocks of three genomes, and the budgets for building one from zero
+- [docs/FLOW.md](docs/FLOW.md) — the upward flow (DNA → regulation → RNA → protein → cell → tissue → organism) and the types that carry it
 - [docs/NODES-READER-WRITER.md](docs/NODES-READER-WRITER.md) — nodes, reader, writer, executor: the conceptual model against the biology
 - [docs/UNKNOWN.md](docs/UNKNOWN.md) — classifying the space between genes from sequence alone, with a pattern file you can extend
 - [docs/CANCER.md](docs/CANCER.md) — healthy versus tumour: somatic differences, drivers from cBioPortal, targets, agent packet

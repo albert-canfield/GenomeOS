@@ -1,0 +1,50 @@
+{
+  "result": "unknown_genome_wide",
+  "date": "2026-09-10",
+  "chromosomes": {
+    "chr1": {
+      "unknown_blocks": 2425,
+      "unknown_bp": 77202925,
+      "classified_fraction": 0.9627,
+      "by_class": {
+        "regulatory": {
+          "blocks": 1528,
+          "bp": 31874182
+        },
+        "gap": {
+          "blocks": 7,
+          "bp": 22004558
+        },
+        "long_orf": {
+          "blocks": 114,
+          "bp": 10506602
+        },
+        "unique_intergenic": {
+          "blocks": 87,
+          "bp": 5074693
+        },
+        "interspersed_repeat": {
+          "blocks": 143,
+          "bp": 2961371
+        },
+        "unclassified": {
+          "blocks": 405,
+          "bp": 2876745
+        },
+        "mixed_intergenic": {
+          "blocks": 20,
+          "bp": 879641
+        },
+        "promoter_like": {
+          "blocks": 36,
+          "bp": 540930
+        },
+        "interspersed_repeat_SINE": {
+          "blocks": 85,
+          "bp": 484203
+        }
+      },
+      "seconds": 372
+    }
+  }
+}
