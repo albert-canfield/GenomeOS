@@ -146,6 +146,8 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 - [docs/LESSONS.md](docs/LESSONS.md) — what the core has learned from data, and where it is embedded
 - [docs/SEQUENCE-GRAMMAR.md](docs/SEQUENCE-GRAMMAR.md) — the genome's own delimiters, measured, and how BioLang builds on them
 - [docs/GENOME-ANATOMY.md](docs/GENOME-ANATOMY.md) — counting the blocks of three genomes, and the budgets for building one from zero
+- [docs/CANCER.md](docs/CANCER.md) — healthy versus tumour: somatic differences, drivers from cBioPortal, targets, agent packet
+- [docs/DESIGN-MINIMAL-CELL.md](docs/DESIGN-MINIMAL-CELL.md) — how much genome a neuron needs, and why it still is not a small extract
 - [docs/ROADMAP.md](docs/ROADMAP.md) — from a molecular cell to a digital twin
 
 ## Goals

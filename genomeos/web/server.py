@@ -69,7 +69,7 @@ class Api:
     # ---- files -----------------------------------------------------------
 
     def files(self) -> dict:
-        genomes, modules = [], []
+        genomes, modules, vcfs = [], [], []
         if self.data_dir.is_dir():
             for p in sorted(self.data_dir.rglob("*")):
                 if not p.is_file():
@@ -79,7 +79,9 @@ class Api:
                     genomes.append({"path": rel, "size": p.stat().st_size})
                 elif p.suffix == ".bio":
                     modules.append({"path": rel, "size": p.stat().st_size})
-        return {"genomes": genomes, "modules": modules, "version": __version__}
+                elif p.suffix in (".vcf",) or p.name.endswith(".vcf.gz"):
+                    vcfs.append({"path": rel, "size": p.stat().st_size})
+        return {"genomes": genomes, "modules": modules, "vcfs": vcfs, "version": __version__}
 
     def module_source(self, rel: str) -> dict:
         return {"path": rel, "source": self._safe(rel).read_text()}
@@ -653,6 +655,116 @@ class Api:
             "composition_bp": totals,
         }
 
+    # ---- blocks (2-D viewer/editor) ---------------------------------------
+
+    def _annotation_for(self, rel: str, chrom: str):
+        from genomeos.genome import Annotation, default_gencode
+
+        key = (rel, chrom)
+        if not hasattr(self, "_ann_cache"):
+            self._ann_cache = {}
+        if key in self._ann_cache:
+            return self._ann_cache[key]
+        gff = default_gencode({chrom}) if chrom.startswith("chr") else None
+        if "celegans" in rel:
+            g = self.root / "data" / "reference" / "celegans" / "WBcel235.63.gff3.gz"
+            gff = g if g.exists() else None
+        ann = Annotation.from_gff3(gff, {chrom}) if gff else None
+        if len(self._ann_cache) > 6:
+            self._ann_cache.pop(next(iter(self._ann_cache)))
+        self._ann_cache[key] = ann
+        return ann
+
+    def blocks(self, rel: str, chrom: str, start: int, end: int) -> dict:
+        from genomeos.genome.blocks import ELEMENT_WINDOW, blocks_for_window
+
+        path = self._safe(rel)
+        seqs = self._load(str(path))
+        chrom = chrom or next(iter(seqs))
+        if chrom not in seqs:
+            raise ApiError(f"no chromosome {chrom!r}", 404)
+        length = len(seqs[chrom])
+        start = max(0, int(start))
+        end = min(length, int(end)) if end else length
+        if end <= start:
+            raise ApiError("empty window")
+        ann = self._annotation_for(rel, chrom)
+        if ann is None:
+            from genomeos.genome import Annotation
+
+            ann = Annotation()
+        seq = seqs[chrom][start:end] if end - start <= ELEMENT_WINDOW else None
+        return blocks_for_window(ann, chrom, start, end, seq, length)
+
+    def blocks_check_move(
+        self, blocks: list, block_id: str, new_start: int, chrom_length: int | None
+    ) -> dict:
+        from genomeos.genome.blocks import check_move
+
+        return check_move(blocks, block_id, int(new_start), chrom_length)
+
+    # ---- cancer -------------------------------------------------------------
+
+    def cancer_knowledge(self, symbol: str | None = None, top: int = 30) -> dict:
+        from genomeos.results import load_result
+
+        k = load_result("cancer_msk_impact_2017", self.root / "data" / "results")
+        if not k:
+            raise ApiError("no distilled cancer knowledge; run genomeos cancer distil", 404)
+        if symbol:
+            v = k["genes"].get(symbol)
+            if not v:
+                raise ApiError(f"{symbol} not in the distilled panel", 404)
+            return {"gene": symbol, "study": k["study"], "samples": k["samples"], **v}
+        rows = sorted(k["genes"].items(), key=lambda kv: -kv[1]["frequency"])[:top]
+        return {
+            "study": k["study"],
+            "samples": k["samples"],
+            "cancer_types": k["cancer_types"],
+            "genes": [
+                {
+                    "gene": g,
+                    "frequency": v["frequency"],
+                    "samples_mutated": v["samples_mutated"],
+                    "hotspots": v["hotspots"][:3],
+                    "top_types": sorted(v["by_cancer_type"].items(), key=lambda x: -x[1])[:4],
+                }
+                for g, v in rows
+            ],
+            "evidence": k["evidence"],
+        }
+
+    def cancer_compare(self, normal: str, tumour: str, genome: str, chrom: str) -> dict:
+        from genomeos.cancer import agent_packet, annotate, somatic, suggest_cancer_type, surface_targets
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.results import load_result
+
+        k = load_result("cancer_msk_impact_2017", self.root / "data" / "results") or {}
+        n, t, g = self._safe(normal), self._safe(tumour), self._safe(genome)
+        chroms = {chrom} if chrom else None
+        som = somatic(str(n), str(t), chroms)
+        gff = default_gencode(chroms)
+        if not gff:
+            raise ApiError("no annotation for that chromosome (chr21/chrM available)")
+        ann = Annotation.from_gff3(gff, chroms)
+        idx = IndexedGenome(g)
+        ranked = annotate(som, ann, idx, k)
+        idx.close()
+        genes = {
+            s.gene
+            for s in ranked
+            if s.gene and s.consequence not in ("synonymous_variant", "intron_variant", "intergenic")
+        }
+        types = suggest_cancer_type(genes, k) if k else []
+        targets = surface_targets(genes)
+        return {
+            "somatic": len(som),
+            "ranked": [s.to_dict() for s in ranked[:60]],
+            "types": types,
+            "targets": targets,
+            "packet": agent_packet(str(t), ranked, types, targets),
+        }
+
     # ---- libraries -------------------------------------------------------
 
     def libs(self) -> dict:
@@ -694,7 +806,11 @@ class Handler(BaseHTTPRequestHandler):
             self._json({"error": "not found"}, 404)
             return
         body = p.read_bytes()
-        ctype = "text/html; charset=utf-8" if p.suffix == ".html" else "application/octet-stream"
+        ctype = {
+            ".html": "text/html; charset=utf-8",
+            ".js": "application/javascript; charset=utf-8",
+            ".css": "text/css; charset=utf-8",
+        }.get(p.suffix, "application/octet-stream")
         self.send_response(200)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
@@ -710,6 +826,8 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if u.path in ("/", "/index.html"):
                 return self._static("index.html")
+            if u.path.startswith("/static/") and "/" not in u.path[8:]:
+                return self._static(u.path[8:])
             if u.path == "/api/files":
                 return self._json(self.api.files())
             if u.path == "/api/module":
@@ -732,6 +850,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/results":
                 return self._json(self.api.results())
+            if u.path == "/api/blocks":
+                return self._json(
+                    self.api.blocks(
+                        self._q(qs, "path", ""),
+                        self._q(qs, "chrom", ""),
+                        int(self._q(qs, "start", 0)),
+                        int(self._q(qs, "end", 0)),
+                    )
+                )
+            if u.path == "/api/cancer":
+                return self._json(self.api.cancer_knowledge(self._q(qs, "gene"), int(self._q(qs, "top", 30))))
             if u.path == "/api/jobs":
                 return self._json(self.api.jobs())
             if u.path == "/api/progress":
@@ -764,6 +893,24 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
             if u.path == "/api/compile":
                 return self._json(self.api.compile(body.get("source", "")))
+            if u.path == "/api/cancer/compare":
+                return self._json(
+                    self.api.cancer_compare(
+                        body.get("normal", ""),
+                        body.get("tumour", ""),
+                        body.get("genome", "data/reference/chr21.fa.gz"),
+                        body.get("chrom", "chr21"),
+                    )
+                )
+            if u.path == "/api/blocks/check":
+                return self._json(
+                    self.api.blocks_check_move(
+                        body.get("blocks", []),
+                        body.get("id", ""),
+                        body.get("new_start", 0),
+                        body.get("chrom_length"),
+                    )
+                )
             if u.path == "/api/jobs/start":
                 return self._json(self.api.job_start(body.get("name", "")))
             if u.path == "/api/debug":

@@ -855,6 +855,134 @@ def cmd_anatomy(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_design(args: argparse.Namespace) -> int:
+    from genomeos.design import IDENTITY, design
+
+    if args.cell_type not in IDENTITY:
+        print(f"known cell types: {', '.join(sorted(IDENTITY))}")
+        return 1
+    d = design(args.cell_type)
+    print(f"design budget for a {args.cell_type}")
+    print(f"  essential genes (every cell, CEGv2)       {d.essential_genes:>7,}")
+    print(f"  identity genes (chosen libraries − core) {d.identity_genes:>7,}")
+    masters = ", ".join(d.master_regulators)
+    print(f"  master regulators                         {len(d.master_regulators):>7}   {masters}")
+    print(f"  minimal program (essential+identity+masters) {d.minimal_genes:>4,} genes")
+    print(f"  broad program (all core libraries+identity) {d.total_genes:>5,} genes")
+    print(f"    ({d.span_bp / 1e6:.0f} Mb of human gene spans)")
+    print("  base budget for the minimal program:")
+    for k, v in d.budgets_bp.items():
+        print(f"    {k:<40} {v / 1e6:8.1f} Mb")
+    print("  libraries used:")
+    for k, v in d.libraries.items():
+        print(f"    {k:<40} {v:>6,} genes")
+    for n in d.notes:
+        print(f"  note: {n}")
+    if args.save:
+        from genomeos.results import save_result
+
+        print(f"  saved {save_result(f'design_{args.cell_type}', d.to_dict())}")
+    return 0
+
+
+def cmd_cancer(args: argparse.Namespace) -> int:
+    from genomeos.results import load_result
+
+    k = load_result("cancer_msk_impact_2017")
+    if args.cancer_cmd == "distil":
+        from genomeos.cancer import CBioPortal
+        from genomeos.results import save_result
+
+        d = CBioPortal().distil_study(args.study, progress=lambda i, n: print(f"  {i}/{n} genes", flush=True))
+        print(f"  saved {save_result(f'cancer_{args.study}', d)}")
+        return 0
+    if not k:
+        print("no distilled cancer knowledge yet: run `genomeos cancer distil` (cBioPortal, ~30 s)")
+        return 1
+    if args.cancer_cmd == "genes":
+        rows = sorted(k["genes"].items(), key=lambda kv: -kv[1]["frequency"])[: args.top]
+        print(f"{k['study']}: {k['samples']:,} tumours, {len(k['genes'])} driver genes")
+        print(
+            _table(
+                [
+                    {
+                        "gene": g,
+                        "mutated": f"{v['frequency']:.1%}",
+                        "top change": v["hotspots"][0][0] if v["hotspots"] else "",
+                        "types (>10%)": ", ".join(
+                            f"{t} {f:.0%}"
+                            for t, f in sorted(v["by_cancer_type"].items(), key=lambda x: -x[1])
+                            if f > 0.1
+                        )[:70],
+                    }
+                    for g, v in rows
+                ],
+                ["gene", "mutated", "top change", "types (>10%)"],
+            )
+        )
+        return 0
+    if args.cancer_cmd == "gene":
+        v = k["genes"].get(args.symbol)
+        if not v:
+            print(f"{args.symbol} not in the distilled panel")
+            return 1
+        print(f"{args.symbol}: mutated in {v['frequency']:.1%} of {k['samples']:,} tumours ({k['study']})")
+        print("  hotspots:", ", ".join(f"{h[0]} ×{h[1]}" for h in v["hotspots"]))
+        for ct, f in sorted(v["by_cancer_type"].items(), key=lambda x: -x[1])[:12]:
+            print(f"  {ct:<36} {f:6.1%}")
+        return 0
+    if args.cancer_cmd == "types":
+        print(
+            _table(
+                [{"cancer type": t, "samples": n} for t, n in list(k["cancer_types"].items())[: args.top]],
+                ["cancer type", "samples"],
+            )
+        )
+        return 0
+    # compare
+    from genomeos.cancer import agent_packet, annotate, somatic, suggest_cancer_type, surface_targets
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+
+    chroms = set(args.chrom) if args.chrom else None
+    som = somatic(args.normal, args.tumour, chroms)
+    print(f"somatic variants (tumour − normal): {len(som)}")
+    ann = Annotation.from_gff3(args.gff3 or default_gencode(chroms), chroms)
+    genome = IndexedGenome(args.genome)
+    ranked = annotate(som, ann, genome, k)
+    genome.close()
+    print(
+        _table(
+            [
+                {
+                    "gene": s.gene or "-",
+                    "consequence": s.consequence or "-",
+                    "change": s.protein_change,
+                    "driver freq": f"{s.driver_frequency:.1%}" if s.driver_frequency else "-",
+                    "hotspot": "yes" if s.hotspot else "",
+                    "score": f"{s.score:.2f}",
+                }
+                for s in ranked[:15]
+            ],
+            ["gene", "consequence", "change", "driver freq", "hotspot", "score"],
+        )
+    )
+    genes = {
+        s.gene
+        for s in ranked
+        if s.gene and s.consequence not in ("synonymous_variant", "intron_variant", "intergenic")
+    }
+    types = suggest_cancer_type(genes, k)
+    print("suggested cancer types (inferred):")
+    for t_ in types:
+        print(f"  {t_['cancer_type']:<36} enrichment {t_['log_enrichment']:+.2f}")
+    targets = surface_targets(genes)
+    print("cell-surface products among altered genes:", ", ".join(x["gene"] for x in targets) or "none")
+    if args.packet:
+        Path(args.packet).write_text(json.dumps(agent_packet(args.tumour, ranked, types, targets), indent=1))
+        print(f"agent packet written to {args.packet}")
+    return 0
+
+
 def cmd_libs(args: argparse.Namespace) -> int:
     from genomeos.lib import KnowledgeBase
 
@@ -1157,6 +1285,32 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--save", metavar="NAME")
     p.add_argument("--compare", action="store_true")
     p.set_defaults(fn=cmd_anatomy)
+
+    p = sub.add_parser("design", help="parts list and base budget for a cell type built from the libraries")
+    p.add_argument("cell_type")
+    p.add_argument("--save", action="store_true")
+    p.set_defaults(fn=cmd_design)
+
+    can = sub.add_parser(
+        "cancer", help="healthy vs tumour comparison and cBioPortal-distilled cancer knowledge"
+    ).add_subparsers(dest="cancer_cmd", required=True)
+    p = can.add_parser("distil", help="distil driver-gene frequencies from a cBioPortal study")
+    p.add_argument("--study", default="msk_impact_2017")
+    p = can.add_parser("genes", help="most frequently mutated driver genes")
+    p.add_argument("--top", type=int, default=25)
+    p = can.add_parser("gene", help="one gene: frequency, hotspots, cancer types")
+    p.add_argument("symbol")
+    p = can.add_parser("types", help="cancer types in the distilled study")
+    p.add_argument("--top", type=int, default=30)
+    p = can.add_parser("compare", help="somatic variants of a tumour vs the same person's normal sample")
+    p.add_argument("--normal", required=True)
+    p.add_argument("--tumour", required=True)
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--gff3")
+    p.add_argument("--chrom", nargs="*")
+    p.add_argument("--packet", help="write the AI-agent task packet (JSON)")
+    for sp in can.choices.values():
+        sp.set_defaults(fn=cmd_cancer)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
     p.add_argument("--layer", choices=LAYERS)
