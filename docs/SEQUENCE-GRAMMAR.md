@@ -210,6 +210,21 @@ tested against it.
    which the reader layer and AlphaGenome's expression tracks can both supply.
    Both models stay available; `codon` remains the default because it is
    faster and the difference is within a point.
+
+   **Open chromatin as the start prior (the first transcription-evidence
+   test).** The reader's DNase peaks for eleven cell types (30,543 peaks on
+   chr21, union) used the way the ENCODE promoter elements were, as windows a
+   gene may begin in (peak − 500 bp to peak + 2 kb, both strands, 38% of the
+   chromosome): with predicted splice sites, candidates 1,003 → 614, exact
+   exons 40.1% / 46.2% → 37.7% / 52.7%, genes 84.2% / 20.0% → 75.6% / 24.6%.
+   A milder version of the promoter trade: openness in some cell is
+   necessary for a real promoter but far from sufficient, so it removes
+   fewer false candidates than the curated promoter class and keeps more
+   true genes. Extending to 5 kb or adding the promoter class changes
+   nothing that matters. The evidence that would separate an open reading
+   frame from a gene is RNA over its exons, not chromatin at its start;
+   that needs expression tracks (GTEx per gene exists in the RNA layer,
+   AlphaGenome's RNA-seq tracks per base), which is the next experiment.
 2. Promoter motif scanning with JASPAR matrices to derive `requires` lists
    with evidence, and to give `cell_type ... expresses:` a sequence-level
    justification.
