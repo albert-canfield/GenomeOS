@@ -121,6 +121,17 @@ CATALOG: dict[str, dict] = {
     },
 }
 
+CATALOG["budget_genome_wide"] = {
+    "argv": [sys.executable, "scripts/budget_genome_wide.py"],
+    "describe": "The 98%: Zoonomia constraint over every UNKNOWN block and a best guess per block.",
+    "total": 24,
+    "result": None,
+    "count": None,
+    "progress": lambda root: len(list((root / "data" / "results").glob("budget_chr*.json"))),
+    "complete": lambda root: len(list((root / "data" / "results").glob("budget_chr*.json"))) >= 24,
+    "auto_heal": True,
+}
+
 CATALOG["fetch_hg002"] = {
     "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--individual", "--chrom", "chr22"],
     "describe": "Stream the GIAB HG002 benchmark once; keep each chromosome's variants for twins/lookups.",

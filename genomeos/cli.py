@@ -1247,6 +1247,115 @@ def cmd_cancer(args: argparse.Namespace) -> int:
     return 0
 
 
+def _pct(x: float | None, digits: int = 1) -> str:
+    return f"{x:.{digits}%}" if x is not None else ""
+
+
+def cmd_budget(args: argparse.Namespace) -> int:
+    """The 98%: every UNKNOWN block with constraint attached and a best guess (docs/ATTRIBUTION.md)."""
+    import time
+
+    from genomeos.attribution.budget import TIERS, distil, run_and_save
+    from genomeos.results import load_result, save_result
+
+    if args.chrom:
+        out = load_result(f"budget_{args.chrom}") if args.cached else None
+        if out is None:
+            last = [0.0]
+
+            def progress(done: int, total: int, mb: int) -> None:
+                if time.time() - last[0] > 15:
+                    last[0] = time.time()
+                    print(f"  phyloP: {done}/{total} data blocks, {mb / 1e6:.0f} MB", flush=True)
+
+            out = run_and_save(
+                args.chrom,
+                threshold=args.threshold,
+                phylop=not args.no_phylop,
+                elements=not args.no_elements,
+                progress=progress,
+            )
+        cf = out.get("constrained_fraction")
+        print(
+            f"{args.chrom}: {len(out['blocks'])} UNKNOWN blocks, {out['unknown_bp'] / 1e6:.1f} Mb of "
+            f"{out['chromosome_length'] / 1e6:.1f} Mb; constrained bases (phyloP >= {out['threshold']}) "
+            + (f"{cf:.2%} of those measured" if cf is not None else "not measured")
+        )
+        rows = [
+            {
+                "tier": t,
+                "blocks": v["blocks"],
+                "Mb": f"{v['bp'] / 1e6:.2f}",
+                "of UNKNOWN": f"{v['fraction_of_unknown']:.1%}",
+                "of chromosome": _pct(v.get("fraction_of_chromosome")),
+                "constrained kb": f"{v['constrained_bp'] / 1e3:.1f}",
+            }
+            for t, v in out["by_tier"].items()
+        ]
+        print(_table(rows, ["tier", "blocks", "Mb", "of UNKNOWN", "of chromosome", "constrained kb"]))
+        top = sorted(
+            (r for r in out["blocks"] if r["guess"]["tier"] == "constrained_unknown"),
+            key=lambda r: -((r["phylop"] or {}).get("above") or 0),
+        )[: args.top]
+        if top:
+            print(f"\nconstrained_unknown, most constrained bases first (top {len(top)}):")
+            print(
+                _table(
+                    [
+                        {
+                            "block": f"{r['start']:,}-{r['end']:,}",
+                            "kb": f"{r['length'] / 1e3:.0f}",
+                            "class": r["class"],
+                            "constrained": f"{(r['phylop'] or {}).get('fraction_above', 0) or 0:.1%}",
+                            "elements": (r["elements"] or {}).get("n", ""),
+                            "max lod": (r["elements"] or {}).get("max_lod", ""),
+                        }
+                        for r in top
+                    ],
+                    ["block", "kb", "class", "constrained", "elements", "max lod"],
+                )
+            )
+        print(
+            "  [phyloP: Zoonomia 241 mammals, read per base from UCSC, never stored; elements: 100"
+            " vertebrates; a tier is a best guess with its confidence, not a verdict]"
+        )
+        return 0
+    s = distil()
+    if not s["chromosomes"]:
+        print("no budget_chr*.json yet: genomeos budget --chrom chr21, or the budget_genome_wide job")
+        return 1
+    save_result("budget_genome_wide", s)
+    print(
+        f"{s['chromosomes']} chromosomes: {s['unknown_bp'] / 1e6:.0f} Mb of UNKNOWN blocks in "
+        f"{s['genome_bp'] / 1e6:.0f} Mb; constrained {s['constrained_fraction']:.2%} of measured bases; "
+        f"a guess at confidence >= 0.5 on {s['guessed_fraction']:.1%}"
+    )
+    rows = [
+        {
+            "tier": t,
+            "blocks": v["blocks"],
+            "Mb": f"{v['bp'] / 1e6:.1f}",
+            "of UNKNOWN": _pct(v.get("fraction_of_unknown")),
+            "of genome": _pct(v.get("fraction_of_genome")),
+            "constrained Mb": f"{v['constrained_bp'] / 1e6:.2f}",
+        }
+        for t, v in s["by_tier"].items()
+        if t in TIERS
+    ]
+    print(_table(rows, ["tier", "blocks", "Mb", "of UNKNOWN", "of genome", "constrained Mb"]))
+    rows = [
+        {
+            "class": k,
+            "blocks": v["blocks"],
+            "Mb": f"{v['bp'] / 1e6:.1f}",
+            "constrained": _pct(v.get("constrained_fraction"), 2),
+        }
+        for k, v in s["by_class"].items()
+    ][: args.top]
+    print(_table(rows, ["class", "blocks", "Mb", "constrained"]))
+    return 0
+
+
 def cmd_unknown(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, Genome, default_gencode
     from genomeos.genome.unknown import investigate, load_patterns
@@ -2022,6 +2131,35 @@ def cmd_individual(args: argparse.Namespace) -> int:
             print(f"wrote {args.out}")
         else:
             print(md)
+        return 0
+    if args.action == "trio":
+        try:
+            r = ind.trio(args.name, args.father, args.mother, args.chrom or None)
+        except FileNotFoundError as ex:
+            print(ex)
+            return 1
+        t = r["totals"]
+        print(
+            f"{r['child']} with {r['father']} and {r['mother']} on {len(r['chromosomes'])} chromosomes: "
+            f"{t['child_variants']:,} child variants; {r['fraction_inherited']:.1%} inherited "
+            f"({t['in_both_parents']:,} from both), {t['de_novo_candidates']:,} absent from both parents "
+            f"({r['fraction_de_novo_candidates']:.2%}), {t['mendelian_errors']:,} Mendelian errors "
+            f"({r['fraction_mendelian_errors']:.3%})"
+        )
+        rows = [
+            {
+                "chr": c,
+                "child": f"{v['child_variants']:,}",
+                "inherited": f"{v['inherited']:,}",
+                "both": f"{v['in_both_parents']:,}",
+                "de novo?": v["de_novo_candidates"],
+                "errors": v["mendelian_errors"],
+            }
+            for c, v in list(r["per_chromosome"].items())[: args.top]
+        ]
+        print(_table(rows, ["chr", "child", "inherited", "both", "de novo?", "errors"]))
+        print(f"  [{r['evidence']}]  {r['note']}")
+        print(f"  stored under data/individuals/{r['child']}/trio_{r['father']}_{r['mother']}.json")
         return 0
     if args.action == "coding":
         try:
@@ -3388,6 +3526,19 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(fn=cmd_unknown)
 
     p = sub.add_parser(
+        "budget", help="the 98%%: every UNKNOWN block with constraint attached and a best guess"
+    )
+    p.add_argument("--chrom", help="one chromosome (reads Zoonomia phyloP over its blocks); omit: the genome")
+    p.add_argument(
+        "--threshold", type=float, default=2.27, help="phyloP for a constrained base (Zoonomia 5%% FDR)"
+    )
+    p.add_argument("--no-phylop", action="store_true")
+    p.add_argument("--no-elements", action="store_true")
+    p.add_argument("--cached", action="store_true", help="show the saved budget instead of recomputing")
+    p.add_argument("--top", type=int, default=15)
+    p.set_defaults(fn=cmd_budget)
+
+    p = sub.add_parser(
         "protein", help="a gene's protein: our translation, UniProt record, AlphaFold structure"
     )
     p.add_argument(
@@ -3486,8 +3637,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("individual", help="a person's genome as a local individual: import a VCF once")
     isub = p.add_subparsers(dest="action")
-    q = isub.add_parser("import", help="split a VCF (GRCh38, plain or .gz) into per-chromosome PASS files")
-    q.add_argument("vcf")
+    q = isub.add_parser(
+        "import", help="split a VCF (GRCh38, plain or .gz, file or URL) into per-chromosome files"
+    )
+    q.add_argument("vcf", help="a local file or an http(s) URL, streamed once")
     q.add_argument("--name", required=True, help="how this person is called in every layer")
     q.add_argument("--note", help="where the calls come from (caller, date, consent)")
     q.add_argument("--replace", action="store_true")
@@ -3497,6 +3650,14 @@ def build_parser() -> argparse.ArgumentParser:
     q = isub.add_parser("report", help="one Markdown page from what has been computed for the person")
     q.add_argument("--name", required=True)
     q.add_argument("--out", help="write to a file instead of printing")
+    q = isub.add_parser(
+        "trio", help="Mendelian consistency of a child against both parents; de novo candidates"
+    )
+    q.add_argument("--name", required=True, help="the child")
+    q.add_argument("--father", required=True)
+    q.add_argument("--mother", required=True)
+    q.add_argument("--chrom", nargs="*")
+    q.add_argument("--top", type=int, default=25)
     q = isub.add_parser("coding", help="genome-wide coding SNVs by consequence and by gene (missense first)")
     q.add_argument("--name", required=True)
     q.add_argument("--chrom", nargs="*")

@@ -10,7 +10,7 @@ wide to narrow; read them top down.
 | Document | Holds |
 |---|---|
 | [../README.md](../README.md) | the ambition, the central equation, what runs today, quick start, command list |
-| [ROADMAP.md](ROADMAP.md) | the one plan: scope, architecture split, where each component stands, eight areas with goals, requirements, gaps and next steps, data jobs, milestones, ideas pool, working rules |
+| [ROADMAP.md](ROADMAP.md) | the one plan: scope, architecture split, where each component stands, nine areas with goals, requirements, gaps and next steps, data jobs, milestones, ideas pool, working rules |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | the stack, the state model, execution regimes, uncertainty as a type, context gating, resolution levels, the separable engine |
 | [DECISIONS.md](DECISIONS.md) | every architecture decision, numbered and dated, with its consequence |
 | [LANDSCAPE.md](LANDSCAPE.md) | what exists elsewhere and what GenomeOS adds |
@@ -33,6 +33,7 @@ wide to narrow; read them top down.
 | Area | Document |
 |---|---|
 | Genome decoding | [GENOME-ANATOMY.md](GENOME-ANATOMY.md), [UNKNOWN.md](UNKNOWN.md), [NODES-READER-WRITER.md](NODES-READER-WRITER.md) |
+| The 98% (attribution of the non-coding genome) | [ATTRIBUTION.md](ATTRIBUTION.md) |
 | Molecules and flow | [PROTEIN.md](PROTEIN.md), [FLOW.md](FLOW.md) |
 | Prediction (optional models) | [ALPHAGENOME.md](ALPHAGENOME.md) |
 | Organism | [ORGANISM-FROM-ONE-CELL.md](ORGANISM-FROM-ONE-CELL.md) |

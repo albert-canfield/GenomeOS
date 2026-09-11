@@ -108,6 +108,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 reached | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader on 25 with eleven cell types; the node model tested genome-wide (90.2% of enhancers act inside their node) and on two mouse chromosomes; the segment parser on chr21 at 92.7% gene precision once RNA over the exons counts as evidence | the parser on every chromosome with measured RNA; enhancer targets and boundaries from Hi-C |
 | **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph; the dominant isoform per tissue from GTEx (APP695 in the cerebellum) | measured modification state; isoform expression per cell type or stage; an engine that handles 100-species models |
+| **The 98%** (GenomeOS) | first budget | chromosome 21's 446 UNKNOWN blocks tiered with Zoonomia constraint read per base: structural 47%, fossil 19%, regulatory 19%, neutral 14%, constrained-unknown 1.4% (287 kb in 20 blocks); `genomeos budget` | the other 23 chromosomes (job running); a gene and a tissue attributed to each constrained-unknown block; scoring against VISTA, MPRA, eQTL |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
 
@@ -349,12 +350,30 @@ in order. "Owner" is the session that holds the files today (see §7).
   runtime; isoform expression is GTEx's adult tissues, not a cell type or a
   stage; kinetics only where BioModels has a curated model, which is a small
   fraction of Reactome.
-- **Next.** 1. The 99 translation disagreements read one by one, now that
-  they are triaged by mechanism, with the dominant isoform per tissue as the
-  first thing to check. 2. Writers that act: a `modifies` edge run as a rule
-  in the network engine, so a kinase knockout changes a substrate's state and
-  not only its neighbourhood. 3. The dominant isoform fed to the twin, so a
-  variant is judged on the transcript the tissue makes.
+- **The disagreements, read with the isoform the body makes (2026-09-11).**
+  `scripts/disagreements_isoforms.py` took GTEx's dominant transcript for each
+  of the 96 disagreement genes, translated it locally and compared it with
+  UniProt (`translation_disagreements_isoforms`, 151 s). Not one is a
+  canonical-choice artefact: 38 make the canonical transcript and still differ
+  (reference alleles), 18 make another isoform that differs too, 16 have a
+  non-coding dominant transcript in the local models, and 24 have no expressed
+  isoform in GTEx or are absent from it, olfactory receptors mostly. The
+  disagreements are reference alleles and gene-model differences, not isoform
+  choice, cross-tabulated against the mechanism triage in the file. The item
+  closes.
+- **Writers as rules (2026-09-11).** `genomeos protein X --bio` and the
+  packaged `--lib --bio` block end with one `rule WRITER modifies GENE`
+  per UniProt-named writer (strength 1.0, evidence curated "UniProt: n
+  modified residues written by WRITER", confidence 0.8), the writers declared
+  first as bare proteins because a rule may only name a declared entity; a
+  program that imports the writer itself drops the stub. The packaged
+  proteome carries a writers field per protein (2.33 MB). A kinase knockout
+  now reaches its substrates through the rules rather than the neighbourhood.
+- **Next.** 1. The dominant isoform fed to the twin, so a variant is judged on
+  the transcript the tissue makes. 2. The 38 reference-allele disagreements as
+  what they are, hg38 carrying a minor allele, checked against an individual's
+  genotype. 3. Measured modification state (a phosphoproteome) so a `modifies`
+  rule can carry occupancy rather than possibility.
 - **Owner.** genomeos-fe.
 
 ### D. The individual (BioTwin)
@@ -412,13 +431,25 @@ in order. "Owner" is the session that holds the files today (see §7).
   MUC16 and the HLA genes on top, as length and polymorphism predict. Calls
   past a stop the reference carries are left out, as in the knockout scan.
   DATA.md "Your own genome" describes it.
+- **Missense ranked by the residue (2026-09-11).** The inventory ranks a
+  person's missense variants by what UniProt records at the residue: an
+  annotated site first (active or binding site, modified residue,
+  glycosylation, the two cysteines of a disulfide bridge, a motif), then inside
+  a domain, then nothing, homozygous before heterozygous; bridges and
+  cross-links count only at their two residues. HG002: 46 of 9,830 missense
+  variants sit on an annotated site and 5,374 more inside a domain; CD52
+  p.Asn40Ser homozygous removes an N-glycosylation site, GALNTL5 p.Cys124Arg
+  and OR56B1 p.Cys106Arg each lose a bridge cysteine. In the CLI table, the
+  dossier and the person's coding.json. A rank from annotation, not a
+  predicted effect.
 - **Missing.** Telomere length from a real 30x BAM (100 GB) not done; no
-  pedigree or trio; no polygenic scores; the inventory counts a missense
-  variant but does not judge it.
+  pedigree or trio; no polygenic scores; a missense variant is ranked by
+  annotation, not predicted, and the trace still uses the canonical
+  transcript rather than the one the tissue makes.
 - **Next.** 1. Telomere from a streamed CRAM range instead of a BAM download.
-  2. The effect of a missense variant, judged on the transcript the tissue
-  makes, so the dossier can rank the 9,830 rather than count them. 3. A
-  trio: HG002 with its GIAB parents HG003 and HG004 as the first pedigree.
+  2. The missense effect predicted rather than ranked, on the transcript the
+  tissue makes. 3. A trio: HG002 with its GIAB parents HG003 and HG004 as the
+  first pedigree.
 - **Owner.** genomeos-fe.
 
 ### E. From one cell to an organism
@@ -566,6 +597,67 @@ in order. "Owner" is the session that holds the files today (see §7).
 
 ---
 
+### I. The 98% (attribution of the non-coding genome)
+
+- **Goal.** Every UNKNOWN block with a best guess of what it is for the
+  organism and the evidence behind it: from "98% no clue" to "98% a very good
+  guess", tested by quantities (the house budget), by measured ground truth,
+  and by the organism run forward. Albert's framing of 2026-09-11, the DNA as
+  the blueprint and the living organism as the built house, is the opening of
+  ATTRIBUTION.md.
+- **Code.** `attribution/bigwig.py` (a bigWig reader over HTTP range requests,
+  standard library only), `attribution/constraint.py` (Zoonomia phyloP over
+  241 mammals, the 100-vertebrate conserved elements), `attribution/budget.py`
+  (the tiers and the budget), `scripts/budget_genome_wide.py`, `genomeos budget`.
+- **Design.** ATTRIBUTION.md.
+- **Data.** `budget_chr*` (1 of 24), `budget_genome_wide` (from the job);
+  `data/knowledge/constraint`, the conserved elements per chromosome (cache).
+- **Requirements.** Constraint is read per base and never stored (the Zoonomia
+  track is 9.6 GB; chromosome 21 costs 33 MB of ranges); a tier is a best
+  guess with a confidence, never a verdict; every threshold is a named constant
+  repeated in the result; "neutral" is a claim with evidence (unconstrained, no
+  element), not the absence of one.
+- **The first budget (2026-09-11).** Chromosome 21's 446 UNKNOWN blocks, 20.8
+  Mb, with Zoonomia phyloP over every sequence-bearing base and the
+  100-vertebrate elements over each block:
+
+  | tier | blocks | Mb | of UNKNOWN | of chromosome | constrained kb |
+  |---|---|---|---|---|---|
+  | structural | 27 | 9.75 | 46.9% | 20.9% | 0.8 |
+  | fossil | 104 | 3.91 | 18.8% | 8.4% | 39.9 |
+  | regulatory | 194 | 3.93 | 18.9% | 8.4% | 50.6 |
+  | constrained_unknown | 20 | 0.29 | 1.4% | 0.6% | 18.0 |
+  | neutral | 101 | 2.93 | 14.1% | 6.3% | 39.8 |
+
+  Constrained bases are 1.3% of the UNKNOWN space against 10.7% of the
+  genome: constraint lives in and around genes, where the UNKNOWN pass does
+  not look. Twenty blocks, 287 kb, are the real unknown of this chromosome;
+  the most constrained, 47 kb at 16.82 Mb, is unique sequence with 179
+  conserved elements, which is what an unannotated regulatory region or gene
+  looks like. The registry's regulatory class is only 1.2% constrained: a cCRE
+  is a chromatin state, mostly lineage-specific, not a conserved element.
+- **Next.** 1. Every chromosome through the `budget_genome_wide` job (started
+  2026-09-11, smallest first, resumable). 2. The blocks organised by the
+  evidence that exists: CTCF node, reader open fraction per cell type,
+  AlphaGenome enhancer target, repeat family, segmental duplication,
+  constraint. 3. Attribution as BioLang `element` blocks with a function, a
+  target gene, a tissue and a `predicted` confidence: AlphaGenome's predicted
+  chromatin tracks for activity and tissue, in-silico deletion for the target,
+  in-silico mutagenesis for the bases that matter; the self-hosted model gates
+  the move from chromosome 21 to the genome. 4. Scoring against measured
+  ground truth (VISTA enhancers, ENCODE4 lentiMPRA, GTEx eQTL, the GWAS
+  catalog, ClinVar) the way the parser was scored against GENCODE. 5. Closure
+  at three levels: gene (open elements reproduce GTEx expression per tissue),
+  cell (a deleted element moves its gene and the cell program; IMPC, DepMap),
+  organism (the Body runtime still produces a human's cell counts over
+  decades). 6. Simpler genomes as the comparison, C. elegans first, then
+  Drosophila enhancers, fugu as the compact vertebrate, mouse for transfer.
+- **Owner.** genomeos-f7 (this lane's files); the organism-level closure runs
+  on genomeos-73's Body runtime and the block evidence on genomeos-fe's
+  decoding results.
+
+---
+
 ## 4. Data jobs to be done
 
 Per-chromosome coverage on 2026-09-11 (25 human chromosomes including X, Y
@@ -586,6 +678,7 @@ or the CLI; results land in `data/results` and are committed.
 | Enhancer targets, predicted (AlphaGenome) | 24 of 24 chromosomes (4,800 elements) | done | 2,994 elements move a gene, 2,291 name a coding gene; **90.2% of those sit inside the element's CTCF node** (79.8% to 91.8% per chromosome) and 71.2% are exactly the nearest TSS; 1,157 behave as silencers. Needs a key; the daily quota ran out mid-run and the job waited and resumed rather than failing |
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
+| Composition budget: constraint per UNKNOWN block, a tier per block | 1 of 24 (chr21, 2026-09-11); job `budget_genome_wide` running | `genomeos budget --chrom C`; `genomeos budget` distils | Zoonomia phyloP read per base over HTTP ranges, never stored; about 2.5 GB of ranges for the genome; see area I |
 | Segment parser scored against GENCODE | chr21, six configurations | `genomeos segments --chrom C [--predicted-sites] [--promoter-anchored] [--coding markov] [--rna-filter]` | every result kept side by side; RNA over the exons reaches 92.7% gene precision at 57.9% sensitivity; see area B |
 
 One-off jobs, each needing a decision or a resource:
@@ -651,6 +744,11 @@ session that holds it. Items 1–4 run in parallel today.
     a concrete reason: Schoeberl2002 (100 species) does not reproduce on the
     in-house SBML engine, so a reference implementation is needed for models
     of that size. Milestone 1.1. unassigned.
+13. The 98%: chromosome 21 budgeted 2026-09-11 (constraint per UNKNOWN
+    block, five tiers, 1.4% of the space left as constrained unknown); the
+    genome-wide job running. Next: organise the blocks, attribute a gene and
+    a tissue with AlphaGenome, score against VISTA and MPRA. Milestone 1.3.
+    genomeos-f7.
 
 ## 6. Milestones
 
@@ -661,6 +759,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
 | **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. Outstanding: the two remaining ranking defects, CNA and SV, the library layer |
+| **1.3 the 98%** ◔ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements | chromosome 21 budgeted 2026-09-11; the genome-wide budget is the running job; scoring needs VISTA and MPRA as ground truth |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
 ---
@@ -708,7 +807,8 @@ ambition in §1 before it is started.
 - **A self-hosted AlphaGenome.** The weights are published; self-deployment
   removes the per-request quota and turns enhancer-to-gene, the predicted
   reader and in-silico mutagenesis from per-chromosome jobs into genome-wide
-  ones (docs/ALPHAGENOME.md).
+  ones (docs/ALPHAGENOME.md). Since 2026-09-11 it is the prerequisite of area
+  I's attribution step: a million blocks cannot go through the hosted quota.
 
 ---
 
