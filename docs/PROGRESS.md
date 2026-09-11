@@ -430,3 +430,21 @@ report, which is the habit to keep.
 - **The comparison, read carefully.** Of the 91 mouse nodes holding two or more genes whose symbol matches a human gene, 49 land inside one human node and 39 more split across *adjacent* human nodes, with 3 scattered. Synteny between mouse and human is textbook, so "the genes stay together" is not news and would not have been worth running. The number that carries information is the shape of the failures: when a mouse node does not map to a single human node, its pieces are next to each other 39 times out of 42. A unit that fragments into neighbours is a unit whose boundaries are drawn slightly differently, not a unit that does not exist. The node behaves as a real object in both genomes and the CTCF-only boundary is the resolution limit rather than the biology.
 - **Stated as a lower bound, on purpose.** Orthology here is gene-symbol identity, which misses every renamed and every one-to-many orthologue, and the result file says so in its evidence block. A stronger run through Ensembl Compara would move the numbers up, not down, which is why the conclusion survives the weak method.
 - Also landed: the kinetic pathway view on the Molecules tab (a443cec), with the knockout curves drawn dashed against the baseline.
+
+## 2026-09-11 — 0.9
+
+Version 0.9.0. The whole genome is decoded end to end, and the parts of the
+model that could be tested have been tested rather than asserted.
+
+- **Every chromosome**: 25 fetched and analysed, UNKNOWN space classified at 98.5% with curated repeats, CTCF nodes on 24, open chromatin read for eleven cell types (42.0% to 77.1% of coding genes read, depending on the cell).
+- **The whole proteome**: 19,478 coding genes compiled from seven public databases, 19,249 verified against UniProt (90.9% identical to the canonical entry, 97.8% exact for some isoform), the disagreements triaged by mechanism, and the result packaged as a 2.3 MB library that answers with no network at all.
+- **The structural model tested twice, from different directions**: 4,800 regulatory elements deleted one at a time, and the gene that moves sits inside the element's own node 90.2% of the time; in mouse, a node that splits across human nodes splits into adjacent ones 39 times out of 42. The node stopped being a design argument and became a measured object.
+- **A person's own genome** as a first-class input that never leaves the machine, with predicted effects of their own regulatory variants on a named gene.
+- **Pathways that run**: Reactome as reachability, and as kinetics where a curated model exists, with the model size at which our engine fails recorded next to the two that work.
+- **The engine is separable**: BioLang imports nothing from the application, enforced by a test rather than by care, and licensed apart from it (Apache 2.0 against AGPL-3.0-or-later).
+- Suite: 274 passed, 4 skipped; 22 BioLang programs testing themselves, 62 checks; lint and format clean.
+
+What 0.9 does not contain, stated plainly: no benchmark showing the therapeutic
+pipeline recovers known targets, no published perturbation reproduced, and the
+human body above haematopoiesis is still counts rather than mechanism. Those
+are 1.0 to 1.2, and they are all validation rather than construction.

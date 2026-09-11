@@ -10,4 +10,4 @@ that, and it is also one less thing to untangle when BioLang is packaged on
 its own, since the package root does not travel with it.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.9.0"

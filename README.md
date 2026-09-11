@@ -93,11 +93,19 @@ Validated on real human DNA: the mitochondrial genome translates to the known
 proteins (MT-CO1 513 aa, MT-CO2 227 aa, MT-ATP6 226 aa) and chromosome 21
 loads in half a second.
 
-## Status (2026-09-10)
+## Status (0.9, 2026-09-11)
 
-The action plan in [docs/ACTION-PLAN.md](docs/ACTION-PLAN.md) has been executed
-through all five phases to a first working level; [docs/PROGRESS.md](docs/PROGRESS.md)
-records the evidence per task. Highlights:
+The whole genome is decoded end to end. Every human chromosome has been
+fetched and analysed, the proteome compiled and verified against the curators,
+and the structural model tested at genome scale. [docs/ROADMAP.md](docs/ROADMAP.md)
+holds the plan and the gaps; [docs/PROGRESS.md](docs/PROGRESS.md) records the
+evidence per task. What 0.9 means, measured:
+
+- **every chromosome**: 25 fetched and analysed, UNKNOWN space classified at 98.5% with curated repeats, CTCF nodes on 24, open chromatin read for eleven cell types
+- **the whole proteome**: 19,478 coding genes compiled from seven public databases, translation verified against UniProt on 19,249 of them (90.9% identical to the canonical entry, 97.8% exact for some isoform), and packaged as a 2.3 MB library that answers offline
+- **the structural model tested, not asserted**: 4,800 regulatory elements deleted one at a time, and the gene that moves sits inside the element's own CTCF node 90.2% of the time; in mouse, a node that splits across human nodes splits into adjacent ones 39 times out of 42
+- **a person's own genome**: any GRCh38 VCF imported locally, used by carrier lookup, the gene report, the twin and the gene-by-gene walk, and never leaving the machine
+- **pathways that run**: Reactome as reachability, and as kinetics where a curated ODE model exists (removing MEK from Kholodenko2000 stops the ERK oscillation)
 
 - a real person's genome (GIAB HG002) compiles to BioIR: 55,210 chromosome-21 variants applied to both haplotypes, every coding transcript translated, ClinVar consequences reproduced at >90%
 - 45 genome "libraries" verified against Gene Ontology and Reactome by data (95.5% agreement, the gap documented)

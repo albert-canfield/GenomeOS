@@ -503,8 +503,8 @@ session that holds it. Items 1–4 run in parallel today.
     test suite. Milestone 2.0. genomeos-73. (The import boundary that blocked
     this is closed as of 2026-09-11: the Apache paths can be lifted into their
     own package without dragging the application behind them.)
-11. README refresh, version 0.9.0 and the first git tag when item 1 lands.
-    Milestone 0.9. genomeos-f7.
+11. Done 2026-09-11: version 0.9.0 and the README rewritten around what the
+    release actually measures. The git tag follows the merge to `main`.
 12. libRoadRunner and MaBoSS adapters tested in CI on Python 3.12, now with
     a concrete reason: Schoeberl2002 (100 species) does not reproduce on the
     in-house SBML engine, so a reference implementation is needed for models
@@ -515,7 +515,7 @@ session that holds it. Items 1–4 run in parallel today.
 | Version | Milestone | Proof |
 |---|---|---|
 | 0.1–0.8 | engine, compiler from public data, cell runtime, composition spike, spatial, whole worm, twin, debugger | done, see PROGRESS.md |
-| **0.9 whole genome** ✅ data | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | all reached on 2026-09-11; the proteome also ships as a packaged offline library. Outstanding for the release itself: version bump to 0.9.0, git tag, README refresh |
+| **0.9 whole genome** ✅ | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | all reached 2026-09-11; the proteome also ships as a packaged offline library. Version is 0.9.0 and the README states what that means; the git tag is cut when the pull request to `main` is merged |
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
 | **1.2 therapeutics benchmark** | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark test in CI |
