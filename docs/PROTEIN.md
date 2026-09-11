@@ -328,6 +328,34 @@ support; 15,165 of 19,283 compiled proteins sit in one connected
 component. The compiled definitions occupy about 300 MB locally and are
 not committed; the summaries are.
 
+### The disagreements, read with the isoform the body makes (2026-09-12)
+
+The 96 genes whose canonical transcript does not translate to the curated
+protein were triaged by mechanism; the isoform layer adds the question the
+triage could not ask: is the canonical transcript even the one the body
+makes? `scripts/disagreements_isoforms.py` takes GTEx's dominant transcript
+for each gene, translates it locally and compares
+(`data/results/translation_disagreements_isoforms.json`, 151 s):
+
+| verdict | genes |
+|---|---|
+| the body makes the canonical transcript and it still differs: the reference allele is the disagreement | 38 |
+| the body makes another isoform and that one differs too | 18 |
+| the dominant transcript is non-coding in the local models | 16 |
+| no expressed isoform in GTEx, or the gene is not in GTEx (olfactory receptors mostly) | 24 |
+| the isoform the body makes matches UniProt (a canonical-choice artefact) | **0** |
+
+Not one disagreement is the annotation picking the wrong isoform: where
+GTEx sees expression, the transcript it sees is the disagreeing one, and
+where it sees another, that one disagrees as well. The frameshift and
+nonsense alleles of hg38 stay what the triage said (the reference carries
+an allele the curated protein does not), and the "same length, different
+sequence" group (18 of its 38 measured cases make the canonical transcript)
+is now most likely the same thing at single-residue scale: reference
+alleles, not isoforms. What the isoform check cannot settle is the 40 genes
+GTEx does not resolve, and it does not need to: their triage already names
+the mechanism.
+
 ## The proteome as a library
 
 The compiled proteome is now a BioLib layer that ships with GenomeOS:
