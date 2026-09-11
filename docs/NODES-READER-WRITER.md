@@ -100,3 +100,27 @@ Layered evidence, each layer with its own kind and confidence:
 
 Each layer moves a block from UNKNOWN toward a named function with a
 confidence, and the interface should show which layer said so.
+
+## Reader v1 (built 2026-09-11)
+
+`genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first
+reader: ENCODE's DNase-seq peaks for a cell type (one 1-2 MB narrowPeak file
+from the portal, rows of the chromosome kept) laid over the nodes, the
+promoters and the enhancers. Per node: peaks and open fraction; per coding
+gene: read (promoter open, TSS ± 1 kb) or silent; per enhancer: active or
+not. Two cell types compared give the genes one reads and the other does
+not.
+
+| chr21 | K562 (blood) | HepG2 (liver) |
+|---|---|---|
+| peaks kept | 5,159 | 1,849 |
+| coding genes read | 135 of 221 (61%) | 118 of 221 (53%) |
+| enhancers active | 2,005 of 12,139 (17%) | 1,401 (12%) |
+| silent nodes | 23 of 228 | 34 of 228 |
+| read only here | RUNX1, ITGB2, S100B, GRIK1, KCNJ6 … | TFF1, TFF3, ABCG1, FTCD, MX2 … |
+
+RUNX1 and ITGB2 open in the blood line and TFF1/TFF3 and FTCD in the liver
+line is what the biology says; 106 genes are read in both. Evidence:
+experimental for the peaks, inferred for "read" (an open promoter is
+necessary for transcription, not proof of it). Results:
+`reader_<cell>_<chrom>.json`, `reader_K562_vs_HepG2_chr21.json`.

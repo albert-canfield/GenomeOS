@@ -1618,6 +1618,55 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_reader(args: argparse.Namespace) -> int:
+    """Reader v1: which nodes and genes a cell type reads, from ENCODE DNase peaks."""
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome.domains import infer_domains
+    from genomeos.genome.reader import compare, fetch_peaks, load_peaks, read_chromosome, slug
+    from genomeos.genome.regulatory import load_ccres
+    from genomeos.results import save_result
+
+    gff = default_gencode({args.chrom})
+    if not gff or not Path(args.genome).exists():
+        print(f"{args.chrom}: needs local models and sequence (genomeos data fetch --chrom {args.chrom})")
+        return 1
+    ann = Annotation.from_gff3(gff, {args.chrom})
+    g = IndexedGenome(args.genome)
+    length = g.lengths[args.chrom]
+    g.close()
+    ccres = load_ccres(args.chrom)
+    domains = infer_domains(args.chrom, length, ccres, ann) if ccres else []
+    results = []
+    for cell in [args.cell_type, *(args.versus or [])]:
+        if not load_peaks(cell, args.chrom):
+            print(f"fetching ENCODE DNase peaks for {cell}…", flush=True)
+            info = fetch_peaks(cell, {args.chrom})
+            kept = info["kept"][args.chrom]
+            print(f"  {info['accession']} ({info['candidates']} candidate files); kept {kept:,} peaks")
+        r = read_chromosome(cell, args.chrom, ann, domains, ccres)
+        save_result(f"reader_{slug(cell)}_{args.chrom}", {k: v for k, v in r.items() if k != "_read_all"})
+        genes = f"{r['genes_read']}/{r['coding_genes']} coding genes read ({r['read_fraction']:.0%})"
+        frac = f"{r['enhancers_active_fraction']:.0%}"
+        enh = f"enhancers active {r['enhancers_active']}/{r['enhancers']} ({frac})"
+        nodes = f"nodes open {r['nodes_open']}/{r['nodes']}, silent {r['nodes_silent']}"
+        print(f"{cell} on {args.chrom}: {r['peaks']:,} peaks; {genes}; {enh}; {nodes}")
+        print(
+            "  strongest promoters: "
+            + ", ".join(f"{x['gene']} {x['signal']:.0f}" for x in r["top_read"][:10])
+        )
+        print(f"  [{r['evidence']['peaks']}; {r['evidence']['read']}]")
+        results.append(r)
+    for other in results[1:]:
+        c = compare(results[0], other)
+        print(
+            f"{c['a']} vs {c['b']}: {c['read_in_both']} genes read in both; "
+            f"read only in {c['a']}: {', '.join(c['read_in_a_only'][:25])}"
+        )
+        print(f"  read only in {c['b']}: {', '.join(c['read_in_b_only'][:25])}")
+        save_result(f"reader_{slug(c['a'])}_vs_{slug(c['b'])}_{args.chrom}", c)
+    return 0
+
+
 def cmd_report(args: argparse.Namespace) -> int:
     """Every layer about one gene, as one Markdown dossier."""
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
@@ -2503,6 +2552,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser(
+        "reader", help="reader v1: which nodes and genes a cell type reads (ENCODE DNase peaks)"
+    )
+    p.add_argument("--cell-type", required=True, help="ENCODE biosample term, e.g. K562, HepG2, liver")
+    p.add_argument("--versus", nargs="*", help="other cell types to compare with")
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.set_defaults(fn=cmd_reader)
 
     p = sub.add_parser("report", help="a gene dossier: every layer about one gene in one document")
     p.add_argument("symbol")
