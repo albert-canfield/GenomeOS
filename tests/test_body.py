@@ -99,18 +99,22 @@ def test_celegans_grows_to_the_adult_and_matches_the_reference():
     from genomeos.lang import parse_file
 
     m = parse_file("data/organisms/celegans/embryo.bio")
-    body = Body(m).run(until=6000)
+    body = Body(m, means=True).run(until=6000)  # timers at their means: the topology and fates exactly
     ref = ReferenceLineage.load()
     d = compare(body, ref)
     assert d.reference_cells == 2183 and d.matched == 2183 and not d.missing and not d.extra
     assert not d.parent_mismatch and d.fate_accuracy == 1.0 and d.deaths_matched == d.deaths_expected == 131
     assert d.timing_median is not None and d.timing_median < 20
     assert body.count_at(6000) == 961 and body.deaths_by(6000) == 131
+    # with the measured spread (the program's own seed) the early wave lands nearer the reference
+    seeded = Body(m).run(until=8000)
+    assert m.organism.seed == 0 and 230 <= seeded.count_at(350) <= 300 and seeded.count_at(8000) == 961
+    assert all(c["ok"] for c in seeded.check_asserts()), seeded.check_asserts()
     # mechanism decided the founders: Wnt reached EMS, Notch reached ABp, PIE-1 stayed in the germline
     assert body.cells["EMS"].factors.get("Wnt") == "received" and body.cells["ABp"].factors.get("Notch")
     assert body.cells["P4"].cell_type == "GermCell" and "PIE-1" not in body.cells["AB"].factors
     assert body.cells["MS"].factors.get("POP-1") and "POP-1" not in body.cells["E"].factors
-    embryo = compare(Body(m).run(until=800), ref, until=800)
+    embryo = compare(Body(m, means=True).run(until=800), ref, until=800)
     assert embryo.deaths_matched == 110 and embryo.fates_checked == 555
     rep = body.uncertainty().to_dict()
     assert rep["organism"]["label"] == "high" and rep["cellular"]["items"] > 500

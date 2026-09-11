@@ -4,6 +4,9 @@
 # the reference (Sulston 1983 via WormWeb), with cycle timers distilled per
 # founder lineage and generation. Run: genomeos grow data/organisms/celegans/embryo.bio
 module organism.celegans.embryo
+# test: cells >= 2150
+# test: deaths == 131
+# test: alive >= 940
 import cell_types.bio
 import timers.bio
 import founders.bio
@@ -15,11 +18,15 @@ organism Celegans {
   genome: WBcel235
   root: P0
   cell_type: Zygote
+  seed: 0
   factors: SKN-1, PIE-1, PAL-1, POP-1, PAR-3, PAR-2
   environment: temperature = 20
   observe: count, deaths, fates
   assert: count at 0.5 min = 2
   assert: count at 350 min in 240..310
+  assert: count at 500 min in 560..640
+  assert: deaths at 8000 min = 131
+  assert: count at 8000 min = 961
   assert: deaths at 800 min in 100..115
   reference: celegans
   evidence: experimental "Sulston et al. 1983, Dev Biol 100:64; Sulston & Horvitz 1977, Dev Biol 56:110"; confidence: 0.9

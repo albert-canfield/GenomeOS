@@ -2,6 +2,8 @@
 # one zygote, cited cycle timers per founder lineage, the founder divisions by name,
 # and default a/p then l/r naming afterwards. Run: genomeos grow data/demo/celegans_lineage.bio
 module organism.celegans.early
+# test: cells >= 40
+# test: deaths == 0
 import bio.std.development
 
 organism CelegansEarly {

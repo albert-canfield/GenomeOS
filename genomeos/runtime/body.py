@@ -63,12 +63,17 @@ class Cell:
 
 
 class Body:
-    def __init__(self, module: Module, seed: int | None = None, max_cells: int = 200_000):
+    def __init__(
+        self, module: Module, seed: int | None = None, max_cells: int = 200_000, means: bool = False
+    ):
+        """`seed` overrides the organism's declared seed; `means=True` runs every timer at its mean."""
         if module.organism is None:
             raise ValueError(f"module {module.name!r} declares no organism block")
         self.module = module
         self.organism = module.organism
-        self.rng = random.Random(seed) if seed is not None else None
+        if seed is None:
+            seed = self.organism.seed
+        self.rng = random.Random(seed) if seed is not None and not means else None
         self.max_cells = max_cells
         self.cells: dict[str, Cell] = {}
         self.time = 0.0

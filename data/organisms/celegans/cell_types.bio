@@ -1,6 +1,8 @@
 # Tissue-level cell types of C. elegans as used by the reference lineage
 # (WormWeb tissue labels), with Cell Ontology ids where one applies.
 module organism.celegans.cell_types
+# test: entities >= 20
+# test: unknowns == 0
 import bio.std.development
 
 cell_type Neuron { parent: PostMitotic; ontology: CL:0000540; evidence: curated "Cell Ontology"; confidence: 0.9 }

@@ -673,7 +673,7 @@ def cmd_grow(args: argparse.Namespace) -> int:
     o = module.organism
     parts = str(args.until).split()
     args.until = to_minutes(float(parts[0]), parts[1] if len(parts) > 1 else "min")
-    body = Body(module, seed=args.seed, max_cells=args.max_cells).run(until=args.until)
+    body = Body(module, seed=args.seed, max_cells=args.max_cells, means=args.means).run(until=args.until)
     s = body.summary()
     when = f"{args.until:g} min"
     if args.until > 10_000:
@@ -2268,7 +2268,8 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("grow", help="grow an organism from one cell (BioLang v0.3 organism program)")
     p.add_argument("module", help="a .bio file with an organism block")
     p.add_argument("--until", default="800", help="organism time: 800, '14 h', '20 yr' (default 800 min)")
-    p.add_argument("--seed", type=int, default=None, help="seed for timer noise (default: deterministic)")
+    p.add_argument("--seed", type=int, default=None, help="seed for timer spread (default: the program's)")
+    p.add_argument("--means", action="store_true", help="run every timer at its mean, no spread")
     p.add_argument("--depth", type=int, default=2, help="lineage tree depth to print (0 = none)")
     p.add_argument("--max-cells", type=int, default=200_000)
     p.add_argument("--compare", action="store_true", help="score against the organism's reference lineage")

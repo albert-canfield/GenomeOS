@@ -5,6 +5,8 @@
 # These decisions come before the observed-lineage program and take precedence for the
 # cells they name. Review: Maduro 2010, Dev Dyn 239:1315; Priess 2005, WormBook (Notch).
 module organism.celegans.founders
+# test: entities >= 8
+# test: unknowns == 0
 import bio.std.development
 
 signal Wnt_P2_EMS { mode: contact; ligand: MOM-2; receptor: MOM-5; from: cell = P2; to: cell = EMS; sets: Wnt = received; evidence: experimental "Thorpe et al. 1997, Cell 90:695; Rocheleau et al. 1997, Cell 90:707"; confidence: 0.9 }

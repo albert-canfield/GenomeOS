@@ -5,6 +5,8 @@
 # their measured rates. Mechanism is not claimed anywhere below; the report says so.
 # Run: genomeos grow data/organisms/human/body.bio --until "20 yr" --depth 0
 module organism.human.body
+# test: cells == 18
+# test: deaths == 0
 import bio.std.development
 import tissues.bio
 

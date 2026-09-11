@@ -24,6 +24,7 @@ organism Celegans {
   genome: WBcel235
   root: P0                           # name of the first cell (default Zygote)
   resolution: cells                  # cells (named, default) or populations (counted)
+  seed: 0                            # timers run with their measured spread from this seed; omit for means
   cell_type: Zygote                  # bootstrap type
   factors: SKN-1, PIE-1, PAL-1       # maternal factors present in the zygote
   environment: temperature = 20
@@ -91,6 +92,12 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   its adult count and lets it regrow after losses. Populations wait from
   now, cells wait from birth. One runtime serves named cells (C. elegans)
   and counted tissues (human); `turnover_per_day` and `culled` are reported.
+- **Spread.** A timer's `sd` is applied when the run has a seed: the organism's
+  `seed:` by default, `--seed N` to override, `--means` to switch it off.
+  The C. elegans program declares `seed: 0`; at their means the distilled
+  timers put 194 cells at 350 min against 274 in the reference, with the
+  spread restored 240 to 265 (seeds 0 to 3), so the spread is part of the
+  measured biology, not noise added for effect.
 - **Stages** are events: when a stage starts, populations and resting cells
   read the new stage and decide again.
 - **Diamond imports** are merged once; identifier collisions between
