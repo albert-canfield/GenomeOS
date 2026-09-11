@@ -1801,8 +1801,17 @@ def cmd_segments(args: argparse.Namespace) -> int:
         )
         name += "_anchored"
     r = parse_chromosome(
-        args.chrom, seq, sig, ann, min_relative=args.min_relative, sites=sites, start_windows=start_windows
+        args.chrom,
+        seq,
+        sig,
+        ann,
+        min_relative=args.min_relative,
+        sites=sites,
+        start_windows=start_windows,
+        coding_model=args.coding,
     )
+    if args.coding != "codon":
+        name += f"_{args.coding}"
     if args.predicted_sites:
         r["splice_sites"] = sm
     if start_windows is not None:
@@ -3265,6 +3274,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--predicted-sites",
         action="store_true",
         help="feature c: take donors and acceptors from AlphaGenome's splice-site tracks (needs the key)",
+    )
+    p.add_argument(
+        "--coding",
+        choices=("codon", "markov"),
+        default="codon",
+        help="coding model: codon usage log-odds (default) or a 3-periodic fifth-order Markov model",
     )
     p.add_argument(
         "--promoter-anchored",

@@ -182,6 +182,34 @@ tested against it.
    predicted start signal of the same quality, and scoring against canonical
    transcripts separately. All of it stays `predicted` evidence; the grammar
    runs unchanged without the key.
+   **The coding model, tested (2026-09-11, late).** Two experiments had named
+   the coding score as the remaining limit, so it was replaced: a 3-periodic
+   fifth-order Markov model of coding sequence (GENSCAN's kind: the
+   probability of each base given the five before it and its position in the
+   codon, learned from the chromosome's canonical CDS, against a homogeneous
+   fifth-order model of the chromosome itself; `--coding markov`,
+   `MarkovCoding` in `genomeos/genome/segments.py`) in place of the codon
+   usage table, everything else unchanged, on the same three configurations:
+
+   | configuration | codon table (exons, genes) | Markov model (exons, genes) |
+   |---|---|---|
+   | matrices alone | 4.6% / 5.2%, 89.1% / 21.9% | 5.6% / 6.7%, 88.2% / 23.3% |
+   | AlphaGenome sites | 40.1% / 46.2%, 84.2% / 20.0% | 39.7% / 47.2%, 84.6% / 21.4% |
+   | + starts at ENCODE promoters | 30.2% / 61.9%, 59.3% / 53.8% | 30.0% / 63.0%, 59.3% / 55.6% |
+
+   (sensitivity / precision; `segments_chr21_predicted_sites_markov.json`
+   next to the codon-table results.) One to two points of precision in every
+   configuration, no sensitivity, and the same 950 to 1,000 candidates with
+   predicted sites. So the coding model is not the limit either, at least not
+   at fifth order with this much training data (221 genes): what a stronger
+   frame model buys is the ability to tell a real reading frame from a
+   plausible one a little more often, and the candidates it cannot reject are
+   real open reading frames that are simply not genes, or genes annotated on
+   another isoform. The next lever is therefore not sequence at all but
+   evidence of transcription: RNA-seq or CAGE support for a candidate's exons,
+   which the reader layer and AlphaGenome's expression tracks can both supply.
+   Both models stay available; `codon` remains the default because it is
+   faster and the difference is within a point.
 2. Promoter motif scanning with JASPAR matrices to derive `requires` lists
    with evidence, and to give `cell_type ... expresses:` a sequence-level
    justification.

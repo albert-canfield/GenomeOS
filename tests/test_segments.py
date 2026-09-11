@@ -77,3 +77,16 @@ def test_external_site_oracle_replaces_the_matrices_and_maps_both_strands():
 
     assert abs(score_of(0.5) - BACKGROUND_LOG_ODDS) < 1e-9
     assert score_of(0.99) > score_of(0.5) > score_of(0.05) > 5
+
+
+def test_markov_coding_prefers_the_frame_it_was_trained_on():
+    from genomeos.genome.segments import MarkovCoding
+
+    codons = ["GAG", "AAG", "CTG", "GCC", "GAC", "AAC", "ATC", "CTC"] * 40
+    cds = "".join(codons)
+    background = ("ACGT" * 300 + "TTGA" * 300 + "GCA" * 400) * 3
+    m = MarkovCoding().learn([cds] * 3, background)
+    in_frame = sum(m.codon(cds, i) for i in range(0, len(cds) - 8, 3))
+    off_frame = sum(m.codon(cds, i) for i in range(1, len(cds) - 8, 3))
+    assert in_frame > off_frame > -1e9
+    assert m.codon(background, 100) < in_frame / (len(cds) / 3)  # background scores below the coding mean

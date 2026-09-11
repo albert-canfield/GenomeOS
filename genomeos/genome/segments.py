@@ -93,6 +93,71 @@ def codon_log_odds(coding_dna: list[str], background_seq: str, sample: int = 3_0
     }
 
 
+class MarkovCoding:
+    """A 3-periodic inhomogeneous Markov model of coding sequence (GENSCAN-style): the probability of
+    each base given the previous `order` bases and its position in the codon, learned from the
+    canonical CDS of the chromosome, against a homogeneous Markov model of the same order learned
+    from the chromosome itself. `codon(s, i)` is the log2 ratio for the codon at s[i:i+3], the same
+    quantity the codon table gives, so the parser is unchanged."""
+
+    def __init__(self, order: int = 5) -> None:
+        self.order = order
+        self.coding: list[dict[str, list[int]]] = [{}, {}, {}]  # phase -> context -> counts ACGT
+        self.background: dict[str, list[int]] = {}
+        self.table: list[dict[str, list[float]]] = [{}, {}, {}]  # phase -> context -> log2 ratio per base
+        self.bg_table: dict[str, list[float]] = {}
+
+    @staticmethod
+    def _idx(ch: str) -> int:
+        return "ACGT".find(ch)
+
+    def learn(self, coding_dna: list[str], background_seq: str, sample: int = 3_000_000) -> MarkovCoding:
+        k = self.order
+        for cds in coding_dna:
+            s = cds.upper()
+            for i in range(k, len(s)):
+                b = self._idx(s[i])
+                ctx = s[i - k : i]
+                if b < 0 or "N" in ctx:
+                    continue
+                row = self.coding[i % 3].setdefault(ctx, [0, 0, 0, 0])
+                row[b] += 1
+        b_seq = background_seq.upper()[:sample]
+        for i in range(k, len(b_seq)):
+            b = self._idx(b_seq[i])
+            ctx = b_seq[i - k : i]
+            if b < 0 or "N" in ctx:
+                continue
+            row = self.background.setdefault(ctx, [0, 0, 0, 0])
+            row[b] += 1
+        # smoothed conditional probabilities, then the log2 ratio coding / background per base
+        for ctx, row in self.background.items():
+            tot = sum(row) + 4
+            self.bg_table[ctx] = [math.log2((c + 1) / tot) for c in row]
+        for ph in range(3):
+            for ctx, row in self.coding[ph].items():
+                tot = sum(row) + 4
+                bg = self.bg_table.get(ctx, [-2.0] * 4)
+                self.table[ph][ctx] = [math.log2((c + 1) / tot) - bg[j] for j, c in enumerate(row)]
+        return self
+
+    def base(self, s: str, i: int, phase: int) -> float:
+        k = self.order
+        if i < k:
+            return 0.0
+        b = self._idx(s[i])
+        if b < 0:
+            return 0.0
+        row = self.table[phase].get(s[i - k : i])
+        return row[b] if row else 0.0
+
+    def codon(self, s: str, i: int) -> float:
+        return self.base(s, i, 0) + self.base(s, i + 1, 1) + self.base(s, i + 2, 2)
+
+    def get(self, codon: str, default: float = 0.0) -> float:  # noqa: ARG002 - dict-like fallback
+        return default
+
+
 # ---- the parser ----------------------------------------------------------------------
 
 
@@ -139,12 +204,18 @@ class SegmentParser:
         pre = [[0.0] * (n + 1) for _ in range(3)]
         nxt = [[n] * (n + 1) for _ in range(3)]
         lo = self.codon_lo
+        markov = getattr(lo, "codon", None)  # a MarkovCoding scores codons in their sequence context
         for f in range(3):
             acc = 0.0
             row = pre[f]
-            for i in range(f, n - 2, 3):
-                acc += lo.get(s[i : i + 3], 0.0)
-                row[i + 3] = acc
+            if markov is not None:
+                for i in range(f, n - 2, 3):
+                    acc += markov(s, i)
+                    row[i + 3] = acc
+            else:
+                for i in range(f, n - 2, 3):
+                    acc += lo.get(s[i : i + 3], 0.0)
+                    row[i + 3] = acc
             # fill gaps so that pre[f][p] = coding score of codons in frame f ending at or before p
             last = 0.0
             for p in range(n + 1):
@@ -392,10 +463,12 @@ def parse_chromosome(
     overlap: int = 200_000,
     sites=None,
     start_windows: dict[str, list[tuple[int, int]]] | None = None,
+    coding_model: str = "codon",
 ) -> dict[str, Any]:
     """Learn coding potential from the annotation, parse the chromosome in windows, evaluate.
     `sites` is an optional external splice-site oracle, `start_windows` an optional restriction of
-    where a gene may begin (see SegmentParser)."""
+    where a gene may begin (see SegmentParser); `coding_model` is "codon" (codon usage log-odds) or
+    "markov" (3-periodic fifth-order Markov model against the chromosome's own background)."""
     from genomeos.genome import Genome
     from genomeos.runtime.central_dogma import coding_sequence
 
@@ -411,7 +484,7 @@ def parse_chromosome(
         for t in module.entities[g.id].transcripts:
             if t.cds_segments and "Ensembl_canonical" in t.tags:
                 cds.append(coding_sequence(genome, t).replace("U", "T"))
-    lo = codon_log_odds(cds, seq)
+    lo = MarkovCoding().learn(cds, seq) if coding_model == "markov" else codon_log_odds(cds, seq)
     parser = SegmentParser(signals, lo, min_relative, sites, start_windows)
     preds: list[Prediction] = []
     n = len(seq)
@@ -437,7 +510,8 @@ def parse_chromosome(
     return {
         "chrom": chrom,
         "min_relative": min_relative,
-        "codon_table_size": len(lo),
+        "coding_model": coding_model,
+        "codon_table_size": len(lo) if isinstance(lo, dict) else sum(len(x) for x in lo.table),
         "training_cds": len(cds),
         **ev,
         "predictions_top": [p.to_dict() for p in sorted(kept, key=lambda p: -p.score)[:50]],
