@@ -228,8 +228,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   is not that the genes stay together; it is that when a mouse node does not
   map to one human node, the pieces are next to each other 39 times out of 42.
   The node behaves as a unit in both genomes, and the CTCF-only boundary is
-  the resolution limit rather than the biology. Orthology here is symbol
-  identity, which is a lower bound, and the result says so.
+  the resolution limit rather than the biology. That first run used gene-symbol
+  identity for orthology and was written up as a lower bound; re-run with MGI's
+  curated homology (48c48bc) the tested set grows from 91 nodes to 109 and the
+  shape holds: 53% in one human node, 94% in the same neighbourhood, adjacent
+  45 times out of 51. The stronger method moved the count and left the
+  conclusion, which is what a lower bound is supposed to do. Both columns are
+  kept in the result.
 - **Next.** 1. The coding model, which two independent experiments now name as
   the limit: the codon log-odds score is what separates a real reading frame
   from a plausible one. 2. The `reader` construct in BioLang, so context
