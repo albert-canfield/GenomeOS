@@ -4,7 +4,7 @@
 (function () {
   const $ = s => document.querySelector(s);
   const COLORS = {gene: '#1f6feb', transcript: '#4c8dff', exon: '#8250df', cds: '#d1242f', unknown: '#57606a',
-                  cpg_island: '#1a7f37', repeat: '#bf8700', telomere: '#0e8a8a', gap: '#30363d', ccre: '#2ea043', domain: '#6639ba'};
+                  cpg_island: '#1a7f37', repeat: '#bf8700', telomere: '#0e8a8a', gap: '#30363d', ccre: '#2ea043', domain: '#6639ba', open: '#f78166'};
   const REPEAT_COLORS = {LINE: '#bf8700', SINE: '#e3b341', LTR: '#9a6700', DNA: '#7a5901', Satellite: '#0e8a8a', Simple_repeat: '#d29922', Low_complexity: '#b08800'};
   const CCRE_COLORS = {PLS: '#2ea043', pELS: '#e3b341', dELS: '#d29922', 'CTCF-only': '#39c5c5', 'DNase-H3K4me3': '#4c8dff'};
   const st = {path: null, chrom: null, length: 0, view: [0, 1], data: null, sel: null, filter: new Set(), highlight: null,
@@ -86,7 +86,7 @@
     if (st.filter.size && !st.filter.has(b.type)) return false;
     return b.end > st.view[0] && b.start < st.view[1];
   }
-  const classOf = b => (b.type === 'unknown' && b.attrs.class) ? 'unknown:' + b.attrs.class : (b.type === 'ccre' ? 'ccre:' + b.attrs.cls : b.type);
+  const classOf = b => (b.type === 'unknown' && b.attrs.class) ? 'unknown:' + b.attrs.class : (b.type === 'ccre' ? 'ccre:' + b.attrs.cls : (b.type === 'open' ? 'open:' + b.attrs.cell : b.type));
   function isMuted(b) {
     if (st.highlight) return classOf(b) !== st.highlight && !(b.parent && st.highlight === 'gene' && b.type !== 'gene' && false);
     if (st.query) { const q = st.query.toLowerCase(); const hit = (b.name || '').toLowerCase().includes(q) || (st.byId[b.parent]?.name || '').toLowerCase().includes(q) || (st.byId[st.byId[b.parent]?.parent]?.name || '').toLowerCase().includes(q); if (!hit) return true; }
@@ -165,6 +165,7 @@
     } else {
       if (b.type === 'ccre') col = CCRE_COLORS[b.attrs.cls] || col;
       if (b.type === 'repeat' && b.attrs.cls) col = REPEAT_COLORS[b.attrs.cls] || '#bf8700';
+      if (b.type === 'open') col = ['#f78166', '#ff9bce', '#79c0ff', '#56d364'][Math.abs([...b.attrs.cell].reduce((h, c) => h + c.charCodeAt(0), 0)) % 4];
       const ucol = {interspersed_repeat: '#bf8700', interspersed_repeat_SINE: '#bf8700', tandem_repeat: '#e3b341', low_complexity: '#9a6700', long_orf: '#d1242f', satellite_array: '#7a5901', mixed_intergenic: '#6e7681', unique_intergenic: '#8b949e', promoter_like: '#1a7f37', centromere: '#0e8a8a', telomere: '#0e8a8a', gene_desert: '#3d444d'};
       ctx.fillStyle = (b.type === 'unknown' && b.attrs.class && ucol[b.attrs.class]) || col; ctx.globalAlpha = m ? 0.15 : (b.type === 'unknown' ? (b.attrs.class ? 0.6 : 0.35) : 0.9);
       ctx.fillRect(x0, y + (b.type === 'unknown' ? h * 0.3 : 0), w, b.type === 'unknown' ? h * 0.4 : h);
@@ -180,7 +181,7 @@
     const d = st.data; if (!d) return;
     classSummary();
     const span = d.end - d.start;
-    const types = ['domain', 'gene', 'transcript', 'exon', 'cds', 'unknown', 'ccre', 'cpg_island', 'repeat', 'telomere', 'gap'];
+    const types = ['domain', 'gene', 'transcript', 'exon', 'cds', 'unknown', 'ccre', 'open', 'cpg_island', 'repeat', 'telomere', 'gap'];
     const rows = [];
     for (const t of types) {
       const iv = d.blocks.filter(b => b.type === t).map(b => [Math.max(d.start, b.start), Math.min(d.end, b.end)]).filter(([a, b]) => b > a).sort((a, b) => a[0] - b[0]);
@@ -201,7 +202,8 @@
     for (const g of Object.values(groups)) { g.iv.sort((a, b) => a[0] - b[0]); let cur = null, bp = 0; for (const [a, b] of g.iv) { if (!cur || a > cur[1]) { if (cur) bp += cur[1] - cur[0]; cur = [a, b]; } else cur[1] = Math.max(cur[1], b); } if (cur) bp += cur[1] - cur[0]; g.bp = bp; }
     const keys = Object.keys(groups).sort((a, b) => groups[b].bp - groups[a].bp);
     const ucol = {interspersed_repeat: '#bf8700', interspersed_repeat_SINE: '#bf8700', tandem_repeat: '#e3b341', low_complexity: '#9a6700', long_orf: '#d1242f', satellite_array: '#7a5901', mixed_intergenic: '#6e7681', unique_intergenic: '#8b949e', promoter_like: '#1a7f37', centromere: '#0e8a8a', telomere: '#0e8a8a', gene_desert: '#3d444d', regulatory: '#2ea043'};
-    const colorFor = k => k.startsWith('unknown:') ? (ucol[k.slice(8)] || '#57606a') : k.startsWith('ccre:') ? (CCRE_COLORS[k.slice(5)] || '#2ea043') : (COLORS[k] || '#999');
+    const cellCol = cell => ['#f78166', '#ff9bce', '#79c0ff', '#56d364'][Math.abs([...cell].reduce((h, c) => h + c.charCodeAt(0), 0)) % 4];
+    const colorFor = k => k.startsWith('unknown:') ? (ucol[k.slice(8)] || '#57606a') : k.startsWith('ccre:') ? (CCRE_COLORS[k.slice(5)] || '#2ea043') : k.startsWith('open:') ? cellCol(k.slice(5)) : (COLORS[k] || '#999');
     const label = k => k.startsWith('unknown:') ? 'UNKNOWN · ' + k.slice(8) : k.startsWith('ccre:') ? 'ENCODE ' + k.slice(5) : k;
     $('#b-classes').innerHTML = keys.map(k => `<span class="chip${st.highlight === k ? ' on' : ''}" data-key="${k}" data-tip="Click to highlight every ${label(k)} block and mute the rest; click again to clear."><i style="background:${colorFor(k)}"></i>${label(k)} <b>${(groups[k].bp / span * 100).toFixed(groups[k].bp / span >= 0.1 ? 0 : 1)}%</b> <span class="muted">(${groups[k].n})</span></span>`).join('');
     $('#b-classes').querySelectorAll('.chip').forEach(c => c.onclick = () => { st.highlight = st.highlight === c.dataset.key ? null : c.dataset.key; classSummary(); draw(); });

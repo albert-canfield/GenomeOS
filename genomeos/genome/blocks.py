@@ -267,6 +267,33 @@ def blocks_for_window(
                             },
                         )
                     )
+        # reader v1: open chromatin per cell type, for every cell type distilled for this chromosome
+        from genomeos.genome.reader import EVIDENCE as DNASE_EVIDENCE
+        from genomeos.genome.reader import RESULTS as READER_DIR
+
+        for peaks_file in sorted(READER_DIR.glob(f"dnase_*_{chrom}.bed.gz")):
+            cell = peaks_file.name[len("dnase_") : -len(f"_{chrom}.bed.gz")]
+            with __import__("gzip").open(peaks_file, "rt") as fh:
+                for line in fh:
+                    if line.startswith("#"):
+                        continue
+                    a, b, v = line.rstrip("\n").split("\t")
+                    a, b = int(a), int(b)
+                    if b > start and a < end:
+                        blocks.append(
+                            Block(
+                                f"open:{cell}:{a}",
+                                "open",
+                                a,
+                                b,
+                                ".",
+                                f"open in {cell}",
+                                None,
+                                "experimental",
+                                0.9,
+                                {"cell": cell, "signal": v, "note": DNASE_EVIDENCE},
+                            )
+                        )
         from genomeos.genome.regulatory import EVIDENCE, load_ccres
 
         ccres_all = load_ccres(chrom)

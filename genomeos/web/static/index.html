@@ -258,7 +258,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 <!-- ================= BLOCKS ================= -->
 <section id="blocks">
   <div class="card">
-    <h2><i class="ic">🧩</i>Block map<span class="help" data-tip="Rows: + strand genes, − strand genes, then sequence elements and UNKNOWN spans. A gene box contains its transcripts (canonical first) as lines with exons as bars: red = coding, purple = UTR. Widths are to scale. Repeats are RepeatMasker's curated copies (amber LINE, yellow SINE, brown LTR/DNA, teal satellite) where the chromosome has been distilled with `genomeos repeats`. Wheel to zoom, drag to pan, click the minimap to jump.">?</span></h2>
+    <h2><i class="ic">🧩</i>Block map<span class="help" data-tip="Rows: + strand genes, − strand genes, then sequence elements and UNKNOWN spans. A gene box contains its transcripts (canonical first) as lines with exons as bars: red = coding, purple = UTR. Widths are to scale. Repeats are RepeatMasker's curated copies (amber LINE, yellow SINE, brown LTR/DNA, teal satellite) where the chromosome has been distilled with `genomeos repeats`. Open chromatin per cell type (reader v1, ENCODE DNase peaks) appears as 'open in K562' blocks once `genomeos reader --cell-type` has run for the chromosome; click a chip to highlight one cell type. Wheel to zoom, drag to pan, click the minimap to jump.">?</span></h2>
     <div class="row">
       <select id="b-file"></select>
       <label data-tip="Chromosome name inside the file.">chromosome <input id="b-chrom" placeholder="chr21" style="width:90px" class="mono"></label>
