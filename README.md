@@ -117,6 +117,7 @@ uv run genomeos age --cell-type fibroblast --years 90 --cells 500 --evidence
 uv run genomeos libs --layer timer -v
 uv run genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare   # one cell to the adult worm
 uv run genomeos serve --open           # light web UI at http://127.0.0.1:8765
+uv run bio test data/demo              # the BioLang toolchain on its own: check, compile, run, test, repl
 uv run genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --report
 uv run pytest                          # ~80 tests; real-data tests skip until data is fetched
 uv run ruff check .

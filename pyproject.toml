@@ -9,6 +9,7 @@ dependencies = []
 
 [project.scripts]
 genomeos = "genomeos.cli:main"
+bio = "genomeos.bio:main"
 
 [project.optional-dependencies]
 compose = [

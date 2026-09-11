@@ -159,7 +159,10 @@ and gene-dense, so the composition classes have little to say.
 ## What it cannot do yet
 
 Enhancers, silencers and insulators leave no signal a k-mer or a regex can
-read; they need cross-species conservation, chromatin data or a predictive
-model (AlphaGenome, `predicted` evidence). Repeat *families* are found but not
-named beyond Alu; a learned clustering of high-copy k-mers into families, and
-Dfam consensus sequences as patterns, are the next steps.
+read; ENCODE's chromatin evidence now places them (`regulatory` class,
+`genomeos regulation` for their targets), but which gene each one reaches
+is inferred from the CTCF domain, not measured; Hi-C or a predictive model
+(AlphaGenome, `predicted` evidence) would tighten that. Repeat families are
+named by RepeatMasker's curated library where a chromosome has been
+distilled with `genomeos repeats`; the sequence patterns remain the fallback
+for a chromosome that has not. Silencers have no curated source here yet.
