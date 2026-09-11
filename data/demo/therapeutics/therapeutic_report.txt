@@ -1,0 +1,877 @@
+==============================================================================
+THERAPEUTIC TARGET ANALYSIS
+==============================================================================
+
+GenomeOS generates computational research hypotheses. Therapeutic target rankings and mechanism suggestions are not clinical recommendations and require experimental and clinical validation.
+
+Sample: data/demo/cancer_tumour.vcf   (cancer_tumour)
+Data level reached: 1 of 9
+  analysis ran at data level 1; conclusions that require a higher level are reported as unavailable rather than estimated
+
+TUMOUR SUMMARY
+------------------------------------------------------------------------------
+  - 4 somatic alterations in 4 genes, plus 1 gene(s) reached indirectly
+  - 1 potential direct surface target
+  - 1 gene yielding mutation-derived peptides for the HLA route
+  - 1 indirect / pathway-induced candidate
+  - 3 unsuitable, secreted or unknown
+
+TOP DIRECT SURFACE TARGETS
+------------------------------------------------------------------------------
+  gene      score   access  select  safety  intern  evid   best mechanism
+  APP       0.50    1.00    0.20    0.00    0.65    0.95   blocking_antibody 48%
+
+TOP NEOANTIGEN / HLA CANDIDATES
+------------------------------------------------------------------------------
+  APP        4 peptides, HLA supplied, presentation unestablished
+  SOD1       excluded: the protein sequence is unchanged
+  RUNX1      excluded: a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide
+  NRIP1      excluded: the protein sequence is unchanged
+
+INDIRECT / PATHWAY-INDUCED SURFACE TARGETS
+------------------------------------------------------------------------------
+  gene      score   access  select  safety  intern  evid   best mechanism
+  CSF1R     0.50    1.00    0.50    0.13    unknown 0.95   blocking_antibody 61%
+
+REJECTED OR LOW-PRIORITY TARGETS
+------------------------------------------------------------------------------
+  SOD1       intracellular_only     SOD1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+  RUNX1      intracellular_only     RUNX1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+  NRIP1      intracellular_only     NRIP1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+
+NORMAL-TISSUE SAFETY CONCERNS
+------------------------------------------------------------------------------
+  APP        high      cerebral cortex (669.1 nTPM), hypothalamus (437.7 nTPM), kidney (464.8 nTPM), heart muscle (356.3 nTPM), cerebellum (316.4 nTPM)
+  CSF1R      moderate  spleen (106.8 nTPM), lung (34.5 nTPM), cerebral cortex (30.5 nTPM), liver (25.7 nTPM), adrenal gland (29.3 nTPM)
+  SOD1       high      liver (1537.1 nTPM), cerebral cortex (613.2 nTPM), hypothalamus (597.1 nTPM), heart muscle (491.9 nTPM), kidney (528.5 nTPM)
+  RUNX1      moderate  bone marrow (42.9 nTPM), lung (21.1 nTPM), skeletal muscle (17.7 nTPM)
+  NRIP1      moderate  bone marrow (24.9 nTPM), liver (25.1 nTPM), retina (29.4 nTPM), kidney (14.9 nTPM), skeletal muscle (20.7 nTPM)
+
+TRAFFICKING / INTERNALISATION
+------------------------------------------------------------------------------
+  APP        internalises yes     endosomal yes     lysosomal yes     shedding yes
+  CSF1R      internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  SOD1       internalises unknown endosomal unknown lysosomal yes     shedding unknown
+  RUNX1      internalises unknown endosomal unknown lysosomal unknown shedding unknown
+  NRIP1      internalises unknown endosomal unknown lysosomal unknown shedding unknown
+
+THERAPEUTIC MECHANISM RECOMMENDATIONS
+------------------------------------------------------------------------------
+  CSF1R      blocking_antibody          61%  cargo=none                   effector=the tumour cell's own blocked pathway
+  CSF1R      agonist_antibody           59%  cargo=none                   effector=the target receptor's own signalling
+  CSF1R      adcc                       49%  cargo=none                   effector=endogenous immune system
+  APP        blocking_antibody          48%  cargo=none                   effector=the tumour cell's own blocked pathway
+  CSF1R      targeted_radionuclide      48%  cargo=radionuclide           effector=emitted radiation, including neighbouring cells
+  APP        agonist_antibody           48%  cargo=none                   effector=the target receptor's own signalling
+  APP        adc                        45%  cargo=cytotoxic payload      effector=released payload inside the tumour cell
+  CSF1R      adcp                       43%  cargo=none                   effector=endogenous immune system
+  CSF1R      t_cell_engager             42%  cargo=none                   effector=T cell
+  CSF1R      complement_recruitment     42%  cargo=none                   effector=complement cascade
+
+  Scores above are computational compatibility scores. They are not response probabilities.
+
+COMBINATION TARGET LOGIC
+------------------------------------------------------------------------------
+  APP AND CSF1R: requiring both APP and CSF1R lowers the worst weighted healthy-tissue load from 669.1 (cerebral cortex) to 53.4 (spleen)
+    healthy tissues excluded: bone marrow, cerebellum, kidney, pancreas, retina, skeletal muscle, testis, thyroid gland
+
+EXPERIMENTAL MECHANISMS
+------------------------------------------------------------------------------
+  immune_marker_delivery         best fit APP at 22%
+    tumour-selective delivery makes the cell display a strongly immunogenic surface marker, which pre-existing or adaptive antibodies then attack
+    - experimental: the whole chain from selective delivery to marker display to effective immune attack has no clinical precedent that GenomeOS can cite
+    - selectivity carries the entire safety argument, because any healthy cell that takes up the carrier is marked for destruction too
+  rna_delivery                   best fit APP at 29%
+    a tumour-selective carrier delivers RNA that is translated inside the tumour cell
+    - endosomal escape is the unsolved step and is not modelled here
+    - lysosomal routing helps a cleavable payload and hurts RNA, which must escape before it
+  tumour_suppressor_restoration  no candidate satisfies its requirements
+    the inactivated gene's product is restored inside the tumour cell
+    - Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease.
+    - restoration must reach every malignant cell to matter, which is a delivery problem no current carrier solves
+  genome_editing                 best fit APP at 15%
+    the tumour allele is corrected or disrupted in place
+    - Correcting or replacing one gene does not restore a normal cell. An established malignancy carries several cooperating drivers, passenger mutations, copy-number change, aneuploidy and epigenetic dysregulation; reverting one of them removes one dependency, not the disease.
+    - editing must also reach the nucleus of every malignant cell; surface access is only the first of several barriers
+
+REQUIRED MISSING DATA
+------------------------------------------------------------------------------
+  - matched normal genome: somatic status is estimated from population frequency; rare inherited variants cannot be told apart without it
+  - tumour RNA-seq: no target's expression in this tumour can be established from DNA alone
+  - tumour purity and variant allele fraction: clonal and subclonal alterations cannot be separated, so an antigen on 10% of cells looks like one on 100%
+  - copy number: amplification is one of the strongest reasons a surface target is over-displayed
+  - tumour proteomics: RNA is not protein; abundance at the protein level is unmeasured
+  - surface proteomics: the only direct measurement of what is actually displayed on the tumour cell surface
+  - immunopeptidomics: the only evidence that a mutant peptide is genuinely presented rather than predicted
+  - single-cell tumour data: heterogeneity and co-expression of two antigens in the same cell are otherwise unknowable
+  - tumour expression of this gene: unresolved for this analysis
+  - clonality: unresolved for this analysis
+  - internalisation: unresolved for this analysis
+  - predicted peptide/HLA binding: unresolved for this analysis
+  - predicted antigen processing: unresolved for this analysis
+  - observed presentation: unresolved for this analysis
+  - induced surface phenotype: unresolved for this analysis
+
+CANDIDATE DETAIL
+==============================================================================
+
+------------------------------------------------------------------------------
+TARGET: APP  (Amyloid-beta precursor protein)
+------------------------------------------------------------------------------
+
+Classification:
+  direct surface
+  curated topology places 684 residues (18-701) outside the cell, within reach of a circulating binder
+
+Why interesting:
+  its product is physically reachable from outside the cell; 3 approved therapies already engage it
+
+Tumour evidence:
+  chr21:25881673 G>C  missense_variant  N770K
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: unknown - no variant allele fraction or tumour purity supplied
+
+Normal tissue concern:
+  risk: high
+  cerebral cortex is an organ without a spare and carries 669.1 nTPM (threshold 10)
+  tissues above the concern threshold: cerebral cortex (669.1 nTPM), hypothalamus (437.7 nTPM), kidney (464.8 nTPM), heart muscle (356.3 nTPM), cerebellum (316.4 nTPM), adrenal gland (422 nTPM), lung (255.6 nTPM), liver (251.5 nTPM)
+
+Surface accessibility:
+  transmembrane, confidence 0.95, single-pass
+  extracellular 18-701
+  transmembrane 702-722
+
+Internalisation:
+  internalises: yes  endosomal: yes  lysosomal: yes  shedding: yes
+
+Structure:
+  experimental entries: 12  predicted: P05067  extracellular region resolved: yes
+  epitope N770K at residue 770: extracellular=no, structurally resolved=no
+    reference KFFEQMQN -> mutant KFFEQMQK
+
+Neoantigen / HLA route:
+  novel peptide sequence: yes
+  one residue is replaced, so every peptide spanning it is tumour-specific
+  4 mutation-spanning peptides; example YKFFEQMQN -> YKFFEQMQK
+  HLA alleles: HLA-A*02:01, HLA-B*07:02
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  surface_accessibility      1.00
+      curated membrane localisation at confidence 0.95, plus 684 residues of
+      curated extracellular topology (18-701) worth +0.10
+  tumour_selectivity         0.20
+      no tumour RNA-seq; population tissue-specificity class 'Low tissue
+      specificity' used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.00
+      1 - log10(1 + 669.1) / log10(101), where 669.1 is cerebral cortex at
+      669.1 nTPM weighted 1 (Human Protein Atlas consensus, population-level)
+  clonality                  unknown
+      no variant allele fraction or tumour purity supplied
+  internalisation            0.65
+      curated internalisation annotation (0.60) endosomal routing (+0.10)
+      lysosomal routing (+0.20) recycling competes with degradative routing
+      (-0.10) shedding produces soluble decoy antigen (-0.15); kinetics
+      unavailable, so this is a qualitative ranking, not a rate
+  lysosomal_trafficking      1.00
+      curated lysosomal localisation
+  structural_bindability     0.90
+      an experimental structure of the extracellular region is deposited
+  neoantigen_strength        0.50
+      mutation-spanning peptides derived (0.30) patient HLA genotype supplied
+      (+0.20); ceiling without presentation evidence is 0.70
+  presentation_confidence    0.00
+      no binding or processing evidence; presentation cannot be established
+  clinical_precedent         1.00
+      3 approved therapies already engage this target
+  evidence_strength          0.95
+      strongest evidence level available is clinical, over 29 evidence records
+  shedding                   1.00
+      curated annotation indicates a released or secreted form circulates
+  OVERALL                    0.50       coverage 83%, confidence 0.79
+  adjustment: safety cap (poor) 0.522 -> 0.5 (normal-tissue safety scores 0.00, below the 0.35 threshold)
+
+Compatible mechanisms (computational compatibility score):
+  1. blocking_antibody          48%  cargo=none, effector=the tumour cell's own blocked pathway
+  2. agonist_antibody           48%  cargo=none, effector=the target receptor's own signalling
+  3. adc                        45%  cargo=cytotoxic payload, effector=released payload inside the tumour cell
+  4. adcc                       38%  cargo=none, effector=endogenous immune system
+  5. targeted_radionuclide      34%  cargo=radionuclide, effector=emitted radiation, including neighbouring cells
+  6. adcp                       30%  cargo=none, effector=endogenous immune system
+
+Experimental possibilities:
+  - rna_delivery               29%  EXPERIMENTAL
+  - immune_marker_delivery     22%  EXPERIMENTAL
+  - genome_editing             15%  EXPERIMENTAL
+
+Ruled out, and why:
+  - tumour_suppressor_restoration:
+      loss_of_function not met: restoration only applies to an inactivated
+      gene; no loss-of-function alteration is present
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - clonality is unknown, so it is not known whether this alteration is
+    present in every tumour cell or in a minority subclone
+  - experimental mechanisms are listed for completeness; their compatibility
+    scores describe biological fit, not evidence that the approach works
+
+Design readiness: 0.70 (coverage 100%)
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+
+Evidence:
+  clinical:
+    [Open Targets Platform / ChEMBL] 3 approved antibody therapies target APP:
+    Aducanumab, Donanemab, Lecanemab
+    [Open Targets Platform / ChEMBL] 10 agents against APP have entered
+    clinical trials
+  human:
+    [UniProtKB/Swiss-Prot] APP is Amyloid-beta precursor protein (770 aa),
+    accession P05067
+    [UniProtKB/Swiss-Prot topology] APP has 1 curated transmembrane segment
+    and 1 extracellular topological domain(s)
+    [UniProtKB/Swiss-Prot topology] APP exposes residues 18-701 (684 aa)
+    outside the cell
+    [UniProtKB/Swiss-Prot subcellular location] APP is annotated at: Cell
+    membrane; Cell projection, growth cone; Cell surface; Cytoplasm;
+    Cytoplasmic vesicle; Early endosome; Endoplasmic reticulum; Golgi
+    apparatus
+  in_vitro:
+    [PDB (via UniProt cross-references)] 94 experimental structures cover the
+    extracellular region of APP (18-701); best 2FMA X_RAY
+    [PDB (via UniProt cross-references)] residue 770 of APP is resolved in 15
+    structures; best 8C3H (X_RAY)
+  computational:
+    [AlphaFold DB] predicted structure P05067 is available for APP; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS accessibility] APP has positive evidence of an outward-facing
+    part: Gene Ontology GO:0009986, curated cell-surface annotation, curated
+    extracellular topological domain, signal peptide
+    [GenomeOS normal-tissue safety] APP: detected in 18/18 queried healthy
+    tissues; highest weighted cerebral cortex at 669.1 nTPM; on-target/off-
+    tumour risk high (cerebral cortex is an organ without a spare and carries
+    669.1 nTPM (threshold 10))
+    [GenomeOS evidence layering] APP: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] APP trafficking established for: internalisation,
+    endosomal routing, lysosomal routing, recycling, shedding
+
+Recognition mode for design: expression_differential
+  the tumour and healthy cells carry the same protein sequence here; selectivity has to come from how much of it each displays, which is why tumour and normal expression data dominate this candidate's uncertainty
+
+------------------------------------------------------------------------------
+TARGET: CSF1R  (Macrophage colony-stimulating factor 1 receptor)
+------------------------------------------------------------------------------
+
+Classification:
+  pathway induced surface
+  not altered in this tumour; reached as a surface protein associated with a disrupted driver, so it is a hypothesis about an induced phenotype, not an observed alteration
+
+Why interesting:
+  surface protein associated with disrupted RUNX1; a candidate indirect route when the driver itself cannot be reached
+
+Tumour evidence:
+  not altered in this tumour; proposed indirectly (see limitations)
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: unknown - no variant allele fraction or tumour purity supplied
+
+Normal tissue concern:
+  risk: moderate
+  lung is an organ without a spare and carries 34.5 nTPM (threshold 10)
+  tissues above the concern threshold: spleen (106.8 nTPM), lung (34.5 nTPM), cerebral cortex (30.5 nTPM), liver (25.7 nTPM), adrenal gland (29.3 nTPM), heart muscle (15.5 nTPM), hypothalamus (14.1 nTPM), colon (20.5 nTPM)
+
+Surface accessibility:
+  transmembrane, confidence 0.95, single-pass
+  extracellular 20-517
+  transmembrane 518-538
+
+Internalisation:
+  internalises: unknown
+  no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent
+
+Structure:
+  experimental entries: 12  predicted: P07333  extracellular region resolved: yes
+
+Scores (research priority, not clinical):
+  surface_accessibility      1.00
+      curated membrane localisation at confidence 0.95, plus 498 residues of
+      curated extracellular topology (20-517) worth +0.10
+  tumour_selectivity         0.50
+      no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced'
+      used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.13
+      1 - log10(1 + 53.4) / log10(101), where 53.4 is spleen at 106.8 nTPM
+      weighted 0.5 (Human Protein Atlas consensus, population-level)
+  clonality                  unknown
+      no variant allele fraction or tumour purity supplied
+  internalisation            unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  lysosomal_trafficking      unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  structural_bindability     0.90
+      an experimental structure of the extracellular region is deposited
+  neoantigen_strength        0.00
+      no neoantigen assessment
+  presentation_confidence    unknown
+      peptide/HLA route does not apply to this variant
+  clinical_precedent         1.00
+      7 approved therapies already engage this target
+  evidence_strength          0.95
+      strongest evidence level available is clinical, over 21 evidence records
+  shedding                   unknown
+      no evidence either way on ectodomain shedding
+  OVERALL                    0.50       coverage 68%, confidence 0.65
+  adjustment: safety cap (poor) 0.566 -> 0.5 (normal-tissue safety scores 0.13, below the 0.35 threshold)
+
+Compatible mechanisms (computational compatibility score):
+  1. blocking_antibody          61%  cargo=none, effector=the tumour cell's own blocked pathway
+  2. agonist_antibody           59%  cargo=none, effector=the target receptor's own signalling
+  3. adcc                       49%  cargo=none, effector=endogenous immune system
+  4. targeted_radionuclide      48%  cargo=radionuclide, effector=emitted radiation, including neighbouring cells
+  5. adcp                       43%  cargo=none, effector=endogenous immune system
+  6. t_cell_engager             42%  cargo=none, effector=T cell
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - genome_editing:
+      mutation_rationale not established: no protein-altering alteration in
+      this gene, so there is no mutation-specific rationale
+  - immune_marker_delivery, rna_delivery:
+      intracellular_delivery not established: intracellular cargo delivery
+      requires the target to carry the binder inside; no internalisation
+      evidence exists
+  - tcr_based, tcr_mimic:
+      peptide_hla_target not established: no mutation-derived peptide could be
+      derived, so there is no peptide/HLA complex to recognise
+  - tumour_suppressor_restoration:
+      loss_of_function not met: restoration only applies to an inactivated
+      gene; no loss-of-function alteration is present
+
+Major uncertainties:
+  - indirect candidate: CSF1R is not altered in this tumour. It is proposed
+    because it is a surface protein associated with the disrupted driver
+    RUNX1. Whether the tumour actually displays more of it is unmeasured.
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - clonality is unknown, so it is not known whether this alteration is
+    present in every tumour cell or in a minority subclone
+  - internalisation is unknown, so payload-delivery mechanisms cannot be
+    assessed
+
+Design readiness: 0.70 (coverage 90%)
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  clinical:
+    [Open Targets Platform / ChEMBL] 7 approved small molecule therapies
+    target CSF1R: Pazopanib, Pazopanib Hydrochloride, Pexidartinib,
+    Pexidartinib Hydrochloride
+    [Open Targets Platform / ChEMBL] 14 agents against CSF1R have entered
+    clinical trials
+  human:
+    [UniProtKB/Swiss-Prot] CSF1R is Macrophage colony-stimulating factor 1
+    receptor (972 aa), accession P07333
+    [UniProtKB/Swiss-Prot topology] CSF1R has 1 curated transmembrane segment
+    and 1 extracellular topological domain(s)
+    [UniProtKB/Swiss-Prot topology] CSF1R exposes residues 20-517 (498 aa)
+    outside the cell
+    [UniProtKB/Swiss-Prot subcellular location] CSF1R is annotated at: Cell
+    membrane
+  in_vitro:
+    [PDB (via UniProt cross-references)] 3 experimental structures cover the
+    extracellular region of CSF1R (20-517); best 4WRL X_RAY
+  computational:
+    [AlphaFold DB] predicted structure P07333 is available for CSF1R; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS accessibility] CSF1R has positive evidence of an outward-facing
+    part: Gene Ontology GO:0009986, curated extracellular topological domain,
+    signal peptide
+    [GenomeOS normal-tissue safety] CSF1R: detected in 18/18 queried healthy
+    tissues; highest weighted spleen at 106.8 nTPM; on-target/off-tumour risk
+    moderate (lung is an organ without a spare and carries 34.5 nTPM
+    (threshold 10))
+    [GenomeOS evidence layering] CSF1R: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] CSF1R: no curated endocytosis, endosomal, lysosomal
+    or recycling annotation for this protein; internalisation is unknown, not
+    absent
+
+Recognition mode for design: pathway_induced
+  the target is not altered; it is proposed as a surface consequence of a disrupted driver and requires expression evidence before it is real
+
+------------------------------------------------------------------------------
+TARGET: SOD1  (Superoxide dismutase [Cu-Zn])
+------------------------------------------------------------------------------
+
+Classification:
+  intracellular only
+  SOD1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+
+Why interesting:
+  1 approved therapies already engage it
+
+Tumour evidence:
+  chr21:31659775 G>A  synonymous_variant  A2=
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: unknown - no variant allele fraction or tumour purity supplied
+
+Normal tissue concern:
+  risk: high
+  liver is an organ without a spare and carries 1537.1 nTPM (threshold 10)
+  tissues above the concern threshold: liver (1537.1 nTPM), cerebral cortex (613.2 nTPM), hypothalamus (597.1 nTPM), heart muscle (491.9 nTPM), kidney (528.5 nTPM), adrenal gland (619 nTPM), cerebellum (297.4 nTPM), skeletal muscle (448 nTPM)
+
+Surface accessibility:
+  nuclear, confidence 0.90
+
+Internalisation:
+  internalises: unknown  lysosomal: yes
+  protein is not at the cell surface, so post-binding trafficking does not apply to a circulating binder
+
+Structure:
+  experimental entries: 12  predicted: P00441
+  epitope A2= at residue 2: extracellular=unknown, structurally resolved=yes
+    reference MATKAVCVL -> mutant M=TKAVCVL
+
+Neoantigen / HLA route:
+  novel peptide sequence: no
+  the protein sequence is unchanged
+  HLA alleles: not supplied
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  surface_accessibility      0.00
+      curated localisation places nuclear inside the cell; a circulating
+      binder cannot reach it
+  tumour_selectivity         0.50
+      no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced'
+      used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.00
+      1 - log10(1 + 1383.4) / log10(101), where 1383.4 is liver at 1537.1 nTPM
+      weighted 0.9 (Human Protein Atlas consensus, population-level)
+  clonality                  unknown
+      no variant allele fraction or tumour purity supplied
+  internalisation            unknown
+      protein is not at the cell surface, so post-binding trafficking does not
+      apply to a circulating binder
+  lysosomal_trafficking      1.00
+      curated lysosomal localisation
+  structural_bindability     unknown
+      protein is not surface-reachable, so an extracellular epitope does not
+      arise
+  neoantigen_strength        0.00
+      the protein sequence is unchanged
+  presentation_confidence    unknown
+      peptide/HLA route does not apply to this variant
+  clinical_precedent         1.00
+      1 approved therapies already engage this target
+  evidence_strength          0.81
+      strongest evidence level available is human, over 16 evidence records
+  shedding                   unknown
+      no evidence either way on ectodomain shedding
+  OVERALL                    0.35       coverage 65%, confidence 0.53
+
+Compatible mechanisms (computational compatibility score):
+  (none passed their hard requirements)
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - adc, adcc, adcp, agonist_antibody, blocking_antibody, complement_recruitment, immune_marker_delivery, nk_cell_engager, rna_delivery, t_cell_engager, targeted_radionuclide:
+      surface_accessible not met: the protein is not reachable from outside
+      the cell, so a circulating binder cannot engage it
+  - genome_editing:
+      intracellular_delivery not established: intracellular cargo delivery
+      requires the target to carry the binder inside; no internalisation
+      evidence exists
+  - tcr_based, tcr_mimic:
+      peptide_hla_target not met: no mutation-derived peptide could be
+      derived, so there is no peptide/HLA complex to recognise
+  - tumour_suppressor_restoration:
+      loss_of_function not met: restoration only applies to an inactivated
+      gene; no loss-of-function alteration is present
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - clonality is unknown, so it is not known whether this alteration is
+    present in every tumour cell or in a minority subclone
+
+Design readiness: 0.15 (coverage 77%)
+  blocked by: no therapeutic mechanism passes its hard requirements for this
+              target
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: no structure covers the region a binder would engage
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  human:
+    [UniProtKB/Swiss-Prot] SOD1 is Superoxide dismutase [Cu-Zn] (154 aa),
+    accession P00441
+    [UniProtKB/Swiss-Prot subcellular location] SOD1 is annotated at:
+    Cytoplasm; Nucleus
+    [Gene Ontology cellular component (goa_human)] SOD1 is annotated to plasma
+    membrane (GO:0005886), extracellular region (GO:0005576), nucleus
+    (GO:0005634), cytoplasm (GO:0005737), mitochondrion (GO:0005739)
+    [Human Protein Atlas (consensus tissue RNA)] normal-tissue RNA levels for
+    SOD1 across 20 queried tissues
+  in_vitro:
+    [PDB (via UniProt cross-references)] residue 2 of SOD1 is resolved in 144
+    structures; best 4A7U (X_RAY)
+  computational:
+    [AlphaFold DB] predicted structure P00441 is available for SOD1; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS accessibility] SOD1 is held against the membrane by a lipid
+    anchor (S-palmitoyl cysteine) with no transmembrane segment and no
+    extracellular domain: it sits on the cytoplasmic face and a circulating
+    binder cannot reach it, despite the 'Cell membrane' annotation
+    [GenomeOS normal-tissue safety] SOD1: detected in 18/18 queried healthy
+    tissues; highest weighted liver at 1537.1 nTPM; on-target/off-tumour risk
+    high (liver is an organ without a spare and carries 1537.1 nTPM (threshold
+    10))
+    [GenomeOS evidence layering] SOD1: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] SOD1 trafficking established for: lysosomal routing
+
+Recognition mode for design: not_addressable
+  the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts
+
+------------------------------------------------------------------------------
+TARGET: RUNX1  (Runt-related transcription factor 1)
+------------------------------------------------------------------------------
+
+Classification:
+  intracellular only
+  RUNX1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+
+Why interesting:
+  RUNX1 is a recurrent driver (1.5% of tumours)
+
+Tumour evidence:
+  chr21:34792138 G>C  stop_gained  Y480*  driver in 1.5% of tumours
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: unknown - no variant allele fraction or tumour purity supplied
+
+Normal tissue concern:
+  risk: moderate
+  bone marrow is an organ without a spare and carries 42.9 nTPM (threshold 10)
+  tissues above the concern threshold: bone marrow (42.9 nTPM), lung (21.1 nTPM), skeletal muscle (17.7 nTPM)
+
+Surface accessibility:
+  nuclear, confidence 0.90
+
+Internalisation:
+  internalises: unknown
+  no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent
+
+Structure:
+  experimental entries: 5  predicted: Q01196
+  epitope Y480* at residue 480: extracellular=unknown, structurally resolved=no
+
+Neoantigen / HLA route:
+  novel peptide sequence: no
+  a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide
+  HLA alleles: not supplied
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  surface_accessibility      0.00
+      curated localisation places nuclear inside the cell; a circulating
+      binder cannot reach it
+  tumour_selectivity         0.50
+      no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced'
+      used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.18
+      1 - log10(1 + 42.9) / log10(101), where 42.9 is bone marrow at 42.9 nTPM
+      weighted 1 (Human Protein Atlas consensus, population-level)
+  clonality                  unknown
+      no variant allele fraction or tumour purity supplied
+  internalisation            unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  lysosomal_trafficking      unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  structural_bindability     unknown
+      protein is not surface-reachable, so an extracellular epitope does not
+      arise
+  neoantigen_strength        0.00
+      a premature stop truncates the protein but leaves every remaining
+      residue identical to wild type, so the substitution itself creates no
+      novel peptide
+  presentation_confidence    unknown
+      peptide/HLA route does not apply to this variant
+  clinical_precedent         0.00
+      no drug, trial or antibody-tractability evidence recorded against this
+      target
+  evidence_strength          0.81
+      strongest evidence level available is human, over 13 evidence records
+  shedding                   unknown
+      no evidence either way on ectodomain shedding
+  OVERALL                    0.25       coverage 62%, confidence 0.50
+
+Compatible mechanisms (computational compatibility score):
+  (none passed their hard requirements)
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - adc, adcc, adcp, agonist_antibody, blocking_antibody, complement_recruitment, immune_marker_delivery, nk_cell_engager, rna_delivery, t_cell_engager, targeted_radionuclide:
+      surface_accessible not met: the protein is not reachable from outside
+      the cell, so a circulating binder cannot engage it
+  - genome_editing, tumour_suppressor_restoration:
+      intracellular_delivery not established: intracellular cargo delivery
+      requires the target to carry the binder inside; no internalisation
+      evidence exists
+  - tcr_based, tcr_mimic:
+      peptide_hla_target not met: no mutation-derived peptide could be
+      derived, so there is no peptide/HLA complex to recognise
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - clonality is unknown, so it is not known whether this alteration is
+    present in every tumour cell or in a minority subclone
+  - a premature stop or frameshift often triggers nonsense-mediated decay,
+    which removes the transcript rather than producing a truncated protein;
+    whether any product is made here is unmeasured and would need tumour RNA-
+    seq
+  - Correcting or replacing one gene does not restore a normal cell. An
+    established malignancy carries several cooperating drivers, passenger
+    mutations, copy-number change, aneuploidy and epigenetic dysregulation;
+    reverting one of them removes one dependency, not the disease.
+
+Design readiness: 0.15 (coverage 77%)
+  blocked by: no therapeutic mechanism passes its hard requirements for this
+              target
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: no structure covers the region a binder would engage
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  human:
+    [UniProtKB/Swiss-Prot] RUNX1 is Runt-related transcription factor 1 (453
+    aa), accession Q01196
+    [UniProtKB/Swiss-Prot subcellular location] RUNX1 is annotated at: Nucleus
+    [Gene Ontology cellular component (goa_human)] RUNX1 is annotated to
+    nucleus (GO:0005634)
+    [Human Protein Atlas (consensus tissue RNA)] normal-tissue RNA levels for
+    RUNX1 across 20 queried tissues
+  computational:
+    [AlphaFold DB] predicted structure Q01196 is available for RUNX1; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS normal-tissue safety] RUNX1: detected in 16/18 queried healthy
+    tissues; highest weighted bone marrow at 42.9 nTPM; on-target/off-tumour
+    risk moderate (bone marrow is an organ without a spare and carries 42.9
+    nTPM (threshold 10))
+    [GenomeOS evidence layering] RUNX1: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] RUNX1: no curated endocytosis, endosomal, lysosomal
+    or recycling annotation for this protein; internalisation is unknown, not
+    absent
+    [GenomeOS structure] residue 480 of RUNX1 is not covered by any deposited
+    structure
+
+Recognition mode for design: not_addressable
+  the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts
+
+------------------------------------------------------------------------------
+TARGET: NRIP1  (Nuclear receptor-interacting protein 1)
+------------------------------------------------------------------------------
+
+Classification:
+  intracellular only
+  NRIP1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide
+
+Why interesting:
+  NRIP1 is altered in this tumour
+
+Tumour evidence:
+  chr21:15000000 A>G  intron_variant
+  tumour expression: unavailable - no tumour RNA-seq supplied
+  clonality: unknown - no variant allele fraction or tumour purity supplied
+
+Normal tissue concern:
+  risk: moderate
+  bone marrow is an organ without a spare and carries 24.9 nTPM (threshold 10)
+  tissues above the concern threshold: bone marrow (24.9 nTPM), liver (25.1 nTPM), retina (29.4 nTPM), kidney (14.9 nTPM), skeletal muscle (20.7 nTPM), pancreas (13.5 nTPM), colon (17 nTPM), spleen (12.3 nTPM)
+
+Surface accessibility:
+  nuclear, confidence 0.90
+
+Internalisation:
+  internalises: unknown
+  no curated endocytosis, endosomal, lysosomal or recycling annotation for this protein; internalisation is unknown, not absent
+
+Structure:
+  experimental entries: 12  predicted: P48552
+
+Neoantigen / HLA route:
+  novel peptide sequence: no
+  the protein sequence is unchanged
+  HLA alleles: not supplied
+  predicted binding: unavailable; observed presentation: not supplied
+
+Scores (research priority, not clinical):
+  surface_accessibility      0.00
+      curated localisation places nuclear inside the cell; a circulating
+      binder cannot reach it
+  tumour_selectivity         0.20
+      no tumour RNA-seq; population tissue-specificity class 'Low tissue
+      specificity' used as a weak prior and capped at 0.5
+  tumour_expression          unknown
+      no tumour RNA-seq supplied
+  normal_tissue_safety       0.29
+      1 - log10(1 + 24.9) / log10(101), where 24.9 is bone marrow at 24.9 nTPM
+      weighted 1 (Human Protein Atlas consensus, population-level)
+  clonality                  unknown
+      no variant allele fraction or tumour purity supplied
+  internalisation            unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  lysosomal_trafficking      unknown
+      no curated endocytosis, endosomal, lysosomal or recycling annotation for
+      this protein; internalisation is unknown, not absent
+  structural_bindability     unknown
+      protein is not surface-reachable, so an extracellular epitope does not
+      arise
+  neoantigen_strength        0.00
+      the protein sequence is unchanged
+  presentation_confidence    unknown
+      peptide/HLA route does not apply to this variant
+  clinical_precedent         0.00
+      no drug, trial or antibody-tractability evidence recorded against this
+      target
+  evidence_strength          0.81
+      strongest evidence level available is human, over 12 evidence records
+  shedding                   unknown
+      no evidence either way on ectodomain shedding
+  OVERALL                    0.22       coverage 62%, confidence 0.50
+
+Compatible mechanisms (computational compatibility score):
+  (none passed their hard requirements)
+
+Experimental possibilities:
+  (none)
+
+Ruled out, and why:
+  - adc, adcc, adcp, agonist_antibody, blocking_antibody, complement_recruitment, immune_marker_delivery, nk_cell_engager, rna_delivery, t_cell_engager, targeted_radionuclide:
+      surface_accessible not met: the protein is not reachable from outside
+      the cell, so a circulating binder cannot engage it
+  - genome_editing:
+      mutation_rationale not established: no protein-altering alteration in
+      this gene, so there is no mutation-specific rationale
+  - tcr_based, tcr_mimic:
+      peptide_hla_target not met: no mutation-derived peptide could be
+      derived, so there is no peptide/HLA complex to recognise
+  - tumour_suppressor_restoration:
+      loss_of_function not met: restoration only applies to an inactivated
+      gene; no loss-of-function alteration is present
+
+Major uncertainties:
+  - surface expression in this tumour cannot be established: DNA evidence
+    present, RNA evidence unavailable, protein evidence unavailable
+  - clonality is unknown, so it is not known whether this alteration is
+    present in every tumour cell or in a minority subclone
+
+Design readiness: 0.15 (coverage 77%)
+  blocked by: no therapeutic mechanism passes its hard requirements for this
+              target
+  blocked by: surface protein abundance has not been measured in this patient;
+              localisation is curated annotation, not a measurement of this
+              tumour
+  blocked by: no structure covers the region a binder would engage
+  blocked by: internalisation kinetics unknown; no trafficking data for this
+              receptor
+
+Evidence:
+  human:
+    [UniProtKB/Swiss-Prot] NRIP1 is Nuclear receptor-interacting protein 1
+    (1158 aa), accession P48552
+    [UniProtKB/Swiss-Prot subcellular location] NRIP1 is annotated at: Nucleus
+    [Human Protein Atlas (immunofluorescence)] NRIP1 imaged in: Nucleoplasm,
+    Nucleoli, Cytosol
+    [Gene Ontology cellular component (goa_human)] NRIP1 is annotated to
+    nucleus (GO:0005634)
+  computational:
+    [AlphaFold DB] predicted structure P48552 is available for NRIP1; a
+    prediction is not an experimental structure and pLDDT is not solvent
+    accessibility
+  inferred:
+    [GenomeOS normal-tissue safety] NRIP1: detected in 18/18 queried healthy
+    tissues; highest weighted bone marrow at 24.9 nTPM; on-target/off-tumour
+    risk moderate (bone marrow is an organ without a spare and carries 24.9
+    nTPM (threshold 10))
+    [GenomeOS evidence layering] NRIP1: DNA evidence present, RNA evidence
+    unavailable, protein evidence unavailable; surface expression in this
+    tumour cannot be established
+    [GenomeOS trafficking] NRIP1: no curated endocytosis, endosomal, lysosomal
+    or recycling annotation for this protein; internalisation is unknown, not
+    absent
+    [GenomeOS neoantigen reasoning] NRIP1 intron_variant: the protein sequence
+    is unchanged
+
+Recognition mode for design: not_addressable
+  the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts
+
+==============================================================================
+LIMITATIONS
+==============================================================================
+
+  - This analysis ran at data level 1 of 9. Conclusions that need a higher
+    level are reported as unavailable, not estimated.
+  - No tumour RNA or protein data was supplied, so for every candidate the
+    chain is: DNA evidence present, RNA evidence unavailable, protein evidence
+    unavailable, and surface expression cannot be established.
+  - Localisation, topology, trafficking and healthy-tissue expression are
+    curated population-level knowledge about the gene, not measurements of
+    this patient's tumour.
+  - No matched normal sample means somatic status is estimated from population
+    allele frequency; rare inherited variants cannot be separated from somatic
+    ones.
+  - Mechanism compatibility scores describe how well the biology fits a
+    mechanism class. They are not probabilities that a patient responds.
+  - Correcting or replacing a single gene does not restore a normal cell:
+    established malignancies carry several cooperating alterations.
+  - GenomeOS produces no therapeutic sequence, construct, vector, formulation
+    or protocol.
+
+GenomeOS generates computational research hypotheses. Therapeutic target rankings and mechanism suggestions are not clinical recommendations and require experimental and clinical validation.

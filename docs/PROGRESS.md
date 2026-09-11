@@ -61,3 +61,93 @@ Updated as each task is completed (tests + lint green before moving on).
 - **RegulatoryElement in BioIR** with targets: promoters reach the TSS within 1 kb (0.8), enhancers reach the coding genes of their CTCF domain nearest first (0.4 / 0.25), insulators reach nothing; BioLang `element` block; `genomeos regulation --gene G`; regulation layer drawn in the Flow tab and printed by `genomeos flow`. APP: 1 promoter element, 98 reachable enhancers (89 intragenic), 2 bounding insulators, alone in its 175 kb node.
 - **Cancer, tumour alone**: `genomeos cancer tumour --vcf T.vcf --packet p.json` and the Cancer tab. Ensembl VEP REST annotates any chromosome (consequence, HGVS, SIFT/PolyPhen, COSMIC, gnomAD; 200 variants per call, cached per variant); gnomAD ≥ 1% set aside as likely germline; cBioPortal grading; mutation burden with its assumption written in; mutant peptide windows from UniProt; truncated drivers run through their Reactome pathways (demo RUNX1 Y480*: 64 reactions lost over 10 pathways). Positions are 1-based at the VEP and reporting boundary (the internal Variant is 0-based; caught by the demo disagreeing with the local classifier).
 - **Proteome job** `proteome_chr21` running: coverage table per question for every coding gene of chr21 (result `proteome_chr21`).
+
+## 2026-09-11 — therapeutic targeting and the design dataset
+
+`genomeos/therapeutics/`: from a tumour's alterations to what physically
+distinguishes those cells, what a therapy could reach, and which mechanism the
+biology supports. Research hypotheses with evidence per claim; docs/THERAPEUTICS.md.
+
+- **Pipeline** (`pipeline.py`): consequence → localisation → accessibility →
+  expression and selectivity → trafficking → neoantigen/HLA → pathway-induced →
+  normal-tissue exclusion → structure and epitope → mechanism selection →
+  ranking. Each stage is a function over explicit inputs and a provider, so any
+  one is replaceable; the whole pipeline runs offline against the caches.
+- **Accessibility is not a membrane word.** The correction that mattered most:
+  UniProt annotates SRC as `Cell membrane`, and SRC sits on the inner leaflet on
+  a myristoyl anchor. External accessibility is now claimed only with positive
+  evidence of an outward-facing part (extracellular topological domain,
+  transmembrane segment with a plasma-membrane location, GPI anchor, cell-surface
+  annotation, or signal peptide). A lipid anchor with no transmembrane segment is
+  reported as *cytoplasmic face*; a bare membrane annotation as *side not
+  established*. Before the fix the demo called SRC, YAP1 and RARA surface targets;
+  after it, only APP and CSF1R, which is correct.
+- **One level deeper**: a surface protein whose *mutation* sits in the
+  cytoplasmic tail has no mutation-specific extracellular epitope. The demo's
+  APP N770K is exactly that (UniProt topology: extracellular 18–701,
+  transmembrane 702–722, cytoplasmic 723–770), and the report says so.
+- **Truncations do not make neoepitopes.** A premature stop leaves every
+  remaining residue identical to wild type, so RUNX1 Y480* is reported as
+  yielding no mutation-derived peptide, with nonsense-mediated decay flagged as a
+  further reason the truncated protein may not exist. The missense APP N770K does
+  yield peptides (4 mutation-spanning windows; the change is the last residue).
+- **15 mechanisms** (`mechanisms.py`) with declarative gates and weighted
+  factors: antibody blocking and agonism, ADCC, ADCP, complement, T-cell and
+  NK-cell engagers, ADC, targeted radionuclide, immune-marker delivery, RNA
+  delivery, tumour-suppressor restoration, genome editing, TCR and TCR-mimic. A
+  failed gate scores zero and prints why; an unknown factor is dropped and listed
+  as a blocking unknown, and compatibility is multiplied by input coverage so a
+  mechanism cannot rank highly on ignorance. Target, binder, mechanism, cargo and
+  effector are separate objects, so `payload = none` is a complete mechanism.
+- **Scoring** (`scoring.py`): 13 component scores, each with the sentence that
+  produced it, and one overall whose formula and adjustments are printed.
+  Unknown dimensions are excluded, never defaulted; missing normal-tissue data
+  caps the overall at 0.6; a target no mechanism can address caps design
+  readiness at 0.15.
+- **Evidence** (`evidence.py`): source, source type, claim, level
+  (clinical / human / preclinical / in vitro / computational / inferred) and
+  confidence, grouped by level in the report, never mixed. `Missing` records what
+  could not be established and what would resolve it.
+- **Design dataset** (`design.py`): `TherapeuticDesignDataset` v1.0 with
+  provenance (GenomeOS version, pipeline version, provider versions, input
+  hashes), per-target recognition specification, positive set, negative set,
+  tumour-versus-normal differential, structure identifiers, binder requirements,
+  desired action, encoding-strategy classification and design readiness. Five
+  layers written side by side plus the text report. The negative set is what
+  makes selectivity tractable: wild-type protein, wild-type and similar
+  peptide/HLA complexes, every healthy tissue above threshold with its level, the
+  closest human paralogues with identity (RUNX1 → RUNX3 65%, RUNX2 60%;
+  APP → APLP2 50%, APLP1 37%; CSF1R → KIT 39%, FLT3 30%, PDGFRA/B 29%), and
+  polymorphism flagged as not screened. No sequence, construct, vector, cassette,
+  formulation or protocol is produced anywhere.
+- **New sources**: Human Protein Atlas search API for per-tissue consensus nTPM
+  across 20 tissues (CC BY-SA 4.0); Open Targets Platform GraphQL for antibody
+  tractability, approved drugs and trials by modality, and curated safety
+  liabilities (CC0); Ensembl Compara for human paralogues with sequence identity.
+  All cached under `data/knowledge/therapeutics/`. No peptide/HLA predictor is
+  wired in: `NoNeoantigenPredictor` reports binding unavailable rather than
+  inventing affinities.
+- **Patient data levels 1–9** are reported, so a conclusion is never read above
+  its data. The demo runs at level 1.
+- **Integration**: `genomeos therapeutic --tumour ... [--normal --rna --hla
+  --purity --out --report --spec GENE --offline]`; `genomeos cancer tumour
+  --therapeutic`; `POST /api/therapeutics`; a **Targets** tab in `genomeos serve`
+  with candidate cards, score bars, a mechanism panel and expandable evidence.
+- **Demo** (`data/demo/cancer_tumour.vcf`, 5 variants, level 1): APP
+  direct surface (score 0.50, accessibility 1.00, normal-tissue safety 0.00 —
+  669 nTPM in cerebral cortex, 465 in kidney, 356 in heart — so the safety cap
+  binds); CSF1R reached indirectly from disrupted RUNX1 (0.50, best mechanism
+  blocking antibody 61%); SOD1, RUNX1 and NRIP1 intracellular with every surface
+  mechanism gated off and the reason printed. `APP AND CSF1R` lowers the worst
+  weighted healthy-tissue load 12.5-fold, with the bulk-RNA caveat attached.
+  Outputs committed under `data/demo/therapeutics/`.
+- **Tests**: `tests/test_therapeutics.py`, 41 offline tests with stubbed
+  providers: nuclear protein keeps the peptide route and loses the surface one,
+  lipid-anchored protein is not a surface target, GPI protein is, mutation in the
+  cytoplasmic tail is not a surface epitope, high essential-organ expression is
+  penalised, missing expression stays unknown, internalisation raises ADC and
+  lowers it when absent while ADCC survives, a mechanism cannot score well on
+  missing inputs, no HLA limits the peptide route, combination logic computes its
+  gain, the dataset keeps the DNA origin and contains no nucleotide run, readiness
+  is gated, and the evidence graph links a mechanism back to the variant.
+  Whole suite: 170 passed, 4 skipped.

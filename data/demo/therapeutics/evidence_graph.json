@@ -1,0 +1,733 @@
+{
+ "schema": "GenomeOS.TherapeuticDesignDataset.EvidenceGraph",
+ "schema_version": "1.0",
+ "sample_id": "cancer_tumour",
+ "nodes": [
+  {
+   "id": "sample:cancer_tumour",
+   "kind": "sample",
+   "path": "data/demo/cancer_tumour.vcf"
+  },
+  {
+   "id": "gene:APP",
+   "kind": "gene",
+   "symbol": "APP"
+  },
+  {
+   "id": "protein:P05067",
+   "kind": "protein",
+   "name": "Amyloid-beta precursor protein",
+   "uniprot": "P05067"
+  },
+  {
+   "id": "variant:chr21:25881673:G>C",
+   "kind": "variant",
+   "gene": "APP",
+   "consequence": "missense_variant",
+   "protein_change": "N770K",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:APP",
+   "kind": "localisation",
+   "compartment": "transmembrane"
+  },
+  {
+   "id": "expression:APP",
+   "kind": "expression",
+   "summary": "detected in 18/18 queried healthy tissues; highest weighted cerebral cortex at 669.1 nTPM"
+  },
+  {
+   "id": "structure:APP",
+   "kind": "structure",
+   "pdb": [
+    "2FMA",
+    "6NB9",
+    "6OIZ",
+    "8T82",
+    "5ONQ"
+   ],
+   "predicted": "P05067"
+  },
+  {
+   "id": "peptides:APP",
+   "kind": "peptide_set",
+   "count": 4
+  },
+  {
+   "id": "target:APP",
+   "kind": "target",
+   "target_class": "direct_surface"
+  },
+  {
+   "id": "mechanism:blocking_antibody",
+   "kind": "mechanism",
+   "status": "established"
+  },
+  {
+   "id": "mechanism:agonist_antibody",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:adc",
+   "kind": "mechanism",
+   "status": "established"
+  },
+  {
+   "id": "mechanism:adcc",
+   "kind": "mechanism",
+   "status": "established"
+  },
+  {
+   "id": "mechanism:targeted_radionuclide",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:adcp",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:complement_recruitment",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:rna_delivery",
+   "kind": "mechanism",
+   "status": "experimental"
+  },
+  {
+   "id": "mechanism:nk_cell_engager",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:t_cell_engager",
+   "kind": "mechanism",
+   "status": "established"
+  },
+  {
+   "id": "mechanism:immune_marker_delivery",
+   "kind": "mechanism",
+   "status": "experimental"
+  },
+  {
+   "id": "mechanism:tcr_based",
+   "kind": "mechanism",
+   "status": "clinical"
+  },
+  {
+   "id": "mechanism:genome_editing",
+   "kind": "mechanism",
+   "status": "experimental"
+  },
+  {
+   "id": "mechanism:tcr_mimic",
+   "kind": "mechanism",
+   "status": "preclinical"
+  },
+  {
+   "id": "gene:CSF1R",
+   "kind": "gene",
+   "symbol": "CSF1R"
+  },
+  {
+   "id": "protein:P07333",
+   "kind": "protein",
+   "name": "Macrophage colony-stimulating factor 1 receptor",
+   "uniprot": "P07333"
+  },
+  {
+   "id": "localisation:CSF1R",
+   "kind": "localisation",
+   "compartment": "transmembrane"
+  },
+  {
+   "id": "expression:CSF1R",
+   "kind": "expression",
+   "summary": "detected in 18/18 queried healthy tissues; highest weighted spleen at 106.8 nTPM"
+  },
+  {
+   "id": "structure:CSF1R",
+   "kind": "structure",
+   "pdb": [
+    "8JOT",
+    "6T2W",
+    "2I1M",
+    "6IG8",
+    "2I0Y"
+   ],
+   "predicted": "P07333"
+  },
+  {
+   "id": "target:CSF1R",
+   "kind": "target",
+   "target_class": "pathway_induced_surface"
+  },
+  {
+   "id": "gene:SOD1",
+   "kind": "gene",
+   "symbol": "SOD1"
+  },
+  {
+   "id": "protein:P00441",
+   "kind": "protein",
+   "name": "Superoxide dismutase [Cu-Zn]",
+   "uniprot": "P00441"
+  },
+  {
+   "id": "variant:chr21:31659775:G>A",
+   "kind": "variant",
+   "gene": "SOD1",
+   "consequence": "synonymous_variant",
+   "protein_change": "A2=",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:SOD1",
+   "kind": "localisation",
+   "compartment": "nuclear"
+  },
+  {
+   "id": "expression:SOD1",
+   "kind": "expression",
+   "summary": "detected in 18/18 queried healthy tissues; highest weighted liver at 1537.1 nTPM"
+  },
+  {
+   "id": "structure:SOD1",
+   "kind": "structure",
+   "pdb": [
+    "4A7U",
+    "2WYT",
+    "4A7V",
+    "1MFM",
+    "4A7S"
+   ],
+   "predicted": "P00441"
+  },
+  {
+   "id": "target:SOD1",
+   "kind": "target",
+   "target_class": "intracellular_only"
+  },
+  {
+   "id": "gene:RUNX1",
+   "kind": "gene",
+   "symbol": "RUNX1"
+  },
+  {
+   "id": "protein:Q01196",
+   "kind": "protein",
+   "name": "Runt-related transcription factor 1",
+   "uniprot": "Q01196"
+  },
+  {
+   "id": "variant:chr21:34792138:G>C",
+   "kind": "variant",
+   "gene": "RUNX1",
+   "consequence": "stop_gained",
+   "protein_change": "Y480*",
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:RUNX1",
+   "kind": "localisation",
+   "compartment": "nuclear"
+  },
+  {
+   "id": "expression:RUNX1",
+   "kind": "expression",
+   "summary": "detected in 16/18 queried healthy tissues; highest weighted bone marrow at 42.9 nTPM"
+  },
+  {
+   "id": "structure:RUNX1",
+   "kind": "structure",
+   "pdb": [
+    "1LJM",
+    "1E50",
+    "1H9D",
+    "1CMO",
+    "1CO1"
+   ],
+   "predicted": "Q01196"
+  },
+  {
+   "id": "target:RUNX1",
+   "kind": "target",
+   "target_class": "intracellular_only"
+  },
+  {
+   "id": "gene:NRIP1",
+   "kind": "gene",
+   "symbol": "NRIP1"
+  },
+  {
+   "id": "protein:P48552",
+   "kind": "protein",
+   "name": "Nuclear receptor-interacting protein 1",
+   "uniprot": "P48552"
+  },
+  {
+   "id": "variant:chr21:15000000:A>G",
+   "kind": "variant",
+   "gene": "NRIP1",
+   "consequence": "intron_variant",
+   "protein_change": null,
+   "somatic_status": "somatic_candidate"
+  },
+  {
+   "id": "localisation:NRIP1",
+   "kind": "localisation",
+   "compartment": "nuclear"
+  },
+  {
+   "id": "expression:NRIP1",
+   "kind": "expression",
+   "summary": "detected in 18/18 queried healthy tissues; highest weighted bone marrow at 24.9 nTPM"
+  },
+  {
+   "id": "structure:NRIP1",
+   "kind": "structure",
+   "pdb": [
+    "9KNG",
+    "9KND",
+    "9KNF",
+    "5NTW",
+    "6G07"
+   ],
+   "predicted": "P48552"
+  },
+  {
+   "id": "target:NRIP1",
+   "kind": "target",
+   "target_class": "intracellular_only"
+  }
+ ],
+ "edges": [
+  {
+   "from": "gene:APP",
+   "to": "protein:P05067",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:cancer_tumour",
+   "to": "variant:chr21:25881673:G>C",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr21:25881673:G>C",
+   "to": "gene:APP",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr21:25881673:G>C",
+   "to": "protein:P05067",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Asn770Lys",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P05067",
+   "to": "localisation:APP",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P05067",
+   "to": "expression:APP",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P05067",
+   "to": "structure:APP",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P05067",
+   "to": "peptides:APP",
+   "relation": "yields_mutant_peptides",
+   "evidence": "derived from UniProt sequence",
+   "confidence": 0.7
+  },
+  {
+   "from": "localisation:APP",
+   "to": "target:APP",
+   "relation": "supports_target_class",
+   "evidence": "curated topology places 684 residues (18-701) outside the cell, within reach of a circulating binder",
+   "confidence": 0.95
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.484
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:agonist_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.481
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.453
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.377
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.345
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.296
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.295
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:rna_delivery",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.292
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.282
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.279
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:immune_marker_delivery",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.215
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:tcr_based",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.183
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:genome_editing",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.15
+  },
+  {
+   "from": "target:APP",
+   "to": "mechanism:tcr_mimic",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.132
+  },
+  {
+   "from": "gene:CSF1R",
+   "to": "protein:P07333",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P07333",
+   "to": "localisation:CSF1R",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P07333",
+   "to": "expression:CSF1R",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P07333",
+   "to": "structure:CSF1R",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:CSF1R",
+   "to": "target:CSF1R",
+   "relation": "supports_target_class",
+   "evidence": "not altered in this tumour; reached as a surface protein associated with a disrupted driver, so it is a hypothesis about an induced phenotype, not an observed alteration",
+   "confidence": 0.95
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:blocking_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.606
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:agonist_antibody",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.59
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:adcc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.487
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:targeted_radionuclide",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.482
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:adcp",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.426
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:t_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.422
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:complement_recruitment",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.42
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:nk_cell_engager",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.412
+  },
+  {
+   "from": "target:CSF1R",
+   "to": "mechanism:adc",
+   "relation": "compatible_with",
+   "evidence": "GenomeOS mechanism engine",
+   "confidence": 0.358
+  },
+  {
+   "from": "gene:SOD1",
+   "to": "protein:P00441",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:cancer_tumour",
+   "to": "variant:chr21:31659775:G>A",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr21:31659775:G>A",
+   "to": "gene:SOD1",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr21:31659775:G>A",
+   "to": "protein:P00441",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Ala2=",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P00441",
+   "to": "localisation:SOD1",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P00441",
+   "to": "expression:SOD1",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P00441",
+   "to": "structure:SOD1",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:SOD1",
+   "to": "target:SOD1",
+   "relation": "supports_target_class",
+   "evidence": "SOD1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide",
+   "confidence": 0.9
+  },
+  {
+   "from": "gene:RUNX1",
+   "to": "protein:Q01196",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:cancer_tumour",
+   "to": "variant:chr21:34792138:G>C",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr21:34792138:G>C",
+   "to": "gene:RUNX1",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "variant:chr21:34792138:G>C",
+   "to": "protein:Q01196",
+   "relation": "changes_residue",
+   "evidence": "VEP p.Tyr480Ter",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q01196",
+   "to": "localisation:RUNX1",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:Q01196",
+   "to": "expression:RUNX1",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:Q01196",
+   "to": "structure:RUNX1",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:RUNX1",
+   "to": "target:RUNX1",
+   "relation": "supports_target_class",
+   "evidence": "RUNX1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide",
+   "confidence": 0.9
+  },
+  {
+   "from": "gene:NRIP1",
+   "to": "protein:P48552",
+   "relation": "encodes",
+   "evidence": "Ensembl / UniProt",
+   "confidence": 0.95
+  },
+  {
+   "from": "sample:cancer_tumour",
+   "to": "variant:chr21:15000000:A>G",
+   "relation": "observed_in",
+   "evidence": "tumour VCF",
+   "confidence": 0.9
+  },
+  {
+   "from": "variant:chr21:15000000:A>G",
+   "to": "gene:NRIP1",
+   "relation": "alters",
+   "evidence": "Ensembl VEP",
+   "confidence": 0.95
+  },
+  {
+   "from": "protein:P48552",
+   "to": "localisation:NRIP1",
+   "relation": "localises_to",
+   "evidence": "UniProt / HPA / GO",
+   "confidence": 0.9
+  },
+  {
+   "from": "protein:P48552",
+   "to": "expression:NRIP1",
+   "relation": "expressed_in_normal_tissue",
+   "evidence": "Human Protein Atlas",
+   "confidence": 0.8
+  },
+  {
+   "from": "protein:P48552",
+   "to": "structure:NRIP1",
+   "relation": "has_structure",
+   "evidence": "PDB / AlphaFold",
+   "confidence": 0.9
+  },
+  {
+   "from": "localisation:NRIP1",
+   "to": "target:NRIP1",
+   "relation": "supports_target_class",
+   "evidence": "NRIP1 is nuclear; no circulating binder reaches it and this alteration yields no mutation-derived peptide",
+   "confidence": 0.9
+  }
+ ],
+ "traversal": "every target is reachable back to the tumour DNA it came from, and forward to the mechanisms its biology supports",
+ "evidence": "50 nodes, 60 edges"
+}

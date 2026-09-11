@@ -743,6 +743,49 @@ class Api:
         a["packet"] = tumour_packet(a)
         return a
 
+    def therapeutics(
+        self,
+        vcf: str,
+        hla: str = "",
+        rna: str = "",
+        normal: str = "",
+        top: int = 8,
+        offline: bool = False,
+    ) -> dict:
+        """Therapeutic target and mechanism reasoning for one tumour VCF."""
+        from genomeos.therapeutics import analyse_vcf, machine_report, text_report
+        from genomeos.therapeutics.design import dataset, design_readiness, negative_targets
+
+        path = self._safe(vcf)
+        a = analyse_vcf(
+            str(path),
+            normal_vcf=str(self._safe(normal)) if normal else None,
+            hla=[x for x in hla.split(",") if x.strip()],
+            rna=str(self._safe(rna)) if rna else None,
+            top_genes=top,
+            net=not offline,
+        )
+        out = machine_report(a)
+        out["report"] = text_report(a)
+        out["data_level_detail"] = a["data_level"]
+        out["design"] = {
+            c.gene: {
+                "readiness": design_readiness(c),
+                "negative_targets": negative_targets(c, a.get("provider_bundle")),
+                "class_reason": c.class_reason,
+                "localization": c.localization.to_dict(),
+                "trafficking": c.trafficking.to_dict(),
+                "normal_tissue": c.normal_tissue.to_dict(),
+                "structure": c.structure.to_dict(),
+                "neoantigen": c.neoantigen.to_dict() if c.neoantigen else None,
+                "scores": c.scores.to_dict(),
+                "mechanisms": [m.to_dict() for m in c.therapeutic_mechanisms],
+            }
+            for c in a["candidates"]
+        }
+        out["schema"] = dataset(a, None)["schema"]
+        return out
+
     def cancer_compare(self, normal: str, tumour: str, genome: str, chrom: str) -> dict:
         from genomeos.cancer import agent_packet, annotate, somatic, suggest_cancer_type, surface_targets
         from genomeos.genome import Annotation, IndexedGenome, default_gencode
@@ -1038,6 +1081,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.compile(body.get("source", "")))
             if u.path == "/api/cancer/tumour":
                 return self._json(self.api.cancer_tumour(body.get("vcf", ""), int(body.get("deep", 5))))
+            if u.path == "/api/therapeutics":
+                return self._json(
+                    self.api.therapeutics(
+                        body.get("vcf", ""),
+                        body.get("hla", ""),
+                        body.get("rna", ""),
+                        body.get("normal", ""),
+                        int(body.get("top", 8)),
+                        bool(body.get("offline", False)),
+                    )
+                )
             if u.path == "/api/cancer/compare":
                 return self._json(
                     self.api.cancer_compare(

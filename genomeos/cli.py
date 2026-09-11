@@ -948,6 +948,7 @@ def cmd_cancer(args: argparse.Namespace) -> int:
             k,
             deep=args.deep,
             pathways=not args.no_pathways,
+            therapeutics=args.therapeutic,
             log=sys.stdout,
         )
         mb = a["mutation_burden"]
@@ -1008,6 +1009,22 @@ def cmd_cancer(args: argparse.Namespace) -> int:
             "cell-surface products among altered genes:",
             ", ".join(x["gene"] for x in a["surface_targets"]) or "none",
         )
+        t = a.get("therapeutic_targets")
+        if t:
+            print(f"therapeutic target candidates (data level {t['data_level']}/9):")
+            for c in t["therapeutic_candidates"]:
+                best = (c["recommended_mechanisms"] or [{}])[0]
+                print(
+                    f"  {c['gene']:<10} {c['target_class']:<24} score "
+                    f"{c['scores']['overall'] if c['scores']['overall'] is not None else '-'}"
+                    + (
+                        f"  best mechanism {best['mechanism']} "
+                        f"{best['compatibility']:.0%} (cargo {best['cargo']})"
+                        if best
+                        else "  no mechanism passes its requirements"
+                    )
+                )
+            print(f"  {t['disclaimer']}")
         if args.packet:
             Path(args.packet).write_text(json.dumps(tumour_packet(a), indent=1))
             print(f"agent packet written to {args.packet}")
@@ -1614,6 +1631,73 @@ def cmd_libs(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_therapeutic(args: argparse.Namespace) -> int:
+    """Cancer targeting and therapeutic mechanism reasoning for one tumour."""
+    from genomeos.therapeutics import DISCLAIMER, analyse_vcf, text_report, write_outputs
+    from genomeos.therapeutics.report import target_specification_text
+
+    hla = [a for spec in (args.hla or []) for a in spec.split(",") if a.strip()]
+    a = analyse_vcf(
+        args.tumour,
+        normal_vcf=args.normal,
+        hla=hla,
+        rna=args.rna,
+        chroms=set(args.chrom) if args.chrom else None,
+        top_genes=args.top,
+        purity=args.purity,
+        net=not args.offline,
+        indirect=not args.no_indirect,
+        log=sys.stdout,
+    )
+    if args.report:
+        print(text_report(a, detail=args.detail))
+    else:
+        print(
+            f"{a['sample']}: {a['variants_total']} variants, {a['somatic_candidates']} somatic "
+            f"candidates, {len(a['candidates'])} target candidates "
+            f"(data level {a['data_level']['level_reached']}/9)"
+        )
+        rows = []
+        for c in a["candidates"]:
+            best = c.best_mechanism
+            rows.append(
+                {
+                    "gene": c.gene,
+                    "class": c.target_class.replace("_", " "),
+                    "score": "-" if c.scores.overall is None else f"{c.scores.overall:.2f}",
+                    "access": _fmt(c.scores.value("surface_accessibility")),
+                    "select": _fmt(c.scores.value("tumour_selectivity")),
+                    "safety": _fmt(c.scores.value("normal_tissue_safety")),
+                    "intern": _fmt(c.scores.value("internalisation")),
+                    "best mechanism": f"{best.mechanism} {best.compatibility:.0%}" if best else "none",
+                }
+            )
+        print(
+            _table(
+                rows,
+                ["gene", "class", "score", "access", "select", "safety", "intern", "best mechanism"],
+            )
+        )
+        print(f"\n{DISCLAIMER}")
+    if args.spec:
+        for c in a["candidates"]:
+            if c.gene.upper() == args.spec.upper():
+                print(target_specification_text(c, a.get("provider_bundle")))
+                break
+        else:
+            print(f"{args.spec} is not among the candidates")
+    if args.out:
+        files = write_outputs(a, args.out)
+        print("\nwritten:")
+        for path in files.values():
+            print(f"  {path}")
+    return 0
+
+
+def _fmt(v: float | None) -> str:
+    return "-" if v is None else f"{v:.2f}"
+
+
 def cmd_serve(args: argparse.Namespace) -> int:
     from genomeos.web import serve
 
@@ -1886,6 +1970,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--deep", type=int, default=5, help="top coding variants to trace to peptides and pathways"
     )
     p.add_argument("--no-pathways", action="store_true")
+    p.add_argument(
+        "--therapeutic",
+        action="store_true",
+        help="also run the therapeutic target pipeline (genomeos therapeutic has the full report)",
+    )
     p.add_argument("--packet", help="write the AI-agent task packet (JSON)")
     p = can.add_parser("compare", help="somatic variants of a tumour vs the same person's normal sample")
     p.add_argument("--normal", required=True)
@@ -1974,6 +2063,25 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--verify", action="store_true", help="check catalogue genes against the data")
     p.add_argument("--gene", help="which libraries a gene belongs to, by data")
     p.set_defaults(fn=cmd_libs)
+
+    p = sub.add_parser(
+        "therapeutic",
+        help="therapeutic target and mechanism reasoning for one tumour (research hypotheses only)",
+    )
+    p.add_argument("--tumour", required=True, help="tumour VCF")
+    p.add_argument("--normal", help="matched normal VCF; without it germline is estimated")
+    p.add_argument("--rna", help="tumour RNA table: gene<TAB>value per line")
+    p.add_argument("--hla", action="append", help="patient class I alleles, e.g. HLA-A*02:01,HLA-B*07:02")
+    p.add_argument("--chrom", action="append", help="restrict to these chromosomes")
+    p.add_argument("--purity", type=float, help="tumour purity 0-1, for clonality")
+    p.add_argument("--top", type=int, default=12, help="genes to analyse, by variant rank")
+    p.add_argument("--detail", type=int, default=5, help="candidates to expand in the report")
+    p.add_argument("--report", action="store_true", help="print the full text report")
+    p.add_argument("--spec", help="print the target specification for one gene")
+    p.add_argument("--out", help="directory for the dataset layers and the report")
+    p.add_argument("--offline", action="store_true", help="local caches only, no network")
+    p.add_argument("--no-indirect", action="store_true", help="skip pathway-induced candidates")
+    p.set_defaults(fn=cmd_therapeutic)
 
     p = sub.add_parser("serve", help="start the light web UI on localhost")
     p.add_argument("--host", default="127.0.0.1")

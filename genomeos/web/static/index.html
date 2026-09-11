@@ -92,6 +92,15 @@ svg.chart{width:100%;height:280px;display:block}
 .kpi div span{font-size:12px;color:var(--muted)}
 .scroll{max-height:420px;overflow:auto}
 .hint{font-size:12px;color:var(--muted);margin-top:6px}
+.tcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.thead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.tbar{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:3px 0}
+.tbar-l{flex:0 0 170px;color:var(--muted)}
+.tbar-t{flex:1;height:7px;background:var(--bg);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.tbar-t i{display:block;height:100%;background:var(--accent)}
+.tbar-v{flex:0 0 46px;text-align:right;font-variant-numeric:tabular-nums}
+.tcard details{margin-top:4px;font-size:12.5px}
+.tcard summary{cursor:pointer;color:var(--muted)}
 /* icons + hover explanations */
 .ic{display:inline-block;width:1.15em;text-align:center;margin-right:6px;font-style:normal}
 nav button .ic{margin-right:5px}
@@ -147,6 +156,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="debug" data-tip="Step a model with biological breakpoints and get an explanation, with evidence, of what drove each value."><i class="ic">🔍</i>Debugger</button>
     <button data-tab="molecules" data-tip="RNA and proteins: a gene's transcripts, our translated protein checked against UniProt, its domains and function, and the AlphaFold 3-D structure coloured by per-residue confidence."><i class="ic">🧫</i>Molecules</button>
     <button data-tab="cancer" data-tip="Healthy versus tumour: somatic differences graded against cBioPortal driver knowledge, suggested cancer types, cell-surface targets, and a task packet for an AI agent."><i class="ic">🎗️</i>Cancer</button>
+    <button data-tab="targets" data-tip="Therapeutic targets: for every alteration, where the protein sits, whether a binder can reach it, how the tumour differs from healthy tissue, what happens after binding, the peptide/HLA route, and which therapeutic mechanism the biology supports. Research hypotheses with evidence, never clinical advice."><i class="ic">🎯</i>Targets</button>
     <button data-tab="progress" data-tip="What is running now, what has been done, and every measurement obtained so far."><i class="ic">📊</i>Progress</button>
     <button data-tab="libs" data-tip="The reusable 'libraries' the genome contains, in five layers, with membership computed from Gene Ontology and Reactome."><i class="ic">📚</i>Libraries</button>
   </nav></div>
@@ -540,6 +550,25 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   </div>
 </section>
 
+<!-- ================= TARGETS ================= -->
+<section id="targets">
+  <div class="card">
+    <h2><i class="ic">🎯</i>Therapeutic targets<span class="help" data-tip="Runs the target reasoning pipeline: consequence, protein localisation and topology, tumour accessibility, healthy-tissue expression, trafficking after binding, the peptide/HLA route, structure, mechanism compatibility and ranking. Needs the internet the first time; every answer is cached.">?</span></h2>
+    <div class="row">
+      <label data-tip="Any VCF under data/.">tumour VCF <select id="th-vcf"></select></label>
+      <label data-tip="Patient class I alleles, comma separated. Without them no mutant peptide can be prioritised.">HLA <input id="th-hla" placeholder="HLA-A*02:01,HLA-B*07:02" style="width:210px" class="mono"></label>
+      <label data-tip="How many genes to analyse, by variant rank.">top genes <input id="th-top" type="number" value="8" style="width:60px"></label>
+      <button class="primary" id="th-run" data-tip="Run the therapeutic target analysis."><i class="ic">🧪</i>Analyse</button>
+      <button class="ghost" id="th-report" data-tip="The full text report, with every section and the evidence per claim."><i class="ic">📄</i>Report</button>
+      <button class="ghost" id="th-json" data-tip="The machine-readable output for a later autonomous agent."><i class="ic">📦</i>JSON</button>
+      <span class="muted" id="th-status"></span>
+    </div>
+    <div class="hint">GenomeOS generates computational research hypotheses. Target rankings and mechanism suggestions are not clinical recommendations and require experimental and clinical validation. No therapeutic sequence, construct or protocol is produced.</div>
+  </div>
+  <div id="th-out" style="margin-top:10px"></div>
+  <pre id="th-reportout" class="mono" style="font-size:11px;max-height:420px;overflow:auto;margin-top:10px"></pre>
+</section>
+
 <!-- ================= PROGRESS ================= -->
 <section id="progress">
   <div class="grid cols-2">
@@ -726,7 +755,7 @@ const ready = (async () => {
   if (files.modules.length) { const d = defaultModule(); $('#p-file').value = d.path; await openModule(d.path); $('#p-init').value = 'TetR=10'; $('#p-run').click(); $('#p-compile').click(); }
   const pref = files.genomes.find(g => g.path.includes('chrM')) || files.genomes[0];
   if (pref) { $('#g-file').value = pref.path; await loadGenome(); if (pref.path.includes('chrM')) { $('#g-locus').value = 'chrM:5903-7445(+)'; $('#g-table').value = 'mito'; $('#g-translate').click(); } }
-  loadLibs(); initAge(); loadTwins(); loadResults(); window.api = api; if (window.blocksInit) window.blocksInit(files); loadCancer();
+  loadLibs(); initAge(); loadTwins(); loadResults(); window.api = api; if (window.blocksInit) window.blocksInit(files); if (window.therapeuticsInit) window.therapeuticsInit(files); loadCancer();
 })();
 
 // ---- genome
@@ -1072,5 +1101,6 @@ window.addEventListener('resize', () => { /* charts are viewBox-scaled; nothing 
 <script src="/static/blocks.js"></script>
 <script src="/static/molecules.js"></script>
 <script src="/static/flow.js"></script>
+<script src="/static/therapeutics.js"></script>
 </body>
 </html>

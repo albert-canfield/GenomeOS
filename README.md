@@ -76,6 +76,13 @@ therefore always executes `Genome + Bootstrap State`, never DNA in isolation.
   compile-time reference checks. The repressilator is the first program.
 - **BioLib catalogue.** 45 biological "libraries" found in the genome, in five
   layers: core, blueprint, timer, systems, parts. `genomeos libs -v`.
+- **Therapeutic target reasoning.** From a tumour VCF: protein localisation and
+  topology, whether a circulating binder can reach the altered protein, healthy
+  versus tumour expression, trafficking after binding, the mutant peptide/HLA
+  route for intracellular proteins, and mechanism compatibility across antibody,
+  engager, conjugate, radionuclide, TCR and experimental delivery mechanisms.
+  Every conclusion carries its evidence level; everything unestablished stays
+  unknown. See [docs/THERAPEUTICS.md](docs/THERAPEUTICS.md).
 
 Validated on real human DNA: the mitochondrial genome translates to the known
 proteins (MT-CO1 513 aa, MT-CO2 227 aa, MT-ATP6 226 aa) and chromosome 21
@@ -96,6 +103,7 @@ records the evidence per task. Highlights:
 - the DNA → RNA → protein relationship as one traceable object: every base mapped to its mRNA position, codon and residue and back, with the consequence of a single-base change (Flow tab, `genomeos flow`)
 - a federated protein compiler: Ensembl, UniProt, InterPro, PDB, AlphaFold, Reactome, STRING and the Human Protein Atlas compiled into one definition per protein keyed by UniProt accession, evidence and confidence per section, predicted never treated as observed (`genomeos protein X --compile`, docs/PROTEIN.md)
 - nodes above genes: domains between CTCF boundaries with the genes and enhancers inside (`genomeos domains`)
+- therapeutic target reasoning: for every tumour alteration, where the protein sits and whether a binder can physically reach it, how the tumour differs from healthy tissue, what happens after binding, the peptide/HLA route, and which of 15 therapeutic mechanisms the biology supports, each with its evidence level and its missing data (`genomeos therapeutic`, docs/THERAPEUTICS.md)
 - a local web UI with a dozen views, including a Progress tab with live background jobs and the project's task log
 
 ## Quick start
@@ -107,13 +115,15 @@ uv run genomeos orfs data/demo/demo.fa --min-aa 30
 uv run genomeos age --cell-type fibroblast --years 90 --cells 500 --evidence
 uv run genomeos libs --layer timer -v
 uv run genomeos serve --open           # light web UI at http://127.0.0.1:8765
+uv run genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --report
 uv run pytest                          # ~80 tests; real-data tests skip until data is fetched
 uv run ruff check .
 ```
 
 More commands: `annotate`, `gene`, `index`, `variant`, `twin build|new|fork|run`,
 `clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`,
-`flow`, `domains`, `protein --compile`, `proteome`, `unknown`, `cancer`, `design`.
+`flow`, `domains`, `protein --compile`, `proteome`, `unknown`, `cancer`,
+`therapeutic`, `design`.
 Optional extras: `uv sync --extra compose` (process-bigraph), `--extra predict`
 (AlphaGenome client, needs `ALPHAGENOME_API_KEY`), `--extra clocks` (biolearn, needs torch).
 
@@ -121,7 +131,8 @@ The web UI is a single HTML page served by the standard library: Start,
 Genome, Anatomy, Blocks (2-D block map with domains, genes, UNKNOWN classes
 and ENCODE elements), Flow (DNA → RNA → protein, linked lanes), Program,
 Ageing, Twin, Space, Debugger, Molecules (protein definition and AlphaFold
-structure), Cancer, Progress and Libraries.
+structure), Cancer, Targets (therapeutic candidates, mechanisms and the
+evidence behind each), Progress and Libraries.
 
 To work with a real human chromosome:
 
@@ -155,6 +166,7 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 - [docs/NODES-READER-WRITER.md](docs/NODES-READER-WRITER.md) — nodes, reader, writer, executor: the conceptual model against the biology
 - [docs/UNKNOWN.md](docs/UNKNOWN.md) — classifying the space between genes from sequence alone, with a pattern file you can extend
 - [docs/CANCER.md](docs/CANCER.md) — healthy versus tumour: somatic differences, drivers from cBioPortal, targets, agent packet
+- [docs/THERAPEUTICS.md](docs/THERAPEUTICS.md) — therapeutic targeting: accessibility, selectivity, trafficking, neoantigens, mechanism compatibility, and the design dataset
 - [docs/DESIGN-MINIMAL-CELL.md](docs/DESIGN-MINIMAL-CELL.md) — how much genome a neuron needs, and why it still is not a small extract
 - [docs/ROADMAP.md](docs/ROADMAP.md) — from a molecular cell to a digital twin
 

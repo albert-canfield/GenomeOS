@@ -1,0 +1,294 @@
+{
+ "schema": "GenomeOS.TherapeuticDesignDataset.PositiveTargets",
+ "schema_version": "1.0",
+ "sample_id": "cancer_tumour",
+ "targets": [
+  {
+   "target_id": "APP:P05067",
+   "gene": "APP",
+   "target_class": "direct_surface",
+   "recognition_mode": "expression_differential",
+   "states": [
+    "APP displayed at tumour-level density"
+   ],
+   "region": {
+    "domain": null,
+    "start": 18,
+    "end": 701,
+    "extracellular": true,
+    "topology": "single-pass",
+    "orientation": "N-terminus outside",
+    "structural_accessibility": {
+     "value": null,
+     "unit": "",
+     "qualitative": null,
+     "source": "",
+     "level": "inferred",
+     "patient_specific": false,
+     "confidence": 0.0,
+     "reason": "solvent accessibility is not computed; it needs coordinates and a per-residue calculation"
+    },
+    "structurally_resolved": true
+   },
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "APP"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "cerebral cortex (669.1 nTPM)",
+     "hypothalamus (437.7 nTPM)",
+     "kidney (464.8 nTPM)",
+     "heart muscle (356.3 nTPM)",
+     "cerebellum (316.4 nTPM)",
+     "adrenal gland (422 nTPM)",
+     "lung (255.6 nTPM)",
+     "liver (251.5 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "cancer_tumour",
+     "chromosome": "chr21",
+     "position": 25881673,
+     "reference": "G",
+     "alternate": "C",
+     "gene": "APP",
+     "transcript": null,
+     "protein_change": "N770K",
+     "hgvsc": "c.2310C>G",
+     "hgvsp": "p.Asn770Lys",
+     "residue": 770,
+     "variant_type": "missense_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "no matched normal supplied; population frequency used to set inherited variants aside",
+     "vaf": null,
+     "copy_number": null,
+     "clonality": "unknown",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.7
+  },
+  {
+   "target_id": "CSF1R:P07333",
+   "gene": "CSF1R",
+   "target_class": "pathway_induced_surface",
+   "recognition_mode": "pathway_induced",
+   "states": [
+    "CSF1R displayed at elevated density on this tumour, if expression confirms it"
+   ],
+   "region": {
+    "domain": null,
+    "start": 20,
+    "end": 517,
+    "extracellular": true,
+    "topology": "single-pass",
+    "orientation": "N-terminus outside",
+    "structural_accessibility": {
+     "value": null,
+     "unit": "",
+     "qualitative": null,
+     "source": "",
+     "level": "inferred",
+     "patient_specific": false,
+     "confidence": 0.0,
+     "reason": "solvent accessibility is not computed; it needs coordinates and a per-residue calculation"
+    },
+    "structurally_resolved": true
+   },
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "CSF1R"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "spleen (106.8 nTPM)",
+     "lung (34.5 nTPM)",
+     "cerebral cortex (30.5 nTPM)",
+     "liver (25.7 nTPM)",
+     "adrenal gland (29.3 nTPM)",
+     "heart muscle (15.5 nTPM)",
+     "hypothalamus (14.1 nTPM)",
+     "colon (20.5 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [],
+   "design_readiness": 0.7
+  },
+  {
+   "target_id": "SOD1:P00441",
+   "gene": "SOD1",
+   "target_class": "intracellular_only",
+   "recognition_mode": "not_addressable",
+   "states": [
+    "none: the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "SOD1"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "liver (1537.1 nTPM)",
+     "cerebral cortex (613.2 nTPM)",
+     "hypothalamus (597.1 nTPM)",
+     "heart muscle (491.9 nTPM)",
+     "kidney (528.5 nTPM)",
+     "adrenal gland (619 nTPM)",
+     "cerebellum (297.4 nTPM)",
+     "skeletal muscle (448 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "cancer_tumour",
+     "chromosome": "chr21",
+     "position": 31659775,
+     "reference": "G",
+     "alternate": "A",
+     "gene": "SOD1",
+     "transcript": null,
+     "protein_change": "A2=",
+     "hgvsc": "c.6G>A",
+     "hgvsp": "p.Ala2=",
+     "residue": 2,
+     "variant_type": "synonymous_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "no matched normal supplied; population frequency used to set inherited variants aside",
+     "vaf": null,
+     "copy_number": null,
+     "clonality": "unknown",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "RUNX1:Q01196",
+   "gene": "RUNX1",
+   "target_class": "intracellular_only",
+   "recognition_mode": "not_addressable",
+   "states": [
+    "none: the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "RUNX1"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "bone marrow (42.9 nTPM)",
+     "lung (21.1 nTPM)",
+     "skeletal muscle (17.7 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "cancer_tumour",
+     "chromosome": "chr21",
+     "position": 34792138,
+     "reference": "G",
+     "alternate": "C",
+     "gene": "RUNX1",
+     "transcript": null,
+     "protein_change": "Y480*",
+     "hgvsc": "c.1440C>G",
+     "hgvsp": "p.Tyr480Ter",
+     "residue": 480,
+     "variant_type": "stop_gained",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "no matched normal supplied; population frequency used to set inherited variants aside",
+     "vaf": null,
+     "copy_number": null,
+     "clonality": "unknown",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": 0.0151,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  },
+  {
+   "target_id": "NRIP1:P48552",
+   "gene": "NRIP1",
+   "target_class": "intracellular_only",
+   "recognition_mode": "not_addressable",
+   "states": [
+    "none: the protein is not reachable from outside the cell and this alteration yields no mutation-derived peptide, so there is no molecular address for a binder to recognise; the routes left are indirect ones through the pathway this gene disrupts"
+   ],
+   "region": null,
+   "logic": {
+    "operator": "SINGLE",
+    "targets": [
+     "NRIP1"
+    ],
+    "rationale": "one antigen; selectivity rests entirely on the tumour-versus-normal difference of this target alone",
+    "normal_tissues_excluded": [],
+    "normal_tissues_still_at_risk": [
+     "bone marrow (24.9 nTPM)",
+     "liver (25.1 nTPM)",
+     "retina (29.4 nTPM)",
+     "kidney (14.9 nTPM)",
+     "skeletal muscle (20.7 nTPM)",
+     "pancreas (13.5 nTPM)",
+     "colon (17 nTPM)",
+     "spleen (12.3 nTPM)"
+    ],
+    "selectivity_gain": null,
+    "evidence": []
+   },
+   "origin": [
+    {
+     "sample_id": "cancer_tumour",
+     "chromosome": "chr21",
+     "position": 15000000,
+     "reference": "A",
+     "alternate": "G",
+     "gene": "NRIP1",
+     "transcript": null,
+     "protein_change": null,
+     "hgvsc": "c.-335+14344T>C",
+     "hgvsp": null,
+     "residue": null,
+     "variant_type": "intron_variant",
+     "somatic_status": "somatic_candidate",
+     "somatic_basis": "no matched normal supplied; population frequency used to set inherited variants aside",
+     "vaf": null,
+     "copy_number": null,
+     "clonality": "unknown",
+     "cosmic": [],
+     "gnomad_af": null,
+     "driver_frequency": null,
+     "hotspot": false
+    }
+   ],
+   "design_readiness": 0.15
+  }
+ ]
+}

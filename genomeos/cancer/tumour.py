@@ -309,9 +309,19 @@ def analyse(
     knowledge: dict | None = None,
     deep: int = 5,
     pathways: bool = True,
+    therapeutics: bool = False,
+    hla: list[str] | None = None,
+    rna: str | None = None,
     log=None,
 ) -> dict[str, Any]:
-    """The whole tumour-only pipeline; returns the analysis dict (the packet wraps it)."""
+    """The whole tumour-only pipeline; returns the analysis dict (the packet wraps it).
+
+    With `therapeutics=True` the ranked variants continue into the target
+    reasoning pipeline (genomeos.therapeutics): localisation, accessibility,
+    tumour-versus-normal difference, trafficking, the peptide/HLA route and
+    mechanism compatibility. It is off by default so the existing command
+    keeps its cost and its output shape.
+    """
     variants = list(iter_vcf(vcf, chroms, pass_only=False))
     vep = annotate_vep(variants, log=log)
     ranked = grade(variants, vep, knowledge)
@@ -364,6 +374,20 @@ def analyse(
     genes = {t.gene for t in somatic if t.gene and t.consequence in CODING}
     from genomeos.cancer.compare import suggest_cancer_type, surface_targets
 
+    therapeutic: dict[str, Any] | None = None
+    if therapeutics:
+        from genomeos.therapeutics import PatientProfile
+        from genomeos.therapeutics import analyse as therapeutic_analyse
+        from genomeos.therapeutics.report import machine_report
+
+        profile = PatientProfile(
+            sample_id=Path(vcf).stem,
+            tumour_vcf=vcf,
+            rna_path=rna,
+            hla_alleles=list(hla or []),
+        )
+        therapeutic = machine_report(therapeutic_analyse(ranked, profile, log=log))
+
     return {
         "sample": vcf,
         "variants_total": len(variants),
@@ -378,12 +402,17 @@ def analyse(
         "pathway_effects": effects,
         "suggested_cancer_types": suggest_cancer_type(genes, knowledge),
         "surface_targets": surface_targets(genes),
+        "therapeutic_targets": therapeutic,
         "evidence": {
             "consequence": "curated: Ensembl VEP (canonical transcript, pick one)",
             "germline_filter": f"inferred: gnomAD frequency ≥ {GERMLINE_AF} means inherited; rare germline "
             "variants cannot be told apart without the normal sample",
             "drivers": "curated: cBioPortal study frequencies and hotspots",
             "damage": "predicted: SIFT / PolyPhen",
+            "therapeutic_targets": "inferred: genomeos.therapeutics; research hypotheses with evidence "
+            "per claim, not clinical advice"
+            if therapeutics
+            else "not run (genomeos therapeutic --tumour ...)",
         },
     }
 
@@ -413,7 +442,12 @@ def tumour_packet(analysis: dict[str, Any]) -> dict[str, Any]:
                 "surface_targets",
                 "evidence",
             )
-        },
+        }
+        | (
+            {"therapeutic_targets": analysis["therapeutic_targets"]}
+            if analysis.get("therapeutic_targets")
+            else {}
+        ),
         "constraints": [
             "Use only the evidence in inputs; mark any external knowledge as 'assumption'.",
             "Variants set aside as likely germline are not tumour-specific; do not build on them.",
