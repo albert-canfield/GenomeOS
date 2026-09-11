@@ -41,6 +41,10 @@ autosomes, not committed; chr21's subset stays the committed distilled
 copy). After that `genomeos twin build` and `genomeos lookup` work on any
 fetched chromosome; the Progress tab has it as the `fetch_hg002` job.
 
+The compiled proteome follows the same rule: 290 MB of definitions stay in
+data/knowledge (rebuildable), and a 2.3 MB distilled table travels inside the
+package as the proteome library (docs/PROTEIN.md).
+
 ## Summaries produced so far
 
 | Summary | Raw input it replaces | Size before → after |

@@ -1491,6 +1491,35 @@ def cmd_protein(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
     from genomeos.molecules import protein_report
 
+    if args.lib:
+        from genomeos.lib.proteome import block, get
+
+        r = get(args.symbol)
+        if not r:
+            print(f"{args.symbol.upper()}: not in the packaged proteome (19,283 human proteins)")
+            return 1
+        if args.bio:
+            print(block(args.symbol), end="")
+            return 0
+        print(
+            f"{args.symbol.upper()}  UniProt:{r['accession']}  {r['name']}  {r['length']} aa  [{r['chrom']}]"
+        )
+        print(f"  {r['function']}")
+        print(
+            f"  location: {'; '.join(r['location']) or '?'}  · tissue: {r['tissue_pattern'] or '?'}  · "
+            f"cell types: {r['cell_type_pattern'] or '?'}"
+        )
+        print(f"  domains: {', '.join(r['domains']) or 'none'}")
+        print(
+            f"  pathways: {len(r['pathways'])}  · partners (physical): {', '.join(r['partners']) or 'none'}"
+        )
+        af = ", AlphaFold" if r["alphafold"] else ""
+        print(
+            f"  structures: {r['structures_experimental']} experimental{af}  · "
+            f"diseases: {'; '.join(r['diseases']) or 'none recorded'}"
+        )
+        print("  [packaged proteome: UniProt, InterPro, Reactome, STRING, HPA, PDB, AlphaFold; no network]")
+        return 0
     if args.bio:
         from genomeos.molecules import compile_protein, to_biolang
 
@@ -2184,6 +2213,23 @@ def cmd_domains(args: argparse.Namespace) -> int:
 
 
 def cmd_libs(args: argparse.Namespace) -> int:
+    if getattr(args, "proteome", False):
+        from genomeos.lib.proteome import summary
+
+        s = summary()
+        print(f"packaged proteome: {s['proteins']:,} human proteins (genomeos/lib/data/proteome.json.gz)")
+        for k in (
+            "with_function",
+            "with_pathways",
+            "with_partners",
+            "with_experimental_structure",
+            "with_disease",
+        ):
+            print(f"  {k.replace('_', ' '):<28}{s[k]:>7,}  {s[k] / s['proteins']:.1%}")
+        print(f"  {'symbol mismatch (marked)':<28}{s['symbol_mismatch']:>7,}")
+        for k, v in s["evidence"].items():
+            print(f"  [{k}: {v}]")
+        return 0
     from genomeos.lib import KnowledgeBase
 
     kb = None
@@ -2669,6 +2715,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--bio", action="store_true", help="emit the compiled definition as a BioLang protein block"
     )
+    p.add_argument("--lib", action="store_true", help="read from the packaged proteome library (offline)")
     p.add_argument("symbol")
     p.add_argument("--chrom", help="chromosome for our own translation (e.g. chr21)")
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
@@ -2794,6 +2841,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(fn=cmd_domains)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
+    p.add_argument(
+        "--proteome", action="store_true", help="the packaged proteome library: counts and evidence"
+    )
     p.add_argument("--layer", choices=LAYERS)
     p.add_argument("-v", "--verbose", action="store_true")
     p.add_argument("--data", action="store_true", help="count members from GO/Reactome data")
