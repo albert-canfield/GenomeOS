@@ -8,11 +8,14 @@ missing and what comes next. Evidence per finished task stays in
 [ACTION-PLAN.md](ACTION-PLAN.md); lessons the code carries are in
 [LESSONS.md](LESSONS.md).
 
-Measured state at the review: 68 commits in two days, 42 `genomeos`
-commands plus the `bio` toolchain, 16 web views, 220 tests passing and 5
-skipped, lint clean, three `bio.std` modules, six organism programs, 25
-chromosomes inventoried, four proteomes compiled, the whole worm grown from
-one cell, a human body grown as populations, a therapeutic design dataset.
+Measured state on 2026-09-11 (evening): 85 commits in two days, 44 `genomeos`
+commands plus the `bio` toolchain, 16 web views, 255 tests passing and 4
+skipped, lint clean, three `bio.std` modules, seven organism programs, every
+human chromosome fetched and analysed, the whole human proteome compiled and
+verified against UniProt, a genome-wide knowledge graph, the whole worm grown
+from one cell, a human body grown as populations, haematopoiesis as mechanism,
+a therapeutic design dataset with optional peptide/HLA binding, and the engine
+separable from the application under its own licence.
 
 ---
 
@@ -104,7 +107,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioTwin** (individual) | 0.7 | HG002 with measured telomere and epigenetic age; fork, run, diff; calibration from measured state; `genomeos lookup` for one variant through every layer | genome-wide twin (per-chromosome build in progress); a user's own VCF; telomere from real reads |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 nearly there | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader v1 (open nodes per cell type) on 2; signals learned | the segment parser (in progress); reader on every chromosome; a second mammal |
-| **Molecules** (GenomeOS) | 0.9 in progress | federated protein compiler, RNA layer with GTEx, pathways as reachability, knowledge graph, translation verified against UniProt; proteome on 4 chromosomes | 21 chromosomes of proteome (running); genome-wide graph; kinetics |
+| **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes), translation verified against UniProt on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability | chrY verification; kinetics where BioModels has an SBML pathway; post-translational state beyond the UniProt feature list |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
 
@@ -202,10 +205,16 @@ in order. "Owner" is the session that holds the files today (see §7).
   Protein isoform, never Gene → Protein; predicted never equals
   experimental; STRING association is not interaction; never call an API
   per simulation tick.
-- **Missing.** 21 chromosomes of proteome (about 20 minutes per 400 genes,
-  so roughly 17 hours of source time, running); translation verification on
-  22 chromosomes; the knowledge graph exists for chr21 only; pathways run as
-  reachability, not kinetics; no post-translational state model beyond the
+- **Done (2026-09-11).** The whole human proteome: 19,478 coding genes over
+  25 chromosomes, sequence 99.1%, domains 99.0%, function 86.3%, interactions
+  81.5%, pathways 58.2%, experimental structure 45.2%, predicted 98.2%,
+  disease 25.5%. Translation verified against UniProt on 19,249 genes: 90.9%
+  identical to the canonical entry, 97.8% exact for some isoform, 99 real
+  disagreements left to explain. Knowledge graph genome-wide: 41,982 nodes,
+  327,024 edges, largest component 15,165 of 19,283 compiled proteins.
+- **Missing.** chrY is the one chromosome with no verification result (61
+  genes); the 99 disagreements are not yet explained one by one; pathways run
+  as reachability, not kinetics; no post-translational state model beyond the
   UniProt feature list; no isoform-level expression.
 - **Next.** 1. Let the proteome job run to the end, one process (fixed
   today). 2. `genomeos verify` after each chromosome compiles, as part of
@@ -361,9 +370,9 @@ or the CLI; results land in `data/results` and are committed.
 | UNKNOWN classification | 25 of 25 with curated repeats; genome-wide 98.5% classified | done | `unknown_genome_wide` summary committed |
 | CTCF domains | 24 of 25 (chrM has none) | done | |
 | Reader (open nodes per cell type) | 2 of 25 | `genomeos reader --chrom` | K562 and HepG2 |
-| Proteome compiled | 4 of 25 | `proteome_genome_wide` (running) | roughly 17 h of source time remaining |
-| Translation verified against UniProt | 3 of 25 | part of the proteome job since 2026-09-11 | |
-| Knowledge graph | 1 of 25 | `genomeos graph` | after the proteome |
+| Proteome compiled | 25 of 25 (2026-09-11) | done | 19,478 coding genes: sequence 99.1%, domains 99.0%, function 86.3%, interactions 81.5%, pathways 58.2%, experimental structure 45.2%, predicted structure 98.2%, disease 25.5% |
+| Translation verified against UniProt | 24 of 25 | `genomeos verify --chrom chrY` | 19,249 genes: 90.9% canonical identical, 97.8% exact for some isoform, 99 real disagreements. chrY (61 genes) is the one chromosome with no verification result |
+| Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 327,024 edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
 | HG002 twin | 1 of 25 | `genomeos twin build` per chromosome | in progress (genomeos-fe) |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
 
@@ -386,9 +395,10 @@ One-off jobs, each needing a decision or a resource:
 The ordered list across areas, each with the milestone it serves and the
 session that holds it. Items 1–4 run in parallel today.
 
-1. Whole-genome data jobs to 25 of 25 (§4): fetch and analysis done on
-   2026-09-11; the proteome job, verification and graph remain. Milestone
-   0.9. genomeos-fe.
+1. Whole-genome data jobs: **done on 2026-09-11**, every row of §4 at 25 of
+   25 except chrY verification (61 genes) and the HG002 twin. What remains of
+   milestone 0.9 is the twin, chrY verification, and explaining the 99
+   translation disagreements. genomeos-fe.
 2. HG002 twin on every chromosome, then `twin build --vcf` for any genome.
    Milestone 0.9. genomeos-fe.
 3. Haematopoiesis landed 2026-09-11 as the first human mechanism module;
@@ -418,7 +428,7 @@ session that holds it. Items 1–4 run in parallel today.
 | Version | Milestone | Proof |
 |---|---|---|
 | 0.1–0.8 | engine, compiler from public data, cell runtime, composition spike, spatial, whole worm, twin, debugger | done, see PROGRESS.md |
-| **0.9 whole genome** | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | every row of §4 at 25 of 25; numbers in PROGRESS.md; README and version bumped |
+| **0.9 whole genome** ◐ | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | reached 2026-09-11 for fetch, UNKNOWN, domains, proteome and graph; outstanding: chrY verification, the twin, and the version bump |
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
 | **1.2 therapeutics benchmark** | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark test in CI |
