@@ -165,6 +165,27 @@ values only for tissue-enhanced genes; GTEx (`genomeos rna`) covers the
 rest. The mitochondrial proteome compiles at 100% on every question, the
 13 best-studied proteins in the cell.
 
+## Verified: the engine reads genes the way the curators do
+
+`genomeos verify --chrom C` translates the canonical transcript of every
+compiled gene from the reference sequence and compares it with the reviewed
+UniProt sequence, then tries every coding isoform:
+
+| chromosome | genes | canonical identical | some isoform identical | real disagreements |
+|---|---|---|---|---|
+| chr21 | 213 | 91.5% | 99.1% | 2 (SH3BGR, KRTAP6-3) |
+| chrM | 13 | 100% | 100% | 0 |
+
+A canonical-choice difference (16 on chr21) is GENCODE and UniProt naming
+different isoforms as canonical; the protein is still produced exactly by
+another transcript. The two real disagreements are recorded with their
+identities in `translation_vs_uniprot_chr21.json` for a look.
+
+This pass also caught a compiler bug: UniProt's `gene_exact` query matches
+synonyms, so the first hit for MIF was a 560-residue protein that carries
+MIF as an alias. The compiler now takes the entry whose primary gene name is
+the symbol; 16 cached definitions were recompiled.
+
 ## BioLang importer
 
 `genomeos protein TP53 --bio` writes the compiled definition as a BioLang

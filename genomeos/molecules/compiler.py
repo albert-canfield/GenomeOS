@@ -153,10 +153,17 @@ UNIPROT_FIELDS = ",".join(
 
 
 def uniprot_raw(symbol: str, organism: int = 9606) -> dict[str, Any] | None:
+    """The reviewed entry whose primary gene name is the symbol; gene_exact also matches synonyms,
+    so the first hit can be another protein (MIF returned a 560-residue entry once)."""
     q = f"gene_exact:{symbol} AND organism_id:{organism} AND reviewed:true"
-    url = f"https://rest.uniprot.org/uniprotkb/search?query={urllib.parse.quote(q)}&format=json&size=1"
+    url = f"https://rest.uniprot.org/uniprotkb/search?query={urllib.parse.quote(q)}&format=json&size=5"
     d = _get(url + f"&fields={UNIPROT_FIELDS}")
-    return d["results"][0] if d.get("results") else None
+    hits = d.get("results") or []
+    for h in hits:
+        primary = ((h.get("genes") or [{}])[0].get("geneName") or {}).get("value", "")
+        if primary.upper() == symbol.upper():
+            return h
+    return hits[0] if hits else None
 
 
 def normalise_uniprot(d: dict[str, Any]) -> dict[str, dict[str, Any]]:

@@ -16,7 +16,19 @@ from pathlib import Path
 
 JOBS_DIR = Path("data/jobs")
 
+
 # name -> (argv, total-steps hint, result name whose keys count progress)
+def _count_curated(root: Path) -> int:
+    n = 0
+    for p in (root / "data" / "results").glob("unknown_chr*.json"):
+        try:
+            if json.loads(p.read_text()).get("curated_repeats"):
+                n += 1
+        except (OSError, json.JSONDecodeError):
+            continue
+    return n
+
+
 CATALOG: dict[str, dict] = {
     "anatomy_genome_wide": {
         "argv": [sys.executable, "scripts/anatomy_genome_wide.py"],
@@ -41,10 +53,13 @@ CATALOG: dict[str, dict] = {
     },
     "unknown_genome_wide": {
         "argv": [sys.executable, "scripts/unknown_genome_wide.py"],
-        "describe": "Every human chromosome: stream, classify the UNKNOWN blocks, keep the summary, discard.",
-        "total": 25,
+        "describe": "Every chromosome: classify the UNKNOWN blocks with curated repeats; keep the summary.",
+        "total": 24,
         "result": "unknown_genome_wide",
-        "count": lambda r: len(r.get("chromosomes", {})),
+        # progress = chromosomes classified with the curated repeat pass (a re-run starts from the
+        # chromosomes that lack it, so the earlier pass does not count)
+        "progress": lambda root: _count_curated(root),
+        "count": None,
     },
     "proteome_chr21": {
         "argv": [sys.executable, "-m", "genomeos.cli", "proteome", "--chrom", "chr21"],

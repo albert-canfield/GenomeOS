@@ -1594,6 +1594,48 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_verify(args: argparse.Namespace) -> int:
+    """Translate every compiled gene of a chromosome and compare with UniProt."""
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.molecules.verify import verify_chromosome
+    from genomeos.results import save_result
+
+    gff = default_gencode({args.chrom})
+    if not gff or not Path(args.genome).exists():
+        print(f"{args.chrom}: needs local models and sequence (genomeos data fetch --chrom {args.chrom})")
+        return 1
+    ann = Annotation.from_gff3(gff, {args.chrom})
+    genome = IndexedGenome(args.genome)
+    r = verify_chromosome(args.chrom, ann, genome)
+    genome.close()
+    save_result(f"translation_vs_uniprot_{args.chrom}", r)
+    print(
+        f"{args.chrom}: {r['genes_checked']} compiled genes; canonical transcript identical to UniProt "
+        f"{r['exact_canonical_fraction']:.1%}; some isoform identical "
+        f"{r['exact_some_isoform_fraction']:.1%}; "
+        f"{r['canonical_differs_but_another_isoform_matches']} canonical-choice differences; "
+        f"{r['disagreement_count']} real disagreements  [{r['evidence']}]"
+    )
+    if r["disagreements"]:
+        print(
+            _table(
+                [
+                    {
+                        "gene": d["gene"],
+                        "transcript": d["transcript"],
+                        "ours aa": d["ours_aa"],
+                        "UniProt aa": d["uniprot_aa"],
+                        "best identity": f"{d['identity_best_isoform']:.1%}",
+                    }
+                    for d in r["disagreements"][: args.top]
+                ],
+                ["gene", "transcript", "ours aa", "UniProt aa", "best identity"],
+            )
+        )
+    print(f"  saved data/results/translation_vs_uniprot_{args.chrom}.json")
+    return 0
+
+
 def cmd_lookup(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
     from genomeos.genome.lookup import lookup, parse_variant
@@ -2392,6 +2434,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser(
+        "verify", help="translate every compiled gene of a chromosome and compare with UniProt"
+    )
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--top", type=int, default=15)
+    p.set_defaults(fn=cmd_verify)
 
     p = sub.add_parser(
         "lookup",
