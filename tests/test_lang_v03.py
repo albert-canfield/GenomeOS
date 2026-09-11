@@ -87,9 +87,9 @@ def test_diamond_imports_merge_once():
     assert m.organism.name == "Celegans" and len(m.decisions) > 2000 and len(m.timers) > 50
     # mechanism first, lookup after: the founders' EMS decision precedes the generated one
     ids = [d.id for d in m.decisions if d.id == "div_EMS"]
+    first = m.decisions[[d.id for d in m.decisions].index("div_EMS")]
     assert (
-        len(ids) == 2
-        and m.decisions[[d.id for d in m.decisions].index("div_EMS")].when.get("Wnt") == "received"
+        len(ids) == 2 and first.asymmetric == {"POP-1": "MS"} and first.evidence.source.startswith("Sulston")
     )
 
 
