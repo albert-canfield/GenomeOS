@@ -43,14 +43,17 @@ class Domain:
     def length(self) -> int:
         return self.end - self.start
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self, compact: bool = False) -> dict[str, Any]:
+        """`compact` keeps the first 12 gene symbols and a count (the saved result stays small)."""
+        genes = self.genes[:12] if compact else self.genes
         return {
             "id": self.id,
             "chrom": self.chrom,
             "start": self.start,
             "end": self.end,
             "length": self.length,
-            "genes": self.genes,
+            "genes": genes,
+            "genes_count": len(self.genes),
             "coding_genes": self.coding_genes,
             "promoters": self.promoters,
             "enhancers": self.enhancers,

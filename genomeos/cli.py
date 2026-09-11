@@ -2085,7 +2085,7 @@ def cmd_domains(args: argparse.Namespace) -> int:
             ["domain", "start", "size", "coding", "promoters", "enhancers", "genes"],
         )
     )
-    save_result(f"domains_{args.chrom}", {**s, "domains": [d.to_dict() for d in doms]})
+    save_result(f"domains_{args.chrom}", {**s, "domains": [d.to_dict(compact=True) for d in doms]})
     print(f"  saved data/results/domains_{args.chrom}.json")
     return 0
 

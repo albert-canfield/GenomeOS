@@ -98,7 +98,7 @@ def analyse_chromosome(chrom: str, progress=None) -> dict[str, Any]:
     if ccres and not load_result(f"domains_{chrom}"):
         doms = infer_domains(chrom, len(seq), ccres, ann)
         s = summarise(doms)
-        save_result(f"domains_{chrom}", {**s, "domains": [d.to_dict() for d in doms]})
+        save_result(f"domains_{chrom}", {**s, "domains": [d.to_dict(compact=True) for d in doms]})
         out["domains"] = s["domains"]
     return out
 

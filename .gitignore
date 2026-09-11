@@ -27,3 +27,6 @@ data/results/gencode_v50_chr*.gff3.gz
 
 # Local secrets (API keys): ALPHAGENOME_API_KEY=... lives in .env, never in the repository.
 .env
+# RepeatMasker rows per chromosome are local reference data (1 MB each); only chr21 is tracked as the worked example
+data/results/rmsk_chr*.bed.gz
+!data/results/rmsk_chr21.bed.gz
