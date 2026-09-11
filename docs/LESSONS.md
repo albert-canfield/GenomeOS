@@ -99,6 +99,12 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 - Say which files are yours before you start; the overlap (cli.py,
   server.py, index.html) is small when each feature is one subcommand, one
   route and one card.
+- Committing through a private index solves the clobbering problem and
+  creates a second one: `update-ref` does not touch `.git/index`, so the
+  shared index falls behind by every commit made that way. After 125 commits
+  it reported 200 phantom changes to an editor and carried 64 staged
+  deletions of files that were on disk and committed. `git read-tree HEAD`
+  after each commit, and the drift never starts.
 - The shared index goes stale on its own: twice in one day it held staged
   deletions of every committed result file (248,000 lines), one plain
   commit away from leaving the repository. `git status` shows it as `D `

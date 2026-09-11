@@ -57,8 +57,18 @@ git add path/to/your/files                     # explicit paths only
 TREE=$(git write-tree); OLD=$(git rev-parse HEAD)
 C=$(git commit-tree "$TREE" -p "$OLD" -m "What changed and what it proved")
 git update-ref refs/heads/dev "$C" "$OLD"; unset GIT_INDEX_FILE
+git read-tree HEAD                             # refresh the SHARED index, see below
 git push origin dev                            # the hook checks again
 ```
+
+**Refresh the shared index after every commit.** `update-ref` moves the branch
+without touching `.git/index`, so a commit made through a private index leaves
+the shared one behind by exactly that commit's contents. After a hundred such
+commits the shared index is a hundred commits stale, `git status` in an editor
+reports hundreds of phantom changes, and a plain `git commit` from it would
+delete every file added since the drift began. One `git read-tree HEAD` after
+each commit keeps it honest, costs nothing, and it is the reason this project
+has had to repair that index three times in one day.
 
 For a shared file (`cli.py`, `server.py`, `index.html`, `README.md`,
 `PROGRESS.md`) build the staged copy from `git show HEAD:FILE` plus your own

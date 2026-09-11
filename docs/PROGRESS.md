@@ -448,3 +448,12 @@ What 0.9 does not contain, stated plainly: no benchmark showing the therapeutic
 pipeline recovers known targets, no published perturbation reproduced, and the
 human body above haematopoiesis is still counts rather than mechanism. Those
 are 1.0 to 1.2, and they are all validation rather than construction.
+
+## 2026-09-11 — why the editor reported 200 files to commit
+
+The working tree had one change of mine. The editor showed around 200, because
+it reads `.git/index`, and that index was 125 commits stale.
+
+- **The cause is the fix for the earlier problem.** Three sessions share one checkout, so each commits through a private `GIT_INDEX_FILE` to avoid sweeping up the others' work. But `git update-ref` moves the branch without touching `.git/index`, so every private-index commit leaves the shared index behind by exactly its own contents. After 125 commits the shared index held 36 stale modifications and 64 deletions of files that are on disk and committed, and a plain `git commit` from it would have removed them.
+- **The remedy is one line**: `git read-tree HEAD` after each commit, now written into the commit recipe in CONTRIBUTING.md and into the lessons. It costs nothing and the drift never starts.
+- **The measurement worth keeping**: what an editor reports and what the repository contains are different questions when the index is shared. Read the tree against HEAD through a clean index before believing either.
