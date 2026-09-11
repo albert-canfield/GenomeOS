@@ -149,12 +149,15 @@ in order. "Owner" is the session that holds the files today (see §7).
   grammar) and no JASPAR promoter scan; the **reader** of
   NODES-READER-WRITER.md (which nodes are open in which cell type, from
   DNase/ATAC/methylation) has no code; no second mammal for node comparison.
-- **Next.** 1. Finish the curated UNKNOWN pass and domains for every fetched
-  chromosome (jobs). 2. L1 ORF2 and Alu signatures in the pattern file.
-  3. Segment parser evaluated against GENCODE per chromosome.
-  4. Reader v1: ENCODE DNase per biosample distilled to "open nodes per cell
-  type", shown as a lane in the block map. 5. Mouse chr19 as the comparison
-  genome.
+- **Next.** 1. The fetch job runs the curated UNKNOWN pass and the domains
+  for the chromosome it fetched, so a new chromosome arrives fully analysed;
+  the genome-wide job finishes the rest. 2. Reader v1: ENCODE DNase per
+  biosample distilled to "open nodes per cell type", shown as a lane in the
+  block map (after the background jobs, same network budget). 3. Segment
+  parser: Viterbi over the grammar with the learned PWMs, evaluated against
+  GENCODE per chromosome. 4. Mouse chr19 as the comparison genome. The L1
+  ORF2 and Alu sequence signatures are superseded by the RepeatMasker pass
+  and stay as the fallback for chromosomes not yet distilled.
 - **Owner.** genomeos-fe.
 
 ### C. Molecules (RNA, proteins, pathways, the knowledge graph)
