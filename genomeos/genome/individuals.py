@@ -472,3 +472,102 @@ def knockouts(
     d.mkdir(parents=True, exist_ok=True)  # the test human gets a directory too (git-ignored like the rest)
     (d / "knockouts.json").write_text(json.dumps(out, indent=1))
     return out
+
+
+def dossier(name: str, root: Path | None = None) -> str:
+    """One Markdown page for a person from what has been computed and stored under their directory:
+    the import, the reference checks, the ClinVar screen and the truncating variants. Nothing is
+    recomputed here; a section that has not been run says so. Never written under data/results."""
+    root = root or ROOT
+    people = {p["name"]: p for p in list_individuals(root)}
+    if name not in people:
+        raise FileNotFoundError(f"{name} is not a local individual")
+    p = people[name]
+    d = root / name
+
+    def load(fname: str) -> dict[str, Any] | None:
+        f = d / fname
+        try:
+            return json.loads(f.read_text()) if f.exists() else None
+        except (OSError, json.JSONDecodeError):
+            return None
+
+    lines = [f"# {name}", ""]
+    src = (
+        "built-in test human (GIAB HG002)" if p["builtin"] else f"imported from `{p.get('source_file', '?')}`"
+    )
+    note = f"; {p['note']}" if p.get("note") else ""
+    variants = f"{p['variants']:,} PASS variants, " if p.get("variants") else ""
+    lines.append(
+        f"**Genome** — {src}{note}: {variants}{len(p['chromosomes'])} chromosomes on file. _{p['evidence']}_"
+    )
+    lines.append("")
+    ck = checks(name, root)
+    if ck:
+        mism = sum(r["reference_mismatches"] for r in ck.values())
+        bad = [c for c, r in ck.items() if not r["verdict"].startswith("matches")]
+        state = "matches GRCh38" if not bad else f"assembly doubt on {', '.join(bad)}"
+        applied = sum(r["hap1"]["applied"] + r["hap2"]["applied"] for r in ck.values())
+        lines.append(
+            f"**Reference check** — {len(ck)} chromosomes applied to GRCh38 ({applied:,} alleles placed), "
+            f"{mism:,} reference mismatches: {state}. _measured genotypes against the local sequence_"
+        )
+    else:
+        lines.append("**Reference check** — not run (`genomeos individual check`).")
+    lines.append("")
+    sc = load("clinvar_screen.json")
+    if sc:
+        lines.append(
+            f"**ClinVar carrier screen** — {len(sc['hits'])} pathogenic or likely pathogenic alleles carried "
+            f"over {sc['variants_scanned']:,} variants on {len(sc['chromosomes'])} chromosomes "
+            f"({sc['pathogenic']} pathogenic, {sc['likely_pathogenic']} likely, {sc['homozygous']} "
+            f"homozygous, {sc['two_stars_or_more']} with two or more review stars). _{sc['evidence']}_"
+        )
+        if sc["hits"]:
+            lines.append("")
+            lines.append("| variant | gene | genotype | significance | stars | condition |")
+            lines.append("|---|---|---|---|---|---|")
+            for h in sc["hits"][:40]:
+                lines.append(
+                    f"| {h['chrom']}:{h['pos']:,} {h['ref'][:8]}>{h['alt'][:8]} | "
+                    f"{h['gene']} | {h['genotype']} "
+                    f"({h['zygosity']}) | {h['significance']} | {h['stars']} | {h['conditions'][:60]} |"
+                )
+        lines.append("")
+        lines.append(f"_{sc['note']}_")
+    else:
+        lines.append("**ClinVar carrier screen** — not run (`genomeos individual screen`).")
+    lines.append("")
+    ko = load("knockouts.json")
+    if ko:
+        lines.append(
+            f"**Truncating variants** — {len(ko['hits'])} SNVs that end a canonical "
+            f"protein early or remove its "
+            f"start or stop, in {len(ko['genes'])} genes over {len(ko['chromosomes'])} chromosomes "
+            f"({ko['nonsense']} nonsense, {ko['start_lost']} start lost, {ko['stop_lost']} stop lost; "
+            f"{ko['homozygous']} homozygous). _{ko['evidence']}_"
+        )
+        hom = [h for h in ko["hits"] if h["zygosity"] == "homozygous"][:25]
+        if hom:
+            lines.append("")
+            lines.append("Homozygous, most protein lost first:")
+            lines.append("")
+            lines.append("| gene | variant | consequence | protein | lost |")
+            lines.append("|---|---|---|---|---|")
+            for h in hom:
+                lost = f"{h['fraction_lost']:.0%}" if h.get("fraction_lost") is not None else ""
+                lines.append(
+                    f"| {h['gene']} | {h['chrom']}:{h['pos']:,} {h['ref']}>{h['alt']} | "
+                    f"{h['consequence'].replace('_', ' ')} | {h['hgvs_p'] or ''} "
+                    f"of {h['protein_length']} aa | {lost} |"
+                )
+        lines.append("")
+        lines.append(f"_{ko['note']}_")
+    else:
+        lines.append("**Truncating variants** — not run (`genomeos individual knockouts`).")
+    lines.append("")
+    lines.append(
+        "_Every section is research annotation of a variant list against public references; none of it is "
+        "clinical advice. This page lives under the person's own directory and is never committed._"
+    )
+    return "\n".join(lines)

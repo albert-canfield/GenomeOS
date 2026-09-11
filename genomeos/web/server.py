@@ -276,6 +276,15 @@ class Api:
             p["checks"] = checks(p["name"], root)
         return {"individuals": people}
 
+    def individual_report(self, name: str) -> dict:
+        """The person's Markdown dossier from what is stored under their directory."""
+        from genomeos.genome.individuals import dossier
+
+        try:
+            return {"name": name, "markdown": dossier(name, self.root / "data" / "individuals")}
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+
     def individual_knockouts(self, name: str) -> dict:
         """Genome-wide truncating SNVs on canonical transcripts for one person, homozygous first."""
         from genomeos.genome.individuals import knockouts
@@ -1502,6 +1511,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/individuals":
                 return self._json(self.api.individuals())
+            if u.path == "/api/individual/report":
+                return self._json(self.api.individual_report(self._q(qs, "name") or "HG002"))
             if u.path == "/api/individual/knockouts":
                 return self._json(self.api.individual_knockouts(self._q(qs, "name") or "HG002"))
             if u.path == "/api/individual/screen":

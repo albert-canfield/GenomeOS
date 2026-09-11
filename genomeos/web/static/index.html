@@ -386,6 +386,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <button class="ghost" id="ind-check" data-tip="Apply this person's variants of the chromosome to the local GRCh38 sequence and count the calls whose reference base disagrees: the assembly check. Statistics only, stored under the person's directory."><i class="ic">✅</i>Check vs reference</button>
       <button class="ghost" id="ind-screen" data-tip="ClinVar carrier screen over every chromosome the person has: pathogenic and likely pathogenic alleles carried, with genotype, zygosity and ClinVar's review stars. ClinVar is streamed once and kept locally; the result stays under the person's directory. Research annotation, not a clinical report."><i class="ic">🩺</i>ClinVar screen</button>
       <button class="ghost" id="ind-ko" data-tip="Genome-wide: this person's SNVs that end a canonical protein early (nonsense), remove its start or its stop, homozygous first. Derived by the local trace; SNVs only; a truncating variant is a list to look at, not a verdict."><i class="ic">✂️</i>Truncating variants</button>
+      <button class="ghost" id="ind-report" data-tip="One page from what has been computed for this person: the import, the reference checks, the ClinVar screen, the truncating variants. Nothing is recomputed; sections not run say so."><i class="ic">📄</i>Dossier</button>
       <label>gene <input id="ind-gene" placeholder="APP" style="width:90px" class="mono"></label>
       <button class="ghost" id="ind-predict" data-tip="AlphaGenome feature d: this person's variants inside the elements that reach the gene (promoters, enhancers in its node), each scored for its predicted effect on the gene's expression per tissue, summed per haplotype where phased. About 8 s per variant the first time, cached after; needs the key."><i class="ic">🔮</i>Predict on gene</button>
     </div>
@@ -1028,6 +1029,13 @@ async function individualGenes() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> consequence by the local trace on the canonical transcript</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
+async function individualReport() {
+  const name = $('#ind-who').value;
+  try {
+    const r = await api(`/api/individual/report?name=${encodeURIComponent(name)}`);
+    $('#ind-out').innerHTML = `<pre style="white-space:pre-wrap;font-size:12px;line-height:1.5">${r.markdown.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
 async function individualKnockouts() {
   const name = $('#ind-who').value;
   $('#ind-out').innerHTML = '<span class="muted">tracing every coding gene of every chromosome for ' + name + ' (a few minutes the first time)…</span>';
@@ -1073,7 +1081,7 @@ async function individualPredict() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill predicted">predicted</span> ${(r.model || 'AlphaGenome').split(' (')[0]} · ${h.note}</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
-document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; $('#ind-ko').onclick = individualKnockouts; } });
+document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; $('#ind-ko').onclick = individualKnockouts; $('#ind-report').onclick = individualReport; } });
 async function loadTwins() {
   loadIndividuals();
   twins = (await api('/api/twins')).twins;

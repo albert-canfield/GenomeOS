@@ -133,6 +133,8 @@ plain or gzipped, from any caller:
     genomeos individual list
     genomeos individual check --name ME               # apply to GRCh38, count reference mismatches: the assembly check
     genomeos individual screen --name ME              # ClinVar carrier screen: pathogenic alleles carried, offline
+    genomeos individual knockouts --name ME           # truncating SNVs genome-wide, homozygous first
+    genomeos individual report --name ME --out ME.md  # one page from everything computed for the person
     genomeos individual genes --name ME --chrom chr21
     genomeos individual predict --name ME --gene APP --chrom chr21   # AlphaGenome feature d, needs the key
     genomeos lookup chr17:7675088 C>T          # now says whether ME carries it

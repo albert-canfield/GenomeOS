@@ -1977,6 +1977,18 @@ def cmd_individual(args: argparse.Namespace) -> int:
         return 0 if ok else 1
     if args.action == "predict":
         return _individual_predict(args)
+    if args.action == "report":
+        try:
+            md = ind.dossier(args.name)
+        except FileNotFoundError as ex:
+            print(ex)
+            return 1
+        if args.out:
+            Path(args.out).write_text(md)
+            print(f"wrote {args.out}")
+        else:
+            print(md)
+        return 0
     if args.action == "knockouts":
         try:
             r = ind.knockouts(args.name, args.chrom or None)
@@ -3284,6 +3296,9 @@ def build_parser() -> argparse.ArgumentParser:
     isub.add_parser("list", help="the test human and every imported person")
     q = isub.add_parser("remove", help="delete an imported person's files")
     q.add_argument("name")
+    q = isub.add_parser("report", help="one Markdown page from what has been computed for the person")
+    q.add_argument("--name", required=True)
+    q.add_argument("--out", help="write to a file instead of printing")
     q = isub.add_parser(
         "knockouts", help="genome-wide truncating SNVs (nonsense, start/stop lost), homozygous first"
     )

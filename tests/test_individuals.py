@@ -63,3 +63,46 @@ def test_verdict_reads_the_mismatch_rate():
     assert ind.verdict({"variants": 10_000, "reference_mismatches": 12}).startswith("matches GRCh38")
     assert ind.verdict({"variants": 10_000, "reference_mismatches": 400}).startswith("partly disagrees")
     assert ind.verdict({"variants": 10_000, "reference_mismatches": 6_000}).startswith("does not match")
+
+
+def test_dossier_reads_what_is_stored(tmp_path):
+    import gzip
+    import json
+
+    src = tmp_path / "me.vcf.gz"
+    with gzip.open(src, "wt") as fh:
+        fh.write(VCF)
+    root = tmp_path / "individuals"
+    ind.import_vcf(src, "me", "test calls", root=root)
+    md = ind.dossier("me", root)
+    assert md.startswith("# me") and "4 PASS variants" in md and "not run" in md
+    hit = {
+        "chrom": "chr21",
+        "pos": 100,
+        "ref": "A",
+        "alt": "G",
+        "gene": "G1",
+        "genotype": "0/1",
+        "zygosity": "heterozygous",
+        "significance": "Pathogenic",
+        "stars": 2,
+        "conditions": "C",
+    }
+    (root / "me" / "clinvar_screen.json").write_text(
+        json.dumps(
+            {
+                "hits": [hit],
+                "variants_scanned": 4,
+                "chromosomes": ["chr21"],
+                "pathogenic": 1,
+                "likely_pathogenic": 0,
+                "homozygous": 0,
+                "two_stars_or_more": 1,
+                "evidence": "curated: test",
+                "note": "research",
+            }
+        )
+    )
+    md = ind.dossier("me", root)
+    assert "| chr21:100 A>G | G1 | 0/1 (heterozygous) | Pathogenic | 2 | C |" in md
+    assert "**Truncating variants** — not run" in md
