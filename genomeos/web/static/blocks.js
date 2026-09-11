@@ -5,6 +5,7 @@
   const $ = s => document.querySelector(s);
   const COLORS = {gene: '#1f6feb', transcript: '#4c8dff', exon: '#8250df', cds: '#d1242f', unknown: '#57606a',
                   cpg_island: '#1a7f37', repeat: '#bf8700', telomere: '#0e8a8a', gap: '#30363d', ccre: '#2ea043', domain: '#6639ba'};
+  const REPEAT_COLORS = {LINE: '#bf8700', SINE: '#e3b341', LTR: '#9a6700', DNA: '#7a5901', Satellite: '#0e8a8a', Simple_repeat: '#d29922', Low_complexity: '#b08800'};
   const CCRE_COLORS = {PLS: '#2ea043', pELS: '#e3b341', dELS: '#d29922', 'CTCF-only': '#39c5c5', 'DNase-H3K4me3': '#4c8dff'};
   const st = {path: null, chrom: null, length: 0, view: [0, 1], data: null, sel: null, filter: new Set(), highlight: null,
               mode: 'view', edits: [], drag: null, hover: null, query: ''};
@@ -149,6 +150,7 @@
       }
     } else {
       if (b.type === 'ccre') col = CCRE_COLORS[b.attrs.cls] || col;
+      if (b.type === 'repeat' && b.attrs.cls) col = REPEAT_COLORS[b.attrs.cls] || '#bf8700';
       const ucol = {interspersed_repeat: '#bf8700', interspersed_repeat_SINE: '#bf8700', tandem_repeat: '#e3b341', low_complexity: '#9a6700', long_orf: '#d1242f', satellite_array: '#7a5901', mixed_intergenic: '#6e7681', unique_intergenic: '#8b949e', promoter_like: '#1a7f37', centromere: '#0e8a8a', telomere: '#0e8a8a', gene_desert: '#3d444d'};
       ctx.fillStyle = (b.type === 'unknown' && b.attrs.class && ucol[b.attrs.class]) || col; ctx.globalAlpha = m ? 0.15 : (b.type === 'unknown' ? (b.attrs.class ? 0.6 : 0.35) : 0.9);
       ctx.fillRect(x0, y + (b.type === 'unknown' ? h * 0.3 : 0), w, b.type === 'unknown' ? h * 0.4 : h);

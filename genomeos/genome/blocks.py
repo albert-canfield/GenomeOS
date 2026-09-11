@@ -239,6 +239,34 @@ def blocks_for_window(
             )
     ccres_all = None
     if (end - start) <= ELEMENT_WINDOW:
+        # curated repeats (RepeatMasker) replace the sequence-derived simple repeats when present
+        from genomeos.genome.repeats import EVIDENCE as RMSK_EVIDENCE
+        from genomeos.genome.repeats import load_repeats
+
+        reps = load_repeats(chrom)
+        if reps:
+            blocks = [b for b in blocks if b.type != "repeat"]
+            for r in reps:
+                if r.end > start and r.start < end:
+                    blocks.append(
+                        Block(
+                            f"rmsk:{r.start}",
+                            "repeat",
+                            r.start,
+                            r.end,
+                            ".",
+                            f"{r.name} ({r.cls})",
+                            None,
+                            "curated",
+                            0.9,
+                            {
+                                "cls": r.cls,
+                                "family": r.family,
+                                "divergence": f"{r.divergence:.0%}",
+                                "note": RMSK_EVIDENCE,
+                            },
+                        )
+                    )
         from genomeos.genome.regulatory import EVIDENCE, load_ccres
 
         ccres_all = load_ccres(chrom)
