@@ -1,0 +1,159 @@
+{
+  "result": "translation_vs_uniprot_chr22",
+  "date": "2026-09-11",
+  "chrom": "chr22",
+  "genes_checked": 426,
+  "exact_canonical": 384,
+  "exact_canonical_fraction": 0.9014,
+  "exact_some_isoform": 407,
+  "exact_some_isoform_fraction": 0.9554,
+  "canonical_differs_but_another_isoform_matches": 23,
+  "disagreements": [
+    {
+      "gene": "OR11H1",
+      "accession": "Q8NG94",
+      "transcript": "OR11H1-201",
+      "ours_aa": 315,
+      "uniprot_aa": 326,
+      "identity_canonical": 0.0399,
+      "identity_best_isoform": 0.0399,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "KLHDC7B",
+      "accession": "Q96G42",
+      "transcript": "KLHDC7B-202",
+      "ours_aa": 1235,
+      "uniprot_aa": 594,
+      "identity_canonical": 0.0405,
+      "identity_best_isoform": 0.0405,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "MIEF1",
+      "accession": "L0R8F8",
+      "transcript": "MIEF1-201",
+      "ours_aa": 463,
+      "uniprot_aa": 70,
+      "identity_canonical": 0.0086,
+      "identity_best_isoform": 0.0429,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "ARSA",
+      "accession": "P15289",
+      "transcript": "ARSA-201",
+      "ours_aa": 509,
+      "uniprot_aa": 507,
+      "identity_canonical": 0.0727,
+      "identity_best_isoform": 0.0769,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "TMPRSS6",
+      "accession": "Q8IU80",
+      "transcript": "TMPRSS6-208",
+      "ours_aa": 802,
+      "uniprot_aa": 811,
+      "identity_canonical": 0.0703,
+      "identity_best_isoform": 0.08,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "RBFOX2",
+      "accession": "O43251",
+      "transcript": "RBFOX2-220",
+      "ours_aa": 447,
+      "uniprot_aa": 390,
+      "identity_canonical": 0.0492,
+      "identity_best_isoform": 0.0821,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "CYP2D7",
+      "accession": "A0A087X1C5",
+      "transcript": "CYP2D7-209",
+      "ours_aa": 201,
+      "uniprot_aa": 515,
+      "identity_canonical": 0.1049,
+      "identity_best_isoform": 0.1223,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "SELENOM",
+      "accession": "Q8WWX9",
+      "transcript": "SELENOM-201",
+      "ours_aa": 47,
+      "uniprot_aa": 145,
+      "identity_canonical": 0.3241,
+      "identity_best_isoform": 0.3241,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "SHANK3",
+      "accession": "Q9BYB0",
+      "transcript": "SHANK3-211",
+      "ours_aa": 1792,
+      "uniprot_aa": 1806,
+      "identity_canonical": 0.3383,
+      "identity_best_isoform": 0.3383,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "FAM246C",
+      "accession": "P0DSO1",
+      "transcript": "FAM246C-202",
+      "ours_aa": 115,
+      "uniprot_aa": 240,
+      "identity_canonical": 0.4792,
+      "identity_best_isoform": 0.4792,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "GSTT2",
+      "accession": "P0CG29",
+      "transcript": "GSTT2-202",
+      "ours_aa": 195,
+      "uniprot_aa": 244,
+      "identity_canonical": 0.791,
+      "identity_best_isoform": 0.791,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "TTLL8",
+      "accession": "A6PVC2",
+      "transcript": "TTLL8-201",
+      "ours_aa": 752,
+      "uniprot_aa": 850,
+      "identity_canonical": 0.8835,
+      "identity_best_isoform": 0.8835,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "gene": "EMID1",
+      "accession": "Q96A84",
+      "transcript": "EMID1-201",
+      "ours_aa": 443,
+      "uniprot_aa": 441,
+      "identity_canonical": 0.3183,
+      "identity_best_isoform": 0.9206,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 13,
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference, not an error"
+}
