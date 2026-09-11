@@ -113,6 +113,11 @@ tested against it.
    | splice site (exact position) | 7.5% | 6.9% |
    | CDS segment (exact both ends) | 4.7% | 5.2% |
 
+   Tried and dropped the same day: banded exon and intron length models
+   learned from the annotation (a sliding-window maximum per intron band).
+   They moved nothing (exact exons 4.7% / 5.2% before and after), so the
+   bottleneck is the coding-potential and signal scores, not the lengths.
+
    That is the honest state of "signals alone": the parser lands on nine in
    ten coding genes but draws their exon boundaries right only rarely, and
    it invents 556 candidates for 221 genes. The scoring is the limit,
