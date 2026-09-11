@@ -107,7 +107,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioTwin** (individual) | 0.9 | any GRCh38 genome imported locally and used by carrier lookup, the gene report, the twin and the gene-by-gene walk; HG002 across all 22 autosomes with measured telomere and epigenetic age; fork, run, diff; predicted effect of a person's own regulatory variants; ClinVar carrier screen, genome-wide truncating-variant scan and a one-page dossier, all off the repository | telomere from real reads; pedigree and trio; polygenic scores |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 reached | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader on 25 with eleven cell types; the node model tested genome-wide (90.2% of enhancers act inside their node) and on two mouse chromosomes; the segment parser on chr21 at 92.7% gene precision once RNA over the exons counts as evidence | the parser on every chromosome with measured RNA; enhancer targets and boundaries from Hi-C |
-| **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph | measured modification state; isoform-level expression; an engine that handles 100-species models |
+| **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph; the dominant isoform per tissue from GTEx (APP695 in the cerebellum) | measured modification state; isoform expression per cell type or stage; an engine that handles 100-species models |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
 
@@ -332,14 +332,29 @@ in order. "Owner" is the session that holds the files today (see §7).
   writers. The 2,985 writer to substrate pairs are `modifies` edges in the
   knowledge graph, rebuilt to 330,018 edges. A site that can be modified is
   not a measurement that it is, and the result says which it holds.
+- **Isoform-level expression (2026-09-11).** Expression had been recorded per
+  gene; `genomeos rna X --isoforms` reads GTEx v8 median TPM per transcript
+  per tissue (paged from the portal, cached under
+  `data/knowledge/expression`), labels each transcript with the compiled
+  definition's name, canonical flag and protein length, and names the
+  dominant isoform per tissue against the canonical one. TP53-201 dominates
+  in all 54 tissues, so there the canonical choice is the expression. APP-201
+  (770 aa) dominates in 33 tissues, APP-204 (751 aa) in 14, and APP-202, the
+  695-residue neuronal isoform, in the cerebellum at 79% of the gene's TPM,
+  which is the textbook. The layer says which protein a tissue makes, which
+  is what `ProteinState.isoform` was for. The Molecules protein card shows
+  the modification classes and the writers UniProt names.
 - **Missing.** Modification state is possibility, not occupancy: no measured
   phosphoproteome, and no rule that runs a writer against a site in the
-  runtime; no isoform-level expression; kinetics only where BioModels has a
-  curated model, which is a small fraction of Reactome.
-- **Next.** 1. Isoform-level expression. 2. The 99 translation disagreements
-  read one by one, now that they are triaged by mechanism. 3. Writers that
-  act: a `modifies` edge run as a rule in the network engine, so a kinase
-  knockout changes a substrate's state and not only its neighbourhood.
+  runtime; isoform expression is GTEx's adult tissues, not a cell type or a
+  stage; kinetics only where BioModels has a curated model, which is a small
+  fraction of Reactome.
+- **Next.** 1. The 99 translation disagreements read one by one, now that
+  they are triaged by mechanism, with the dominant isoform per tissue as the
+  first thing to check. 2. Writers that act: a `modifies` edge run as a rule
+  in the network engine, so a kinase knockout changes a substrate's state and
+  not only its neighbourhood. 3. The dominant isoform fed to the twin, so a
+  variant is judged on the transcript the tissue makes.
 - **Owner.** genomeos-fe.
 
 ### D. The individual (BioTwin)
