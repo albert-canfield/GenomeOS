@@ -39,3 +39,5 @@ jobs:
           [ -s data/knowledge/cl-basic.obo ] || curl -sL --fail -o data/knowledge/cl-basic.obo http://purl.obolibrary.org/obo/cl/cl-basic.obo
       - name: Test
         run: uv run pytest -q -rs
+      - name: BioLang programs test themselves
+        run: uv run bio test data/demo genomeos/std
