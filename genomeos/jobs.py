@@ -150,6 +150,26 @@ def _enhancer_job(chrom: str, sample: int = 200) -> dict:
 for _c in CHROMOSOMES:
     if _c != "chrM":
         CATALOG[f"enhancer_targets_{_c}"] = _enhancer_job(_c)
+
+
+def _enhancer_chromosomes_done(root: Path, sample: int = 200) -> int:
+    return sum(
+        1
+        for c in CHROMOSOMES
+        if c != "chrM" and _result_count(root, f"enhancer_targets_{c}", "elements_scored") >= sample
+    )
+
+
+CATALOG["enhancer_targets_genome_wide"] = {
+    "argv": [sys.executable, "scripts/enhancer_targets_genome_wide.py"],
+    "describe": "AlphaGenome: 200 distal enhancers per chromosome, one chromosome at a time, until all 24.",
+    "total": 24,
+    "result": None,
+    "count": None,
+    "progress": lambda root: float(_enhancer_chromosomes_done(root)),
+    "complete": lambda root: _enhancer_chromosomes_done(root) >= 24,
+    "auto_heal": True,
+}
 for _c in CHROMOSOMES:
     CATALOG[f"fetch_{_c}"] = {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--analyse", "--chrom", _c],

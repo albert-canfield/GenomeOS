@@ -336,6 +336,7 @@ def evaluate(preds: list[Prediction], annotation, chrom: str) -> dict[str, Any]:
     module = annotation.to_module("segments")
     true_exons: set[tuple[int, int, str]] = set()
     true_sites: set[tuple[int, str]] = set()
+    canon_exons: set[tuple[int, int, str]] = set()  # the canonical transcript's CDS segments only
     true_genes: list[tuple[int, int, str]] = []
     for g in annotation.protein_coding():
         if g.locus.chrom != chrom:
@@ -343,13 +344,17 @@ def evaluate(preds: list[Prediction], annotation, chrom: str) -> dict[str, Any]:
         strand = g.locus.strand.value
         true_genes.append((g.locus.start, g.locus.end, strand))
         for t in module.entities[g.id].transcripts:
+            canonical = "Ensembl_canonical" in t.tags
             for seg in t.cds_segments:
                 true_exons.add((seg.start, seg.end, strand))
                 true_sites.add((seg.start, strand))
                 true_sites.add((seg.end, strand))
+                if canonical:
+                    canon_exons.add((seg.start, seg.end, strand))
     pred_exons = {(a, b, p.strand.value) for p in preds for a, b in p.exons}
     pred_sites = {x for p in preds for a, b in p.exons for x in ((a, p.strand.value), (b, p.strand.value))}
     exon_tp = len(pred_exons & true_exons)
+    canon_tp = len(pred_exons & canon_exons)
     site_tp = len(pred_sites & true_sites)
     gene_hit = sum(
         1 for s, e, st in true_genes if any(p.strand.value == st and p.start < e and p.end > s for p in preds)
@@ -367,6 +372,8 @@ def evaluate(preds: list[Prediction], annotation, chrom: str) -> dict[str, Any]:
         "true_exons": len(true_exons),
         "exon_sensitivity": frac(exon_tp, len(true_exons)),
         "exon_precision": frac(exon_tp, len(pred_exons)),
+        "canonical_exons": len(canon_exons),
+        "canonical_exon_sensitivity": frac(canon_tp, len(canon_exons)),
         "site_sensitivity": frac(site_tp, len(true_sites)),
         "site_precision": frac(site_tp, len(pred_sites)),
         "gene_sensitivity": frac(gene_hit, len(true_genes)),

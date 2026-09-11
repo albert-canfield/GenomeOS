@@ -99,6 +99,16 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 - Say which files are yours before you start; the overlap (cli.py,
   server.py, index.html) is small when each feature is one subcommand, one
   route and one card.
+- The shared index goes stale on its own: twice in one day it held staged
+  deletions of every committed result file (248,000 lines), one plain
+  commit away from leaving the repository. `git status` shows it as `D `
+  rows; a mixed `git reset -q` fixes the index without touching the tree.
+- Filtering shared-file hunks by keyword drops the hunk that does not
+  contain the keyword: an `individual predict` subparser went out in a later
+  fix-up because its hunk said "predict" and "regulatory", never
+  "individual". After every push of a shared file, run the new command once
+  from the pushed tree (the pre-push hook checks tests, not that the CLI
+  surface is complete), or filter by line range instead of by word.
 
 ## Engineering
 

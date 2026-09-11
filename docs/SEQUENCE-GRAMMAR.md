@@ -148,6 +148,7 @@ tested against it.
    | level | matrices alone | AlphaGenome sites | + starts at ENCODE promoters |
    |---|---|---|---|
    | CDS segment (exact both ends) | 4.7% / 5.2% | **40.1% / 46.2%** | 30.2% / **61.9%** |
+   | canonical CDS segment found (1,907 segments) | 8.7% | **74.8%** | 56.3% |
    | splice site (exact position) | 7.5% / 6.9% | **51.6% / 49.2%** | 38.9% / **66.0%** |
    | gene (any overlap, same strand) | 89.1% / 21.9% | 84.2% / 20.0% | 59.3% / **53.8%** |
    | candidates | 556 | 1,003 | 158 |
@@ -174,7 +175,10 @@ tested against it.
    discarding weak sites loses true exons faster than it removes false ones.
    The remaining gap to the annotation is first and last exons (start and
    stop, no splice signal) and alternative isoforms, since every transcript's
-   CDS segments count as truth. The next measurable steps are therefore a
+   CDS segments count as truth: scored against the canonical transcript's
+   segments alone (second row), three in four are found exactly, so most of
+   the "missing" exons are isoform-specific ones the parser was never going
+   to produce from one structure per locus. The next measurable steps are therefore a
    predicted start signal of the same quality, and scoring against canonical
    transcripts separately. All of it stays `predicted` evidence; the grammar
    runs unchanged without the key.
