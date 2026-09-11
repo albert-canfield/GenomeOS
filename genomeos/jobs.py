@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -19,6 +20,28 @@ JOBS_DIR = Path("data/jobs")
 
 
 # name -> (argv, total-steps hint, result name whose keys count progress)
+_STEP = re.compile(r"(chr[0-9XYM]+): (\d+)/(\d+) compiled")
+
+
+def _current_step(name: str, root: Path) -> tuple[str, int, int] | None:
+    """The newest 'chrN: a/b compiled' line of a job's log (the live process writes the latest one)."""
+    log = root / "data" / "jobs" / f"{name}.log"
+    if not log.exists():
+        return None
+    best = None
+    for m in _STEP.finditer(log.read_text(errors="replace")):
+        best = (m.group(1), int(m.group(2)), int(m.group(3)))
+    return best
+
+
+def _proteome_progress(root: Path) -> float:
+    done = len(list((root / "data" / "results").glob("proteome_chr*.json")))
+    step = _current_step("proteome_genome_wide", root)
+    if step and not (root / "data" / "results" / f"proteome_{step[0]}.json").exists() and step[2]:
+        return round(done + step[1] / step[2], 2)
+    return float(done)
+
+
 def _count_curated(root: Path) -> int:
     n = 0
     for p in (root / "data" / "results").glob("unknown_chr*.json"):
@@ -75,7 +98,7 @@ CATALOG: dict[str, dict] = {
         "total": 25,
         "result": None,
         "count": None,
-        "progress": lambda root: len(list((root / "data" / "results").glob("proteome_chr*.json"))),
+        "progress": lambda root: _proteome_progress(root),
     },
     "distil": {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "distil"],
@@ -113,9 +136,10 @@ class JobStatus:
     state: str  # idle | running | done | failed
     started: float | None
     finished: float | None
-    done: int
+    done: float
     total: int
     last_lines: list[str]
+    detail: str = ""
 
     def to_dict(self) -> dict:
         return {
@@ -128,6 +152,7 @@ class JobStatus:
             "total": self.total,
             "fraction": round(self.done / self.total, 3) if self.total else None,
             "last_lines": self.last_lines,
+            "detail": self.detail,
         }
 
 
@@ -199,9 +224,13 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
             state = (
                 "done" if meta.get("code") == 0 else "failed" if meta.get("code") is not None else "unknown"
             )
-    done = 0
+    done: float = 0
+    detail = ""
     if spec.get("progress"):
         done = spec["progress"](root)
+        step = _current_step(name, root)
+        if step:
+            detail = f"{step[0]}: {step[1]:,}/{step[2]:,}"
     if spec.get("result") and spec.get("count"):
         from genomeos.results import load_result
 
@@ -223,7 +252,15 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
     log = JOBS_DIR / f"{name}.log"
     lines = log.read_text().splitlines()[-6:] if log.exists() else []
     return JobStatus(
-        name, spec["describe"], state, meta.get("started"), meta.get("finished"), done, spec["total"], lines
+        name,
+        spec["describe"],
+        state,
+        meta.get("started"),
+        meta.get("finished"),
+        done,
+        spec["total"],
+        lines,
+        detail=detail,
     )
 
 

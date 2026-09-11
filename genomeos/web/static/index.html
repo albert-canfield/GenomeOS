@@ -1132,7 +1132,7 @@ async function loadJobs() {
         ${j.state !== 'running' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
         ${j.finished ? `<span class="muted">finished ${when(j.finished)}</span>` : ''}</div>
       <div class="muted" style="font-size:12px">${j.describe}</div>
-      ${j.total > 1 ? `<div class="prog ${j.state}"><i style="width:${(j.fraction || 0) * 100}%"></i></div><div class="muted" style="font-size:11px">${j.done} of ${j.total}</div>` : ''}
+      ${j.total > 1 ? `<div class="prog ${j.state}"><i style="width:${(j.fraction || 0) * 100}%"></i></div><div class="muted" style="font-size:11px">${j.done} of ${j.total}${j.detail ? ' · ' + j.detail : ''}</div>` : ''}
       ${j.last_lines.length ? `<div class="log">${j.last_lines.join('\n')}</div>` : ''}</div>`).join('');
     $('#j-list').querySelectorAll('button[data-job]').forEach(b => b.onclick = async () => { await api('/api/jobs/start', {name: b.dataset.job}); loadJobs(); });
     const running = r.jobs.some(j => j.state === 'running');
