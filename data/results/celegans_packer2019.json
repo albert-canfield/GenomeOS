@@ -10,7 +10,11 @@
     "checked": 232,
     "agree": 173,
     "rate": 0.7457,
-    "unchecked": 149
+    "unchecked": 149,
+    "single_tissue_ids": 164,
+    "single_tissue_agree": 138,
+    "single_tissue_rate": 0.8415,
+    "note": "internal ids whose descendants span several tissues are a labelling-depth question, not a disagreement between the atlas and the lineage; the single-tissue rate excludes them"
   },
   "disagreements": [
     {
@@ -438,7 +442,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalaaaalp/ABalaapaap": {
       "cell_type": "Glia",
@@ -447,7 +452,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalaaaar": {
       "cell_type": "Arcade_cell",
@@ -456,7 +462,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABalaaaarx": {
       "cell_type": "Pharyngeal_intestinal_valve",
@@ -465,7 +472,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABalaaapar/ABalaaappl": {
       "cell_type": "ABarpaaa_lineage",
@@ -484,7 +492,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalaapaa": {
       "cell_type": "Glia",
@@ -493,7 +502,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalaapap/ABalppaap": {
       "cell_type": "Pharyngeal_neuron",
@@ -502,7 +512,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABalaapapp/ABalppaapp": {
       "cell_type": "Glia",
@@ -511,7 +522,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalaapp": {
       "cell_type": "Glia",
@@ -520,7 +532,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalaappa/ABalppaaa": {
       "cell_type": "ABarpaaa_lineage",
@@ -534,7 +547,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalaappp/ABalapaap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -543,7 +557,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalaapppa/ABalapaapa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -552,7 +567,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalaapppp/ABalapaapp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -561,7 +577,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -570,7 +587,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalapaaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -579,7 +597,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalapaaa/ABalappap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -588,7 +607,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalapaaaa/ABalappapa": {
       "cell_type": "Glia",
@@ -597,7 +617,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABalapaaap/ABalappapp": {
       "cell_type": "Glia",
@@ -606,7 +627,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalapapa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -615,7 +637,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalappaa": {
       "cell_type": "ABarpaaa_lineage",
@@ -629,7 +652,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalapppa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -638,7 +662,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapppaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -647,7 +672,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapxp": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -671,7 +697,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapxpapa/ABpxpaaappa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -680,7 +707,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapxpapaa/ABpxpaaappaa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -689,7 +717,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapxpp": {
       "cell_type": "ABarpaaa_lineage",
@@ -708,7 +737,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapxppaa/ABalaappppa/ABalapaappa/ABalppapppa/ABarapppppa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -717,7 +747,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapxppaaa/ABalaappppaa/ABalapaappaa/ABalppapppaa/ABarapppppaa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -726,7 +757,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapxppap/ABalaappppp/ABalapaappp/ABalppapppp/ABarapppppp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -735,7 +767,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalapxppp": {
       "cell_type": "Glia",
@@ -749,7 +782,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpaaa/ABarapaa": {
       "cell_type": "Pharyngeal_intestinal_valve",
@@ -758,7 +792,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalpaaaa/ABarapaaa": {
       "cell_type": "Pharyngeal_gland",
@@ -767,7 +802,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalpaap/ABaraaap": {
       "cell_type": "Pharyngeal_muscle",
@@ -776,7 +812,8 @@
       "reference_tissue": [
         "other"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalpaapa/ABaraaapa": {
       "cell_type": "Pharyngeal_neuron",
@@ -785,7 +822,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalpaapaaa/ABalpaappap/ABaraaapaaa/ABaraaappax/ABarapapapa": {
       "cell_type": "Arcade_cell",
@@ -794,7 +832,8 @@
       "reference_tissue": [
         "other"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABalpaapap/ABaraaapap": {
       "cell_type": "Pharyngeal_muscle",
@@ -803,7 +842,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalpaapapa/ABaraaapapa/ABalpappppa": {
       "cell_type": "Pharyngeal_marginal_cell",
@@ -812,7 +852,8 @@
       "reference_tissue": [
         "marginal"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpaappa/ABaraaappa": {
       "cell_type": "Hypodermis",
@@ -821,7 +862,8 @@
       "reference_tissue": [
         "other"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABalpaapppx/ABalpapaaap/ABaraaapppp": {
       "cell_type": "Hypodermis",
@@ -830,7 +872,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpapa/ABarappa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -839,7 +882,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalpapaa/ABarappaa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -849,7 +893,8 @@
         "hypoderm",
         "other"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalpapaap/ABarappaap": {
       "cell_type": "Parent_of_hyp1V_and_ant_arc_V",
@@ -868,7 +913,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABalpapapp/ABarappapp": {
       "cell_type": "Arcade_cell",
@@ -877,7 +923,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABalpappa/ABarapapa": {
       "cell_type": "Pharyngeal_neuron",
@@ -887,7 +934,8 @@
         "marginal",
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalpappaa/ABarapapaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -896,7 +944,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpappap": {
       "cell_type": "Pharyngeal_marginal_cell",
@@ -905,7 +954,8 @@
       "reference_tissue": [
         "marginal"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalpapppa/ABarapappa": {
       "cell_type": "Pharyngeal_neuron",
@@ -914,7 +964,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpapppp/ABarapappp": {
       "cell_type": "Pharyngeal_muscle",
@@ -923,7 +974,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalpax/ABaraax": {
       "cell_type": "Pharyngeal_muscle",
@@ -937,7 +989,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalppapa/ABarapppa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -946,7 +999,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalppapaa/ABarapppaa": {
       "cell_type": "Glia",
@@ -955,7 +1009,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalppapap/ABarapppap": {
       "cell_type": "Pharyngeal_neuron",
@@ -964,7 +1019,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalppapp/ABarapppp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -973,7 +1029,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppappa/ABarappppa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -982,7 +1039,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppappap/ABarappppap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -991,7 +1049,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppappp/ABarappppp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1000,7 +1059,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppp/ABpraaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1009,7 +1069,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalpppa/ABpraaaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1018,7 +1079,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABalpppaa/ABpraaaaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1027,7 +1089,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABalpppaaa/ABpraaaaaa": {
       "cell_type": "ABarpaaa_lineage",
@@ -1046,7 +1109,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppapa/ABpraaaapa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1055,7 +1119,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppapav/ABpraaaapav": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1064,7 +1129,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppapp/ABpraaaapp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1073,7 +1139,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppappp/ABpraaaappp": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1082,7 +1149,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppapppa/ABpraaaapppa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1091,7 +1159,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppp/ABpraaap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1100,7 +1169,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppa/ABpraaapa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1109,7 +1179,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppaa/ABpraaapaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1118,7 +1189,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppaad/ABpraaapaad": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1127,7 +1199,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppap/ABpraaapap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1136,7 +1209,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppapa/ABpraaapapa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1145,7 +1219,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppapaa/ABpraaapapaa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1154,7 +1229,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppp/ABpraaapp": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1163,7 +1239,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppppa/ABpraaappa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1172,7 +1249,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppppaa/ABpraaappaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1181,7 +1259,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppppap/ABpraaappap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1190,7 +1269,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppppp/ABpraaappp": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1199,7 +1279,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppppa/ABpraaapppa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1208,7 +1289,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppppaa/ABpraaapppaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1217,7 +1299,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalppppppp/ABpraaapppp": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1226,7 +1309,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABalpppppppa/ABpraaappppa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1235,7 +1319,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABaraaapppa/ABalpaappaa": {
       "cell_type": "Arcade_cell",
@@ -1244,7 +1329,8 @@
       "reference_tissue": [
         "other"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABaraappaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -1253,7 +1339,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABaraapx": {
       "cell_type": "Pharyngeal_gland",
@@ -1267,7 +1354,8 @@
       "reference_tissue": [
         "marginal"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABaraapxpa": {
       "cell_type": "Pharyngeal_muscle",
@@ -1291,7 +1379,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABarapapapp": {
       "cell_type": "Glia",
@@ -1300,7 +1389,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABarpaaa": {
       "cell_type": "ABarpaaa_lineage",
@@ -1329,7 +1419,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpaaap": {
       "cell_type": "ABarpaaa_lineage",
@@ -1343,7 +1434,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpaapap/ABarpaappx": {
       "cell_type": "Hypodermis",
@@ -1352,7 +1444,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpaapx": {
       "cell_type": "Seam_cell",
@@ -1371,7 +1464,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABarpapa/ABplaaaa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1380,7 +1474,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABarpapaa/ABplaaaaa": {
       "cell_type": "ABarpaaa_lineage",
@@ -1394,7 +1489,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpapaap/ABplaaaaap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1403,7 +1499,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpapaapp/ABplaaaaapp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1412,7 +1509,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpapaappa/ABplaaaaappa/ABpxpaappppa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1421,7 +1519,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpapaappp/ABplaaaaappp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1430,7 +1529,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpapap/ABplaaaap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1439,7 +1539,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABarpapapx/ABplaaaapx": {
       "cell_type": "Hypodermis",
@@ -1453,7 +1554,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpappaa/ABplaaapaa": {
       "cell_type": "XXX",
@@ -1467,7 +1569,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpappp/ABplaaapp": {
       "cell_type": "Seam_cell",
@@ -1476,7 +1579,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABarpapppx/ABplaaappx": {
       "cell_type": "Seam_cell",
@@ -1560,7 +1664,8 @@
       "reference_tissue": [
         "excretory"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABplpapppa": {
       "cell_type": "Hypodermis",
@@ -1569,7 +1674,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABplpapppax": {
       "cell_type": "Rectal_cell",
@@ -1583,7 +1689,8 @@
       "reference_tissue": [
         "epithelium"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABplpappppp": {
       "cell_type": "Rectal_gland",
@@ -1592,7 +1699,8 @@
       "reference_tissue": [
         "epithelium"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABplpappppp/ABpxppppaap": {
       "cell_type": "Rectal_gland",
@@ -1601,7 +1709,8 @@
       "reference_tissue": [
         "epithelium"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABplppppapx": {
       "cell_type": "Rectal_cell",
@@ -1615,7 +1724,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABprpappap": {
       "cell_type": "Pharyngeal_gland",
@@ -1624,7 +1734,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABprpapppa": {
       "cell_type": "Pharyngeal_neuron",
@@ -1633,7 +1744,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABprpapppp": {
       "cell_type": "Pharyngeal_intestinal_valve",
@@ -1642,7 +1754,8 @@
       "reference_tissue": [
         "valve"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABprpppaaaa": {
       "cell_type": "Rectal_cell",
@@ -1651,7 +1764,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABprppppapa": {
       "cell_type": "Rectal_cell",
@@ -1660,7 +1774,8 @@
       "reference_tissue": [
         "rectal"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1669,7 +1784,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxaapa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1678,7 +1794,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxaapaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1687,7 +1804,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxaapaaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -1696,7 +1814,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxaapaaaa": {
       "cell_type": "Hypodermis",
@@ -1705,7 +1824,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapaaap/ABalaaapall/ABalaaapprr/ABalppapapp/ABarapppapp": {
       "cell_type": "Glia",
@@ -1714,7 +1834,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapaap": {
       "cell_type": "Pharyngeal_neuron",
@@ -1723,7 +1844,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxaapaapa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1732,7 +1854,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapaapp": {
       "cell_type": "Glia",
@@ -1741,7 +1864,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1750,7 +1874,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapapa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1759,7 +1884,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapapaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1768,7 +1894,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapapap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1777,7 +1904,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapapp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1786,7 +1914,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapappp": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1795,7 +1924,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapapppa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1804,7 +1934,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapp": {
       "cell_type": "G2_and_W_blasts",
@@ -1818,7 +1949,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaappap": {
       "cell_type": "Hypodermis",
@@ -1827,7 +1959,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaappp": {
       "cell_type": "Hypodermis",
@@ -1836,7 +1969,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapppa": {
       "cell_type": "Hypodermis",
@@ -1845,7 +1979,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxaapppp": {
       "cell_type": "Hypodermis",
@@ -1854,7 +1989,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapa": {
       "cell_type": "Hypodermis",
@@ -1863,7 +1999,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxapaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1872,7 +2009,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxapaaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -1881,7 +2019,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapaaaa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1890,7 +2029,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapaaaap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1899,7 +2039,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapaaaapa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1908,7 +2049,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapaaap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -1917,7 +2059,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapaaapa": {
       "cell_type": "Glia",
@@ -1926,7 +2069,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABpxapaapa": {
       "cell_type": "G2_and_W_blasts",
@@ -1940,7 +2084,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxapapaa": {
       "cell_type": "Seam_cell",
@@ -1949,7 +2094,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxapapap": {
       "cell_type": "Hypodermis",
@@ -1958,7 +2104,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxapappa": {
       "cell_type": "Hypodermis",
@@ -1967,7 +2114,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxapappp": {
       "cell_type": "ABarpaaa_lineage",
@@ -1981,7 +2129,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxappa": {
       "cell_type": "ABarpaaa_lineage",
@@ -1995,7 +2144,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxappaap": {
       "cell_type": "Hypodermis",
@@ -2004,7 +2154,8 @@
       "reference_tissue": [
         "repro"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxappapa": {
       "cell_type": "Seam_cell",
@@ -2013,7 +2164,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxappapp": {
       "cell_type": "Hypodermis",
@@ -2023,7 +2175,8 @@
         "neuron",
         "repro"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxapppa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2032,7 +2185,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapppap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2041,7 +2195,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapppapp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2050,7 +2205,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxapppp": {
       "cell_type": "Hypodermis",
@@ -2059,7 +2215,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxappppa": {
       "cell_type": "Hypodermis",
@@ -2068,7 +2225,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxappppp": {
       "cell_type": "T",
@@ -2082,7 +2240,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxpaaaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2091,7 +2250,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxpaaaaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2100,7 +2260,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaaaaap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2109,7 +2270,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaaaap": {
       "cell_type": "Parent_of_exc_duct_pore_DB_1_3",
@@ -2124,7 +2286,8 @@
         "excretory",
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaaap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2133,7 +2296,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxpaaapa": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2142,7 +2306,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxpaaapp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2151,7 +2316,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2160,7 +2326,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxpaapa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2169,7 +2336,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxpaapaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2178,7 +2346,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaapap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2187,7 +2356,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABpxpaapapa": {
       "cell_type": "Glia",
@@ -2196,7 +2366,8 @@
       "reference_tissue": [
         "glia"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaapp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2205,7 +2376,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaappa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2214,7 +2386,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaappaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2223,7 +2396,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpaappp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2232,7 +2406,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpapaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2241,7 +2416,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpapaaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -2250,7 +2426,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpapaap": {
       "cell_type": "GLR",
@@ -2259,7 +2436,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABpxpapap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2268,7 +2446,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxpapapa": {
       "cell_type": "Parent_of_exc_gland_AVK",
@@ -2282,7 +2461,8 @@
       "reference_tissue": [
         "excretory"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABpxpapapp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2291,7 +2471,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxppaaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -2300,7 +2481,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxppaap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2309,7 +2491,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxppaapa": {
       "cell_type": "Parent_of_exc_gland_AVK",
@@ -2323,7 +2506,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxppap": {
       "cell_type": "Pharyngeal_muscle",
@@ -2332,7 +2516,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABpxppapa": {
       "cell_type": "Pharyngeal_muscle",
@@ -2341,7 +2526,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABpxppapaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -2350,7 +2536,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxppapap": {
       "cell_type": "Arcade_cell",
@@ -2359,7 +2546,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "ABpxppappa": {
       "cell_type": "Pharyngeal_neuron",
@@ -2368,7 +2556,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxppappp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2377,7 +2566,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpppa": {
       "cell_type": "Pharyngeal_neuron",
@@ -2386,7 +2576,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxpppaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2395,7 +2586,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpppaaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -2404,7 +2596,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpppaap": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2413,7 +2606,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "ABpxpppapa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2422,7 +2616,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxpppp": {
       "cell_type": "Ciliated_non_amphid_neuron",
@@ -2431,7 +2626,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxppppa": {
       "cell_type": "Glia",
@@ -2441,7 +2637,8 @@
         "epithelium",
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxppppaa": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2450,7 +2647,8 @@
       "reference_tissue": [
         "epithelium"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxppppap": {
       "cell_type": "Pharyngeal_neuron",
@@ -2460,7 +2658,8 @@
         "epithelium",
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "ABpxppppp": {
       "cell_type": "Pharyngeal_neuron",
@@ -2469,7 +2668,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "ABpxpppppa": {
       "cell_type": "Intestinal_and_rectal_muscle",
@@ -2478,7 +2678,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Caapa": {
       "cell_type": "Body_wall_muscle",
@@ -2487,7 +2688,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "Cpapa": {
       "cell_type": "Hypodermis",
@@ -2496,7 +2698,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Cpapax": {
       "cell_type": "Hypodermis",
@@ -2510,7 +2713,8 @@
       "reference_tissue": [
         "hypoderm"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Cxaa": {
       "cell_type": "Hypodermis",
@@ -2754,7 +2958,8 @@
       "reference_tissue": [
         "intestine"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Eaxap/Eaxpa": {
       "cell_type": "Intestine",
@@ -2763,7 +2968,8 @@
       "reference_tissue": [
         "intestine"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Eaxpp/Epxap": {
       "cell_type": "Intestine",
@@ -2772,7 +2978,8 @@
       "reference_tissue": [
         "intestine"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Epxaa": {
       "cell_type": "Intestine",
@@ -2781,7 +2988,8 @@
       "reference_tissue": [
         "intestine"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Epxpa": {
       "cell_type": "Intestine",
@@ -2790,7 +2998,8 @@
       "reference_tissue": [
         "intestine"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Epxpp": {
       "cell_type": "Intestine",
@@ -2799,7 +3008,8 @@
       "reference_tissue": [
         "intestine"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "Exx": {
       "cell_type": "Intestine",
@@ -2818,7 +3028,8 @@
       "reference_tissue": [
         "other"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "MSaaaaaa": {
       "cell_type": "GLR",
@@ -2827,7 +3038,8 @@
       "reference_tissue": [
         "other"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSaaaaaax/MSxpaaaax": {
       "cell_type": "GLR",
@@ -2836,7 +3048,8 @@
       "reference_tissue": [
         "other"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSaaaaap": {
       "cell_type": "Pharyngeal_muscle",
@@ -2845,7 +3058,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "MSaaaaapa": {
       "cell_type": "Pharyngeal_gland",
@@ -2854,7 +3068,8 @@
       "reference_tissue": [
         "gland"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "MSaaaapa": {
       "cell_type": "Pharyngeal_muscle",
@@ -2863,7 +3078,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": false
     },
     "MSaaaapp": {
       "cell_type": "Pharyngeal_muscle",
@@ -2872,7 +3088,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSaaaappp/MSxapaapp": {
       "cell_type": "Pharyngeal_muscle",
@@ -2881,7 +3098,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSaaapaa": {
       "cell_type": "Pharyngeal_muscle",
@@ -2890,7 +3108,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSaaapapp": {
       "cell_type": "Pharyngeal_muscle",
@@ -2899,7 +3118,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSaaapp": {
       "cell_type": "Pharyngeal_intestinal_valve",
@@ -2908,7 +3128,8 @@
       "reference_tissue": [
         "valve"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSaaappp": {
       "cell_type": "Pharyngeal_intestinal_valve",
@@ -2917,7 +3138,8 @@
       "reference_tissue": [
         "valve"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSaappa": {
       "cell_type": "Pharyngeal_intestinal_valve",
@@ -2926,7 +3148,8 @@
       "reference_tissue": [
         "valve"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSapaap": {
       "cell_type": "Ciliated_amphid_neuron",
@@ -2935,7 +3158,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "MSapaapp": {
       "cell_type": "M_cell",
@@ -2944,7 +3168,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": false
     },
     "MSappaaa": {
       "cell_type": "hmc",
@@ -2953,7 +3178,8 @@
       "reference_tissue": [
         "mesoderm"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "MSpaaaaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -2962,7 +3188,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSpaaaap": {
       "cell_type": "Pharyngeal_muscle",
@@ -2971,7 +3198,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSpaaapa": {
       "cell_type": "Pharyngeal_neuron",
@@ -2980,7 +3208,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSpaaapp": {
       "cell_type": "Pharyngeal_intestinal_valve",
@@ -2989,7 +3218,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "MSpaaappp/MSxapappa": {
       "cell_type": "Pharyngeal_muscle",
@@ -2998,7 +3228,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSpaapaa": {
       "cell_type": "Pharyngeal_neuron",
@@ -3007,7 +3238,8 @@
       "reference_tissue": [
         "neuron"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSpappa": {
       "cell_type": "Body_wall_muscle",
@@ -3016,7 +3248,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSpappax": {
       "cell_type": "Body_wall_muscle",
@@ -3030,7 +3263,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": false
+      "agree": false,
+      "single_tissue_descendants": true
     },
     "MSppaapp": {
       "cell_type": "Intestinal_and_rectal_muscle",
@@ -3039,7 +3273,8 @@
       "reference_tissue": [
         "muscle"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSpppaaa": {
       "cell_type": "hmc_homolog",
@@ -3063,7 +3298,8 @@
       "reference_tissue": [
         "marginal"
       ],
-      "agree": true
+      "agree": true,
+      "single_tissue_descendants": true
     },
     "MSxapaa": {
       "cell_type": "Pharyngeal_muscle",
@@ -3272,5 +3508,5 @@
     }
   },
   "inputs": [],
-  "describe": "Packer 2019 lineage -> cell type table (GEO GSE126954, 2.8 MB streamed), checked against the lineage"
+  "describe": "Packer 2019 lineage -> cell type table (GEO GSE126954, 2.8 MB streamed) checked against the lineage"
 }

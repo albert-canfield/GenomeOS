@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import math
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -604,6 +605,11 @@ def _check_references(module: Module) -> None:
         raise BioLangError(f"organism {org.name!r} starts as undeclared cell_type {org.cell_type!r}")
 
 
+# `import <scheme>:<name>` asks a registered resolver for BioLang text: the engine defines the hook,
+# the application registers sources (the packaged proteome as `protein:TP53`). The engine imports nothing.
+IMPORT_RESOLVERS: dict[str, Callable[[str], str]] = {}
+
+
 def resolve_import(name: str, base_dir: Path | None) -> Path:
     """`bio.std.ageing` -> genomeos/std/ageing.bio; `a.b` -> <base>/a/b.bio; or a literal path."""
     if name.endswith(".bio"):
@@ -632,6 +638,22 @@ def parse(
     module = Module(name=name, imports=imports)
     done = set() if _done is None else _done  # files already merged into this program (diamond imports)
     for imp in imports:
+        scheme, _, rest = imp.partition(":")
+        if rest and scheme in IMPORT_RESOLVERS:
+            key = imp
+            if key in done:
+                continue
+            done.add(key)
+            module.merge(
+                parse(
+                    IMPORT_RESOLVERS[scheme](rest), name_hint=imp, base_dir=base_dir, _seen=_seen, _done=done
+                )
+            )
+            continue
+        if rest and scheme.isalpha() and scheme.islower() and "/" not in scheme and not imp.endswith(".bio"):
+            raise BioLangError(
+                f"no resolver registered for import scheme {scheme!r} (have {sorted(IMPORT_RESOLVERS)})"
+            )
         path = resolve_import(imp, base_dir)
         key = str(path.resolve())
         if key in _seen:

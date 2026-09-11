@@ -1,0 +1,21 @@
+# bio.std.human_turnover — the measured lifespan of each human cell type as a timer, from
+# Sender & Milo 2021 (Nat Med 27:45): a maintenance program replaces a cell type on this clock.
+module bio.std.human_turnover
+
+timer Erythrocytes_lifespan { duration: 119 d; when: cell_type = Erythrocytes; evidence: experimental "Sender & Milo 2021: Erythrocytes lifespan 119 days"; confidence: 0.7 }
+timer MatureTCells_lifespan { duration: 320 d; when: cell_type = MatureTCells; evidence: experimental "Sender & Milo 2021: Mature T cells lifespan 320 days"; confidence: 0.7 }
+timer Neutrophils_lifespan { duration: 6.6 d; when: cell_type = Neutrophils; evidence: experimental "Sender & Milo 2021: Neutrophils lifespan 6.6 days"; confidence: 0.7 }
+timer EndothelialCells_lifespan { duration: 2300 d; when: cell_type = EndothelialCells; evidence: experimental "Sender & Milo 2021: Endothelial cells lifespan 2300 days"; confidence: 0.7 }
+timer MatureBCells_lifespan { duration: 63 d; when: cell_type = MatureBCells; evidence: experimental "Sender & Milo 2021: Mature B cells lifespan 63 days"; confidence: 0.7 }
+timer SmallIntestineEpithelia_lifespan { duration: 5.3 d; when: cell_type = SmallIntestineEpithelia; evidence: experimental "Sender & Milo 2021: Small intestine epithelia lifespan 5.3 days"; confidence: 0.7 }
+timer EpidermalCells_lifespan { duration: 31 d; when: cell_type = EpidermalCells; evidence: experimental "Sender & Milo 2021: Epidermal cells lifespan 31 days"; confidence: 0.7 }
+timer Neurons_lifespan { duration: 300000 d; when: cell_type = Neurons; evidence: experimental "Sender & Milo 2021: Neurons lifespan 300000 days"; confidence: 0.7 }
+timer GlialCells_lifespan { duration: 21000 d; when: cell_type = GlialCells; evidence: experimental "Sender & Milo 2021: Glial cells lifespan 21000 days"; confidence: 0.7 }
+timer ColonEpithelia_lifespan { duration: 3.4 d; when: cell_type = ColonEpithelia; evidence: experimental "Sender & Milo 2021: Colon epithelia lifespan 3.4 days"; confidence: 0.7 }
+timer Adipocytes_lifespan { duration: 4000 d; when: cell_type = Adipocytes; evidence: experimental "Sender & Milo 2021: Adipocytes lifespan 4000 days"; confidence: 0.7 }
+timer AlveolarMacrophages_lifespan { duration: 165 d; when: cell_type = AlveolarMacrophages; evidence: experimental "Sender & Milo 2021: Alveolar macrophages lifespan 165 days"; confidence: 0.7 }
+timer StomachEpithelia_lifespan { duration: 13 d; when: cell_type = StomachEpithelia; evidence: experimental "Sender & Milo 2021: Stomach epithelia lifespan 13 days"; confidence: 0.7 }
+timer BronchialEpithelialCells_lifespan { duration: 139 d; when: cell_type = BronchialEpithelialCells; evidence: experimental "Sender & Milo 2021: Bronchial epithelial cells lifespan 139 days"; confidence: 0.7 }
+timer Monocytes_lifespan { duration: 3.5 d; when: cell_type = Monocytes; evidence: experimental "Sender & Milo 2021: Monocytes lifespan 3.5 days"; confidence: 0.7 }
+timer Cardiomyocytes_lifespan { duration: 56000 d; when: cell_type = Cardiomyocytes; evidence: experimental "Sender & Milo 2021: Cardiomyocytes lifespan 56000 days"; confidence: 0.7 }
+timer Myocytes_lifespan { duration: 18000 d; when: cell_type = Myocytes; evidence: experimental "Sender & Milo 2021: Myocytes lifespan 18000 days"; confidence: 0.7 }

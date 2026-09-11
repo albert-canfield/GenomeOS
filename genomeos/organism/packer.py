@@ -87,12 +87,29 @@ def _reference_tissue(ref: ReferenceLineage, cell_id: str) -> str:
     return "glia" if t in GLIA else t
 
 
+def _single_tissue(ref: ReferenceLineage, cell_id: str) -> bool:
+    """True when every surviving terminal descendant of the reference cell has the same tissue."""
+    stack, seen = [cell_id], set()
+    while stack:
+        c = ref.cells[stack.pop()]
+        if c.children:
+            stack.extend(c.children)
+        elif c.dies is None:
+            seen.add("glia" if c.tissue in GLIA else c.tissue)
+            if len(seen) > 1:
+                return False
+    return len(seen) == 1
+
+
 def distil(rows: list[dict], ref: ReferenceLineage) -> dict:
     by_lineage: dict[str, Counter] = {}
     for r in rows:
         by_lineage.setdefault(r["lineage"], Counter())[r["cell.type"]] += 1
     table = {}
     agree = disagree = unchecked = 0
+    pure_agree = pure_total = (
+        0  # ids whose reference descendants are one tissue: labelling depth cannot confound
+    )
     disagreements = []
     for lin, ctr in sorted(by_lineage.items()):
         cell_type, n = ctr.most_common(1)[0]
@@ -105,6 +122,11 @@ def distil(rows: list[dict], ref: ReferenceLineage) -> dict:
             row["agree"] = ok
             agree += ok
             disagree += not ok
+            pure = all(_single_tissue(ref, x) for x in expand_lineage(lin) if x in ref.cells)
+            row["single_tissue_descendants"] = pure
+            if pure:
+                pure_total += 1
+                pure_agree += ok
             if not ok:
                 disagreements.append({"lineage": lin, "packer": cell_type, "reference": sorted(ref_tissues)})
         else:
@@ -122,6 +144,11 @@ def distil(rows: list[dict], ref: ReferenceLineage) -> dict:
             "agree": agree,
             "rate": round(agree / checked, 4) if checked else None,
             "unchecked": unchecked,
+            "single_tissue_ids": pure_total,
+            "single_tissue_agree": pure_agree,
+            "single_tissue_rate": round(pure_agree / pure_total, 4) if pure_total else None,
+            "note": "internal ids whose descendants span several tissues are a labelling-depth question, "
+            "not a disagreement between the atlas and the lineage; the single-tissue rate excludes them",
         },
         "disagreements": disagreements,
         "by_lineage": table,

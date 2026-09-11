@@ -55,6 +55,7 @@ class Cell:
     x: int | None = None  # grid position when the organism has a space
     y: int | None = None
     move_at: float | None = None  # next step of a recurring migration
+    divide_seq: int = -1  # event token of the pending division: a rescheduled division runs exactly once
     measured: set[str] = field(default_factory=set)  # factors set by express decisions (the reader)
     stated: set[str] = field(default_factory=set)  # factors stated by mechanism: maternal load, asymmetry
 
@@ -168,9 +169,10 @@ class Body:
             if self.population(c) or c.quiescent:
                 self._resolve(c, born=False)
 
-    def _push(self, t: float, name: str, kind: str) -> None:
+    def _push(self, t: float, name: str, kind: str) -> int:
         self._seq += 1
         heapq.heappush(self._queue, (t, self._seq, name, kind))
+        return self._seq
 
     def population(self, c: Cell) -> bool:
         return c.population
@@ -263,6 +265,7 @@ class Body:
                 if d.after is not None and c.move_at is None:
                     c.move_at = self.time + d.after * self.organism.tempo
                     self._push(c.move_at, c.name, f"move:{d.id}")
+        swapped = False
         if c.divides_at is not None and not born and not c.quiescent:
             # a signal changed what the cell reads: an earlier-precedence division may now apply
             d = self._first(c, "divide", ctx)
@@ -277,7 +280,8 @@ class Body:
                     self.fired[d.id] += 1
                 else:
                     c.divides_at = None
-        if c.divides_at is None and not c.quiescent and (born or self.population(c)):
+                    swapped = True  # a cell whose division decision changed is rescheduled from now
+        if c.divides_at is None and not c.quiescent and (born or swapped or self.population(c)):
             d = self._first(c, "divide", ctx)
             if d is None:
                 if not any(x for x in c.fired if x.startswith(("fate_", "die_"))) and c.cell_type == "":
@@ -299,7 +303,7 @@ class Body:
             c.divides_at = (self.time if self.population(c) else max(c.born, self.time)) + wait
             c.fired.append(d.id)
             self.fired[d.id] += 1
-            self._push(c.divides_at, c.name, "divide")
+            c.divide_seq = self._push(c.divides_at, c.name, "divide")
 
     def _record(self) -> None:
         total = sum(x.count for x in self.cells.values() if x.born <= self.time < x.end)
@@ -603,7 +607,7 @@ class Body:
 
     def run(self, until: float = math.inf) -> Body:
         while self._queue and len(self.cells) < self.max_cells:
-            t, _, name, kind = self._queue[0]
+            t, seq, name, kind = self._queue[0]
             if t > until:
                 break
             heapq.heappop(self._queue)
@@ -616,7 +620,12 @@ class Body:
                 self._sense()
                 continue
             c = self.cells[name]
-            if kind == "divide" and c.divides_at == t and (c.dies_at is None or c.dies_at > t):
+            if (
+                kind == "divide"
+                and seq == c.divide_seq
+                and c.divides_at == t
+                and (c.dies_at is None or c.dies_at > t)
+            ):
                 self._divide(c)
             elif kind == "cull" and c.dies_at is None:
                 self._cull(c)

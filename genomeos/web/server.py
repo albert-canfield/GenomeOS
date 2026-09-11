@@ -49,6 +49,9 @@ class Api:
     """All endpoints as plain methods so they can be unit-tested without HTTP."""
 
     def __init__(self, root: Path) -> None:
+        from genomeos.lib.biolang import register as _register_imports
+
+        _register_imports()
         self.root = root.resolve()
         self.data_dir = self.root / "data"
 

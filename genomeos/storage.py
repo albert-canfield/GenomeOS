@@ -286,6 +286,12 @@ def _distil_celegans_tf_atlas() -> dict:
     return out
 
 
+def _distil_celegans_digital_development() -> dict:
+    from genomeos.organism.digital_development import distil
+
+    return distil()
+
+
 def _distil_celegans_packer() -> dict:
     from genomeos.organism.packer import distil, stream_annotation
     from genomeos.organism.reference import ReferenceLineage
@@ -311,6 +317,12 @@ DISTILLERS: list[Distiller] = [
         [],
         _distil_celegans_tf_atlas,
         "Ma 2021 TF protein atlas (88 MB streamed): factor presence per cell, reader.bio, textbook check",
+    ),
+    Distiller(
+        "celegans_digital_development",
+        [],
+        _distil_celegans_digital_development,
+        "Du 2014 founder fate changes per knockout (17 KB streamed) scored against the program's knockouts",
     ),
     Distiller(
         "celegans_packer2019",

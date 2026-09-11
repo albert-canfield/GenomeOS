@@ -3493,6 +3493,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    from genomeos.lib.biolang import register as _register_imports
+
+    _register_imports()  # `import protein:SYMBOL` in BioLang programs reads the packaged proteome
     args = build_parser().parse_args(argv)
     # a command that defaults to chromosome 21's sequence follows --chrom when that chromosome is local
     chrom = getattr(args, "chrom", None)

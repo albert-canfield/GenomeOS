@@ -22,13 +22,14 @@ cell_type CPrecursor { parent: Blastomere; evidence: experimental "Sulston 1983 
 cell_type DPrecursor { parent: Blastomere; evidence: experimental "Sulston 1983 (D: 20 body muscle cells)"; confidence: 0.9 }
 
 signal Wnt_P2_EMS { mode: contact; ligand: MOM-2; receptor: MOM-5; from: cell = P2; to: cell = EMS; sets: Wnt = received; evidence: experimental "Thorpe et al. 1997, Cell 90:695; Rocheleau et al. 1997, Cell 90:707"; confidence: 0.9 }
-signal Notch_P2_ABp { mode: contact; ligand: APX-1; receptor: GLP-1; from: cell = P2; to: cell = ABp; sets: Notch = received; evidence: experimental "Mello et al. 1994, Cell 77:95; Mickey et al. 1996, Development 122:1791"; confidence: 0.9 }
+signal Notch_P2_ABp { mode: contact; ligand: APX-1; receptor: GLP-1; from: cell = P2, PIE-1 = present; to: cell = ABp; sets: Notch = received; evidence: experimental "Mello et al. 1994, Cell 77:95; Mickey et al. 1996, Development 122:1791"; confidence: 0.9 }
 signal Notch_MS_ABalp { mode: contact; ligand: LAG-2; receptor: GLP-1; from: cell = MS; to: cell = ABalp|ABara; sets: Notch2 = received; evidence: experimental "Priess 2005, WormBook (second Notch interaction, pharynx from ABa)"; confidence: 0.8 }
 
 # divisions: which daughter keeps which maternal factor
 decision div_P0  { action: divide; when: cell = P0;  daughters: AB, P1;  lineages: AB = AB, P1 = P; after: 0 min; asymmetric: PIE-1 -> P1, SKN-1 -> P1, PAL-1 -> P1, PAR-2 -> P1, PAR-3 -> AB; evidence: experimental "Sulston 1983; Kemphues et al. 1988, Cell 52:311 (PAR); Mello 1992 (PIE-1); Bowerman 1992 (SKN-1)"; confidence: 0.9 }
 decision div_P1  { action: divide; when: cell = P1;  daughters: EMS, P2; lineages: EMS = EMS, P2 = P; asymmetric: PIE-1 -> P2; evidence: experimental "Sulston 1983; Mello et al. 1992, Cell 70:163 (PIE-1 to the germline side; SKN-1 and PAL-1 in both)"; confidence: 0.9 }
-decision div_EMS { action: divide; when: cell = EMS; daughters: MS, E; lineages: MS = MS, E = E; asymmetric: POP-1 -> MS; evidence: experimental "Sulston 1983; Lin et al. 1998, Cell 92:229 (POP-1 high in MS, low in E after the Wnt signal)"; confidence: 0.9 }
+decision div_EMS { action: divide; when: cell = EMS, Wnt = received; daughters: MS, E; lineages: MS = MS, E = E; asymmetric: POP-1 -> MS; evidence: experimental "Sulston 1983; Lin et al. 1998, Cell 92:229 (the Wnt signal from P2 lowers POP-1 in the posterior daughter, E)"; confidence: 0.9 }
+decision div_EMS_no_wnt { action: divide; when: cell = EMS, Wnt = absent; daughters: MS, E; lineages: MS = MS, E = E; evidence: experimental "Thorpe et al. 1997; Rocheleau et al. 1997 (without the Wnt signal both daughters keep POP-1 high and E takes the MS fate)"; confidence: 0.9 }
 decision div_P2  { action: divide; when: cell = P2;  daughters: C, P3;   lineages: C = C, P3 = P; asymmetric: PIE-1 -> P3, SKN-1 -> P3; evidence: experimental "Sulston 1983; SKN-1 is not maintained in C; PAL-1 in both (Hunter & Kenyon 1996, Cell 87:217)"; confidence: 0.8 }
 decision div_P3  { action: divide; when: cell = P3;  daughters: D, P4;   lineages: D = D, P4 = P4; asymmetric: PIE-1 -> P4, SKN-1 -> P4; evidence: experimental "Sulston 1983; Hunter & Kenyon 1996"; confidence: 0.8 }
 
@@ -36,7 +37,7 @@ decision div_P3  { action: divide; when: cell = P3;  daughters: D, P4;   lineage
 decision fate_ABa { action: differentiate; when: cell = ABa|ABp, Notch = absent; to: ABaPrecursor; evidence: experimental "Priess & Thomson 1987; Mello et al. 1994 (without the P2 signal ABp is ABa-like)"; confidence: 0.9 }
 decision fate_ABp { action: differentiate; when: cell = ABp, Notch = received; to: ABpPrecursor; evidence: experimental "Mello et al. 1994, Cell 77:95 (APX-1/GLP-1)"; confidence: 0.9 }
 decision fate_EMS { action: differentiate; when: cell = EMS|P2, SKN-1 = present, PIE-1 = absent; to: EMSPrecursor; evidence: experimental "Bowerman et al. 1992, Cell 68:1061 (SKN-1); Mello et al. 1992 (without PIE-1, P2 takes the EMS fate)"; confidence: 0.9 }
-decision fate_MS  { action: differentiate; when: cell = MS, SKN-1 = present, POP-1 = present; to: MSPrecursor; evidence: experimental "Lin et al. 1995, Cell 83:599; Broitman-Maduro et al. 2006 (TBX-35)"; confidence: 0.9 }
+decision fate_MS  { action: differentiate; when: cell = MS|E, SKN-1 = present, POP-1 = present; to: MSPrecursor; evidence: experimental "Lin et al. 1995, Cell 83:599; Broitman-Maduro et al. 2006 (TBX-35)"; confidence: 0.9 }
 decision fate_E   { action: differentiate; when: cell = MS|E, SKN-1 = present, POP-1 = absent; to: EPrecursor; evidence: experimental "Lin et al. 1995 (without POP-1, MS takes the E fate); Maduro et al. 2005 (END-1/END-3)"; confidence: 0.9 }
 decision fate_C   { action: differentiate; when: cell = MS|E|C, SKN-1 = absent, PAL-1 = present; to: CPrecursor; evidence: experimental "Hunter & Kenyon 1996, Cell 87:217 (PAL-1 for C; without SKN-1, EMS daughters take the C fate)"; confidence: 0.9 }
 decision fate_D   { action: differentiate; when: cell = D, PAL-1 = present, SKN-1 = absent; to: DPrecursor; evidence: experimental "Hunter & Kenyon 1996 (PAL-1 for D)"; confidence: 0.8 }

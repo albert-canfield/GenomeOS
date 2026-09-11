@@ -257,3 +257,24 @@ def to_bio_tissues(table: dict) -> str:
                 f'evidence: {kind} "{src}: production balances loss"; confidence: {conf} }}'
             )
     return "\n".join(lines) + "\n"
+
+
+def to_std_turnover(table: dict, module_name: str = "bio.std.human_turnover") -> str:
+    """Sender & Milo 2021 lifespans as maintenance timers, one per cell type, for human programs."""
+    lines = [
+        "# bio.std.human_turnover — the measured lifespan of each human cell type as a timer, from",
+        "# Sender & Milo 2021 (Nat Med 27:45): a maintenance program replaces a cell type on this clock.",
+        f"module {module_name}",
+        "",
+    ]
+    for t in table["types"]:
+        life = t.get("lifespan_days")
+        if not life:
+            continue
+        cid = "".join(ch for ch in t["cell_type"].title() if ch.isalnum())
+        note = f"Sender & Milo 2021: {t['cell_type']} lifespan {life:g} days"
+        lines.append(
+            f"timer {cid}_lifespan {{ duration: {life:g} d; when: cell_type = {cid}; "
+            f'evidence: experimental "{note}"; confidence: 0.7 }}'
+        )
+    return "\n".join(lines) + "\n"

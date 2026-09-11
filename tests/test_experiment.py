@@ -44,7 +44,8 @@ def _types(result) -> dict[str, str]:
 
 def test_celegans_mutants_reproduce_the_published_founder_phenotypes():
     m = parse_file("data/organisms/celegans/mutants.bio")
-    assert [e.name for e in m.experiments] == ["pop1", "skn1", "pie1", "apx1", "glp1", "pal1"]
+    names = [e.name for e in m.experiments]
+    assert names == ["pop1", "skn1", "pie1", "apx1", "glp1", "mom2", "mom5", "pal1"]
     by = {e.name: e for e in m.experiments}
     wt = Body(m, means=True).run(until=800)
     assert wt.cells["MS"].cell_type == "MSPrecursor" and wt.cells["E"].cell_type == "EPrecursor"

@@ -138,16 +138,18 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Requirements.** Every construct has evidence and confidence; programs
   test themselves (`# test:` and `assert:`); a `.bio` file runs without the
   rest of GenomeOS; the same program runs on any engine that fits it.
-- **Missing.** A written grammar (BNF) and a versioned language spec; the
-  two boundary leaks above; a `biolang` package with its own tests;
-  imports from a registry; `bio.std` has no signalling, human development
-  or timer modules beyond the worm.
-- **Next.** 1. Fix the two engine imports (done for `experiment`: knockouts
-  against the wild type reproduce the classic founder mutants, 2026-09-11).
-  2. Grammar spec in one file, generated from the parser's block
-  table. 3. `bio` packaged as an extra entry point with its own test set.
-  4. `bio.std.signalling` from CellPhoneDB and `bio.std.timers.human`
-  from the Carnegie stages.
+- **Missing.** A `biolang` package with its own tests; imports from a
+  remote registry (the resolver hook exists: `import protein:TP53` reads the
+  packaged proteome through `IMPORT_RESOLVERS`). Done 2026-09-11: the grammar
+  and the IR type list are generated from the parser and the dataclasses
+  (BIOLANG-GRAMMAR.md, held current by a test); `bio.std.human_stages`
+  (Carnegie), `bio.std.signalling` (148 pairs from CellPhoneDB) and
+  `bio.std.human_turnover` (Sender & Milo lifespans); `express` (reader
+  state), `field`, `design`, space and populations in the language.
+- **Next.** 1. `bio` packaged as an extra entry point with its own test set.
+  2. A `population` type in BioIR (today a counted `Cell`). 3. PAR polarity
+  rules for the worm's first divisions, so par-2 and par-3 knockouts are
+  predicted rather than stated.
 - **Owner.** genomeos-73 (parser, IR, body runtime, std); genomeos-fe
   (`bio.py`, central dogma).
 
@@ -348,20 +350,23 @@ in order. "Owner" is the session that holds the files today (see §7).
   exact; timers with their measured spread; the human body reproduced by
   growth and turnover, not asserted; organism-level uncertainty populated.
 - **Missing.** The human program is counts, not mechanism, except
-  haematopoiesis (first mechanism module, from the stem cell to the blood
-  lineages gated by the established factors, landed 2026-09-11); Packer 2019 disagrees with the lineage at 26% of internal
-  nodes (labelling depth); the Body runtime does not yet run inside a
-  process-bigraph composite with a GRN or SBML model; the spatial engine has
-  no division or movement; the external engines (libRoadRunner, MaBoSS,
-  CompuCell3D) are deferred for lack of Python 3.14 wheels, although CI
-  runs 3.12 and could test them as optional extras.
-- **Next.** 1. First human mechanism module: haematopoiesis from HSC to the eight
-  lineages, decisions from cited transcription-factor rules, checked against
-  the Sender & Milo counts and the known lineage choices. 2. Body runtime
-  as a bigraph process beside a GRN. 3. Cells that divide and move in the
-  spatial engine (the worm's 28 founders in space). 4. libRoadRunner and
-  MaBoSS adapters tested in CI on 3.12. (The `experiment` block and the six
-  founder mutants landed on 2026-09-11.)
+  haematopoiesis; the worm's terminal fates below the founders are the
+  observed lineage program, although every cell now carries its measured
+  transcription factors (Ma 2021 atlas, `express`); the PAR polarity rules
+  are not written (par-2 and par-3 are the misses against Digital
+  Development); the external engines (libRoadRunner, MaBoSS, CompuCell3D)
+  are deferred for lack of Python 3.14 wheels, although CI runs 3.12 and
+  could test them as optional extras. Done 2026-09-11: haematopoiesis,
+  the Body as a process-bigraph process gated by a network, space (sites,
+  fields, division in place, contact inhibition, migration; the French flag
+  grown from one cell), the measured reader, Packer 2019 at 84% on
+  single-tissue ids (the rest is labelling depth), Digital Development as
+  the published knockout set (7 of 11 modelled transformations).
+- **Next.** 1. Terminal fates from measured factors: rules on the atlas
+  (ELT-2, HLH-1, PHA-4 and the rest) with precedence over the lineage
+  lookup, scored by the diff. 2. PAR polarity rules for the first divisions.
+  3. The worm's founders in space with the real contacts replacing named
+  senders. 4. libRoadRunner and MaBoSS adapters tested in CI on 3.12.
 - **Owner.** genomeos-73.
 
 ### F. Cancer and therapeutics
@@ -457,14 +462,19 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Code.** `forge.py`, `design.py`, `runtime/debugger.py`.
 - **Design.** DESIGN-MINIMAL-CELL.md, ACTION-PLAN.md Phase 5.
 - **Data.** `design_neuron`.
-- **Missing.** Search only; no experiment language (arrives with the
-  `experiment` block); no published perturbation reproduced; no
-  calibration of the predicted confidence against outcomes.
-- **Next.** 1. Reuse the `experiment` block as the BioForge input. 2. Pick
-  three published perturbations with quantitative outcomes (repressilator
-  variants, a Boolean cell-cycle mutant, a C. elegans founder mutant) and
-  make them tests. 3. Constraint language for design (must express, must
-  not express, budget in genes and bases).
+- **Missing.** No calibration of the predicted confidence against outcomes;
+  knockouts of network species (the `experiment` block perturbs organisms;
+  network perturbations are covered by tests: the repressilator's `# test:`
+  claims and the Fauré cell-cycle knockout in `test_boolean.py`). Done
+  2026-09-11: the `design` block (BioForge takes experiments as input;
+  knockouts, additions and knobs searched toward targets under constraints,
+  the answer emitted as a predicted experiment; POP-1, PIE-1, GFI1 and IKZF1
+  found), eight worm mutants and nine blood mutants as experiment programs
+  in CI, Digital Development as the published set.
+- **Next.** 1. Budget constraints in `design` (genes, bases, perturbations
+  already there). 2. Network knockouts in `experiment` (a species held at
+  zero). 3. Calibrate predicted confidence: how often a design's answer
+  matches the published outcome.
 - **Owner.** genomeos-73 after the experiment block.
 
 ---
@@ -498,9 +508,9 @@ One-off jobs, each needing a decision or a resource:
 | AlphaGenome live predictions for UNKNOWN regulatory blocks | `ALPHAGENOME_API_KEY` | Albert |
 | Cohort expression for the other TCGA studies (`genomeos cancer expression --study`) | 30 s each, pick the studies | genomeos-f7 |
 | Retrospective therapeutic benchmark (public tumours with approved targets) | choose the cases | genomeos-f7 |
-| Packer 2019 disagreements resolved to one labelling depth | design | genomeos-73 |
+| Packer 2019 disagreements resolved to one labelling depth | **done 2026-09-11**: 84% on the 164 single-tissue ids; the rest is depth | genomeos-73 |
 | Mouse chromosome as the second mammal for node comparison | **done 2026-09-11**: mm10 chr19, 371 nodes, 97% of testable nodes in the same human neighbourhood | genomeos-fe |
-| Sender & Milo per-tissue turnover as maintenance timers in `bio.std` | none | genomeos-73 |
+| Sender & Milo per-tissue turnover as maintenance timers in `bio.std` | **done 2026-09-11**: `bio.std.human_turnover` | genomeos-73 |
 
 ---
 
@@ -523,16 +533,20 @@ session that holds it. Items 1–4 run in parallel today.
 5. Reader lane in the block map and a `reader` construct in BioLang.
    Milestone 1.1. genomeos-fe.
 6. Segment parser scored against GENCODE. Milestone 1.1. genomeos-fe.
-7. Three published perturbations as `experiment` programs in CI; BioForge
-   takes experiments as input. Milestone 1.0. genomeos-73.
-8. Body runtime inside a process-bigraph composite with a network model.
-   Milestone 1.1. genomeos-73.
+7. Done 2026-09-11: worm and blood mutants as experiment programs in CI,
+   Digital Development as the published set, BioForge takes experiments
+   (`design`). Next: PAR polarity rules; terminal fates from measured
+   factors. genomeos-73.
+8. Done 2026-09-11: the Body inside a process-bigraph composite, gated by a
+   network; space in the Body. Next: the worm's founders in space with real
+   contacts. genomeos-73.
 9. Done 2026-09-11: the retrospective benchmark, which recovered all six
    known targets and exposed three mechanism-ranking defects. Next in this
    area: fix those three, then cBioPortal CNA and SV, then `cancer.*`
    libraries. Milestone 1.2. genomeos-f7.
-10. BIOIR-v0.3 spec and the BioLang grammar in one file; `bio` with its own
-    test suite. Milestone 2.0. genomeos-73. (The import boundary that blocked
+10. Grammar and IR type list generated from the code (done 2026-09-11,
+    BIOLANG-GRAMMAR.md); `bio` with its own test suite. Milestone 2.0.
+    genomeos-73. (The import boundary that blocked
     this is closed as of 2026-09-11: the Apache paths can be lifted into their
     own package without dragging the application behind them.)
 11. Done 2026-09-11: version 0.9.0 and the README rewritten around what the

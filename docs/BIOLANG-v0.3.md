@@ -228,8 +228,25 @@ reference for `celegans` is distilled by
 `timers.bio`, `lineage_embryo.bio` and `lineage_larva.bio` under
 `data/organisms/celegans/`.
 
+## Imports from a registered source
+
+`import protein:TP53` asks a resolver registered by the application for the
+block text: the engine defines the hook (`genomeos.lang.parser.IMPORT_RESOLVERS`)
+and imports nothing; GenomeOS registers the packaged human proteome
+(`genomeos.lib.biolang.register()`, done by the CLI and the web server), so a
+program pulls a cited `protein` block with accession, domains, pathways and
+interactions in one line. `bio` programs without the application see no
+resolvers and say so.
+
 ## Standard prelude
 
 | Module | Contents |
 |---|---|
 | `bio.std.development` | Zygote, Blastomere, Progenitor, GermCell, PostMitotic with CL ids |
+| `bio.std.human_stages` | the 23 Carnegie stages and the fetal period as `stage`s (days after fertilisation, O'Rahilly & Müller), cleavage, segmentation-clock and somite timers |
+| `bio.std.signalling` | 148 developmental and haematopoietic ligand-receptor pairs as contact `signal`s, generated from CellPhoneDB with the review that makes each pathway textbook |
+| `bio.std.human_turnover` | the measured lifespan of 17 human cell types as maintenance timers, generated from Sender & Milo 2021 |
+
+The grammar itself is generated from the parser and the IR:
+[BIOLANG-GRAMMAR.md](BIOLANG-GRAMMAR.md) (`python -m genomeos.lang.grammar`),
+and a test fails when it is out of date.
