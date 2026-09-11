@@ -1068,11 +1068,11 @@ class Api:
 
     def graph(self, gene: str, max_nodes: int = 40) -> dict:
         """One protein's neighbourhood in the local knowledge graph (cached definitions only)."""
-        from genomeos.molecules.graph import build
+        from genomeos.molecules.graph import cached_build
 
         if not gene or not gene.replace("-", "").replace("_", "").isalnum():
             raise ApiError("gene symbol required")
-        g = build()
+        g = cached_build()
         n = g.neighbourhood(gene.upper(), max_nodes)
         rels = ("associates", "member_of", "has_domain", "expressed_in")
         n["degree"] = {k: g.degree(gene.upper(), k) for k in rels}

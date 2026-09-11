@@ -153,3 +153,17 @@ def summarise(g: Graph) -> dict[str, Any]:
         "evidence": "edges carry the evidence of their source section: Reactome, InterPro (curated), "
         "HPA (experimental), STRING (predicted)",
     }
+
+
+_CACHE: dict[str, Any] = {}
+
+
+def cached_build(cache_dir: Path = CACHE, min_score: float = 0.7) -> Graph:
+    """The graph over the whole local proteome, rebuilt only when the definition cache changed
+    (19,000 definitions take about 2.5 s to load; a request should not pay that every time)."""
+    files = list(cache_dir.glob("*.json"))
+    sig = (len(files), max((f.stat().st_mtime for f in files), default=0.0), min_score)
+    if _CACHE.get("sig") != sig:
+        _CACHE["graph"] = build(cache_dir, min_score)
+        _CACHE["sig"] = sig
+    return _CACHE["graph"]

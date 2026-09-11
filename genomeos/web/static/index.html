@@ -1175,11 +1175,17 @@ async function loadUnknownWide() {
   } catch (e) { $('#j-unknown').innerHTML = `<span class="muted">${e.message}</span>`; }
   try {
     const p = await api('/api/proteome');
-    const chroms = Object.keys(p);
+    const chroms = Object.keys(p).sort((a, b) => a.length - b.length || a.localeCompare(b));
     if (!chroms.length) { $('#j-proteome').innerHTML = '<span class="muted">no chromosome compiled yet</span>'; return; }
-    const qs = Object.keys(p[chroms[0]].coverage);
-    $('#j-proteome').innerHTML = `<table><tr><th>question</th>${chroms.map(c => `<th class="num">${c} (${p[c].coding_genes})</th>`).join('')}</tr>` +
-      qs.map(q => `<tr><td>${q.replace(/_/g, ' ')}</td>${chroms.map(c => { const v = p[c].coverage[q]; return `<td class="num" style="background:rgba(31,111,235,${(v || 0) * 0.35})">${v != null ? (v * 100).toFixed(1) + '%' : '-'}</td>`; }).join('')}</tr>`).join('') + '</table>';
+    const qs = ['sequence', 'function', 'domains', 'pathways', 'interactions', 'expression', 'structure_experimental', 'disease'];
+    const short = {sequence: 'seq', function: 'function', domains: 'domains', pathways: 'pathways', interactions: 'partners', expression: 'expressed', structure_experimental: 'PDB', disease: 'disease'};
+    const genes = chroms.reduce((s, c) => s + p[c].coding_genes, 0);
+    const tot = q => chroms.reduce((s, c) => s + (p[c].coverage[q] || 0) * p[c].coding_genes, 0) / genes;
+    const cell = v => `<td class="num" style="background:rgba(31,111,235,${(v || 0) * 0.35})">${v != null ? (v * 100).toFixed(0) + '%' : '-'}</td>`;
+    $('#j-proteome').innerHTML = `<div class="kpi"><div><b>${chroms.length}</b><span>chromosomes</span></div><div><b>${fmt(genes)}</b><span>coding genes compiled</span></div><div><b>${(tot('function') * 100).toFixed(0)}%</b><span>function known</span></div><div><b>${(tot('structure_experimental') * 100).toFixed(0)}%</b><span>experimental structure</span></div></div>
+      <table><tr><th>chr</th><th class="num">genes</th>${qs.map(q => `<th class="num" data-tip="${q.replace(/_/g, ' ')}">${short[q]}</th>`).join('')}</tr>
+      <tr style="font-weight:600"><td>all</td><td class="num">${fmt(genes)}</td>${qs.map(q => cell(tot(q))).join('')}</tr>` +
+      chroms.map(c => `<tr><td class="mono">${c}</td><td class="num">${p[c].coding_genes}</td>${qs.map(q => cell(p[c].coverage[q])).join('')}</tr>`).join('') + '</table>';
   } catch (e) { $('#j-proteome').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
 async function loadFeatures() {
