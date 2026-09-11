@@ -580,6 +580,14 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <h2><i class="ic">🧬</i>Whole-genome inventory<span class="help" data-tip="The anatomy of every human chromosome, streamed one at a time: downloaded, counted, deleted. Rows appear as chromosomes finish.">?</span></h2>
       <div id="j-genome" class="scroll"></div>
     </div>
+    <div class="card">
+      <h2><i class="ic">🕵️</i>UNKNOWN space, genome-wide<span class="help" data-tip="Every UNKNOWN block of every chromosome classified: curated repeat annotation and ENCODE chromatin evidence first, then sequence rules. Rows appear as chromosomes finish; 'curated' says the RepeatMasker pass was used.">?</span></h2>
+      <div id="j-unknown" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🕸️</i>Proteome coverage<span class="help" data-tip="For every protein-coding gene of a compiled chromosome: which questions the public databases answer (sequence, function, domains, pathways, interactions, expression, structures, disease). Measured, not assumed.">?</span></h2>
+      <div id="j-proteome" class="scroll"></div>
+    </div>
   </div>
   <div class="card" style="margin-top:16px">
     <h2><i class="ic">🗺️</i>Project progress<span class="help" data-tip="The task log the project keeps in docs/PROGRESS.md: what was built, its status, and the evidence that it works.">?</span></h2>
@@ -664,7 +672,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
   b.scrollIntoView({block: 'nearest', inline: 'nearest'});
-  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadProgress(); }
+  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadProgress(); }
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
   // first visit to a simulation tab runs its default example
@@ -1037,6 +1045,26 @@ async function loadGenomeWide() {
       <table><tr><th>chr</th><th class="num">Mb</th><th class="num">genes</th><th class="num">genes/Mb</th><th class="num">CDS</th><th class="num">intron</th><th class="num">intergenic</th><th class="num">exons</th><th class="num">intron bp</th><th class="num">CpG isl.</th><th class="num">s</th></tr>` +
       g.table.map(r => `<tr><td class="mono">${r.chrom}</td><td class="num">${r.length_mb}</td><td class="num">${fmt(r.coding_genes)}</td><td class="num">${r.genes_per_mb}</td><td class="num">${(r.cds * 100).toFixed(2)}%</td><td class="num">${(r.intron * 100).toFixed(0)}%</td><td class="num">${(r.intergenic * 100).toFixed(0)}%</td><td class="num">${r.exons ?? ''}</td><td class="num">${r.intron_median ?? ''}</td><td class="num">${fmt(r.cpg_islands)}</td><td class="num">${r.seconds ?? ''}</td></tr>`).join('') + '</table>';
   } catch (e) { $('#j-genome').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function loadUnknownWide() {
+  try {
+    const u = await api('/api/unknown/genome');
+    if (!u.table.length) { $('#j-unknown').innerHTML = '<span class="muted">not run yet</span>'; return; }
+    const by = Object.entries(u.by_class);
+    $('#j-unknown').innerHTML = `<div class="kpi"><div><b>${u.done}/${u.total}</b><span>chromosomes</span></div><div><b>${(u.unknown_bp / 1e9).toFixed(2)} Gb</b><span>UNKNOWN space</span></div><div><b>${u.classified != null ? (u.classified * 100).toFixed(1) + '%' : '-'}</b><span>classified</span></div></div>
+      <div class="prog"><i style="width:${u.done / u.total * 100}%"></i></div>
+      <div style="font-size:12px;margin:6px 0">${by.map(([k, v]) => `<span class="chip" data-tip="${k.replace(/_/g, ' ')}: ${(v / 1e6).toFixed(0)} Mb">${k.replace(/_/g, ' ')} ${(v / u.unknown_bp * 100).toFixed(1)}%</span>`).join(' ')}</div>
+      <table><tr><th>chr</th><th class="num">blocks</th><th class="num">Mb</th><th class="num">classified</th><th>largest class</th><th>curated</th><th class="num">s</th></tr>` +
+      u.table.map(r => `<tr><td class="mono">${r.chrom}</td><td class="num">${fmt(r.blocks)}</td><td class="num">${r.unknown_mb}</td><td class="num">${(r.classified * 100).toFixed(1)}%</td><td>${r.top_class.replace(/_/g, ' ')} <span class="muted">${r.top_share != null ? (r.top_share * 100).toFixed(0) + '%' : ''}</span></td><td>${r.curated_repeats ? '✓' : '·'}</td><td class="num">${r.seconds ?? ''}</td></tr>`).join('') + '</table>';
+  } catch (e) { $('#j-unknown').innerHTML = `<span class="muted">${e.message}</span>`; }
+  try {
+    const p = await api('/api/proteome');
+    const chroms = Object.keys(p);
+    if (!chroms.length) { $('#j-proteome').innerHTML = '<span class="muted">no chromosome compiled yet</span>'; return; }
+    const qs = Object.keys(p[chroms[0]].coverage);
+    $('#j-proteome').innerHTML = `<table><tr><th>question</th>${chroms.map(c => `<th class="num">${c} (${p[c].coding_genes})</th>`).join('')}</tr>` +
+      qs.map(q => `<tr><td>${q.replace(/_/g, ' ')}</td>${chroms.map(c => { const v = p[c].coverage[q]; return `<td class="num" style="background:rgba(31,111,235,${(v || 0) * 0.35})">${v != null ? (v * 100).toFixed(1) + '%' : '-'}</td>`; }).join('')}</tr>`).join('') + '</table>';
+  } catch (e) { $('#j-proteome').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
 async function loadProgress() {
   const p = await api('/api/progress');

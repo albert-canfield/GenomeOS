@@ -614,6 +614,64 @@ class Api:
             "done": sum(1 for r in rows if r["status"].startswith("done")),
         }
 
+    def unknown_wide(self) -> dict:
+        """Genome-wide UNKNOWN classification: per-chromosome rows and class totals, as far as it has run."""
+        from genomeos.results import load_result
+
+        r = load_result("unknown_genome_wide", self.root / "data" / "results") or {"chromosomes": {}}
+        ch = r.get("chromosomes", {})
+        order = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
+        rows = []
+        for c in order:
+            v = ch.get(c) or (
+                load_result(f"unknown_{c}", self.root / "data" / "results") if c == "chr21" else None
+            )
+            if not v:
+                continue
+            by = {k: (x["bp"] if isinstance(x, dict) else x) for k, x in v["by_class"].items()}
+            top = max(
+                (kv for kv in by.items() if kv[0] != "unclassified"), key=lambda kv: kv[1], default=("-", 0)
+            )
+            rows.append(
+                {
+                    "chrom": c,
+                    "blocks": v["unknown_blocks"],
+                    "unknown_mb": round(v["unknown_bp"] / 1e6, 1),
+                    "classified": v["classified_fraction"],
+                    "top_class": top[0],
+                    "top_share": round(top[1] / v["unknown_bp"], 3) if v["unknown_bp"] else None,
+                    "curated_repeats": bool(v.get("curated_repeats")),
+                    "seconds": v.get("seconds"),
+                }
+            )
+        tot_bp = sum(v["unknown_bp"] for v in ch.values()) or 1
+        by_all: dict[str, int] = {}
+        for v in ch.values():
+            for k, x in v["by_class"].items():
+                by_all[k] = by_all.get(k, 0) + (x["bp"] if isinstance(x, dict) else x)
+        return {
+            "done": len(rows),
+            "total": 24,
+            "unknown_bp": tot_bp,
+            "classified": round(1 - by_all.get("unclassified", 0) / tot_bp, 4) if ch else None,
+            "by_class": dict(sorted(by_all.items(), key=lambda kv: -kv[1])[:12]),
+            "table": rows,
+        }
+
+    def proteome_summary(self) -> dict:
+        from genomeos.results import load_result
+
+        out = {}
+        for c in [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]:
+            r = load_result(f"proteome_{c}", self.root / "data" / "results")
+            if r:
+                out[c] = {
+                    "coding_genes": r["coding_genes"],
+                    "coverage": r["coverage_fraction"],
+                    "no_entry": len(r.get("no_reviewed_entry", [])),
+                }
+        return out
+
     def genome_wide(self) -> dict:
         from genomeos.results import load_result
 
@@ -1053,6 +1111,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.progress())
             if u.path == "/api/anatomy/genome":
                 return self._json(self.api.genome_wide())
+            if u.path == "/api/unknown/genome":
+                return self._json(self.api.unknown_wide())
+            if u.path == "/api/proteome":
+                return self._json(self.api.proteome_summary())
             if u.path == "/api/anatomy":
                 return self._json(self.api.anatomy(self._q(qs, "path"), self._q(qs, "chrom")))
             if u.path == "/api/develop":
