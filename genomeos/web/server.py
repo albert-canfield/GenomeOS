@@ -965,6 +965,27 @@ class Api:
             if genome:
                 genome.close()
 
+    def report(self, gene: str, chrom: str) -> dict:
+        """The gene dossier (Markdown and the dict behind it)."""
+        from genomeos.genome import IndexedGenome, default_gencode
+        from genomeos.report import gene_report, to_markdown
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+        if not default_gencode({chrom}) or not fa.exists():
+            raise ApiError(f"{chrom} is not local; fetch it first")
+        ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+        genome = IndexedGenome(fa)
+        try:
+            rep = gene_report(gene.upper(), chrom, ann, genome, self.root)
+        except KeyError as e:
+            raise ApiError(f"{gene} not on {chrom}") from e
+        finally:
+            genome.close()
+        rep["markdown"] = to_markdown(rep)
+        return rep
+
     def lookup(self, variant: str) -> dict:
         """One variant through every layer: VEP anywhere, local trace when the chromosome is local."""
         from genomeos.genome import IndexedGenome, default_gencode
@@ -1208,6 +1229,8 @@ class Handler(BaseHTTPRequestHandler):
                         int(self._q(qs, "end", 0)),
                     )
                 )
+            if u.path == "/api/report":
+                return self._json(self.api.report(self._q(qs, "gene", ""), self._q(qs, "chrom", "chr21")))
             if u.path == "/api/lookup":
                 return self._json(self.api.lookup(self._q(qs, "variant", "")))
             if u.path == "/api/graph":

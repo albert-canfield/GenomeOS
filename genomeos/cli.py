@@ -1603,6 +1603,33 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_report(args: argparse.Namespace) -> int:
+    """Every layer about one gene, as one Markdown dossier."""
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.report import gene_report, to_markdown
+
+    gff = default_gencode({args.chrom})
+    if not gff or not Path(args.genome).exists():
+        print(f"{args.chrom}: needs local models and sequence (genomeos data fetch --chrom {args.chrom})")
+        return 1
+    ann = Annotation.from_gff3(gff, {args.chrom})
+    genome = IndexedGenome(args.genome)
+    try:
+        rep = gene_report(args.symbol, args.chrom, ann, genome)
+    except KeyError:
+        print(f"{args.symbol} not on {args.chrom}")
+        return 1
+    finally:
+        genome.close()
+    text = json.dumps(rep, indent=1) if args.json else to_markdown(rep)
+    if args.out:
+        Path(args.out).write_text(text)
+        print(f"wrote {args.out}")
+    else:
+        print(text)
+    return 0
+
+
 def cmd_verify(args: argparse.Namespace) -> int:
     """Translate every compiled gene of a chromosome and compare with UniProt."""
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
@@ -2452,6 +2479,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser("report", help="a gene dossier: every layer about one gene in one document")
+    p.add_argument("symbol")
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--out", help="write to a file (.md or .json)")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(fn=cmd_report)
 
     p = sub.add_parser(
         "verify", help="translate every compiled gene of a chromosome and compare with UniProt"

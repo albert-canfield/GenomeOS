@@ -117,6 +117,14 @@
     c.addEventListener('mousemove', ev => { if (G.drag) { const r = c.getBoundingClientRect(); G.drag.x = ev.clientX - r.left; G.drag.y = ev.clientY - r.top; gDraw(); } else { const n = pick(ev); c.title = n ? `${n.kind}: ${n.name || n.id}` : ''; } });
     window.addEventListener('mouseup', () => { G.drag = null; });
   });
+  document.addEventListener('DOMContentLoaded', () => {
+    const b = $('#m-report'); if (!b) return;
+    b.onclick = async () => {
+      const out = $('#m-report-out'); out.style.display = 'block'; out.textContent = 'assembling the dossier…';
+      try { const r = await window.api(`/api/report?gene=${encodeURIComponent($('#m-gene').value.trim())}&chrom=${encodeURIComponent($('#m-chrom').value.trim())}`); out.textContent = r.markdown; }
+      catch (e) { out.textContent = e.message; }
+    };
+  });
   window.moleculesRna = async function (gene, chrom) {
     $('#m-rna-status').textContent = 'listing transcripts, fetching GTEx…';
     try {

@@ -501,9 +501,11 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
         <label data-tip="Chromosome for our own translation; chr21 and chrM are local.">chromosome <input id="m-chrom" value="chr21" style="width:80px" class="mono"></label>
         <label data-tip="Residue number to mark on the structure, e.g. 673 for APP A673T.">residue <input id="m-residue" type="number" placeholder="673" style="width:80px"></label>
         <button class="primary" id="m-load" data-tip="Fetch UniProt and AlphaFold for this gene."><i class="ic">🔎</i>Load</button>
+        <button class="ghost" id="m-report" data-tip="A dossier of every layer about this gene (origin, flow, regulation, expression, protein, pathways, the test human's variants) as Markdown you can copy."><i class="ic">📄</i>Dossier</button>
         <span class="muted" id="m-status"></span>
       </div>
       <div id="m-info"><span class="muted">Load a gene.</span></div>
+      <pre id="m-report-out" class="mono" style="display:none;font-size:11.5px;white-space:pre-wrap;max-height:360px;overflow:auto;margin-top:8px"></pre>
     </div>
     <div class="card" style="grid-column:1/-1">
       <h2><i class="ic">🧵</i>RNA<span class="help" data-tip="The RNA layer of the gene: every transcript from the gene models (canonical and MANE first) with biotype, exon count, spliced length and coding length; and where the gene is expressed, as GTEx median TPM per tissue (measured on bulk post-mortem tissue, 54 tissues).">?</span>
