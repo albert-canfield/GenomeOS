@@ -15,12 +15,7 @@ import json
 from typing import Any
 
 from genomeos.molecules.compiler import CACHE
-from genomeos.runtime.central_dogma import (
-    STANDARD_CODE,
-    VERTEBRATE_MITOCHONDRIAL_CODE,
-    coding_sequence,
-    translate,
-)
+from genomeos.runtime.central_dogma import coding_sequence, table_for, translate_cds
 
 
 def _identity(a: str, b: str) -> float:
@@ -28,9 +23,16 @@ def _identity(a: str, b: str) -> float:
     return sum(1 for x, y in zip(a, b, strict=False) if x == y) / n if n else 0.0
 
 
+def _similarity(a: str, b: str) -> float:
+    """Gapped similarity (difflib ratio): an N-terminal offset or one extra exon still scores high,
+    a wrong protein does not."""
+    from difflib import SequenceMatcher
+
+    return SequenceMatcher(None, a, b, autojunk=False).ratio() if a and b else 0.0
+
+
 def verify_chromosome(chrom: str, annotation, genome) -> dict[str, Any]:
     module = annotation.to_module("verify")
-    table = VERTEBRATE_MITOCHONDRIAL_CODE if chrom in ("chrM", "MT") else STANDARD_CODE
     rows: list[dict[str, Any]] = []
     for g in annotation.protein_coding():
         if g.locus.chrom != chrom or g.symbol.startswith("ENSG"):
@@ -46,14 +48,26 @@ def verify_chromosome(chrom: str, annotation, genome) -> dict[str, Any]:
         if not txs:
             continue
         canon = next((t for t in txs if "Ensembl_canonical" in t.tags), txs[0])
-        ours = translate(coding_sequence(genome, canon), table=table, initiator=True)
+        ours = translate_cds(coding_sequence(genome, canon), table_for(canon, chrom))
         # best over all coding isoforms, to tell "other isoform" from "real disagreement"
         best = max(
-            (_identity(translate(coding_sequence(genome, t), table=table, initiator=True), uni) for t in txs),
+            (_identity(translate_cds(coding_sequence(genome, t), table_for(t, chrom)), uni) for t in txs),
             default=0.0,
+        )
+        sim = (
+            max(
+                (
+                    _similarity(translate_cds(coding_sequence(genome, t), table_for(t, chrom)), uni)
+                    for t in txs
+                ),
+                default=0.0,
+            )
+            if best < 0.9999
+            else 1.0
         )
         rows.append(
             {
+                "similarity_best_isoform": round(sim, 4),
                 "gene": g.symbol,
                 "accession": ident.get("accession"),
                 "transcript": canon.attrs.get("name", canon.id),
@@ -69,7 +83,8 @@ def verify_chromosome(chrom: str, annotation, genome) -> dict[str, Any]:
     exact = sum(1 for r in rows if r["exact"])
     best_exact = sum(1 for r in rows if r["identity_best_isoform"] >= 0.9999)
     other_isoform = sum(1 for r in rows if not r["exact"] and r["identity_best_isoform"] >= 0.9999)
-    disagree = [r for r in rows if r["identity_best_isoform"] < 0.98]
+    offset = [r for r in rows if r["identity_best_isoform"] < 0.98 and r["similarity_best_isoform"] >= 0.9]
+    disagree = [r for r in rows if r["similarity_best_isoform"] < 0.9]
     return {
         "chrom": chrom,
         "genes_checked": n,
@@ -78,8 +93,10 @@ def verify_chromosome(chrom: str, annotation, genome) -> dict[str, Any]:
         "exact_some_isoform": best_exact,
         "exact_some_isoform_fraction": round(best_exact / n, 4) if n else None,
         "canonical_differs_but_another_isoform_matches": other_isoform,
-        "disagreements": sorted(disagree, key=lambda r: r["identity_best_isoform"])[:40],
+        "same_protein_different_boundaries": len(offset),
+        "disagreements": sorted(disagree, key=lambda r: r["similarity_best_isoform"])[:40],
         "disagreement_count": len(disagree),
         "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
-        "note": "a length difference with a matching isoform is a canonical-choice difference, not an error",
+        "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped "
+        "similarity with low identity is the same protein with different start or exon boundaries",
     }

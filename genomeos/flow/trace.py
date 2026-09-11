@@ -14,7 +14,12 @@ from typing import Any
 
 from genomeos.coords import Locus, Strand
 from genomeos.ir.model import Gene, Transcript
-from genomeos.runtime.central_dogma import STANDARD_CODE, VERTEBRATE_MITOCHONDRIAL_CODE, translate
+from genomeos.runtime.central_dogma import (
+    SELENOCYSTEINE_CODE,
+    STANDARD_CODE,
+    VERTEBRATE_MITOCHONDRIAL_CODE,
+    translate_cds,
+)
 
 AA3 = {
     "A": "Ala",
@@ -240,9 +245,16 @@ def trace(
         if first in g2m and last in g2m:
             cds_start = g2m[first] + transcript.cds_phase
             cds_end = g2m[last] + 1
-            table_name = table_name or ("mito" if chrom in ("chrM", "MT") else "standard")
-            table = VERTEBRATE_MITOCHONDRIAL_CODE if table_name == "mito" else STANDARD_CODE
-            protein = translate(mrna[cds_start:cds_end], table=table, initiator=True)
+            if table_name is None:
+                table_name = (
+                    "mito"
+                    if chrom in ("chrM", "MT")
+                    else ("seleno" if "seleno" in transcript.tags else "standard")
+                )
+            table = {"mito": VERTEBRATE_MITOCHONDRIAL_CODE, "seleno": SELENOCYSTEINE_CODE}.get(
+                table_name, STANDARD_CODE
+            )
+            protein = translate_cds(mrna[cds_start:cds_end], table)
     return CentralDogmaTrace(
         gene=gene_symbol or transcript.gene_id,
         transcript=transcript.attrs.get("name", transcript.id),

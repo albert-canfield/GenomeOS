@@ -8,8 +8,9 @@
   "exact_some_isoform": 13,
   "exact_some_isoform_fraction": 1.0,
   "canonical_differs_but_another_isoform_matches": 0,
+  "same_protein_different_boundaries": 0,
   "disagreements": [],
   "disagreement_count": 0,
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
-  "note": "a length difference with a matching isoform is a canonical-choice difference, not an error"
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

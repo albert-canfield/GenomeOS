@@ -1626,10 +1626,11 @@ def cmd_verify(args: argparse.Namespace) -> int:
                         "ours aa": d["ours_aa"],
                         "UniProt aa": d["uniprot_aa"],
                         "best identity": f"{d['identity_best_isoform']:.1%}",
+                        "similarity": f"{d['similarity_best_isoform']:.1%}",
                     }
                     for d in r["disagreements"][: args.top]
                 ],
-                ["gene", "transcript", "ours aa", "UniProt aa", "best identity"],
+                ["gene", "transcript", "ours aa", "UniProt aa", "best identity", "similarity"],
             )
         )
     print(f"  saved data/results/translation_vs_uniprot_{args.chrom}.json")

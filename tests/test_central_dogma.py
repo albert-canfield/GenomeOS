@@ -51,3 +51,11 @@ def test_splice_joins_exons():
     mrna = splice(g, t)
     assert mrna == "AUGAAAUUUUAA"
     assert translate(mrna) == "MKF"
+
+
+def test_selenocysteine_table_reads_uga_as_u_but_keeps_the_final_stop():
+    from genomeos.runtime.central_dogma import SELENOCYSTEINE_CODE, translate_cds
+
+    assert translate_cds("AUGUGAGGCUAA", SELENOCYSTEINE_CODE) == "MUG"
+    assert translate_cds("AUGGGCUGA", SELENOCYSTEINE_CODE) == "MG"  # UGA as terminator at the end
+    assert translate_cds("AUGUGAGGCUAA") == "M"  # standard table: UGA stops

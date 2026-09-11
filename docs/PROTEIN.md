@@ -171,15 +171,24 @@ rest. The mitochondrial proteome compiles at 100% on every question, the
 compiled gene from the reference sequence and compares it with the reviewed
 UniProt sequence, then tries every coding isoform:
 
-| chromosome | genes | canonical identical | some isoform identical | real disagreements |
-|---|---|---|---|---|
-| chr21 | 213 | 91.5% | 99.1% | 2 (SH3BGR, KRTAP6-3) |
-| chrM | 13 | 100% | 100% | 0 |
+| chromosome | genes | canonical identical | some isoform identical | same protein, other boundaries | real disagreements |
+|---|---|---|---|---|---|
+| chr21 | 213 | 91.5% | 99.1% | 1 | 1 (SH3BGR) |
+| chr22 | 426 | 91.1% | 96.5% | 7 | 4 (CYP2D7, FAM246C, KLHDC7B, GSTT2) |
+| chrM | 13 | 100% | 100% | 0 | 0 |
 
 A canonical-choice difference (16 on chr21) is GENCODE and UniProt naming
 different isoforms as canonical; the protein is still produced exactly by
 another transcript. The two real disagreements are recorded with their
 identities in `translation_vs_uniprot_chr21.json` for a look.
+
+The pass found two things the engine did not know. Selenoproteins (25 human
+genes, GENCODE tag `seleno`) read an in-frame UGA as selenocysteine, so
+SELENOM stopped at residue 47 instead of 145; the engine now has a
+selenocysteine table chosen by the tag, and the three selenoproteins on
+chr22 match exactly. And a gene can own two reviewed UniProt entries (MIEF1:
+the 463-residue protein and a 70-residue microprotein from an upstream ORF);
+the compiler now takes the longest entry with the matching primary name.
 
 This pass also caught a compiler bug: UniProt's `gene_exact` query matches
 synonyms, so the first hit for MIF was a 560-residue protein that carries

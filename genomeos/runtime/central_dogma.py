@@ -27,6 +27,10 @@ STANDARD_CODE: dict[str, str] = {
 # Vertebrate mitochondrial code (NCBI table 2) differs at four codons.
 VERTEBRATE_MITOCHONDRIAL_CODE = {**STANDARD_CODE, "UGA": "W", "AUA": "M", "AGA": "*", "AGG": "*"}
 
+# Selenoproteins (25 human genes, GENCODE tag "seleno"): an in-frame UGA is read as
+# selenocysteine (U) when a SECIS element sits in the 3' UTR; the real stop is UAA or UAG.
+SELENOCYSTEINE_CODE = {**STANDARD_CODE, "UGA": "U"}
+
 START_CODON = "AUG"
 STOP = "*"
 
@@ -162,6 +166,32 @@ def coding_sequence(genome, transcript: Transcript) -> str:
     return rna[transcript.cds_phase :]
 
 
-def translate_transcript(genome, transcript: Transcript, table: dict[str, str] = STANDARD_CODE) -> str:
+def table_for(transcript: Transcript, chrom: str | None = None) -> dict[str, str]:
+    """The codon table a transcript is read with: mitochondrial on chrM, selenocysteine when tagged."""
+    if chrom in ("chrM", "MT"):
+        return VERTEBRATE_MITOCHONDRIAL_CODE
+    if "seleno" in getattr(transcript, "tags", ()):
+        return SELENOCYSTEINE_CODE
+    return STANDARD_CODE
+
+
+def translate_cds(rna: str, table: dict[str, str] = STANDARD_CODE) -> str:
+    """Translate a coding sequence; with the selenocysteine table a final UGA is still the stop."""
+    protein = translate(rna, table=table, initiator=True)
+    rna = rna.upper().replace("T", "U")
+    # with the selenocysteine table a UGA in the last codon of the CDS is the terminator, not Sec
+    last = rna[len(protein) * 3 - 3 : len(protein) * 3]
+    if (
+        table is SELENOCYSTEINE_CODE
+        and protein.endswith("U")
+        and last == "UGA"
+        and len(rna) - len(protein) * 3 < 3
+    ):
+        protein = protein[:-1]
+    return protein
+
+
+def translate_transcript(genome, transcript: Transcript, table: dict[str, str] | None = None) -> str:
     """Protein encoded by a transcript, stopping at the first stop codon."""
-    return translate(coding_sequence(genome, transcript), table=table, initiator=True)
+    chrom = transcript.exons[0].chrom if transcript.exons else None
+    return translate_cds(coding_sequence(genome, transcript), table or table_for(transcript, chrom))

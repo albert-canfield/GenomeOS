@@ -159,10 +159,15 @@ def uniprot_raw(symbol: str, organism: int = 9606) -> dict[str, Any] | None:
     url = f"https://rest.uniprot.org/uniprotkb/search?query={urllib.parse.quote(q)}&format=json&size=5"
     d = _get(url + f"&fields={UNIPROT_FIELDS}")
     hits = d.get("results") or []
-    for h in hits:
-        primary = ((h.get("genes") or [{}])[0].get("geneName") or {}).get("value", "")
-        if primary.upper() == symbol.upper():
-            return h
+    same = [
+        h
+        for h in hits
+        if (((h.get("genes") or [{}])[0].get("geneName") or {}).get("value", "")).upper() == symbol.upper()
+    ]
+    if same:
+        # a gene can own several reviewed entries (MIEF1: the 463-residue protein and a 70-residue
+        # microprotein from an upstream ORF); the main product is the longest
+        return max(same, key=lambda h: h.get("sequence", {}).get("length", 0))
     return hits[0] if hits else None
 
 
