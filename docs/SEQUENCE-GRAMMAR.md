@@ -131,10 +131,48 @@ tested against it.
    conservation. Each of those is a measurable step up on this table. Every
    prediction is saved as `predicted` evidence next to this measurement
    (`data/results/segments_chr21.json`); none enters the block map.
+   **Second opinion on the splice sites (feature c, 2026-09-11).** The
+   bottleneck named above was tested directly. `genomeos segments --chrom
+   chr21 --predicted-sites` keeps the parser exactly as it is (Kozak matrix
+   for starts, codon log-odds, Viterbi, the same priors) and replaces only
+   the donor and acceptor candidates: instead of the two learned matrices it
+   takes AlphaGenome's splice-site tracks, four probabilities per base (donor
+   and acceptor on each strand), 45 requests of 1 Mb for the chromosome in
+   33 s, cached locally (`genomeos/predict/splice_sites.py`). Calibrated
+   against GENCODE first: the donor track peaks on the last exonic base and
+   the acceptor track on the first exonic base, on both strands, with mean
+   probability 0.91 to 1.00 at canonical exon boundaries. A probability
+   enters the Viterbi as log2(p/(1−p)) + 10 bits, so a confident site sits
+   where a perfect matrix hit would.
+
+   | level | matrices alone | AlphaGenome sites |
+   |---|---|---|
+   | CDS segment (exact both ends) | 4.7% / 5.2% | **40.1% / 46.2%** |
+   | splice site (exact position) | 7.5% / 6.9% | **51.6% / 49.2%** |
+   | gene (any overlap, same strand) | 89.1% / 21.9% | 84.2% / 20.0% |
+   | candidates | 556 | 1,003 |
+
+   (`data/results/segments_chr21_predicted_sites.json`; sensitivity /
+   precision.) Nine times the exact exons from the same parser: the
+   delimiters were the limit, as section 1 said. What did not move is as
+   telling: gene precision stays at one in five because the start codons and
+   the coding model are unchanged, and the 1,003 candidates are mostly
+   single-exon open reading frames the Kozak matrix lets through. Thresholds
+   were swept on the cached tracks (p ≥ 0.05, 0.2, 0.5; 10 or 13.3 bits):
+   the lowest threshold with the 10-bit scale is best on every axis, so
+   discarding weak sites loses true exons faster than it removes false ones.
+   The remaining gap to the annotation is first and last exons (start and
+   stop, no splice signal) and alternative isoforms, since every transcript's
+   CDS segments count as truth. The next measurable steps are therefore a
+   predicted start signal of the same quality, and scoring against canonical
+   transcripts separately. All of it stays `predicted` evidence; the grammar
+   runs unchanged without the key.
 2. Promoter motif scanning with JASPAR matrices to derive `requires` lists
    with evidence, and to give `cell_type ... expresses:` a sequence-level
    justification.
 3. Deep-model signals (AlphaGenome, Evo 2) for the delimiters no PWM can
    capture (enhancers, chromatin accessibility), entering as `predicted`.
+   Splice sites: done above (feature c). Enhancer targets: docs/ALPHAGENOME.md
+   feature b.
 4. Grammar written in BioLang itself, so a bio-engineer can add a signal
    the way one adds a rule: with its examples and evidence.

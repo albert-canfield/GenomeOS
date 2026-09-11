@@ -39,6 +39,10 @@ STOP_BONUS = 0.0
 MIN_CDS = 300  # total coding bases a candidate must have (100 residues)
 MIN_GENE_SCORE = 10.0  # bits over background a candidate must reach
 EVIDENCE = "predicted: segment parser v1 (learned PWMs + codon log-odds, Viterbi over candidate signals)"
+EVIDENCE_PREDICTED_SITES = (
+    "predicted: segment parser v1 with AlphaGenome splice sites as the donor/acceptor candidates "
+    "(learned Kozak matrix for starts, codon log-odds, Viterbi)"
+)
 
 
 @dataclass(slots=True)
@@ -109,10 +113,17 @@ class _Donor:
 
 
 class SegmentParser:
-    def __init__(self, signals: SignalSet, codon_lo: dict[str, float], min_relative: float = 0.6) -> None:
+    """Viterbi over candidate signals. `sites`, when given, replaces the donor/acceptor matrices with an
+    external oracle: sites(strand, genomic_offset, n) -> (donors, acceptors) in the string's own coordinates
+    (feature c: AlphaGenome splice-site tracks). Start codons always come from the learned Kozak matrix."""
+
+    def __init__(
+        self, signals: SignalSet, codon_lo: dict[str, float], min_relative: float = 0.6, sites=None
+    ) -> None:
         self.signals = signals
         self.codon_lo = codon_lo
         self.min_relative = min_relative
+        self.sites = sites
 
     def _prefix_and_stops(self, s: str) -> tuple[list[list[float]], list[list[int]]]:
         n = len(s)
@@ -145,7 +156,7 @@ class SegmentParser:
         return pre[f][e] - pre[f][b]
 
     def _candidates(
-        self, s: str
+        self, s: str, offset: int = 0, strand: str = "+"
     ) -> tuple[list[tuple[int, float]], list[tuple[int, float]], list[tuple[int, float]]]:
         pw = self.signals.pwms
         donor, acceptor, start = pw["splice_donor"], pw["splice_acceptor"], pw["start_kozak"]
@@ -166,13 +177,14 @@ class SegmentParser:
             return tot
 
         donors, acceptors, starts = [], [], []
+        external = self.sites is not None
         for p in range(1, n - 2):
             two = s[p : p + 2]
-            if two == "GT":
+            if not external and two == "GT":
                 sc = score_at(dm, p, donor.offset, donor.length)
                 if sc / dmax >= self.min_relative:
                     donors.append((p, sc))
-            if s[p - 1 : p + 1] == "AG":
+            if not external and s[p - 1 : p + 1] == "AG":
                 sc = score_at(am, p + 1, acceptor.offset, acceptor.length)  # anchor: first exonic base
                 if sc / amax >= self.min_relative:
                     acceptors.append((p + 1, sc))  # first exonic base after AG
@@ -180,13 +192,19 @@ class SegmentParser:
                 sc = score_at(sm, p, start.offset, start.length)
                 if sc / smax >= self.min_relative:
                     starts.append((p, sc))
+        if external:
+            donors, acceptors = self.sites(strand, offset, n)
+            donors = [(p, sc) for p, sc in donors if 1 <= p < n - 2]
+            acceptors = [(p, sc) for p, sc in acceptors if 1 <= p < n]
         return donors, acceptors, starts
 
-    def parse_strand(self, s: str) -> list[tuple[int, int, list[tuple[int, int]], float]]:
+    def parse_strand(
+        self, s: str, offset: int = 0, strand: str = "+"
+    ) -> list[tuple[int, int, list[tuple[int, int]], float]]:
         """Best non-overlapping gene structures on one strand of `s` (coordinates in `s`)."""
         n = len(s)
         pre, nxt = self._prefix_and_stops(s)
-        donors, acceptors, starts = self._candidates(s)
+        donors, acceptors, starts = self._candidates(s, offset, strand)
         beginnings: list[_Beginning] = []
         donor_states: list[_Donor] = []
         # events in order of position; a donor closes exons that began before it, an acceptor opens one
@@ -275,12 +293,16 @@ class SegmentParser:
         out.sort()
         return out
 
-    def parse(self, chrom: str, seq: str) -> list[Prediction]:
+    def parse(self, chrom: str, seq: str, offset: int = 0) -> list[Prediction]:
+        """Both strands of `seq`, which starts at genomic `offset` (used only by an external site oracle)."""
         fwd = seq.upper()
         n = len(fwd)
-        preds = [Prediction(chrom, Strand.PLUS, s, e, ex, sc) for s, e, ex, sc in self.parse_strand(fwd)]
+        preds = [
+            Prediction(chrom, Strand.PLUS, s, e, ex, sc)
+            for s, e, ex, sc in self.parse_strand(fwd, offset, "+")
+        ]
         rc = str(Sequence(fwd).reverse_complement())
-        for s, e, ex, sc in self.parse_strand(rc):
+        for s, e, ex, sc in self.parse_strand(rc, offset, "-"):
             exons = sorted((n - b, n - a) for a, b in ex)
             preds.append(Prediction(chrom, Strand.MINUS, n - e, n - s, exons, sc))
         preds.sort(key=lambda p: p.start)
@@ -342,8 +364,10 @@ def parse_chromosome(
     min_relative: float = 0.5,
     window: int = 2_000_000,
     overlap: int = 200_000,
+    sites=None,
 ) -> dict[str, Any]:
-    """Learn coding potential from the annotation, parse the chromosome in windows, evaluate."""
+    """Learn coding potential from the annotation, parse the chromosome in windows, evaluate.
+    `sites` is an optional external splice-site oracle (see SegmentParser)."""
     from genomeos.genome import Genome
     from genomeos.runtime.central_dogma import coding_sequence
 
@@ -360,13 +384,13 @@ def parse_chromosome(
             if t.cds_segments and "Ensembl_canonical" in t.tags:
                 cds.append(coding_sequence(genome, t).replace("U", "T"))
     lo = codon_log_odds(cds, seq)
-    parser = SegmentParser(signals, lo, min_relative)
+    parser = SegmentParser(signals, lo, min_relative, sites)
     preds: list[Prediction] = []
     n = len(seq)
     pos = 0
     while pos < n:
         end = min(n, pos + window)
-        for p in parser.parse(chrom, seq[pos:end]):
+        for p in parser.parse(chrom, seq[pos:end], pos):
             shifted = Prediction(
                 chrom, p.strand, p.start + pos, p.end + pos, [(a + pos, b + pos) for a, b in p.exons], p.score
             )
@@ -389,6 +413,6 @@ def parse_chromosome(
         "training_cds": len(cds),
         **ev,
         "predictions_top": [p.to_dict() for p in sorted(kept, key=lambda p: -p.score)[:50]],
-        "evidence": EVIDENCE,
+        "evidence": EVIDENCE if sites is None else EVIDENCE_PREDICTED_SITES,
         "note": "scored against every coding transcript's CDS; a prediction is a candidate, not an assertion",
     }

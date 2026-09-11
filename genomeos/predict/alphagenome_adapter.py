@@ -48,9 +48,9 @@ FEATURES: tuple[tuple[str, str, str, str], ...] = (
     (
         "c",
         "sequence grammar",
-        "splice-site and chromatin signals the learned matrices cannot capture, entering as predicted "
-        "evidence",
-        "planned",
+        "splice sites at 1 bp as the donor/acceptor candidates of the segment parser "
+        "(`genomeos segments --predicted-sites`), entering as predicted evidence",
+        "built",
     ),
     (
         "d",

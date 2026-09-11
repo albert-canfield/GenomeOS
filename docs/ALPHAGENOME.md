@@ -91,15 +91,29 @@ unphased sequence, so it does not see a diploid individual.
    neuroectodermal line, agrees) and the elements the inference gets wrong:
    EH38E3454846 is 41 kb from SCAF4 but moves HUNK, beyond the boundary;
    EH38E3457653 sits 234 kb from HLCS and moves SIM2 instead. Other
-   chromosomes run through the same job by name; the summary card on the
-   Progress tab shows one row per chromosome scored.
-3. **Splicing, at the resolution our grammar lacks** (feature c). Our learned
-   donor and acceptor matrices reach about 90% recall at seven false hits per
-   kilobase, which is why segments are parsed by grammar and never asserted
-   (D19). AlphaGenome predicts splice sites, their usage and the junctions at
-   1 bp, so the segment parser can carry a second, independent opinion, and a
-   variant can be reported as splice-disrupting with a predicted junction
-   change rather than a motif score.
+   chromosomes run through the same job by name (`enhancer_targets_<chrom>`,
+   registered for every chromosome); the summary card on the Progress tab
+   shows one row per chromosome scored. The first three agree with each other:
+
+   | chromosome | elements | name a gene | coding target = nearest TSS | inside the node | silencer-like |
+   |---|---|---|---|---|---|
+   | chr21 | 200 | 63.5% | 67.8% | 86.7% | 43 |
+   | chr22 | 200 | 61.0% | 65.0% | 91.8% | 47 |
+   | chr1 | 200 | 64.0% | 68.4% | 86.7% | 53 |
+3. **Splicing, at the resolution our grammar lacks** (built, feature c). Our
+   learned donor and acceptor matrices reach about 90% recall at seven false
+   hits per kilobase, which is why segments are parsed by grammar and never
+   asserted (D19). `genomeos segments --chrom C --predicted-sites` feeds the
+   parser AlphaGenome's splice-site tracks instead (four probabilities per
+   base, donor and acceptor per strand; 1 Mb per request, 45 requests and
+   33 s for chr21, cached under `data/knowledge/alphagenome/splice`). The
+   tracks were calibrated first: they mark the last exonic base (donor) and
+   the first exonic base (acceptor) on both strands, mean probability 0.91 to
+   1.00 at canonical boundaries. With nothing else changed, exact CDS
+   segments on chr21 go from 4.7% / 5.2% to 40.1% / 46.2% and exact splice
+   sites from 7.5% / 6.9% to 51.6% / 49.2% (sensitivity / precision;
+   docs/SEQUENCE-GRAMMAR.md has the table and what did not move). Everything
+   stays `predicted`; without the key the grammar runs as before.
 4. **Domains from a predicted contact map**. `genomeos domains` infers a node
    between CTCF-only elements and labels it inferred. A predicted contact map
    at 2 kb over a 1 Mb window is a different kind of evidence for the same

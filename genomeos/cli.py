@@ -1689,8 +1689,31 @@ def cmd_segments(args: argparse.Namespace) -> int:
     seq = str(g.fetch(Locus(args.chrom, 0, length)))
     g.close()
     sig = SignalSet.load(args.signals)
-    r = parse_chromosome(args.chrom, seq, sig, ann, min_relative=args.min_relative)
-    save_result(f"segments_{args.chrom}", r)
+    sites = None
+    name = f"segments_{args.chrom}"
+    if args.predicted_sites:
+        from genomeos.predict import status
+        from genomeos.predict.splice_sites import SpliceSites, client_factory
+
+        st = status()
+        if not st["enabled"]:
+            print(f"AlphaGenome splice sites are disabled: {st['reason']}. To enable: {st['how']}")
+            return 2
+        ss = SpliceSites(args.chrom, length).load(
+            client_factory, progress=lambda m: print("  " + m, flush=True)
+        )
+        sm = ss.summary()
+        print(
+            f"{args.chrom}: predicted splice sites over {sm['windows']} windows "
+            f"({sm['requests_this_run']} requests, {sm['seconds_this_run']} s); "
+            f"confident (p ≥ 0.5): {sm['confident_at_or_above_0.5']}"
+        )
+        sites = ss.local
+        name = f"segments_{args.chrom}_predicted_sites"
+    r = parse_chromosome(args.chrom, seq, sig, ann, min_relative=args.min_relative, sites=sites)
+    if args.predicted_sites:
+        r["splice_sites"] = sm
+    save_result(name, r)
     print(
         f"{args.chrom}: {r['predictions']} candidate genes from signals alone, {r['predicted_exons']} exons"
     )
@@ -1703,7 +1726,7 @@ def cmd_segments(args: argparse.Namespace) -> int:
         f"  genes: sensitivity {r['gene_sensitivity']:.1%} precision {r['gene_precision']:.1%} "
         f"(of {r['true_genes']} coding genes)"
     )
-    print(f"  [{r['evidence']}]  saved data/results/segments_{args.chrom}.json")
+    print(f"  [{r['evidence']}]  saved data/results/{name}.json")
     return 0
 
 
@@ -2910,6 +2933,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.add_argument("--signals", default="data/results/signals_chr21.json")
     p.add_argument("--min-relative", type=float, default=0.6)
+    p.add_argument(
+        "--predicted-sites",
+        action="store_true",
+        help="feature c: take donors and acceptors from AlphaGenome's splice-site tracks (needs the key)",
+    )
     p.set_defaults(fn=cmd_segments)
 
     p = sub.add_parser(
