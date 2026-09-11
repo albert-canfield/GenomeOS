@@ -165,6 +165,48 @@ values only for tissue-enhanced genes; GTEx (`genomeos rna`) covers the
 rest. The mitochondrial proteome compiles at 100% on every question, the
 13 best-studied proteins in the cell.
 
+## The milestone: the whole human proteome compiled (2026-09-11)
+
+The genome-wide job finished: 19,478 protein-coding genes on
+25 chromosomes, each compiled from UniProt, InterPro, PDB, AlphaFold,
+Reactome, STRING and the Human Protein Atlas, with the genomic origin from
+the local GENCODE models. This is the measured answer to "how much of the
+proteome do we know":
+
+| question | proteins | fraction |
+|---|---|---|
+| genomic origin | 19,353 | 99.4% |
+| sequence | 19,310 | 99.1% |
+| name | 19,310 | 99.1% |
+| function | 16,804 | 86.3% |
+| domains | 19,280 | 99.0% |
+| pathways | 11,333 | 58.2% |
+| interactions | 15,882 | 81.5% |
+| expression | 19,373 | 99.5% |
+| structure experimental | 8,799 | 45.2% |
+| structure predicted | 19,121 | 98.2% |
+| disease | 4,960 | 25.5% |
+
+Sequence, name and domains are essentially complete; a predicted structure
+exists for almost every protein; function is known for six in seven;
+pathways for six in ten; an experimental structure for under half; a
+recorded disease association for a quarter. The mitochondrial proteins and
+chromosome 19's zinc fingers sit at the two ends of that range.
+
+The translation check ran on every chromosome as it compiled: of
+19,249 compiled genes, 90.9% translate from the
+canonical transcript to exactly the reviewed UniProt sequence, 97.8%
+match some annotated isoform exactly, and 99 disagree beyond
+boundary differences (`translation_vs_uniprot_<chrom>.json` lists each).
+
+The knowledge graph built from the compiled definitions
+(`graph_genome.json`): 41,982 nodes (19,797 proteins,
+2,302 pathways, 19,846 domains, 37 tissues) and
+327,024 edges, 95,098 of the associations with experimental
+support; 15,165 of 19,283 compiled proteins sit in one connected
+component. The compiled definitions occupy about 300 MB locally and are
+not committed; the summaries are.
+
 ## Verified: the engine reads genes the way the curators do
 
 `genomeos verify --chrom C` translates the canonical transcript of every

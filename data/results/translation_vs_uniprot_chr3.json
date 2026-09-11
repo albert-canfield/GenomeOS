@@ -1,0 +1,41 @@
+{
+  "result": "translation_vs_uniprot_chr3",
+  "date": "2026-09-11",
+  "chrom": "chr3",
+  "genes_checked": 1037,
+  "exact_canonical": 930,
+  "exact_canonical_fraction": 0.8968,
+  "exact_some_isoform": 1020,
+  "exact_some_isoform_fraction": 0.9836,
+  "canonical_differs_but_another_isoform_matches": 90,
+  "same_protein_different_boundaries": 11,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.4627,
+      "gene": "OR5AC1",
+      "accession": "P0C628",
+      "transcript": "OR5AC1-201",
+      "ours_aa": 95,
+      "uniprot_aa": 307,
+      "identity_canonical": 0.2801,
+      "identity_best_isoform": 0.2801,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8438,
+      "gene": "OR5H8",
+      "accession": "P0DN80",
+      "transcript": "OR5H8-201",
+      "ours_aa": 268,
+      "uniprot_aa": 308,
+      "identity_canonical": 0.75,
+      "identity_best_isoform": 0.75,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 2,
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

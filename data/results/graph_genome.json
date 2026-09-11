@@ -1,0 +1,100 @@
+{
+  "result": "graph_genome",
+  "date": "2026-09-11",
+  "nodes": 41982,
+  "edges": 327024,
+  "node_kinds": {
+    "protein": 19797,
+    "pathway": 2302,
+    "domain": 19846,
+    "tissue": 37
+  },
+  "edge_kinds": {
+    "member_of": 47948,
+    "has_domain": 88582,
+    "expressed_in": 16487,
+    "associates": 174007
+  },
+  "compiled_proteins": 19283,
+  "physical_associations": 95098,
+  "hubs": [
+    {
+      "gene": "LTN1",
+      "associations": 1022
+    },
+    {
+      "gene": "HMGN1",
+      "associations": 851
+    },
+    {
+      "gene": "PWP2",
+      "associations": 648
+    },
+    {
+      "gene": "MRPL39",
+      "associations": 576
+    },
+    {
+      "gene": "ATP5PF",
+      "associations": 571
+    },
+    {
+      "gene": "TP53",
+      "associations": 483
+    },
+    {
+      "gene": "COL6A1",
+      "associations": 460
+    },
+    {
+      "gene": "COL6A2",
+      "associations": 455
+    },
+    {
+      "gene": "IFNAR2",
+      "associations": 454
+    },
+    {
+      "gene": "IL10RB",
+      "associations": 438
+    }
+  ],
+  "isolated_proteins": 3726,
+  "largest_component": 15165,
+  "components": 3924,
+  "biggest_pathways": [
+    [
+      "Neutrophil degranulation",
+      475
+    ],
+    [
+      "Expression and translocation of olfactory receptors",
+      402
+    ],
+    [
+      "Generic Transcription Pathway",
+      351
+    ],
+    [
+      "Antigen processing: Ubiquitination & Proteasome degradation",
+      294
+    ],
+    [
+      "G alpha (i) signalling events",
+      257
+    ],
+    [
+      "Dengue Virus-Host Interactions",
+      245
+    ],
+    [
+      "Neddylation",
+      231
+    ],
+    [
+      "Ub-specific processing proteases",
+      206
+    ]
+  ],
+  "evidence": "edges carry the evidence of their source section: Reactome, InterPro (curated), HPA (experimental), STRING (predicted)"
+}
