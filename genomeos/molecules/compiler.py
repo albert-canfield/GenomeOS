@@ -362,6 +362,12 @@ def compile_protein(
     if cached.exists() and not refresh:
         prior = json.loads(cached.read_text())
         failed = {k for k, v in prior["sections"].items() if v.get("error") and v.get("evidence") == "none"}
+        # a section never attempted (its prerequisite failed) counts as failed too
+        failed |= {
+            k
+            for k in SECTION_SOURCE
+            if k not in prior["sections"] and SECTION_SOURCE[k] in (sources or SOURCES)
+        }
         if not failed:
             return prior
         # a transient failure must not become permanent: refetch only what failed
