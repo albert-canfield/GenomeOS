@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 from dataclasses import dataclass
 
-from genomeos.genome.sequence import Locus, Sequence, Strand
+from genomeos.coords import Locus, Strand
 from genomeos.ir import Transcript
 
 _BASES = "UCAG"
@@ -48,17 +48,25 @@ def start_codons_for(table: dict[str, str]) -> frozenset[str]:
     )
 
 
-def transcribe(dna: Sequence | str, strand: Strand = Strand.PLUS) -> str:
+_COMPLEMENT = str.maketrans("ACGTNacgtn", "TGCANtgcan")
+
+
+def reverse_complement(dna: str) -> str:
+    """The other strand read 5' to 3'; a string helper so the engine does not depend on the genome layer."""
+    return str(dna).translate(_COMPLEMENT)[::-1]
+
+
+def transcribe(dna: str, strand: Strand = Strand.PLUS) -> str:
     """Return the RNA transcribed from the given template orientation.
 
     The input is the *coding* (sense) sequence as written in the genome for the
     plus strand; for the minus strand we reverse-complement first, which is
     what the polymerase effectively reads.
     """
-    seq = Sequence(str(dna))
+    seq = str(dna).upper()
     if strand is Strand.MINUS:
-        seq = seq.reverse_complement()
-    return str(seq).replace("T", "U")
+        seq = reverse_complement(seq)
+    return seq.replace("T", "U")
 
 
 def translate(
@@ -101,7 +109,7 @@ class Orf:
 
 
 def find_orfs(
-    seq: Sequence | str,
+    seq: str,
     chrom: str = "seq",
     min_aa: int = 30,
     table: dict[str, str] = STANDARD_CODE,
@@ -115,10 +123,10 @@ def find_orfs(
     stop codon inside the sequence, and the initiator is emitted as M.
     """
     starts = start_codons if start_codons is not None else start_codons_for(table)
-    forward = str(Sequence(str(seq)))
+    forward = str(seq).upper()
     n = len(forward)
     for strand in (Strand.PLUS, Strand.MINUS):
-        s = forward if strand is Strand.PLUS else str(Sequence(forward).reverse_complement())
+        s = forward if strand is Strand.PLUS else reverse_complement(forward)
         rna = s.replace("T", "U")
         for frame in range(3):
             i = frame

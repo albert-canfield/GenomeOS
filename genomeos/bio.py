@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """`bio`: the BioLang toolchain on its own.
 
     bio check   FILE [--context k=v]     compile, resolve references, report evidence and confidence
@@ -35,6 +36,7 @@ from genomeos import __version__
 from genomeos.ir import Module
 from genomeos.lang import parse, parse_file
 from genomeos.lang.parser import BioLangError
+from genomeos.lang.tools import check_module, compile_module, load_module, run_boolean, run_module, run_sbml
 
 OPS = {
     ">": operator.gt,
@@ -300,8 +302,44 @@ def cmd_repl(args: argparse.Namespace) -> int:
 # ---- entry point ---------------------------------------------------------------------
 
 
+def cmd_check(args: argparse.Namespace) -> int:
+    module = load_module(args.module)
+    context = dict(kv.split("=", 1) for kv in args.context) if args.context else None
+    print(check_module(module, context))
+    return 0
+
+
+def cmd_compile(args: argparse.Namespace) -> int:
+    module = load_module(args.module)
+    text = compile_module(module)
+    if args.output:
+        Path(args.output).write_text(text)
+        print(f"wrote {args.output}: {len(module.entities)} entities, {len(module.rules)} rules")
+    else:
+        print(text)
+    return 0
+
+
+def cmd_run(args: argparse.Namespace) -> int:
+    if args.module.endswith(".xml"):
+        print(run_sbml(args.module, args.hours, args.dt))
+        return 0
+    if args.module.endswith(".bnet"):
+        init = {
+            k: v.strip().lower() in ("1", "true", "on")
+            for k, v in (kv.split("=", 1) for kv in (args.init or []))
+        }
+        print(run_boolean(args.module, init or None, args.seed))
+        return 0
+    module = load_module(args.module)
+    context = dict(kv.split("=", 1) for kv in args.context) if args.context else {}
+    initial = {k: float(v) for k, v in (kv.split("=", 1) for kv in (args.init or []))}
+    text, _ = run_module(module, args.hours, args.dt, context, initial, args.seed, args.csv)
+    print(text)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
-    from genomeos.cli import cmd_check, cmd_compile, cmd_run
 
     ap = argparse.ArgumentParser(
         prog="bio", description="the BioLang toolchain: check, compile, run, test, repl"
