@@ -86,7 +86,7 @@ Boundary rules (from ARCHITECTURE.md §10) and where they are broken today:
 | Standard library written in BioLang, not Python | holds (ageing, cell_types, development) |
 | One thin entry point (`bio`) | holds (`genomeos/bio.py`, 333 lines) |
 | No dependencies in the language core | holds |
-| Engines import nothing from genome, knowledge or web | **now a licensing rule too** (D40: an Apache-2.0 engine file importing AGPL application code could not be distributed as Apache). `runtime/variant_effect.py` fixed on 2026-09-11: `Locus`/`Strand` come from `genomeos.coords`, a variant is a structural protocol, reverse-complement is local. Still crossing: `runtime/central_dogma.py` imports `genomeos.genome.sequence.Sequence`, and `bio.py` imports three command functions from `genomeos.cli` — the standalone toolchain depending on the application CLI |
+| Engines import nothing from genome, knowledge or web | **holds since 2026-09-11** (b162919 and b90e741): a grep over `lang`, `ir`, `runtime`, `coords.py`, `version.py` and `bio.py` on dev finds no import of the application. `bio` runs on an engine-side `lang/tools.py` instead of the CLI, and the version string moved to `genomeos/version.py` so the Apache half never reads the AGPL package root |
 | `lang` and `ir` depend only on themselves | `Locus` lives in `genomeos/coords.py`; move it under `ir` when the packages split |
 
 ### 2.1 Where each component stands (2026-09-11)
@@ -98,8 +98,8 @@ attached. "Missing for complete" is what separates it from the ambition.
 |---|---|---|---|
 | **BioLang** (language) | v0.3 | 18 block kinds: `module`, `import`, `gene`, `transcript`, `protein`, `region`, `element`, `domain`, `rule`, `param`, `cell_type`, `event`, `organism`, `stage`, `timer`, `signal`, `decision`, `experiment`; evidence and confidence on every block; `bio.std` prelude; programs test themselves | a written grammar and versioned spec; `population` and `reader`/`writer` constructs; a registry for shared libraries; std modules for signalling and human development |
 | **BioIR** (representation) | 0.3 | 20 types with JSON round-trip: Evidence, Entity, Region, RegulatoryElement, Gene, Transcript, Protein, CellType, Effect, Event, Parameter, Rule, Domain, Signal, Timer, Stage, Decision, Experiment, Organism, Module; `UNKNOWN` as a value | a BIOIR-v0.3 spec (the doc is v0.1); ProteinState and Population as types; `Locus` moved under `ir` |
-| **BioVM** (engines) | 0.3 | eleven engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces; the two engine files that import the genome layer |
-| **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs the demo, std and organism programs in CI | its own package and test suite; `bio fmt`; language server |
+| **BioVM** (engines) | 0.3 | twelve engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces |
+| **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs the demo, std and organism programs in CI; depends on the engine alone, so it can be packaged as it stands | its own package and test suite; `bio fmt`; language server |
 | **BioLib** (libraries) | 45 libraries | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol; haematopoiesis as a runnable mechanism module | `cancer.*` layer; more human development modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
 | **BioTwin** (individual) | 0.7 | HG002 with measured telomere and epigenetic age; fork, run, diff; calibration from measured state; `genomeos lookup` for one variant through every layer | genome-wide twin (per-chromosome build in progress); a user's own VCF; telomere from real reads |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
@@ -405,7 +405,9 @@ session that holds it. Items 1–4 run in parallel today.
 9. Retrospective therapeutic benchmark; cBioPortal CNA and SV; `cancer.*`
    libraries. Milestone 1.2. genomeos-f7.
 10. BIOIR-v0.3 spec and the BioLang grammar in one file; `bio` with its own
-    test suite. Milestone 2.0. genomeos-73.
+    test suite. Milestone 2.0. genomeos-73. (The import boundary that blocked
+    this is closed as of 2026-09-11: the Apache paths can be lifted into their
+    own package without dragging the application behind them.)
 11. README refresh, version 0.9.0 and the first git tag when item 1 lands.
     Milestone 0.9. genomeos-f7.
 12. libRoadRunner and MaBoSS adapters tested in CI on Python 3.12.

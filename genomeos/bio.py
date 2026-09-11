@@ -32,11 +32,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from genomeos import __version__
 from genomeos.ir import Module
 from genomeos.lang import parse, parse_file
 from genomeos.lang.parser import BioLangError
 from genomeos.lang.tools import check_module, compile_module, load_module, run_boolean, run_module, run_sbml
+from genomeos.version import __version__
 
 OPS = {
     ">": operator.gt,

@@ -6,9 +6,9 @@ This product includes two separately licensed parts:
   * The BioLang engine — the language, the intermediate representation, the
     virtual machine, the standard library and the `bio` toolchain
     (genomeos/lang, genomeos/ir, genomeos/runtime, genomeos/std,
-    genomeos/coords.py, genomeos/bio.py, and the BioLang programs under
-    data/demo and data/organisms) — is licensed under the Apache License,
-    Version 2.0. See LICENSE-APACHE.
+    genomeos/coords.py, genomeos/version.py, genomeos/bio.py, and the BioLang
+    programs under data/demo and data/organisms) — is licensed under the
+    Apache License, Version 2.0. See LICENSE-APACHE.
 
   * The GenomeOS application — everything else — is licensed under the GNU
     Affero General Public License, version 3 or later. See LICENSE.
