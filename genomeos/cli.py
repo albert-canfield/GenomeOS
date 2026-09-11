@@ -2142,6 +2142,47 @@ def _individual_predict(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_mouse(args: argparse.Namespace) -> int:
+    """The second mammal: a mouse chromosome through the same code, its nodes held against ours."""
+    from genomeos.genome.mouse import analyse
+    from genomeos.results import save_result
+
+    r = analyse(args.chrom, progress=lambda m: print("  " + m, flush=True))
+    save_result(f"mouse_mm10_{args.chrom}", {k: v for k, v in r.items() if k != "mouse_domains"})
+    c = r["node_comparison"]
+    print(
+        f"mouse {args.chrom} (mm10): {r['length']:,} bp, {r['genes']:,} genes "
+        f"({r['coding_genes']:,} coding), {r['elements']:,} ENCODE elements, {r['domains']} nodes"
+    )
+    print(
+        f"  {r['domains_with_coding_genes']} nodes with coding genes, median {r['domain_length_median']:,} bp"
+    )
+    frac = f"{c['fraction_conserved']:.0%}" if c["fraction_conserved"] is not None else "n/a"
+    same = (
+        f"{c['fraction_same_neighbourhood']:.0%}" if c["fraction_same_neighbourhood"] is not None else "n/a"
+    )
+    print(f"  against {r['human_nodes_indexed']:,} human nodes ({r['human_symbols_indexed']:,} symbols):")
+    print(f"    {c['tested']} mouse nodes have ≥ 2 symbol matches; {c['unmapped']} have fewer")
+    print(f"    {c['conserved']} land in one human node ({frac})")
+    print(f"    {c['split_adjacent']} span adjacent human nodes, {c['split_scattered']} scattered")
+    print(f"    same human neighbourhood (one node or adjacent nodes): {same}")
+    rows = [
+        {
+            "mouse node": x["id"],
+            "coding": x["coding_genes"],
+            "mapped": x["mapped"],
+            "verdict": x["verdict"],
+            "human nodes": ", ".join(x["human_nodes"][:4]),
+            "genes": ", ".join(x["genes"][:5]),
+        }
+        for x in sorted(r["node_rows"], key=lambda x: -x["mapped"])[: args.top]
+    ]
+    print(_table(rows, ["mouse node", "coding", "mapped", "verdict", "human nodes", "genes"]))
+    for k, v in r["evidence"].items():
+        print(f"  [{k}: {v}]")
+    return 0
+
+
 def cmd_lookup(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
     from genomeos.genome.lookup import lookup, parse_variant
@@ -3198,6 +3239,13 @@ def build_parser() -> argparse.ArgumentParser:
     q.add_argument("--top", type=int, default=25)
     q.add_argument("--json", action="store_true")
     p.set_defaults(fn=cmd_individual, action="list")
+
+    p = sub.add_parser(
+        "mouse", help="the second mammal: a mouse chromosome through the same code, nodes compared"
+    )
+    p.add_argument("--chrom", default="chr19")
+    p.add_argument("--top", type=int, default=15)
+    p.set_defaults(fn=cmd_mouse)
 
     p = sub.add_parser("report", help="a gene dossier: every layer about one gene in one document")
     p.add_argument("symbol")

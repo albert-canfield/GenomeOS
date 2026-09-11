@@ -62,6 +62,16 @@ Known limitation: the ORF finder only starts at AUG. Human mitochondrial
 genes ND1, ND2 and ND5 use AUA/AUU starts, so their ORFs are found at the
 first internal AUG. Alternative start codons are on the Phase 1 list.
 
+## The second mammal: mouse mm10 (2026-09-11)
+
+`genomeos mouse --chrom chr19` fetches, once, the mouse chromosome through
+the same three doors as a human one: sequence from UCSC (mm10, the assembly
+ENCODE's mouse registry is on), gene models from GENCODE vM25 (the
+chromosome's rows streamed out of the genome-wide GFF3), and the ENCODE
+SCREEN mouse cCREs (rows of the chromosome). Files carry the `mm10_` prefix
+under `data/reference` (local) and `data/results/ccres_mm10_<chrom>.bed.gz`
+(committed, small); the summary is `data/results/mouse_mm10_<chrom>.json`.
+
 ## Optional: AlphaGenome (predicted regulatory effects)
 
 Google DeepMind's AlphaGenome predicts what a sequence change does to

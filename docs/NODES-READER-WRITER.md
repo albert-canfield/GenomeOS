@@ -143,6 +143,41 @@ turns one chromosome's observation into a property of the genome as this
 model reads it: the node bounds regulation, and nearest-gene is right two
 times in three.
 
+## The second mammal: mouse chr19 through the same code (2026-09-11)
+
+If nodes are a property of mammalian genomes rather than of one annotation,
+a mouse chromosome fetched and analysed exactly like a human one should give
+nodes whose genes sit together in human too. `genomeos mouse --chrom chr19`
+does that with no mouse-specific code beyond the three URLs: UCSC mm10
+sequence (19 MB), GENCODE vM25 gene models (rows of chr19 kept), ENCODE
+SCREEN's mouse cCRE registry (11,597 elements on chr19), the same
+`infer_domains` (`genomeos/genome/mouse.py`,
+`data/results/mouse_mm10_chr19.json`). Orthology is gene-symbol identity
+(App ↔ APP), a cheap lower bound.
+
+| mouse chr19 (61.4 Mb) | |
+|---|---|
+| genes | 1,394 (718 coding) |
+| nodes | 371 (256 with coding genes), median 109 kb; human chromosomes give 102–115 kb |
+| mouse nodes with ≥ 2 genes matched to a human node | 91 |
+| all matched genes in one human node | 49 (54%) |
+| in adjacent human nodes (same neighbourhood, boundaries drawn differently) | 39 (43%) |
+| scattered over distant human nodes | 3 (3%) |
+| same human neighbourhood | 97% |
+
+Read two ways. Synteny is not the surprise: mouse chr19 is human 11q13 and
+10q23–26 and everyone knows it. The number that speaks to the model is the
+split: where a mouse node's genes fall into several human nodes, they fall
+into *adjacent* ones 39 times out of 42. The neighbourhood is conserved; the
+exact boundary is where the two CTCF registries (different depths, different
+cell types assayed) disagree. Which is to say: the node is a real unit of
+organisation in both genomes, and an inferred boundary from CTCF-only
+elements is a resolution limit, not the biology. The 280 mouse nodes with
+fewer than two matches are mostly nodes with no or one coding gene (115 of
+371 have none), and symbol renaming takes some of the rest; a curated
+orthology (Ensembl homology) would raise the tested count, not change the
+shape.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first
