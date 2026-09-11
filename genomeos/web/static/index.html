@@ -642,6 +642,14 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-unknown" class="scroll"></div>
     </div>
     <div class="card">
+      <h2><i class="ic">👥</i>The test human, every chromosome<span class="help" data-tip="HG002's benchmark variants applied to each local chromosome, statistics only (no haplotype files kept): variants applied per haplotype and reference mismatches, which must be zero if the sequence and the calls agree.">?</span></h2>
+      <div id="j-twin" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">📖</i>Reader, every chromosome<span class="help" data-tip="Reader v1 over every chromosome for the cell types run so far: coding genes with an open promoter (read), active enhancers and silent nodes per cell type, from ENCODE DNase peaks.">?</span></h2>
+      <div id="j-reader" class="scroll"></div>
+    </div>
+    <div class="card">
       <h2><i class="ic">🕸️</i>Proteome coverage<span class="help" data-tip="For every protein-coding gene of a compiled chromosome: which questions the public databases answer (sequence, function, domains, pathways, interactions, expression, structures, disease). Measured, not assumed.">?</span></h2>
       <div id="j-proteome" class="scroll"></div>
     </div>
@@ -733,7 +741,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
   b.scrollIntoView({block: 'nearest', inline: 'nearest'});
-  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadProgress(); loadFeatures(); }
+  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadProgress(); loadFeatures(); }
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
   // first visit to a simulation tab runs its default example
@@ -1114,9 +1122,12 @@ const when = ts => ts ? new Date(ts * 1000).toLocaleTimeString() : '';
 async function loadJobs() {
   try {
     const r = await api('/api/jobs');
-    // one fetch job exists per chromosome; show them only once started, to keep the list short
-    const jobs = r.jobs.filter(j => !j.name.startsWith('fetch_') || j.state !== 'idle');
-    $('#j-list').innerHTML = jobs.map(j => `<div style="margin-bottom:12px">
+    // one fetch job exists per chromosome; list only the running or failed ones and fold the rest into a line
+    const fetches = r.jobs.filter(j => j.name.startsWith('fetch_'));
+    const doneFetch = fetches.filter(j => j.state === 'done').map(j => j.name.slice(6));
+    const jobs = r.jobs.filter(j => !j.name.startsWith('fetch_') || j.state === 'running' || j.state === 'failed');
+    const fetchLine = doneFetch.length ? `<div class="muted" style="font-size:12px;margin-bottom:10px">fetched and analysed: ${doneFetch.length} chromosomes (${doneFetch.join(', ')})</div>` : '';
+    $('#j-list').innerHTML = fetchLine + jobs.map(j => `<div style="margin-bottom:12px">
       <div class="row" style="margin-bottom:2px"><b class="mono">${j.name}</b> <span class="state ${j.state}">${j.state}</span>
         ${j.state !== 'running' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
         ${j.finished ? `<span class="muted">finished ${when(j.finished)}</span>` : ''}</div>
@@ -1166,6 +1177,25 @@ async function loadFeatures() {
       <table>${f.features.map(x => `<tr><td>${x.id}</td><td><b>${x.name}</b></td><td class="muted" style="font-size:12px">${x.what}</td><td><span class="pstatus ${x.state === 'built' ? 'done' : 'progress'}">${x.state}</span></td></tr>`).join('')}</table>
       <div class="muted" style="font-size:12px">${f.licence}</div></div>`).join('');
   } catch (e) { $('#j-features').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function loadIndividualWide() {
+  try {
+    const d = await api('/api/individual');
+    const tw = d.twin;
+    if (tw && tw.chromosomes) {
+      const t = tw.totals || {}; const rows = Object.entries(tw.chromosomes);
+      $('#j-twin').innerHTML = `<div class="kpi"><div><b>${rows.length}</b><span>chromosomes</span></div><div><b>${fmt(t.variants || 0)}</b><span>PASS variants</span></div><div><b>${t.reference_mismatches ?? '-'}</b><span>reference mismatches</span></div></div>
+        <table><tr><th>chr</th><th class="num">variants</th><th class="num">SNVs</th><th class="num">hap1 applied</th><th class="num">hap2 applied</th><th class="num">mismatch</th></tr>` +
+        rows.map(([c, r]) => `<tr><td class="mono">${c}</td><td class="num">${fmt(r.variants)}</td><td class="num">${fmt(r.snv)}</td><td class="num">${fmt(r.hap1.applied)}</td><td class="num">${fmt(r.hap2.applied)}</td><td class="num">${(r.hap1.skipped_ref_mismatch || 0) + (r.hap2.skipped_ref_mismatch || 0)}</td></tr>`).join('') + '</table>';
+    } else $('#j-twin').innerHTML = '<span class="muted">not run yet (scripts/twin_genome_wide.py)</span>';
+    const rd = d.reader;
+    if (rd && rd.chromosomes) {
+      const cells = rd.cell_types || []; const t = rd.totals || {};
+      $('#j-reader').innerHTML = `<div class="kpi">${cells.map(c => `<div><b>${fmt((t[c] || {}).genes_read || 0)}</b><span>${c} reads of ${fmt((t[c] || {}).coding_genes || 0)} genes</span></div>`).join('')}</div>
+        <table><tr><th>chr</th>${cells.map(c => `<th class="num">${c} read</th><th class="num">${c} enhancers</th>`).join('')}<th class="num">both</th></tr>` +
+        Object.entries(rd.chromosomes).map(([c, r]) => `<tr><td class="mono">${c}</td>${cells.map(k => `<td class="num">${r[k] ? r[k].genes_read + '/' + r[k].coding_genes : '-'}</td><td class="num">${r[k] ? fmt(r[k].enhancers_active) : '-'}</td>`).join('')}<td class="num">${r.read_in_both ?? '-'}</td></tr>`).join('') + '</table>';
+    } else $('#j-reader').innerHTML = '<span class="muted">not run yet (scripts/reader_genome_wide.py)</span>';
+  } catch (e) { $('#j-twin').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
 async function loadProgress() {
   const p = await api('/api/progress');

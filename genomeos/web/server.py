@@ -725,6 +725,16 @@ class Api:
             "table": rows,
         }
 
+    def individual_wide(self) -> dict:
+        """The test human on every autosome (statistics only) and the reader on every chromosome."""
+        from genomeos.results import load_result
+
+        rd = self.root / "data" / "results"
+        return {
+            "twin": load_result("hg002_twin_by_chromosome", rd),
+            "reader": load_result("reader_genome_wide", rd),
+        }
+
     def proteome_summary(self) -> dict:
         from genomeos.results import load_result
 
@@ -1306,6 +1316,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.genome_wide())
             if u.path == "/api/unknown/genome":
                 return self._json(self.api.unknown_wide())
+            if u.path == "/api/individual":
+                return self._json(self.api.individual_wide())
             if u.path == "/api/proteome":
                 return self._json(self.api.proteome_summary())
             if u.path == "/api/anatomy":
