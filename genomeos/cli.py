@@ -722,6 +722,24 @@ def cmd_data(args: argparse.Namespace) -> int:
     from genomeos import storage
     from genomeos.results import list_results
 
+    if args.data_cmd == "fetch":
+        from genomeos.genome.fetch import fetch_chromosome
+
+        for chrom in args.chrom:
+            print(f"{chrom}: sequence, gene models, regulatory elements, repeats…", flush=True)
+            r = fetch_chromosome(
+                chrom,
+                progress=lambda m: print(f"  {m}", flush=True),
+                elements=not args.no_elements,
+                repeats=not args.no_repeats,
+            )
+            print(
+                f"  ready: {r['sequence']}, {r['gencode']}"
+                + (f", {r['ccres']} ENCODE elements" if "ccres" in r else "")
+                + (f", {r['repeats']:,} repeat copies" if "repeats" in r else "")
+            )
+        print("every view now works for these chromosomes: Blocks, Flow, regulation, domains, unknown")
+        return 0
     if args.data_cmd == "status":
         st = storage.status()
         print("data directories:")
@@ -1641,8 +1659,16 @@ def cmd_graph(args: argparse.Namespace) -> int:
             detail = f"score {e['score']}" if "score" in e else ""
             if "ntpm" in e:
                 detail = f"{e['ntpm']:.0f} nTPM"
-            rows.append({"relation": e["rel"], "node": node.get("name") or other, "kind": node["kind"],
-                         "evidence": e["evidence"], "conf": e["confidence"], "detail": detail})
+            rows.append(
+                {
+                    "relation": e["rel"],
+                    "node": node.get("name") or other,
+                    "kind": node["kind"],
+                    "evidence": e["evidence"],
+                    "conf": e["confidence"],
+                    "detail": detail,
+                }
+            )
         print(_table(rows[: args.top], ["relation", "node", "kind", "evidence", "conf", "detail"]))
         return 0
     s = summarise(g)
