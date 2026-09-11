@@ -107,7 +107,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioTwin** (individual) | 0.9 | any GRCh38 genome imported locally and used by carrier lookup, the gene report, the twin and the gene-by-gene walk; HG002 across all 22 autosomes with measured telomere and epigenetic age; fork, run, diff; predicted effect of a person's own regulatory variants | telomere from real reads; pedigree and trio; polygenic scores |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 nearly there | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader v1 (open nodes per cell type) on 2; signals learned | the segment parser (in progress); reader on every chromosome; a second mammal |
-| **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes), translation verified against UniProt on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability | chrY verification; kinetics where BioModels has an SBML pathway; post-translational state beyond the UniProt feature list |
+| **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists | post-translational state beyond the UniProt feature list; isoform-level expression; an engine that handles 100-species models |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
 
@@ -255,14 +255,28 @@ in order. "Owner" is the session that holds the files today (see §7).
   symbol mismatches marked rather than hidden. `genomeos protein X --lib`
   answers with no network at all, which is what makes the protein layer usable
   on a laptop and in CI.
-- **Missing.** Pathways run as reachability, not kinetics; no
-  post-translational state model beyond the UniProt feature list; no
-  isoform-level expression. chrY verification and the triage of the
-  translation disagreements by mechanism both landed on 2026-09-11.
-- **Next.** 1. Let the proteome job run to the end, one process (fixed
-  today). 2. `genomeos verify` after each chromosome compiles, as part of
-  the job. 3. Genome-wide graph once the proteome finishes. 4. Kinetic
-  pathways where BioModels has an SBML version of the Reactome pathway.
+- **Kinetics where a curated model exists (2026-09-11).** `genomeos pathway
+  ID --kinetic` finds a curated ODE model by the Reactome pathway's name, runs
+  it on the in-house SBML engine and compares a knockout against the baseline
+  on final levels and peaks; a gene symbol reaches species named `x1`/`x2`
+  through the model's MIRIAM annotations. Two worked results: taking RAF1 out
+  of Hornberg2005 erases the downstream transients entirely (peaks 0.201 and
+  0.562 to zero), and taking MEK out of Kholodenko2000 stops the ERK
+  oscillation (Erk2-PP peak 298.8 to 10.0, final 37.0 to 0). The engine gained
+  function definitions, rate rules, species names and annotations, and
+  amount-versus-concentration semantics.
+- **A recorded failure, kept on purpose.** Schoeberl2002 (100 species, 125
+  reactions) does not reproduce on the in-house engine: the cascade species
+  stay flat. The result file is committed next to the two that work. That is
+  what keeps the libRoadRunner adapter (§5 item 12) an honest open item rather
+  than an aspiration, and it marks the size of model where our engine stops.
+- **Missing.** No post-translational state model beyond the UniProt feature
+  list; no isoform-level expression; kinetics only where BioModels has a
+  curated model, which is a small fraction of Reactome.
+- **Next.** 1. Post-translational state, which is the layer the protein model
+  names (`ProteinState`) and nothing populates. 2. Isoform-level expression.
+  3. The 99 translation disagreements read one by one, now that they are
+  triaged by mechanism.
 - **Owner.** genomeos-fe.
 
 ### D. The individual (BioTwin)
@@ -477,8 +491,10 @@ session that holds it. Items 1–4 run in parallel today.
     own package without dragging the application behind them.)
 11. README refresh, version 0.9.0 and the first git tag when item 1 lands.
     Milestone 0.9. genomeos-f7.
-12. libRoadRunner and MaBoSS adapters tested in CI on Python 3.12.
-    Milestone 1.1. unassigned.
+12. libRoadRunner and MaBoSS adapters tested in CI on Python 3.12, now with
+    a concrete reason: Schoeberl2002 (100 species) does not reproduce on the
+    in-house SBML engine, so a reference implementation is needed for models
+    of that size. Milestone 1.1. unassigned.
 
 ## 6. Milestones
 
