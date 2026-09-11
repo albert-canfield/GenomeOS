@@ -32,6 +32,7 @@ def test_markdown_renders_every_section_present():
                 "uniprot_aa": 19,
                 "evidence": "derived",
             },
+            "reader": {"read_in": ["K562", "H1"], "silent_in": ["keratinocyte"], "evidence": "experimental"},
             "individual": {
                 "sample": "HG002",
                 "variants_in_gene": 3,
@@ -51,6 +52,7 @@ def test_markdown_renders_every_section_present():
     md = to_markdown(rep)
     assert md.startswith("# X (chr1)") and "**Origin**" in md and "Identity with UniProt 100.0%" in md
     assert "p.Lys2Arg (0/1)" in md and "_measured_" in md
+    assert "**Reader**" in md and "read) in 2 of 3 cell types: K562, H1; silent in: keratinocyte" in md
     assert "**Regulation**" not in md  # sections absent from the dict are not rendered
 
 

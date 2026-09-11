@@ -88,7 +88,44 @@ def gene_report(symbol: str, chrom: str, annotation, genome, root: Path = Path("
             "enhancers_nearest": r["enhancers_nearest_to_this_gene"],
             "enhancers_inside_gene": r["enhancers_inside_gene"],
             "insulators": len(r["insulators_bounding"]),
-            "evidence": "curated: ENCODE elements; inferred: targets bounded by the CTCF domain",
+            "enhancers_predicted": r.get("enhancers_predicted", 0),
+            "enhancers_predicted_this_gene": r.get("enhancers_predicted_this_gene", 0),
+            "strongest_predicted": next(
+                (
+                    {
+                        "element": e["id"],
+                        "distance": e["distance"],
+                        "log2_fold_change": e["predicted"]["log2_fold_change"],
+                        "tissue": e["predicted"]["tissue"],
+                        "action": e["predicted"]["action"],
+                    }
+                    for e in sorted(
+                        (e for e in r["enhancers"] if e.get("predicted_this_gene")),
+                        key=lambda e: -abs(e["predicted"]["log2_fold_change"]),
+                    )
+                ),
+                None,
+            ),
+            "evidence": "curated: ENCODE elements; inferred: targets bounded by the CTCF domain"
+            + (
+                "; predicted: AlphaGenome deletion effects where scored"
+                if r.get("enhancers_predicted")
+                else ""
+            ),
+        }
+    # the reader: which cell types read this gene (promoter open), from every reader result on this chromosome
+    read_in, silent_in = [], []
+    for f in sorted((root / "data" / "results").glob(f"reader_*_{chrom}.json")):
+        rr = _load_json(f)
+        if not rr or "silent_genes" not in rr:
+            continue
+        cell = rr.get("cell_type") or f.name[len("reader_") : -len(f"_{chrom}.json")]
+        (silent_in if symbol in set(rr["silent_genes"]) else read_in).append(cell)
+    if read_in or silent_in:
+        sec["reader"] = {
+            "read_in": read_in,
+            "silent_in": silent_in,
+            "evidence": "experimental: ENCODE DNase peaks; inferred: read = promoter (TSS ± 1 kb) open",
         }
     gtex = _load_json(root / "data" / "knowledge" / "expression" / f"gtex_{symbol}.json")
     if gtex and gtex.get("tissues"):
@@ -194,12 +231,34 @@ def to_markdown(rep: dict[str, Any]) -> str:
         )
     if "regulation" in sec:
         r = sec["regulation"]
+        predicted = ""
+        if r.get("enhancers_predicted"):
+            predicted = (
+                f" AlphaGenome scored {r['enhancers_predicted']} of them, "
+                f"{r['enhancers_predicted_this_gene']} name this gene"
+            )
+            sp = r.get("strongest_predicted")
+            if sp:
+                predicted += (
+                    f", strongest {sp['element']} at {sp['distance']:,} bp "
+                    f"({sp['log2_fold_change']:+.2f} in {sp['tissue']})"
+                )
+            predicted += "."
         para(
             "Regulation",
             f"node {r['node']} ({(r['node_length'] or 0) / 1000:.0f} kb, {r['genes_in_node']} coding genes); "
             f"{r['promoter_elements']} promoter elements; {r['enhancers_in_node']} enhancers can reach it "
             f"({r['enhancers_nearest']} nearest to it, {r['enhancers_inside_gene']} inside the gene); "
-            f"{r['insulators']} bounding insulators.",
+            f"{r['insulators']} bounding insulators." + predicted,
+            r["evidence"],
+        )
+    if "reader" in sec:
+        r = sec["reader"]
+        n_all = len(r["read_in"]) + len(r["silent_in"])
+        para(
+            "Reader",
+            f"promoter open (read) in {len(r['read_in'])} of {n_all} cell types: "
+            f"{', '.join(r['read_in']) or 'none'}; silent in: {', '.join(r['silent_in']) or 'none'}.",
             r["evidence"],
         )
     if "rna" in sec:
