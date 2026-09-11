@@ -882,6 +882,74 @@ class Api:
             },
         }
 
+    def budget_wide(self) -> dict:
+        """The 98%: every chromosome's composition budget (tiers, constraint) and the job's state."""
+        from genomeos import jobs
+        from genomeos.attribution.budget import PHYLOP_THRESHOLD, TIERS
+
+        rd = self.root / "data" / "results"
+        cache = getattr(self, "_budget_cache", None)
+        if cache is None:
+            cache = self._budget_cache = {}
+        rows = []
+        tiers = dict.fromkeys(TIERS, 0)
+        unknown_bp = constrained = measured = genome = 0
+
+        def order(q: Path) -> tuple[int, str]:
+            c = q.stem.split("_chr")[-1]
+            return (int(c), "") if c.isdigit() else (100, c)
+
+        for path in sorted(rd.glob("budget_chr*.json"), key=order):
+            key = (str(path), path.stat().st_mtime)
+            row = cache.get(key)
+            if row is None:
+                try:
+                    r = json.loads(path.read_text())
+                except (OSError, json.JSONDecodeError):
+                    continue
+                if not r.get("by_tier"):
+                    continue
+                cost = r.get("cost") or {}
+                row = {
+                    "chrom": r["chrom"],
+                    "blocks": len(r.get("blocks", [])),
+                    "unknown_bp": r["unknown_bp"],
+                    "chromosome_length": r.get("chromosome_length") or 0,
+                    "constrained_fraction": r.get("constrained_fraction"),
+                    "constrained_bp": r.get("constrained_bp") or 0,
+                    "measured_bp": r.get("measured_bp") or 0,
+                    "tiers": {t: v["bp"] for t, v in r["by_tier"].items()},
+                    "constrained_unknown_blocks": r["by_tier"]
+                    .get("constrained_unknown", {})
+                    .get("blocks", 0),
+                    "mb_fetched": (cost.get("phylop") or {}).get("mb_fetched"),
+                    "seconds": cost.get("seconds"),
+                }
+                cache.clear() if len(cache) > 64 else None
+                cache[key] = row
+            rows.append(row)
+            for t, bp in row["tiers"].items():
+                tiers[t] = tiers.get(t, 0) + bp
+            unknown_bp += row["unknown_bp"]
+            constrained += row["constrained_bp"]
+            measured += row["measured_bp"]
+            genome += row["chromosome_length"]
+        try:
+            job = jobs.status("budget_genome_wide", self.root).to_dict()
+        except (KeyError, OSError, ValueError):
+            job = None
+        return {
+            "done": len(rows),
+            "total": 24,
+            "threshold": PHYLOP_THRESHOLD,
+            "unknown_bp": unknown_bp,
+            "genome_bp": genome,
+            "constrained_fraction": round(constrained / measured, 4) if measured else None,
+            "tiers": tiers,
+            "table": rows,
+            "job": job,
+        }
+
     def proteome_summary(self) -> dict:
         from genomeos.results import load_result
 
@@ -1600,6 +1668,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.cancer_knowledge(self._q(qs, "gene"), int(self._q(qs, "top", 30))))
             if u.path == "/api/jobs":
                 return self._json(self.api.jobs())
+            if u.path == "/api/budget":
+                return self._json(self.api.budget_wide())
             if u.path == "/api/progress":
                 return self._json(self.api.progress())
             if u.path == "/api/features":

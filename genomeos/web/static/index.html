@@ -692,6 +692,10 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-mouse" class="scroll"></div>
     </div>
     <div class="card">
+      <h2><i class="ic">🧩</i>The 98%: composition budget<span class="help" data-tip="Every UNKNOWN block of a chromosome with evolutionary constraint attached (Zoonomia phyloP over 241 mammals, read per base from UCSC and never stored, plus the 100-vertebrate conserved elements) and a best guess: structural, fossil, regulatory, constrained unknown, neutral. The house argument: quantities that do not fit rule an attribution out. Rows appear as chromosomes finish; the job runs smallest first.">?</span></h2>
+      <div id="j-budget" class="scroll"></div>
+    </div>
+    <div class="card">
       <h2><i class="ic">🎯</i>Enhancer targets, predicted<span class="help" data-tip="AlphaGenome feature b. Each sampled distal enhancer is deleted in its 1 Mb window and the predicted expression of every gene in the window is read across all RNA-seq tracks; the gene that moves most is the predicted target, the track is the tissue. Compared with the domain inference (nearest TSS inside the CTCF node): agreement is a test of the node model. Predicted evidence, confidence capped at 0.7.">?</span></h2>
       <div id="j-enhancers" class="scroll"></div>
     </div>
@@ -797,7 +801,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
   b.scrollIntoView({block: 'nearest', inline: 'nearest'});
-  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadProgress(); loadFeatures(); }
+  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadBudgetWide(); loadProgress(); loadFeatures(); }
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
   // first visit to a simulation tab runs its default example
@@ -1285,10 +1289,14 @@ async function loadJobs() {
     // the same for the per-chromosome enhancer jobs (AlphaGenome feature b); the genome-wide job stays listed
     const enh = r.jobs.filter(j => /^enhancer_targets_chr/.test(j.name));
     const doneEnh = enh.filter(j => j.state === 'done').map(j => j.name.slice('enhancer_targets_'.length));
-    const jobs = r.jobs.filter(j => (!j.name.startsWith('fetch_') && !/^enhancer_targets_chr/.test(j.name)) || j.state === 'running' || j.state === 'failed' || j.state === 'stalled');
+    const listed = r.jobs.filter(j => (!j.name.startsWith('fetch_') && !/^enhancer_targets_chr/.test(j.name)) || j.state === 'running' || j.state === 'failed' || j.state === 'stalled');
+    // finished work leaves the list: one line names it, the cards on this tab show its results
+    const jobs = listed.filter(j => j.state !== 'done');
+    const doneJobs = listed.filter(j => j.state === 'done').map(j => j.name);
     const fetchLine = doneFetch.length ? `<div class="muted" style="font-size:12px;margin-bottom:10px">fetched and analysed: ${doneFetch.length} chromosomes (${doneFetch.join(', ')})</div>` : '';
     const enhLine = doneEnh.length ? `<div class="muted" style="font-size:12px;margin-bottom:10px">enhancer targets predicted: ${doneEnh.length} chromosomes (${doneEnh.join(', ')})</div>` : '';
-    $('#j-list').innerHTML = fetchLine + enhLine + jobs.map(j => `<div style="margin-bottom:12px">
+    const doneLine = doneJobs.length ? `<div class="muted" style="font-size:12px;margin-bottom:10px" data-tip="Complete jobs are not listed; their results are the cards on this tab.">complete: ${doneJobs.length} job${doneJobs.length === 1 ? '' : 's'} (${doneJobs.map(n => `<span class="mono">${n}</span>`).join(', ')})</div>` : '';
+    $('#j-list').innerHTML = fetchLine + enhLine + doneLine + (jobs.length ? '' : '<div class="muted" style="font-size:12px">nothing running or waiting</div>') + jobs.map(j => `<div style="margin-bottom:12px">
       <div class="row" style="margin-bottom:2px"><b class="mono">${j.name}</b> <span class="state ${j.state}">${j.state}</span>
         ${j.state !== 'running' && j.state !== 'stalled' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
         ${(j.state === 'failed' || j.state === 'stalled' || j.state === 'unknown') && (j.fraction || 0) < 1 ? `<button class="ghost" data-heal="${j.name}" data-tip="Bring the job back on track: restart it from what is already saved. The server does this by itself every minute for long jobs; this is the manual nudge."><i class="ic">🩹</i>Heal</button>` : ''}
@@ -1301,7 +1309,7 @@ async function loadJobs() {
     $('#j-list').querySelectorAll('button[data-heal]').forEach(b => b.onclick = async () => { await api('/api/jobs/heal', {name: b.dataset.heal}); loadJobs(); });
     const running = r.jobs.some(j => j.state === 'running' || j.state === 'stalled');
     clearTimeout(jobTimer);
-    if (running) jobTimer = setTimeout(() => { loadJobs(); loadGenomeWide(); }, 5000);
+    if (running) jobTimer = setTimeout(() => { loadJobs(); loadGenomeWide(); loadBudgetWide(); }, 5000);
   } catch (e) { $('#j-list').textContent = e.message; }
 }
 async function loadGenomeWide() {
@@ -1347,6 +1355,30 @@ async function loadFeatures() {
       <table>${f.features.map(x => `<tr><td>${x.id}</td><td><b>${x.name}</b></td><td class="muted" style="font-size:12px">${x.what}</td><td><span class="pstatus ${x.state === 'built' ? 'done' : 'progress'}">${x.state}</span></td></tr>`).join('')}</table>
       <div class="muted" style="font-size:12px">${f.licence}</div></div>`).join('');
   } catch (e) { $('#j-features').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function loadBudgetWide() {
+  try {
+    const b = await api('/api/budget');
+    const el = $('#j-budget');
+    const j = b.job || {};
+    const startBtn = `<button class="ghost" id="j-budget-start" data-tip="Budget every chromosome in the background, smallest first; about 2.5 GB of range requests over the genome, nothing stored."><i class="ic">▶️</i>Start the job</button>`;
+    if (!b.table.length) { el.innerHTML = `<span class="muted">not run yet (genomeos budget --chrom chr21, or start the budget_genome_wide job)</span> ${j.state === 'running' ? '' : startBtn}`; const s0 = $('#j-budget-start'); if (s0) s0.onclick = async () => { await api('/api/jobs/start', {name: 'budget_genome_wide'}); loadJobs(); loadBudgetWide(); }; return; }
+    const col = {structural: 'var(--muted)', fossil: 'var(--c5)', regulatory: 'var(--c1)', constrained_unknown: 'var(--c2)', neutral: 'var(--line)'};
+    const names = {structural: 'structural', fossil: 'fossil', regulatory: 'regulatory', constrained_unknown: 'constrained unknown', neutral: 'neutral'};
+    const pct = (x, d = 2) => x == null ? '-' : (x * 100).toFixed(d) + '%';
+    const bar = (tiers, total) => `<div class="bar" style="display:flex;width:220px">${Object.entries(tiers).map(([k, v]) => `<i style="width:${(v / total * 100).toFixed(2)}%;background:${col[k]}" data-tip="${names[k]} ${(v / total * 100).toFixed(1)}%"></i>`).join('')}</div>`;
+    const tot = Object.values(b.tiers).reduce((a, c) => a + c, 0) || 1;
+    const age = j.activity == null ? '' : j.activity < 90 ? `${j.activity} s ago` : `${Math.round(j.activity / 60)} min ago`;
+    const last = (j.last_lines || []).slice(-1)[0] || '';
+    el.innerHTML = `<div class="kpi"><div><b>${b.done}/${b.total}</b><span>chromosomes budgeted</span></div><div><b>${(b.unknown_bp / 1e6).toFixed(0)} Mb</b><span>UNKNOWN space tiered</span></div><div><b>${pct(b.constrained_fraction)}</b><span>bases constrained (phyloP ≥ ${b.threshold})</span></div><div><b>${(b.tiers.constrained_unknown / 1e6).toFixed(1)} Mb</b><span>constrained unknown: the real unknown</span></div></div>
+      <div class="prog ${j.state || ''}"><i style="width:${b.done / b.total * 100}%"></i></div>
+      <div class="muted" style="font-size:12px;margin-bottom:6px">job <b class="mono">budget_genome_wide</b> <span class="state ${j.state || 'unknown'}">${j.state || 'not started'}</span>${j.state === 'running' || j.state === 'stalled' ? ` · ${j.done} of ${j.total} · active ${age}<div class="log">${last}</div>` : ` ${b.done < b.total ? startBtn : '· every chromosome budgeted'}`}</div>
+      <div style="font-size:12px;margin:6px 0">${Object.entries(b.tiers).map(([k, v]) => `<span class="chip"><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col[k]};margin-right:4px;vertical-align:middle"></i>${names[k]} ${(v / tot * 100).toFixed(1)}%</span>`).join(' ')}</div>
+      <table><tr><th>chr</th><th class="num">blocks</th><th class="num">Mb</th><th>tiers</th><th class="num">constrained</th><th class="num" data-tip="blocks in the constrained-unknown tier">unknown blocks</th><th class="num" data-tip="MB of phyloP range requests">MB</th><th class="num">s</th></tr>` +
+      b.table.map(r => { const t = Object.values(r.tiers).reduce((a, c) => a + c, 0) || 1; return `<tr><td class="mono">${r.chrom}</td><td class="num">${fmt(r.blocks)}</td><td class="num">${(r.unknown_bp / 1e6).toFixed(1)}</td><td>${bar(r.tiers, t)}</td><td class="num">${pct(r.constrained_fraction)}</td><td class="num">${r.constrained_unknown_blocks}</td><td class="num">${r.mb_fetched ?? ''}</td><td class="num">${r.seconds != null ? Math.round(r.seconds) : ''}</td></tr>`; }).join('') + `</table>
+      <div class="muted" style="font-size:12px;margin-top:6px"><span class="pill curated">curated</span> Zoonomia phyloP over 241 mammals, UCSC 100-vertebrate conserved elements · a tier is a best guess with its confidence, not a verdict (docs/ATTRIBUTION.md)</div>`;
+    const s = $('#j-budget-start'); if (s) s.onclick = async () => { await api('/api/jobs/start', {name: 'budget_genome_wide'}); loadJobs(); loadBudgetWide(); };
+  } catch (e) { $('#j-budget').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
 async function loadIndividualWide() {
   try {
