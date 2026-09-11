@@ -115,8 +115,13 @@ tested against it.
 
    Tried and dropped the same day: banded exon and intron length models
    learned from the annotation (a sliding-window maximum per intron band).
-   They moved nothing (exact exons 4.7% / 5.2% before and after), so the
-   bottleneck is the coding-potential and signal scores, not the lengths.
+   They moved nothing (exact exons 4.7% / 5.2% before and after). An in-frame
+   hexamer coding model instead of codon usage gained a little on a 2 Mb
+   slice (site precision 8% → 11%) and nothing over the whole chromosome
+   (4.9% / 5.2%, 186 more candidates), so it was dropped too. The bottleneck
+   is what three matrices and a codon table cannot see: the scores would need
+   a proper probabilistic model of the whole structure (emission and duration
+   models of a gene-finding HMM) or conservation, not tuning.
 
    That is the honest state of "signals alone": the parser lands on nine in
    ten coding genes but draws their exon boundaries right only rarely, and
