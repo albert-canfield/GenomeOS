@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [main]
 
+# one run per branch at a time: a newer push cancels the run it supersedes
+# instead of letting it finish and fail on code that no longer exists
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest

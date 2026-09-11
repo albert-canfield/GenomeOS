@@ -18,10 +18,15 @@ one cell, a human body grown as populations, a therapeutic design dataset.
 
 ## 1. Main scope
 
-GenomeOS is an executable model of biology for geneticists: a compiler that
-turns a real genome plus public scientific knowledge into an executable
-model, and a virtual machine that runs that model through time, from one
-cell to an organism, with evidence and uncertainty on every fact.
+The ambition, in Albert's words: decode the full genome on its blocks,
+their function and their structure, and mimic its behaviour through
+BioLang, BioIR, BioVM and the rest of the family. GenomeOS is therefore an
+executable model of biology for geneticists: a compiler that turns a real
+genome plus public scientific knowledge into an executable model, and a
+virtual machine that runs that model through time, from one cell to an
+organism, with evidence and uncertainty on every fact. Open source, MIT
+licence. The governing documents are indexed in [README.md](README.md) and
+the decisions behind them in [DECISIONS.md](DECISIONS.md).
 
 The organism is treated as a functional system and DNA as its seed. Four
 things stay first-class: timers (construction and maintenance cycles),
@@ -84,6 +89,25 @@ Boundary rules (from ARCHITECTURE.md §10) and where they are broken today:
 | Engines import nothing from genome, knowledge or web | **broken twice**: `runtime/central_dogma.py` and `runtime/variant_effect.py` import the genome layer. Fix: move the codon tables and translation into the engine and have the genome layer call them, not the reverse |
 | `lang` and `ir` depend only on themselves | `Locus` lives in `genomeos/coords.py`; move it under `ir` when the packages split |
 
+### 2.1 Where each component stands (2026-09-11)
+
+"Functional" means a geneticist can use it today on real data with evidence
+attached. "Missing for complete" is what separates it from the ambition.
+
+| Component | Version | Functional today | Missing for complete |
+|---|---|---|---|
+| **BioLang** (language) | v0.3 | 18 block kinds: `module`, `import`, `gene`, `transcript`, `protein`, `region`, `element`, `domain`, `rule`, `param`, `cell_type`, `event`, `organism`, `stage`, `timer`, `signal`, `decision`, `experiment`; evidence and confidence on every block; `bio.std` prelude; programs test themselves | a written grammar and versioned spec; `population` and `reader`/`writer` constructs; a registry for shared libraries; std modules for signalling and human development |
+| **BioIR** (representation) | 0.3 | 20 types with JSON round-trip: Evidence, Entity, Region, RegulatoryElement, Gene, Transcript, Protein, CellType, Effect, Event, Parameter, Rule, Domain, Signal, Timer, Stage, Decision, Experiment, Organism, Module; `UNKNOWN` as a value | a BIOIR-v0.3 spec (the doc is v0.1); ProteinState and Population as types; `Locus` moved under `ir` |
+| **BioVM** (engines) | 0.3 | eleven engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces; the two engine files that import the genome layer |
+| **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs the demo, std and organism programs in CI | its own package and test suite; `bio fmt`; language server |
+| **BioLib** (libraries) | 45 libraries | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol | `cancer.*` layer; human development and haematopoiesis modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
+| **BioTwin** (individual) | 0.7 | HG002 with measured telomere and epigenetic age; fork, run, diff; calibration from measured state; `genomeos lookup` for one variant through every layer | genome-wide twin (per-chromosome build in progress); a user's own VCF; telomere from real reads |
+| **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
+| **Genome decoding** (GenomeOS) | 0.9 in progress | every chromosome inventoried; UNKNOWN classified genome-wide (96.6%, curated repeats on 19 of 24); domains, curated repeats, ENCODE elements, reader v1 (open nodes per cell type) where fetched; signals learned | the segment parser; every chromosome fetched and analysed; a second mammal |
+| **Molecules** (GenomeOS) | 0.9 in progress | federated protein compiler, RNA layer with GTEx, pathways as reachability, knowledge graph, translation verified against UniProt; proteome on 4 chromosomes | 21 chromosomes of proteome (running); genome-wide graph; kinetics |
+| **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
+| **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
+
 Data architecture: `data/reference` and `data/knowledge` are caches (git
 ignored, rebuilt by `genomeos data fetch` and the compilers); `data/results`
 holds the committed summaries, one per real-data run; `data/organisms` and
@@ -111,16 +135,15 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Requirements.** Every construct has evidence and confidence; programs
   test themselves (`# test:` and `assert:`); a `.bio` file runs without the
   rest of GenomeOS; the same program runs on any engine that fits it.
-- **Missing.** The `experiment` block (perturb, run, compare, report; in
-  progress); a written grammar (BNF) and a versioned language spec; the
+- **Missing.** A written grammar (BNF) and a versioned language spec; the
   two boundary leaks above; a `biolang` package with its own tests;
   imports from a registry; `bio.std` has no signalling, human development
   or timer modules beyond the worm.
-- **Next.** 1. `experiment` block with knockouts checked against known
-  C. elegans mutants (genomeos-73, in progress). 2. Fix the two engine
-  imports. 3. Grammar spec in one file, generated from the parser's block
-  table. 4. `bio` packaged as an extra entry point with its own test set.
-  5. `bio.std.signalling` from CellPhoneDB and `bio.std.timers.human`
+- **Next.** 1. Fix the two engine imports (done for `experiment`: knockouts
+  against the wild type reproduce the classic founder mutants, 2026-09-11).
+  2. Grammar spec in one file, generated from the parser's block
+  table. 3. `bio` packaged as an extra entry point with its own test set.
+  4. `bio.std.signalling` from CellPhoneDB and `bio.std.timers.human`
   from the Carnegie stages.
 - **Owner.** genomeos-73 (parser, IR, body runtime, std); genomeos-fe
   (`bio.py`, central dogma).
@@ -149,13 +172,15 @@ in order. "Owner" is the session that holds the files today (see §7).
   grammar) and no JASPAR promoter scan; the **reader** of
   NODES-READER-WRITER.md (which nodes are open in which cell type, from
   DNase/ATAC/methylation) has no code; no second mammal for node comparison.
-- **Next.** 1. The fetch job runs the curated UNKNOWN pass and the domains
-  for the chromosome it fetched, so a new chromosome arrives fully analysed;
-  the genome-wide job finishes the rest. 2. Reader v1: ENCODE DNase per
-  biosample distilled to "open nodes per cell type", shown as a lane in the
-  block map (after the background jobs, same network budget). 3. Segment
-  parser: Viterbi over the grammar with the learned PWMs, evaluated against
-  GENCODE per chromosome. 4. Mouse chr19 as the comparison genome. The L1
+- **Done since the review (2026-09-11).** A fetched chromosome arrives
+  analysed (`data fetch --analyse`: curated UNKNOWN pass and domains);
+  reader v1 (`genomeos reader`: ENCODE DNase peaks per cell type over
+  nodes, promoters and enhancers; K562 and HepG2 on chr21, chr22 analysed).
+- **Next.** 1. Reader lane in the block map and a `reader` construct in
+  BioLang so context gating comes from chromatin. 2. Segment parser
+  (`genomeos segments --chrom C`): Viterbi over the grammar with the learned
+  PWMs, evaluated against GENCODE per chromosome. 3. Fetch chr15–20 and chrX.
+  4. Mouse chr19 as the comparison genome. The L1
   ORF2 and Alu sequence signatures are superseded by the RepeatMasker pass
   and stay as the fallback for chromosomes not yet distilled.
 - **Owner.** genomeos-fe.
@@ -233,13 +258,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   no division or movement; the external engines (libRoadRunner, MaBoSS,
   CompuCell3D) are deferred for lack of Python 3.14 wheels, although CI
   runs 3.12 and could test them as optional extras.
-- **Next.** 1. `experiment` block and mutant phenotypes (genomeos-73).
-  2. First human mechanism module: haematopoiesis from HSC to the eight
+- **Next.** 1. First human mechanism module: haematopoiesis from HSC to the eight
   lineages, decisions from cited transcription-factor rules, checked against
-  the Sender & Milo counts and the known lineage choices. 3. Body runtime
-  as a bigraph process beside a GRN. 4. Cells that divide and move in the
-  spatial engine (the worm's 28 founders in space). 5. libRoadRunner and
-  MaBoSS adapters tested in CI on 3.12.
+  the Sender & Milo counts and the known lineage choices. 2. Body runtime
+  as a bigraph process beside a GRN. 3. Cells that divide and move in the
+  spatial engine (the worm's 28 founders in space). 4. libRoadRunner and
+  MaBoSS adapters tested in CI on 3.12. (The `experiment` block and the six
+  founder mutants landed on 2026-09-11.)
 - **Owner.** genomeos-73.
 
 ### F. Cancer and therapeutics
@@ -330,15 +355,16 @@ or the CLI; results land in `data/results` and are committed.
 
 | Layer | Done | Job | Notes |
 |---|---|---|---|
-| Sequence, GENCODE rows, ENCODE elements, RepeatMasker (`fetch_<chrom>`) | 18 of 25 | `genomeos data fetch --chrom` | missing chr15–20, chrX; about 4 min each |
+| Sequence, GENCODE rows, ENCODE elements, RepeatMasker, curated UNKNOWN pass, domains (`fetch_<chrom>`) | 18 of 25 fetched | `genomeos data fetch --chrom C --analyse` | missing chr15–20, chrX; about 4 min each |
 | Anatomy inventory | 25 of 25 | done | `anatomy_hg38_by_chromosome` |
-| UNKNOWN classification | 25 of 25, curated repeats on 14 of 24 | `unknown_genome_wide` (running, one process) | redo of chr15–22, X, Y after their fetch |
-| CTCF domains | 2 of 25 | `genomeos domains --chrom` | run after each fetch |
+| UNKNOWN classification | 25 of 25, curated repeats on 19 of 24 | `unknown_genome_wide` (running, one process) | the rest arrive with their fetch |
+| CTCF domains | 3 of 25 | part of fetch since 2026-09-11 | |
+| Reader (open nodes per cell type) | 2 of 25 | `genomeos reader --chrom` | K562 and HepG2 |
 | Proteome compiled | 4 of 25 | `proteome_genome_wide` (running) | roughly 17 h of source time remaining |
-| Translation verified against UniProt | 3 of 25 | `genomeos verify --chrom` | fold into the proteome job |
+| Translation verified against UniProt | 3 of 25 | part of the proteome job since 2026-09-11 | |
 | Knowledge graph | 1 of 25 | `genomeos graph` | after the proteome |
 | HG002 twin | 1 of 25 | `genomeos twin build` per chromosome | in progress (genomeos-fe) |
-| Curated repeats distilled | 18 of 25 | part of fetch | |
+| Curated repeats distilled | 21 of 25 | part of fetch | |
 
 One-off jobs, each needing a decision or a resource:
 
@@ -354,7 +380,36 @@ One-off jobs, each needing a decision or a resource:
 
 ---
 
-## 5. Milestones
+## 5. Next steps, consolidated
+
+The ordered list across areas, each with the milestone it serves and the
+session that holds it. Items 1–4 run in parallel today.
+
+1. Whole-genome data jobs to 25 of 25 (§4): fetch chr15–20 and chrX with
+   analysis, the proteome job, verification, graph. Milestone 0.9. genomeos-fe.
+2. HG002 twin on every chromosome, then `twin build --vcf` for any genome.
+   Milestone 0.9. genomeos-fe.
+3. Haematopoiesis as the first human mechanism module, checked against
+   counts and lineage choices. Milestone 1.1. genomeos-73.
+4. Evidence explorer view; the engine-boundary fix in `runtime/variant_effect.py`;
+   `.gitignore` for `data/jobs`; nightly CI. Milestone 1.0. genomeos-f7.
+5. Reader lane in the block map and a `reader` construct in BioLang.
+   Milestone 1.1. genomeos-fe.
+6. Segment parser scored against GENCODE. Milestone 1.1. genomeos-fe.
+7. Three published perturbations as `experiment` programs in CI; BioForge
+   takes experiments as input. Milestone 1.0. genomeos-73.
+8. Body runtime inside a process-bigraph composite with a network model.
+   Milestone 1.1. genomeos-73.
+9. Retrospective therapeutic benchmark; cBioPortal CNA and SV; `cancer.*`
+   libraries. Milestone 1.2. genomeos-f7.
+10. BIOIR-v0.3 spec and the BioLang grammar in one file; `bio` with its own
+    test suite. Milestone 2.0. genomeos-73.
+11. README refresh, version 0.9.0 and the first git tag when item 1 lands.
+    Milestone 0.9. genomeos-f7.
+12. libRoadRunner and MaBoSS adapters tested in CI on Python 3.12.
+    Milestone 1.1. unassigned.
+
+## 6. Milestones
 
 | Version | Milestone | Proof |
 |---|---|---|
@@ -367,7 +422,7 @@ One-off jobs, each needing a decision or a resource:
 
 ---
 
-## 6. Improvement and creativity pool
+## 7. Improvement and creativity pool
 
 Ideas judged worth keeping, not yet scheduled. Each would be judged by the
 ambition in §1 before it is started.
@@ -402,10 +457,14 @@ ambition in §1 before it is started.
 
 ---
 
-## 7. How the work is organised (several sessions, one checkout)
+## 8. How the work is organised (several sessions, one checkout)
 
-- All work on `dev`; Albert opens pull requests to `main`. No attribution
-  trailers.
+- All work on `dev`; Albert alone opens pull requests to `main`, by hand;
+  no session or script opens or merges one. No attribution trailers.
+- The cycle: finish the piece, `scripts/check.sh` green (lint, format, the
+  whole suite, `bio test`), commit to `dev`, push once per finished piece.
+  The `pre-push` hook in the checkout runs the same check and refuses a red
+  push. CONTRIBUTING.md has the commands.
 - Each session owns files (listed in §3) and commits through a private
   index; shared files (`cli.py`, `server.py`, `index.html`, `README.md`,
   `PROGRESS.md`) take isolated hunks only, announced to the peers. The
@@ -416,4 +475,6 @@ ambition in §1 before it is started.
   result per chromosome is committed as it lands.
 - PROGRESS.md is append-only and is what the Progress tab shows; this file
   is edited by the reviewing session (genomeos-f7) and updated at each
-  milestone.
+  milestone. Documents are layered as docs/README.md describes: wide
+  (README, ROADMAP, ARCHITECTURE, DECISIONS), specifications per language
+  version, one design document per area, records (PROGRESS, LESSONS).

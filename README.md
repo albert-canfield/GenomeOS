@@ -50,14 +50,19 @@ therefore always executes `Genome + Bootstrap State`, never DNA in isolation.
 
 ## Project family
 
-| Component | Role | Status |
+| Component | Role | Status (2026-09-11) |
 |---|---|---|
-| **BioLang** | biological programming language / DSL | designed, not built |
-| **BioLib** | reusable biological modules (`cell.core`, `animal.development`, `organs.heart`, ...) | designed, not built |
-| **BioIR** | common intermediate representation joining genomics, pathways, cells, physiology | v0.1 spec + Python types |
-| **BioVM** | runtime: discrete events, stochastic, continuous, spatial engines | v0.1: central dogma + cell ageing |
-| **BioTwin** | a specific genome + specific biological state | designed |
-| **BioForge** | in-silico design and experiment system | designed |
+| **BioLang** | biological programming language / DSL | v0.3: 18 block kinds from `gene` to `organism` and `experiment`; evidence on every block; programs test themselves |
+| **BioIR** | common intermediate representation joining genomics, pathways, cells, physiology | 0.3: 20 types with JSON round-trip, `UNKNOWN` as a value |
+| **BioVM** | runtime: discrete events, stochastic, continuous, spatial engines | eleven engines (central dogma, network, Boolean, SBML, ageing, spatial, segmentation, gastrulation, Body, debugger, uncertainty); process-bigraph composition |
+| **`bio`** | the toolchain on its own | `bio check | compile | run | test | repl` |
+| **BioLib** | reusable biological modules (`cell.core`, `animal.development`, `organs.heart`, ...) | 45 libraries with data-computed membership from GO and Reactome |
+| **BioTwin** | a specific genome + specific biological state | HG002 with measured state; fork, run, diff; genome-wide build in progress |
+| **BioForge** | in-silico design and experiment system | design search under constraints; experiments as input next |
+
+Where each stands in detail, what is missing and what comes next:
+[docs/ROADMAP.md](docs/ROADMAP.md) §2.1; the document index is
+[docs/README.md](docs/README.md).
 
 ## What runs today (v0.1)
 
