@@ -1193,6 +1193,62 @@ class Api:
         d["states"] = [st.to_dict() for st in states_from_definition(d)][:40]
         return d
 
+    def pathway_kinetic(
+        self, query: str, model: str | None, knockout: str | None, hours: float = 100.0, top: int = 6
+    ) -> dict:
+        """A curated BioModels ODE model for a pathway (by name or id), run on the in-house engine, with an
+        optional knockout compared on final levels and peaks; the top species' time series for a chart."""
+        import re
+
+        from genomeos.molecules import biomodels
+
+        hits, used = [], query
+        if not model:
+            if not query:
+                raise ApiError("give a pathway name to search BioModels with, or a BIOMD… id")
+            hits, used = biomodels.search_pathway(query, limit=8)
+            if not hits:
+                raise ApiError(f"no curated BioModels entry matches {query!r}")
+            model = hits[0]["id"]
+        if not re.fullmatch(r"(BIOMD|MODEL)\d+", model):
+            raise ApiError("model id must look like BIOMD0000000010")
+        path = biomodels.fetch(model, self.root / "data" / "knowledge" / "biomodels")
+        dt = 0.01 if hours <= 500 else 0.05
+        base = biomodels.run(path, duration=hours, dt=dt)
+        out: dict = {
+            "hits": hits,
+            "query_used": used,
+            "model": {k: v for k, v in base.items() if k not in ("series", "times", "levels")},
+            "levels": base["levels"],
+            "times": base["times"],
+        }
+        shown = [s for s, _ in sorted(base["levels"].items(), key=lambda kv: -kv[1]["peak"])[:top]]
+        out["series"] = {s: base["series"][s] for s in shown}
+        if knockout:
+            acc = None
+            if not re.fullmatch(r"[A-NR-Z][0-9][A-Z0-9]{3}[0-9]([A-Z][A-Z0-9]{2}[0-9])?", knockout.upper()):
+                from genomeos.molecules import compile_protein
+
+                try:
+                    d = compile_protein(knockout.upper(), sources={"uniprot"})
+                    acc = ((d["sections"].get("identity") or {}).get("items") or {}).get("accession")
+                except Exception:  # noqa: BLE001 - match by name only
+                    acc = None
+            else:
+                acc = knockout.upper()
+            ko = biomodels.run(path, duration=hours, dt=dt, knockout=[knockout], accessions={knockout: acc})
+            changed = biomodels.compare(base, ko)
+            out["knockout"] = {
+                "term": knockout,
+                "accession": acc,
+                "held": ko["knocked_out"],
+                "changed": changed,
+                "series": {r["species"]: ko["series"][r["species"]] for r in changed[:top]},
+            }
+            for r in changed[:top]:
+                out["series"].setdefault(r["species"], base["series"][r["species"]])
+        return out
+
     def pathway(self, pathway_id: str, knockout: str | None) -> dict:
         """A Reactome pathway as a reachability graph, optionally with one protein removed."""
         import re
@@ -1463,6 +1519,15 @@ class Handler(BaseHTTPRequestHandler):
                 )
             if u.path == "/api/pathway":
                 return self._json(self.api.pathway(self._q(qs, "id", ""), self._q(qs, "knockout")))
+            if u.path == "/api/pathway_kinetic":
+                return self._json(
+                    self.api.pathway_kinetic(
+                        self._q(qs, "query", ""),
+                        self._q(qs, "model"),
+                        self._q(qs, "knockout"),
+                        float(self._q(qs, "hours") or 100),
+                    )
+                )
             if u.path == "/api/flow":
                 return self._json(
                     self.api.flow(

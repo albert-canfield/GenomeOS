@@ -67,6 +67,31 @@
         ${d.reactions.map(r => `<tr style="${lostIds.has(r.id) ? 'color:var(--bad)' : ''}"><td>${lostIds.has(r.id) ? '✗' : '✓'}</td><td>${r.name}</td><td class="muted">${r.inputs.join(' + ')}</td><td class="muted">${r.outputs.join(' + ')}</td><td class="muted">${r.catalysts.map(c => '⚙ ' + c).concat(r.inhibitors.map(i => '⊣ ' + i)).join('; ')}</td></tr>`).join('')}</table>`;
     } catch (e) { $('#m-pw-status').textContent = e.message; }
   };
+  window.moleculesKinetic = async function () {
+    const raw = $('#m-kin-model').value.trim(), ko = $('#m-kin-ko').value.trim(), hours = +$('#m-kin-hours').value || 100;
+    const isId = /^(BIOMD|MODEL)\d+$/.test(raw);
+    const query = !isId ? (raw || ($('#m-pw-status').textContent.split(' · ')[0] || '')) : '';
+    if (!isId && !query) { $('#m-kin-status').textContent = 'run a Reactome pathway first, or type a model name or BIOMD id'; return; }
+    $('#m-kin-status').textContent = 'searching BioModels and integrating…';
+    try {
+      const d = await window.api(`/api/pathway_kinetic?${isId ? 'model=' + encodeURIComponent(raw) : 'query=' + encodeURIComponent(query)}${ko ? '&knockout=' + encodeURIComponent(ko) : ''}&hours=${hours}`);
+      const m = d.model, k = d.knockout;
+      $('#m-kin-status').textContent = `${m.model} ${m.name}`;
+      const hits = d.hits && d.hits.length ? `<div class="muted" style="font-size:12px">BioModels, curated, matching “${d.query_used}”: ${d.hits.map(h => `<span class="chip" data-kin="${h.id}" title="${h.name}">${h.id === m.model ? '▶ ' : ''}${h.name.slice(0, 40)}</span>`).join(' ')}</div>` : '';
+      $('#m-kin-out').innerHTML = `${hits}
+        <div style="margin-top:6px"><b>${m.model}</b> ${m.name} <span class="pill curated">curated: BioModels</span> <span class="pill derived">derived: in-house RK4 run</span> · ${m.species} species, ${m.reactions} reactions, ${m.functions} functions, ${m.rate_rules} rate rules · ${m.duration} time units</div>
+        ${k ? (k.held.length ? `<div style="margin-top:6px"><b>knockout ${k.term}</b>${k.accession ? ` <span class="mono muted">${k.accession}</span>` : ''} → held at 0: <span class="mono">${k.held.join(', ')}</span> <span class="pill inferred">inferred from the run</span> · ${k.changed.length} species change final level or peak by ≥ 10% of their range</div>
+          <table style="margin-top:6px;font-size:12px"><tr><th>species</th><th class="num">final</th><th class="num">→ knockout</th><th class="num">peak</th><th class="num">→ knockout</th><th class="num">peaks</th></tr>${k.changed.slice(0, 12).map(r => `<tr><td>${r.name}</td><td class="num">${r.baseline_final.toFixed(3)}</td><td class="num" style="color:${r.final_change < 0 ? 'var(--bad)' : 'var(--ok, #2ea043)'}">${r.knockout_final.toFixed(3)} (${(r.final_change * 100).toFixed(0)}%)</td><td class="num">${r.baseline_peak.toFixed(3)}</td><td class="num" style="color:${r.peak_change < 0 ? 'var(--bad)' : 'var(--ok, #2ea043)'}">${r.knockout_peak.toFixed(3)} (${(r.peak_change * 100).toFixed(0)}%)</td><td class="num">${r.peaks_before} → ${r.peaks_after}</td></tr>`).join('')}</table>` : `<div class="muted" style="margin-top:6px">knockout ${k.term}: no species of the model matches that name${k.accession ? ' or accession ' + k.accession : ''}</div>`) : ''}`;
+      $('#m-kin-out').querySelectorAll('[data-kin]').forEach(c => c.onclick = () => { $('#m-kin-model').value = c.dataset.kin; window.moleculesKinetic(); });
+      const svg = $('#m-kin-chart'); svg.style.display = 'block';
+      const series = [];
+      const names = Object.keys(d.series).slice(0, 6);
+      names.forEach(s => series.push({name: d.levels[s].name, values: d.series[s]}));
+      if (k && k.series) Object.entries(k.series).slice(0, 3).forEach(([s, v]) => series.push({name: d.levels[s].name + ' (knockout)', values: v, dash: true}));
+      if (window.lineChart) window.lineChart(svg, $('#m-kin-legend'), d.times, series, {xunit: ''});
+    } catch (e) { $('#m-kin-status').textContent = e.message; }
+  };
+  document.addEventListener('DOMContentLoaded', () => { const b = $('#m-kin-run'); if (b) b.onclick = window.moleculesKinetic; });
   // ---- knowledge-graph neighbourhood: a small force layout on a canvas
   const G = {nodes: [], edges: [], drag: null, raf: 0, ticks: 0};
   const KIND_COL = {protein: '#1f6feb', pathway: '#1a7f37', domain: '#8250df', tissue: '#bf8700'};

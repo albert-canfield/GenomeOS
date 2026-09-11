@@ -557,6 +557,15 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
         <button class="primary" id="m-pw-run" data-tip="Fetch the pathway (cached after the first time) and run the reachability with the knockout."><i class="ic">▶️</i>Run</button>
       </div>
       <div id="m-pw-out"><span class="muted">no pathway run yet</span></div>
+      <div class="row" style="margin-top:10px">
+        <label data-tip="Kinetics: a hand-curated ODE model from BioModels for this pathway, found by the pathway's name (fewer words until something matches) or given as a BIOMD id, run on the in-house SBML engine. Time units are the model's own.">kinetic model <input id="m-kin-model" placeholder="name or BIOMD0000000010" style="width:190px" class="mono"></label>
+        <label>knockout <input id="m-kin-ko" placeholder="MEK" style="width:90px" class="mono"></label>
+        <label>time <input id="m-kin-hours" type="number" value="100" style="width:70px"></label>
+        <button class="ghost" id="m-kin-run" data-tip="Run the curated model, then again with the knockout held at zero, and compare final levels and peaks."><i class="ic">📈</i>Run kinetic</button>
+        <span class="muted" id="m-kin-status"></span>
+      </div>
+      <div id="m-kin-out"></div>
+      <svg class="chart" id="m-kin-chart" style="display:none"></svg><div class="legend" id="m-kin-legend"></div>
     </div>
     <div class="card">
       <h2><i class="ic">🧊</i>Structure (AlphaFold)<span class="help" data-tip="C-alpha backbone of the predicted model, rotating. Colour is the model's own confidence per residue (pLDDT): blue high, teal confident, yellow low, red very low. Low-confidence stretches are usually disordered regions, not errors.">?</span></h2>

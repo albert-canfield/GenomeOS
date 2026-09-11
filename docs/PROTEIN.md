@@ -173,6 +173,10 @@ engine (the receptor binds, the cascade stays flat), while Sarma2012,
 Huang1996, Kholodenko2000, Hornberg2005 and McClean2007 run; the
 libRoadRunner adapter (roadmap item 12) is the reference for such cases.
 Results land in `data/results/kinetic_<model>.json` without the time series.
+The Molecules tab has the same thing under the pathway card: a kinetic model
+found by the loaded pathway's name or given as a BIOMD id, a knockout, the
+changed species as a table and the top species' time courses as a chart,
+knockout curves dashed.
 
 ## The knowledge graph itself
 
