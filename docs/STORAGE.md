@@ -36,7 +36,7 @@ has a summary.
 
 `genomeos data fetch --individual --chrom chr22` adds the test human: the
 156 MB GIAB HG002 benchmark is streamed once and every chromosome's PASS
-rows are kept as a small file under data/reference (about 60 MB for all
+rows are kept as a file under data/reference (158 MB for the 22
 autosomes, not committed; chr21's subset stays the committed distilled
 copy). After that `genomeos twin build` and `genomeos lookup` work on any
 fetched chromosome; the Progress tab has it as the `fetch_hg002` job.
