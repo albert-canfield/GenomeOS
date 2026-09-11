@@ -538,6 +538,34 @@ def dossier(name: str, root: Path | None = None) -> str:
     else:
         lines.append("**ClinVar carrier screen** — not run (`genomeos individual screen`).")
     lines.append("")
+    cv = load("coding.json")
+    if cv:
+        bc = cv["by_consequence"]
+        top = [r for r in cv["top"] if r["protein_changing"]][:15]
+        lines.append(
+            f"**Coding variants** — {sum(bc.values()):,} coding SNVs on canonical transcripts over "
+            f"{len(cv['chromosomes'])} chromosomes: "
+            + ", ".join(f"{k} {v:,}" for k, v in bc.items())
+            + f"; {cv['genes_with_protein_changing']:,} genes carry a protein-changing variant, "
+            f"{cv['genes_with_homozygous_changing']:,} a homozygous one. _{cv['evidence']}_"
+        )
+        if top:
+            lines.append("")
+            lines.append("Genes with the most protein-changing variants:")
+            lines.append("")
+            lines.append("| gene | protein-changing | homozygous | coding SNVs | examples |")
+            lines.append("|---|---|---|---|---|")
+            for r in top:
+                lines.append(
+                    f"| {r['gene']} | {r['protein_changing']} | "
+                    f"{r['homozygous_changing']} | {r['coding_snvs']} | "
+                    f"{'; '.join(r['examples'][:4])} |"
+                )
+        lines.append("")
+        lines.append(f"_{cv['note']}_")
+    else:
+        lines.append("**Coding variants** — not run (`genomeos individual coding`).")
+    lines.append("")
     ko = load("knockouts.json")
     if ko:
         lines.append(
@@ -571,3 +599,115 @@ def dossier(name: str, root: Path | None = None) -> str:
         "clinical advice. This page lives under the person's own directory and is never committed._"
     )
     return "\n".join(lines)
+
+
+def coding_inventory(
+    name: str,
+    chroms: list[str] | None = None,
+    root: Path | None = None,
+    reference: Path = Path("data/reference"),
+):
+    """Genome-wide: every coding SNV of the person on canonical transcripts, counted by consequence and by
+    gene; the genes with the most protein-changing variants first. Derived by the local trace, SNVs only.
+    Stored under the person's directory."""
+    from genomeos.flow import trace_gene
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+
+    root = root or ROOT
+    people = {p["name"]: p for p in list_individuals(root)}
+    if name not in people:
+        raise FileNotFoundError(f"{name} is not a local individual")
+    chroms = chroms or people[name]["chromosomes"]
+    by_consequence: dict[str, int] = {}
+    per_gene: list[dict[str, Any]] = []
+    done = []
+    genes_seen = 0
+    for chrom in chroms:
+        vcf = vcf_path(name, chrom, root)
+        gff = default_gencode({chrom})
+        fa = reference / f"{chrom}.fa"
+        if vcf is None or not gff or not fa.exists():
+            continue
+        ann = Annotation.from_gff3(gff, {chrom})
+        genome = IndexedGenome(str(fa))
+        try:
+            module = ann.to_module("coding")
+            positions: list[tuple[int, list[str]]] = []
+            with vcf.open() as fh:
+                for line in fh:
+                    if line.startswith("#"):
+                        continue
+                    f = line.rstrip("\n").split("\t")
+                    if len(f[3]) == 1 and len(f[4]) == 1:
+                        positions.append((int(f[1]), f))
+            positions.sort(key=lambda x: x[0])
+            keys = [q for q, _ in positions]
+            import bisect
+
+            for g in ann.genes.values():
+                if g.locus.chrom != chrom or g.type != "protein_coding":
+                    continue
+                lo = bisect.bisect_left(keys, g.locus.start + 1)
+                hi = bisect.bisect_right(keys, g.locus.end)
+                if lo == hi:
+                    continue
+                tr = trace_gene(genome, g, module.entities[g.id].transcripts)
+                if tr is None:
+                    continue
+                genes_seen += 1
+                counts: dict[str, int] = {}
+                hom_changing = 0
+                examples = []
+                for pos, f in positions[lo:hi]:
+                    sub = tr.substitute(pos - 1, f[3], f[4])
+                    if sub.get("region") != "CDS":
+                        continue
+                    if (sub.get("residue") or 0) > len(tr.protein) + 1:
+                        continue  # past a stop the reference itself carries (see knockouts)
+                    c = sub.get("consequence") or "coding"
+                    counts[c] = counts.get(c, 0) + 1
+                    by_consequence[c] = by_consequence.get(c, 0) + 1
+                    if c not in ("synonymous", "coding"):
+                        gt = f[9].split(":")[0] if len(f) > 9 else ""
+                        if gt.replace("|", "/").split("/").count("1") >= 2:
+                            hom_changing += 1
+                        if len(examples) < 6:
+                            examples.append(f"{sub.get('hgvs_p') or c} ({gt})")
+                if counts:
+                    changing = sum(v for k, v in counts.items() if k not in ("synonymous", "coding"))
+                    per_gene.append(
+                        {
+                            "gene": g.symbol,
+                            "chrom": chrom,
+                            "coding_snvs": sum(counts.values()),
+                            "protein_changing": changing,
+                            "homozygous_changing": hom_changing,
+                            "missense": counts.get("missense", 0),
+                            "synonymous": counts.get("synonymous", 0),
+                            "protein_length": len(tr.protein),
+                            "examples": examples,
+                        }
+                    )
+        finally:
+            genome.close()
+        done.append(chrom)
+    per_gene.sort(key=lambda r: (-r["protein_changing"], -r["coding_snvs"]))
+    out = {
+        "individual": name,
+        "chromosomes": done,
+        "coding_genes_traced": genes_seen,
+        "genes_with_coding_snvs": len(per_gene),
+        "by_consequence": dict(sorted(by_consequence.items(), key=lambda kv: -kv[1])),
+        "genes_with_protein_changing": sum(1 for r in per_gene if r["protein_changing"]),
+        "genes_with_homozygous_changing": sum(1 for r in per_gene if r["homozygous_changing"]),
+        "top": per_gene[:60],
+        "date": time.strftime("%Y-%m-%d"),
+        "evidence": "measured genotypes; consequence derived by the local trace on the canonical transcript "
+        "(SNVs only)",
+        "note": "a count of protein-changing variants per gene is not a measure of harm: long and "
+        "polymorphic genes carry many; the ClinVar screen and the truncating list are where to look first",
+    }
+    d = root / name
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "coding.json").write_text(json.dumps(out, indent=1))
+    return out

@@ -288,6 +288,17 @@ class Api:
         except FileNotFoundError as ex:
             raise ApiError(str(ex)) from ex
 
+    def individual_coding(self, name: str) -> dict:
+        """Genome-wide coding SNVs by consequence and by gene for one person."""
+        from genomeos.genome.individuals import coding_inventory
+
+        try:
+            return coding_inventory(
+                name, None, self.root / "data" / "individuals", self.root / "data" / "reference"
+            )
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+
     def individual_knockouts(self, name: str) -> dict:
         """Genome-wide truncating SNVs on canonical transcripts for one person, homozygous first."""
         from genomeos.genome.individuals import knockouts
@@ -1516,6 +1527,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.individuals())
             if u.path == "/api/individual/report":
                 return self._json(self.api.individual_report(self._q(qs, "name") or "HG002"))
+            if u.path == "/api/individual/coding":
+                return self._json(self.api.individual_coding(self._q(qs, "name") or "HG002"))
             if u.path == "/api/individual/knockouts":
                 return self._json(self.api.individual_knockouts(self._q(qs, "name") or "HG002"))
             if u.path == "/api/individual/screen":

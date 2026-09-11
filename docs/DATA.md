@@ -134,6 +134,7 @@ plain or gzipped, from any caller:
     genomeos individual check --name ME               # apply to GRCh38, count reference mismatches: the assembly check
     genomeos individual screen --name ME              # ClinVar carrier screen: pathogenic alleles carried, offline
     genomeos individual knockouts --name ME           # truncating SNVs genome-wide, homozygous first
+    genomeos individual coding --name ME              # coding SNVs by consequence and by gene, missense included
     genomeos individual report --name ME --out ME.md  # one page from everything computed for the person
     genomeos individual genes --name ME --chrom chr21
     genomeos individual predict --name ME --gene APP --chrom chr21   # AlphaGenome feature d, needs the key
@@ -189,6 +190,16 @@ non-secretor allele), FCGR2A, SERPINB11. Calls that fall past a stop the
 reference itself carries (FCGR2C, a pseudogene in most people) are left out
 and counted. SNVs only, so frameshift indels are not in this list; a
 truncating variant is a list to look at, not a verdict.
+
+`individual coding` is the whole coding inventory: every coding SNV on a
+canonical transcript, by consequence and by gene, protein-changing and
+homozygous first. HG002: 21,019 coding SNVs on 22 autosomes, 11,101
+synonymous, 9,830 missense, 61 nonsense, 16 stop lost, 11 start lost; 5,438
+genes carry a protein-changing variant, 2,529 a homozygous one, and the top
+of the list is MUC16 (57 changes in 14,569 residues) and the HLA genes (30
+to 37 each), which is what a count of changes per gene measures: length and
+polymorphism, not harm. The dossier carries it as a section next to the
+truncating list and the ClinVar screen.
 
 Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
 variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135

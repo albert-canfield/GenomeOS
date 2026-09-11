@@ -2023,6 +2023,34 @@ def cmd_individual(args: argparse.Namespace) -> int:
         else:
             print(md)
         return 0
+    if args.action == "coding":
+        try:
+            r = ind.coding_inventory(args.name, args.chrom or None)
+        except FileNotFoundError as ex:
+            print(ex)
+            return 1
+        bc = r["by_consequence"]
+        print(
+            f"{r['individual']}: {sum(bc.values()):,} coding SNVs on canonical transcripts over "
+            f"{len(r['chromosomes'])} chromosomes; {r['genes_with_protein_changing']:,} genes with a "
+            f"protein-changing variant, {r['genes_with_homozygous_changing']:,} with a homozygous one"
+        )
+        print("  by consequence: " + ", ".join(f"{k} {v:,}" for k, v in bc.items()))
+        rows = [
+            {
+                "gene": x["gene"],
+                "chrom": x["chrom"],
+                "changing": x["protein_changing"],
+                "homozygous": x["homozygous_changing"],
+                "coding": x["coding_snvs"],
+                "aa": x["protein_length"],
+                "examples": "; ".join(x["examples"][:3])[:60],
+            }
+            for x in r["top"][: args.top]
+        ]
+        print(_table(rows, ["gene", "chrom", "changing", "homozygous", "coding", "aa", "examples"]))
+        print(f"  [{r['evidence']}]  {r['note']}")
+        return 0
     if args.action == "knockouts":
         try:
             r = ind.knockouts(args.name, args.chrom or None)
@@ -3448,6 +3476,10 @@ def build_parser() -> argparse.ArgumentParser:
     q = isub.add_parser("report", help="one Markdown page from what has been computed for the person")
     q.add_argument("--name", required=True)
     q.add_argument("--out", help="write to a file instead of printing")
+    q = isub.add_parser("coding", help="genome-wide coding SNVs by consequence and by gene (missense first)")
+    q.add_argument("--name", required=True)
+    q.add_argument("--chrom", nargs="*")
+    q.add_argument("--top", type=int, default=25)
     q = isub.add_parser(
         "knockouts", help="genome-wide truncating SNVs (nonsense, start/stop lost), homozygous first"
     )
