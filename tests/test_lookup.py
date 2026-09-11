@@ -75,6 +75,7 @@ def test_carriers_reads_a_local_individual(tmp_path, monkeypatch):
         "chr21\t100\t.\tA\tG\t50\tPASS\t.\tGT\t0/1\nchr21\t200\t.\tC\tT,G\t50\tPASS\t.\tGT\t1/1\n"
     )
     monkeypatch.setattr(lk, "INDIVIDUALS", {"HG002": (str(tmp_path / "HG002_{chrom}.vcf"), "test calls")})
+    monkeypatch.setattr(lk, "INDIVIDUAL_FALLBACK", str(tmp_path / "none_{sample}_{chrom}.vcf"))
     assert lk.carriers("chr21", 100, "A", "G")[0]["genotype"] == "0/1"
     assert lk.carriers("chr21", 200, "C", "G")[0]["carries"] is True
     assert lk.carriers("chr21", 300, "A", "G")[0]["carries"] is False
