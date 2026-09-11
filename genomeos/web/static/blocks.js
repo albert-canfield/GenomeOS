@@ -270,8 +270,12 @@
       ${Object.keys(b.attrs).length ? `<div class="muted" style="font-size:12px">${Object.entries(b.attrs).map(([k, v]) => `${k}=${v}`).join(' · ')}</div>` : ''}
       ${b.type === 'unknown' && b.attrs.class ? `<div class="hint">Investigated: <b>${b.attrs.class}</b> (${b.evidence}, conf ${b.confidence}). ${b.attrs.patterns ? 'patterns: ' + b.attrs.patterns + '. ' : ''}${b.attrs.similar_to ? 'similar to ' + b.attrs.similar_to : ''}</div>` : ''}
       ${b.type === 'unknown' && !b.attrs.class ? '<div class="hint">UNKNOWN: no annotated gene here. In a human chromosome this space carries most of the regulation (enhancers, insulators) that we cannot yet read from sequence alone.</div>' : ''}
-      <div class="row" style="margin-top:6px"><button class="ghost" id="b-zoomto"><i class="ic">🔍</i>Zoom to</button><button class="ghost" id="b-hl"><i class="ic">💡</i>${st.highlight === classOf(b) ? 'Clear highlight' : 'Highlight all ' + (b.type === 'unknown' && b.attrs.class ? b.attrs.class : b.type)}</button></div>`;
+      <div class="row" style="margin-top:6px"><button class="ghost" id="b-zoomto"><i class="ic">🔍</i>Zoom to</button><button class="ghost" id="b-hl"><i class="ic">💡</i>${st.highlight === classOf(b) ? 'Clear highlight' : 'Highlight all ' + (b.type === 'unknown' && b.attrs.class ? b.attrs.class : b.type)}</button>${(b.type === 'gene' || par) ? `<button class="ghost" id="b-flow" data-tip="Open this gene in Flow: DNA → RNA → protein with its regulation"><i class="ic">🔁</i>Flow</button><button class="ghost" id="b-mol" data-tip="Open this gene in Molecules: isoforms, expression, protein definition, structure, graph"><i class="ic">🧫</i>Molecules</button>` : ''}</div>`;
     $('#b-zoomto').onclick = () => { const pad = (b.end - b.start) * 0.15; st.view = [Math.max(0, b.start - pad), Math.min(st.length, b.end + pad)]; scheduleLoad(); };
+    const geneName = b.type === 'gene' ? b.name : (par && par.type === 'gene' ? par.name : (par && par.parent && st.byId[par.parent] ? st.byId[par.parent].name : null));
+    const go = (tab, fill) => { fill(); const t = document.querySelector(`nav button[data-tab="${tab}"]`); if (t) t.click(); };
+    if ($('#b-flow') && geneName) $('#b-flow').onclick = () => go('flow', () => { $('#f-gene').value = geneName; $('#f-chrom').value = st.chrom; setTimeout(() => $('#f-load').click(), 200); });
+    if ($('#b-mol') && geneName) $('#b-mol').onclick = () => go('molecules', () => { $('#m-gene').value = geneName; $('#m-chrom').value = st.chrom; setTimeout(() => $('#m-load').click(), 200); });
     $('#b-hl').onclick = () => { st.highlight = st.highlight === classOf(b) ? null : classOf(b); classSummary(); draw(); showInfo(b, false); };
   }
 

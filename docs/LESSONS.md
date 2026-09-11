@@ -70,6 +70,20 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   named "long ORF" is only honest once the repeat signatures are subtracted
   first. Order of classification matters more than the classifiers.
 
+## Several sessions in one checkout
+
+- The git index is shared by everyone working in the same checkout: a
+  plain `git commit` ships whatever anyone has staged, and `git add -A`
+  sweeps half-finished work into someone else's commit. Commit through a
+  private index (`GIT_INDEX_FILE`, `read-tree HEAD`, add explicit paths,
+  apply your own hunks of shared files, `write-tree`, `commit-tree`,
+  `update-ref` with the old value) and the shared index stops mattering.
+- Format and lint only the files you changed; a package-wide `ruff format`
+  rewrites the other person's uncommitted lines.
+- Say which files are yours before you start; the overlap (cli.py,
+  server.py, index.html) is small when each feature is one subcommand, one
+  route and one card.
+
 ## Engineering
 
 - process-bigraph registers processes with `core.register_link` and applies float updates additively; the composite ran our two engines on one clock.
