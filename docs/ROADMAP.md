@@ -247,14 +247,19 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Requirements.** HG002 is the test human; measured state is labelled
   with its caveats (cell-line signature); every inferred parameter carries
   its confidence.
+- **Done (2026-09-11).** The twin covers all 22 autosomes, and a person's own
+  genome is a first-class input: `genomeos individual import FILE.vcf` splits
+  any GRCh38 VCF into per-chromosome PASS files under a git-ignored directory,
+  and carrier lookup, the gene report, twin build and the gene-by-gene walk
+  all see it. Nothing leaves the machine, which is the only acceptable design
+  for somebody's own genome.
 - **Missing.** Telomere length from a real 30x BAM (100 GB) not done;
-  AlphaGenome features c and d not yet wired (a and b built); no path for a user's own VCF
-  beyond HG002; no pedigree or trio; no polygenic scores.
-- **Next.** 1. Twin on every fetched chromosome (genomeos-fe, in progress).
-  2. `genomeos twin build --vcf ANY` for a user's own genome with the same
-  reports. 3. Telomere from a streamed CRAM range instead of a BAM download.
-  4. AlphaGenome features c and d (splicing signals for the segment parser, predicted haplotype differences for the twin); a and b are built, all optional and loaded disabled without the key (docs/DATA.md).
-- **Owner.** genomeos-fe (build, lookup); genomeos-f7 (user-genome path).
+  AlphaGenome feature d not yet wired (a, b and c built); no pedigree or trio;
+  no polygenic scores.
+- **Next.** 1. AlphaGenome feature d: the predicted effect of a person's own
+  regulatory variants on one gene, with the unphased-single-sequence caveat
+  attached. 2. Telomere from a streamed CRAM range instead of a BAM download.
+- **Owner.** genomeos-fe.
 
 ### E. From one cell to an organism
 
