@@ -23,6 +23,11 @@ A `# test:` comment is a claim the module makes about itself, checked by
 # test: TetR peaks >= 1        a species: final, peaks, min, max
 ```
 
+An organism program (BioLang v0.3, stages declared) is grown by the Body
+runtime to the start of its last stage; the program's own `assert:` lines
+become claims, and `# test: alive == 961`, `cells`, `deaths` read the
+summary at that point.
+
 Every run also checks that no level went NaN or infinite. The demo
 repressilator carries three such lines; `bio test data/demo genomeos/std`
 runs eight files and 11 checks.

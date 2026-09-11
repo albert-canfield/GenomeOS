@@ -12,6 +12,8 @@
     # test: TetR peaks >= 2         number of peaks over the run
     # test: rules >= 3              module facts: rules, entities, unknowns
     # test: confidence >= 0.6       mean confidence over all rules
+    # test: alive == 961             organism programs: cells (born), alive, deaths at the last stage;
+                                    the program's own `assert:` lines are checked too
 
 GenomeOS is the first application of this toolchain; nothing here needs
 the genome layer, so it can be packaged apart (docs/ARCHITECTURE.md).
@@ -62,12 +64,30 @@ def evaluate(
     """Run the module once (if any test needs a trajectory) and judge each test line."""
     from genomeos.runtime import NetworkRuntime
 
-    needs_run = any(s not in ("rules", "entities", "unknowns", "confidence", "events") for s, *_ in tests)
+    facts = ("rules", "entities", "unknowns", "confidence", "events")
+    body_subjects = ("cells", "alive", "deaths")
+    needs_run = any(s not in facts and s not in body_subjects for s, *_ in tests)
     traj = None
     if needs_run and module.rules:
         vm = NetworkRuntime(module, context={}, seed=0)
         traj = vm.run(hours=hours, dt=0.05, initial={})
     results = []
+    # an organism program (stages declared): grow it to the last stage; its own `assert:` lines are claims
+    body = None
+    stages = getattr(module, "stages", None) or []
+    if stages and getattr(module, "organism", None) is not None:
+        try:
+            from genomeos.ir.model import to_minutes
+            from genomeos.runtime.body import Body
+
+            horizon = max(to_minutes(st.start, st.unit) for st in stages)
+            body = Body(module, seed=0).run(until=horizon)
+            for a in body.check_asserts():
+                results.append(
+                    {"test": f"assert: {a.get('assert')}", "got": a.get("value"), "ok": bool(a.get("ok"))}
+                )
+        except Exception as e:  # noqa: BLE001  (the organism layer reports its own failure as a claim)
+            results.append({"test": "organism grows to its last stage", "got": str(e)[:80], "ok": False})
     for subject, measure, op, value in tests:
         got: float | None
         if subject == "rules":
@@ -80,13 +100,16 @@ def evaluate(
             got = len(module.events)
         elif subject == "confidence":
             got = sum(r.confidence for r in module.rules) / len(module.rules) if module.rules else 0.0
+        elif subject in body_subjects and body is not None:
+            summ = body.summary()
+            got = {"cells": summ["cells_born"], "alive": summ["alive"], "deaths": summ["deaths"]}[subject]
         elif traj is not None and subject in traj.levels:
             xs = traj.levels[subject]
             got = {"final": xs[-1], "peaks": traj.peaks(subject), "min": min(xs), "max": max(xs)}[measure]
         else:
             got = None
         ok = got is not None and not (isinstance(got, float) and math.isnan(got)) and OPS[op](got, value)
-        fact = subject in ("rules", "entities", "unknowns", "events", "confidence")
+        fact = subject in facts or subject in body_subjects
         label = f"{subject} {op} {value:g}" if fact else f"{subject} {measure} {op} {value:g}"
         results.append({"test": label, "got": got, "ok": ok})
     if traj is not None:
@@ -112,7 +135,8 @@ def cmd_test(args: argparse.Namespace) -> int:
             total += 1
             continue
         tests = parse_tests(text)
-        results = evaluate(module, tests, hours=args.hours) if (tests or module.rules) else []
+        organism = bool(getattr(module, "stages", None)) and getattr(module, "organism", None) is not None
+        results = evaluate(module, tests, hours=args.hours) if (tests or module.rules or organism) else []
         n_ok = sum(1 for r in results if r["ok"])
         total += max(1, len(results))
         failed += sum(1 for r in results if not r["ok"])
