@@ -684,6 +684,10 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-reader" class="scroll"></div>
     </div>
     <div class="card">
+      <h2><i class="ic">🐭</i>The second mammal<span class="help" data-tip="A mouse chromosome (mm10: UCSC sequence, GENCODE vM25 models, ENCODE mouse cCREs) analysed with the unchanged human code, its nodes compared with every human node by gene symbol (a lower bound on orthology). Conserved = all matched genes in one human node; adjacent = spread over neighbouring human nodes (same neighbourhood, boundary drawn differently); scattered = distant human nodes.">?</span></h2>
+      <div id="j-mouse" class="scroll"></div>
+    </div>
+    <div class="card">
       <h2><i class="ic">🎯</i>Enhancer targets, predicted<span class="help" data-tip="AlphaGenome feature b. Each sampled distal enhancer is deleted in its 1 Mb window and the predicted expression of every gene in the window is read across all RNA-seq tracks; the gene that moves most is the predicted target, the track is the tissue. Compared with the domain inference (nearest TSS inside the CTCF node): agreement is a test of the node model. Predicted evidence, confidence capped at 0.7.">?</span></h2>
       <div id="j-enhancers" class="scroll"></div>
     </div>
@@ -1319,6 +1323,13 @@ async function loadIndividualWide() {
         <table><tr><th>chr</th>${cells.map(c => `<th class="num">${c} read</th><th class="num">${c} enhancers</th>`).join('')}<th class="num">both</th></tr>` +
         Object.entries(rd.chromosomes).map(([c, r]) => `<tr><td class="mono">${c}</td>${cells.map(k => `<td class="num">${r[k] ? r[k].genes_read + '/' + r[k].coding_genes : '-'}</td><td class="num">${r[k] ? fmt(r[k].enhancers_active) : '-'}</td>`).join('')}<td class="num">${r.read_in_both ?? '-'}</td></tr>`).join('') + '</table>';
     } else $('#j-reader').innerHTML = '<span class="muted">not run yet (scripts/reader_genome_wide.py)</span>';
+    const mm = d.mouse || {};
+    const mchroms = Object.keys(mm);
+    if (mchroms.length) {
+      $('#j-mouse').innerHTML = mchroms.map(c => { const r = mm[c], n = r.node_comparison || {}; const pct = x => x == null ? '?' : (x * 100).toFixed(0) + '%';
+        return `<div class="kpi"><div><b>mouse ${c}</b><span>${fmt(r.length)} bp · ${fmt(r.genes)} genes (${fmt(r.coding_genes)} coding)</span></div><div><b>${fmt(r.domains)}</b><span>nodes, median ${fmt(r.domain_length_median)} bp</span></div><div><b>${n.tested}</b><span>nodes with ≥ 2 symbol-matched genes</span></div><div><b>${pct(n.fraction_conserved)}</b><span>in one human node</span></div><div><b>${pct(n.fraction_same_neighbourhood)}</b><span>same human neighbourhood</span></div><div><b>${n.split_scattered}</b><span>scattered</span></div></div>
+          <div class="muted">${Object.entries(r.evidence || {}).map(([k, v]) => `<span class="pill ${v.startsWith('curated') ? 'curated' : 'inferred'}">${k}</span> ${v.split(': ').slice(1).join(': ')}`).join(' · ')}</div>`; }).join('');
+    } else $('#j-mouse').innerHTML = '<span class="muted">not run yet (genomeos mouse --chrom chr19)</span>';
     const et = d.enhancer_targets || {};
     const chroms = Object.keys(et);
     if (chroms.length) {
