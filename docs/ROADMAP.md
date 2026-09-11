@@ -379,12 +379,23 @@ in order. "Owner" is the session that holds the files today (see §7).
   the other way. PROTEIN.md now bounds them from three sides: not isoform
   choice, not this trio's alleles, mechanism by triage; population allele
   frequency at the exact site is what would settle each one.
-- **Next.** 1. The dominant isoform fed to the twin, so a variant is judged on
-  the transcript the tissue makes, and the twin says which protein each tissue
-  makes for a person given their variants. 2. Population allele frequency at
-  the 96 disagreement sites, which is the one measurement that settles them.
-  3. Measured modification state (a phosphoproteome) so a `modifies` rule can
-  carry occupancy rather than possibility.
+- **The twin's isoform (2026-09-11).** `genomeos individual protein --name ME
+  --gene G --chrom C` traces GTEx's dominant transcript in each tissue and
+  reads the person's coding variants on that transcript rather than the
+  canonical one: which protein each tissue makes in this person. HG002 and
+  APP: APP-201 (770 aa) in 33 tissues, APP-204 (751 aa) in 14, APP-202 (695
+  aa, neuronal) in six brain regions, APP-203 in the cortex, no coding variant
+  on any. HG002 and FUT2: FUT2-201 in 49 tissues carrying p.Trp154Ter
+  homozygous, the truncated non-secretor protein everywhere the gene is made.
+  The output states that the isoform per tissue is GTEx's population median,
+  not the person's own expression; that half stays open. DATA.md "the twin's
+  isoform".
+- **Next.** 1. Population allele frequency at the 96 disagreement sites
+  (gnomAD through the lookup layer's VEP path, one site at a time, cached),
+  the one measurement that settles them. 2. The person's own expression in
+  place of GTEx's median where a measurement exists. 3. Measured modification
+  state (a phosphoproteome) so a `modifies` rule can carry occupancy rather
+  than possibility.
 - **Owner.** genomeos-fe.
 
 ### D. The individual (BioTwin)
