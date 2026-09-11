@@ -120,6 +120,17 @@ class Body:
         root.population = o.resolution == "populations"
         self._add(root, None)
 
+    def set_factor(self, name: str, value: str | None) -> None:
+        """An organism-wide factor set from outside (a coupled process, an environment change): every
+        population and resting cell reads it and decides again; cells born later carry it in their context."""
+        current = self.environment.get(name)
+        if value is None:
+            self.environment.pop(name, None)
+        else:
+            self.environment[name] = value
+        if current != value:
+            self._stage_change()
+
     def _stage_change(self) -> None:
         """Populations and resting cells read the new stage and decide again."""
         for c in self.alive_at(self.time):

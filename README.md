@@ -106,6 +106,7 @@ records the evidence per task. Highlights:
 - development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient
 - an organism from one cell: BioLang v0.3 `organism` programs run by the Body runtime (`genomeos grow`); C. elegans grows from the zygote to the 959-cell adult with every cell, fate and programmed death matching Sulston's lineage, founders decided by maternal factors, Wnt and Notch, timing within a median 12 minutes ([docs/BIOLANG-v0.3.md](docs/BIOLANG-v0.3.md), [docs/ORGANISM-FROM-ONE-CELL.md](docs/ORGANISM-FROM-ONE-CELL.md))
 - knockouts as experiments: `experiment` blocks remove a maternal factor or a signal and run against the wild type; the six classic C. elegans mutants (pop-1, skn-1, pie-1, apx-1, glp-1, pal-1) reproduce their published founder phenotypes from the cited rules (`genomeos grow data/organisms/celegans/mutants.bio --experiments`)
+- the organism runtime composes with the other engines: with the `compose` extra an organism program runs as a process-bigraph process beside a gene network and the ageing population on one clock, and a network's species can gate the organism's decisions through named factors
 - the first human mechanism module: haematopoiesis from the stem cell to the blood lineages, each step gated by the transcription factors the genetics established, flows fitted to the measured daily outputs (2.8e11 cells replaced per day), nine knockouts reproducing their published phenotypes (`genomeos grow data/organisms/human/haematopoiesis_mutants.bio --experiments`)
 - the same runtime at population resolution grows a human body: Carnegie-stage timers, germ layers by share, sixteen tissue populations that reach the adult counts of Sender & Milo 2021 and turn over at their measured rates (2.8e13 cells at 20 years, 3.2e11 replaced per day), every number cited and the whole labelled low confidence because it is counts, not mechanism (`genomeos grow data/organisms/human/body.bio --until "20 yr"`)
 - a debugger with biological breakpoints and evidence traces, and BioForge design search whose outputs are labelled predicted
@@ -114,6 +115,14 @@ records the evidence per task. Highlights:
 - nodes above genes: domains between CTCF boundaries with the genes and enhancers inside (`genomeos domains`)
 - therapeutic target reasoning: for every tumour alteration, where the protein sits and whether a binder can physically reach it, how the tumour differs from healthy tissue, what happens after binding, the peptide/HLA route, and which of 15 therapeutic mechanisms the biology supports, each with its evidence level and its missing data (`genomeos therapeutic`, docs/THERAPEUTICS.md)
 - a local web UI with a dozen views, including a Progress tab with live background jobs and the project's task log
+
+## Licence and credits
+
+The code is MIT (see [LICENSE](LICENSE)). GenomeOS is built for research and
+education: several of the sources and optional models it can enable are
+non-commercial or academic only, so a commercial user must check every source
+they turn on. Everything GenomeOS stands on is credited with its licence in
+[ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md).
 
 ## Quick start
 

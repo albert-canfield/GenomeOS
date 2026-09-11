@@ -140,6 +140,17 @@ their fates without PAL-1). Terminal fates below the founders still come
 from the observed lineage program, so the report is explicit about where
 mechanism stops.
 
+## Composition
+
+With the `compose` extra, `genomeos.runtime.compose.build_body_composite`
+puts an organism program into a process-bigraph Composite beside a
+regulatory network. The network's species levels can gate the organism:
+a gate names a factor, a species and a threshold, and while the species is
+at or above it the factor is present in the organism's context, so any
+`when: FACTOR = present` decision reads the network's state. That is the
+bridge from molecular dynamics (rules, Hill functions) to the cell
+decisions of the organism layer.
+
 ## Running
 
 ```
