@@ -132,6 +132,7 @@ plain or gzipped, from any caller:
     genomeos individual import /path/genome.vcf.gz --name ME --note "GATK 4.5, 2026-08, own consent"
     genomeos individual list
     genomeos individual check --name ME               # apply to GRCh38, count reference mismatches: the assembly check
+    genomeos individual screen --name ME              # ClinVar carrier screen: pathogenic alleles carried, offline
     genomeos individual genes --name ME --chrom chr21
     genomeos individual predict --name ME --gene APP --chrom chr21   # AlphaGenome feature d, needs the key
     genomeos lookup chr17:7675088 C>T          # now says whether ME carries it
@@ -160,6 +161,21 @@ against GRCh37/hg19 disagrees at most positions and is called out as such,
 before anyone reads a consequence off the wrong coordinates. HG002's own
 benchmark gives 0 mismatches over 4 million calls, which is what the check
 is calibrated against.
+
+`individual screen` is the carrier screen. ClinVar's GRCh38 VCF (190 MB,
+4.47 million rows) is streamed once and distilled to its 346,571 pathogenic
+and likely pathogenic rows (226,268 and 120,303; conflicting calls left
+out), 7.6 MB under `data/knowledge/clinvar`, local; only the counts are
+committed (`clinvar_pathogenic_summary.json`). The screen intersects the
+person's files with that table, chromosome by chromosome, and reports each
+allele carried with genotype, zygosity, ClinVar's review stars and the
+conditions. HG002, 4,048,342 variants on 22 autosomes, 7 seconds: two hits,
+the F11 c.1716+1G>T-type factor XI deficiency allele heterozygous (two
+stars; F11 deficiency is common in the Ashkenazi population HG002 comes
+from) and a 9p21 CDKN2B row ClinVar itself labels "likely pathogenic |
+protective" with no review stars. Research annotation against a public
+database, never a clinical report; the output says so, and the per-person
+result stays under the person's directory.
 
 Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
 variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135

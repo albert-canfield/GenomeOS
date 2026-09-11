@@ -1977,6 +1977,40 @@ def cmd_individual(args: argparse.Namespace) -> int:
         return 0 if ok else 1
     if args.action == "predict":
         return _individual_predict(args)
+    if args.action == "screen":
+        from genomeos.genome import clinvar
+
+        if not clinvar.pathogenic_path().exists():
+            print("ClinVar not distilled yet: streaming the GRCh38 VCF once (about 190 MB, kept locally)")
+            s = clinvar.distil(progress=lambda m: print("  " + m, flush=True))
+            print(f"  kept {s['rows_kept']:,} pathogenic / likely pathogenic rows of {s['rows_read']:,}")
+        try:
+            r = clinvar.screen(args.name, args.chrom or None)
+        except FileNotFoundError as ex:
+            print(ex)
+            return 1
+        print(
+            f"{r['individual']}: {len(r['hits'])} ClinVar pathogenic alleles carried over "
+            f"{r['variants_scanned']:,} variants on {len(r['chromosomes'])} chromosomes "
+            f"({r['pathogenic']} pathogenic, {r['likely_pathogenic']} likely; {r['homozygous']} homozygous; "
+            f"{r['two_stars_or_more']} with ≥ 2 stars)"
+        )
+        rows = [
+            {
+                "variant": f"{h['chrom']}:{h['pos']:,} {h['ref'][:8]}>{h['alt'][:8]}",
+                "gene": h["gene"],
+                "gt": h["genotype"],
+                "zygosity": h["zygosity"],
+                "significance": h["significance"],
+                "stars": h["stars"],
+                "condition": h["conditions"][:48],
+            }
+            for h in r["hits"][: args.top]
+        ]
+        print(_table(rows, ["variant", "gene", "gt", "zygosity", "significance", "stars", "condition"]))
+        print(f"  [{r['evidence']}]  {r['note']}")
+        print(f"  stored under data/individuals/{args.name}/clinvar_screen.json (never under data/results)")
+        return 0
     if args.action == "check":
         people = {p["name"]: p for p in ind.list_individuals()}
         if args.name not in people:
@@ -3223,6 +3257,10 @@ def build_parser() -> argparse.ArgumentParser:
     isub.add_parser("list", help="the test human and every imported person")
     q = isub.add_parser("remove", help="delete an imported person's files")
     q.add_argument("name")
+    q = isub.add_parser("screen", help="ClinVar carrier screen: pathogenic alleles the person carries")
+    q.add_argument("--name", required=True)
+    q.add_argument("--chrom", nargs="*", help="default: every chromosome the person has")
+    q.add_argument("--top", type=int, default=30)
     q = isub.add_parser("check", help="apply the person's variants to the local reference; assembly verdict")
     q.add_argument("--name", required=True)
     q.add_argument("--chrom", nargs="*", help="default: every chromosome with rows and a local sequence")

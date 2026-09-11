@@ -276,6 +276,18 @@ class Api:
             p["checks"] = checks(p["name"], root)
         return {"individuals": people}
 
+    def individual_screen(self, name: str) -> dict:
+        """ClinVar pathogenic alleles the person carries (ClinVar distilled once, locally)."""
+        from genomeos.genome import clinvar
+
+        knowledge = self.root / "data" / "knowledge" / "clinvar"
+        if not clinvar.pathogenic_path(knowledge).exists():
+            clinvar.distil(knowledge)
+        try:
+            return clinvar.screen(name, None, self.root / "data" / "individuals", knowledge)
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+
     def individual_check(self, name: str, chrom: str) -> dict:
         """The person's variants of one chromosome applied to the local reference: statistics and verdict."""
         from genomeos.genome.individuals import check
@@ -1481,6 +1493,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/individuals":
                 return self._json(self.api.individuals())
+            if u.path == "/api/individual/screen":
+                return self._json(self.api.individual_screen(self._q(qs, "name") or "HG002"))
             if u.path == "/api/individual/check":
                 return self._json(
                     self.api.individual_check(self._q(qs, "name") or "HG002", self._q(qs, "chrom") or "chr21")
