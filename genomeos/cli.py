@@ -9,6 +9,8 @@ genomeos age     [--cell-type T]       cell ageing simulation
 genomeos libs    [--layer L] [-v]      the biological libraries in the genome
 genomeos serve   [--port 8765] [--open] light web UI on localhost
 """
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Part of the GenomeOS application; see LICENSING.md.
 
 from __future__ import annotations
 

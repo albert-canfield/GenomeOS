@@ -18,6 +18,8 @@
 GenomeOS is the first application of this toolchain; nothing here needs
 the genome layer, so it can be packaged apart (docs/ARCHITECTURE.md).
 """
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 
 from __future__ import annotations
 

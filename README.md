@@ -118,10 +118,22 @@ records the evidence per task. Highlights:
 
 ## Licence and credits
 
-The code is MIT (see [LICENSE](LICENSE)). GenomeOS is built for research and
-education: several of the sources and optional models it can enable are
-non-commercial or academic only, so a commercial user must check every source
-they turn on. Everything GenomeOS stands on is credited with its licence in
+Open source, and built to stay that way. Two licences, split along the line the
+architecture already draws ([LICENSING.md](LICENSING.md)):
+
+- the **BioLang engine** (language, IR, virtual machine, standard library,
+  `bio` toolchain) is **Apache 2.0**, so anyone can embed it in their own tool,
+  the way they would use Python or Node;
+- the **GenomeOS application** (genome decoding, molecules, twins, organisms,
+  cancer, therapeutics, the web interface) is **AGPL-3.0-or-later**: use it,
+  change it, publish research with it, and if you run a modified version as a
+  service, its users get the source. Improvements come back.
+
+A separate commercial licence can be granted by the author. Independently of
+the code, several data sources and optional models are non-commercial or
+academic only (AlphaGenome, NetMHCpan, COSMIC and some cBioPortal studies), so
+a commercial user must check every source they enable. Everything GenomeOS
+stands on is credited with its licence in
 [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md).
 
 ## Quick start

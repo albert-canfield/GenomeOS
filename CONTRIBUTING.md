@@ -5,6 +5,15 @@ sessions alike; the working rules for several sessions sharing one checkout
 are in [docs/ROADMAP.md](docs/ROADMAP.md) §8 and the reasons in
 [docs/LESSONS.md](docs/LESSONS.md).
 
+## Licence of what you contribute
+
+Contributions are accepted under the licence of the file you are changing
+(inbound equals outbound): Apache 2.0 for the BioLang engine, AGPL-3.0-or-later
+for the GenomeOS application ([LICENSING.md](LICENSING.md)). By contributing you
+also agree that the copyright holder may offer your contribution under a
+separate commercial licence; that is what keeps dual licensing possible. New
+files carry the `SPDX-License-Identifier` of the part they belong to.
+
 ## Branches
 
 - `main` holds tested, working code only. It is protected: nothing lands there

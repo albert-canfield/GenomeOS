@@ -68,25 +68,19 @@ these; raw files are never redistributed (docs/DECISIONS.md D7).
 
 ## Use and licence
 
-The GenomeOS source code is released under the **MIT licence** (see
-[LICENCE](LICENSE)) and its author is Albert Canfield.
+GenomeOS is open source, written by Albert Canfield, under two licences split
+by path: the **BioLang engine** is Apache 2.0 and the **GenomeOS application**
+is AGPL-3.0-or-later. [LICENSING.md](LICENSING.md) has the map and the
+reasoning; [LICENSE](LICENSE) and [LICENSE-APACHE](LICENSE-APACHE) hold the
+texts.
 
-**GenomeOS is intended for research and education, not for commercial use.**
-Two things sit behind that statement and they are different:
-
-1. **The code.** MIT permits commercial use. If GenomeOS is to be
-   non-commercial as a whole, the licence has to say so (a non-commercial
-   licence such as PolyForm Noncommercial or CC BY-NC-SA for the
-   documentation). This is an open decision recorded in
-   docs/DECISIONS.md; until it is settled the code stays MIT and this
-   paragraph states the author's intent.
-2. **The data and the optional models.** Several sources GenomeOS reads are
-   free only for non-commercial or academic use, whatever the code's licence
-   says. Enabling AlphaGenome binds the user to Google DeepMind's
-   non-commercial terms; NetMHCpan needs a DTU licence; COSMIC identifiers
-   and some cBioPortal studies carry their own restrictions. A commercial
-   user must check every source they enable, and GenomeOS names the source
-   of every fact precisely so that check is possible.
+The licence of the code is a separate question from the terms of the data.
+Several sources GenomeOS reads are free only for non-commercial or academic
+use whatever the code says: **AlphaGenome** (API and weights, non-commercial),
+**NetMHCpan** (DTU academic licence, never shipped or downloaded by GenomeOS),
+**COSMIC** identifiers and some **cBioPortal** studies. A commercial user must
+check every source they enable, and GenomeOS names the source of every fact
+precisely so that check is possible.
 
 GenomeOS produces research hypotheses with their evidence and their gaps. It
 is not a medical device, it gives no clinical advice, and it never claims a
