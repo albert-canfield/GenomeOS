@@ -245,6 +245,8 @@ tested against it.
 
    | measured: ENCODE K562 total RNA-seq over ≥ 30% of exon bases (signal ≥ 0.05) | 55 | 26.0% / 72.1% | 47.9% | 44.8% / 89.1% |
    | measured, six-line panel (K562, HepG2, GM12878, IMR-90, A549, MCF-7; best line per exon) | 143 | 36.1% / 65.9% | 67.4% | 62.9% / 62.9% |
+   | predicted panel **or** measured panel (union) | 154 | 36.7% / 63.7% | 68.4% | 66.1% / 63.0% |
+   | predicted panel **and** measured panel (intersection) | 71 | 32.3% / 71.6% | 60.6% | 54.3% / **97.2%** |
 
    (`segments_chr21_predicted_sites_rna.json`, `…_measured_K562.json`.) The
    measured row uses an experiment instead of a model: ENCODE's
@@ -267,7 +269,14 @@ tested against it.
    tracks were trained to. Measured transcription is evidence that a
    region is made, not that it is a gene; the two together, a model that
    knows genes and a measurement that knows this cell, are the honest
-   filter. This is the lever. Nine in
+   filter. Combined (`--rna-combine`): the union adds three genes to the
+   measured panel and keeps its noise (66.1% / 63.0%); the intersection is
+   the strictest call the series has, 71 candidates of which 69 are genes
+   (97.2% precision at 54.3% sensitivity), with exons right 72% of the time.
+   So the two filters are not redundant: the model supplies the gene-level
+   judgement, the measurement supplies the cell, and asking for both is how
+   a parser's call becomes something a geneticist would act on. This is
+   the lever. Nine in
    ten candidates that survive the RNA filter are real genes, against one in
    five before it, and the exons they draw are right two times in three. What
    the filter costs is the genes the panel does not express: sensitivity

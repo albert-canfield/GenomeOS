@@ -1938,8 +1938,17 @@ def cmd_segments(args: argparse.Namespace) -> int:
         inner = post_filter
 
         def post_filter(preds, measured=measured, frac=frac, inner=inner):  # noqa: F811
-            preds = inner(preds) if inner else preds
-            return measured.filter(preds, frac, progress=lambda d, n, b: None)
+            if inner is None:
+                return measured.filter(preds, frac, progress=lambda d, n, b: None)
+            predicted_keep = inner(preds)
+            if args.rna_combine == "intersection":
+                return measured.filter(predicted_keep, frac, progress=lambda d, n, b: None)
+            # union: the model's gene-level tracks for precision, the measured lines for the genes the panel
+            # does not express; a candidate stays if either says it is transcribed
+            keep_ids = {id(p) for p in predicted_keep}
+            measured_keep = measured.filter(preds, frac, progress=lambda d, n, b: None)
+            keep_ids |= {id(p) for p in measured_keep}
+            return [p for p in preds if id(p) in keep_ids]
 
     r = parse_chromosome(
         args.chrom,
@@ -1967,6 +1976,9 @@ def cmd_segments(args: argparse.Namespace) -> int:
     if measured is not None:
         cells = [x.strip() for x in args.rna_measured.split(",") if x.strip()]
         name += "_measured_" + (cells[0].replace(" ", "_") if len(cells) == 1 else f"panel{len(cells)}")
+        if args.rna_filter is not None:
+            name += f"_{args.rna_combine}"
+            r["rna_combine"] = args.rna_combine
         r["rna_measured"] = {**ms, "min_exon_fraction": frac}
         r["evidence"] += f"; candidates kept only where ENCODE {args.rna_measured} RNA-seq covers their exons"
     if args.predicted_sites:
@@ -3686,6 +3698,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--rna-measured",
         metavar="CELL_TYPE",
         help="keep candidates whose exons carry ENCODE total RNA-seq signal in these cell lines (comma list)",
+    )
+    p.add_argument(
+        "--rna-combine",
+        choices=("union", "intersection"),
+        default="union",
+        help="with both RNA filters: keep what either says is transcribed (union) or what both do",
     )
     p.add_argument(
         "--coding",
