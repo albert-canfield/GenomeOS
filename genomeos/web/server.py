@@ -632,6 +632,9 @@ class Api:
             top = max(
                 (kv for kv in by.items() if kv[0] != "unclassified"), key=lambda kv: kv[1], default=("-", 0)
             )
+            if "curated_repeats" not in v:
+                per = load_result(f"unknown_{c}", self.root / "data" / "results") or {}
+                v = {**v, "curated_repeats": per.get("curated_repeats", False)}
             rows.append(
                 {
                     "chrom": c,

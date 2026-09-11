@@ -91,6 +91,7 @@ def main() -> None:
                 "unknown_blocks": r["unknown_blocks"],
                 "unknown_bp": r["unknown_bp"],
                 "classified_fraction": r["classified_fraction"],
+                "curated_repeats": r.get("curated_repeats", False),
                 "by_class": r["by_class"],
                 "seconds": r["seconds"],
             }
