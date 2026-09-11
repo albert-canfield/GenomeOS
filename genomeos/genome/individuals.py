@@ -549,6 +549,22 @@ def dossier(name: str, root: Path | None = None) -> str:
             + f"; {cv['genes_with_protein_changing']:,} genes carry a protein-changing variant, "
             f"{cv['genes_with_homozygous_changing']:,} a homozygous one. _{cv['evidence']}_"
         )
+        mr = [m for m in cv.get("missense_ranked", []) if m["site"] == "site"][:15]
+        if mr:
+            lines.append("")
+            lines.append(
+                f"Missense variants on an annotated UniProt site "
+                f"({cv.get('missense_at_annotated_site', 0)} of {cv.get('missense', 0)}; "
+                f"{cv.get('missense_in_domain', 0)} more inside a domain), homozygous first:"
+            )
+            lines.append("")
+            lines.append("| gene | change | genotype | site |")
+            lines.append("|---|---|---|---|")
+            for m in mr:
+                lines.append(
+                    f"| {m['gene']} | {m['hgvs_p'] or ''} | {m['genotype']} | "
+                    f"{'; '.join(m['features'][:2])} |"
+                )
         if top:
             lines.append("")
             lines.append("Genes with the most protein-changing variants:")
@@ -601,6 +617,48 @@ def dossier(name: str, root: Path | None = None) -> str:
     return "\n".join(lines)
 
 
+SITE_TYPES = {
+    "Active site",
+    "Binding site",
+    "Site",
+    "Modified residue",
+    "Disulfide bond",
+    "Glycosylation",
+    "Lipidation",
+    "Cross-link",
+    "DNA binding",
+    "Metal binding",
+    "Zinc finger",
+    "Motif",
+}
+DOMAIN_TYPES = {
+    "Domain",
+    "Region",
+    "Repeat",
+    "Transmembrane",
+    "Coiled coil",
+    "Compositional bias",
+    "Topological domain",
+}
+
+
+def site_class(features: list[dict[str, Any]]) -> str:
+    """How much UniProt says about the residue a missense variant hits: a site, a domain, or nothing."""
+    types = {f.get("type") for f in features}
+    if types & SITE_TYPES:
+        return "site"
+    if types & DOMAIN_TYPES:
+        return "domain"
+    return "none"
+
+
+def rank_missense(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Missense variants worth reading first: those on an annotated site, then in a domain, homozygous
+    before heterozygous within each. A rank from annotation, not a prediction of effect."""
+    order = {"site": 0, "domain": 1, "none": 2}
+    return sorted(rows, key=lambda m: (order[m["site"]], m["zygosity"] != "homozygous", m["gene"], m["pos"]))
+
+
 def coding_inventory(
     name: str,
     chroms: list[str] | None = None,
@@ -618,10 +676,14 @@ def coding_inventory(
     if name not in people:
         raise FileNotFoundError(f"{name} is not a local individual")
     chroms = chroms or people[name]["chromosomes"]
+    from genomeos.genome.lookup import features_at
+
     by_consequence: dict[str, int] = {}
     per_gene: list[dict[str, Any]] = []
+    missense: list[dict[str, Any]] = []
     done = []
     genes_seen = 0
+    protein_cache = Path("data/knowledge/proteins")
     for chrom in chroms:
         vcf = vcf_path(name, chrom, root)
         gff = default_gencode({chrom})
@@ -658,6 +720,13 @@ def coding_inventory(
                 counts: dict[str, int] = {}
                 hom_changing = 0
                 examples = []
+                defn = None
+                dp = protein_cache / f"{g.symbol}.json"
+                if dp.exists():
+                    try:
+                        defn = json.loads(dp.read_text())
+                    except (OSError, json.JSONDecodeError):
+                        defn = None
                 for pos, f in positions[lo:hi]:
                     sub = tr.substitute(pos - 1, f[3], f[4])
                     if sub.get("region") != "CDS":
@@ -669,10 +738,43 @@ def coding_inventory(
                     by_consequence[c] = by_consequence.get(c, 0) + 1
                     if c not in ("synonymous", "coding"):
                         gt = f[9].split(":")[0] if len(f) > 9 else ""
-                        if gt.replace("|", "/").split("/").count("1") >= 2:
+                        hom = gt.replace("|", "/").split("/").count("1") >= 2
+                        if hom:
                             hom_changing += 1
                         if len(examples) < 6:
                             examples.append(f"{sub.get('hgvs_p') or c} ({gt})")
+                        if c == "missense":
+                            residue = sub.get("residue") or 0
+                            feats = [
+                                x
+                                for x in (features_at(defn, residue) if defn else [])
+                                # a bridge or a cross-link is two residues, not everything between them
+                                if x["type"] not in ("Disulfide bond", "Cross-link")
+                                or residue in (x["start"], x["end"])
+                            ]
+                            for x in feats:
+                                if x["type"] in ("Disulfide bond", "Cross-link") and not x["description"]:
+                                    x["description"] = f"Cys{x['start']}–Cys{x['end']}"
+                            missense.append(
+                                {
+                                    "gene": g.symbol,
+                                    "chrom": chrom,
+                                    "pos": pos,
+                                    "ref": f[3],
+                                    "alt": f[4],
+                                    "hgvs_p": sub.get("hgvs_p"),
+                                    "residue": sub.get("residue"),
+                                    "protein_length": len(tr.protein),
+                                    "genotype": gt,
+                                    "zygosity": "homozygous" if hom else "heterozygous",
+                                    "features": [
+                                        f"{x['type']}: {x['description']}"[:60]
+                                        for x in feats
+                                        if x["type"] != "Chain"
+                                    ][:4],
+                                    "site": site_class(feats),
+                                }
+                            )
                 if counts:
                     changing = sum(v for k, v in counts.items() if k not in ("synonymous", "coding"))
                     per_gene.append(
@@ -692,6 +794,7 @@ def coding_inventory(
             genome.close()
         done.append(chrom)
     per_gene.sort(key=lambda r: (-r["protein_changing"], -r["coding_snvs"]))
+    ranked = rank_missense(missense)
     out = {
         "individual": name,
         "chromosomes": done,
@@ -700,6 +803,10 @@ def coding_inventory(
         "by_consequence": dict(sorted(by_consequence.items(), key=lambda kv: -kv[1])),
         "genes_with_protein_changing": sum(1 for r in per_gene if r["protein_changing"]),
         "genes_with_homozygous_changing": sum(1 for r in per_gene if r["homozygous_changing"]),
+        "missense": len(missense),
+        "missense_at_annotated_site": sum(1 for m in missense if m["site"] == "site"),
+        "missense_in_domain": sum(1 for m in missense if m["site"] == "domain"),
+        "missense_ranked": ranked[:60],
         "top": per_gene[:60],
         "date": time.strftime("%Y-%m-%d"),
         "evidence": "measured genotypes; consequence derived by the local trace on the canonical transcript "

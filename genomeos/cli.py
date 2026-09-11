@@ -2049,6 +2049,27 @@ def cmd_individual(args: argparse.Namespace) -> int:
             for x in r["top"][: args.top]
         ]
         print(_table(rows, ["gene", "chrom", "changing", "homozygous", "coding", "aa", "examples"]))
+        mr = [m for m in r.get("missense_ranked", []) if m["site"] != "none"][: args.top]
+        if mr:
+            print(
+                f"  missense on an annotated UniProt site: {r['missense_at_annotated_site']:,} of "
+                f"{r['missense']:,} ({r['missense_in_domain']:,} more inside a domain); read these first:"
+            )
+            print(
+                _table(
+                    [
+                        {
+                            "gene": m["gene"],
+                            "change": m["hgvs_p"] or "",
+                            "gt": m["genotype"],
+                            "where": m["site"],
+                            "annotation": "; ".join(m["features"][:2])[:70],
+                        }
+                        for m in mr
+                    ],
+                    ["gene", "change", "gt", "where", "annotation"],
+                )
+            )
         print(f"  [{r['evidence']}]  {r['note']}")
         return 0
     if args.action == "knockouts":

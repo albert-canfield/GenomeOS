@@ -201,6 +201,17 @@ to 37 each), which is what a count of changes per gene measures: length and
 polymorphism, not harm. The dossier carries it as a section next to the
 truncating list and the ClinVar screen.
 
+The missense variants are ranked by what UniProt says about the residue
+they hit, since a count judges nothing: a variant on an annotated site
+(active or binding site, modified residue, glycosylation, the two cysteines
+of a disulfide bridge, a motif) first, then one inside a domain, then the
+rest, homozygous before heterozygous. HG002: 46 of the 9,830 missense
+variants sit on an annotated site (5,374 more inside a domain), among them
+CD52 p.Asn40Ser homozygous, which removes an N-glycosylation site, and two
+cysteines of disulfide bridges lost in GALNTL5 and an olfactory receptor.
+A rank from annotation, not a prediction of effect; the residue-level view
+of any of them is one click away on the Flow tab.
+
 Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
 variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
 missense, 133 synonymous, 1 nonsense), the KRTAP10 cluster on top as

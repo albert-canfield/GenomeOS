@@ -106,3 +106,22 @@ def test_dossier_reads_what_is_stored(tmp_path):
     md = ind.dossier("me", root)
     assert "| chr21:100 A>G | G1 | 0/1 (heterozygous) | Pathogenic | 2 | C |" in md
     assert "**Truncating variants** — not run" in md
+
+
+def test_missense_rank_reads_uniprot_annotation():
+    feats_site = [{"type": "Binding site", "description": "Zn", "start": 5, "end": 5}]
+    feats_dom = [{"type": "Domain", "description": "Kinase", "start": 1, "end": 300}]
+    assert ind.site_class(feats_site) == "site" and ind.site_class(feats_dom) == "domain"
+    assert ind.site_class([{"type": "Chain", "description": "x", "start": 1, "end": 9}]) == "none"
+    rows = [
+        {"gene": "B", "pos": 1, "site": "none", "zygosity": "homozygous"},
+        {"gene": "A", "pos": 2, "site": "domain", "zygosity": "heterozygous"},
+        {"gene": "C", "pos": 3, "site": "site", "zygosity": "heterozygous"},
+        {"gene": "C", "pos": 4, "site": "site", "zygosity": "homozygous"},
+    ]
+    assert [(m["gene"], m["pos"]) for m in ind.rank_missense(rows)] == [
+        ("C", 4),
+        ("C", 3),
+        ("A", 2),
+        ("B", 1),
+    ]
