@@ -103,7 +103,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioIR** (representation) | 0.3 | 20 types with JSON round-trip: Evidence, Entity, Region, RegulatoryElement, Gene, Transcript, Protein, CellType, Effect, Event, Parameter, Rule, Domain, Signal, Timer, Stage, Decision, Experiment, Organism, Module; `UNKNOWN` as a value | a BIOIR-v0.3 spec (the doc is v0.1); ProteinState and Population as types; `Locus` moved under `ir` |
 | **BioVM** (engines) | 0.3 | twelve engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces |
 | **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs the demo, std and organism programs in CI; depends on the engine alone, so it can be packaged as it stands | its own package and test suite; `bio fmt`; language server |
-| **BioLib** (libraries) | 45 libraries | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol; haematopoiesis as a runnable mechanism module | `cancer.*` layer; more human development modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
+| **BioLib** (libraries) | 45 libraries + the proteome | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol; haematopoiesis as a runnable mechanism module; **the whole human proteome packaged** (19,283 proteins in 2.3 MB, `genomeos protein X --lib`, answers offline) | `cancer.*` layer; more human development modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
 | **BioTwin** (individual) | 0.7 | HG002 with measured telomere and epigenetic age; fork, run, diff; calibration from measured state; `genomeos lookup` for one variant through every layer | genome-wide twin (per-chromosome build in progress); a user's own VCF; telomere from real reads |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 nearly there | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader v1 (open nodes per cell type) on 2; signals learned | the segment parser (in progress); reader on every chromosome; a second mammal |
@@ -212,10 +212,17 @@ in order. "Owner" is the session that holds the files today (see §7).
   identical to the canonical entry, 97.8% exact for some isoform, 99 real
   disagreements left to explain. Knowledge graph genome-wide: 41,982 nodes,
   327,024 edges, largest component 15,165 of 19,283 compiled proteins.
-- **Missing.** chrY is the one chromosome with no verification result (61
-  genes); the 99 disagreements are not yet explained one by one; pathways run
-  as reachability, not kinetics; no post-translational state model beyond the
-  UniProt feature list; no isoform-level expression.
+- **Packaged as a library (2026-09-11).** The compiled proteome is distilled
+  into `genomeos/lib/data/proteome.json.gz`: 19,283 proteins in 2.3 MB,
+  shipped inside the package, with function on 87.0%, pathways 58.7%,
+  partners 63.6%, experimental structure 45.6% and disease 25.7%, and the 168
+  symbol mismatches marked rather than hidden. `genomeos protein X --lib`
+  answers with no network at all, which is what makes the protein layer usable
+  on a laptop and in CI.
+- **Missing.** Pathways run as reachability, not kinetics; no
+  post-translational state model beyond the UniProt feature list; no
+  isoform-level expression. chrY verification and the triage of the
+  translation disagreements by mechanism both landed on 2026-09-11.
 - **Next.** 1. Let the proteome job run to the end, one process (fixed
   today). 2. `genomeos verify` after each chromosome compiles, as part of
   the job. 3. Genome-wide graph once the proteome finishes. 4. Kinetic
@@ -371,7 +378,7 @@ or the CLI; results land in `data/results` and are committed.
 | CTCF domains | 24 of 25 (chrM has none) | done | |
 | Reader (open nodes per cell type) | 2 of 25 | `genomeos reader --chrom` | K562 and HepG2 |
 | Proteome compiled | 25 of 25 (2026-09-11) | done | 19,478 coding genes: sequence 99.1%, domains 99.0%, function 86.3%, interactions 81.5%, pathways 58.2%, experimental structure 45.2%, predicted structure 98.2%, disease 25.5% |
-| Translation verified against UniProt | 24 of 25 | `genomeos verify --chrom chrY` | 19,249 genes: 90.9% canonical identical, 97.8% exact for some isoform, 99 real disagreements. chrY (61 genes) is the one chromosome with no verification result |
+| Translation verified against UniProt | 25 of 25 (2026-09-11) | done | 19,249 genes: 90.9% canonical identical, 97.8% exact for some isoform; the remaining disagreements are triaged by mechanism, including hg38 frameshift and nonsense alleles detected automatically |
 | Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 327,024 edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
 | HG002 twin | 1 of 25 | `genomeos twin build` per chromosome | in progress (genomeos-fe) |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
