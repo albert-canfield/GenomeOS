@@ -15,8 +15,13 @@ data/knowledge/
 # imported personal genomes (genomeos individual import) never leave the machine
 data/individuals/
 data/cache/
-data/twins/*.fa
-data/twins/*.fa.fai
+# A twin holds a named person's measured biological state: chronological age,
+# telomere length, epigenetic age, their variants and modifiers. Only the
+# open-consent public test subject is tracked; anyone else's twin stays local,
+# like their imported genome (data/individuals) and their predictions.
+data/twins/*
+!data/twins/HG002.json
+!data/twins/HG002_TERT.json
 *.fa.gz
 *.fa.fai
 *.vcf.gz

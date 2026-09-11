@@ -104,7 +104,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioVM** (engines) | 0.3 | twelve engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces |
 | **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs the demo, std and organism programs in CI; depends on the engine alone, so it can be packaged as it stands | its own package and test suite; `bio fmt`; language server |
 | **BioLib** (libraries) | 45 libraries + the proteome | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol; haematopoiesis as a runnable mechanism module; **the whole human proteome packaged** (19,283 proteins in 2.3 MB, `genomeos protein X --lib`, answers offline) | `cancer.*` layer; more human development modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
-| **BioTwin** (individual) | 0.7 | HG002 with measured telomere and epigenetic age; fork, run, diff; calibration from measured state; `genomeos lookup` for one variant through every layer | genome-wide twin (per-chromosome build in progress); a user's own VCF; telomere from real reads |
+| **BioTwin** (individual) | 0.9 | any GRCh38 genome imported locally and used by carrier lookup, the gene report, the twin and the gene-by-gene walk; HG002 across all 22 autosomes with measured telomere and epigenetic age; fork, run, diff; predicted effect of a person's own regulatory variants | telomere from real reads; pedigree and trio; polygenic scores |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 nearly there | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader v1 (open nodes per cell type) on 2; signals learned | the segment parser (in progress); reader on every chromosome; a second mammal |
 | **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes), translation verified against UniProt on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability | chrY verification; kinetics where BioModels has an SBML pathway; post-translational state beyond the UniProt feature list |
@@ -253,12 +253,19 @@ in order. "Owner" is the session that holds the files today (see §7).
   and carrier lookup, the gene report, twin build and the gene-by-gene walk
   all see it. Nothing leaves the machine, which is the only acceptable design
   for somebody's own genome.
-- **Missing.** Telomere length from a real 30x BAM (100 GB) not done;
-  AlphaGenome feature d not yet wired (a, b and c built); no pedigree or trio;
-  no polygenic scores.
-- **Next.** 1. AlphaGenome feature d: the predicted effect of a person's own
-  regulatory variants on one gene, with the unphased-single-sequence caveat
-  attached. 2. Telomere from a streamed CRAM range instead of a BAM download.
+- **All four AlphaGenome features are built** (a–d): variant effect per
+  tissue, enhancer to gene, splice sites in the segment parser, and the
+  predicted effect of a person's own regulatory variants on one gene, summed
+  per haplotype where the genotype is phased.
+- **Privacy is enforced by the repository, not by intent.** A person's
+  imported genome (`data/individuals`), their per-variant predictions
+  (`data/knowledge/alphagenome`) and now their twin (`data/twins`, which holds
+  chronological age, telomere length and epigenetic age) are all git-ignored;
+  only the open-consent public test subject stays tracked. Per-person results
+  are never written under `data/results`.
+- **Missing.** Telomere length from a real 30x BAM (100 GB) not done; no
+  pedigree or trio; no polygenic scores.
+- **Next.** 1. Telomere from a streamed CRAM range instead of a BAM download.
 - **Owner.** genomeos-fe.
 
 ### E. From one cell to an organism
