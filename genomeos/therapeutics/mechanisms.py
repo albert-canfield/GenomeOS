@@ -726,25 +726,41 @@ def evaluate(candidate: Any, spec: MechanismSpec, inputs: Inputs) -> MechanismFi
 
 
 def precedent_for(
-    spec: MechanismSpec, precedent: dict[str, Any] | None
+    spec: MechanismSpec, precedent: dict[str, Any] | None, externally_reachable: bool | None = None
 ) -> tuple[dict[str, Any] | None, list[Evidence]]:
     """Existing therapies of this mechanism's modality against this target.
 
     Real precedent is clinical evidence that a target is reachable that way.
     It is never evidence that the therapy suits this patient's tumour, and the
     note says so every time.
+
+    One subtlety decides whether the note is evidence or noise. A mechanism
+    that needs an extracellular epitope can cite a small-molecule precedent
+    only when the target is *known* to be reachable from outside: radioligands
+    against a surface enzyme are real, so the modality is not wrong in
+    general. Against an intracellular protein the same citation is a
+    non-sequitur, because a kinase inhibitor crossing the membrane says
+    nothing about whether a binder can reach the protein from the outside.
+    Without positive evidence of an outward-facing part, small-molecule
+    precedent is dropped for such mechanisms (docs/DECISIONS.md D29).
     """
     if not precedent or not spec.precedent_drug_types:
         return None, []
+    types = spec.precedent_drug_types
+    needs_epitope = "extracellular" in spec.binder_recognises
+    if needs_epitope and externally_reachable is not True:
+        types = tuple(t for t in types if t != "Small molecule")
+        if not types:
+            return None, []
     rows = ((precedent.get("drugAndClinicalCandidates") or {}).get("rows")) or []
-    hits = [r for r in rows if (r.get("drug") or {}).get("drugType") in spec.precedent_drug_types]
+    hits = [r for r in rows if (r.get("drug") or {}).get("drugType") in types]
     if not hits:
         return None, []
     approved = [r for r in hits if r.get("maxClinicalStage") == "APPROVAL"]
     trials = [r for r in hits if str(r.get("maxClinicalStage", "")).startswith("PHASE")]
     names = sorted({(r["drug"]["name"] or "").title() for r in approved})[:5]
     payload = {
-        "modalities": list(spec.precedent_drug_types),
+        "modalities": list(types),
         "approved": len(approved),
         "in_trials": len(trials),
         "examples": names,
@@ -761,7 +777,7 @@ def precedent_for(
         ev.append(
             clinical(
                 "Open Targets Platform / ChEMBL",
-                f"{len(approved)} approved {'/'.join(spec.precedent_drug_types).lower()} therapies "
+                f"{len(approved)} approved {'/'.join(types).lower()} therapies "
                 f"already engage this target: {', '.join(names)}",
                 0.95,
             )

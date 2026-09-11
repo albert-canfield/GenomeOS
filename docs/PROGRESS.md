@@ -460,3 +460,32 @@ it reads `.git/index`, and that index was 125 commits stale.
 - **The remedy is one line**: `git read-tree HEAD` after each commit, now written into the commit recipe in CONTRIBUTING.md and into the lessons. It costs nothing and the drift never starts.
 - **The measurement worth keeping**: what an editor reports and what the repository contains are different questions when the index is shared. Read the tree against HEAD through a clean index before believing either.
 - **The measured reader of the C. elegans embryo** (`genomeos data distil --only celegans_tf_atlas`): the Ma et al. 2021 4D protein atlas of 266 transcription factors (Zenodo 4737593, CC BY 4.0, 88 MB streamed) distilled to a per-cell presence table (presence = a fifth of the factor's maximum adjusted expression; 1,266 cells, median 53 factors per cell, 185 cells per factor; `data/results/celegans_tf_atlas_cells.json`, compact) and generated into `data/organisms/celegans/reader.bio`: one `express` decision per cell, imported by the worm program after the founders, so every cell carries its measured factors. New `express` action in BioLang. Textbook check of the atlas against the lineage: ELT-2 → intestine precision 0.96, recall 1.0; ELT-7 1.0 / 1.0; END-1 0.82 / 1.0; HLH-1 → muscle 0.94 precision, 0.52 recall (body-wall muscle only, as it should); UNC-120 0.95 / 0.52; ELT-1, LIN-26, NHR-25 → hypodermis 0.55 to 0.63 precision, 0.81 to 0.97 recall (broader factors); PHA-4 → pharynx 0.85 (against Packer 2019 types); CEH-22 0.33 (pharyngeal muscle only, and a loose lineage match). The worm still grows to the same 2,183 cells and fates with the reader loaded. Tests: `tests/test_tf_atlas.py`.
+
+## 2026-09-11 — the therapeutic pipeline asked to reproduce known answers
+
+Until a reasoning pipeline is made to reproduce something already known, its
+rankings are assertions. Six tumours whose driver and whose approved therapy
+are public were run through it (`scripts/therapeutic_benchmark.py`, cases
+under `data/demo/benchmark`, result committed, tests read it in CI). Every
+hotspot coordinate was verified through `genomeos lookup` before use; one
+guess was wrong and the tool caught it, which is why the ERBB2 case is an
+amplification with copy number rather than an invented point mutation.
+
+Three questions, scored apart, because conflating them flatters the pipeline:
+
+- **Is the target recovered?** 6 of 6. EGFR, ERBB2, BRAF, KRAS, PIK3CA and IDH1 all appear among the ranked candidates of their own tumour.
+- **Is the route called correctly?** 6 of 6. Both approved antibody targets, EGFR and ERBB2, are found as surface targets at accessibility 1.00. The four whose approved drug is a small-molecule inhibitor are correctly *not* called surface targets, and each still offers the peptide/HLA route, which is the claim the project makes about nuclear and cytoplasmic drivers.
+- **Is the mechanism ranked first defensible?** 3 of 6, and this is the honest part. For EGFR the pipeline puts an agonist antibody first, which against an activating driver would push the pathway the tumour already over-drives. For BRAF and PIK3CA it puts a targeted radionuclide first, a modality needing an extracellular epitope, for proteins whose accessibility is 0.36 and unestablished. Recorded as known defects with a pinned count that may fall and must not rise, rather than smoothed away.
+
+**One real bug, found and fixed by the benchmark.** A small-molecule
+precedent counted as evidence that a mechanism requiring an extracellular
+epitope could reach the target, so the existence of dabrafenib "supported" a
+radioligand against cytoplasmic BRAF. That is a non-sequitur: a kinase
+inhibitor crossing the membrane says nothing about whether a binder can reach
+the protein from outside. Small-molecule precedent now requires positive
+evidence of reachability, which keeps the genuine case (radioligands against
+surface enzymes) and drops the false one. ERBB2 keeps its trastuzumab and
+pertuzumab precedent; BRAF now cites none.
+
+The benchmark was worth building for that fix alone, and the three defects it
+will not let us forget are worth more.

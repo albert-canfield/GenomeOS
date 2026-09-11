@@ -1,0 +1,175 @@
+{
+  "result": "therapeutic_benchmark",
+  "date": "2026-09-11",
+  "cases": 6,
+  "targets_recovered": 6,
+  "verdicts_correct": 6,
+  "top_mechanism_defensible": 3,
+  "surface_cases": 2,
+  "surface_cases_recovered": 2,
+  "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
+  "note": "Two questions scored apart: whether the driver's gene is recovered at all, and whether the route is called correctly. GenomeOS models antibody-like modalities and no small molecules, so for a target whose approved drug is a small-molecule inhibitor the correct answer is that no surface route exists; those cases pass by not claiming one. A third question, whether the mechanism ranked first is defensible, is scored separately and is where the pipeline currently falls short: see mechanism_concerns per row.",
+  "rows": [
+    {
+      "case": "EGFR L858R, lung adenocarcinoma",
+      "gene": "EGFR",
+      "approved": "osimertinib (small molecule); cetuximab and panitumumab are approved antibodies against EGFR in colorectal carcinoma",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "a single-pass receptor with a large extracellular domain and an approved antibody, so a surface route must be found",
+      "candidates": [
+        "EGFR"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "seconds": 1.0,
+      "target_class": "direct_surface",
+      "score": 0.5,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "agonist_antibody",
+      "best_compatibility": 0.622,
+      "peptide_route": true,
+      "mechanism_concerns": [
+        "top mechanism is agonist_antibody against an activating driver, which would drive the pathway"
+      ],
+      "mechanism_sane": false,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "ERBB2-amplified breast carcinoma",
+      "gene": "ERBB2",
+      "approved": "trastuzumab, pertuzumab (antibodies); trastuzumab deruxtecan (antibody-drug conjugate)",
+      "approved_modality": "antibody",
+      "expected": "surface",
+      "why": "the canonical surface target in oncology; if any case must work, it is this one",
+      "candidates": [
+        "ERBB2"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "seconds": 1.0,
+      "target_class": "direct_surface",
+      "score": 0.494,
+      "surface_accessibility": 1.0,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.521,
+      "peptide_route": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "recovered as a surface target",
+      "pass": true
+    },
+    {
+      "case": "BRAF V600E, melanoma",
+      "gene": "BRAF",
+      "approved": "vemurafenib, dabrafenib (small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "a cytoplasmic kinase; the approved drug is a small molecule, a class GenomeOS does not model",
+      "candidates": [
+        "BRAF",
+        "HSP90AA1",
+        "HSP90AB1"
+      ],
+      "recovered": true,
+      "rank": 1,
+      "seconds": 1.0,
+      "target_class": "neoantigen_hla",
+      "score": 0.427,
+      "surface_accessibility": 0.36,
+      "best_mechanism": "targeted_radionuclide",
+      "best_compatibility": 0.31,
+      "peptide_route": true,
+      "mechanism_concerns": [
+        "top mechanism targeted_radionuclide needs an extracellular epitope, accessibility is 0.36"
+      ],
+      "mechanism_sane": false,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "KRAS G12C, lung adenocarcinoma",
+      "gene": "KRAS",
+      "approved": "sotorasib, adagrasib (covalent small molecules)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "membrane-anchored on the inner leaflet, so no outward-facing epitope; the mutant peptide route is the one GenomeOS can reason about",
+      "candidates": [
+        "KIT",
+        "EGFR",
+        "PDGFRB",
+        "ERBB2",
+        "KRAS"
+      ],
+      "recovered": true,
+      "rank": 5,
+      "seconds": 1.0,
+      "target_class": "neoantigen_hla",
+      "score": 0.369,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "PIK3CA H1047R, breast carcinoma",
+      "gene": "PIK3CA",
+      "approved": "alpelisib (small molecule)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "intracellular lipid kinase",
+      "candidates": [
+        "EGFR",
+        "PDGFRB",
+        "ERBB2",
+        "ERBB3",
+        "PIK3CA"
+      ],
+      "recovered": true,
+      "rank": 5,
+      "seconds": 1.0,
+      "target_class": "neoantigen_hla",
+      "score": 0.438,
+      "surface_accessibility": 0.36,
+      "best_mechanism": "targeted_radionuclide",
+      "best_compatibility": 0.329,
+      "peptide_route": true,
+      "mechanism_concerns": [
+        "top mechanism targeted_radionuclide needs an extracellular epitope, accessibility is 0.36"
+      ],
+      "mechanism_sane": false,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    },
+    {
+      "case": "IDH1 R132H, glioma and AML",
+      "gene": "IDH1",
+      "approved": "ivosidenib (small molecule)",
+      "approved_modality": "small_molecule",
+      "expected": "out_of_scope_expected",
+      "why": "cytosolic enzyme; a neomorphic mutation whose product is a metabolite, which GenomeOS does not model at all",
+      "candidates": [
+        "EGFR",
+        "IDH1"
+      ],
+      "recovered": true,
+      "rank": 2,
+      "seconds": 1.1,
+      "target_class": "neoantigen_hla",
+      "score": 0.345,
+      "surface_accessibility": 0.0,
+      "best_mechanism": null,
+      "best_compatibility": null,
+      "peptide_route": true,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
+      "verdict": "correctly not a surface target; approved drug is out of scope",
+      "pass": true
+    }
+  ]
+}

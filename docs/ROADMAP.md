@@ -375,11 +375,28 @@ in order. "Owner" is the session that holds the files today (see §7).
   binder, mechanism, cargo and effector kept apart; negative set as
   important as positive; patient data levels reported; nothing above its
   data.
+- **Benchmarked against known answers (2026-09-11).** Six tumours whose
+  driver and approved therapy are public run through the pipeline
+  (`scripts/therapeutic_benchmark.py`, result committed, tests read it). All
+  six targets are recovered. Both approved antibody targets, EGFR and ERBB2,
+  are found as surface targets; the four whose approved drug is a
+  small-molecule inhibitor are correctly *not* called surface targets, and
+  each still offers the peptide/HLA route, which is the pipeline's
+  distinctive claim. A third question is scored apart and the pipeline fails
+  it three times in six: the mechanism it ranks first is an agonist antibody
+  against an activating driver (EGFR), or a radionuclide against a protein
+  with no established outward-facing part (BRAF, PIK3CA). Those are recorded
+  as known defects with a pinned count rather than hidden.
+- **One real bug found and fixed by the benchmark**: a small-molecule
+  precedent counted as evidence that a mechanism needing an extracellular
+  epitope could reach the target, so a kinase inhibitor "supported" a
+  radioligand against cytoplasmic BRAF. Small-molecule precedent now requires
+  positive evidence of reachability (D29 applied to precedent, not only to
+  localisation).
 - **Missing.** Copy number and structural variants from cBioPortal profiles
-  (only patient-supplied CNV today); a `cancer.*` library layer; a
-  peptide/HLA binding predictor (licence decision pending); no
-  retrospective benchmark showing the pipeline recovers approved targets
-  (ERBB2, CD19, BCMA, EGFR) from their tumours; the demo runs at data
+  (only patient-supplied CNV today); a `cancer.*` library layer; the three
+  mechanism-ranking defects above; expression-driven targets such as CD19 and
+  BCMA, which need patient RNA rather than a variant; the demo runs at data
   level 1 only.
 - **Next.** 1. Retrospective benchmark on public cases with known targets;
   a test that fails if a known target drops out of the top ranks.
@@ -497,7 +514,9 @@ session that holds it. Items 1–4 run in parallel today.
    takes experiments as input. Milestone 1.0. genomeos-73.
 8. Body runtime inside a process-bigraph composite with a network model.
    Milestone 1.1. genomeos-73.
-9. Retrospective therapeutic benchmark; cBioPortal CNA and SV; `cancer.*`
+9. Done 2026-09-11: the retrospective benchmark, which recovered all six
+   known targets and exposed three mechanism-ranking defects. Next in this
+   area: fix those three, then cBioPortal CNA and SV, then `cancer.*`
    libraries. Milestone 1.2. genomeos-f7.
 10. BIOIR-v0.3 spec and the BioLang grammar in one file; `bio` with its own
     test suite. Milestone 2.0. genomeos-73. (The import boundary that blocked
@@ -518,7 +537,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **0.9 whole genome** ✅ | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | all reached 2026-09-11; the proteome also ships as a packaged offline library. Version is 0.9.0 and the README states what that means; the git tag is cut when the pull request to `main` is merged |
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
-| **1.2 therapeutics benchmark** | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark test in CI |
+| **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 3/6 top mechanisms defensible. Outstanding: the three mechanism defects, CNA and SV, the library layer |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
 ---

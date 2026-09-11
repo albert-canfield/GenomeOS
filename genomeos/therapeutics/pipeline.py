@@ -524,7 +524,7 @@ def select_mechanisms(c: TherapeuticTargetCandidate) -> list[Any]:
     out = []
     for spec in mech.MECHANISMS.values():
         fit = mech.evaluate(c, spec, inputs)
-        payload, ev = mech.precedent_for(spec, c.precedent)
+        payload, ev = mech.precedent_for(spec, c.precedent, c.localization.reachable)
         fit.precedent = payload
         fit.evidence.extend(ev)
         if payload and payload["approved"] and fit.viable:
