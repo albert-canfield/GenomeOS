@@ -86,6 +86,14 @@ CATALOG: dict[str, dict] = {
     },
 }
 
+CATALOG["fetch_hg002"] = {
+    "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--individual", "--chrom", "chr22"],
+    "describe": "Stream the GIAB HG002 benchmark once; keep each chromosome's variants for twins/lookups.",
+    "total": 1,
+    "result": None,
+    "count": None,
+}
+
 # one fetch job per human chromosome: bring it to full footing (sequence, models, elements, repeats)
 CHROMOSOMES = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]
 for _c in CHROMOSOMES:

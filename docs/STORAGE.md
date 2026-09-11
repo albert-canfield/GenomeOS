@@ -34,6 +34,13 @@ regulation, domains, unknown, lookup, rna and proteome all work for it;
 `genomeos data status` shows the footprint and `data clean` removes what
 has a summary.
 
+`genomeos data fetch --individual --chrom chr22` adds the test human: the
+156 MB GIAB HG002 benchmark is streamed once and every chromosome's PASS
+rows are kept as a small file under data/reference (about 60 MB for all
+autosomes, not committed; chr21's subset stays the committed distilled
+copy). After that `genomeos twin build` and `genomeos lookup` work on any
+fetched chromosome; the Progress tab has it as the `fetch_hg002` job.
+
 ## Summaries produced so far
 
 | Summary | Raw input it replaces | Size before → after |

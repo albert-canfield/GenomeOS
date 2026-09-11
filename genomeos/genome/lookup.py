@@ -143,8 +143,9 @@ def features_at(defn: dict[str, Any], residue: int) -> list[dict[str, Any]]:
 
 
 INDIVIDUALS = {
-    "HG002": ("data/results/HG002_{chrom}.vcf", "GIAB v4.2.1 benchmark calls (a real person, open consent)")
+    "HG002": ("data/results/HG002_{chrom}.vcf", "GIAB v4.2.1 benchmark calls (a real person, open consent)"),
 }
+INDIVIDUAL_FALLBACK = "data/reference/{sample}_{chrom}.vcf"  # chromosomes split by `data fetch --individual`
 
 
 def carriers(chrom: str, pos: int, ref: str, alt: str) -> list[dict[str, Any]]:
@@ -152,6 +153,8 @@ def carriers(chrom: str, pos: int, ref: str, alt: str) -> list[dict[str, Any]]:
     out = []
     for name, (pattern, source) in INDIVIDUALS.items():
         path = Path(pattern.format(chrom=chrom))
+        if not path.exists():
+            path = Path(INDIVIDUAL_FALLBACK.format(sample=name, chrom=chrom))
         if not path.exists():
             continue
         found = None

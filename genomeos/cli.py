@@ -738,7 +738,16 @@ def cmd_data(args: argparse.Namespace) -> int:
     from genomeos.results import list_results
 
     if args.data_cmd == "fetch":
-        from genomeos.genome.fetch import fetch_chromosome
+        from genomeos.genome.fetch import fetch_chromosome, fetch_individual, individual_vcf_path
+
+        if args.individual:
+            missing = [c for c in args.chrom if not individual_vcf_path(c).exists()]
+            if missing:
+                print("streaming the GIAB HG002 benchmark once (156 MB) and keeping every chromosome's rows…")
+                counts = fetch_individual(progress=lambda m: print(f"  {m}", flush=True))
+                print(f"  kept {sum(counts.values()):,} PASS variants over {len(counts)} chromosomes")
+            for c in args.chrom:
+                print(f"  {c}: {individual_vcf_path(c)}")
 
         for chrom in args.chrom:
             print(f"{chrom}: sequence, gene models, regulatory elements, repeats…", flush=True)
@@ -2285,6 +2294,13 @@ def build_parser() -> argparse.ArgumentParser:
         dest="data_cmd", required=True
     )
     data.add_parser("status", help="disk use and what can be distilled")
+    p = data.add_parser(
+        "fetch", help="bring one more chromosome to full footing: sequence, models, elements, repeats"
+    )
+    p.add_argument("--chrom", nargs="+", required=True)
+    p.add_argument("--no-elements", action="store_true")
+    p.add_argument("--no-repeats", action="store_true")
+    p.add_argument("--individual", action="store_true", help="also the test human's (HG002) variants")
     p = data.add_parser("distil", help="turn raw downloads into result summaries")
     p.add_argument("--only", nargs="*")
     p.add_argument("--force", action="store_true", help="recompute existing summaries")
