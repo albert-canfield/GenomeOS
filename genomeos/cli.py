@@ -2524,8 +2524,9 @@ def cmd_ptm(args: argparse.Namespace) -> int:
     s = summary(idx, top=args.top)
     save_result("ptm_genome_wide", s)
     print(
-        f"{s['proteins_with_sites']:,} of {s['proteins']:,} compiled proteins carry {s['sites']:,} modifiable "
-        f"sites; {s['writers']} named writers, {s['writer_edges']:,} writer→substrate edges  [{s['evidence']}]"
+        f"{s['proteins_with_sites']:,} of {s['proteins']:,} compiled proteins carry "
+        f"{s['sites']:,} modifiable sites; {s['writers']} named writers, "
+        f"{s['writer_edges']:,} writer→substrate edges  [{s['evidence']}]"
     )
     print("  by class: " + ", ".join(f"{k} {v:,}" for k, v in s["by_class"].items()))
     print(_table(s["top_writers"], ["writer", "substrates", "sites"]))
