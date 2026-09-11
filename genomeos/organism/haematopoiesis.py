@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Haematopoiesis as a mechanism module: from the stem cell to the blood lineages.
 
 The first human module in which lineage choices are decided by named factors rather

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The human body as counted populations: the numbers a population program needs.
 
 Sender & Milo 2021 (Nat Med 27:45, "The distribution of cellular turnover in

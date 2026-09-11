@@ -728,6 +728,13 @@ def cmd_grow(args: argparse.Namespace) -> int:
     if args.depth > 0:
         for line in body.tree(depth=args.depth):
             print("  " + line)
+    if body.spatial:
+        print(f"  space {o.width}x{o.height}; blocked divisions (no free site): {body.blocked_divisions}")
+        for row in body.type_map():
+            print("  " + row)
+        bands = body.bands_along_x()
+        if bands:
+            print("  bands: " + ", ".join(f"{t or 'empty'} {a}-{b}" for t, a, b in bands))
     if body.unknown:
         print("  UNKNOWN stops: " + ", ".join(f"{k} ×{v}" for k, v in body.unknown.items()))
     for chk in body.check_asserts():

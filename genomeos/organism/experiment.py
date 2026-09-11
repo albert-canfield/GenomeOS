@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Experiments: a perturbed organism run against the wild type.
 
 An `experiment` block names what is removed (maternal factors, signals), added or

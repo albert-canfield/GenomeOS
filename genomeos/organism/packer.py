@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Packer et al. 2019 (Science, GEO GSE126954): 86,024 embryonic single cells with their lineage
 and terminal cell type. Streamed once and distilled to one table: lineage → cell type, plus an
 agreement score against the reference lineage's tissue per cell. Two independent sources

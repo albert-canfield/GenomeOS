@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """The reference lineage of C. elegans: the ground truth a grown organism is scored against.
 
 Source: the complete timed cell lineage compiled by Nikhil Bhatla (WormWeb,

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """LineageDiff: how far a grown body is from the reference lineage, as numbers.
 
 born      reference cells (within the window) that the body also produced, by name

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """Minimal organism (Phase 5): the invariant early lineage of C. elegans.
 
 Since v0.3 the lineage is a BioLang program (data/demo/celegans_lineage.bio:

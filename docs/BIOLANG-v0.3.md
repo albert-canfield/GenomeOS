@@ -63,6 +63,8 @@ decision germline         { action: quiesce; when: cell = P4; ... }
 
 domain APP_node { locus: chr21:25880000-26055000; genes: APP; boundaries: EH38E2135001, EH38E2135420 }
 
+field Morphogen { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0 }
+
 experiment pop1 {
   knockout: POP-1                    # factors never present; signals by id, ligand or receptor never sent
   until: 800 min                     # omitted = the organism's last stage
@@ -139,6 +141,22 @@ without PIE-1, ABp becomes ABa-like without the Notch signal, C and D lose
 their fates without PAL-1). Terminal fates below the founders still come
 from the observed lineage program, so the report is explicit about where
 mechanism stops.
+
+## Space
+
+An organism may have a grid (`space: 30 x 1`, `origin: 0,0`, `sense: 30 min`)
+and `field` blocks (diffusion, decay, point sources per hour). Cells then
+hold a site; a division puts one daughter on the parent's site and the other
+on the nearest free site (along `direction:` first), and a division that finds
+no free site waits another cycle (contact inhibition, counted). A `signal`
+with `mode: gradient` reads a field at the cell's site and sets its factor
+while the value is at or above `threshold`; cells re-read gradients every
+`sense` interval and decide again when a factor changes. `migrate` moves a
+cell by `steps` sites along `direction` or up the gradient of `toward`, into
+free sites only, and recurs with `after`. `data/demo/flag_organism.bio`
+grows Wolpert's French flag from a single founder: the strip fills, the
+gradient forms, and the three bands appear in order. A cell's `x` and `y`
+are in its context, so `when: x = >=10` also works.
 
 ## Composition
 

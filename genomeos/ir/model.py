@@ -278,6 +278,8 @@ class Signal(Entity):
     receiver: dict[str, str] = field(default_factory=dict)
     sets: str = ""
     value: str = "active"
+    field_name: str = ""  # gradient signals: the field read at the cell's position
+    threshold: float = 0.0  # the factor is set while the local value is at or above this
 
     def __post_init__(self) -> None:
         self.kind = "signal"
@@ -310,6 +312,18 @@ def to_minutes(value: float, unit: str) -> float:
         return value * _UNIT_MIN[unit]
     except KeyError:
         raise ValueError(f"unknown time unit {unit!r}") from None
+
+
+@dataclass(slots=True)
+class Field:
+    """A diffusing, decaying scalar field on the organism's grid, fed by point sources (amount per hour)."""
+
+    name: str
+    diffusion: float = 0.2  # grid^2 per hour
+    decay: float = 0.01  # per hour
+    sources: list[tuple[int, int, float]] = field(default_factory=list)  # (x, y, rate per hour)
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
 
 
 @dataclass(slots=True)
@@ -371,6 +385,9 @@ class Decision:
     name: str = ""
     asymmetric: dict[str, str] = field(default_factory=dict)
     lineages: dict[str, str] = field(default_factory=dict)  # daughter -> lineage it founds (generation 0)
+    toward: str = ""  # migrate: climb this field's gradient
+    direction: str = ""  # migrate: +x, -x, +y or -y
+    steps: int = 1  # migrate: grid steps per move
     timer: str = ""
     after: float | None = None  # minutes
     fraction: float = 1.0
@@ -407,6 +424,10 @@ class Organism:
     tempo: float = 1.0  # multiplies every timer (species pace; Rayon 2020, Matsuda 2020)
     resolution: str = "cells"  # cells: every division makes a named cell; populations: counts grow in place
     seed: int | None = None  # default seed for timer spread; None = deterministic means
+    width: int = 0  # space: grid size; 0 = no space, cells have no position
+    height: int = 0
+    origin: tuple[int, int] = (0, 0)  # where the first cell sits
+    sense: float = 30.0  # minutes between gradient readings
     root: str = "Zygote"  # name of the first cell
     cell_type: str = ""  # bootstrap cell type
     factors: list[str] = field(default_factory=list)  # maternal factors present in the zygote
@@ -433,6 +454,7 @@ class Module:
     stages: list[Stage] = field(default_factory=list)
     decisions: list[Decision] = field(default_factory=list)
     experiments: list[Experiment] = field(default_factory=list)
+    fields: list[Field] = field(default_factory=list)
     organism: Organism | None = None
 
     def add(self, entity: Entity) -> None:
@@ -471,6 +493,7 @@ class Module:
         self.stages.extend(other.stages)
         self.decisions.extend(other.decisions)
         self.experiments.extend(other.experiments)
+        self.fields.extend(other.fields)
         if self.organism is None:
             self.organism = other.organism
         for k, v in other.parameters.items():
@@ -540,6 +563,7 @@ class Module:
             "stages": [conv(st) for st in self.stages],
             "decisions": [conv(d) for d in self.decisions],
             "experiments": [conv(x) for x in self.experiments],
+            "fields": [conv(f) for f in self.fields],
             "organism": conv(self.organism) if self.organism else None,
         }
 
@@ -604,11 +628,14 @@ class Module:
             pd.pop("__type__", None)
             pd["evidence"] = evid(pd.get("evidence", {}))
             m.parameters[pd["name"]] = Parameter(**pd)
+        for fd in data.get("fields", []):
+            fd["sources"] = [tuple(x) for x in fd.get("sources", [])]
         for key, typ, target in (
             ("timers", Timer, m.timers),
             ("stages", Stage, m.stages),
             ("decisions", Decision, m.decisions),
             ("experiments", Experiment, m.experiments),
+            ("fields", Field, m.fields),
         ):
             for d in data.get(key, []):
                 d.pop("__type__", None)
@@ -618,5 +645,7 @@ class Module:
             od = dict(data["organism"])
             od.pop("__type__", None)
             od["evidence"] = evid(od.get("evidence", {}))
+            if isinstance(od.get("origin"), list):
+                od["origin"] = tuple(od["origin"])
             m.organism = Organism(**od)
         return m

@@ -18,6 +18,7 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     timer <Id> { duration: 20 min; sd: 2; lengthening: 1.1; when: lineage = AB }
     signal <Id> { mode: contact; ligand: APX-1; receptor: GLP-1; from: cell = P2; to: cell = ABp; sets: N }
     decision <Id> { action: divide|differentiate|migrate|quiesce|die; when: ...; daughters: A, B; to: T; ... }
+    field <Id> { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0 }
     experiment <Id> { knockout: POP-1; until: 800 min; expect: "..."; assert: ... }
 
 Properties are `key: value`, one per line or `;`-separated; a block may sit on
@@ -45,6 +46,7 @@ from genomeos.ir import (
     Evidence,
     EvidenceKind,
     Experiment,
+    Field,
     Gene,
     Module,
     Organism,
@@ -78,8 +80,9 @@ _KINDS = (
     "signal",
     "decision",
     "experiment",
+    "field",
 )
-_REPEATABLE = ("effect", "assert", "observe")
+_REPEATABLE = ("effect", "assert", "observe", "source")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
 _PARAM = re.compile(r"^(\w[\w.]*)\s*=\s*([-+0-9.eE]+)\s*([^\s{]*)\s*$")
 _EFFECT = re.compile(r"^(\w+)\s*(\+=|-=|\*=|=)\s*([-+0-9.eE]+)\s*(.*)$")
@@ -416,6 +419,11 @@ def _compile_block(b: Block, module: Module) -> None:
             raise BioLangError(f"line {b.line}: signal mode must be contact, gradient or systemic")
         sg.ligand, sg.receptor = p.get("ligand", ""), p.get("receptor", "")
         sg.sender, sg.receiver = _parse_when(p.get("from", "")), _parse_when(p.get("to", ""))
+        sg.field_name = p.get("field", "")
+        if "threshold" in p:
+            sg.threshold = _float(p["threshold"], "threshold", b.line)
+        if sg.mode == "gradient" and not sg.field_name:
+            raise BioLangError(f"line {b.line}: a gradient signal names the field it reads")
         factor, _, value = p.get("sets", "").partition("=")
         sg.sets, sg.value = factor.strip(), value.strip() or "active"
         module.add(sg)
@@ -429,6 +437,20 @@ def _compile_block(b: Block, module: Module) -> None:
         if "tempo" in p:
             org.tempo = _float(p["tempo"], "tempo", b.line)
         org.root = p.get("root", org.root)
+        if "space" in p:
+            dims = [x.strip() for x in p["space"].lower().replace("×", "x").split("x")]
+            if len(dims) != 2:
+                raise BioLangError(f"line {b.line}: space must be 'WIDTH x HEIGHT'")
+            org.width, org.height = (
+                int(_float(dims[0], "space", b.line)),
+                int(_float(dims[1], "space", b.line)),
+            )
+        if "origin" in p:
+            ox, oy = (int(_float(x, "origin", b.line)) for x in _list(p["origin"])[:2])
+            org.origin = (ox, oy)
+        if "sense" in p:
+            val, unit = _quantity(p["sense"], "sense", b.line)
+            org.sense = to_minutes(val, unit)
         org.resolution = p.get("resolution", org.resolution)
         if "seed" in p:
             org.seed = int(_float(p["seed"], "seed", b.line))
@@ -441,6 +463,22 @@ def _compile_block(b: Block, module: Module) -> None:
         org.asserts = [x.strip() for x in p.get("assert", "").split(" ; ") if x.strip()]
         org.reference = p.get("reference", "")
         module.organism = org
+    elif b.kind == "field":
+        fl = Field(name=b.header, evidence=ev, confidence=conf)
+        if "diffusion" in p:
+            fl.diffusion = _float(p["diffusion"], "diffusion", b.line)
+        if "decay" in p:
+            fl.decay = _float(p["decay"], "decay", b.line)
+        for src in p.get("source", "").split(" ; "):
+            src = src.strip()
+            if not src:
+                continue
+            pos, sep, rate = src.partition("=")
+            xy = _list(pos)
+            if not sep or len(xy) != 2:
+                raise BioLangError(f"line {b.line}: source must be 'x,y = rate', got {src!r}")
+            fl.sources.append((int(float(xy[0])), int(float(xy[1])), float(rate)))
+        module.fields.append(fl)
     elif b.kind == "experiment":
         ex = Experiment(name=b.header, evidence=ev, confidence=conf)
         ex.knockouts = _list(p.get("knockout", ""))
@@ -488,6 +526,11 @@ def _compile_block(b: Block, module: Module) -> None:
             dc.asymmetric = _arrows(p["asymmetric"], b.line)
         if "lineages" in p:
             dc.lineages = _parse_when(p["lineages"])
+        dc.toward, dc.direction = p.get("toward", ""), p.get("direction", "")
+        if dc.direction and dc.direction not in ("+x", "-x", "+y", "-y"):
+            raise BioLangError(f"line {b.line}: direction must be +x, -x, +y or -y")
+        if "steps" in p:
+            dc.steps = int(_float(p["steps"], "steps", b.line))
         if "after" in p:
             val, unit = _quantity(p["after"], "after", b.line)
             dc.after = to_minutes(val, unit)
@@ -522,6 +565,13 @@ def _check_references(module: Module) -> None:
             raise BioLangError(f"decision {d.id!r} differentiates to undeclared cell_type {d.to!r}")
         if d.timer and d.timer not in timers:
             raise BioLangError(f"decision {d.id!r} waits on undeclared timer {d.timer!r}")
+    fields = {f.name for f in module.fields}
+    for sg in module.signals():
+        if sg.field_name and sg.field_name not in fields:
+            raise BioLangError(f"signal {sg.id!r} reads undeclared field {sg.field_name!r}")
+    for d in module.decisions:
+        if d.toward and d.toward not in fields:
+            raise BioLangError(f"decision {d.id!r} migrates toward undeclared field {d.toward!r}")
     org = module.organism
     if org and org.cell_type and org.cell_type not in cell_types:
         raise BioLangError(f"organism {org.name!r} starts as undeclared cell_type {org.cell_type!r}")

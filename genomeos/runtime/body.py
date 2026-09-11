@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 """Body runtime: grows an organism from one cell by discrete events.
 
 Every cell (or population: a cell with `count` > 1) reads its context, the
@@ -25,6 +26,7 @@ from dataclasses import dataclass, field
 
 from genomeos.ir import Decision, EvidenceKind, Module, Timer, matches, to_minutes
 
+from .spatial import Field2D
 from .uncertainty import UncertaintyReport
 
 SUFFIXES = (("a", "p"), ("l", "r"))
@@ -50,6 +52,9 @@ class Cell:
     unknown: str = ""  # why the program left this cell without a next step
     cull_at: float | None = None  # next fractional death of a population, if a chain is running
     flow_at: dict[str, float] = field(default_factory=dict)  # recurring differentiation flows by decision id
+    x: int | None = None  # grid position when the organism has a space
+    y: int | None = None
+    move_at: float | None = None  # next step of a recurring migration
 
     @property
     def end(self) -> float:
@@ -84,6 +89,19 @@ class Body:
         self.knockouts = set(knockouts)
         self.adds = set(adds)
         self.environment = {**module.organism.environment, **(environment or {})}
+        # space: fields on the organism's grid, stepped between events; sites held by positioned cells
+        self.fields: dict[str, Field2D] = {}
+        self.sources: list[tuple[str, int, int, float]] = []
+        self.occupied: dict[tuple[int, int], str] = {}
+        self.field_time = 0.0
+        self.blocked_divisions = 0  # divisions that found no free site (contact inhibition)
+        if module.organism.width > 0 and module.organism.height > 0:
+            for f in module.fields:
+                self.fields[f.name] = Field2D(
+                    f.name, module.organism.width, module.organism.height, f.diffusion, f.decay
+                )
+                self.sources.extend((f.name, x, y, rate) for x, y, rate in f.sources)
+        self._gradients = [sg for sg in module.signals() if sg.mode == "gradient" and sg.sets]
         if seed is None:
             seed = self.organism.seed
         self.rng = random.Random(seed) if seed is not None and not means else None
@@ -118,7 +136,16 @@ class Body:
         factors = {f: "present" for f in list(o.factors) + sorted(self.adds) if f not in self.knockouts}
         root = Cell(o.root, "", 0, 0.0, o.cell_type, factors)
         root.population = o.resolution == "populations"
+        if self.spatial:
+            root.x, root.y = o.origin
+            self.occupied[o.origin] = root.name
+            if self._gradients:
+                self._push(o.sense, "", "sense")
         self._add(root, None)
+
+    @property
+    def spatial(self) -> bool:
+        return self.organism.width > 0 and self.organism.height > 0
 
     def set_factor(self, name: str, value: str | None) -> None:
         """An organism-wide factor set from outside (a coupled process, an environment change): every
@@ -158,6 +185,8 @@ class Body:
         }
         ctx.update(self.environment)
         ctx.update(c.factors)
+        if c.x is not None:
+            ctx["x"], ctx["y"] = str(c.x), str(c.y)
         return ctx
 
     def _candidates(self, c: Cell) -> list[Decision]:
@@ -223,6 +252,11 @@ class Body:
         if (d := self._first(c, "migrate", ctx)) and d.id not in c.fired:
             c.fired.append(d.id)
             self.fired[d.id] += 1
+            if c.x is not None:
+                self._move(c, d)
+                if d.after is not None and c.move_at is None:
+                    c.move_at = self.time + d.after * self.organism.tempo
+                    self._push(c.move_at, c.name, f"move:{d.id}")
         if c.divides_at is not None and not born and not c.quiescent:
             # a signal changed what the cell reads: an earlier-precedence division may now apply
             d = self._first(c, "divide", ctx)
@@ -248,8 +282,9 @@ class Body:
             else:
                 wait = self._duration(timer, c)
                 self.timers_used[timer.name] += 1
-            # cells wait from birth; populations wait from now (they decide again after every step)
-            c.divides_at = (self.time if self.population(c) else c.born) + wait
+            # cells wait from birth (or from now when they decide again later, e.g. after a blocked division);
+            # populations wait from now (they decide again after every step)
+            c.divides_at = (self.time if self.population(c) else max(c.born, self.time)) + wait
             c.fired.append(d.id)
             self.fired[d.id] += 1
             self._push(c.divides_at, c.name, "divide")
@@ -284,9 +319,12 @@ class Body:
         """One step of a recurring flow; the chain continues while the decision applies."""
         c.flow_at.pop(did, None)
         d = next((x for x in self.module.decisions if x.id == did), None)
-        if d is None or not (c.born <= self.time < c.end) or not d.applies(self.context(c)):
+        alive = c.born <= self.time < c.end
+        if d is None or not alive or not d.applies(self.context(c)):
             if did in c.fired:
                 c.fired.remove(did)  # so that a later decision point can start the flow again
+            if alive:
+                self._resolve(c, born=False)
             return
         part = c.count * d.fraction
         c.count -= part
@@ -307,8 +345,132 @@ class Body:
         self._apply_signals(c)
         self._resolve(c)
 
+    def _read_gradients(self, c: Cell) -> bool:
+        """Set or clear the factors of gradient signals from the fields at the cell's site."""
+        if c.x is None or not self._gradients:
+            return False
+        changed = False
+        ctx = None
+        for sg in self._gradients:
+            if {sg.id, sg.field_name, sg.sets} & self.knockouts or sg.field_name not in self.fields:
+                continue
+            if sg.receiver:
+                ctx = ctx or self.context(c)
+                if not matches(sg.receiver, ctx):
+                    continue
+            on = self.fields[sg.field_name].at(c.x, c.y) >= sg.threshold
+            if on and c.factors.get(sg.sets) != sg.value:
+                c.factors[sg.sets] = sg.value
+                self.fired[sg.id] += 1
+                changed = True
+            elif not on and sg.sets in c.factors:
+                del c.factors[sg.sets]
+                changed = True
+        return changed
+
+    def _sense(self) -> None:
+        """Every `sense` minutes, positioned cells re-read the gradients and decide again if one changed."""
+        for c in self.alive_at(self.time):
+            if self._read_gradients(c):
+                self._resolve(c, born=False)
+        self._push(self.time + self.organism.sense, "", "sense")
+
+    def _advance_fields(self, t: float) -> None:
+        """Step the fields (hours) from the last field time to t (minutes), within the stable step."""
+        if not self.fields or t <= self.field_time:
+            return
+        hours = (t - self.field_time) / 60.0
+        self.field_time = t
+        max_d = max(f.diffusion for f in self.fields.values()) or 1.0
+        h = min(0.25 / max_d, 0.5)
+        while hours > 1e-9:
+            dt = min(h, hours)
+            for name, x, y, rate in self.sources:
+                self.fields[name].add(x, y, rate * dt)
+            for f in self.fields.values():
+                f.step(dt)
+            hours -= dt
+
+    def _free_site(self, c: Cell, direction: str = "") -> tuple[int, int] | None:
+        """A free site for a daughter: along `direction` first, then the nearest free site."""
+        assert c.x is not None and c.y is not None
+        w, hgt = self.organism.width, self.organism.height
+        steps = {"+x": (1, 0), "-x": (-1, 0), "+y": (0, 1), "-y": (0, -1)}
+
+        def free(x: int, y: int) -> bool:
+            return 0 <= x < w and 0 <= y < hgt and (x, y) not in self.occupied
+
+        if direction in steps:
+            dx, dy = steps[direction]
+            x, y = c.x + dx, c.y + dy
+            while 0 <= x < w and 0 <= y < hgt:  # the nearest free site in that direction
+                if (x, y) not in self.occupied:
+                    return (x, y)
+                x, y = x + dx, y + dy
+        seen = {(c.x, c.y)}
+        frontier = [(c.x, c.y)]
+        while frontier:
+            nxt = []
+            for x, y in frontier:
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    site = (x + dx, y + dy)
+                    if site in seen or not (0 <= site[0] < w and 0 <= site[1] < hgt):
+                        continue
+                    if site not in self.occupied:
+                        return site
+                    seen.add(site)
+                    nxt.append(site)
+            frontier = nxt
+        return None
+
+    def _move(self, c: Cell, d: Decision) -> bool:
+        """Migrate by `steps` sites, along `direction` or up the gradient of `toward`; free sites only."""
+        assert c.x is not None and c.y is not None
+        w, hgt = self.organism.width, self.organism.height
+        steps = {"+x": (1, 0), "-x": (-1, 0), "+y": (0, 1), "-y": (0, -1)}
+        moved = False
+        for _ in range(max(1, d.steps)):
+            target = None
+            if d.direction in steps:
+                dx, dy = steps[d.direction]
+                target = (c.x + dx, c.y + dy)
+            elif d.toward in self.fields:
+                fld = self.fields[d.toward]
+                best = fld.at(c.x, c.y)
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    x, y = c.x + dx, c.y + dy
+                    if 0 <= x < w and 0 <= y < hgt and fld.at(x, y) > best:
+                        best, target = fld.at(x, y), (x, y)
+            if target is None or not (0 <= target[0] < w and 0 <= target[1] < hgt) or target in self.occupied:
+                break
+            del self.occupied[(c.x, c.y)]
+            c.x, c.y = target
+            self.occupied[target] = c.name
+            moved = True
+        return moved
+
+    def _step_move(self, c: Cell, did: str) -> None:
+        c.move_at = None
+        d = next((x for x in self.module.decisions if x.id == did), None)
+        alive = c.born <= self.time < c.end
+        if d is None or not alive or not d.applies(self.context(c)):
+            if did in c.fired:
+                c.fired.remove(did)
+            if alive:
+                self._resolve(c, born=False)  # the walk is over: other decisions get their turn
+            return
+        if self._move(c, d):
+            self.fired[did] += 1
+            if self._read_gradients(c):
+                self._resolve(c, born=False)  # a new reading at the new site may change the decision
+                if did not in c.fired:
+                    return  # the walk decision no longer applies after re-deciding
+        c.move_at = self.time + (d.after or 0.0) * self.organism.tempo
+        self._push(c.move_at, c.name, f"move:{did}")
+
     def _apply_signals(self, newborn: Cell) -> None:
-        signals = self.module.signals()
+        self._read_gradients(newborn)
+        signals = [sg for sg in self.module.signals() if sg.mode != "gradient"]
         if not signals:
             return
         alive = [x for x in self.cells.values() if x.born <= self.time < x.end and x is not newborn]
@@ -345,6 +507,17 @@ class Body:
         else:
             a, b = SUFFIXES[c.generation % 2]
             names = [c.name + a, c.name + b]
+        sites: list[tuple[int, int] | None] = [None, None]
+        if c.x is not None:
+            second = self._free_site(c, d.direction)
+            if second is None:  # contact inhibition: no room, the cell waits another cycle
+                self.blocked_divisions += 1
+                c.divides_at = None
+                c.fired = [x for x in c.fired if x not in self._divide_ids]
+                self._resolve(c)
+                return
+            sites = [(c.x, c.y), second]
+            del self.occupied[(c.x, c.y)]
         for i, name in enumerate(names):
             factors = dict(c.factors)
             for factor, keeper in d.asymmetric.items():
@@ -361,6 +534,9 @@ class Body:
                 name, lineage, generation, self.time, c.cell_type, factors, parent=c.name, count=c.count
             )
             child.population = c.population
+            if sites[i] is not None:
+                child.x, child.y = sites[i]
+                self.occupied[sites[i]] = name
             self._add(child, c)
 
     def _cull(self, c: Cell) -> None:
@@ -387,8 +563,12 @@ class Body:
                 break
             heapq.heappop(self._queue)
             self.time = t
+            self._advance_fields(t)
             if kind == "stage":
                 self._stage_change()
+                continue
+            if kind == "sense":
+                self._sense()
                 continue
             c = self.cells[name]
             if kind == "divide" and c.divides_at == t and (c.dies_at is None or c.dies_at > t):
@@ -397,9 +577,45 @@ class Body:
                 self._cull(c)
             elif kind.startswith("flow:"):
                 self._flow(c, kind[5:])
+            elif kind.startswith("move:"):
+                self._step_move(c, kind[5:])
+            elif kind == "die" and c.dies_at == t and c.x is not None:
+                self.occupied.pop((c.x, c.y), None)  # the site is free again
             # deaths need no action: dies_at already ends the cell
         self.time = until if until != math.inf else self.time
+        self._advance_fields(self.time)
         return self
+
+    # ---- space -----------------------------------------------------------
+
+    def positions(self) -> list[tuple[str, int, int, str]]:
+        return [(c.name, c.x, c.y, c.cell_type) for c in self.alive_at(self.time) if c.x is not None]
+
+    def type_map(self) -> list[str]:
+        """One character per site, row by row: first letter of the cell type, '.' for an empty site."""
+        if not self.spatial:
+            return []
+        grid = [["."] * self.organism.width for _ in range(self.organism.height)]
+        for _, x, y, cell_type in self.positions():
+            grid[y][x] = (cell_type or "?")[0]
+        return ["".join(row) for row in grid]
+
+    def bands_along_x(self, y: int | None = None) -> list[tuple[str, int, int]]:
+        """Contiguous runs of cell type along x in one row: (type, start, end)."""
+        if not self.spatial:
+            return []
+        row = self.organism.height // 2 if y is None else y
+        types = ["" for _ in range(self.organism.width)]
+        for _, x, yy, cell_type in self.positions():
+            if yy == row:
+                types[x] = cell_type
+        bands: list[tuple[str, int, int]] = []
+        start = 0
+        for x in range(1, self.organism.width + 1):
+            if x == self.organism.width or types[x] != types[start]:
+                bands.append((types[start], start, x))
+                start = x
+        return bands
 
     # ---- queries ---------------------------------------------------------
 
