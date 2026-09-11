@@ -1374,6 +1374,78 @@ def _accession_for(symbol_or_acc: str) -> str:
     return ident["accession"]
 
 
+def _pathway_kinetic(args: argparse.Namespace, ids: list[str]) -> int:
+    """Kinetic counterpart: a curated BioModels ODE model for the pathway, run on the in-house engine."""
+    from genomeos.lang.tools import spark
+    from genomeos.molecules import biomodels
+    from genomeos.molecules.reactome import PathwayModel, fetch_pathway
+    from genomeos.results import save_result
+
+    query = args.query
+    if not query and ids:
+        try:
+            query = PathwayModel.from_sbml(fetch_pathway(ids[0])).summary()["name"]
+            print(f"{ids[0]}: {query!r}")
+        except Exception as e:  # noqa: BLE001
+            print(f"{ids[0]}: unavailable ({str(e)[:80]}); give --query or --model")
+            return 1
+    model_id = args.model
+    if not model_id:
+        if not query:
+            print("give a Reactome id, --query TEXT or --model BIOMD…")
+            return 1
+        hits, used = biomodels.search_pathway(query, limit=args.limit)
+        if not hits:
+            print(f"no curated BioModels entry matches {query!r}; try --query with other words")
+            return 1
+        print(f"BioModels, curated, matching {used!r}:")
+        for h in hits:
+            print(f"  {h['id']}  {h['name'][:80]}")
+        model_id = hits[0]["id"]
+        print(f"running the first ({model_id}); pick another with --model")
+    path = biomodels.fetch(model_id)
+    base = biomodels.run(path, duration=args.hours, dt=args.dt)
+    print(
+        f"{base['model']} {base['name']!r}: {base['species']} species, {base['reactions']} reactions, "
+        f"{base['functions']} functions, {base['rate_rules']} rate rules; {args.hours} time units"
+    )
+    print(f"  [{base['evidence']}]")
+    shown = sorted(base["levels"].items(), key=lambda kv: -kv[1]["peak"])[: args.top]
+    for sid, lv in shown:
+        name = lv["name"][:28]
+        print(f"  {name:<28} {spark(base['series'][sid])}  final={lv['final']:10.3f}  peaks={lv['peaks']}")
+    baseline = {k: v for k, v in base.items() if k not in ("series", "times")}
+    out = {"pathways": ids, "query": query, "baseline": baseline}
+    if args.knockout:
+        acc = None
+        try:
+            acc = _accession_for(args.knockout)
+        except (SystemExit, Exception):  # noqa: BLE001 - no compiled definition: match by name only
+            acc = None
+        ko = biomodels.run(
+            path, duration=args.hours, dt=args.dt, knockout=[args.knockout], accessions={args.knockout: acc}
+        )
+        if not ko["knocked_out"]:
+            print(f"  knockout {args.knockout}: no species of the model matches that name or accession {acc}")
+        else:
+            changed = biomodels.compare(base, ko)
+            held = ", ".join(ko["knocked_out"])
+            print(
+                f"  knockout {args.knockout} → held at 0: {held}; {len(changed)} species change their final "
+                f"level or peak by ≥ 10% of their range  [inferred from the run]"
+            )
+            for r in changed[: args.top]:
+                name = r["name"][:28]
+                print(
+                    f"    {name:<28} final {r['baseline_final']:9.3f} → {r['knockout_final']:9.3f} "
+                    f"({r['final_change']:+.0%})  peak {r['baseline_peak']:9.3f} → {r['knockout_peak']:9.3f} "
+                    f"({r['peak_change']:+.0%})"
+                )
+            out["knockout"] = {"term": args.knockout, "held": ko["knocked_out"], "changed": changed}
+    save_result(f"kinetic_{model_id}", out)
+    return 0
+
+
 def cmd_pathway(args: argparse.Namespace) -> int:
     from genomeos.molecules.reactome import PathwayModel, fetch_pathway
     from genomeos.results import save_result
@@ -1385,6 +1457,8 @@ def cmd_pathway(args: argparse.Namespace) -> int:
         d = compile_protein(args.gene)
         ids += [x["id"] for x in (d["sections"].get("pathways", {}).get("items") or [])][: args.limit]
         print(f"{args.gene}: {len(ids)} Reactome pathways from the compiled definition")
+    if args.kinetic or args.model or args.query:
+        return _pathway_kinetic(args, ids)
     if not ids:
         print("give pathway ids (R-HSA-…) or --gene SYMBOL")
         return 1
@@ -3050,6 +3124,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--knockout", help="gene symbol or UniProt accession to remove")
     p.add_argument("--limit", type=int, default=50)
     p.add_argument("-v", "--verbose", action="store_true")
+    p.add_argument(
+        "--kinetic", action="store_true", help="run a curated BioModels ODE model of the pathway instead"
+    )
+    p.add_argument("--model", help="a BioModels id (BIOMD…) to run; implies --kinetic")
+    p.add_argument("--query", help="search BioModels with this text instead of the pathway's name")
+    p.add_argument("--hours", type=float, default=100.0, help="time units to simulate (the model's own)")
+    p.add_argument("--dt", type=float, default=0.01)
+    p.add_argument("--top", type=int, default=12)
     p.set_defaults(fn=cmd_pathway)
 
     p = sub.add_parser("proteome", help="compile every protein of a chromosome; keep the coverage summary")

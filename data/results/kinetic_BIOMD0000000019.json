@@ -1,0 +1,671 @@
+{
+  "result": "kinetic_BIOMD0000000019",
+  "date": "2026-09-11",
+  "pathways": [],
+  "query": null,
+  "baseline": {
+    "model": "BIOMD0000000019",
+    "name": "Schoeberl2002 - EGF MAPK",
+    "species": 100,
+    "reactions": 125,
+    "functions": 0,
+    "rate_rules": 0,
+    "duration": 100.0,
+    "dt": 0.01,
+    "knocked_out": [],
+    "levels": {
+      "x2": {
+        "name": "EGFR",
+        "initial": 50000.0,
+        "final": 18.331613,
+        "peak": 50000.0,
+        "peaks": 0
+      },
+      "x3": {
+        "name": "EGF-EGFR",
+        "initial": 0.0,
+        "final": 624.586771,
+        "peak": 624.586771,
+        "peaks": 0
+      },
+      "x4": {
+        "name": "EGF-EGFR^2",
+        "initial": 0.0,
+        "final": 54.336108,
+        "peak": 54.336108,
+        "peaks": 0
+      },
+      "x5": {
+        "name": "EGF-EGFR*^2",
+        "initial": 0.0,
+        "final": 5327.584899,
+        "peak": 5327.584899,
+        "peaks": 0
+      },
+      "x6": {
+        "name": "EGFRi",
+        "initial": 0.0,
+        "final": 1.229167,
+        "peak": 1.243905,
+        "peaks": 1
+      },
+      "x7": {
+        "name": "EGF-EGFR*^2-GAP-Grb2-Prot",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x8": {
+        "name": "EGF-EGFRi*^2",
+        "initial": 0.0,
+        "final": 286.350603,
+        "peak": 286.350603,
+        "peaks": 0
+      },
+      "x9": {
+        "name": "Proti",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x10": {
+        "name": "EGF-EGFRi",
+        "initial": 0.0,
+        "final": 128.348312,
+        "peak": 128.348312,
+        "peaks": 0
+      },
+      "x11": {
+        "name": "EGF-EGFRi^2",
+        "initial": 0.0,
+        "final": 2.852199,
+        "peak": 2.852199,
+        "peaks": 0
+      },
+      "x12": {
+        "name": "Prot",
+        "initial": 81000.0,
+        "final": 0.0,
+        "peak": 81000.0,
+        "peaks": 0
+      },
+      "x13": {
+        "name": "EGFideg",
+        "initial": 0.0,
+        "final": 10.396427,
+        "peak": 10.396427,
+        "peaks": 0
+      },
+      "x14": {
+        "name": "GAP",
+        "initial": 12000.0,
+        "final": 0.0,
+        "peak": 12000.0,
+        "peaks": 0
+      },
+      "x15": {
+        "name": "EGF-EGFR*^2-GAP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x16": {
+        "name": "EGFi",
+        "initial": 0.0,
+        "final": 21.076559,
+        "peak": 21.076559,
+        "peaks": 0
+      },
+      "x17": {
+        "name": "EGF-EGFRi*^2-GAP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x18": {
+        "name": "EGF-EGFRi*^2-GAP-Grb2",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x19": {
+        "name": "EGF-EGFRi*^2-GAP-Grb2-Sos",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x20": {
+        "name": "EGF-EGFRi*^2-GAP-Grb2-Sos-Ras-GDP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x21": {
+        "name": "EGF-EGFRi*^2-GAP-Grb2-Sos-Ras-GTP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x22": {
+        "name": "Grb2",
+        "initial": 11000.0,
+        "final": 0.0,
+        "peak": 11000.0,
+        "peaks": 0
+      },
+      "x23": {
+        "name": "EGF-EGFR*^2-GAP-Grb2",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x24": {
+        "name": "Sos",
+        "initial": 26300.0,
+        "final": 0.0,
+        "peak": 26300.0,
+        "peaks": 0
+      },
+      "x25": {
+        "name": "EGF-EGFR*^2-GAP-Grb2-Sos",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x26": {
+        "name": "Ras-GDP",
+        "initial": 72000.0,
+        "final": 0.0,
+        "peak": 72000.0,
+        "peaks": 0
+      },
+      "x27": {
+        "name": "EGF-EGFR*^2-GAP-Grb2-Sos-Ras-GDP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x28": {
+        "name": "Ras-GTP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x29": {
+        "name": "EGF-EGFR*^2-GAP-Grb2-Sos-Ras-GTP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x30": {
+        "name": "Grb2-Sos",
+        "initial": 40000.0,
+        "final": 0.0,
+        "peak": 40000.0,
+        "peaks": 0
+      },
+      "x31": {
+        "name": "Shc",
+        "initial": 101000.0,
+        "final": 0.0,
+        "peak": 101000.0,
+        "peaks": 0
+      },
+      "x32": {
+        "name": "EGF-EGFR*^2-GAP-Shc",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x33": {
+        "name": "EGF-EGFR*^2-GAP-Shc*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x34": {
+        "name": "EGF-EGFR*^2-GAP-Shc*-Grb2",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x35": {
+        "name": "EGF-EGFR*^2-GAP-Shc*-Grb2-Sos",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x36": {
+        "name": "EGF-EGFR*^2-GAP-Shc*-Grb2-Sos-Ras-GDP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x37": {
+        "name": "EGF-EGFR*^2-GAP-Shc*-Grb2-Sos-Ras-GTP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x38": {
+        "name": "Shc*-Grb2-Sos",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x39": {
+        "name": "Shc*-Grb2",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x40": {
+        "name": "Shc*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x41": {
+        "name": "Raf",
+        "initial": 40000.0,
+        "final": 0.0,
+        "peak": 40000.0,
+        "peaks": 0
+      },
+      "x42": {
+        "name": "Raf-Ras-GTP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x43": {
+        "name": "Ras-GTP*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x44": {
+        "name": "Phosphotase1",
+        "initial": 40000.0,
+        "final": 0.0,
+        "peak": 40000.0,
+        "peaks": 0
+      },
+      "x45": {
+        "name": "Raf*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x46": {
+        "name": "Raf*-P'ase",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x47": {
+        "name": "MEK",
+        "initial": 22000000.0,
+        "final": 0.0,
+        "peak": 22000000.0,
+        "peaks": 0
+      },
+      "x48": {
+        "name": "MEK-Raf*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x49": {
+        "name": "MEK-P",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x50": {
+        "name": "MEK-P-Raf*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x51": {
+        "name": "MEK-PP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x52": {
+        "name": "MEK-PP-P'ase2",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x53": {
+        "name": "Phosphatase2",
+        "initial": 40000.0,
+        "final": 0.0,
+        "peak": 40000.0,
+        "peaks": 0
+      },
+      "x54": {
+        "name": "MEK-P-P'ase2",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x55": {
+        "name": "ERK",
+        "initial": 21000000.0,
+        "final": 0.0,
+        "peak": 21000000.0,
+        "peaks": 0
+      },
+      "x56": {
+        "name": "ERK-MEK-PP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x57": {
+        "name": "ERK-P",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x58": {
+        "name": "ERK-P-MEK-PP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x59": {
+        "name": "ERK-PP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x60": {
+        "name": "Phosphotase3",
+        "initial": 10000000.0,
+        "final": 0.0,
+        "peak": 10000000.0,
+        "peaks": 0
+      },
+      "x61": {
+        "name": "ERK-PP-P'ase3",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x62": {
+        "name": "ERK-P-P'ase3",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x63": {
+        "name": "EGF-EGFRi*^2-GAP-Shc",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x64": {
+        "name": "EGF-EGFRi*^2-GAP-Shc*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x65": {
+        "name": "EGF-EGFRi*^2-GAP-Shc*-Grb2",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x66": {
+        "name": "EGF-EGFRi*^2-GAP-Shc*-Grb2-Sos",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x67": {
+        "name": "EGF-EGFRi*^2-GAP-Shc*-Grb2-Sos-Ras-GDP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x68": {
+        "name": "EGF-EGFRi*^2-GAP-Shc*-Grb2-Sos-Ras-GTP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x69": {
+        "name": "Rasi-GTP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x70": {
+        "name": "Rafi-Rasi-GTP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x71": {
+        "name": "Rasi-GTP*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x72": {
+        "name": "Rafi*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x73": {
+        "name": "Rafi*-P'ase",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x74": {
+        "name": "MEKi-Rafi*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x75": {
+        "name": "MEKi-P",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x76": {
+        "name": "MEKi-P-Rafi*",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x77": {
+        "name": "MEKi-PP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x78": {
+        "name": "MEKi-PP-P'ase2i",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x79": {
+        "name": "MEKi-P-P'ase2i",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x80": {
+        "name": "ERKi-MEKi-PP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x81": {
+        "name": "ERKi-P",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x82": {
+        "name": "ERKi-P-MEKi-PP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x83": {
+        "name": "ERKi-PP",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x84": {
+        "name": "ERKi-PP-P'ase3i",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x85": {
+        "name": "ERKi-P-P'ase3i",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x86": {
+        "name": "EGFRideg",
+        "initial": 0.0,
+        "final": 4.120761,
+        "peak": 4.120761,
+        "peaks": 0
+      },
+      "x87": {
+        "name": "EGF-EGFRi*^2deg",
+        "initial": 0.0,
+        "final": 445.359881,
+        "peak": 445.359881,
+        "peaks": 0
+      },
+      "x88": {
+        "name": "EGF-EGFR*^2-GAP-Grb2-Sos-Prot",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x89": {
+        "name": "EGF-EGFR*^2-GAP-Grb2-Sos-Ras-GDP-Prot",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x90": {
+        "name": "EGF-EGFR*^2-GAP-Grb2-Sos-Ras-GTP-Prot",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x91": {
+        "name": "EGF-EGFR*^2-GAP-Shc*-Grb2-Prot",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x92": {
+        "name": "EGF-EGFR*^2-GAP-Shc*-Grb2-Sos-Prot",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x93": {
+        "name": "EGF-EGFR*^2-GAP-Shc*-Grb2-Sos-Ras-GDP-Prot",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      },
+      "x94": {
+        "name": "EGF-EGFR*^2-GAP-Shc*-Grb2-Sos-Ras-GTP-Prot",
+        "initial": 0.0,
+        "final": 0.0,
+        "peak": 0.0,
+        "peaks": 0
+      }
+    },
+    "evidence": "curated: BioModels (manually curated, reproduces the cited paper); derived: in-house RK4 run"
+  }
+}

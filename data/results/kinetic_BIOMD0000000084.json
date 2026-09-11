@@ -1,0 +1,111 @@
+{
+  "result": "kinetic_BIOMD0000000084",
+  "date": "2026-09-11",
+  "pathways": [],
+  "query": null,
+  "baseline": {
+    "model": "",
+    "name": "Hornberg2005_ERKcascade",
+    "species": 8,
+    "reactions": 8,
+    "functions": 0,
+    "rate_rules": 0,
+    "duration": 200.0,
+    "dt": 0.01,
+    "knocked_out": [],
+    "levels": {
+      "R": {
+        "name": "R",
+        "initial": 0.5,
+        "final": 0.00084,
+        "peak": 0.5,
+        "peaks": 0
+      },
+      "Rin": {
+        "name": "Rin",
+        "initial": 0.0,
+        "final": 0.49916,
+        "peak": 0.49916,
+        "peaks": 1
+      },
+      "x1": {
+        "name": "x1",
+        "initial": 1.0,
+        "final": 0.997448,
+        "peak": 1.0,
+        "peaks": 1
+      },
+      "x1p": {
+        "name": "x1p",
+        "initial": 0.0,
+        "final": 0.002552,
+        "peak": 0.130479,
+        "peaks": 1
+      },
+      "x2": {
+        "name": "x2",
+        "initial": 1.0,
+        "final": 0.992213,
+        "peak": 1.0,
+        "peaks": 1
+      },
+      "x2p": {
+        "name": "x2p",
+        "initial": 0.0,
+        "final": 0.007787,
+        "peak": 0.200818,
+        "peaks": 1
+      },
+      "x3": {
+        "name": "x3",
+        "initial": 1.0,
+        "final": 0.975888,
+        "peak": 1.0,
+        "peaks": 1
+      },
+      "x3p": {
+        "name": "x3p",
+        "initial": 0.0,
+        "final": 0.024112,
+        "peak": 0.561665,
+        "peaks": 1
+      }
+    },
+    "evidence": "curated: BioModels (manually curated, reproduces the cited paper); derived: in-house RK4 run"
+  },
+  "knockout": {
+    "term": "RAF1",
+    "held": [
+      "x1",
+      "x1p"
+    ],
+    "changed": [
+      {
+        "species": "x2p",
+        "name": "x2p",
+        "baseline_final": 0.007787,
+        "knockout_final": 0.0,
+        "baseline_peak": 0.200818,
+        "knockout_peak": 0.0,
+        "relative_change": -1.0,
+        "final_change": -0.039,
+        "peak_change": -1.0,
+        "peaks_before": 1,
+        "peaks_after": 0
+      },
+      {
+        "species": "x3p",
+        "name": "x3p",
+        "baseline_final": 0.024112,
+        "knockout_final": 0.0,
+        "baseline_peak": 0.561665,
+        "knockout_peak": 0.0,
+        "relative_change": -1.0,
+        "final_change": -0.043,
+        "peak_change": -1.0,
+        "peaks_before": 1,
+        "peaks_after": 0
+      }
+    ]
+  }
+}

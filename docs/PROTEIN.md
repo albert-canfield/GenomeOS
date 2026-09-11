@@ -140,6 +140,40 @@ regulation of TP53 activity through phosphorylation (18 of 21 reactions,
 signalling, lose 2 to 3%. The ranking is what a reachability model can say;
 how much each loss matters in a given cell needs the rates it does not have.
 
+### Kinetics where a curated model exists (2026-09-11)
+
+Reachability says which reactions survive a knockout; it cannot say how much
+or when. BioModels holds hand-curated ODE models (BIOMD… ids, each one
+reproducing its paper) for many of the same pathways, with rate laws,
+parameters and initial conditions. `genomeos pathway R-HSA-5673001
+--kinetic` takes the Reactome pathway's name ("RAF/MAP kinase cascade"),
+searches BioModels with it (backing off to fewer words until something
+curated matches), keeps the SBML under `data/knowledge/biomodels` and runs
+it on the in-house engine (`genomeos/molecules/biomodels.py`); `--model
+BIOMD…` picks a model directly, `--knockout SYMBOL` holds the matching
+species at zero. A gene symbol lands on a model whose species are called
+x1, x2, x3 through the model's own MIRIAM annotations: the species annotated
+with the UniProt accession of the symbol is the one knocked out.
+
+| model | knockout | what the run says |
+|---|---|---|
+| Hornberg2005 ERK cascade (BIOMD0000000084) | RAF1 (x1, x1p held at 0) | the MEK-P and ERK-P transients vanish (peaks −100%); steady states barely move (−4%), which is why the comparison counts peaks as well as final levels |
+| Kholodenko2000 MAPK oscillator (BIOMD0000000010) | MEK (MKK, MKK-P, MKK-PP) | the ERK-PP oscillation is gone (peak 299 → 10, −97%); Mos-P steady state rises 62% because the negative feedback through ERK is cut |
+
+The engine gained what curated models need: SBML functionDefinitions
+(lambda calls), rateRules, species display names and annotations, and the
+amount/concentration semantics (a species given as an amount in a
+compartment of size ≠ 1 is a concentration in the maths, and a reaction's
+substance-per-time rate changes it by rate/volume). Evidence: the model is
+curated (BioModels), the run is derived (our RK4 integration), the knockout
+effect is inferred from the run; time units are the model's own. Known
+limit, recorded rather than hidden: Schoeberl2002's 100-species EGF-MAPK
+model (BIOMD0000000019) does not reproduce its published transient on this
+engine (the receptor binds, the cascade stays flat), while Sarma2012,
+Huang1996, Kholodenko2000, Hornberg2005 and McClean2007 run; the
+libRoadRunner adapter (roadmap item 12) is the reference for such cases.
+Results land in `data/results/kinetic_<model>.json` without the time series.
+
 ## The knowledge graph itself
 
 The compiled definitions are one graph (`genomeos.molecules.graph`, no
