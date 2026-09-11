@@ -341,14 +341,28 @@ the same analysis, and the **Targets** tab in `genomeos serve` renders it.
 | Ensembl sequence | transcript coding sequences, for reconstructing an altered protein | Apache 2.0 service |
 | cBioPortal expression profiles | cohort tumour-versus-normal behaviour per gene | study terms, portal ODbL |
 | cBioPortal (distilled) | driver frequencies and hotspots | ODbL, distilled summary committed |
+| MHCflurry 2 (optional) | peptide/HLA class I binding, percentile rank | Apache 2.0; models downloaded by the user |
+| NetMHCpan 4.1 (optional) | peptide/HLA class I binding, percentile rank | academic licence from DTU; never shipped or downloaded by GenomeOS |
 
 Every response is cached under `data/knowledge/therapeutics/`, so an analysis
 is reproducible without the network. No page is scraped where an API exists.
 
-No peptide/HLA binding predictor is wired in: IEDB's and NetMHCpan's terms are
-not assumed. `NoNeoantigenPredictor` reports binding as unavailable rather than
-inventing affinities, and implementing the `NeoantigenProvider` protocol is all
-it takes to plug a real one in.
+Two peptide/HLA predictors can be enabled, and neither is assumed
+(`genomeos/therapeutics/binding.py`). **MHCflurry 2** (Apache 2.0) installs with
+`uv sync --extra hla` plus `mhcflurry-downloads fetch models_class1_presentation`
+and is the default when present. **NetMHCpan 4.1** is the field's reference
+predictor under an academic licence from DTU: GenomeOS never ships, downloads or
+redistributes it, and calls a binary the user installed, found on `PATH` or at
+`$NETMHCPAN`. Choose with `--hla-predictor mhcflurry|netmhcpan|none`.
+
+With neither installed, `NoNeoantigenPredictor` reports binding as unavailable
+rather than inventing affinities; the analysis still runs and says what is
+missing. With one installed, every mutation-spanning peptide is scored against
+the patient's class I alleles and reported as a percentile rank (binder at
+<= 2.0, strong binder at <= 0.5) with `computational` evidence. Binding is still
+not presentation: proteasomal cleavage, TAP transport and immunopeptidomics stay
+unestablished, so presentation confidence remains capped at 0.25 on binding
+alone.
 
 ## What this is not
 

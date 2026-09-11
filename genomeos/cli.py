@@ -2220,6 +2220,12 @@ def cmd_therapeutic(args: argparse.Namespace) -> int:
     from genomeos.therapeutics import DISCLAIMER, analyse_vcf, text_report, write_outputs
     from genomeos.therapeutics.report import target_specification_text
 
+    if args.install_hla_models:
+        from genomeos.therapeutics.binding import fetch_mhcflurry_models
+
+        print(fetch_mhcflurry_models(log=sys.stdout))
+        return 0
+
     hla = [a for spec in (args.hla or []) for a in spec.split(",") if a.strip()]
     a = analyse_vcf(
         args.tumour,
@@ -2233,6 +2239,7 @@ def cmd_therapeutic(args: argparse.Namespace) -> int:
         cohort=args.cohort or "",
         net=not args.offline,
         indirect=not args.no_indirect,
+        hla_predictor=args.hla_predictor,
         log=sys.stdout,
     )
     if args.report:
@@ -2770,6 +2777,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--normal", help="matched normal VCF; without it germline is estimated")
     p.add_argument("--rna", help="tumour RNA table: gene<TAB>value per line")
     p.add_argument("--hla", action="append", help="patient class I alleles, e.g. HLA-A*02:01,HLA-B*07:02")
+    p.add_argument(
+        "--hla-predictor",
+        default="",
+        help="peptide/HLA binding predictor: mhcflurry, netmhcpan, none (default: first installed)",
+    )
+    p.add_argument(
+        "--install-hla-models",
+        action="store_true",
+        help="download MHCflurry's class I models (its own downloader fails on Python 3.13+)",
+    )
     p.add_argument("--chrom", action="append", help="restrict to these chromosomes")
     p.add_argument("--purity", type=float, help="tumour purity 0-1, for clonality")
     p.add_argument("--cnv", help="copy-number table: gene<TAB>copies per line")

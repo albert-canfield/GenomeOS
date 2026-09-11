@@ -107,3 +107,20 @@ haplotype 2 by policy), 0 reference mismatches and
 calls is the check that the fetched hg38 sequences and the benchmark agree
 base for base. chrX and chrY are not in the benchmark set. No haplotype
 FASTA is kept; `genomeos twin build` makes one on demand.
+
+## Optional: peptide/HLA binding predictors
+
+The therapeutic pipeline enumerates the peptides a mutation creates; whether
+one of them binds the patient's HLA needs a predictor, and GenomeOS ships
+none. Two can be enabled, and the analysis runs without either (binding is
+reported as unavailable, never invented).
+
+| Predictor | Licence | How to enable |
+|---|---|---|
+| MHCflurry 2 | Apache 2.0, usable by anyone | `uv sync --extra hla` then `uv run mhcflurry-downloads fetch models_class1_presentation` |
+| NetMHCpan 4.1 | academic licence from DTU Health Tech | request the package at https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/, install it, then put `netMHCpan` on `PATH` or set `NETMHCPAN=/path/to/netMHCpan` |
+
+`genomeos therapeutic --hla-predictor mhcflurry|netmhcpan|none` chooses one;
+the default is the first installed. `/api/features` and the Progress tab list
+both with their licence and their state. GenomeOS never downloads or
+redistributes NetMHCpan; a commercial user needs a licence from DTU.

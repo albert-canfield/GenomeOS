@@ -864,6 +864,7 @@ def analyse_vcf(
     cohort: str = "",
     net: bool = True,
     indirect: bool = True,
+    hla_predictor: str = "",
     log: Any = None,
 ) -> dict[str, Any]:
     """End to end: a tumour VCF in, a therapeutic target analysis out."""
@@ -893,7 +894,13 @@ def analyse_vcf(
     except Exception:  # noqa: BLE001 - the GO files are optional
         kb = None
     patient_rna = PatientRnaProvider.from_file(rna) if rna else PatientRnaProvider()
-    providers = Providers.default(net=net, knowledge_base=kb, patient_rna=patient_rna, cohort_study=cohort)
+    providers = Providers.default(
+        net=net,
+        knowledge_base=kb,
+        patient_rna=patient_rna,
+        cohort_study=cohort,
+        hla_predictor=hla_predictor,
+    )
     analysis = analyse(ranked, profile, providers, top_genes=top_genes, indirect=indirect, log=log)
     analysis["variants_total"] = len(ranked)
     analysis["somatic_candidates"] = sum(1 for v in ranked if not v.likely_germline)

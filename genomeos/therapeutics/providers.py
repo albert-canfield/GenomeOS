@@ -858,7 +858,10 @@ class Providers:
         knowledge_base: Any = None,
         patient_rna: PatientRnaProvider | None = None,
         cohort_study: str = "",
+        hla_predictor: str = "",
     ) -> Providers:
+        from .binding import choose as choose_predictor
+
         protein = CompiledProteinProvider(net=net)
         return cls(
             protein=protein,
@@ -867,7 +870,7 @@ class Providers:
             trafficking=AnnotationTraffickingProvider(protein, knowledge_base),
             precedent=OpenTargetsProvider(net=net),
             homology=EnsemblParalogueProvider(net=net),
-            neoantigen=NoNeoantigenPredictor(),
+            neoantigen=choose_predictor(hla_predictor),
             patient_rna=patient_rna or PatientRnaProvider(),
             cohort=CBioPortalCohortProvider(study=cohort_study, net=net),
             transcript=EnsemblTranscriptProvider(net=net),

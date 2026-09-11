@@ -253,15 +253,21 @@ def assess(
         reason = answer.reason if answer is not None else "no peptides to submit"
         a.predicted_binding = None
         a.missing.append(Missing("predicted peptide/HLA binding", reason, ("a wired binding predictor",)))
-    a.predicted_processing = None
-    a.missing.append(
-        Missing(
-            "predicted antigen processing",
-            "proteasomal cleavage and TAP transport are not modelled; binding affinity alone "
-            "overestimates presentation",
-            ("a processing predictor",),
-        )
+    modelled = bool(a.predicted_binding and a.predicted_binding.get("processing_modelled"))
+    a.predicted_processing = (
+        {"source": a.predicted_binding["predictor"], "included_in": "presentation percentile"}
+        if modelled
+        else None
     )
+    if not modelled:
+        a.missing.append(
+            Missing(
+                "predicted antigen processing",
+                "proteasomal cleavage and TAP transport are not modelled; binding affinity alone "
+                "overestimates presentation",
+                ("a processing predictor",),
+            )
+        )
     a.observed_immunopeptidomics = None
     a.missing.append(
         Missing(

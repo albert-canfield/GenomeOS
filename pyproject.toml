@@ -21,6 +21,12 @@ clocks = [
 predict = [
     "alphagenome>=0.9.0",
 ]
+hla = [
+    # MHCflurry 2 is Apache 2.0; its models are downloaded by the user with
+    # `mhcflurry-downloads fetch models_class1_presentation`. NetMHCpan is not
+    # installable from here: it needs a DTU licence and a local binary.
+    "mhcflurry>=2.1",
+]
 
 [dependency-groups]
 dev = [

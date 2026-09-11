@@ -16,6 +16,7 @@ wide to narrow; read them top down.
 | [LANDSCAPE.md](LANDSCAPE.md) | what exists elsewhere and what GenomeOS adds |
 | [GENOME-AS-CODE.md](GENOME-AS-CODE.md) | the reverse-engineering view: timers, blueprint, parts, systems |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | branches, every-step checklist |
+| [../ACKNOWLEDGEMENTS.md](../ACKNOWLEDGEMENTS.md) | every library, model and data source with its licence, and the terms of use |
 
 ## Specifications: the engine
 
