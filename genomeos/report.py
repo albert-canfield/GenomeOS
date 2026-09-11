@@ -132,41 +132,37 @@ def gene_report(symbol: str, chrom: str, annotation, genome, root: Path = Path("
             "most_affected": [(r["name"], r["fraction_lost"]) for r in rows[:3]],
             "evidence": "curated: Reactome; inferred reachability",
         }
-    # the test human inside the gene
-    from genomeos.genome.fetch import individual_vcf_path
+    # every local individual inside the gene: the test human and any imported genome
+    from genomeos.genome.individuals import rows_in, sources
 
-    vcf = individual_vcf_path(chrom)
-    if vcf.exists():
+    people = []
+    for name, vcf, evidence in sources(chrom):
         inside, coding = 0, []
-        with vcf.open() as fh:
-            for line in fh:
-                if line.startswith("#"):
-                    continue
-                f = line.rstrip("\n").split("\t")
-                pos = int(f[1])
-                if pos < g.locus.start + 1:
-                    continue
-                if pos > g.locus.end:
-                    break
-                inside += 1
-                if tr is not None and len(f[3]) == 1 and len(f[4]) == 1 and len(coding) < 20:
-                    sub = tr.substitute(pos - 1, f[3], f[4])
-                    if sub.get("region") == "CDS":
-                        coding.append(
-                            {
-                                "pos": pos,
-                                "change": f"{f[3]}>{f[4]}",
-                                "genotype": f[9].split(":")[0],
-                                "consequence": sub.get("consequence"),
-                                "hgvs_p": sub.get("hgvs_p"),
-                            }
-                        )
-        sec["individual"] = {
-            "sample": "HG002",
-            "variants_in_gene": inside,
-            "coding_snvs": coding,
-            "evidence": "measured: GIAB v4.2.1 benchmark; consequence derived by the local trace",
-        }
+        for f in rows_in(vcf, g.locus.start + 1, g.locus.end):
+            inside += 1
+            if tr is not None and len(f[3]) == 1 and len(f[4]) == 1 and len(coding) < 20:
+                sub = tr.substitute(int(f[1]) - 1, f[3], f[4])
+                if sub.get("region") == "CDS":
+                    coding.append(
+                        {
+                            "pos": int(f[1]),
+                            "change": f"{f[3]}>{f[4]}",
+                            "genotype": f[9].split(":")[0] if len(f) > 9 else "",
+                            "consequence": sub.get("consequence"),
+                            "hgvs_p": sub.get("hgvs_p"),
+                        }
+                    )
+        people.append(
+            {
+                "sample": name,
+                "variants_in_gene": inside,
+                "coding_snvs": coding,
+                "evidence": f"{evidence}; consequence derived by the local trace",
+            }
+        )
+    if people:
+        sec["individual"] = people[0]  # the test human, as before
+        sec["individuals"] = people
     return rep
 
 
@@ -237,8 +233,7 @@ def to_markdown(rep: dict[str, Any]) -> str:
             f"{k['reactions_lost']} reactions lost across {k['pathways']} pathways; most affected: {worst}.",
             k["evidence"],
         )
-    if "individual" in sec:
-        i = sec["individual"]
+    for i in sec.get("individuals") or ([sec["individual"]] if "individual" in sec else []):
         cod = (
             "; ".join(f"{c['hgvs_p'] or c['consequence']} ({c['genotype']})" for c in i["coding_snvs"])
             or "none"

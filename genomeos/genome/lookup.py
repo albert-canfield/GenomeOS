@@ -151,12 +151,17 @@ INDIVIDUAL_FALLBACK = "data/reference/{sample}_{chrom}.vcf"  # chromosomes split
 def carriers(chrom: str, pos: int, ref: str, alt: str) -> list[dict[str, Any]]:
     """Which local individuals carry this exact variant, and with what genotype."""
     out = []
+    scan: list[tuple[str, Path, str]] = []
     for name, (pattern, source) in INDIVIDUALS.items():
         path = Path(pattern.format(chrom=chrom))
         if not path.exists():
             path = Path(INDIVIDUAL_FALLBACK.format(sample=name, chrom=chrom))
-        if not path.exists():
-            continue
+        if path.exists():
+            scan.append((name, path, f"measured: {source}"))
+    from genomeos.genome.individuals import sources
+
+    scan += [(n, p, e) for n, p, e in sources(chrom) if n not in INDIVIDUALS]  # imported genomes
+    for name, path, source in scan:
         found = None
         with path.open() as fh:
             for line in fh:
@@ -176,7 +181,7 @@ def carriers(chrom: str, pos: int, ref: str, alt: str) -> list[dict[str, Any]]:
                 "individual": name,
                 "carries": found is not None,
                 "genotype": found,
-                "evidence": f"measured: {source}",
+                "evidence": source,
             }
         )
     return out

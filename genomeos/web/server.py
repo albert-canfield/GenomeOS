@@ -266,6 +266,40 @@ class Api:
 
     # ---- twins ------------------------------------------------------------
 
+    def individuals(self) -> dict:
+        """The test human and every imported person (local files only)."""
+        from genomeos.genome.individuals import list_individuals
+
+        return {"individuals": list_individuals(self.root / "data" / "individuals")}
+
+    def individual_import(self, path: str, name: str, note: str = "", replace: bool = False) -> dict:
+        """Split a VCF on this machine into per-chromosome files under data/individuals/<name>."""
+        from genomeos.genome.individuals import import_vcf
+
+        try:
+            root = self.root / "data" / "individuals"
+            return {"ok": True, "manifest": import_vcf(path, name, note, root, replace)}
+        except (ValueError, FileNotFoundError, FileExistsError) as ex:
+            raise ApiError(str(ex)) from ex
+
+    def individual_genes(self, name: str, chrom: str, limit: int = 40) -> dict:
+        """One chromosome gene by gene for one person: variants and coding consequences."""
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome.individuals import gene_by_gene
+
+        gff = default_gencode({chrom})
+        fa = self.root / "data" / "reference" / f"{chrom}.fa"
+        if not gff or not fa.exists():
+            raise ApiError(f"{chrom} needs local models and sequence (genomeos data fetch --chrom {chrom})")
+        ann = Annotation.from_gff3(gff, {chrom})
+        genome = IndexedGenome(str(fa))
+        try:
+            return gene_by_gene(name, chrom, ann, genome, self.root / "data" / "individuals", limit)
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+        finally:
+            genome.close()
+
     def twins(self) -> dict:
         from genomeos.twin import Twin
 
@@ -1297,6 +1331,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.proteome_lib(self._q(qs, "gene")))
             if u.path == "/api/twins":
                 return self._json(self.api.twins())
+            if u.path == "/api/individuals":
+                return self._json(self.api.individuals())
+            if u.path == "/api/individual/genes":
+                return self._json(
+                    self.api.individual_genes(
+                        self._q(qs, "name") or "HG002",
+                        self._q(qs, "chrom") or "chr21",
+                        int(self._q(qs, "top") or 40),
+                    )
+                )
             if u.path == "/api/results":
                 return self._json(self.api.results())
             if u.path == "/api/blocks":
@@ -1435,6 +1479,15 @@ class Handler(BaseHTTPRequestHandler):
                 )
             if u.path == "/api/twin/measure":
                 return self._json(self.api.twin_measure(body.get("name", "")))
+            if u.path == "/api/individual/import":
+                return self._json(
+                    self.api.individual_import(
+                        body.get("path", ""),
+                        body.get("name", ""),
+                        body.get("note", ""),
+                        bool(body.get("replace")),
+                    )
+                )
             if u.path == "/api/twin/new":
                 return self._json(
                     self.api.twin_new(

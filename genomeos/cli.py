@@ -1827,6 +1827,92 @@ def cmd_verify(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_individual(args: argparse.Namespace) -> int:
+    """A person's genome as a local individual: import once, then every layer sees it (offline)."""
+    from genomeos.genome import individuals as ind
+
+    if args.action == "import":
+        try:
+            m = ind.import_vcf(
+                args.vcf,
+                args.name,
+                args.note or "",
+                replace=args.replace,
+                progress=lambda s: print(s, flush=True),
+            )
+        except (ValueError, FileNotFoundError, FileExistsError) as ex:
+            print(ex)
+            return 1
+        chroms = ", ".join(f"{k} {v:,}" for k, v in m["chromosomes"].items())
+        print(f"imported {m['name']}: {m['variants']:,} PASS variants on {len(m['chromosomes'])} chromosomes")
+        print(f"  {chroms}")
+        print(
+            f"  skipped {m['skipped_filtered']:,} filtered rows and {m['skipped_other_contigs']:,} rows "
+            f"on other contigs; {m['phased']:,} phased genotypes; sample column {m['sample_column']}"
+        )
+        print(f"  kept under data/individuals/{m['name']} (git-ignored; nothing leaves this machine)")
+        print("  now: genomeos lookup, report, twin build --vcf, and individual genes see this person")
+        return 0
+    if args.action == "remove":
+        ok = ind.remove(args.name)
+        print(f"removed {args.name}" if ok else f"{args.name}: not an imported individual")
+        return 0 if ok else 1
+    if args.action == "genes":
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+
+        gff = default_gencode({args.chrom})
+        fa = Path("data/reference") / f"{args.chrom}.fa"
+        if not gff or not fa.exists():
+            print(f"{args.chrom}: needs local models and sequence (genomeos data fetch --chrom {args.chrom})")
+            return 1
+        ann = Annotation.from_gff3(gff, {args.chrom})
+        genome = IndexedGenome(str(fa))
+        try:
+            r = ind.gene_by_gene(args.name, args.chrom, ann, genome, limit=args.top)
+        except FileNotFoundError as ex:
+            print(ex)
+            return 1
+        finally:
+            genome.close()
+        if args.json:
+            print(json.dumps(r, indent=2))
+            return 0
+        tt = r["totals"]
+        print(
+            f"{r['individual']} on {args.chrom}: {tt['genes_with_variants']:,} of {tt['genes']:,} coding "
+            f"genes carry variants ({tt['variants_in_genes']:,} inside genes, {tt['coding_snvs']:,} coding "
+            "SNVs)"
+        )
+        if r["by_consequence"]:
+            print(
+                "  coding SNVs by consequence: "
+                + ", ".join(f"{k} {v}" for k, v in r["by_consequence"].items())
+            )
+        rows = [
+            {
+                "gene": g["gene"],
+                "variants": f"{g['variants']:,}",
+                "coding": g["coding_snvs"],
+                "protein-changing": g["protein_changing"],
+                "changes": "; ".join(
+                    f"{x['hgvs_p'] or x['consequence']} ({x['genotype']})"
+                    for x in g["changes"]
+                    if x["consequence"] not in ("synonymous", "coding")
+                )[:70],
+            }
+            for g in r["genes"]
+        ]
+        print(_table(rows, ["gene", "variants", "coding", "protein-changing", "changes"]))
+        print(f"  [{r['evidence']}]")
+        return 0
+    for p in ind.list_individuals():
+        tag = "built-in test human" if p["builtin"] else (p.get("note") or p.get("source_file", ""))
+        n = f"{p['variants']:,} variants, " if p.get("variants") else ""
+        print(f"{p['name']:12} {n}{len(p['chromosomes'])} chromosomes  {tag}")
+        print(f"             [{p['evidence']}]")
+    return 0
+
+
 def cmd_lookup(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
     from genomeos.genome.lookup import lookup, parse_variant
@@ -2834,6 +2920,23 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--chrom", default="chr21")
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.set_defaults(fn=cmd_reader)
+
+    p = sub.add_parser("individual", help="a person's genome as a local individual: import a VCF once")
+    isub = p.add_subparsers(dest="action")
+    q = isub.add_parser("import", help="split a VCF (GRCh38, plain or .gz) into per-chromosome PASS files")
+    q.add_argument("vcf")
+    q.add_argument("--name", required=True, help="how this person is called in every layer")
+    q.add_argument("--note", help="where the calls come from (caller, date, consent)")
+    q.add_argument("--replace", action="store_true")
+    isub.add_parser("list", help="the test human and every imported person")
+    q = isub.add_parser("remove", help="delete an imported person's files")
+    q.add_argument("name")
+    q = isub.add_parser("genes", help="one chromosome gene by gene: variants and coding consequences")
+    q.add_argument("--name", default="HG002")
+    q.add_argument("--chrom", default="chr21")
+    q.add_argument("--top", type=int, default=25)
+    q.add_argument("--json", action="store_true")
+    p.set_defaults(fn=cmd_individual, action="list")
 
     p = sub.add_parser("report", help="a gene dossier: every layer about one gene in one document")
     p.add_argument("symbol")

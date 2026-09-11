@@ -368,6 +368,23 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 
 <!-- ================= TWIN ================= -->
 <section id="twin">
+  <div class="card" style="margin-bottom:16px">
+    <h2><i class="ic">🧍</i>Your genome, as a local individual<span class="help" data-tip="Import one VCF against GRCh38 (plain or .gz, any caller) once: it is split into a small PASS file per chromosome under data/individuals/<name>, git-ignored, and nothing leaves this machine. From then on the variant lookup says whether that person carries a variant, the gene dossier lists their variants inside a gene, twin build makes their haplotypes, and the table below walks a chromosome gene by gene with the consequence of every coding change. HG002 is the built-in test human.">?</span></h2>
+    <div id="ind-list" class="scroll"></div>
+    <div class="row" style="margin-top:8px">
+      <label>VCF on this machine <input id="ind-path" placeholder="/path/to/genome.vcf.gz" style="width:300px" class="mono"></label>
+      <label>name <input id="ind-name" placeholder="ME" style="width:90px"></label>
+      <label>note <input id="ind-note" placeholder="caller, date, consent" style="width:180px"></label>
+      <button class="ghost" id="ind-import" data-tip="Stream the file once and keep one PASS file per chromosome locally."><i class="ic">📥</i>Import</button>
+      <span class="muted" id="ind-status"></span>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <label>person <select id="ind-who"></select></label>
+      <label>chromosome <select id="ind-chrom"></select></label>
+      <button class="ghost" id="ind-genes" data-tip="Every coding gene of the chromosome with this person's variants and the consequence of each coding SNV on the canonical transcript."><i class="ic">🧬</i>Genes</button>
+    </div>
+    <div id="ind-out" class="scroll" style="margin-top:6px"></div>
+  </div>
   <div class="grid cols-2">
     <div class="card">
       <h2><i class="ic">👥</i>Twins<span class="help" data-tip="Saved twins under data/twins. HG002 is a real, openly consented genome; its telomere and epigenetic age were streamed from public sequencing data. A twin with a parent is a fork.">?</span></h2>
@@ -961,7 +978,39 @@ function renderUnc(el, unc) {
 
 // ---- twins
 let twins = [];
+async function loadIndividuals() {
+  try {
+    const d = await api('/api/individuals'); const list = d.individuals || [];
+    $('#ind-list').innerHTML = `<table><tr><th>person</th><th class="num">variants</th><th>chromosomes</th><th>source</th><th>evidence</th></tr>` +
+      list.map(p => `<tr><td class="mono">${p.name}</td><td class="num">${p.variants ? fmt(p.variants) : ''}</td><td>${p.chromosomes.length}${p.chromosomes.length && p.chromosomes.length < 25 ? ` (${p.chromosomes.slice(0, 6).join(', ')}${p.chromosomes.length > 6 ? '…' : ''})` : ''}</td><td>${p.builtin ? 'built-in test human' : (p.note || p.source_file || '')}</td><td><span class="pill experimental">${p.evidence.split(':')[0]}</span> <span class="muted">${p.evidence.split(':').slice(1).join(':').trim()}</span></td></tr>`).join('') + '</table>';
+    const who = $('#ind-who'); const cur = who.value; who.innerHTML = list.map(p => `<option>${p.name}</option>`).join(''); if (cur) who.value = cur;
+    const chroms = [...new Set(list.flatMap(p => p.chromosomes))]; const order = c => { const k = c.slice(3); return k === 'X' ? 23 : k === 'Y' ? 24 : k === 'M' ? 25 : +k; };
+    const cs = $('#ind-chrom'); const cc = cs.value; cs.innerHTML = chroms.sort((a, b) => order(a) - order(b)).map(c => `<option>${c}</option>`).join(''); if (cc) cs.value = cc; else if (chroms.includes('chr21')) cs.value = 'chr21';
+  } catch (e) { $('#ind-list').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function importIndividual() {
+  $('#ind-status').textContent = 'importing (streams the file once)…';
+  try {
+    const r = await api('/api/individual/import', {path: $('#ind-path').value.trim(), name: $('#ind-name').value.trim(), note: $('#ind-note').value.trim()});
+    const m = r.manifest; $('#ind-status').textContent = `${m.name}: ${fmt(m.variants)} PASS variants on ${Object.keys(m.chromosomes).length} chromosomes; ${fmt(m.skipped_filtered)} filtered and ${fmt(m.skipped_other_contigs)} off-contig rows skipped`;
+    loadIndividuals();
+  } catch (e) { $('#ind-status').textContent = e.message; }
+}
+async function individualGenes() {
+  const name = $('#ind-who').value, chrom = $('#ind-chrom').value;
+  $('#ind-out').innerHTML = '<span class="muted">tracing every coding gene…</span>';
+  try {
+    const r = await api(`/api/individual/genes?name=${encodeURIComponent(name)}&chrom=${encodeURIComponent(chrom)}&top=40`);
+    const t = r.totals;
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(t.genes_with_variants)}</b><span>of ${fmt(t.genes)} coding genes carry variants</span></div><div><b>${fmt(t.variants_in_genes)}</b><span>variants inside genes</span></div><div><b>${fmt(t.coding_snvs)}</b><span>coding SNVs</span></div>${Object.entries(r.by_consequence).map(([k, n]) => `<div><b>${fmt(n)}</b><span>${k}</span></div>`).join('')}</div>
+      <table><tr><th>gene</th><th class="num">variants</th><th class="num">coding SNVs</th><th class="num">protein-changing</th><th>changes (genotype)</th></tr>` +
+      r.genes.map(g => `<tr><td class="mono"><a href="#flow?gene=${g.gene}&chrom=${chrom}" onclick="document.querySelector('nav button[data-tab=flow]').click(); $('#f-gene').value='${g.gene}'; if ($('#f-chrom')) $('#f-chrom').value='${chrom}'; if (window.loadFlow) loadFlow(); return false;">${g.gene}</a></td><td class="num">${fmt(g.variants)}</td><td class="num">${g.coding_snvs}</td><td class="num">${g.protein_changing}</td><td>${g.changes.filter(c => c.consequence !== 'synonymous').map(c => `${c.hgvs_p || c.consequence} <span class="muted">(${c.genotype})</span>`).join('; ')}</td></tr>`).join('') +
+      `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> consequence by the local trace on the canonical transcript</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; } });
 async function loadTwins() {
+  loadIndividuals();
   twins = (await api('/api/twins')).twins;
   $('#t-list').innerHTML = twins.length ? `<table><tr><th>name</th><th>parent</th><th class="num">age</th><th class="num">telomere</th><th class="num">epi. age</th><th>variants</th></tr>` +
     twins.map(t => `<tr><td class="mono">${t.name}</td><td class="mono">${t.parent || ''}</td><td class="num">${t.age}</td><td class="num">${t.telomere_bp ?? ''}</td><td class="num">${t.epigenetic_age ?? ''}</td><td class="mono">${t.variants.join(', ')}</td></tr>`).join('') + '</table>'

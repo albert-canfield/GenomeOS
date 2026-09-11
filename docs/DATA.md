@@ -111,6 +111,33 @@ calls is the check that the fetched hg38 sequences and the benchmark agree
 base for base. chrX and chrY are not in the benchmark set. No haplotype
 FASTA is kept; `genomeos twin build` makes one on demand.
 
+## Your own genome (`genomeos individual import`, 2026-09-11)
+
+A geneticist's own data enters the way HG002 does. One VCF against GRCh38,
+plain or gzipped, from any caller:
+
+    genomeos individual import /path/genome.vcf.gz --name ME --note "GATK 4.5, 2026-08, own consent"
+    genomeos individual list
+    genomeos individual genes --name ME --chrom chr21
+    genomeos lookup chr17:7675088 C>T          # now says whether ME carries it
+    genomeos report TP53 --chrom chr17 ...      # lists ME's variants inside the gene
+    genomeos twin build --vcf data/individuals/ME/ME_chr21.vcf --sample ME --chrom chr21 --genome data/reference/chr21.fa
+
+The file is streamed once and split into one small PASS file per chromosome
+under `data/individuals/<name>/` with a manifest (source file, sample column,
+counts per chromosome, phased genotypes, rows skipped as filtered or on
+other contigs). Chromosome names `21`, `chr21`, `MT` are normalised to hg38's;
+contigs and decoys are dropped and counted. The directory is git-ignored and
+no layer sends a byte of it anywhere: every lookup, dossier and gene walk is
+local. Genotypes are measured evidence (the caller's); consequences are
+derived by the local trace on the canonical transcript. The Twin tab has the
+same import, list and gene-by-gene table.
+
+Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
+variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
+missense, 133 synonymous, 1 nonsense), the KRTAP10 cluster on top as
+expected for a highly polymorphic family.
+
 ## Optional: peptide/HLA binding predictors
 
 The therapeutic pipeline enumerates the peptides a mutation creates; whether

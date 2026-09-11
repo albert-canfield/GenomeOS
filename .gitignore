@@ -12,6 +12,8 @@ build/
 # Fetch them with scripts/fetch_reference.sh (see docs/DATA.md).
 data/reference/
 data/knowledge/
+# imported personal genomes (genomeos individual import) never leave the machine
+data/individuals/
 data/cache/
 data/twins/*.fa
 data/twins/*.fa.fai

@@ -112,15 +112,6 @@ CATALOG: dict[str, dict] = {
         "complete": lambda root: len(list((root / "data" / "results").glob("proteome_chr*.json"))) >= 25,
         "auto_heal": True,
     },
-    "enhancer_targets_chr21": {
-        "argv": [sys.executable, "scripts/enhancer_targets.py", "--chrom", "chr21", "--sample", "200"],
-        "describe": "AlphaGenome: delete 200 chr21 distal enhancers one by one and read which gene moves.",
-        "total": 200,
-        "result": "enhancer_targets_chr21",
-        "count": lambda r: r.get("summary", {}).get("elements_scored", 0),
-        "complete": lambda root: _result_count(root, "enhancer_targets_chr21", "elements_scored") >= 200,
-        "auto_heal": True,
-    },
     "distil": {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "distil"],
         "describe": "Turn any raw downloads present into result summaries.",
@@ -140,6 +131,25 @@ CATALOG["fetch_hg002"] = {
 
 # one fetch job per human chromosome: bring it to full footing (sequence, models, elements, repeats)
 CHROMOSOMES = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]
+
+
+def _enhancer_job(chrom: str, sample: int = 200) -> dict:
+    """AlphaGenome feature b on one chromosome: a sampled, resumable, self-healing job (needs the key)."""
+    name = f"enhancer_targets_{chrom}"
+    return {
+        "argv": [sys.executable, "scripts/enhancer_targets.py", "--chrom", chrom, "--sample", str(sample)],
+        "describe": f"AlphaGenome: delete {sample} {chrom} distal enhancers one at a time; which gene moves?",
+        "total": sample,
+        "result": name,
+        "count": lambda r: r.get("summary", {}).get("elements_scored", 0),
+        "complete": lambda root, n=name, s=sample: _result_count(root, n, "elements_scored") >= s,
+        "auto_heal": True,
+    }
+
+
+for _c in CHROMOSOMES:
+    if _c != "chrM":
+        CATALOG[f"enhancer_targets_{_c}"] = _enhancer_job(_c)
 for _c in CHROMOSOMES:
     CATALOG[f"fetch_{_c}"] = {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--analyse", "--chrom", _c],
