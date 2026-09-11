@@ -405,3 +405,10 @@ than a step that fails loudly. A script that edits a document should verify
 its own result, and the person running it should read the file, not the exit
 line. Both mistakes today were caught by reading the artefact instead of the
 report, which is the habit to keep.
+
+## 2026-09-11 — the node model tested on the whole genome, and a scoring artefact removed
+
+- **Enhancer to gene, all 24 chromosomes** (84c3318): 4,800 distal enhancers deleted one at a time. 2,994 move a gene, 2,291 name a coding gene, and **90.2% of those sit inside the element's own CTCF node** (79.8% to 91.8% per chromosome), 71.2% exactly the nearest transcription start. The node model has been argued for since docs/NODES-READER-WRITER.md was written; it is now tested at genome scale, and the boundary predicts where an element acts nine times out of ten. 1,157 elements that the ENCODE registry calls enhancer-like rise when deleted, so they act as silencers: the registry names a class of element, not a direction of effect.
+- **A scoring artefact removed** (4c034f6): the segment parser was being scored against every coding transcript, so an exon that exists only in a minor isoform counted as a miss. Scored against each gene's canonical transcript, the same run finds 74.8% of CDS segments exactly, against the 40.1% the earlier figure reported. Most of what looked like failure was the parser not reproducing isoform-specific exons, which is a much smaller problem than not finding the gene's exons at all. The roadmap table now carries both columns, because the pessimistic number is still the right one for "reproduce GENCODE" and the optimistic one is the right one for "find the gene".
+- Neither number changes the conclusion from this morning: gene-level precision is still the weak axis and the coding model is still the limit.
+- **Not recorded here**: kinetic pathways through the SBML engine were announced as about to land and are not on dev yet, so the roadmap says nothing about them. After this morning's slip, a claim goes in the documents when it is in the repository and has been read back out of it, not when it is reported.

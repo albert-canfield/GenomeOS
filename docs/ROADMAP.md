@@ -177,25 +177,34 @@ in order. "Owner" is the session that holds the files today (see §7).
   analysed (`data fetch --analyse`: curated UNKNOWN pass and domains);
   reader v1 (`genomeos reader`: ENCODE DNase peaks per cell type over
   nodes, promoters and enhancers; K562 and HepG2 on chr21, chr22 analysed).
-- **Done (2026-09-11).** Enhancer to gene (feature b): deleting an element in
-  its 1 Mb window and reading which gene moves turns "nearest coding gene in
-  the CTCF domain, inferred 0.4" into a named gene with a tissue and a
-  magnitude. On 200 sampled chr21 distal enhancers, 63.5% move some gene by at
-  least 0.1 log2, and where a coding gene is named it is the nearest TSS in
-  the node 67.8% of the time and inside the node 87.4%. Two findings worth
-  more than the headline: a third of the time the nearest-gene heuristic names
-  the wrong gene, and 43 of 127 elements the registry calls enhancer-like
-  behave as silencers.
+- **Enhancer to gene, genome-wide (2026-09-11).** Deleting an element in its
+  1 Mb window and reading which gene moves turns "nearest coding gene in the
+  CTCF domain, inferred 0.4" into a named gene with a tissue and a magnitude.
+  Across all 24 chromosomes, 4,800 distal enhancers deleted one at a time:
+  2,994 move a gene, 2,291 name a coding gene, **90.2% of those inside the
+  element's CTCF node** (79.8% to 91.8% per chromosome) and 71.2% exactly the
+  nearest TSS. The node model has now been tested on the whole genome rather
+  than argued for: the boundary predicts where an element acts nine times out
+  of ten. Two findings worth as much as the headline: the nearest-gene
+  heuristic names the wrong gene almost a third of the time, and 1,157
+  elements the registry calls enhancer-like behave as silencers, rising when
+  deleted. The registry names a class of element, not a direction.
 - **Segment parser: three runs, one conclusion (2026-09-11).** The parser
   runs Viterbi over the grammar and is scored against every coding transcript
   on chr21. All three results are kept side by side so the comparison stays
   checkable.
 
-  | signals used | candidates | exon precision | site precision | gene precision | gene sensitivity |
+  | signals used | candidates | exon precision | gene precision | gene sensitivity | canonical exons found |
   |---|---|---|---|---|---|
-  | learned donor/acceptor matrices | 556 | 5.2% | 6.9% | 21.9% | 89.1% |
-  | + AlphaGenome splice sites (feature c) | 1,003 | 46.2% | 49.2% | 20.0% | 84.2% |
-  | + starts anchored at ENCODE promoters | 158 | 61.9% | 66.0% | 53.8% | 59.3% |
+  | learned donor/acceptor matrices | 556 | 5.2% | 21.9% | 89.1% | 8.7% |
+  | + AlphaGenome splice sites (feature c) | 1,003 | 46.2% | 20.0% | 84.2% | **74.8%** |
+  | + starts anchored at ENCODE promoters | 158 | 61.9% | 53.8% | 59.3% | 56.3% |
+
+  The last column matters more than it looks. Scored against every coding
+  transcript, the parser finds 40% of CDS segments; scored against the
+  *canonical* transcript of each gene it finds 74.8%. Most of what looked like
+  failure was the parser not reproducing isoform-specific exons, which is a
+  different and much smaller problem than not finding the gene's exons at all.
 
   Better splice sites multiply exon and site accuracy eight-fold and leave
   gene finding untouched. Anchoring the start at a curated promoter is the
@@ -418,7 +427,7 @@ or the CLI; results land in `data/results` and are committed.
 | Proteome compiled | 25 of 25 (2026-09-11) | done | 19,478 coding genes: sequence 99.1%, domains 99.0%, function 86.3%, interactions 81.5%, pathways 58.2%, experimental structure 45.2%, predicted structure 98.2%, disease 25.5% |
 | Translation verified against UniProt | 25 of 25 (2026-09-11) | done | 19,249 genes: 90.9% canonical identical, 97.8% exact for some isoform; the remaining disagreements are triaged by mechanism, including hg38 frameshift and nonsense alleles detected automatically |
 | Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 327,024 edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
-| Enhancer targets, predicted (AlphaGenome) | chr21, chr22, chr1 sampled (200 each); registered for every chromosome | `enhancer_targets_<chrom>` | needs a key; about eight seconds per element, so it is a sampling job, not a sweep. Coding target inside the node: chr21 87.4%, chr22 91.8%, chr1 86.7%. The daily quota ran out on 2026-09-11 and the waiting job retried instead of failing, which is the behaviour the quota-shaped design was built for |
+| Enhancer targets, predicted (AlphaGenome) | 24 of 24 chromosomes (4,800 elements) | done | 2,994 elements move a gene, 2,291 name a coding gene; **90.2% of those sit inside the element's CTCF node** (79.8% to 91.8% per chromosome) and 71.2% are exactly the nearest TSS; 1,157 behave as silencers. Needs a key; the daily quota ran out mid-run and the job waited and resumed rather than failing |
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
 | Segment parser scored against GENCODE | chr21, three variants | `genomeos segments --chrom C [--predicted-sites] [--promoter-anchored]` | all three results kept side by side; see area B |
