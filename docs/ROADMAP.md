@@ -264,6 +264,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   | + starts confined to open chromatin | 614 | 53% | not recorded | 76% |
   | + RNA over the exons, eight tissues | **82** | **68.6%** | **92.7%** | 57.9% |
   | + measured RNA, ENCODE K562 total RNA-seq | 55 | 72.1% | 89.1% | 44.8% |
+  | + measured RNA, six ENCODE cell lines pooled | 143 | 65.9% | 62.9% | 62.9% |
 
   Nine candidates in ten were sequence that is never transcribed in the
   panel. The panel is eight tissues rather than the body, and that is where
@@ -277,10 +278,17 @@ in order. "Owner" is the session that holds the files today (see §7).
   exon and gene precision as the predicted panel, fewer genes found, because
   one cell line expresses fewer of chr21's genes than eight tissues do; the
   signal threshold was swept (1.0 leaves 12 candidates, 0.05 the 55) and the
-  sweep sits next to the table in SEQUENCE-GRAMMAR.md.
-- **Next.** 1. A broader measured panel (several ENCODE cell types, or GTEx
-  coverage) to recover the sensitivity one cell line and eight predicted
-  tissues both lose; then a second chromosome. 2. The `reader` construct in
+  sweep sits next to the table in SEQUENCE-GRAMMAR.md. Pooling six lines
+  (K562, HepG2, GM12878, IMR-90, A549, MCF-7; HeLa-S3 and SK-N-SH have no
+  released strand-specific track, recorded as missing) buys sensitivity, 44.8%
+  to 62.9% of genes, and pays for it in precision, 89.1% to 62.9%, because
+  measured transcription includes the non-coding transcription the model's
+  gene-level tracks exclude. A model that knows genes plus a measurement that
+  knows the cell is the honest filter. Results are
+  `segments_chr21_predicted_sites_measured_<cell|panelN>`.
+- **Next.** 1. The two filters combined: the predicted gene-level panel for
+  precision and the measured lines for the genes the panel does not express;
+  then a second chromosome. 2. The `reader` construct in
   BioLang, so context gating comes from
   chromatin (the parser half belongs to the language owner). 3. Orthology
   from Ensembl Compara, and a boundary source finer than CTCF alone (Hi-C
