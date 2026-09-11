@@ -2480,6 +2480,58 @@ def _predict_element(args: argparse.Namespace, st: dict) -> int:
     return 0
 
 
+def cmd_ptm(args: argparse.Namespace) -> int:
+    """Post-translational state: modifiable sites and their writers, per protein or genome-wide."""
+    from genomeos.molecules.ptm import CACHE, INDEX, build_index, load_index, sites, summary
+    from genomeos.results import save_result
+
+    if args.protein:
+        p = CACHE / f"{args.protein.upper()}.json"
+        if not p.exists():
+            print(f"{args.protein}: no compiled definition (genomeos protein {args.protein} --compile)")
+            return 1
+        ss = sites(json.loads(p.read_text()))
+        by = {}
+        for s in ss:
+            by[s["class"]] = by.get(s["class"], 0) + 1
+        print(
+            f"{args.protein.upper()}: {len(ss)} modifiable sites  "
+            + ", ".join(f"{k} {v}" for k, v in by.items())
+        )
+        rows = [
+            {
+                "site": f"{s['start']}" if s["start"] == s["end"] else f"{s['start']}-{s['end']}",
+                "class": s["class"],
+                "modification": s["description"][:44],
+                "written by": ", ".join(s["writers"]) or "",
+            }
+            for s in ss[: args.top]
+        ]
+        print(_table(rows, ["site", "class", "modification", "written by"]))
+        print("  [curated: UniProt features; a site that can be modified, not a measurement that it is]")
+        return 0
+    idx = load_index(INDEX) if not args.rebuild else None
+    if idx is None:
+        idx = build_index()
+    if args.writer:
+        subs = idx["writers"].get(args.writer.upper(), {})
+        print(
+            f"{args.writer.upper()}: {len(subs)} substrates with a UniProt-recorded site  [curated: UniProt]"
+        )
+        for g, n in sorted(subs.items(), key=lambda kv: (-kv[1], kv[0]))[: args.top]:
+            print(f"  {g:12} {n} site{'s' if n != 1 else ''}")
+        return 0
+    s = summary(idx, top=args.top)
+    save_result("ptm_genome_wide", s)
+    print(
+        f"{s['proteins_with_sites']:,} of {s['proteins']:,} compiled proteins carry {s['sites']:,} modifiable "
+        f"sites; {s['writers']} named writers, {s['writer_edges']:,} writer→substrate edges  [{s['evidence']}]"
+    )
+    print("  by class: " + ", ".join(f"{k} {v:,}" for k, v in s["by_class"].items()))
+    print(_table(s["top_writers"], ["writer", "substrates", "sites"]))
+    return 0
+
+
 def cmd_graph(args: argparse.Namespace) -> int:
     from genomeos.molecules.graph import build, summarise
     from genomeos.results import save_result
@@ -3418,6 +3470,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--min", type=float, default=0.05, help="smallest |log2 fold change| reported")
     p.add_argument("--json", action="store_true")
     p.set_defaults(fn=cmd_predict)
+
+    p = sub.add_parser("ptm", help="post-translational state: modifiable sites and who writes them")
+    p.add_argument("protein", nargs="?", help="one protein's sites; omit for the genome-wide summary")
+    p.add_argument("--writer", help="substrates of a kinase, acetyltransferase, … (UniProt 'by')")
+    p.add_argument("--top", type=int, default=25)
+    p.add_argument("--rebuild", action="store_true", help="rebuild the index from the cached definitions")
+    p.set_defaults(fn=cmd_ptm)
 
     p = sub.add_parser("graph", help="the local protein knowledge graph built from compiled definitions")
     p.add_argument("gene", nargs="?", help="show one protein's neighbourhood instead of the summary")

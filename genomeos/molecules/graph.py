@@ -115,6 +115,17 @@ def build(cache_dir: Path = CACHE, min_score: float = 0.7) -> Graph:
                 score=it["score"],
                 physical=it["physical_evidence"],
             )
+    # post-translational state: who writes which site (UniProt "by X" on modified residues)
+    from genomeos.molecules.ptm import build_index, load_index
+
+    idx = load_index(cache_dir / "_ptm_index.json") or build_index(cache_dir, cache_dir / "_ptm_index.json")
+    for writer, substrates in idx.get("writers", {}).items():
+        g.add_node(writer, "protein", compiled=writer in compiled)
+        for substrate, n in substrates.items():
+            if substrate in g.nodes:
+                g.add_edge(
+                    writer, substrate, "modifies", "curated: UniProt modified residue, by", 0.8, sites=n
+                )
     return g
 
 

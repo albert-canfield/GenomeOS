@@ -178,6 +178,34 @@ found by the loaded pathway's name or given as a BIOMD id, a knockout, the
 changed species as a table and the top species' time courses as a chart,
 knockout curves dashed.
 
+## Post-translational state (2026-09-12)
+
+The model separated what a protein *is* from one protein in one place at one
+time (ProteinState) and nothing populated a state's modifications. Now the
+UniProt features already in every compiled definition are read as the
+modifiable sites of the protein, with their chemistry and, where UniProt
+names it, their writer ("Phosphoserine; by CDK5, PRPK, AMPK, NUAK1 and ATM"):
+`genomeos ptm TP53` lists them, `genomeos ptm --writer PKA` lists a writer's
+substrates, `genomeos ptm` gives the genome (`genomeos/molecules/ptm.py`,
+`data/results/ptm_genome_wide.json`; the index is local under the protein
+cache). The knowledge graph gains a `modifies` edge from writer to substrate,
+curated from the same features.
+
+| | |
+|---|---|
+| compiled proteins with at least one site | 13,083 of 19,452 |
+| modifiable sites | 96,362: phospho 41,661, disulfide 18,329, glyco 17,603, acetyl 7,041, methyl 2,879, hydroxy 1,979, lipid 1,207, other 4,895 |
+| named writers | 352, with 2,985 writer → substrate edges |
+| writers with the most substrates | PKA 166, PKC 164, CDK1 95, CK2 94, FAM20C 94, PKB 68, PRMT5 59, AMPK 57, AKT1 56, ATM 53 |
+
+Read with its limit: a site is one that *can* be modified, recorded from the
+literature UniProt cites; whether it *is* modified in a given cell is a
+measurement (phosphoproteomics) the project does not hold. Writers are
+given as UniProt writes them, so "PKA" and "PKC" are families, not genes,
+and land in the graph as nodes of their own. Ubiquitin cross-links are not
+in the compiled `modifications` section yet, which is why no ubiquitin class
+appears.
+
 ## The knowledge graph itself
 
 The compiled definitions are one graph (`genomeos.molecules.graph`, no

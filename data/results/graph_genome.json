@@ -1,19 +1,20 @@
 {
   "result": "graph_genome",
   "date": "2026-09-11",
-  "nodes": 41982,
-  "edges": 327024,
+  "nodes": 42045,
+  "edges": 330018,
   "node_kinds": {
-    "protein": 19797,
+    "protein": 19860,
     "pathway": 2302,
     "domain": 19846,
     "tissue": 37
   },
   "edge_kinds": {
-    "member_of": 47948,
-    "has_domain": 88582,
+    "member_of": 47953,
+    "has_domain": 88586,
     "expressed_in": 16487,
-    "associates": 174007
+    "associates": 174007,
+    "modifies": 2985
   },
   "compiled_proteins": 19283,
   "physical_associations": 95098,

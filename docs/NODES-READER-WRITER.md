@@ -169,6 +169,14 @@ The orthology is MGI's curated mouse–human homology report, streamed once
 and distilled to 24,584 symbol pairs (`data/results/mgi_mouse_human_orthology.tsv.gz`);
 symbol identity (App ↔ APP) stays as the fallback and is reported beside it.
 
+A second, larger chromosome gives the same answer. Mouse chr11 (122 Mb,
+1,622 coding genes, 27,432 elements, 836 nodes, median 102 kb; human 17 and
+parts of 5, 7 and 22): 270 mouse nodes with ≥ 2 matched genes, 159 in one
+human node (59%), 91 in adjacent nodes, 20 scattered, 93% in the same human
+neighbourhood (`data/results/mouse_mm10_chr11.json`). Two chromosomes, 379
+tested nodes, 93–94% same neighbourhood: the number is a property of the
+comparison, not of the chromosome picked first.
+
 Read two ways. Synteny is not the surprise: mouse chr19 is human 11q13 and
 10q23–26 and everyone knows it. The number that speaks to the model is the
 split: where a mouse node's genes fall into several human nodes, they fall
