@@ -118,6 +118,7 @@ plain or gzipped, from any caller:
 
     genomeos individual import /path/genome.vcf.gz --name ME --note "GATK 4.5, 2026-08, own consent"
     genomeos individual list
+    genomeos individual check --name ME               # apply to GRCh38, count reference mismatches: the assembly check
     genomeos individual genes --name ME --chrom chr21
     genomeos individual predict --name ME --gene APP --chrom chr21   # AlphaGenome feature d, needs the key
     genomeos lookup chr17:7675088 C>T          # now says whether ME carries it
@@ -137,6 +138,15 @@ person's regulatory variants on one gene (docs/ALPHAGENOME.md, feature d).
 Per-person results never land under `data/results`: the imported files, the
 gene walks and the predictions stay under git-ignored directories, so a
 named person's genome cannot be committed by accident.
+
+`individual check` is the first thing to run after an import: it applies the
+person's variants to the local GRCh38 sequence, haplotype by haplotype, keeps
+the statistics only (no FASTA) and counts the calls whose reference allele
+disagrees with the reference base. Up to 0.5% mismatches is a match; a file
+against GRCh37/hg19 disagrees at most positions and is called out as such,
+before anyone reads a consequence off the wrong coordinates. HG002's own
+benchmark gives 0 mismatches over 4 million calls, which is what the check
+is calibrated against.
 
 Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
 variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135

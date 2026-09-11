@@ -383,6 +383,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label>person <select id="ind-who"></select></label>
       <label>chromosome <select id="ind-chrom"></select></label>
       <button class="ghost" id="ind-genes" data-tip="Every coding gene of the chromosome with this person's variants and the consequence of each coding SNV on the canonical transcript."><i class="ic">🧬</i>Genes</button>
+      <button class="ghost" id="ind-check" data-tip="Apply this person's variants of the chromosome to the local GRCh38 sequence and count the calls whose reference base disagrees: the assembly check. Statistics only, stored under the person's directory."><i class="ic">✅</i>Check vs reference</button>
       <label>gene <input id="ind-gene" placeholder="APP" style="width:90px" class="mono"></label>
       <button class="ghost" id="ind-predict" data-tip="AlphaGenome feature d: this person's variants inside the elements that reach the gene (promoters, enhancers in its node), each scored for its predicted effect on the gene's expression per tissue, summed per haplotype where phased. About 8 s per variant the first time, cached after; needs the key."><i class="ic">🔮</i>Predict on gene</button>
     </div>
@@ -984,8 +985,9 @@ let twins = [];
 async function loadIndividuals() {
   try {
     const d = await api('/api/individuals'); const list = d.individuals || [];
-    $('#ind-list').innerHTML = `<table><tr><th>person</th><th class="num">variants</th><th>chromosomes</th><th>source</th><th>evidence</th></tr>` +
-      list.map(p => `<tr><td class="mono">${p.name}</td><td class="num">${p.variants ? fmt(p.variants) : ''}</td><td>${p.chromosomes.length}${p.chromosomes.length && p.chromosomes.length < 25 ? ` (${p.chromosomes.slice(0, 6).join(', ')}${p.chromosomes.length > 6 ? '…' : ''})` : ''}</td><td>${p.builtin ? 'built-in test human' : (p.note || p.source_file || '')}</td><td><span class="pill experimental">${p.evidence.split(':')[0]}</span> <span class="muted">${p.evidence.split(':').slice(1).join(':').trim()}</span></td></tr>`).join('') + '</table>';
+    const checkCell = p => { const ck = Object.values(p.checks || {}); if (!ck.length) return '<span class="muted">not checked</span>'; const bad = ck.filter(r => !r.verdict.startsWith('matches')); const mism = ck.reduce((a, r) => a + r.reference_mismatches, 0); return bad.length ? `<span class="pill inferred">assembly doubt</span> ${bad.map(r => r.chrom).join(', ')}` : `<span class="pill experimental">matches GRCh38</span> ${ck.length} chr, ${fmt(mism)} mismatches`; };
+    $('#ind-list').innerHTML = `<table><tr><th>person</th><th class="num">variants</th><th>chromosomes</th><th>source</th><th>reference check</th><th>evidence</th></tr>` +
+      list.map(p => `<tr><td class="mono">${p.name}</td><td class="num">${p.variants ? fmt(p.variants) : ''}</td><td>${p.chromosomes.length}${p.chromosomes.length && p.chromosomes.length < 25 ? ` (${p.chromosomes.slice(0, 6).join(', ')}${p.chromosomes.length > 6 ? '…' : ''})` : ''}</td><td>${p.builtin ? 'built-in test human' : (p.note || p.source_file || '')}</td><td>${checkCell(p)}</td><td><span class="pill experimental">${p.evidence.split(':')[0]}</span> <span class="muted">${p.evidence.split(':').slice(1).join(':').trim()}</span></td></tr>`).join('') + '</table>';
     const who = $('#ind-who'); const cur = who.value; who.innerHTML = list.map(p => `<option>${p.name}</option>`).join(''); if (cur) who.value = cur;
     const chroms = [...new Set(list.flatMap(p => p.chromosomes))]; const order = c => { const k = c.slice(3); return k === 'X' ? 23 : k === 'Y' ? 24 : k === 'M' ? 25 : +k; };
     const cs = $('#ind-chrom'); const cc = cs.value; cs.innerHTML = chroms.sort((a, b) => order(a) - order(b)).map(c => `<option>${c}</option>`).join(''); if (cc) cs.value = cc; else if (chroms.includes('chr21')) cs.value = 'chr21';
@@ -1011,6 +1013,18 @@ async function individualGenes() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> consequence by the local trace on the canonical transcript</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
+async function individualCheck() {
+  const name = $('#ind-who').value, chrom = $('#ind-chrom').value;
+  $('#ind-out').innerHTML = '<span class="muted">applying ' + name + "'s variants of " + chrom + ' to the reference…</span>';
+  try {
+    const r = await api(`/api/individual/check?name=${encodeURIComponent(name)}&chrom=${encodeURIComponent(chrom)}`);
+    const ok = r.verdict.startsWith('matches');
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.variants)}</b><span>PASS variants (${fmt(r.snv)} SNVs, ${fmt(r.phased)} phased)</span></div><div><b>${fmt(r.hap1.applied)} / ${fmt(r.hap2.applied)}</b><span>applied on hap1 / hap2</span></div><div><b>${fmt(r.reference_mismatches)}</b><span>reference mismatches</span></div></div>
+      <div><span class="pill ${ok ? 'experimental' : 'inferred'}">${ok ? 'matches GRCh38' : 'assembly doubt'}</span> ${r.verdict} <span class="muted">· hap1 length change ${r.hap1.length_delta > 0 ? '+' : ''}${fmt(r.hap1.length_delta)} bp, skipped overlaps ${r.hap1.skipped_overlap} · ${r.seconds} s</span></div>
+      <div class="muted" style="margin-top:4px">${r.evidence}</div>`;
+    loadIndividuals();
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
 async function individualPredict() {
   const name = $('#ind-who').value, chrom = $('#ind-chrom').value, gene = $('#ind-gene').value.trim();
   if (!gene) { $('#ind-out').innerHTML = '<span class="muted">name a gene on the chosen chromosome</span>'; return; }
@@ -1024,7 +1038,7 @@ async function individualPredict() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill predicted">predicted</span> ${(r.model || 'AlphaGenome').split(' (')[0]} · ${h.note}</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
-document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; } });
+document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; } });
 async function loadTwins() {
   loadIndividuals();
   twins = (await api('/api/twins')).twins;

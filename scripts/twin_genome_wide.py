@@ -54,7 +54,7 @@ def main() -> None:
         "variants": sum(r["variants"] for r in ch.values()),
         "snv": sum(r["snv"] for r in ch.values()),
         "reference_mismatches": sum(
-            r[h].get("ref_mismatch", 0) for r in ch.values() for h in ("hap1", "hap2")
+            r[h].get("skipped_ref_mismatch", 0) for r in ch.values() for h in ("hap1", "hap2")
         ),
         "evidence": "measured: GIAB HG002 v4.2.1 benchmark applied to hg38; haplotype FASTA not kept",
         "seconds": round(time.time() - t0),

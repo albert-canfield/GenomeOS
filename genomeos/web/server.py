@@ -268,9 +268,22 @@ class Api:
 
     def individuals(self) -> dict:
         """The test human and every imported person (local files only)."""
-        from genomeos.genome.individuals import list_individuals
+        from genomeos.genome.individuals import checks, list_individuals
 
-        return {"individuals": list_individuals(self.root / "data" / "individuals")}
+        root = self.root / "data" / "individuals"
+        people = list_individuals(root)
+        for p in people:
+            p["checks"] = checks(p["name"], root)
+        return {"individuals": people}
+
+    def individual_check(self, name: str, chrom: str) -> dict:
+        """The person's variants of one chromosome applied to the local reference: statistics and verdict."""
+        from genomeos.genome.individuals import check
+
+        try:
+            return check(name, chrom, self.root / "data" / "individuals", self.root / "data" / "reference")
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
 
     def individual_import(self, path: str, name: str, note: str = "", replace: bool = False) -> dict:
         """Split a VCF on this machine into per-chromosome files under data/individuals/<name>."""
@@ -1367,6 +1380,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/individuals":
                 return self._json(self.api.individuals())
+            if u.path == "/api/individual/check":
+                return self._json(
+                    self.api.individual_check(self._q(qs, "name") or "HG002", self._q(qs, "chrom") or "chr21")
+                )
             if u.path == "/api/individual/predict":
                 return self._json(
                     self.api.individual_predict(

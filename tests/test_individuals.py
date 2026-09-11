@@ -56,3 +56,10 @@ def test_normalise_chrom():
     assert ind.normalise_chrom("21") == "chr21" and ind.normalise_chrom("chrX") == "chrX"
     assert ind.normalise_chrom("MT") == "chrM" and ind.normalise_chrom("M") == "chrM"
     assert ind.normalise_chrom("chr21_random") is None and ind.normalise_chrom("HLA-A") is None
+
+
+def test_verdict_reads_the_mismatch_rate():
+    assert ind.verdict({"variants": 0, "reference_mismatches": 0}) == "no variants to check"
+    assert ind.verdict({"variants": 10_000, "reference_mismatches": 12}).startswith("matches GRCh38")
+    assert ind.verdict({"variants": 10_000, "reference_mismatches": 400}).startswith("partly disagrees")
+    assert ind.verdict({"variants": 10_000, "reference_mismatches": 6_000}).startswith("does not match")

@@ -275,3 +275,83 @@ def gene_by_gene(
         "genes": rows[:limit] if limit else rows,
         "evidence": "measured genotypes; consequence derived by the local trace on the canonical transcript",
     }
+
+
+MISMATCH_TOLERANCE = (
+    0.005  # more than 0.5% of calls disagreeing with the reference base means the wrong assembly
+)
+
+
+def verdict(stats: dict[str, Any]) -> str:
+    """What the reference mismatches say about the file: the assembly check every import needs."""
+    total = stats.get("variants", 0)
+    mism = stats.get("reference_mismatches", 0)
+    if total == 0:
+        return "no variants to check"
+    rate = mism / total
+    if rate <= MISMATCH_TOLERANCE:
+        return "matches GRCh38: the reference base agrees at the called positions"
+    if rate >= 0.2:
+        return (
+            "does not match GRCh38: most calls disagree with the reference base "
+            "(wrong assembly, e.g. GRCh37/hg19?)"
+        )
+    return "partly disagrees with GRCh38: check the assembly and the chromosome naming of the source file"
+
+
+def check(
+    name: str, chrom: str, root: Path | None = None, reference: Path = Path("data/reference")
+) -> dict[str, Any]:
+    """Apply one person's variants of one chromosome to the local reference, keep the statistics only
+    (no haplotype FASTA), and say whether the file fits GRCh38. Stored under the person's directory."""
+    from genomeos.coords import Locus
+    from genomeos.genome import IndexedGenome, apply_variants, iter_vcf
+
+    root = root or ROOT
+    vcf = vcf_path(name, chrom, root)
+    if vcf is None:
+        raise FileNotFoundError(f"{name} has no rows on {chrom}")
+    fa = reference / f"{chrom}.fa"
+    if not fa.exists():
+        raise FileNotFoundError(f"no reference sequence for {chrom} (genomeos data fetch --chrom {chrom})")
+    t0 = time.time()
+    variants = list(iter_vcf(vcf, {chrom}))
+    genome = IndexedGenome(str(fa))
+    try:
+        ref = genome.fetch(Locus(chrom, 0, genome.lengths[chrom]))
+    finally:
+        genome.close()
+    row: dict[str, Any] = {
+        "individual": name,
+        "chrom": chrom,
+        "variants": len(variants),
+        "snv": sum(1 for v in variants if v.is_snv),
+        "phased": sum(1 for v in variants if v.phased),
+    }
+    for h in (0, 1):
+        _, st = apply_variants(ref, variants, h)
+        row[f"hap{h + 1}"] = st
+    row["reference_mismatches"] = max(
+        row["hap1"]["skipped_ref_mismatch"], row["hap2"]["skipped_ref_mismatch"]
+    )
+    row["verdict"] = verdict(row)
+    row["seconds"] = round(time.time() - t0, 1)
+    row["evidence"] = "measured genotypes applied to the local GRCh38 sequence; haplotype FASTA not kept"
+    d = root / name
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"check_{chrom}.json").write_text(json.dumps(row, indent=1))
+    return row
+
+
+def checks(name: str, root: Path | None = None) -> dict[str, dict[str, Any]]:
+    """Every stored reference check for a person, by chromosome."""
+    root = root or ROOT
+    out = {}
+    d = root / name
+    if d.exists():
+        for p in sorted(d.glob("check_chr*.json")):
+            try:
+                out[p.stem[len("check_") :]] = json.loads(p.read_text())
+            except (OSError, json.JSONDecodeError):
+                continue
+    return out

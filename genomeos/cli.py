@@ -1903,6 +1903,29 @@ def cmd_individual(args: argparse.Namespace) -> int:
         return 0 if ok else 1
     if args.action == "predict":
         return _individual_predict(args)
+    if args.action == "check":
+        people = {p["name"]: p for p in ind.list_individuals()}
+        if args.name not in people:
+            print(f"{args.name}: not a local individual (genomeos individual list)")
+            return 1
+        chroms = args.chrom or [
+            c for c in people[args.name]["chromosomes"] if (Path("data/reference") / f"{c}.fa").exists()
+        ]
+        if not chroms:
+            print(f"{args.name}: no chromosome with both this person's rows and a local reference sequence")
+            return 1
+        worst = ""
+        for chrom in chroms:
+            r = ind.check(args.name, chrom)
+            print(
+                f"{chrom}: {r['variants']:,} variants ({r['snv']:,} SNVs, {r['phased']:,} phased); "
+                f"hap1 applied {r['hap1']['applied']:,}, hap2 applied {r['hap2']['applied']:,}; "
+                f"reference mismatches {r['reference_mismatches']:,} ({r['seconds']} s)"
+            )
+            worst = worst or ("" if r["verdict"].startswith("matches") else r["verdict"])
+        print(f"  verdict: {worst or 'matches GRCh38 on every chromosome checked'}")
+        print(f"  [{r['evidence']}]  stored under data/individuals/{args.name}/ (never under data/results)")
+        return 0
     if args.action == "genes":
         from genomeos.genome import Annotation, IndexedGenome, default_gencode
 
@@ -1956,6 +1979,12 @@ def cmd_individual(args: argparse.Namespace) -> int:
         n = f"{p['variants']:,} variants, " if p.get("variants") else ""
         print(f"{p['name']:12} {n}{len(p['chromosomes'])} chromosomes  {tag}")
         print(f"             [{p['evidence']}]")
+        ck = ind.checks(p["name"])
+        if ck:
+            mism = sum(r["reference_mismatches"] for r in ck.values())
+            bad = [c for c, r in ck.items() if not r["verdict"].startswith("matches")]
+            state = "matches GRCh38" if not bad else f"assembly doubt on {', '.join(bad)}"
+            print(f"             reference check: {len(ck)} chromosomes, {mism:,} mismatches, {state}")
     return 0
 
 
@@ -3071,6 +3100,9 @@ def build_parser() -> argparse.ArgumentParser:
     isub.add_parser("list", help="the test human and every imported person")
     q = isub.add_parser("remove", help="delete an imported person's files")
     q.add_argument("name")
+    q = isub.add_parser("check", help="apply the person's variants to the local reference; assembly verdict")
+    q.add_argument("--name", required=True)
+    q.add_argument("--chrom", nargs="*", help="default: every chromosome with rows and a local sequence")
     q = isub.add_parser("predict", help="feature d: this person's regulatory variants on one gene, predicted")
     q.add_argument("--name", required=True)
     q.add_argument("--gene", required=True)
