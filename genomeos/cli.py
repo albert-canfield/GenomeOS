@@ -1965,7 +1965,8 @@ def cmd_segments(args: argparse.Namespace) -> int:
         r["rna"] = {**cs, "min_exon_fraction": args.rna_filter}
         r["evidence"] += "; candidates kept only where AlphaGenome predicts RNA over their exons (predicted)"
     if measured is not None:
-        name += f"_{args.rna_measured.replace(' ', '_')}"
+        cells = [x.strip() for x in args.rna_measured.split(",") if x.strip()]
+        name += "_measured_" + (cells[0].replace(" ", "_") if len(cells) == 1 else f"panel{len(cells)}")
         r["rna_measured"] = {**ms, "min_exon_fraction": frac}
         r["evidence"] += f"; candidates kept only where ENCODE {args.rna_measured} RNA-seq covers their exons"
     if args.predicted_sites:
@@ -3684,7 +3685,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--rna-measured",
         metavar="CELL_TYPE",
-        help="keep candidates whose exons carry ENCODE total RNA-seq signal in this cell line (bigWig)",
+        help="keep candidates whose exons carry ENCODE total RNA-seq signal in these cell lines (comma list)",
     )
     p.add_argument(
         "--coding",

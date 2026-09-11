@@ -244,8 +244,9 @@ tested against it.
    | + starts at ENCODE promoters, RNA ≥ 50% | 48 | 24.0% / 72.6% | 44.6% | 42.1% / 100% |
 
    | measured: ENCODE K562 total RNA-seq over ≥ 30% of exon bases (signal ≥ 0.05) | 55 | 26.0% / 72.1% | 47.9% | 44.8% / 89.1% |
+   | measured, six-line panel (K562, HepG2, GM12878, IMR-90, A549, MCF-7; best line per exon) | 143 | 36.1% / 65.9% | 67.4% | 62.9% / 62.9% |
 
-   (`segments_chr21_predicted_sites_rna.json`, `…_rna_K562.json`.) The
+   (`segments_chr21_predicted_sites_rna.json`, `…_measured_K562.json`.) The
    measured row uses an experiment instead of a model: ENCODE's
    strand-specific total RNA-seq bigWigs for K562, read over HTTP ranges
    for the candidate exons only (0.7 MB moved for 3,248 exons,
@@ -255,7 +256,18 @@ tested against it.
    fewer of chr21's genes than eight tissues do, and the threshold matters:
    at signal ≥ 1.0 only 12 candidates survive, at 0.05 the 55 above, swept
    and recorded. Model and measurement agree on the point, which is what
-   the measurement was for. This is the lever. Nine in
+   the measurement was for. A panel of six lines (`--rna-measured
+   "K562,HepG2,…"`, an exon counted where its best line covers it, 6.3 MB
+   moved; HeLa-S3 and SK-N-SH have no released strand-specific track) buys
+   sensitivity back, 45% → 63% of genes and 48% → 67% of canonical exons,
+   and pays in precision, 89% → 63%: the more lines are pooled, the more
+   candidates sit under transcription that is not a coding gene (a
+   pseudogene, a long non-coding RNA, an antisense read-through), and
+   measured RNA cannot tell those apart, whereas the model's gene-level
+   tracks were trained to. Measured transcription is evidence that a
+   region is made, not that it is a gene; the two together, a model that
+   knows genes and a measurement that knows this cell, are the honest
+   filter. This is the lever. Nine in
    ten candidates that survive the RNA filter are real genes, against one in
    five before it, and the exons they draw are right two times in three. What
    the filter costs is the genes the panel does not express: sensitivity

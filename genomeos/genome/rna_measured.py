@@ -63,7 +63,9 @@ def find_tracks(cell_type: str, timeout: int = 60) -> dict[str, Any]:
 
 
 class MeasuredRna:
-    """Signal over the exons of the parser's candidates, one strand's bigWig at a time."""
+    """Signal over the exons of the parser's candidates, one strand's bigWig at a time; with several cell
+    types (a comma-separated panel) an exon's covered fraction is the best over the panel, so a gene made
+    in any of them counts."""
 
     def __init__(
         self, cell_type: str, chrom: str, signal: float = SIGNAL, tracks: dict | None = None
@@ -71,25 +73,41 @@ class MeasuredRna:
         self.cell_type = cell_type
         self.chrom = chrom
         self.signal = signal
-        self.tracks = tracks or find_tracks(cell_type)
+        self.panel = [c.strip() for c in cell_type.split(",") if c.strip()]
+        self.missing: list[str] = []
+        if tracks is not None:
+            self.tracks_by_cell = {self.panel[0]: tracks}
+        else:
+            self.tracks_by_cell = {}
+            for c in self.panel:
+                try:
+                    self.tracks_by_cell[c] = find_tracks(c)
+                except (LookupError, OSError) as ex:
+                    self.missing.append(f"{c}: {str(ex)[:60]}")
+        self.tracks = next(iter(self.tracks_by_cell.values()), {"tracks": {}})
         self.fractions: dict[tuple[str, int, int], float] = {}
         self.bytes_fetched = 0
 
     def prepare(self, exons_by_strand: dict[str, list[tuple[int, int]]], progress=None) -> None:
-        """One pass per strand over every exon interval (non-overlapping), keeping the covered fraction."""
+        """One pass per cell type and strand over every exon interval (non-overlapping), keeping the best
+        covered fraction seen."""
         from genomeos.attribution.bigwig import BigWig
 
-        for strand, exons in exons_by_strand.items():
-            if not exons:
-                continue
-            bw = BigWig(self.tracks["tracks"][strand]["href"])
-            try:
-                stats = bw.summarise(self.chrom, exons, self.signal, progress=progress)
-                for (a, b), st in zip(exons, stats, strict=False):
-                    self.fractions[(strand, a, b)] = min(1.0, st.above / (b - a)) if b > a else 0.0
-                self.bytes_fetched += getattr(bw.src, "bytes_fetched", 0)
-            finally:
-                bw.close()
+        for tracks in self.tracks_by_cell.values():
+            for strand, exons in exons_by_strand.items():
+                if not exons or strand not in tracks["tracks"]:
+                    continue
+                bw = BigWig(tracks["tracks"][strand]["href"])
+                try:
+                    stats = bw.summarise(self.chrom, exons, self.signal, progress=progress)
+                    for (a, b), st in zip(exons, stats, strict=False):
+                        fr = min(1.0, st.above / (b - a)) if b > a else 0.0
+                        key = (strand, a, b)
+                        if fr > self.fractions.get(key, 0.0):
+                            self.fractions[key] = fr
+                    self.bytes_fetched += getattr(bw.src, "bytes_fetched", 0)
+                finally:
+                    bw.close()
 
     def covered_fraction(self, strand: str, start: int, end: int) -> float:
         return self.fractions.get((strand, start, end), 0.0)
@@ -112,8 +130,13 @@ class MeasuredRna:
     def summary(self) -> dict[str, Any]:
         return {
             "cell_type": self.cell_type,
-            "experiment": self.tracks.get("experiment"),
-            "tracks": {s: t["accession"] for s, t in self.tracks["tracks"].items()},
+            "panel": list(self.tracks_by_cell),
+            "missing": self.missing,
+            "experiments": {c: tr.get("experiment") for c, tr in self.tracks_by_cell.items()},
+            "tracks": {
+                c: {s: t["accession"] for s, t in tr["tracks"].items()}
+                for c, tr in self.tracks_by_cell.items()
+            },
             "signal_threshold": self.signal,
             "exons_measured": len(self.fractions),
             "bytes_fetched": self.bytes_fetched,
