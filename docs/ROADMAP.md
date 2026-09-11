@@ -177,11 +177,16 @@ in order. "Owner" is the session that holds the files today (see §7).
   analysed (`data fetch --analyse`: curated UNKNOWN pass and domains);
   reader v1 (`genomeos reader`: ENCODE DNase peaks per cell type over
   nodes, promoters and enhancers; K562 and HepG2 on chr21, chr22 analysed).
-- **Next.** 0. Enhancer to gene with AlphaGenome (feature b, docs/ALPHAGENOME.md):
-  33.6% of the UNKNOWN space is regulatory and none of it names its gene with
-  evidence; one request per element raises the target from "nearest coding gene
-  in the CTCF domain, inferred 0.4" to a predicted target with a magnitude.
-  1. Reader lane in the block map and a `reader` construct in
+- **Done (2026-09-11).** Enhancer to gene (feature b): deleting an element in
+  its 1 Mb window and reading which gene moves turns "nearest coding gene in
+  the CTCF domain, inferred 0.4" into a named gene with a tissue and a
+  magnitude. On 200 sampled chr21 distal enhancers, 63.5% move some gene by at
+  least 0.1 log2, and where a coding gene is named it is the nearest TSS in
+  the node 67.8% of the time and inside the node 87.4%. Two findings worth
+  more than the headline: a third of the time the nearest-gene heuristic names
+  the wrong gene, and 43 of 127 elements the registry calls enhancer-like
+  behave as silencers.
+- **Next.** 1. Reader lane in the block map and a `reader` construct in
   BioLang so context gating comes from chromatin. 2. Segment parser
   (`genomeos segments --chrom C`): Viterbi over the grammar with the learned
   PWMs, evaluated against GENCODE per chromosome. 3. Fetch chr15–20 and chrX.
@@ -242,14 +247,13 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Requirements.** HG002 is the test human; measured state is labelled
   with its caveats (cell-line signature); every inferred parameter carries
   its confidence.
-- **Missing.** The twin holds chr21 only (genome-wide streaming of the HG002
-  VCF in progress); telomere length from a real 30x BAM (100 GB) not done;
-  AlphaGenome features b–d not yet wired (key in place, feature a built); no path for a user's own VCF
+- **Missing.** Telomere length from a real 30x BAM (100 GB) not done;
+  AlphaGenome features c and d not yet wired (a and b built); no path for a user's own VCF
   beyond HG002; no pedigree or trio; no polygenic scores.
 - **Next.** 1. Twin on every fetched chromosome (genomeos-fe, in progress).
   2. `genomeos twin build --vcf ANY` for a user's own genome with the same
   reports. 3. Telomere from a streamed CRAM range instead of a BAM download.
-  4. AlphaGenome features b–d (regulatory blocks, grammar signals, twin haplotypes) now that the key exists and feature a (`genomeos predict`) is built; all optional, loaded disabled without the key (docs/DATA.md).
+  4. AlphaGenome features c and d (splicing signals for the segment parser, predicted haplotype differences for the twin); a and b are built, all optional and loaded disabled without the key (docs/DATA.md).
 - **Owner.** genomeos-fe (build, lookup); genomeos-f7 (user-genome path).
 
 ### E. From one cell to an organism
@@ -376,11 +380,12 @@ or the CLI; results land in `data/results` and are committed.
 | Anatomy inventory | 25 of 25 | done | `anatomy_hg38_by_chromosome` |
 | UNKNOWN classification | 25 of 25 with curated repeats; genome-wide 98.5% classified | done | `unknown_genome_wide` summary committed |
 | CTCF domains | 24 of 25 (chrM has none) | done | |
-| Reader (open nodes per cell type) | 2 of 25 | `genomeos reader --chrom` | K562 and HepG2 |
+| Reader (open nodes per cell type) | 25 of 25 | done | K562 and HepG2; `reader_genome_wide` |
 | Proteome compiled | 25 of 25 (2026-09-11) | done | 19,478 coding genes: sequence 99.1%, domains 99.0%, function 86.3%, interactions 81.5%, pathways 58.2%, experimental structure 45.2%, predicted structure 98.2%, disease 25.5% |
 | Translation verified against UniProt | 25 of 25 (2026-09-11) | done | 19,249 genes: 90.9% canonical identical, 97.8% exact for some isoform; the remaining disagreements are triaged by mechanism, including hg38 frameshift and nonsense alleles detected automatically |
 | Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 327,024 edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
-| HG002 twin | 1 of 25 | `genomeos twin build` per chromosome | in progress (genomeos-fe) |
+| Enhancer targets, predicted (AlphaGenome) | chr21 sampled (200 of 6,618) | `enhancer_targets_<chrom>` | needs a key; about eight seconds per element, so it is a sampling job, not a sweep |
+| HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
 
 One-off jobs, each needing a decision or a resource:
@@ -402,10 +407,11 @@ One-off jobs, each needing a decision or a resource:
 The ordered list across areas, each with the milestone it serves and the
 session that holds it. Items 1–4 run in parallel today.
 
-1. Whole-genome data jobs: **done on 2026-09-11**, every row of §4 at 25 of
-   25 except chrY verification (61 genes) and the HG002 twin. What remains of
-   milestone 0.9 is the twin, chrY verification, and explaining the 99
-   translation disagreements. genomeos-fe.
+1. Whole-genome data jobs: **done on 2026-09-11**. Every row of §4 is
+   complete: fetch and analysis, UNKNOWN with curated repeats, domains, the
+   reader, the proteome, translation verification, the knowledge graph and the
+   HG002 twin over all 22 autosomes. What remains of milestone 0.9 is the
+   version bump and the release tag. genomeos-f7.
 2. HG002 twin on every chromosome, then `twin build --vcf` for any genome.
    Milestone 0.9. genomeos-fe.
 3. Haematopoiesis landed 2026-09-11 as the first human mechanism module;
@@ -435,7 +441,7 @@ session that holds it. Items 1–4 run in parallel today.
 | Version | Milestone | Proof |
 |---|---|---|
 | 0.1–0.8 | engine, compiler from public data, cell runtime, composition spike, spatial, whole worm, twin, debugger | done, see PROGRESS.md |
-| **0.9 whole genome** ◐ | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | reached 2026-09-11 for fetch, UNKNOWN, domains, proteome and graph; outstanding: chrY verification, the twin, and the version bump |
+| **0.9 whole genome** ✅ data | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | all reached on 2026-09-11; the proteome also ships as a packaged offline library. Outstanding for the release itself: version bump to 0.9.0, git tag, README refresh |
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
 | **1.2 therapeutics benchmark** | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark test in CI |
