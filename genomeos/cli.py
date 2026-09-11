@@ -1977,6 +1977,33 @@ def cmd_individual(args: argparse.Namespace) -> int:
         return 0 if ok else 1
     if args.action == "predict":
         return _individual_predict(args)
+    if args.action == "knockouts":
+        try:
+            r = ind.knockouts(args.name, args.chrom or None)
+        except FileNotFoundError as ex:
+            print(ex)
+            return 1
+        print(
+            f"{r['individual']}: {len(r['hits'])} truncating SNVs on canonical transcripts over "
+            f"{len(r['chromosomes'])} chromosomes ({r['nonsense']} nonsense, {r['start_lost']} start lost, "
+            f"{r['stop_lost']} stop lost; {r['homozygous']} homozygous) in {len(r['genes'])} genes"
+        )
+        rows = [
+            {
+                "gene": h["gene"],
+                "variant": f"{h['chrom']}:{h['pos']:,} {h['ref']}>{h['alt']}",
+                "gt": h["genotype"],
+                "zygosity": h["zygosity"],
+                "consequence": h["consequence"],
+                "protein": f"{h['hgvs_p'] or ''} of {h['protein_length']} aa",
+                "lost": f"{h['fraction_lost']:.0%}" if h["fraction_lost"] is not None else "",
+            }
+            for h in r["hits"][: args.top]
+        ]
+        print(_table(rows, ["gene", "variant", "gt", "zygosity", "consequence", "protein", "lost"]))
+        print(f"  [{r['evidence']}]  {r['note']}")
+        print(f"  stored under data/individuals/{args.name}/knockouts.json (never under data/results)")
+        return 0
     if args.action == "screen":
         from genomeos.genome import clinvar
 
@@ -3257,6 +3284,12 @@ def build_parser() -> argparse.ArgumentParser:
     isub.add_parser("list", help="the test human and every imported person")
     q = isub.add_parser("remove", help="delete an imported person's files")
     q.add_argument("name")
+    q = isub.add_parser(
+        "knockouts", help="genome-wide truncating SNVs (nonsense, start/stop lost), homozygous first"
+    )
+    q.add_argument("--name", required=True)
+    q.add_argument("--chrom", nargs="*")
+    q.add_argument("--top", type=int, default=30)
     q = isub.add_parser("screen", help="ClinVar carrier screen: pathogenic alleles the person carries")
     q.add_argument("--name", required=True)
     q.add_argument("--chrom", nargs="*", help="default: every chromosome the person has")

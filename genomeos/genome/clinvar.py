@@ -199,6 +199,6 @@ def screen(name: str, chroms: list[str] | None = None, root: Path | None = None,
         "note": NOTE,
     }
     d = root / name
-    if d.exists():
-        (d / "clinvar_screen.json").write_text(json.dumps(out, indent=1))
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "clinvar_screen.json").write_text(json.dumps(out, indent=1))
     return out

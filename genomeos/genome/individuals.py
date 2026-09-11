@@ -355,3 +355,120 @@ def checks(name: str, root: Path | None = None) -> dict[str, dict[str, Any]]:
             except (OSError, json.JSONDecodeError):
                 continue
     return out
+
+
+TRUNCATING = ("nonsense", "start_lost", "stop_lost")
+
+
+def knockouts(
+    name: str,
+    chroms: list[str] | None = None,
+    root: Path | None = None,
+    reference: Path = Path("data/reference"),
+):
+    """Genome-wide: the person's SNVs that end, start or extend a canonical protein early or late
+    (nonsense, start lost, stop lost), homozygous first: the natural knockouts. Derived by the local
+    trace; SNVs only, so frameshift indels are not counted. Stored under the person's directory."""
+    from genomeos.flow import trace_gene
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+
+    root = root or ROOT
+    people = {p["name"]: p for p in list_individuals(root)}
+    if name not in people:
+        raise FileNotFoundError(f"{name} is not a local individual")
+    chroms = chroms or people[name]["chromosomes"]
+    hits = []
+    scanned_genes = 0
+    after_reference_stop = 0
+    done = []
+    for chrom in chroms:
+        vcf = vcf_path(name, chrom, root)
+        gff = default_gencode({chrom})
+        fa = reference / f"{chrom}.fa"
+        if vcf is None or not gff or not fa.exists():
+            continue
+        ann = Annotation.from_gff3(gff, {chrom})
+        genome = IndexedGenome(str(fa))
+        try:
+            module = ann.to_module("knockouts")
+            positions: list[tuple[int, list[str]]] = []
+            with vcf.open() as fh:
+                for line in fh:
+                    if line.startswith("#"):
+                        continue
+                    f = line.rstrip("\n").split("\t")
+                    if len(f[3]) == 1 and len(f[4]) == 1:
+                        positions.append((int(f[1]), f))
+            positions.sort(key=lambda x: x[0])
+            keys = [q for q, _ in positions]
+            import bisect
+
+            for g in ann.genes.values():
+                if g.locus.chrom != chrom or g.type != "protein_coding":
+                    continue
+                lo = bisect.bisect_left(keys, g.locus.start + 1)
+                hi = bisect.bisect_right(keys, g.locus.end)
+                if lo == hi:
+                    continue
+                scanned_genes += 1
+                tr = trace_gene(genome, g, module.entities[g.id].transcripts)
+                if tr is None:
+                    continue
+                for pos, f in positions[lo:hi]:
+                    sub = tr.substitute(pos - 1, f[3], f[4])
+                    if sub.get("region") != "CDS" or sub.get("consequence") not in TRUNCATING:
+                        continue
+                    residue = sub.get("residue") or 0
+                    length = len(tr.protein) or 1
+                    if residue > length + 1:
+                        # past a stop the reference itself carries: the transcript's CDS runs on after a
+                        # premature stop (a reference nonsense allele or a
+                        # pseudogene), not this person's doing
+                        after_reference_stop += 1
+                        continue
+                    gt = f[9].split(":")[0] if len(f) > 9 else ""
+                    alleles = gt.replace("|", "/").split("/")
+                    hits.append(
+                        {
+                            "chrom": chrom,
+                            "pos": pos,
+                            "ref": f[3],
+                            "alt": f[4],
+                            "gene": g.symbol,
+                            "transcript": tr.transcript,
+                            "consequence": sub["consequence"],
+                            "hgvs_p": sub.get("hgvs_p"),
+                            "residue": residue,
+                            "protein_length": length,
+                            "fraction_lost": round(1 - residue / length, 3)
+                            if sub["consequence"] == "nonsense"
+                            else None,
+                            "genotype": gt,
+                            "zygosity": "homozygous" if alleles.count("1") >= 2 else "heterozygous",
+                        }
+                    )
+        finally:
+            genome.close()
+        done.append(chrom)
+    hits.sort(key=lambda h: (h["zygosity"] != "homozygous", -(h["fraction_lost"] or 0), h["chrom"], h["pos"]))
+    out = {
+        "individual": name,
+        "chromosomes": done,
+        "genes_with_variants": scanned_genes,
+        "hits": hits,
+        "nonsense": sum(1 for h in hits if h["consequence"] == "nonsense"),
+        "start_lost": sum(1 for h in hits if h["consequence"] == "start_lost"),
+        "stop_lost": sum(1 for h in hits if h["consequence"] == "stop_lost"),
+        "homozygous": sum(1 for h in hits if h["zygosity"] == "homozygous"),
+        "skipped_after_reference_stop": after_reference_stop,
+        "genes": sorted({h["gene"] for h in hits}),
+        "date": time.strftime("%Y-%m-%d"),
+        "evidence": "measured genotypes; consequence derived by the local trace on the canonical transcript "
+        "(SNVs only)",
+        "note": "a truncating SNV is not a proven loss of function: late stops, alternative isoforms and "
+        "nonsense-mediated decay escape all soften it; this is the list to look at, not a verdict",
+    }
+    d = root / name
+    d.mkdir(parents=True, exist_ok=True)  # the test human gets a directory too (git-ignored like the rest)
+    (d / "knockouts.json").write_text(json.dumps(out, indent=1))
+    return out

@@ -177,6 +177,17 @@ protective" with no review stars. Research annotation against a public
 database, never a clinical report; the output says so, and the per-person
 result stays under the person's directory.
 
+`individual knockouts` walks every coding gene of every chromosome the
+person has and lists the SNVs that end the canonical protein early
+(nonsense), remove its start or its stop, homozygous first, with the
+fraction of the protein lost. HG002: 88 such SNVs in 84 genes (61 nonsense,
+11 start lost, 16 stop lost; 30 homozygous), the expected picture of a
+healthy genome: olfactory receptors, FUT2 p.Trp154Ter homozygous (the common
+non-secretor allele), FCGR2A, SERPINB11. Calls that fall past a stop the
+reference itself carries (FCGR2C, a pseudogene in most people) are left out
+and counted. SNVs only, so frameshift indels are not in this list; a
+truncating variant is a list to look at, not a verdict.
+
 Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
 variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
 missense, 133 synonymous, 1 nonsense), the KRTAP10 cluster on top as

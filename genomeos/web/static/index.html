@@ -385,6 +385,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <button class="ghost" id="ind-genes" data-tip="Every coding gene of the chromosome with this person's variants and the consequence of each coding SNV on the canonical transcript."><i class="ic">🧬</i>Genes</button>
       <button class="ghost" id="ind-check" data-tip="Apply this person's variants of the chromosome to the local GRCh38 sequence and count the calls whose reference base disagrees: the assembly check. Statistics only, stored under the person's directory."><i class="ic">✅</i>Check vs reference</button>
       <button class="ghost" id="ind-screen" data-tip="ClinVar carrier screen over every chromosome the person has: pathogenic and likely pathogenic alleles carried, with genotype, zygosity and ClinVar's review stars. ClinVar is streamed once and kept locally; the result stays under the person's directory. Research annotation, not a clinical report."><i class="ic">🩺</i>ClinVar screen</button>
+      <button class="ghost" id="ind-ko" data-tip="Genome-wide: this person's SNVs that end a canonical protein early (nonsense), remove its start or its stop, homozygous first. Derived by the local trace; SNVs only; a truncating variant is a list to look at, not a verdict."><i class="ic">✂️</i>Truncating variants</button>
       <label>gene <input id="ind-gene" placeholder="APP" style="width:90px" class="mono"></label>
       <button class="ghost" id="ind-predict" data-tip="AlphaGenome feature d: this person's variants inside the elements that reach the gene (promoters, enhancers in its node), each scored for its predicted effect on the gene's expression per tissue, summed per haplotype where phased. About 8 s per variant the first time, cached after; needs the key."><i class="ic">🔮</i>Predict on gene</button>
     </div>
@@ -1027,6 +1028,16 @@ async function individualGenes() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> consequence by the local trace on the canonical transcript</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
+async function individualKnockouts() {
+  const name = $('#ind-who').value;
+  $('#ind-out').innerHTML = '<span class="muted">tracing every coding gene of every chromosome for ' + name + ' (a few minutes the first time)…</span>';
+  try {
+    const r = await api(`/api/individual/knockouts?name=${encodeURIComponent(name)}`);
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${r.hits.length}</b><span>truncating SNVs in ${r.genes.length} genes</span></div><div><b>${r.nonsense}</b><span>nonsense</span></div><div><b>${r.start_lost} / ${r.stop_lost}</b><span>start lost / stop lost</span></div><div><b>${r.homozygous}</b><span>homozygous</span></div><div><b>${r.chromosomes.length}</b><span>chromosomes</span></div></div>
+      <table><tr><th>gene</th><th>variant</th><th>gt</th><th>zygosity</th><th>consequence</th><th>protein</th><th class="num">lost</th></tr>${r.hits.slice(0, 40).map(h => `<tr><td><a href="#" onclick="document.querySelector('nav button[data-tab=flow]').click(); $('#f-gene').value='${h.gene}'; $('#f-chrom').value='${h.chrom}'; $('#f-variant').value='${h.chrom}:${h.pos} ${h.ref}>${h.alt}'; setTimeout(() => $('#f-load').click(), 200); return false;">${h.gene}</a></td><td class="mono">${h.chrom}:${fmt(h.pos)} ${h.ref}>${h.alt}</td><td class="mono">${h.genotype}</td><td>${h.zygosity}</td><td>${h.consequence.replace('_', ' ')}</td><td>${h.hgvs_p || ''} of ${h.protein_length} aa</td><td class="num">${h.fraction_lost != null ? (h.fraction_lost * 100).toFixed(0) + '%' : ''}</td></tr>`).join('')}</table>
+      <div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> ${r.evidence} · ${r.note}${r.skipped_after_reference_stop ? ` · ${r.skipped_after_reference_stop} calls past a stop the reference itself carries were left out` : ''}</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
 async function individualScreen() {
   const name = $('#ind-who').value;
   $('#ind-out').innerHTML = '<span class="muted">screening ' + name + " against ClinVar's pathogenic rows (first time streams ClinVar, a few minutes)…</span>";
@@ -1062,7 +1073,7 @@ async function individualPredict() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill predicted">predicted</span> ${(r.model || 'AlphaGenome').split(' (')[0]} · ${h.note}</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
-document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; } });
+document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; $('#ind-ko').onclick = individualKnockouts; } });
 async function loadTwins() {
   loadIndividuals();
   twins = (await api('/api/twins')).twins;
