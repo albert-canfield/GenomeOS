@@ -147,7 +147,13 @@
         <div><b>2 RNA</b> spliced mRNA ${d.mrna_length.toLocaleString()} nt = 5'UTR ${d.utr5} + CDS ${d.cds_length} + 3'UTR ${d.utr3}; introns removed: ${((d.gene_end - d.gene_start) - d.mrna_length).toLocaleString()} bp (${(100 - d.mrna_length / (d.gene_end - d.gene_start) * 100).toFixed(1)}% of the gene) <span class="pill derived">${ev.mrna}</span></div>
         <div><b>3 protein</b> ${d.protein_length} aa, ${d.codon_table} code${d.tags.length ? ' · ' + d.tags.join(', ') : ''} <span class="pill derived">${ev.protein}</span>
           <div class="mono" style="font-size:11px;word-break:break-all;max-height:64px;overflow:auto;margin-top:4px">${d.protein}</div></div>
-        ${d.variant ? `<div style="margin-top:6px"><b>variant</b> ${d.variant.consequence === 'reference mismatch' ? `reference base at that position is ${d.variant.expected}` : d.variant.hgvs_p ? `${d.variant.hgvs_c} → ${d.variant.hgvs_p} <b>${d.variant.consequence}</b> (codon ${d.variant.codon_before}→${d.variant.codon_after})` : `<b>${d.variant.consequence}</b>: no change to the protein`}</div>` : ''}`;
+        ${d.variant ? `<div style="margin-top:6px"><b>variant</b> ${d.variant.consequence === 'reference mismatch' ? `reference base at that position is ${d.variant.expected}` : d.variant.hgvs_p ? `${d.variant.hgvs_c} → ${d.variant.hgvs_p} <b>${d.variant.consequence}</b> (codon ${d.variant.codon_before}→${d.variant.codon_after})${d.variant.residue ? ` <button class="ghost" id="f-to-structure" data-tip="Open the Molecules tab with residue ${d.variant.residue} marked on the AlphaFold model and the UniProt features" style="padding:1px 8px;font-size:11px">🧊 residue ${d.variant.residue} on the structure</button>` : ''}` : `<b>${d.variant.consequence}</b>: no change to the protein`}</div>` : ''}`;
+      const toS = $('#f-to-structure');
+      if (toS) toS.onclick = () => {
+        $('#m-gene').value = d.gene; $('#m-chrom').value = d.chrom; $('#m-residue').value = d.variant.residue;
+        const b = document.querySelector('nav button[data-tab="molecules"]'); if (b) b.click();
+        setTimeout(() => $('#m-load').click(), 200);
+      };
       draw();
     } catch (e) { $('#f-status').textContent = e.message; }
   };
