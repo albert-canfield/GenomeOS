@@ -1,6 +1,6 @@
 # From one cell to an organism: research, design, plan
 
-Status: proposal, 2026-09-10. Nothing in this document is built yet.
+Status: proposed 2026-09-10; steps 0 to 5 built 2026-09-11 (see the end of the document and docs/PROGRESS.md). Step 6 (human body as populations) is next.
 
 The ask: a computational model that starts with one cell and, by reading the
 genome under timers and signals, grows, maintains and kills cells until an
@@ -271,7 +271,7 @@ decision die {
 
 observe count, fates, deaths every 10 min
 assert count at 100 min in 24..34
-compare lineage against data/knowledge/celegans/lineage.json
+compare lineage against data/results/celegans_lineage_cells.json
 ```
 
 The `experiment` block from the v0.3 note keeps its planned role (fork,
@@ -335,7 +335,7 @@ useful alone.
 ### Step 0. Truth data, distilled (small)
 
 - Fetch the WormWeb lineage JSON; convert to a compact
-  `data/knowledge/celegans/lineage.json` (name, parent, born, divides,
+  `data/results/celegans_lineage_cells.json` (name, parent, born, divides,
   dies, fate) with licence and source recorded; ~150 KB; committed.
 - Distil Packer 2019 annotation to lineage → cell type → time (small
   table); distil Richards 2013 Table 2 to per-cell cycle length mean/SD;
@@ -431,3 +431,22 @@ result (founders from factors, scored). Steps 4–6 each stand alone.
    502 subtypes; subtypes later from Packer.
 
 Sources are listed in section 1; datasets and licences in 1.2 and 1.3.
+
+---
+
+## Built (2026-09-11)
+
+| step | state | where |
+|---|---|---|
+| 0 truth data | done | `genomeos data distil --only celegans_lineage` and `celegans_packer2019`; data/results/celegans_lineage_cells.json, data/results/celegans_*.json |
+| 1 BioIR and BioLang v0.3 | done | genomeos/ir/model.py, genomeos/lang/parser.py, genomeos/std/development.bio, docs/BIOLANG-v0.3.md |
+| 2 Body runtime | done | genomeos/runtime/body.py, genomeos/organism/diff.py, `genomeos grow` |
+| 3 founders from factors | done | data/organisms/celegans/founders.bio (PAR, SKN-1, PIE-1, PAL-1, POP-1, Wnt, Notch) |
+| 4 embryo to hatching | done | data/organisms/celegans/embryo.bio: 1,439 cells, 555 fates, 110 deaths reproduced |
+| 5 larva to adult | done | lineage_larva.bio: 961 cells alive in the adult, 131 deaths |
+| 6 human body as populations | next | populations (`count`, `fraction`) are in the runtime; the program and the distilled counts are not written |
+
+Measured against the reference (`genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare`):
+cells born 2,183/2,183, parent mismatches 0, terminal fates 961/961, deaths 131/131, division timing median 12 min
+(embryo median 8 min, p90 25 min). The alive-cell curve runs under the reference between 350 and 500 min because
+per-generation mean timers smooth the real spread; the program's own `assert` flags it.

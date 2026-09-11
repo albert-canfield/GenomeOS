@@ -658,6 +658,66 @@ def cmd_organism(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_grow(args: argparse.Namespace) -> int:
+    """Grow an organism from one cell: BioLang v0.3 organism program -> Body runtime -> report."""
+    from genomeos.lang import parse_file
+    from genomeos.organism import REFERENCES, ReferenceLineage
+    from genomeos.organism.diff import compare
+    from genomeos.runtime.body import Body
+
+    module = parse_file(args.module)
+    if module.organism is None:
+        print(f"{args.module}: no organism block (see docs/BIOLANG-v0.3.md)", file=sys.stderr)
+        return 2
+    o = module.organism
+    body = Body(module, seed=args.seed, max_cells=args.max_cells).run(until=args.until)
+    s = body.summary()
+    print(
+        f"{o.name} ({o.species or 'species not stated'}): {s['cells_born']} cells born, "
+        f"{s['alive']:g} alive at {args.until:g} min, {s['deaths']} deaths, "
+        f"{len(module.decisions)} decisions / {len(module.timers)} timers / {len(module.signals())} signals"
+    )
+    checkpoints = [t for t in (0.5, 50, 100, 200, 350, 500, 800, 2000, 4000, 5700) if t <= args.until]
+    if args.until not in checkpoints:
+        checkpoints.append(args.until)
+    for t in checkpoints:
+        parts = []
+        for what in o.observe or ["count"]:
+            if what == "count":
+                parts.append(f"cells={body.count_at(t):g}")
+            elif what == "deaths":
+                parts.append(f"deaths={body.deaths_by(t)}")
+            elif what == "fates":
+                top = list(body.fates_at(t).items())[:4]
+                parts.append("fates=" + ", ".join(f"{k} {v:g}" for k, v in top))
+            elif what.startswith("lineage "):
+                lg = what.split(None, 1)[1]
+                parts.append(f"{lg}={body.lineage_count_at(lg, t):g}")
+        print(f"  t={t:7.1f} min  " + "  ".join(parts))
+    if args.depth > 0:
+        for line in body.tree(depth=args.depth):
+            print("  " + line)
+    if body.unknown:
+        print("  UNKNOWN stops: " + ", ".join(f"{k} ×{v}" for k, v in body.unknown.items()))
+    for chk in body.check_asserts():
+        mark = "ok  " if chk["ok"] else "FAIL"
+        print(f"  assert {mark} {chk['assert']}  (got {chk.get('value', chk.get('error'))})")
+    print(body.uncertainty().format())
+    out: dict = {"summary": s, "asserts": body.check_asserts(), "uncertainty": body.uncertainty().to_dict()}
+    if args.compare:
+        path = REFERENCES.get(o.reference)
+        if not path or not Path(path).exists():
+            print(f"  no reference {o.reference!r} available (genomeos data distil --only celegans_lineage)")
+        else:
+            diff = compare(body, ReferenceLineage.load(path), until=args.until)
+            print(diff.format())
+            out["diff"] = diff.to_dict()
+    if args.json:
+        Path(args.json).write_text(json.dumps(out, indent=1, default=str))
+        print(f"  wrote {args.json}")
+    return 0
+
+
 def cmd_data(args: argparse.Namespace) -> int:
     from genomeos import storage
     from genomeos.results import list_results
@@ -1467,6 +1527,57 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_rna(args: argparse.Namespace) -> int:
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.molecules.rna import rna_report
+
+    ann = genome = None
+    gff = default_gencode({args.chrom}) if args.chrom else None
+    if gff:
+        ann = Annotation.from_gff3(gff, {args.chrom})
+        if Path(args.genome).exists():
+            genome = IndexedGenome(args.genome)
+    r = rna_report(args.symbol, ann, genome, expression=not args.no_expression)
+    if genome:
+        genome.close()
+    tx = r.get("transcripts")
+    if tx:
+        print(
+            f"{tx['gene']} ({tx['gene_type']}): {tx['count']} transcripts, {tx['coding_isoforms']} coding; "
+            f"biotypes {tx['by_biotype']}  [{tx['evidence']}]"
+        )
+        print(
+            _table(
+                [
+                    {
+                        "transcript": x["name"],
+                        "biotype": x["biotype"],
+                        "exons": x["exons"],
+                        "spliced nt": x.get("spliced_nt", "-"),
+                        "CDS nt": x.get("cds_nt", "-"),
+                        "aa": x.get("protein_aa", "-"),
+                        "tags": ", ".join(x["tags"]),
+                    }
+                    for x in tx["transcripts"][: args.top]
+                ],
+                ["transcript", "biotype", "exons", "spliced nt", "CDS nt", "aa", "tags"],
+            )
+        )
+    elif ann is not None:
+        print(f"{args.symbol} not on {args.chrom}")
+    e = r.get("expression")
+    if e and e.get("tissues"):
+        print(
+            f"expression (GTEx): {e['pattern']}; median {e['median_tpm']} TPM over "
+            f"{e['tissues_measured']} tissues, {e['tissues_expressed']} with ≥1 TPM  "
+            f"[{e['evidence']}] conf={e['confidence']}"
+        )
+        print("  top: " + ", ".join(f"{t_} {v:.0f}" for t_, v in e["top"]))
+    elif e:
+        print(f"expression: {e.get('error', 'unavailable')}")
+    return 0
+
+
 def cmd_repeats(args: argparse.Namespace) -> int:
     from genomeos.genome.repeats import fetch_repeats, load_repeats, save_repeats, summarise
     from genomeos.results import save_result
@@ -1930,6 +2041,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("-o", "--output", help="write the designed module as BioIR JSON")
     p.set_defaults(fn=cmd_forge)
 
+    p = sub.add_parser("grow", help="grow an organism from one cell (BioLang v0.3 organism program)")
+    p.add_argument("module", help="a .bio file with an organism block")
+    p.add_argument("--until", type=float, default=800.0, help="minutes of organism time (default 800)")
+    p.add_argument("--seed", type=int, default=None, help="seed for timer noise (default: deterministic)")
+    p.add_argument("--depth", type=int, default=2, help="lineage tree depth to print (0 = none)")
+    p.add_argument("--max-cells", type=int, default=200_000)
+    p.add_argument("--compare", action="store_true", help="score against the organism's reference lineage")
+    p.add_argument("--json", help="write summary, asserts, uncertainty and diff to this file")
+    p.set_defaults(fn=cmd_grow)
+
     p = sub.add_parser("organism", help="minimal organism: C. elegans early lineage")
     p.add_argument("--minutes", type=float, default=150.0)
     p.add_argument("--depth", type=int, default=2)
@@ -2083,6 +2204,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser(
+        "rna", help="the RNA layer of a gene: transcripts and isoforms, GTEx expression per tissue"
+    )
+    p.add_argument("symbol")
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--top", type=int, default=15)
+    p.add_argument("--no-expression", action="store_true")
+    p.set_defaults(fn=cmd_rna)
 
     p = sub.add_parser("repeats", help="curated repeat annotation (RepeatMasker via UCSC) for a chromosome")
     p.add_argument("--chrom", default="chr21")

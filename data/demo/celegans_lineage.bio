@@ -1,14 +1,45 @@
-# Early C. elegans embryonic lineage timing (20 °C), Sulston et al. 1983.
-# Cell-cycle lengths per founder lineage feed genomeos.organism.celegans.
-module organism.celegans.lineage
+# Early C. elegans embryonic lineage (20 °C), Sulston et al. 1983, as a BioLang v0.3 program:
+# one zygote, cited cycle timers per founder lineage, the founder divisions by name,
+# and default a/p then l/r naming afterwards. Run: genomeos grow data/demo/celegans_lineage.bio
+module organism.celegans.early
+import bio.std.development
 
+organism CelegansEarly {
+  species: Caenorhabditis elegans
+  genome: WBcel235
+  root: P0
+  cell_type: Zygote
+  factors: SKN-1, PIE-1, PAL-1, POP-1
+  environment: temperature = 20
+  observe: count, lineage AB, lineage E
+  assert: count at 100 min in 22..34
+  assert: lineage E at 120 min in 2..4
+  reference: celegans
+  evidence: experimental "Sulston et al. 1983, Dev Biol 100:64"; confidence: 0.9
+}
+
+stage Cleavage { from: 0 min; to: 100 min; evidence: experimental "Sulston et al. 1983"; confidence: 0.8 }
+stage Gastrulation { from: 100 min; to: 350 min; evidence: experimental "Sulston et al. 1983 (E2 ingression at ~100 min)"; confidence: 0.8 }
+
+# cycle timers (the values also stay as params for the older `organism` command)
 param ab_cycle_min = 20 min { evidence: experimental "Sulston et al. 1983, Dev Biol 100:64 (AB blastomeres ~20 min early)"; confidence: 0.6 }
 param ab_lengthening = 1.12 { evidence: inferred "AB cycles lengthen ~10% per round"; confidence: 0.3 }
-param p1_cycle_min = 22 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.6 }
-param ems_cycle_min = 25 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.6 }
-param ms_cycle_min = 30 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
-param e_cycle_min = 42 min { evidence: experimental "Sulston et al. 1983 (E lineage divides slowly)"; confidence: 0.6 }
-param c_cycle_min = 38 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
-param d_cycle_min = 55 min { evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
-param p_cycle_min = 28 min { evidence: experimental "Sulston et al. 1983 (P2, P3 germline precursors)"; confidence: 0.5 }
-param total_e_cells_at_hatching = 20 { evidence: experimental "Sulston et al. 1983"; confidence: 0.9 }
+timer ab_cycle  { duration: 20 min; lengthening: 1.12; when: lineage = AB;  evidence: experimental "Sulston et al. 1983 (AB ~20 min early, lengthening)"; confidence: 0.6 }
+timer p1_cycle  { duration: 22 min; when: cell = P1;  evidence: experimental "Sulston et al. 1983"; confidence: 0.6 }
+timer ems_cycle { duration: 25 min; when: cell = EMS; evidence: experimental "Sulston et al. 1983"; confidence: 0.6 }
+timer ms_cycle  { duration: 30 min; lengthening: 1.10; when: lineage = MS; evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
+timer e_cycle   { duration: 42 min; lengthening: 1.15; when: lineage = E;  evidence: experimental "Sulston et al. 1983 (E lineage divides slowly)"; confidence: 0.6 }
+timer c_cycle   { duration: 38 min; lengthening: 1.10; when: lineage = C;  evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
+timer d_cycle   { duration: 55 min; lengthening: 1.10; when: lineage = D;  evidence: experimental "Sulston et al. 1983"; confidence: 0.5 }
+timer p_cycle   { duration: 28 min; when: lineage = P; evidence: experimental "Sulston et al. 1983 (P2, P3 germline precursors)"; confidence: 0.5 }
+
+# the founder divisions, by name; maternal factors segregate to the germline side
+decision div_P0  { action: divide; when: cell = P0;  daughters: AB, P1;  lineages: AB = AB, P1 = P; after: 0 min; asymmetric: PIE-1 -> P1, SKN-1 -> P1, PAL-1 -> P1; evidence: experimental "Sulston et al. 1983; Mello et al. 1992 (PIE-1); Bowerman et al. 1992 (SKN-1)"; confidence: 0.9 }
+decision div_P1  { action: divide; when: cell = P1;  daughters: EMS, P2; lineages: EMS = EMS, P2 = P; asymmetric: PIE-1 -> P2; evidence: experimental "Sulston et al. 1983"; confidence: 0.9 }
+decision div_EMS { action: divide; when: cell = EMS; daughters: MS, E;   lineages: MS = MS, E = E; asymmetric: POP-1 -> MS; evidence: experimental "Sulston et al. 1983; Lin, Thorpe & Priess 1998 (POP-1 asymmetry)"; confidence: 0.9 }
+decision div_P2  { action: divide; when: cell = P2;  daughters: C, P3;   lineages: C = C, P3 = P; asymmetric: PIE-1 -> P3; evidence: experimental "Sulston et al. 1983"; confidence: 0.9 }
+decision div_P3  { action: divide; when: cell = P3;  daughters: D, P4;   lineages: D = D, P4 = P4; asymmetric: PIE-1 -> P4; evidence: experimental "Sulston et al. 1983"; confidence: 0.9 }
+decision germline { action: quiesce; when: cell = P4; evidence: experimental "Sulston et al. 1983 (P4 divides once, post-embryonically, into Z2/Z3)"; confidence: 0.9 }
+decision germ_type { action: differentiate; when: cell = P4; to: GermCell; evidence: experimental "Sulston et al. 1983"; confidence: 0.9 }
+decision blastomere { action: differentiate; when: cell_type = Zygote, generation = >=0; to: Blastomere; evidence: curated "every somatic descendant of the zygote is a blastomere until it differentiates"; confidence: 0.9 }
+decision somatic { action: divide; when: lineage = AB|MS|E|C|D; evidence: experimental "Sulston et al. 1983 (somatic founders keep dividing through the proliferation phase)"; confidence: 0.7 }

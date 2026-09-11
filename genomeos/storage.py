@@ -232,7 +232,47 @@ def _distil_ccres_chr21() -> dict:
     return out
 
 
+def _distil_celegans_lineage() -> dict:
+    from genomeos.organism.reference import KNOWLEDGE, ReferenceLineage, distil, fetch_wormweb, parse_wormweb
+
+    data = distil(parse_wormweb(fetch_wormweb()))
+    KNOWLEDGE.parent.mkdir(parents=True, exist_ok=True)
+    KNOWLEDGE.write_text(json.dumps(data, separators=(",", ":")))
+    ref = ReferenceLineage.from_dict(data)
+    org = DATA / "organisms" / "celegans"
+    org.mkdir(parents=True, exist_ok=True)
+    (org / "timers.bio").write_text(ref.to_bio_timers())
+    (org / "lineage_embryo.bio").write_text(ref.to_bio_program(0.0, 800.0))
+    (org / "lineage_larva.bio").write_text(ref.to_bio_program(800.0))
+    return {
+        **{k: v for k, v in data.items() if k != "cells"},
+        **ref.summary(),
+        "knowledge_file": str(KNOWLEDGE),
+        "generated": [str(org / f) for f in ("timers.bio", "lineage_embryo.bio", "lineage_larva.bio")],
+        "cycle_timers": len(ref.cycle_stats()),
+    }
+
+
+def _distil_celegans_packer() -> dict:
+    from genomeos.organism.packer import distil, stream_annotation
+    from genomeos.organism.reference import ReferenceLineage
+
+    return distil(stream_annotation(), ReferenceLineage.load())
+
+
 DISTILLERS: list[Distiller] = [
+    Distiller(
+        "celegans_lineage",
+        [],
+        _distil_celegans_lineage,
+        "the complete timed C. elegans lineage (WormWeb, CC BY) as a 2,183-cell table plus generated BioLang",
+    ),
+    Distiller(
+        "celegans_packer2019",
+        [],
+        _distil_celegans_packer,
+        "Packer 2019 lineage -> cell type table (GEO GSE126954, 2.8 MB streamed) checked against the lineage",
+    ),
     Distiller(
         "encode_ccres_chr21",
         [],

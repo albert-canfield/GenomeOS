@@ -1,0 +1,11 @@
+# bio.std.development — the generic cell states of development and the five
+# decisions a cell can take: divide, differentiate, migrate, quiesce, die.
+# Organism programs import this and add their own cell types, timers,
+# signals and decisions; see docs/BIOLANG-v0.3.md.
+module bio.std.development
+
+cell_type Zygote { ontology: CL:0000365; evidence: curated "Cell Ontology (animal zygote)"; confidence: 0.9 }
+cell_type Blastomere { parent: Zygote; ontology: CL:0000361; evidence: curated "Cell Ontology (early embryonic cell)"; confidence: 0.9 }
+cell_type Progenitor { parent: Blastomere; ontology: CL:0011115; evidence: curated "Cell Ontology (precursor cell)"; confidence: 0.9 }
+cell_type GermCell { parent: Blastomere; ontology: CL:0000586; evidence: curated "Cell Ontology (germ cell)"; confidence: 0.9 }
+cell_type PostMitotic { parent: Progenitor; evidence: curated "terminally differentiated: exits the cell cycle"; confidence: 0.9 }

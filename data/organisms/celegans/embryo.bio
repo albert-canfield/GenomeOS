@@ -1,0 +1,34 @@
+# C. elegans from one cell: the embryo (and, through lineage_larva, the adult).
+# Layers, in order of precedence: founders.bio (mechanism where known: maternal
+# factors, Wnt/POP-1, Notch), then the observed lineage program generated from
+# the reference (Sulston 1983 via WormWeb), with cycle timers distilled per
+# founder lineage and generation. Run: genomeos grow data/organisms/celegans/embryo.bio
+module organism.celegans.embryo
+import cell_types.bio
+import timers.bio
+import founders.bio
+import lineage_embryo.bio
+import lineage_larva.bio
+
+organism Celegans {
+  species: Caenorhabditis elegans
+  genome: WBcel235
+  root: P0
+  cell_type: Zygote
+  factors: SKN-1, PIE-1, PAL-1, POP-1, PAR-3, PAR-2
+  environment: temperature = 20
+  observe: count, deaths, fates
+  assert: count at 0.5 min = 2
+  assert: count at 350 min in 240..310
+  assert: deaths at 800 min in 100..115
+  reference: celegans
+  evidence: experimental "Sulston et al. 1983, Dev Biol 100:64; Sulston & Horvitz 1977, Dev Biol 56:110"; confidence: 0.9
+}
+
+stage Cleavage { from: 0 min; to: 100 min; evidence: experimental "Sulston et al. 1983"; confidence: 0.8 }
+stage Gastrulation { from: 100 min; to: 350 min; evidence: experimental "Sulston et al. 1983 (E2 ingression at ~100 min)"; confidence: 0.8 }
+stage Morphogenesis { from: 350 min; to: 800 min; evidence: experimental "Sulston et al. 1983 (proliferation ends, elongation)"; confidence: 0.7 }
+stage Larva { from: 800 min; to: 5700 min; evidence: experimental "Sulston & Horvitz 1977 (L1-L4)"; confidence: 0.7 }
+stage Adult { from: 5700 min; evidence: experimental "Sulston & Horvitz 1977"; confidence: 0.7 }
+
+decision blastomere { action: differentiate; when: cell_type = Zygote; to: Blastomere; evidence: curated "every descendant of the zygote is a blastomere until it differentiates"; confidence: 0.9 }

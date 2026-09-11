@@ -1,0 +1,3276 @@
+{
+  "result": "celegans_packer2019",
+  "date": "2026-09-11",
+  "source": "Packer et al. 2019, Science 365:eaax1971; GEO GSE126954 cell annotation",
+  "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE126nnn/GSE126954/suppl/GSE126954_cell_annotation.csv.gz",
+  "cells_with_lineage_and_type": 26571,
+  "lineage_ids": 381,
+  "cell_types": 36,
+  "agreement_with_reference": {
+    "checked": 232,
+    "agree": 173,
+    "rate": 0.7457,
+    "unchecked": 149
+  },
+  "disagreements": [
+    {
+      "lineage": "ABalaaaar",
+      "packer": "Arcade_cell",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABalaaaarx",
+      "packer": "Pharyngeal_intestinal_valve",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABalaapa",
+      "packer": "Ciliated_non_amphid_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABalaapap/ABalppaap",
+      "packer": "Pharyngeal_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABalaapp",
+      "packer": "Glia",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABalapaaaa/ABalappapa",
+      "packer": "Glia",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABalappap",
+      "packer": "Glia",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABalpaaa/ABarapaa",
+      "packer": "Pharyngeal_intestinal_valve",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "ABalpaaaa/ABarapaaa",
+      "packer": "Pharyngeal_gland",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "ABalpaap/ABaraaap",
+      "packer": "Pharyngeal_muscle",
+      "reference": [
+        "other"
+      ]
+    },
+    {
+      "lineage": "ABalpaapa/ABaraaapa",
+      "packer": "Pharyngeal_neuron",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "ABalpaapaaa/ABalpaappap/ABaraaapaaa/ABaraaappax/ABarapapapa",
+      "packer": "Arcade_cell",
+      "reference": [
+        "other"
+      ]
+    },
+    {
+      "lineage": "ABalpaappa/ABaraaappa",
+      "packer": "Hypodermis",
+      "reference": [
+        "other"
+      ]
+    },
+    {
+      "lineage": "ABalpapaa/ABarappaa",
+      "packer": "Ciliated_non_amphid_neuron",
+      "reference": [
+        "hypoderm",
+        "other"
+      ]
+    },
+    {
+      "lineage": "ABalpapap/ABarappap",
+      "packer": "Pharyngeal_intestinal_valve",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABalpapapp/ABarappapp",
+      "packer": "Arcade_cell",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABalppapap/ABarapppap",
+      "packer": "Pharyngeal_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABalpppaa/ABpraaaaa",
+      "packer": "Ciliated_amphid_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABaraaapppa/ABalpaappaa",
+      "packer": "Arcade_cell",
+      "reference": [
+        "other"
+      ]
+    },
+    {
+      "lineage": "ABaraappaa",
+      "packer": "Pharyngeal_neuron",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "ABarapapap",
+      "packer": "Pharyngeal_marginal_cell",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABarapapapp",
+      "packer": "Glia",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABarpap/ABplaaa",
+      "packer": "Pharyngeal_neuron",
+      "reference": [
+        "hypoderm"
+      ]
+    },
+    {
+      "lineage": "ABarpapap/ABplaaaap",
+      "packer": "Ciliated_amphid_neuron",
+      "reference": [
+        "hypoderm"
+      ]
+    },
+    {
+      "lineage": "ABplpapppp",
+      "packer": "Pharyngeal_intestinal_valve",
+      "reference": [
+        "epithelium"
+      ]
+    },
+    {
+      "lineage": "ABplpappppp",
+      "packer": "Rectal_gland",
+      "reference": [
+        "epithelium"
+      ]
+    },
+    {
+      "lineage": "ABplpappppp/ABpxppppaap",
+      "packer": "Rectal_gland",
+      "reference": [
+        "epithelium"
+      ]
+    },
+    {
+      "lineage": "ABprpappap",
+      "packer": "Pharyngeal_gland",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABprpppaaaa",
+      "packer": "Rectal_cell",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxaap",
+      "packer": "Ciliated_amphid_neuron",
+      "reference": [
+        "hypoderm"
+      ]
+    },
+    {
+      "lineage": "ABpxaapaa",
+      "packer": "Ciliated_amphid_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABpxaapaaa",
+      "packer": "Pharyngeal_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABpxaapaap",
+      "packer": "Pharyngeal_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABpxapa",
+      "packer": "Hypodermis",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxapaaapa",
+      "packer": "Glia",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxapaapp",
+      "packer": "Hypodermis",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxapapap",
+      "packer": "Hypodermis",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxapappa",
+      "packer": "Hypodermis",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxappaaa",
+      "packer": "Hypodermis",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxappaap",
+      "packer": "Hypodermis",
+      "reference": [
+        "repro"
+      ]
+    },
+    {
+      "lineage": "ABpxappapp",
+      "packer": "Hypodermis",
+      "reference": [
+        "neuron",
+        "repro"
+      ]
+    },
+    {
+      "lineage": "ABpxpaaapa",
+      "packer": "Ciliated_non_amphid_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABpxpaapap",
+      "packer": "Ciliated_non_amphid_neuron",
+      "reference": [
+        "glia"
+      ]
+    },
+    {
+      "lineage": "ABpxpapaap",
+      "packer": "GLR",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxpapapaa",
+      "packer": "Excretory_gland",
+      "reference": [
+        "excretory"
+      ]
+    },
+    {
+      "lineage": "ABpxppap",
+      "packer": "Pharyngeal_muscle",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxppapa",
+      "packer": "Pharyngeal_muscle",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxppapap",
+      "packer": "Arcade_cell",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxpppapa",
+      "packer": "Ciliated_amphid_neuron",
+      "reference": [
+        "hypoderm"
+      ]
+    },
+    {
+      "lineage": "ABpxpppp",
+      "packer": "Ciliated_non_amphid_neuron",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "ABpxppppa",
+      "packer": "Glia",
+      "reference": [
+        "epithelium",
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "ABpxppppaa",
+      "packer": "Ciliated_amphid_neuron",
+      "reference": [
+        "epithelium"
+      ]
+    },
+    {
+      "lineage": "ABpxppppp",
+      "packer": "Pharyngeal_neuron",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "Caapa",
+      "packer": "Body_wall_muscle",
+      "reference": [
+        "neuron"
+      ]
+    },
+    {
+      "lineage": "MSapaap",
+      "packer": "Ciliated_amphid_neuron",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "MSapaapp",
+      "packer": "M_cell",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "MSappaaa",
+      "packer": "hmc",
+      "reference": [
+        "mesoderm"
+      ]
+    },
+    {
+      "lineage": "MSpaaapp",
+      "packer": "Pharyngeal_intestinal_valve",
+      "reference": [
+        "muscle"
+      ]
+    },
+    {
+      "lineage": "MSppaap",
+      "packer": "Pharyngeal_intestinal_valve",
+      "reference": [
+        "muscle"
+      ]
+    }
+  ],
+  "by_lineage": {
+    "ABalaaaala/ABalaapaaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalaaaalp/ABalaapaap": {
+      "cell_type": "Glia",
+      "cells": 5,
+      "majority": 3,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABalaaaar": {
+      "cell_type": "Arcade_cell",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABalaaaarx": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABalaaapar/ABalaaappl": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABalaaapx": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABalaapa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABalaapaa": {
+      "cell_type": "Glia",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABalaapap/ABalppaap": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABalaapapp/ABalppaapp": {
+      "cell_type": "Glia",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABalaapp": {
+      "cell_type": "Glia",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABalaappa/ABalppaaa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 3,
+      "majority": 1
+    },
+    "ABalaappap/ABalppaaap": {
+      "cell_type": "Glia",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABalaappp/ABalapaap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 23,
+      "majority": 14,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalaapppa/ABalapaapa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 50,
+      "majority": 46,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalaapppp/ABalapaapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 89,
+      "majority": 89,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapaaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapaaa/ABalappap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapaaaa/ABalappapa": {
+      "cell_type": "Glia",
+      "cells": 4,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABalapaaap/ABalappapp": {
+      "cell_type": "Glia",
+      "cells": 3,
+      "majority": 2,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABalapapa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalappaa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 2,
+      "majority": 1
+    },
+    "ABalappap": {
+      "cell_type": "Glia",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABalapppa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 2,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapppaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 3,
+      "majority": 3,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapxp": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 2,
+      "majority": 2
+    },
+    "ABalapxpa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABalapxpap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 32,
+      "majority": 32
+    },
+    "ABalapxpap/ABpxpaaapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 105,
+      "majority": 105,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapxpapa/ABpxpaaappa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 353,
+      "majority": 353,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapxpapaa/ABpxpaaappaa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 115,
+      "majority": 115,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapxpp": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABalapxppa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 59,
+      "majority": 59
+    },
+    "ABalapxppa/ABalaapppp/ABalapaapp/ABalppappp/ABarappppp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 96,
+      "majority": 96,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapxppaa/ABalaappppa/ABalapaappa/ABalppapppa/ABarapppppa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 226,
+      "majority": 226,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapxppaaa/ABalaappppaa/ABalapaappaa/ABalppapppaa/ABarapppppaa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 118,
+      "majority": 118,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapxppap/ABalaappppp/ABalapaappp/ABalppapppp/ABarapppppp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 278,
+      "majority": 278,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalapxppp": {
+      "cell_type": "Glia",
+      "cells": 3,
+      "majority": 1
+    },
+    "ABalapxpppp/ABalaapappp/ABalppaappp": {
+      "cell_type": "Glia",
+      "cells": 244,
+      "majority": 244,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABalpaaa/ABarapaa": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "ABalpaaaa/ABarapaaa": {
+      "cell_type": "Pharyngeal_gland",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "ABalpaap/ABaraaap": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "other"
+      ],
+      "agree": false
+    },
+    "ABalpaapa/ABaraaapa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "ABalpaapaaa/ABalpaappap/ABaraaapaaa/ABaraaappax/ABarapapapa": {
+      "cell_type": "Arcade_cell",
+      "cells": 52,
+      "majority": 52,
+      "reference_tissue": [
+        "other"
+      ],
+      "agree": false
+    },
+    "ABalpaapap/ABaraaapap": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 10,
+      "majority": 8,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "ABalpaapapa/ABaraaapapa/ABalpappppa": {
+      "cell_type": "Pharyngeal_marginal_cell",
+      "cells": 167,
+      "majority": 167,
+      "reference_tissue": [
+        "marginal"
+      ],
+      "agree": true
+    },
+    "ABalpaappa/ABaraaappa": {
+      "cell_type": "Hypodermis",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "other"
+      ],
+      "agree": false
+    },
+    "ABalpaapppx/ABalpapaaap/ABaraaapppp": {
+      "cell_type": "Hypodermis",
+      "cells": 170,
+      "majority": 170,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABalpapa/ABarappa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpapaa/ABarappaa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 4,
+      "majority": 2,
+      "reference_tissue": [
+        "hypoderm",
+        "other"
+      ],
+      "agree": false
+    },
+    "ABalpapaap/ABarappaap": {
+      "cell_type": "Parent_of_hyp1V_and_ant_arc_V",
+      "cells": 75,
+      "majority": 75
+    },
+    "ABalpapaapa/ABarappaapa": {
+      "cell_type": "hyp1V_and_ant_arc_V",
+      "cells": 107,
+      "majority": 107
+    },
+    "ABalpapap/ABarappap": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABalpapapp/ABarappapp": {
+      "cell_type": "Arcade_cell",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABalpappa/ABarapapa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "marginal",
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpappaa/ABarapapaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 210,
+      "majority": 210,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpappap": {
+      "cell_type": "Pharyngeal_marginal_cell",
+      "cells": 14,
+      "majority": 11,
+      "reference_tissue": [
+        "marginal"
+      ],
+      "agree": true
+    },
+    "ABalpapppa/ABarapappa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 121,
+      "majority": 121,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpapppp/ABarapappp": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 11,
+      "majority": 8,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "ABalpax/ABaraax": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABalppap/ABarappp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 3,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppapa/ABarapppa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 3,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppapaa/ABarapppaa": {
+      "cell_type": "Glia",
+      "cells": 3,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABalppapap/ABarapppap": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABalppapp/ABarapppp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 14,
+      "majority": 8,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppappa/ABarappppa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 50,
+      "majority": 49,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppappap/ABarappppap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 153,
+      "majority": 153,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppappp/ABarappppp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 92,
+      "majority": 91,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppp/ABpraaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 7,
+      "majority": 7,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppa/ABpraaaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 28,
+      "majority": 27,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppaa/ABpraaaaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 14,
+      "majority": 11,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABalpppaaa/ABpraaaaaa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 5,
+      "majority": 2
+    },
+    "ABalpppaap/ABpraaaaap": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 4,
+      "majority": 2
+    },
+    "ABalpppap/ABpraaaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 65,
+      "majority": 62,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppapa/ABpraaaapa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 164,
+      "majority": 160,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppapav/ABpraaaapav": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 157,
+      "majority": 157,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppapp/ABpraaaapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 95,
+      "majority": 76,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppappp/ABpraaaappp": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 150,
+      "majority": 150,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppapppa/ABpraaaapppa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 124,
+      "majority": 124,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppp/ABpraaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 24,
+      "majority": 24,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppa/ABpraaapa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 52,
+      "majority": 49,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppaa/ABpraaapaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 183,
+      "majority": 183,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppaad/ABpraaapaad": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 259,
+      "majority": 259,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppap/ABpraaapap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 136,
+      "majority": 101,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppapa/ABpraaapapa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 208,
+      "majority": 208,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppapaa/ABpraaapapaa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 60,
+      "majority": 60,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppp/ABpraaapp": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 95,
+      "majority": 95,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppppa/ABpraaappa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 141,
+      "majority": 141,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppppaa/ABpraaappaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 89,
+      "majority": 89,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppppap/ABpraaappap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 150,
+      "majority": 150,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppppp/ABpraaappp": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 98,
+      "majority": 98,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppppa/ABpraaapppa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 149,
+      "majority": 149,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppppaa/ABpraaapppaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 181,
+      "majority": 181,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalppppppp/ABpraaapppp": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 123,
+      "majority": 123,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABalpppppppa/ABpraaappppa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 199,
+      "majority": 199,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABaraaapppa/ABalpaappaa": {
+      "cell_type": "Arcade_cell",
+      "cells": 60,
+      "majority": 60,
+      "reference_tissue": [
+        "other"
+      ],
+      "agree": false
+    },
+    "ABaraappaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 46,
+      "majority": 46,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "ABaraapx": {
+      "cell_type": "Pharyngeal_gland",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABaraapxapp/ABarapapppa": {
+      "cell_type": "Pharyngeal_marginal_cell",
+      "cells": 190,
+      "majority": 190,
+      "reference_tissue": [
+        "marginal"
+      ],
+      "agree": true
+    },
+    "ABaraapxpa": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 109,
+      "majority": 96
+    },
+    "ABaraapxpaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 70,
+      "majority": 70
+    },
+    "ABaraapxpp": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 92,
+      "majority": 92
+    },
+    "ABarapapap": {
+      "cell_type": "Pharyngeal_marginal_cell",
+      "cells": 4,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABarapapapp": {
+      "cell_type": "Glia",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABarpaaa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 5,
+      "majority": 5
+    },
+    "ABarpaaaa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 32,
+      "majority": 32
+    },
+    "ABarpaaaaa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 55,
+      "majority": 55
+    },
+    "ABarpaaaap/ABarpaaapa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 36,
+      "majority": 36
+    },
+    "ABarpaaaapp/ABarpaaapap/ABpxpaaapap": {
+      "cell_type": "Glia",
+      "cells": 116,
+      "majority": 116,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABarpaaap": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 46,
+      "majority": 44
+    },
+    "ABarpaapaa": {
+      "cell_type": "Hypodermis",
+      "cells": 91,
+      "majority": 91,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABarpaapap/ABarpaappx": {
+      "cell_type": "Hypodermis",
+      "cells": 81,
+      "majority": 81,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABarpaapx": {
+      "cell_type": "Seam_cell",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABarpaapxx": {
+      "cell_type": "Hypodermis",
+      "cells": 96,
+      "majority": 96
+    },
+    "ABarpap/ABplaaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": false
+    },
+    "ABarpapa/ABplaaaa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABarpapaa/ABplaaaaa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 7,
+      "majority": 3
+    },
+    "ABarpapaaa/ABplaaaaaa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 11,
+      "majority": 9,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABarpapaap/ABplaaaaap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 10,
+      "majority": 9,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABarpapaapp/ABplaaaaapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 125,
+      "majority": 125,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABarpapaappa/ABplaaaaappa/ABpxpaappppa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 111,
+      "majority": 111,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABarpapaappp/ABplaaaaappp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 78,
+      "majority": 78,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABarpapap/ABplaaaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": false
+    },
+    "ABarpapapx/ABplaaaapx": {
+      "cell_type": "Hypodermis",
+      "cells": 14,
+      "majority": 8
+    },
+    "ABarpappa/ABplaaapa": {
+      "cell_type": "Hypodermis",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABarpappaa/ABplaaapaa": {
+      "cell_type": "XXX",
+      "cells": 23,
+      "majority": 23
+    },
+    "ABarpappap/ABplaaapap": {
+      "cell_type": "Hypodermis",
+      "cells": 78,
+      "majority": 76,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABarpappp/ABplaaapp": {
+      "cell_type": "Seam_cell",
+      "cells": 3,
+      "majority": 3,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABarpapppx/ABplaaappx": {
+      "cell_type": "Seam_cell",
+      "cells": 137,
+      "majority": 137
+    },
+    "ABarppxaa": {
+      "cell_type": "Seam_cell",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABarppxaaa": {
+      "cell_type": "Glia",
+      "cells": 54,
+      "majority": 54
+    },
+    "ABarppxaap": {
+      "cell_type": "Seam_cell",
+      "cells": 62,
+      "majority": 61
+    },
+    "ABarppxapa": {
+      "cell_type": "Hypodermis",
+      "cells": 66,
+      "majority": 64
+    },
+    "ABarppxapp": {
+      "cell_type": "Seam_cell",
+      "cells": 5,
+      "majority": 4
+    },
+    "ABarppxp": {
+      "cell_type": "Seam_cell",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABarppxpa": {
+      "cell_type": "Seam_cell",
+      "cells": 26,
+      "majority": 26
+    },
+    "ABarppxpax": {
+      "cell_type": "Seam_cell",
+      "cells": 198,
+      "majority": 198
+    },
+    "ABarppxpp": {
+      "cell_type": "Seam_cell",
+      "cells": 52,
+      "majority": 52
+    },
+    "ABarppxppa": {
+      "cell_type": "Seam_cell",
+      "cells": 68,
+      "majority": 68
+    },
+    "ABarppxppp": {
+      "cell_type": "Seam_cell",
+      "cells": 61,
+      "majority": 60
+    },
+    "ABarpx": {
+      "cell_type": "Arcade_cell",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABplpappa": {
+      "cell_type": "Excretory_cell_parent",
+      "cells": 16,
+      "majority": 15
+    },
+    "ABplpappaa": {
+      "cell_type": "Excretory_cell_parent",
+      "cells": 44,
+      "majority": 44
+    },
+    "ABplpappaap": {
+      "cell_type": "Excretory_cell",
+      "cells": 105,
+      "majority": 105,
+      "reference_tissue": [
+        "excretory"
+      ],
+      "agree": true
+    },
+    "ABplpapppa": {
+      "cell_type": "Hypodermis",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABplpapppax": {
+      "cell_type": "Rectal_cell",
+      "cells": 39,
+      "majority": 39
+    },
+    "ABplpapppp": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "epithelium"
+      ],
+      "agree": false
+    },
+    "ABplpappppp": {
+      "cell_type": "Rectal_gland",
+      "cells": 20,
+      "majority": 20,
+      "reference_tissue": [
+        "epithelium"
+      ],
+      "agree": false
+    },
+    "ABplpappppp/ABpxppppaap": {
+      "cell_type": "Rectal_gland",
+      "cells": 86,
+      "majority": 86,
+      "reference_tissue": [
+        "epithelium"
+      ],
+      "agree": false
+    },
+    "ABplppppapx": {
+      "cell_type": "Rectal_cell",
+      "cells": 46,
+      "majority": 46
+    },
+    "ABprpappa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 4,
+      "majority": 3,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABprpappap": {
+      "cell_type": "Pharyngeal_gland",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABprpapppa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 4,
+      "majority": 4,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABprpapppp": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 4,
+      "majority": 4,
+      "reference_tissue": [
+        "valve"
+      ],
+      "agree": true
+    },
+    "ABprpppaaaa": {
+      "cell_type": "Rectal_cell",
+      "cells": 43,
+      "majority": 43,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABprppppapa": {
+      "cell_type": "Rectal_cell",
+      "cells": 35,
+      "majority": 35,
+      "reference_tissue": [
+        "rectal"
+      ],
+      "agree": true
+    },
+    "ABpxaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": false
+    },
+    "ABpxaapa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 7,
+      "majority": 6,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 5,
+      "majority": 2,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABpxaapaaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABpxaapaaaa": {
+      "cell_type": "Hypodermis",
+      "cells": 113,
+      "majority": 113,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxaapaaap/ABalaaapall/ABalaaapprr/ABalppapapp/ABarapppapp": {
+      "cell_type": "Glia",
+      "cells": 131,
+      "majority": 131,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABpxaapaap": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABpxaapaapa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 9,
+      "majority": 8,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapaapp": {
+      "cell_type": "Glia",
+      "cells": 218,
+      "majority": 218,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABpxaapap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 41,
+      "majority": 40,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapapa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 159,
+      "majority": 158,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapapaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 140,
+      "majority": 140,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapapap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 51,
+      "majority": 51,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 101,
+      "majority": 69,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapappp": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 187,
+      "majority": 187,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapapppa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 87,
+      "majority": 87,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxaapp": {
+      "cell_type": "G2_and_W_blasts",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABpxaappaa": {
+      "cell_type": "Hypodermis",
+      "cells": 129,
+      "majority": 129,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxaappap": {
+      "cell_type": "Hypodermis",
+      "cells": 149,
+      "majority": 149,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxaappp": {
+      "cell_type": "Hypodermis",
+      "cells": 16,
+      "majority": 16,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxaapppa": {
+      "cell_type": "Hypodermis",
+      "cells": 183,
+      "majority": 182,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxaapppp": {
+      "cell_type": "Hypodermis",
+      "cells": 197,
+      "majority": 197,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxapa": {
+      "cell_type": "Hypodermis",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxapaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapaaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapaaaa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 11,
+      "majority": 9,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapaaaap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 109,
+      "majority": 109,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapaaaapa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 65,
+      "majority": 65,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapaaap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 7,
+      "majority": 5,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapaaapa": {
+      "cell_type": "Glia",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxapaapa": {
+      "cell_type": "G2_and_W_blasts",
+      "cells": 52,
+      "majority": 50
+    },
+    "ABpxapaapp": {
+      "cell_type": "Hypodermis",
+      "cells": 45,
+      "majority": 45,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxapapaa": {
+      "cell_type": "Seam_cell",
+      "cells": 96,
+      "majority": 96,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxapapap": {
+      "cell_type": "Hypodermis",
+      "cells": 27,
+      "majority": 19,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxapappa": {
+      "cell_type": "Hypodermis",
+      "cells": 96,
+      "majority": 94,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxapappp": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 9,
+      "majority": 3
+    },
+    "ABpxapp": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxappa": {
+      "cell_type": "ABarpaaa_lineage",
+      "cells": 1,
+      "majority": 1
+    },
+    "ABpxappaaa": {
+      "cell_type": "Hypodermis",
+      "cells": 77,
+      "majority": 77,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxappaap": {
+      "cell_type": "Hypodermis",
+      "cells": 42,
+      "majority": 42,
+      "reference_tissue": [
+        "repro"
+      ],
+      "agree": false
+    },
+    "ABpxappapa": {
+      "cell_type": "Seam_cell",
+      "cells": 124,
+      "majority": 121,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxappapp": {
+      "cell_type": "Hypodermis",
+      "cells": 91,
+      "majority": 91,
+      "reference_tissue": [
+        "neuron",
+        "repro"
+      ],
+      "agree": false
+    },
+    "ABpxapppa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 11,
+      "majority": 8,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapppap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 3,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapppapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 117,
+      "majority": 117,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxapppp": {
+      "cell_type": "Hypodermis",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxappppa": {
+      "cell_type": "Hypodermis",
+      "cells": 15,
+      "majority": 15,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "ABpxappppp": {
+      "cell_type": "T",
+      "cells": 141,
+      "majority": 141
+    },
+    "ABpxpaaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 3,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaaaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 26,
+      "majority": 26,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaaaaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 175,
+      "majority": 171,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaaaaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 180,
+      "majority": 180,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaaaap": {
+      "cell_type": "Parent_of_exc_duct_pore_DB_1_3",
+      "cells": 80,
+      "majority": 61
+    },
+    "ABpxpaaaapa": {
+      "cell_type": "Excretory_duct_and_pore",
+      "cells": 86,
+      "majority": 86,
+      "reference_tissue": [
+        "excretory",
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 9,
+      "majority": 4,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaaapa": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 12,
+      "majority": 9,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABpxpaaapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 159,
+      "majority": 159,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 3,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaapa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 6,
+      "majority": 6,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaapaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 12,
+      "majority": 9,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaapap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 3,
+      "majority": 2,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": false
+    },
+    "ABpxpaapapa": {
+      "cell_type": "Glia",
+      "cells": 128,
+      "majority": 128,
+      "reference_tissue": [
+        "glia"
+      ],
+      "agree": true
+    },
+    "ABpxpaapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaappa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 110,
+      "majority": 109,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaappaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 212,
+      "majority": 212,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpaappp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 158,
+      "majority": 155,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpapaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 4,
+      "majority": 3,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpapaaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 6,
+      "majority": 4,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpapaap": {
+      "cell_type": "GLR",
+      "cells": 3,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxpapap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpapapa": {
+      "cell_type": "Parent_of_exc_gland_AVK",
+      "cells": 102,
+      "majority": 100
+    },
+    "ABpxpapapaa": {
+      "cell_type": "Excretory_gland",
+      "cells": 149,
+      "majority": 149,
+      "reference_tissue": [
+        "excretory"
+      ],
+      "agree": false
+    },
+    "ABpxpapapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxppaaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxppaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxppaapa": {
+      "cell_type": "Parent_of_exc_gland_AVK",
+      "cells": 5,
+      "majority": 2
+    },
+    "ABpxppaapp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxppap": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxppapa": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 3,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxppapaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxppapap": {
+      "cell_type": "Arcade_cell",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxppappa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 2,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxppappp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 3,
+      "majority": 3,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpppa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpppaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpppaaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 4,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpppaap": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 4,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxpppapa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 4,
+      "majority": 2,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": false
+    },
+    "ABpxpppp": {
+      "cell_type": "Ciliated_non_amphid_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "ABpxppppa": {
+      "cell_type": "Glia",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "epithelium",
+        "neuron"
+      ],
+      "agree": false
+    },
+    "ABpxppppaa": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 6,
+      "majority": 3,
+      "reference_tissue": [
+        "epithelium"
+      ],
+      "agree": false
+    },
+    "ABpxppppap": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 2,
+      "majority": 1,
+      "reference_tissue": [
+        "epithelium",
+        "neuron"
+      ],
+      "agree": true
+    },
+    "ABpxppppp": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "ABpxpppppa": {
+      "cell_type": "Intestinal_and_rectal_muscle",
+      "cells": 3,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "Caapa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 3,
+      "majority": 2,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": false
+    },
+    "Cpapa": {
+      "cell_type": "Hypodermis",
+      "cells": 39,
+      "majority": 39,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "Cpapax": {
+      "cell_type": "Hypodermis",
+      "cells": 155,
+      "majority": 155
+    },
+    "Cpappv": {
+      "cell_type": "Hypodermis",
+      "cells": 60,
+      "majority": 60,
+      "reference_tissue": [
+        "hypoderm"
+      ],
+      "agree": true
+    },
+    "Cxaa": {
+      "cell_type": "Hypodermis",
+      "cells": 5,
+      "majority": 5
+    },
+    "Cxaaax/Cxaapa": {
+      "cell_type": "Hypodermis",
+      "cells": 457,
+      "majority": 456
+    },
+    "Cxaapp": {
+      "cell_type": "Hypodermis",
+      "cells": 60,
+      "majority": 60
+    },
+    "Cxaax": {
+      "cell_type": "Hypodermis",
+      "cells": 42,
+      "majority": 42
+    },
+    "Cxap": {
+      "cell_type": "Hypodermis",
+      "cells": 2,
+      "majority": 1
+    },
+    "Cxapp": {
+      "cell_type": "Hypodermis",
+      "cells": 48,
+      "majority": 48
+    },
+    "Cxappd": {
+      "cell_type": "Hypodermis",
+      "cells": 70,
+      "majority": 70
+    },
+    "Cxp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 8,
+      "majority": 8
+    },
+    "Cxpa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 37,
+      "majority": 37
+    },
+    "Cxpaa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 124,
+      "majority": 124
+    },
+    "Cxpaaa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 105,
+      "majority": 105
+    },
+    "Cxpaaax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 115,
+      "majority": 115
+    },
+    "Cxpaap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 102,
+      "majority": 102
+    },
+    "Cxpaapx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 114,
+      "majority": 114
+    },
+    "Cxpap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 152,
+      "majority": 152
+    },
+    "Cxpapa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 108,
+      "majority": 108
+    },
+    "Cxpapax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 92,
+      "majority": 92
+    },
+    "Cxpapp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 101,
+      "majority": 101
+    },
+    "Cxpappx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 94,
+      "majority": 93
+    },
+    "Cxpp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 46,
+      "majority": 45
+    },
+    "Cxppa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 109,
+      "majority": 108
+    },
+    "Cxppaa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 98,
+      "majority": 98
+    },
+    "Cxppaax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 116,
+      "majority": 116
+    },
+    "Cxppap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 144,
+      "majority": 144
+    },
+    "Cxppapx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 105,
+      "majority": 105
+    },
+    "Cxppp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 124,
+      "majority": 122
+    },
+    "Cxpppa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 139,
+      "majority": 139
+    },
+    "Cxpppax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 95,
+      "majority": 95
+    },
+    "Cxpppp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 133,
+      "majority": 133
+    },
+    "Cxppppx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 154,
+      "majority": 154
+    },
+    "Dx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 13,
+      "majority": 13
+    },
+    "Dxa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 53,
+      "majority": 53
+    },
+    "Dxaap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 74,
+      "majority": 74
+    },
+    "Dxap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 86,
+      "majority": 86
+    },
+    "Dxapa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 89,
+      "majority": 89
+    },
+    "Dxapp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 79,
+      "majority": 79
+    },
+    "Dxapx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 73,
+      "majority": 73
+    },
+    "Dxp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 20,
+      "majority": 20
+    },
+    "Dxpap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 83,
+      "majority": 83
+    },
+    "Dxpp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 152,
+      "majority": 152
+    },
+    "Dxppa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 89,
+      "majority": 89
+    },
+    "Dxppax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 123,
+      "majority": 123
+    },
+    "Dxppp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 111,
+      "majority": 111
+    },
+    "Dxpppx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 90,
+      "majority": 90
+    },
+    "Dxxa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 227,
+      "majority": 227
+    },
+    "Dxxaa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 239,
+      "majority": 239
+    },
+    "Dxxax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 136,
+      "majority": 136
+    },
+    "Eaxaa": {
+      "cell_type": "Intestine",
+      "cells": 86,
+      "majority": 86,
+      "reference_tissue": [
+        "intestine"
+      ],
+      "agree": true
+    },
+    "Eaxap/Eaxpa": {
+      "cell_type": "Intestine",
+      "cells": 77,
+      "majority": 77,
+      "reference_tissue": [
+        "intestine"
+      ],
+      "agree": true
+    },
+    "Eaxpp/Epxap": {
+      "cell_type": "Intestine",
+      "cells": 47,
+      "majority": 47,
+      "reference_tissue": [
+        "intestine"
+      ],
+      "agree": true
+    },
+    "Epxaa": {
+      "cell_type": "Intestine",
+      "cells": 46,
+      "majority": 46,
+      "reference_tissue": [
+        "intestine"
+      ],
+      "agree": true
+    },
+    "Epxpa": {
+      "cell_type": "Intestine",
+      "cells": 40,
+      "majority": 40,
+      "reference_tissue": [
+        "intestine"
+      ],
+      "agree": true
+    },
+    "Epxpp": {
+      "cell_type": "Intestine",
+      "cells": 54,
+      "majority": 54,
+      "reference_tissue": [
+        "intestine"
+      ],
+      "agree": true
+    },
+    "Exx": {
+      "cell_type": "Intestine",
+      "cells": 12,
+      "majority": 12
+    },
+    "Exxx": {
+      "cell_type": "Intestine",
+      "cells": 111,
+      "majority": 111
+    },
+    "MSaaaaa": {
+      "cell_type": "GLR",
+      "cells": 4,
+      "majority": 3,
+      "reference_tissue": [
+        "other"
+      ],
+      "agree": true
+    },
+    "MSaaaaaa": {
+      "cell_type": "GLR",
+      "cells": 235,
+      "majority": 234,
+      "reference_tissue": [
+        "other"
+      ],
+      "agree": true
+    },
+    "MSaaaaaax/MSxpaaaax": {
+      "cell_type": "GLR",
+      "cells": 164,
+      "majority": 164,
+      "reference_tissue": [
+        "other"
+      ],
+      "agree": true
+    },
+    "MSaaaaap": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 21,
+      "majority": 21,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSaaaaapa": {
+      "cell_type": "Pharyngeal_gland",
+      "cells": 54,
+      "majority": 54,
+      "reference_tissue": [
+        "gland"
+      ],
+      "agree": true
+    },
+    "MSaaaapa": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 52,
+      "majority": 52,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSaaaapp": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 12,
+      "majority": 12,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSaaaappp/MSxapaapp": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 243,
+      "majority": 243,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSaaapaa": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 62,
+      "majority": 62,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSaaapapp": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 29,
+      "majority": 29,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSaaapp": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 62,
+      "majority": 61,
+      "reference_tissue": [
+        "valve"
+      ],
+      "agree": true
+    },
+    "MSaaappp": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 30,
+      "majority": 30,
+      "reference_tissue": [
+        "valve"
+      ],
+      "agree": true
+    },
+    "MSaappa": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 98,
+      "majority": 98,
+      "reference_tissue": [
+        "valve"
+      ],
+      "agree": true
+    },
+    "MSapaap": {
+      "cell_type": "Ciliated_amphid_neuron",
+      "cells": 3,
+      "majority": 2,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "MSapaapp": {
+      "cell_type": "M_cell",
+      "cells": 192,
+      "majority": 192,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "MSappaaa": {
+      "cell_type": "hmc",
+      "cells": 123,
+      "majority": 123,
+      "reference_tissue": [
+        "mesoderm"
+      ],
+      "agree": false
+    },
+    "MSpaaaaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 93,
+      "majority": 93,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "MSpaaaap": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 52,
+      "majority": 52,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSpaaapa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 49,
+      "majority": 49,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "MSpaaapp": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 29,
+      "majority": 22,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "MSpaaappp/MSxapappa": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 143,
+      "majority": 143,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSpaapaa": {
+      "cell_type": "Pharyngeal_neuron",
+      "cells": 82,
+      "majority": 81,
+      "reference_tissue": [
+        "neuron"
+      ],
+      "agree": true
+    },
+    "MSpappa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSpappax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 4,
+      "majority": 3
+    },
+    "MSppaap": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 3,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": false
+    },
+    "MSppaapp": {
+      "cell_type": "Intestinal_and_rectal_muscle",
+      "cells": 1,
+      "majority": 1,
+      "reference_tissue": [
+        "muscle"
+      ],
+      "agree": true
+    },
+    "MSpppaaa": {
+      "cell_type": "hmc_homolog",
+      "cells": 144,
+      "majority": 144
+    },
+    "MSxaapa": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 81,
+      "majority": 81
+    },
+    "MSxaapap": {
+      "cell_type": "Pharyngeal_marginal_cell",
+      "cells": 56,
+      "majority": 56
+    },
+    "MSxaapapa/ABalpappapp": {
+      "cell_type": "Pharyngeal_marginal_cell",
+      "cells": 304,
+      "majority": 304,
+      "reference_tissue": [
+        "marginal"
+      ],
+      "agree": true
+    },
+    "MSxapaa": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 83,
+      "majority": 83
+    },
+    "MSxapaaa": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 123,
+      "majority": 123
+    },
+    "MSxapaap": {
+      "cell_type": "Pharyngeal_muscle",
+      "cells": 17,
+      "majority": 17
+    },
+    "MSxapaapa": {
+      "cell_type": "Pharyngeal_gland",
+      "cells": 74,
+      "majority": 74
+    },
+    "MSxapapa": {
+      "cell_type": "Pharyngeal_gland",
+      "cells": 119,
+      "majority": 119
+    },
+    "MSxapapaa": {
+      "cell_type": "Pharyngeal_gland",
+      "cells": 74,
+      "majority": 74
+    },
+    "MSxapapp": {
+      "cell_type": "Pharyngeal_intestinal_valve",
+      "cells": 1,
+      "majority": 1
+    },
+    "MSxapp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 1,
+      "majority": 1
+    },
+    "MSxappp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 274,
+      "majority": 274
+    },
+    "MSxapppa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 111,
+      "majority": 111
+    },
+    "MSxapppax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 118,
+      "majority": 118
+    },
+    "MSxapppp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 147,
+      "majority": 147
+    },
+    "MSxappppx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 133,
+      "majority": 133
+    },
+    "MSxp": {
+      "cell_type": "Arcade_cell",
+      "cells": 1,
+      "majority": 1
+    },
+    "MSxpaaa": {
+      "cell_type": "GLR",
+      "cells": 9,
+      "majority": 9
+    },
+    "MSxpaaaa": {
+      "cell_type": "GLR",
+      "cells": 274,
+      "majority": 274
+    },
+    "MSxpaaap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 255,
+      "majority": 241
+    },
+    "MSxpapa": {
+      "cell_type": "GLR",
+      "cells": 6,
+      "majority": 6
+    },
+    "MSxpapaa": {
+      "cell_type": "Coelomocyte",
+      "cells": 615,
+      "majority": 613
+    },
+    "MSxpapap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 150,
+      "majority": 150
+    },
+    "MSxpapp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 195,
+      "majority": 195
+    },
+    "MSxpappa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 149,
+      "majority": 149
+    },
+    "MSxpappp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 110,
+      "majority": 110
+    },
+    "MSxpp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 2,
+      "majority": 2
+    },
+    "MSxppaa": {
+      "cell_type": "Z1_Z4",
+      "cells": 2,
+      "majority": 2
+    },
+    "MSxppaaa": {
+      "cell_type": "hmc_and_homolog",
+      "cells": 122,
+      "majority": 122
+    },
+    "MSxppaap": {
+      "cell_type": "Z1_Z4",
+      "cells": 314,
+      "majority": 314
+    },
+    "MSxppap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 4,
+      "majority": 3
+    },
+    "MSxppapp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 96,
+      "majority": 96
+    },
+    "MSxppp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 11,
+      "majority": 11
+    },
+    "MSxpppa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 142,
+      "majority": 142
+    },
+    "MSxpppaa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 94,
+      "majority": 94
+    },
+    "MSxpppap": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 98,
+      "majority": 98
+    },
+    "MSxpppax": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 49,
+      "majority": 49
+    },
+    "MSxpppp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 267,
+      "majority": 267
+    },
+    "MSxppppa": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 76,
+      "majority": 76
+    },
+    "MSxppppp": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 89,
+      "majority": 89
+    },
+    "MSxppppx": {
+      "cell_type": "Body_wall_muscle",
+      "cells": 84,
+      "majority": 84
+    },
+    "Z2/Z3:pseudotime_bin_1": {
+      "cell_type": "Germline",
+      "cells": 97,
+      "majority": 97
+    },
+    "Z2/Z3:pseudotime_bin_2": {
+      "cell_type": "Germline",
+      "cells": 271,
+      "majority": 271
+    },
+    "Z2/Z3:pseudotime_bin_3": {
+      "cell_type": "Germline",
+      "cells": 118,
+      "majority": 118
+    }
+  },
+  "inputs": [],
+  "describe": "Packer 2019 lineage -> cell type table (GEO GSE126954, 2.8 MB streamed), checked against the lineage"
+}

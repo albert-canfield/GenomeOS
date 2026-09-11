@@ -1,0 +1,22 @@
+# Tissue-level cell types of C. elegans as used by the reference lineage
+# (WormWeb tissue labels), with Cell Ontology ids where one applies.
+module organism.celegans.cell_types
+import bio.std.development
+
+cell_type Neuron { parent: PostMitotic; ontology: CL:0000540; evidence: curated "Cell Ontology"; confidence: 0.9 }
+cell_type Hypodermis { parent: PostMitotic; ontology: CL:0000362; evidence: curated "Cell Ontology (epidermal cell); hyp syncytium nuclei counted as cells"; confidence: 0.8 }
+cell_type Muscle { parent: PostMitotic; ontology: CL:0000187; evidence: curated "Cell Ontology (muscle cell): body wall, pharyngeal, enteric, sex muscles"; confidence: 0.9 }
+cell_type Reproductive { parent: Progenitor; ontology: CL:0000586; evidence: curated "germ line (Z2/Z3 descendants) and somatic gonad, vulva, uterus"; confidence: 0.8 }
+cell_type Intestine { parent: PostMitotic; ontology: CL:0002563; evidence: curated "Cell Ontology (intestinal epithelial cell)"; confidence: 0.9 }
+cell_type Epithelium { parent: PostMitotic; ontology: CL:0000066; evidence: curated "Cell Ontology (epithelial cell): pharyngeal, rectal, arcade epithelia"; confidence: 0.8 }
+cell_type GliaSocket { parent: PostMitotic; ontology: CL:0000125; evidence: curated "Cell Ontology (glial cell): socket glia"; confidence: 0.8 }
+cell_type GliaSheath { parent: PostMitotic; ontology: CL:0000125; evidence: curated "Cell Ontology (glial cell): sheath glia"; confidence: 0.8 }
+cell_type PharyngealMarginal { parent: PostMitotic; evidence: curated "WormAtlas pharynx marginal cells"; confidence: 0.8 }
+cell_type Valve { parent: PostMitotic; evidence: curated "WormAtlas pharyngeal-intestinal and rectal valves"; confidence: 0.8 }
+cell_type Coelomocyte { parent: PostMitotic; evidence: curated "WormAtlas coelomocytes"; confidence: 0.8 }
+cell_type Excretory { parent: PostMitotic; evidence: curated "WormAtlas excretory cell, duct, pore"; confidence: 0.8 }
+cell_type Gland { parent: PostMitotic; ontology: CL:0000150; evidence: curated "Cell Ontology (glandular cell)"; confidence: 0.8 }
+cell_type Rectal { parent: PostMitotic; evidence: curated "WormAtlas rectal cells"; confidence: 0.8 }
+cell_type TailSpike { parent: PostMitotic; evidence: curated "WormAtlas tail spike cells (die during embryogenesis)"; confidence: 0.7 }
+cell_type Mesoderm { parent: Progenitor; evidence: curated "post-embryonic mesoblast (M) lineage"; confidence: 0.8 }
+cell_type Other { parent: PostMitotic; evidence: curated "cells the source labels only as other (GLR, hmc, head mesodermal)"; confidence: 0.6 }

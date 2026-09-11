@@ -896,6 +896,24 @@ class Api:
             if genome:
                 genome.close()
 
+    def rna(self, gene: str, chrom: str | None) -> dict:
+        """Transcripts (local models) and GTEx expression per tissue for one gene."""
+        from genomeos.genome import IndexedGenome, default_gencode
+        from genomeos.molecules.rna import rna_report
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        ann = genome = None
+        if chrom and default_gencode({chrom}):
+            ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+            fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+            genome = IndexedGenome(fa) if fa.exists() else None
+        try:
+            return rna_report(gene.upper(), ann, genome)
+        finally:
+            if genome:
+                genome.close()
+
     def protein_definition(self, gene: str, refresh: bool = False) -> dict:
         """The federated protein definition (cached locally after the first compile)."""
         from genomeos.molecules import compile_protein, states_from_definition
@@ -1089,6 +1107,8 @@ class Handler(BaseHTTPRequestHandler):
                         int(self._q(qs, "end", 0)),
                     )
                 )
+            if u.path == "/api/rna":
+                return self._json(self.api.rna(self._q(qs, "gene", ""), self._q(qs, "chrom")))
             if u.path == "/api/protein_definition":
                 return self._json(
                     self.api.protein_definition(self._q(qs, "gene", ""), self._q(qs, "refresh", "") == "1")

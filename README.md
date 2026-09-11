@@ -98,7 +98,8 @@ records the evidence per task. Highlights:
 - 45 genome "libraries" verified against Gene Ontology and Reactome by data (95.5% agreement, the gap documented)
 - SBML models from BioModels and Boolean models run unchanged; the Fauré cell cycle gives its published attractors
 - epigenetic clocks validated on real blood methylation (Horvath r > 0.8); telomere estimator; digital twins that fork, run and diff
-- development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient, the C. elegans early lineage from a zygote
+- development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient
+- an organism from one cell: BioLang v0.3 `organism` programs run by the Body runtime (`genomeos grow`); C. elegans grows from the zygote to the 959-cell adult with every cell, fate and programmed death matching Sulston's lineage, founders decided by maternal factors, Wnt and Notch, timing within a median 12 minutes ([docs/BIOLANG-v0.3.md](docs/BIOLANG-v0.3.md), [docs/ORGANISM-FROM-ONE-CELL.md](docs/ORGANISM-FROM-ONE-CELL.md))
 - a debugger with biological breakpoints and evidence traces, and BioForge design search whose outputs are labelled predicted
 - the DNA → RNA → protein relationship as one traceable object: every base mapped to its mRNA position, codon and residue and back, with the consequence of a single-base change (Flow tab, `genomeos flow`)
 - a federated protein compiler: Ensembl, UniProt, InterPro, PDB, AlphaFold, Reactome, STRING and the Human Protein Atlas compiled into one definition per protein keyed by UniProt accession, evidence and confidence per section, predicted never treated as observed (`genomeos protein X --compile`, docs/PROTEIN.md)
@@ -114,6 +115,7 @@ uv run genomeos info data/demo/demo.fa
 uv run genomeos orfs data/demo/demo.fa --min-aa 30
 uv run genomeos age --cell-type fibroblast --years 90 --cells 500 --evidence
 uv run genomeos libs --layer timer -v
+uv run genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare   # one cell to the adult worm
 uv run genomeos serve --open           # light web UI at http://127.0.0.1:8765
 uv run genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --report
 uv run pytest                          # ~80 tests; real-data tests skip until data is fetched
@@ -121,7 +123,7 @@ uv run ruff check .
 ```
 
 More commands: `annotate`, `gene`, `index`, `variant`, `twin build|new|fork|run`,
-`clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`,
+`clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`, `grow`,
 `flow`, `domains`, `protein --compile`, `proteome`, `unknown`, `cancer`,
 `therapeutic`, `design`.
 Optional extras: `uv sync --extra compose` (process-bigraph), `--extra predict`

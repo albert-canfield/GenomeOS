@@ -67,6 +67,26 @@
         ${d.reactions.map(r => `<tr style="${lostIds.has(r.id) ? 'color:var(--bad)' : ''}"><td>${lostIds.has(r.id) ? '✗' : '✓'}</td><td>${r.name}</td><td class="muted">${r.inputs.join(' + ')}</td><td class="muted">${r.outputs.join(' + ')}</td><td class="muted">${r.catalysts.map(c => '⚙ ' + c).concat(r.inhibitors.map(i => '⊣ ' + i)).join('; ')}</td></tr>`).join('')}</table>`;
     } catch (e) { $('#m-pw-status').textContent = e.message; }
   };
+  window.moleculesRna = async function (gene, chrom) {
+    $('#m-rna-status').textContent = 'listing transcripts, fetching GTEx…';
+    try {
+      const r = await window.api(`/api/rna?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom || '')}`);
+      const tx = r.transcripts, e = r.expression;
+      let html = '';
+      if (tx) {
+        html += `<div><b>${tx.count} transcripts</b>, ${tx.coding_isoforms} coding · ${Object.entries(tx.by_biotype).map(([k, v]) => `${k.replace(/_/g, ' ')} ${v}`).join(', ')} <span class="pill curated">curated: GENCODE</span></div>
+          <div class="scroll" style="max-height:220px"><table style="margin-top:6px;font-size:12px"><tr><th>transcript</th><th>biotype</th><th class="num">exons</th><th class="num">spliced nt</th><th class="num">CDS nt</th><th class="num">aa</th><th>tags</th></tr>
+          ${tx.transcripts.map(x => `<tr><td class="mono">${x.name}</td><td>${x.biotype_label}</td><td class="num">${x.exons}</td><td class="num">${x.spliced_nt ?? '-'}</td><td class="num">${x.cds_nt ?? '-'}</td><td class="num">${x.protein_aa ?? '-'}</td><td class="muted">${x.tags.join(', ')}</td></tr>`).join('')}</table></div>`;
+      } else if (chrom) html += `<div class="muted">no local gene models for ${chrom}; transcripts need chr21 or chrM</div>`;
+      if (e && e.tissues && Object.keys(e.tissues).length) {
+        const mx = e.max_tpm || 1;
+        html += `<div style="margin-top:8px"><b>expression</b> ${e.pattern}; median ${e.median_tpm} TPM over ${e.tissues_measured} tissues, ${e.tissues_expressed} with ≥ 1 TPM <span class="pill experimental">measured: GTEx v8</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 14px;font-size:11.5px;margin-top:4px">${Object.entries(e.tissues).map(([t, v]) => `<div style="display:flex;align-items:center;gap:6px"><span style="width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${t}">${t.replace(/_/g, ' ')}</span><i style="display:inline-block;height:8px;width:${Math.max(1, v / mx * 90)}px;background:var(--c1);border-radius:2px"></i><span class="muted num">${v.toFixed(0)}</span></div>`).join('')}</div>`;
+      } else if (e) html += `<div class="muted" style="margin-top:6px">expression: ${e.error || 'unavailable'}</div>`;
+      $('#m-rna').innerHTML = html || '<span class="muted">nothing found</span>';
+      $('#m-rna-status').textContent = tx ? `${tx.gene} · ${tx.gene_type}` : '';
+    } catch (err) { $('#m-rna-status').textContent = err.message; }
+  };
   window.moleculesDefinition = async function (gene) {
     $('#m-def-status').textContent = 'compiling from Ensembl, UniProt, STRING, HPA…';
     try { const d = await window.api(`/api/protein_definition?gene=${encodeURIComponent(gene)}`); renderDefinition(d); $('#m-def-status').textContent = 'from local knowledge cache after the first compile'; }
@@ -76,6 +96,7 @@
   document.addEventListener('DOMContentLoaded', () => { const b = $('#m-pw-run'); if (b) b.onclick = () => window.moleculesPathway($('#m-pw').value.trim(), $('#m-ko').value.trim()); });
   window.moleculesLoad = async function (gene, chrom) {
     window.moleculesDefinition(gene);
+    window.moleculesRna(gene, chrom);
     $('#m-status').textContent = 'fetching UniProt and AlphaFold…';
     try {
       const r = await window.api(`/api/protein?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom || '')}`);

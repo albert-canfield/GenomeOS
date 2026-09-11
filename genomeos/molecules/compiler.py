@@ -311,6 +311,19 @@ def string_network(symbol: str, min_score: float = 0.7, limit: int = 50) -> list
     return sorted(best.values(), key=lambda x: -x["score"])
 
 
+def _numeric(d: Any) -> Any:
+    """HPA gives per-tissue values as strings; keep them as numbers."""
+    if not isinstance(d, dict):
+        return d
+    out = {}
+    for k, v in d.items():
+        try:
+            out[k] = float(v)
+        except (TypeError, ValueError):
+            out[k] = v
+    return out
+
+
 def hpa_entry(ensembl_gene_id: str) -> dict[str, Any]:
     d = _get(f"https://www.proteinatlas.org/{ensembl_gene_id}.json")
     return {
@@ -320,9 +333,9 @@ def hpa_entry(ensembl_gene_id: str) -> dict[str, Any]:
         "subcellular_additional": d.get("Subcellular additional location"),
         "tissue_specificity": d.get("RNA tissue specificity"),
         "tissue_distribution": d.get("RNA tissue distribution"),
-        "tissue_ntpm": d.get("RNA tissue specific nTPM"),
+        "tissue_ntpm": _numeric(d.get("RNA tissue specific nTPM")),
         "cell_type_specificity": d.get("RNA single cell type specificity"),
-        "cell_type_ncpm": d.get("RNA single cell type specific nCPM"),
+        "cell_type_ncpm": _numeric(d.get("RNA single cell type specific nCPM")),
         "blood_cell_specificity": d.get("RNA blood cell specificity"),
         "cancer_specificity": d.get("RNA cancer specificity"),
         "disease_involvement": d.get("Disease involvement"),

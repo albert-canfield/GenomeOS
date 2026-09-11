@@ -472,6 +472,11 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="m-info"><span class="muted">Load a gene.</span></div>
     </div>
     <div class="card" style="grid-column:1/-1">
+      <h2><i class="ic">🧵</i>RNA<span class="help" data-tip="The RNA layer of the gene: every transcript from the gene models (canonical and MANE first) with biotype, exon count, spliced length and coding length; and where the gene is expressed, as GTEx median TPM per tissue (measured on bulk post-mortem tissue, 54 tissues).">?</span>
+        <span class="muted" id="m-rna-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+      <div id="m-rna"><span class="muted">Load a gene.</span></div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
       <h2><i class="ic">🕸️</i>Protein definition<span class="help" data-tip="Everything the public databases know about this protein, compiled into one object keyed by its UniProt accession: genomic origin and transcripts (Ensembl), sequence, isoforms, domains, modifications and diseases (UniProt, InterPro), experimental structures with their method (PDB), the predicted structure (AlphaFold), pathways (Reactome), associations (STRING) and where it is expressed (Human Protein Atlas). Each section carries its source, evidence kind and confidence. Compiled once, then read from the local knowledge cache.">?</span>
         <span class="muted" id="m-def-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
       <div id="m-def"><span class="muted">Load a gene to compile its definition.</span></div>
