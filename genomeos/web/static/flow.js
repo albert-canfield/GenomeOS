@@ -93,6 +93,17 @@
       if (h.residue) { const px = xProt(h.residue) + (g.W - 2 * g.pad) / d.protein_length / 2; ctx.beginPath(); ctx.moveTo(rx, g.rnaY + 14); ctx.lineTo(px, g.protY - 14); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(px, g.protY - 14); ctx.lineTo(px, g.protY + 14); ctx.stroke(); }
       ctx.setLineDash([]);
     }
+    // individuals: one row of ticks per person under the DNA lane (measured genotypes; coding SNVs in red)
+    const people = d.individuals || [];
+    people.forEach((p, i) => {
+      const y = g.dnaY + 16 + i * 9;
+      if (y > g.rnaY - 30) return;
+      ctx.fillStyle = muted; ctx.font = '10px system-ui'; ctx.textAlign = 'right'; ctx.fillText(p.name, g.pad - 6, y + 4); ctx.textAlign = 'left';
+      ctx.fillStyle = '#8b949e'; ctx.globalAlpha = 0.7;
+      for (const [pos] of p.positions) { const x = xDNA(pos); ctx.fillRect(x, y, 1, 6); }
+      ctx.globalAlpha = 1; ctx.fillStyle = '#d1242f';
+      for (const c of p.coding_snvs) { if (c.consequence === 'synonymous') continue; const x = xDNA(c.pos - 1); ctx.fillRect(x - 1, y - 1, 3, 8); }
+    });
     // variant marker
     const v = st.variant;
     if (v && v.mrna !== undefined) {
@@ -139,11 +150,13 @@
     try {
       const d = await window.api(`/api/flow?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom)}${variant ? '&variant=' + encodeURIComponent(variant) : ''}`);
       st.data = d; st.variant = d.variant || null; st.hover = null;
+      setTimeout(() => document.querySelectorAll('.f-ind-var').forEach(a => a.onclick = ev => { ev.preventDefault(); $('#f-variant').value = a.dataset.v; $('#f-load').click(); }), 0);
       $('#f-status').textContent = `${d.gene} · ${d.transcript} (canonical of ${d.transcripts})`;
       const ev = d.evidence;
       $('#f-summary').innerHTML = `
         <div><b>1 DNA</b> ${d.chrom}:${(d.gene_start + 1).toLocaleString()}–${d.gene_end.toLocaleString()} (${d.strand}) · ${(d.gene_end - d.gene_start).toLocaleString()} bp · ${d.exons.length} exons <span class="pill curated">${ev.exons}</span></div>
         ${d.regulation ? `<div><b>1b regulation</b> node ${d.regulation.domain ? d.regulation.domain.id : '?'}${d.regulation.domain ? ` (${(d.regulation.domain.length / 1000).toFixed(0)} kb, ${d.regulation.domain.coding_genes} coding genes)` : ''}: ${d.regulation.promoters.length} promoter element${d.regulation.promoters.length === 1 ? '' : 's'}, ${d.regulation.enhancers_in_domain} enhancers can reach it (${d.regulation.enhancers_nearest_to_this_gene} nearest to this gene, ${d.regulation.enhancers_inside_gene} inside the gene), ${d.regulation.insulators_bounding.length} bounding insulators <span class="pill curated">curated: ENCODE elements</span> <span class="pill inferred">inferred: reach bounded by the CTCF domain</span>${d.regulation.enhancers_predicted ? ` · ${d.regulation.enhancers_predicted} scored by AlphaGenome, ${d.regulation.enhancers_predicted_this_gene} name this gene <span class="pill predicted">predicted</span>` : ''}<div class="muted" style="font-size:11.5px">green tick = promoter, amber = enhancer, drawn where they fall in the gene span; the full list is in <span class="mono">genomeos regulation --gene ${d.gene}</span></div></div>` : ''}
+        ${(d.individuals || []).length ? `<div><b>1c individuals</b> ${d.individuals.map(p => `<span class="mono">${p.name}</span> ${p.variants_in_gene.toLocaleString()} variants inside the gene${p.coding_snvs.length ? ', coding: ' + p.coding_snvs.filter(c => c.consequence !== 'synonymous').slice(0, 8).map(c => `<a href="#" class="f-ind-var" data-v="${d.chrom}:${c.pos} ${c.ref}>${c.alt}">${c.hgvs_p || c.consequence}</a> <span class="muted">(${c.genotype})</span>`).join('; ') + (p.coding_snvs.some(c => c.consequence === 'synonymous') ? ` + ${p.coding_snvs.filter(c => c.consequence === 'synonymous').length} synonymous` : '') : ''}`).join(' · ')} <span class="pill experimental">measured</span> <span class="muted">genotypes from each person's file; grey ticks under the DNA lane, red = protein-changing; click a change to trace it</span></div>` : ''}
         <div><b>2 RNA</b> spliced mRNA ${d.mrna_length.toLocaleString()} nt = 5'UTR ${d.utr5} + CDS ${d.cds_length} + 3'UTR ${d.utr3}; introns removed: ${((d.gene_end - d.gene_start) - d.mrna_length).toLocaleString()} bp (${(100 - d.mrna_length / (d.gene_end - d.gene_start) * 100).toFixed(1)}% of the gene) <span class="pill derived">${ev.mrna}</span></div>
         <div><b>3 protein</b> ${d.protein_length} aa, ${d.codon_table} code${d.tags.length ? ' · ' + d.tags.join(', ') : ''} <span class="pill derived">${ev.protein}</span>
           <div class="mono" style="font-size:11px;word-break:break-all;max-height:64px;overflow:auto;margin-top:4px">${d.protein}</div></div>
@@ -184,5 +197,11 @@
     $('#f-load').onclick = window.flowLoad;
     $('#f-gene').onkeydown = e => { if (e.key === 'Enter') window.flowLoad(); };
     window.addEventListener('resize', draw);
+  });
+  document.addEventListener('DOMContentLoaded', () => {
+    // deep link: #flow?gene=APP&chrom=chr21[&variant=chr21:25897620 C>T]
+    const q = ((window.initialHash || location.hash).split('?')[1] || '');
+    const gm = q.match(/gene=([^&]+)/), cm = q.match(/chrom=([^&]+)/), vm = q.match(/variant=([^&]+)/);
+    if (gm && $('#f-gene') && (window.initialHash || location.hash).startsWith('#flow')) { $('#f-gene').value = decodeURIComponent(gm[1]); if (cm) $('#f-chrom').value = decodeURIComponent(cm[1]); if (vm) $('#f-variant').value = decodeURIComponent(vm[1]); setTimeout(() => $('#f-load').click(), 400); }
   });
 })();

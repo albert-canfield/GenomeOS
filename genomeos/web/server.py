@@ -1267,6 +1267,42 @@ class Api:
             finally:
                 fai.close()
             out["regulation"] = regulation_of(g.symbol, chrom, ccres, ann, length)
+        # every local individual's variants inside the gene: the test human and imported genomes
+        from genomeos.genome.individuals import rows_in, sources
+
+        people = []
+        for name, vcf, evidence in sources(chrom, self.root / "data" / "individuals"):
+            inside, coding, positions = 0, [], []
+            for f in rows_in(vcf, g.locus.start + 1, g.locus.end):
+                inside += 1
+                pos = int(f[1])
+                gt = f[9].split(":")[0] if len(f) > 9 else ""
+                if len(positions) < 2000:
+                    positions.append([pos - 1, gt])
+                if tr is not None and len(f[3]) == 1 and len(f[4]) == 1 and len(coding) < 30:
+                    sub = tr.substitute(pos - 1, f[3], f[4])
+                    if sub.get("region") == "CDS":
+                        coding.append(
+                            {
+                                "pos": pos,
+                                "ref": f[3],
+                                "alt": f[4],
+                                "genotype": gt,
+                                "consequence": sub.get("consequence"),
+                                "hgvs_p": sub.get("hgvs_p"),
+                                "residue": sub.get("residue"),
+                            }
+                        )
+            people.append(
+                {
+                    "name": name,
+                    "variants_in_gene": inside,
+                    "positions": positions,
+                    "coding_snvs": coding,
+                    "evidence": evidence,
+                }
+            )
+        out["individuals"] = people
         if variant:
             try:
                 pos, change = (

@@ -93,3 +93,14 @@ Run it on any gene:
 genomeos gene MT-CO1 --gff3 data/results/gencode_v50_chr21_chrM.gff3.gz --genome data/reference/chrM.fa.gz --chrom chrM --table mito
 genomeos flow APP --chrom chr21
 ```
+
+## Individuals on the flow (2026-09-11)
+
+Below the DNA lane the Flow tab draws one row of ticks per local individual
+(the test human and every genome imported with `genomeos individual import`):
+every variant of that person inside the gene as a grey tick, protein-changing
+coding SNVs in red, and the summary lists the changes with their genotype;
+clicking one traces it through DNA → RNA → protein like any variant typed
+into the box. Genotypes are measured (each person's file); consequences are
+derived by the local trace on the canonical transcript. Served in `/api/flow`
+as `individuals`.
