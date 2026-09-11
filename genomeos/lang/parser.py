@@ -20,6 +20,7 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     decision <Id> { action: divide|differentiate|migrate|quiesce|die; when: ...; daughters: A, B; to: T; ... }
     field <Id> { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0 }
     experiment <Id> { knockout: POP-1; until: 800 min; expect: "..."; assert: ... }
+    design <Id> { knockout_any_of: A, B; at_most: 1; until: 3 yr; target: type X at 3 yr = 0; keep: ... }
 
 Properties are `key: value`, one per line or `;`-separated; a block may sit on
 one line. Blocks may nest (transcript inside gene). `#` starts a comment.
@@ -40,6 +41,7 @@ from genomeos.ir import (
     Action,
     CellType,
     Decision,
+    Design,
     Domain,
     Effect,
     Event,
@@ -81,8 +83,9 @@ _KINDS = (
     "decision",
     "experiment",
     "field",
+    "design",
 )
-_REPEATABLE = ("effect", "assert", "observe", "source")
+_REPEATABLE = ("effect", "assert", "observe", "source", "target", "keep", "vary")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
 _PARAM = re.compile(r"^(\w[\w.]*)\s*=\s*([-+0-9.eE]+)\s*([^\s{]*)\s*$")
 _EFFECT = re.compile(r"^(\w+)\s*(\+=|-=|\*=|=)\s*([-+0-9.eE]+)\s*(.*)$")
@@ -479,6 +482,27 @@ def _compile_block(b: Block, module: Module) -> None:
                 raise BioLangError(f"line {b.line}: source must be 'x,y = rate', got {src!r}")
             fl.sources.append((int(float(xy[0])), int(float(xy[1])), float(rate)))
         module.fields.append(fl)
+    elif b.kind == "design":
+        dg = Design(name=b.header, evidence=ev, confidence=conf)
+        dg.knockout_any_of = _list(p.get("knockout_any_of", ""))
+        dg.add_any_of = _list(p.get("add_any_of", ""))
+        if "at_most" in p:
+            dg.at_most = max(1, int(_float(p["at_most"], "at_most", b.line)))
+        if "until" in p:
+            val, unit = _quantity(p["until"], "until", b.line)
+            dg.until = to_minutes(val, unit)
+        for key, target in (("target", dg.targets), ("keep", dg.keeps), ("vary", dg.vary)):
+            target.extend(x.strip() for x in p.get(key, "").split(" ; ") if x.strip())
+        for spec in dg.vary:
+            parts = spec.split()
+            if len(parts) != 4 or parts[0] not in ("timer", "decision") or ".." not in parts[3]:
+                raise BioLangError(
+                    f"line {b.line}: vary expects 'timer NAME duration LO..HI' or "
+                    "'decision ID fraction|after LO..HI'"
+                )
+        if not dg.targets and not dg.keeps:
+            raise BioLangError(f"line {b.line}: design {b.header!r} needs a target or a keep")
+        module.designs.append(dg)
     elif b.kind == "experiment":
         ex = Experiment(name=b.header, evidence=ev, confidence=conf)
         ex.knockouts = _list(p.get("knockout", ""))

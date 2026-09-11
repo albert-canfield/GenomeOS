@@ -673,6 +673,20 @@ def cmd_grow(args: argparse.Namespace) -> int:
         print(f"{args.module}: no organism block (see docs/BIOLANG-v0.3.md)", file=sys.stderr)
         return 2
     o = module.organism
+    if args.design is not None:
+        from genomeos.organism.forge import run_designs
+
+        names = [x for x in args.design.split(",") if x] or None
+        results = run_designs(module, names, seed=args.seed)
+        if not results:
+            print(f"{args.module}: no design blocks" + (f" named {names}" if names else ""))
+            return 1
+        for r in results:
+            print(r.format())
+        if args.json:
+            Path(args.json).write_text(json.dumps([r.to_dict() for r in results], indent=1, default=str))
+            print(f"  wrote {args.json}")
+        return 0
     if args.experiments is not None:
         from genomeos.organism.experiment import run_experiments
 
@@ -2504,6 +2518,14 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         metavar="NAMES",
         help="run the program's experiment blocks (all, or a comma-separated list) against the wild type",
+    )
+    p.add_argument(
+        "--design",
+        nargs="?",
+        const="",
+        default=None,
+        metavar="NAMES",
+        help="run the program's design blocks with BioForge (all, or a comma-separated list)",
     )
     p.set_defaults(fn=cmd_grow)
 

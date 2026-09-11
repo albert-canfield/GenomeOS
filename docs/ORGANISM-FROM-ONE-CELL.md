@@ -451,6 +451,9 @@ cells born 2,183/2,183, parent mismatches 0, terminal fates 961/961, deaths 131/
 (embryo median 8 min, p90 25 min). The alive-cell curve runs under the reference between 350 and 500 min because
 per-generation mean timers smooth the real spread; the program's own `assert` flags it.
 
+Design (`genomeos grow FILE --design`): BioForge over organism programs; the C. elegans and haematopoiesis design
+files answer their questions with the expected factor (POP-1, PIE-1, GFI1), each returned as a predicted experiment.
+
 Haematopoiesis (`genomeos grow data/organisms/human/haematopoiesis.bio --until "3 yr"`): the first human
 mechanism module; every compartment gated by the factors the genetics showed necessary, flows solved from the
 measured outputs, pools within 15% of design after three years, 2.8e11 cells replaced per day, nine knockouts

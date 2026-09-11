@@ -264,7 +264,13 @@ class Body:
             if d is not None and current is not None and d.id != current:
                 c.fired.remove(current)
                 self.fired[current] -= 1
-                c.divides_at = None
+                if d.after is not None and self.population(c):
+                    # same cadence: keep the pending step's time, only the decision changes (a re-timed
+                    # step would shift the phase between growth and outflow, which the balance depends on)
+                    c.fired.append(d.id)
+                    self.fired[d.id] += 1
+                else:
+                    c.divides_at = None
         if c.divides_at is None and not c.quiescent and (born or self.population(c)):
             d = self._first(c, "divide", ctx)
             if d is None:
@@ -308,6 +314,8 @@ class Body:
         pool = self.cells.get(name)
         if pool is not None:
             pool.count += amount
+            if pool.born <= self.time < pool.end:
+                self._resolve(pool, born=False)  # the receiving population decides again too
             return
         child = Cell(
             name, c.lineage, c.generation, self.time, cell_type, dict(c.factors), parent=c.name, count=amount
@@ -333,6 +341,7 @@ class Body:
         c.flow_at[did] = self.time + (d.after or 0.0) * self.organism.tempo
         self._push(c.flow_at[did], c.name, f"flow:{did}")
         self._record()
+        self._resolve(c, born=False)  # a changed population decides again (caps and quiescence are re-read)
 
     # ---- events ----------------------------------------------------------
 

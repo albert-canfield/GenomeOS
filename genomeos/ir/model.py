@@ -415,6 +415,26 @@ class Experiment:
 
 
 @dataclass(slots=True)
+class Design:
+    """A goal for BioForge over an organism: which perturbations it may try (factors to knock out or add,
+    continuous knobs), what to reach (`targets`, loss terms) and what must hold (`keeps`, constraints).
+    The result is an experiment, labelled predicted until the bench confirms it."""
+
+    name: str
+    knockout_any_of: list[str] = field(default_factory=list)
+    add_any_of: list[str] = field(default_factory=list)
+    at_most: int = 1  # perturbations combined per candidate
+    vary: list[str] = field(
+        default_factory=list
+    )  # "timer NAME duration LO..HI", "decision ID fraction LO..HI"
+    until: float | None = None  # minutes
+    targets: list[str] = field(default_factory=list)  # assert grammar; distance from holding is the loss
+    keeps: list[str] = field(default_factory=list)  # assert grammar; must hold
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
 class Organism:
     """The program root: one genome, one bootstrap cell state, one environment."""
 
@@ -455,6 +475,7 @@ class Module:
     decisions: list[Decision] = field(default_factory=list)
     experiments: list[Experiment] = field(default_factory=list)
     fields: list[Field] = field(default_factory=list)
+    designs: list[Design] = field(default_factory=list)
     organism: Organism | None = None
 
     def add(self, entity: Entity) -> None:
@@ -494,6 +515,7 @@ class Module:
         self.decisions.extend(other.decisions)
         self.experiments.extend(other.experiments)
         self.fields.extend(other.fields)
+        self.designs.extend(other.designs)
         if self.organism is None:
             self.organism = other.organism
         for k, v in other.parameters.items():
@@ -564,6 +586,7 @@ class Module:
             "decisions": [conv(d) for d in self.decisions],
             "experiments": [conv(x) for x in self.experiments],
             "fields": [conv(f) for f in self.fields],
+            "designs": [conv(d) for d in self.designs],
             "organism": conv(self.organism) if self.organism else None,
         }
 
@@ -636,6 +659,7 @@ class Module:
             ("decisions", Decision, m.decisions),
             ("experiments", Experiment, m.experiments),
             ("fields", Field, m.fields),
+            ("designs", Design, m.designs),
         ):
             for d in data.get(key, []):
                 d.pop("__type__", None)

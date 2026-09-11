@@ -142,6 +142,31 @@ their fates without PAL-1). Terminal fates below the founders still come
 from the observed lineage program, so the report is explicit about where
 mechanism stops.
 
+## Design (BioForge over organisms)
+
+A `design` block asks which perturbation reaches a goal:
+
+```
+design lose_neutrophils_keep_the_rest {
+  knockout_any_of: TAL1, GATA1, KLF1, SPI1, CEBPA, GFI1, IRF8, PAX5, NOTCH1, IKZF1
+  at_most: 1                          # perturbations combined per candidate
+  vary: timer cycle duration 10..120  # optional continuous knobs (timer duration, decision fraction or after)
+  until: 3 yr
+  target: type Neutrophil at 3 yr = 0 # loss: normalised distance from holding
+  keep: type Erythrocyte at 3 yr >= 2e13   # constraints that must hold
+  keep: type Monocyte at 3 yr >= 1e9
+}
+```
+
+`genomeos grow FILE --design [names]` runs every candidate as an experiment
+against the same program, seed and horizon, ranks feasible candidates by
+loss and then by the number of perturbations, and emits the answer as an
+`experiment` block with `predicted` evidence and low confidence: a design is
+a hypothesis until the bench confirms it. Over the haematopoiesis module the
+first question above answers GFI1 (C/EBPa would also take the monocytes,
+since the GMP needs it); the second answers IKZF1 or TCF3 alone; over the C. elegans founders, "two intestinal
+founders" answers POP-1 and "two EMS founders and no germline" answers PIE-1.
+
 ## Space
 
 An organism may have a grid (`space: 30 x 1`, `origin: 0,0`, `sense: 30 min`)
