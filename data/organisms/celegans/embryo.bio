@@ -1,6 +1,7 @@
 # C. elegans from one cell: the embryo (and, through lineage_larva, the adult).
 # Layers, in order of precedence: founders.bio (mechanism where known: maternal
-# factors, Wnt/POP-1, Notch), then the observed lineage program generated from
+# factors, Wnt/POP-1, Notch), reader.bio (the measured transcription factors each cell
+# carries, Ma et al. 2021), then the observed lineage program generated from
 # the reference (Sulston 1983 via WormWeb), with cycle timers distilled per
 # founder lineage and generation. Run: genomeos grow data/organisms/celegans/embryo.bio
 module organism.celegans.embryo
@@ -10,6 +11,7 @@ module organism.celegans.embryo
 import cell_types.bio
 import timers.bio
 import founders.bio
+import reader.bio
 import lineage_embryo.bio
 import lineage_larva.bio
 

@@ -550,6 +550,9 @@ def _compile_block(b: Block, module: Module) -> None:
             dc.asymmetric = _arrows(p["asymmetric"], b.line)
         if "lineages" in p:
             dc.lineages = _parse_when(p["lineages"])
+        dc.sets = _list(p.get("sets", ""))
+        if action == "express" and not dc.sets:
+            raise BioLangError(f"line {b.line}: express needs 'sets: FACTOR, ...'")
         dc.toward, dc.direction = p.get("toward", ""), p.get("direction", "")
         if dc.direction and dc.direction not in ("+x", "-x", "+y", "-y"):
             raise BioLangError(f"line {b.line}: direction must be +x, -x, +y or -y")

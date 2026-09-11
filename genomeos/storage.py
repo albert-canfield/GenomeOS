@@ -271,6 +271,21 @@ def _distil_human_turnover() -> dict:
     return table
 
 
+def _distil_celegans_tf_atlas() -> dict:
+    from genomeos.organism.reference import ReferenceLineage
+    from genomeos.organism.tf_atlas import distil, fetch, save_cells, summary, textbook_check, to_bio_reader
+
+    table = distil(fetch())
+    save_cells(table)
+    ref = ReferenceLineage.load()
+    checks = textbook_check(table, ref, load_result("celegans_packer2019"))
+    org = DATA / "organisms" / "celegans"
+    (org / "reader.bio").write_text(to_bio_reader(table))
+    out = summary(table, checks)
+    out["generated"] = [str(org / "reader.bio")]
+    return out
+
+
 def _distil_celegans_packer() -> dict:
     from genomeos.organism.packer import distil, stream_annotation
     from genomeos.organism.reference import ReferenceLineage
@@ -290,6 +305,12 @@ DISTILLERS: list[Distiller] = [
         [],
         _distil_human_turnover,
         "Sender & Milo 2021 cell counts, lifespans and turnover per cell type (Summary.xlsx streamed)",
+    ),
+    Distiller(
+        "celegans_tf_atlas",
+        [],
+        _distil_celegans_tf_atlas,
+        "Ma 2021 TF protein atlas (88 MB streamed): factor presence per cell, reader.bio, textbook check",
     ),
     Distiller(
         "celegans_packer2019",

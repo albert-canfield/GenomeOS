@@ -60,6 +60,7 @@ decision div_EMS {
 decision fate_ABalaaaalal { action: differentiate; when: cell = ABalaaaalal; to: Neuron; name: AINL; ... }
 decision die_ABalaaaalar  { action: die; when: cell = ABalaaaalar; after: 85 min; ... }
 decision germline         { action: quiesce; when: cell = P4; ... }
+decision read_ABala       { action: express; when: cell = ABala; sets: CEH-13, PHA-4, ...; ... }
 
 domain APP_node { locus: chr21:25880000-26055000; genes: APP; boundaries: EH38E2135001, EH38E2135420 }
 
@@ -84,6 +85,14 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
 
 ## Semantics
 
+- **Reader.** An `express` decision states the factors a cell carries (its
+  reader state): every applying `express` decision sets its factors when the
+  cell decides, and a cell the reader covers carries exactly the listed set,
+  so measured factors inherited from the parent but not listed are dropped.
+  `data/organisms/celegans/reader.bio` is generated from the Ma et al. 2021
+  transcription-factor atlas (266 factors, ~1,270 cells), so every cell of the
+  worm program carries its measured factors, and a rule such as
+  `when: ELT-2 = present` reads a measurement rather than a lineage name.
 - **Precedence.** For each action the first matching decision in module order
   wins; imported modules come first in import order. Write mechanism before
   lookup: `founders.bio` (maternal factors, Wnt, Notch) before the generated

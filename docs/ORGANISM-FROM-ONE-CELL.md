@@ -451,6 +451,10 @@ cells born 2,183/2,183, parent mismatches 0, terminal fates 961/961, deaths 131/
 (embryo median 8 min, p90 25 min). The alive-cell curve runs under the reference between 350 and 500 min because
 per-generation mean timers smooth the real spread; the program's own `assert` flags it.
 
+Reader (`genomeos data distil --only celegans_tf_atlas`): the Ma 2021 transcription-factor atlas as one `express`
+decision per cell, imported by the worm program; textbook factors predict their tissues (ELT-2 intestine 0.96, HLH-1
+body-wall muscle 0.94, PHA-4 pharynx 0.85), which is the atlas and the lineage checking each other.
+
 Design (`genomeos grow FILE --design`): BioForge over organism programs; the C. elegans and haematopoiesis design
 files answer their questions with the expected factor (POP-1, PIE-1, GFI1), each returned as a predicted experiment.
 

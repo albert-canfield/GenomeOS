@@ -125,6 +125,7 @@ class Body:
         named = {x.id for v in self._by_cell.values() for x in v}
         self._general = [d for d in module.decisions if d.id not in named]
         self._divide_ids = {d.id for d in module.decisions if d.action == "divide"}
+        self._expressed_names = {f for d in module.decisions if d.action == "express" for f in d.sets}
         self._bootstrap()
 
     # ---- setup ---------------------------------------------------------
@@ -224,6 +225,8 @@ class Body:
                 c.fired.append(d.id)
                 self.fired[d.id] += 1
                 self._push(c.dies_at, c.name, "die")
+        self._express(c, ctx)
+        ctx = self.context(c)
         for _ in range(32):  # differentiation chains and sequential population splits
             d = self._first(c, "differentiate", ctx, unfired=True)
             if d is None:
@@ -301,6 +304,26 @@ class Body:
             self.history[-1] = (self.time, total)
         else:
             self.history.append((self.time, total))
+
+    def _express(self, c: Cell, ctx: dict[str, str]) -> None:
+        """Every applying `express` decision sets its factors; a cell the reader covers carries exactly the
+        measured set, so measured factors inherited from the parent but not listed here are dropped."""
+        if not self._expressed_names:
+            return
+        applying = [d for d in self._candidates(c) if d.action == "express" and d.applies(ctx)]
+        if not applying:
+            return
+        wanted: set[str] = set()
+        for d in applying:
+            wanted.update(f for f in d.sets if f not in self.knockouts)
+            if d.id not in c.fired:
+                c.fired.append(d.id)
+                self.fired[d.id] += 1
+        for f in list(c.factors):
+            if f in self._expressed_names and f not in wanted:
+                del c.factors[f]
+        for f in wanted:
+            c.factors.setdefault(f, "present")
 
     def _split(self, c: Cell, d: Decision) -> None:
         """A fraction of a population differentiates into the target pool (created on first use)."""

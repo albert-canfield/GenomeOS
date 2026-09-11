@@ -364,7 +364,7 @@ class Stage:
         return s <= t_min < e
 
 
-DECISION_ACTIONS = ("divide", "differentiate", "migrate", "quiesce", "die")
+DECISION_ACTIONS = ("divide", "differentiate", "migrate", "quiesce", "die", "express")
 
 
 @dataclass(slots=True)
@@ -375,6 +375,7 @@ class Decision:
     (or the first matching Timer); `asymmetric` says which daughter keeps which factor.
     differentiate: become cell type `to` (optionally taking terminal `name`).
     die: after `after` minutes from birth (or at once). quiesce: stop dividing. migrate: move.
+    express: the cell carries the factors in `sets` (its measured or inferred reader state).
     `fraction` applies to populations: the share of the population that takes the decision."""
 
     id: str
@@ -385,6 +386,7 @@ class Decision:
     name: str = ""
     asymmetric: dict[str, str] = field(default_factory=dict)
     lineages: dict[str, str] = field(default_factory=dict)  # daughter -> lineage it founds (generation 0)
+    sets: list[str] = field(default_factory=list)  # express: factors present in the cell
     toward: str = ""  # migrate: climb this field's gradient
     direction: str = ""  # migrate: +x, -x, +y or -y
     steps: int = 1  # migrate: grid steps per move
