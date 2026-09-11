@@ -70,6 +70,17 @@ def main() -> None:
             fetch(UCSC.format(chrom=chrom), fa)
             gpath = tmp / f"{chrom}.gff3"
             gpath.write_text("".join(per.get(chrom, [])))
+            # curated repeats for this chromosome: fetched, distilled to a summary, BED deleted after use
+            from genomeos.genome.repeats import RESULTS as RMSK_DIR
+            from genomeos.genome.repeats import fetch_repeats, save_repeats
+            from genomeos.genome.repeats import summarise as summarise_repeats
+
+            try:
+                reps = fetch_repeats(chrom)
+                save_repeats(chrom, reps)
+                save_result(f"rmsk_{chrom}", summarise_repeats(chrom, reps))
+            except Exception as e:  # noqa: BLE001
+                print(f"  {chrom}: RepeatMasker unavailable ({str(e)[:60]}); sequence rules only", flush=True)
             seq = Genome.from_fasta(fa).chromosomes[chrom].sequence
             ann = Annotation.from_gff3(gpath, {chrom})
             r = investigate(seq, ann, chrom, progress=lambda m, c=chrom: print(f"  {c}: {m}", flush=True))
@@ -85,6 +96,8 @@ def main() -> None:
             save_result("unknown_genome_wide", summary)
             fa.unlink()
             gpath.unlink()
+            if chrom != "chr21":
+                (RMSK_DIR / f"rmsk_{chrom}.bed.gz").unlink(missing_ok=True)
             mb = r["unknown_bp"] / 1e6
             print(
                 f"{chrom}: {mb:.1f} Mb unknown, {r['classified_fraction']:.0%} classified, {r['seconds']} s",

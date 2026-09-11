@@ -1,6 +1,6 @@
 {
   "result": "unknown_chr21",
-  "date": "2026-09-10",
+  "date": "2026-09-11",
   "chrom": "chr21",
   "unknown_blocks": 446,
   "unknown_bp": 20813319,
@@ -13,44 +13,60 @@
       "blocks": 177,
       "bp": 3650278
     },
-    "unique_intergenic": {
-      "blocks": 52,
-      "bp": 2954806
+    "interspersed_repeat_LINE": {
+      "blocks": 69,
+      "bp": 3164936
     },
     "centromere": {
       "blocks": 1,
       "bp": 2349840
     },
-    "long_orf": {
-      "blocks": 38,
-      "bp": 2272721
+    "unique_intergenic": {
+      "blocks": 32,
+      "bp": 1926392
     },
     "satellite_array": {
-      "blocks": 6,
-      "bp": 1221853
-    },
-    "unclassified": {
-      "blocks": 113,
-      "bp": 763454
+      "blocks": 8,
+      "bp": 1228523
     },
     "mixed_intergenic": {
-      "blocks": 9,
-      "bp": 758052
+      "blocks": 6,
+      "bp": 652777
     },
-    "interspersed_repeat": {
-      "blocks": 7,
-      "bp": 413871
+    "unclassified": {
+      "blocks": 75,
+      "bp": 490633
+    },
+    "interspersed_repeat_LTR": {
+      "blocks": 19,
+      "bp": 451581
     },
     "promoter_like": {
       "blocks": 17,
-      "bp": 210383
+      "bp": 276323
+    },
+    "interspersed_repeat": {
+      "blocks": 4,
+      "bp": 228172
+    },
+    "long_orf": {
+      "blocks": 4,
+      "bp": 128280
     },
     "interspersed_repeat_SINE": {
-      "blocks": 11,
-      "bp": 62118
+      "blocks": 14,
+      "bp": 84659
+    },
+    "tandem_repeat": {
+      "blocks": 3,
+      "bp": 17689
+    },
+    "interspersed_repeat_DNA": {
+      "blocks": 2,
+      "bp": 7293
     }
   },
-  "classified_fraction": 0.9633,
+  "classified_fraction": 0.9764,
   "high_copy_threshold": 40,
   "patterns": [
     "telomeric_repeat",
@@ -80,7 +96,7 @@
       "length": 2349840,
       "class": "centromere",
       "evidence": "curated",
-      "confidence": 0.7,
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 1
@@ -100,7 +116,14 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.089
-        }
+        },
+        "repeat_coverage": {
+          "Satellite": 0.912,
+          "Simple_repeat": 0.038,
+          "LINE": 0.007,
+          "Low_complexity": 0.0
+        },
+        "interspersed_coverage": 0.007
       },
       "patterns": {
         "cenp_b_box": 4029
@@ -111,9 +134,9 @@
       "start": 19900043,
       "end": 20193596,
       "length": 293553,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 7,
@@ -135,7 +158,18 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.879
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.296,
+          "LTR": 0.147,
+          "SINE": 0.071,
+          "DNA": 0.031,
+          "Simple_repeat": 0.018,
+          "Low_complexity": 0.001,
+          "srpRNA": 0.0,
+          "snRNA": 0.0
+        },
+        "interspersed_coverage": 0.546
       },
       "patterns": {
         "alu_core": 1,
@@ -169,7 +203,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.912
-        }
+        },
+        "repeat_coverage": {
+          "Satellite": 0.389,
+          "Simple_repeat": 0.108,
+          "LINE": 0.073,
+          "LTR": 0.02,
+          "SINE": 0.016,
+          "DNA": 0.001
+        },
+        "interspersed_coverage": 0.11
       },
       "patterns": {
         "poly_a_tail": 3
@@ -204,7 +247,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.673
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.198,
+          "LTR": 0.152,
+          "SINE": 0.087,
+          "DNA": 0.018,
+          "Simple_repeat": 0.016,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.455
       },
       "patterns": {
         "alu_core": 1,
@@ -234,7 +286,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.906
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.247,
+          "LTR": 0.123,
+          "SINE": 0.04,
+          "Retroposon": 0.015,
+          "Simple_repeat": 0.006,
+          "DNA": 0.001,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.427
       },
       "patterns": {
         "poly_a_tail": 4
@@ -263,7 +325,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.75
-        }
+        },
+        "repeat_coverage": {
+          "Satellite": 0.453,
+          "LINE": 0.062,
+          "Simple_repeat": 0.019,
+          "SINE": 0.008,
+          "LTR": 0.007,
+          "Low_complexity": 0.0
+        },
+        "interspersed_coverage": 0.077
       },
       "patterns": {
         "poly_a_tail": 3
@@ -300,7 +371,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.714
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.208,
+          "LTR": 0.129,
+          "SINE": 0.085,
+          "Simple_repeat": 0.018,
+          "DNA": 0.017,
+          "Low_complexity": 0.004,
+          "Unknown": 0.001
+        },
+        "interspersed_coverage": 0.44
       },
       "patterns": {
         "alu_core": 1,
@@ -312,9 +393,9 @@
       "start": 22669586,
       "end": 22882581,
       "length": 212995,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 15,
@@ -337,7 +418,18 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.69
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.244,
+          "LTR": 0.2,
+          "SINE": 0.088,
+          "DNA": 0.016,
+          "Simple_repeat": 0.009,
+          "Low_complexity": 0.003,
+          "RC": 0.001,
+          "Unknown": 0.0
+        },
+        "interspersed_coverage": 0.548
       },
       "patterns": {
         "poly_a_tail": 6
@@ -349,8 +441,8 @@
       "end": 5448586,
       "length": 204683,
       "class": "satellite_array",
-      "evidence": "inferred",
-      "confidence": 0.4,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "pELS": 3,
@@ -371,7 +463,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.633
-        }
+        },
+        "repeat_coverage": {
+          "Satellite": 0.541,
+          "LINE": 0.164,
+          "Simple_repeat": 0.014,
+          "SINE": 0.009,
+          "LTR": 0.002
+        },
+        "interspersed_coverage": 0.175
       },
       "patterns": {
         "alu_core": 1,
@@ -402,9 +502,9 @@
       "start": 20430762,
       "end": 20597952,
       "length": 167190,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "CTCF-only": 4,
@@ -426,7 +526,18 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.758
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.273,
+          "LTR": 0.128,
+          "SINE": 0.08,
+          "DNA": 0.032,
+          "Simple_repeat": 0.024,
+          "Low_complexity": 0.001,
+          "Unknown": 0.001,
+          "snRNA": 0.0
+        },
+        "interspersed_coverage": 0.514
       },
       "patterns": {
         "alu_core": 1,
@@ -451,9 +562,9 @@
       "start": 23131206,
       "end": 23281735,
       "length": 150529,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "CTCF-only": 1,
@@ -475,7 +586,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.833
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.248,
+          "LTR": 0.158,
+          "DNA": 0.053,
+          "SINE": 0.046,
+          "Simple_repeat": 0.02,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.505
       },
       "patterns": {
         "poly_a_tail": 2
@@ -512,7 +632,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.897
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.199,
+          "LTR": 0.136,
+          "SINE": 0.069,
+          "DNA": 0.06,
+          "Simple_repeat": 0.014,
+          "Low_complexity": 0.002,
+          "Unknown": 0.001
+        },
+        "interspersed_coverage": 0.465
       },
       "patterns": {
         "poly_a_tail": 7
@@ -547,7 +677,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.655
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.227,
+          "LTR": 0.17,
+          "SINE": 0.065,
+          "DNA": 0.021,
+          "Simple_repeat": 0.017,
+          "Low_complexity": 0.001,
+          "snRNA": 0.0
+        },
+        "interspersed_coverage": 0.483
       },
       "patterns": {
         "alu_core": 1,
@@ -559,9 +699,9 @@
       "start": 40864473,
       "end": 41007243,
       "length": 142770,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 17,
@@ -582,7 +722,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.786
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.298,
+          "LTR": 0.203,
+          "SINE": 0.071,
+          "DNA": 0.031,
+          "Simple_repeat": 0.021,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.603
       },
       "patterns": {
         "alu_core": 1,
@@ -618,7 +767,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.923
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.167,
+          "LTR": 0.131,
+          "SINE": 0.069,
+          "Simple_repeat": 0.022,
+          "DNA": 0.014,
+          "Low_complexity": 0.005
+        },
+        "interspersed_coverage": 0.381
       },
       "patterns": {
         "poly_a_tail": 4
@@ -653,7 +811,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.615
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.19,
+          "LTR": 0.127,
+          "SINE": 0.109,
+          "DNA": 0.054,
+          "Simple_repeat": 0.012,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.48
       },
       "patterns": {
         "poly_a_tail": 8
@@ -664,9 +831,9 @@
       "start": 27751239,
       "end": 27883612,
       "length": 132373,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "CTCF-only": 2,
@@ -688,7 +855,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.808
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.308,
+          "LTR": 0.139,
+          "SINE": 0.085,
+          "DNA": 0.024,
+          "Simple_repeat": 0.014,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.556
       },
       "patterns": {
         "alu_core": 1,
@@ -752,7 +928,18 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.929
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.223,
+          "LTR": 0.12,
+          "SINE": 0.038,
+          "rRNA": 0.028,
+          "Retroposon": 0.016,
+          "Simple_repeat": 0.009,
+          "DNA": 0.001,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.399
       },
       "patterns": {
         "poly_a_tail": 2
@@ -763,9 +950,9 @@
       "start": 17296596,
       "end": 17419112,
       "length": 122516,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 16
@@ -785,7 +972,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.625
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.386,
+          "LTR": 0.219,
+          "SINE": 0.115,
+          "DNA": 0.014,
+          "Simple_repeat": 0.009,
+          "Low_complexity": 0.002,
+          "snRNA": 0.001
+        },
+        "interspersed_coverage": 0.734
       },
       "patterns": {
         "poly_a_tail": 11
@@ -821,7 +1018,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.75
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.238,
+          "LTR": 0.084,
+          "SINE": 0.079,
+          "DNA": 0.018,
+          "Simple_repeat": 0.018,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.42
       },
       "patterns": {
         "alu_core": 2,
@@ -851,7 +1057,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.162,
+          "LTR": 0.158,
+          "SINE": 0.027,
+          "Retroposon": 0.017,
+          "Simple_repeat": 0.006,
+          "Low_complexity": 0.001,
+          "DNA": 0.0
+        },
+        "interspersed_coverage": 0.366
       },
       "patterns": {
         "poly_a_tail": 2
@@ -880,7 +1096,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.917
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.169,
+          "SINE": 0.04,
+          "DNA": 0.028,
+          "LTR": 0.017,
+          "Simple_repeat": 0.007,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.254
       },
       "patterns": {
         "alu_core": 1,
@@ -892,9 +1117,9 @@
       "start": 19134423,
       "end": 19244542,
       "length": 110119,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1,
@@ -915,7 +1140,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.818
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.223,
+          "LTR": 0.162,
+          "SINE": 0.075,
+          "DNA": 0.048,
+          "Simple_repeat": 0.014,
+          "Low_complexity": 0.004
+        },
+        "interspersed_coverage": 0.508
       },
       "patterns": {
         "alu_core": 1,
@@ -1012,9 +1246,9 @@
       "start": 13205547,
       "end": 13305151,
       "length": 99604,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.357,
@@ -1030,7 +1264,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.421
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.283,
+          "SINE": 0.11,
+          "LTR": 0.091,
+          "DNA": 0.024,
+          "Simple_repeat": 0.018,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.508
       },
       "patterns": {
         "poly_a_tail": 6
@@ -1064,7 +1307,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.368
-        }
+        },
+        "repeat_coverage": {
+          "SINE": 0.139,
+          "LTR": 0.137,
+          "LINE": 0.119,
+          "DNA": 0.051,
+          "Simple_repeat": 0.016,
+          "Low_complexity": 0.009
+        },
+        "interspersed_coverage": 0.446
       },
       "patterns": {
         "alu_core": 1,
@@ -1076,9 +1328,9 @@
       "start": 18760320,
       "end": 18857778,
       "length": 97458,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "PLS": 1,
@@ -1101,7 +1353,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.895
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.23,
+          "LTR": 0.205,
+          "DNA": 0.07,
+          "SINE": 0.054,
+          "Simple_repeat": 0.006,
+          "Low_complexity": 0.004,
+          "snRNA": 0.0
+        },
+        "interspersed_coverage": 0.56
       },
       "patterns": {
         "poly_a_tail": 2
@@ -1137,7 +1399,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.842
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.202,
+          "LTR": 0.154,
+          "SINE": 0.071,
+          "DNA": 0.016,
+          "Simple_repeat": 0.015,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.445
       },
       "patterns": {
         "poly_a_tail": 4
@@ -1148,9 +1419,9 @@
       "start": 14393745,
       "end": 14485227,
       "length": 91482,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 15,
@@ -1172,7 +1443,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.778
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.384,
+          "LTR": 0.084,
+          "SINE": 0.071,
+          "DNA": 0.02,
+          "Simple_repeat": 0.012,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.56
       },
       "patterns": {
         "alu_core": 1,
@@ -1277,7 +1557,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.824
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.214,
+          "LTR": 0.141,
+          "SINE": 0.087,
+          "DNA": 0.023,
+          "Simple_repeat": 0.015,
+          "Low_complexity": 0.005
+        },
+        "interspersed_coverage": 0.465
       },
       "patterns": {
         "alu_core": 1,
@@ -1307,9 +1596,9 @@
       "start": 19047684,
       "end": 19130522,
       "length": 82838,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "pELS": 2,
@@ -1331,7 +1620,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.938
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.286,
+          "LINE": 0.237,
+          "SINE": 0.061,
+          "DNA": 0.037,
+          "Simple_repeat": 0.008,
+          "Low_complexity": 0.002,
+          "rRNA": 0.0
+        },
+        "interspersed_coverage": 0.621
       },
       "patterns": {
         "poly_a_tail": 2
@@ -1422,9 +1721,9 @@
       "start": 22520058,
       "end": 22598610,
       "length": 78552,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 3,
@@ -1445,7 +1744,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.467
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.273,
+          "LTR": 0.119,
+          "SINE": 0.115,
+          "DNA": 0.048,
+          "Simple_repeat": 0.008,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.555
       },
       "patterns": {
         "poly_a_tail": 5
@@ -1456,9 +1764,9 @@
       "start": 26600840,
       "end": 26677960,
       "length": 77120,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 6
@@ -1478,7 +1786,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.933
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.388,
+          "LTR": 0.153,
+          "SINE": 0.053,
+          "DNA": 0.051,
+          "Simple_repeat": 0.012,
+          "srpRNA": 0.002,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.645
       },
       "patterns": {
         "poly_a_tail": 3
@@ -1522,9 +1840,9 @@
       "start": 8603984,
       "end": 8680537,
       "length": 76553,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "unique_intergenic",
+      "evidence": "inferred",
+      "confidence": 0.3,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.376,
@@ -1540,7 +1858,18 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.933
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.244,
+          "Simple_repeat": 0.065,
+          "SINE": 0.047,
+          "LTR": 0.044,
+          "DNA": 0.029,
+          "Satellite": 0.016,
+          "Unknown": 0.006,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.363
       },
       "patterns": {},
       "similar_to": []
@@ -1549,9 +1878,9 @@
       "start": 9681769,
       "end": 9757216,
       "length": 75447,
-      "class": "long_orf",
+      "class": "promoter_like",
       "evidence": "predicted",
-      "confidence": 0.4,
+      "confidence": 0.5,
       "features": {
         "ccre": {
           "dELS": 1,
@@ -1572,7 +1901,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.2,
+          "LINE": 0.058,
+          "SINE": 0.052,
+          "DNA": 0.03,
+          "Simple_repeat": 0.014,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.339
       },
       "patterns": {},
       "similar_to": []
@@ -1581,9 +1919,9 @@
       "start": 19665020,
       "end": 19739708,
       "length": 74688,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 4,
@@ -1605,7 +1943,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.929
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.214,
+          "LTR": 0.195,
+          "DNA": 0.058,
+          "SINE": 0.046,
+          "Simple_repeat": 0.013,
+          "Low_complexity": 0.002,
+          "tRNA": 0.0
+        },
+        "interspersed_coverage": 0.513
       },
       "patterns": {
         "poly_a_tail": 2
@@ -1639,7 +1987,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.929
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.204,
+          "LTR": 0.086,
+          "SINE": 0.047,
+          "DNA": 0.018,
+          "Simple_repeat": 0.013,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.354
       },
       "patterns": {
         "alu_core": 1,
@@ -1651,9 +2008,9 @@
       "start": 22994354,
       "end": 23065490,
       "length": 71136,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 9
@@ -1673,7 +2030,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.714
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.261,
+          "LTR": 0.143,
+          "SINE": 0.075,
+          "DNA": 0.026,
+          "Simple_repeat": 0.019,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.505
       },
       "patterns": {
         "alu_core": 1,
@@ -1709,7 +2075,18 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.643
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.177,
+          "SINE": 0.108,
+          "LINE": 0.072,
+          "Simple_repeat": 0.018,
+          "DNA": 0.017,
+          "RC": 0.007,
+          "Unknown": 0.002,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.381
       },
       "patterns": {
         "alu_core": 2,
@@ -1743,7 +2120,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.929
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.168,
+          "LTR": 0.162,
+          "SINE": 0.067,
+          "Simple_repeat": 0.035,
+          "DNA": 0.017,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.414
       },
       "patterns": {
         "poly_a_tail": 2
@@ -1777,7 +2163,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.165,
+          "LTR": 0.124,
+          "SINE": 0.072,
+          "DNA": 0.071,
+          "Simple_repeat": 0.018,
+          "Low_complexity": 0.004
+        },
+        "interspersed_coverage": 0.433
       },
       "patterns": {
         "alu_core": 1,
@@ -1843,7 +2238,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.846
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.16,
+          "LTR": 0.12,
+          "SINE": 0.068,
+          "DNA": 0.056,
+          "Simple_repeat": 0.014,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.404
       },
       "patterns": {
         "poly_a_tail": 4
@@ -1923,9 +2327,9 @@
       "start": 30643136,
       "end": 30706732,
       "length": 63596,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 5
@@ -1945,7 +2349,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.917
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.325,
+          "LTR": 0.211,
+          "SINE": 0.045,
+          "DNA": 0.017,
+          "Simple_repeat": 0.008,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.597
       },
       "patterns": {
         "alu_core": 1
@@ -1956,9 +2369,9 @@
       "start": 17128465,
       "end": 17191687,
       "length": 63222,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 4
@@ -1978,7 +2391,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.833
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.553,
+          "LTR": 0.129,
+          "SINE": 0.058,
+          "DNA": 0.015,
+          "Low_complexity": 0.002,
+          "Simple_repeat": 0.002
+        },
+        "interspersed_coverage": 0.754
       },
       "patterns": {
         "poly_a_tail": 3
@@ -1989,9 +2411,9 @@
       "start": 9839362,
       "end": 9902343,
       "length": 62981,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "pELS": 1,
@@ -2014,7 +2436,18 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.279,
+          "LTR": 0.254,
+          "DNA": 0.091,
+          "SINE": 0.065,
+          "Satellite": 0.008,
+          "Simple_repeat": 0.007,
+          "Low_complexity": 0.001,
+          "srpRNA": 0.0
+        },
+        "interspersed_coverage": 0.689
       },
       "patterns": {},
       "similar_to": []
@@ -2058,9 +2491,9 @@
       "start": 27893722,
       "end": 27954904,
       "length": 61182,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 5,
@@ -2082,7 +2515,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.583
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.413,
+          "SINE": 0.111,
+          "LTR": 0.104,
+          "Simple_repeat": 0.012,
+          "DNA": 0.008,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.636
       },
       "patterns": {
         "alu_core": 1,
@@ -2129,9 +2571,9 @@
       "start": 18858276,
       "end": 18917212,
       "length": 58936,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 3,
@@ -2152,7 +2594,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.441,
+          "DNA": 0.063,
+          "SINE": 0.046,
+          "LTR": 0.043,
+          "Simple_repeat": 0.01,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.593
       },
       "patterns": {
         "poly_a_tail": 3
@@ -2203,7 +2654,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.818
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.257,
+          "LTR": 0.094,
+          "DNA": 0.053,
+          "SINE": 0.046,
+          "Simple_repeat": 0.031,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.449
       },
       "patterns": {
         "poly_a_tail": 2
@@ -2227,9 +2687,9 @@
       "start": 20598163,
       "end": 20651449,
       "length": 53286,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 4
@@ -2249,7 +2709,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.19,
+          "LTR": 0.166,
+          "DNA": 0.086,
+          "SINE": 0.072,
+          "Simple_repeat": 0.02,
+          "snRNA": 0.001,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.515
       },
       "patterns": {
         "alu_core": 1,
@@ -2274,9 +2744,9 @@
       "start": 9914846,
       "end": 9966971,
       "length": 52125,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 2
@@ -2296,7 +2766,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.341,
+          "LTR": 0.241,
+          "SINE": 0.031,
+          "DNA": 0.016,
+          "Simple_repeat": 0.006,
+          "Low_complexity": 0.005
+        },
+        "interspersed_coverage": 0.629
       },
       "patterns": {},
       "similar_to": []
@@ -2318,9 +2797,9 @@
       "start": 6008810,
       "end": 6060339,
       "length": 51529,
-      "class": "long_orf",
+      "class": "interspersed_repeat",
       "evidence": "predicted",
-      "confidence": 0.4,
+      "confidence": 0.5,
       "features": {
         "ccre": {
           "dELS": 1
@@ -2340,7 +2819,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.5
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.125,
+          "SINE": 0.104,
+          "LTR": 0.099,
+          "DNA": 0.024,
+          "Simple_repeat": 0.018,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.352
       },
       "patterns": {
         "poly_a_tail": 4
@@ -2351,9 +2839,9 @@
       "start": 8552231,
       "end": 8603546,
       "length": 51315,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "unique_intergenic",
+      "evidence": "inferred",
+      "confidence": 0.3,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.357,
@@ -2369,7 +2857,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.9
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.215,
+          "LTR": 0.13,
+          "SINE": 0.045,
+          "Low_complexity": 0.04,
+          "DNA": 0.017,
+          "Simple_repeat": 0.017
+        },
+        "interspersed_coverage": 0.408
       },
       "patterns": {
         "alu_core": 1,
@@ -2399,7 +2896,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.169,
+          "SINE": 0.082,
+          "LTR": 0.062,
+          "Simple_repeat": 0.022,
+          "Low_complexity": 0.006,
+          "DNA": 0.005
+        },
+        "interspersed_coverage": 0.318
       },
       "patterns": {},
       "similar_to": []
@@ -2408,9 +2914,9 @@
       "start": 30829759,
       "end": 30880643,
       "length": 50884,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "unique_intergenic",
+      "evidence": "inferred",
+      "confidence": 0.3,
       "features": {
         "ccre": {
           "pELS": 1,
@@ -2432,7 +2938,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.7
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.177,
+          "LTR": 0.128,
+          "SINE": 0.118,
+          "DNA": 0.024,
+          "Simple_repeat": 0.019,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.447
       },
       "patterns": {
         "poly_a_tail": 4,
@@ -2512,7 +3027,7 @@
       "start": 43479534,
       "end": 43529185,
       "length": 49651,
-      "class": "long_orf",
+      "class": "mixed_intergenic",
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
@@ -2534,7 +3049,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.556
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.131,
+          "SINE": 0.11,
+          "LTR": 0.102,
+          "DNA": 0.026,
+          "Simple_repeat": 0.02
+        },
+        "interspersed_coverage": 0.368
       },
       "patterns": {
         "poly_a_tail": 4
@@ -2545,9 +3068,9 @@
       "start": 15880068,
       "end": 15928295,
       "length": 48227,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "CTCF-only": 1,
@@ -2569,7 +3092,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.778
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.521,
+          "LTR": 0.171,
+          "SINE": 0.049,
+          "DNA": 0.031,
+          "Simple_repeat": 0.003,
+          "snRNA": 0.001
+        },
+        "interspersed_coverage": 0.772
       },
       "patterns": {
         "poly_a_tail": 4
@@ -2673,7 +3205,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.778
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.142,
+          "LINE": 0.13,
+          "SINE": 0.086,
+          "Simple_repeat": 0.019,
+          "DNA": 0.016,
+          "Low_complexity": 0.007,
+          "tRNA": 0.001
+        },
+        "interspersed_coverage": 0.373
       },
       "patterns": {
         "poly_a_tail": 5
@@ -2684,9 +3226,9 @@
       "start": 18967058,
       "end": 19014244,
       "length": 47186,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 3
@@ -2706,7 +3248,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.778
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.219,
+          "LINE": 0.205,
+          "SINE": 0.063,
+          "DNA": 0.029,
+          "Simple_repeat": 0.012,
+          "Low_complexity": 0.006
+        },
+        "interspersed_coverage": 0.516
       },
       "patterns": {
         "poly_a_tail": 1
@@ -2717,9 +3268,9 @@
       "start": 22154299,
       "end": 22200639,
       "length": 46340,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 5
@@ -2739,7 +3290,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.889
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.405,
+          "LTR": 0.141,
+          "SINE": 0.041,
+          "Simple_repeat": 0.017,
+          "DNA": 0.012,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.599
       },
       "patterns": {
         "alu_core": 1,
@@ -2751,9 +3311,9 @@
       "start": 13120807,
       "end": 13167142,
       "length": 46335,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.389,
@@ -2769,7 +3329,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.889
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.343,
+          "Satellite": 0.207,
+          "LTR": 0.097,
+          "SINE": 0.055,
+          "DNA": 0.03,
+          "Simple_repeat": 0.006,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.525
       },
       "patterns": {},
       "similar_to": []
@@ -2796,7 +3366,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.778
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.146,
+          "SINE": 0.094,
+          "LTR": 0.064,
+          "DNA": 0.007,
+          "Simple_repeat": 0.006,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.311
       },
       "patterns": {
         "poly_a_tail": 1
@@ -2830,7 +3409,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.889
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.342,
+          "SINE": 0.052,
+          "LTR": 0.049,
+          "DNA": 0.032,
+          "Simple_repeat": 0.007,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.476
       },
       "patterns": {
         "poly_a_tail": 2
@@ -2841,9 +3429,9 @@
       "start": 22601509,
       "end": 22647139,
       "length": 45630,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 3,
@@ -2864,7 +3452,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.889
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.221,
+          "LINE": 0.22,
+          "SINE": 0.072,
+          "DNA": 0.018,
+          "Simple_repeat": 0.017,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.53
       },
       "patterns": {
         "alu_core": 1,
@@ -2979,9 +3576,9 @@
       "start": 30166805,
       "end": 30209150,
       "length": 42345,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "CTCF-only": 4,
@@ -3002,7 +3599,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.875
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.267,
+          "LTR": 0.103,
+          "SINE": 0.102,
+          "DNA": 0.033,
+          "Simple_repeat": 0.011,
+          "Low_complexity": 0.006
+        },
+        "interspersed_coverage": 0.504
       },
       "patterns": {
         "poly_a_tail": 2
@@ -3013,9 +3619,9 @@
       "start": 14775262,
       "end": 14816837,
       "length": 41575,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.362,
@@ -3031,7 +3637,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.59,
+          "LTR": 0.119,
+          "SINE": 0.054,
+          "DNA": 0.021,
+          "Simple_repeat": 0.006,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.785
       },
       "patterns": {
         "poly_a_tail": 2
@@ -3066,7 +3681,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.5
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.153,
+          "LTR": 0.105,
+          "SINE": 0.081,
+          "Simple_repeat": 0.02,
+          "DNA": 0.011,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.348
       },
       "patterns": {
         "alu_core": 1,
@@ -3102,7 +3726,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.75
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.128,
+          "LTR": 0.105,
+          "SINE": 0.085,
+          "DNA": 0.022,
+          "Simple_repeat": 0.011,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.34
       },
       "patterns": {
         "poly_a_tail": 2
@@ -3135,7 +3768,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.19,
+          "LINE": 0.147,
+          "DNA": 0.083,
+          "SINE": 0.063,
+          "Simple_repeat": 0.006,
+          "Unknown": 0.003,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.483
       },
       "patterns": {},
       "similar_to": []
@@ -3167,7 +3810,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.714
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.21,
+          "SINE": 0.112,
+          "DNA": 0.069,
+          "LTR": 0.052,
+          "Simple_repeat": 0.012
+        },
+        "interspersed_coverage": 0.444
       },
       "patterns": {
         "poly_a_tail": 4
@@ -3235,7 +3886,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.286
-        }
+        },
+        "repeat_coverage": {
+          "SINE": 0.211,
+          "LTR": 0.17,
+          "Simple_repeat": 0.045,
+          "DNA": 0.033,
+          "LINE": 0.029
+        },
+        "interspersed_coverage": 0.443
       },
       "patterns": {
         "poly_a_tail": 2
@@ -3347,9 +4006,9 @@
       "start": 5973383,
       "end": 6008603,
       "length": 35220,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.415,
@@ -3365,7 +4024,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.571
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.607,
+          "LTR": 0.107,
+          "SINE": 0.099,
+          "DNA": 0.038,
+          "Simple_repeat": 0.006,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.851
       },
       "patterns": {
         "poly_a_tail": 1
@@ -3469,7 +4137,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.833
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.205,
+          "LINE": 0.199,
+          "SINE": 0.062,
+          "Simple_repeat": 0.008,
+          "DNA": 0.008,
+          "Low_complexity": 0.006,
+          "tRNA": 0.001
+        },
+        "interspersed_coverage": 0.474
       },
       "patterns": {
         "poly_a_tail": 1
@@ -3535,7 +4213,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.116,
+          "LINE": 0.112,
+          "SINE": 0.06,
+          "DNA": 0.034,
+          "Simple_repeat": 0.014,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.322
       },
       "patterns": {
         "poly_a_tail": 1
@@ -3649,9 +4336,9 @@
       "start": 21975681,
       "end": 22008746,
       "length": 33065,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 2
@@ -3671,7 +4358,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.667
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.166,
+          "LINE": 0.165,
+          "SINE": 0.112,
+          "DNA": 0.062,
+          "Simple_repeat": 0.018,
+          "Unknown": 0.003,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.506
       },
       "patterns": {
         "poly_a_tail": 2
@@ -3700,7 +4397,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.178,
+          "LTR": 0.097,
+          "SINE": 0.084,
+          "Simple_repeat": 0.027,
+          "Low_complexity": 0.01
+        },
+        "interspersed_coverage": 0.359
       },
       "patterns": {},
       "similar_to": []
@@ -3727,7 +4432,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.17,
+          "LTR": 0.097,
+          "SINE": 0.081,
+          "Simple_repeat": 0.027,
+          "Low_complexity": 0.01
+        },
+        "interspersed_coverage": 0.348
       },
       "patterns": {},
       "similar_to": []
@@ -3754,7 +4467,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.18,
+          "LTR": 0.095,
+          "SINE": 0.084,
+          "Simple_repeat": 0.028,
+          "Low_complexity": 0.007
+        },
+        "interspersed_coverage": 0.36
       },
       "patterns": {
         "ctcf_core": 1
@@ -3765,9 +4486,9 @@
       "start": 13351638,
       "end": 13384248,
       "length": 32610,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "unique_intergenic",
+      "evidence": "inferred",
+      "confidence": 0.3,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.447,
@@ -3783,7 +4504,18 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.833
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.202,
+          "Satellite": 0.11,
+          "SINE": 0.098,
+          "Retroposon": 0.085,
+          "LTR": 0.045,
+          "DNA": 0.026,
+          "Simple_repeat": 0.022,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.456
       },
       "patterns": {},
       "similar_to": []
@@ -3897,7 +4629,7 @@
       "start": 13793141,
       "end": 13824405,
       "length": 31264,
-      "class": "long_orf",
+      "class": "mixed_intergenic",
       "evidence": "predicted",
       "confidence": 0.4,
       "features": {
@@ -3920,7 +4652,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.667
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.156,
+          "SINE": 0.099,
+          "LINE": 0.097,
+          "DNA": 0.05,
+          "Simple_repeat": 0.011,
+          "scRNA": 0.006,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.401
       },
       "patterns": {
         "poly_a_tail": 1
@@ -3931,9 +4673,9 @@
       "start": 15315422,
       "end": 15346651,
       "length": 31229,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 2
@@ -3953,7 +4695,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.833
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.32,
+          "LTR": 0.097,
+          "DNA": 0.063,
+          "SINE": 0.048,
+          "Low_complexity": 0.002,
+          "Simple_repeat": 0.002
+        },
+        "interspersed_coverage": 0.528
       },
       "patterns": {
         "poly_a_tail": 1
@@ -4066,9 +4817,9 @@
       "start": 9129773,
       "end": 9160574,
       "length": 30801,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 1
@@ -4088,7 +4839,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.5
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.37,
+          "LINE": 0.306,
+          "SINE": 0.141,
+          "DNA": 0.018,
+          "Simple_repeat": 0.001
+        },
+        "interspersed_coverage": 0.834
       },
       "patterns": {},
       "similar_to": []
@@ -4341,9 +5100,9 @@
       "start": 16873691,
       "end": 16902555,
       "length": 28864,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "PLS": 1,
@@ -4365,7 +5124,14 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.384,
+          "LINE": 0.336,
+          "SINE": 0.031,
+          "Simple_repeat": 0.007
+        },
+        "interspersed_coverage": 0.751
       },
       "patterns": {
         "poly_a_tail": 1
@@ -4481,9 +5247,9 @@
       "start": 30396822,
       "end": 30425379,
       "length": 28557,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 1
@@ -4503,7 +5269,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.6
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.354,
+          "LTR": 0.201,
+          "SINE": 0.066,
+          "DNA": 0.017,
+          "Simple_repeat": 0.009,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.638
       },
       "patterns": {
         "poly_a_tail": 3
@@ -4581,9 +5356,9 @@
       "start": 13067033,
       "end": 13095304,
       "length": 28271,
-      "class": "interspersed_repeat",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.359,
@@ -4599,7 +5374,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.4
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.434,
+          "SINE": 0.108,
+          "LTR": 0.096,
+          "DNA": 0.02,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.658
       },
       "patterns": {
         "poly_a_tail": 1
@@ -4632,7 +5415,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.205,
+          "LINE": 0.185,
+          "SINE": 0.072,
+          "Simple_repeat": 0.017,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.461
       },
       "patterns": {
         "poly_a_tail": 1
@@ -4643,9 +5434,9 @@
       "start": 20356896,
       "end": 20385062,
       "length": 28166,
-      "class": "mixed_intergenic",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -4665,7 +5456,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.6
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.363,
+          "DNA": 0.132,
+          "SINE": 0.105,
+          "LTR": 0.041,
+          "Simple_repeat": 0.009
+        },
+        "interspersed_coverage": 0.64
       },
       "patterns": {},
       "similar_to": []
@@ -4765,7 +5564,17 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.6
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.289,
+          "SINE": 0.101,
+          "LTR": 0.066,
+          "Simple_repeat": 0.048,
+          "Satellite": 0.034,
+          "Low_complexity": 0.008,
+          "DNA": 0.007
+        },
+        "interspersed_coverage": 0.462
       },
       "patterns": {
         "poly_a_tail": 2
@@ -4776,9 +5585,9 @@
       "start": 10613379,
       "end": 10640027,
       "length": 26648,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 1
@@ -4798,7 +5607,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.467,
+          "LTR": 0.08,
+          "SINE": 0.033,
+          "Low_complexity": 0.02,
+          "Simple_repeat": 0.006
+        },
+        "interspersed_coverage": 0.58
       },
       "patterns": {},
       "similar_to": []
@@ -4829,7 +5646,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.8
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.143,
+          "SINE": 0.109,
+          "Simple_repeat": 0.035,
+          "LINE": 0.034,
+          "DNA": 0.002
+        },
+        "interspersed_coverage": 0.288
       },
       "patterns": {
         "poly_a_tail": 2
@@ -4840,9 +5665,9 @@
       "start": 19594663,
       "end": 19620694,
       "length": 26031,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -4862,7 +5687,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.8
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.341,
+          "LINE": 0.091,
+          "SINE": 0.063,
+          "DNA": 0.04,
+          "Simple_repeat": 0.018,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.535
       },
       "patterns": {},
       "similar_to": []
@@ -4937,9 +5771,9 @@
       "start": 17270550,
       "end": 17296218,
       "length": 25668,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.401,
@@ -4955,7 +5789,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.813,
+          "Retroposon": 0.063,
+          "LTR": 0.06,
+          "SINE": 0.01,
+          "DNA": 0.007,
+          "Simple_repeat": 0.004
+        },
+        "interspersed_coverage": 0.953
       },
       "patterns": {
         "poly_a_tail": 1
@@ -5103,9 +5946,9 @@
       "start": 28023232,
       "end": 28048403,
       "length": 25171,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 4
@@ -5125,7 +5968,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.497,
+          "LINE": 0.232,
+          "SINE": 0.023,
+          "DNA": 0.011,
+          "Simple_repeat": 0.007
+        },
+        "interspersed_coverage": 0.762
       },
       "patterns": {
         "poly_a_tail": 1
@@ -5136,9 +5987,9 @@
       "start": 25069906,
       "end": 25095021,
       "length": 25115,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 2,
@@ -5159,7 +6010,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.8
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.286,
+          "LINE": 0.232,
+          "SINE": 0.041,
+          "Simple_repeat": 0.006,
+          "DNA": 0.003
+        },
+        "interspersed_coverage": 0.562
       },
       "patterns": {
         "poly_a_tail": 1
@@ -5203,9 +6062,9 @@
       "start": 22476391,
       "end": 22500603,
       "length": 24212,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 2
@@ -5225,7 +6084,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.54,
+          "DNA": 0.099,
+          "SINE": 0.083,
+          "Simple_repeat": 0.014,
+          "LTR": 0.013
+        },
+        "interspersed_coverage": 0.735
       },
       "patterns": {
         "poly_a_tail": 1
@@ -5362,7 +6229,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.152,
+          "LTR": 0.136,
+          "DNA": 0.063,
+          "SINE": 0.033,
+          "Simple_repeat": 0.012,
+          "rRNA": 0.002
+        },
+        "interspersed_coverage": 0.384
       },
       "patterns": {},
       "similar_to": []
@@ -5389,7 +6265,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.21,
+          "SINE": 0.103,
+          "LTR": 0.088,
+          "DNA": 0.014,
+          "Simple_repeat": 0.004,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.414
       },
       "patterns": {
         "poly_a_tail": 1
@@ -5400,9 +6285,9 @@
       "start": 8108225,
       "end": 8131902,
       "length": 23677,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.419,
@@ -5418,7 +6303,14 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.263,
+          "LTR": 0.182,
+          "SINE": 0.06,
+          "Simple_repeat": 0.005
+        },
+        "interspersed_coverage": 0.505
       },
       "patterns": {
         "poly_a_tail": 2
@@ -5483,7 +6375,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.179,
+          "SINE": 0.098,
+          "LTR": 0.045,
+          "Simple_repeat": 0.017,
+          "Low_complexity": 0.013,
+          "DNA": 0.006
+        },
+        "interspersed_coverage": 0.327
       },
       "patterns": {},
       "similar_to": []
@@ -5492,9 +6393,9 @@
       "start": 21543345,
       "end": 21566762,
       "length": 23417,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -5514,7 +6415,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.361,
+          "LINE": 0.319,
+          "SINE": 0.073,
+          "DNA": 0.02,
+          "Simple_repeat": 0.016
+        },
+        "interspersed_coverage": 0.773
       },
       "patterns": {},
       "similar_to": []
@@ -5587,9 +6496,9 @@
       "start": 7793954,
       "end": 7816676,
       "length": 22722,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.443,
@@ -5605,7 +6514,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.5
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.321,
+          "SINE": 0.171,
+          "LTR": 0.131,
+          "DNA": 0.041,
+          "Simple_repeat": 0.011
+        },
+        "interspersed_coverage": 0.664
       },
       "patterns": {
         "poly_a_tail": 1,
@@ -5641,7 +6558,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.75
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.145,
+          "SINE": 0.127,
+          "LTR": 0.097,
+          "DNA": 0.061,
+          "Simple_repeat": 0.016,
+          "Low_complexity": 0.001
+        },
+        "interspersed_coverage": 0.43
       },
       "patterns": {
         "poly_a_tail": 1
@@ -5652,9 +6578,9 @@
       "start": 13314944,
       "end": 13337481,
       "length": 22537,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.38,
@@ -5670,7 +6596,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.565,
+          "LINE": 0.19,
+          "SINE": 0.019,
+          "Simple_repeat": 0.014,
+          "DNA": 0.012,
+          "rRNA": 0.002
+        },
+        "interspersed_coverage": 0.785
       },
       "patterns": {},
       "similar_to": []
@@ -5814,9 +6749,9 @@
       "start": 25431701,
       "end": 25453288,
       "length": 21587,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -5836,7 +6771,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.602,
+          "LTR": 0.14,
+          "SINE": 0.063,
+          "DNA": 0.018,
+          "Simple_repeat": 0.016
+        },
+        "interspersed_coverage": 0.823
       },
       "patterns": {
         "poly_a_tail": 2
@@ -5982,9 +6925,9 @@
       "start": 34426017,
       "end": 34446687,
       "length": 20670,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.446,
@@ -6000,7 +6943,15 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.25
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.306,
+          "SINE": 0.174,
+          "LTR": 0.144,
+          "DNA": 0.04,
+          "Simple_repeat": 0.012
+        },
+        "interspersed_coverage": 0.664
       },
       "patterns": {
         "poly_a_tail": 1,
@@ -6034,7 +6985,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 1.0
-        }
+        },
+        "repeat_coverage": {
+          "LTR": 0.263,
+          "LINE": 0.1,
+          "SINE": 0.087,
+          "DNA": 0.045,
+          "Low_complexity": 0.012,
+          "Simple_repeat": 0.007
+        },
+        "interspersed_coverage": 0.495
       },
       "patterns": {
         "poly_a_tail": 2
@@ -6045,9 +7005,9 @@
       "start": 8680934,
       "end": 8701460,
       "length": 20526,
-      "class": "unique_intergenic",
-      "evidence": "inferred",
-      "confidence": 0.3,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.374,
@@ -6063,7 +7023,16 @@
           "tandem": 0.0,
           "low_complexity": 0.0,
           "unique": 0.75
-        }
+        },
+        "repeat_coverage": {
+          "LINE": 0.364,
+          "SINE": 0.164,
+          "LTR": 0.058,
+          "DNA": 0.015,
+          "Simple_repeat": 0.014,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.6
       },
       "patterns": {
         "poly_a_tail": 1
@@ -6120,7 +7089,15 @@
         "longest_orf_aa": 221,
         "periodicity_171": 0.006,
         "alu_per_kb": 0.101,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.09,
+          "LINE": 0.063,
+          "SINE": 0.061,
+          "Simple_repeat": 0.014,
+          "Low_complexity": 0.011
+        },
+        "interspersed_coverage": 0.214
       },
       "patterns": {},
       "similar_to": []
@@ -6129,9 +7106,9 @@
       "start": 19740150,
       "end": 19759358,
       "length": 19208,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.32,
@@ -6142,7 +7119,16 @@
         "longest_orf_aa": 135,
         "periodicity_171": -0.006,
         "alu_per_kb": 0.104,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.37,
+          "DNA": 0.071,
+          "SINE": 0.058,
+          "LTR": 0.049,
+          "Simple_repeat": 0.008,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.548
       },
       "patterns": {},
       "similar_to": []
@@ -6179,9 +7165,9 @@
       "start": 13981899,
       "end": 14000926,
       "length": 19027,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 1
@@ -6196,7 +7182,14 @@
         "longest_orf_aa": 376,
         "periodicity_171": 0.011,
         "alu_per_kb": 0.263,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.594,
+          "Simple_repeat": 0.159,
+          "SINE": 0.072,
+          "Satellite": 0.055
+        },
+        "interspersed_coverage": 0.666
       },
       "patterns": {},
       "similar_to": []
@@ -6274,9 +7267,9 @@
       "start": 7770548,
       "end": 7788702,
       "length": 18154,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "unclassified",
+      "evidence": "none",
+      "confidence": 0.0,
       "features": {
         "ccre": {
           "dELS": 1
@@ -6291,7 +7284,16 @@
         "longest_orf_aa": 333,
         "periodicity_171": -0.001,
         "alu_per_kb": 0.275,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.201,
+          "SINE": 0.152,
+          "LINE": 0.059,
+          "Simple_repeat": 0.022,
+          "DNA": 0.016,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.428
       },
       "patterns": {
         "poly_a_tail": 1
@@ -6320,7 +7322,16 @@
         "longest_orf_aa": 138,
         "periodicity_171": 0.005,
         "alu_per_kb": 0.111,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.272,
+          "LINE": 0.114,
+          "SINE": 0.049,
+          "DNA": 0.033,
+          "Simple_repeat": 0.009,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.468
       },
       "patterns": {},
       "similar_to": []
@@ -6370,7 +7381,15 @@
         "longest_orf_aa": 122,
         "periodicity_171": -0.005,
         "alu_per_kb": 0.279,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.107,
+          "LINE": 0.092,
+          "LTR": 0.048,
+          "Simple_repeat": 0.004,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.247
       },
       "patterns": {},
       "similar_to": []
@@ -6379,9 +7398,9 @@
       "start": 22136083,
       "end": 22153949,
       "length": 17866,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -6396,7 +7415,15 @@
         "longest_orf_aa": 115,
         "periodicity_171": 0.001,
         "alu_per_kb": 0.168,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.281,
+          "LTR": 0.182,
+          "SINE": 0.076,
+          "DNA": 0.019,
+          "Simple_repeat": 0.014
+        },
+        "interspersed_coverage": 0.557
       },
       "patterns": {},
       "similar_to": []
@@ -6503,7 +7530,15 @@
         "longest_orf_aa": 136,
         "periodicity_171": 0.005,
         "alu_per_kb": 0.402,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.172,
+          "LINE": 0.118,
+          "LTR": 0.1,
+          "DNA": 0.015,
+          "Simple_repeat": 0.006
+        },
+        "interspersed_coverage": 0.403
       },
       "patterns": {},
       "similar_to": []
@@ -6513,8 +7548,8 @@
       "end": 6484622,
       "length": 17109,
       "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.522,
@@ -6525,7 +7560,16 @@
         "longest_orf_aa": 172,
         "periodicity_171": 0.015,
         "alu_per_kb": 1.052,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.369,
+          "LINE": 0.129,
+          "LTR": 0.027,
+          "DNA": 0.012,
+          "Simple_repeat": 0.011,
+          "Low_complexity": 0.006
+        },
+        "interspersed_coverage": 0.538
       },
       "patterns": {
         "poly_a_tail": 3
@@ -6537,8 +7581,8 @@
       "end": 37036532,
       "length": 16870,
       "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "CTCF-only": 1,
@@ -6554,7 +7598,15 @@
         "longest_orf_aa": 201,
         "periodicity_171": -0.003,
         "alu_per_kb": 1.126,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.374,
+          "LINE": 0.266,
+          "DNA": 0.086,
+          "LTR": 0.053,
+          "Simple_repeat": 0.02
+        },
+        "interspersed_coverage": 0.778
       },
       "patterns": {
         "alu_core": 1,
@@ -6585,7 +7637,16 @@
         "longest_orf_aa": 224,
         "periodicity_171": -0.008,
         "alu_per_kb": 0.059,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.149,
+          "LTR": 0.085,
+          "DNA": 0.077,
+          "SINE": 0.058,
+          "Simple_repeat": 0.021,
+          "Low_complexity": 0.008
+        },
+        "interspersed_coverage": 0.369
       },
       "patterns": {},
       "similar_to": []
@@ -6594,9 +7655,9 @@
       "start": 28911170,
       "end": 28927885,
       "length": 16715,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 1,
@@ -6612,7 +7673,17 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.001,
         "alu_per_kb": 0.239,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.31,
+          "SINE": 0.163,
+          "DNA": 0.088,
+          "LTR": 0.073,
+          "Low_complexity": 0.009,
+          "Simple_repeat": 0.004,
+          "Unknown": 0.002
+        },
+        "interspersed_coverage": 0.634
       },
       "patterns": {
         "poly_a_tail": 1
@@ -6786,7 +7857,15 @@
         "longest_orf_aa": 198,
         "periodicity_171": -0.002,
         "alu_per_kb": 0.062,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.391,
+          "SINE": 0.046,
+          "DNA": 0.018,
+          "Simple_repeat": 0.012,
+          "LTR": 0.011
+        },
+        "interspersed_coverage": 0.467
       },
       "patterns": {
         "poly_a_tail": 1
@@ -6815,7 +7894,15 @@
         "longest_orf_aa": 197,
         "periodicity_171": -0.024,
         "alu_per_kb": 0.504,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.203,
+          "LTR": 0.141,
+          "LINE": 0.14,
+          "Simple_repeat": 0.04,
+          "Low_complexity": 0.023
+        },
+        "interspersed_coverage": 0.484
       },
       "patterns": {},
       "similar_to": []
@@ -6884,9 +7971,9 @@
       "start": 30813274,
       "end": 30829038,
       "length": 15764,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 2
@@ -6901,7 +7988,15 @@
         "longest_orf_aa": 117,
         "periodicity_171": -0.004,
         "alu_per_kb": 0.254,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.266,
+          "SINE": 0.125,
+          "LTR": 0.099,
+          "DNA": 0.043,
+          "Simple_repeat": 0.013
+        },
+        "interspersed_coverage": 0.533
       },
       "patterns": {},
       "similar_to": []
@@ -6967,9 +8062,9 @@
       "start": 13427773,
       "end": 13443372,
       "length": 15599,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_SINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.399,
@@ -6980,7 +8075,16 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.016,
         "alu_per_kb": 0.192,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.29,
+          "LINE": 0.254,
+          "LTR": 0.072,
+          "DNA": 0.024,
+          "Simple_repeat": 0.004,
+          "Low_complexity": 0.002
+        },
+        "interspersed_coverage": 0.64
       },
       "patterns": {},
       "similar_to": []
@@ -6989,9 +8093,9 @@
       "start": 27623018,
       "end": 27638612,
       "length": 15594,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1,
@@ -7007,7 +8111,15 @@
         "longest_orf_aa": 153,
         "periodicity_171": 0.007,
         "alu_per_kb": 0.257,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.283,
+          "LTR": 0.137,
+          "SINE": 0.073,
+          "DNA": 0.027,
+          "Simple_repeat": 0.011
+        },
+        "interspersed_coverage": 0.521
       },
       "patterns": {
         "poly_a_tail": 2
@@ -7018,9 +8130,9 @@
       "start": 13777266,
       "end": 13792634,
       "length": 15368,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.386,
@@ -7031,7 +8143,14 @@
         "longest_orf_aa": 133,
         "periodicity_171": 0.005,
         "alu_per_kb": 0.325,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.245,
+          "SINE": 0.152,
+          "LINE": 0.118,
+          "Simple_repeat": 0.033
+        },
+        "interspersed_coverage": 0.515
       },
       "patterns": {
         "poly_a_tail": 1
@@ -7124,9 +8243,9 @@
       "start": 10342757,
       "end": 10357399,
       "length": 14642,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "pELS": 2
@@ -7141,7 +8260,14 @@
         "longest_orf_aa": 352,
         "periodicity_171": -0.006,
         "alu_per_kb": 0.068,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.564,
+          "SINE": 0.045,
+          "LTR": 0.013,
+          "Simple_repeat": 0.008
+        },
+        "interspersed_coverage": 0.622
       },
       "patterns": {
         "poly_a_tail": 1
@@ -7206,9 +8332,9 @@
       "start": 30356885,
       "end": 30371389,
       "length": 14504,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "unclassified",
+      "evidence": "none",
+      "confidence": 0.0,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.355,
@@ -7219,7 +8345,16 @@
         "longest_orf_aa": 303,
         "periodicity_171": -0.007,
         "alu_per_kb": 0.069,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.351,
+          "SINE": 0.065,
+          "LTR": 0.036,
+          "Simple_repeat": 0.014,
+          "Unknown": 0.01,
+          "Low_complexity": 0.004
+        },
+        "interspersed_coverage": 0.451
       },
       "patterns": {},
       "similar_to": []
@@ -7245,7 +8380,15 @@
         "longest_orf_aa": 121,
         "periodicity_171": 0.002,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.168,
+          "LINE": 0.054,
+          "DNA": 0.036,
+          "Simple_repeat": 0.028,
+          "SINE": 0.027
+        },
+        "interspersed_coverage": 0.286
       },
       "patterns": {},
       "similar_to": []
@@ -7434,7 +8577,14 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.008,
         "alu_per_kb": 0.147,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.18,
+          "SINE": 0.086,
+          "LTR": 0.078,
+          "Simple_repeat": 0.037
+        },
+        "interspersed_coverage": 0.345
       },
       "patterns": {},
       "similar_to": []
@@ -7608,9 +8758,9 @@
       "start": 7116635,
       "end": 7129102,
       "length": 12467,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.391,
@@ -7621,7 +8771,16 @@
         "longest_orf_aa": 167,
         "periodicity_171": 0.008,
         "alu_per_kb": 0.08,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.311,
+          "LTR": 0.293,
+          "SINE": 0.045,
+          "DNA": 0.016,
+          "Simple_repeat": 0.005,
+          "Low_complexity": 0.003
+        },
+        "interspersed_coverage": 0.665
       },
       "patterns": {},
       "similar_to": []
@@ -7643,7 +8802,14 @@
         "longest_orf_aa": 248,
         "periodicity_171": 0.005,
         "alu_per_kb": 0.405,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.227,
+          "SINE": 0.127,
+          "LTR": 0.032,
+          "Simple_repeat": 0.011
+        },
+        "interspersed_coverage": 0.386
       },
       "patterns": {
         "poly_a_tail": 1
@@ -7681,9 +8847,9 @@
       "start": 13179089,
       "end": 13190741,
       "length": 11652,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.37,
@@ -7694,7 +8860,13 @@
         "longest_orf_aa": 161,
         "periodicity_171": 0.0,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.595,
+          "LTR": 0.199,
+          "SINE": 0.035
+        },
+        "interspersed_coverage": 0.828
       },
       "patterns": {},
       "similar_to": []
@@ -7716,7 +8888,15 @@
         "longest_orf_aa": 142,
         "periodicity_171": 0.008,
         "alu_per_kb": 0.431,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.193,
+          "SINE": 0.181,
+          "DNA": 0.041,
+          "LTR": 0.026,
+          "Simple_repeat": 0.008
+        },
+        "interspersed_coverage": 0.441
       },
       "patterns": {
         "alu_core": 1,
@@ -7728,9 +8908,9 @@
       "start": 13654356,
       "end": 13665867,
       "length": 11511,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "unclassified",
+      "evidence": "none",
+      "confidence": 0.0,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.387,
@@ -7741,7 +8921,14 @@
         "longest_orf_aa": 425,
         "periodicity_171": -0.009,
         "alu_per_kb": 0.174,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.304,
+          "SINE": 0.095,
+          "LTR": 0.021,
+          "Simple_repeat": 0.014
+        },
+        "interspersed_coverage": 0.421
       },
       "patterns": {
         "poly_a_tail": 1
@@ -7765,7 +8952,15 @@
         "longest_orf_aa": 127,
         "periodicity_171": -0.003,
         "alu_per_kb": 0.087,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.171,
+          "LTR": 0.089,
+          "SINE": 0.052,
+          "DNA": 0.036,
+          "Simple_repeat": 0.02
+        },
+        "interspersed_coverage": 0.348
       },
       "patterns": {},
       "similar_to": []
@@ -7846,7 +9041,15 @@
         "longest_orf_aa": 170,
         "periodicity_171": -0.005,
         "alu_per_kb": 0.548,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.25,
+          "LTR": 0.117,
+          "Simple_repeat": 0.037,
+          "LINE": 0.033,
+          "DNA": 0.021
+        },
+        "interspersed_coverage": 0.422
       },
       "patterns": {},
       "similar_to": []
@@ -7873,7 +9076,15 @@
         "longest_orf_aa": 119,
         "periodicity_171": -0.003,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.171,
+          "LINE": 0.105,
+          "SINE": 0.045,
+          "DNA": 0.018,
+          "Simple_repeat": 0.014
+        },
+        "interspersed_coverage": 0.34
       },
       "patterns": {},
       "similar_to": []
@@ -8094,7 +9305,16 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.003,
         "alu_per_kb": 0.101,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.252,
+          "SINE": 0.083,
+          "DNA": 0.082,
+          "LTR": 0.027,
+          "Simple_repeat": 0.018,
+          "Low_complexity": 0.006
+        },
+        "interspersed_coverage": 0.443
       },
       "patterns": {
         "poly_a_tail": 1
@@ -8105,9 +9325,9 @@
       "start": 21737319,
       "end": 21746927,
       "length": 9608,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 1
@@ -8122,7 +9342,14 @@
         "longest_orf_aa": 128,
         "periodicity_171": -0.005,
         "alu_per_kb": 0.104,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.387,
+          "LINE": 0.105,
+          "SINE": 0.033,
+          "Simple_repeat": 0.009
+        },
+        "interspersed_coverage": 0.525
       },
       "patterns": {
         "poly_a_tail": 3
@@ -8133,9 +9360,9 @@
       "start": 13016692,
       "end": 13026199,
       "length": 9507,
-      "class": "promoter_like",
-      "evidence": "predicted",
-      "confidence": 0.5,
+      "class": "interspersed_repeat_SINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.391,
@@ -8146,7 +9373,15 @@
         "longest_orf_aa": 141,
         "periodicity_171": 0.005,
         "alu_per_kb": 0.947,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.317,
+          "DNA": 0.124,
+          "LTR": 0.109,
+          "LINE": 0.015,
+          "Simple_repeat": 0.004
+        },
+        "interspersed_coverage": 0.565
       },
       "patterns": {},
       "similar_to": []
@@ -8168,7 +9403,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.0,
         "alu_per_kb": 0.319,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.144,
+          "SINE": 0.131,
+          "LTR": 0.117,
+          "DNA": 0.025,
+          "Simple_repeat": 0.003
+        },
+        "interspersed_coverage": 0.418
       },
       "patterns": {},
       "similar_to": []
@@ -8194,7 +9437,14 @@
         "longest_orf_aa": 139,
         "periodicity_171": 0.015,
         "alu_per_kb": 0.331,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.212,
+          "SINE": 0.097,
+          "LTR": 0.087,
+          "Simple_repeat": 0.01
+        },
+        "interspersed_coverage": 0.397
       },
       "patterns": {},
       "similar_to": []
@@ -8371,9 +9621,9 @@
       "start": 13897298,
       "end": 13905959,
       "length": 8661,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -8388,7 +9638,12 @@
         "longest_orf_aa": 108,
         "periodicity_171": 0.001,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.883,
+          "Simple_repeat": 0.013
+        },
+        "interspersed_coverage": 0.883
       },
       "patterns": {},
       "similar_to": []
@@ -8425,9 +9680,9 @@
       "start": 22984482,
       "end": 22992993,
       "length": 8511,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -8442,7 +9697,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.004,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.616,
+          "LTR": 0.186,
+          "DNA": 0.017
+        },
+        "interspersed_coverage": 0.819
       },
       "patterns": {},
       "similar_to": []
@@ -8451,9 +9712,9 @@
       "start": 13029493,
       "end": 13037970,
       "length": 8477,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.407,
@@ -8464,7 +9725,14 @@
         "longest_orf_aa": 102,
         "periodicity_171": 0.013,
         "alu_per_kb": 0.59,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.451,
+          "SINE": 0.212,
+          "LTR": 0.128,
+          "Simple_repeat": 0.011
+        },
+        "interspersed_coverage": 0.792
       },
       "patterns": {
         "poly_a_tail": 3
@@ -8475,9 +9743,9 @@
       "start": 13667546,
       "end": 13676021,
       "length": 8475,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.337,
@@ -8488,7 +9756,14 @@
         "longest_orf_aa": 121,
         "periodicity_171": 0.003,
         "alu_per_kb": 0.118,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.57,
+          "SINE": 0.035,
+          "scRNA": 0.005,
+          "Simple_repeat": 0.003
+        },
+        "interspersed_coverage": 0.605
       },
       "patterns": {},
       "similar_to": []
@@ -8539,7 +9814,13 @@
         "longest_orf_aa": 137,
         "periodicity_171": -0.005,
         "alu_per_kb": 0.24,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Simple_repeat": 0.278,
+          "LINE": 0.098,
+          "SINE": 0.073
+        },
+        "interspersed_coverage": 0.171
       },
       "patterns": {},
       "similar_to": []
@@ -8561,7 +9842,13 @@
         "longest_orf_aa": 135,
         "periodicity_171": -0.015,
         "alu_per_kb": 0.242,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.274,
+          "LTR": 0.106,
+          "SINE": 0.074
+        },
+        "interspersed_coverage": 0.455
       },
       "patterns": {
         "poly_a_tail": 2
@@ -8602,9 +9889,9 @@
       "start": 32394380,
       "end": 32402510,
       "length": 8130,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.412,
@@ -8615,7 +9902,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.014,
         "alu_per_kb": 0.615,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.412,
+          "SINE": 0.286,
+          "LTR": 0.081,
+          "DNA": 0.072,
+          "Simple_repeat": 0.003
+        },
+        "interspersed_coverage": 0.851
       },
       "patterns": {
         "poly_a_tail": 3
@@ -8665,7 +9960,14 @@
         "longest_orf_aa": 251,
         "periodicity_171": 0.006,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.112,
+          "SINE": 0.016,
+          "LINE": 0.009,
+          "DNA": 0.007
+        },
+        "interspersed_coverage": 0.145
       },
       "patterns": {},
       "similar_to": []
@@ -8691,7 +9993,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.015,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.147,
+          "LTR": 0.102,
+          "SINE": 0.069,
+          "Simple_repeat": 0.042,
+          "DNA": 0.036
+        },
+        "interspersed_coverage": 0.355
       },
       "patterns": {},
       "similar_to": []
@@ -8700,9 +10010,9 @@
       "start": 14228372,
       "end": 14236205,
       "length": 7833,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.384,
@@ -8713,7 +10023,13 @@
         "longest_orf_aa": 181,
         "periodicity_171": 0.007,
         "alu_per_kb": 0.128,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.305,
+          "LINE": 0.203,
+          "SINE": 0.037
+        },
+        "interspersed_coverage": 0.545
       },
       "patterns": {},
       "similar_to": []
@@ -8722,9 +10038,9 @@
       "start": 36008300,
       "end": 36016078,
       "length": 7778,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "pELS": 1
@@ -8739,7 +10055,13 @@
         "longest_orf_aa": 126,
         "periodicity_171": 0.001,
         "alu_per_kb": 0.643,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.362,
+          "SINE": 0.194,
+          "LTR": 0.11
+        },
+        "interspersed_coverage": 0.666
       },
       "patterns": {},
       "similar_to": []
@@ -8748,9 +10070,9 @@
       "start": 30747259,
       "end": 30755014,
       "length": 7755,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.366,
@@ -8761,7 +10083,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.012,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.291,
+          "SINE": 0.105,
+          "LTR": 0.07,
+          "DNA": 0.04,
+          "Simple_repeat": 0.01
+        },
+        "interspersed_coverage": 0.507
       },
       "patterns": {},
       "similar_to": []
@@ -8799,9 +10129,9 @@
       "start": 8227646,
       "end": 8235353,
       "length": 7707,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "tandem_repeat",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.496,
@@ -8812,7 +10142,15 @@
         "longest_orf_aa": 921,
         "periodicity_171": 0.094,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Simple_repeat": 0.695,
+          "SINE": 0.105,
+          "LTR": 0.054,
+          "LINE": 0.035,
+          "Low_complexity": 0.012
+        },
+        "interspersed_coverage": 0.195
       },
       "patterns": {},
       "similar_to": []
@@ -8874,9 +10212,9 @@
       "start": 8454792,
       "end": 8462319,
       "length": 7527,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "tandem_repeat",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.496,
@@ -8887,7 +10225,14 @@
         "longest_orf_aa": 910,
         "periodicity_171": 0.075,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Simple_repeat": 0.675,
+          "SINE": 0.108,
+          "LINE": 0.058,
+          "LTR": 0.056
+        },
+        "interspersed_coverage": 0.222
       },
       "patterns": {},
       "similar_to": []
@@ -8896,9 +10241,9 @@
       "start": 7618077,
       "end": 7625601,
       "length": 7524,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.349,
@@ -8909,7 +10254,13 @@
         "longest_orf_aa": 121,
         "periodicity_171": -0.007,
         "alu_per_kb": 0.266,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.415,
+          "SINE": 0.229,
+          "Simple_repeat": 0.009
+        },
+        "interspersed_coverage": 0.644
       },
       "patterns": {
         "poly_a_tail": 1
@@ -8933,7 +10284,15 @@
         "longest_orf_aa": 240,
         "periodicity_171": 0.003,
         "alu_per_kb": 1.218,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.295,
+          "LINE": 0.082,
+          "Simple_repeat": 0.069,
+          "DNA": 0.024,
+          "Low_complexity": 0.006
+        },
+        "interspersed_coverage": 0.401
       },
       "patterns": {
         "poly_a_tail": 1
@@ -9015,7 +10374,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.018,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.074,
+          "LTR": 0.062,
+          "SINE": 0.039,
+          "Simple_repeat": 0.035,
+          "DNA": 0.028
+        },
+        "interspersed_coverage": 0.203
       },
       "patterns": {},
       "similar_to": []
@@ -9024,9 +10391,9 @@
       "start": 26217381,
       "end": 26224631,
       "length": 7250,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.421,
@@ -9037,7 +10404,14 @@
         "longest_orf_aa": 146,
         "periodicity_171": -0.009,
         "alu_per_kb": 0.138,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.46,
+          "LINE": 0.106,
+          "SINE": 0.104,
+          "DNA": 0.044
+        },
+        "interspersed_coverage": 0.714
       },
       "patterns": {},
       "similar_to": []
@@ -9046,9 +10420,9 @@
       "start": 30635619,
       "end": 30642863,
       "length": 7244,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -9063,7 +10437,16 @@
         "longest_orf_aa": 122,
         "periodicity_171": -0.002,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.306,
+          "LTR": 0.097,
+          "DNA": 0.061,
+          "SINE": 0.046,
+          "Simple_repeat": 0.011,
+          "Low_complexity": 0.01
+        },
+        "interspersed_coverage": 0.509
       },
       "patterns": {},
       "similar_to": []
@@ -9200,7 +10583,15 @@
         "longest_orf_aa": 121,
         "periodicity_171": -0.028,
         "alu_per_kb": 0.301,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.1,
+          "LTR": 0.063,
+          "DNA": 0.06,
+          "LINE": 0.031,
+          "Simple_repeat": 0.009
+        },
+        "interspersed_coverage": 0.255
       },
       "patterns": {},
       "similar_to": []
@@ -9222,7 +10613,15 @@
         "longest_orf_aa": 131,
         "periodicity_171": 0.011,
         "alu_per_kb": 0.301,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.329,
+          "SINE": 0.106,
+          "LINE": 0.041,
+          "DNA": 0.016,
+          "Simple_repeat": 0.007
+        },
+        "interspersed_coverage": 0.493
       },
       "patterns": {},
       "similar_to": []
@@ -9248,7 +10647,13 @@
         "longest_orf_aa": 424,
         "periodicity_171": 0.003,
         "alu_per_kb": 0.459,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Simple_repeat": 0.167,
+          "LINE": 0.125,
+          "SINE": 0.106
+        },
+        "interspersed_coverage": 0.231
       },
       "patterns": {},
       "similar_to": []
@@ -9297,7 +10702,14 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.007,
         "alu_per_kb": 0.31,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.213,
+          "SINE": 0.109,
+          "LINE": 0.052,
+          "DNA": 0.046
+        },
+        "interspersed_coverage": 0.42
       },
       "patterns": {},
       "similar_to": []
@@ -9306,9 +10718,9 @@
       "start": 10606140,
       "end": 10612454,
       "length": 6314,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.388,
@@ -9319,7 +10731,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.006,
         "alu_per_kb": 0.158,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.586,
+          "SINE": 0.096,
+          "DNA": 0.024
+        },
+        "interspersed_coverage": 0.705
       },
       "patterns": {},
       "similar_to": []
@@ -9341,7 +10759,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.01,
         "alu_per_kb": 0.158,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.139,
+          "SINE": 0.129,
+          "DNA": 0.089
+        },
+        "interspersed_coverage": 0.356
       },
       "patterns": {},
       "similar_to": []
@@ -9367,7 +10791,13 @@
         "longest_orf_aa": 221,
         "periodicity_171": 0.018,
         "alu_per_kb": 0.158,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.095,
+          "Simple_repeat": 0.059,
+          "LINE": 0.026
+        },
+        "interspersed_coverage": 0.121
       },
       "patterns": {},
       "similar_to": []
@@ -9417,7 +10847,14 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.013,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.099,
+          "SINE": 0.076,
+          "Low_complexity": 0.027,
+          "Simple_repeat": 0.02
+        },
+        "interspersed_coverage": 0.175
       },
       "patterns": {},
       "similar_to": []
@@ -9439,7 +10876,16 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.011,
         "alu_per_kb": 0.499,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.266,
+          "LINE": 0.129,
+          "LTR": 0.069,
+          "Simple_repeat": 0.014,
+          "DNA": 0.011,
+          "Low_complexity": 0.005
+        },
+        "interspersed_coverage": 0.475
       },
       "patterns": {},
       "similar_to": []
@@ -9504,9 +10950,9 @@
       "start": 9758365,
       "end": 9764228,
       "length": 5863,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.392,
@@ -9517,7 +10963,14 @@
         "longest_orf_aa": 161,
         "periodicity_171": -0.002,
         "alu_per_kb": 0.171,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.48,
+          "LTR": 0.096,
+          "SINE": 0.05,
+          "Simple_repeat": 0.029
+        },
+        "interspersed_coverage": 0.627
       },
       "patterns": {},
       "similar_to": []
@@ -9570,7 +11023,14 @@
         "longest_orf_aa": 170,
         "periodicity_171": 0.006,
         "alu_per_kb": 0.176,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.273,
+          "SINE": 0.074,
+          "Simple_repeat": 0.041,
+          "LINE": 0.022
+        },
+        "interspersed_coverage": 0.369
       },
       "patterns": {},
       "similar_to": []
@@ -9619,7 +11079,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.015,
         "alu_per_kb": 0.178,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.078,
+          "DNA": 0.04,
+          "Simple_repeat": 0.006
+        },
+        "interspersed_coverage": 0.118
       },
       "patterns": {},
       "similar_to": []
@@ -9641,7 +11107,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.023,
         "alu_per_kb": 0.179,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.078,
+          "DNA": 0.04,
+          "Simple_repeat": 0.006
+        },
+        "interspersed_coverage": 0.118
       },
       "patterns": {},
       "similar_to": []
@@ -9663,7 +11135,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.004,
         "alu_per_kb": 0.179,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.251,
+          "SINE": 0.044,
+          "LTR": 0.029,
+          "Low_complexity": 0.016,
+          "Simple_repeat": 0.015
+        },
+        "interspersed_coverage": 0.325
       },
       "patterns": {},
       "similar_to": []
@@ -9672,9 +11152,9 @@
       "start": 6217885,
       "end": 6223479,
       "length": 5594,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.415,
@@ -9685,7 +11165,12 @@
         "longest_orf_aa": 123,
         "periodicity_171": 0.009,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.434,
+          "LTR": 0.265
+        },
+        "interspersed_coverage": 0.698
       },
       "patterns": {},
       "similar_to": []
@@ -9733,7 +11218,13 @@
         "longest_orf_aa": 102,
         "periodicity_171": -0.007,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "DNA": 0.045,
+          "SINE": 0.031,
+          "Simple_repeat": 0.003
+        },
+        "interspersed_coverage": 0.077
       },
       "patterns": {},
       "similar_to": []
@@ -9742,9 +11233,9 @@
       "start": 6360415,
       "end": 6365954,
       "length": 5539,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.372,
@@ -9755,7 +11246,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.011,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.364,
+          "LTR": 0.211
+        },
+        "interspersed_coverage": 0.575
       },
       "patterns": {},
       "similar_to": []
@@ -9764,9 +11260,9 @@
       "start": 30431026,
       "end": 30436465,
       "length": 5439,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_DNA",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "CTCF-only": 1
@@ -9781,7 +11277,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.005,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "DNA": 0.265,
+          "LINE": 0.125,
+          "LTR": 0.121,
+          "SINE": 0.055,
+          "Simple_repeat": 0.012
+        },
+        "interspersed_coverage": 0.566
       },
       "patterns": {},
       "similar_to": []
@@ -9803,7 +11307,13 @@
         "longest_orf_aa": 114,
         "periodicity_171": 0.023,
         "alu_per_kb": 0.184,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.282,
+          "SINE": 0.131,
+          "Simple_repeat": 0.027
+        },
+        "interspersed_coverage": 0.413
       },
       "patterns": {},
       "similar_to": []
@@ -9825,7 +11335,14 @@
         "longest_orf_aa": 114,
         "periodicity_171": 0.023,
         "alu_per_kb": 0.185,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.282,
+          "SINE": 0.131,
+          "Simple_repeat": 0.027,
+          "DNA": 0.023
+        },
+        "interspersed_coverage": 0.437
       },
       "patterns": {},
       "similar_to": []
@@ -9873,7 +11390,15 @@
         "longest_orf_aa": 166,
         "periodicity_171": 0.005,
         "alu_per_kb": 0.186,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.072,
+          "DNA": 0.061,
+          "Simple_repeat": 0.031,
+          "LTR": 0.03,
+          "LINE": 0.012
+        },
+        "interspersed_coverage": 0.175
       },
       "patterns": {},
       "similar_to": []
@@ -9895,7 +11420,14 @@
         "longest_orf_aa": 101,
         "periodicity_171": 0.008,
         "alu_per_kb": 0.187,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.283,
+          "SINE": 0.157,
+          "DNA": 0.025,
+          "Simple_repeat": 0.022
+        },
+        "interspersed_coverage": 0.464
       },
       "patterns": {},
       "similar_to": []
@@ -9917,7 +11449,14 @@
         "longest_orf_aa": 114,
         "periodicity_171": 0.027,
         "alu_per_kb": 0.187,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.286,
+          "SINE": 0.133,
+          "Simple_repeat": 0.027,
+          "DNA": 0.024
+        },
+        "interspersed_coverage": 0.443
       },
       "patterns": {},
       "similar_to": []
@@ -9926,9 +11465,9 @@
       "start": 15346738,
       "end": 15352077,
       "length": 5339,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -9943,7 +11482,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.011,
         "alu_per_kb": 0.562,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.748,
+          "SINE": 0.171,
+          "LTR": 0.057
+        },
+        "interspersed_coverage": 0.976
       },
       "patterns": {},
       "similar_to": []
@@ -9979,9 +11524,9 @@
       "start": 9902627,
       "end": 9907915,
       "length": 5288,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.377,
@@ -9992,7 +11537,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.007,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.454,
+          "SINE": 0.051
+        },
+        "interspersed_coverage": 0.506
       },
       "patterns": {},
       "similar_to": []
@@ -10001,9 +11551,9 @@
       "start": 44210114,
       "end": 44215381,
       "length": 5267,
-      "class": "long_orf",
-      "evidence": "predicted",
-      "confidence": 0.4,
+      "class": "unclassified",
+      "evidence": "none",
+      "confidence": 0.0,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.495,
@@ -10014,7 +11564,16 @@
         "longest_orf_aa": 256,
         "periodicity_171": -0.039,
         "alu_per_kb": 0.759,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.237,
+          "Simple_repeat": 0.144,
+          "LTR": 0.126,
+          "Low_complexity": 0.122,
+          "LINE": 0.06,
+          "DNA": 0.035
+        },
+        "interspersed_coverage": 0.458
       },
       "patterns": {},
       "similar_to": []
@@ -10092,7 +11651,13 @@
         "longest_orf_aa": 133,
         "periodicity_171": -0.003,
         "alu_per_kb": 0.196,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.316,
+          "SINE": 0.06,
+          "Simple_repeat": 0.056
+        },
+        "interspersed_coverage": 0.376
       },
       "patterns": {},
       "similar_to": []
@@ -10322,9 +11887,9 @@
       "start": 6128972,
       "end": 6133735,
       "length": 4763,
-      "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.456,
@@ -10335,7 +11900,13 @@
         "longest_orf_aa": 168,
         "periodicity_171": 0.012,
         "alu_per_kb": 1.05,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.589,
+          "SINE": 0.256,
+          "Simple_repeat": 0.006
+        },
+        "interspersed_coverage": 0.845
       },
       "patterns": {
         "poly_a_tail": 1
@@ -10359,7 +11930,13 @@
         "longest_orf_aa": 101,
         "periodicity_171": 0.0,
         "alu_per_kb": 0.213,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.322,
+          "SINE": 0.15,
+          "Simple_repeat": 0.031
+        },
+        "interspersed_coverage": 0.471
       },
       "patterns": {},
       "similar_to": []
@@ -10381,7 +11958,15 @@
         "longest_orf_aa": 101,
         "periodicity_171": 0.019,
         "alu_per_kb": 0.213,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.322,
+          "SINE": 0.136,
+          "DNA": 0.028,
+          "Simple_repeat": 0.025,
+          "Low_complexity": 0.008
+        },
+        "interspersed_coverage": 0.486
       },
       "patterns": {},
       "similar_to": []
@@ -10407,7 +11992,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.003,
         "alu_per_kb": 0.214,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.14,
+          "LTR": 0.119,
+          "Simple_repeat": 0.01
+        },
+        "interspersed_coverage": 0.258
       },
       "patterns": {
         "poly_a_tail": 1
@@ -10418,9 +12009,9 @@
       "start": 6223580,
       "end": 6228127,
       "length": 4547,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.386,
@@ -10431,7 +12022,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.006,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.379,
+          "LTR": 0.163
+        },
+        "interspersed_coverage": 0.542
       },
       "patterns": {},
       "similar_to": []
@@ -10453,7 +12049,14 @@
         "longest_orf_aa": 142,
         "periodicity_171": 0.007,
         "alu_per_kb": 0.222,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.259,
+          "SINE": 0.127,
+          "DNA": 0.018,
+          "Simple_repeat": 0.008
+        },
+        "interspersed_coverage": 0.404
       },
       "patterns": {},
       "similar_to": []
@@ -10502,7 +12105,13 @@
         "longest_orf_aa": 238,
         "periodicity_171": -0.017,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "rRNA": 0.169,
+          "Simple_repeat": 0.026,
+          "Low_complexity": 0.01
+        },
+        "interspersed_coverage": 0
       },
       "patterns": {
         "ctcf_core": 1
@@ -10553,7 +12162,13 @@
         "longest_orf_aa": 105,
         "periodicity_171": -0.023,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.295,
+          "DNA": 0.038,
+          "Simple_repeat": 0.008
+        },
+        "interspersed_coverage": 0.332
       },
       "patterns": {},
       "similar_to": []
@@ -10562,9 +12177,9 @@
       "start": 42951014,
       "end": 42955352,
       "length": 4338,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "satellite_array",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.418,
@@ -10575,7 +12190,11 @@
         "longest_orf_aa": 100,
         "periodicity_171": -0.027,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Satellite": 1.002
+        },
+        "interspersed_coverage": 0
       },
       "patterns": {},
       "similar_to": []
@@ -10584,9 +12203,9 @@
       "start": 10358620,
       "end": 10362948,
       "length": 4328,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "DNase-H3K4me3": 1
@@ -10601,7 +12220,12 @@
         "longest_orf_aa": 101,
         "periodicity_171": 0.015,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.618,
+          "LTR": 0.109
+        },
+        "interspersed_coverage": 0.727
       },
       "patterns": {},
       "similar_to": []
@@ -10623,7 +12247,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.02,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.09,
+          "SINE": 0.081,
+          "DNA": 0.055,
+          "LTR": 0.031,
+          "Simple_repeat": 0.006
+        },
+        "interspersed_coverage": 0.257
       },
       "patterns": {},
       "similar_to": []
@@ -10632,9 +12264,9 @@
       "start": 5698863,
       "end": 5703181,
       "length": 4318,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.328,
@@ -10645,7 +12277,13 @@
         "longest_orf_aa": 121,
         "periodicity_171": -0.009,
         "alu_per_kb": 0.232,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.616,
+          "SINE": 0.191,
+          "Simple_repeat": 0.006
+        },
+        "interspersed_coverage": 0.807
       },
       "patterns": {
         "poly_a_tail": 1
@@ -10682,9 +12320,9 @@
       "start": 7131029,
       "end": 7135333,
       "length": 4304,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.329,
@@ -10695,7 +12333,13 @@
         "longest_orf_aa": 121,
         "periodicity_171": -0.026,
         "alu_per_kb": 0.232,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.618,
+          "SINE": 0.191,
+          "Simple_repeat": 0.006
+        },
+        "interspersed_coverage": 0.809
       },
       "patterns": {},
       "similar_to": []
@@ -10721,7 +12365,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.012,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.164,
+          "LINE": 0.04,
+          "Low_complexity": 0.022
+        },
+        "interspersed_coverage": 0.204
       },
       "patterns": {},
       "similar_to": []
@@ -10730,9 +12380,9 @@
       "start": 20426206,
       "end": 20430442,
       "length": 4236,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.376,
@@ -10743,7 +12393,15 @@
         "longest_orf_aa": 114,
         "periodicity_171": -0.006,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.449,
+          "LINE": 0.197,
+          "DNA": 0.117,
+          "SINE": 0.039,
+          "Simple_repeat": 0.004
+        },
+        "interspersed_coverage": 0.802
       },
       "patterns": {},
       "similar_to": []
@@ -10765,7 +12423,15 @@
         "longest_orf_aa": 245,
         "periodicity_171": -0.018,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.101,
+          "LTR": 0.079,
+          "DNA": 0.039,
+          "LINE": 0.03,
+          "Simple_repeat": 0.023
+        },
+        "interspersed_coverage": 0.249
       },
       "patterns": {
         "ctcf_core": 1
@@ -10793,7 +12459,12 @@
         "longest_orf_aa": 157,
         "periodicity_171": -0.023,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.484,
+          "Simple_repeat": 0.012
+        },
+        "interspersed_coverage": 0.484
       },
       "patterns": {},
       "similar_to": []
@@ -10815,7 +12486,12 @@
         "longest_orf_aa": 230,
         "periodicity_171": -0.002,
         "alu_per_kb": 0.957,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.321,
+          "LINE": 0.034
+        },
+        "interspersed_coverage": 0.355
       },
       "patterns": {
         "poly_a_tail": 1
@@ -10826,9 +12502,9 @@
       "start": 17643997,
       "end": 17648148,
       "length": 4151,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.385,
@@ -10839,7 +12515,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.013,
         "alu_per_kb": 0.241,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.298,
+          "LTR": 0.187,
+          "DNA": 0.098,
+          "SINE": 0.058,
+          "Simple_repeat": 0.013
+        },
+        "interspersed_coverage": 0.642
       },
       "patterns": {},
       "similar_to": []
@@ -10865,7 +12549,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.027,
         "alu_per_kb": 0.244,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.171,
+          "DNA": 0.101,
+          "Simple_repeat": 0.028
+        },
+        "interspersed_coverage": 0.271
       },
       "patterns": {
         "poly_a_tail": 2
@@ -10943,7 +12633,13 @@
         "longest_orf_aa": 248,
         "periodicity_171": -0.009,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.068,
+          "Low_complexity": 0.017,
+          "Simple_repeat": 0.014
+        },
+        "interspersed_coverage": 0.068
       },
       "patterns": {},
       "similar_to": []
@@ -10965,7 +12661,13 @@
         "longest_orf_aa": 202,
         "periodicity_171": -0.017,
         "alu_per_kb": 0.266,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.16,
+          "SINE": 0.159,
+          "Simple_repeat": 0.019
+        },
+        "interspersed_coverage": 0.32
       },
       "patterns": {},
       "similar_to": []
@@ -10991,7 +12693,13 @@
         "longest_orf_aa": 164,
         "periodicity_171": 0.004,
         "alu_per_kb": 0.536,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.216,
+          "SINE": 0.164,
+          "LINE": 0.045
+        },
+        "interspersed_coverage": 0.426
       },
       "patterns": {},
       "similar_to": []
@@ -11013,7 +12721,14 @@
         "longest_orf_aa": 160,
         "periodicity_171": -0.006,
         "alu_per_kb": 0.537,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.155,
+          "LTR": 0.134,
+          "LINE": 0.089,
+          "Simple_repeat": 0.027
+        },
+        "interspersed_coverage": 0.377
       },
       "patterns": {},
       "similar_to": []
@@ -11022,9 +12737,9 @@
       "start": 32625096,
       "end": 32628755,
       "length": 3659,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.423,
@@ -11035,7 +12750,13 @@
         "longest_orf_aa": 102,
         "periodicity_171": -0.017,
         "alu_per_kb": 0.82,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.403,
+          "SINE": 0.389,
+          "LTR": 0.023
+        },
+        "interspersed_coverage": 0.815
       },
       "patterns": {
         "poly_a_tail": 1
@@ -11059,7 +12780,14 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.013,
         "alu_per_kb": 0.275,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.139,
+          "LTR": 0.089,
+          "SINE": 0.076,
+          "DNA": 0.022
+        },
+        "interspersed_coverage": 0.326
       },
       "patterns": {},
       "similar_to": []
@@ -11085,7 +12813,13 @@
         "longest_orf_aa": 202,
         "periodicity_171": 0.001,
         "alu_per_kb": 0.283,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.17,
+          "SINE": 0.169,
+          "Simple_repeat": 0.021
+        },
+        "interspersed_coverage": 0.339
       },
       "patterns": {},
       "similar_to": []
@@ -11150,8 +12884,8 @@
       "end": 33498516,
       "length": 3318,
       "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "CTCF-only": 1
@@ -11166,7 +12900,15 @@
         "longest_orf_aa": 118,
         "periodicity_171": 0.007,
         "alu_per_kb": 1.206,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.405,
+          "LTR": 0.118,
+          "LINE": 0.092,
+          "DNA": 0.066,
+          "Simple_repeat": 0.011
+        },
+        "interspersed_coverage": 0.681
       },
       "patterns": {
         "poly_a_tail": 1
@@ -11218,7 +12960,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.003,
         "alu_per_kb": 0.302,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.096,
+          "LINE": 0.026
+        },
+        "interspersed_coverage": 0.121
       },
       "patterns": {},
       "similar_to": []
@@ -11293,7 +13040,12 @@
         "longest_orf_aa": 167,
         "periodicity_171": -0.012,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Satellite": 0.06,
+          "Simple_repeat": 0.025
+        },
+        "interspersed_coverage": 0
       },
       "patterns": {},
       "similar_to": []
@@ -11315,7 +13067,12 @@
         "longest_orf_aa": 123,
         "periodicity_171": 0.003,
         "alu_per_kb": 0.331,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.104,
+          "Simple_repeat": 0.085
+        },
+        "interspersed_coverage": 0.104
       },
       "patterns": {},
       "similar_to": []
@@ -11337,7 +13094,12 @@
         "longest_orf_aa": 150,
         "periodicity_171": 0.032,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "DNA": 0.067,
+          "LINE": 0.031
+        },
+        "interspersed_coverage": 0.098
       },
       "patterns": {},
       "similar_to": []
@@ -11347,8 +13109,8 @@
       "end": 43079862,
       "length": 2919,
       "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.488,
@@ -11359,7 +13121,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.024,
         "alu_per_kb": 1.37,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.52,
+          "LINE": 0.191,
+          "LTR": 0.086,
+          "Low_complexity": 0.022,
+          "Simple_repeat": 0.021
+        },
+        "interspersed_coverage": 0.797
       },
       "patterns": {
         "poly_a_tail": 1
@@ -11383,7 +13153,15 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.003,
         "alu_per_kb": 0.343,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.148,
+          "SINE": 0.126,
+          "LINE": 0.06,
+          "DNA": 0.02,
+          "Simple_repeat": 0.013
+        },
+        "interspersed_coverage": 0.354
       },
       "patterns": {},
       "similar_to": []
@@ -11438,7 +13216,14 @@
         "longest_orf_aa": 149,
         "periodicity_171": 0.036,
         "alu_per_kb": 0.353,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.215,
+          "LINE": 0.047,
+          "DNA": 0.025,
+          "Simple_repeat": 0.013
+        },
+        "interspersed_coverage": 0.286
       },
       "patterns": {
         "poly_a_tail": 1
@@ -11492,7 +13277,11 @@
         "longest_orf_aa": 130,
         "periodicity_171": 0.005,
         "alu_per_kb": 1.068,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.295
+        },
+        "interspersed_coverage": 0.295
       },
       "patterns": {},
       "similar_to": []
@@ -11541,7 +13330,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.004,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.087,
+          "LTR": 0.047
+        },
+        "interspersed_coverage": 0.135
       },
       "patterns": {},
       "similar_to": []
@@ -11550,9 +13344,9 @@
       "start": 32280999,
       "end": 32283681,
       "length": 2682,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_LTR",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -11567,7 +13361,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.012,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.305,
+          "SINE": 0.22,
+          "DNA": 0.045
+        },
+        "interspersed_coverage": 0.569
       },
       "patterns": {},
       "similar_to": []
@@ -11577,8 +13377,8 @@
       "end": 46448402,
       "length": 2633,
       "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -11593,7 +13393,12 @@
         "longest_orf_aa": 121,
         "periodicity_171": 0.012,
         "alu_per_kb": 1.139,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.401,
+          "LTR": 0.326
+        },
+        "interspersed_coverage": 0.728
       },
       "patterns": {},
       "similar_to": []
@@ -11619,7 +13424,12 @@
         "longest_orf_aa": 153,
         "periodicity_171": 0.025,
         "alu_per_kb": 0.8,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.181,
+          "Simple_repeat": 0.013
+        },
+        "interspersed_coverage": 0.181
       },
       "patterns": {},
       "similar_to": []
@@ -11667,7 +13477,15 @@
         "longest_orf_aa": 163,
         "periodicity_171": -0.008,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "DNA": 0.134,
+          "LTR": 0.041,
+          "SINE": 0.033,
+          "LINE": 0.026,
+          "Simple_repeat": 0.02
+        },
+        "interspersed_coverage": 0.233
       },
       "patterns": {
         "ctcf_core": 1
@@ -11678,9 +13496,9 @@
       "start": 8462798,
       "end": 8465253,
       "length": 2455,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "tandem_repeat",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.516,
@@ -11691,7 +13509,11 @@
         "longest_orf_aa": 177,
         "periodicity_171": 0.055,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Simple_repeat": 0.513
+        },
+        "interspersed_coverage": 0
       },
       "patterns": {},
       "similar_to": []
@@ -11727,9 +13549,9 @@
       "start": 32622083,
       "end": 32624415,
       "length": 2332,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "satellite_array",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "pELS": 1
@@ -11744,7 +13566,11 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.014,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Satellite": 0.759
+        },
+        "interspersed_coverage": 0
       },
       "patterns": {},
       "similar_to": []
@@ -11798,7 +13624,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.004,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.135,
+          "DNA": 0.071,
+          "LTR": 0.051
+        },
+        "interspersed_coverage": 0.257
       },
       "patterns": {},
       "similar_to": []
@@ -11820,7 +13652,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.001,
         "alu_per_kb": 0.45,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.143,
+          "LINE": 0.085
+        },
+        "interspersed_coverage": 0.228
       },
       "patterns": {},
       "similar_to": []
@@ -11868,7 +13705,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.007,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.04,
+          "Simple_repeat": 0.021
+        },
+        "interspersed_coverage": 0.04
       },
       "patterns": {},
       "similar_to": []
@@ -11917,7 +13759,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.027,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "DNA": 0.142,
+          "Simple_repeat": 0.081,
+          "LINE": 0.059
+        },
+        "interspersed_coverage": 0.201
       },
       "patterns": {},
       "similar_to": []
@@ -11927,8 +13775,8 @@
       "end": 44447141,
       "length": 1895,
       "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.482,
@@ -11939,7 +13787,15 @@
         "longest_orf_aa": 112,
         "periodicity_171": 0.029,
         "alu_per_kb": 1.583,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.319,
+          "LINE": 0.257,
+          "LTR": 0.069,
+          "DNA": 0.034,
+          "Low_complexity": 0.016
+        },
+        "interspersed_coverage": 0.679
       },
       "patterns": {},
       "similar_to": []
@@ -11948,9 +13804,9 @@
       "start": 14005279,
       "end": 14007133,
       "length": 1854,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_DNA",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.379,
@@ -11961,7 +13817,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.012,
         "alu_per_kb": 0.539,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "DNA": 0.287,
+          "SINE": 0.126,
+          "LINE": 0.124
+        },
+        "interspersed_coverage": 0.537
       },
       "patterns": {},
       "similar_to": []
@@ -12009,7 +13871,11 @@
         "longest_orf_aa": 150,
         "periodicity_171": 0.067,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Simple_repeat": 0.358
+        },
+        "interspersed_coverage": 0
       },
       "patterns": {},
       "similar_to": []
@@ -12057,7 +13923,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.034,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.193,
+          "SINE": 0.171,
+          "LTR": 0.081
+        },
+        "interspersed_coverage": 0.446
       },
       "patterns": {},
       "similar_to": []
@@ -12079,7 +13951,12 @@
         "longest_orf_aa": 107,
         "periodicity_171": 0.006,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "DNA": 0.115,
+          "LINE": 0.053
+        },
+        "interspersed_coverage": 0.168
       },
       "patterns": {},
       "similar_to": []
@@ -12101,7 +13978,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.007,
         "alu_per_kb": 0.609,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.262,
+          "Simple_repeat": 0.038
+        },
+        "interspersed_coverage": 0.262
       },
       "patterns": {
         "poly_a_tail": 1
@@ -12125,7 +14007,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.032,
         "alu_per_kb": 0.617,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.301,
+          "Simple_repeat": 0.012
+        },
+        "interspersed_coverage": 0.301
       },
       "patterns": {
         "poly_a_tail": 1
@@ -12175,7 +14062,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.004,
         "alu_per_kb": 0.643,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LINE": 0.388,
+          "SINE": 0.097
+        },
+        "interspersed_coverage": 0.485
       },
       "patterns": {},
       "similar_to": []
@@ -12307,7 +14199,11 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.003,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "LTR": 0.382
+        },
+        "interspersed_coverage": 0.382
       },
       "patterns": {},
       "similar_to": []
@@ -12344,8 +14240,8 @@
       "end": 7139155,
       "length": 1366,
       "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.464,
@@ -12356,7 +14252,12 @@
         "longest_orf_aa": 133,
         "periodicity_171": 0.0,
         "alu_per_kb": 1.464,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.796,
+          "Simple_repeat": 0.032
+        },
+        "interspersed_coverage": 0.796
       },
       "patterns": {},
       "similar_to": []
@@ -12404,7 +14305,11 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.015,
         "alu_per_kb": 0.778,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.216
+        },
+        "interspersed_coverage": 0.216
       },
       "patterns": {},
       "similar_to": []
@@ -12426,7 +14331,14 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.017,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "Simple_repeat": 0.206,
+          "rRNA": 0.15,
+          "DNA": 0.086,
+          "Low_complexity": 0.034
+        },
+        "interspersed_coverage": 0.086
       },
       "patterns": {},
       "similar_to": []
@@ -12435,9 +14347,9 @@
       "start": 46666229,
       "end": 46667376,
       "length": 1147,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_SINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "ccre": {
           "dELS": 1
@@ -12452,7 +14364,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.011,
         "alu_per_kb": 0.872,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.61,
+          "Simple_repeat": 0.028,
+          "LINE": 0.005
+        },
+        "interspersed_coverage": 0.616
       },
       "patterns": {
         "poly_a_tail": 1
@@ -12528,7 +14446,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.024,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "DNA": 0.154,
+          "LINE": 0.076
+        },
+        "interspersed_coverage": 0.23
       },
       "patterns": {},
       "similar_to": []
@@ -12550,7 +14473,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.063,
         "alu_per_kb": 0.943,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.28,
+          "Simple_repeat": 0.042
+        },
+        "interspersed_coverage": 0.28
       },
       "patterns": {},
       "similar_to": []
@@ -12559,9 +14487,9 @@
       "start": 8103706,
       "end": 8104757,
       "length": 1051,
-      "class": "unclassified",
-      "evidence": "none",
-      "confidence": 0.0,
+      "class": "interspersed_repeat_SINE",
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.448,
@@ -12572,7 +14500,12 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.005,
         "alu_per_kb": 0.951,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.747,
+          "Simple_repeat": 0.042
+        },
+        "interspersed_coverage": 0.747
       },
       "patterns": {},
       "similar_to": []
@@ -12582,8 +14515,8 @@
       "end": 28995234,
       "length": 1048,
       "class": "interspersed_repeat_SINE",
-      "evidence": "predicted",
-      "confidence": 0.6,
+      "evidence": "curated",
+      "confidence": 0.9,
       "features": {
         "n_fraction": 0.0,
         "gc": 0.425,
@@ -12594,7 +14527,13 @@
         "longest_orf_aa": 0,
         "periodicity_171": 0.04,
         "alu_per_kb": 1.908,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.565,
+          "LINE": 0.388,
+          "LTR": 0.027
+        },
+        "interspersed_coverage": 0.98
       },
       "patterns": {},
       "similar_to": []
@@ -12616,7 +14555,11 @@
         "longest_orf_aa": 0,
         "periodicity_171": -0.009,
         "alu_per_kb": 0.0,
-        "composition": {}
+        "composition": {},
+        "repeat_coverage": {
+          "SINE": 0.153
+        },
+        "interspersed_coverage": 0.153
       },
       "patterns": {},
       "similar_to": []

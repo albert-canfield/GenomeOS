@@ -1467,6 +1467,51 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_repeats(args: argparse.Namespace) -> int:
+    from genomeos.genome.repeats import fetch_repeats, load_repeats, save_repeats, summarise
+    from genomeos.results import save_result
+
+    reps = load_repeats(args.chrom) if not args.refresh else []
+    if not reps:
+        print(f"fetching RepeatMasker rows for {args.chrom} from UCSC…", flush=True)
+        reps = fetch_repeats(args.chrom)
+        save_repeats(args.chrom, reps)
+    length = None
+    if Path(args.genome).exists():
+        from genomeos.genome import IndexedGenome
+
+        g = IndexedGenome(args.genome)
+        length = g.lengths.get(args.chrom)
+        g.close()
+    s = summarise(args.chrom, reps, length)
+    save_result(f"rmsk_{args.chrom}", s)
+    print(
+        f"{args.chrom}: {s['copies']:,} repeat copies, {s['repeat_bp'] / 1e6:.1f} Mb"
+        + (f" ({s['repeat_fraction']:.1%} of the chromosome)" if s["repeat_fraction"] else "")
+        + f"  [curated: {s['evidence']}]"
+    )
+    print(
+        _table(
+            [
+                {
+                    "class": k,
+                    "copies": f"{v['copies']:,}",
+                    "Mb": f"{v['bp'] / 1e6:.2f}",
+                    "mean divergence": f"{v['mean_divergence']:.0%}",
+                }
+                for k, v in s["by_class"].items()
+            ],
+            ["class", "copies", "Mb", "mean divergence"],
+        )
+    )
+    print(
+        "  top families: "
+        + ", ".join(f"{k} {v / 1e6:.1f} Mb" for k, v in list(s["top_families"].items())[:8])
+    )
+    print(f"  saved data/results/rmsk_{args.chrom}.bed.gz and rmsk_{args.chrom}.json")
+    return 0
+
+
 def cmd_regulation(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, Genome, default_gencode
     from genomeos.genome.regulation import regulation_of
@@ -2038,6 +2083,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser("repeats", help="curated repeat annotation (RepeatMasker via UCSC) for a chromosome")
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--refresh", action="store_true")
+    p.set_defaults(fn=cmd_repeats)
 
     p = sub.add_parser(
         "regulation", help="the regulatory input of a gene: promoter, enhancers in its node, insulators"

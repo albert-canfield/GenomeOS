@@ -37,6 +37,24 @@ it more.
 Among the 60 largest blocks, pairs that share many 20-mers are reported as
 duplication candidates (`similar_to`).
 
+## Curated repeats: RepeatMasker through the UCSC API
+
+Sequence patterns only find young repeats. `genomeos repeats --chrom chr21`
+fetches RepeatMasker's annotation of the chromosome from the public UCSC
+track API (20 MB of JSON once), keeps a 0.7 MB BED with class, family, name
+and divergence, and a class summary (`rmsk_chr21.json`: 64,812 copies,
+20.5 Mb; LINE/L1 6.3 Mb, SINE/Alu 3.5 Mb, alpha satellite 2.5 Mb). The
+UNKNOWN classifier then grades each block by curated coverage before any
+sequence rule: ≥ 50% interspersed repeat → `interspersed_repeat_<class>`
+(curated, 0.9); ≥ 50% satellite → centromere or satellite array; ≥ 50%
+simple or low-complexity → tandem repeat; and a block that is ≥ 30%
+interspersed repeat can no longer be called `long_orf`.
+
+On chromosome 21 this moved 2.1 of the 2.3 Mb of `long_orf` into
+`interspersed_repeat_LINE` (3.2 Mb in total, the LINE-1 ORF2 frames), added
+0.45 Mb of LTR, and raised the classified share from 96.3% to 97.6%. What
+remains `long_orf` (0.13 Mb) is non-repetitive and worth a look.
+
 ## Chromosome 21 (85 s, with ENCODE evidence)
 
 | class | blocks | bp | share of UNKNOWN |
@@ -124,8 +142,9 @@ class; the pattern classes (repeats, satellites, telomeres) are small
 because they need the named signatures in the pattern file. `long_orf` at
 a quarter of the space is too large to be honest as "possible unannotated
 coding": most of it is the ORF2 of LINE-1 elements, which read as a
-1,200-residue open frame. Until an L1 signature is in the pattern file, read
-`long_orf` as "LINE-1 or a real ORF", not as a gene candidate. Chromosome
+1,200-residue open frame. The curated repeat pass above fixes this on
+chromosome 21 (2.3 Mb → 0.13 Mb) and the genome-wide job now fetches
+RepeatMasker per chromosome, so the table will be re-run with it. Chromosome
 11 and 19 classify worst (92 to 93%) because their UNKNOWN space is small
 and gene-dense, so the composition classes have little to say.
 
