@@ -259,8 +259,15 @@ def _distil_human_turnover() -> dict:
     table = distil(read_xlsx(fetch_milo()))
     org = DATA / "organisms" / "human"
     org.mkdir(parents=True, exist_ok=True)
+    from genomeos.organism.haematopoiesis import mutants_bio
+    from genomeos.organism.haematopoiesis import to_bio as haematopoiesis_bio
+
     (org / "tissues.bio").write_text(to_bio_tissues(table))
-    table["generated"] = [str(org / "tissues.bio")]
+    (org / "haematopoiesis.bio").write_text(haematopoiesis_bio())
+    (org / "haematopoiesis_mutants.bio").write_text(mutants_bio())
+    table["generated"] = [
+        str(org / f) for f in ("tissues.bio", "haematopoiesis.bio", "haematopoiesis_mutants.bio")
+    ]
     return table
 
 

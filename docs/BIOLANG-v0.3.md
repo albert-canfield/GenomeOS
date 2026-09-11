@@ -110,6 +110,11 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   timers put 194 cells at 350 min against 274 in the reference, with the
   spread restored 240 to 265 (seeds 0 to 3), so the spread is part of the
   measured biology, not noise added for effect.
+- **Flows.** A `differentiate` decision with `fraction` and `after` on a
+  population is a recurring flow: every `after`, that share of the pool moves
+  into the target pool (created on first use, then merged into), for as long
+  as the decision applies. This is how a stem-cell compartment feeds a
+  lineage; `data/organisms/human/haematopoiesis.bio` is built from it.
 - **Stages** are events: when a stage starts, populations and resting cells
   read the new stage and decide again.
 - **Diamond imports** are merged once; identifier collisions between

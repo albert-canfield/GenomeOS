@@ -27,6 +27,7 @@ Common keys on any block: evidence, confidence.
 
 from __future__ import annotations
 
+import math
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -492,8 +493,11 @@ def _compile_block(b: Block, module: Module) -> None:
             dc.after = to_minutes(val, unit)
         if "fraction" in p:
             dc.fraction = _float(p["fraction"], "fraction", b.line)
-            if not 0.0 <= dc.fraction <= 1.0:
-                raise BioLangError(f"line {b.line}: fraction must be within 0..1")
+            top = math.inf if action == "divide" else 1.0  # a population may more than double per step
+            if not 0.0 <= dc.fraction <= top:
+                raise BioLangError(
+                    f"line {b.line}: fraction must be within 0..{'1' if top == 1.0 else 'any'}"
+                )
         if action == "divide" and len(dc.daughters) not in (0, 2):
             raise BioLangError(f"line {b.line}: a division names two daughters or none")
         if action == "differentiate" and not dc.to:

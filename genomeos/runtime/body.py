@@ -49,6 +49,7 @@ class Cell:
     fired: list[str] = field(default_factory=list)
     unknown: str = ""  # why the program left this cell without a next step
     cull_at: float | None = None  # next fractional death of a population, if a chain is running
+    flow_at: dict[str, float] = field(default_factory=dict)  # recurring differentiation flows by decision id
 
     @property
     def end(self) -> float:
@@ -187,7 +188,12 @@ class Body:
             d = self._first(c, "differentiate", ctx, unfired=True)
             if d is None:
                 break
-            if d.fraction < 1.0 and self.population(c):
+            if d.fraction < 1.0 and self.population(c) and d.after is not None:
+                # a recurring flow: every `after`, this share moves into the target pool
+                if d.id not in c.flow_at:
+                    c.flow_at[d.id] = self.time + d.after * self.organism.tempo
+                    self._push(c.flow_at[d.id], c.name, f"flow:{d.id}")
+            elif d.fraction < 1.0 and self.population(c):
                 self._split(c, d)
             else:
                 c.cell_type = d.to
@@ -245,15 +251,38 @@ class Body:
             self.history.append((self.time, total))
 
     def _split(self, c: Cell, d: Decision) -> None:
-        """A fraction of a population differentiates into a new node."""
+        """A fraction of a population differentiates into the target pool (created on first use)."""
         part = c.count * d.fraction
         c.count -= part
-        name = f"{c.name}>{d.to}"
+        self._pour(c, d.to, part)
+        self._record()
+
+    def _pour(self, c: Cell, cell_type: str, amount: float) -> None:
+        name = f"{c.name}>{cell_type}"
+        pool = self.cells.get(name)
+        if pool is not None:
+            pool.count += amount
+            return
         child = Cell(
-            name, c.lineage, c.generation, self.time, d.to, dict(c.factors), parent=c.name, count=part
+            name, c.lineage, c.generation, self.time, cell_type, dict(c.factors), parent=c.name, count=amount
         )
         child.population = True
         self._add(child, c)
+
+    def _flow(self, c: Cell, did: str) -> None:
+        """One step of a recurring flow; the chain continues while the decision applies."""
+        c.flow_at.pop(did, None)
+        d = next((x for x in self.module.decisions if x.id == did), None)
+        if d is None or not (c.born <= self.time < c.end) or not d.applies(self.context(c)):
+            if did in c.fired:
+                c.fired.remove(did)  # so that a later decision point can start the flow again
+            return
+        part = c.count * d.fraction
+        c.count -= part
+        self.fired[did] += 1
+        self._pour(c, d.to, part)
+        c.flow_at[did] = self.time + (d.after or 0.0) * self.organism.tempo
+        self._push(c.flow_at[did], c.name, f"flow:{did}")
         self._record()
 
     # ---- events ----------------------------------------------------------
@@ -355,6 +384,8 @@ class Body:
                 self._divide(c)
             elif kind == "cull" and c.dies_at is None:
                 self._cull(c)
+            elif kind.startswith("flow:"):
+                self._flow(c, kind[5:])
             # deaths need no action: dies_at already ends the cell
         self.time = until if until != math.inf else self.time
         return self

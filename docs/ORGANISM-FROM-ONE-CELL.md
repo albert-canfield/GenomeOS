@@ -451,6 +451,11 @@ cells born 2,183/2,183, parent mismatches 0, terminal fates 961/961, deaths 131/
 (embryo median 8 min, p90 25 min). The alive-cell curve runs under the reference between 350 and 500 min because
 per-generation mean timers smooth the real spread; the program's own `assert` flags it.
 
+Haematopoiesis (`genomeos grow data/organisms/human/haematopoiesis.bio --until "3 yr"`): the first human
+mechanism module; every compartment gated by the factors the genetics showed necessary, flows solved from the
+measured outputs, pools within 15% of design after three years, 2.8e11 cells replaced per day, nine knockouts
+reproducing their published phenotypes.
+
 Human (`genomeos grow data/organisms/human/body.bio --until "20 yr"`): 2-cell at day 1, 8-cell at day 3,
 1.8e12 cells at birth, 2.87e13 at 18 years, 2.84e13 at 20 years, 3.19e11 cells replaced per day against the
 published 3.3e11; erythrocytes 2.5e13, neurons 1.2e11, cardiomyocytes 3.2e9. The uncertainty report reads
