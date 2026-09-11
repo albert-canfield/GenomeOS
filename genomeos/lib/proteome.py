@@ -27,6 +27,7 @@ FIELDS = (
     "domains",
     "pathways",
     "partners",
+    "writers",
     "tissue_pattern",
     "cell_type_pattern",
     "diseases",
@@ -41,6 +42,7 @@ EVIDENCE = {
     "domains": "curated: InterPro",
     "pathways": "curated: Reactome",
     "partners": "predicted: STRING, experimental channel ≥ 0.4",
+    "writers": "curated: UniProt modified residues, 'by' the named enzyme",
     "tissue_pattern": "experimental: Human Protein Atlas",
     "diseases": "curated: UniProt",
     "structures_experimental": "experimental: PDB",
@@ -49,6 +51,8 @@ EVIDENCE = {
 
 
 def _row(d: dict[str, Any], chrom_of: dict[str, str]) -> dict[str, Any] | None:
+    from genomeos.molecules.compiler import writer_counts
+
     s = d.get("sections", {})
     ident = (s.get("identity") or {}).get("items") or {}
     if not ident.get("accession"):
@@ -68,6 +72,7 @@ def _row(d: dict[str, Any], chrom_of: dict[str, str]) -> dict[str, Any] | None:
         "domains": [x["name"] for x in dom.get("interpro", []) if x.get("name")][:10],
         "pathways": [x["id"] for x in (s.get("pathways") or {}).get("items") or []][:12],
         "partners": list(dict.fromkeys(x["partner"] for x in inter if x.get("physical_evidence")))[:10],
+        "writers": dict(sorted(writer_counts(d).items(), key=lambda kv: (-kv[1], kv[0]))[:12]),
         "tissue_pattern": ex.get("tissue_specificity"),
         "cell_type_pattern": ex.get("cell_type_specificity"),
         "diseases": [x["name"] for x in (s.get("diseases") or {}).get("items") or [] if x.get("name")][:5],
@@ -139,7 +144,11 @@ def block(symbol: str) -> str:
     )
     props.append(f"confidence: {0.9 if r['symbol_match'] else 0.5}")
     head = f"# {r['name']} ({r['length']} aa) — {r['function'][:110]}" if r["function"] else f"# {r['name']}"
-    return head + "\n" + f"protein {symbol.upper()} {{\n" + "".join(f"  {x};\n" for x in props) + "}\n"
+    from genomeos.molecules.compiler import writer_rules
+
+    rules = writer_rules(symbol.upper(), r.get("writers") or {})
+    body = head + "\n" + f"protein {symbol.upper()} {{\n" + "".join(f"  {x};\n" for x in props) + "}\n"
+    return body + "".join(x + "\n" for x in rules)
 
 
 def summary() -> dict[str, Any]:

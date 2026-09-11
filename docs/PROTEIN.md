@@ -180,6 +180,15 @@ knockout curves dashed.
 
 ## Post-translational state (2026-09-12)
 
+**Writers as rules.** The BioLang importer (`genomeos protein X --bio`,
+`genomeos protein X --lib --bio`) now emits, after the `protein` block, one
+rule per writer: `rule ATM modifies TP53 { strength: 1.0; evidence: curated
+"UniProt: 5 modified residues written by ATM"; confidence: 0.8 }`. A program
+that imports a protein therefore carries who acts on it, as rules the
+runtime can apply, and the packaged proteome table stores the writers per
+protein so the offline block has them too.
+
+
 The model separated what a protein *is* from one protein in one place at one
 time (ProteinState) and nothing populated a state's modifications. Now the
 UniProt features already in every compiled definition are read as the

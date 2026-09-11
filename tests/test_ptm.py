@@ -62,3 +62,48 @@ def test_sites_states_and_index(tmp_path):
     assert idx["writers"]["KAT5"] == {"TP53": 1} and idx["by_class"] == {"phospho": 1, "acetyl": 1}
     sm = summary(idx)
     assert sm["writers"] == 3 and sm["writer_edges"] == 3 and sm["top_writers"][0]["substrates"] == 1
+
+
+def test_writers_become_biolang_rules(tmp_path):
+    from genomeos.lang.tools import load_module
+    from genomeos.molecules.compiler import to_biolang, writer_counts, writer_rules
+
+    defn = {
+        "gene": "TP53",
+        "id": "UniProt:P04637",
+        "sections": {
+            "identity": {
+                "items": {"accession": "P04637", "name": "p53", "sequence": "MEEPQ", "length": 5},
+                "confidence": 0.9,
+            },
+            "modifications": {
+                "items": [
+                    {
+                        "type": "Modified residue",
+                        "description": "Phosphoserine; by HIPK4",
+                        "start": 9,
+                        "end": 9,
+                    },
+                    {
+                        "type": "Modified residue",
+                        "description": "Phosphoserine; by ATM and HIPK4",
+                        "start": 15,
+                        "end": 15,
+                    },
+                ],
+                "confidence": 0.8,
+            },
+        },
+    }
+    assert writer_counts(defn) == {"HIPK4": 2, "ATM": 1}
+    rules = writer_rules("TP53", writer_counts(defn))
+    assert rules[0].startswith("protein HIPK4 {") and rules[2].startswith("rule HIPK4 modifies TP53 {")
+    assert "2 modified residues" in rules[2]
+    src = to_biolang(defn)
+    assert "rule ATM modifies TP53" in src
+    f = tmp_path / "tp53.bio"
+    f.write_text("module test.tp53\n\n" + src)
+    m = load_module(f)
+    assert {r.source for r in m.rules} == {"HIPK4", "ATM"} and all(r.target == "TP53" for r in m.rules)
+    assert {"TP53", "HIPK4", "ATM"} <= set(m.entities)
+    assert all(r.action.value == "modifies" for r in m.rules)

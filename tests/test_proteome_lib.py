@@ -52,6 +52,7 @@ def test_distil_load_block(tmp_path, monkeypatch):
     b = proteome.block("a")
     assert b.startswith("# A protein (100 aa)") and "protein A {" in b and "accession: P1;" in b
     assert "interactions: B;" in b and "confidence: 0.9" in b
+    assert "writers" in r
     assert proteome.block("nope").startswith("# NOPE: not in")
     with gzip.open(out, "rt") as fh:
         assert json.load(fh)["evidence"]["pathways"].startswith("curated")

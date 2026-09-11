@@ -579,4 +579,35 @@ def to_biolang(defn: dict[str, Any], max_items: int = 12) -> str:
     lines.append(f"protein {defn['gene']} {{")
     lines.extend(f"  {x};" for x in props)
     lines.append("}")
+    lines.extend(writer_rules(defn["gene"], writer_counts(defn)))
     return "\n".join(lines) + "\n"
+
+
+def writer_counts(defn: dict[str, Any]) -> dict[str, int]:
+    """Writers UniProt names on the protein's modified residues (kinases, acetyltransferases, …) with
+    how many sites each one writes; the post-translational layer's edges, per protein."""
+    from genomeos.molecules.ptm import sites
+
+    counts: dict[str, int] = {}
+    for s in sites(defn):
+        for w in s["writers"]:
+            if w != "(self)" and w != defn["gene"]:
+                counts[w] = counts.get(w, 0) + 1
+    return counts
+
+
+def writer_rules(gene: str, counts: dict[str, int], max_rules: int = 12) -> list[str]:
+    """The writers as BioLang rules: `rule PKA modifies TP53 { … }`, curated from UniProt, so a program
+    that imports the protein carries who acts on it. A rule may only name declared entities, so each
+    writer is declared first as a bare protein (a program that also imports the writer itself should
+    drop the stub, since an id is declared once)."""
+    out = []
+    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:max_rules]
+    for w, _ in ranked:
+        ev = f'evidence: curated "UniProt: named as a writer on {gene}"'
+        out.append(f"protein {w} {{ {ev}; confidence: 0.6 }}")
+    for w, n in ranked:
+        sites_ = f"{n} modified residue{'s' if n != 1 else ''}"
+        ev = f'evidence: curated "UniProt: {sites_} written by {w}"'
+        out.append(f"rule {w} modifies {gene} {{ strength: 1.0; {ev}; confidence: 0.8 }}")
+    return out
