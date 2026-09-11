@@ -35,3 +35,8 @@ data/results/reader_*_chr*.json
 !data/results/reader_*_chr21.json
 data/results/dnase_*_chr*.bed.gz
 !data/results/dnase_*_chr21.bed.gz
+
+# Background-job metadata and logs are per-machine runtime state: pids, timings and
+# console output that mean nothing on another checkout. The job registry lives in
+# genomeos/jobs.py and the results the jobs produce are under data/results.
+data/jobs/

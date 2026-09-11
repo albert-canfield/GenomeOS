@@ -305,3 +305,17 @@ gone, which closes the structural blocker for packaging BioLang separately.
 - **`genomeos/version.py`** (D41) now holds the version string on the engine side and the package root re-exports it, so every existing `from genomeos import __version__` keeps working while `bio` reads the engine. It is also one fewer tie to cut at milestone 2.0, because the package root does not travel with the engine.
 - **`tests/test_engine_boundary.py`** makes the rule permanent in three forms: every engine file is parsed for imports of the application, including imports inside functions; reading the package root is forbidden by name; and `import genomeos.bio` runs in a subprocess so the test asserts what is actually loaded rather than what is written. Nine modules load, none from the application.
 - **Why it is a test and not a note**: since the relicensing the direction is a licensing requirement (D40), and an accidental import would relicense the file that made it. A grep in a review would eventually miss one; the run-time check cannot.
+
+## 2026-09-11 — tree review: what was loose, and what it actually was
+
+Asked to review and commit what the sessions had left behind. The shared git
+index made it look like hundreds of files; against a clean index the truth was
+six modified and 66 untracked, and most of that was not meant to be committed
+at all.
+
+- **`data/jobs` is now ignored** (63 untracked files, 304 KB, plus 11 that had been tracked since the Progress tab was built). Job metadata is per-machine runtime state: process ids, timings, heartbeats and console output that mean nothing in another checkout, and that change on every run. The registry that defines the jobs lives in `genomeos/jobs.py` and everything a job is worth keeping goes to `data/results`. Checked before untracking that a checkout without the directory still lists all 33 jobs without error, since the runtime creates it on demand.
+- **`.env.example`** committed: the key goes in a git-ignored `.env`, and a template with an empty value is the difference between a documented feature and a guessing game.
+- **`uv.lock`** updated for the `hla` extra added with the binding predictors.
+- **`data/results/ccres_chrM.bed.gz`**, so the mitochondrial cCRE file is tracked like the 25 others.
+- **One line in `cmd_verify`**, left uncommitted by the session that owns verification: it prints the same-protein-different-boundaries count that `molecules/verify.py` already writes. Confirmed with that session before committing.
+- **A stray file named `T`**, created by a shell redirect of `C>T` in a variant argument, deleted. The lesson is in the command, not the repository: quote a variant.

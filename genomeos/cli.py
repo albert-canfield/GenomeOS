@@ -1760,6 +1760,7 @@ def cmd_verify(args: argparse.Namespace) -> int:
         f"{r['exact_canonical_fraction']:.1%}; some isoform identical "
         f"{r['exact_some_isoform_fraction']:.1%}; "
         f"{r['canonical_differs_but_another_isoform_matches']} canonical-choice differences; "
+        f"{r['same_protein_different_boundaries']} same protein with other boundaries; "
         f"{r['disagreement_count']} real disagreements  [{r['evidence']}]"
     )
     if r["disagreements"]:
