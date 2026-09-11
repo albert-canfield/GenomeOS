@@ -30,3 +30,8 @@ data/results/gencode_v50_chr*.gff3.gz
 # RepeatMasker rows per chromosome are local reference data (1 MB each); only chr21 is tracked as the worked example
 data/results/rmsk_chr*.bed.gz
 !data/results/rmsk_chr21.bed.gz
+# reader v1 per-chromosome results and DNase peak rows stay local; the genome-wide summary and chr21 are tracked
+data/results/reader_*_chr*.json
+!data/results/reader_*_chr21.json
+data/results/dnase_*_chr*.bed.gz
+!data/results/dnase_*_chr21.bed.gz

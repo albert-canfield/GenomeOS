@@ -124,3 +124,19 @@ line is what the biology says; 106 genes are read in both. Evidence:
 experimental for the peaks, inferred for "read" (an open promoter is
 necessary for transcription, not proof of it). Results:
 `reader_<cell>_<chrom>.json`, `reader_K562_vs_HepG2_chr21.json`.
+
+### Every chromosome (`scripts/reader_genome_wide.py`, 110 s after the peaks are fetched)
+
+| genome-wide | K562 (blood, female) | HepG2 (liver, male) |
+|---|---|---|
+| coding genes read | 14,828 of 20,094 (74%) | 13,015 of 20,094 (65%) |
+| enhancers active | 193,255 | 124,478 |
+| silent nodes | 2,085 | 1,465 |
+| read in both | 11,987 | |
+
+Two checks fall out of the numbers. K562 reads no gene on chrY (0 of 61)
+because the line is female; HepG2, male, reads 9. And the two cell types
+read three quarters and two thirds of the coding genes respectively, with
+11,987 in common: the housekeeping core plus what each lineage adds.
+Per-chromosome results stay local (`reader_<cell>_<chrom>.json`); the
+summary is `reader_genome_wide.json`.
