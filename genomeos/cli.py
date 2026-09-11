@@ -660,6 +660,7 @@ def cmd_organism(args: argparse.Namespace) -> int:
 
 def cmd_grow(args: argparse.Namespace) -> int:
     """Grow an organism from one cell: BioLang v0.3 organism program -> Body runtime -> report."""
+    from genomeos.ir import to_minutes
     from genomeos.lang import parse_file
     from genomeos.organism import REFERENCES, ReferenceLineage
     from genomeos.organism.diff import compare
@@ -670,14 +671,27 @@ def cmd_grow(args: argparse.Namespace) -> int:
         print(f"{args.module}: no organism block (see docs/BIOLANG-v0.3.md)", file=sys.stderr)
         return 2
     o = module.organism
+    parts = str(args.until).split()
+    args.until = to_minutes(float(parts[0]), parts[1] if len(parts) > 1 else "min")
     body = Body(module, seed=args.seed, max_cells=args.max_cells).run(until=args.until)
     s = body.summary()
+    when = f"{args.until:g} min"
+    if args.until > 10_000:
+        when = f"{args.until / 1440:.0f} d ({args.until / 525960:.1f} yr)"
+    lost = ""
+    if s["culled"]:
+        lost = f", {s['culled']:.3g} lost to turnover, {s['turnover_per_day']:.3g} replaced per day"
     print(
         f"{o.name} ({o.species or 'species not stated'}): {s['cells_born']} cells born, "
-        f"{s['alive']:g} alive at {args.until:g} min, {s['deaths']} deaths, "
+        f"{s['alive']:.4g} alive at {when}, {s['deaths']} deaths{lost}; "
         f"{len(module.decisions)} decisions / {len(module.timers)} timers / {len(module.signals())} signals"
     )
-    checkpoints = [t for t in (0.5, 50, 100, 200, 350, 500, 800, 2000, 4000, 5700) if t <= args.until]
+    marks = (0.5, 50, 100, 200, 350, 500, 800, 2000, 4000, 5700)
+    if args.until > 10_000:  # long runs: days, months, years
+        days = (1, 5, 14, 21, 56, 266)
+        years = (1, 5, 18, 40, 80)
+        marks = tuple(to_minutes(x, "d") for x in days) + tuple(to_minutes(x, "yr") for x in years)
+    checkpoints = [t for t in marks if t <= args.until]
     if args.until not in checkpoints:
         checkpoints.append(args.until)
     for t in checkpoints:
@@ -693,7 +707,8 @@ def cmd_grow(args: argparse.Namespace) -> int:
             elif what.startswith("lineage "):
                 lg = what.split(None, 1)[1]
                 parts.append(f"{lg}={body.lineage_count_at(lg, t):g}")
-        print(f"  t={t:7.1f} min  " + "  ".join(parts))
+        label = f"t={t:7.1f} min" if args.until <= 10_000 else f"t={t / 1440:8.1f} d"
+        print(f"  {label}  " + "  ".join(parts))
     if args.depth > 0:
         for line in body.tree(depth=args.depth):
             print("  " + line)
@@ -2205,7 +2220,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("grow", help="grow an organism from one cell (BioLang v0.3 organism program)")
     p.add_argument("module", help="a .bio file with an organism block")
-    p.add_argument("--until", type=float, default=800.0, help="minutes of organism time (default 800)")
+    p.add_argument("--until", default="800", help="organism time: 800, '14 h', '20 yr' (default 800 min)")
     p.add_argument("--seed", type=int, default=None, help="seed for timer noise (default: deterministic)")
     p.add_argument("--depth", type=int, default=2, help="lineage tree depth to print (0 = none)")
     p.add_argument("--max-cells", type=int, default=200_000)

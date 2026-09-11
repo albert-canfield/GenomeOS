@@ -153,6 +153,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
     <button data-tab="space" data-tip="Development in space: morphogen gradients, the segmentation clock and germ-layer choice."><i class="ic">🌱</i>Space</button>
+    <button data-tab="organism" data-tip="An organism from one cell: a BioLang organism program grows cell by cell (C. elegans, every cell named and scored against Sulston's lineage) or as counted populations (a human body over 20 years)."><i class="ic">🪱</i>Organism</button>
     <button data-tab="debug" data-tip="Step a model with biological breakpoints and get an explanation, with evidence, of what drove each value."><i class="ic">🔍</i>Debugger</button>
     <button data-tab="molecules" data-tip="RNA and proteins: a gene's transcripts, our translated protein checked against UniProt, its domains and function, and the AlphaFold 3-D structure coloured by per-residue confidence."><i class="ic">🧫</i>Molecules</button>
     <button data-tab="cancer" data-tip="Healthy versus tumour: somatic differences graded against cBioPortal driver knowledge, suggested cancer types, cell-surface targets, and a task packet for an AI agent."><i class="ic">🎗️</i>Cancer</button>
@@ -431,6 +432,33 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   </div>
 </section>
 
+<!-- ================= ORGANISM ================= -->
+<section id="organism">
+  <div class="card">
+    <h2><i class="ic">🪱</i>From one cell to an organism<span class="help" data-tip="A BioLang v0.3 organism block names the genome, the first cell, its maternal factors and the environment; decisions (divide, differentiate, migrate, quiesce, die), timers and signals do the rest. Cells: every division makes a named cell (C. elegans, compared with Sulston's lineage). Populations: counts grow in place and turn over (human).">?</span></h2>
+    <div class="row">
+      <select id="o-module">
+        <option value="data/organisms/celegans/embryo.bio">C. elegans: zygote to adult (2,183 cells, Sulston 1983)</option>
+        <option value="data/demo/celegans_lineage.bio">C. elegans: early lineage from cycle timers (demo)</option>
+        <option value="data/organisms/human/body.bio">Human: body as counted populations (Sender & Milo 2021)</option>
+      </select>
+      <label data-tip="Organism time: minutes, or with a unit (800, 14 h, 20 yr).">until <input id="o-until" value="800" style="width:80px"></label>
+      <label data-tip="How many generations of the lineage tree to print.">depth <input id="o-depth" type="number" value="3" min="0" max="6" style="width:60px"></label>
+      <button class="primary" id="o-run" data-tip="Grow the organism and, when a reference lineage exists, score cells born, fates, deaths and timing against it."><i class="ic">▶️</i>Grow</button>
+      <span class="muted" id="o-status"></span>
+    </div>
+    <div id="o-summary" class="hint"></div>
+    <svg class="chart" id="o-chart" style="height:200px"></svg><div class="legend" id="o-legend"></div>
+    <div class="grid cols-2">
+      <div><h3>Fates</h3><div id="o-fates"></div><h3>Asserts</h3><div id="o-asserts" class="mono" style="font-size:12px"></div></div>
+      <div><h3>Against the reference</h3><div id="o-diff"></div><h3>Mechanism that fired</h3><div id="o-fired" class="mono" style="font-size:12px"></div></div>
+    </div>
+    <h3>Lineage tree</h3>
+    <pre id="o-tree" class="mono" style="max-height:320px;overflow:auto;font-size:12px"></pre>
+    <div id="o-unc" class="unc"></div>
+  </div>
+</section>
+
 <!-- ================= DEBUGGER ================= -->
 <section id="debug">
   <div class="grid cols-2">
@@ -705,7 +733,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   // first visit to a simulation tab runs its default example
   if (!autoRan.has(b.dataset.tab)) {
     autoRan.add(b.dataset.tab);
-    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run', molecules: '#m-load', flow: '#f-load'}[b.dataset.tab];
+    const first = {space: '#s-run', organism: '#o-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run', molecules: '#m-load', flow: '#f-load'}[b.dataset.tab];
     if (first) setTimeout(async () => { await ready; if (b.dataset.tab === 'debug' && !$('#d-bp').value) { $('#d-bp').value = 'LacI > 30'; $('#d-init').value = 'TetR=10'; $('#d-explain').value = 'lacI.mRNA'; } $(first).click(); }, 300);
   }
 });
@@ -973,6 +1001,36 @@ $('#s-run').onclick = async () => {
       renderUnc($('#s-unc'), r.uncertainty);
     }
   } catch (e) { $('#s-status').textContent = e.message; }
+};
+
+// ---- organism
+$('#o-module').onchange = () => { $('#o-until').value = $('#o-module').value.includes('human') ? '20 yr' : $('#o-module').value.includes('demo') ? '150' : '800'; };
+$('#o-run').onclick = async () => {
+  $('#o-status').textContent = 'growing…';
+  try {
+    const r = await api(`/api/grow?module=${encodeURIComponent($('#o-module').value)}&until=${encodeURIComponent($('#o-until').value)}&depth=${$('#o-depth').value}`);
+    $('#o-status').textContent = '';
+    const s = r.summary, o = r.organism;
+    const fmt = v => v >= 1e6 ? v.toExponential(2) : (+v).toLocaleString();
+    $('#o-summary').innerHTML = `<b>${o.name}</b> (${o.species}) · resolution: ${o.resolution} · ${fmt(s.cells_born)} cells born, <b>${fmt(s.alive)}</b> alive, ${fmt(s.deaths)} deaths${s.culled ? `, ${fmt(s.culled)} lost to turnover, ${fmt(s.turnover_per_day)} replaced per day` : ''} · ${o.decisions} decisions, ${o.timers} timers, ${o.signals} signals · maternal factors: ${o.factors.join(', ') || 'none'}${Object.keys(r.unknown).length ? ` · <span class="err">UNKNOWN stops: ${Object.entries(r.unknown).map(([k, v]) => `${k} ×${v}`).join(', ')}</span>` : ''}`;
+    const long = r.curve[r.curve.length - 1].t > 10000;
+    const xs = r.curve.map(c => long ? c.t / 1440 : c.t);
+    const series = [{name: 'cells alive', values: r.curve.map(c => c.cells), color: '#1f6feb'}];
+    if (r.curve.some(c => c.reference != null)) series.push({name: 'reference (Sulston)', values: r.curve.map(c => c.reference), color: '#bf8700', dash: true});
+    lineChart($('#o-chart'), $('#o-legend'), xs, series, {xunit: long ? 'd' : 'min', ymin: 0, yfmt: v => v >= 1e6 ? v.toExponential(1) : v.toFixed(0)});
+    $('#o-fates').innerHTML = '<table>' + Object.entries(r.fates).map(([k, v]) => `<tr><td>${k}</td><td class="num">${fmt(v)}</td></tr>`).join('') + '</table>';
+    $('#o-asserts').innerHTML = r.asserts.map(a => `<div class="${a.ok ? 'ok' : 'err'}">${a.ok ? 'ok  ' : 'FAIL'} ${a.assert} <span class="muted">(got ${a.value != null ? fmt(a.value) : a.error})</span></div>`).join('') || '<span class="muted">no asserts in the program</span>';
+    const d = r.diff;
+    $('#o-diff').innerHTML = d ? `<table>
+      <tr><td>cells born by name</td><td class="num">${d.matched}/${d.reference_cells} (${(d.born_fraction * 100).toFixed(1)}%)</td></tr>
+      <tr><td>missing / extra / parent mismatches</td><td class="num">${d.missing} / ${d.extra} / ${d.parent_mismatch}</td></tr>
+      <tr><td>division timing (median / p90)</td><td class="num">${d.timing_median_min == null ? 'n/a' : d.timing_median_min.toFixed(0) + ' / ' + d.timing_p90_min.toFixed(0) + ' min'}</td></tr>
+      <tr><td>terminal fates correct</td><td class="num">${d.fates_correct}/${d.fates_checked}${d.fate_accuracy != null ? ' (' + (d.fate_accuracy * 100).toFixed(1) + '%)' : ''}; ${d.fates_unknown} UNKNOWN</td></tr>
+      <tr><td>programmed deaths</td><td class="num">${d.deaths_matched}/${d.deaths_expected}</td></tr></table>` : '<span class="muted">no reference lineage for this organism</span>';
+    $('#o-fired').innerHTML = r.fired.map(f => `<div>${f.id} <span class="muted">×${f.n}</span></div>`).join('') || '<span class="muted">only the lineage program fired</span>';
+    $('#o-tree').textContent = r.tree.join('\n');
+    renderUnc($('#o-unc'), r.uncertainty);
+  } catch (e) { $('#o-status').textContent = e.message; }
 };
 
 // ---- debugger

@@ -15,6 +15,7 @@ UNKNOWN: the program did not say. Nothing is invented.
 
 from __future__ import annotations
 
+import bisect
 import heapq
 import math
 import random
@@ -40,15 +41,19 @@ class Cell:
     parent: str = ""
     children: list[str] = field(default_factory=list)
     count: float = 1.0  # > 1: a population
+    population: bool = False  # counted node: division grows the count in place, so it does not end the node
     divides_at: float | None = None
     dies_at: float | None = None
     terminal_name: str = ""
     quiescent: bool = False
     fired: list[str] = field(default_factory=list)
     unknown: str = ""  # why the program left this cell without a next step
+    cull_at: float | None = None  # next fractional death of a population, if a chain is running
 
     @property
     def end(self) -> float:
+        if self.population:
+            return self.dies_at if self.dies_at is not None else math.inf
         ends = [x for x in (self.divides_at, self.dies_at) if x is not None]
         return min(ends) if ends else math.inf
 
@@ -68,6 +73,8 @@ class Body:
         self.cells: dict[str, Cell] = {}
         self.time = 0.0
         self.fired: Counter[str] = Counter()
+        self.culled: float = 0.0  # population cells removed by fractional deaths
+        self.history: list[tuple[float, float]] = []  # (time, total count) whenever a population changes
         self.unknown: Counter[str] = Counter()
         self.timers_used: Counter[str] = Counter()
         self._queue: list[tuple[float, int, str, str]] = []
@@ -88,12 +95,24 @@ class Body:
 
     def _bootstrap(self) -> None:
         o = self.organism
+        for st in self.module.stages:
+            self._push(to_minutes(st.start, st.unit), "", "stage")
         root = Cell(o.root, "", 0, 0.0, o.cell_type, {f: "present" for f in o.factors})
+        root.population = o.resolution == "populations"
         self._add(root, None)
+
+    def _stage_change(self) -> None:
+        """Populations and resting cells read the new stage and decide again."""
+        for c in self.alive_at(self.time):
+            if self.population(c) or c.quiescent:
+                self._resolve(c, born=False)
 
     def _push(self, t: float, name: str, kind: str) -> None:
         self._seq += 1
         heapq.heappush(self._queue, (t, self._seq, name, kind))
+
+    def population(self, c: Cell) -> bool:
+        return c.population
 
     # ---- context and decisions ------------------------------------------
 
@@ -114,9 +133,9 @@ class Body:
     def _candidates(self, c: Cell) -> list[Decision]:
         return self._by_cell.get(c.name, []) + self._general
 
-    def _first(self, c: Cell, action: str, ctx: dict[str, str]) -> Decision | None:
+    def _first(self, c: Cell, action: str, ctx: dict[str, str], unfired: bool = False) -> Decision | None:
         for d in self._candidates(c):
-            if d.action == action and d.applies(ctx):
+            if d.action == action and d.applies(ctx) and not (unfired and d.id in c.fired):
                 return d
         return None
 
@@ -135,15 +154,22 @@ class Body:
         """Decide what a cell does next; called at birth and after a signal changes its factors."""
         ctx = self.context(c)
         if c.dies_at is None and (d := self._first(c, "die", ctx)):
-            c.dies_at = c.born + (d.after or 0.0) * self.organism.tempo
-            c.fired.append(d.id)
-            self.fired[d.id] += 1
-            self._push(c.dies_at, c.name, "die")
-        for _ in range(4):  # differentiation chains (Progenitor -> Neuroblast -> Neuron)
-            d = self._first(c, "differentiate", ctx)
-            if d is None or d.id in c.fired:
+            if self.population(c) and d.fraction < 1.0:
+                if (
+                    c.cull_at is None
+                ):  # start the recurring loss; _cull keeps it going while a decision applies
+                    c.cull_at = self.time + (d.after or 0.0) * self.organism.tempo
+                    self._push(c.cull_at, c.name, "cull")
+            else:
+                c.dies_at = c.born + (d.after or 0.0) * self.organism.tempo
+                c.fired.append(d.id)
+                self.fired[d.id] += 1
+                self._push(c.dies_at, c.name, "die")
+        for _ in range(32):  # differentiation chains and sequential population splits
+            d = self._first(c, "differentiate", ctx, unfired=True)
+            if d is None:
                 break
-            if d.fraction < 1.0 and c.count > 1:
+            if d.fraction < 1.0 and self.population(c):
                 self._split(c, d)
             else:
                 c.cell_type = d.to
@@ -152,10 +178,13 @@ class Body:
             c.fired.append(d.id)
             self.fired[d.id] += 1
             ctx = self.context(c)
-        if d := self._first(c, "quiesce", ctx):
-            c.quiescent = True
+        d = self._first(c, "quiesce", ctx)
+        c.quiescent = d is not None  # re-evaluated at every decision point
+        if d is not None and d.id not in c.fired:
             c.fired.append(d.id)
             self.fired[d.id] += 1
+        if c.quiescent and c.divides_at is not None and self.population(c):
+            c.divides_at = None
         if (d := self._first(c, "migrate", ctx)) and d.id not in c.fired:
             c.fired.append(d.id)
             self.fired[d.id] += 1
@@ -167,7 +196,7 @@ class Body:
                 c.fired.remove(current)
                 self.fired[current] -= 1
                 c.divides_at = None
-        if c.divides_at is None and not c.quiescent:
+        if c.divides_at is None and not c.quiescent and (born or self.population(c)):
             d = self._first(c, "divide", ctx)
             if d is None:
                 if not any(x for x in c.fired if x.startswith(("fate_", "die_"))) and c.cell_type == "":
@@ -184,10 +213,18 @@ class Body:
             else:
                 wait = self._duration(timer, c)
                 self.timers_used[timer.name] += 1
-            c.divides_at = c.born + wait
+            # cells wait from birth; populations wait from now (they decide again after every step)
+            c.divides_at = (self.time if self.population(c) else c.born) + wait
             c.fired.append(d.id)
             self.fired[d.id] += 1
             self._push(c.divides_at, c.name, "divide")
+
+    def _record(self) -> None:
+        total = sum(x.count for x in self.cells.values() if x.born <= self.time < x.end)
+        if self.history and self.history[-1][0] == self.time:
+            self.history[-1] = (self.time, total)
+        else:
+            self.history.append((self.time, total))
 
     def _split(self, c: Cell, d: Decision) -> None:
         """A fraction of a population differentiates into a new node."""
@@ -197,7 +234,9 @@ class Body:
         child = Cell(
             name, c.lineage, c.generation, self.time, d.to, dict(c.factors), parent=c.name, count=part
         )
+        child.population = True
         self._add(child, c)
+        self._record()
 
     # ---- events ----------------------------------------------------------
 
@@ -233,6 +272,16 @@ class Body:
         d = next((x for x in self._candidates(c) if x.id in c.fired and x.action == "divide"), None)
         if d is None:
             return
+        if c.quiescent:
+            return
+        if self.population(c) and not d.daughters:
+            # a population: grows in place by `fraction` (1.0 = doubling), then decides again
+            c.count *= 1.0 + d.fraction
+            c.divides_at = None
+            c.fired = [x for x in c.fired if x not in self._divide_ids]  # the next step is decided afresh
+            self._record()
+            self._resolve(c)
+            return
         if d.daughters:
             names = list(d.daughters)
         else:
@@ -253,7 +302,25 @@ class Body:
             child = Cell(
                 name, lineage, generation, self.time, c.cell_type, factors, parent=c.name, count=c.count
             )
+            child.population = c.population
             self._add(child, c)
+
+    def _cull(self, c: Cell) -> None:
+        """A share of a population dies (turnover); recurs while a fractional death decision applies."""
+        c.cull_at = None
+        d = self._first(c, "die", self.context(c))
+        if d is None or d.fraction >= 1.0 or not (c.born <= self.time < c.end):
+            return
+        lost = c.count * d.fraction
+        c.count -= lost
+        self.culled += lost
+        self.fired[d.id] += 1
+        if d.id not in c.fired:
+            c.fired.append(d.id)
+        c.cull_at = self.time + (d.after or 0.0) * self.organism.tempo
+        self._push(c.cull_at, c.name, "cull")
+        self._record()
+        self._resolve(c, born=False)  # a smaller population may grow again (quiescence is re-read)
 
     def run(self, until: float = math.inf) -> Body:
         while self._queue and len(self.cells) < self.max_cells:
@@ -262,9 +329,14 @@ class Body:
                 break
             heapq.heappop(self._queue)
             self.time = t
+            if kind == "stage":
+                self._stage_change()
+                continue
             c = self.cells[name]
             if kind == "divide" and c.divides_at == t and (c.dies_at is None or c.dies_at > t):
                 self._divide(c)
+            elif kind == "cull" and c.dies_at is None:
+                self._cull(c)
             # deaths need no action: dies_at already ends the cell
         self.time = until if until != math.inf else self.time
         return self
@@ -275,6 +347,11 @@ class Body:
         return [c for c in self.cells.values() if c.born <= t < c.end]
 
     def count_at(self, t: float) -> float:
+        """Cells alive at t. Population counts are mutable, so for past times the recorded total is used."""
+        if self.history and t < self.time:
+            i = bisect.bisect_right(self.history, (t, math.inf)) - 1
+            if i >= 0:
+                return self.history[i][1]
         return sum(c.count for c in self.alive_at(t))
 
     def lineage_count_at(self, lineage: str, t: float) -> float:
@@ -282,6 +359,17 @@ class Body:
 
     def deaths_by(self, t: float) -> int:
         return sum(1 for c in self.cells.values() if c.dies_at is not None and c.dies_at <= t)
+
+    def turnover_per_day(self) -> float:
+        """Cells lost per day by the fractional death decisions currently applying to populations."""
+        total = 0.0
+        for c in self.alive_at(self.time):
+            if not self.population(c):
+                continue
+            d = self._first(c, "die", self.context(c))
+            if d is not None and d.fraction < 1.0 and d.after:
+                total += c.count * d.fraction / (d.after / 1440.0)
+        return total
 
     def fates_at(self, t: float) -> dict[str, float]:
         out: dict[str, float] = {}
@@ -305,7 +393,7 @@ class Body:
                 what = f"  -> {c.cell_type}" + (f" ({c.terminal_name})" if c.terminal_name else "")
             if c.unknown:
                 what += f"  UNKNOWN: {c.unknown}"
-            n = f" ×{c.count:g}" if c.count != 1 else ""
+            n = f" ×{c.count:.4g} [{c.cell_type}]" if self.population(c) else ""
             out.append(f"{'  ' * d}{c.name}{n} (born {c.born:.0f} min){what}")
             if d < depth:
                 for ch in c.children:
@@ -347,6 +435,9 @@ class Body:
             "cells_born": len(self.cells),
             "alive": self.count_at(t),
             "deaths": self.deaths_by(t),
+            "culled": self.culled,
+            "turnover_per_day": self.turnover_per_day(),
+            "populations": sum(1 for c in self.alive_at(t) if self.population(c)),
             "fates": self.fates_at(t),
             "decisions_fired": sum(self.fired.values()),
             "unknown": dict(self.unknown),

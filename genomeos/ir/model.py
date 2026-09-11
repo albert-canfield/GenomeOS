@@ -385,6 +385,7 @@ class Organism:
     species: str = ""
     genome: str = ""
     tempo: float = 1.0  # multiplies every timer (species pace; Rayon 2020, Matsuda 2020)
+    resolution: str = "cells"  # cells: every division makes a named cell; populations: counts grow in place
     root: str = "Zygote"  # name of the first cell
     cell_type: str = ""  # bootstrap cell type
     factors: list[str] = field(default_factory=list)  # maternal factors present in the zygote

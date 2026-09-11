@@ -100,6 +100,7 @@ records the evidence per task. Highlights:
 - epigenetic clocks validated on real blood methylation (Horvath r > 0.8); telomere estimator; digital twins that fork, run and diff
 - development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient
 - an organism from one cell: BioLang v0.3 `organism` programs run by the Body runtime (`genomeos grow`); C. elegans grows from the zygote to the 959-cell adult with every cell, fate and programmed death matching Sulston's lineage, founders decided by maternal factors, Wnt and Notch, timing within a median 12 minutes ([docs/BIOLANG-v0.3.md](docs/BIOLANG-v0.3.md), [docs/ORGANISM-FROM-ONE-CELL.md](docs/ORGANISM-FROM-ONE-CELL.md))
+- the same runtime at population resolution grows a human body: Carnegie-stage timers, germ layers by share, sixteen tissue populations that reach the adult counts of Sender & Milo 2021 and turn over at their measured rates (2.8e13 cells at 20 years, 3.2e11 replaced per day), every number cited and the whole labelled low confidence because it is counts, not mechanism (`genomeos grow data/organisms/human/body.bio --until "20 yr"`)
 - a debugger with biological breakpoints and evidence traces, and BioForge design search whose outputs are labelled predicted
 - the DNA → RNA → protein relationship as one traceable object: every base mapped to its mRNA position, codon and residue and back, with the consequence of a single-base change (Flow tab, `genomeos flow`)
 - a federated protein compiler: Ensembl, UniProt, InterPro, PDB, AlphaFold, Reactome, STRING and the Human Protein Atlas compiled into one definition per protein keyed by UniProt accession, evidence and confidence per section, predicted never treated as observed (`genomeos protein X --compile`, docs/PROTEIN.md)
@@ -116,6 +117,7 @@ uv run genomeos orfs data/demo/demo.fa --min-aa 30
 uv run genomeos age --cell-type fibroblast --years 90 --cells 500 --evidence
 uv run genomeos libs --layer timer -v
 uv run genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare   # one cell to the adult worm
+uv run genomeos grow data/organisms/human/body.bio --until "20 yr"               # a human body as populations
 uv run genomeos serve --open           # light web UI at http://127.0.0.1:8765
 uv run bio test data/demo              # the BioLang toolchain on its own: check, compile, run, test, repl
 uv run genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --report

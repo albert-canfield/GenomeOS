@@ -23,6 +23,7 @@ organism Celegans {
   species: Caenorhabditis elegans
   genome: WBcel235
   root: P0                           # name of the first cell (default Zygote)
+  resolution: cells                  # cells (named, default) or populations (counted)
   cell_type: Zygote                  # bootstrap type
   factors: SKN-1, PIE-1, PAL-1       # maternal factors present in the zygote
   environment: temperature = 20
@@ -80,9 +81,18 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
 - **Signals** are applied when a receiver or a sender is born and both are
   alive; the receiver gains the factor and re-decides, which can replace a
   pending lookup division by a mechanistic one.
-- **Populations.** A cell may carry `count` > 1; `fraction` on a
-  differentiate decision splits that share into a new node. One runtime
-  serves named cells (C. elegans) and counted tissues (human).
+- **Populations.** `resolution: populations` in the organism block makes
+  every node a counted population instead of a named cell: a `divide`
+  without daughters grows the count in place by `fraction` (1.0 = doubling)
+  and the population decides again; `differentiate` with `fraction` splits
+  that share into a new node; `die` with `fraction` and `after` is a
+  recurring loss (turnover) that runs while the decision applies; `quiesce`
+  is re-read at every step, so `when: count = >=2.55e13` caps a tissue at
+  its adult count and lets it regrow after losses. Populations wait from
+  now, cells wait from birth. One runtime serves named cells (C. elegans)
+  and counted tissues (human); `turnover_per_day` and `culled` are reported.
+- **Stages** are events: when a stage starts, populations and resting cells
+  read the new stage and decide again.
 - **Diamond imports** are merged once; identifier collisions between
   different files remain errors.
 - **Uncertainty.** Decisions that fired contribute to the organism level,
@@ -95,7 +105,15 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
 genomeos grow data/demo/celegans_lineage.bio --until 150 --depth 3
 genomeos grow data/organisms/celegans/embryo.bio --until 800 --compare
 genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare --json out.json
+genomeos grow data/organisms/human/body.bio --until "20 yr" --depth 2
 ```
+
+The human program (`data/organisms/human/body.bio` with the generated
+`tissues.bio`) is the same runtime at population resolution: Carnegie-stage
+timers, germ layers by stated shares, sixteen tissue populations that grow
+to the adult counts of Sender & Milo 2021 and then turn over at their
+measured daily rates. Its uncertainty report says what it is: curated
+counts and inferred shares, no mechanism.
 
 `--compare` scores the body against `reference:` (cells born by name,
 parent topology, division timing, terminal fates, deaths, count curve). The

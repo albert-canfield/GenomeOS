@@ -1,6 +1,6 @@
 # From one cell to an organism: research, design, plan
 
-Status: proposed 2026-09-10; steps 0 to 5 built 2026-09-11 (see the end of the document and docs/PROGRESS.md). Step 6 (human body as populations) is next.
+Status: proposed 2026-09-10; all six steps built 2026-09-11 (see the end of the document and docs/PROGRESS.md).
 
 The ask: a computational model that starts with one cell and, by reading the
 genome under timers and signals, grows, maintains and kills cells until an
@@ -444,9 +444,15 @@ Sources are listed in section 1; datasets and licences in 1.2 and 1.3.
 | 3 founders from factors | done | data/organisms/celegans/founders.bio (PAR, SKN-1, PIE-1, PAL-1, POP-1, Wnt, Notch) |
 | 4 embryo to hatching | done | data/organisms/celegans/embryo.bio: 1,439 cells, 555 fates, 110 deaths reproduced |
 | 5 larva to adult | done | lineage_larva.bio: 961 cells alive in the adult, 131 deaths |
-| 6 human body as populations | next | populations (`count`, `fraction`) are in the runtime; the program and the distilled counts are not written |
+| 6 human body as populations | done | data/organisms/human/body.bio + generated tissues.bio from Sender & Milo 2021 (`genomeos data distil --only human_cell_turnover`); 1.8e12 cells at birth, 2.84e13 at 20 years, 3.19e11 replaced per day; low confidence by construction |
 
 Measured against the reference (`genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare`):
 cells born 2,183/2,183, parent mismatches 0, terminal fates 961/961, deaths 131/131, division timing median 12 min
 (embryo median 8 min, p90 25 min). The alive-cell curve runs under the reference between 350 and 500 min because
 per-generation mean timers smooth the real spread; the program's own `assert` flags it.
+
+Human (`genomeos grow data/organisms/human/body.bio --until "20 yr"`): 2-cell at day 1, 8-cell at day 3,
+1.8e12 cells at birth, 2.87e13 at 18 years, 2.84e13 at 20 years, 3.19e11 cells replaced per day against the
+published 3.3e11; erythrocytes 2.5e13, neurons 1.2e11, cardiomyocytes 3.2e9. The uncertainty report reads
+"low" at every level, which is the point: the human program is counts and shares with citations, and the
+language now has a place to put mechanism when it is known.

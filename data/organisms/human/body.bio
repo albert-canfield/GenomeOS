@@ -1,0 +1,53 @@
+# A human body from one cell, as counted populations: the same runtime that grows
+# C. elegans cell by cell, at the resolution the knowledge allows for a human.
+# Stages are Carnegie/clinical landmarks; germ layers split by stated shares; tissue
+# populations grow to the adult counts of Sender & Milo 2021 and then turn over at
+# their measured rates. Mechanism is not claimed anywhere below; the report says so.
+# Run: genomeos grow data/organisms/human/body.bio --until "20 yr" --depth 0
+module organism.human.body
+import bio.std.development
+import tissues.bio
+
+organism Human {
+  species: Homo sapiens
+  genome: GRCh38
+  root: Zygote
+  resolution: populations
+  cell_type: Zygote
+  factors: maternal_mRNA, OCT4
+  environment: temperature = 37
+  tempo: 1.0
+  observe: count, fates
+  assert: count at 3 d in 6..10
+  assert: count at 266 d in 1e12..1e13
+  assert: count at 20 yr in 2e13..3.5e13
+  evidence: curated "Sender & Milo 2021; Hatton et al. 2023 (36e12 cells, 70 kg male); Carnegie stages"; confidence: 0.5
+}
+
+stage Cleavage { from: 0 d; to: 5 d; evidence: curated "first cleavage ~24 h; 8-cell at day 3; morula day 4"; confidence: 0.8 }
+stage Blastocyst { from: 5 d; to: 14 d; evidence: curated "blastocyst day 5-6, implantation day 6-10"; confidence: 0.8 }
+stage Gastrulation { from: 14 d; to: 21 d; evidence: experimental "Carnegie stages 7-9; CS7/CS8 spatial atlases 2024"; confidence: 0.8 }
+stage Organogenesis { from: 21 d; to: 56 d; evidence: curated "Carnegie stages 10-23 (embryonic period)"; confidence: 0.8 }
+stage Fetal { from: 56 d; to: 266 d; evidence: curated "fetal period to birth at ~38 weeks post-fertilisation"; confidence: 0.8 }
+stage Childhood { from: 266 d; to: 18 yr; evidence: curated "postnatal growth to adult size"; confidence: 0.7 }
+stage Adult { from: 18 yr; evidence: curated "maintenance: turnover balances loss"; confidence: 0.7 }
+
+cell_type Trophectoderm { parent: Blastomere; ontology: CL:0000351; evidence: curated "Cell Ontology (trophoblast)"; confidence: 0.9 }
+cell_type Epiblast { parent: Blastomere; ontology: CL:0000352; evidence: curated "Cell Ontology"; confidence: 0.9 }
+cell_type Hypoblast { parent: Blastomere; evidence: curated "primitive endoderm, extra-embryonic"; confidence: 0.8 }
+
+timer cleavage { duration: 20 h; when: stage = Cleavage; evidence: curated "2-cell ~day 1, 8-cell day 3 (about one division per 20 h)"; confidence: 0.6 }
+timer preimplantation { duration: 2 d; when: stage = Blastocyst|Gastrulation; evidence: inferred "~100 cells at day 5, ~1,000-2,000 epiblast cells at day 14, a few thousand at day 21"; confidence: 0.3 }
+timer fetal_doubling { duration: 7.2 d; when: stage = Organogenesis|Fetal; evidence: inferred "from a few hundred embryo-proper cells at day 21 to ~2.5e12 at birth needs ~34 doublings in 245 days"; confidence: 0.3 }
+
+decision blastomere { action: differentiate; when: cell_type = Zygote; to: Blastomere; evidence: curated "cleavage-stage cells"; confidence: 0.9 }
+decision cleave { action: divide; when: cell_type = Blastomere, stage = Cleavage; fraction: 1.0; evidence: curated "holoblastic cleavage"; confidence: 0.8 }
+decision te { action: differentiate; when: cell_type = Blastomere, stage = Blastocyst; to: Trophectoderm; fraction: 0.65; evidence: curated "outer cells become trophectoderm (~2/3 of the blastocyst)"; confidence: 0.6 }
+decision icm_hypoblast { action: differentiate; when: cell_type = Blastomere, stage = Blastocyst; to: Hypoblast; fraction: 0.4; evidence: curated "inner cell mass: hypoblast (primitive endoderm) and epiblast"; confidence: 0.5 }
+decision icm_epiblast { action: differentiate; when: cell_type = Blastomere, stage = Blastocyst; to: Epiblast; fraction: 1.0; evidence: curated "the rest of the inner cell mass is epiblast, the source of the body"; confidence: 0.7 }
+decision extraembryonic { action: quiesce; when: cell_type = Trophectoderm|Hypoblast; evidence: curated "placenta and yolk sac are not counted in the body"; confidence: 0.9 }
+decision preimplantation_growth { action: divide; when: cell_type = Blastomere|Epiblast, stage = Blastocyst|Gastrulation; fraction: 1.0; evidence: inferred "roughly daily doublings"; confidence: 0.3 }
+decision ectoderm { action: differentiate; when: cell_type = Epiblast, stage = Gastrulation; to: Ectoderm; fraction: 0.45; evidence: inferred "germ-layer shares of the embryo proper (order of magnitude; the gastrulation module states the same)"; confidence: 0.3 }
+decision mesoderm { action: differentiate; when: cell_type = Epiblast, stage = Gastrulation; to: Mesoderm; fraction: 0.64; evidence: inferred "0.35 of the epiblast"; confidence: 0.3 }
+decision endoderm { action: differentiate; when: cell_type = Epiblast, stage = Gastrulation; to: Endoderm; fraction: 1.0; evidence: inferred "0.20 of the epiblast"; confidence: 0.3 }
+decision prenatal_growth { action: divide; when: stage = Organogenesis|Fetal; fraction: 1.0; evidence: inferred "exponential growth of every tissue until birth"; confidence: 0.3 }

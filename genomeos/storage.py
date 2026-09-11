@@ -253,6 +253,17 @@ def _distil_celegans_lineage() -> dict:
     }
 
 
+def _distil_human_turnover() -> dict:
+    from genomeos.organism.human import distil, fetch_milo, read_xlsx, to_bio_tissues
+
+    table = distil(read_xlsx(fetch_milo()))
+    org = DATA / "organisms" / "human"
+    org.mkdir(parents=True, exist_ok=True)
+    (org / "tissues.bio").write_text(to_bio_tissues(table))
+    table["generated"] = [str(org / "tissues.bio")]
+    return table
+
+
 def _distil_celegans_packer() -> dict:
     from genomeos.organism.packer import distil, stream_annotation
     from genomeos.organism.reference import ReferenceLineage
@@ -266,6 +277,12 @@ DISTILLERS: list[Distiller] = [
         [],
         _distil_celegans_lineage,
         "the complete timed C. elegans lineage (WormWeb, CC BY) as a 2,183-cell table plus generated BioLang",
+    ),
+    Distiller(
+        "human_cell_turnover",
+        [],
+        _distil_human_turnover,
+        "Sender & Milo 2021 cell counts, lifespans and turnover per cell type (Summary.xlsx streamed)",
     ),
     Distiller(
         "celegans_packer2019",

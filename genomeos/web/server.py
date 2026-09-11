@@ -363,6 +363,70 @@ class Api:
             out["diff"] = diff_runs(runs[0], runs[1])
         return out
 
+    # ---- organism (grow) -------------------------------------------------
+
+    def grow(self, module: str, until: str = "800", depth: int = 3) -> dict:
+        """Grow a BioLang v0.3 organism program and score it against its reference when one exists."""
+        from genomeos.ir import to_minutes
+        from genomeos.lang import parse_file
+        from genomeos.organism import REFERENCES, ReferenceLineage
+        from genomeos.organism.diff import compare
+        from genomeos.runtime.body import Body
+
+        path = self._safe(module)
+        m = parse_file(path)
+        if m.organism is None:
+            raise ApiError(f"{module} has no organism block")
+        parts = str(until).split()
+        until_min = to_minutes(float(parts[0]), parts[1] if len(parts) > 1 else "min")
+        until_min = min(until_min, to_minutes(100, "yr"))
+        body = Body(m, max_cells=50_000).run(until=until_min)
+        marks = [0.5, 25, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600, 800, 1500, 2000, 3000, 4000, 5700]
+        if until_min > 10_000:
+            days = (1, 3, 5, 14, 21, 56, 100, 180, 266, 365, 730, 1826, 3652, 6574, 7305, 10957, 14610, 29220)
+            marks = [to_minutes(d, "d") for d in days]
+        marks = [t for t in marks if t <= until_min] + [until_min]
+        ref = None
+        if m.organism.reference in REFERENCES and Path(REFERENCES[m.organism.reference]).exists():
+            ref = ReferenceLineage.load(REFERENCES[m.organism.reference])
+        out = {
+            "summary": body.summary(),
+            "organism": {
+                "name": m.organism.name,
+                "species": m.organism.species,
+                "resolution": m.organism.resolution,
+                "factors": m.organism.factors,
+                "decisions": len(m.decisions),
+                "timers": len(m.timers),
+                "signals": len(m.signals()),
+                "stages": [
+                    {"name": st.name, "start": st.start, "end": st.end, "unit": st.unit} for st in m.stages
+                ],
+            },
+            "curve": [
+                {
+                    "t": t,
+                    "cells": body.count_at(t),
+                    "deaths": body.deaths_by(t),
+                    "reference": ref.count_at(t) if ref else None,
+                }
+                for t in marks
+            ],
+            "fates": body.fates_at(until_min),
+            "tree": body.tree(depth=max(0, min(int(depth), 6))),
+            "asserts": body.check_asserts(),
+            "uncertainty": body.uncertainty().to_dict(),
+            "unknown": dict(body.unknown),
+            "fired": [
+                {"id": k, "n": v}
+                for k, v in body.fired.most_common()
+                if not k.startswith(("div_", "fate_", "die_"))
+            ][:40],
+        }
+        if ref is not None:
+            out["diff"] = compare(body, ref, until=until_min).to_dict()
+        return out
+
     # ---- development (space) --------------------------------------------
 
     def develop(self, model: str, width: int = 60, hours: float = 100.0) -> dict:
@@ -1178,6 +1242,14 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.proteome_summary())
             if u.path == "/api/anatomy":
                 return self._json(self.api.anatomy(self._q(qs, "path"), self._q(qs, "chrom")))
+            if u.path == "/api/grow":
+                return self._json(
+                    self.api.grow(
+                        self._q(qs, "module", "data/organisms/celegans/embryo.bio"),
+                        self._q(qs, "until", "800"),
+                        int(self._q(qs, "depth", 3)),
+                    )
+                )
             if u.path == "/api/develop":
                 return self._json(
                     self.api.develop(

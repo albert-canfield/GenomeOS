@@ -425,6 +425,9 @@ def _compile_block(b: Block, module: Module) -> None:
         if "tempo" in p:
             org.tempo = _float(p["tempo"], "tempo", b.line)
         org.root = p.get("root", org.root)
+        org.resolution = p.get("resolution", org.resolution)
+        if org.resolution not in ("cells", "populations"):
+            raise BioLangError(f"line {b.line}: resolution must be cells or populations")
         org.cell_type = p.get("cell_type", "")
         org.factors = _list(p.get("factors", ""))
         org.environment = _parse_when(p.get("environment", ""))
