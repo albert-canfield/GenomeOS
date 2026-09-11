@@ -124,8 +124,8 @@ uv run ruff check .
 
 More commands: `annotate`, `gene`, `index`, `variant`, `twin build|new|fork|run`,
 `clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`, `grow`,
-`flow`, `domains`, `protein --compile`, `proteome`, `unknown`, `cancer`,
-`cancer expression`, `therapeutic`, `design`.
+`flow`, `regulation`, `domains`, `repeats`, `rna`, `protein --compile|--bio`, `proteome`,
+`graph`, `pathway`, `unknown`, `cancer compare|tumour|expression`, `therapeutic`, `design`.
 Optional extras: `uv sync --extra compose` (process-bigraph), `--extra predict`
 (AlphaGenome client, needs `ALPHAGENOME_API_KEY`), `--extra clocks` (biolearn, needs torch).
 
