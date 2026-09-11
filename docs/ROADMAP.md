@@ -100,10 +100,10 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioIR** (representation) | 0.3 | 20 types with JSON round-trip: Evidence, Entity, Region, RegulatoryElement, Gene, Transcript, Protein, CellType, Effect, Event, Parameter, Rule, Domain, Signal, Timer, Stage, Decision, Experiment, Organism, Module; `UNKNOWN` as a value | a BIOIR-v0.3 spec (the doc is v0.1); ProteinState and Population as types; `Locus` moved under `ir` |
 | **BioVM** (engines) | 0.3 | eleven engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces; the two engine files that import the genome layer |
 | **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs the demo, std and organism programs in CI | its own package and test suite; `bio fmt`; language server |
-| **BioLib** (libraries) | 45 libraries | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol | `cancer.*` layer; human development and haematopoiesis modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
+| **BioLib** (libraries) | 45 libraries | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol; haematopoiesis as a runnable mechanism module | `cancer.*` layer; more human development modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
 | **BioTwin** (individual) | 0.7 | HG002 with measured telomere and epigenetic age; fork, run, diff; calibration from measured state; `genomeos lookup` for one variant through every layer | genome-wide twin (per-chromosome build in progress); a user's own VCF; telomere from real reads |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
-| **Genome decoding** (GenomeOS) | 0.9 in progress | every chromosome inventoried; UNKNOWN classified genome-wide (96.6%, curated repeats on 19 of 24); domains, curated repeats, ENCODE elements, reader v1 (open nodes per cell type) where fetched; signals learned | the segment parser; every chromosome fetched and analysed; a second mammal |
+| **Genome decoding** (GenomeOS) | 0.9 nearly there | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader v1 (open nodes per cell type) on 2; signals learned | the segment parser (in progress); reader on every chromosome; a second mammal |
 | **Molecules** (GenomeOS) | 0.9 in progress | federated protein compiler, RNA layer with GTEx, pathways as reachability, knowledge graph, translation verified against UniProt; proteome on 4 chromosomes | 21 chromosomes of proteome (running); genome-wide graph; kinetics |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
@@ -164,9 +164,7 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Requirements.** Any chromosome on demand (`genomeos data fetch --chrom`);
   classification order fixed (curated repeats before ORFs); every class
   names its evidence layer; the block map shows it.
-- **Missing.** Domains on 2 of 25 chromosomes; curated-repeat UNKNOWN pass
-  on 14 of 24 (job running); the L1 ORF2 signature (long_orf is 23.6% of
-  UNKNOWN and mostly LINE-1); silencers have no source; enhancer → gene is
+- **Missing.** Silencers have no source; enhancer → gene is
   inferred from the CTCF domain, never measured (Hi-C or a predictive model);
   the sequence grammar has signals but no segment parser (Viterbi over the
   grammar) and no JASPAR promoter scan; the **reader** of
@@ -249,10 +247,9 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Requirements.** Every cell by name against Sulston; deaths and fates
   exact; timers with their measured spread; the human body reproduced by
   growth and turnover, not asserted; organism-level uncertainty populated.
-- **Missing.** The human program is counts, not mechanism (low confidence by
-  construction); no runnable haematopoietic differentiation module (the
-  0.3 proof in the old roadmap was never built; only the cell type and the
-  library exist); Packer 2019 disagrees with the lineage at 26% of internal
+- **Missing.** The human program is counts, not mechanism, except
+  haematopoiesis (first mechanism module, from the stem cell to the blood
+  lineages gated by the established factors, landed 2026-09-11); Packer 2019 disagrees with the lineage at 26% of internal
   nodes (labelling depth); the Body runtime does not yet run inside a
   process-bigraph composite with a GRN or SBML model; the spatial engine has
   no division or movement; the external engines (libRoadRunner, MaBoSS,
@@ -355,16 +352,16 @@ or the CLI; results land in `data/results` and are committed.
 
 | Layer | Done | Job | Notes |
 |---|---|---|---|
-| Sequence, GENCODE rows, ENCODE elements, RepeatMasker, curated UNKNOWN pass, domains (`fetch_<chrom>`) | 18 of 25 fetched | `genomeos data fetch --chrom C --analyse` | missing chr15–20, chrX; about 4 min each |
+| Sequence, GENCODE rows, ENCODE elements, RepeatMasker, curated UNKNOWN pass, domains (`fetch_<chrom>`) | 25 of 25 (2026-09-11) | `genomeos data fetch --chrom C --analyse` | sequences 1.4 GB in `data/reference`, local only |
 | Anatomy inventory | 25 of 25 | done | `anatomy_hg38_by_chromosome` |
-| UNKNOWN classification | 25 of 25, curated repeats on 19 of 24 | `unknown_genome_wide` (running, one process) | the rest arrive with their fetch |
-| CTCF domains | 3 of 25 | part of fetch since 2026-09-11 | |
+| UNKNOWN classification | 25 of 25 with curated repeats; genome-wide 98.5% classified | done | `unknown_genome_wide` summary committed |
+| CTCF domains | 24 of 25 (chrM has none) | done | |
 | Reader (open nodes per cell type) | 2 of 25 | `genomeos reader --chrom` | K562 and HepG2 |
 | Proteome compiled | 4 of 25 | `proteome_genome_wide` (running) | roughly 17 h of source time remaining |
 | Translation verified against UniProt | 3 of 25 | part of the proteome job since 2026-09-11 | |
 | Knowledge graph | 1 of 25 | `genomeos graph` | after the proteome |
 | HG002 twin | 1 of 25 | `genomeos twin build` per chromosome | in progress (genomeos-fe) |
-| Curated repeats distilled | 21 of 25 | part of fetch | |
+| Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
 
 One-off jobs, each needing a decision or a resource:
 
@@ -385,12 +382,13 @@ One-off jobs, each needing a decision or a resource:
 The ordered list across areas, each with the milestone it serves and the
 session that holds it. Items 1–4 run in parallel today.
 
-1. Whole-genome data jobs to 25 of 25 (§4): fetch chr15–20 and chrX with
-   analysis, the proteome job, verification, graph. Milestone 0.9. genomeos-fe.
+1. Whole-genome data jobs to 25 of 25 (§4): fetch and analysis done on
+   2026-09-11; the proteome job, verification and graph remain. Milestone
+   0.9. genomeos-fe.
 2. HG002 twin on every chromosome, then `twin build --vcf` for any genome.
    Milestone 0.9. genomeos-fe.
-3. Haematopoiesis as the first human mechanism module, checked against
-   counts and lineage choices. Milestone 1.1. genomeos-73.
+3. Haematopoiesis landed 2026-09-11 as the first human mechanism module;
+   next mechanism modules follow the same pattern. Milestone 1.1. genomeos-73.
 4. Evidence explorer view; the engine-boundary fix in `runtime/variant_effect.py`;
    `.gitignore` for `data/jobs`; nightly CI. Milestone 1.0. genomeos-f7.
 5. Reader lane in the block map and a `reader` construct in BioLang.
