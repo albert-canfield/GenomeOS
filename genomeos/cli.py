@@ -770,6 +770,7 @@ def cmd_data(args: argparse.Namespace) -> int:
                 progress=lambda m: print(f"  {m}", flush=True),
                 elements=not args.no_elements,
                 repeats=not args.no_repeats,
+                analyse=args.analyse,
             )
             print(
                 f"  ready: {r['sequence']}, {r['gencode']}"
@@ -2350,6 +2351,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--no-elements", action="store_true")
     p.add_argument("--no-repeats", action="store_true")
     p.add_argument("--individual", action="store_true", help="also the test human's (HG002) variants")
+    p.add_argument("--analyse", action="store_true", help="then classify the UNKNOWN space and infer domains")
     p = data.add_parser("distil", help="turn raw downloads into result summaries")
     p.add_argument("--only", nargs="*")
     p.add_argument("--force", action="store_true", help="recompute existing summaries")

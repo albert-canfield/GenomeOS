@@ -31,6 +31,27 @@ def main() -> None:
             print(f"{c}: skipped after 3 attempts", flush=True)
             continue
         save_result(f"proteome_{c}", r)
+        # with local models and sequence, also verify our translation against UniProt for this chromosome
+        from pathlib import Path
+
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.molecules.verify import verify_chromosome
+
+        fa = Path(f"data/reference/{c}.fa.gz")
+        gff = default_gencode({c})
+        if gff and fa.exists():
+            ann = Annotation.from_gff3(gff, {c})
+            genome = IndexedGenome(fa)
+            try:
+                v = verify_chromosome(c, ann, genome)
+            finally:
+                genome.close()
+            save_result(f"translation_vs_uniprot_{c}", v)
+            print(
+                f"{c}: translation vs UniProt: {v['exact_some_isoform_fraction']:.1%} identical for some "
+                f"isoform, {v['disagreement_count']} real disagreements",
+                flush=True,
+            )
         cov = r["coverage_fraction"]
         print(
             f"{c}: {r['coding_genes']} genes in {r['seconds']} s; sequence {cov['sequence']:.1%}, "

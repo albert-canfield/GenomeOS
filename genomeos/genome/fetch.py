@@ -74,8 +74,34 @@ def fetch_gencode_chrom(chrom: str, progress=None) -> Path:
     return dest
 
 
+def analyse_chromosome(chrom: str, progress=None) -> dict[str, Any]:
+    """After a fetch: classify the UNKNOWN space (curated repeats and ENCODE evidence) and infer the
+    domains, so the new chromosome arrives with the same results chromosome 21 has."""
+    from genomeos.genome import Annotation, Genome, default_gencode
+    from genomeos.genome.domains import infer_domains, summarise
+    from genomeos.genome.regulatory import load_ccres
+    from genomeos.genome.unknown import investigate
+    from genomeos.results import load_result, save_result
+
+    out: dict[str, Any] = {}
+    genome = Genome.from_fasta(REFERENCE / f"{chrom}.fa.gz")
+    seq = genome.chromosomes[chrom].sequence
+    ann = Annotation.from_gff3(default_gencode({chrom}), {chrom})
+    if not (load_result(f"unknown_{chrom}") or {}).get("curated_repeats"):
+        r = investigate(seq, ann, chrom, progress=progress)
+        save_result(f"unknown_{chrom}", r)
+        out["unknown_classified"] = r["classified_fraction"]
+    ccres = load_ccres(chrom)
+    if ccres and not load_result(f"domains_{chrom}"):
+        doms = infer_domains(chrom, len(seq), ccres, ann)
+        s = summarise(doms)
+        save_result(f"domains_{chrom}", {**s, "domains": [d.to_dict() for d in doms]})
+        out["domains"] = s["domains"]
+    return out
+
+
 def fetch_chromosome(
-    chrom: str, progress=None, elements: bool = True, repeats: bool = True
+    chrom: str, progress=None, elements: bool = True, repeats: bool = True, analyse: bool = False
 ) -> dict[str, Any]:
     out: dict[str, Any] = {"chrom": chrom}
     out["sequence"] = str(fetch_sequence(chrom, progress))
@@ -97,6 +123,8 @@ def fetch_chromosome(
             save_repeats(chrom, reps)
             save_result(f"rmsk_{chrom}", summarise(chrom, reps))
         out["repeats"] = len(reps)
+    if analyse:
+        out.update(analyse_chromosome(chrom, progress))
     return out
 
 
