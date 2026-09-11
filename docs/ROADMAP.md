@@ -296,10 +296,27 @@ in order. "Owner" is the session that holds the files today (see §7).
   judgement and the measurement the cell; asking for both is how a call
   becomes actionable. Results
   `segments_chr21_predicted_sites_rna_measured_panel6_{union,intersection}`.
-- **Next.** 1. The second chromosome, chr22 through the same five
-  configurations (running). 2. The `reader` construct in
+- **The second chromosome (2026-09-12).** chr22 (447 coding genes, 8,669
+  CDS segments) through the same five configurations, nothing tuned:
+
+  | signals used, chr22 | candidates | exon precision | gene precision | gene sensitivity | canonical exons |
+  |---|---|---|---|---|---|
+  | learned matrices | 297 | 8.3% | 30.0% | 72.3% | 5.9% |
+  | AlphaGenome splice sites | 1,293 | 49.4% | 18.7% | 97.3% | 70.4% |
+  | + predicted RNA, eight tissues | 151 | 63.1% | 92.7% | 81.2% | 62.8% |
+  | + measured RNA, six lines | 289 | 60.1% | 58.8% | 88.6% | 65.1% |
+  | predicted ∩ measured | 142 | 63.7% | **94.4%** | 79.9% | 62.0% |
+
+  The same ordering as chr21 in every row, with higher sensitivity because
+  the eight-tissue panel covers chr22's genes better; chr21 carries more
+  tissue-restricted and keratin-associated genes. Two chromosomes, ten runs,
+  the series holds, and the parser thread of this area closes: the grammar
+  finds the genes, splice-site prediction draws their exons, transcription
+  evidence says which are real, and asking the model and the measurement
+  together is the actionable call.
+- **Next.** 1. The `reader` construct in
   BioLang, so context gating comes from
-  chromatin (the parser half belongs to the language owner). 3. Orthology
+  chromatin (the parser half belongs to the language owner). 2. Orthology
   from Ensembl Compara, and a boundary source finer than CTCF alone (Hi-C
   domains) to test whether the resolution limit is the biology. The L1 ORF2
   and Alu sequence signatures are superseded by the RepeatMasker pass and
@@ -764,7 +781,7 @@ or the CLI; results land in `data/results` and are committed.
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
 | Composition budget: constraint per UNKNOWN block, a tier per block | 1 of 24 (chr21, 2026-09-11); job `budget_genome_wide` running | `genomeos budget --chrom C`; `genomeos budget` distils | Zoonomia phyloP read per base over HTTP ranges, never stored; about 2.5 GB of ranges for the genome; see area I |
-| Segment parser scored against GENCODE | chr21, six configurations | `genomeos segments --chrom C [--predicted-sites] [--promoter-anchored] [--coding markov] [--rna-filter]` | every result kept side by side; RNA over the exons reaches 92.7% gene precision at 57.9% sensitivity; see area B |
+| Segment parser scored against GENCODE | chr21 and chr22, twelve runs, series closed 2026-09-12 | `genomeos segments --chrom C [--predicted-sites] [--promoter-anchored] [--coding markov] [--rna-filter]` | every result kept side by side; RNA over the exons reaches 92.7% gene precision at 57.9% sensitivity; see area B |
 
 One-off jobs, each needing a decision or a resource:
 
