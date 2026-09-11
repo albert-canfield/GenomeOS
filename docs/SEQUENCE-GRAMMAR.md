@@ -276,7 +276,28 @@ tested against it.
    So the two filters are not redundant: the model supplies the gene-level
    judgement, the measurement supplies the cell, and asking for both is how
    a parser's call becomes something a geneticist would act on. This is
-   the lever. Nine in
+   the lever.
+
+   **The second chromosome (chr22, 447 coding genes, 8,669 CDS segments).**
+   The same five configurations, nothing tuned:
+
+   | chr22 | candidates | exons (sens / prec) | canonical exons | genes (sens / prec) |
+   |---|---|---|---|---|
+   | matrices alone | 297 | 3.0% / 8.3% | 5.9% | 72.3% / 30.0% |
+   | AlphaGenome splice sites | 1,293 | 34.6% / 49.4% | 70.4% | 97.3% / 18.7% |
+   | + predicted RNA (eight tissues) | 151 | 30.9% / 63.1% | 62.8% | 81.2% / 92.7% |
+   | + measured RNA (six ENCODE lines) | 289 | 32.0% / 60.1% | 65.1% | 88.6% / 58.8% |
+   | + both (intersection) | 142 | 30.5% / 63.7% | 62.0% | 79.9% / 94.4% |
+
+   The shape is chr21's shape: sites take canonical exons from 6% to 70%,
+   the predicted panel turns one-in-five gene precision into nine-in-ten,
+   the measured lines are broader and noisier, and the intersection is the
+   strictest. Sensitivity is higher on chr22 across the board (81% of genes
+   after the predicted filter against 58% on chr21), which is the panel's
+   tissues covering chr22's genes better, not the parser; chr21 has more
+   of the tissue-restricted and keratin-associated genes that no panel of
+   eight expresses. Two chromosomes, ten runs, the same ordering: the
+   series holds. Nine in
    ten candidates that survive the RNA filter are real genes, against one in
    five before it, and the exons they draw are right two times in three. What
    the filter costs is the genes the panel does not express: sensitivity
