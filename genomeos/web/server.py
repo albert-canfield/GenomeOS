@@ -827,6 +827,7 @@ class Api:
                 p.stem.split("_")[-1]: load_result(p.stem, rd)
                 for p in sorted(rd.glob("enhancer_targets_chr*.json"))
             },
+            "enhancer_targets_genome_wide": load_result("enhancer_targets_genome_wide", rd),
         }
 
     def proteome_summary(self) -> dict:

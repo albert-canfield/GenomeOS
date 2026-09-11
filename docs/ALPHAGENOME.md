@@ -93,13 +93,24 @@ unphased sequence, so it does not see a diploid individual.
    EH38E3457653 sits 234 kb from HLCS and moves SIM2 instead. Other
    chromosomes run through the same job by name (`enhancer_targets_<chrom>`,
    registered for every chromosome); the summary card on the Progress tab
-   shows one row per chromosome scored. The first three agree with each other:
+   shows one row per chromosome scored. All 24 chromosomes ran the same day
+   (`enhancer_targets_genome_wide`, `data/results/enhancer_targets_genome_wide.json`):
 
-   | chromosome | elements | name a gene | coding target = nearest TSS | inside the node | silencer-like |
-   |---|---|---|---|---|---|
-   | chr21 | 200 | 63.5% | 67.8% | 86.7% | 43 |
-   | chr22 | 200 | 61.0% | 65.0% | 91.8% | 47 |
-   | chr1 | 200 | 64.0% | 68.4% | 86.7% | 53 |
+   | | genome-wide (24 chromosomes) |
+   |---|---|
+   | distal enhancers deleted one by one | 4,800 (200 per chromosome) |
+   | some gene moves by ≥ 0.1 log2 | 2,994 (62.4%); 735 strong |
+   | a coding gene moves | 2,291 |
+   | strongest coding gene = nearest TSS in the CTCF node | 1,631 (71.2%; per chromosome 50% to 83%) |
+   | strongest coding gene inside the node | 2,066 (90.2%; per chromosome 79.8% to 91.8%, median 86.4%) |
+   | strongest coding gene beyond the boundary | 225 (9.8%) |
+   | silencer-like (expression rises on deletion) | 1,157 of 2,994 named |
+   | tissues where the strongest effect falls most often | K562, placenta, CD14 monocyte, HepG2, small intestine |
+
+   The chr21 numbers above are one row of this; the shape does not change
+   across chromosomes, which is the point: nine in ten predicted coding
+   targets fall inside the node the element sits in, and the nearest-TSS
+   heuristic names the wrong gene for three in ten.
 3. **Splicing, at the resolution our grammar lacks** (built, feature c). Our
    learned donor and acceptor matrices reach about 90% recall at seven false
    hits per kilobase, which is why segments are parsed by grammar and never

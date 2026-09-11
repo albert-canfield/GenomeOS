@@ -131,8 +131,17 @@ This is a prediction agreeing with an inference, and both are labelled as
 such; it is not a measurement. But it is the first evidence in the project,
 beyond the placement of CTCF sites, that the node is the right unit for
 regulation, and it gives every scored enhancer a named gene, a tissue and a
-magnitude instead of a distance. The same job runs on any fetched
-chromosome.
+magnitude instead of a distance.
+
+The same job then ran on every chromosome (4,800 elements, 200 per
+chromosome, `data/results/enhancer_targets_genome_wide.json`): 2,291 move a
+coding gene, and for 90.2% of them the gene is inside the element's node
+(79.8% to 91.8% per chromosome, median 86.4%); 71.2% are exactly the
+nearest TSS the inference had named; 1,157 of the 2,994 named effects are
+rises, silencer-like. Twenty-four chromosomes giving the same shape is what
+turns one chromosome's observation into a property of the genome as this
+model reads it: the node bounds regulation, and nearest-gene is right two
+times in three.
 
 ## Reader v1 (built 2026-09-11)
 

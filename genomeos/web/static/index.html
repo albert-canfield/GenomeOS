@@ -1309,7 +1309,11 @@ async function loadIndividualWide() {
     const et = d.enhancer_targets || {};
     const chroms = Object.keys(et);
     if (chroms.length) {
-      $('#j-enhancers').innerHTML = chroms.map(c => {
+      const gw = d.enhancer_targets_genome_wide && d.enhancer_targets_genome_wide.genome;
+      const pctg = (x) => x == null ? '?' : (x * 100).toFixed(0) + '%';
+      const head = gw ? `<div class="kpi"><div><b>${gw.chromosomes}</b><span>chromosomes</span></div><div><b>${fmt(gw.elements_scored)}</b><span>distal enhancers deleted one by one</span></div><div><b>${pctg(gw.fraction_with_target)}</b><span>move some gene by ≥ 0.1 log2</span></div><div><b>${pctg(gw.coding_target_agrees_with_nearest)}</b><span>coding target = nearest TSS in node</span></div><div><b>${pctg(gw.coding_target_inside_domain)}</b><span>coding target inside the node</span></div><div><b>${fmt(gw.silencer_like)}</b><span>silencer-like</span></div></div>
+        <table><tr><th>chr</th><th class="num">scored</th><th class="num">name a gene</th><th class="num">= nearest TSS</th><th class="num">inside node</th><th class="num">silencer-like</th></tr>${Object.entries(gw && d.enhancer_targets_genome_wide.chromosomes || {}).map(([c, r]) => `<tr><td class="mono">${c}</td><td class="num">${r.elements_scored}</td><td class="num">${pctg(r.fraction_with_target)}</td><td class="num">${pctg(r.coding_target_agrees_with_nearest)}</td><td class="num">${pctg(r.fraction_inside_domain)}</td><td class="num">${r.silencer_like}</td></tr>`).join('')}</table><div class="muted" style="margin:6px 0 10px">genome-wide: <span class="pill predicted">predicted</span> per chromosome below</div>` : '';
+      $('#j-enhancers').innerHTML = head + chroms.map(c => {
         const r = et[c], s = r.summary || {}, v = s.verdicts_coding || s.verdicts || {};
         const pct = (x) => x == null ? '?' : (x * 100).toFixed(0) + '%';
         const named = s.with_predicted_target || 0;
