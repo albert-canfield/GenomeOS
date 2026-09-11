@@ -30,3 +30,12 @@ def test_live_prediction():
     ad = AlphaGenomeAdapter()
     effects = ad.predict("chr21", 25897620, "C", "T")
     assert isinstance(effects, list)
+
+
+def test_key_is_read_from_a_local_dotenv_file(tmp_path):
+    from genomeos.predict.alphagenome_adapter import _dotenv_key
+
+    env = tmp_path / ".env"
+    env.write_text('OTHER=1\nALPHAGENOME_API_KEY="abc"\n')
+    assert _dotenv_key("ALPHAGENOME_API_KEY", str(env)) == "abc"
+    assert _dotenv_key("ALPHAGENOME_API_KEY", str(tmp_path / "missing")) is None

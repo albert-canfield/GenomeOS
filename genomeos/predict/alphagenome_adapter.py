@@ -39,11 +39,24 @@ class PredictedEffect:
         return min(0.7, 0.2 + abs(self.log2_fold_change) * 0.25)
 
 
+def _dotenv_key(name: str, path: str = ".env") -> str | None:
+    """Read NAME=value from a local .env file (git-ignored) when the variable is not exported."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if line.startswith(f"{name}="):
+                    return line.split("=", 1)[1].strip().strip("'\"") or None
+    except OSError:
+        return None
+    return None
+
+
 class AlphaGenomeAdapter:
     def __init__(self, scorer: Scorer | None = None, api_key: str | None = None) -> None:
         self._scorer = scorer
         self._client = None
-        self.api_key = api_key or os.environ.get("ALPHAGENOME_API_KEY")
+        self.api_key = api_key or os.environ.get("ALPHAGENOME_API_KEY") or _dotenv_key("ALPHAGENOME_API_KEY")
 
     @property
     def available(self) -> bool:

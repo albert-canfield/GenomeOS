@@ -24,3 +24,6 @@ data/twins/*.fa.fai
 # per-chromosome GENCODE splits are reference data (data fetch --chrom), not results; only the chr21+chrM subset is tracked
 data/results/gencode_v50_chr*.gff3.gz
 !data/results/gencode_v50_chr21_chrM.gff3.gz
+
+# Local secrets (API keys): ALPHAGENOME_API_KEY=... lives in .env, never in the repository.
+.env
