@@ -80,8 +80,15 @@ def evaluate(
             from genomeos.ir.model import to_minutes
             from genomeos.runtime.body import Body
 
+            # run to the last stage, or further if an assert names a later time
             horizon = max(to_minutes(st.start, st.unit) for st in stages)
-            body = Body(module, seed=0).run(until=horizon)
+            for a in getattr(module.organism, "asserts", []) or []:
+                for num, unit in re.findall(r"at\s+([\d.]+)\s*([A-Za-z]+)", str(a)):
+                    try:
+                        horizon = max(horizon, to_minutes(float(num), unit))
+                    except (ValueError, KeyError):
+                        continue
+            body = Body(module, seed=None).run(until=horizon)  # the program's own seed, if it declares one
             for a in body.check_asserts():
                 results.append(
                     {"test": f"assert: {a.get('assert')}", "got": a.get("value"), "ok": bool(a.get("ok"))}
