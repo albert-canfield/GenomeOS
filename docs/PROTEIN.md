@@ -77,8 +77,30 @@ definitions.
 chromosome and records, per question above, how many proteins have an
 answer. The result is `data/results/proteome_chr21.json`; the compiled
 definitions stay in the local cache (not committed, a few tens of KB each).
-This is the measurable form of "how much of the proteome do we know", and
-the first milestone of the protein layer:
+This is the measurable form of "how much of the proteome do we know".
+Chromosome 21, 216 protein-coding genes, compiled in one pass
+(3 read-through genes have no reviewed UniProt entry:
+CFAP298-TCP10L, GET1-SH3BGR, IFNAR2-IL10RB):
+
+| question | proteins | fraction |
+|---|---|---|
+| genomic origin | 216 | 100.0% |
+| sequence | 213 | 98.6% |
+| name | 213 | 98.6% |
+| function | 194 | 89.8% |
+| domains | 208 | 96.3% |
+| pathways | 134 | 62.0% |
+| interactions | 178 | 82.4% |
+| expression | 216 | 100.0% |
+| structure experimental | 98 | 45.4% |
+| structure predicted | 212 | 98.1% |
+| disease | 55 | 25.5% |
+
+Sequence, name, domains and a predicted structure are close to complete;
+function is known for nine in ten; pathways for six in ten; an experimental
+structure for under half; a recorded disease association for a quarter.
+That is the shape Albert's table predicted, now measured on real data. It
+is the first milestone of the protein layer:
 
 **Human genome → complete protein knowledge graph**: click any protein and
 see everything science currently records about it, with every fact carrying
