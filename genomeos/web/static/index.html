@@ -129,6 +129,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 .prog i{display:block;height:100%;background:var(--accent);transition:width .4s}
 .prog.running i{background:linear-gradient(90deg,var(--accent),var(--c6))}
 .state{font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--line)}
+.state.stalled{color:var(--warn);border-color:var(--warn)}
 .state.running{color:var(--warn);border-color:var(--warn)}.state.done{color:var(--ok);border-color:var(--ok)}.state.failed{color:var(--bad);border-color:var(--bad)}.state.idle{color:var(--muted)}
 .log{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:pre-wrap;max-height:90px;overflow:auto;margin-top:4px}
 .pstatus{font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
@@ -1129,13 +1130,16 @@ async function loadJobs() {
     const fetchLine = doneFetch.length ? `<div class="muted" style="font-size:12px;margin-bottom:10px">fetched and analysed: ${doneFetch.length} chromosomes (${doneFetch.join(', ')})</div>` : '';
     $('#j-list').innerHTML = fetchLine + jobs.map(j => `<div style="margin-bottom:12px">
       <div class="row" style="margin-bottom:2px"><b class="mono">${j.name}</b> <span class="state ${j.state}">${j.state}</span>
-        ${j.state !== 'running' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
+        ${j.state !== 'running' && j.state !== 'stalled' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
+        ${(j.state === 'failed' || j.state === 'stalled' || j.state === 'unknown') && (j.fraction || 0) < 1 ? `<button class="ghost" data-heal="${j.name}" data-tip="Bring the job back on track: restart it from what is already saved. The server does this by itself every minute for long jobs; this is the manual nudge."><i class="ic">🩹</i>Heal</button>` : ''}
+        ${j.activity != null && (j.state === 'running' || j.state === 'stalled') ? `<span class="muted" data-tip="Seconds since the job last wrote a line or a heartbeat.">active ${j.activity < 90 ? j.activity + ' s' : Math.round(j.activity / 60) + ' min'} ago</span>` : ''}${j.heals ? `<span class="muted" data-tip="Times the supervisor or the Heal button restarted this job.">healed ×${j.heals}</span>` : ''}
         ${j.finished ? `<span class="muted">finished ${when(j.finished)}</span>` : ''}</div>
       <div class="muted" style="font-size:12px">${j.describe}</div>
       ${j.total > 1 ? `<div class="prog ${j.state}"><i style="width:${(j.fraction || 0) * 100}%"></i></div><div class="muted" style="font-size:11px">${j.done} of ${j.total}${j.detail ? ' · ' + j.detail : ''}</div>` : ''}
       ${j.last_lines.length ? `<div class="log">${j.last_lines.join('\n')}</div>` : ''}</div>`).join('');
     $('#j-list').querySelectorAll('button[data-job]').forEach(b => b.onclick = async () => { await api('/api/jobs/start', {name: b.dataset.job}); loadJobs(); });
-    const running = r.jobs.some(j => j.state === 'running');
+    $('#j-list').querySelectorAll('button[data-heal]').forEach(b => b.onclick = async () => { await api('/api/jobs/heal', {name: b.dataset.heal}); loadJobs(); });
+    const running = r.jobs.some(j => j.state === 'running' || j.state === 'stalled');
     clearTimeout(jobTimer);
     if (running) jobTimer = setTimeout(() => { loadJobs(); loadGenomeWide(); }, 5000);
   } catch (e) { $('#j-list').textContent = e.message; }

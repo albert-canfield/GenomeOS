@@ -1386,6 +1386,12 @@ class Handler(BaseHTTPRequestHandler):
                         body.get("chrom_length"),
                     )
                 )
+            if u.path == "/api/jobs/heal":
+                from genomeos import jobs
+
+                return self._json(
+                    jobs.heal(body.get("name", ""), self.api.root, force=bool(body.get("force"))).to_dict()
+                )
             if u.path == "/api/jobs/start":
                 return self._json(self.api.job_start(body.get("name", "")))
             if u.path == "/api/debug":
@@ -1454,6 +1460,12 @@ def make_server(
     root: Path, host: str = "127.0.0.1", port: int = 8765, verbose: bool = False
 ) -> ThreadingHTTPServer:
     Handler.api = Api(root)
+    # the supervisor: every minute, restart an auto-heal job that is not complete and is dead or stalled
+    import threading
+
+    from genomeos import jobs
+
+    threading.Thread(target=jobs.supervise, args=(root, 60), daemon=True, name="job-supervisor").start()
     srv = ThreadingHTTPServer((host, port), Handler)
     srv.verbose = verbose  # type: ignore[attr-defined]
     return srv

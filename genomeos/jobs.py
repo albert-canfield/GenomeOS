@@ -84,6 +84,8 @@ CATALOG: dict[str, dict] = {
         # chromosomes that lack it, so the earlier pass does not count)
         "progress": lambda root: _count_curated(root),
         "count": None,
+        "complete": lambda root: _count_curated(root) >= 24,
+        "auto_heal": True,
     },
     "proteome_chr21": {
         "argv": [sys.executable, "-m", "genomeos.cli", "proteome", "--chrom", "chr21"],
@@ -99,6 +101,8 @@ CATALOG: dict[str, dict] = {
         "result": None,
         "count": None,
         "progress": lambda root: _proteome_progress(root),
+        "complete": lambda root: len(list((root / "data" / "results").glob("proteome_chr*.json"))) >= 25,
+        "auto_heal": True,
     },
     "distil": {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "distil"],
@@ -140,6 +144,8 @@ class JobStatus:
     total: int
     last_lines: list[str]
     detail: str = ""
+    activity: float | None = None  # seconds since the last sign of life
+    heals: int = 0
 
     def to_dict(self) -> dict:
         return {
@@ -153,6 +159,8 @@ class JobStatus:
             "fraction": round(self.done / self.total, 3) if self.total else None,
             "last_lines": self.last_lines,
             "detail": self.detail,
+            "activity": self.activity,
+            "heals": self.heals,
         }
 
 
@@ -172,6 +180,82 @@ def _alive(pid: int | None) -> bool:
     except (ProcessLookupError, PermissionError):
         return False
     return True
+
+
+STALL_AFTER = 20 * 60  # seconds without a heartbeat or a log line before a running job counts as stalled
+HEAL_COOLDOWN = 10 * 60  # seconds between automatic restarts of the same job
+
+
+def heartbeat(name: str, root: Path = Path(".")) -> None:
+    """Called by a job script at every step: proof of life for the supervisor."""
+    p = root / "data" / "jobs" / f"{name}.heartbeat"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(str(time.time()))
+
+
+def last_activity(name: str, root: Path = Path(".")) -> float | None:
+    """Seconds since the job last showed life (heartbeat file or log write), None if never."""
+    stamps = []
+    for p in (root / "data" / "jobs" / f"{name}.heartbeat", root / "data" / "jobs" / f"{name}.log"):
+        if p.exists():
+            stamps.append(p.stat().st_mtime)
+    return round(time.time() - max(stamps)) if stamps else None
+
+
+def is_complete(name: str, root: Path = Path(".")) -> bool:
+    fn = CATALOG[name].get("complete")
+    return bool(fn(root)) if fn else False
+
+
+def heal(name: str, root: Path = Path("."), force: bool = False) -> JobStatus:
+    """Bring a job back on track: if it is not complete and its process is gone (or stalled), start it
+    again; the scripts resume from what is already saved. A live, active job is left alone."""
+    st = status(name, root)
+    if is_complete(name, root) and not force:
+        return st
+    pid = _recorded_pid(name)
+    if st.state == "running" and not force:
+        return st
+    if st.state == "stalled" and _alive(pid):
+        try:
+            os.kill(pid, 15)
+            time.sleep(2)
+        except ProcessLookupError:
+            pass
+    _running.pop(name, None)
+    return start(name, root)
+
+
+def supervise_once(root: Path = Path(".")) -> list[str]:
+    """One supervisor pass: restart every auto-heal job that was started, is not complete, and is
+    dead or stalled, at most once per HEAL_COOLDOWN. Returns the names healed."""
+    healed = []
+    for name, spec in CATALOG.items():
+        if not spec.get("auto_heal") or not _meta_path(name).exists() or is_complete(name, root):
+            continue
+        st = status(name, root)
+        if st.state not in ("failed", "unknown", "stalled"):
+            continue
+        meta = json.loads(_meta_path(name).read_text())
+        if time.time() - (meta.get("healed") or 0) < HEAL_COOLDOWN:
+            continue
+        heal(name, root)
+        meta = json.loads(_meta_path(name).read_text())
+        meta["healed"] = time.time()
+        meta["heals"] = (meta.get("heals") or 0) + 1
+        _meta_path(name).write_text(json.dumps(meta))
+        healed.append(name)
+    return healed
+
+
+def supervise(root: Path = Path("."), interval: int = 60) -> None:
+    """Run forever (a daemon thread in the server): heal what needs healing every `interval` seconds."""
+    import contextlib
+
+    while True:
+        with contextlib.suppress(Exception):  # the supervisor itself must never die
+            supervise_once(root)
+        time.sleep(interval)
 
 
 def _recorded_pid(name: str) -> int | None:
@@ -224,6 +308,9 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
             state = (
                 "done" if meta.get("code") == 0 else "failed" if meta.get("code") is not None else "unknown"
             )
+    activity = last_activity(name, root)
+    if state == "running" and activity is not None and activity > STALL_AFTER:
+        state = "stalled"
     done: float = 0
     detail = ""
     if spec.get("progress"):
@@ -261,6 +348,8 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
         spec["total"],
         lines,
         detail=detail,
+        activity=activity,
+        heals=int(meta.get("heals") or 0) if meta else 0,
     )
 
 

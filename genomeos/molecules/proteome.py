@@ -85,7 +85,7 @@ def coding_symbols_from_ensembl(chrom: str, window: int = 5_000_000) -> list[str
 
 
 def compile_chromosome(
-    chrom: str, gff3: str | None = None, limit: int | None = None, log=sys.stdout
+    chrom: str, gff3: str | None = None, limit: int | None = None, log=sys.stdout, workers: int = 8
 ) -> dict[str, Any]:
     from genomeos.genome import Annotation, default_gencode
 
@@ -108,16 +108,38 @@ def compile_chromosome(
     per_gene: dict[str, dict[str, bool]] = {}
     no_entry: list[str] = []
     t0 = time.time()
-    for i, sym in enumerate(symbols, 1):
-        d = compile_protein(sym)
-        cov = d.get("coverage") or coverage(d)
-        per_gene[sym] = cov
-        if not cov["sequence"]:
-            no_entry.append(sym)
-        for q in QUESTIONS:
-            counts[q] += cov[q]
-        if i % 10 == 0 or i == len(symbols):
-            print(f"{chrom}: {i}/{len(symbols)} compiled ({time.time() - t0:.0f} s)", file=log, flush=True)
+    # the work is waiting on public databases, so several genes compile at once (each writes its
+    # own cache file; a gene that fails is retried once, then recorded without an entry)
+    from concurrent.futures import ThreadPoolExecutor
+
+    def one(sym: str) -> tuple[str, dict[str, bool]]:
+        for attempt in range(2):
+            try:
+                d = compile_protein(sym)
+                return sym, d.get("coverage") or coverage(d)
+            except Exception:  # noqa: BLE001
+                if attempt:
+                    return sym, dict.fromkeys(QUESTIONS, False)
+                time.sleep(5)
+        return sym, dict.fromkeys(QUESTIONS, False)
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for i, (sym, cov) in enumerate(pool.map(one, symbols), 1):
+            per_gene[sym] = cov
+            if not cov["sequence"]:
+                no_entry.append(sym)
+            for q in QUESTIONS:
+                counts[q] += cov[q]
+            if i % 10 == 0 or i == len(symbols):
+                print(
+                    f"{chrom}: {i}/{len(symbols)} compiled ({time.time() - t0:.0f} s)", file=log, flush=True
+                )
+                try:
+                    from genomeos.jobs import heartbeat
+
+                    heartbeat("proteome_genome_wide")
+                except OSError:
+                    pass
     n = len(symbols)
     return {
         "chrom": chrom,

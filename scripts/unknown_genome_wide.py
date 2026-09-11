@@ -22,6 +22,7 @@ from pathlib import Path
 from genomeos.genome import Annotation, Genome
 from genomeos.genome.regulatory import RESULTS, save_ccres, stream_ccres
 from genomeos.genome.unknown import investigate
+from genomeos.jobs import heartbeat
 from genomeos.results import load_result, save_result
 
 UCSC = "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/{chrom}.fa.gz"
@@ -96,6 +97,7 @@ def main() -> None:
                 "seconds": r["seconds"],
             }
             save_result("unknown_genome_wide", summary)
+            heartbeat("unknown_genome_wide")
             fa.unlink()
             gpath.unlink()
             if chrom != "chr21":
@@ -110,4 +112,13 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    # never give up: a failed pass (a broken download, a source outage) is retried with a growing pause
+    pause = 60
+    for _attempt in range(1000):
+        try:
+            main()
+            break
+        except Exception as e:  # noqa: BLE001
+            print(f"pass failed ({str(e)[:100]}); next pass in {pause} s", flush=True)
+            time.sleep(pause)
+            pause = min(pause * 2, 1800)
