@@ -24,7 +24,7 @@ RESULT = load_result("therapeutic_benchmark")
 pytestmark = pytest.mark.skipif(not RESULT, reason="benchmark result not present")
 
 #: Known defects, counted today. Lower this when one is fixed; a rise is a regression.
-KNOWN_MECHANISM_DEFECTS = 3
+KNOWN_MECHANISM_DEFECTS = 2  # was 3; the agonist-against-a-driver case was fixed 2026-09-11
 
 
 def rows():

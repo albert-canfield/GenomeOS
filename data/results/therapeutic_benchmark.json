@@ -4,7 +4,7 @@
   "cases": 6,
   "targets_recovered": 6,
   "verdicts_correct": 6,
-  "top_mechanism_defensible": 3,
+  "top_mechanism_defensible": 4,
   "surface_cases": 2,
   "surface_cases_recovered": 2,
   "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
@@ -26,13 +26,11 @@
       "target_class": "direct_surface",
       "score": 0.5,
       "surface_accessibility": 1.0,
-      "best_mechanism": "agonist_antibody",
-      "best_compatibility": 0.622,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.606,
       "peptide_route": true,
-      "mechanism_concerns": [
-        "top mechanism is agonist_antibody against an activating driver, which would drive the pathway"
-      ],
-      "mechanism_sane": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
       "verdict": "recovered as a surface target",
       "pass": true
     },
@@ -78,11 +76,11 @@
       "target_class": "neoantigen_hla",
       "score": 0.427,
       "surface_accessibility": 0.36,
-      "best_mechanism": "targeted_radionuclide",
-      "best_compatibility": 0.31,
+      "best_mechanism": "blocking_antibody",
+      "best_compatibility": 0.25,
       "peptide_route": true,
       "mechanism_concerns": [
-        "top mechanism targeted_radionuclide needs an extracellular epitope, accessibility is 0.36"
+        "top mechanism blocking_antibody needs an extracellular epitope, accessibility is 0.36"
       ],
       "mechanism_sane": false,
       "verdict": "correctly not a surface target; approved drug is out of scope",
@@ -136,11 +134,11 @@
       "target_class": "neoantigen_hla",
       "score": 0.438,
       "surface_accessibility": 0.36,
-      "best_mechanism": "targeted_radionuclide",
-      "best_compatibility": 0.329,
+      "best_mechanism": "adcp",
+      "best_compatibility": 0.25,
       "peptide_route": true,
       "mechanism_concerns": [
-        "top mechanism targeted_radionuclide needs an extracellular epitope, accessibility is 0.36"
+        "top mechanism adcp needs an extracellular epitope, accessibility is 0.36"
       ],
       "mechanism_sane": false,
       "verdict": "correctly not a surface target; approved drug is out of scope",
@@ -159,7 +157,7 @@
       ],
       "recovered": true,
       "rank": 2,
-      "seconds": 1.1,
+      "seconds": 1.0,
       "target_class": "neoantigen_hla",
       "score": 0.345,
       "surface_accessibility": 0.0,

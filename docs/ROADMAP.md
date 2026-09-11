@@ -383,16 +383,24 @@ in order. "Owner" is the session that holds the files today (see §7).
   small-molecule inhibitor are correctly *not* called surface targets, and
   each still offers the peptide/HLA route, which is the pipeline's
   distinctive claim. A third question is scored apart and the pipeline fails
-  it three times in six: the mechanism it ranks first is an agonist antibody
-  against an activating driver (EGFR), or a radionuclide against a protein
-  with no established outward-facing part (BRAF, PIK3CA). Those are recorded
-  as known defects with a pinned count rather than hidden.
-- **One real bug found and fixed by the benchmark**: a small-molecule
-  precedent counted as evidence that a mechanism needing an extracellular
-  epitope could reach the target, so a kinase inhibitor "supported" a
-  radioligand against cytoplasmic BRAF. Small-molecule precedent now requires
-  positive evidence of reachability (D29 applied to precedent, not only to
-  localisation).
+  it, though less than it did: 4 of 6 now, after two fixes the benchmark
+  prompted. What remains is that a cytoplasmic protein (BRAF, PIK3CA) still
+  heads its list with a mechanism needing an extracellular epitope, now capped
+  at the provisional ceiling of 0.25 and labelled with its unmet requirement,
+  so it misleads nobody but should not be first. Pinned at 2, may fall, must
+  not rise.
+- **Three fixes the benchmark prompted.** (1) A small-molecule precedent
+  counted as evidence that a mechanism needing an extracellular epitope could
+  reach the target, so a kinase inhibitor "supported" a radioligand against
+  cytoplasmic BRAF; such precedent now requires positive evidence of
+  reachability. (2) An agonist antibody was ranked first against an activating
+  driver, which would push the pathway the tumour already over-drives;
+  agonism now needs positive evidence that triggering the target is the
+  intent, and is refused on ignorance rather than offered on it. (3) A
+  mechanism whose hard requirement merely went unanswered could outrank one
+  whose requirements were established; such a mechanism is now capped at 0.25
+  and carries the reason. All three are the same mistake in different
+  clothes: treating an unanswered question as permission.
 - **Missing.** Copy number and structural variants from cBioPortal profiles
   (only patient-supplied CNV today); a `cancer.*` library layer; the three
   mechanism-ranking defects above; expression-driven targets such as CD19 and
@@ -537,7 +545,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **0.9 whole genome** ✅ | every chromosome fetched, classified with curated repeats, domains found, proteome compiled and verified, HG002 twin genome-wide, graph genome-wide | all reached 2026-09-11; the proteome also ships as a packaged offline library. Version is 0.9.0 and the README states what that means; the git tag is cut when the pull request to `main` is merged |
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
-| **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 3/6 top mechanisms defensible. Outstanding: the three mechanism defects, CNA and SV, the library layer |
+| **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. Outstanding: the two remaining ranking defects, CNA and SV, the library layer |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
 ---

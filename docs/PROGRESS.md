@@ -490,3 +490,15 @@ pertuzumab precedent; BRAF now cites none.
 
 The benchmark was worth building for that fix alone, and the three defects it
 will not let us forget are worth more.
+
+## 2026-09-11 — fixing what the benchmark found
+
+Asked whether the defects were fixed, the answer was no: one bug had been
+fixed and three were merely recorded. Two of the three are now fixed, and the
+benchmark scores 4 of 6 on the mechanism question rather than 3.
+
+- **Agonism is no longer offered on ignorance.** An agonist antibody was ranked first for EGFR, an activating driver; triggering a receptor the tumour has already switched on is the wrong direction. The mechanism's own note had said for months that it "requires the target to have an activating function worth triggering", and nothing enforced it. It is now a gate that treats unknown as failure, so an agonist is offered when something establishes the intent and never because nothing denies it. EGFR now leads with a blocking antibody at 0.61, which is what is actually approved.
+- **A provisional mechanism can no longer lead.** A mechanism whose hard requirement went unanswered was scored as though the requirement were met, letting a radionuclide against a cytoplasmic kinase outrank established options. Such a mechanism is now capped at 0.25 with the unmet requirement recorded in its contributions.
+- **All three fixes, including yesterday's precedent bug, are the same mistake in different clothes**: treating an unanswered question as permission. The project's rule was already written down for localisation (D29); it was not being applied to precedent, to agonism, or to ranking.
+- **What is still wrong, and pinned at 2**: a cytoplasmic protein still heads its list with a mechanism needing an extracellular epitope, capped and labelled but first. The honest fix is to rank mechanisms whose requirements are established above those merely permitted, which is a scoring change rather than a gate.
+- The pinned count in the test went from 3 to 2. It may fall and must not rise.

@@ -39,6 +39,10 @@ STATUS_FACTOR: dict[str, float] = {
 }
 
 #: A mechanism evaluated on few of its declared inputs is damped to this
+#: A mechanism offered only because its hard requirement is unknown cannot score
+#: above this, so it never outranks one whose requirements are established.
+PROVISIONAL_CEILING = 0.25
+
 #: fraction at zero coverage, so ignorance never reads as compatibility.
 COVERAGE_FLOOR = 0.4
 
@@ -131,6 +135,29 @@ SURFACE_GATE = Gate(
     "the protein is not reachable from outside the cell, so a circulating binder cannot engage it",
     unknown_is_failure=False,
 )
+
+
+def _agonism_wanted(c: Any) -> bool | None:
+    """Is switching this target *on* the therapeutic intent?
+
+    Agonist antibodies are real medicine where the target is an immune
+    receptor worth triggering (CD40, 4-1BB). Against a tumour's own driver
+    they are the wrong direction: the tumour has already activated that
+    pathway. GenomeOS carries no evidence of therapeutic intent per target, so
+    this answers unknown and the gate treats unknown as failure. An agonist is
+    therefore never offered on ignorance; it is offered when something says it
+    should be.
+    """
+    return getattr(c, "agonism_intended", None)
+
+
+AGONIST_GATE = Gate(
+    "agonism_intended",
+    _agonism_wanted,
+    "nothing establishes that triggering this target is the therapeutic intent, and against a driver "
+    "the tumour has already activated, agonism pushes the wrong way",
+    unknown_is_failure=True,
+)
 INTERNALISATION_GATE = Gate(
     "internalisation",
     _internalises,
@@ -217,7 +244,7 @@ _add(
         "the target receptor's own signalling",
         (),
         "clinical",
-        (SURFACE_GATE,),
+        (SURFACE_GATE, AGONIST_GATE),
         (
             ("surface_accessibility", 1.0),
             ("tumour_selectivity", 0.9),
@@ -631,12 +658,14 @@ def evaluate(candidate: Any, spec: MechanismSpec, inputs: Inputs) -> MechanismFi
         antigen_release=spec.antigen_release,
         notes=list(spec.notes),
     )
+    provisional: list[str] = []
     for gate in spec.gates:
         result = gate.test(candidate)
         if result is False or (result is None and gate.unknown_is_failure):
             state = "not established" if result is None else "not met"
             fit.gates_failed.append(f"{gate.key} {state}: {gate.unmet}")
         elif result is None:
+            provisional.append(gate.key)
             fit.blocking_unknowns.append(f"{gate.key} is unknown; the mechanism is scored provisionally")
 
     numerator = 0.0
@@ -693,6 +722,21 @@ def evaluate(candidate: Any, spec: MechanismSpec, inputs: Inputs) -> MechanismFi
     damping = COVERAGE_FLOOR + (1.0 - COVERAGE_FLOOR) * coverage
     available = len(spec.weights) + len(spec.penalties) - len(fit.blocking_unknowns)
     fit.compatibility = round(raw * factor * damping, 3)
+    # A mechanism whose hard requirement merely went unanswered is a hypothesis, not an
+    # option. Capping it keeps it visible with its reason while stopping it from heading
+    # a list above mechanisms whose requirements are actually established.
+    if provisional and fit.compatibility > PROVISIONAL_CEILING:
+        fit.contributions.append(
+            {
+                "factor": "provisional requirement",
+                "value": fit.compatibility,
+                "weight": 0.0,
+                "direction": "caps",
+                "contributes": PROVISIONAL_CEILING,
+                "basis": f"{', '.join(provisional)} not established, so compatibility is capped",
+            }
+        )
+        fit.compatibility = PROVISIONAL_CEILING
     fit.contributions.append(
         {
             "factor": "mechanism maturity",
