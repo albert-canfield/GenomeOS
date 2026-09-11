@@ -201,6 +201,88 @@ class CBioPortal:
             pageSize=10_000_000,
         )
 
+    # ---- expression -----------------------------------------------------------
+
+    #: Expression profiles, most informative first. The reference-normal z-score
+    #: is the one worth having: it is tumour measured against matched normal
+    #: tissue, so it is unit-free and says what a raw RSEM value cannot.
+    EXPRESSION_PROFILES: tuple[tuple[str, str, str], ...] = (
+        (
+            "rna_seq_v2_mrna_median_all_sample_ref_normal_Zscores",
+            "z_vs_normal",
+            "z-score of each tumour against the study's normal samples",
+        ),
+        (
+            "rna_seq_v2_mrna_median_Zscores",
+            "z_vs_tumours",
+            "z-score of each tumour against the other tumours in the study",
+        ),
+        ("rna_seq_v2_mrna", "rsem", "RSEM expression value, not comparable across datasets"),
+    )
+
+    def molecular_profiles(self, study: str) -> list[dict]:
+        return self._get(f"/studies/{study}/molecular-profiles")
+
+    def expression_profile(self, study: str) -> tuple[str, str, str] | None:
+        """The best available expression profile of a study, and what it means."""
+        available = {p["molecularProfileId"] for p in self.molecular_profiles(study)}
+        for suffix, kind, meaning in self.EXPRESSION_PROFILES:
+            if f"{study}_{suffix}" in available:
+                return f"{study}_{suffix}", kind, meaning
+        return None
+
+    def expression(self, profile: str, sample_list: str, entrez_ids: list[int]) -> list[dict]:
+        return self._post(
+            f"/molecular-profiles/{profile}/molecular-data/fetch",
+            {"sampleListId": sample_list, "entrezGeneIds": entrez_ids},
+            projection="SUMMARY",
+        )
+
+    def expression_distribution(
+        self, study: str, symbols: Iterable[str], batch: int = 60, progress=None
+    ) -> dict[str, Any]:
+        """Per gene, the distribution of its expression across a cohort's tumours.
+
+        A cohort cannot say what one patient's tumour does. It says how often a
+        gene is raised above normal tissue in this cancer type at all, which is
+        the difference between a target worth investigating and a gene that
+        happens to be mutated.
+        """
+        chosen = self.expression_profile(study)
+        if chosen is None:
+            raise ValueError(f"{study} has no mRNA expression profile")
+        profile, kind, meaning = chosen
+        sample_list = f"{study}_all"
+        ids = self.genes(symbols)
+        rev = {v: k for k, v in ids.items()}
+        entrez = list(ids.values())
+        values: dict[str, list[float]] = {}
+        for i in range(0, len(entrez), batch):
+            chunk = entrez[i : i + batch]
+            for r in self.expression(profile, sample_list, chunk):
+                v = r.get("value")
+                sym = rev.get(r["entrezGeneId"])
+                if v is None or sym is None:
+                    continue
+                values.setdefault(sym, []).append(float(v))
+            if progress:
+                progress(min(i + batch, len(entrez)), len(entrez))
+            time.sleep(self.sleep)
+        return {
+            "study": study,
+            "profile": profile,
+            "kind": kind,
+            "meaning": meaning,
+            "samples": max((len(v) for v in values.values()), default=0),
+            "genes": {g: summarise(v, kind) for g, v in sorted(values.items())},
+            "missing": sorted(set(ids) - set(values)),
+            "evidence": {
+                "kind": "experimental",
+                "source": f"cBioPortal {study} ({profile}), via public REST API",
+            },
+            "confidence": 0.8,
+        }
+
     # ---- distillation ----------------------------------------------------------
 
     def distil_study(
@@ -259,3 +341,63 @@ class CBioPortal:
             },
             "confidence": 0.8,
         }
+
+
+def summarise(values: list[float], kind: str, raised: float = 2.0) -> dict[str, Any]:
+    """The shape of one gene's expression across a cohort, kept to a few numbers.
+
+    `fraction_raised` is only meaningful for a z-score profile, where 2.0 is the
+    usual threshold for calling a tumour over-expressed; for a raw RSEM profile
+    it is left out rather than computed from an arbitrary cutoff.
+    """
+    v = sorted(values)
+    n = len(v)
+
+    def q(f: float) -> float:
+        if n == 1:
+            return v[0]
+        i = f * (n - 1)
+        lo = int(i)
+        hi = min(lo + 1, n - 1)
+        return v[lo] + (v[hi] - v[lo]) * (i - lo)
+
+    out: dict[str, Any] = {
+        "n": n,
+        "min": round(v[0], 3),
+        "q1": round(q(0.25), 3),
+        "median": round(q(0.5), 3),
+        "q3": round(q(0.75), 3),
+        "p90": round(q(0.90), 3),
+        "max": round(v[-1], 3),
+    }
+    if kind.startswith("z_"):
+        out["fraction_raised"] = round(sum(1 for x in v if x >= raised) / n, 4)
+        out["raised_threshold"] = raised
+    return out
+
+
+def percentile_of(value: float, summary: dict[str, Any]) -> float | None:
+    """Roughly where a value falls in a distribution, from its quantiles only.
+
+    Interpolates between the stored quantiles; it is a position, not a test,
+    and it is only valid when the value is on the same scale as the cohort.
+    """
+    points = [
+        (summary.get("min"), 0.0),
+        (summary.get("q1"), 0.25),
+        (summary.get("median"), 0.5),
+        (summary.get("q3"), 0.75),
+        (summary.get("p90"), 0.90),
+        (summary.get("max"), 1.0),
+    ]
+    points = [(x, f) for x, f in points if x is not None]
+    if len(points) < 2:
+        return None
+    if value <= points[0][0]:
+        return 0.0
+    for (x0, f0), (x1, f1) in zip(points, points[1:], strict=False):
+        if value <= x1:
+            if x1 == x0:
+                return round(f1, 3)
+            return round(f0 + (f1 - f0) * (value - x0) / (x1 - x0), 3)
+    return 1.0

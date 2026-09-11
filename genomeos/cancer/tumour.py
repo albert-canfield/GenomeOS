@@ -81,6 +81,7 @@ class TumourVariant:
     alt: str
     gene: str = ""
     consequence: str = ""
+    transcript: str = ""
     hgvsp: str = ""
     hgvsc: str = ""
     protein_change: str = ""  # short form, R175H
@@ -103,6 +104,7 @@ class TumourVariant:
             "alt": self.alt,
             "gene": self.gene,
             "consequence": self.consequence,
+            "transcript": self.transcript,
             "hgvsp": self.hgvsp,
             "hgvsc": self.hgvsc,
             "protein_change": self.protein_change,
@@ -174,6 +176,7 @@ def normalise_vep(rec: dict[str, Any]) -> dict[str, Any]:
     return {
         "gene": tc.get("gene_symbol") or "",
         "consequence": rec.get("most_severe_consequence") or "",
+        "transcript": tc.get("transcript_id") or "",
         "hgvsp": hgvsp,
         "hgvsc": (tc.get("hgvsc") or "").split(":")[-1],
         "protein_change": short,
@@ -185,6 +188,31 @@ def normalise_vep(rec: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+#: What a cached VEP record must carry. A record written before a field was
+#: added is refetched rather than read as a missing value: the cache is an
+#: optimisation, and it must never quietly answer a question it cannot.
+VEP_FIELDS = (
+    "gene",
+    "consequence",
+    "transcript",
+    "hgvsp",
+    "hgvsc",
+    "protein_change",
+    "residue",
+    "sift",
+    "polyphen",
+    "cosmic",
+    "gnomad_af",
+)
+
+
+def _stale(rec: dict[str, Any]) -> bool:
+    """A cached record from an older schema, but not a recorded annotation failure."""
+    if rec.get("consequence") in ("", "unannotated") and len(rec) <= 2:
+        return False
+    return any(k not in rec for k in VEP_FIELDS)
+
+
 def annotate_vep(variants: list[Variant], cache_dir: Path = CACHE, log=None) -> dict[str, dict[str, Any]]:
     """Annotate through VEP, batch by batch, keeping a small per-variant cache."""
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -194,7 +222,9 @@ def annotate_vep(variants: list[Variant], cache_dir: Path = CACHE, log=None) -> 
         for line in cache_file.read_text().splitlines():
             if line.strip():
                 k, _, rest = line.partition("\t")
-                cache[k] = json.loads(rest)
+                rec = json.loads(rest)
+                if not _stale(rec):
+                    cache[k] = rec
     todo = [v for v in variants if v.alts and _key(v) not in cache]
     with cache_file.open("a") as fh:
         for i in range(0, len(todo), BATCH):

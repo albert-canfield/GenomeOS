@@ -125,6 +125,7 @@
       const r = await window.api('/api/therapeutics', {
         vcf: $('#th-vcf').value,
         hla: $('#th-hla').value.trim(),
+        cohort: $('#th-cohort').value.trim(),
         top: +$('#th-top').value || 8,
       });
       last = r;

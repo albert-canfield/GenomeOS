@@ -809,6 +809,7 @@ class Api:
         normal: str = "",
         top: int = 8,
         offline: bool = False,
+        cohort: str = "",
     ) -> dict:
         """Therapeutic target and mechanism reasoning for one tumour VCF."""
         from genomeos.therapeutics import analyse_vcf, machine_report, text_report
@@ -821,6 +822,7 @@ class Api:
             hla=[x for x in hla.split(",") if x.strip()],
             rna=str(self._safe(rna)) if rna else None,
             top_genes=top,
+            cohort=cohort,
             net=not offline,
         )
         out = machine_report(a)
@@ -1172,6 +1174,7 @@ class Handler(BaseHTTPRequestHandler):
                         body.get("normal", ""),
                         int(body.get("top", 8)),
                         bool(body.get("offline", False)),
+                        body.get("cohort", ""),
                     )
                 )
             if u.path == "/api/cancer/compare":

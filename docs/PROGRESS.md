@@ -59,6 +59,7 @@ Updated as each task is completed (tests + lint green before moving on).
 - **Knowledge to execution**: `genomeos pathway ID --knockout X` runs a Reactome pathway export as a reachability graph (no rate laws in the export, so no integration); a knockout removes every entity containing the protein. Stabilization of p53: 15 reactions, 13 reachable, 6 lost without TP53 (MDM2 binding, CHEK2/ATM phosphorylation, ubiquitination, translocation). Molecules tab: click a pathway chip to run it. Tests on a toy graph and on the committed export `data/models/reactome_R-HSA-69541.sbml`.
 - **BioLang importer**: `genomeos protein X --bio` emits a `protein` block with accession, sequence, isoforms, domains, pathways, interactions (physical channel only), structures; the parser accepts these properties.
 - **RegulatoryElement in BioIR** with targets: promoters reach the TSS within 1 kb (0.8), enhancers reach the coding genes of their CTCF domain nearest first (0.4 / 0.25), insulators reach nothing; BioLang `element` block; `genomeos regulation --gene G`; regulation layer drawn in the Flow tab and printed by `genomeos flow`. APP: 1 promoter element, 98 reachable enhancers (89 intragenic), 2 bounding insulators, alone in its 175 kb node.
+- **RNA layer**: `genomeos rna GENE` and an RNA card in Molecules: every isoform from the gene models with biotype, exon count, spliced and coding length and canonical/MANE tags (APP: 63 transcripts, 53 coding), plus GTEx median TPM in 54 tissues with a pattern summary (APP: expressed in all tissues, brain frontal cortex highest at 561 TPM). Flow tab links a traced variant to its residue on the structure.
 - **Block map shows curated repeats** (RepeatMasker copies with class colours, family and divergence on hover) wherever a chromosome has been distilled with `genomeos repeats`; Progress tab gained the genome-wide UNKNOWN table and the proteome coverage card.
 - **Curated repeats in the UNKNOWN classifier**: `genomeos repeats` distils RepeatMasker (UCSC API, 20 MB once, 0.7 MB kept) and the classifier grades blocks by curated coverage first. chr21: long_orf 2.27 → 0.13 Mb, LINE 3.16 Mb curated, classified 96.3% → 97.6%. The genome-wide script fetches repeats per chromosome and discards them.
 - **Genome-wide UNKNOWN classification done**: 26,806 blocks, 1.009 Gb, 96.6% classified in 92 min with one chromosome on disk at a time; regulatory 33.6%, long_orf 23.6% (mostly LINE-1 ORF2, an L1 signature is the next pattern), gap 15.8%, unique intergenic 10.5%, centromere 4.8%. Per-chromosome results `unknown_chr*.json`, summary `unknown_genome_wide.json`, table in docs/UNKNOWN.md.
@@ -163,3 +164,56 @@ biology supports. Research hypotheses with evidence per claim; docs/THERAPEUTICS
 - **Body runtime** (`genomeos/runtime/body.py`): discrete-event growth from one cell; per cell read → decide → wait → write; first matching decision per action wins (mechanism written before lookup); signals re-decide a pending division; asymmetric factor inheritance; populations as cells with a count; UNKNOWN stops reported, never filled in; organism-level uncertainty populated for the first time.
 - **Result**: the whole worm grows in 0.4 s: 2,183/2,183 cells by name, 0 parent mismatches, 961/961 fates, 131/131 deaths; timing median 12 min (embryo 8 min, p90 25 min) on distilled timers; the alive-cell curve is under the reference between 350 and 500 min because per-generation mean timers smooth the real spread (194 vs 274 at 350 min), which the `assert` in the program flags. `genomeos grow FILE --compare` prints the diff; `tests/test_body.py` holds the numbers.
 - **What is mechanism and what is lookup**: the founder divisions, the germline (PIE-1), MS/E (Wnt from P2, POP-1 asymmetry, END-3) and ABa/ABp (Notch from P2, second Notch from MS) are decided by cited mechanistic rules in `founders.bio`; every later fate is the observed lineage program (experimental, Sulston). The uncertainty report says so per level.
+
+## 2026-09-11 (later) — cohort expression, altered-protein reconstruction, copy number
+
+The three developments named as most valuable at the end of the therapeutics
+work, implemented.
+
+- **Cohort expression reference.** `genomeos cancer expression --study X`
+  distils, per gene, how a cancer type behaves: the distribution of
+  tumour-versus-normal z-scores across the study's tumours and the fraction in
+  which the gene is raised above normal tissue. cBioPortal's reference-normal
+  z-score profile is preferred because it is scored against the study's own
+  normal samples and is therefore unit-free. Breast cancer separates MKI67
+  (raised in 65.8% of 1,082 tumours) from CEACAM5 (38.8%), ERBB2 (11.0%), APP
+  (2.2%) and RUNX1 (0.8%); EGFR sits at median -4.20, lower in tumour than in
+  normal breast. `genomeos therapeutic --cohort X` uses it as the selectivity
+  prior in place of the tissue-specificity class, capped at 0.6 because a cohort
+  describes a cancer type and not a patient.
+- **Three expression questions kept apart**: healthy tissue (Human Protein
+  Atlas), this cancer type (cohort), this tumour (patient RNA). A patient TPM is
+  never compared against a cohort's z-score or RSEM, because they are different
+  scales; where a whole transcriptome is supplied the gene's rank within the
+  patient's own sample is reported instead, which needs no unit.
+- **Altered protein reconstruction.** The transcript id is now carried down from
+  VEP, the coding sequence fetched from Ensembl, the HGVS coding change applied
+  and both proteins translated and compared. Frameshifts yield their novel
+  C-terminal stretch, in-frame indels their junction, substitutions their
+  wild-type counterpart, and a premature stop is confirmed by sequence to create
+  no new residue. Alignment is decided by the reading frame, not by protein
+  length: a frameshift with no downstream stop can produce a protein of the same
+  length that shares no sequence with the reference, and an earlier version
+  mislabelled exactly that case. A frameshift now scores above a substitution on
+  neoantigen strength because its residues have no wild-type counterpart at all.
+  This also settles isoform disagreements: RUNX1 Y480* is called on a
+  481-residue transcript against a 453-residue canonical UniProt entry, and
+  rebuilding from ENST00000675419 confirms the truncation rather than reporting
+  a mismatch.
+- **VEP cache schema check**: a cached record written before a field existed is
+  refetched instead of read as a missing value, so adding the transcript id does
+  not silently lose it on an existing cache.
+- **Copy number** (`--cnv gene<TAB>copies`): recorded as patient-derived,
+  reported in the design dataset, and scored as at most 0.5 on tumour expression
+  with the basis line stating that copy number bounds what a cell could display
+  and never shows that it does. Patient RNA outranks it whenever both exist.
+- **Data level** now reports both the level at which the chain of inputs first
+  breaks and the higher-level inputs that were supplied anyway, so a run with
+  HLA and copy number but no matched normal is not described as level 1 with no
+  further explanation.
+- **Tests**: 58 in tests/test_therapeutics.py, including the reconstruction of
+  every variant class against a synthetic transcript whose translation can be
+  read by eye, the frame-versus-length distinction, the cohort prior against a
+  tissue-specificity class, unit-free ranking, and copy number bounding rather
+  than standing in for expression. Suite excluding another session's in-progress
+  files: 201 passed, 4 skipped.

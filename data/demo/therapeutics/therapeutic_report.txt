@@ -6,7 +6,10 @@ GenomeOS generates computational research hypotheses. Therapeutic target ranking
 
 Sample: data/demo/cancer_tumour.vcf   (cancer_tumour)
 Data level reached: 1 of 9
-  analysis ran at data level 1; conclusions that require a higher level are reported as unavailable rather than estimated
+  analysis ran at data level 1; conclusions that require a higher level are
+  reported as unavailable rather than estimated. Inputs from higher levels
+  were supplied and used where they apply (hla), but the level is the point at
+  which the chain of inputs first breaks
 
 TUMOUR SUMMARY
 ------------------------------------------------------------------------------
@@ -24,8 +27,8 @@ TOP DIRECT SURFACE TARGETS
 TOP NEOANTIGEN / HLA CANDIDATES
 ------------------------------------------------------------------------------
   APP        4 peptides, HLA supplied, presentation unestablished
-  SOD1       excluded: the protein sequence is unchanged
-  RUNX1      excluded: a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide
+  SOD1       excluded: the altered ENST00000270142 translates to 154 residues against 154 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence
+  RUNX1      excluded: the altered ENST00000675419 translates to 479 residues against 480 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence
   NRIP1      excluded: the protein sequence is unchanged
 
 INDIRECT / PATHWAY-INDUCED SURFACE TARGETS
@@ -113,6 +116,7 @@ REQUIRED MISSING DATA
   - tumour RNA-seq: no target's expression in this tumour can be established from DNA alone
   - tumour purity and variant allele fraction: clonal and subclonal alterations cannot be separated, so an antigen on 10% of cells looks like one on 100%
   - copy number: amplification is one of the strongest reasons a surface target is over-displayed
+  - a cohort of the same cancer type: without one there is nothing to say how often this cancer type raises a gene above normal tissue, so selectivity falls back to a tissue-specificity class
   - tumour proteomics: RNA is not protein; abundance at the protein level is unmeasured
   - surface proteomics: the only direct measurement of what is actually displayed on the tumour cell surface
   - immunopeptidomics: the only evidence that a mutant peptide is genuinely presented rather than predicted
@@ -124,6 +128,7 @@ REQUIRED MISSING DATA
   - predicted antigen processing: unresolved for this analysis
   - observed presentation: unresolved for this analysis
   - induced surface phenotype: unresolved for this analysis
+  - altered protein sequence: unresolved for this analysis
 
 CANDIDATE DETAIL
 ==============================================================================
@@ -164,7 +169,7 @@ Structure:
 
 Neoantigen / HLA route:
   novel peptide sequence: yes
-  one residue is replaced, so every peptide spanning it is tumour-specific
+  the altered ENST00000346798 translates to 770 residues against 770, diverging at residue 770 and producing 1 residue that exists in no reference protein
   4 mutation-spanning peptides; example YKFFEQMQN -> YKFFEQMQK
   HLA alleles: HLA-A*02:01, HLA-B*07:02
   predicted binding: unavailable; observed presentation: not supplied
@@ -174,8 +179,8 @@ Scores (research priority, not clinical):
       curated membrane localisation at confidence 0.95, plus 684 residues of
       curated extracellular topology (18-701) worth +0.10
   tumour_selectivity         0.20
-      no tumour RNA-seq; population tissue-specificity class 'Low tissue
-      specificity' used as a weak prior and capped at 0.5
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Low tissue specificity' used as a weak prior and capped at 0.5
   tumour_expression          unknown
       no tumour RNA-seq supplied
   normal_tissue_safety       0.00
@@ -194,13 +199,13 @@ Scores (research priority, not clinical):
       an experimental structure of the extracellular region is deposited
   neoantigen_strength        0.50
       mutation-spanning peptides derived (0.30) patient HLA genotype supplied
-      (+0.20); ceiling without presentation evidence is 0.70
+      (+0.20); ceiling without presentation evidence is 0.60
   presentation_confidence    0.00
       no binding or processing evidence; presentation cannot be established
   clinical_precedent         1.00
       3 approved therapies already engage this target
   evidence_strength          0.95
-      strongest evidence level available is clinical, over 29 evidence records
+      strongest evidence level available is clinical, over 32 evidence records
   shedding                   1.00
       curated annotation indicates a released or secreted form circulates
   OVERALL                    0.50       coverage 83%, confidence 0.79
@@ -318,8 +323,8 @@ Scores (research priority, not clinical):
       curated membrane localisation at confidence 0.95, plus 498 residues of
       curated extracellular topology (20-517) worth +0.10
   tumour_selectivity         0.50
-      no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced'
-      used as a weak prior and capped at 0.5
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Tissue enhanced' used as a weak prior and capped at 0.5
   tumour_expression          unknown
       no tumour RNA-seq supplied
   normal_tissue_safety       0.13
@@ -342,7 +347,7 @@ Scores (research priority, not clinical):
   clinical_precedent         1.00
       7 approved therapies already engage this target
   evidence_strength          0.95
-      strongest evidence level available is clinical, over 21 evidence records
+      strongest evidence level available is clinical, over 22 evidence records
   shedding                   unknown
       no evidence either way on ectodomain shedding
   OVERALL                    0.50       coverage 68%, confidence 0.65
@@ -468,8 +473,8 @@ Structure:
 
 Neoantigen / HLA route:
   novel peptide sequence: no
-  the protein sequence is unchanged
-  HLA alleles: not supplied
+  the altered ENST00000270142 translates to 154 residues against 154 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence
+  HLA alleles: HLA-A*02:01, HLA-B*07:02
   predicted binding: unavailable; observed presentation: not supplied
 
 Scores (research priority, not clinical):
@@ -477,8 +482,8 @@ Scores (research priority, not clinical):
       curated localisation places nuclear inside the cell; a circulating
       binder cannot reach it
   tumour_selectivity         0.50
-      no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced'
-      used as a weak prior and capped at 0.5
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Tissue enhanced' used as a weak prior and capped at 0.5
   tumour_expression          unknown
       no tumour RNA-seq supplied
   normal_tissue_safety       0.00
@@ -495,13 +500,15 @@ Scores (research priority, not clinical):
       protein is not surface-reachable, so an extracellular epitope does not
       arise
   neoantigen_strength        0.00
-      the protein sequence is unchanged
+      the altered ENST00000270142 translates to 154 residues against 154 with
+      no residue that differs from the reference: a truncation removes protein
+      rather than creating new sequence
   presentation_confidence    unknown
       peptide/HLA route does not apply to this variant
   clinical_precedent         1.00
       1 approved therapies already engage this target
   evidence_strength          0.81
-      strongest evidence level available is human, over 16 evidence records
+      strongest evidence level available is human, over 20 evidence records
   shedding                   unknown
       no evidence either way on ectodomain shedding
   OVERALL                    0.35       coverage 65%, confidence 0.53
@@ -549,11 +556,11 @@ Evidence:
     accession P00441
     [UniProtKB/Swiss-Prot subcellular location] SOD1 is annotated at:
     Cytoplasm; Nucleus
+    [Human Protein Atlas (immunofluorescence)] SOD1 imaged in: Nucleoplasm,
+    Cytosol
     [Gene Ontology cellular component (goa_human)] SOD1 is annotated to plasma
     membrane (GO:0005886), extracellular region (GO:0005576), nucleus
     (GO:0005634), cytoplasm (GO:0005737), mitochondrion (GO:0005739)
-    [Human Protein Atlas (consensus tissue RNA)] normal-tissue RNA levels for
-    SOD1 across 20 queried tissues
   in_vitro:
     [PDB (via UniProt cross-references)] residue 2 of SOD1 is resolved in 144
     structures; best 4A7U (X_RAY)
@@ -612,8 +619,8 @@ Structure:
 
 Neoantigen / HLA route:
   novel peptide sequence: no
-  a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide
-  HLA alleles: not supplied
+  the altered ENST00000675419 translates to 479 residues against 480 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence
+  HLA alleles: HLA-A*02:01, HLA-B*07:02
   predicted binding: unavailable; observed presentation: not supplied
 
 Scores (research priority, not clinical):
@@ -621,8 +628,8 @@ Scores (research priority, not clinical):
       curated localisation places nuclear inside the cell; a circulating
       binder cannot reach it
   tumour_selectivity         0.50
-      no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced'
-      used as a weak prior and capped at 0.5
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Tissue enhanced' used as a weak prior and capped at 0.5
   tumour_expression          unknown
       no tumour RNA-seq supplied
   normal_tissue_safety       0.18
@@ -640,16 +647,16 @@ Scores (research priority, not clinical):
       protein is not surface-reachable, so an extracellular epitope does not
       arise
   neoantigen_strength        0.00
-      a premature stop truncates the protein but leaves every remaining
-      residue identical to wild type, so the substitution itself creates no
-      novel peptide
+      the altered ENST00000675419 translates to 479 residues against 480 with
+      no residue that differs from the reference: a truncation removes protein
+      rather than creating new sequence
   presentation_confidence    unknown
       peptide/HLA route does not apply to this variant
   clinical_precedent         0.00
       no drug, trial or antibody-tractability evidence recorded against this
       target
   evidence_strength          0.81
-      strongest evidence level available is human, over 13 evidence records
+      strongest evidence level available is human, over 17 evidence records
   shedding                   unknown
       no evidence either way on ectodomain shedding
   OVERALL                    0.25       coverage 62%, confidence 0.50
@@ -701,10 +708,10 @@ Evidence:
     [UniProtKB/Swiss-Prot] RUNX1 is Runt-related transcription factor 1 (453
     aa), accession Q01196
     [UniProtKB/Swiss-Prot subcellular location] RUNX1 is annotated at: Nucleus
+    [Human Protein Atlas (immunofluorescence)] RUNX1 imaged in: Nucleoplasm,
+    Vesicles
     [Gene Ontology cellular component (goa_human)] RUNX1 is annotated to
     nucleus (GO:0005634)
-    [Human Protein Atlas (consensus tissue RNA)] normal-tissue RNA levels for
-    RUNX1 across 20 queried tissues
   computational:
     [AlphaFold DB] predicted structure Q01196 is available for RUNX1; a
     prediction is not an experimental structure and pLDDT is not solvent
@@ -760,7 +767,7 @@ Structure:
 Neoantigen / HLA route:
   novel peptide sequence: no
   the protein sequence is unchanged
-  HLA alleles: not supplied
+  HLA alleles: HLA-A*02:01, HLA-B*07:02
   predicted binding: unavailable; observed presentation: not supplied
 
 Scores (research priority, not clinical):
@@ -768,8 +775,8 @@ Scores (research priority, not clinical):
       curated localisation places nuclear inside the cell; a circulating
       binder cannot reach it
   tumour_selectivity         0.20
-      no tumour RNA-seq; population tissue-specificity class 'Low tissue
-      specificity' used as a weak prior and capped at 0.5
+      no tumour RNA-seq and no cohort; population tissue-specificity class
+      'Low tissue specificity' used as a weak prior and capped at 0.5
   tumour_expression          unknown
       no tumour RNA-seq supplied
   normal_tissue_safety       0.29
@@ -794,7 +801,7 @@ Scores (research priority, not clinical):
       no drug, trial or antibody-tractability evidence recorded against this
       target
   evidence_strength          0.81
-      strongest evidence level available is human, over 12 evidence records
+      strongest evidence level available is human, over 13 evidence records
   shedding                   unknown
       no evidence either way on ectodomain shedding
   OVERALL                    0.22       coverage 62%, confidence 0.50

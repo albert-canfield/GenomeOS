@@ -43,6 +43,10 @@ WEIGHTS: dict[str, float] = {
 #: priority; scored and published, but kept out of the overall mean.
 DIAGNOSTIC = ("shedding",)
 
+#: Copy number bounds what a cell could display; it is not a measurement of
+#: what it does, so it cannot reach the score a measurement can.
+COPY_NUMBER_CAP = 0.5
+
 SAFETY_UNKNOWN_CAP = 0.6
 SAFETY_POOR_CAP = 0.5
 SAFETY_POOR_THRESHOLD = 0.35
@@ -110,12 +114,23 @@ def clonality(tumour: TumourState) -> tuple[float | None, str]:
 def tumour_expression_score(tumour: TumourState) -> tuple[float | None, str]:
     """Only patient measurements count. DNA alone never establishes expression."""
     m = tumour.expression
-    if m.value is None:
-        return None, m.reason or "no tumour RNA-seq or proteomics supplied"
-    score = min(1.0, math.log10(1 + m.value) / math.log10(1 + 100.0))
-    return round(score, 3), (
-        f"log10(1 + {m.value:g} {m.unit}) / log10(101) from this patient's tumour RNA-seq; saturates at 100"
-    )
+    if m.value is not None:
+        score = min(1.0, math.log10(1 + m.value) / math.log10(1 + 100.0))
+        return round(score, 3), (
+            f"log10(1 + {m.value:g} {m.unit}) / log10(101) from this patient's tumour RNA-seq; "
+            "saturates at 100"
+        )
+    cn = tumour.copy_number
+    if cn.value is not None:
+        # Copy number is not expression. It bounds how much a cell could make,
+        # which is weaker than a measurement and is capped to say so.
+        score = min(COPY_NUMBER_CAP, max(0.0, (cn.value - 2.0) / 8.0))
+        return round(score, 3), (
+            f"no tumour RNA-seq; {cn.value:g} copies against the diploid 2, scored as "
+            f"({cn.value:g} - 2) / 8 and capped at {COPY_NUMBER_CAP:g} because copy number bounds what "
+            "a cell could make and never shows that it does"
+        )
+    return None, m.reason or "no tumour RNA-seq or proteomics supplied"
 
 
 def clinical_precedent(precedent: dict[str, Any] | None, available: bool) -> tuple[float | None, str]:

@@ -563,6 +563,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label data-tip="Any VCF under data/.">tumour VCF <select id="th-vcf"></select></label>
       <label data-tip="Patient class I alleles, comma separated. Without them no mutant peptide can be prioritised.">HLA <input id="th-hla" placeholder="HLA-A*02:01,HLA-B*07:02" style="width:210px" class="mono"></label>
       <label data-tip="How many genes to analyse, by variant rank.">top genes <input id="th-top" type="number" value="8" style="width:60px"></label>
+      <label data-tip="cBioPortal study id of the same cancer type. Gives how often each gene is raised above normal tissue in that cancer, measured against the study's own normal samples.">cohort <input id="th-cohort" placeholder="brca_tcga_pan_can_atlas_2018" style="width:220px" class="mono"></label>
       <button class="primary" id="th-run" data-tip="Run the therapeutic target analysis."><i class="ic">🧪</i>Analyse</button>
       <button class="ghost" id="th-report" data-tip="The full text report, with every section and the evidence per claim."><i class="ic">📄</i>Report</button>
       <button class="ghost" id="th-json" data-tip="The machine-readable output for a later autonomous agent."><i class="ic">📦</i>JSON</button>

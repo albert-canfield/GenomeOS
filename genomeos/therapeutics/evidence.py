@@ -152,7 +152,17 @@ class EvidenceLedger:
     missing: list[Missing] = field(default_factory=list)
 
     def add(self, *evidence: Evidence) -> None:
-        self.items.extend(e for e in evidence if e is not None)
+        """Append evidence, skipping a claim already recorded from the same source.
+
+        Stages are re-run when later information arrives, so the same statement
+        can arrive twice; the ledger is a set of statements, not a log.
+        """
+        seen = {(e.source, e.claim) for e in self.items}
+        for e in evidence:
+            if e is None or (e.source, e.claim) in seen:
+                continue
+            seen.add((e.source, e.claim))
+            self.items.append(e)
 
     def lack(self, what: str, reason: str, resolved_by: tuple[str, ...] = ()) -> Missing:
         m = Missing(what, reason, resolved_by)

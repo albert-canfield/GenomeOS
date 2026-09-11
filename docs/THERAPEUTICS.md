@@ -63,7 +63,7 @@ immune system`, `immune_components: [NK cells, macrophages]`.
 | consequence | `genomeos.cancer.tumour` | gene, consequence, protein change, driver status |
 | localisation | `therapeutics/localisation.py` | compartment, topology, which residues face outwards |
 | accessibility | `therapeutics/pipeline.py` | the target class, from localisation and never from the mutation |
-| expression and selectivity | `therapeutics/expression.py` | healthy-tissue levels, tumour levels when supplied, the differential |
+| expression and selectivity | `therapeutics/expression.py` | healthy-tissue levels, tumour levels when supplied, cohort behaviour, the differential |
 | trafficking | `therapeutics/trafficking.py` | internalisation, endosomal and lysosomal routing, recycling, shedding |
 | neoantigen / HLA | `therapeutics/neoantigen.py` | whether the variant yields a novel peptide, and the layers of presentation |
 | pathway-induced | `therapeutics/pipeline.py` | surface proteins associated with a disrupted driver |
@@ -75,10 +75,49 @@ immune system`, `immune_components: [NK cells, macrophages]`.
 
 Every stage takes a provider, never an API. `therapeutics/providers.py` defines
 the protocols (`ProteinAnnotationProvider`, `ExpressionProvider`,
-`StructureProvider`, `TraffickingProvider`, `NeoantigenProvider`,
+`TumourExpressionProvider`, `CohortExpressionProvider`, `StructureProvider`,
+`TraffickingProvider`, `TranscriptSequenceProvider`, `NeoantigenProvider`,
 `CancerEvidenceProvider`, `HomologyProvider`) so a source can be replaced
 without touching the reasoning, and so the whole pipeline runs offline against
 the caches.
+
+## Three questions about expression, kept apart
+
+Expression is where a target pipeline is most tempted to cheat, so the three
+questions are answered separately and never substituted for one another.
+
+| Question | Source | What it can and cannot say |
+|---|---|---|
+| Does healthy tissue carry it? | Human Protein Atlas consensus nTPM | population-level, measured, the basis of the safety score |
+| Does this cancer type raise it above normal? | a cBioPortal cohort, scored against the study's own normal samples | a property of the cancer type, never of this patient |
+| Does *this* tumour carry it? | the patient's own RNA-seq | the only answer that is about this patient |
+
+The cohort is the one worth explaining. `--cohort brca_tcga_pan_can_atlas_2018`
+fetches, per gene, the distribution of tumour-versus-normal z-scores across the
+study, and with it the fraction of tumours in which the gene is raised above
+normal tissue at all. That fraction is a far better selectivity prior than a
+tissue-specificity class, because it is measured against normal samples instead
+of inferred from how widely a gene is expressed. In breast cancer it separates
+MKI67 (raised in 66% of 1,082 tumours) from ERBB2 (11%) from RUNX1 (0.8%).
+
+It is still a prior. A cohort describes a cancer type, so its contribution is
+capped at 0.6, below what a patient measurement can reach, and the report says
+so in the score's own basis line.
+
+Patient RNA, when supplied, overrides everything. Two comparisons are then
+possible and only one of them is safe:
+
+- the gene's rank within the patient's own transcriptome, which needs no unit
+  and is therefore valid;
+- the raw value against healthy-tissue nTPM, which is an approximation because
+  TPM and nTPM are different normalisations of the same idea.
+
+A patient TPM is never compared against a cohort's RSEM or z-score. Those are
+different scales, and a percentile computed across them would be meaningless.
+
+Copy number, supplied with `--cnv`, is treated as a third thing again: it bounds
+how much protein a cell could display and never shows that it does, so it scores
+at most 0.5 and the basis line says why.
 
 ## Accessibility is not a membrane word
 
@@ -101,6 +140,39 @@ The same distinction runs one level deeper: a surface protein whose *mutation*
 sits in the cytoplasmic tail has no mutation-specific extracellular epitope,
 however accessible the protein is. The demo tumour's APP N770K is exactly that
 case, and the report says so.
+
+## Reconstructing the altered protein
+
+A frameshift's novel peptide stretch cannot be read off a VCF record. The indel
+has to be applied to the transcript the consequence was called on, and the
+result translated. So the transcript id is carried down from Ensembl VEP, the
+coding sequence is fetched, the HGVS coding change is applied, and both proteins
+are translated and compared.
+
+That turns a rule about the variant class into a measurement of what the protein
+becomes:
+
+| Variant | What the sequence shows |
+|---|---|
+| frameshift | the novel C-terminal stretch, which exists in no healthy protein |
+| in-frame indel | no new residue, but a junction that exists in no healthy cell |
+| substitution | one changed residue, with its wild-type counterpart kept beside it |
+| premature stop | no residue differs from the reference; the protein is simply shorter |
+
+Two details matter. Alignment is decided by the reading frame, not by protein
+length: a frameshift with no downstream stop can produce a protein of exactly the
+same length that shares no sequence with the reference. And a frameshift scores
+above a substitution on neoantigen strength, because its residues have no
+wild-type counterpart at all, which is the easiest discrimination problem in the
+pipeline rather than the hardest.
+
+The reconstruction also settles isoform disagreements. The demo's RUNX1 Y480* is
+called on a 481-residue transcript while the canonical UniProt entry is 453
+residues, so the canonical route could only report a mismatch. Rebuilding from
+ENST00000675419 confirms the truncation from sequence instead.
+
+Changes outside the coding sequence, and forms this module does not reconstruct,
+are declined and recorded as missing rather than approximated.
 
 ## Evidence, and the refusal to fill gaps
 
@@ -227,12 +299,16 @@ molecule to build is a separate downstream stage.
 genomeos therapeutic --tumour data/demo/cancer_tumour.vcf \
   --hla "HLA-A*02:01,HLA-B*07:02" --out out/ --report
 
+# with a cohort of the same cancer type
+genomeos cancer expression --study brca_tcga_pan_can_atlas_2018
+genomeos therapeutic --tumour tumour.vcf --cohort brca_tcga_pan_can_atlas_2018
+
 # one target's specification
 genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --spec RUNX1
 
 # richer patient input
 genomeos therapeutic --tumour tumour.vcf --normal normal.vcf \
-  --rna tumour_tpm.tsv --purity 0.7 --hla "HLA-A*02:01"
+  --rna tumour_tpm.tsv --cnv copy_number.tsv --purity 0.7 --hla "HLA-A*02:01"
 
 # offline, against the caches only
 genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --offline
@@ -262,6 +338,8 @@ the same analysis, and the **Targets** tab in `genomeos serve` renders it.
 | Human Protein Atlas | consensus healthy-tissue RNA, immunofluorescence location | CC BY-SA 4.0 |
 | Open Targets Platform | tractability, approved drugs and trials, safety liabilities | CC0 1.0 |
 | Ensembl Compara | human paralogues with sequence identity | Apache 2.0 service |
+| Ensembl sequence | transcript coding sequences, for reconstructing an altered protein | Apache 2.0 service |
+| cBioPortal expression profiles | cohort tumour-versus-normal behaviour per gene | study terms, portal ODbL |
 | cBioPortal (distilled) | driver frequencies and hotspots | ODbL, distilled summary committed |
 
 Every response is cached under `data/knowledge/therapeutics/`, so an analysis

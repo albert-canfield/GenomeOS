@@ -259,7 +259,7 @@ def text_report(analysis: dict[str, Any], detail: int = 5) -> str:
         "",
         f"Sample: {analysis['sample']}   ({analysis['sample_id']})",
         f"Data level reached: {analysis['data_level']['level_reached']} of 9",
-        f"  {analysis['data_level']['note']}",
+        *_wrap(analysis["data_level"]["note"], "  "),
         "",
         "TUMOUR SUMMARY",
         THIN,

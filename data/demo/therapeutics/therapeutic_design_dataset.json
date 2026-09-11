@@ -4,7 +4,7 @@
  "provenance": {
   "genomeos_version": "0.1.0",
   "pipeline_version": "therapeutics/1.0",
-  "generated": "2026-09-11T02:14:34+0100",
+  "generated": "2026-09-11T08:38:21+0100",
   "sample": "data/demo/cancer_tumour.vcf",
   "sample_id": "cancer_tumour",
   "input_hashes": {
@@ -15,6 +15,8 @@
    "normal_expression": "Human Protein Atlas, CC BY-SA 4.0 (proteinatlas.org)",
    "therapeutic_precedent": "Open Targets Platform, CC0 1.0 (platform.opentargets.org)",
    "homology": "Ensembl REST comparative genomics (Apache 2.0 service, EMBL-EBI terms)",
+   "transcript_sequence": "Ensembl REST sequence endpoint (Apache 2.0 service, EMBL-EBI terms)",
+   "cohort_expression": "no cohort selected",
    "neoantigen_predictor": "none configured",
    "patient_rna": "not supplied"
   },
@@ -38,7 +40,7 @@
      "reference": "G",
      "alternate": "C",
      "gene": "APP",
-     "transcript": null,
+     "transcript": "ENST00000346798",
      "protein_change": "N770K",
      "hgvsc": "c.2310C>G",
      "hgvsp": "p.Asn770Lys",
@@ -177,6 +179,17 @@
       "retrieved_at": "2026-09-11"
      },
      {
+      "source": "Ensembl REST (coding sequence)",
+      "source_type": "database",
+      "claim": "coding sequence of ENST00000346798, 2313 nt",
+      "level": "human",
+      "confidence": 0.95,
+      "patient_derived": false,
+      "identifier": "ENST00000346798",
+      "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000346798",
+      "retrieved_at": "2026-09-11"
+     },
+     {
       "source": "UniProtKB/Swiss-Prot processing",
       "source_type": "database",
       "claim": "APP has a signal peptide (1-17): it enters the secretory pathway",
@@ -184,15 +197,6 @@
       "confidence": 0.9,
       "patient_derived": false,
       "identifier": "P05067",
-      "retrieved_at": "2026-09-11"
-     },
-     {
-      "source": "UniProtKB/Swiss-Prot canonical sequence",
-      "source_type": "database",
-      "claim": "APP residue 770 is N in the reference, replaced by K in the tumour",
-      "level": "human",
-      "confidence": 0.9,
-      "patient_derived": false,
       "retrieved_at": "2026-09-11"
      },
      {
@@ -1024,7 +1028,7 @@
    "neoantigen": {
     "applicable": true,
     "novel_peptide_sequence": true,
-    "reason": "one residue is replaced, so every peptide spanning it is tumour-specific",
+    "reason": "the altered ENST00000346798 translates to 770 residues against 770, diverging at residue 770 and producing 1 residue that exists in no reference protein",
     "peptide_candidates": [
      {
       "sequence": "KFFEQMQK",
@@ -1082,11 +1086,22 @@
     "wild_type_discrimination": "a binder must tell the mutant peptide from the wild-type peptide, which differs at a single residue inside the same HLA groove; this is the hardest part of the design",
     "evidence": [
      {
-      "source": "UniProtKB/Swiss-Prot canonical sequence",
+      "source": "Ensembl REST (coding sequence)",
       "source_type": "database",
-      "claim": "APP residue 770 is N in the reference, replaced by K in the tumour",
+      "claim": "coding sequence of ENST00000346798, 2313 nt",
       "level": "human",
-      "confidence": 0.9,
+      "confidence": 0.95,
+      "patient_derived": false,
+      "identifier": "ENST00000346798",
+      "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000346798",
+      "retrieved_at": "2026-09-11"
+     },
+     {
+      "source": "GenomeOS neoantigen reasoning",
+      "source_type": "derived",
+      "claim": "4 peptides covering the altered region of APP, derived by applying c.2310C>G to the coding sequence of ENST00000346798 and translating it",
+      "level": "inferred",
+      "confidence": 0.75,
       "patient_derived": false,
       "retrieved_at": "2026-09-11"
      },
@@ -1908,7 +1923,7 @@
      "tumour_selectivity": {
       "value": 0.2,
       "weight": 1.3,
-      "basis": "no tumour RNA-seq; population tissue-specificity class 'Low tissue specificity' used as a weak prior and capped at 0.5"
+      "basis": "no tumour RNA-seq and no cohort; population tissue-specificity class 'Low tissue specificity' used as a weak prior and capped at 0.5"
      },
      "tumour_expression": {
       "value": null,
@@ -1945,7 +1960,7 @@
      "neoantigen_strength": {
       "value": 0.5,
       "weight": 0.9,
-      "basis": "mutation-spanning peptides derived (0.30) patient HLA genotype supplied (+0.20); ceiling without presentation evidence is 0.70"
+      "basis": "mutation-spanning peptides derived (0.30) patient HLA genotype supplied (+0.20); ceiling without presentation evidence is 0.60"
      },
      "presentation_confidence": {
       "value": 0.0,
@@ -1960,7 +1975,7 @@
      "evidence_strength": {
       "value": 0.95,
       "weight": 0.8,
-      "basis": "strongest evidence level available is clinical, over 29 evidence records"
+      "basis": "strongest evidence level available is clinical, over 32 evidence records"
      },
      "shedding": {
       "value": 1.0,
@@ -2092,6 +2107,15 @@
        "retrieved_at": "2026-09-11"
       },
       {
+       "source": "Human Protein Atlas (immunofluorescence)",
+       "source_type": "database",
+       "claim": "APP imaged in: Golgi apparatus, Vesicles",
+       "level": "human",
+       "confidence": 0.7,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
        "source": "Gene Ontology cellular component (goa_human)",
        "source_type": "database",
        "claim": "APP is annotated to plasma membrane (GO:0005886), cell surface (GO:0009986), extracellular region (GO:0005576), nucleus (GO:0005634), cytoplasm (GO:0005737), mitochondrion (GO:0005739)",
@@ -2175,12 +2199,14 @@
        "retrieved_at": "2026-09-11"
       },
       {
-       "source": "UniProtKB/Swiss-Prot canonical sequence",
+       "source": "Ensembl REST (coding sequence)",
        "source_type": "database",
-       "claim": "APP residue 770 is N in the reference, replaced by K in the tumour",
+       "claim": "coding sequence of ENST00000346798, 2313 nt",
        "level": "human",
-       "confidence": 0.9,
+       "confidence": 0.95,
        "patient_derived": false,
+       "identifier": "ENST00000346798",
+       "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000346798",
        "retrieved_at": "2026-09-11"
       },
       {
@@ -2288,9 +2314,27 @@
       {
        "source": "GenomeOS neoantigen reasoning",
        "source_type": "derived",
+       "claim": "4 peptides covering the altered region of APP, derived by applying c.2310C>G to the coding sequence of ENST00000346798 and translating it",
+       "level": "inferred",
+       "confidence": 0.75,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
+       "source": "GenomeOS neoantigen reasoning",
+       "source_type": "derived",
        "claim": "4 mutation-spanning peptides of length 8-11 derived for APP N770K",
        "level": "inferred",
        "confidence": 0.7,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
+       "source": "GenomeOS tumour selectivity",
+       "source_type": "derived",
+       "claim": "APP selectivity is a population-level prior, not a measurement of this tumour",
+       "level": "inferred",
+       "confidence": 0.3,
        "patient_derived": false,
        "retrieved_at": "2026-09-11"
       },
@@ -3943,7 +3987,7 @@
      "tumour_selectivity": {
       "value": 0.5,
       "weight": 1.3,
-      "basis": "no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced' used as a weak prior and capped at 0.5"
+      "basis": "no tumour RNA-seq and no cohort; population tissue-specificity class 'Tissue enhanced' used as a weak prior and capped at 0.5"
      },
      "tumour_expression": {
       "value": null,
@@ -3998,7 +4042,7 @@
      "evidence_strength": {
       "value": 0.95,
       "weight": 0.8,
-      "basis": "strongest evidence level available is clinical, over 21 evidence records"
+      "basis": "strongest evidence level available is clinical, over 22 evidence records"
      },
      "shedding": {
       "value": null,
@@ -4255,6 +4299,15 @@
        "retrieved_at": "2026-09-11"
       },
       {
+       "source": "GenomeOS tumour selectivity",
+       "source_type": "derived",
+       "claim": "CSF1R selectivity is a population-level prior, not a measurement of this tumour",
+       "level": "inferred",
+       "confidence": 0.3,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
        "source": "GenomeOS scoring",
        "source_type": "derived",
        "claim": "CSF1R scores 0.5 over 68% of the declared dimensions; unavailable: clonality, internalisation, lysosomal_trafficking, presentation_confidence, tumour_expression",
@@ -4334,7 +4387,7 @@
      "reference": "G",
      "alternate": "A",
      "gene": "SOD1",
-     "transcript": null,
+     "transcript": "ENST00000270142",
      "protein_change": "A2=",
      "hgvsc": "c.6G>A",
      "hgvsp": "p.Ala2=",
@@ -4404,6 +4457,17 @@
       "retrieved_at": "2026-09-11"
      },
      {
+      "source": "Ensembl REST (coding sequence)",
+      "source_type": "database",
+      "claim": "coding sequence of ENST00000270142, 465 nt",
+      "level": "human",
+      "confidence": 0.95,
+      "patient_derived": false,
+      "identifier": "ENST00000270142",
+      "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000270142",
+      "retrieved_at": "2026-09-11"
+     },
+     {
       "source": "UniProtKB/Swiss-Prot subcellular location",
       "source_type": "database",
       "claim": "SOD1 is annotated at: Cytoplasm; Nucleus",
@@ -4445,6 +4509,15 @@
       "retrieved_at": "2026-09-11"
      },
      {
+      "source": "Human Protein Atlas (immunofluorescence)",
+      "source_type": "database",
+      "claim": "SOD1 imaged in: Nucleoplasm, Cytosol",
+      "level": "human",
+      "confidence": 0.7,
+      "patient_derived": false,
+      "retrieved_at": "2026-09-11"
+     },
+     {
       "source": "Gene Ontology cellular component (goa_human)",
       "source_type": "database",
       "claim": "SOD1 is annotated to plasma membrane (GO:0005886), extracellular region (GO:0005576), nucleus (GO:0005634), cytoplasm (GO:0005737), mitochondrion (GO:0005739)",
@@ -4470,25 +4543,6 @@
       "confidence": 0.95,
       "patient_derived": false,
       "identifier": "4A7U",
-      "retrieved_at": "2026-09-11"
-     },
-     {
-      "source": "AlphaFold DB",
-      "source_type": "prediction",
-      "claim": "predicted structure P00441 is available for SOD1; a prediction is not an experimental structure and pLDDT is not solvent accessibility",
-      "level": "computational",
-      "confidence": 0.7,
-      "patient_derived": false,
-      "identifier": "P00441",
-      "url": "https://alphafold.ebi.ac.uk/entry/P00441"
-     },
-     {
-      "source": "GenomeOS evidence layering",
-      "source_type": "derived",
-      "claim": "SOD1: DNA evidence present, RNA evidence unavailable, protein evidence unavailable; surface expression in this tumour cannot be established",
-      "level": "inferred",
-      "confidence": 0.9,
-      "patient_derived": false,
       "retrieved_at": "2026-09-11"
      }
     ]
@@ -5238,9 +5292,12 @@
    "neoantigen": {
     "applicable": false,
     "novel_peptide_sequence": false,
-    "reason": "the protein sequence is unchanged",
+    "reason": "the altered ENST00000270142 translates to 154 residues against 154 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
     "peptide_candidates": [],
-    "hla_alleles": [],
+    "hla_alleles": [
+     "HLA-A*02:01",
+     "HLA-B*07:02"
+    ],
     "predicted_binding": null,
     "predicted_processing": null,
     "observed_immunopeptidomics": null,
@@ -5248,9 +5305,29 @@
     "wild_type_discrimination": "unknown",
     "evidence": [
      {
+      "source": "Ensembl REST (coding sequence)",
+      "source_type": "database",
+      "claim": "coding sequence of ENST00000270142, 465 nt",
+      "level": "human",
+      "confidence": 0.95,
+      "patient_derived": false,
+      "identifier": "ENST00000270142",
+      "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000270142",
+      "retrieved_at": "2026-09-11"
+     },
+     {
       "source": "GenomeOS neoantigen reasoning",
       "source_type": "derived",
-      "claim": "SOD1 A2=: the protein sequence is unchanged",
+      "claim": "SOD1: reconstructed from ENST00000270142 and confirmed by sequence, not assumed from the variant class",
+      "level": "inferred",
+      "confidence": 0.9,
+      "patient_derived": false,
+      "retrieved_at": "2026-09-11"
+     },
+     {
+      "source": "GenomeOS neoantigen reasoning",
+      "source_type": "derived",
+      "claim": "SOD1 A2=: the altered ENST00000270142 translates to 154 residues against 154 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
       "level": "inferred",
       "confidence": 0.85,
       "patient_derived": false,
@@ -5368,7 +5445,7 @@
      "tumour_selectivity": {
       "value": 0.5,
       "weight": 1.3,
-      "basis": "no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced' used as a weak prior and capped at 0.5"
+      "basis": "no tumour RNA-seq and no cohort; population tissue-specificity class 'Tissue enhanced' used as a weak prior and capped at 0.5"
      },
      "tumour_expression": {
       "value": null,
@@ -5407,7 +5484,7 @@
      "neoantigen_strength": {
       "value": 0.0,
       "weight": 0.9,
-      "basis": "the protein sequence is unchanged"
+      "basis": "the altered ENST00000270142 translates to 154 residues against 154 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence"
      },
      "presentation_confidence": {
       "value": null,
@@ -5423,7 +5500,7 @@
      "evidence_strength": {
       "value": 0.807,
       "weight": 0.8,
-      "basis": "strongest evidence level available is human, over 16 evidence records"
+      "basis": "strongest evidence level available is human, over 20 evidence records"
      },
      "shedding": {
       "value": null,
@@ -5498,6 +5575,15 @@
        "retrieved_at": "2026-09-11"
       },
       {
+       "source": "Human Protein Atlas (immunofluorescence)",
+       "source_type": "database",
+       "claim": "SOD1 imaged in: Nucleoplasm, Cytosol",
+       "level": "human",
+       "confidence": 0.7,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
        "source": "Gene Ontology cellular component (goa_human)",
        "source_type": "database",
        "claim": "SOD1 is annotated to plasma membrane (GO:0005886), extracellular region (GO:0005576), nucleus (GO:0005634), cytoplasm (GO:0005737), mitochondrion (GO:0005739)",
@@ -5533,6 +5619,17 @@
        "level": "human",
        "confidence": 0.8,
        "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
+       "source": "Ensembl REST (coding sequence)",
+       "source_type": "database",
+       "claim": "coding sequence of ENST00000270142, 465 nt",
+       "level": "human",
+       "confidence": 0.95,
+       "patient_derived": false,
+       "identifier": "ENST00000270142",
+       "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000270142",
        "retrieved_at": "2026-09-11"
       },
       {
@@ -5620,9 +5717,27 @@
       {
        "source": "GenomeOS neoantigen reasoning",
        "source_type": "derived",
-       "claim": "SOD1 A2=: the protein sequence is unchanged",
+       "claim": "SOD1: reconstructed from ENST00000270142 and confirmed by sequence, not assumed from the variant class",
+       "level": "inferred",
+       "confidence": 0.9,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
+       "source": "GenomeOS neoantigen reasoning",
+       "source_type": "derived",
+       "claim": "SOD1 A2=: the altered ENST00000270142 translates to 154 residues against 154 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
        "level": "inferred",
        "confidence": 0.85,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
+       "source": "GenomeOS tumour selectivity",
+       "source_type": "derived",
+       "claim": "SOD1 selectivity is a population-level prior, not a measurement of this tumour",
+       "level": "inferred",
+       "confidence": 0.3,
        "patient_derived": false,
        "retrieved_at": "2026-09-11"
       },
@@ -5686,7 +5801,7 @@
      "reference": "G",
      "alternate": "C",
      "gene": "RUNX1",
-     "transcript": null,
+     "transcript": "ENST00000675419",
      "protein_change": "Y480*",
      "hgvsc": "c.1440C>G",
      "hgvsp": "p.Tyr480Ter",
@@ -5741,6 +5856,17 @@
       "retrieved_at": "2026-09-11"
      },
      {
+      "source": "Ensembl REST (coding sequence)",
+      "source_type": "database",
+      "claim": "coding sequence of ENST00000675419, 1443 nt",
+      "level": "human",
+      "confidence": 0.95,
+      "patient_derived": false,
+      "identifier": "ENST00000675419",
+      "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000675419",
+      "retrieved_at": "2026-09-11"
+     },
+     {
       "source": "UniProtKB/Swiss-Prot subcellular location",
       "source_type": "database",
       "claim": "RUNX1 is annotated at: Nucleus",
@@ -5759,6 +5885,15 @@
       "patient_derived": false,
       "identifier": "ENSG00000159216",
       "url": "https://www.proteinatlas.org/ENSG00000159216",
+      "retrieved_at": "2026-09-11"
+     },
+     {
+      "source": "Human Protein Atlas (immunofluorescence)",
+      "source_type": "database",
+      "claim": "RUNX1 imaged in: Nucleoplasm, Vesicles",
+      "level": "human",
+      "confidence": 0.7,
+      "patient_derived": false,
       "retrieved_at": "2026-09-11"
      },
      {
@@ -5801,27 +5936,9 @@
      {
       "source": "GenomeOS neoantigen reasoning",
       "source_type": "derived",
-      "claim": "RUNX1 Y480*: a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide",
+      "claim": "RUNX1: reconstructed from ENST00000675419 and confirmed by sequence, not assumed from the variant class",
       "level": "inferred",
-      "confidence": 0.85,
-      "patient_derived": false,
-      "retrieved_at": "2026-09-11"
-     },
-     {
-      "source": "GenomeOS normal-tissue safety",
-      "source_type": "derived",
-      "claim": "RUNX1: detected in 16/18 queried healthy tissues; highest weighted bone marrow at 42.9 nTPM; on-target/off-tumour risk moderate (bone marrow is an organ without a spare and carries 42.9 nTPM (threshold 10))",
-      "level": "inferred",
-      "confidence": 0.6,
-      "patient_derived": false,
-      "retrieved_at": "2026-09-11"
-     },
-     {
-      "source": "GenomeOS structure",
-      "source_type": "derived",
-      "claim": "residue 480 of RUNX1 is not covered by any deposited structure",
-      "level": "inferred",
-      "confidence": 0.6,
+      "confidence": 0.9,
       "patient_derived": false,
       "retrieved_at": "2026-09-11"
      }
@@ -6350,9 +6467,12 @@
    "neoantigen": {
     "applicable": false,
     "novel_peptide_sequence": false,
-    "reason": "a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide",
+    "reason": "the altered ENST00000675419 translates to 479 residues against 480 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
     "peptide_candidates": [],
-    "hla_alleles": [],
+    "hla_alleles": [
+     "HLA-A*02:01",
+     "HLA-B*07:02"
+    ],
     "predicted_binding": null,
     "predicted_processing": null,
     "observed_immunopeptidomics": null,
@@ -6360,9 +6480,29 @@
     "wild_type_discrimination": "unknown",
     "evidence": [
      {
+      "source": "Ensembl REST (coding sequence)",
+      "source_type": "database",
+      "claim": "coding sequence of ENST00000675419, 1443 nt",
+      "level": "human",
+      "confidence": 0.95,
+      "patient_derived": false,
+      "identifier": "ENST00000675419",
+      "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000675419",
+      "retrieved_at": "2026-09-11"
+     },
+     {
       "source": "GenomeOS neoantigen reasoning",
       "source_type": "derived",
-      "claim": "RUNX1 Y480*: a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide",
+      "claim": "RUNX1: reconstructed from ENST00000675419 and confirmed by sequence, not assumed from the variant class",
+      "level": "inferred",
+      "confidence": 0.9,
+      "patient_derived": false,
+      "retrieved_at": "2026-09-11"
+     },
+     {
+      "source": "GenomeOS neoantigen reasoning",
+      "source_type": "derived",
+      "claim": "RUNX1 Y480*: the altered ENST00000675419 translates to 479 residues against 480 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
       "level": "inferred",
       "confidence": 0.85,
       "patient_derived": false,
@@ -6458,7 +6598,7 @@
      "tumour_selectivity": {
       "value": 0.5,
       "weight": 1.3,
-      "basis": "no tumour RNA-seq; population tissue-specificity class 'Tissue enhanced' used as a weak prior and capped at 0.5"
+      "basis": "no tumour RNA-seq and no cohort; population tissue-specificity class 'Tissue enhanced' used as a weak prior and capped at 0.5"
      },
      "tumour_expression": {
       "value": null,
@@ -6498,7 +6638,7 @@
      "neoantigen_strength": {
       "value": 0.0,
       "weight": 0.9,
-      "basis": "a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide"
+      "basis": "the altered ENST00000675419 translates to 479 residues against 480 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence"
      },
      "presentation_confidence": {
       "value": null,
@@ -6514,7 +6654,7 @@
      "evidence_strength": {
       "value": 0.807,
       "weight": 0.8,
-      "basis": "strongest evidence level available is human, over 13 evidence records"
+      "basis": "strongest evidence level available is human, over 17 evidence records"
      },
      "shedding": {
       "value": null,
@@ -6589,6 +6729,15 @@
        "retrieved_at": "2026-09-11"
       },
       {
+       "source": "Human Protein Atlas (immunofluorescence)",
+       "source_type": "database",
+       "claim": "RUNX1 imaged in: Nucleoplasm, Vesicles",
+       "level": "human",
+       "confidence": 0.7,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
        "source": "Gene Ontology cellular component (goa_human)",
        "source_type": "database",
        "claim": "RUNX1 is annotated to nucleus (GO:0005634)",
@@ -6615,6 +6764,17 @@
        "level": "human",
        "confidence": 0.7,
        "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
+       "source": "Ensembl REST (coding sequence)",
+       "source_type": "database",
+       "claim": "coding sequence of ENST00000675419, 1443 nt",
+       "level": "human",
+       "confidence": 0.95,
+       "patient_derived": false,
+       "identifier": "ENST00000675419",
+       "url": "https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=ENST00000675419",
        "retrieved_at": "2026-09-11"
       }
      ],
@@ -6679,9 +6839,27 @@
       {
        "source": "GenomeOS neoantigen reasoning",
        "source_type": "derived",
-       "claim": "RUNX1 Y480*: a premature stop truncates the protein but leaves every remaining residue identical to wild type, so the substitution itself creates no novel peptide",
+       "claim": "RUNX1: reconstructed from ENST00000675419 and confirmed by sequence, not assumed from the variant class",
+       "level": "inferred",
+       "confidence": 0.9,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
+       "source": "GenomeOS neoantigen reasoning",
+       "source_type": "derived",
+       "claim": "RUNX1 Y480*: the altered ENST00000675419 translates to 479 residues against 480 with no residue that differs from the reference: a truncation removes protein rather than creating new sequence",
        "level": "inferred",
        "confidence": 0.85,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
+       "source": "GenomeOS tumour selectivity",
+       "source_type": "derived",
+       "claim": "RUNX1 selectivity is a population-level prior, not a measurement of this tumour",
+       "level": "inferred",
+       "confidence": 0.3,
        "patient_derived": false,
        "retrieved_at": "2026-09-11"
       },
@@ -6747,7 +6925,7 @@
      "reference": "A",
      "alternate": "G",
      "gene": "NRIP1",
-     "transcript": null,
+     "transcript": "ENST00000318948",
      "protein_change": null,
      "hgvsc": "c.-335+14344T>C",
      "hgvsp": null,
@@ -7540,7 +7718,10 @@
     "novel_peptide_sequence": false,
     "reason": "the protein sequence is unchanged",
     "peptide_candidates": [],
-    "hla_alleles": [],
+    "hla_alleles": [
+     "HLA-A*02:01",
+     "HLA-B*07:02"
+    ],
     "predicted_binding": null,
     "predicted_processing": null,
     "observed_immunopeptidomics": null,
@@ -7557,7 +7738,15 @@
       "retrieved_at": "2026-09-11"
      }
     ],
-    "missing": []
+    "missing": [
+     {
+      "what": "altered protein sequence",
+      "reason": "the coding change c.-335+14344T>C is outside the coding sequence or in a form GenomeOS does not reconstruct",
+      "would_be_resolved_by": [
+       "a transcript-level caller that emits the altered protein directly"
+      ]
+     }
+    ]
    },
    "binder_requirements": {
     "recognition": {
@@ -7657,7 +7846,7 @@
      "tumour_selectivity": {
       "value": 0.2,
       "weight": 1.3,
-      "basis": "no tumour RNA-seq; population tissue-specificity class 'Low tissue specificity' used as a weak prior and capped at 0.5"
+      "basis": "no tumour RNA-seq and no cohort; population tissue-specificity class 'Low tissue specificity' used as a weak prior and capped at 0.5"
      },
      "tumour_expression": {
       "value": null,
@@ -7713,7 +7902,7 @@
      "evidence_strength": {
       "value": 0.807,
       "weight": 0.8,
-      "basis": "strongest evidence level available is human, over 12 evidence records"
+      "basis": "strongest evidence level available is human, over 13 evidence records"
      },
      "shedding": {
       "value": null,
@@ -7876,6 +8065,15 @@
        "retrieved_at": "2026-09-11"
       },
       {
+       "source": "GenomeOS tumour selectivity",
+       "source_type": "derived",
+       "claim": "NRIP1 selectivity is a population-level prior, not a measurement of this tumour",
+       "level": "inferred",
+       "confidence": 0.3,
+       "patient_derived": false,
+       "retrieved_at": "2026-09-11"
+      },
+      {
        "source": "GenomeOS scoring",
        "source_type": "derived",
        "claim": "NRIP1 scores 0.217 over 62% of the declared dimensions; unavailable: clonality, internalisation, lysosomal_trafficking, presentation_confidence, structural_bindability, tumour_expression",
@@ -7912,6 +8110,13 @@
       "would_be_resolved_by": [
        "receptor internalisation assay",
        "curated endocytosis annotation"
+      ]
+     },
+     {
+      "what": "altered protein sequence",
+      "reason": "the coding change c.-335+14344T>C is outside the coding sequence or in a form GenomeOS does not reconstruct",
+      "would_be_resolved_by": [
+       "a transcript-level caller that emits the altered protein directly"
       ]
      }
     ]
@@ -7997,6 +8202,12 @@
    "candidates_affected": 5
   },
   {
+   "input": "a cohort of the same cancer type",
+   "missing": true,
+   "why": "without one there is nothing to say how often this cancer type raises a gene above normal tissue, so selectivity falls back to a tissue-specificity class",
+   "candidates_affected": 5
+  },
+  {
    "input": "tumour proteomics",
    "missing": true,
    "why": "RNA is not protein; abundance at the protein level is unmeasured",
@@ -8058,6 +8269,12 @@
   },
   {
    "input": "induced surface phenotype",
+   "missing": true,
+   "why": "unresolved for this analysis",
+   "candidates_affected": 1
+  },
+  {
+   "input": "altered protein sequence",
    "missing": true,
    "why": "unresolved for this analysis",
    "candidates_affected": 1

@@ -38,6 +38,7 @@ HPA_API = "https://www.proteinatlas.org/api/search_download.php"
 OPENTARGETS_API = "https://api.platform.opentargets.org/api/v4/graphql"
 ENSEMBL_HOMOLOGY = "https://rest.ensembl.org/homology/id/homo_sapiens"
 ENSEMBL_LOOKUP = "https://rest.ensembl.org/lookup/id"
+ENSEMBL_SEQUENCE = "https://rest.ensembl.org/sequence/id"
 
 #: HPA consensus-tissue columns, with the weight an on-target hit there carries.
 #: Weights are a stated policy of this pipeline, not a measurement: damage to a
@@ -176,6 +177,13 @@ class TumourExpressionProvider(Protocol):
 
 
 @runtime_checkable
+class CohortExpressionProvider(Protocol):
+    """How a gene behaves across a cohort of the same cancer type."""
+
+    def cohort(self, gene: str) -> Answer: ...
+
+
+@runtime_checkable
 class StructureProvider(Protocol):
     """Experimental and predicted structures for a protein."""
 
@@ -187,6 +195,13 @@ class TraffickingProvider(Protocol):
     """Endocytosis, endosomal and lysosomal routing, recycling, shedding."""
 
     def trafficking(self, gene: str, annotation: dict[str, Any] | None = None) -> Answer: ...
+
+
+@runtime_checkable
+class TranscriptSequenceProvider(Protocol):
+    """The coding sequence of one transcript, for reconstructing an altered protein."""
+
+    def cds(self, transcript: str) -> Answer: ...
 
 
 @runtime_checkable
@@ -340,6 +355,26 @@ class PatientRnaProvider:
     def available(self) -> bool:
         return bool(self.values)
 
+    @property
+    def whole_transcriptome(self) -> bool:
+        """Enough genes for a within-sample rank to mean anything."""
+        return len(self.values) >= 5000
+
+    def rank(self, gene: str) -> float | None:
+        """Where this gene sits among all genes measured in this tumour.
+
+        A rank inside one sample needs no unit, so it survives the comparison a
+        raw value cannot: a patient's TPM and a cohort's RSEM are different
+        scales and must never be compared directly.
+        """
+        if not self.whole_transcriptome:
+            return None
+        v = self.values.get(gene.upper())
+        if v is None:
+            return None
+        below = sum(1 for x in self.values.values() if x < v)
+        return round(below / len(self.values), 4)
+
     def tumour_expression(self, gene: str) -> Answer:
         if not self.values:
             return Answer.none("no tumour RNA-seq supplied")
@@ -348,14 +383,101 @@ class PatientRnaProvider:
             return Answer.none(f"{gene} absent from the supplied tumour RNA-seq table")
         from .evidence import patient
 
+        rank = self.rank(gene)
+        claim = f"{gene} measured at {v:g} {self.unit} in this tumour"
+        if rank is not None:
+            claim += f", at the {rank:.0%} rank of the {len(self.values):,} genes measured in this sample"
+        ev = [patient(f"tumour RNA-seq ({self.path or 'supplied table'})", claim, 0.9)]
+        return Answer(
+            {"value": v, "unit": self.unit, "sample": self.sample_id, "rank": rank},
+            ev,
+            True,
+            "",
+            today(),
+        )
+
+
+@dataclass
+class CBioPortalCohortProvider:
+    """Cohort expression for one cancer type, from cBioPortal.
+
+    A cohort cannot say what this patient's tumour does. It answers a different
+    and still useful question: in this cancer type, is the gene raised above
+    normal tissue often, rarely, or never? The profile preferred is the one
+    scored against the study's own normal samples, which is unit-free and
+    therefore comparable; a raw expression profile is used only if no z-score
+    profile exists, and is labelled as not comparable across datasets.
+    """
+
+    study: str = ""
+    net: bool = True
+    cache: DiskCache = field(default_factory=lambda: DiskCache("cohort"))
+    _warmed: set[str] = field(default_factory=set)
+
+    @property
+    def available(self) -> bool:
+        return bool(self.study)
+
+    def _key(self, gene: str) -> str:
+        return f"{self.study}|{gene.upper()}"
+
+    def warm(self, genes: list[str]) -> None:
+        """Fetch a whole gene list in one call instead of one call per gene."""
+        if not self.study or not self.net:
+            return
+        wanted = [g.upper() for g in genes if g and self.cache.get(self._key(g)) is None]
+        if not wanted:
+            return
+        try:
+            from genomeos.cancer.cbioportal import CBioPortal
+
+            d = CBioPortal(timeout=180).expression_distribution(self.study, wanted)
+        except Exception as e:  # noqa: BLE001 - a cohort is optional context, never a failure
+            self._warmed.update(wanted)
+            self.cache.put(f"{self.study}|__error__", {"error": str(e)[:160]})
+            return
+        meta = {k: d[k] for k in ("study", "profile", "kind", "meaning", "samples")}
+        for gene, summary in d["genes"].items():
+            self.cache.put(self._key(gene), {**meta, "gene": gene, "summary": summary})
+        for gene in d["missing"]:
+            self.cache.put(self._key(gene), {**meta, "gene": gene, "summary": None})
+        self._warmed.update(wanted)
+
+    def cohort(self, gene: str) -> Answer:
+        if not self.study:
+            return Answer.none("no cohort study selected; pass one to compare this tumour against")
+        row = self.cache.get(self._key(gene))
+        if row is None and gene.upper() not in self._warmed:
+            self.warm([gene])
+            row = self.cache.get(self._key(gene))
+        if row is None:
+            err = self.cache.get(f"{self.study}|__error__") or {}
+            return Answer.none(
+                f"cohort expression unavailable for {gene}: {err.get('error', 'not retrieved')}"
+            )
+        if not row.get("summary"):
+            return Answer.none(f"{gene} is not measured in the {self.study} expression profile")
+        s = row["summary"]
+        claim = (
+            f"across {s['n']} tumours of {row['study']}, {gene} has median "
+            f"{s['median']:+.2f} ({row['meaning']})"
+        )
+        if "fraction_raised" in s:
+            claim += (
+                f"; raised above normal tissue (z >= {s['raised_threshold']:g}) in "
+                f"{s['fraction_raised']:.1%} of them"
+            )
         ev = [
-            patient(
-                f"tumour RNA-seq ({self.path or 'supplied table'})",
-                f"{gene} measured at {v:g} {self.unit} in this tumour",
-                0.9,
+            database(
+                f"cBioPortal {row['study']}",
+                claim,
+                0.8,
+                "human",
+                identifier=row["profile"],
+                url=f"https://www.cbioportal.org/study/summary?id={row['study']}",
             )
         ]
-        return Answer({"value": v, "unit": self.unit, "sample": self.sample_id}, ev, True, "", today())
+        return Answer(row, ev, True, "", today())
 
 
 @dataclass
@@ -648,6 +770,48 @@ class EnsemblParalogueProvider:
 
 
 @dataclass
+class EnsemblTranscriptProvider:
+    """Coding sequences from Ensembl, keyed by the transcript VEP actually used.
+
+    A frameshift's novel peptide stretch cannot be read off a VCF record: the
+    indel has to be applied to the transcript and the result translated. That
+    needs the same transcript the consequence was called on, which is why the
+    transcript id is carried down from VEP rather than assumed.
+    """
+
+    net: bool = True
+    cache: DiskCache = field(default_factory=lambda: DiskCache("cds"))
+
+    def cds(self, transcript: str) -> Answer:
+        if not transcript:
+            return Answer.none("no transcript id on this variant's annotation")
+        key = transcript.split(".")[0]
+        seq = self.cache.get(key)
+        if seq is None:
+            if not self.net:
+                return Answer.none(f"no cached coding sequence for {transcript} and network disabled")
+            try:
+                d = _fetch_json(f"{ENSEMBL_SEQUENCE}/{key}?type=cds;content-type=application/json")
+            except UnavailableError as e:
+                return Answer.none(f"Ensembl sequence unavailable for {transcript}: {e}")
+            seq = (d or {}).get("seq")
+            if not seq:
+                return Answer.none(f"Ensembl returned no coding sequence for {transcript}")
+            self.cache.put(key, seq)
+        ev = [
+            database(
+                "Ensembl REST (coding sequence)",
+                f"coding sequence of {key}, {len(seq)} nt",
+                0.95,
+                "human",
+                identifier=key,
+                url=f"https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t={key}",
+            )
+        ]
+        return Answer(seq, ev, True, "", today())
+
+
+@dataclass
 class NoNeoantigenPredictor:
     """The honest default: no peptide/HLA predictor is wired in.
 
@@ -684,6 +848,8 @@ class Providers:
     homology: EnsemblParalogueProvider
     neoantigen: Any
     patient_rna: PatientRnaProvider
+    cohort: CBioPortalCohortProvider
+    transcript: EnsemblTranscriptProvider
 
     @classmethod
     def default(
@@ -691,6 +857,7 @@ class Providers:
         net: bool = True,
         knowledge_base: Any = None,
         patient_rna: PatientRnaProvider | None = None,
+        cohort_study: str = "",
     ) -> Providers:
         protein = CompiledProteinProvider(net=net)
         return cls(
@@ -702,6 +869,8 @@ class Providers:
             homology=EnsemblParalogueProvider(net=net),
             neoantigen=NoNeoantigenPredictor(),
             patient_rna=patient_rna or PatientRnaProvider(),
+            cohort=CBioPortalCohortProvider(study=cohort_study, net=net),
+            transcript=EnsemblTranscriptProvider(net=net),
         )
 
     def versions(self) -> dict[str, str]:
@@ -712,6 +881,12 @@ class Providers:
             "normal_expression": HPA_LICENCE,
             "therapeutic_precedent": OT_LICENCE,
             "homology": "Ensembl REST comparative genomics (Apache 2.0 service, EMBL-EBI terms)",
+            "transcript_sequence": "Ensembl REST sequence endpoint (Apache 2.0 service, EMBL-EBI terms)",
+            "cohort_expression": (
+                f"cBioPortal {self.cohort.study} (CC BY-SA 4.0 study data, ODbL portal)"
+                if self.cohort.available
+                else "no cohort selected"
+            ),
             "neoantigen_predictor": getattr(self.neoantigen, "name", "unknown"),
             "patient_rna": self.patient_rna.path or "not supplied",
         }

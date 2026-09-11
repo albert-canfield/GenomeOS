@@ -32,6 +32,7 @@ from genomeos.cancer.tumour import CODING, TumourVariant
 from . import logic as combination_logic
 from . import mechanisms as mech
 from .evidence import derived, strongest_level
+from .evidence import patient as patient_evidence
 from .expression import (
     normal_profile,
     normal_tissue_safety,
@@ -41,6 +42,7 @@ from .expression import (
 from .localisation import localise, mutation_topology
 from .model import (
     Localisation,
+    Measure,
     ScoreComponent,
     TherapeuticTargetCandidate,
     VariantOrigin,
@@ -78,6 +80,9 @@ DATA_LEVELS: tuple[tuple[int, str, str], ...] = (
 )
 
 CLONAL_VAF = 0.35
+
+#: Copies at or above which a gene counts as amplified rather than gained.
+AMPLIFIED_COPIES = 4.0
 AF_INFO = re.compile(r"(?:^|;)AF=([0-9.]+)")
 
 DISCLAIMER = (
@@ -97,6 +102,8 @@ class PatientProfile:
     hla_alleles: list[str] = field(default_factory=list)
     purity: float | None = None
     copy_number: dict[str, float] = field(default_factory=dict)
+    copy_number_path: str = ""
+    cohort_study: str = ""
 
     def levels(self) -> dict[str, Any]:
         have = {
@@ -126,11 +133,43 @@ class PatientProfile:
                 {"level": n, "input": key, "purpose": desc, "present": have[key]}
                 for n, key, desc in DATA_LEVELS
             ],
+            "inputs_present": [key for key, ok in have.items() if ok],
             "note": (
                 f"analysis ran at data level {contiguous}; conclusions that require a higher level are "
                 "reported as unavailable rather than estimated"
+            )
+            + (
+                f". Inputs from higher levels were supplied and used where they apply "
+                f"({', '.join(k for k, ok in have.items() if ok and k != 'tumour_vcf')}), but the level "
+                "is the point at which the chain of inputs first breaks"
+                if reached > contiguous
+                else ""
             ),
         }
+
+
+def copy_number_table(path: str) -> dict[str, float]:
+    """Gene to absolute copy number, from a two-column table.
+
+    Amplification is one of the strongest reasons a surface protein is
+    over-displayed, and it is the one piece of that story a VCF of point
+    mutations cannot carry.
+    """
+    out: dict[str, float] = {}
+    p = Path(path)
+    if not p.exists():
+        return out
+    for line in p.read_text().splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        parts = line.replace(",", "\t").split("\t")
+        if len(parts) < 2:
+            continue
+        try:
+            out[parts[0].strip().upper()] = float(parts[1])
+        except ValueError:
+            continue  # header row
+    return out
 
 
 def vaf_table(vcf: str) -> dict[str, float]:
@@ -193,6 +232,7 @@ def origin_of(
         reference=v.ref,
         alternate=v.alt,
         gene=v.gene,
+        transcript=v.transcript or None,
         protein_change=v.protein_change or None,
         hgvsc=v.hgvsc or None,
         hgvsp=v.hgvsp or None,
@@ -269,19 +309,46 @@ def build_candidate(
             ("Human Protein Atlas consensus RNA, or a local GTEx extract",),
         )
     rna = providers.patient_rna.tumour_expression(gene)
+    cohort = providers.cohort.cohort(gene)
     c.tumour = tumour_state(
         gene,
         [f"{o.variant_type} {o.protein_change or ''}".strip() for o in c.origins],
         rna,
         c.normal_tissue,
         hpa.data if hpa.available else None,
+        cohort,
     )
+    if not cohort.available and providers.cohort.available:
+        c.ledger.lack("cohort expression", cohort.reason, ("a cBioPortal study of this cancer type",))
     c.ledger.add(*c.tumour.evidence)
     if not rna.available:
         c.ledger.lack(
             "tumour expression of this gene",
             rna.reason,
             ("tumour RNA-seq", "tumour proteomics", "surface proteomics"),
+        )
+    cn = profile.copy_number.get(gene.upper())
+    if cn is not None:
+        c.tumour.copy_number = Measure(
+            value=cn,
+            unit="copies",
+            source=f"patient copy-number table ({profile.copy_number_path or 'supplied'})",
+            level="human",
+            patient_specific=True,
+            confidence=0.85,
+        )
+        c.tumour.evidence.append(
+            patient_evidence(
+                f"copy number ({profile.copy_number_path or 'supplied table'})",
+                f"{gene} is present at {cn:g} copies in this tumour against the diploid 2"
+                + (
+                    "; amplification raises the amount of protein a cell can display, though it does "
+                    "not prove the protein is made"
+                    if cn >= AMPLIFIED_COPIES
+                    else ""
+                ),
+                0.85,
+            )
         )
     clonal = next((o for o in c.origins if o.clonality != "unknown"), None)
     if clonal:
@@ -334,6 +401,9 @@ def build_candidate(
             sequence,
             profile.hla_alleles,
             providers.neoantigen,
+            hgvsc=lead.hgvsc,
+            transcript=lead.transcript,
+            transcripts=providers.transcript,
         )
         c.ledger.add(*c.neoantigen.evidence)
         c.ledger.missing.extend(c.neoantigen.missing)
@@ -350,6 +420,8 @@ def build_candidate(
 
     # --- stage 9: scores
     c.scores = score_candidate(c, prec.available)
+    for comp in c.scores.components.values():
+        c.ledger.add(*comp.evidence)
     c.ledger.add(summary_evidence(c.scores, gene))
 
     # --- stage 10: mechanisms
@@ -630,6 +702,12 @@ def missing_data_report(candidates: list[TherapeuticTargetCandidate], profile: P
             not profile.copy_number,
             "amplification is one of the strongest reasons a surface target is over-displayed",
         ),
+        (
+            "a cohort of the same cancer type",
+            not profile.cohort_study,
+            "without one there is nothing to say how often this cancer type raises a gene above normal "
+            "tissue, so selectivity falls back to a tissue-specificity class",
+        ),
         ("tumour proteomics", True, "RNA is not protein; abundance at the protein level is unmeasured"),
         (
             "surface proteomics",
@@ -686,6 +764,11 @@ def analyse(
         by_gene.setdefault(v.gene, []).append(v)
     order = sorted(by_gene, key=lambda g: -max(v.score for v in by_gene[g]))[:top_genes]
 
+    if providers.cohort.available:
+        if log:
+            print(f"therapeutics: cohort expression from {providers.cohort.study}", file=log, flush=True)
+        providers.cohort.warm(order)
+
     candidates: list[TherapeuticTargetCandidate] = []
     for i, gene in enumerate(order, 1):
         if log:
@@ -729,6 +812,10 @@ def analyse(
                 ("tumour_vcf", input_hash(profile.tumour_vcf)),
                 ("normal_vcf", input_hash(profile.normal_vcf) if profile.normal_vcf else None),
                 ("tumour_rna", input_hash(profile.rna_path) if profile.rna_path else None),
+                (
+                    "copy_number",
+                    input_hash(profile.copy_number_path) if profile.copy_number_path else None,
+                ),
             )
             if v
         },
@@ -773,6 +860,8 @@ def analyse_vcf(
     knowledge: dict[str, Any] | None = None,
     top_genes: int = 12,
     purity: float | None = None,
+    cnv: str | None = None,
+    cohort: str = "",
     net: bool = True,
     indirect: bool = True,
     log: Any = None,
@@ -791,6 +880,9 @@ def analyse_vcf(
         rna_path=rna,
         hla_alleles=list(hla or []),
         purity=purity,
+        copy_number=copy_number_table(cnv) if cnv else {},
+        copy_number_path=cnv or "",
+        cohort_study=cohort,
     )
     kb = None
     try:
@@ -801,7 +893,7 @@ def analyse_vcf(
     except Exception:  # noqa: BLE001 - the GO files are optional
         kb = None
     patient_rna = PatientRnaProvider.from_file(rna) if rna else PatientRnaProvider()
-    providers = Providers.default(net=net, knowledge_base=kb, patient_rna=patient_rna)
+    providers = Providers.default(net=net, knowledge_base=kb, patient_rna=patient_rna, cohort_study=cohort)
     analysis = analyse(ranked, profile, providers, top_genes=top_genes, indirect=indirect, log=log)
     analysis["variants_total"] = len(ranked)
     analysis["somatic_candidates"] = sum(1 for v in ranked if not v.likely_germline)

@@ -956,6 +956,40 @@ def cmd_cancer(args: argparse.Namespace) -> int:
         d = CBioPortal().distil_study(args.study, progress=lambda i, n: print(f"  {i}/{n} genes", flush=True))
         print(f"  saved {save_result(f'cancer_{args.study}', d)}")
         return 0
+    if args.cancer_cmd == "expression":
+        from genomeos.cancer import CBioPortal
+        from genomeos.cancer.cbioportal import DRIVER_PANEL
+        from genomeos.results import save_result
+
+        genes = args.genes or list(DRIVER_PANEL)
+        d = CBioPortal(timeout=180).expression_distribution(
+            args.study, genes, progress=lambda i, n: print(f"  {i}/{n} genes", flush=True)
+        )
+        print(f"{d['study']}: {d['samples']} tumours, {len(d['genes'])} genes, profile {d['kind']}")
+        print(f"  {d['meaning']}")
+        rows = sorted(d["genes"].items(), key=lambda kv: -(kv[1].get("fraction_raised") or kv[1]["median"]))[
+            : args.top
+        ]
+        print(
+            _table(
+                [
+                    {
+                        "gene": g,
+                        "median": f"{v['median']:+.2f}",
+                        "q1..q3": f"{v['q1']:+.2f}..{v['q3']:+.2f}",
+                        "raised above normal": (
+                            f"{v['fraction_raised']:.1%}" if "fraction_raised" in v else "-"
+                        ),
+                    }
+                    for g, v in rows
+                ],
+                ["gene", "median", "q1..q3", "raised above normal"],
+            )
+        )
+        if d["missing"]:
+            print(f"  not measured: {', '.join(d['missing'][:12])}")
+        print(f"  saved {save_result(f'expression_{args.study}', d)}")
+        return 0
     if not k:
         print("no distilled cancer knowledge yet: run `genomeos cancer distil` (cBioPortal, ~30 s)")
         return 1
@@ -1801,6 +1835,8 @@ def cmd_therapeutic(args: argparse.Namespace) -> int:
         chroms=set(args.chrom) if args.chrom else None,
         top_genes=args.top,
         purity=args.purity,
+        cnv=args.cnv,
+        cohort=args.cohort or "",
         net=not args.offline,
         indirect=not args.no_indirect,
         log=sys.stdout,
@@ -2121,6 +2157,13 @@ def build_parser() -> argparse.ArgumentParser:
     ).add_subparsers(dest="cancer_cmd", required=True)
     p = can.add_parser("distil", help="distil driver-gene frequencies from a cBioPortal study")
     p.add_argument("--study", default="msk_impact_2017")
+    p = can.add_parser(
+        "expression",
+        help="distil a study's tumour-versus-normal expression per gene (cohort reference)",
+    )
+    p.add_argument("--study", required=True, help="cBioPortal study id")
+    p.add_argument("--genes", nargs="*", help="gene symbols; the driver panel by default")
+    p.add_argument("--top", type=int, default=20, help="rows to print")
     p = can.add_parser("genes", help="most frequently mutated driver genes")
     p.add_argument("--top", type=int, default=25)
     p = can.add_parser("gene", help="one gene: frequency, hotspots, cancer types")
@@ -2256,6 +2299,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--hla", action="append", help="patient class I alleles, e.g. HLA-A*02:01,HLA-B*07:02")
     p.add_argument("--chrom", action="append", help="restrict to these chromosomes")
     p.add_argument("--purity", type=float, help="tumour purity 0-1, for clonality")
+    p.add_argument("--cnv", help="copy-number table: gene<TAB>copies per line")
+    p.add_argument(
+        "--cohort",
+        help="cBioPortal study id of the same cancer type, e.g. brca_tcga_pan_can_atlas_2018; "
+        "gives how often each gene is raised above normal tissue in that cancer",
+    )
     p.add_argument("--top", type=int, default=12, help="genes to analyse, by variant rank")
     p.add_argument("--detail", type=int, default=5, help="candidates to expand in the report")
     p.add_argument("--report", action="store_true", help="print the full text report")

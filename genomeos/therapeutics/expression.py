@@ -29,6 +29,13 @@ DETECTION_NTPM = 1.0
 #: nTPM above which on-target binding in a critical tissue is a real concern.
 CONCERN_NTPM = 10.0
 
+#: A gene raised above normal in this share of a cohort's tumours scores full
+#: marks on the cohort route; half the cohort is already a strong signal.
+HALF_COHORT_RAISED = 0.5
+
+#: A cohort describes a cancer type, not a patient, so it cannot score higher.
+COHORT_CAP = 0.6
+
 SPECIFICITY_HINT = {
     "Tissue enriched": 0.9,
     "Group enriched": 0.75,
@@ -147,9 +154,21 @@ def tumour_state(
     patient_rna: Answer,
     normal: NormalTissueProfile,
     hpa_row: dict[str, Any] | None = None,
+    cohort: Answer | None = None,
 ) -> TumourState:
     """What the tumour is known to do with this gene, and what is not known."""
     state = TumourState(altered=bool(alterations), alterations=list(alterations))
+    if cohort is not None and cohort.available:
+        state.cohort = {
+            "study": cohort.data["study"],
+            "profile": cohort.data["profile"],
+            "kind": cohort.data["kind"],
+            "meaning": cohort.data["meaning"],
+            "samples": cohort.data["summary"]["n"],
+            **cohort.data["summary"],
+            "level": "population-level: this cancer type, not this patient",
+        }
+        state.evidence.extend(cohort.evidence)
     if patient_rna.available:
         d = patient_rna.data
         state.expression = Measure(
@@ -160,6 +179,7 @@ def tumour_state(
             patient_specific=True,
             confidence=0.9,
         )
+        state.expression_rank = d.get("rank")
         state.evidence.extend(patient_rna.evidence)
     else:
         state.expression = Measure.unavailable(patient_rna.reason or "no tumour RNA-seq supplied")
@@ -212,7 +232,9 @@ def tumour_selectivity(
         score = min(1.0, math.log10(max(ratio, 1e-3) + 1) / math.log10(21))  # 20x ratio saturates
         basis = (
             f"log-ratio of tumour {tumour.expression.value:g} {tumour.expression.unit} to the highest "
-            f"healthy tissue ({highest.tissue} {highest.value:g} nTPM); 20x saturates the score"
+            f"healthy tissue ({highest.tissue} {highest.value:g} nTPM); 20x saturates the score. "
+            f"{tumour.expression.unit} and nTPM are both per-million normalisations, so the ratio is an "
+            "approximation, not a like-for-like measurement"
         )
         ev = [
             derived(
@@ -221,12 +243,23 @@ def tumour_selectivity(
                 0.75,
             )
         ]
+        if tumour.expression_rank is not None:
+            ev.append(
+                derived(
+                    "GenomeOS tumour selectivity",
+                    f"{gene} sits at the {tumour.expression_rank:.0%} rank of this tumour's own "
+                    "transcriptome, which needs no unit and so is the safer of the two comparisons",
+                    0.8,
+                )
+            )
         return round(score, 3), basis, ev
+    if tumour.cohort and "fraction_raised" in tumour.cohort:
+        return _cohort_selectivity(gene, tumour.cohort)
     if normal.specificity in SPECIFICITY_HINT:
         capped = min(0.5, SPECIFICITY_HINT[normal.specificity])
         basis = (
-            f"no tumour RNA-seq; population tissue-specificity class '{normal.specificity}' used as a "
-            "weak prior and capped at 0.5"
+            f"no tumour RNA-seq and no cohort; population tissue-specificity class "
+            f"'{normal.specificity}' used as a weak prior and capped at 0.5"
         )
         ev = [
             derived(
@@ -236,7 +269,37 @@ def tumour_selectivity(
             )
         ]
         return capped, basis, ev
-    return None, "no tumour expression and no healthy-tissue specificity class available", []
+    return None, "no tumour expression, no cohort and no healthy-tissue specificity class", []
+
+
+def _cohort_selectivity(gene: str, cohort: dict[str, Any]) -> tuple[float, str, list[Evidence]]:
+    """How often this cancer type raises the gene above normal tissue.
+
+    Better than a tissue-specificity class, because it is measured against
+    normal samples rather than inferred from how widely the gene is expressed.
+    Still population-level, so it is capped below what a patient measurement
+    can reach.
+    """
+    raised = float(cohort["fraction_raised"])
+    median = float(cohort["median"])
+    raised_part = min(1.0, raised / HALF_COHORT_RAISED)
+    median_part = max(0.0, min(1.0, (median + 1.0) / 3.0))
+    score = min(COHORT_CAP, 0.6 * raised_part + 0.4 * median_part)
+    basis = (
+        f"no tumour RNA-seq; {cohort['study']} raises {gene} above normal tissue "
+        f"(z >= {cohort['raised_threshold']:g}) in {raised:.1%} of {cohort['n']} tumours, median "
+        f"{median:+.2f}; 0.6 x min(1, {raised:.3f}/{HALF_COHORT_RAISED:g}) + 0.4 x "
+        f"({median:+.2f} + 1)/3, capped at {COHORT_CAP:g} because a cohort is not this patient"
+    )
+    ev = [
+        derived(
+            "GenomeOS tumour selectivity",
+            f"{gene} is raised above normal tissue in {raised:.1%} of tumours of this type; that is a "
+            "property of the cancer type, and says nothing about this tumour until its RNA is measured",
+            0.45,
+        )
+    ]
+    return round(score, 3), basis, ev
 
 
 def target_density(gene: str, tumour: TumourState, normal: NormalTissueProfile) -> dict[str, Any]:

@@ -238,6 +238,71 @@ class StubHomology:
         return Answer(r, [], True, "", "2026-01-01")
 
 
+class StubTranscripts:
+    """Coding sequences by transcript id."""
+
+    def __init__(self, sequences: dict[str, str] | None = None) -> None:
+        self.sequences = sequences or {}
+
+    def cds(self, transcript: str) -> Answer:
+        if not transcript:
+            return Answer.none("no transcript id on this variant's annotation")
+        seq = self.sequences.get(transcript.split(".")[0])
+        if seq is None:
+            return Answer.none(f"no cached coding sequence for {transcript}")
+        return Answer(seq, [], True, "", "2026-01-01")
+
+
+class StubCohort:
+    """A cancer-type cohort's expression distribution for a gene."""
+
+    def __init__(self, rows: dict[str, dict] | None = None, study: str = "") -> None:
+        self.rows = rows or {}
+        self.study = study or ("stub_cohort" if rows else "")
+
+    @property
+    def available(self) -> bool:
+        return bool(self.study)
+
+    def warm(self, genes: list[str]) -> None:
+        return None
+
+    def cohort(self, gene: str) -> Answer:
+        if not self.study:
+            return Answer.none("no cohort study selected")
+        summary = self.rows.get(gene.upper())
+        if summary is None:
+            return Answer.none(f"{gene} not measured in the stub cohort")
+        return Answer(
+            {
+                "study": self.study,
+                "profile": f"{self.study}_ref_normal_Zscores",
+                "kind": "z_vs_normal",
+                "meaning": "z-score against the study's normal samples",
+                "gene": gene.upper(),
+                "summary": summary,
+            },
+            [],
+            True,
+            "",
+            "2026-01-01",
+        )
+
+
+def cohort_row(median: float, fraction_raised: float, n: int = 500) -> dict:
+    return {
+        "n": n,
+        "min": median - 3,
+        "q1": median - 1,
+        "median": median,
+        "q3": median + 1,
+        "p90": median + 2,
+        "max": median + 4,
+        "fraction_raised": fraction_raised,
+        "raised_threshold": 2.0,
+    }
+
+
 class StubRna:
     def __init__(self, values: dict[str, float] | None = None) -> None:
         self.values = values or {}
@@ -262,6 +327,9 @@ class StubProviders:
         paralogues=None,
         rna=None,
         neoantigen=None,
+        cohort=None,
+        cohort_study="",
+        transcripts=None,
     ) -> None:
         self.protein = StubProtein(definitions or DEFINITIONS)
         self.expression = StubExpression(expression or {})
@@ -270,6 +338,8 @@ class StubProviders:
         self.precedent = StubPrecedent(precedent)
         self.homology = StubHomology(paralogues)
         self.patient_rna = StubRna(rna)
+        self.cohort = StubCohort(cohort, cohort_study)
+        self.transcript = StubTranscripts(transcripts)
         self.neoantigen = neoantigen or NoNeoantigenPredictor()
 
     def versions(self) -> dict[str, str]:
@@ -962,3 +1032,270 @@ def test_structural_resolution_of_the_mutated_residue_matches_its_own_evidence()
     c = candidate("ERBB2", [variant("ERBB2", "missense_variant", "A900V", 900)], providers)
     assert c.structure.mutation_resolved_in == 1  # only the low-resolution tail entry covers 900
     assert c.structure.candidate_epitopes[0].structurally_resolved is True
+
+
+# --- the cohort reference -------------------------------------------------------------
+
+
+def test_a_cohort_beats_a_tissue_specificity_class_as_a_selectivity_prior():
+    """How often this cancer type raises the gene above normal is measured, not inferred."""
+    plain = candidate(
+        "ERBB2",
+        [variant("ERBB2", "missense_variant", "A310V", 310)],
+        StubProviders(expression={"ERBB2": hpa_row("ERBB2", LOW)}),
+    )
+    often = candidate(
+        "ERBB2",
+        [variant("ERBB2", "missense_variant", "A310V", 310)],
+        StubProviders(
+            expression={"ERBB2": hpa_row("ERBB2", LOW)},
+            cohort={"ERBB2": cohort_row(median=2.4, fraction_raised=0.66)},
+        ),
+    )
+    rarely = candidate(
+        "ERBB2",
+        [variant("ERBB2", "missense_variant", "A310V", 310)],
+        StubProviders(
+            expression={"ERBB2": hpa_row("ERBB2", LOW)},
+            cohort={"ERBB2": cohort_row(median=0.28, fraction_raised=0.008)},
+        ),
+    )
+    assert often.scores.value("tumour_selectivity") > rarely.scores.value("tumour_selectivity")
+    assert "raises ERBB2 above normal tissue" in often.scores.components["tumour_selectivity"].basis
+    assert "tissue-specificity class" in plain.scores.components["tumour_selectivity"].basis
+    # a cohort describes a cancer type, never this patient, so it stays capped
+    assert often.scores.value("tumour_selectivity") <= 0.6
+    assert any("says nothing about this tumour" in e.claim for e in often.ledger.items)
+
+
+def test_the_cohort_is_recorded_as_population_level_context():
+    c = candidate(
+        "ERBB2",
+        [variant("ERBB2", "missense_variant", "A310V", 310)],
+        StubProviders(
+            expression={"ERBB2": hpa_row("ERBB2", LOW)},
+            cohort={"ERBB2": cohort_row(median=0.77, fraction_raised=0.11)},
+        ),
+    )
+    assert c.tumour.cohort is not None
+    assert c.tumour.cohort["fraction_raised"] == 0.11
+    assert "not this patient" in c.tumour.cohort["level"]
+    assert c.tumour.expression.value is None  # a cohort never fills in the patient's own expression
+
+
+def test_a_missing_cohort_is_asked_for_rather_than_assumed():
+    providers = StubProviders(expression={"ERBB2": hpa_row("ERBB2", LOW)})
+    c = candidate("ERBB2", [variant("ERBB2", "missense_variant", "A310V", 310)], providers)
+    a = analyse([], PROFILE, providers)
+    a["candidates"] = [c]
+    assert c.tumour.cohort is None
+    assert any("cohort" in m["input"] for m in a["missing_data"])
+
+
+def test_a_within_sample_rank_needs_no_unit_and_is_reported_when_available():
+    from genomeos.therapeutics.providers import PatientRnaProvider
+
+    table = {f"G{i}": float(i) for i in range(6000)}
+    table["ERBB2"] = 5999.5
+    p = PatientRnaProvider(table, "TPM", "s", "stub.tsv")
+    assert p.whole_transcriptome
+    assert p.rank("ERBB2") > 0.99
+    assert p.rank("G0") == 0.0
+    small = PatientRnaProvider({"ERBB2": 200.0}, "TPM", "s", "stub.tsv")
+    assert small.whole_transcriptome is False
+    assert small.rank("ERBB2") is None  # a rank over one gene would be meaningless
+    answer = p.tumour_expression("ERBB2")
+    assert answer.data["rank"] > 0.99
+    assert "rank of the 6,001 genes" in answer.evidence[0].claim
+
+
+def test_patient_rna_still_outranks_a_cohort():
+    providers = StubProviders(
+        expression={"ERBB2": hpa_row("ERBB2", LOW)},
+        cohort={"ERBB2": cohort_row(median=0.1, fraction_raised=0.01)},
+        rna={"ERBB2": 240.0},
+    )
+    c = candidate("ERBB2", [variant("ERBB2", "missense_variant", "A310V", 310)], providers)
+    basis = c.scores.components["tumour_selectivity"].basis
+    assert "240 TPM" in basis  # the patient measurement decides, not the cohort
+    assert c.tumour.cohort is not None  # the cohort is still recorded as context
+
+
+# --- reconstructing the altered protein -----------------------------------------------
+
+# A short synthetic transcript, so the reconstruction is checked against a
+# sequence whose translation can be read by eye.
+#            M   K   T   A   Y   I   A   K   Q   R   Q   I   S   F   V   K  stop
+TOY_CDS = "ATG AAA ACG GCC TAT ATT GCG AAA CAA CGC CAG ATT AGC TTT GTT AAA TGA".replace(" ", "")
+TOY_PROTEIN = "MKTAYIAKQRQISFVK"
+TRANSCRIPTS = {"ENST00000000001": TOY_CDS}
+
+
+def tx_variant(consequence: str, hgvsc: str, change: str = "", residue: int | None = None):
+    v = variant("TOY", consequence, change, residue)
+    v.transcript = "ENST00000000001"
+    v.hgvsc = hgvsc
+    return v
+
+
+TOY = defn("TOY", "P09999", TOY_PROTEIN, ["Nucleus"], ["Nucleus"])
+
+
+def toy_providers(**kw):
+    return StubProviders(definitions={**DEFINITIONS, "TOY": TOY}, transcripts=TRANSCRIPTS, **kw)
+
+
+def test_a_frameshift_yields_the_novel_stretch_a_vcf_record_cannot_show():
+    from genomeos.therapeutics.neoantigen import altered_protein
+
+    # delete one base early in the codon for Y5: everything after shifts frame
+    d = altered_protein(TOY_CDS, "c.13del")
+    assert d is not None
+    assert d["first_altered_residue"] == 5
+    assert d["novel_residues"] > 0
+    assert d["mutant_protein"][:4] == "MKTA"
+    assert d["novel_stretch"] and d["novel_stretch"] not in TOY_PROTEIN
+
+    c = build_candidate("TOY", [tx_variant("frameshift_variant", "c.13del")], PROFILE, toy_providers(), {})
+    n = c.neoantigen
+    assert n.novel_peptide_sequence is True
+    assert n.peptides
+    assert all(p.source == "frameshift_derived" for p in n.peptides)
+    assert all(p.wild_type_sequence == "" for p in n.peptides)  # no counterpart exists
+    assert "no wild-type counterpart" in n.wild_type_discrimination
+    assert "exist" in n.reason and "reference protein" in n.reason
+
+
+def test_a_truncation_is_confirmed_by_sequence_not_by_a_rule():
+    # the third base of codon 5 turns TAT into TAA, a stop
+    c = build_candidate("TOY", [tx_variant("stop_gained", "c.15T>A", "Y5*", 5)], PROFILE, toy_providers(), {})
+    n = c.neoantigen
+    assert n.novel_peptide_sequence is False
+    assert n.peptides == []
+    assert "removes protein rather than creating new sequence" in n.reason
+    assert any("confirmed by sequence, not assumed" in e.claim for e in n.evidence)
+
+
+def test_an_inframe_deletion_keeps_the_junction_as_the_tumour_specific_feature():
+    c = build_candidate("TOY", [tx_variant("inframe_deletion", "c.13_15del")], PROFILE, toy_providers(), {})
+    n = c.neoantigen
+    assert n.novel_peptide_sequence is True
+    assert n.peptides and all(p.source == "junction_derived" for p in n.peptides)
+    assert "no residue is new" in n.reason
+    assert "adjacent" in n.reason
+
+
+def test_a_substitution_reconstructed_from_the_transcript_keeps_its_wild_type_counterpart():
+    c = build_candidate(
+        "TOY", [tx_variant("missense_variant", "c.13T>G", "Y5D", 5)], PROFILE, toy_providers(), {}
+    )
+    n = c.neoantigen
+    assert n.novel_peptide_sequence is True
+    assert n.peptides
+    pep = n.peptides[0]
+    assert pep.source == "mutation_derived"
+    assert pep.wild_type_sequence and pep.wild_type_sequence != pep.sequence
+    assert sum(1 for a, b in zip(pep.sequence, pep.wild_type_sequence, strict=True) if a != b) == 1
+
+
+def test_a_frameshift_scores_above_a_substitution_because_nothing_self_resembles_it():
+    fs = build_candidate("TOY", [tx_variant("frameshift_variant", "c.13del")], PROFILE, toy_providers(), {})
+    sub = build_candidate(
+        "TOY", [tx_variant("missense_variant", "c.13T>G", "Y5D", 5)], PROFILE, toy_providers(), {}
+    )
+    assert fs.scores.value("neoantigen_strength") > sub.scores.value("neoantigen_strength")
+    assert "no wild-type counterpart" in fs.scores.components["neoantigen_strength"].basis
+
+
+def test_an_unreconstructable_change_says_so_instead_of_guessing():
+    c = build_candidate("TOY", [tx_variant("frameshift_variant", "c.-12del")], PROFILE, toy_providers(), {})
+    assert c.neoantigen.peptides == []
+    assert any("does not reconstruct" in m.reason for m in c.neoantigen.missing)
+    # and with no transcript at all, the rule-based statement still stands
+    bare = build_candidate(
+        "TOY", [variant("TOY", "frameshift_variant", "", None)], PROFILE, toy_providers(), {}
+    )
+    assert bare.neoantigen.novel_peptide_sequence is True
+    assert any("coding sequence was not available" in m.reason for m in bare.neoantigen.missing)
+
+
+def test_hgvs_coding_changes_this_module_declines_to_reconstruct():
+    from genomeos.therapeutics.neoantigen import apply_hgvs_c
+
+    assert apply_hgvs_c(TOY_CDS, "c.13del")[0] != TOY_CDS
+    assert apply_hgvs_c(TOY_CDS, "c.-5del") is None  # 5' UTR
+    assert apply_hgvs_c(TOY_CDS, "c.*5del") is None  # 3' UTR
+    assert apply_hgvs_c(TOY_CDS, "c.999del") is None  # past the end
+    assert apply_hgvs_c(TOY_CDS, "c.13A>G") is None  # reference base disagrees
+    assert apply_hgvs_c(TOY_CDS, "") is None
+    assert apply_hgvs_c(TOY_CDS, "c.13_15dup")[0].startswith(TOY_CDS[:15] + TOY_CDS[12:15])
+
+
+# --- copy number ----------------------------------------------------------------------
+
+
+def test_copy_number_bounds_expression_without_standing_in_for_it(tmp_path):
+    from genomeos.therapeutics.pipeline import copy_number_table
+
+    table = tmp_path / "cnv.tsv"
+    table.write_text("gene\tcopies\nERBB2\t12\nFLAT1\t2\n")
+    cn = copy_number_table(str(table))
+    assert cn == {"ERBB2": 12.0, "FLAT1": 2.0}
+
+    providers = StubProviders(expression={"ERBB2": hpa_row("ERBB2", LOW)})
+    amplified = PatientProfile("t", "t.vcf", copy_number=cn, copy_number_path=str(table))
+    c = build_candidate(
+        "ERBB2", [variant("ERBB2", "missense_variant", "A310V", 310)], amplified, providers, {}
+    )
+    assert c.tumour.copy_number.value == 12.0
+    assert c.tumour.copy_number.patient_specific is True
+    assert any("amplification raises the amount" in e.claim for e in c.tumour.evidence)
+    # it scores, but below what a measurement of expression could reach, and it
+    # never fills in the expression itself
+    score = c.scores.value("tumour_expression")
+    assert 0 < score <= 0.5
+    assert "copy number bounds what a cell could make" in c.scores.components["tumour_expression"].basis
+    assert c.tumour.expression.value is None
+
+    flat = build_candidate(
+        "FLAT1", [variant("FLAT1", "missense_variant", "A100V", 100)], amplified, providers, {}
+    )
+    assert flat.scores.value("tumour_expression") == 0.0  # diploid is not evidence of over-display
+
+
+def test_rna_outranks_copy_number_when_both_are_present(tmp_path):
+    table = tmp_path / "cnv.tsv"
+    table.write_text("ERBB2\t12\n")
+    from genomeos.therapeutics.pipeline import copy_number_table
+
+    profile = PatientProfile(
+        "t", "t.vcf", copy_number=copy_number_table(str(table)), copy_number_path=str(table)
+    )
+    providers = StubProviders(expression={"ERBB2": hpa_row("ERBB2", LOW)}, rna={"ERBB2": 240.0})
+    c = build_candidate("ERBB2", [variant("ERBB2", "missense_variant", "A310V", 310)], profile, providers, {})
+    assert "RNA-seq" in c.scores.components["tumour_expression"].basis
+    assert c.scores.value("tumour_expression") > 0.5
+
+
+def test_the_data_level_reports_both_the_break_and_what_was_supplied():
+    bare = PatientProfile("t", "t.vcf").levels()
+    assert bare["level_reached"] == 1 and bare["highest_input_present"] == 1
+    assert "higher level" in bare["note"] and "Inputs from higher levels" not in bare["note"]
+
+    mixed = PatientProfile("t", "t.vcf", hla_alleles=["HLA-A*02:01"], copy_number={"APP": 9.0}).levels()
+    assert mixed["level_reached"] == 1  # the chain breaks at the matched normal
+    assert mixed["highest_input_present"] == 7
+    assert "Inputs from higher levels were supplied" in mixed["note"]
+    assert set(mixed["inputs_present"]) == {"tumour_vcf", "copy_number", "hla"}
+
+    full = PatientProfile(
+        "t", "t.vcf", normal_vcf="n.vcf", rna_path="r.tsv", copy_number={"APP": 9.0}
+    ).levels()
+    assert full["level_reached"] == 4
+
+
+def test_supplied_hla_alleles_are_recorded_even_when_the_variant_makes_no_peptide():
+    profile = PatientProfile("t", "t.vcf", hla_alleles=["HLA-A*02:01"])
+    c = build_candidate("TOY", [tx_variant("stop_gained", "c.15T>A", "Y5*", 5)], profile, toy_providers(), {})
+    assert c.neoantigen.peptides == []
+    assert c.neoantigen.hla_alleles == ["HLA-A*02:01"]  # supplied, just not useful here

@@ -251,6 +251,8 @@ class TumourState:
     purity: float | None = None
     clonality: Clonality = "unknown"
     clonality_reason: str = "no variant allele fraction or tumour purity supplied"
+    expression_rank: float | None = None  # within this tumour's own transcriptome
+    cohort: dict[str, Any] | None = None  # how the gene behaves across this cancer type
     evidence: list[Evidence] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
@@ -263,6 +265,8 @@ class TumourState:
             "copy_number": self.copy_number.to_dict(),
             "vaf": self.vaf,
             "purity": self.purity,
+            "expression_rank_in_sample": self.expression_rank,
+            "cohort": self.cohort,
             "clonality": self.clonality,
             "clonality_reason": self.clonality_reason if self.clonality == "unknown" else "",
             "evidence": [e.to_dict() for e in self.evidence],
