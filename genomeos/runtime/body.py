@@ -55,6 +55,8 @@ class Cell:
     x: int | None = None  # grid position when the organism has a space
     y: int | None = None
     move_at: float | None = None  # next step of a recurring migration
+    measured: set[str] = field(default_factory=set)  # factors set by express decisions (the reader)
+    stated: set[str] = field(default_factory=set)  # factors stated by mechanism: maternal load, asymmetry
 
     @property
     def end(self) -> float:
@@ -136,6 +138,7 @@ class Body:
             self._push(to_minutes(st.start, st.unit), "", "stage")
         factors = {f: "present" for f in list(o.factors) + sorted(self.adds) if f not in self.knockouts}
         root = Cell(o.root, "", 0, 0.0, o.cell_type, factors)
+        root.stated = set(factors)
         root.population = o.resolution == "populations"
         if self.spatial:
             root.x, root.y = o.origin
@@ -319,11 +322,14 @@ class Body:
             if d.id not in c.fired:
                 c.fired.append(d.id)
                 self.fired[d.id] += 1
-        for f in list(c.factors):
-            if f in self._expressed_names and f not in wanted:
+        # only factors that came from the reader are replaced; maternal factors, asymmetric inheritance and
+        # signals are stated mechanism and keep their say even when a reporter does not see the protein
+        for f in c.measured - wanted - c.stated:
+            if c.factors.get(f) == "present":
                 del c.factors[f]
         for f in wanted:
             c.factors.setdefault(f, "present")
+        c.measured = set(wanted) - c.stated
 
     def _split(self, c: Cell, d: Decision) -> None:
         """A fraction of a population differentiates into the target pool (created on first use)."""
@@ -344,6 +350,8 @@ class Body:
             name, c.lineage, c.generation, self.time, cell_type, dict(c.factors), parent=c.name, count=amount
         )
         child.population = True
+        child.measured = set(c.measured)
+        child.stated = set(c.stated)
         self._add(child, c)
 
     def _flow(self, c: Cell, did: str) -> None:
@@ -552,20 +560,25 @@ class Body:
             del self.occupied[(c.x, c.y)]
         for i, name in enumerate(names):
             factors = dict(c.factors)
+            stated = set(c.stated)
             for factor, keeper in d.asymmetric.items():
                 keep = (
                     keeper == name or (name.endswith(keeper) and len(keeper) == 1) or keeper == ("a", "p")[i]
                 )
                 if keep and factor not in self.knockouts:
                     factors[factor] = factors.get(factor, "present")
+                    stated.add(factor)
                 else:
                     factors.pop(factor, None)
+                    stated.discard(factor)
             lineage = d.lineages.get(name, c.lineage)
             generation = 0 if name in d.lineages else c.generation + 1
             child = Cell(
                 name, lineage, generation, self.time, c.cell_type, factors, parent=c.name, count=c.count
             )
             child.population = c.population
+            child.measured = {f for f in c.measured if f in factors}
+            child.stated = {f for f in stated if f in factors}
             if sites[i] is not None:
                 child.x, child.y = sites[i]
                 self.occupied[sites[i]] = name

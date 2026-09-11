@@ -163,8 +163,7 @@ def test_distilled_atlas_agrees_with_the_textbook():
     )  # HLH-1 marks body-wall muscle, not the pharyngeal and other muscles
     assert by["PHA-4"]["precision"] > 0.8
     cells = load_cells()
-    gut = [
-        c for c in ("Ea", "Ep", "Eal", "Ear", "Epl", "Epr") if c in cells
-    ]  # END-1 and ELT-2 come on in E's daughters
-    assert gut and all("END-1" in cells[c] or "ELT-2" in cells[c] for c in gut) and "PHA-4" not in cells["E"]
+    # END-1 comes on at the 4E stage, ELT-2 at 8E, as the genetics says; E itself carries neither, nor PHA-4
+    assert all("END-1" in cells[c] for c in ("Eal", "Ear", "Epl", "Epr"))
+    assert all("ELT-2" in cells[c] for c in ("Ealaa", "Eprpp")) and "PHA-4" not in cells["E"]
     assert Path("data/organisms/celegans/reader.bio").exists()
