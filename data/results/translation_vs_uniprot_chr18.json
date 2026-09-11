@@ -1,0 +1,29 @@
+{
+  "result": "translation_vs_uniprot_chr18",
+  "date": "2026-09-11",
+  "chrom": "chr18",
+  "genes_checked": 259,
+  "exact_canonical": 238,
+  "exact_canonical_fraction": 0.9189,
+  "exact_some_isoform": 258,
+  "exact_some_isoform_fraction": 0.9961,
+  "canonical_differs_but_another_isoform_matches": 20,
+  "same_protein_different_boundaries": 0,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.8151,
+      "gene": "TGIF1",
+      "accession": "Q15583",
+      "transcript": "TGIF1-202",
+      "ours_aa": 272,
+      "uniprot_aa": 401,
+      "identity_canonical": 0.0549,
+      "identity_best_isoform": 0.0823,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 1,
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

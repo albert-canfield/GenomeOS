@@ -1,0 +1,77 @@
+{
+  "result": "translation_vs_uniprot_chr14",
+  "date": "2026-09-11",
+  "chrom": "chr14",
+  "genes_checked": 593,
+  "exact_canonical": 519,
+  "exact_canonical_fraction": 0.8752,
+  "exact_some_isoform": 572,
+  "exact_some_isoform_fraction": 0.9646,
+  "canonical_differs_but_another_isoform_matches": 53,
+  "same_protein_different_boundaries": 12,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.1826,
+      "gene": "SFTA3",
+      "accession": "P0C7M3",
+      "transcript": "SFTA3-213",
+      "ours_aa": 136,
+      "uniprot_aa": 94,
+      "identity_canonical": 0.0221,
+      "identity_best_isoform": 0.0221,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.7287,
+      "gene": "OR4Q2",
+      "accession": "P0C623",
+      "transcript": "OR4Q2-201",
+      "ours_aa": 180,
+      "uniprot_aa": 314,
+      "identity_canonical": 0.5669,
+      "identity_best_isoform": 0.5669,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8015,
+      "gene": "OR4K3",
+      "accession": "Q96R72",
+      "transcript": "OR4K3-201",
+      "ours_aa": 214,
+      "uniprot_aa": 315,
+      "identity_canonical": 0.6571,
+      "identity_best_isoform": 0.6571,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.837,
+      "gene": "OR11H7",
+      "accession": "Q8NGC8",
+      "transcript": "OR11H7-201",
+      "ours_aa": 226,
+      "uniprot_aa": 314,
+      "identity_canonical": 0.7197,
+      "identity_best_isoform": 0.7197,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8384,
+      "gene": "SERPINA2",
+      "accession": "P20848",
+      "transcript": "SERPINA2-201",
+      "ours_aa": 309,
+      "uniprot_aa": 421,
+      "identity_canonical": 0.7268,
+      "identity_best_isoform": 0.7268,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 5,
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

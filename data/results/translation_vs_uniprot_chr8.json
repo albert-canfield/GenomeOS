@@ -1,0 +1,53 @@
+{
+  "result": "translation_vs_uniprot_chr8",
+  "date": "2026-09-11",
+  "chrom": "chr8",
+  "genes_checked": 684,
+  "exact_canonical": 634,
+  "exact_canonical_fraction": 0.9269,
+  "exact_some_isoform": 670,
+  "exact_some_isoform_fraction": 0.9795,
+  "canonical_differs_but_another_isoform_matches": 36,
+  "same_protein_different_boundaries": 8,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.26,
+      "gene": "DEFB109D",
+      "accession": "P0DY26",
+      "transcript": "DEFB109D-201",
+      "ours_aa": 13,
+      "uniprot_aa": 87,
+      "identity_canonical": 0.1494,
+      "identity_best_isoform": 0.1494,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.4557,
+      "gene": "PINX1",
+      "accession": "Q96BK5",
+      "transcript": "PINX1-219",
+      "ours_aa": 440,
+      "uniprot_aa": 328,
+      "identity_canonical": 0.3273,
+      "identity_best_isoform": 0.3273,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8243,
+      "gene": "MROH5",
+      "accession": "Q6ZUA9",
+      "transcript": "MROH5-201",
+      "ours_aa": 924,
+      "uniprot_aa": 1318,
+      "identity_canonical": 0.7011,
+      "identity_best_isoform": 0.7011,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 3,
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

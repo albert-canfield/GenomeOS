@@ -1,0 +1,41 @@
+{
+  "result": "translation_vs_uniprot_chr20",
+  "date": "2026-09-11",
+  "chrom": "chr20",
+  "genes_checked": 523,
+  "exact_canonical": 473,
+  "exact_canonical_fraction": 0.9044,
+  "exact_some_isoform": 514,
+  "exact_some_isoform_fraction": 0.9828,
+  "canonical_differs_but_another_isoform_matches": 41,
+  "same_protein_different_boundaries": 5,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.7558,
+      "gene": "WFDC6",
+      "accession": "Q9BQY6",
+      "transcript": "WFDC6-201",
+      "ours_aa": 86,
+      "uniprot_aa": 131,
+      "identity_canonical": 0.5649,
+      "identity_best_isoform": 0.5649,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8347,
+      "gene": "GCNT7",
+      "accession": "Q6ZNI0",
+      "transcript": "GCNT7-201",
+      "ours_aa": 308,
+      "uniprot_aa": 430,
+      "identity_canonical": 0.0372,
+      "identity_best_isoform": 0.0372,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 2,
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

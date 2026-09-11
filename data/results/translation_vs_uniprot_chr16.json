@@ -1,0 +1,65 @@
+{
+  "result": "translation_vs_uniprot_chr16",
+  "date": "2026-09-11",
+  "chrom": "chr16",
+  "genes_checked": 816,
+  "exact_canonical": 738,
+  "exact_canonical_fraction": 0.9044,
+  "exact_some_isoform": 801,
+  "exact_some_isoform_fraction": 0.9816,
+  "canonical_differs_but_another_isoform_matches": 63,
+  "same_protein_different_boundaries": 9,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.5714,
+      "gene": "NPIPB3",
+      "accession": "Q92617",
+      "transcript": "NPIPB3-209",
+      "ours_aa": 420,
+      "uniprot_aa": 1050,
+      "identity_canonical": 0.0371,
+      "identity_best_isoform": 0.341,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8302,
+      "gene": "C16orf82",
+      "accession": "Q7Z2V1",
+      "transcript": "C16orf82-201",
+      "ours_aa": 154,
+      "uniprot_aa": 217,
+      "identity_canonical": 0.0553,
+      "identity_best_isoform": 0.0553,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8735,
+      "gene": "MSLNL",
+      "accession": "Q96KJ4",
+      "transcript": "MSLNL-202",
+      "ours_aa": 752,
+      "uniprot_aa": 702,
+      "identity_canonical": 0.0559,
+      "identity_best_isoform": 0.0559,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8842,
+      "gene": "SLC22A31",
+      "accession": "A6NKX4",
+      "transcript": "SLC22A31-207",
+      "ours_aa": 446,
+      "uniprot_aa": 556,
+      "identity_canonical": 0.0773,
+      "identity_best_isoform": 0.0863,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 4,
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

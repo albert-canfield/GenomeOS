@@ -1,0 +1,89 @@
+{
+  "result": "translation_vs_uniprot_chr10",
+  "date": "2026-09-11",
+  "chrom": "chr10",
+  "genes_checked": 713,
+  "exact_canonical": 643,
+  "exact_canonical_fraction": 0.9018,
+  "exact_some_isoform": 701,
+  "exact_some_isoform_fraction": 0.9832,
+  "canonical_differs_but_another_isoform_matches": 58,
+  "same_protein_different_boundaries": 4,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.1745,
+      "gene": "C10orf95",
+      "accession": "Q9H7T3",
+      "transcript": "C10orf95-201",
+      "ours_aa": 213,
+      "uniprot_aa": 257,
+      "identity_canonical": 0.0856,
+      "identity_best_isoform": 0.0856,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8097,
+      "gene": "AGAP9",
+      "accession": "Q5VTM2",
+      "transcript": "AGAP9-201",
+      "ours_aa": 658,
+      "uniprot_aa": 703,
+      "identity_canonical": 0.0413,
+      "identity_best_isoform": 0.0413,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.863,
+      "gene": "PNLIPRP2",
+      "accession": "P54317",
+      "transcript": "PNLIPRP2-201",
+      "ours_aa": 356,
+      "uniprot_aa": 469,
+      "identity_canonical": 0.7591,
+      "identity_best_isoform": 0.7591,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8706,
+      "gene": "PANK1",
+      "accession": "Q8TE04",
+      "transcript": "PANK1-201",
+      "ours_aa": 461,
+      "uniprot_aa": 598,
+      "identity_canonical": 0.0401,
+      "identity_best_isoform": 0.0401,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8879,
+      "gene": "DUSP13B",
+      "accession": "Q9UII6",
+      "transcript": "DUSP13B-209",
+      "ours_aa": 417,
+      "uniprot_aa": 198,
+      "identity_canonical": 0.0264,
+      "identity_best_isoform": 0.0484,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8913,
+      "gene": "PTCHD3",
+      "accession": "Q3KNS1",
+      "transcript": "PTCHD3-201",
+      "ours_aa": 767,
+      "uniprot_aa": 954,
+      "identity_canonical": 0.804,
+      "identity_best_isoform": 0.804,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 6,
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}
