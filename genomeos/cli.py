@@ -1800,6 +1800,26 @@ def cmd_segments(args: argparse.Namespace) -> int:
             f"(ENCODE promoter-like elements, {args.promoter_anchored:,} bp downstream)"
         )
         name += "_anchored"
+    post_filter = None
+    if args.rna_filter is not None:
+        from genomeos.predict import status
+        from genomeos.predict.rna_tracks import RnaCoverage, filter_predictions
+        from genomeos.predict.splice_sites import client_factory
+
+        st = status()
+        if not st["enabled"]:
+            print(f"AlphaGenome RNA tracks are disabled: {st['reason']}. To enable: {st['how']}")
+            return 2
+        cov = RnaCoverage(args.chrom, length).load(
+            client_factory, progress=lambda m: print("  " + m, flush=True)
+        )
+        cs = cov.summary()
+        print(
+            f"{args.chrom}: predicted RNA over {cs['windows']} windows ({cs['requests_this_run']} requests); "
+            f"transcribed bases + {cs['transcribed_bases']['+']:,}, − {cs['transcribed_bases']['-']:,} "
+            f"(coverage ≥ {cs['coverage_threshold']} in a panel of {len(cs['panel'])} tissues)"
+        )
+        post_filter = lambda preds: filter_predictions(preds, cov, args.rna_filter)  # noqa: E731
     r = parse_chromosome(
         args.chrom,
         seq,
@@ -1809,9 +1829,14 @@ def cmd_segments(args: argparse.Namespace) -> int:
         sites=sites,
         start_windows=start_windows,
         coding_model=args.coding,
+        post_filter=post_filter,
     )
     if args.coding != "codon":
         name += f"_{args.coding}"
+    if args.rna_filter is not None:
+        name += "_rna"
+        r["rna"] = {**cs, "min_exon_fraction": args.rna_filter}
+        r["evidence"] += "; candidates kept only where AlphaGenome predicts RNA over their exons (predicted)"
     if args.predicted_sites:
         r["splice_sites"] = sm
     if start_windows is not None:
@@ -3274,6 +3299,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--predicted-sites",
         action="store_true",
         help="feature c: take donors and acceptors from AlphaGenome's splice-site tracks (needs the key)",
+    )
+    p.add_argument(
+        "--rna-filter",
+        type=float,
+        nargs="?",
+        const=0.3,
+        default=None,
+        metavar="FRACTION",
+        help="keep only candidates whose exons AlphaGenome predicts transcribed (mean fraction, default 0.3)",
     )
     p.add_argument(
         "--coding",

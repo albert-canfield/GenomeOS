@@ -225,6 +225,37 @@ tested against it.
    frame from a gene is RNA over its exons, not chromatin at its start;
    that needs expression tracks (GTEx per gene exists in the RNA layer,
    AlphaGenome's RNA-seq tracks per base), which is the next experiment.
+
+   **RNA over the exons (2026-09-12).** That experiment: AlphaGenome's
+   predicted RNA-seq coverage per base and strand for a panel of eight
+   tissues (liver, brain, lung, colon, kidney, heart, prostate, ovary; 45
+   requests of 1 Mb for chr21, runs of bases with coverage ≥ 0.5 kept sparse
+   under `data/knowledge/alphagenome/rna`, `genomeos/predict/rna_tracks.py`),
+   used as a filter after the parse: a candidate stays if its exons are
+   predicted transcribed on its strand (`--rna-filter FRACTION`, mean
+   covered fraction of the exons).
+
+   | predicted sites, then… | candidates | exons (sens / prec) | canonical exons | genes (sens / prec) |
+   |---|---|---|---|---|
+   | no filter | 1,003 | 40.1% / 46.2% | 74.8% | 84.2% / 20.0% |
+   | RNA over ≥ 30% of exon bases | 82 | 32.9% / **68.6%** | 61.0% | 57.9% / **92.7%** |
+   | RNA over ≥ 50% | 71 | 29.4% / 71.3% | 54.8% | 51.1% / 95.8% |
+   | RNA over ≥ 80% | 33 | 12.2% / 83.7% | 23.0% | 21.3% / 90.9% |
+   | + starts at ENCODE promoters, RNA ≥ 50% | 48 | 24.0% / 72.6% | 44.6% | 42.1% / 100% |
+
+   (`segments_chr21_predicted_sites_rna.json`.) This is the lever. Nine in
+   ten candidates that survive the RNA filter are real genes, against one in
+   five before it, and the exons they draw are right two times in three. What
+   the filter costs is the genes the panel does not express: sensitivity
+   falls to 58% because eight tissues are not the body, not because the
+   parser lost them (the candidates are still there in the unfiltered run).
+   The honest summary of the whole parser series is therefore: sequence
+   signals find the gene bodies (89% of genes are hit by some candidate) and,
+   with predicted splice sites, most of their canonical exons (75%);
+   telling a gene from an open reading frame needs evidence that it is
+   transcribed, and with that evidence the parser's calls become believable.
+   Everything predicted stays `predicted`; the grammar-only run is the
+   fallback without the key.
 2. Promoter motif scanning with JASPAR matrices to derive `requires` lists
    with evidence, and to give `cell_type ... expresses:` a sequence-level
    justification.

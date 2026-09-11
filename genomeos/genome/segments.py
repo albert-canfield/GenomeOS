@@ -464,6 +464,7 @@ def parse_chromosome(
     sites=None,
     start_windows: dict[str, list[tuple[int, int]]] | None = None,
     coding_model: str = "codon",
+    post_filter=None,
 ) -> dict[str, Any]:
     """Learn coding potential from the annotation, parse the chromosome in windows, evaluate.
     `sites` is an optional external splice-site oracle, `start_windows` an optional restriction of
@@ -506,7 +507,11 @@ def parse_chromosome(
             continue
         kept.append(p)
     kept.sort(key=lambda p: p.start)
+    candidates = len(kept)
+    if post_filter is not None:  # evidence beyond sequence: keep the candidates it supports
+        kept = post_filter(kept)
     ev = evaluate(kept, annotation, chrom)
+    ev["candidates_before_filter"] = candidates
     return {
         "chrom": chrom,
         "min_relative": min_relative,
