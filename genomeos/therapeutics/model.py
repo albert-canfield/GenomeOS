@@ -407,6 +407,7 @@ class StructureContext:
     target_domain: str | None = None
     residue_range: list[int] | None = None
     mutation_position: int | None = None
+    mutation_resolved_in: int | None = None  # deposited structures covering the altered residue
     surface_accessibility: Measure = field(
         default_factory=lambda: Measure.unavailable("not computed; no coordinates loaded")
     )
@@ -422,6 +423,7 @@ class StructureContext:
             "target_domain": self.target_domain,
             "residue_range": self.residue_range,
             "mutation_position": self.mutation_position,
+            "mutation_resolved_in_structures": self.mutation_resolved_in,
             "surface_accessibility": self.surface_accessibility.to_dict(),
             "candidate_epitopes": [e.to_dict() for e in self.candidate_epitopes],
             "evidence": [e.to_dict() for e in self.evidence],

@@ -4,7 +4,7 @@
  "provenance": {
   "genomeos_version": "0.1.0",
   "pipeline_version": "therapeutics/1.0",
-  "generated": "2026-09-11T02:09:53+0100",
+  "generated": "2026-09-11T02:14:34+0100",
   "sample": "data/demo/cancer_tumour.vcf",
   "sample_id": "cancer_tumour",
   "input_hashes": {
@@ -904,7 +904,7 @@
       },
       "extracellular": false,
       "surface_accessible": false,
-      "structurally_resolved": false,
+      "structurally_resolved": true,
       "predicted_bindable": null,
       "experimentally_validated": null,
       "tumour_specific_change": "N770K",

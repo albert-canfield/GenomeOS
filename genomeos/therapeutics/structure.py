@@ -127,6 +127,7 @@ def context(
                 )
             )
         covering = [e for e in exp if (c := _covered(e)) and c[0] <= residue <= c[1]]
+        ctx.mutation_resolved_in = len(covering)
         if covering:
             best = min(covering, key=lambda x: x.get("resolution_A") or 99)
             ctx.evidence.append(
@@ -196,21 +197,8 @@ def mutation_epitope(
             ep.reference_context = sequence[a:b]
             ep.mutant_context = sequence[a : residue - 1] + mutant + sequence[residue:b]
             ep.region = Region("epitope_window", a + 1, b, f"{flank} residues either side of {residue}")
-    home = next(
-        (r for r in localisation.extracellular_regions if r.contains(residue)),
-        None,
-    )
-    if home and ctx.pdb_ids:
-        resolved = any(
-            r.get("residue_range") and r["residue_range"][0] <= residue <= r["residue_range"][1]
-            for r in ctx.pdb_ids
-        )
-        ep.structurally_resolved = resolved
-    elif ctx.pdb_ids:
-        ep.structurally_resolved = any(
-            r.get("residue_range") and r["residue_range"][0] <= residue <= r["residue_range"][1]
-            for r in ctx.pdb_ids
-        )
+    if ctx.mutation_resolved_in is not None:
+        ep.structurally_resolved = ctx.mutation_resolved_in > 0
     ep.surface_accessible = None if outside else False
     ep.predicted_bindable = None
     ep.experimentally_validated = None

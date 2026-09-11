@@ -70,6 +70,19 @@ THERAPEUTIC MECHANISM RECOMMENDATIONS
 
   Scores above are computational compatibility scores. They are not response probabilities.
 
+  Existing therapeutic precedent:
+  - APP: approved agents already engage this target (Aducanumab, Donanemab,
+    Lecanemab), which supports adcc, adcp, agonist_antibody,
+    blocking_antibody, complement_recruitment, nk_cell_engager,
+    t_cell_engager, targeted_radionuclide as reachable modalities. An existing
+    drug against this gene does not mean it suits this patient's tumour, whose
+    alteration, expression and disease context may differ entirely.
+  - CSF1R: approved agents already engage this target (Pazopanib, Pazopanib
+    Hydrochloride, Pexidartinib, Pexidartinib Hydrochloride, Quizartinib),
+    which supports targeted_radionuclide as reachable modalities. An existing
+    drug against this gene does not mean it suits this patient's tumour, whose
+    alteration, expression and disease context may differ entirely.
+
 COMBINATION TARGET LOGIC
 ------------------------------------------------------------------------------
   APP AND CSF1R: requiring both APP and CSF1R lowers the worst weighted healthy-tissue load from 669.1 (cerebral cortex) to 53.4 (spleen)
@@ -146,7 +159,7 @@ Internalisation:
 
 Structure:
   experimental entries: 12  predicted: P05067  extracellular region resolved: yes
-  epitope N770K at residue 770: extracellular=no, structurally resolved=no
+  epitope N770K at residue 770: extracellular=no, structurally resolved=yes
     reference KFFEQMQN -> mutant KFFEQMQK
 
 Neoantigen / HLA route:

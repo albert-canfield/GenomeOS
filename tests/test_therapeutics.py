@@ -943,3 +943,22 @@ def test_the_web_endpoint_returns_the_analysis(tmp_path):
     gene = out["therapeutic_candidates"][0]["gene"]
     assert "readiness" in out["design"][gene]
     assert "negative_targets" in out["design"][gene]
+
+
+def test_structural_resolution_of_the_mutated_residue_matches_its_own_evidence():
+    """The epitope field must agree with the deposited structures, not a display subset."""
+    many = json.loads(json.dumps(RECEPTOR))
+    many["sections"]["structures_experimental"]["items"] = [
+        {
+            "source": "PDB",
+            "id": f"X{i:03d}",
+            "method": "X_RAY",
+            "resolution_A": 1.0 + i * 0.1,
+            "chains": "A=23-624",
+        }
+        for i in range(20)
+    ] + [{"source": "PDB", "id": "TAIL", "method": "X_RAY", "resolution_A": 9.9, "chains": "A=700-1255"}]
+    providers = StubProviders(definitions={**DEFINITIONS, "ERBB2": many})
+    c = candidate("ERBB2", [variant("ERBB2", "missense_variant", "A900V", 900)], providers)
+    assert c.structure.mutation_resolved_in == 1  # only the low-resolution tail entry covers 900
+    assert c.structure.candidate_epitopes[0].structurally_resolved is True

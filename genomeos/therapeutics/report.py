@@ -329,6 +329,26 @@ def text_report(analysis: dict[str, Any], detail: int = 5) -> str:
         "",
         "  Scores above are computational compatibility scores. They are not response probabilities.",
     ]
+    precedent_rows = []
+    for c in candidates:
+        hits = [m for m in c.therapeutic_mechanisms if m.viable and (m.precedent or {}).get("approved")]
+        if not hits:
+            continue
+        examples = sorted({e for m in hits for e in m.precedent["examples"]})
+        mechanisms = sorted({m.mechanism for m in hits})
+        precedent_rows.append((c.gene, examples, mechanisms))
+    if precedent_rows:
+        lines += ["", "  Existing therapeutic precedent:"]
+        for gene, examples, mechanisms in precedent_rows[:6]:
+            lines.extend(
+                _wrap(
+                    f"{gene}: approved agents already engage this target ({', '.join(examples)}), which "
+                    f"supports {', '.join(mechanisms)} as reachable modalities. An existing drug against "
+                    "this gene does not mean it suits this patient's tumour, whose alteration, "
+                    "expression and disease context may differ entirely.",
+                    "  - ",
+                )
+            )
     lines += ["", "COMBINATION TARGET LOGIC", THIN]
     combos = analysis.get("combinations") or []
     for x in combos:
