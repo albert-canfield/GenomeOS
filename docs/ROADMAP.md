@@ -86,7 +86,7 @@ Boundary rules (from ARCHITECTURE.md §10) and where they are broken today:
 | Standard library written in BioLang, not Python | holds (ageing, cell_types, development) |
 | One thin entry point (`bio`) | holds (`genomeos/bio.py`, 333 lines) |
 | No dependencies in the language core | holds |
-| Engines import nothing from genome, knowledge or web | **broken twice**: `runtime/central_dogma.py` and `runtime/variant_effect.py` import the genome layer. Fix: move the codon tables and translation into the engine and have the genome layer call them, not the reverse |
+| Engines import nothing from genome, knowledge or web | **now a licensing rule too** (D40: an Apache-2.0 engine file importing AGPL application code could not be distributed as Apache). `runtime/variant_effect.py` fixed on 2026-09-11: `Locus`/`Strand` come from `genomeos.coords`, a variant is a structural protocol, reverse-complement is local. Still crossing: `runtime/central_dogma.py` imports `genomeos.genome.sequence.Sequence`, and `bio.py` imports three command functions from `genomeos.cli` — the standalone toolchain depending on the application CLI |
 | `lang` and `ir` depend only on themselves | `Locus` lives in `genomeos/coords.py`; move it under `ir` when the packages split |
 
 ### 2.1 Where each component stands (2026-09-11)

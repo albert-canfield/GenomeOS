@@ -15,6 +15,17 @@ built on it.
 | **Distilled results** — `data/results/` | | derived from their upstream sources, whose terms apply | each summary names its source; see [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md). |
 | **BioLang programs** — `data/demo/`, `data/organisms/` | | Apache License 2.0, as part of the engine's standard material | programs are meant to be copied and adapted. |
 
+**The dependency direction is the rule that keeps the split honest.** The
+application may import the engine; the engine may never import the
+application. Apache 2.0 code can be used inside an AGPL work, so
+`genomeos/genome` and `genomeos/molecules` importing `genomeos/runtime` is
+fine. The reverse is not: an Apache-licensed file that imports AGPL code is a
+work based on it, and could not honestly be distributed as Apache. This is the
+same one-way rule [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) §10 already
+states for the engine boundary, and it is now a licensing requirement as well
+as an architectural one. Adding an application import to an engine file
+relicenses that file by accident; do not do it.
+
 `SPDX-License-Identifier` headers on the package entry points state this in
 machine-readable form. When BioLang is split into its own package (roadmap
 milestone 2.0), the engine paths above move across unchanged and the split

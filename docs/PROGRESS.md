@@ -281,3 +281,13 @@ draws, so the engine can spread and the application cannot be taken private.
 - **Non-commercial licences were considered and rejected** (PolyForm Noncommercial, CC BY-NC): they are not open source, they would bar exactly the internal research use by a company that adoption depends on, and they protect nothing the AGPL does not already protect.
 - **The data question is separate from the code question**, and saying so plainly is the honest part: AlphaGenome, NetMHCpan, COSMIC and some cBioPortal studies are non-commercial or academic whatever GenomeOS's licence says, so a commercial user must check every source they enable. LICENSING.md holds the path map and the reasoning, NOTICE the summary, ACKNOWLEDGEMENTS.md every library, model and source with its terms.
 - Both licence texts are byte-identical to the FSF and Apache originals; SPDX headers mark the package entry points; `pyproject` carries the classifiers and ships both texts with the wheel. Commits published before today remain MIT, which the documents state rather than hide.
+
+## 2026-09-11 — the licence split has a dependency direction (D40)
+
+Raised by the session that owns the genome and molecules layers, and correct:
+the engine/application boundary stopped being only an architectural preference
+the moment the two halves took different licences.
+
+- **The rule**: the application may import the engine; the engine may never import the application. Apache 2.0 code sits happily inside an AGPL work, so `genomeos/genome` importing `genomeos/runtime` is fine. The reverse is not: an Apache-marked file that imports AGPL code is a work based on it and could not honestly be distributed as Apache. Adding such an import relicenses that file by accident. Stated in LICENSING.md and ROADMAP.md §2.
+- **`runtime/variant_effect.py` fixed**: `Locus` and `Strand` now come from `genomeos.coords` (they always lived there; the genome layer only re-exports them), a variant is a structural `Protocol` that the application's VCF-backed class satisfies without the engine importing it, and reverse-complement is a four-line local helper instead of the application's `Sequence` class. No behaviour change; variant-effect, flow-trace, index-variant and twin tests unchanged.
+- **Still crossing the line, in files owned by another session**: `runtime/central_dogma.py` imports `Sequence` from the genome layer, and `bio.py` imports three command functions from `genomeos.cli`, so the toolchain that is meant to stand alone currently depends on the application's command line. Both are recorded in the roadmap as the remaining engine-boundary work.
