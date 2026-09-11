@@ -19,6 +19,20 @@
     draw();
   }
   window.addEventListener('resize', resize);
+  // fetch another chromosome as a background job (Progress tab shows it)
+  document.addEventListener('DOMContentLoaded', () => {
+    const sel = $('#b-fetch-chrom'); if (!sel) return;
+    const all = [...Array.from({length: 22}, (_, i) => 'chr' + (i + 1)), 'chrX', 'chrY', 'chrM'];
+    sel.innerHTML = all.map(c => `<option>${c}</option>`).join(''); sel.value = 'chr22';
+    $('#b-fetch').onclick = async () => {
+      const c = sel.value; $('#b-fetch-status').textContent = `fetching ${c} in the background…`;
+      try {
+        await window.api('/api/jobs/start', {name: 'fetch_' + c});
+        const poll = async () => { const r = await window.api('/api/jobs'); const j = r.jobs.find(x => x.name === 'fetch_' + c); if (!j) return; if (j.state === 'running') { $('#b-fetch-status').textContent = `fetching ${c}: ${(j.last_lines[j.last_lines.length - 1] || '').trim()}`; setTimeout(poll, 4000); } else { $('#b-fetch-status').textContent = j.state === 'done' ? `${c} ready: reload the page to see it in the file list` : `${c}: ${j.state}`; } };
+        setTimeout(poll, 2000);
+      } catch (e) { $('#b-fetch-status').textContent = e.message; }
+    };
+  });
   window.blocksResize = resize;
 
   const X = pos => (pos - st.view[0]) / (st.view[1] - st.view[0]) * canvas.width;

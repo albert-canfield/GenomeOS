@@ -69,6 +69,17 @@ CATALOG: dict[str, dict] = {
     },
 }
 
+# one fetch job per human chromosome: bring it to full footing (sequence, models, elements, repeats)
+CHROMOSOMES = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]
+for _c in CHROMOSOMES:
+    CATALOG[f"fetch_{_c}"] = {
+        "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--chrom", _c],
+        "describe": f"Fetch {_c}: sequence, GENCODE rows, ENCODE elements, RepeatMasker.",
+        "total": 1,
+        "result": f"rmsk_{_c}",
+        "count": lambda r: 1 if r else 0,
+    }
+
 
 @dataclass(slots=True)
 class JobStatus:

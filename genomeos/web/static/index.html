@@ -263,6 +263,9 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label data-tip="Chromosome name inside the file.">chromosome <input id="b-chrom" placeholder="chr21" style="width:90px" class="mono"></label>
       <button class="primary" id="b-load" data-tip="Load the chromosome's blocks (genes for the whole chromosome; transcripts and exons appear when zoomed under 3 Mb)."><i class="ic">📂</i>Load</button>
       <button class="ghost" id="b-zoomout" data-tip="Show the whole chromosome."><i class="ic">🗺️</i>Whole</button>
+      <label data-tip="Bring another chromosome to full footing in the background: sequence, gene models, ENCODE elements and RepeatMasker (10-90 MB kept). It appears in the file list when done; the Progress tab shows the job.">fetch <select id="b-fetch-chrom" class="mono" style="width:90px"></select></label>
+      <button class="ghost" id="b-fetch" data-tip="Start the fetch job for the selected chromosome."><i class="ic">⬇️</i>Fetch</button>
+      <span class="muted" id="b-fetch-status"></span>
       <label data-tip="Type a gene name and press Enter to jump; while typing, everything else is muted.">search <input id="b-search" placeholder="APP" style="width:120px" class="mono"></label>
       <span class="muted" id="b-status"></span>
     </div>
@@ -1047,7 +1050,9 @@ const when = ts => ts ? new Date(ts * 1000).toLocaleTimeString() : '';
 async function loadJobs() {
   try {
     const r = await api('/api/jobs');
-    $('#j-list').innerHTML = r.jobs.map(j => `<div style="margin-bottom:12px">
+    // one fetch job exists per chromosome; show them only once started, to keep the list short
+    const jobs = r.jobs.filter(j => !j.name.startsWith('fetch_') || j.state !== 'idle');
+    $('#j-list').innerHTML = jobs.map(j => `<div style="margin-bottom:12px">
       <div class="row" style="margin-bottom:2px"><b class="mono">${j.name}</b> <span class="state ${j.state}">${j.state}</span>
         ${j.state !== 'running' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
         ${j.finished ? `<span class="muted">finished ${when(j.finished)}</span>` : ''}</div>
