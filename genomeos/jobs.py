@@ -8,6 +8,7 @@ that file. Only whitelisted jobs can be started (no arbitrary commands).
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import time
@@ -129,10 +130,31 @@ def _meta_path(name: str) -> Path:
     return JOBS_DIR / f"{name}.json"
 
 
+def _alive(pid: int | None) -> bool:
+    """Is a job process started by any earlier server or shell still running?"""
+    if not pid:
+        return False
+    try:
+        os.kill(pid, 0)
+    except (ProcessLookupError, PermissionError):
+        return False
+    return True
+
+
+def _recorded_pid(name: str) -> int | None:
+    if not _meta_path(name).exists():
+        return None
+    meta = json.loads(_meta_path(name).read_text())
+    return meta.get("pid") if meta.get("finished") is None else None
+
+
 def start(name: str, root: Path = Path(".")) -> JobStatus:
     if name not in CATALOG:
         raise KeyError(f"unknown job {name!r}; known: {sorted(CATALOG)}")
     if name in _running and _running[name].poll() is None:
+        return status(name, root)
+    if _alive(_recorded_pid(name)):
+        # started by an earlier server process (the server restarts; the job does not): do not start a twin
         return status(name, root)
     JOBS_DIR.mkdir(parents=True, exist_ok=True)
     log = JOBS_DIR / f"{name}.log"
@@ -160,7 +182,12 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
                 meta.update({"finished": time.time(), "code": code})
                 _meta_path(name).write_text(json.dumps(meta))
     elif meta:
-        state = "done" if meta.get("code") == 0 else "failed" if meta.get("code") is not None else "unknown"
+        if meta.get("code") is None and _alive(meta.get("pid")):
+            state = "running"
+        else:
+            state = (
+                "done" if meta.get("code") == 0 else "failed" if meta.get("code") is not None else "unknown"
+            )
     done = 0
     if spec.get("progress"):
         done = spec["progress"](root)
