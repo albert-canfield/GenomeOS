@@ -1,0 +1,487 @@
+{
+  "result": "segments_chr21_predicted_sites_rna_K562",
+  "date": "2026-09-11",
+  "chrom": "chr21",
+  "min_relative": 0.6,
+  "coding_model": "codon",
+  "codon_table_size": 64,
+  "training_cds": 221,
+  "predictions": 8,
+  "predicted_exons": 84,
+  "true_exons": 3743,
+  "exon_sensitivity": 0.0195,
+  "exon_precision": 0.869,
+  "canonical_exons": 1907,
+  "canonical_exon_sensitivity": 0.033,
+  "site_sensitivity": 0.0245,
+  "site_precision": 0.9048,
+  "gene_sensitivity": 0.0588,
+  "gene_precision": 1.0,
+  "true_genes": 221,
+  "candidates_before_filter": 1003,
+  "predictions_top": [
+    {
+      "chrom": "chr21",
+      "strand": "-",
+      "start": 33439223,
+      "end": 33614439,
+      "exons": [
+        [
+          33439223,
+          33439297
+        ],
+        [
+          33447017,
+          33447140
+        ],
+        [
+          33448781,
+          33448879
+        ],
+        [
+          33455726,
+          33455784
+        ],
+        [
+          33460412,
+          33460505
+        ],
+        [
+          33465341,
+          33465409
+        ],
+        [
+          33467009,
+          33467122
+        ],
+        [
+          33491065,
+          33491137
+        ],
+        [
+          33504411,
+          33504527
+        ],
+        [
+          33505560,
+          33505702
+        ],
+        [
+          33505973,
+          33506104
+        ],
+        [
+          33509782,
+          33509920
+        ],
+        [
+          33511251,
+          33511458
+        ],
+        [
+          33516988,
+          33517141
+        ],
+        [
+          33517356,
+          33517608
+        ],
+        [
+          33520363,
+          33520562
+        ],
+        [
+          33520905,
+          33521015
+        ],
+        [
+          33522187,
+          33522282
+        ],
+        [
+          33524768,
+          33525000
+        ],
+        [
+          33528166,
+          33528335
+        ],
+        [
+          33528518,
+          33528604
+        ],
+        [
+          33528849,
+          33528937
+        ],
+        [
+          33530758,
+          33530884
+        ],
+        [
+          33531488,
+          33531557
+        ],
+        [
+          33532344,
+          33532456
+        ],
+        [
+          33534578,
+          33534753
+        ],
+        [
+          33535224,
+          33535320
+        ],
+        [
+          33539170,
+          33539356
+        ],
+        [
+          33573289,
+          33573372
+        ],
+        [
+          33579349,
+          33579436
+        ],
+        [
+          33581301,
+          33581375
+        ],
+        [
+          33581445,
+          33581500
+        ],
+        [
+          33581950,
+          33582055
+        ],
+        [
+          33582164,
+          33582246
+        ],
+        [
+          33583487,
+          33583666
+        ],
+        [
+          33584589,
+          33584768
+        ],
+        [
+          33585977,
+          33586181
+        ],
+        [
+          33587347,
+          33587425
+        ],
+        [
+          33587521,
+          33587602
+        ],
+        [
+          33591161,
+          33591211
+        ],
+        [
+          33595730,
+          33595836
+        ],
+        [
+          33597279,
+          33597401
+        ],
+        [
+          33599149,
+          33599248
+        ],
+        [
+          33602233,
+          33602345
+        ],
+        [
+          33603403,
+          33603537
+        ],
+        [
+          33613537,
+          33613606
+        ],
+        [
+          33614363,
+          33614439
+        ]
+      ],
+      "score": 1201.06
+    },
+    {
+      "chrom": "chr21",
+      "strand": "-",
+      "start": 25585706,
+      "end": 25607460,
+      "exons": [
+        [
+          25585706,
+          25585754
+        ],
+        [
+          25588834,
+          25588882
+        ],
+        [
+          25592811,
+          25592965
+        ],
+        [
+          25593892,
+          25593958
+        ],
+        [
+          25597301,
+          25597414
+        ],
+        [
+          25599798,
+          25599866
+        ],
+        [
+          25601367,
+          25601467
+        ],
+        [
+          25603795,
+          25603935
+        ],
+        [
+          25606448,
+          25606655
+        ],
+        [
+          25607402,
+          25607460
+        ]
+      ],
+      "score": 279.5
+    },
+    {
+      "chrom": "chr21",
+      "strand": "+",
+      "start": 33403543,
+      "end": 33436962,
+      "exons": [
+        [
+          33403543,
+          33403616
+        ],
+        [
+          33410835,
+          33410892
+        ],
+        [
+          33411518,
+          33411575
+        ],
+        [
+          33414887,
+          33415020
+        ],
+        [
+          33421479,
+          33421685
+        ],
+        [
+          33425101,
+          33425197
+        ],
+        [
+          33426883,
+          33427032
+        ],
+        [
+          33432176,
+          33432336
+        ],
+        [
+          33432713,
+          33432871
+        ],
+        [
+          33436827,
+          33436962
+        ]
+      ],
+      "score": 258.18
+    },
+    {
+      "chrom": "chr21",
+      "strand": "+",
+      "start": 42893333,
+      "end": 42909021,
+      "exons": [
+        [
+          42893333,
+          42893381
+        ],
+        [
+          42896926,
+          42897047
+        ],
+        [
+          42903181,
+          42904276
+        ],
+        [
+          42908863,
+          42909021
+        ]
+      ],
+      "score": 193.1
+    },
+    {
+      "chrom": "chr21",
+      "strand": "+",
+      "start": 31666263,
+      "end": 31668578,
+      "exons": [
+        [
+          31666263,
+          31666345
+        ],
+        [
+          31666448,
+          31666518
+        ],
+        [
+          31667257,
+          31667375
+        ],
+        [
+          31668470,
+          31668578
+        ]
+      ],
+      "score": 123.72
+    },
+    {
+      "chrom": "chr21",
+      "strand": "-",
+      "start": 25724639,
+      "end": 25729794,
+      "exons": [
+        [
+          25724639,
+          25724677
+        ],
+        [
+          25725225,
+          25725350
+        ],
+        [
+          25729630,
+          25729794
+        ]
+      ],
+      "score": 97.39
+    },
+    {
+      "chrom": "chr21",
+      "strand": "-",
+      "start": 33865686,
+      "end": 33907391,
+      "exons": [
+        [
+          33865686,
+          33865995
+        ],
+        [
+          33903934,
+          33904021
+        ],
+        [
+          33907340,
+          33907391
+        ]
+      ],
+      "score": 74.64
+    },
+    {
+      "chrom": "chr21",
+      "strand": "-",
+      "start": 43773760,
+      "end": 43776269,
+      "exons": [
+        [
+          43773760,
+          43773927
+        ],
+        [
+          43774614,
+          43774759
+        ],
+        [
+          43776203,
+          43776269
+        ]
+      ],
+      "score": 70.37
+    }
+  ],
+  "evidence": "predicted: segment parser v1 with AlphaGenome splice sites as the donor/acceptor candidates (learned Kozak matrix for starts, codon log-odds, Viterbi); candidates kept only where AlphaGenome predicts RNA over their exons (predicted); candidates kept only where ENCODE K562 RNA-seq covers their exons",
+  "note": "scored against every coding transcript's CDS; a prediction is a candidate, not an assertion",
+  "rna": {
+    "chrom": "chr21",
+    "panel": {
+      "UBERON:0002107": "liver",
+      "UBERON:0000955": "brain",
+      "UBERON:0002048": "lung",
+      "UBERON:0001157": "transverse colon",
+      "UBERON:0002113": "kidney",
+      "UBERON:0000948": "heart",
+      "UBERON:0002367": "prostate gland",
+      "UBERON:0000992": "ovary"
+    },
+    "coverage_threshold": 0.5,
+    "windows": 45,
+    "requests_this_run": 0,
+    "seconds_this_run": 0.0,
+    "transcribed_bases": {
+      "+": 311943,
+      "-": 259647
+    },
+    "min_exon_fraction": 0.5
+  },
+  "rna_measured": {
+    "cell_type": "K562",
+    "experiment": "https://www.encodeproject.org/experiments/ENCSR860DWK/",
+    "tracks": {
+      "+": "ENCFF837YDW",
+      "-": "ENCFF039BDG"
+    },
+    "signal_threshold": 1.0,
+    "exons_measured": 1541,
+    "bytes_fetched": 699674,
+    "evidence": "experimental: ENCODE total RNA-seq, strand-specific signal of unique reads (GRCh38, released)",
+    "min_exon_fraction": 0.5
+  },
+  "splice_sites": {
+    "chrom": "chr21",
+    "windows": 45,
+    "requests_this_run": 0,
+    "seconds_this_run": 0.0,
+    "candidates_at_or_above_0.05": {
+      "donor+": 6266,
+      "acceptor+": 6407,
+      "donor-": 5427,
+      "acceptor-": 5486
+    },
+    "confident_at_or_above_0.5": {
+      "donor+": 1343,
+      "acceptor+": 1258,
+      "donor-": 1196,
+      "acceptor-": 1135
+    }
+  }
+}

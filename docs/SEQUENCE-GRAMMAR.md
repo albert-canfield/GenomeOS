@@ -243,7 +243,19 @@ tested against it.
    | RNA over ≥ 80% | 33 | 12.2% / 83.7% | 23.0% | 21.3% / 90.9% |
    | + starts at ENCODE promoters, RNA ≥ 50% | 48 | 24.0% / 72.6% | 44.6% | 42.1% / 100% |
 
-   (`segments_chr21_predicted_sites_rna.json`.) This is the lever. Nine in
+   | measured: ENCODE K562 total RNA-seq over ≥ 30% of exon bases (signal ≥ 0.05) | 55 | 26.0% / 72.1% | 47.9% | 44.8% / 89.1% |
+
+   (`segments_chr21_predicted_sites_rna.json`, `…_rna_K562.json`.) The
+   measured row uses an experiment instead of a model: ENCODE's
+   strand-specific total RNA-seq bigWigs for K562, read over HTTP ranges
+   for the candidate exons only (0.7 MB moved for 3,248 exons,
+   `genomeos/genome/rna_measured.py`, `--rna-measured K562`; the bigWig
+   reader is `genomeos/attribution/bigwig.py`). It reaches the same precision
+   as the predicted panel with fewer genes, because one cell line expresses
+   fewer of chr21's genes than eight tissues do, and the threshold matters:
+   at signal ≥ 1.0 only 12 candidates survive, at 0.05 the 55 above, swept
+   and recorded. Model and measurement agree on the point, which is what
+   the measurement was for. This is the lever. Nine in
    ten candidates that survive the RNA filter are real genes, against one in
    five before it, and the exons they draw are right two times in three. What
    the filter costs is the genes the panel does not express: sensitivity

@@ -1929,6 +1929,18 @@ def cmd_segments(args: argparse.Namespace) -> int:
             f"(coverage ≥ {cs['coverage_threshold']} in a panel of {len(cs['panel'])} tissues)"
         )
         post_filter = lambda preds: filter_predictions(preds, cov, args.rna_filter)  # noqa: E731
+    measured = None
+    if args.rna_measured:
+        from genomeos.genome.rna_measured import MeasuredRna
+
+        measured = MeasuredRna(args.rna_measured, args.chrom)
+        frac = args.rna_filter if args.rna_filter is not None else 0.3
+        inner = post_filter
+
+        def post_filter(preds, measured=measured, frac=frac, inner=inner):  # noqa: F811
+            preds = inner(preds) if inner else preds
+            return measured.filter(preds, frac, progress=lambda d, n, b: None)
+
     r = parse_chromosome(
         args.chrom,
         seq,
@@ -1940,12 +1952,22 @@ def cmd_segments(args: argparse.Namespace) -> int:
         coding_model=args.coding,
         post_filter=post_filter,
     )
+    if measured is not None:
+        ms = measured.summary()
+        print(
+            f"{args.chrom}: measured RNA of {ms['cell_type']} over {ms['exons_measured']:,} candidate exons "
+            f"({ms['bytes_fetched'] / 1e6:.1f} MB of bigWig read; tracks {ms['tracks']})"
+        )
     if args.coding != "codon":
         name += f"_{args.coding}"
     if args.rna_filter is not None:
         name += "_rna"
         r["rna"] = {**cs, "min_exon_fraction": args.rna_filter}
         r["evidence"] += "; candidates kept only where AlphaGenome predicts RNA over their exons (predicted)"
+    if measured is not None:
+        name += f"_{args.rna_measured.replace(' ', '_')}"
+        r["rna_measured"] = {**ms, "min_exon_fraction": frac}
+        r["evidence"] += f"; candidates kept only where ENCODE {args.rna_measured} RNA-seq covers their exons"
     if args.predicted_sites:
         r["splice_sites"] = sm
     if start_windows is not None:
@@ -3650,6 +3672,11 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         metavar="FRACTION",
         help="keep only candidates whose exons AlphaGenome predicts transcribed (mean fraction, default 0.3)",
+    )
+    p.add_argument(
+        "--rna-measured",
+        metavar="CELL_TYPE",
+        help="keep candidates whose exons carry ENCODE total RNA-seq signal in this cell line (bigWig)",
     )
     p.add_argument(
         "--coding",
