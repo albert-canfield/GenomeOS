@@ -1619,6 +1619,10 @@ def cmd_lookup(args: argparse.Namespace) -> int:
     if v.get("pubmed"):
         more = " …" if v["pubmed_count"] > 8 else ""
         print("  PubMed: " + ", ".join(str(p) for p in v["pubmed"][:8]) + more)
+    for ind in r.get("individuals", []):
+        gt = f" (genotype {ind['genotype']})" if ind["carries"] else ""
+        has = "carries it" if ind["carries"] else "does not carry it"
+        print(f"  {ind['individual']}: {has}{gt}  [{ind['evidence']}]")
     lt = r.get("local_trace")
     if lt:
         verdict = "agrees with VEP" if lt["agrees_with_vep"] else "differs from VEP (isoform or region)"

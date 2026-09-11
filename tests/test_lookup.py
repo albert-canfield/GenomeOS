@@ -64,3 +64,18 @@ def test_features_at_residue():
     hits = features_at(defn, 175)
     assert [h["type"] for h in hits] == ["Domain", "Modified residue"]
     assert features_at(defn, 500) == []
+
+
+def test_carriers_reads_a_local_individual(tmp_path, monkeypatch):
+    from genomeos.genome import lookup as lk
+
+    vcf = tmp_path / "HG002_chr21.vcf"
+    vcf.write_text(
+        "##fileformat=VCFv4.2\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tHG002\n"
+        "chr21\t100\t.\tA\tG\t50\tPASS\t.\tGT\t0/1\nchr21\t200\t.\tC\tT,G\t50\tPASS\t.\tGT\t1/1\n"
+    )
+    monkeypatch.setattr(lk, "INDIVIDUALS", {"HG002": (str(tmp_path / "HG002_{chrom}.vcf"), "test calls")})
+    assert lk.carriers("chr21", 100, "A", "G")[0]["genotype"] == "0/1"
+    assert lk.carriers("chr21", 200, "C", "G")[0]["carries"] is True
+    assert lk.carriers("chr21", 300, "A", "G")[0]["carries"] is False
+    assert lk.carriers("chr22", 100, "A", "G") == []

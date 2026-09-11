@@ -59,6 +59,7 @@ CATALOG: dict[str, dict] = {
         "total": 25,
         "result": None,
         "count": None,
+        "progress": lambda root: len(list((root / "data" / "results").glob("proteome_chr*.json"))),
     },
     "distil": {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "distil"],
@@ -146,6 +147,8 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
     elif meta:
         state = "done" if meta.get("code") == 0 else "failed" if meta.get("code") is not None else "unknown"
     done = 0
+    if spec.get("progress"):
+        done = spec["progress"](root)
     if spec.get("result") and spec.get("count"):
         from genomeos.results import load_result
 

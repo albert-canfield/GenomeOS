@@ -142,6 +142,43 @@ def features_at(defn: dict[str, Any], residue: int) -> list[dict[str, Any]]:
     return out
 
 
+INDIVIDUALS = {
+    "HG002": ("data/results/HG002_{chrom}.vcf", "GIAB v4.2.1 benchmark calls (a real person, open consent)")
+}
+
+
+def carriers(chrom: str, pos: int, ref: str, alt: str) -> list[dict[str, Any]]:
+    """Which local individuals carry this exact variant, and with what genotype."""
+    out = []
+    for name, (pattern, source) in INDIVIDUALS.items():
+        path = Path(pattern.format(chrom=chrom))
+        if not path.exists():
+            continue
+        found = None
+        with path.open() as fh:
+            for line in fh:
+                if line.startswith("#"):
+                    continue
+                f = line.rstrip("\n").split("\t")
+                if len(f) < 10:
+                    continue
+                p_ = int(f[1])
+                if p_ > pos:
+                    break
+                if p_ == pos and f[3] == ref and alt in f[4].split(","):
+                    found = f[9].split(":")[0]
+                    break
+        out.append(
+            {
+                "individual": name,
+                "carries": found is not None,
+                "genotype": found,
+                "evidence": f"measured: {source}",
+            }
+        )
+    return out
+
+
 def lookup(
     chrom: str, pos: int, ref: str, alt: str, annotation=None, genome=None, pathways: int = 10
 ) -> dict[str, Any]:
@@ -167,6 +204,7 @@ def lookup(
     if v.get("pubmed_count"):
         known.append(f"{v['pubmed_count']} PubMed citations")
     out["known"] = known or ["no prior record in ClinVar, dbSNP, COSMIC or gnomAD: a novel variant"]
+    out["individuals"] = carriers(chrom, pos, ref, alt)
     # local trace
     if annotation is not None and genome is not None and v.get("gene"):
         try:
