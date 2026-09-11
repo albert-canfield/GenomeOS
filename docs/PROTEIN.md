@@ -365,6 +365,35 @@ alleles, not isoforms. What the isoform check cannot settle is the 40 genes
 GTEx does not resolve, and it does not need to: their triage already names
 the mechanism.
 
+### The disagreements, held against three real genotypes (2026-09-12)
+
+If the reference carries a minor allele where UniProt describes the common
+protein, a real person should carry the curated version.
+`scripts/disagreements_genotype.py` takes each disagreement gene, applies the
+SNVs a local individual carries inside the canonical CDS (alt allele, every
+site), translates and compares again, for HG002 and both parents
+(`data/results/translation_disagreements_genotype.json`):
+
+| HG002 | genes |
+|---|---|
+| no variant of this person inside the CDS | 40 |
+| the person's SNVs leave the disagreement as it is (or make it worse) | 52 |
+| only indels inside the CDS, not applied (a frame change is possible) | 1 |
+| the person's alleles give the curated protein | **0** |
+
+HG003 and HG004 give the same picture (46 / 46 / 1 and 38 / 54 / 1, none
+restored). So the 96 are not common alleles this Ashkenazi trio happens
+to carry the other way: where the trio does vary inside these CDS, the
+variation is unrelated to the curated protein and often makes the
+translation shorter still (olfactory receptors that are pseudogenes in
+most people, OR12D1 among them). Together with the isoform check above,
+the disagreements are now bounded from three sides: not isoform choice,
+not this trio's alleles, and by mechanism either a reference allele the
+population does not share widely, or a gene model and a UniProt entry that
+describe different products. What would settle each one is population
+allele frequency at the exact site (gnomAD), which the lookup layer already
+fetches one variant at a time.
+
 ## The proteome as a library
 
 The compiled proteome is now a BioLib layer that ships with GenomeOS:
