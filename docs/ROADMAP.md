@@ -104,10 +104,10 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioVM** (engines) | 0.3 | twelve engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces |
 | **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs the demo, std and organism programs in CI; depends on the engine alone, so it can be packaged as it stands | its own package and test suite; `bio fmt`; language server |
 | **BioLib** (libraries) | 45 libraries + the proteome | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol; haematopoiesis as a runnable mechanism module; **the whole human proteome packaged** (19,283 proteins in 2.3 MB, `genomeos protein X --lib`, answers offline) | `cancer.*` layer; more human development modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
-| **BioTwin** (individual) | 0.9 | any GRCh38 genome imported locally and used by carrier lookup, the gene report, the twin and the gene-by-gene walk; HG002 across all 22 autosomes with measured telomere and epigenetic age; fork, run, diff; predicted effect of a person's own regulatory variants | telomere from real reads; pedigree and trio; polygenic scores |
+| **BioTwin** (individual) | 0.9 | any GRCh38 genome imported locally and used by carrier lookup, the gene report, the twin and the gene-by-gene walk; HG002 across all 22 autosomes with measured telomere and epigenetic age; fork, run, diff; predicted effect of a person's own regulatory variants; ClinVar carrier screen, genome-wide truncating-variant scan and a one-page dossier, all off the repository | telomere from real reads; pedigree and trio; polygenic scores |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
-| **Genome decoding** (GenomeOS) | 0.9 nearly there | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader v1 (open nodes per cell type) on 2; signals learned | the segment parser (in progress); reader on every chromosome; a second mammal |
-| **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists | post-translational state beyond the UniProt feature list; isoform-level expression; an engine that handles 100-species models |
+| **Genome decoding** (GenomeOS) | 0.9 reached | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader on 25 with eleven cell types; the node model tested genome-wide (90.2% of enhancers act inside their node) and on two mouse chromosomes; the segment parser on chr21 at 92.7% gene precision once RNA over the exons counts as evidence | the parser on every chromosome with measured RNA; enhancer targets and boundaries from Hi-C |
+| **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph | measured modification state; isoform-level expression; an engine that handles 100-species models |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
 
@@ -160,12 +160,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   a confidence; the delimiters the cell reads learned from the sequence.
 - **Code.** `genome/annotation.py`, `blocks.py`, `unknown.py`, `repeats.py`,
   `regulation.py`, `domains.py`, `signals.py`, `anatomy.py`, `fetch.py`,
-  `lookup.py`.
+  `lookup.py`, `segments.py`; `predict/rna_tracks.py`.
 - **Design.** GENOME-AS-CODE.md, GENOME-ANATOMY.md, SEQUENCE-GRAMMAR.md,
   UNKNOWN.md, NODES-READER-WRITER.md.
 - **Data.** `anatomy_hg38_by_chromosome`, `unknown_chr*` (25),
   `rmsk_chr*` (18), `ccres_chr*` (24), `domains_chr*` (2),
-  `signals_chr21`, `gencode_v50_chr*` rows (18).
+  `signals_chr21`, `segments_chr21`, `mouse_mm10_chr*` (2),
+  `gencode_v50_chr*` rows (18).
 - **Requirements.** Any chromosome on demand (`genomeos data fetch --chrom`);
   classification order fixed (curated repeats before ORFs); every class
   names its evidence layer; the block map shows it.
@@ -237,14 +238,44 @@ in order. "Owner" is the session that holds the files today (see §7).
   45 times out of 51. The stronger method moved the count and left the
   conclusion, which is what a lower bound is supposed to do. Both columns are
   kept in the result.
-- **Next.** 1. The coding model, which two independent experiments now name as
-  the limit: the codon log-odds score is what separates a real reading frame
-  from a plausible one. 2. The `reader` construct in BioLang, so context
-  gating comes from chromatin (the parser half belongs to the language owner).
-  3. A second mouse chromosome, or orthology from Ensembl Compara instead of
-  symbol identity, whichever answers more. The L1 ORF2 and Alu sequence
-  signatures are superseded by the RepeatMasker pass and stay as the fallback
-  for chromosomes not yet distilled.
+- **The second mouse chromosome (2026-09-11).** mm10 chr11 through the same
+  code: 836 nodes, 270 tested, 59% in one human node, 93% in the same human
+  neighbourhood, 20 scattered. With chr19 that is 379 tested mouse nodes at
+  93 to 94% in the same human neighbourhood: two chromosomes, one shape.
+- **The coding model was not the limit either (2026-09-11).** The claim
+  above was tested as it asked to be. A 3-periodic fifth-order Markov model of
+  coding sequence (`segments --coding markov`) in place of the codon table
+  gains one to two points of precision in every configuration and no
+  sensitivity on chr21. Both models are kept. What separates a real gene from
+  a plausible reading frame is not a better score of the sequence but
+  evidence that the sequence is transcribed.
+- **Transcription evidence, two ways (2026-09-11).** Confining gene starts to
+  the reader's DNase peaks (eleven cell types, 38% of chr21) cuts candidates
+  1,003 to 614 and lifts exon precision 46% to 53% at 76% gene sensitivity, a
+  milder trade than the promoter class. RNA over the exons is the lever:
+  AlphaGenome's predicted RNA-seq coverage for eight tissues, cached per 1 Mb
+  window (`genomeos/predict/rna_tracks.py`), applied after the parse as a
+  filter (`segments --rna-filter`).
+
+  | signals used | candidates | exon precision | gene precision | gene sensitivity |
+  |---|---|---|---|---|
+  | AlphaGenome splice sites | 1,003 | 46.2% | 20.0% | 84.2% |
+  | + starts confined to open chromatin | 614 | 53% | not recorded | 76% |
+  | + RNA over the exons, eight tissues | **82** | **68.6%** | **92.7%** | 57.9% |
+
+  Nine candidates in ten were sequence that is never transcribed in the
+  panel. The panel is eight tissues rather than the body, and that is where
+  the lost sensitivity went. SEQUENCE-GRAMMAR.md item 1 closes the series:
+  the grammar finds the genes, transcription evidence says which are real.
+- **Next.** 1. Measured RNA where it exists (ENCODE or GTEx coverage) in
+  place of the predicted panel, and a broader panel where it does not, to
+  recover the sensitivity eight tissues lose; then a second chromosome.
+  2. The `reader` construct in BioLang, so context gating comes from
+  chromatin (the parser half belongs to the language owner). 3. Orthology
+  from Ensembl Compara, and a boundary source finer than CTCF alone (Hi-C
+  domains) to test whether the resolution limit is the biology. The L1 ORF2
+  and Alu sequence signatures are superseded by the RepeatMasker pass and
+  stay as the fallback for chromosomes not yet distilled.
 - **Owner.** genomeos-fe.
 
 ### C. Molecules (RNA, proteins, pathways, the knowledge graph)
@@ -253,10 +284,12 @@ in order. "Owner" is the session that holds the files today (see §7).
   compiled from public sources into one definition per protein, verified
   against the curators, and executable as pathways.
 - **Code.** `molecules/compiler.py`, `proteome.py`, `verify.py`, `rna.py`,
-  `graph.py`, `reactome.py`, `uniprot.py`, `alphafold.py`; `flow/trace.py`.
+  `graph.py`, `reactome.py`, `uniprot.py`, `alphafold.py`, `ptm.py`;
+  `flow/trace.py`.
 - **Design.** PROTEIN.md, FLOW.md.
 - **Data.** `proteome_chr*` (4 of 25: chrM, 21, 22, Y),
-  `translation_vs_uniprot_chr*` (3), `graph_chr21`, compiled definitions in
+  `translation_vs_uniprot_chr*` (3), `graph_chr21`, `graph_genome`,
+  `ptm_genome_wide`, compiled definitions in
   `data/knowledge/proteins` (18 MB).
 - **Requirements.** UniProt accession is the id; Gene → Transcript →
   Protein isoform, never Gene → Protein; predicted never equals
@@ -291,13 +324,22 @@ in order. "Owner" is the session that holds the files today (see §7).
   stay flat. The result file is committed next to the two that work. That is
   what keeps the libRoadRunner adapter (§5 item 12) an honest open item rather
   than an aspiration, and it marks the size of model where our engine stops.
-- **Missing.** No post-translational state model beyond the UniProt feature
-  list; no isoform-level expression; kinetics only where BioModels has a
+- **Post-translational state (2026-09-11).** The layer the protein model
+  names (`ProteinState`) is populated from UniProt's modified-residue
+  features: `genomeos ptm X` lists a protein's modifiable sites with class
+  and writer, `genomeos ptm --writer PKA` lists a writer's substrates, and the
+  genome-wide summary counts 96,362 sites on 13,083 proteins with 352 named
+  writers. The 2,985 writer to substrate pairs are `modifies` edges in the
+  knowledge graph, rebuilt to 330,018 edges. A site that can be modified is
+  not a measurement that it is, and the result says which it holds.
+- **Missing.** Modification state is possibility, not occupancy: no measured
+  phosphoproteome, and no rule that runs a writer against a site in the
+  runtime; no isoform-level expression; kinetics only where BioModels has a
   curated model, which is a small fraction of Reactome.
-- **Next.** 1. Post-translational state, which is the layer the protein model
-  names (`ProteinState`) and nothing populates. 2. Isoform-level expression.
-  3. The 99 translation disagreements read one by one, now that they are
-  triaged by mechanism.
+- **Next.** 1. Isoform-level expression. 2. The 99 translation disagreements
+  read one by one, now that they are triaged by mechanism. 3. Writers that
+  act: a `modifies` edge run as a rule in the network engine, so a kinase
+  knockout changes a substrate's state and not only its neighbourhood.
 - **Owner.** genomeos-fe.
 
 ### D. The individual (BioTwin)
@@ -305,7 +347,8 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Goal.** A person's genome plus measured state plus environment, forked,
   run and compared.
 - **Code.** `twin/twin.py`, `twin/clocks.py`, `genome/telomere.py`,
-  `genome/variants.py`, `runtime/variant_effect.py`, `calibrate`.
+  `genome/variants.py`, `genome/individuals.py`, `runtime/variant_effect.py`,
+  `calibrate`.
 - **Design.** ACTION-PLAN.md Phase 3, STORAGE.md, LESSONS.md (timers).
 - **Data.** `hg002_chr21`, `hg002_telomere_stream`,
   `hg002_methylation_stream`, `clock_GSE41169`, `clinvar_chr21_agreement`,
@@ -329,9 +372,28 @@ in order. "Owner" is the session that holds the files today (see §7).
   chronological age, telomere length and epigenetic age) are all git-ignored;
   only the open-consent public test subject stays tracked. Per-person results
   are never written under `data/results`.
+- **What a person learns from their own file (2026-09-11).** Three commands,
+  all reading the imported genome and writing under the person's own
+  directory, never `data/results`. `genomeos individual screen` streams
+  ClinVar once (4.47 M rows, the 346,571 pathogenic and likely pathogenic
+  rows kept locally) and intersects the person's files: HG002's four million
+  variants in seven seconds give two hits, the F11 factor XI deficiency
+  carrier allele among them, each with genotype, zygosity, review stars and
+  conditions. `genomeos individual knockouts` lists nonsense, start-lost and
+  stop-lost SNVs on canonical transcripts across every chromosome, homozygous
+  first, with the fraction of protein lost: HG002 has 88 in 84 genes, the
+  FUT2 non-secretor allele homozygous among them; calls past a stop the
+  reference itself carries are left out and counted. `genomeos individual
+  report` writes the dossier as one Markdown page from whatever has been
+  computed (import, reference checks, screen, truncating variants), and a
+  section not run says so. Each has a Twin tab button. Research annotation,
+  not a clinical report, and the page says that too.
 - **Missing.** Telomere length from a real 30x BAM (100 GB) not done; no
-  pedigree or trio; no polygenic scores.
+  pedigree or trio; no polygenic scores; the variant scan stops at truncating
+  variants.
 - **Next.** 1. Telomere from a streamed CRAM range instead of a BAM download.
+  2. Missense effect in the dossier, where the truncating scan stops. 3. A
+  trio: HG002 with its GIAB parents HG003 and HG004 as the first pedigree.
 - **Owner.** genomeos-fe.
 
 ### E. From one cell to an organism
@@ -494,11 +556,12 @@ or the CLI; results land in `data/results` and are committed.
 | Reader (open nodes per cell type) | 25 of 25, eleven cell types | done | 42.0% (keratinocyte) to 77.1% (hepatocyte) of coding genes read per cell; resumable per cell type, any ENCODE biosample |
 | Proteome compiled | 25 of 25 (2026-09-11) | done | 19,478 coding genes: sequence 99.1%, domains 99.0%, function 86.3%, interactions 81.5%, pathways 58.2%, experimental structure 45.2%, predicted structure 98.2%, disease 25.5% |
 | Translation verified against UniProt | 25 of 25 (2026-09-11) | done | 19,249 genes: 90.9% canonical identical, 97.8% exact for some isoform; the remaining disagreements are triaged by mechanism, including hg38 frameshift and nonsense alleles detected automatically |
-| Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 327,024 edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
+| Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 330,018 edges after the 2,985 `modifies` edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
+| Modifiable sites (post-translational state) | genome-wide (2026-09-11) | done | 96,362 sites on 13,083 proteins, 352 named writers; `ptm_genome_wide` |
 | Enhancer targets, predicted (AlphaGenome) | 24 of 24 chromosomes (4,800 elements) | done | 2,994 elements move a gene, 2,291 name a coding gene; **90.2% of those sit inside the element's CTCF node** (79.8% to 91.8% per chromosome) and 71.2% are exactly the nearest TSS; 1,157 behave as silencers. Needs a key; the daily quota ran out mid-run and the job waited and resumed rather than failing |
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
-| Segment parser scored against GENCODE | chr21, three variants | `genomeos segments --chrom C [--predicted-sites] [--promoter-anchored]` | all three results kept side by side; see area B |
+| Segment parser scored against GENCODE | chr21, six configurations | `genomeos segments --chrom C [--predicted-sites] [--promoter-anchored] [--coding markov] [--rna-filter]` | every result kept side by side; RNA over the exons reaches 92.7% gene precision at 57.9% sensitivity; see area B |
 
 One-off jobs, each needing a decision or a resource:
 
@@ -509,7 +572,7 @@ One-off jobs, each needing a decision or a resource:
 | Cohort expression for the other TCGA studies (`genomeos cancer expression --study`) | 30 s each, pick the studies | genomeos-f7 |
 | Retrospective therapeutic benchmark (public tumours with approved targets) | choose the cases | genomeos-f7 |
 | Packer 2019 disagreements resolved to one labelling depth | **done 2026-09-11**: 84% on the 164 single-tissue ids; the rest is depth | genomeos-73 |
-| Mouse chromosome as the second mammal for node comparison | **done 2026-09-11**: mm10 chr19, 371 nodes, 97% of testable nodes in the same human neighbourhood | genomeos-fe |
+| Mouse chromosome as the second mammal for node comparison | **done 2026-09-11**: mm10 chr19 and chr11 with MGI's curated orthology, 379 tested nodes at 93 to 94% in the same human neighbourhood | genomeos-fe |
 | Sender & Milo per-tissue turnover as maintenance timers in `bio.std` | **done 2026-09-11**: `bio.std.human_turnover` | genomeos-73 |
 
 ---
@@ -524,15 +587,22 @@ session that holds it. Items 1–4 run in parallel today.
    reader, the proteome, translation verification, the knowledge graph and the
    HG002 twin over all 22 autosomes. What remains of milestone 0.9 is the
    version bump and the release tag. genomeos-f7.
-2. HG002 twin on every chromosome, then `twin build --vcf` for any genome.
-   Milestone 0.9. genomeos-fe.
+2. Done 2026-09-11: HG002 twin on every autosome and any imported genome as
+   input to the twin; then the ClinVar carrier screen, the truncating-variant
+   scan and the dossier for a person's own file, all off the repository.
+   Next: telomere from a streamed CRAM range. genomeos-fe.
 3. Haematopoiesis landed 2026-09-11 as the first human mechanism module;
    next mechanism modules follow the same pattern. Milestone 1.1. genomeos-73.
 4. Evidence explorer view; the engine-boundary fix in `runtime/variant_effect.py`;
    `.gitignore` for `data/jobs`; nightly CI. Milestone 1.0. genomeos-f7.
-5. Reader lane in the block map and a `reader` construct in BioLang.
-   Milestone 1.1. genomeos-fe.
-6. Segment parser scored against GENCODE. Milestone 1.1. genomeos-fe.
+5. Reader lane in the block map done 2026-09-11; the `reader` construct in
+   BioLang remains, its parser half with genomeos-73. Milestone 1.1.
+   genomeos-fe.
+6. Done 2026-09-11: the segment parser scored against GENCODE through six
+   configurations. The coding model is not the limit; RNA over the exons is
+   the lever (92.7% gene precision at 57.9% sensitivity on chr21). Next:
+   measured RNA and a second chromosome. Post-translational state landed in
+   area C the same day. Milestone 1.1. genomeos-fe.
 7. Done 2026-09-11: worm and blood mutants as experiment programs in CI,
    Digital Development as the published set, BioForge takes experiments
    (`design`). Next: PAR polarity rules; terminal fates from measured
