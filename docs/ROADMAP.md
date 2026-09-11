@@ -415,9 +415,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   rest gene-model differences. The item closes.
 - **Next.** 1. The person's own expression in place of GTEx's median where a
   measurement exists. 2. Measured modification state (a phosphoproteome) so a
-  `modifies` rule can carry occupancy rather than possibility. 3. The 31 hg38
-  frameshift and nonsense alleles surfaced wherever the reference is used as
-  a person: a carrier of the reference allele is a carrier of a truncation.
+  `modifies` rule can carry occupancy rather than possibility. 3. Done
+  2026-09-12 in area D: the 31 hg38 frameshift and nonsense alleles surfaced
+  in the coding inventory and the dossier, a carrier of the reference allele
+  being a carrier of a truncation.
 - **Owner.** genomeos-fe.
 
 ### D. The individual (BioTwin)
@@ -498,6 +499,15 @@ in order. "Owner" is the session that holds the files today (see §7).
   12,296 are mostly representation differences between three call sets, since
   true de novo variants number 60 to 100 per child: the trio measures caller
   agreement first. Stored under the child's directory.
+- **The reference's own truncations (2026-09-12).** For the 31 genes where
+  hg38 carries a frameshift or nonsense allele against the curated protein
+  (the verified disagreements by mechanism), `individual coding` and the
+  dossier say whether the person differs from the reference anywhere inside
+  the gene; no variant means the person carries hg38's truncation, which no
+  caller lists. HG002 matches the reference in 5 of the 30 on file (OR2T7,
+  OR4C45, OR4K3, OR1P1, SCYGR10) and differs inside the other 25, none of
+  which restores the curated protein. `reference_alleles_carried()` in
+  `genome/individuals.py`; DATA.md paragraph.
 - **Missing.** Telomere length from a real 30x BAM (100 GB) not done; no
   polygenic scores; a missense variant is ranked by annotation, not predicted,
   and the trace still uses the canonical transcript rather than the one the
