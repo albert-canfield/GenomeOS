@@ -382,6 +382,8 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label>person <select id="ind-who"></select></label>
       <label>chromosome <select id="ind-chrom"></select></label>
       <button class="ghost" id="ind-genes" data-tip="Every coding gene of the chromosome with this person's variants and the consequence of each coding SNV on the canonical transcript."><i class="ic">🧬</i>Genes</button>
+      <label>gene <input id="ind-gene" placeholder="APP" style="width:90px" class="mono"></label>
+      <button class="ghost" id="ind-predict" data-tip="AlphaGenome feature d: this person's variants inside the elements that reach the gene (promoters, enhancers in its node), each scored for its predicted effect on the gene's expression per tissue, summed per haplotype where phased. About 8 s per variant the first time, cached after; needs the key."><i class="ic">🔮</i>Predict on gene</button>
     </div>
     <div id="ind-out" class="scroll" style="margin-top:6px"></div>
   </div>
@@ -1008,7 +1010,20 @@ async function individualGenes() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> consequence by the local trace on the canonical transcript</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
-document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; } });
+async function individualPredict() {
+  const name = $('#ind-who').value, chrom = $('#ind-chrom').value, gene = $('#ind-gene').value.trim();
+  if (!gene) { $('#ind-out').innerHTML = '<span class="muted">name a gene on the chosen chromosome</span>'; return; }
+  $('#ind-out').innerHTML = '<span class="muted">scoring this person\'s regulatory variants on ' + gene + ' (about 8 s per variant the first time)…</span>';
+  try {
+    const r = await api(`/api/individual/predict?name=${encodeURIComponent(name)}&gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom)}&max=30`);
+    const h = r.haplotypes;
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.variants_in_elements)}</b><span>variants in ${r.elements_considered} elements that reach ${r.gene}</span></div><div><b>${r.variants_scored}</b><span>scored</span></div><div><b>${r.variants_moving_gene}</b><span>move ${r.gene} by ≥ ${r.min_effect_log2fc} log2</span></div><div><b>${h.hap1_log2_fold_change > 0 ? '+' : ''}${h.hap1_log2_fold_change} / ${h.hap2_log2_fold_change > 0 ? '+' : ''}${h.hap2_log2_fold_change}</b><span>haplotype sums (log2)</span></div></div>
+      <table><tr><th>variant</th><th>gt</th><th>element</th><th class="num">to TSS</th><th class="num">log2FC on ${r.gene}</th><th>tissue</th><th class="num">tracks moved</th></tr>` +
+      r.variants.slice(0, 20).map(v => `<tr><td class="mono">${r.chrom}:${fmt(v.pos)} ${v.ref}>${v.alt}</td><td class="mono">${v.genotype}</td><td>${v.element_class} <span class="mono muted">${v.element}</span></td><td class="num">${fmt(v.distance_to_tss)}</td><td class="num">${v.effect.log2_fold_change > 0 ? '+' : ''}${v.effect.log2_fold_change.toFixed(2)}</td><td>${v.effect.tissue || ''}</td><td class="num">${v.effect.tracks_moved}</td></tr>`).join('') +
+      `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill predicted">predicted</span> ${(r.model || 'AlphaGenome').split(' (')[0]} · ${h.note}</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; } });
 async function loadTwins() {
   loadIndividuals();
   twins = (await api('/api/twins')).twins;

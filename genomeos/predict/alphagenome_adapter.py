@@ -55,8 +55,9 @@ FEATURES: tuple[tuple[str, str, str, str], ...] = (
     (
         "d",
         "twin",
-        "predicted expression differences between an individual's haplotypes and the reference",
-        "planned",
+        "a person's variants inside the elements that reach a gene, each scored for its predicted effect "
+        "on the gene and summed per haplotype (`genomeos individual predict`)",
+        "built",
     ),
 )
 

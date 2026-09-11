@@ -1880,6 +1880,8 @@ def cmd_individual(args: argparse.Namespace) -> int:
         ok = ind.remove(args.name)
         print(f"removed {args.name}" if ok else f"{args.name}: not an imported individual")
         return 0 if ok else 1
+    if args.action == "predict":
+        return _individual_predict(args)
     if args.action == "genes":
         from genomeos.genome import Annotation, IndexedGenome, default_gencode
 
@@ -1933,6 +1935,86 @@ def cmd_individual(args: argparse.Namespace) -> int:
         n = f"{p['variants']:,} variants, " if p.get("variants") else ""
         print(f"{p['name']:12} {n}{len(p['chromosomes'])} chromosomes  {tag}")
         print(f"             [{p['evidence']}]")
+    return 0
+
+
+def _individual_predict(args: argparse.Namespace) -> int:
+    """Feature d: what this person's regulatory variants do to one gene, predicted per variant."""
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome.individuals import vcf_path
+    from genomeos.genome.regulation import regulation_of
+    from genomeos.genome.regulatory import load_ccres
+    from genomeos.predict import AlphaGenomeAdapter, status
+    from genomeos.predict.individual_effects import predict_gene
+
+    st = status()
+    if not st["enabled"]:
+        print(f"AlphaGenome predictions are disabled: {st['reason']}. To enable: {st['how']}")
+        return 2
+    vcf = vcf_path(args.name, args.chrom)
+    if vcf is None:
+        print(f"{args.name} has no rows on {args.chrom} (genomeos individual list)")
+        return 1
+    gff = default_gencode({args.chrom})
+    fa = Path("data/reference") / f"{args.chrom}.fa"
+    ccres = load_ccres(args.chrom)
+    if not gff or not fa.exists() or not ccres:
+        print(
+            f"{args.chrom}: needs local models, sequence and elements "
+            f"(genomeos data fetch --chrom {args.chrom})"
+        )
+        return 1
+    ann = Annotation.from_gff3(gff, {args.chrom})
+    genome = IndexedGenome(str(fa))
+    try:
+        reg = regulation_of(args.gene.upper(), args.chrom, ccres, ann, genome.lengths[args.chrom])
+    except KeyError:
+        print(f"{args.gene} not on {args.chrom}")
+        return 1
+    finally:
+        genome.close()
+    scorer = AlphaGenomeAdapter()._live_scorer(threshold=0.02)  # noqa: SLF001
+    r = predict_gene(
+        args.name,
+        reg["gene"],
+        args.chrom,
+        reg,
+        scorer,
+        vcf,
+        max_variants=args.max,
+        progress=lambda m: print("  " + m, flush=True),
+    )
+    if args.json:
+        print(json.dumps({"model": st["model"], **r}, indent=2))
+        return 0
+    print(
+        f"{r['individual']} × {r['gene']}: {r['variants_in_elements']} variants in "
+        f"{r['elements_considered']} elements that reach the gene; {r['variants_scored']} scored, "
+        f"{r['variants_moving_gene']} move it by ≥ {r['min_effect_log2fc']} log2  [predicted, {st['model']}]"
+    )
+    h = r["haplotypes"]
+    print(
+        f"  haplotype sums: hap1 {h['hap1_log2_fold_change']:+.2f}, hap2 {h['hap2_log2_fold_change']:+.2f}"
+        + (
+            f", unphased heterozygous {', '.join(f'{x:+.2f}' for x in h['unphased_heterozygous_effects'])}"
+            if h["unphased_heterozygous_effects"]
+            else ""
+        )
+    )
+    rows = [
+        {
+            "variant": f"{args.chrom}:{v['pos']:,} {v['ref']}>{v['alt']}",
+            "gt": v["genotype"],
+            "element": f"{v['element_class']} {v['element']}",
+            "dist": f"{v['distance_to_tss']:,}",
+            "log2FC": f"{v['effect']['log2_fold_change']:+.2f}",
+            "tissue": (v["effect"]["tissue"] or "")[:32],
+            "tracks": v["effect"]["tracks_moved"],
+        }
+        for v in r["variants"][: args.top]
+    ]
+    print(_table(rows, ["variant", "gt", "element", "dist", "log2FC", "tissue", "tracks"]))
+    print(f"  [{r['evidence']}]  {h['note']}")
     return 0
 
 

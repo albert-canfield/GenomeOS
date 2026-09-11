@@ -300,6 +300,40 @@ class Api:
         finally:
             genome.close()
 
+    def individual_predict(self, name: str, gene: str, chrom: str, max_variants: int = 30) -> dict:
+        """Feature d: the person's regulatory variants on one gene, predicted per variant (cached)."""
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome.individuals import vcf_path
+        from genomeos.genome.regulation import regulation_of
+        from genomeos.genome.regulatory import load_ccres
+        from genomeos.predict import AlphaGenomeAdapter, status
+        from genomeos.predict.individual_effects import predict_gene
+
+        st = status()
+        if not st["enabled"]:
+            raise ApiError(f"AlphaGenome predictions are disabled: {st['reason']}")
+        vcf = vcf_path(name, chrom, self.root / "data" / "individuals")
+        if vcf is None:
+            raise ApiError(f"{name} has no rows on {chrom}")
+        gff = default_gencode({chrom})
+        fa = self.root / "data" / "reference" / f"{chrom}.fa"
+        ccres = load_ccres(chrom)
+        if not gff or not fa.exists() or not ccres:
+            raise ApiError(
+                f"{chrom} needs local models, sequence and elements (genomeos data fetch --chrom {chrom})"
+            )
+        ann = Annotation.from_gff3(gff, {chrom})
+        genome = IndexedGenome(str(fa))
+        try:
+            reg = regulation_of(gene.upper(), chrom, ccres, ann, genome.lengths[chrom])
+        except KeyError as ex:
+            raise ApiError(f"{gene} not on {chrom}") from ex
+        finally:
+            genome.close()
+        scorer = AlphaGenomeAdapter()._live_scorer(threshold=0.02)  # noqa: SLF001
+        r = predict_gene(name, reg["gene"], chrom, reg, scorer, vcf, max_variants=max_variants)
+        return {"model": st["model"], **r}
+
     def twins(self) -> dict:
         from genomeos.twin import Twin
 
@@ -1333,6 +1367,15 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/individuals":
                 return self._json(self.api.individuals())
+            if u.path == "/api/individual/predict":
+                return self._json(
+                    self.api.individual_predict(
+                        self._q(qs, "name") or "HG002",
+                        self._q(qs, "gene") or "",
+                        self._q(qs, "chrom") or "chr21",
+                        int(self._q(qs, "max") or 30),
+                    )
+                )
             if u.path == "/api/individual/genes":
                 return self._json(
                     self.api.individual_genes(

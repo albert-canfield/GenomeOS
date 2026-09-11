@@ -126,10 +126,26 @@ unphased sequence, so it does not see a diploid individual.
    base pairs of an unclassified block gives a contribution profile: a direct,
    if expensive, answer to "what is this sequence for". Roughly three requests
    per base, so it is a per-block tool, never a scan.
-7. **The twin, with its limitation stated**. An individual's non-coding
-   variants can be scored for predicted expression change. The model reads one
-   unphased sequence, so a diploid twin gets two runs and no interaction
-   between haplotypes; that caveat travels with the result.
+7. **The twin, with its limitation stated** (built, feature d). The twin
+   question is "what do this person's variants do to this gene", not "what
+   does this variant do". `genomeos individual predict --name ME --gene APP
+   --chrom chr21` takes the elements the regulation layer says reach the gene
+   (promoter elements first, then the enhancers AlphaGenome itself tied to the
+   gene, then the near ones, then the rest of the node), collects the person's
+   variants inside them (SNVs and indels up to 50 bp), scores each with the
+   gene-level RNA-seq scorer and sums the effects per haplotype where the
+   genotypes are phased (`genomeos/predict/individual_effects.py`). Per-variant
+   answers are cached under `data/knowledge/alphagenome/variants`; per-person
+   results are never written under `data/results`, so nothing about a named
+   person's genome can be committed by accident. Checked on HG002's chr21 rows
+   imported as `demo`, gene APP: 39 variants inside 99 elements, scored in 41 s;
+   four move APP by ≥ 0.1 log2, the strongest a 6 bp insertion at
+   chr21:26,137,053 in enhancer EH38E3453088 (−0.30 in naive CD4 T cells, 23
+   tracks), the same element the deletion job (feature b) had already tied to
+   APP. The model reads one unphased sequence, so a haplotype sum is a sum of
+   single-variant predictions and not a prediction on the whole haplotype; that
+   caveat travels with every result. All four features are now built; the
+   Twin tab runs this from the "Your genome" card.
 
 ## How it fits the architecture
 

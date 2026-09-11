@@ -119,6 +119,7 @@ plain or gzipped, from any caller:
     genomeos individual import /path/genome.vcf.gz --name ME --note "GATK 4.5, 2026-08, own consent"
     genomeos individual list
     genomeos individual genes --name ME --chrom chr21
+    genomeos individual predict --name ME --gene APP --chrom chr21   # AlphaGenome feature d, needs the key
     genomeos lookup chr17:7675088 C>T          # now says whether ME carries it
     genomeos report TP53 --chrom chr17 ...      # lists ME's variants inside the gene
     genomeos twin build --vcf data/individuals/ME/ME_chr21.vcf --sample ME --chrom chr21 --genome data/reference/chr21.fa
@@ -131,7 +132,11 @@ contigs and decoys are dropped and counted. The directory is git-ignored and
 no layer sends a byte of it anywhere: every lookup, dossier and gene walk is
 local. Genotypes are measured evidence (the caller's); consequences are
 derived by the local trace on the canonical transcript. The Twin tab has the
-same import, list and gene-by-gene table.
+same import, list and gene-by-gene table, and the predicted effect of the
+person's regulatory variants on one gene (docs/ALPHAGENOME.md, feature d).
+Per-person results never land under `data/results`: the imported files, the
+gene walks and the predictions stay under git-ignored directories, so a
+named person's genome cannot be committed by accident.
 
 Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
 variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
