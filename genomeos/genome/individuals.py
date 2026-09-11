@@ -1026,3 +1026,108 @@ def _inside(intervals: list[tuple[int, int]], starts: list[int], pos0: int) -> b
 
     i = bisect.bisect_right(starts, pos0) - 1
     return i >= 0 and intervals[i][0] <= pos0 < intervals[i][1]
+
+
+def variants_on_transcript(tr, rows) -> list[dict[str, Any]]:
+    """A person's SNVs (VCF rows) read on one traced transcript: the coding ones with their consequence."""
+    out = []
+    for f in rows:
+        if len(f[3]) != 1 or len(f[4]) != 1:
+            continue
+        sub = tr.substitute(int(f[1]) - 1, f[3], f[4])
+        if sub.get("region") != "CDS":
+            continue
+        gt = f[9].split(":")[0] if len(f) > 9 else ""
+        out.append(
+            {
+                "pos": int(f[1]),
+                "ref": f[3],
+                "alt": f[4],
+                "genotype": gt,
+                "consequence": sub.get("consequence"),
+                "hgvs_p": sub.get("hgvs_p"),
+                "residue": sub.get("residue"),
+            }
+        )
+    return out
+
+
+def tissue_proteins(
+    name: str, gene: str, chrom: str, root: Path | None = None, reference: Path = Path("data/reference")
+):
+    """Which protein each tissue makes in this person: GTEx's dominant transcript per tissue, traced,
+    with the person's coding variants read on that transcript rather than on the canonical one."""
+    from genomeos.flow.trace import trace
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.molecules.rna import gtex_isoforms
+
+    root = root or ROOT
+    vcf = vcf_path(name, chrom, root)
+    gff = default_gencode({chrom})
+    fa = reference / f"{chrom}.fa"
+    if vcf is None:
+        raise FileNotFoundError(f"{name} has no rows on {chrom}")
+    if not gff or not fa.exists():
+        raise FileNotFoundError(
+            f"{chrom} needs local models and sequence (genomeos data fetch --chrom {chrom})"
+        )
+    ann = Annotation.from_gff3(gff, {chrom})
+    g = ann.gene(gene.upper())
+    module = ann.to_module("tissue")
+    txs = {t.id.split(".")[0]: t for t in module.entities[g.id].transcripts if t.cds_segments}
+    defn_p = Path("data/knowledge/proteins") / f"{g.symbol}.json"
+    labels = []
+    if defn_p.exists():
+        try:
+            d = json.loads(defn_p.read_text())
+            labels = ((d["sections"].get("genomic_origin") or {}).get("items") or {}).get("transcripts") or []
+        except (OSError, json.JSONDecodeError):
+            labels = []
+    iso = gtex_isoforms(g.symbol, transcripts=labels)
+    rows = list(rows_in(vcf, g.locus.start + 1, g.locus.end))
+    genome = IndexedGenome(str(fa))
+    proteins = []
+    try:
+        dominant = iso.get("dominant_by_tissue") or {}
+        by_tx: dict[str, list[str]] = {}
+        for tissue, d in dominant.items():
+            by_tx.setdefault(d["transcript"], []).append(tissue)
+        canonical = iso.get("canonical")
+        if canonical and canonical not in by_tx:
+            by_tx[canonical] = []
+        for tid, tissues in sorted(by_tx.items(), key=lambda kv: -len(kv[1])):
+            tx = txs.get(tid)
+            if tx is None:
+                proteins.append(
+                    {"transcript": tid, "tissues": tissues, "note": "non-coding in the local models"}
+                )
+                continue
+            tr = trace(genome, tx, g.symbol)
+            vs = variants_on_transcript(tr, rows)
+            changing = [v for v in vs if v["consequence"] not in ("synonymous", "coding")]
+            proteins.append(
+                {
+                    "transcript": tid,
+                    "name": (iso.get("isoforms", {}).get(tid) or {}).get("name"),
+                    "canonical": tid == canonical,
+                    "tissues_dominant": len(tissues),
+                    "tissues": tissues[:12],
+                    "protein_length": len(tr.protein),
+                    "coding_snvs": len(vs),
+                    "protein_changing": [
+                        {k: v[k] for k in ("hgvs_p", "genotype", "consequence", "residue")} for v in changing
+                    ],
+                }
+            )
+    finally:
+        genome.close()
+    return {
+        "individual": name,
+        "gene": g.symbol,
+        "chrom": chrom,
+        "tissues_measured": iso.get("tissues_measured", 0),
+        "proteins": proteins,
+        "evidence": "measured: GTEx v8 transcript TPM per tissue; measured genotypes; consequence derived "
+        "by the local trace on the tissue's dominant transcript",
+        "note": "the isoform a tissue makes is GTEx's population median, not this person's own expression",
+    }

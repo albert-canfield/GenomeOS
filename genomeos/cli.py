@@ -2132,6 +2132,35 @@ def cmd_individual(args: argparse.Namespace) -> int:
         else:
             print(md)
         return 0
+    if args.action == "protein":
+        try:
+            r = ind.tissue_proteins(args.name, args.gene, args.chrom)
+        except (FileNotFoundError, KeyError) as ex:
+            print(ex)
+            return 1
+        print(
+            f"{r['individual']} × {r['gene']}: the protein each of {r['tissues_measured']} tissues makes  "
+            f"[{r['evidence']}]"
+        )
+        for p in r["proteins"]:
+            if "note" in p:
+                print(f"  {p['transcript']}: {p['note']} (dominant in {len(p['tissues'])} tissues)")
+                continue
+            tag = " canonical" if p["canonical"] else ""
+            ch = (
+                "; ".join(
+                    f"{v['hgvs_p'] or v['consequence']} ({v['genotype']})" for v in p["protein_changing"]
+                )
+                or "none"
+            )
+            print(
+                f"  {p['name'] or p['transcript']}{tag}: {p['protein_length']} aa, dominant in "
+                f"{p['tissues_dominant']} tissues ({', '.join(p['tissues'][:4])}"
+                f"{'…' if len(p['tissues']) > 4 else ''}); "
+                f"{p['coding_snvs']} coding SNVs, protein-changing: {ch}"
+            )
+        print(f"  {r['note']}")
+        return 0
     if args.action == "regions":
         try:
             counts = ind.import_regions(args.name, args.bed, progress=lambda m: print(m, flush=True))
@@ -3663,6 +3692,12 @@ def build_parser() -> argparse.ArgumentParser:
     q = isub.add_parser("report", help="one Markdown page from what has been computed for the person")
     q.add_argument("--name", required=True)
     q.add_argument("--out", help="write to a file instead of printing")
+    q = isub.add_parser(
+        "protein", help="which protein each tissue makes in this person (dominant isoform + variants)"
+    )
+    q.add_argument("--name", required=True)
+    q.add_argument("--gene", required=True)
+    q.add_argument("--chrom", required=True)
     q = isub.add_parser("regions", help="the regions a person's calls are trusted in (BED, file or URL)")
     q.add_argument("--name", required=True)
     q.add_argument("bed")

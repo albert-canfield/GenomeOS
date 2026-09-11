@@ -135,6 +135,7 @@ plain or gzipped, from any caller:
     genomeos individual screen --name ME              # ClinVar carrier screen: pathogenic alleles carried, offline
     genomeos individual knockouts --name ME           # truncating SNVs genome-wide, homozygous first
     genomeos individual coding --name ME              # coding SNVs by consequence and by gene, missense included
+    genomeos individual protein --name ME --gene APP --chrom chr21   # which protein each tissue makes in ME
     genomeos individual report --name ME --out ME.md  # one page from everything computed for the person
     genomeos individual genes --name ME --chrom chr21
     genomeos individual predict --name ME --gene APP --chrom chr21   # AlphaGenome feature d, needs the key
@@ -230,6 +231,16 @@ differently, multi-allelic sites), which is the honest state: a trio
 comparison of three benchmark files measures the callers' agreement first
 and inheritance second. Stored under the child's directory as
 `trio_<father>_<mother>.json`, never under `data/results`.
+
+`individual protein` is the twin's isoform: for one gene, GTEx's dominant
+transcript in each tissue, traced, with the person's coding variants read on
+that transcript rather than on the canonical one. HG002 × APP: APP-201 (770
+aa) in 33 tissues, APP-204 (751 aa) in 14, APP-202 (695 aa, the neuronal
+isoform) in 6 brain regions, APP-203 in the cortex, no coding variant on
+any of them; HG002 × FUT2: FUT2-201 in 49 tissues carrying p.Trp154Ter
+homozygous, so every tissue that makes FUT2 makes the truncated one. The
+isoform per tissue is GTEx's population median, not this person's own
+expression, and the output says so.
 
 Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
 variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
