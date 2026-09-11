@@ -61,3 +61,49 @@ genomeos info data/reference/chr21.fa.gz       # 46,709,983 bp in 0.5 s
 Known limitation: the ORF finder only starts at AUG. Human mitochondrial
 genes ND1, ND2 and ND5 use AUA/AUU starts, so their ORFs are found at the
 first internal AUG. Alternative start codons are on the Phase 1 list.
+
+## Optional: AlphaGenome (predicted regulatory effects)
+
+Google DeepMind's AlphaGenome predicts what a sequence change does to
+expression, splicing and chromatin in each tissue. It is optional: the core
+never depends on it, and its output enters GenomeOS only as `predicted`
+evidence capped at confidence 0.7. Without it the features below are loaded
+but disabled, and `genomeos predict --status` and the Progress tab say why
+and how to enable them.
+
+| | Feature | What the key enables | State |
+|---|---|---|---|
+| a | variant effect | predicted expression change per tissue for any variant: `genomeos predict chr21:25897620 C>T`, `/api/predict` | built |
+| b | regulatory blocks | predicted target gene and tissue for UNKNOWN regulatory elements, tightening the CTCF-domain inference | planned |
+| c | sequence grammar | splice-site and chromatin signals the learned matrices cannot capture, entering as predicted evidence | planned |
+| d | twin | predicted expression differences between an individual's haplotypes and the reference | planned |
+
+To enable:
+
+1. Request a key (free for non-commercial use) at
+   https://deepmind.google.com/science/alphagenome/account/terms.
+2. Install the client: `uv sync --extra predict`.
+3. Put the key in a file named `.env` at the project root (git-ignored,
+   never committed) or export it in your shell:
+
+```
+ALPHAGENOME_API_KEY=your-key-here
+```
+
+4. Check: `uv run genomeos predict --status` prints `enabled`.
+
+The key is read from the environment first and from `.env` second; it is
+never written to a result, a log or a job file.
+
+## HG002 on every autosome (2026-09-11)
+
+`scripts/twin_genome_wide.py` applied the GIAB v4.2.1 benchmark calls to
+all 22 local autosomes and kept only the statistics
+(`hg002_twin_by_chromosome.json`): 4,048,342 PASS variants
+(3,460,251 SNVs), 1,619,891 applied on haplotype 1 and
+4,032,208 on haplotype 2 (unphased heterozygotes go to
+haplotype 2 by policy), 0 reference mismatches and
+840 skipped overlaps. Zero mismatches over four million
+calls is the check that the fetched hg38 sequences and the benchmark agree
+base for base. chrX and chrY are not in the benchmark set. No haplotype
+FASTA is kept; `genomeos twin build` makes one on demand.
