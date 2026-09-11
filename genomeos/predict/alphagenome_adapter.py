@@ -41,9 +41,9 @@ FEATURES: tuple[tuple[str, str, str, str], ...] = (
     (
         "b",
         "regulatory blocks",
-        "predicted target gene and tissue for UNKNOWN regulatory elements, tightening the CTCF-domain "
-        "inference",
-        "planned",
+        "predicted target gene and tissue for enhancer-like elements by deleting each one in its window "
+        "(`genomeos predict --element`, job enhancer_targets_chr21), held against the CTCF-domain inference",
+        "built",
     ),
     (
         "c",

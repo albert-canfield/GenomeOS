@@ -27,6 +27,7 @@ from genomeos.genome.domains import Domain, infer_domains
 from genomeos.genome.regulatory import CCRE
 from genomeos.genome.regulatory import EVIDENCE as ENCODE_EVIDENCE
 from genomeos.ir.model import Evidence, EvidenceKind, RegulatoryElement
+from genomeos.predict.enhancer_target import cached_prediction
 
 PROMOTER_REACH = 1_000
 OPEN_CHROMATIN_REACH = 2_000
@@ -147,7 +148,7 @@ def regulation_of(
 
     def row(e: RegulatoryElement) -> dict[str, Any]:
         t = next(t for t in e.targets if t["gene"] == g.symbol)
-        return {
+        r = {
             "id": e.id,
             "class": e.cls,
             "start": e.locus.start,
@@ -157,7 +158,14 @@ def regulation_of(
             "confidence": t["confidence"],
             "intragenic": g.locus.start <= e.locus.start < g.locus.end,
         }
+        pred = cached_prediction(chrom, e.id)  # AlphaGenome feature b, only where the job has been
+        if pred is not None:
+            r["predicted"] = pred
+            r["predicted_this_gene"] = pred["gene"] == g.symbol
+        return r
 
+    rows_enh = sorted((row(e) for e in enhancers), key=lambda r: r["distance"])[:200]
+    predicted = [r for r in rows_enh if "predicted" in r]
     return {
         "gene": g.symbol,
         "chrom": chrom,
@@ -168,12 +176,15 @@ def regulation_of(
         "enhancers_in_domain": len(enhancers),
         "enhancers_nearest_to_this_gene": len(nearest),
         "enhancers_inside_gene": len(inside),
-        "enhancers": sorted((row(e) for e in enhancers), key=lambda r: r["distance"])[:200],
+        "enhancers": rows_enh,
+        "enhancers_predicted": len(predicted),
+        "enhancers_predicted_this_gene": sum(1 for r in predicted if r["predicted_this_gene"]),
         "insulators_bounding": [{"id": e.id, "start": e.locus.start, "end": e.locus.end} for e in insulators],
         "competing_genes": dom.genes if dom else [],
         "evidence": {
             "elements": "curated: " + ENCODE_EVIDENCE,
             "targets": "inferred: reach bounded by the CTCF domain, nearest TSS first",
+            "predicted": "predicted: AlphaGenome expression change on deleting the element, where scored",
             "domain": "inferred: CTCF-only boundaries, no Hi-C",
         },
     }

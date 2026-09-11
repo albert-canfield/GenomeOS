@@ -159,8 +159,12 @@ to shrink. Only 1.5% stays unclassified.
 Enhancers, silencers and insulators leave no signal a k-mer or a regex can
 read; ENCODE's chromatin evidence now places them (`regulatory` class,
 `genomeos regulation` for their targets), but which gene each one reaches
-is inferred from the CTCF domain, not measured; Hi-C or a predictive model
-(AlphaGenome, `predicted` evidence) would tighten that. Repeat families are
+is inferred from the CTCF domain, not measured. Where the AlphaGenome job
+has run (`enhancer_targets_chr21`: 200 chr21 enhancers deleted one by one,
+docs/ALPHAGENOME.md feature b) the element carries a `predicted` target with
+a tissue and a magnitude next to the inferred one; 87% of the predicted
+coding targets fall inside the inferred node. Hi-C would make it a
+measurement. Repeat families are
 named by RepeatMasker's curated library where a chromosome has been
 distilled with `genomeos repeats`; the sequence patterns remain the fallback
 for a chromosome that has not. Silencers have no curated source here yet.

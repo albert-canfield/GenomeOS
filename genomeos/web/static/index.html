@@ -654,6 +654,10 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-reader" class="scroll"></div>
     </div>
     <div class="card">
+      <h2><i class="ic">🎯</i>Enhancer targets, predicted<span class="help" data-tip="AlphaGenome feature b. Each sampled distal enhancer is deleted in its 1 Mb window and the predicted expression of every gene in the window is read across all RNA-seq tracks; the gene that moves most is the predicted target, the track is the tissue. Compared with the domain inference (nearest TSS inside the CTCF node): agreement is a test of the node model. Predicted evidence, confidence capped at 0.7.">?</span></h2>
+      <div id="j-enhancers" class="scroll"></div>
+    </div>
+    <div class="card">
       <h2><i class="ic">🕸️</i>Proteome coverage<span class="help" data-tip="For every protein-coding gene of a compiled chromosome: which questions the public databases answer (sequence, function, domains, pathways, interactions, expression, structures, disease). Measured, not assumed.">?</span></h2>
       <div id="j-proteome" class="scroll"></div>
     </div>
@@ -1223,6 +1227,18 @@ async function loadIndividualWide() {
         <table><tr><th>chr</th>${cells.map(c => `<th class="num">${c} read</th><th class="num">${c} enhancers</th>`).join('')}<th class="num">both</th></tr>` +
         Object.entries(rd.chromosomes).map(([c, r]) => `<tr><td class="mono">${c}</td>${cells.map(k => `<td class="num">${r[k] ? r[k].genes_read + '/' + r[k].coding_genes : '-'}</td><td class="num">${r[k] ? fmt(r[k].enhancers_active) : '-'}</td>`).join('')}<td class="num">${r.read_in_both ?? '-'}</td></tr>`).join('') + '</table>';
     } else $('#j-reader').innerHTML = '<span class="muted">not run yet (scripts/reader_genome_wide.py)</span>';
+    const et = d.enhancer_targets || {};
+    const chroms = Object.keys(et);
+    if (chroms.length) {
+      $('#j-enhancers').innerHTML = chroms.map(c => {
+        const r = et[c], s = r.summary || {}, v = s.verdicts_coding || s.verdicts || {};
+        const pct = (x) => x == null ? '?' : (x * 100).toFixed(0) + '%';
+        const named = s.with_predicted_target || 0;
+        return `<div class="kpi"><div><b>${c}</b><span>${fmt(s.elements_scored || 0)} of ${fmt(r.distal_enhancers_with_domain_target || 0)} distal enhancers scored</span></div><div><b>${pct(s.fraction_with_target)}</b><span>name a gene (≥ ${r.min_effect_log2fc} log2)</span></div><div><b>${pct(s.coding_target_agrees_with_nearest)}</b><span>coding target = nearest TSS in node</span></div><div><b>${pct(s.fraction_inside_domain)}</b><span>target inside the node</span></div><div><b>${fmt(s.silencer_like || 0)}</b><span>silencer-like (expression rises)</span></div></div>
+          <table><tr><th>verdict (coding target vs node inference)</th><th class="num">elements</th><th class="num">share</th></tr>${Object.entries(v).map(([k, n]) => `<tr><td>${k}</td><td class="num">${fmt(n)}</td><td class="num">${pct(n / (s.elements_scored || 1))}</td></tr>`).join('')}</table>
+          <div class="muted" style="margin-top:6px">tissues where the strongest effect falls: ${Object.entries(s.top_tissues || {}).slice(0, 8).map(([k, n]) => `${k} (${n})`).join(', ') || '-'}${s.median_distance_when_agreeing ? ` · median distance when agreeing ${fmt(s.median_distance_when_agreeing)} bp` : ''} · ${named} named <span class="pill predicted">predicted: ${(r.model || 'AlphaGenome').split(' (')[0]}</span></div>`;
+      }).join('');
+    } else $('#j-enhancers').innerHTML = '<span class="muted">not run yet (job enhancer_targets_chr21 on this tab, needs ALPHAGENOME_API_KEY)</span>';
   } catch (e) { $('#j-twin').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
 async function loadProgress() {

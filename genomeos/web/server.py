@@ -742,6 +742,10 @@ class Api:
         return {
             "twin": load_result("hg002_twin_by_chromosome", rd),
             "reader": load_result("reader_genome_wide", rd),
+            "enhancer_targets": {
+                p.stem.split("_")[-1]: load_result(p.stem, rd)
+                for p in sorted(rd.glob("enhancer_targets_chr*.json"))
+            },
         }
 
     def proteome_summary(self) -> dict:

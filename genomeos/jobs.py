@@ -42,6 +42,14 @@ def _proteome_progress(root: Path) -> float:
     return float(done)
 
 
+def _result_count(root: Path, name: str, key: str) -> int:
+    p = root / "data" / "results" / f"{name}.json"
+    try:
+        return int(json.loads(p.read_text()).get("summary", {}).get(key, 0)) if p.exists() else 0
+    except (OSError, json.JSONDecodeError, ValueError):
+        return 0
+
+
 def _count_curated(root: Path) -> int:
     n = 0
     for p in (root / "data" / "results").glob("unknown_chr*.json"):
@@ -102,6 +110,15 @@ CATALOG: dict[str, dict] = {
         "count": None,
         "progress": lambda root: _proteome_progress(root),
         "complete": lambda root: len(list((root / "data" / "results").glob("proteome_chr*.json"))) >= 25,
+        "auto_heal": True,
+    },
+    "enhancer_targets_chr21": {
+        "argv": [sys.executable, "scripts/enhancer_targets.py", "--chrom", "chr21", "--sample", "200"],
+        "describe": "AlphaGenome: delete 200 chr21 distal enhancers one by one and read which gene moves.",
+        "total": 200,
+        "result": "enhancer_targets_chr21",
+        "count": lambda r: r.get("summary", {}).get("elements_scored", 0),
+        "complete": lambda root: _result_count(root, "enhancer_targets_chr21", "elements_scored") >= 200,
         "auto_heal": True,
     },
     "distil": {

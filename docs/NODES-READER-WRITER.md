@@ -101,6 +101,39 @@ Layered evidence, each layer with its own kind and confidence:
 Each layer moves a block from UNKNOWN toward a named function with a
 confidence, and the interface should show which layer said so.
 
+## Do enhancers stay inside their node? A predicted test (2026-09-11)
+
+The node model makes one testable claim: an enhancer reaches genes inside
+its CTCF domain and not across the boundary. GenomeOS could not measure this
+(no Hi-C), so it asked a predictive model. For 200 distal enhancers of
+chromosome 21, spread along its length, AlphaGenome deleted the element in
+its 1 Mb window and reported the predicted expression change of every gene
+across 371 RNA-seq tracks (`scripts/enhancer_targets.py`, feature b in
+docs/ALPHAGENOME.md, `data/results/enhancer_targets_chr21.json`):
+
+- 90 elements move a coding gene by ≥ 0.1 log2; for 78 of them (86.7%) the
+  gene that moves most is inside the node the element sits in, and for 61
+  (67.8%) it is exactly the nearest TSS in the node, the target `genomeos
+  regulation` had inferred at 0.4.
+- 12 elements name a coding gene beyond the boundary. Some are the model's
+  known long-range weakness, some may be boundaries the CTCF-only inference
+  draws in the wrong place; each one is a candidate for a better node, which
+  is what the `regulation` rows now show as `predicted` next to `inferred`.
+- 110 elements move no coding gene by that threshold, and the share that
+  names a gene falls from 52% under 20 kb to 32% beyond 100 kb: the model
+  reads the near ones and is agnostic about the far ones, as it says of
+  itself.
+- 43 of the 127 named effects are rises, not drops: the registry's
+  "enhancer-like" class, defined by chromatin marks, includes elements that
+  behave as silencers for the gene they move.
+
+This is a prediction agreeing with an inference, and both are labelled as
+such; it is not a measurement. But it is the first evidence in the project,
+beyond the placement of CTCF sites, that the node is the right unit for
+regulation, and it gives every scored enhancer a named gene, a tissue and a
+magnitude instead of a distance. The same job runs on any fetched
+chromosome.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first

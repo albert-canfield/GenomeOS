@@ -1896,7 +1896,7 @@ def cmd_predict(args: argparse.Namespace) -> int:
     from genomeos.predict import AlphaGenomeAdapter, status
 
     st = status()
-    if args.status or not args.variant:
+    if args.status or (not args.variant and not args.element):
         why = f" ({st['reason']})" if st["reason"] else ""
         print(f"{st['name']}: {'enabled' if st['enabled'] else 'disabled'}{why}")
         for f in st["features"]:
@@ -1908,6 +1908,8 @@ def cmd_predict(args: argparse.Namespace) -> int:
     if not st["enabled"]:
         print(f"AlphaGenome predictions are disabled: {st['reason']}. To enable: {st['how']}")
         return 2
+    if args.element:
+        return _predict_element(args, st)
     m = re.match(r"^(chr\w+):(\d+)\s+([ACGTacgt]+)>([ACGTacgt]+)$", " ".join(args.variant).strip())
     if not m:
         print("expected a variant like chr21:25897620 C>T (1-based, plus strand)")
@@ -1955,6 +1957,63 @@ def cmd_predict(args: argparse.Namespace) -> int:
         )
     if len(effects) > args.top:
         print(f"  … {len(effects) - args.top} more (--top N or --json)")
+    return 0
+
+
+def _predict_element(args: argparse.Namespace, st: dict) -> int:
+    """Feature b: delete an ENCODE element (or any region) and read which gene moves."""
+    import re
+
+    from genomeos.predict import AlphaGenomeAdapter
+    from genomeos.predict.enhancer_target import Context
+
+    m = re.match(r"^(chr\w+):([\d,]+)-([\d,]+)$", args.element.strip())
+    if not m:
+        print("expected a region like chr21:42721378-42721727 (0-based start, half-open) or an element id")
+        return 2
+    chrom, start, end = m.group(1), int(m.group(2).replace(",", "")), int(m.group(3).replace(",", ""))
+    try:
+        ctx = Context(chrom)
+    except FileNotFoundError as ex:
+        print(ex)
+        return 1
+    try:
+        r = ctx.score_region(
+            AlphaGenomeAdapter()._live_scorer(threshold=0.0), start, end, min_effect=args.min
+        )  # noqa: SLF001
+    finally:
+        ctx.close()
+    if args.json:
+        print(json.dumps({"model": st["model"], "evidence": "predicted", **r}, indent=2))
+        return 0
+    print(f"{r['id']} {chrom}:{r['start']:,}-{r['end']:,} ({r['length']} bp) deleted in its 1 Mb window")
+    print(
+        f"  {r['genes_in_window']} genes read across {r['tracks']} RNA-seq tracks  [predicted, {st['model']}]"
+    )
+    if r.get("inferred"):
+        print(
+            f"  inferred target (nearest TSS in domain): {r['inferred']['gene']} "
+            f"at {r['inferred']['distance']:,} bp"
+        )
+    p = r["predicted"]
+    if p:
+        print(
+            f"  predicted target: {p['gene']} ({p['action']}, log2FC {p['log2_fold_change']:+.2f} "
+            f"in {p['tissue']}, {p['strength']}, confidence {p['confidence']})"
+        )
+    else:
+        print(f"  predicted target: none (no gene moves by {args.min} log2)")
+    pc = r.get("predicted_coding")
+    if pc and (not p or pc["gene"] != p["gene"]):
+        print(
+            f"  strongest coding gene: {pc['gene']} ({pc['action']}, {pc['log2_fold_change']:+.2f} "
+            f"in {pc['tissue']})"
+        )
+    if r.get("verdict_coding"):
+        print(f"  verdict: {r['verdict_coding']}")
+    print("  genes that move most:")
+    for g in r["top_genes"]:
+        print(f"    {g['gene']:16} drop {g['max_drop_log2fc']:+.3f} in {g['max_drop_tissue'][:40]}")
     return 0
 
 
@@ -2104,6 +2163,13 @@ def cmd_repeats(args: argparse.Namespace) -> int:
     return 0
 
 
+def _predicted_cell(e: dict) -> str:
+    p = e.get("predicted")
+    if p:
+        return f"{p['gene']} {p['log2_fold_change']:+.2f} {p['tissue'][:18]}"
+    return "no effect" if "predicted" in e else ""
+
+
 def cmd_regulation(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, Genome, default_gencode
     from genomeos.genome.regulation import regulation_of
@@ -2139,6 +2205,11 @@ def cmd_regulation(args: argparse.Namespace) -> int:
         f"{r['enhancers_nearest_to_this_gene']} nearest to this gene, "
         f"{r['enhancers_inside_gene']} inside the gene"
     )
+    if r.get("enhancers_predicted"):
+        print(
+            f"  predicted (AlphaGenome, deletion): {r['enhancers_predicted']} scored, "
+            f"{r['enhancers_predicted_this_gene']} name this gene"
+        )
     print(f"  insulators bounding the node: {len(r['insulators_bounding'])}")
     print(
         _table(
@@ -2151,10 +2222,11 @@ def cmd_regulation(args: argparse.Namespace) -> int:
                     "where": "intragenic" if e["intragenic"] else "outside",
                     "basis": e["basis"],
                     "conf": e["confidence"],
+                    "predicted": _predicted_cell(e),
                 }
                 for e in r["enhancers"][: args.top]
             ],
-            ["element", "class", "position", "distance", "where", "basis", "conf"],
+            ["element", "class", "position", "distance", "where", "basis", "conf", "predicted"],
         )
     )
     for k, v in r["evidence"].items():
@@ -2793,6 +2865,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="optional AlphaGenome feature: predicted expression change per tissue for a variant",
     )
     p.add_argument("variant", nargs="*", help="chr21:25897620 C>T (1-based, plus strand)")
+    p.add_argument("--element", help="feature b: delete a region (chr21:START-END) and read which gene moves")
     p.add_argument("--status", action="store_true", help="whether the feature is enabled and what it brings")
     p.add_argument("--top", type=int, default=20)
     p.add_argument("--min", type=float, default=0.05, help="smallest |log2 fold change| reported")

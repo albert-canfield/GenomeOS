@@ -53,14 +53,46 @@ unphased sequence, so it does not see a diploid individual.
    0.7. Verified against a published liver eQTL: rs12740374 raises PSRC1 by
    0.81 log2 and CELSR2 by 0.51 in liver tracks, while the coding variant APP
    A673T shows no expression effect at all (`data/results/alphagenome_rs12740374.json`).
-2. **Enhancer to gene** (feature b). For every ENCODE regulatory block that
-   `genomeos unknown` classifies, ask the gene-mask scorer which gene the
-   element actually reaches and in which tissue, and raise the target from
-   "nearest coding gene inside the CTCF domain, inferred 0.4" to a predicted
-   target with a magnitude. This is the single biggest gain: 33.6% of the
-   UNKNOWN space is regulatory and none of it currently names its gene with
-   evidence. Cost is one request per element, so a chromosome is a job, not a
-   genome-wide run.
+2. **Enhancer to gene** (built, feature b). For an enhancer-like element the
+   registry says where and what kind; nothing says which gene. `genomeos predict
+   --element chr21:START-END` deletes the element as a variant in its 1 Mb
+   window and reads the predicted expression of every gene in the window
+   across the 371 RNA-seq tracks; the gene that moves most is the predicted
+   target, the track where it moves most the tissue, the change the magnitude,
+   and a rise on deletion marks the element as silencer-like for that gene.
+   Everything is `predicted`, confidence capped at 0.7; answers are cached per
+   element under `data/knowledge/alphagenome/elements` so a layer that only
+   reads (`genomeos regulation`, the Flow tab) never calls the API. The
+   chromosome job `enhancer_targets_chr21` (Progress tab) sampled 200 of the
+   6,618 distal enhancers of chr21 evenly along the chromosome, about eight
+   seconds each, and holds each answer against the domain inference
+   (`data/results/enhancer_targets_chr21.json`):
+
+   | | |
+   |---|---|
+   | elements deleted | 200 (dELS, 2 kb to 400 kb from the inferred target) |
+   | some gene moves by ≥ 0.1 log2 | 127 (63.5%); 40 strong (≥ 0.3), 87 weak |
+   | strongest coding gene = nearest TSS in the CTCF node | 61 of 90 named coding targets (67.8%) |
+   | strongest coding gene inside the node | 78 of 90 (86.7%); 12 name a gene beyond the boundary |
+   | no coding gene moves | 110 (55%); a non-coding gene moves in 37 of these |
+   | silencer-like (expression rises on deletion) | 43 of 127 named |
+   | median distance when prediction and inference agree | 28 kb |
+   | some gene named, element < 20 kb from its inferred target | 52% (n = 63) |
+   | some gene named, element ≥ 100 kb from its inferred target | 32% (n = 31) |
+
+   Read carefully: the 87% inside-the-node figure is a prediction agreeing with
+   an inference, not a measurement, and the model itself states that elements
+   beyond 100 kb are weak, which the last two rows reproduce. What it changes
+   for a geneticist is the label on an enhancer: 61 elements move from
+   "nearest coding gene in the node, inferred 0.4" to a named gene with a
+   tissue and a magnitude, and 43 elements that the registry calls
+   enhancer-like behave as silencers for the gene they move. The examples
+   worth looking at are PKNOX1 (element EH38E3461530, 56 kb away, −0.80 in a
+   neuroectodermal line, agrees) and the elements the inference gets wrong:
+   EH38E3454846 is 41 kb from SCAF4 but moves HUNK, beyond the boundary;
+   EH38E3457653 sits 234 kb from HLCS and moves SIM2 instead. Other
+   chromosomes run through the same job by name; the summary card on the
+   Progress tab shows one row per chromosome scored.
 3. **Splicing, at the resolution our grammar lacks** (feature c). Our learned
    donor and acceptor matrices reach about 90% recall at seven false hits per
    kilobase, which is why segments are parsed by grammar and never asserted
