@@ -394,6 +394,36 @@ describe different products. What would settle each one is population
 allele frequency at the exact site (gnomAD), which the lookup layer already
 fetches one variant at a time.
 
+### The residue-level disagreements settled by allele frequency (2026-09-12)
+
+For the 38 genes whose canonical translation has the curated protein's
+length but not its sequence, each differing residue names a codon and the
+single-base change that would give UniProt's residue is a variant with a
+genomic position. `scripts/disagreements_frequency.py` asks gnomAD and
+dbSNP (through Ensembl VEP, cached by the lookup layer) about each such
+allele, up to six per gene
+(`data/results/translation_disagreements_frequency.json`, 112 s):
+
+| verdict | genes |
+|---|---|
+| the curated allele is the common one: the reference carries a minor allele (OR9H1 rs7555046 at 0.99; FCGBP, four sites at 1.0) | 2 |
+| the curated allele is a known polymorphism, not the majority (HLA-DQA1, MICA, GSTT2, SERPINA2, PRB4, SAMD1) | 6 |
+| the curated allele is in dbSNP but rare or unmeasured | 10 |
+| the curated allele is unknown to dbSNP and gnomAD: the gene model and the UniProt entry describe different things | 16 |
+| no residue-level difference found (alignment rather than substitution) | 4 |
+
+That is the last side of the bound. Eight of the 38 are population
+variation, of which two are the reference carrying the minor allele (the
+classic case, FCGBP's four sites all at frequency 1.0) and six are
+polymorphic loci where UniProt chose one haplotype (the HLA and MICA
+entries, as expected of the MHC). The 16 with alleles no population
+resource has seen are not alleles at all: the UniProt sequence there comes
+from a different gene model, a different assembly or a corrected entry.
+Across all four checks, the 96 disagreements now read as: 31 hg38
+frameshift and nonsense alleles (by mechanism), 8 residue-level population
+variants, 7 different products, and the rest gene-model differences that
+no isoform, no genotype of the trio and no population allele explains.
+
 ## The proteome as a library
 
 The compiled proteome is now a BioLib layer that ships with GenomeOS:
