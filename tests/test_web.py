@@ -75,3 +75,22 @@ def test_http_roundtrip():
     finally:
         srv.shutdown()
         srv.server_close()
+
+
+def test_api_grow_reports_the_organism_and_its_space():
+    api = Api(ROOT)
+    worm = api.grow("data/demo/celegans_lineage.bio", "150", 2)
+    assert (
+        worm["summary"]["organism"] == "CelegansEarly"
+        and worm["space"] is None
+        and worm["diff"]["matched"] > 0
+    )
+    flag = api.grow("data/demo/flag_organism.bio", "200 h", 0)
+    rows = flag["space"]["rows"]
+    assert (
+        flag["space"]["width"] == 30
+        and len(rows) == 1
+        and rows[0].startswith("BBB")
+        and rows[0].endswith("RRR")
+    )
+    assert [b[0] for b in flag["space"]["bands"]] == ["Blue", "White", "Red"] and flag["asserts"][0]["ok"]

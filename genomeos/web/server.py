@@ -414,6 +414,15 @@ class Api:
             ],
             "fates": body.fates_at(until_min),
             "tree": body.tree(depth=max(0, min(int(depth), 6))),
+            "space": {
+                "width": m.organism.width,
+                "height": m.organism.height,
+                "rows": body.type_map(),
+                "bands": body.bands_along_x(),
+                "blocked": body.blocked_divisions,
+            }
+            if body.spatial
+            else None,
             "asserts": body.check_asserts(),
             "uncertainty": body.uncertainty().to_dict(),
             "unknown": dict(body.unknown),
