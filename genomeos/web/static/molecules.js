@@ -97,7 +97,17 @@
       G.nodes = n.nodes.map((x, i) => ({...x, centre: x.id === n.centre, x: W / 2 + (x.id === n.centre ? 0 : Math.cos(i) * 120), y: H / 2 + (x.id === n.centre ? 0 : Math.sin(i) * 120)}));
       G.edges = n.edges; G.ticks = 0; cancelAnimationFrame(G.raf); gStep();
       const d = n.degree; $('#m-graph-status').textContent = `${n.centre}: ${d.associates} associations, ${d.member_of} pathways, ${d.has_domain} domains, ${d.expressed_in} tissues with nTPM`;
-      $('#m-graph-info').innerHTML = `showing ${n.nodes.length - 1} of its neighbours (highest confidence first) · blue protein (faded = not compiled locally), green pathway, purple domain, amber tissue · solid blue association = STRING experimental channel, dashed = other channels`;
+      const uncompiled = n.nodes.filter(x => x.kind === 'protein' && x.compiled === false).map(x => x.id);
+      $('#m-graph-info').innerHTML = `showing ${n.nodes.length - 1} of its neighbours (highest confidence first) · blue protein (faded = not compiled locally), green pathway, purple domain, amber tissue · solid blue association = STRING experimental channel, dashed = other channels${uncompiled.length ? ` · <button class="ghost" id="m-graph-grow" style="padding:1px 8px;font-size:11px" data-tip="Compile the ${Math.min(8, uncompiled.length)} nearest uncompiled partners from the public databases (a few seconds each) so the graph grows around this protein.">🌱 compile ${Math.min(8, uncompiled.length)} partners</button>` : ''}`;
+      const grow = $('#m-graph-grow');
+      if (grow) grow.onclick = async () => {
+        const todo = uncompiled.slice(0, 8);
+        for (let i = 0; i < todo.length; i++) {
+          $('#m-graph-status').textContent = `compiling ${todo[i]} (${i + 1}/${todo.length})…`;
+          try { await window.api(`/api/protein_definition?gene=${encodeURIComponent(todo[i])}`); } catch (e) { /* a partner without a reviewed entry is skipped */ }
+        }
+        window.moleculesGraph(gene);
+      };
     } catch (e) { $('#m-graph-status').textContent = e.message; }
   };
   document.addEventListener('DOMContentLoaded', () => {
