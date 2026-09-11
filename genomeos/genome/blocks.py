@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from genomeos.genome.sequence import Sequence
@@ -342,6 +343,7 @@ def blocks_for_window(
                     )
                 )
     _apply_unknown_classes(blocks, chrom)
+    reader_cells = _apply_reader(blocks, chrom)
     return {
         "chrom": chrom,
         "start": start,
@@ -350,7 +352,37 @@ def blocks_for_window(
         "coarse": coarse,
         "blocks": [b.to_dict() for b in blocks],
         "counts": _counts(blocks),
+        "reader_cells": reader_cells,
     }
+
+
+def _apply_reader(blocks: list[Block], chrom: str, results_dir: Path | None = None) -> list[str]:
+    """Reader v1 on the map: for every cell type read on this chromosome, each node carries its open
+    fraction and whether the reader calls it silent, each coding gene whether its promoter is open
+    (read) or not (silent). Returns the cell types found."""
+    from genomeos.results import RESULTS_DIR, load_result
+
+    rd = results_dir or RESULTS_DIR
+    cells = []
+    for f in sorted(rd.glob(f"reader_*_{chrom}.json")):
+        cell = f.name[len("reader_") : -len(f"_{chrom}.json")]
+        r = load_result(f.stem, rd)
+        if not r or "node_table" not in r:
+            continue
+        cells.append(cell)
+        nodes = {n["id"]: n for n in r["node_table"]}
+        silent_nodes = set(r.get("silent_node_ids", []))
+        silent_genes = set(r.get("silent_genes", []))
+        for b in blocks:
+            if b.type == "domain":
+                n = nodes.get(b.id)
+                if n:
+                    b.attrs[f"{cell}_open_fraction"] = n["open_fraction"]
+                    b.attrs[f"{cell}_peaks"] = n["peaks"]
+                    b.attrs[f"{cell}_node"] = "silent" if b.id in silent_nodes else "open"
+            elif b.type == "gene" and b.attrs.get("gene_type") == "protein_coding":
+                b.attrs[f"{cell}_read"] = "silent" if b.name in silent_genes else "read"
+    return cells
 
 
 def _apply_unknown_classes(blocks: list[Block], chrom: str) -> None:

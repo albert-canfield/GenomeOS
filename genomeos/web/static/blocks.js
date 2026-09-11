@@ -50,6 +50,7 @@
       else st.view = [Math.max(0, st.view[0]), Math.min(r.length, st.view[1])];
       applyEdits();
       $('#b-status').textContent = `${st.chrom}: ${Object.entries(r.counts).map(([k, v]) => `${v} ${k}`).join(', ')}${r.coarse ? ' (zoom in for transcripts and exons)' : ''}`;
+      const sel = $('#b-reader'); if (sel) { const cur = st.reader; sel.innerHTML = '<option value="">off</option>' + (r.reader_cells || []).map(c => `<option value="${c}">${c}</option>`).join(''); sel.value = (r.reader_cells || []).includes(cur) ? cur : ''; st.reader = sel.value; }
       layout(); draw(); summary();
     } catch (e) { $('#b-status').textContent = e.message; }
   }
@@ -117,7 +118,7 @@
     const yPlus = 22 + (rowsDomain ? rowsDomain * (domainH + gapY) + 18 : 0);
     const yMinus = yPlus + rowsPlus * (geneH + gapY) + 18;
     const yOther = yMinus + rowsMinus * (geneH + gapY) + 18;
-    ctx.fillStyle = muted(); if (rowsDomain) ctx.fillText('nodes: domains between CTCF boundaries (inferred)', 4, yDomain - 4); ctx.fillText('+ strand', 4, yPlus - 4); ctx.fillText('− strand', 4, yMinus - 4); ctx.fillText('sequence elements & UNKNOWN', 4, yOther - 4);
+    ctx.fillStyle = muted(); if (rowsDomain) ctx.fillText(st.reader ? `nodes: domains between CTCF boundaries (inferred) · reader ${st.reader}: fill = open fraction, red edge = silent node; genes: ● read ○ silent` : 'nodes: domains between CTCF boundaries (inferred)', 4, yDomain - 4); ctx.fillText('+ strand', 4, yPlus - 4); ctx.fillText('− strand', 4, yMinus - 4); ctx.fillText('sequence elements & UNKNOWN', 4, yOther - 4);
     st.hitboxes = [];
     const bs = st.data.blocks;
     for (const b of bs) {
@@ -137,6 +138,8 @@
     let col = COLORS[b.type] || '#999';
     if (b.type === 'gene') {
       ctx.fillStyle = col; ctx.globalAlpha = m ? 0.12 : 0.22; ctx.fillRect(x0, y, w, h); ctx.globalAlpha = m ? 0.18 : 1;
+      const rd = st.reader && b.attrs[st.reader + '_read'];
+      if (rd) { ctx.beginPath(); ctx.arc(x0 + Math.min(6, w / 2), y + h - 6, 3.2, 0, Math.PI * 2); ctx.fillStyle = rd === 'read' ? '#56d364' : 'transparent'; ctx.fill(); ctx.strokeStyle = rd === 'read' ? '#56d364' : '#8b949e'; ctx.lineWidth = 1.2; ctx.stroke(); }
       ctx.strokeStyle = b.id === st.sel ? '#fff' : col; ctx.lineWidth = b.id === st.sel ? 2 : 1; ctx.strokeRect(x0 + 0.5, y + 0.5, w - 1, h - 1);
       if (w > 30) { ctx.fillStyle = m ? muted() : '#fff'; ctx.font = 'bold 11px system-ui'; ctx.fillText(b.name + (b.attrs.gene_type !== 'protein_coding' ? ' · ' + b.attrs.gene_type : ''), x0 + 4, y + 11); }
       // transcripts inside when zoomed
@@ -168,7 +171,12 @@
       if (b.type === 'open') col = ['#f78166', '#ff9bce', '#79c0ff', '#56d364'][Math.abs([...b.attrs.cell].reduce((h, c) => h + c.charCodeAt(0), 0)) % 4];
       const ucol = {interspersed_repeat: '#bf8700', interspersed_repeat_SINE: '#bf8700', tandem_repeat: '#e3b341', low_complexity: '#9a6700', long_orf: '#d1242f', satellite_array: '#7a5901', mixed_intergenic: '#6e7681', unique_intergenic: '#8b949e', promoter_like: '#1a7f37', centromere: '#0e8a8a', telomere: '#0e8a8a', gene_desert: '#3d444d'};
       ctx.fillStyle = (b.type === 'unknown' && b.attrs.class && ucol[b.attrs.class]) || col; ctx.globalAlpha = m ? 0.15 : (b.type === 'unknown' ? (b.attrs.class ? 0.6 : 0.35) : 0.9);
-      ctx.fillRect(x0, y + (b.type === 'unknown' ? h * 0.3 : 0), w, b.type === 'unknown' ? h * 0.4 : h);
+      if (b.type === 'domain' && st.reader && b.attrs[st.reader + '_open_fraction'] != null) {
+        const f = b.attrs[st.reader + '_open_fraction'];
+        ctx.globalAlpha = m ? 0.1 : 0.25; ctx.fillRect(x0, y, w, h);
+        ctx.globalAlpha = m ? 0.15 : 0.95; ctx.fillStyle = '#56d364'; ctx.fillRect(x0, y, w, Math.max(1, Math.min(1, f / 0.05) * h));
+        if (b.attrs[st.reader + '_node'] === 'silent') { ctx.strokeStyle = '#f85149'; ctx.lineWidth = 1.5; ctx.strokeRect(x0 + 0.5, y + 0.5, w - 1, h - 1); }
+      } else ctx.fillRect(x0, y + (b.type === 'unknown' ? h * 0.3 : 0), w, b.type === 'unknown' ? h * 0.4 : h);
       if (b.id === st.sel) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(x0, y, w, h); }
       if (w > 40 && h >= 20) { ctx.fillStyle = m ? muted() : '#fff'; ctx.font = '10px system-ui'; ctx.fillText(b.name, x0 + 3, y + 13); }
     }
@@ -302,6 +310,7 @@
     if (pref) { $('#b-file').value = pref.path; $('#b-chrom').value = pref.path.includes('chr21') ? 'chr21' : pref.path.includes('chrM') ? 'chrM' : ''; }
     $('#b-load').onclick = () => { st.path = $('#b-file').value; st.chrom = $('#b-chrom').value; st.sel = null; st.edits = []; renderEdits(); load(false); };
     $('#b-search').oninput = e => { st.query = e.target.value.trim(); draw(); };
+    if ($('#b-reader')) $('#b-reader').onchange = e => { st.reader = e.target.value; draw(); };
     $('#b-search').onkeydown = e => { if (e.key === 'Enter' && st.data) { const q = st.query.toLowerCase(); const g = st.data.blocks.find(b => b.type === 'gene' && b.name.toLowerCase() === q) || st.data.blocks.find(b => b.name.toLowerCase().includes(q)); if (g) { st.sel = g.id; const pad = (g.end - g.start) * 0.5; st.view = [Math.max(0, g.start - pad), Math.min(st.length, g.end + pad)]; showInfo(g, false); scheduleLoad(); } } };
     document.querySelectorAll('#b-filters input').forEach(cb => cb.onchange = () => { st.filter = new Set([...document.querySelectorAll('#b-filters input:checked')].map(x => x.value)); if (st.filter.size === document.querySelectorAll('#b-filters input').length) st.filter.clear(); draw(); });
     $('#b-mode').onchange = () => { st.mode = $('#b-mode').checked ? 'edit' : 'view'; $('#b-modelabel').textContent = st.mode === 'edit' ? 'edit mode: drag a block to propose a move' : 'view mode'; };
@@ -310,6 +319,7 @@
     $('#b-zoomout').onclick = () => { st.view = [0, st.length]; scheduleLoad(); };
     resize(); renderEdits();
     // deep link: #blocks?locus=chr21:25800000-26300000
+    const rm = ((window.initialHash || location.hash).split('?')[1] || '').match(/reader=([^&]+)/); if (rm) st.reader = decodeURIComponent(rm[1]);
     const m = ((window.initialHash || location.hash).split('?')[1] || '').match(/locus=([^:&]+):(\d+)-(\d+)/);
     if (m) { $('#b-chrom').value = m[1]; st.path = $('#b-file').value; st.chrom = m[1]; st.view = [+m[2], +m[3]]; st.length = 1e12; load(true).then(() => { st.view = [+m[2], +m[3]]; scheduleLoad(); }); }
     else if (pref) $('#b-load').click();

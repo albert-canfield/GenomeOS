@@ -158,6 +158,20 @@ experimental for the peaks, inferred for "read" (an open promoter is
 necessary for transcription, not proof of it). Results:
 `reader_<cell>_<chrom>.json`, `reader_K562_vs_HepG2_chr21.json`.
 
+### The reader lane in the block map (2026-09-11)
+
+The Blocks tab has a `reader` selector listing every cell type read on the
+loaded chromosome. With one selected, each node in the domain lane is filled
+in proportion to its open fraction in that cell (full at 5% of bases under a
+DNase peak) and a silent node gets a red edge; every coding gene carries a
+dot, filled when the reader calls it read (promoter open) and hollow when
+silent. Switching K562 to HepG2 on chr21 is the picture of the whole idea:
+the text does not change, the reading does. The node and gene attributes
+(`K562_open_fraction`, `K562_node`, `HepG2_read`, …) travel with the blocks
+(`/api/blocks`), so any view can ask which cell reads a gene. Inferred, as
+the reader itself: an open promoter is necessary for transcription, not
+proof of it.
+
 ### Every chromosome (`scripts/reader_genome_wide.py`, 110 s after the peaks are fetched)
 
 | genome-wide | K562 (blood, female) | HepG2 (liver, male) |

@@ -269,6 +269,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <button class="ghost" id="b-fetch" data-tip="Start the fetch job for the selected chromosome."><i class="ic">⬇️</i>Fetch</button>
       <span class="muted" id="b-fetch-status"></span>
       <label data-tip="Type a gene name and press Enter to jump; while typing, everything else is muted.">search <input id="b-search" placeholder="APP" style="width:120px" class="mono"></label>
+      <label data-tip="Reader lane: colour each node by how open it is in one cell type (ENCODE DNase peaks over the node) and mark every coding gene as read (promoter open, filled dot) or silent (hollow dot) in that cell. Same text, different reader. Cell types appear once `genomeos reader --cell-type X --chrom C` has run.">reader <select id="b-reader"><option value="">off</option></select></label>
       <span class="muted" id="b-status"></span>
     </div>
     <div class="row" id="b-filters" data-tip="Show only these block types; everything else is muted.">
