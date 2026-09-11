@@ -2583,7 +2583,54 @@ def cmd_graph(args: argparse.Namespace) -> int:
     return 0
 
 
+def _rna_isoforms(args: argparse.Namespace) -> int:
+    """Isoform-level expression: which transcript each tissue actually makes (GTEx transcript TPM)."""
+    from genomeos.molecules.rna import gtex_isoforms
+
+    sym = args.symbol.upper()
+    transcripts = []
+    p = Path("data/knowledge/proteins") / f"{sym}.json"
+    if p.exists():
+        d = json.loads(p.read_text())
+        transcripts = ((d["sections"].get("genomic_origin") or {}).get("items") or {}).get(
+            "transcripts"
+        ) or []
+    r = gtex_isoforms(sym, transcripts=transcripts)
+    if r.get("error"):
+        print(f"{sym}: {r['error']}")
+        return 1
+    print(
+        f"{sym}: {r['transcripts_measured']} transcripts measured in {r['tissues_measured']} tissues; "
+        f"canonical {r['canonical'] or '?'} is the dominant isoform in {r['canonical_dominant_in']} tissues, "
+        f"another in {len(r['tissues_where_another_isoform_dominates'])}  [{r['evidence']}]"
+    )
+    rows = [
+        {
+            "transcript": tid,
+            "name": v["name"] or "",
+            "canonical": "yes" if v["canonical"] else "",
+            "aa": v["protein_length"] or "",
+            "dominant in": v["tissues_dominant"],
+            "median TPM": f"{v['median_tpm']:.2f}",
+            "max TPM": f"{v['max_tpm']:.2f}",
+        }
+        for tid, v in list(r["isoforms"].items())[: args.top]
+    ]
+    print(_table(rows, ["transcript", "name", "canonical", "aa", "dominant in", "median TPM", "max TPM"]))
+    other = r["tissues_where_another_isoform_dominates"]
+    if other:
+        print(
+            "  tissues where a non-canonical isoform dominates: "
+            + "; ".join(
+                f"{t} → {d['name'] or d['transcript']} ({d['share']:.0%})" for t, d in list(other.items())[:8]
+            )
+        )
+    return 0
+
+
 def cmd_rna(args: argparse.Namespace) -> int:
+    if getattr(args, "isoforms", False):
+        return _rna_isoforms(args)
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
     from genomeos.molecules.rna import rna_report
 
@@ -3495,6 +3542,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.add_argument("--top", type=int, default=15)
     p.add_argument("--no-expression", action="store_true")
+    p.add_argument("--isoforms", action="store_true", help="per-transcript expression per tissue (GTEx)")
     p.set_defaults(fn=cmd_rna)
 
     p = sub.add_parser("repeats", help="curated repeat annotation (RepeatMasker via UCSC) for a chromosome")

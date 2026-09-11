@@ -206,6 +206,26 @@ and land in the graph as nodes of their own. Ubiquitin cross-links are not
 in the compiled `modifications` section yet, which is why no ubiquitin class
 appears.
 
+## Isoform-level expression (2026-09-12)
+
+The model is Gene → Transcript(s) → Protein isoform(s), and expression had
+been recorded per gene only. `genomeos rna X --isoforms` reads GTEx v8's
+median TPM per transcript per tissue (RSEM isoform quantification, paged
+from the portal API, cached under `data/knowledge/expression`) and labels
+each transcript with the compiled definition's name, canonical flag and
+protein length; per tissue it names the dominant isoform and its share, and
+overall how often the canonical transcript is the one the tissue actually
+makes (`gtex_isoforms`, `summarise_isoforms` in `genomeos/molecules/rna.py`).
+
+Two worked cases. TP53: 28 transcripts, 54 tissues, the canonical TP53-201
+(393 aa) dominates in all 54, the rest are near zero; the canonical choice
+is the expression. APP: 17 transcripts, the canonical APP-201 (770 aa)
+dominates in 33 tissues, APP-204 (751 aa) in 14, and APP-202, the 695-residue
+neuronal isoform, in the cerebellum (79% of the gene's TPM) and cerebellar
+hemisphere, which is the textbook: APP695 is the neuron's isoform, APP751
+and APP770 the periphery's. The layer says which protein a tissue makes,
+which is what `ProteinState.isoform` was for.
+
 ## The knowledge graph itself
 
 The compiled definitions are one graph (`genomeos.molecules.graph`, no

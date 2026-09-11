@@ -39,3 +39,37 @@ def test_transcripts_of_app():
         assert canon["spliced_nt"] == 3583 and canon["protein_aa"] == 770
         genome.close()
     assert "protein_coding" in r["by_biotype"]
+
+
+def test_summarise_isoforms_names_the_dominant_transcript_per_tissue():
+    from genomeos.molecules.rna import summarise_isoforms
+
+    rows = [
+        {"transcriptId": "ENST1.1", "tissueSiteDetailId": "Brain", "median": 1.0},
+        {"transcriptId": "ENST2.3", "tissueSiteDetailId": "Brain", "median": 9.0},
+        {"transcriptId": "ENST1.1", "tissueSiteDetailId": "Liver", "median": 5.0},
+        {"transcriptId": "ENST2.3", "tissueSiteDetailId": "Liver", "median": 0.0},
+        {"transcriptId": "ENST1.1", "tissueSiteDetailId": "Empty", "median": 0.0},
+    ]
+    tx = [
+        {
+            "transcript": "ENST1",
+            "name": "G-201",
+            "canonical": True,
+            "protein_length": 100,
+            "biotype": "protein_coding",
+        },
+        {
+            "transcript": "ENST2",
+            "name": "G-202",
+            "canonical": False,
+            "protein_length": 80,
+            "biotype": "protein_coding",
+        },
+    ]
+    r = summarise_isoforms("G", "ENSG1.1", rows, tx)
+    assert r["transcripts_measured"] == 2 and r["tissues_measured"] == 3 and r["canonical"] == "ENST1"
+    assert r["canonical_dominant_in"] == 1 and list(r["tissues_where_another_isoform_dominates"]) == ["Brain"]
+    assert r["tissues_where_another_isoform_dominates"]["Brain"]["share"] == 0.9
+    assert list(r["isoforms"])[0] in ("ENST1", "ENST2") and r["isoforms"]["ENST2"]["tissues_dominant"] == 1
+    assert "Empty" not in r["dominant_by_tissue"]  # nothing expressed there, nothing dominates
