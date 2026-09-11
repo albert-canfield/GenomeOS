@@ -22,6 +22,18 @@ genomeos data clean --yes     delete raw inputs that have summaries
 genomeos data results         list summaries
 ```
 
+## Working on another chromosome
+
+`genomeos data fetch --chrom chr22` brings one more chromosome to the same
+footing as chromosome 21, within the same economics: the sequence
+(UCSC, 13-80 MB gz, kept under data/reference), its GENCODE rows (the
+genome-wide 60 MB file is streamed once and only this chromosome's rows
+are written, 2-10 MB), the ENCODE elements (streamed, rows kept) and the
+RepeatMasker annotation (20 MB fetched, 1 MB kept). After that Blocks, Flow,
+regulation, domains, unknown, lookup, rna and proteome all work for it;
+`genomeos data status` shows the footprint and `data clean` removes what
+has a summary.
+
 ## Summaries produced so far
 
 | Summary | Raw input it replaces | Size before → after |
