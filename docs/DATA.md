@@ -212,6 +212,25 @@ cysteines of disulfide bridges lost in GALNTL5 and an olfactory receptor.
 A rank from annotation, not a prediction of effect; the residue-level view
 of any of them is one click away on the Flow tab.
 
+`individual import` also takes an http(s) URL and streams it, which is how
+the GIAB parents arrive: HG003 and HG004 (v4.2.1 benchmark calls, open
+consent) as local individuals. `individual regions --name X BED` keeps the
+regions a person's calls are trusted in (GIAB's benchmark regions, or a
+caller's callable track), and `individual trio --name HG002 --father HG003
+--mother HG004` reads inheritance chromosome by chromosome: 4,096,122 child
+variants on 22 autosomes, 96.4% inherited (2,336,470 from both parents).
+Without trusted regions, 100,114 child calls were absent from both parents
+and 48,848 were "Mendelian errors" (homozygous in the child, absent from a
+parent); with all three region sets applied, 12,296 and 2,930, and 133,736
+child calls sit outside a parent's trusted region and are counted as
+untrusted rather than as events. Real de novo variation is about 60 to 100
+per genome, so the 12,296 that remain are still mostly representation
+differences between three separately produced call sets (indels aligned
+differently, multi-allelic sites), which is the honest state: a trio
+comparison of three benchmark files measures the callers' agreement first
+and inheritance second. Stored under the child's directory as
+`trio_<father>_<mother>.json`, never under `data/results`.
+
 Checked on HG002's chr21 rows re-imported under another name: 55,210 PASS
 variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
 missense, 133 synonymous, 1 nonsense), the KRTAP10 cluster on top as

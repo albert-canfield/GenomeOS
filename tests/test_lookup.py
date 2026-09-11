@@ -76,6 +76,9 @@ def test_carriers_reads_a_local_individual(tmp_path, monkeypatch):
     )
     monkeypatch.setattr(lk, "INDIVIDUALS", {"HG002": (str(tmp_path / "HG002_{chrom}.vcf"), "test calls")})
     monkeypatch.setattr(lk, "INDIVIDUAL_FALLBACK", str(tmp_path / "none_{sample}_{chrom}.vcf"))
+    from genomeos.genome import individuals as ind
+
+    monkeypatch.setattr(ind, "ROOT", tmp_path / "nobody")  # imported genomes on this machine stay out
     assert lk.carriers("chr21", 100, "A", "G")[0]["genotype"] == "0/1"
     assert lk.carriers("chr21", 200, "C", "G")[0]["carries"] is True
     assert lk.carriers("chr21", 300, "A", "G")[0]["carries"] is False

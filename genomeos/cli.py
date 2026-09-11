@@ -2132,6 +2132,17 @@ def cmd_individual(args: argparse.Namespace) -> int:
         else:
             print(md)
         return 0
+    if args.action == "regions":
+        try:
+            counts = ind.import_regions(args.name, args.bed, progress=lambda m: print(m, flush=True))
+        except FileNotFoundError as ex:
+            print(ex)
+            return 1
+        print(
+            f"  {sum(counts.values()):,} intervals kept under "
+            f"data/individuals/{args.name}/regions_<chrom>.bed"
+        )
+        return 0
     if args.action == "trio":
         try:
             r = ind.trio(args.name, args.father, args.mother, args.chrom or None)
@@ -2144,7 +2155,8 @@ def cmd_individual(args: argparse.Namespace) -> int:
             f"{t['child_variants']:,} child variants; {r['fraction_inherited']:.1%} inherited "
             f"({t['in_both_parents']:,} from both), {t['de_novo_candidates']:,} absent from both parents "
             f"({r['fraction_de_novo_candidates']:.2%}), {t['mendelian_errors']:,} Mendelian errors "
-            f"({r['fraction_mendelian_errors']:.3%})"
+            f"({r['fraction_mendelian_errors']:.3%}); {t['outside_a_parent_region']:,} outside a parent's "
+            f"trusted region  [{r['regions']}]"
         )
         rows = [
             {
@@ -2154,10 +2166,11 @@ def cmd_individual(args: argparse.Namespace) -> int:
                 "both": f"{v['in_both_parents']:,}",
                 "de novo?": v["de_novo_candidates"],
                 "errors": v["mendelian_errors"],
+                "untrusted": v["outside_a_parent_region"],
             }
             for c, v in list(r["per_chromosome"].items())[: args.top]
         ]
-        print(_table(rows, ["chr", "child", "inherited", "both", "de novo?", "errors"]))
+        print(_table(rows, ["chr", "child", "inherited", "both", "de novo?", "errors", "untrusted"]))
         print(f"  [{r['evidence']}]  {r['note']}")
         print(f"  stored under data/individuals/{r['child']}/trio_{r['father']}_{r['mother']}.json")
         return 0
@@ -3650,6 +3663,9 @@ def build_parser() -> argparse.ArgumentParser:
     q = isub.add_parser("report", help="one Markdown page from what has been computed for the person")
     q.add_argument("--name", required=True)
     q.add_argument("--out", help="write to a file instead of printing")
+    q = isub.add_parser("regions", help="the regions a person's calls are trusted in (BED, file or URL)")
+    q.add_argument("--name", required=True)
+    q.add_argument("bed")
     q = isub.add_parser(
         "trio", help="Mendelian consistency of a child against both parents; de novo candidates"
     )

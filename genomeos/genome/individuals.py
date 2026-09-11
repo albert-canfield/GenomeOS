@@ -35,8 +35,18 @@ HEADER = (
 )
 
 
-def _open(path: Path):
-    return gzip.open(path, "rt") if str(path).endswith(".gz") else open(path)
+def _open(path: Path | str):
+    """A local file (plain or gzip) or an http(s) URL streamed straight from the server."""
+    s = str(path)
+    if s.startswith(("http://", "https://")):
+        import io
+        import urllib.request
+
+        req = urllib.request.Request(s, headers={"User-Agent": "GenomeOS/0.1 (stream)"})
+        resp = urllib.request.urlopen(req, timeout=1800)  # noqa: S310
+        raw = io.BufferedReader(resp, 1 << 20)
+        return gzip.open(raw, "rt") if s.endswith(".gz") else io.TextIOWrapper(raw)
+    return gzip.open(path, "rt") if s.endswith(".gz") else open(path)
 
 
 def normalise_chrom(raw: str) -> str | None:
@@ -52,12 +62,13 @@ def import_vcf(
 ) -> dict[str, Any]:
     """Stream one VCF and keep a PASS file per chromosome plus a manifest. Returns the manifest."""
     root = root or ROOT
-    src = Path(src)
+    remote = str(src).startswith(("http://", "https://"))
+    src = str(src) if remote else Path(src)
     if not _NAME.match(name):
         raise ValueError("name: letters, digits, _ . - only, up to 40 characters")
     if name in BUILTIN:
         raise ValueError(f"{name} is the built-in test human; pick another name")
-    if not src.exists():
+    if not remote and not src.exists():
         raise FileNotFoundError(f"no VCF at {src}")
     d = root / name
     if d.exists():
@@ -68,6 +79,7 @@ def import_vcf(
     counts: dict[str, int] = {}
     handles: dict[str, Any] = {}
     sample = name
+    source_name = src.rsplit("/", 1)[-1] if remote else src.name
     skipped_filter = skipped_contig = 0
     phased = 0
     try:
@@ -91,7 +103,7 @@ def import_vcf(
                     continue
                 if chrom not in handles:
                     handles[chrom] = open(d / f"{name}_{chrom}.vcf", "w")  # noqa: SIM115
-                    handles[chrom].write(HEADER.format(source=src.name, chrom=chrom, sample=name))
+                    handles[chrom].write(HEADER.format(source=source_name, chrom=chrom, sample=name))
                     if progress:
                         progress(f"{chrom}: splitting {name}")
                 gt = f[9].split(":")[0] if len(f) >= 10 else "1/1"
@@ -103,7 +115,8 @@ def import_vcf(
             h.close()
     manifest = {
         "name": name,
-        "source_file": src.name,
+        "source_file": source_name,
+        "source_url": src if remote else None,
         "sample_column": sample,
         "note": note,
         "date": time.strftime("%Y-%m-%d"),
@@ -113,7 +126,7 @@ def import_vcf(
         "chromosomes": {c: counts[c] for c in CHROMOSOMES if c in counts},
         "skipped_filtered": skipped_filter,
         "skipped_other_contigs": skipped_contig,
-        "evidence": f"measured: {src.name} (the caller's genotypes); nothing leaves this machine",
+        "evidence": f"measured: {source_name} (the caller's genotypes); nothing leaves this machine",
     }
     (d / "manifest.json").write_text(json.dumps(manifest, indent=1))
     return manifest
@@ -818,3 +831,198 @@ def coding_inventory(
     d.mkdir(parents=True, exist_ok=True)
     (d / "coding.json").write_text(json.dumps(out, indent=1))
     return out
+
+
+def _genotypes(path: Path) -> dict[tuple[int, str, str], str]:
+    out: dict[tuple[int, str, str], str] = {}
+    with path.open() as fh:
+        for line in fh:
+            if line.startswith("#"):
+                continue
+            f = line.rstrip("\n").split("\t")
+            gt = f[9].split(":")[0] if len(f) > 9 else ""
+            alleles = gt.replace("|", "/").split("/")
+            for i, alt in enumerate(f[4].split(","), 1):
+                if str(i) in alleles:
+                    out[(int(f[1]), f[3], alt)] = "hom" if alleles.count(str(i)) >= 2 else "het"
+    return out
+
+
+def trio(child: str, father: str, mother: str, chroms: list[str] | None = None, root: Path | None = None):
+    """Mendelian consistency of a child's variants against both parents, chromosome by chromosome:
+    inherited from one or both, present in neither (a de novo candidate), and the impossible ones
+    (homozygous in the child, absent from one parent). Where both parents have trusted regions
+    (`import_regions`), a child call outside them counts as untrusted, not as an event. Autosomes."""
+    root = root or ROOT
+    people = {p["name"]: p for p in list_individuals(root)}
+    for n in (child, father, mother):
+        if n not in people:
+            raise FileNotFoundError(f"{n} is not a local individual")
+    chroms = chroms or [c for c in people[child]["chromosomes"] if c not in ("chrX", "chrY", "chrM")]
+    keys = (
+        "child_variants",
+        "inherited",
+        "in_both_parents",
+        "de_novo_candidates",
+        "mendelian_errors",
+        "outside_a_parent_region",
+    )
+    tot = dict.fromkeys(keys, 0)
+    per_chrom = {}
+    de_novo: list[dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
+    done = []
+    regions_used = False
+    for chrom in chroms:
+        pc, pf, pm = (vcf_path(n, chrom, root) for n in (child, father, mother))
+        if not (pc and pf and pm):
+            continue
+        gc, gf, gm = _genotypes(pc), _genotypes(pf), _genotypes(pm)
+        rf, rm = load_regions(father, chrom, root), load_regions(mother, chrom, root)
+        rc = load_regions(child, chrom, root)  # the child's own trusted regions, when it has them
+        sf, sm, sc = [x for x, _ in rf], [x for x, _ in rm], [x for x, _ in rc]
+        have_regions = bool(rf and rm)
+        regions_used = regions_used or have_regions
+        row = dict.fromkeys(keys, 0)
+        for key, zyg in gc.items():
+            row["child_variants"] += 1
+            f_has, m_has = key in gf, key in gm
+            pos0 = key[0] - 1
+            trusted = (not have_regions) or (
+                _inside(rf, sf, pos0) and _inside(rm, sm, pos0) and (not rc or _inside(rc, sc, pos0))
+            )
+            if f_has and m_has:
+                row["in_both_parents"] += 1
+                row["inherited"] += 1
+            elif f_has or m_has:
+                if zyg != "hom":
+                    row["inherited"] += 1
+                elif trusted:
+                    row["mendelian_errors"] += 1
+                    if len(errors) < 200:
+                        errors.append(
+                            {
+                                "chrom": chrom,
+                                "pos": key[0],
+                                "ref": key[1],
+                                "alt": key[2],
+                                "child": zyg,
+                                "father": gf.get(key),
+                                "mother": gm.get(key),
+                            }
+                        )
+                else:
+                    row["outside_a_parent_region"] += 1
+            elif trusted:
+                row["de_novo_candidates"] += 1
+                if len(de_novo) < 500:
+                    de_novo.append(
+                        {"chrom": chrom, "pos": key[0], "ref": key[1], "alt": key[2], "child": zyg}
+                    )
+            else:
+                row["outside_a_parent_region"] += 1
+        for k in keys:
+            tot[k] += row[k]
+        per_chrom[chrom] = row
+        done.append(chrom)
+    cv = tot["child_variants"] or 1
+    out = {
+        "child": child,
+        "father": father,
+        "mother": mother,
+        "chromosomes": done,
+        "totals": tot,
+        "fraction_inherited": round(tot["inherited"] / cv, 4),
+        "fraction_de_novo_candidates": round(tot["de_novo_candidates"] / cv, 5),
+        "fraction_mendelian_errors": round(tot["mendelian_errors"] / cv, 5),
+        "regions": (
+            "trusted regions applied (both parents, and the child's where present)"
+            if regions_used
+            else "no trusted regions: every absence counts, most are no-calls"
+        ),
+        "per_chromosome": per_chrom,
+        "de_novo_candidates": de_novo,
+        "mendelian_errors": errors,
+        "date": time.strftime("%Y-%m-%d"),
+        "evidence": "measured genotypes of three people; inheritance derived by comparing calls at the same "
+        "position and alleles",
+        "note": "a de novo candidate is a child call absent from both parents' files inside both parents' "
+        "trusted regions: real de novo variation is about 60 to 100 per genome, so a larger count is "
+        "representation differences and residual no-calls; a Mendelian error is a homozygous child call "
+        "with a parent lacking the allele, inside the trusted regions",
+    }
+    d = root / child
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"trio_{father}_{mother}.json").write_text(json.dumps(out, indent=1))
+    return out
+
+
+def import_regions(name: str, src: str | Path, root: Path | None = None, progress=None) -> dict[str, int]:
+    """The regions a person's calls are trusted in (a BED, file or URL: GIAB's benchmark regions, a
+    caller's callable-regions track), kept per chromosome under the person's directory. Without them a
+    variant absent from a parent cannot be told from a parent that was never called there."""
+    root = root or ROOT
+    d = root / name
+    if not (d / "manifest.json").exists() and name not in BUILTIN:
+        raise FileNotFoundError(f"{name} is not a local individual")
+    d.mkdir(parents=True, exist_ok=True)
+    counts: dict[str, int] = {}
+    handles: dict[str, Any] = {}
+    try:
+        with _open(src) as fh:
+            for line in fh:
+                if line.startswith(("#", "track", "browser")):
+                    continue
+                f = line.rstrip("\n").split("\t")
+                if len(f) < 3:
+                    continue
+                chrom = normalise_chrom(f[0])
+                if chrom is None:
+                    continue
+                if chrom not in handles:
+                    handles[chrom] = open(d / f"regions_{chrom}.bed", "w")  # noqa: SIM115
+                handles[chrom].write(f"{chrom}\t{f[1]}\t{f[2]}\n")
+                counts[chrom] = counts.get(chrom, 0) + 1
+    finally:
+        for h in handles.values():
+            h.close()
+    m = d / "manifest.json"
+    if m.exists():
+        try:
+            man = json.loads(m.read_text())
+            man["regions_source"] = str(src).rsplit("/", 1)[-1]
+            man["regions_intervals"] = sum(counts.values())
+            m.write_text(json.dumps(man, indent=1))
+        except (OSError, json.JSONDecodeError):
+            pass
+    if progress:
+        progress(f"{name}: {sum(counts.values()):,} trusted intervals on {len(counts)} chromosomes")
+    return counts
+
+
+def load_regions(name: str, chrom: str, root: Path | None = None) -> list[tuple[int, int]]:
+    """Sorted, merged trusted intervals (0-based, half-open) of a person on a chromosome; empty if none."""
+    root = root or ROOT
+    p = root / name / f"regions_{chrom}.bed"
+    if not p.exists():
+        return []
+    iv = []
+    with p.open() as fh:
+        for line in fh:
+            f = line.split("\t")
+            iv.append((int(f[1]), int(f[2])))
+    iv.sort()
+    out: list[tuple[int, int]] = []
+    for a, b in iv:
+        if out and a <= out[-1][1]:
+            out[-1] = (out[-1][0], max(out[-1][1], b))
+        else:
+            out.append((a, b))
+    return out
+
+
+def _inside(intervals: list[tuple[int, int]], starts: list[int], pos0: int) -> bool:
+    import bisect
+
+    i = bisect.bisect_right(starts, pos0) - 1
+    return i >= 0 and intervals[i][0] <= pos0 < intervals[i][1]

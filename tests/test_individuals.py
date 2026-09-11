@@ -125,3 +125,45 @@ def test_missense_rank_reads_uniprot_annotation():
         ("A", 2),
         ("B", 1),
     ]
+
+
+def test_trio_counts_inheritance(tmp_path):
+    root = tmp_path / "individuals"
+
+    def person(name, rows):
+        src = tmp_path / f"{name}.vcf"
+        src.write_text(
+            "##fileformat=VCFv4.2\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tX\n"
+            + "".join(f"chr21\t{p}\t.\t{r}\t{a}\t.\tPASS\t.\tGT\t{g}\n" for p, r, a, g in rows)
+        )
+        ind.import_vcf(src, name, root=root)
+
+    person(
+        "kid",
+        [(100, "A", "G", "0/1"), (200, "C", "T", "1/1"), (300, "G", "A", "0/1"), (400, "T", "C", "1/1")],
+    )
+    person("dad", [(100, "A", "G", "0/1"), (200, "C", "T", "0/1"), (400, "T", "C", "0/1")])
+    person("mum", [(200, "C", "T", "1/1")])
+    r = ind.trio("kid", "dad", "mum", root=root)
+    t = r["totals"]
+    # 100 from dad, 200 from both, 300 in neither (de novo candidate), 400 homozygous with mum lacking it
+    assert (
+        t["child_variants"],
+        t["inherited"],
+        t["in_both_parents"],
+        t["de_novo_candidates"],
+        t["mendelian_errors"],
+    ) == (4, 2, 1, 1, 1)
+    assert r["de_novo_candidates"][0]["pos"] == 300 and r["mendelian_errors"][0]["pos"] == 400
+    assert (root / "kid" / "trio_dad_mum.json").exists()
+    # trusted regions: mum was only called on 150-250, so 300 and 400 are no-calls there, not events
+    bed = tmp_path / "mum.bed"
+    bed.write_text("chr21\t149\t250\n")
+    assert ind.import_regions("mum", bed, root) == {"chr21": 1}
+    bed_dad = tmp_path / "dad.bed"
+    bed_dad.write_text("chr21\t0\t1000\n")
+    ind.import_regions("dad", bed_dad, root)
+    r = ind.trio("kid", "dad", "mum", root=root)
+    t = r["totals"]
+    assert (t["de_novo_candidates"], t["mendelian_errors"], t["outside_a_parent_region"]) == (0, 0, 2)
+    assert r["regions"].startswith("trusted regions")
