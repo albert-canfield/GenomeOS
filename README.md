@@ -138,7 +138,9 @@ More commands: `annotate`, `gene`, `index`, `variant`, `twin build|new|fork|run`
 `graph`, `pathway`, `lookup`, `report`, `verify`, `unknown`, `cancer compare|tumour|expression`, `therapeutic`,
 `design`, `data fetch --chrom C [--individual]`; the `bio` toolchain: `bio check|compile|run|test|repl`.
 Optional extras: `uv sync --extra compose` (process-bigraph), `--extra predict`
-(AlphaGenome client, needs `ALPHAGENOME_API_KEY`), `--extra clocks` (biolearn, needs torch).
+(AlphaGenome client; the key goes in a git-ignored `.env`, see docs/DATA.md; without it
+the feature loads disabled and `genomeos predict --status` says how to enable it),
+`--extra clocks` (biolearn, needs torch).
 
 The web UI is a single HTML page served by the standard library: Start,
 Genome, Anatomy, Blocks (2-D block map with domains, genes, UNKNOWN classes

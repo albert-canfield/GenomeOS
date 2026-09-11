@@ -11,6 +11,7 @@ from the effect magnitude. Nothing here is ever labelled experimental.
 
 from __future__ import annotations
 
+import importlib.util
 import os
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -18,6 +19,46 @@ from dataclasses import dataclass
 from genomeos.ir import Action, Entity, Evidence, EvidenceKind, Module, Rule
 
 MODEL_NAME = "AlphaGenome (google-deepmind/alphagenome 0.9)"
+KEY_VAR = "ALPHAGENOME_API_KEY"
+HOW_TO_ENABLE = (
+    "install the client with `uv sync --extra predict` and put ALPHAGENOME_API_KEY=... in a git-ignored "
+    ".env file at the project root (or export it); the key is free for non-commercial use from "
+    "https://deepmind.google.com/science/alphagenome/account/terms"
+)
+LICENCE_NOTE = (
+    "AlphaGenome is free for non-commercial use under Google DeepMind's terms; its predictions enter "
+    "GenomeOS only as `predicted` evidence capped at confidence 0.7, and nothing in the core depends on it"
+)
+
+# What the key enables. Every feature is always listed; without the key it is loaded but disabled.
+FEATURES: tuple[tuple[str, str, str, str], ...] = (
+    (
+        "a",
+        "variant effect",
+        "predicted expression change per tissue for any variant (`genomeos predict`, `/api/predict`)",
+        "built",
+    ),
+    (
+        "b",
+        "regulatory blocks",
+        "predicted target gene and tissue for UNKNOWN regulatory elements, tightening the CTCF-domain "
+        "inference",
+        "planned",
+    ),
+    (
+        "c",
+        "sequence grammar",
+        "splice-site and chromatin signals the learned matrices cannot capture, entering as predicted "
+        "evidence",
+        "planned",
+    ),
+    (
+        "d",
+        "twin",
+        "predicted expression differences between an individual's haplotypes and the reference",
+        "planned",
+    ),
+)
 
 Scorer = Callable[[str, int, str, str], list[tuple[str, str, float]]]
 """(chrom, pos_1based, ref, alt) -> [(gene_symbol, tissue, log2_fold_change), ...]"""
@@ -52,17 +93,40 @@ def _dotenv_key(name: str, path: str = ".env") -> str | None:
     return None
 
 
+def status(api_key: str | None = None, dotenv: str = ".env") -> dict:
+    """Whether the optional AlphaGenome features are enabled, and if not, why and how to enable them."""
+    package = importlib.util.find_spec("alphagenome") is not None
+    key = bool(api_key or os.environ.get(KEY_VAR) or _dotenv_key(KEY_VAR, dotenv))
+    missing = []
+    if not package:
+        missing.append("the `alphagenome` package is not installed")
+    if not key:
+        missing.append(f"{KEY_VAR} is not set")
+    return {
+        "name": "AlphaGenome",
+        "enabled": package and key,
+        "package": package,
+        "key": key,
+        "reason": "; ".join(missing),
+        "how": HOW_TO_ENABLE,
+        "licence": LICENCE_NOTE,
+        "model": MODEL_NAME,
+        "features": [{"id": i, "name": n, "what": w, "state": st} for i, n, w, st in FEATURES],
+    }
+
+
 class AlphaGenomeAdapter:
     def __init__(self, scorer: Scorer | None = None, api_key: str | None = None) -> None:
         self._scorer = scorer
         self._client = None
-        self.api_key = api_key or os.environ.get("ALPHAGENOME_API_KEY") or _dotenv_key("ALPHAGENOME_API_KEY")
+        self.last_scan: dict = {}  # genes, tracks and the largest |log2FC| seen by the last live call
+        self.api_key = api_key or os.environ.get(KEY_VAR) or _dotenv_key(KEY_VAR)
 
     @property
     def available(self) -> bool:
         return self._scorer is not None or bool(self.api_key)
 
-    def _live_scorer(self) -> Scorer:
+    def _live_scorer(self, threshold: float = 0.05) -> Scorer:
         from alphagenome.data import genome  # type: ignore[import-not-found]
         from alphagenome.models import dna_client, variant_scorers  # type: ignore[import-not-found]
 
@@ -78,18 +142,28 @@ class AlphaGenomeAdapter:
             out: list[tuple[str, str, float]] = []
             for adata in scores:
                 genes = list(adata.obs.get("gene_name", []))
-                tissues = list(adata.var.get("biosample_name", adata.var.index))
+                names = list(adata.var.get("biosample_name", adata.var.index))
+                gtex = list(adata.var.get("gtex_tissue", [None] * len(names)))
+                tissues = []
+                for g, n in zip(gtex, names, strict=False):
+                    tissues.append(str(g) if g and str(g) not in ("nan", "") else str(n))
+                self.last_scan = {"genes": len(genes), "tracks": len(tissues), "max_abs_log2fc": 0.0}
                 for gi, gene in enumerate(genes):
                     for ti, tissue in enumerate(tissues):
                         val = float(adata.X[gi, ti])
-                        if abs(val) > 0.05:
+                        if abs(val) > self.last_scan["max_abs_log2fc"]:
+                            self.last_scan["max_abs_log2fc"] = abs(val)
+                        if abs(val) > threshold:
                             out.append((str(gene), str(tissue), val))
             return out
 
         return score
 
-    def predict(self, chrom: str, pos_1based: int, ref: str, alt: str) -> list[PredictedEffect]:
-        scorer = self._scorer or self._live_scorer()
+    def predict(
+        self, chrom: str, pos_1based: int, ref: str, alt: str, threshold: float = 0.05
+    ) -> list[PredictedEffect]:
+        """Effects with |log2 fold change| above the threshold; `last_scan` says what was scanned."""
+        scorer = self._scorer or self._live_scorer(threshold)
         return [PredictedEffect(g, t, v) for g, t, v in scorer(chrom, pos_1based, ref, alt)]
 
     def to_module(

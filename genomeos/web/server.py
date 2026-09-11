@@ -986,6 +986,47 @@ class Api:
         rep["markdown"] = to_markdown(rep)
         return rep
 
+    def features(self) -> list[dict]:
+        """Optional features (external keys or packages): always listed, disabled without them."""
+        from genomeos.predict import status
+
+        return [status()]
+
+    def predict(self, variant: str) -> dict:
+        """AlphaGenome predicted tissue effects for one variant, or the disabled status."""
+        import re
+
+        from genomeos.predict import AlphaGenomeAdapter, status
+
+        st = status()
+        if not st["enabled"]:
+            return {"enabled": False, "reason": st["reason"], "how": st["how"]}
+        m = re.match(r"^(chr\w+):(\d+)\s+([ACGTacgt]+)>([ACGTacgt]+)$", variant.strip())
+        if not m:
+            return {"enabled": True, "error": "expected chr21:25897620 C>T"}
+        chrom, pos, ref, alt = m.group(1), int(m.group(2)), m.group(3).upper(), m.group(4).upper()
+        adapter = AlphaGenomeAdapter()
+        effects = adapter.predict(chrom, pos, ref, alt)
+        effects.sort(key=lambda e: -abs(e.log2_fold_change))
+        return {
+            "enabled": True,
+            "variant": f"{chrom}:{pos} {ref}>{alt}",
+            "model": st["model"],
+            "evidence": "predicted",
+            "threshold_log2fc": 0.05,
+            "scanned": adapter.last_scan,
+            "effects": [
+                {
+                    "gene": e.gene,
+                    "tissue": e.tissue,
+                    "log2_fold_change": round(e.log2_fold_change, 4),
+                    "direction": getattr(e.direction, "value", str(e.direction)),
+                    "confidence": round(e.confidence, 3),
+                }
+                for e in effects
+            ],
+        }
+
     def lookup(self, variant: str) -> dict:
         """One variant through every layer: VEP anywhere, local trace when the chromosome is local."""
         from genomeos.genome import IndexedGenome, default_gencode
@@ -1257,6 +1298,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.jobs())
             if u.path == "/api/progress":
                 return self._json(self.api.progress())
+            if u.path == "/api/features":
+                return self._json(self.api.features())
+            if u.path == "/api/predict":
+                return self._json(self.api.predict(self._q(qs, "variant", "")))
             if u.path == "/api/anatomy/genome":
                 return self._json(self.api.genome_wide())
             if u.path == "/api/unknown/genome":

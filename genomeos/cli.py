@@ -1836,6 +1836,75 @@ def cmd_lookup(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_predict(args: argparse.Namespace) -> int:
+    """Optional AlphaGenome feature: loaded always, enabled only with the package and the key."""
+    import re
+
+    from genomeos.predict import AlphaGenomeAdapter, status
+
+    st = status()
+    if args.status or not args.variant:
+        why = f" ({st['reason']})" if st["reason"] else ""
+        print(f"{st['name']}: {'enabled' if st['enabled'] else 'disabled'}{why}")
+        for f in st["features"]:
+            print(f"  {f['id']}. {f['name']:18} {f['state']:8} {f['what']}")
+        if not st["enabled"]:
+            print(f"  to enable: {st['how']}")
+        print(f"  {st['licence']}")
+        return 0
+    if not st["enabled"]:
+        print(f"AlphaGenome predictions are disabled: {st['reason']}. To enable: {st['how']}")
+        return 2
+    m = re.match(r"^(chr\w+):(\d+)\s+([ACGTacgt]+)>([ACGTacgt]+)$", " ".join(args.variant).strip())
+    if not m:
+        print("expected a variant like chr21:25897620 C>T (1-based, plus strand)")
+        return 2
+    chrom, pos, ref, alt = m.group(1), int(m.group(2)), m.group(3).upper(), m.group(4).upper()
+    adapter = AlphaGenomeAdapter()
+    effects = adapter.predict(chrom, pos, ref, alt, threshold=args.min)
+    effects.sort(key=lambda e: -abs(e.log2_fold_change))
+    scan = adapter.last_scan
+    if args.json:
+        print(
+            json.dumps(
+                {
+                    "variant": f"{chrom}:{pos} {ref}>{alt}",
+                    "model": st["model"],
+                    "evidence": "predicted",
+                    "threshold_log2fc": args.min,
+                    "scanned": scan,
+                    "effects": [
+                        {
+                            "gene": e.gene,
+                            "tissue": e.tissue,
+                            "log2_fold_change": round(e.log2_fold_change, 4),
+                            "direction": getattr(e.direction, "value", str(e.direction)),
+                            "confidence": round(e.confidence, 3),
+                        }
+                        for e in effects
+                    ],
+                },
+                indent=2,
+            )
+        )
+        return 0
+    print(f"{chrom}:{pos} {ref}>{alt}: {len(effects)} predicted tissue effects [predicted, {st['model']}]")
+    if scan:
+        print(
+            f"  scanned {scan['genes']} genes in the 1 Mb window across {scan['tracks']} RNA-seq tracks; "
+            f"largest |log2 fold change| {scan['max_abs_log2fc']:.3f} (threshold {args.min})"
+        )
+    for e in effects[: args.top]:
+        d = getattr(e.direction, "value", str(e.direction))
+        print(
+            f"  {e.gene:12} {e.tissue[:44]:44} log2FC {e.log2_fold_change:+.2f}  {d:9} "
+            f"confidence {e.confidence:.2f}"
+        )
+    if len(effects) > args.top:
+        print(f"  … {len(effects) - args.top} more (--top N or --json)")
+    return 0
+
+
 def cmd_graph(args: argparse.Namespace) -> int:
     from genomeos.molecules.graph import build, summarise
     from genomeos.results import save_result
@@ -2632,6 +2701,17 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--no-pathways", action="store_true")
     p.add_argument("--json", action="store_true")
     p.set_defaults(fn=cmd_lookup)
+
+    p = sub.add_parser(
+        "predict",
+        help="optional AlphaGenome feature: predicted expression change per tissue for a variant",
+    )
+    p.add_argument("variant", nargs="*", help="chr21:25897620 C>T (1-based, plus strand)")
+    p.add_argument("--status", action="store_true", help="whether the feature is enabled and what it brings")
+    p.add_argument("--top", type=int, default=20)
+    p.add_argument("--min", type=float, default=0.05, help="smallest |log2 fold change| reported")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(fn=cmd_predict)
 
     p = sub.add_parser("graph", help="the local protein knowledge graph built from compiled definitions")
     p.add_argument("gene", nargs="?", help="show one protein's neighbourhood instead of the summary")

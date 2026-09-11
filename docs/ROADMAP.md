@@ -224,12 +224,12 @@ in order. "Owner" is the session that holds the files today (see §7).
   its confidence.
 - **Missing.** The twin holds chr21 only (genome-wide streaming of the HG002
   VCF in progress); telomere length from a real 30x BAM (100 GB) not done;
-  AlphaGenome live predictions need a key; no path for a user's own VCF
+  AlphaGenome features b–d not yet wired (key in place, feature a built); no path for a user's own VCF
   beyond HG002; no pedigree or trio; no polygenic scores.
 - **Next.** 1. Twin on every fetched chromosome (genomeos-fe, in progress).
   2. `genomeos twin build --vcf ANY` for a user's own genome with the same
   reports. 3. Telomere from a streamed CRAM range instead of a BAM download.
-  4. AlphaGenome adapter live once the key exists (Albert).
+  4. AlphaGenome features b–d (regulatory blocks, grammar signals, twin haplotypes) now that the key exists and feature a (`genomeos predict`) is built; all optional, loaded disabled without the key (docs/DATA.md).
 - **Owner.** genomeos-fe (build, lookup); genomeos-f7 (user-genome path).
 
 ### E. From one cell to an organism

@@ -645,6 +645,10 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <h2><i class="ic">🕸️</i>Proteome coverage<span class="help" data-tip="For every protein-coding gene of a compiled chromosome: which questions the public databases answer (sequence, function, domains, pathways, interactions, expression, structures, disease). Measured, not assumed.">?</span></h2>
       <div id="j-proteome" class="scroll"></div>
     </div>
+    <div class="card">
+      <h2><i class="ic">🔌</i>Optional features<span class="help" data-tip="Features that need an external key or package (AlphaGenome). Always listed; without the key they load disabled and say how to enable them. Nothing in the core depends on them, and their output is always labelled predicted.">?</span></h2>
+      <div id="j-features"></div>
+    </div>
   </div>
   <div class="card" style="margin-top:16px">
     <h2><i class="ic">🗺️</i>Project progress<span class="help" data-tip="The task log the project keeps in docs/PROGRESS.md: what was built, its status, and the evidence that it works.">?</span></h2>
@@ -729,7 +733,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
   b.scrollIntoView({block: 'nearest', inline: 'nearest'});
-  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadProgress(); }
+  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadProgress(); loadFeatures(); }
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
   // first visit to a simulation tab runs its default example
@@ -1154,6 +1158,14 @@ async function loadUnknownWide() {
     $('#j-proteome').innerHTML = `<table><tr><th>question</th>${chroms.map(c => `<th class="num">${c} (${p[c].coding_genes})</th>`).join('')}</tr>` +
       qs.map(q => `<tr><td>${q.replace(/_/g, ' ')}</td>${chroms.map(c => { const v = p[c].coverage[q]; return `<td class="num" style="background:rgba(31,111,235,${(v || 0) * 0.35})">${v != null ? (v * 100).toFixed(1) + '%' : '-'}</td>`; }).join('')}</tr>`).join('') + '</table>';
   } catch (e) { $('#j-proteome').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function loadFeatures() {
+  try {
+    const fs = await api('/api/features');
+    $('#j-features').innerHTML = fs.map(f => `<div class="note"><b>${f.name}</b> <span class="pill ${f.enabled ? 'predicted' : 'none'}">${f.enabled ? 'enabled' : 'disabled'}</span>${f.enabled ? '' : `<div class="muted" style="font-size:12px">${f.reason}. To enable: ${f.how}</div>`}
+      <table>${f.features.map(x => `<tr><td>${x.id}</td><td><b>${x.name}</b></td><td class="muted" style="font-size:12px">${x.what}</td><td><span class="pstatus ${x.state === 'built' ? 'done' : 'progress'}">${x.state}</span></td></tr>`).join('')}</table>
+      <div class="muted" style="font-size:12px">${f.licence}</div></div>`).join('');
+  } catch (e) { $('#j-features').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
 async function loadProgress() {
   const p = await api('/api/progress');
