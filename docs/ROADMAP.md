@@ -390,12 +390,24 @@ in order. "Owner" is the session that holds the files today (see §7).
   The output states that the isoform per tissue is GTEx's population median,
   not the person's own expression; that half stays open. DATA.md "the twin's
   isoform".
-- **Next.** 1. Population allele frequency at the 96 disagreement sites
-  (gnomAD through the lookup layer's VEP path, one site at a time, cached),
-  the one measurement that settles them. 2. The person's own expression in
-  place of GTEx's median where a measurement exists. 3. Measured modification
-  state (a phosphoproteome) so a `modifies` rule can carry occupancy rather
-  than possibility.
+- **The disagreements settled by allele frequency (2026-09-11).**
+  `scripts/disagreements_frequency.py` takes the 38 same-length disagreements,
+  derives for each differing residue the single-base change that would give
+  UniProt's residue, and looks that allele up in gnomAD and dbSNP through VEP
+  (`translation_disagreements_frequency`, 112 s). Two genes where the curated
+  allele is the common one, so hg38 carries a minor allele (OR9H1 rs7555046 at
+  0.99; FCGBP, four sites at 1.0); six known polymorphisms where UniProt chose
+  one haplotype (HLA-DQA1, MICA, GSTT2, SERPINA2, PRB4, SAMD1); ten in dbSNP
+  but rare or unmeasured; sixteen unknown to both, so gene-model or entry
+  differences; four with no residue-level difference. PROTEIN.md closes the
+  series: the 96 read from four sides are 31 hg38 frameshift or nonsense
+  alleles, 8 residue-level population variants, 7 different products, and the
+  rest gene-model differences. The item closes.
+- **Next.** 1. The person's own expression in place of GTEx's median where a
+  measurement exists. 2. Measured modification state (a phosphoproteome) so a
+  `modifies` rule can carry occupancy rather than possibility. 3. The 31 hg38
+  frameshift and nonsense alleles surfaced wherever the reference is used as
+  a person: a carrier of the reference allele is a carrier of a truncation.
 - **Owner.** genomeos-fe.
 
 ### D. The individual (BioTwin)
