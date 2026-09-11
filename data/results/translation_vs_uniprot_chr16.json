@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.5714,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
       "gene": "NPIPB3",
       "accession": "Q92617",
       "transcript": "NPIPB3-209",
@@ -24,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.8302,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.994,
       "gene": "C16orf82",
       "accession": "Q7Z2V1",
       "transcript": "C16orf82-201",
@@ -36,6 +40,8 @@
     },
     {
       "similarity_best_isoform": 0.8735,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.999,
       "gene": "MSLNL",
       "accession": "Q96KJ4",
       "transcript": "MSLNL-202",
@@ -48,6 +54,8 @@
     },
     {
       "similarity_best_isoform": 0.8842,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
       "gene": "SLC22A31",
       "accession": "A6NKX4",
       "transcript": "SLC22A31-207",
@@ -60,6 +68,12 @@
     }
   ],
   "disagreement_count": 4,
+  "out_of_frame_canonical": [
+    {
+      "gene": "PKD1L2",
+      "exact_some_isoform": false
+    }
+  ],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

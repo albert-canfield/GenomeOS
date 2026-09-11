@@ -311,6 +311,8 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
     activity = last_activity(name, root)
     if state == "running" and activity is not None and activity > STALL_AFTER:
         state = "stalled"
+    if state in ("unknown", "failed") and is_complete(name, root):
+        state = "done"  # the results say it finished, whatever happened to the process that made them
     done: float = 0
     detail = ""
     if spec.get("progress"):

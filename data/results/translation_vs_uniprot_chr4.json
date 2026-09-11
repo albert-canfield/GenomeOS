@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.7009,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.997,
       "gene": "CXXC4",
       "accession": "Q9H2H0",
       "transcript": "CXXC4-201",
@@ -24,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.7294,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.999,
       "gene": "CPEB2",
       "accession": "Q7Z5Q1",
       "transcript": "CPEB2-208",
@@ -36,6 +40,8 @@
     },
     {
       "similarity_best_isoform": 0.7758,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.988,
       "gene": "SCOC",
       "accession": "Q9UIL1",
       "transcript": "SCOC-209",
@@ -48,6 +54,8 @@
     },
     {
       "similarity_best_isoform": 0.7935,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.996,
       "gene": "ARL9",
       "accession": "Q6T311",
       "transcript": "ARL9-202",
@@ -60,6 +68,8 @@
     },
     {
       "similarity_best_isoform": 0.8952,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
       "gene": "NPFFR2",
       "accession": "Q9Y5X5",
       "transcript": "NPFFR2-201",
@@ -72,6 +82,7 @@
     }
   ],
   "disagreement_count": 5,
+  "out_of_frame_canonical": [],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

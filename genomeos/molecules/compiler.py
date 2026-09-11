@@ -157,7 +157,7 @@ def uniprot_raw(symbol: str, organism: int = 9606) -> dict[str, Any] | None:
     """The reviewed entry whose primary gene name is the symbol; gene_exact also matches synonyms,
     so the first hit can be another protein (MIF returned a 560-residue entry once)."""
     q = f"gene_exact:{symbol} AND organism_id:{organism} AND reviewed:true"
-    url = f"https://rest.uniprot.org/uniprotkb/search?query={urllib.parse.quote(q)}&format=json&size=5"
+    url = f"https://rest.uniprot.org/uniprotkb/search?query={urllib.parse.quote(q)}&format=json&size=25"
     d = _get(url + f"&fields={UNIPROT_FIELDS}")
     hits = d.get("results") or []
     same = [
@@ -169,7 +169,24 @@ def uniprot_raw(symbol: str, organism: int = 9606) -> dict[str, Any] | None:
         # a gene can own several reviewed entries (MIEF1: the 463-residue protein and a 70-residue
         # microprotein from an upstream ORF); the main product is the longest
         return max(same, key=lambda h: h.get("sequence", {}).get("length", 0))
-    return hits[0] if hits else None
+    # no entry names this symbol as its primary gene. UniProt's parser treats some symbols as stop
+    # words (WAS returned every reviewed human entry); a plain gene: query still resolves them.
+    q2 = f"gene:{symbol} AND organism_id:{organism} AND reviewed:true"
+    url2 = f"https://rest.uniprot.org/uniprotkb/search?query={urllib.parse.quote(q2)}&format=json&size=25"
+    hits2 = _get(url2 + f"&fields={UNIPROT_FIELDS}").get("results") or []
+    same2 = [
+        h
+        for h in hits2
+        if (((h.get("genes") or [{}])[0].get("geneName") or {}).get("value", "")).upper() == symbol.upper()
+    ]
+    if same2:
+        return max(same2, key=lambda h: h.get("sequence", {}).get("length", 0))
+    # still nothing: the first hit is a synonym match (CAPS → CADPS); keep it, marked, so the
+    # mismatch stays visible in the identity section
+    if hits:
+        hits[0]["_symbol_match"] = False
+        return hits[0]
+    return None
 
 
 def normalise_uniprot(d: dict[str, Any]) -> dict[str, dict[str, Any]]:
@@ -263,6 +280,7 @@ def normalise_uniprot(d: dict[str, Any]) -> dict[str, dict[str, Any]]:
     ]
     af = [x["id"] for x in xrefs if x["database"] == "AlphaFoldDB"]
     identity = {
+        "symbol_match": d.get("_symbol_match", True),
         "accession": d["primaryAccession"],
         "name": name,
         "gene": (d.get("genes") or [{}])[0].get("geneName", {}).get("value"),

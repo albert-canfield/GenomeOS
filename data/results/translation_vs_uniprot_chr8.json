@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.26,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.148,
       "gene": "DEFB109D",
       "accession": "P0DY26",
       "transcript": "DEFB109D-201",
@@ -24,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.4557,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
       "gene": "PINX1",
       "accession": "Q96BK5",
       "transcript": "PINX1-219",
@@ -36,6 +40,8 @@
     },
     {
       "similarity_best_isoform": 0.8243,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.701,
       "gene": "MROH5",
       "accession": "Q6ZUA9",
       "transcript": "MROH5-201",
@@ -48,6 +54,7 @@
     }
   ],
   "disagreement_count": 3,
+  "out_of_frame_canonical": [],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

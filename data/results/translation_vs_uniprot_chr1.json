@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.1775,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.343,
       "gene": "OR2T7",
       "accession": "P0C7T2",
       "transcript": "OR2T7-202",
@@ -24,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.2239,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.126,
       "gene": "VN1R5",
       "accession": "Q7Z5H4",
       "transcript": "VN1R5-201",
@@ -36,6 +40,8 @@
     },
     {
       "similarity_best_isoform": 0.2955,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.173,
       "gene": "FCGR2C",
       "accession": "P31995",
       "transcript": "FCGR2C-202",
@@ -48,6 +54,8 @@
     },
     {
       "similarity_best_isoform": 0.4817,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.316,
       "gene": "AKR7L",
       "accession": "Q8NHP1",
       "transcript": "AKR7L-201",
@@ -60,6 +68,8 @@
     },
     {
       "similarity_best_isoform": 0.548,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
       "gene": "MUC1",
       "accession": "P15941",
       "transcript": "MUC1-225",
@@ -72,6 +82,8 @@
     },
     {
       "similarity_best_isoform": 0.6468,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.994,
       "gene": "DRC8",
       "accession": "Q5VUJ9",
       "transcript": "DRC8-203",
@@ -84,6 +96,8 @@
     },
     {
       "similarity_best_isoform": 0.7939,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.683,
       "gene": "OR10J4",
       "accession": "P0C629",
       "transcript": "OR10J4-201",
@@ -96,6 +110,8 @@
     },
     {
       "similarity_best_isoform": 0.8593,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.751,
       "gene": "OR9H1",
       "accession": "Q6UXT6",
       "transcript": "OR9H1-201",
@@ -108,6 +124,8 @@
     },
     {
       "similarity_best_isoform": 0.8865,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.995,
       "gene": "PLA2G2F",
       "accession": "Q9BZM2",
       "transcript": "PLA2G2F-201",
@@ -120,6 +138,8 @@
     },
     {
       "similarity_best_isoform": 0.8922,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.829,
       "gene": "GPATCH4",
       "accession": "Q5T3I0",
       "transcript": "GPATCH4-201",
@@ -132,6 +152,24 @@
     }
   ],
   "disagreement_count": 10,
+  "out_of_frame_canonical": [
+    {
+      "gene": "GPATCH4",
+      "exact_some_isoform": false
+    },
+    {
+      "gene": "OR10J3",
+      "exact_some_isoform": false
+    },
+    {
+      "gene": "OR10J4",
+      "exact_some_isoform": false
+    },
+    {
+      "gene": "OR2T7",
+      "exact_some_isoform": false
+    }
+  ],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

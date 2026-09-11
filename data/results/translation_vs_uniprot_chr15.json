@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.8768,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.994,
       "gene": "CALML4",
       "accession": "Q96GE6",
       "transcript": "CALML4-206",
@@ -24,6 +26,7 @@
     }
   ],
   "disagreement_count": 1,
+  "out_of_frame_canonical": [],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

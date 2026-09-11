@@ -65,9 +65,14 @@ def verify_chromosome(chrom: str, annotation, genome) -> dict[str, Any]:
             if best < 0.9999
             else 1.0
         )
+        cds_len = sum(seg.length for seg in canon.cds_segments) - canon.cds_phase
+        incomplete = any(t.endswith("_NF") for t in canon.tags)
         rows.append(
             {
                 "similarity_best_isoform": round(sim, 4),
+                # mechanism signatures for a reference that does not encode the curated protein
+                "cds_out_of_frame": cds_len % 3 != 0 and not incomplete,
+                "translated_fraction_of_cds": round(len(ours) * 3 / cds_len, 3) if cds_len else None,
                 "gene": g.symbol,
                 "accession": ident.get("accession"),
                 "transcript": canon.attrs.get("name", canon.id),
@@ -96,6 +101,14 @@ def verify_chromosome(chrom: str, annotation, genome) -> dict[str, Any]:
         "same_protein_different_boundaries": len(offset),
         "disagreements": sorted(disagree, key=lambda r: r["similarity_best_isoform"])[:40],
         "disagreement_count": len(disagree),
+        # the frameshift signature over every verified gene, not only the disagreements: a gene that
+        # fires it and still translates exactly (the mitochondrial genes ending mid-codon) shows the
+        # signature detects a property of the annotation, not a fault of the engine
+        "out_of_frame_canonical": [
+            {"gene": r["gene"], "exact_some_isoform": r["identity_best_isoform"] >= 0.9999}
+            for r in rows
+            if r["cds_out_of_frame"]
+        ],
         "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
         "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped "
         "similarity with low identity is the same protein with different start or exon boundaries",

@@ -193,11 +193,46 @@ pathways for six in ten; an experimental structure for under half; a
 recorded disease association for a quarter. The mitochondrial proteins and
 chromosome 19's zinc fingers sit at the two ends of that range.
 
-The translation check ran on every chromosome as it compiled: of
-19,249 compiled genes, 90.9% translate from the
-canonical transcript to exactly the reviewed UniProt sequence, 97.8%
-match some annotated isoform exactly, and 99 disagree beyond
-boundary differences (`translation_vs_uniprot_<chrom>.json` lists each).
+The translation check ran on every chromosome: of 19,310 compiled
+genes, 90.9% translate from the canonical transcript to exactly the
+reviewed UniProt sequence and 97.8% match some annotated isoform
+exactly. The 96 that disagree beyond boundary differences were read
+against the gene models and fall into five groups, each detected by a
+machine-checkable signature rather than by hand:
+
+| why the reference does not give the curated protein | genes | examples |
+|---|---|---|
+| same length, different sequence: frame or isoform choice | 38 | AGAP9, ARL9, ASPRV1, C16orf82, CALML4, DEFB112 … |
+| different length, partial similarity: exon boundary or isoform choice | 20 | CAPS, CCDC28A, CPEB2, CXXC4, DRC8, DUSP13B … |
+| frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged) | 18 | CYP2D7, FAM246C, GPATCH4, IFNL4, KIR2DS4, OR10AC1 … |
+| nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein | 13 | AKR7L, CASP12, DEFB109D, FCGR2C, MUC19, OR1P1 … |
+| different protein (UniProt entry or gene model does not describe the same product) | 7 | C10orf95, C12orf76, EPM2A, FAM174C, GAGE12B, RTL8C … |
+
+Two of those groups are facts about hg38, not about the compiler. The
+reference genome is one haplotype, and at 31 loci it carries a
+loss-of-function allele where UniProt describes the working protein: a
+frameshift (the canonical CDS is not a whole number of codons and GENCODE
+does not tag it incomplete; OR2B8 matches UniProt for 30 residues, then the
+frame shifts and a stop follows at codon 32) or a nonsense allele (our
+translation stops before 70% of the CDS while the curated protein is more
+than 30% longer; CASP12, FCGR2C, IFNL4 and CYP2D7 are the textbook cases).
+The frameshift signature fires on 29 canonical transcripts genome-wide; 7 of
+them translate exactly anyway, six of which are the mitochondrial genes
+whose CDS ends mid-codon by design and is completed by polyadenylation
+(MT-CO3, MT-CYB, MT-ND1 to MT-ND4), which is the check that the signature
+detects a property of the annotation and not a fault of the engine.
+A negative result worth keeping: CDS length not divisible by three on its
+own is useless as a signature, since it holds for 5.2% of coding
+transcripts across 8,602 genes through 5'-incomplete models; the
+untagged-and-canonical condition is what makes it specific.
+
+Reading the disagreements also found a second compiler bug after the
+synonym match: UniProt's query parser treats some symbols as stop words
+(`gene_exact:WAS` returned every reviewed human protein), so the compiler
+falls back to a plain `gene:` query when no entry names the symbol as
+primary, and marks the identity section `symbol_match: false` when even
+that fails (168 definitions, all renamed genes or identical paralogs
+sharing one entry).
 
 The knowledge graph built from the compiled definitions
 (`graph_genome.json`): 41,982 nodes (19,797 proteins,
@@ -206,6 +241,28 @@ The knowledge graph built from the compiled definitions
 support; 15,165 of 19,283 compiled proteins sit in one connected
 component. The compiled definitions occupy about 300 MB locally and are
 not committed; the summaries are.
+
+## The proteome as a library
+
+The compiled proteome is now a BioLib layer that ships with GenomeOS:
+`genomeos/lib/data/proteome.json.gz`, 19,283 human proteins in 2.3 MB,
+distilled from the local cache by `genomeos.lib.proteome.distil()`. Per
+protein it keeps the accession, length, existence level, a one-line
+function, location, up to ten InterPro domains, twelve Reactome pathways,
+ten physically supported partners, the tissue and cell-type pattern, up to
+five diseases, the count of experimental structures and whether AlphaFold
+has a model, plus the evidence per field and a `symbol_match` flag. It
+answers offline:
+
+```
+genomeos protein BRCA1 --lib          # the protein from the packaged table, no network
+genomeos protein BRCA1 --lib --bio    # the same as a BioLang protein block
+genomeos libs --proteome              # counts and evidence for the whole library
+```
+
+Storage rule respected: the full definitions (290 MB, rebuildable with
+the proteome job) stay local; the library is what travels. Regenerate it
+after a new compile with `genomeos.lib.proteome.distil()`.
 
 ## Verified: the engine reads genes the way the curators do
 

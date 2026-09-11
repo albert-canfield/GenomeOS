@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.5383,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 1.0,
       "gene": "SPATA31H1",
       "accession": "Q68DN1",
       "transcript": "SPATA31H1-201",
@@ -24,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.6184,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.443,
       "gene": "SCYGR10",
       "accession": "A0A286YEX9",
       "transcript": "SCYGR10-201",
@@ -36,6 +40,8 @@
     },
     {
       "similarity_best_isoform": 0.8605,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.996,
       "gene": "ASPRV1",
       "accession": "Q53RT3",
       "transcript": "ASPRV1-201",
@@ -48,6 +54,8 @@
     },
     {
       "similarity_best_isoform": 0.8696,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.994,
       "gene": "KCNE4",
       "accession": "Q8WWG9",
       "transcript": "KCNE4-201",
@@ -60,6 +68,8 @@
     },
     {
       "similarity_best_isoform": 0.8986,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.995,
       "gene": "RESP18",
       "accession": "Q5W5W9",
       "transcript": "RESP18-201",
@@ -72,6 +82,12 @@
     }
   ],
   "disagreement_count": 5,
+  "out_of_frame_canonical": [
+    {
+      "gene": "TMEM247",
+      "exact_some_isoform": true
+    }
+  ],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.1826,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.993,
       "gene": "SFTA3",
       "accession": "P0C7M3",
       "transcript": "SFTA3-213",
@@ -24,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.7287,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.573,
       "gene": "OR4Q2",
       "accession": "P0C623",
       "transcript": "OR4Q2-201",
@@ -36,6 +40,8 @@
     },
     {
       "similarity_best_isoform": 0.8015,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.678,
       "gene": "OR4K3",
       "accession": "Q96R72",
       "transcript": "OR4K3-201",
@@ -48,6 +54,8 @@
     },
     {
       "similarity_best_isoform": 0.837,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.717,
       "gene": "OR11H7",
       "accession": "Q8NGC8",
       "transcript": "OR11H7-201",
@@ -60,6 +68,8 @@
     },
     {
       "similarity_best_isoform": 0.8384,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.999,
       "gene": "SERPINA2",
       "accession": "P20848",
       "transcript": "SERPINA2-201",
@@ -72,6 +82,16 @@
     }
   ],
   "disagreement_count": 5,
+  "out_of_frame_canonical": [
+    {
+      "gene": "OR4K3",
+      "exact_some_isoform": false
+    },
+    {
+      "gene": "OR4Q2",
+      "exact_some_isoform": false
+    }
+  ],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

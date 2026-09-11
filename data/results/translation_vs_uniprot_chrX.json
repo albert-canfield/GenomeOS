@@ -3,27 +3,17 @@
   "date": "2026-09-11",
   "chrom": "chrX",
   "genes_checked": 838,
-  "exact_canonical": 758,
-  "exact_canonical_fraction": 0.9045,
-  "exact_some_isoform": 825,
-  "exact_some_isoform_fraction": 0.9845,
+  "exact_canonical": 759,
+  "exact_canonical_fraction": 0.9057,
+  "exact_some_isoform": 826,
+  "exact_some_isoform_fraction": 0.9857,
   "canonical_differs_but_another_isoform_matches": 67,
   "same_protein_different_boundaries": 7,
   "disagreements": [
     {
-      "similarity_best_isoform": 0.0722,
-      "gene": "WAS",
-      "accession": "A0A0C5B5G6",
-      "transcript": "WAS-201",
-      "ours_aa": 502,
-      "uniprot_aa": 16,
-      "identity_canonical": 0.008,
-      "identity_best_isoform": 0.0225,
-      "exact": false,
-      "same_length": false
-    },
-    {
       "similarity_best_isoform": 0.0976,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.857,
       "gene": "GAGE12B",
       "accession": "A1L429",
       "transcript": "GAGE12B-201",
@@ -36,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.1615,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.991,
       "gene": "RTL8C",
       "accession": "O15255",
       "transcript": "RTL8C-201",
@@ -48,6 +40,8 @@
     },
     {
       "similarity_best_isoform": 0.7303,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.571,
       "gene": "UBE2NL",
       "accession": "Q5JXB2",
       "transcript": "UBE2NL-201",
@@ -59,7 +53,8 @@
       "same_length": false
     }
   ],
-  "disagreement_count": 4,
+  "disagreement_count": 3,
+  "out_of_frame_canonical": [],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

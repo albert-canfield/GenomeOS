@@ -783,23 +783,165 @@
   },
   "translation_vs_uniprot": {
     "summary": {
-      "genes_checked": 19249,
+      "out_of_frame_signature": {
+        "genes_flagged": 29,
+        "translate_exactly_anyway": [
+          "MT-CO3",
+          "MT-CYB",
+          "MT-ND1",
+          "MT-ND2",
+          "MT-ND3",
+          "MT-ND4",
+          "TMEM247"
+        ],
+        "note": "an untagged canonical CDS that is not a whole number of codons; the genes that still translate exactly are the mitochondrial genes whose CDS ends mid-codon by design"
+      },
+      "genes_checked": 19310,
       "exact_canonical": 0.9089,
-      "exact_some_isoform": 0.9782,
-      "disagreements": 99
+      "exact_some_isoform": 0.9783,
+      "disagreements": 96,
+      "categories": {
+        "same length, different sequence: frame or isoform choice": {
+          "count": 38,
+          "genes": [
+            "AGAP9 (658/703 aa)",
+            "ARL9 (265/187 aa)",
+            "ASPRV1 (259/343 aa)",
+            "C16orf82 (154/217 aa)",
+            "CALML4 (153/196 aa)",
+            "DEFB112 (94/113 aa)",
+            "FCGBP (4204/5405 aa)",
+            "GCNT7 (308/430 aa)",
+            "GSTT2 (195/244 aa)",
+            "HLA-DQA1 (255/254 aa)",
+            "KCNE4 (170/221 aa)",
+            "KRTAP5-4 (228/288 aa)",
+            "LCN9 (157/176 aa)",
+            "MICA (332/383 aa)",
+            "MROH5 (924/1318 aa)",
+            "MSLNL (752/702 aa)",
+            "NOBOX (574/691 aa)",
+            "NPFFR2 (420/522 aa)",
+            "OR11H7 (226/314 aa)",
+            "OR9H1 (232/308 aa)",
+            "PANK1 (461/598 aa)",
+            "PINX1 (440/328 aa)",
+            "PLA2G2F (211/168 aa)",
+            "PNLIPRP2 (356/469 aa)",
+            "PRB4 (247/310 aa)",
+            "PRSS3 (247/304 aa)",
+            "PTCHD3 (767/954 aa)",
+            "PTGES3L (156/166 aa)",
+            "RAVER1 (739/606 aa)",
+            "RESP18 (186/228 aa)",
+            "RPL36 (105/148 aa)",
+            "RSPH3 (418/560 aa)",
+            "SAMD1 (432/538 aa)",
+            "SERPINA2 (309/421 aa)",
+            "SH3BGR (176/239 aa)",
+            "SLC22A31 (446/556 aa)",
+            "ZFP57 (536/452 aa)",
+            "ZNF302 (399/478 aa)"
+          ]
+        },
+        "different length, partial similarity: exon boundary or isoform choice": {
+          "count": 20,
+          "genes": [
+            "CAPS (189/275 aa)",
+            "CCDC28A (184/274 aa)",
+            "CPEB2 (1034/589 aa)",
+            "CXXC4 (367/198 aa)",
+            "DRC8 (162/269 aa)",
+            "DUSP13B (417/198 aa)",
+            "KLHDC7B (1235/594 aa)",
+            "MUC1 (475/1255 aa)",
+            "MUC2 (1394/5289 aa)",
+            "MUCL3 (1393/517 aa)",
+            "NPIPB3 (420/1050 aa)",
+            "OOSP1 (184/123 aa)",
+            "PRB1 (198/392 aa)",
+            "PRR33 (479/331 aa)",
+            "RFLNB (144/214 aa)",
+            "SCOC (82/159 aa)",
+            "SPATA31H1 (5388/1984 aa)",
+            "SWI5 (130/235 aa)",
+            "TGIF1 (272/401 aa)",
+            "WFDC6 (86/131 aa)"
+          ]
+        },
+        "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)": {
+          "count": 18,
+          "genes": [
+            "CYP2D7 (201/515 aa)",
+            "FAM246C (115/240 aa)",
+            "GPATCH4 (370/446 aa)",
+            "IFNL4 (75/179 aa)",
+            "KIR2DS4 (239/304 aa)",
+            "OR10AC1 (124/325 aa)",
+            "OR10J4 (213/311 aa)",
+            "OR12D1 (238/320 aa)",
+            "OR13C7 (151/318 aa)",
+            "OR2B8 (31/312 aa)",
+            "OR2T7 (109/308 aa)",
+            "OR4K3 (214/315 aa)",
+            "OR4Q2 (180/314 aa)",
+            "OR5AC1 (95/307 aa)",
+            "OR5AL1 (157/329 aa)",
+            "OR5G3 (145/314 aa)",
+            "OR5H8 (268/308 aa)",
+            "SIGLEC16 (136/481 aa)"
+          ]
+        },
+        "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein": {
+          "count": 13,
+          "genes": [
+            "AKR7L (105/331 aa)",
+            "CASP12 (124/341 aa)",
+            "DEFB109D (13/87 aa)",
+            "FCGR2C (56/323 aa)",
+            "MUC19 (4197/8384 aa)",
+            "OR1P1 (184/330 aa)",
+            "OR4A8 (135/315 aa)",
+            "OR4C45 (59/306 aa)",
+            "OR52P1 (53/321 aa)",
+            "OR8J2 (63/315 aa)",
+            "SCYGR10 (47/105 aa)",
+            "UBE2NL (88/153 aa)",
+            "VN1R5 (45/357 aa)"
+          ]
+        },
+        "different protein (UniProt entry or gene model does not describe the same product)": {
+          "count": 7,
+          "genes": [
+            "C10orf95 (213/257 aa)",
+            "C12orf76 (72/135 aa)",
+            "EPM2A (331/344 aa)",
+            "FAM174C (132/132 aa)",
+            "GAGE12B (6/117 aa)",
+            "RTL8C (113/209 aa)",
+            "SFTA3 (136/94 aa)"
+          ]
+        }
+      }
     },
     "per_chromosome": {
-      "chr1": {
-        "genes": 2002,
-        "exact_canonical": 0.9176,
-        "exact_some_isoform": 0.9775,
-        "disagreements": 10
+      "chrX": {
+        "genes": 838,
+        "exact_canonical": 0.9057,
+        "exact_some_isoform": 0.9857,
+        "disagreements": 3
       },
-      "chr10": {
-        "genes": 713,
-        "exact_canonical": 0.9018,
-        "exact_some_isoform": 0.9832,
-        "disagreements": 6
+      "chrM": {
+        "genes": 13,
+        "exact_canonical": 1.0,
+        "exact_some_isoform": 1.0,
+        "disagreements": 0
+      },
+      "chr6": {
+        "genes": 1003,
+        "exact_canonical": 0.9252,
+        "exact_some_isoform": 0.9751,
+        "disagreements": 10
       },
       "chr11": {
         "genes": 1281,
@@ -807,35 +949,23 @@
         "exact_some_isoform": 0.9672,
         "disagreements": 11
       },
-      "chr12": {
-        "genes": 976,
-        "exact_canonical": 0.9027,
-        "exact_some_isoform": 0.9775,
-        "disagreements": 4
+      "chr10": {
+        "genes": 713,
+        "exact_canonical": 0.9018,
+        "exact_some_isoform": 0.9832,
+        "disagreements": 6
       },
-      "chr13": {
-        "genes": 312,
-        "exact_canonical": 0.8974,
-        "exact_some_isoform": 0.984,
+      "chr7": {
+        "genes": 892,
+        "exact_canonical": 0.907,
+        "exact_some_isoform": 0.9765,
+        "disagreements": 2
+      },
+      "chrY": {
+        "genes": 61,
+        "exact_canonical": 0.8361,
+        "exact_some_isoform": 0.9672,
         "disagreements": 0
-      },
-      "chr14": {
-        "genes": 593,
-        "exact_canonical": 0.8752,
-        "exact_some_isoform": 0.9646,
-        "disagreements": 5
-      },
-      "chr15": {
-        "genes": 569,
-        "exact_canonical": 0.9069,
-        "exact_some_isoform": 0.9842,
-        "disagreements": 1
-      },
-      "chr16": {
-        "genes": 816,
-        "exact_canonical": 0.9044,
-        "exact_some_isoform": 0.9816,
-        "disagreements": 4
       },
       "chr17": {
         "genes": 1137,
@@ -843,23 +973,17 @@
         "exact_some_isoform": 0.9763,
         "disagreements": 3
       },
-      "chr18": {
-        "genes": 259,
-        "exact_canonical": 0.9189,
-        "exact_some_isoform": 0.9961,
+      "chr21": {
+        "genes": 213,
+        "exact_canonical": 0.9155,
+        "exact_some_isoform": 0.9906,
         "disagreements": 1
       },
-      "chr19": {
-        "genes": 1390,
-        "exact_canonical": 0.9079,
-        "exact_some_isoform": 0.9712,
-        "disagreements": 12
-      },
-      "chr2": {
-        "genes": 1218,
-        "exact_canonical": 0.913,
-        "exact_some_isoform": 0.9869,
-        "disagreements": 5
+      "chr1": {
+        "genes": 2002,
+        "exact_canonical": 0.9176,
+        "exact_some_isoform": 0.9775,
+        "disagreements": 10
       },
       "chr20": {
         "genes": 523,
@@ -867,10 +991,34 @@
         "exact_some_isoform": 0.9828,
         "disagreements": 2
       },
-      "chr21": {
-        "genes": 213,
-        "exact_canonical": 0.9155,
-        "exact_some_isoform": 0.9906,
+      "chr16": {
+        "genes": 816,
+        "exact_canonical": 0.9044,
+        "exact_some_isoform": 0.9816,
+        "disagreements": 4
+      },
+      "chr15": {
+        "genes": 569,
+        "exact_canonical": 0.9069,
+        "exact_some_isoform": 0.9842,
+        "disagreements": 1
+      },
+      "chr2": {
+        "genes": 1218,
+        "exact_canonical": 0.913,
+        "exact_some_isoform": 0.9869,
+        "disagreements": 5
+      },
+      "chr19": {
+        "genes": 1390,
+        "exact_canonical": 0.9094,
+        "exact_some_isoform": 0.9727,
+        "disagreements": 10
+      },
+      "chr18": {
+        "genes": 259,
+        "exact_canonical": 0.9189,
+        "exact_some_isoform": 0.9961,
         "disagreements": 1
       },
       "chr22": {
@@ -885,29 +1033,17 @@
         "exact_some_isoform": 0.9836,
         "disagreements": 2
       },
+      "chr14": {
+        "genes": 593,
+        "exact_canonical": 0.8752,
+        "exact_some_isoform": 0.9646,
+        "disagreements": 5
+      },
       "chr4": {
         "genes": 745,
         "exact_canonical": 0.9128,
         "exact_some_isoform": 0.9772,
         "disagreements": 5
-      },
-      "chr5": {
-        "genes": 862,
-        "exact_canonical": 0.9234,
-        "exact_some_isoform": 0.9896,
-        "disagreements": 0
-      },
-      "chr6": {
-        "genes": 1003,
-        "exact_canonical": 0.9252,
-        "exact_some_isoform": 0.9751,
-        "disagreements": 10
-      },
-      "chr7": {
-        "genes": 892,
-        "exact_canonical": 0.907,
-        "exact_some_isoform": 0.9765,
-        "disagreements": 2
       },
       "chr8": {
         "genes": 684,
@@ -915,23 +1051,29 @@
         "exact_some_isoform": 0.9795,
         "disagreements": 3
       },
+      "chr13": {
+        "genes": 312,
+        "exact_canonical": 0.8974,
+        "exact_some_isoform": 0.984,
+        "disagreements": 0
+      },
+      "chr12": {
+        "genes": 976,
+        "exact_canonical": 0.9027,
+        "exact_some_isoform": 0.9775,
+        "disagreements": 4
+      },
       "chr9": {
         "genes": 747,
         "exact_canonical": 0.8956,
         "exact_some_isoform": 0.9692,
         "disagreements": 4
       },
-      "chrM": {
-        "genes": 13,
-        "exact_canonical": 1.0,
-        "exact_some_isoform": 1.0,
+      "chr5": {
+        "genes": 862,
+        "exact_canonical": 0.9234,
+        "exact_some_isoform": 0.9896,
         "disagreements": 0
-      },
-      "chrX": {
-        "genes": 838,
-        "exact_canonical": 0.9045,
-        "exact_some_isoform": 0.9845,
-        "disagreements": 4
       }
     }
   },

@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.4627,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.308,
       "gene": "OR5AC1",
       "accession": "P0C628",
       "transcript": "OR5AC1-201",
@@ -24,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.8438,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.864,
       "gene": "OR5H8",
       "accession": "P0DN80",
       "transcript": "OR5H8-201",
@@ -36,6 +40,16 @@
     }
   ],
   "disagreement_count": 2,
+  "out_of_frame_canonical": [
+    {
+      "gene": "OR5AC1",
+      "exact_some_isoform": false
+    },
+    {
+      "gene": "OR5H8",
+      "exact_some_isoform": false
+    }
+  ],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }

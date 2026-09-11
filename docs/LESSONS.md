@@ -70,6 +70,22 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   named "long ORF" is only honest once the repeat signatures are subtracted
   first. Order of classification matters more than the classifiers.
 
+## The reference is one haplotype
+
+- hg38 carries loss-of-function alleles at dozens of loci (olfactory
+  receptors, CASP12, FCGR2C, IFNL4, CYP2D7, KIR2DS4, SIGLEC16): the
+  reference reading frame is shifted or stopped where UniProt describes the
+  working protein. A translation engine that disagrees with UniProt there is
+  right, and the disagreement is a fact about the genome to report, not to
+  fix.
+- Make the signature specific before trusting it: "CDS length not divisible
+  by three" holds for 5% of coding transcripts (5'-incomplete models); the
+  same test restricted to canonical transcripts without an incomplete tag
+  flags 29 genes, and the six mitochondrial genes among them that translate
+  perfectly prove it measures the annotation, not the engine.
+- Every batch of disagreements so far hid one real bug (a synonym match,
+  selenocysteine, a stop-word symbol). Read them; do not round them away.
+
 ## Several sessions in one checkout
 
 - The git index is shared by everyone working in the same checkout: a

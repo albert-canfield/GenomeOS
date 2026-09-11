@@ -58,6 +58,9 @@ def test_stalled_and_heal(tmp_path, monkeypatch):
             (root / "data" / "results" / f"proteome_chr{i}.json").write_text("{}")
         assert jobs.is_complete("proteome_genome_wide", root)
         assert jobs.supervise_once(root) == []
+        sleeper.kill()
+        sleeper.wait()
+        assert jobs.status("proteome_genome_wide", root).state == "done"  # complete, process gone
     finally:
         sleeper.kill()
         sleeper.wait()

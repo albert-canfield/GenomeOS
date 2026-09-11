@@ -12,6 +12,8 @@
   "disagreements": [
     {
       "similarity_best_isoform": 0.1745,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.995,
       "gene": "C10orf95",
       "accession": "Q9H7T3",
       "transcript": "C10orf95-201",
@@ -24,6 +26,8 @@
     },
     {
       "similarity_best_isoform": 0.8097,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
       "gene": "AGAP9",
       "accession": "Q5VTM2",
       "transcript": "AGAP9-201",
@@ -36,6 +40,8 @@
     },
     {
       "similarity_best_isoform": 0.863,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.757,
       "gene": "PNLIPRP2",
       "accession": "P54317",
       "transcript": "PNLIPRP2-201",
@@ -48,6 +54,8 @@
     },
     {
       "similarity_best_isoform": 0.8706,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
       "gene": "PANK1",
       "accession": "Q8TE04",
       "transcript": "PANK1-201",
@@ -60,6 +68,8 @@
     },
     {
       "similarity_best_isoform": 0.8879,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
       "gene": "DUSP13B",
       "accession": "Q9UII6",
       "transcript": "DUSP13B-209",
@@ -72,6 +82,8 @@
     },
     {
       "similarity_best_isoform": 0.8913,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.803,
       "gene": "PTCHD3",
       "accession": "Q3KNS1",
       "transcript": "PTCHD3-201",
@@ -84,6 +96,7 @@
     }
   ],
   "disagreement_count": 6,
+  "out_of_frame_canonical": [],
   "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
   "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
 }
