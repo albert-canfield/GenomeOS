@@ -263,15 +263,25 @@ in order. "Owner" is the session that holds the files today (see §7).
   | AlphaGenome splice sites | 1,003 | 46.2% | 20.0% | 84.2% |
   | + starts confined to open chromatin | 614 | 53% | not recorded | 76% |
   | + RNA over the exons, eight tissues | **82** | **68.6%** | **92.7%** | 57.9% |
+  | + measured RNA, ENCODE K562 total RNA-seq | 55 | 72.1% | 89.1% | 44.8% |
 
   Nine candidates in ten were sequence that is never transcribed in the
   panel. The panel is eight tissues rather than the body, and that is where
   the lost sensitivity went. SEQUENCE-GRAMMAR.md item 1 closes the series:
   the grammar finds the genes, transcription evidence says which are real.
-- **Next.** 1. Measured RNA where it exists (ENCODE or GTEx coverage) in
-  place of the predicted panel, and a broader panel where it does not, to
-  recover the sensitivity eight tissues lose; then a second chromosome.
-  2. The `reader` construct in BioLang, so context gating comes from
+- **Model and measurement agree (2026-09-11).** `segments --rna-measured
+  K562` reads ENCODE's strand-specific total RNA-seq bigWigs (ENCSR860DWK)
+  over the candidate exons only, through the range reader of
+  `attribution/bigwig.py` (0.7 MB moved for 3,248 exons), and keeps the
+  candidates with signal on their strand (`genome/rna_measured.py`). Same
+  exon and gene precision as the predicted panel, fewer genes found, because
+  one cell line expresses fewer of chr21's genes than eight tissues do; the
+  signal threshold was swept (1.0 leaves 12 candidates, 0.05 the 55) and the
+  sweep sits next to the table in SEQUENCE-GRAMMAR.md.
+- **Next.** 1. A broader measured panel (several ENCODE cell types, or GTEx
+  coverage) to recover the sensitivity one cell line and eight predicted
+  tissues both lose; then a second chromosome. 2. The `reader` construct in
+  BioLang, so context gating comes from
   chromatin (the parser half belongs to the language owner). 3. Orthology
   from Ensembl Compara, and a boundary source finer than CTCF alone (Hi-C
   domains) to test whether the resolution limit is the biology. The L1 ORF2
