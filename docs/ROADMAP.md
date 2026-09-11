@@ -369,11 +369,22 @@ in order. "Owner" is the session that holds the files today (see §7).
   program that imports the writer itself drops the stub. The packaged
   proteome carries a writers field per protein (2.33 MB). A kinase knockout
   now reaches its substrates through the rules rather than the neighbourhood.
+- **The disagreements held against three real genotypes (2026-09-11).**
+  `scripts/disagreements_genotype.py` applies the SNVs HG002, HG003 and HG004
+  carry inside each disagreement gene's canonical CDS, translates and compares
+  with UniProt again (`translation_disagreements_genotype`). HG002: 40 genes
+  with no variant inside the CDS, 52 whose variants leave the disagreement as
+  it is or worsen it, 1 with only indels (not applied), 0 restored; HG003
+  46/46/1/0, HG004 38/54/1/0. The 96 are not common alleles this trio carries
+  the other way. PROTEIN.md now bounds them from three sides: not isoform
+  choice, not this trio's alleles, mechanism by triage; population allele
+  frequency at the exact site is what would settle each one.
 - **Next.** 1. The dominant isoform fed to the twin, so a variant is judged on
-  the transcript the tissue makes. 2. The 38 reference-allele disagreements as
-  what they are, hg38 carrying a minor allele, checked against an individual's
-  genotype. 3. Measured modification state (a phosphoproteome) so a `modifies`
-  rule can carry occupancy rather than possibility.
+  the transcript the tissue makes, and the twin says which protein each tissue
+  makes for a person given their variants. 2. Population allele frequency at
+  the 96 disagreement sites, which is the one measurement that settles them.
+  3. Measured modification state (a phosphoproteome) so a `modifies` rule can
+  carry occupancy rather than possibility.
 - **Owner.** genomeos-fe.
 
 ### D. The individual (BioTwin)
