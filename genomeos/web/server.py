@@ -1197,6 +1197,19 @@ class Api:
 
     # ---- libraries -------------------------------------------------------
 
+    def proteome_lib(self, gene: str | None = None) -> dict:
+        """The packaged proteome library: its summary, or one protein's record and BioLang block."""
+        from genomeos.lib.proteome import block, get, summary
+
+        out: dict = {"summary": summary()}
+        if gene:
+            if not gene.replace("-", "").replace("_", "").isalnum():
+                raise ApiError("gene symbol required")
+            r = get(gene)
+            out["protein"] = r
+            out["block"] = block(gene) if r else None
+        return out
+
     def libs(self) -> dict:
         return {
             "libraries": [
@@ -1276,6 +1289,8 @@ class Handler(BaseHTTPRequestHandler):
                 )
             if u.path == "/api/libs":
                 return self._json(self.api.libs())
+            if u.path == "/api/proteome_lib":
+                return self._json(self.api.proteome_lib(self._q(qs, "gene")))
             if u.path == "/api/twins":
                 return self._json(self.api.twins())
             if u.path == "/api/results":

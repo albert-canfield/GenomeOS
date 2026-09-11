@@ -671,6 +671,16 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 
 <!-- ================= LIBRARIES ================= -->
 <section id="libs">
+  <div class="card" style="margin-bottom:16px">
+    <h2><i class="ic">🧬</i>The proteome library<span class="help" data-tip="The whole human proteome distilled into a table that ships with GenomeOS (19,283 proteins, 2.3 MB): accession, function, location, domains, pathways, physically supported partners, tissue pattern, diseases, structures, with the evidence per field. Answers offline; the full compiled definitions stay in the local cache.">?</span>
+      <span class="muted" id="pl-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+    <div id="pl-summary"></div>
+    <div class="row" style="margin-top:8px">
+      <label>protein <input id="pl-gene" placeholder="BRCA1" value="TP53" style="width:120px" class="mono"></label>
+      <button class="ghost" id="pl-show" data-tip="Show the packaged record and its BioLang protein block."><i class="ic">🔎</i>Show</button>
+    </div>
+    <div id="pl-out" style="font-size:12.5px;margin-top:6px"></div>
+  </div>
   <div class="card">
     <h2><i class="ic">📚</i>The libraries in the genome<span class="help" data-tip="Five layers: core (what every cell needs), blueprint (body plan and organs), timer (construction and maintenance clocks), systems (how tissues talk), parts (the inventory). Click a library to see its representative genes, scale, source and notes; search by gene symbol.">?</span></h2>
     <div class="row">
@@ -1255,7 +1265,25 @@ $('#c-packet').onclick = () => { $('#c-packet-out').textContent = lastPacket ? J
 
 // ---- libraries
 let libs = [];
-async function loadLibs() { libs = (await api('/api/libs')).libraries; renderLibs(''); }
+async function loadLibs() { libs = (await api('/api/libs')).libraries; renderLibs(''); loadProteomeLib('TP53'); }
+async function loadProteomeLib(gene) {
+  try {
+    const r = await api('/api/proteome_lib' + (gene ? `?gene=${encodeURIComponent(gene)}` : ''));
+    const s = r.summary;
+    if (s.proteins) $('#pl-summary').innerHTML = `<div class="kpi"><div><b>${fmt(s.proteins)}</b><span>proteins</span></div><div><b>${(s.with_function / s.proteins * 100).toFixed(0)}%</b><span>function known</span></div><div><b>${(s.with_pathways / s.proteins * 100).toFixed(0)}%</b><span>in a pathway</span></div><div><b>${(s.with_partners / s.proteins * 100).toFixed(0)}%</b><span>physical partners</span></div><div><b>${(s.with_experimental_structure / s.proteins * 100).toFixed(0)}%</b><span>experimental structure</span></div></div>`;
+    else $('#pl-summary').innerHTML = '<span class="muted">packaged table missing</span>';
+    if (gene) {
+      const p = r.protein;
+      $('#pl-out').innerHTML = p ? `<div><b>${gene.toUpperCase()}</b> · UniProt ${p.accession} · ${p.name} · ${p.length} aa · ${p.chrom || ''} ${p.symbol_match ? '' : '<span class="pill inferred">entry names another gene</span>'}</div>
+        <div class="muted">${p.function || ''}</div>
+        <div>location: ${p.location.join('; ') || '?'} · tissue: ${p.tissue_pattern || '?'} · cell types: ${p.cell_type_pattern || '?'}</div>
+        <div>domains: ${p.domains.map(d => `<span class="chip">${d}</span>`).join(' ') || 'none'}</div>
+        <div>pathways: ${p.pathways.length} · partners: ${p.partners.join(', ') || 'none'} · structures: ${p.structures_experimental} experimental${p.alphafold ? ', AlphaFold' : ''} · diseases: ${p.diseases.join('; ') || 'none recorded'}</div>
+        <pre class="mono" style="font-size:11px;margin-top:6px;white-space:pre-wrap">${r.block}</pre>` : `<span class="muted">${gene} is not in the packaged proteome</span>`;
+    }
+  } catch (e) { $('#pl-status').textContent = e.message; }
+}
+document.addEventListener('DOMContentLoaded', () => { const b = $('#pl-show'); if (b) { b.onclick = () => loadProteomeLib($('#pl-gene').value.trim()); $('#pl-gene').onkeydown = e => { if (e.key === 'Enter') loadProteomeLib($('#pl-gene').value.trim()); }; } });
 function renderLibs(q) {
   q = q.toLowerCase();
   const hit = l => !q || l.id.includes(q) || l.purpose.toLowerCase().includes(q) || l.genes.some(g => g.toLowerCase().includes(q)) || (l.note || '').toLowerCase().includes(q);
