@@ -58,6 +58,18 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 | A tristable switch read against a clamped morphogen gives endoderm → mesoderm → ectoderm; half its rules are inferred and the report says "low" | gastrulation runtime | `clamp` argument on the network runtime; uncertainty report |
 | Sulston's early lineage follows from per-founder cycle times: 4 cells at 22 min, ~24 at 100 min, E slowest | lineage engine | `data/demo/celegans_lineage.bio` |
 
+## The UNKNOWN space, genome-wide
+
+- Streaming one chromosome at a time kept peak disk under 300 MB for a
+  1 Gb job; the summaries total a few hundred KB. Stream, distil, discard
+  scales.
+- The largest class of intergenic DNA by chromatin evidence is regulatory
+  (34%), not repeat: ENCODE's elements are dense enough that a 10 kb window
+  with two of them is the common case, not the exception.
+- An ORF finder run on repeat-rich DNA finds LINE-1 ORF2 everywhere; a class
+  named "long ORF" is only honest once the repeat signatures are subtracted
+  first. Order of classification matters more than the classifiers.
+
 ## Engineering
 
 - process-bigraph registers processes with `core.register_link` and applies float updates additively; the composite ran our two engines on one clock.
