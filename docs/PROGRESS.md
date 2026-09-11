@@ -377,3 +377,25 @@ from the report, and the roadmap now carries them.
 - **What the three runs say together.** Better splice sites multiplied exon and site accuracy eight-fold and left gene finding untouched. A better start signal finally moved gene precision but paid for it in sensitivity. Neither signal found a gene the grammar was missing. The codon model, which decides between a real reading frame and a merely plausible one, is the limit; that is now a measured claim rather than a suspicion, and it is where area B goes next.
 - **The reader on eleven cell types, genome-wide**: 42.0% of coding genes read in keratinocyte up to 77.1% in hepatocyte, resumable per cell type and accepting any ENCODE biosample. The block map gained a reader lane: nodes fill with their open fraction, silent ones take a red edge, and every coding gene carries a read or silent dot for the chosen cell. The same chromosome, seen through a different cell, is a different map, which is the point the node model has been making in prose since it was written.
 - **The AlphaGenome daily quota ran out, and nothing broke.** The waiting chromosome job retried rather than failing, which is exactly the behaviour the quota-shaped job design was built for and the first time it was tested by the real limit rather than by a unit test.
+
+## 2026-09-11 — correction: roadmap edits that were logged but never landed
+
+The previous two entries described roadmap changes that were not in the file.
+An edit script asserted its way out part-way through, writing nothing, while
+the commit that followed carried only the progress entry, so the log described
+a state the roadmap did not have. Everything is now applied and each edit was
+verified present after the fact rather than assumed:
+
+- area B: the three-run segment-parser table, the reader lane, and a next list
+  headed by the coding model;
+- the §4 reader row (eleven cell types, 42.0% to 77.1% of coding genes read);
+- the §4 enhancer row (three chromosomes, and the quota exhaustion the job
+  handled by waiting);
+- a §4 row for the segment parser itself, which had none.
+
+The lesson is the same one the shared index taught this morning: a step that
+reports success in one place and silently does nothing in another is worse
+than a step that fails loudly. A script that edits a document should verify
+its own result, and the person running it should read the file, not the exit
+line. Both mistakes today were caught by reading the artefact instead of the
+report, which is the habit to keep.

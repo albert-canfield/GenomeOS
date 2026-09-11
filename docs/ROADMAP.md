@@ -186,13 +186,35 @@ in order. "Owner" is the session that holds the files today (see §7).
   more than the headline: a third of the time the nearest-gene heuristic names
   the wrong gene, and 43 of 127 elements the registry calls enhancer-like
   behave as silencers.
-- **Next.** 1. Reader lane in the block map and a `reader` construct in
-  BioLang so context gating comes from chromatin. 2. Segment parser
-  (`genomeos segments --chrom C`): Viterbi over the grammar with the learned
-  PWMs, evaluated against GENCODE per chromosome. 3. Fetch chr15–20 and chrX.
-  4. Mouse chr19 as the comparison genome. The L1
-  ORF2 and Alu sequence signatures are superseded by the RepeatMasker pass
-  and stay as the fallback for chromosomes not yet distilled.
+- **Segment parser: three runs, one conclusion (2026-09-11).** The parser
+  runs Viterbi over the grammar and is scored against every coding transcript
+  on chr21. All three results are kept side by side so the comparison stays
+  checkable.
+
+  | signals used | candidates | exon precision | site precision | gene precision | gene sensitivity |
+  |---|---|---|---|---|---|
+  | learned donor/acceptor matrices | 556 | 5.2% | 6.9% | 21.9% | 89.1% |
+  | + AlphaGenome splice sites (feature c) | 1,003 | 46.2% | 49.2% | 20.0% | 84.2% |
+  | + starts anchored at ENCODE promoters | 158 | 61.9% | 66.0% | 53.8% | 59.3% |
+
+  Better splice sites multiply exon and site accuracy eight-fold and leave
+  gene finding untouched. Anchoring the start at a curated promoter is the
+  first thing that moves gene precision, 2.5-fold, but it buys that precision
+  with sensitivity: it can only find genes the registry already marks, so a
+  third of the genes drop out. Two independent signals, neither of which found
+  a gene the grammar was missing. **The coding model is the limit**, and that
+  is a measured claim now rather than a suspicion.
+- **Reader lane in the block map (2026-09-11)**: nodes fill with their open
+  fraction, silent ones take a red edge, and each coding gene carries a read
+  or silent dot for the chosen cell type. The same chromosome through a
+  different cell is a different map.
+- **Next.** 1. The coding model, which two independent experiments now name as
+  the limit: the codon log-odds score is what separates a real reading frame
+  from a plausible one. 2. The `reader` construct in BioLang, so context
+  gating comes from chromatin (the parser half belongs to the language owner).
+  3. Mouse chr19 as the comparison genome. The L1 ORF2 and Alu sequence
+  signatures are superseded by the RepeatMasker pass and stay as the fallback
+  for chromosomes not yet distilled.
 - **Owner.** genomeos-fe.
 
 ### C. Molecules (RNA, proteins, pathways, the knowledge graph)
@@ -392,13 +414,14 @@ or the CLI; results land in `data/results` and are committed.
 | Anatomy inventory | 25 of 25 | done | `anatomy_hg38_by_chromosome` |
 | UNKNOWN classification | 25 of 25 with curated repeats; genome-wide 98.5% classified | done | `unknown_genome_wide` summary committed |
 | CTCF domains | 24 of 25 (chrM has none) | done | |
-| Reader (open nodes per cell type) | 25 of 25 | done | K562 and HepG2; `reader_genome_wide` |
+| Reader (open nodes per cell type) | 25 of 25, eleven cell types | done | 42.0% (keratinocyte) to 77.1% (hepatocyte) of coding genes read per cell; resumable per cell type, any ENCODE biosample |
 | Proteome compiled | 25 of 25 (2026-09-11) | done | 19,478 coding genes: sequence 99.1%, domains 99.0%, function 86.3%, interactions 81.5%, pathways 58.2%, experimental structure 45.2%, predicted structure 98.2%, disease 25.5% |
 | Translation verified against UniProt | 25 of 25 (2026-09-11) | done | 19,249 genes: 90.9% canonical identical, 97.8% exact for some isoform; the remaining disagreements are triaged by mechanism, including hg38 frameshift and nonsense alleles detected automatically |
 | Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 327,024 edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
-| Enhancer targets, predicted (AlphaGenome) | chr21 sampled (200 of 6,618) | `enhancer_targets_<chrom>` | needs a key; about eight seconds per element, so it is a sampling job, not a sweep |
+| Enhancer targets, predicted (AlphaGenome) | chr21, chr22, chr1 sampled (200 each); registered for every chromosome | `enhancer_targets_<chrom>` | needs a key; about eight seconds per element, so it is a sampling job, not a sweep. Coding target inside the node: chr21 87.4%, chr22 91.8%, chr1 86.7%. The daily quota ran out on 2026-09-11 and the waiting job retried instead of failing, which is the behaviour the quota-shaped design was built for |
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
+| Segment parser scored against GENCODE | chr21, three variants | `genomeos segments --chrom C [--predicted-sites] [--promoter-anchored]` | all three results kept side by side; see area B |
 
 One-off jobs, each needing a decision or a resource:
 
