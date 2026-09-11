@@ -265,6 +265,8 @@ in order. "Owner" is the session that holds the files today (see §7).
   | + RNA over the exons, eight tissues | **82** | **68.6%** | **92.7%** | 57.9% |
   | + measured RNA, ENCODE K562 total RNA-seq | 55 | 72.1% | 89.1% | 44.8% |
   | + measured RNA, six ENCODE cell lines pooled | 143 | 65.9% | 62.9% | 62.9% |
+  | predicted panel ∪ measured lines | 154 | 63.7% | 63.0% | 66.1% |
+  | predicted panel ∩ measured lines | 71 | 71.6% | **97.2%** | 54.3% |
 
   Nine candidates in ten were sequence that is never transcribed in the
   panel. The panel is eight tissues rather than the body, and that is where
@@ -286,9 +288,16 @@ in order. "Owner" is the session that holds the files today (see §7).
   gene-level tracks exclude. A model that knows genes plus a measurement that
   knows the cell is the honest filter. Results are
   `segments_chr21_predicted_sites_measured_<cell|panelN>`.
-- **Next.** 1. The two filters combined: the predicted gene-level panel for
-  precision and the measured lines for the genes the panel does not express;
-  then a second chromosome. 2. The `reader` construct in
+- **The two filters combined (2026-09-12).** `--rna-combine union|intersection`
+  applies when both the predicted panel and the measured lines are given.
+  The union is the most sensitive call of the series, 66.1% of genes; the
+  intersection is the strictest, 69 of 71 candidates are genes (97.2%
+  precision at 54.3% sensitivity). The model supplies the gene-level
+  judgement and the measurement the cell; asking for both is how a call
+  becomes actionable. Results
+  `segments_chr21_predicted_sites_rna_measured_panel6_{union,intersection}`.
+- **Next.** 1. The second chromosome, chr22 through the same five
+  configurations (running). 2. The `reader` construct in
   BioLang, so context gating comes from
   chromatin (the parser half belongs to the language owner). 3. Orthology
   from Ensembl Compara, and a boundary source finer than CTCF alone (Hi-C
