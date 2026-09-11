@@ -217,11 +217,25 @@ in order. "Owner" is the session that holds the files today (see §7).
   fraction, silent ones take a red edge, and each coding gene carries a read
   or silent dot for the chosen cell type. The same chromosome through a
   different cell is a different map.
+- **The second mammal (2026-09-11).** `genomeos mouse --chrom chr19` brings
+  mouse mm10 chromosome 19 through the same three doors as a human chromosome
+  (UCSC sequence, GENCODE vM25 models, ENCODE mouse elements) and infers its
+  nodes with the *unchanged* human code: 371 nodes, 256 with coding genes,
+  median 109 kb, against 20,002 human nodes indexed for comparison. Of the 91
+  mouse nodes holding two or more genes whose symbol matches a human gene, 49
+  land inside a single human node and 39 more split across *adjacent* human
+  nodes, leaving 3 scattered. Synteny is well known, so the interesting number
+  is not that the genes stay together; it is that when a mouse node does not
+  map to one human node, the pieces are next to each other 39 times out of 42.
+  The node behaves as a unit in both genomes, and the CTCF-only boundary is
+  the resolution limit rather than the biology. Orthology here is symbol
+  identity, which is a lower bound, and the result says so.
 - **Next.** 1. The coding model, which two independent experiments now name as
   the limit: the codon log-odds score is what separates a real reading frame
   from a plausible one. 2. The `reader` construct in BioLang, so context
   gating comes from chromatin (the parser half belongs to the language owner).
-  3. Mouse chr19 as the comparison genome. The L1 ORF2 and Alu sequence
+  3. A second mouse chromosome, or orthology from Ensembl Compara instead of
+  symbol identity, whichever answers more. The L1 ORF2 and Alu sequence
   signatures are superseded by the RepeatMasker pass and stay as the fallback
   for chromosomes not yet distilled.
 - **Owner.** genomeos-fe.
@@ -455,7 +469,7 @@ One-off jobs, each needing a decision or a resource:
 | Cohort expression for the other TCGA studies (`genomeos cancer expression --study`) | 30 s each, pick the studies | genomeos-f7 |
 | Retrospective therapeutic benchmark (public tumours with approved targets) | choose the cases | genomeos-f7 |
 | Packer 2019 disagreements resolved to one labelling depth | design | genomeos-73 |
-| Mouse chromosome as the second mammal for node comparison | Ensembl GRCm39 fetch through the same code | genomeos-fe |
+| Mouse chromosome as the second mammal for node comparison | **done 2026-09-11**: mm10 chr19, 371 nodes, 97% of testable nodes in the same human neighbourhood | genomeos-fe |
 | Sender & Milo per-tissue turnover as maintenance timers in `bio.std` | none | genomeos-73 |
 
 ---
