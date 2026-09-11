@@ -53,6 +53,13 @@ CATALOG: dict[str, dict] = {
         "result": "proteome_chr21",
         "count": lambda r: 1 if r else 0,
     },
+    "proteome_genome_wide": {
+        "argv": [sys.executable, "scripts/proteome_genome_wide.py"],
+        "describe": "Every chromosome's proteins compiled from seven public databases, smallest first.",
+        "total": 25,
+        "result": None,
+        "count": None,
+    },
     "distil": {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "distil"],
         "describe": "Turn any raw downloads present into result summaries.",
