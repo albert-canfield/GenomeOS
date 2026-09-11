@@ -104,7 +104,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioVM** (engines) | 0.3 | twelve engines: central dogma (exact on mtDNA and verified against UniProt), gene network (Hill ODE), Boolean (attractors), SBML (MathML + RK4), cell ageing, 2-D spatial fields, segmentation clock, gastrulation, Body (discrete events, one cell to the whole worm and a human as populations), debugger, uncertainty; composition through process-bigraph | one composite that runs Body + network + SBML on a shared clock; division and movement in space; external engines (libRoadRunner, MaBoSS, CompuCell3D) behind the same interfaces |
 | **`bio` toolchain** | 0.1 | `bio check | compile | run | test | repl`; `bio test` runs the demo, std and organism programs in CI; depends on the engine alone, so it can be packaged as it stands | its own package and test suite; `bio fmt`; language server |
 | **BioLib** (libraries) | 45 libraries + the proteome | data-computed membership from GO and Reactome (95.5% agreement with the curated catalogue); five layers (core, blueprint, timer, systems, parts); ligand-receptor protocol; haematopoiesis as a runnable mechanism module; **the whole human proteome packaged** (19,283 proteins in 2.3 MB, `genomeos protein X --lib`, answers offline) | `cancer.*` layer; more human development modules as runnable BioLang; "phenotypes it must reproduce" lists per library |
-| **BioTwin** (individual) | 0.9 | any GRCh38 genome imported locally and used by carrier lookup, the gene report, the twin and the gene-by-gene walk; HG002 across all 22 autosomes with measured telomere and epigenetic age; fork, run, diff; predicted effect of a person's own regulatory variants; ClinVar carrier screen, genome-wide truncating-variant scan and a one-page dossier, all off the repository | telomere from real reads; pedigree and trio; polygenic scores |
+| **BioTwin** (individual) | 0.9 | any GRCh38 genome imported locally and used by carrier lookup, the gene report, the twin and the gene-by-gene walk; HG002 across all 22 autosomes with measured telomere and epigenetic age; fork, run, diff; predicted effect of a person's own regulatory variants; ClinVar carrier screen, genome-wide truncating-variant scan, coding inventory by consequence and a one-page dossier, all off the repository | telomere from real reads; pedigree and trio; polygenic scores |
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 reached | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader on 25 with eleven cell types; the node model tested genome-wide (90.2% of enhancers act inside their node) and on two mouse chromosomes; the segment parser on chr21 at 92.7% gene precision once RNA over the exons counts as evidence | the parser on every chromosome with measured RNA; enhancer targets and boundaries from Hi-C |
 | **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph; the dominant isoform per tissue from GTEx (APP695 in the cerebellum) | measured modification state; isoform expression per cell type or stage; an engine that handles 100-species models |
@@ -403,11 +403,21 @@ in order. "Owner" is the session that holds the files today (see §7).
   computed (import, reference checks, screen, truncating variants), and a
   section not run says so. Each has a Twin tab button. Research annotation,
   not a clinical report, and the page says that too.
+- **The coding inventory (2026-09-11).** `genomeos individual coding` counts
+  every coding SNV on canonical transcripts by consequence and by gene,
+  protein-changing and homozygous first, as a dossier section and a Twin tab
+  button. HG002 on 22 autosomes: 21,019 coding SNVs, of which 11,101
+  synonymous, 9,830 missense, 61 nonsense, 16 stop lost and 11 start lost;
+  5,438 genes carry a protein-changing variant and 2,529 a homozygous one,
+  MUC16 and the HLA genes on top, as length and polymorphism predict. Calls
+  past a stop the reference carries are left out, as in the knockout scan.
+  DATA.md "Your own genome" describes it.
 - **Missing.** Telomere length from a real 30x BAM (100 GB) not done; no
-  pedigree or trio; no polygenic scores; the variant scan stops at truncating
-  variants.
+  pedigree or trio; no polygenic scores; the inventory counts a missense
+  variant but does not judge it.
 - **Next.** 1. Telomere from a streamed CRAM range instead of a BAM download.
-  2. Missense effect in the dossier, where the truncating scan stops. 3. A
+  2. The effect of a missense variant, judged on the transcript the tissue
+  makes, so the dossier can rank the 9,830 rather than count them. 3. A
   trio: HG002 with its GIAB parents HG003 and HG004 as the first pedigree.
 - **Owner.** genomeos-fe.
 
@@ -604,7 +614,8 @@ session that holds it. Items 1–4 run in parallel today.
    version bump and the release tag. genomeos-f7.
 2. Done 2026-09-11: HG002 twin on every autosome and any imported genome as
    input to the twin; then the ClinVar carrier screen, the truncating-variant
-   scan and the dossier for a person's own file, all off the repository.
+   scan, the coding inventory and the dossier for a person's own file, all
+   off the repository.
    Next: telomere from a streamed CRAM range. genomeos-fe.
 3. Haematopoiesis landed 2026-09-11 as the first human mechanism module;
    next mechanism modules follow the same pattern. Milestone 1.1. genomeos-73.
