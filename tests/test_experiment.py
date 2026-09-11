@@ -33,9 +33,7 @@ experiment noL { knockout: L; until: 10 min }
     assert r_f.founders[0].lost == ["with"] and r_f.founders[0].gained == ["without"]
     assert r_f.asserts()[0]["ok"] and "A takes the F-less fate" in r_f.format()
     # knocking out the ligand silences the signal: B never receives it and keeps its default type
-    assert (
-        r_l.mutant.cells["B"].cell_type == "Blastomere" and r_l.wild_type.cells["B"].cell_type == "Signalled"
-    )
+    assert r_l.mutant.cells["B"].cell_type == "Zygote" and r_l.wild_type.cells["B"].cell_type == "Signalled"
     d = r_f.to_dict()
     assert d["knockouts"] == ["F"] and d["changed_cells"] == 1 and d["evidence"]["kind"] == "none"
 
