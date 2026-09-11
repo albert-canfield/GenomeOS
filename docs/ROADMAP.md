@@ -174,7 +174,11 @@ in order. "Owner" is the session that holds the files today (see §7).
   analysed (`data fetch --analyse`: curated UNKNOWN pass and domains);
   reader v1 (`genomeos reader`: ENCODE DNase peaks per cell type over
   nodes, promoters and enhancers; K562 and HepG2 on chr21, chr22 analysed).
-- **Next.** 1. Reader lane in the block map and a `reader` construct in
+- **Next.** 0. Enhancer to gene with AlphaGenome (feature b, docs/ALPHAGENOME.md):
+  33.6% of the UNKNOWN space is regulatory and none of it names its gene with
+  evidence; one request per element raises the target from "nearest coding gene
+  in the CTCF domain, inferred 0.4" to a predicted target with a magnitude.
+  1. Reader lane in the block map and a `reader` construct in
   BioLang so context gating comes from chromatin. 2. Segment parser
   (`genomeos segments --chrom C`): Viterbi over the grammar with the learned
   PWMs, evaluated against GENCODE per chromosome. 3. Fetch chr15–20 and chrX.
@@ -452,6 +456,18 @@ ambition in §1 before it is started.
   no counterpart.
 - **Agent packet as a stable API.** The cancer and therapeutic packets
   versioned and documented as the contract other tools consume.
+- **GenomeOS as an agent skill.** DeepMind's `science-skills` collection
+  (Apache 2.0 / CC-BY) packages one scientific database per skill so an agent
+  can use it. GenomeOS already implements two thirds of that list natively and
+  with evidence, so the value is the other direction: publish a skill that
+  drives `genomeos` and `bio`, and let an agent reach every layer through one
+  tool instead of thirty. Their list is also a source checklist: JASPAR
+  (the promoter motif scan SEQUENCE-GRAMMAR.md already plans), UniBind,
+  Foldseek and the EBI Ontology Lookup Service are sources we do not use yet.
+- **A self-hosted AlphaGenome.** The weights are published; self-deployment
+  removes the per-request quota and turns enhancer-to-gene, the predicted
+  reader and in-silico mutagenesis from per-chromosome jobs into genome-wide
+  ones (docs/ALPHAGENOME.md).
 
 ---
 

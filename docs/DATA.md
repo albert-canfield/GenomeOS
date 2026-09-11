@@ -78,6 +78,9 @@ and how to enable them.
 | c | sequence grammar | splice-site and chromatin signals the learned matrices cannot capture, entering as predicted evidence | planned |
 | d | twin | predicted expression differences between an individual's haplotypes and the reference | planned |
 
+What each feature is worth and how it fits the architecture:
+[ALPHAGENOME.md](ALPHAGENOME.md).
+
 To enable:
 
 1. Request a key (free for non-commercial use) at

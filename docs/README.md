@@ -33,6 +33,7 @@ wide to narrow; read them top down.
 |---|---|
 | Genome decoding | [GENOME-ANATOMY.md](GENOME-ANATOMY.md), [UNKNOWN.md](UNKNOWN.md), [NODES-READER-WRITER.md](NODES-READER-WRITER.md) |
 | Molecules and flow | [PROTEIN.md](PROTEIN.md), [FLOW.md](FLOW.md) |
+| Prediction (optional models) | [ALPHAGENOME.md](ALPHAGENOME.md) |
 | Organism | [ORGANISM-FROM-ONE-CELL.md](ORGANISM-FROM-ONE-CELL.md) |
 | Design | [DESIGN-MINIMAL-CELL.md](DESIGN-MINIMAL-CELL.md) |
 | Cancer and therapeutics | [CANCER.md](CANCER.md), [THERAPEUTICS.md](THERAPEUTICS.md) |
