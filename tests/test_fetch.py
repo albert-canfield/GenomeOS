@@ -9,6 +9,7 @@ def test_default_gencode_finds_a_single_chromosome_file(tmp_path, monkeypatch):
     monkeypatch.setattr(ann_mod, "GENCODE_SUBSET", tmp_path / "none2.gff3.gz")
     monkeypatch.chdir(tmp_path)
     (tmp_path / "data" / "results").mkdir(parents=True)
+    (tmp_path / "data" / "reference").mkdir(parents=True)
     assert ann_mod.default_gencode({"chr22"}) is None
     p = gencode_chrom_path("chr22")
     with gzip.open(p, "wt") as fh:

@@ -29,9 +29,13 @@ def default_gencode(chroms: set[str] | None = None) -> Path | None:
     if GENCODE_SUBSET.exists() and (chroms is None or chroms <= {"chr21", "chrM"}):
         return GENCODE_SUBSET
     if chroms and len(chroms) == 1:
-        per = Path("data/results") / f"gencode_v50_{next(iter(chroms))}.gff3.gz"
-        if per.exists():
-            return per
+        c = next(iter(chroms))
+        for per in (
+            Path("data/reference") / f"gencode_v50_{c}.gff3.gz",
+            Path("data/results") / f"gencode_v50_{c}.gff3.gz",
+        ):
+            if per.exists():
+                return per
     return None
 
 

@@ -27,7 +27,10 @@ RESULTS = Path("data/results")
 
 
 def gencode_chrom_path(chrom: str) -> Path:
-    return RESULTS / f"gencode_v50_{chrom}.gff3.gz"
+    """Per-chromosome GENCODE rows live with the reference data (not committed); an older split
+    under data/results is still honoured."""
+    legacy = RESULTS / f"gencode_v50_{chrom}.gff3.gz"
+    return legacy if legacy.exists() else REFERENCE / f"gencode_v50_{chrom}.gff3.gz"
 
 
 def _download(url: str, dest: Path, progress=None) -> None:
