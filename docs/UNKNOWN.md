@@ -83,70 +83,68 @@ matching of the Alu 5' core (up to 7 substitutions in 36 bases, zero hits in
 regulation: adding one experimental layer (chromatin) moved 17.5% of the
 UNKNOWN space from "unique" to "regulatory" with curated evidence.
 
-## The whole genome (92 min, one chromosome on disk at a time)
+## The whole genome (84 min of compute, one chromosome on disk at a time)
 
-`unknown_genome_wide` streamed every chromosome from UCSC, classified its
-UNKNOWN blocks with the ENCODE elements, kept the summary and deleted the
-sequence. chrM has no UNKNOWN space and is not run.
+`unknown_genome_wide` streamed every chromosome from UCSC, fetched its
+RepeatMasker annotation and ENCODE elements, classified its UNKNOWN blocks
+with the curated evidence first, kept the summary and deleted the rest.
+chrM has no UNKNOWN space.
 
 | total | value |
 |---|---|
 | UNKNOWN blocks | 26,806 |
 | UNKNOWN bases | 1.009 Gb (33% of hg38) |
-| classified | 96.6% |
+| classified | 98.5% (was 96.6% before the curated repeat pass) |
 
 | class | bases | share of UNKNOWN |
 |---|---|---|
 | regulatory | 338.8 Mb | 33.6% |
-| long orf | 238.1 Mb | 23.6% |
+| interspersed repeat LINE | 287.1 Mb | 28.5% |
 | gap | 159.7 Mb | 15.8% |
-| unique intergenic | 106.3 Mb | 10.5% |
+| unique intergenic | 74.8 Mb | 7.4% |
 | centromere | 48.2 Mb | 4.8% |
-| interspersed repeat | 42.6 Mb | 4.2% |
-| unclassified | 34.6 Mb | 3.4% |
-| mixed intergenic | 20.1 Mb | 2.0% |
-| promoter like | 9.7 Mb | 1.0% |
-| satellite array | 5.9 Mb | 0.6% |
-| interspersed repeat SINE | 4.8 Mb | 0.5% |
+| interspersed repeat LTR | 22.5 Mb | 2.2% |
+| satellite array | 21.5 Mb | 2.1% |
+| interspersed repeat SINE | 17.8 Mb | 1.8% |
+| unclassified | 14.8 Mb | 1.5% |
+| mixed intergenic | 10.0 Mb | 1.0% |
+| promoter like | 6.4 Mb | 0.6% |
+| interspersed repeat | 5.0 Mb | 0.5% |
+| long orf | 1.2 Mb | 0.1% |
+| interspersed repeat DNA | 0.6 Mb | 0.1% |
 
-| chromosome | UNKNOWN blocks | UNKNOWN bp | classified | largest class |
-|---|---|---|---|---|
-| chr1 | 2,425 | 77.2 Mb | 96% | regulatory |
-| chr2 | 1,943 | 64.1 Mb | 96% | regulatory |
-| chr3 | 1,298 | 50.4 Mb | 97% | regulatory |
-| chr4 | 1,398 | 62.2 Mb | 97% | long_orf |
-| chr5 | 1,363 | 54.7 Mb | 97% | regulatory |
-| chr6 | 1,396 | 48.0 Mb | 97% | regulatory |
-| chr7 | 1,400 | 45.2 Mb | 96% | regulatory |
-| chr8 | 1,180 | 40.3 Mb | 96% | regulatory |
-| chr9 | 1,080 | 49.1 Mb | 97% | gap |
-| chrX | 1,338 | 71.7 Mb | 97% | long_orf |
-| chrY | 375 | 46.7 Mb | 98% | gap |
-| chr10 | 1,190 | 38.7 Mb | 96% | regulatory |
-| chr11 | 1,453 | 39.0 Mb | 92% | regulatory |
-| chr12 | 1,165 | 35.3 Mb | 97% | regulatory |
-| chr13 | 771 | 52.2 Mb | 98% | gap |
-| chr14 | 942 | 40.7 Mb | 97% | gap |
-| chr15 | 684 | 33.8 Mb | 97% | gap |
-| chr16 | 862 | 29.4 Mb | 97% | gap |
-| chr17 | 1,022 | 20.1 Mb | 96% | regulatory |
-| chr18 | 612 | 29.6 Mb | 97% | regulatory |
-| chr19 | 1,066 | 14.9 Mb | 93% | regulatory |
-| chr20 | 762 | 21.6 Mb | 96% | regulatory |
-| chr21 | 446 | 20.8 Mb | 96% | gap |
-| chr22 | 635 | 22.9 Mb | 97% | gap |
+| chr1 | 2,425 | 77.2 Mb | 99% | regulatory |
+| chr2 | 1,943 | 64.1 Mb | 98% | regulatory |
+| chr3 | 1,298 | 50.4 Mb | 99% | regulatory |
+| chr4 | 1,398 | 62.2 Mb | 99% | interspersed repeat LINE |
+| chr5 | 1,363 | 54.7 Mb | 99% | regulatory |
+| chr6 | 1,396 | 48.0 Mb | 99% | regulatory |
+| chr7 | 1,400 | 45.2 Mb | 98% | regulatory |
+| chr8 | 1,180 | 40.3 Mb | 98% | regulatory |
+| chr9 | 1,080 | 49.1 Mb | 99% | gap |
+| chrX | 1,338 | 71.7 Mb | 99% | interspersed repeat LINE |
+| chrY | 375 | 46.7 Mb | 99% | gap |
+| chr10 | 1,190 | 38.7 Mb | 98% | regulatory |
+| chr11 | 1,453 | 39.0 Mb | 97% | regulatory |
+| chr12 | 1,165 | 35.3 Mb | 99% | regulatory |
+| chr13 | 771 | 52.2 Mb | 99% | gap |
+| chr14 | 942 | 40.7 Mb | 99% | gap |
+| chr15 | 684 | 33.8 Mb | 98% | gap |
+| chr16 | 862 | 29.4 Mb | 98% | gap |
+| chr17 | 1,022 | 20.1 Mb | 98% | regulatory |
+| chr18 | 612 | 29.6 Mb | 99% | regulatory |
+| chr19 | 1,066 | 14.9 Mb | 98% | regulatory |
+| chr20 | 762 | 21.6 Mb | 99% | regulatory |
+| chr21 | 446 | 20.8 Mb | 98% | gap |
+| chr22 | 635 | 22.9 Mb | 99% | gap |
 
-What the table says, and what it does not. A third of the space between
-genes is regulatory by ENCODE's chromatin evidence, the single largest
-class; the pattern classes (repeats, satellites, telomeres) are small
-because they need the named signatures in the pattern file. `long_orf` at
-a quarter of the space is too large to be honest as "possible unannotated
-coding": most of it is the ORF2 of LINE-1 elements, which read as a
-1,200-residue open frame. The curated repeat pass above fixes this on
-chromosome 21 (2.3 Mb → 0.13 Mb) and the genome-wide job now fetches
-RepeatMasker per chromosome, so the table will be re-run with it. Chromosome
-11 and 19 classify worst (92 to 93%) because their UNKNOWN space is small
-and gene-dense, so the composition classes have little to say.
+What the table says. A third of the space between genes is regulatory by
+ENCODE's chromatin evidence; another third is LINE-1 and its relatives by
+RepeatMasker's curated library, which is where the earlier "long ORF"
+class went (it read the ORF2 frames of LINE-1 copies); gaps are the
+unassembled 16%; one in thirteen bases is unique intergenic sequence with
+no evidence of anything yet, which is the honest residue this tool exists
+to shrink. Only 1.5% stays unclassified.
 
 ## Where it shows
 
