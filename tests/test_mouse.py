@@ -32,3 +32,14 @@ def test_compare_nodes_by_symbol(tmp_path):
     assert c["tested"] == 3 and c["fraction_conserved"] == 0.333 and c["fraction_same_neighbourhood"] == 0.667
     verdicts = [r["verdict"] for r in c["rows"]]
     assert verdicts == ["split_adjacent", "conserved", "unmapped", "unmapped", "split_scattered"]
+    assert c["orthology"].startswith("inferred")
+    # a curated orthology maps a renamed mouse gene onto its human orthologue
+    c2 = compare_nodes(mouse, index, {"Gm1234": ["APP-DT"], "Far": ["SOD1"]})
+    assert c2["orthology"].startswith("curated")
+    assert [r["verdict"] for r in c2["rows"]] == [
+        "split_adjacent",
+        "conserved",
+        "conserved",
+        "unmapped",
+        "split_adjacent",
+    ]

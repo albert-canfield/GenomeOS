@@ -20,7 +20,20 @@
   "domain_length_median": 109287,
   "human_nodes_indexed": 20002,
   "human_symbols_indexed": 65976,
+  "orthology_pairs": 24584,
   "node_comparison": {
+    "orthology": "curated: MGI mouse\u2013human homology",
+    "nodes": 371,
+    "tested": 109,
+    "conserved": 58,
+    "split_adjacent": 45,
+    "split_scattered": 6,
+    "unmapped": 262,
+    "fraction_conserved": 0.532,
+    "fraction_same_neighbourhood": 0.945
+  },
+  "node_comparison_symbol_identity": {
+    "orthology": "inferred: symbol identity",
     "nodes": 371,
     "tested": 91,
     "conserved": 49,
@@ -119,11 +132,11 @@
       "start": 3699640,
       "end": 3774343,
       "coding_genes": 2,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
         "chr11:D435"
       ],
-      "verdict": "unmapped",
+      "verdict": "conserved",
       "genes": [
         "1810055G02Rik",
         "Kmt5b"
@@ -165,7 +178,7 @@
       "start": 3946884,
       "end": 4085164,
       "coding_genes": 12,
-      "mapped": 3,
+      "mapped": 6,
       "human_nodes": [
         "chr11:D431"
       ],
@@ -263,11 +276,11 @@
       "start": 4456407,
       "end": 4573442,
       "coding_genes": 3,
-      "mapped": 1,
+      "mapped": 3,
       "human_nodes": [
         "chr11:D429"
       ],
-      "verdict": "unmapped",
+      "verdict": "conserved",
       "genes": [
         "Syt12",
         "2010003K11Rik",
@@ -708,11 +721,12 @@
       "start": 7595705,
       "end": 8567328,
       "coding_genes": 8,
-      "mapped": 2,
+      "mapped": 8,
       "human_nodes": [
+        "chr11:D403",
         "chr11:D406"
       ],
-      "verdict": "conserved",
+      "verdict": "split_scattered",
       "genes": [
         "Lgals12",
         "Plaat5",
@@ -795,7 +809,6 @@
       "mapped": 3,
       "human_nodes": [
         "chr11:D396",
-        "chr11:D397",
         "chr11:D398"
       ],
       "verdict": "split_adjacent",
@@ -966,11 +979,12 @@
       "start": 10983356,
       "end": 11184295,
       "coding_genes": 5,
-      "mapped": 2,
+      "mapped": 4,
       "human_nodes": [
+        "chr11:D388",
         "chr11:D390"
       ],
-      "verdict": "conserved",
+      "verdict": "split_adjacent",
       "genes": [
         "Ms4a15",
         "Ms4a18",
@@ -1004,9 +1018,11 @@
       "start": 11352097,
       "end": 11602206,
       "coding_genes": 7,
-      "mapped": 0,
-      "human_nodes": [],
-      "verdict": "unmapped",
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D386"
+      ],
+      "verdict": "conserved",
       "genes": [
         "Ms4a4a",
         "Ms4a4c",
@@ -1022,11 +1038,12 @@
       "start": 11602206,
       "end": 11768341,
       "coding_genes": 7,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
-        "chr11:D385"
+        "chr11:D385",
+        "chr11:D386"
       ],
-      "verdict": "unmapped",
+      "verdict": "split_adjacent",
       "genes": [
         "Ms4a6d",
         "Ms4a2",
@@ -1105,11 +1122,11 @@
       "start": 12549361,
       "end": 12706269,
       "coding_genes": 5,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
         "chr11:D381"
       ],
-      "verdict": "unmapped",
+      "verdict": "conserved",
       "genes": [
         "Gm4952",
         "Glyat",
@@ -1487,11 +1504,12 @@
       "start": 18664102,
       "end": 18716565,
       "coding_genes": 2,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
+        "chr9:D343",
         "chr9:D344"
       ],
-      "verdict": "unmapped",
+      "verdict": "split_adjacent",
       "genes": [
         "Carnmt1",
         "D030056L22Rik"
@@ -1604,11 +1622,11 @@
       "start": 20435988,
       "end": 20764431,
       "coding_genes": 2,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
         "chr9:D326"
       ],
-      "verdict": "unmapped",
+      "verdict": "conserved",
       "genes": [
         "Aldh1a1",
         "Aldh1a7"
@@ -1669,11 +1687,11 @@
       "start": 21564313,
       "end": 21734397,
       "coding_genes": 2,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
         "chr9:D317"
       ],
-      "verdict": "unmapped",
+      "verdict": "conserved",
       "genes": [
         "1110059E24Rik",
         "Abhd17b"
@@ -2416,11 +2434,11 @@
       "start": 29979172,
       "end": 30045437,
       "coding_genes": 2,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
         "chr9:D41"
       ],
-      "verdict": "unmapped",
+      "verdict": "conserved",
       "genes": [
         "Trpd52l3",
         "Uhrf2"
@@ -2591,11 +2609,12 @@
       "start": 32441723,
       "end": 32501648,
       "coding_genes": 2,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
-        "chr10:D576"
+        "chr10:D576",
+        "chr4:D312"
       ],
-      "verdict": "unmapped",
+      "verdict": "split_scattered",
       "genes": [
         "Rpl9-ps6",
         "Minpp1"
@@ -2762,7 +2781,7 @@
       "start": 34548185,
       "end": 34637135,
       "coding_genes": 4,
-      "mapped": 2,
+      "mapped": 4,
       "human_nodes": [
         "chr10:D583"
       ],
@@ -2779,7 +2798,7 @@
       "start": 34637135,
       "end": 34826464,
       "coding_genes": 3,
-      "mapped": 2,
+      "mapped": 3,
       "human_nodes": [
         "chr10:D583",
         "chr10:D584"
@@ -3168,9 +3187,12 @@
       "start": 38982163,
       "end": 39098972,
       "coding_genes": 2,
-      "mapped": 0,
-      "human_nodes": [],
-      "verdict": "unmapped",
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D616",
+        "chr10:D617"
+      ],
+      "verdict": "split_adjacent",
       "genes": [
         "Cyp2c55",
         "Cyp2c65"
@@ -3181,8 +3203,10 @@
       "start": 39098972,
       "end": 39227497,
       "coding_genes": 1,
-      "mapped": 0,
-      "human_nodes": [],
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D617"
+      ],
       "verdict": "unmapped",
       "genes": [
         "Cyp2c66"
@@ -3193,9 +3217,11 @@
       "start": 39227497,
       "end": 39502309,
       "coding_genes": 2,
-      "mapped": 0,
-      "human_nodes": [],
-      "verdict": "unmapped",
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D616"
+      ],
+      "verdict": "conserved",
       "genes": [
         "Cyp2c29",
         "Cyp2c38"
@@ -3206,9 +3232,12 @@
       "start": 39502309,
       "end": 39989667,
       "coding_genes": 5,
-      "mapped": 0,
-      "human_nodes": [],
-      "verdict": "unmapped",
+      "mapped": 5,
+      "human_nodes": [
+        "chr10:D616",
+        "chr10:D617"
+      ],
+      "verdict": "split_adjacent",
       "genes": [
         "Cyp2c39",
         "Cyp2c67",
@@ -3222,9 +3251,12 @@
       "start": 39989667,
       "end": 40168558,
       "coding_genes": 3,
-      "mapped": 0,
-      "human_nodes": [],
-      "verdict": "unmapped",
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D616",
+        "chr10:D617"
+      ],
+      "verdict": "split_adjacent",
       "genes": [
         "Cyp2c37",
         "Cyp2c54",
@@ -3298,11 +3330,11 @@
       "start": 40857623,
       "end": 41009184,
       "coding_genes": 2,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
         "chr10:D622"
       ],
-      "verdict": "unmapped",
+      "verdict": "conserved",
       "genes": [
         "Zfp518a",
         "Blnk"
@@ -3422,11 +3454,12 @@
       "start": 41870119,
       "end": 41952494,
       "coding_genes": 4,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
-        "chr10:D630"
+        "chr10:D630",
+        "chrX:D397"
       ],
-      "verdict": "unmapped",
+      "verdict": "split_scattered",
       "genes": [
         "Rrp12",
         "Pgam1",
@@ -3697,7 +3730,7 @@
       "start": 43960358,
       "end": 44111761,
       "coding_genes": 4,
-      "mapped": 3,
+      "mapped": 4,
       "human_nodes": [
         "chr10:D648",
         "chr10:D649",
@@ -3733,9 +3766,11 @@
       "start": 44197246,
       "end": 44373171,
       "coding_genes": 3,
-      "mapped": 0,
-      "human_nodes": [],
-      "verdict": "unmapped",
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D651"
+      ],
+      "verdict": "conserved",
       "genes": [
         "Scd3",
         "Scd2",
@@ -3747,8 +3782,10 @@
       "start": 44373171,
       "end": 44432294,
       "coding_genes": 1,
-      "mapped": 0,
-      "human_nodes": [],
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D651"
+      ],
       "verdict": "unmapped",
       "genes": [
         "Scd1"
@@ -4395,8 +4432,10 @@
       "start": 51660436,
       "end": 52623715,
       "coding_genes": 1,
-      "mapped": 0,
-      "human_nodes": [],
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D17"
+      ],
       "verdict": "unmapped",
       "genes": [
         "Ins1"
@@ -4582,11 +4621,11 @@
       "start": 55227312,
       "end": 55305205,
       "coding_genes": 2,
-      "mapped": 1,
+      "mapped": 2,
       "human_nodes": [
         "chr10:D740"
       ],
-      "verdict": "unmapped",
+      "verdict": "conserved",
       "genes": [
         "Gucy2g",
         "Acsl5"
@@ -5121,8 +5160,10 @@
       "start": 61065187,
       "end": 61224125,
       "coding_genes": 3,
-      "mapped": 0,
-      "human_nodes": [],
+      "mapped": 1,
+      "human_nodes": [
+        "chr19:D309"
+      ],
       "verdict": "unmapped",
       "genes": [
         "Zfp950",
@@ -5151,6 +5192,6 @@
     "genes": "curated: GENCODE vM25 (GRCm38)",
     "elements": "curated: ENCODE SCREEN registry of mouse cCREs v3 (mm10)",
     "domains": "inferred: CTCF-only elements as boundaries, the same code as for human",
-    "orthology": "inferred: gene symbol identity (App \u2194 APP), a lower bound on conservation"
+    "orthology": "curated: MGI mouse\u2013human homology classes (symbol identity kept as the fallback)"
   }
 }

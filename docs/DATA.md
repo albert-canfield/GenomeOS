@@ -71,6 +71,9 @@ chromosome's rows streamed out of the genome-wide GFF3), and the ENCODE
 SCREEN mouse cCREs (rows of the chromosome). Files carry the `mm10_` prefix
 under `data/reference` (local) and `data/results/ccres_mm10_<chrom>.bed.gz`
 (committed, small); the summary is `data/results/mouse_mm10_<chrom>.json`.
+The node comparison maps mouse genes to human through MGI's curated
+mouse–human homology report, streamed once (15 MB) and kept as symbol pairs
+(`data/results/mgi_mouse_human_orthology.tsv.gz`, 24,584 pairs).
 
 ## Optional: AlphaGenome (predicted regulatory effects)
 

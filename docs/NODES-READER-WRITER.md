@@ -155,28 +155,32 @@ SCREEN's mouse cCRE registry (11,597 elements on chr19), the same
 `data/results/mouse_mm10_chr19.json`). Orthology is gene-symbol identity
 (App ↔ APP), a cheap lower bound.
 
-| mouse chr19 (61.4 Mb) | |
-|---|---|
-| genes | 1,394 (718 coding) |
-| nodes | 371 (256 with coding genes), median 109 kb; human chromosomes give 102–115 kb |
-| mouse nodes with ≥ 2 genes matched to a human node | 91 |
-| all matched genes in one human node | 49 (54%) |
-| in adjacent human nodes (same neighbourhood, boundaries drawn differently) | 39 (43%) |
-| scattered over distant human nodes | 3 (3%) |
-| same human neighbourhood | 97% |
+| mouse chr19 (61.4 Mb) | MGI orthology (curated) | symbol identity |
+|---|---|---|
+| genes | 1,394 (718 coding) | |
+| nodes | 371 (256 with coding genes), median 109 kb; human chromosomes give 102–115 kb | |
+| mouse nodes with ≥ 2 genes matched to a human node | 109 | 91 |
+| all matched genes in one human node | 58 (53%) | 49 (54%) |
+| in adjacent human nodes (same neighbourhood, boundaries drawn differently) | 45 (41%) | 39 (43%) |
+| scattered over distant human nodes | 6 (6%) | 3 (3%) |
+| same human neighbourhood | 94% | 97% |
+
+The orthology is MGI's curated mouse–human homology report, streamed once
+and distilled to 24,584 symbol pairs (`data/results/mgi_mouse_human_orthology.tsv.gz`);
+symbol identity (App ↔ APP) stays as the fallback and is reported beside it.
 
 Read two ways. Synteny is not the surprise: mouse chr19 is human 11q13 and
 10q23–26 and everyone knows it. The number that speaks to the model is the
 split: where a mouse node's genes fall into several human nodes, they fall
-into *adjacent* ones 39 times out of 42. The neighbourhood is conserved; the
+into *adjacent* ones 45 times out of 51. The neighbourhood is conserved; the
 exact boundary is where the two CTCF registries (different depths, different
 cell types assayed) disagree. Which is to say: the node is a real unit of
 organisation in both genomes, and an inferred boundary from CTCF-only
-elements is a resolution limit, not the biology. The 280 mouse nodes with
-fewer than two matches are mostly nodes with no or one coding gene (115 of
-371 have none), and symbol renaming takes some of the rest; a curated
-orthology (Ensembl homology) would raise the tested count, not change the
-shape.
+elements is a resolution limit, not the biology. Curated orthology raised
+the tested count from 91 to 109 and left the shape where it was, which is
+what the symbol-identity run had predicted. The 262 mouse nodes with fewer
+than two matches are mostly nodes with no or one coding gene (115 of 371
+have none).
 
 ## Reader v1 (built 2026-09-11)
 

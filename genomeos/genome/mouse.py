@@ -35,7 +35,7 @@ EVIDENCE = {
     "genes": "curated: GENCODE vM25 (GRCm38)",
     "elements": "curated: ENCODE SCREEN registry of mouse cCREs v3 (mm10)",
     "domains": "inferred: CTCF-only elements as boundaries, the same code as for human",
-    "orthology": "inferred: gene symbol identity (App ↔ APP), a lower bound on conservation",
+    "orthology": "curated: MGI mouse–human homology classes (symbol identity kept as the fallback)",
 }
 
 
@@ -119,6 +119,54 @@ def load_ccres(chrom: str):
     return out
 
 
+MGI_HOMOLOGY = "https://www.informatics.jax.org/downloads/reports/HOM_MouseHumanSequence.rpt"
+
+
+def orthology_path(results_dir: Path = RESULTS) -> Path:
+    return results_dir / "mgi_mouse_human_orthology.tsv.gz"
+
+
+def fetch_orthology(results_dir: Path = RESULTS, progress=None) -> Path:
+    """Stream MGI's curated mouse–human homology report once (15 MB) and keep only the symbol pairs
+    (one line per pair, a few hundred KB): the orthology the node comparison rests on."""
+    dest = orthology_path(results_dir)
+    if dest.exists():
+        return dest
+    req = urllib.request.Request(MGI_HOMOLOGY, headers={"User-Agent": "GenomeOS/0.1 (stream)"})
+    groups: dict[str, dict[str, list[str]]] = {}
+    with urllib.request.urlopen(req, timeout=600) as resp:  # noqa: S310
+        for line in io.TextIOWrapper(io.BufferedReader(resp, 1 << 20), encoding="utf-8", errors="replace"):
+            f = line.rstrip("\n").split("\t")
+            if len(f) < 4 or f[0] == "DB Class Key":
+                continue
+            org = "mouse" if f[1].startswith("mouse") else "human" if f[1] == "human" else None
+            if org:
+                groups.setdefault(f[0], {"mouse": [], "human": []})[org].append(f[3])
+    pairs = sorted({(mo, hu) for g in groups.values() for mo in g["mouse"] for hu in g["human"]})
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(dest, "wt") as fh:
+        fh.write(f"# MGI mouse–human homology classes distilled to symbol pairs from {MGI_HOMOLOGY}\n")
+        for mo, hu in pairs:
+            fh.write(f"{mo}\t{hu}\n")
+    if progress:
+        progress(f"MGI orthology: {len(pairs):,} mouse–human symbol pairs kept from {len(groups):,} classes")
+    return dest
+
+
+def load_orthology(results_dir: Path = RESULTS) -> dict[str, list[str]]:
+    """Mouse symbol → human symbols (curated, MGI); empty if the report has not been fetched."""
+    p = orthology_path(results_dir)
+    out: dict[str, list[str]] = {}
+    if p.exists():
+        with gzip.open(p, "rt") as fh:
+            for line in fh:
+                if line.startswith("#"):
+                    continue
+                mo, _, hu = line.rstrip("\n").partition("\t")
+                out.setdefault(mo, []).append(hu)
+    return out
+
+
 def human_nodes_by_symbol(results_dir: Path = RESULTS) -> tuple[dict[str, str], int]:
     """Gene symbol → human node id from every committed domains_chr*.json; also the node count."""
     index: dict[str, str] = {}
@@ -135,15 +183,29 @@ def human_nodes_by_symbol(results_dir: Path = RESULTS) -> tuple[dict[str, str], 
     return index, n
 
 
-def compare_nodes(mouse_domains: list[dict[str, Any]], human_index: dict[str, str]) -> dict[str, Any]:
+def compare_nodes(
+    mouse_domains: list[dict[str, Any]],
+    human_index: dict[str, str],
+    orthology: dict[str, list[str]] | None = None,
+) -> dict[str, Any]:
     """Does a mouse node's gene content land in one human node? Per mouse node with two or more
-    coding genes that have a human symbol match: conserved (one human node), split (several), and
-    the nodes with fewer than two matches (unmapped)."""
+    coding genes that have a human match: conserved (one human node), split (several), and the
+    nodes with fewer than two matches (unmapped). With `orthology` (MGI) a mouse gene maps through
+    its curated human orthologues; without it, through symbol identity."""
+
+    def human_node(symbol: str) -> str | None:
+        candidates = (orthology or {}).get(symbol) or [symbol.upper()]
+        for h in candidates:
+            node = human_index.get(h.upper())
+            if node:
+                return node
+        return None
+
     rows = []
     counts = {"conserved": 0, "split_adjacent": 0, "split_scattered": 0, "unmapped": 0}
     for dom in mouse_domains:
         coding = [g for g in dom.get("coding_symbols", []) if g]
-        hits = {g: human_index.get(g.upper()) for g in coding}
+        hits = {g: human_node(g) for g in coding}
         mapped = {g: h for g, h in hits.items() if h}
         targets = sorted(set(mapped.values()), key=_node_key)
         if len(mapped) < 2:
@@ -170,6 +232,7 @@ def compare_nodes(mouse_domains: list[dict[str, Any]], human_index: dict[str, st
     tested = counts["conserved"] + counts["split_adjacent"] + counts["split_scattered"]
     same_place = counts["conserved"] + counts["split_adjacent"]
     return {
+        "orthology": "curated: MGI mouse–human homology" if orthology else "inferred: symbol identity",
         "nodes": len(rows),
         "tested": tested,
         **counts,
@@ -216,7 +279,10 @@ def analyse(chrom: str, progress=None) -> dict[str, Any]:
         rows.append(dd)
     coding = [g for g in ann.genes.values() if g.locus.chrom == chrom and g.type == "protein_coding"]
     human_index, human_nodes = human_nodes_by_symbol()
-    cmp = compare_nodes(rows, human_index)
+    fetch_orthology(progress=progress)
+    orthology = load_orthology()
+    cmp = compare_nodes(rows, human_index, orthology)
+    cmp_symbol = compare_nodes(rows, human_index)
     cls: dict[str, int] = {}
     for c in ccres:
         cls[c.cls] = cls.get(c.cls, 0) + 1
@@ -234,7 +300,9 @@ def analyse(chrom: str, progress=None) -> dict[str, Any]:
         "domain_length_median": sorted(d.length for d in domains)[len(domains) // 2] if domains else None,
         "human_nodes_indexed": human_nodes,
         "human_symbols_indexed": len(human_index),
+        "orthology_pairs": sum(len(v) for v in orthology.values()),
         "node_comparison": {k: v for k, v in cmp.items() if k != "rows"},
+        "node_comparison_symbol_identity": {k: v for k, v in cmp_symbol.items() if k != "rows"},
         "node_rows": cmp["rows"],
         "mouse_domains": rows,
         "evidence": EVIDENCE,
