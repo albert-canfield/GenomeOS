@@ -3,7 +3,16 @@
   "date": "2026-09-11",
   "cell_types": [
     "K562",
-    "HepG2"
+    "HepG2",
+    "GM12878",
+    "H1",
+    "IMR-90",
+    "SK-N-SH",
+    "cardiac muscle cell",
+    "keratinocyte",
+    "hepatocyte",
+    "astrocyte",
+    "CD14-positive monocyte"
   ],
   "chromosomes": {
     "chr1": {
@@ -93,7 +102,106 @@
         "PTAFR",
         "RHBDL2"
       ],
-      "read_in_both": 1230
+      "read_in_both": 1230,
+      "GM12878": {
+        "peaks": 7047,
+        "coding_genes": 2066,
+        "genes_read": 999,
+        "read_fraction": 0.4835,
+        "enhancers_active": 5372,
+        "enhancers_active_fraction": 0.061,
+        "nodes": 1639,
+        "nodes_open": 821,
+        "nodes_silent": 332
+      },
+      "H1": {
+        "peaks": 20961,
+        "coding_genes": 2066,
+        "genes_read": 1523,
+        "read_fraction": 0.7372,
+        "enhancers_active": 12668,
+        "enhancers_active_fraction": 0.1438,
+        "nodes": 1639,
+        "nodes_open": 822,
+        "nodes_silent": 109
+      },
+      "IMR-90": {
+        "peaks": 28866,
+        "coding_genes": 2066,
+        "genes_read": 1427,
+        "read_fraction": 0.6907,
+        "enhancers_active": 20109,
+        "enhancers_active_fraction": 0.2282,
+        "nodes": 1639,
+        "nodes_open": 821,
+        "nodes_silent": 71
+      },
+      "SK-N-SH": {
+        "peaks": 20258,
+        "coding_genes": 2066,
+        "genes_read": 1481,
+        "read_fraction": 0.7168,
+        "enhancers_active": 13185,
+        "enhancers_active_fraction": 0.1496,
+        "nodes": 1639,
+        "nodes_open": 820,
+        "nodes_silent": 62
+      },
+      "cardiac muscle cell": {
+        "peaks": 30228,
+        "coding_genes": 2066,
+        "genes_read": 1533,
+        "read_fraction": 0.742,
+        "enhancers_active": 21860,
+        "enhancers_active_fraction": 0.2481,
+        "nodes": 1639,
+        "nodes_open": 820,
+        "nodes_silent": 43
+      },
+      "keratinocyte": {
+        "peaks": 8024,
+        "coding_genes": 2066,
+        "genes_read": 862,
+        "read_fraction": 0.4172,
+        "enhancers_active": 6141,
+        "enhancers_active_fraction": 0.0697,
+        "nodes": 1639,
+        "nodes_open": 822,
+        "nodes_silent": 282
+      },
+      "hepatocyte": {
+        "peaks": 24043,
+        "coding_genes": 2066,
+        "genes_read": 1570,
+        "read_fraction": 0.7599,
+        "enhancers_active": 18681,
+        "enhancers_active_fraction": 0.212,
+        "nodes": 1639,
+        "nodes_open": 820,
+        "nodes_silent": 42
+      },
+      "astrocyte": {
+        "peaks": 26051,
+        "coding_genes": 2066,
+        "genes_read": 1393,
+        "read_fraction": 0.6742,
+        "enhancers_active": 18530,
+        "enhancers_active_fraction": 0.2103,
+        "nodes": 1639,
+        "nodes_open": 820,
+        "nodes_silent": 39
+      },
+      "CD14-positive monocyte": {
+        "peaks": 19128,
+        "coding_genes": 2066,
+        "genes_read": 1393,
+        "read_fraction": 0.6742,
+        "enhancers_active": 13898,
+        "enhancers_active_fraction": 0.1577,
+        "nodes": 1639,
+        "nodes_open": 821,
+        "nodes_silent": 217
+      }
     },
     "chr2": {
       "K562": {
@@ -182,7 +290,106 @@
         "MAP3K19",
         "MGAT4A"
       ],
-      "read_in_both": 808
+      "read_in_both": 808,
+      "GM12878": {
+        "peaks": 6010,
+        "coding_genes": 1252,
+        "genes_read": 637,
+        "read_fraction": 0.5088,
+        "enhancers_active": 4600,
+        "enhancers_active_fraction": 0.0578,
+        "nodes": 1654,
+        "nodes_open": 828,
+        "nodes_silent": 418
+      },
+      "H1": {
+        "peaks": 19900,
+        "coding_genes": 1252,
+        "genes_read": 1004,
+        "read_fraction": 0.8019,
+        "enhancers_active": 10612,
+        "enhancers_active_fraction": 0.1333,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_silent": 107
+      },
+      "IMR-90": {
+        "peaks": 27296,
+        "coding_genes": 1252,
+        "genes_read": 929,
+        "read_fraction": 0.742,
+        "enhancers_active": 18426,
+        "enhancers_active_fraction": 0.2314,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_silent": 103
+      },
+      "SK-N-SH": {
+        "peaks": 18960,
+        "coding_genes": 1252,
+        "genes_read": 983,
+        "read_fraction": 0.7851,
+        "enhancers_active": 11512,
+        "enhancers_active_fraction": 0.1446,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_silent": 49
+      },
+      "cardiac muscle cell": {
+        "peaks": 27491,
+        "coding_genes": 1252,
+        "genes_read": 1010,
+        "read_fraction": 0.8067,
+        "enhancers_active": 19264,
+        "enhancers_active_fraction": 0.2419,
+        "nodes": 1654,
+        "nodes_open": 828,
+        "nodes_silent": 62
+      },
+      "keratinocyte": {
+        "peaks": 7087,
+        "coding_genes": 1252,
+        "genes_read": 561,
+        "read_fraction": 0.4481,
+        "enhancers_active": 5379,
+        "enhancers_active_fraction": 0.0675,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_silent": 318
+      },
+      "hepatocyte": {
+        "peaks": 21427,
+        "coding_genes": 1252,
+        "genes_read": 1024,
+        "read_fraction": 0.8179,
+        "enhancers_active": 15621,
+        "enhancers_active_fraction": 0.1961,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_silent": 24
+      },
+      "astrocyte": {
+        "peaks": 25673,
+        "coding_genes": 1252,
+        "genes_read": 926,
+        "read_fraction": 0.7396,
+        "enhancers_active": 17610,
+        "enhancers_active_fraction": 0.2211,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_silent": 53
+      },
+      "CD14-positive monocyte": {
+        "peaks": 15987,
+        "coding_genes": 1252,
+        "genes_read": 875,
+        "read_fraction": 0.6989,
+        "enhancers_active": 11153,
+        "enhancers_active_fraction": 0.14,
+        "nodes": 1654,
+        "nodes_open": 827,
+        "nodes_silent": 260
+      }
     },
     "chr3": {
       "K562": {
@@ -271,7 +478,106 @@
         "PDZRN3",
         "PHLDB2"
       ],
-      "read_in_both": 673
+      "read_in_both": 673,
+      "GM12878": {
+        "peaks": 5011,
+        "coding_genes": 1084,
+        "genes_read": 564,
+        "read_fraction": 0.5203,
+        "enhancers_active": 3711,
+        "enhancers_active_fraction": 0.0594,
+        "nodes": 1441,
+        "nodes_open": 723,
+        "nodes_silent": 340
+      },
+      "H1": {
+        "peaks": 13733,
+        "coding_genes": 1084,
+        "genes_read": 846,
+        "read_fraction": 0.7804,
+        "enhancers_active": 7477,
+        "enhancers_active_fraction": 0.1196,
+        "nodes": 1441,
+        "nodes_open": 722,
+        "nodes_silent": 110
+      },
+      "IMR-90": {
+        "peaks": 21309,
+        "coding_genes": 1084,
+        "genes_read": 803,
+        "read_fraction": 0.7408,
+        "enhancers_active": 14380,
+        "enhancers_active_fraction": 0.2301,
+        "nodes": 1441,
+        "nodes_open": 721,
+        "nodes_silent": 96
+      },
+      "SK-N-SH": {
+        "peaks": 13469,
+        "coding_genes": 1084,
+        "genes_read": 827,
+        "read_fraction": 0.7629,
+        "enhancers_active": 8109,
+        "enhancers_active_fraction": 0.1297,
+        "nodes": 1441,
+        "nodes_open": 721,
+        "nodes_silent": 60
+      },
+      "cardiac muscle cell": {
+        "peaks": 22355,
+        "coding_genes": 1084,
+        "genes_read": 874,
+        "read_fraction": 0.8063,
+        "enhancers_active": 15526,
+        "enhancers_active_fraction": 0.2484,
+        "nodes": 1441,
+        "nodes_open": 721,
+        "nodes_silent": 56
+      },
+      "keratinocyte": {
+        "peaks": 5593,
+        "coding_genes": 1084,
+        "genes_read": 487,
+        "read_fraction": 0.4493,
+        "enhancers_active": 4210,
+        "enhancers_active_fraction": 0.0674,
+        "nodes": 1441,
+        "nodes_open": 723,
+        "nodes_silent": 329
+      },
+      "hepatocyte": {
+        "peaks": 17156,
+        "coding_genes": 1084,
+        "genes_read": 886,
+        "read_fraction": 0.8173,
+        "enhancers_active": 12470,
+        "enhancers_active_fraction": 0.1995,
+        "nodes": 1441,
+        "nodes_open": 721,
+        "nodes_silent": 26
+      },
+      "astrocyte": {
+        "peaks": 21084,
+        "coding_genes": 1084,
+        "genes_read": 815,
+        "read_fraction": 0.7518,
+        "enhancers_active": 14249,
+        "enhancers_active_fraction": 0.228,
+        "nodes": 1441,
+        "nodes_open": 722,
+        "nodes_silent": 47
+      },
+      "CD14-positive monocyte": {
+        "peaks": 12864,
+        "coding_genes": 1084,
+        "genes_read": 780,
+        "read_fraction": 0.7196,
+        "enhancers_active": 8822,
+        "enhancers_active_fraction": 0.1411,
+        "nodes": 1441,
+        "nodes_open": 722,
+        "nodes_silent": 218
+      }
     },
     "chr4": {
       "K562": {
@@ -360,7 +666,106 @@
         "STATH",
         "SULT1E1"
       ],
-      "read_in_both": 412
+      "read_in_both": 412,
+      "GM12878": {
+        "peaks": 3704,
+        "coding_genes": 759,
+        "genes_read": 341,
+        "read_fraction": 0.4493,
+        "enhancers_active": 2704,
+        "enhancers_active_fraction": 0.0586,
+        "nodes": 1322,
+        "nodes_open": 661,
+        "nodes_silent": 400
+      },
+      "H1": {
+        "peaks": 9788,
+        "coding_genes": 759,
+        "genes_read": 567,
+        "read_fraction": 0.747,
+        "enhancers_active": 5159,
+        "enhancers_active_fraction": 0.1119,
+        "nodes": 1322,
+        "nodes_open": 662,
+        "nodes_silent": 123
+      },
+      "IMR-90": {
+        "peaks": 17710,
+        "coding_genes": 759,
+        "genes_read": 542,
+        "read_fraction": 0.7141,
+        "enhancers_active": 10978,
+        "enhancers_active_fraction": 0.238,
+        "nodes": 1322,
+        "nodes_open": 661,
+        "nodes_silent": 106
+      },
+      "SK-N-SH": {
+        "peaks": 10436,
+        "coding_genes": 759,
+        "genes_read": 553,
+        "read_fraction": 0.7286,
+        "enhancers_active": 5859,
+        "enhancers_active_fraction": 0.127,
+        "nodes": 1322,
+        "nodes_open": 661,
+        "nodes_silent": 76
+      },
+      "cardiac muscle cell": {
+        "peaks": 18460,
+        "coding_genes": 759,
+        "genes_read": 586,
+        "read_fraction": 0.7721,
+        "enhancers_active": 11792,
+        "enhancers_active_fraction": 0.2557,
+        "nodes": 1322,
+        "nodes_open": 662,
+        "nodes_silent": 48
+      },
+      "keratinocyte": {
+        "peaks": 4449,
+        "coding_genes": 759,
+        "genes_read": 301,
+        "read_fraction": 0.3966,
+        "enhancers_active": 3251,
+        "enhancers_active_fraction": 0.0705,
+        "nodes": 1322,
+        "nodes_open": 662,
+        "nodes_silent": 328
+      },
+      "hepatocyte": {
+        "peaks": 13970,
+        "coding_genes": 759,
+        "genes_read": 602,
+        "read_fraction": 0.7931,
+        "enhancers_active": 9430,
+        "enhancers_active_fraction": 0.2044,
+        "nodes": 1322,
+        "nodes_open": 661,
+        "nodes_silent": 27
+      },
+      "astrocyte": {
+        "peaks": 17892,
+        "coding_genes": 759,
+        "genes_read": 546,
+        "read_fraction": 0.7194,
+        "enhancers_active": 11196,
+        "enhancers_active_fraction": 0.2427,
+        "nodes": 1322,
+        "nodes_open": 661,
+        "nodes_silent": 45
+      },
+      "CD14-positive monocyte": {
+        "peaks": 9110,
+        "coding_genes": 759,
+        "genes_read": 493,
+        "read_fraction": 0.6495,
+        "enhancers_active": 5645,
+        "enhancers_active_fraction": 0.1224,
+        "nodes": 1322,
+        "nodes_open": 662,
+        "nodes_silent": 212
+      }
     },
     "chr5": {
       "K562": {
@@ -449,7 +854,106 @@
         "MCC",
         "MOCS2"
       ],
-      "read_in_both": 525
+      "read_in_both": 525,
+      "GM12878": {
+        "peaks": 4287,
+        "coding_genes": 895,
+        "genes_read": 422,
+        "read_fraction": 0.4715,
+        "enhancers_active": 3209,
+        "enhancers_active_fraction": 0.0604,
+        "nodes": 1245,
+        "nodes_open": 624,
+        "nodes_silent": 345
+      },
+      "H1": {
+        "peaks": 11832,
+        "coding_genes": 895,
+        "genes_read": 694,
+        "read_fraction": 0.7754,
+        "enhancers_active": 6682,
+        "enhancers_active_fraction": 0.1258,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_silent": 104
+      },
+      "IMR-90": {
+        "peaks": 18643,
+        "coding_genes": 895,
+        "genes_read": 661,
+        "read_fraction": 0.7385,
+        "enhancers_active": 12512,
+        "enhancers_active_fraction": 0.2356,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_silent": 99
+      },
+      "SK-N-SH": {
+        "peaks": 11866,
+        "coding_genes": 895,
+        "genes_read": 687,
+        "read_fraction": 0.7676,
+        "enhancers_active": 7151,
+        "enhancers_active_fraction": 0.1346,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_silent": 70
+      },
+      "cardiac muscle cell": {
+        "peaks": 19462,
+        "coding_genes": 895,
+        "genes_read": 721,
+        "read_fraction": 0.8056,
+        "enhancers_active": 13200,
+        "enhancers_active_fraction": 0.2485,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_silent": 64
+      },
+      "keratinocyte": {
+        "peaks": 4749,
+        "coding_genes": 895,
+        "genes_read": 366,
+        "read_fraction": 0.4089,
+        "enhancers_active": 3572,
+        "enhancers_active_fraction": 0.0673,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_silent": 296
+      },
+      "hepatocyte": {
+        "peaks": 15071,
+        "coding_genes": 895,
+        "genes_read": 700,
+        "read_fraction": 0.7821,
+        "enhancers_active": 10775,
+        "enhancers_active_fraction": 0.2029,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_silent": 26
+      },
+      "astrocyte": {
+        "peaks": 18442,
+        "coding_genes": 895,
+        "genes_read": 656,
+        "read_fraction": 0.733,
+        "enhancers_active": 12276,
+        "enhancers_active_fraction": 0.2311,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_silent": 44
+      },
+      "CD14-positive monocyte": {
+        "peaks": 10580,
+        "coding_genes": 895,
+        "genes_read": 594,
+        "read_fraction": 0.6637,
+        "enhancers_active": 7150,
+        "enhancers_active_fraction": 0.1346,
+        "nodes": 1245,
+        "nodes_open": 623,
+        "nodes_silent": 211
+      }
     },
     "chr6": {
       "K562": {
@@ -538,7 +1042,106 @@
         "LRRC1",
         "MEP1A"
       ],
-      "read_in_both": 662
+      "read_in_both": 662,
+      "GM12878": {
+        "peaks": 4918,
+        "coding_genes": 1052,
+        "genes_read": 574,
+        "read_fraction": 0.5456,
+        "enhancers_active": 3822,
+        "enhancers_active_fraction": 0.0671,
+        "nodes": 1180,
+        "nodes_open": 591,
+        "nodes_silent": 266
+      },
+      "H1": {
+        "peaks": 12396,
+        "coding_genes": 1052,
+        "genes_read": 816,
+        "read_fraction": 0.7757,
+        "enhancers_active": 7406,
+        "enhancers_active_fraction": 0.1301,
+        "nodes": 1180,
+        "nodes_open": 590,
+        "nodes_silent": 82
+      },
+      "IMR-90": {
+        "peaks": 19902,
+        "coding_genes": 1052,
+        "genes_read": 782,
+        "read_fraction": 0.7433,
+        "enhancers_active": 13595,
+        "enhancers_active_fraction": 0.2387,
+        "nodes": 1180,
+        "nodes_open": 590,
+        "nodes_silent": 58
+      },
+      "SK-N-SH": {
+        "peaks": 11427,
+        "coding_genes": 1052,
+        "genes_read": 794,
+        "read_fraction": 0.7548,
+        "enhancers_active": 7172,
+        "enhancers_active_fraction": 0.1259,
+        "nodes": 1180,
+        "nodes_open": 592,
+        "nodes_silent": 44
+      },
+      "cardiac muscle cell": {
+        "peaks": 20829,
+        "coding_genes": 1052,
+        "genes_read": 843,
+        "read_fraction": 0.8013,
+        "enhancers_active": 14603,
+        "enhancers_active_fraction": 0.2564,
+        "nodes": 1180,
+        "nodes_open": 591,
+        "nodes_silent": 33
+      },
+      "keratinocyte": {
+        "peaks": 5278,
+        "coding_genes": 1052,
+        "genes_read": 483,
+        "read_fraction": 0.4591,
+        "enhancers_active": 4042,
+        "enhancers_active_fraction": 0.071,
+        "nodes": 1180,
+        "nodes_open": 590,
+        "nodes_silent": 220
+      },
+      "hepatocyte": {
+        "peaks": 15436,
+        "coding_genes": 1052,
+        "genes_read": 838,
+        "read_fraction": 0.7966,
+        "enhancers_active": 11650,
+        "enhancers_active_fraction": 0.2046,
+        "nodes": 1180,
+        "nodes_open": 590,
+        "nodes_silent": 17
+      },
+      "astrocyte": {
+        "peaks": 18428,
+        "coding_genes": 1052,
+        "genes_read": 777,
+        "read_fraction": 0.7386,
+        "enhancers_active": 12894,
+        "enhancers_active_fraction": 0.2264,
+        "nodes": 1180,
+        "nodes_open": 590,
+        "nodes_silent": 33
+      },
+      "CD14-positive monocyte": {
+        "peaks": 12297,
+        "coding_genes": 1052,
+        "genes_read": 764,
+        "read_fraction": 0.7262,
+        "enhancers_active": 8615,
+        "enhancers_active_fraction": 0.1513,
+        "nodes": 1180,
+        "nodes_open": 591,
+        "nodes_silent": 174
+      }
     },
     "chr7": {
       "K562": {
@@ -627,7 +1230,106 @@
         "PPP1R9A",
         "PRR15"
       ],
-      "read_in_both": 534
+      "read_in_both": 534,
+      "GM12878": {
+        "peaks": 3797,
+        "coding_genes": 935,
+        "genes_read": 437,
+        "read_fraction": 0.4674,
+        "enhancers_active": 2783,
+        "enhancers_active_fraction": 0.0565,
+        "nodes": 1133,
+        "nodes_open": 568,
+        "nodes_silent": 277
+      },
+      "H1": {
+        "peaks": 12887,
+        "coding_genes": 935,
+        "genes_read": 677,
+        "read_fraction": 0.7241,
+        "enhancers_active": 6970,
+        "enhancers_active_fraction": 0.1414,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_silent": 85
+      },
+      "IMR-90": {
+        "peaks": 15821,
+        "coding_genes": 935,
+        "genes_read": 627,
+        "read_fraction": 0.6706,
+        "enhancers_active": 10514,
+        "enhancers_active_fraction": 0.2133,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_silent": 93
+      },
+      "SK-N-SH": {
+        "peaks": 14579,
+        "coding_genes": 935,
+        "genes_read": 675,
+        "read_fraction": 0.7219,
+        "enhancers_active": 8252,
+        "enhancers_active_fraction": 0.1674,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_silent": 38
+      },
+      "cardiac muscle cell": {
+        "peaks": 17223,
+        "coding_genes": 935,
+        "genes_read": 683,
+        "read_fraction": 0.7305,
+        "enhancers_active": 11711,
+        "enhancers_active_fraction": 0.2376,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_silent": 40
+      },
+      "keratinocyte": {
+        "peaks": 4124,
+        "coding_genes": 935,
+        "genes_read": 366,
+        "read_fraction": 0.3914,
+        "enhancers_active": 3079,
+        "enhancers_active_fraction": 0.0625,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_silent": 239
+      },
+      "hepatocyte": {
+        "peaks": 13303,
+        "coding_genes": 935,
+        "genes_read": 708,
+        "read_fraction": 0.7572,
+        "enhancers_active": 9715,
+        "enhancers_active_fraction": 0.1971,
+        "nodes": 1133,
+        "nodes_open": 569,
+        "nodes_silent": 17
+      },
+      "astrocyte": {
+        "peaks": 15288,
+        "coding_genes": 935,
+        "genes_read": 630,
+        "read_fraction": 0.6738,
+        "enhancers_active": 10277,
+        "enhancers_active_fraction": 0.2085,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_silent": 24
+      },
+      "CD14-positive monocyte": {
+        "peaks": 9709,
+        "coding_genes": 935,
+        "genes_read": 610,
+        "read_fraction": 0.6524,
+        "enhancers_active": 6633,
+        "enhancers_active_fraction": 0.1346,
+        "nodes": 1133,
+        "nodes_open": 567,
+        "nodes_silent": 173
+      }
     },
     "chr8": {
       "K562": {
@@ -716,7 +1418,106 @@
         "RGS20",
         "SCARA3"
       ],
-      "read_in_both": 395
+      "read_in_both": 395,
+      "GM12878": {
+        "peaks": 3442,
+        "coding_genes": 706,
+        "genes_read": 316,
+        "read_fraction": 0.4476,
+        "enhancers_active": 2601,
+        "enhancers_active_fraction": 0.0574,
+        "nodes": 1112,
+        "nodes_open": 558,
+        "nodes_silent": 317
+      },
+      "H1": {
+        "peaks": 10143,
+        "coding_genes": 706,
+        "genes_read": 523,
+        "read_fraction": 0.7408,
+        "enhancers_active": 5474,
+        "enhancers_active_fraction": 0.1208,
+        "nodes": 1112,
+        "nodes_open": 556,
+        "nodes_silent": 76
+      },
+      "IMR-90": {
+        "peaks": 15052,
+        "coding_genes": 706,
+        "genes_read": 493,
+        "read_fraction": 0.6983,
+        "enhancers_active": 10140,
+        "enhancers_active_fraction": 0.2237,
+        "nodes": 1112,
+        "nodes_open": 556,
+        "nodes_silent": 105
+      },
+      "SK-N-SH": {
+        "peaks": 9933,
+        "coding_genes": 706,
+        "genes_read": 517,
+        "read_fraction": 0.7323,
+        "enhancers_active": 5889,
+        "enhancers_active_fraction": 0.1299,
+        "nodes": 1112,
+        "nodes_open": 556,
+        "nodes_silent": 62
+      },
+      "cardiac muscle cell": {
+        "peaks": 15919,
+        "coding_genes": 706,
+        "genes_read": 538,
+        "read_fraction": 0.762,
+        "enhancers_active": 10979,
+        "enhancers_active_fraction": 0.2422,
+        "nodes": 1112,
+        "nodes_open": 556,
+        "nodes_silent": 72
+      },
+      "keratinocyte": {
+        "peaks": 3749,
+        "coding_genes": 706,
+        "genes_read": 254,
+        "read_fraction": 0.3598,
+        "enhancers_active": 2905,
+        "enhancers_active_fraction": 0.0641,
+        "nodes": 1112,
+        "nodes_open": 558,
+        "nodes_silent": 338
+      },
+      "hepatocyte": {
+        "peaks": 12544,
+        "coding_genes": 706,
+        "genes_read": 541,
+        "read_fraction": 0.7663,
+        "enhancers_active": 8992,
+        "enhancers_active_fraction": 0.1984,
+        "nodes": 1112,
+        "nodes_open": 558,
+        "nodes_silent": 33
+      },
+      "astrocyte": {
+        "peaks": 14645,
+        "coding_genes": 706,
+        "genes_read": 499,
+        "read_fraction": 0.7068,
+        "enhancers_active": 9968,
+        "enhancers_active_fraction": 0.2199,
+        "nodes": 1112,
+        "nodes_open": 556,
+        "nodes_silent": 45
+      },
+      "CD14-positive monocyte": {
+        "peaks": 9114,
+        "coding_genes": 706,
+        "genes_read": 460,
+        "read_fraction": 0.6516,
+        "enhancers_active": 6115,
+        "enhancers_active_fraction": 0.1349,
+        "nodes": 1112,
+        "nodes_open": 556,
+        "nodes_silent": 205
+      }
     },
     "chr9": {
       "K562": {
@@ -805,7 +1606,106 @@
         "PLPPR1",
         "PRUNE2"
       ],
-      "read_in_both": 463
+      "read_in_both": 463,
+      "GM12878": {
+        "peaks": 3005,
+        "coding_genes": 776,
+        "genes_read": 389,
+        "read_fraction": 0.5013,
+        "enhancers_active": 2270,
+        "enhancers_active_fraction": 0.0545,
+        "nodes": 814,
+        "nodes_open": 407,
+        "nodes_silent": 196
+      },
+      "H1": {
+        "peaks": 10089,
+        "coding_genes": 776,
+        "genes_read": 610,
+        "read_fraction": 0.7861,
+        "enhancers_active": 5906,
+        "enhancers_active_fraction": 0.1418,
+        "nodes": 814,
+        "nodes_open": 408,
+        "nodes_silent": 50
+      },
+      "IMR-90": {
+        "peaks": 13020,
+        "coding_genes": 776,
+        "genes_read": 559,
+        "read_fraction": 0.7204,
+        "enhancers_active": 9190,
+        "enhancers_active_fraction": 0.2207,
+        "nodes": 814,
+        "nodes_open": 407,
+        "nodes_silent": 69
+      },
+      "SK-N-SH": {
+        "peaks": 10156,
+        "coding_genes": 776,
+        "genes_read": 590,
+        "read_fraction": 0.7603,
+        "enhancers_active": 6464,
+        "enhancers_active_fraction": 0.1552,
+        "nodes": 814,
+        "nodes_open": 407,
+        "nodes_silent": 33
+      },
+      "cardiac muscle cell": {
+        "peaks": 14402,
+        "coding_genes": 776,
+        "genes_read": 612,
+        "read_fraction": 0.7887,
+        "enhancers_active": 10311,
+        "enhancers_active_fraction": 0.2476,
+        "nodes": 814,
+        "nodes_open": 407,
+        "nodes_silent": 25
+      },
+      "keratinocyte": {
+        "peaks": 3506,
+        "coding_genes": 776,
+        "genes_read": 328,
+        "read_fraction": 0.4227,
+        "enhancers_active": 2697,
+        "enhancers_active_fraction": 0.0648,
+        "nodes": 814,
+        "nodes_open": 407,
+        "nodes_silent": 148
+      },
+      "hepatocyte": {
+        "peaks": 11771,
+        "coding_genes": 776,
+        "genes_read": 607,
+        "read_fraction": 0.7822,
+        "enhancers_active": 8757,
+        "enhancers_active_fraction": 0.2103,
+        "nodes": 814,
+        "nodes_open": 407,
+        "nodes_silent": 10
+      },
+      "astrocyte": {
+        "peaks": 12169,
+        "coding_genes": 776,
+        "genes_read": 547,
+        "read_fraction": 0.7049,
+        "enhancers_active": 8742,
+        "enhancers_active_fraction": 0.2099,
+        "nodes": 814,
+        "nodes_open": 407,
+        "nodes_silent": 24
+      },
+      "CD14-positive monocyte": {
+        "peaks": 8522,
+        "coding_genes": 776,
+        "genes_read": 534,
+        "read_fraction": 0.6881,
+        "enhancers_active": 5974,
+        "enhancers_active_fraction": 0.1435,
+        "nodes": 814,
+        "nodes_open": 409,
+        "nodes_silent": 111
+      }
     },
     "chr10": {
       "K562": {
@@ -894,7 +1794,106 @@
         "NRP1",
         "PHYHIPL"
       ],
-      "read_in_both": 447
+      "read_in_both": 447,
+      "GM12878": {
+        "peaks": 3641,
+        "coding_genes": 732,
+        "genes_read": 371,
+        "read_fraction": 0.5068,
+        "enhancers_active": 2843,
+        "enhancers_active_fraction": 0.06,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 217
+      },
+      "H1": {
+        "peaks": 12651,
+        "coding_genes": 732,
+        "genes_read": 588,
+        "read_fraction": 0.8033,
+        "enhancers_active": 6585,
+        "enhancers_active_fraction": 0.1389,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 65
+      },
+      "IMR-90": {
+        "peaks": 14757,
+        "coding_genes": 732,
+        "genes_read": 529,
+        "read_fraction": 0.7227,
+        "enhancers_active": 10533,
+        "enhancers_active_fraction": 0.2221,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 72
+      },
+      "SK-N-SH": {
+        "peaks": 11370,
+        "coding_genes": 732,
+        "genes_read": 584,
+        "read_fraction": 0.7978,
+        "enhancers_active": 7099,
+        "enhancers_active_fraction": 0.1497,
+        "nodes": 922,
+        "nodes_open": 462,
+        "nodes_silent": 19
+      },
+      "cardiac muscle cell": {
+        "peaks": 16156,
+        "coding_genes": 732,
+        "genes_read": 583,
+        "read_fraction": 0.7964,
+        "enhancers_active": 11755,
+        "enhancers_active_fraction": 0.2479,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 32
+      },
+      "keratinocyte": {
+        "peaks": 3912,
+        "coding_genes": 732,
+        "genes_read": 312,
+        "read_fraction": 0.4262,
+        "enhancers_active": 2993,
+        "enhancers_active_fraction": 0.0631,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 190
+      },
+      "hepatocyte": {
+        "peaks": 12410,
+        "coding_genes": 732,
+        "genes_read": 596,
+        "read_fraction": 0.8142,
+        "enhancers_active": 9442,
+        "enhancers_active_fraction": 0.1991,
+        "nodes": 922,
+        "nodes_open": 462,
+        "nodes_silent": 10
+      },
+      "astrocyte": {
+        "peaks": 14062,
+        "coding_genes": 732,
+        "genes_read": 529,
+        "read_fraction": 0.7227,
+        "enhancers_active": 10284,
+        "enhancers_active_fraction": 0.2169,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 33
+      },
+      "CD14-positive monocyte": {
+        "peaks": 9713,
+        "coding_genes": 732,
+        "genes_read": 490,
+        "read_fraction": 0.6694,
+        "enhancers_active": 6871,
+        "enhancers_active_fraction": 0.1449,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 158
+      }
     },
     "chr11": {
       "K562": {
@@ -971,7 +1970,106 @@
         "SYT8",
         "TUB"
       ],
-      "read_in_both": 691
+      "read_in_both": 691,
+      "GM12878": {
+        "peaks": 3657,
+        "coding_genes": 1319,
+        "genes_read": 565,
+        "read_fraction": 0.4284,
+        "enhancers_active": 2710,
+        "enhancers_active_fraction": 0.056,
+        "nodes": 947,
+        "nodes_open": 475,
+        "nodes_silent": 242
+      },
+      "H1": {
+        "peaks": 12243,
+        "coding_genes": 1319,
+        "genes_read": 874,
+        "read_fraction": 0.6626,
+        "enhancers_active": 7282,
+        "enhancers_active_fraction": 0.1505,
+        "nodes": 947,
+        "nodes_open": 476,
+        "nodes_silent": 69
+      },
+      "IMR-90": {
+        "peaks": 15660,
+        "coding_genes": 1319,
+        "genes_read": 848,
+        "read_fraction": 0.6429,
+        "enhancers_active": 10858,
+        "enhancers_active_fraction": 0.2244,
+        "nodes": 947,
+        "nodes_open": 474,
+        "nodes_silent": 54
+      },
+      "SK-N-SH": {
+        "peaks": 12741,
+        "coding_genes": 1319,
+        "genes_read": 856,
+        "read_fraction": 0.649,
+        "enhancers_active": 7925,
+        "enhancers_active_fraction": 0.1638,
+        "nodes": 947,
+        "nodes_open": 475,
+        "nodes_silent": 40
+      },
+      "cardiac muscle cell": {
+        "peaks": 16504,
+        "coding_genes": 1319,
+        "genes_read": 895,
+        "read_fraction": 0.6785,
+        "enhancers_active": 11846,
+        "enhancers_active_fraction": 0.2449,
+        "nodes": 947,
+        "nodes_open": 474,
+        "nodes_silent": 28
+      },
+      "keratinocyte": {
+        "peaks": 4317,
+        "coding_genes": 1319,
+        "genes_read": 503,
+        "read_fraction": 0.3813,
+        "enhancers_active": 3204,
+        "enhancers_active_fraction": 0.0662,
+        "nodes": 947,
+        "nodes_open": 475,
+        "nodes_silent": 174
+      },
+      "hepatocyte": {
+        "peaks": 13758,
+        "coding_genes": 1319,
+        "genes_read": 908,
+        "read_fraction": 0.6884,
+        "enhancers_active": 10267,
+        "enhancers_active_fraction": 0.2122,
+        "nodes": 947,
+        "nodes_open": 476,
+        "nodes_silent": 19
+      },
+      "astrocyte": {
+        "peaks": 14258,
+        "coding_genes": 1319,
+        "genes_read": 803,
+        "read_fraction": 0.6088,
+        "enhancers_active": 10045,
+        "enhancers_active_fraction": 0.2076,
+        "nodes": 947,
+        "nodes_open": 474,
+        "nodes_silent": 44
+      },
+      "CD14-positive monocyte": {
+        "peaks": 10214,
+        "coding_genes": 1319,
+        "genes_read": 788,
+        "read_fraction": 0.5974,
+        "enhancers_active": 7100,
+        "enhancers_active_fraction": 0.1468,
+        "nodes": 947,
+        "nodes_open": 475,
+        "nodes_silent": 137
+      }
     },
     "chr12": {
       "K562": {
@@ -1058,7 +2156,106 @@
         "TAS2R19",
         "TMTC1"
       ],
-      "read_in_both": 636
+      "read_in_both": 636,
+      "GM12878": {
+        "peaks": 3948,
+        "coding_genes": 1041,
+        "genes_read": 527,
+        "read_fraction": 0.5062,
+        "enhancers_active": 2985,
+        "enhancers_active_fraction": 0.0641,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 194
+      },
+      "H1": {
+        "peaks": 10199,
+        "coding_genes": 1041,
+        "genes_read": 787,
+        "read_fraction": 0.756,
+        "enhancers_active": 6064,
+        "enhancers_active_fraction": 0.1302,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 56
+      },
+      "IMR-90": {
+        "peaks": 15372,
+        "coding_genes": 1041,
+        "genes_read": 734,
+        "read_fraction": 0.7051,
+        "enhancers_active": 10677,
+        "enhancers_active_fraction": 0.2292,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 58
+      },
+      "SK-N-SH": {
+        "peaks": 10352,
+        "coding_genes": 1041,
+        "genes_read": 773,
+        "read_fraction": 0.7426,
+        "enhancers_active": 6620,
+        "enhancers_active_fraction": 0.1421,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 40
+      },
+      "cardiac muscle cell": {
+        "peaks": 16262,
+        "coding_genes": 1041,
+        "genes_read": 808,
+        "read_fraction": 0.7762,
+        "enhancers_active": 11568,
+        "enhancers_active_fraction": 0.2483,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 32
+      },
+      "keratinocyte": {
+        "peaks": 4286,
+        "coding_genes": 1041,
+        "genes_read": 473,
+        "read_fraction": 0.4544,
+        "enhancers_active": 3211,
+        "enhancers_active_fraction": 0.0689,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 154
+      },
+      "hepatocyte": {
+        "peaks": 12855,
+        "coding_genes": 1041,
+        "genes_read": 812,
+        "read_fraction": 0.78,
+        "enhancers_active": 9614,
+        "enhancers_active_fraction": 0.2064,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 12
+      },
+      "astrocyte": {
+        "peaks": 14576,
+        "coding_genes": 1041,
+        "genes_read": 740,
+        "read_fraction": 0.7109,
+        "enhancers_active": 10067,
+        "enhancers_active_fraction": 0.2161,
+        "nodes": 922,
+        "nodes_open": 461,
+        "nodes_silent": 27
+      },
+      "CD14-positive monocyte": {
+        "peaks": 10296,
+        "coding_genes": 1041,
+        "genes_read": 740,
+        "read_fraction": 0.7109,
+        "enhancers_active": 7315,
+        "enhancers_active_fraction": 0.157,
+        "nodes": 922,
+        "nodes_open": 462,
+        "nodes_silent": 116
+      }
     },
     "chr13": {
       "K562": {
@@ -1138,7 +2335,106 @@
         "URAD",
         "UTP14C"
       ],
-      "read_in_both": 197
+      "read_in_both": 197,
+      "GM12878": {
+        "peaks": 1900,
+        "coding_genes": 322,
+        "genes_read": 164,
+        "read_fraction": 0.5093,
+        "enhancers_active": 1395,
+        "enhancers_active_fraction": 0.0544,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 203
+      },
+      "H1": {
+        "peaks": 5986,
+        "coding_genes": 322,
+        "genes_read": 258,
+        "read_fraction": 0.8012,
+        "enhancers_active": 3106,
+        "enhancers_active_fraction": 0.1212,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 48
+      },
+      "IMR-90": {
+        "peaks": 9278,
+        "coding_genes": 322,
+        "genes_read": 248,
+        "read_fraction": 0.7702,
+        "enhancers_active": 5886,
+        "enhancers_active_fraction": 0.2296,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 54
+      },
+      "SK-N-SH": {
+        "peaks": 5730,
+        "coding_genes": 322,
+        "genes_read": 256,
+        "read_fraction": 0.795,
+        "enhancers_active": 3408,
+        "enhancers_active_fraction": 0.1329,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 22
+      },
+      "cardiac muscle cell": {
+        "peaks": 9882,
+        "coding_genes": 322,
+        "genes_read": 264,
+        "read_fraction": 0.8199,
+        "enhancers_active": 6425,
+        "enhancers_active_fraction": 0.2506,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 30
+      },
+      "keratinocyte": {
+        "peaks": 2102,
+        "coding_genes": 322,
+        "genes_read": 129,
+        "read_fraction": 0.4006,
+        "enhancers_active": 1576,
+        "enhancers_active_fraction": 0.0615,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 190
+      },
+      "hepatocyte": {
+        "peaks": 7054,
+        "coding_genes": 322,
+        "genes_read": 266,
+        "read_fraction": 0.8261,
+        "enhancers_active": 5002,
+        "enhancers_active_fraction": 0.1951,
+        "nodes": 662,
+        "nodes_open": 332,
+        "nodes_silent": 12
+      },
+      "astrocyte": {
+        "peaks": 9211,
+        "coding_genes": 322,
+        "genes_read": 248,
+        "read_fraction": 0.7702,
+        "enhancers_active": 5924,
+        "enhancers_active_fraction": 0.2311,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 20
+      },
+      "CD14-positive monocyte": {
+        "peaks": 4762,
+        "coding_genes": 322,
+        "genes_read": 223,
+        "read_fraction": 0.6925,
+        "enhancers_active": 3144,
+        "enhancers_active_fraction": 0.1226,
+        "nodes": 662,
+        "nodes_open": 331,
+        "nodes_silent": 112
+      }
     },
     "chr14": {
       "K562": {
@@ -1227,7 +2523,106 @@
         "PRIMA1",
         "RAB15"
       ],
-      "read_in_both": 399
+      "read_in_both": 399,
+      "GM12878": {
+        "peaks": 2530,
+        "coding_genes": 619,
+        "genes_read": 335,
+        "read_fraction": 0.5412,
+        "enhancers_active": 1891,
+        "enhancers_active_fraction": 0.0595,
+        "nodes": 634,
+        "nodes_open": 317,
+        "nodes_silent": 158
+      },
+      "H1": {
+        "peaks": 7731,
+        "coding_genes": 619,
+        "genes_read": 489,
+        "read_fraction": 0.79,
+        "enhancers_active": 4373,
+        "enhancers_active_fraction": 0.1375,
+        "nodes": 634,
+        "nodes_open": 318,
+        "nodes_silent": 49
+      },
+      "IMR-90": {
+        "peaks": 9868,
+        "coding_genes": 619,
+        "genes_read": 464,
+        "read_fraction": 0.7496,
+        "enhancers_active": 6708,
+        "enhancers_active_fraction": 0.211,
+        "nodes": 634,
+        "nodes_open": 317,
+        "nodes_silent": 43
+      },
+      "SK-N-SH": {
+        "peaks": 7188,
+        "coding_genes": 619,
+        "genes_read": 472,
+        "read_fraction": 0.7625,
+        "enhancers_active": 4515,
+        "enhancers_active_fraction": 0.142,
+        "nodes": 634,
+        "nodes_open": 318,
+        "nodes_silent": 53
+      },
+      "cardiac muscle cell": {
+        "peaks": 10299,
+        "coding_genes": 619,
+        "genes_read": 496,
+        "read_fraction": 0.8013,
+        "enhancers_active": 7319,
+        "enhancers_active_fraction": 0.2302,
+        "nodes": 634,
+        "nodes_open": 317,
+        "nodes_silent": 27
+      },
+      "keratinocyte": {
+        "peaks": 2556,
+        "coding_genes": 619,
+        "genes_read": 277,
+        "read_fraction": 0.4475,
+        "enhancers_active": 1982,
+        "enhancers_active_fraction": 0.0623,
+        "nodes": 634,
+        "nodes_open": 318,
+        "nodes_silent": 148
+      },
+      "hepatocyte": {
+        "peaks": 8727,
+        "coding_genes": 619,
+        "genes_read": 492,
+        "read_fraction": 0.7948,
+        "enhancers_active": 6587,
+        "enhancers_active_fraction": 0.2072,
+        "nodes": 634,
+        "nodes_open": 317,
+        "nodes_silent": 14
+      },
+      "astrocyte": {
+        "peaks": 9133,
+        "coding_genes": 619,
+        "genes_read": 458,
+        "read_fraction": 0.7399,
+        "enhancers_active": 6384,
+        "enhancers_active_fraction": 0.2008,
+        "nodes": 634,
+        "nodes_open": 317,
+        "nodes_silent": 24
+      },
+      "CD14-positive monocyte": {
+        "peaks": 6478,
+        "coding_genes": 619,
+        "genes_read": 453,
+        "read_fraction": 0.7318,
+        "enhancers_active": 4562,
+        "enhancers_active_fraction": 0.1435,
+        "nodes": 634,
+        "nodes_open": 318,
+        "nodes_silent": 95
+      }
     },
     "chr15": {
       "K562": {
@@ -1316,7 +2711,106 @@
         "SQOR",
         "TPM1"
       ],
-      "read_in_both": 372
+      "read_in_both": 372,
+      "GM12878": {
+        "peaks": 2511,
+        "coding_genes": 603,
+        "genes_read": 315,
+        "read_fraction": 0.5224,
+        "enhancers_active": 1989,
+        "enhancers_active_fraction": 0.064,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 122
+      },
+      "H1": {
+        "peaks": 8781,
+        "coding_genes": 603,
+        "genes_read": 470,
+        "read_fraction": 0.7794,
+        "enhancers_active": 4615,
+        "enhancers_active_fraction": 0.1486,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 19
+      },
+      "IMR-90": {
+        "peaks": 10376,
+        "coding_genes": 603,
+        "genes_read": 452,
+        "read_fraction": 0.7496,
+        "enhancers_active": 7421,
+        "enhancers_active_fraction": 0.2389,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 30
+      },
+      "SK-N-SH": {
+        "peaks": 7292,
+        "coding_genes": 603,
+        "genes_read": 467,
+        "read_fraction": 0.7745,
+        "enhancers_active": 4706,
+        "enhancers_active_fraction": 0.1515,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 20
+      },
+      "cardiac muscle cell": {
+        "peaks": 10730,
+        "coding_genes": 603,
+        "genes_read": 472,
+        "read_fraction": 0.7828,
+        "enhancers_active": 7877,
+        "enhancers_active_fraction": 0.2536,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 18
+      },
+      "keratinocyte": {
+        "peaks": 2736,
+        "coding_genes": 603,
+        "genes_read": 283,
+        "read_fraction": 0.4693,
+        "enhancers_active": 2122,
+        "enhancers_active_fraction": 0.0683,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 100
+      },
+      "hepatocyte": {
+        "peaks": 8421,
+        "coding_genes": 603,
+        "genes_read": 489,
+        "read_fraction": 0.8109,
+        "enhancers_active": 6448,
+        "enhancers_active_fraction": 0.2076,
+        "nodes": 543,
+        "nodes_open": 273,
+        "nodes_silent": 8
+      },
+      "astrocyte": {
+        "peaks": 9183,
+        "coding_genes": 603,
+        "genes_read": 445,
+        "read_fraction": 0.738,
+        "enhancers_active": 6669,
+        "enhancers_active_fraction": 0.2147,
+        "nodes": 543,
+        "nodes_open": 273,
+        "nodes_silent": 20
+      },
+      "CD14-positive monocyte": {
+        "peaks": 6565,
+        "coding_genes": 603,
+        "genes_read": 425,
+        "read_fraction": 0.7048,
+        "enhancers_active": 4780,
+        "enhancers_active_fraction": 0.1539,
+        "nodes": 543,
+        "nodes_open": 272,
+        "nodes_silent": 68
+      }
     },
     "chr16": {
       "K562": {
@@ -1405,7 +2899,106 @@
         "WDR90",
         "ZG16B"
       ],
-      "read_in_both": 560
+      "read_in_both": 560,
+      "GM12878": {
+        "peaks": 2519,
+        "coding_genes": 856,
+        "genes_read": 440,
+        "read_fraction": 0.514,
+        "enhancers_active": 1883,
+        "enhancers_active_fraction": 0.0583,
+        "nodes": 563,
+        "nodes_open": 283,
+        "nodes_silent": 141
+      },
+      "H1": {
+        "peaks": 7935,
+        "coding_genes": 856,
+        "genes_read": 649,
+        "read_fraction": 0.7582,
+        "enhancers_active": 4837,
+        "enhancers_active_fraction": 0.1497,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 29
+      },
+      "IMR-90": {
+        "peaks": 8480,
+        "coding_genes": 856,
+        "genes_read": 598,
+        "read_fraction": 0.6986,
+        "enhancers_active": 6142,
+        "enhancers_active_fraction": 0.1901,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 65
+      },
+      "SK-N-SH": {
+        "peaks": 8253,
+        "coding_genes": 856,
+        "genes_read": 646,
+        "read_fraction": 0.7547,
+        "enhancers_active": 5351,
+        "enhancers_active_fraction": 0.1656,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 20
+      },
+      "cardiac muscle cell": {
+        "peaks": 8983,
+        "coding_genes": 856,
+        "genes_read": 638,
+        "read_fraction": 0.7453,
+        "enhancers_active": 6699,
+        "enhancers_active_fraction": 0.2073,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 36
+      },
+      "keratinocyte": {
+        "peaks": 2490,
+        "coding_genes": 856,
+        "genes_read": 372,
+        "read_fraction": 0.4346,
+        "enhancers_active": 1859,
+        "enhancers_active_fraction": 0.0575,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 141
+      },
+      "hepatocyte": {
+        "peaks": 8874,
+        "coding_genes": 856,
+        "genes_read": 673,
+        "read_fraction": 0.7862,
+        "enhancers_active": 6556,
+        "enhancers_active_fraction": 0.2029,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 15
+      },
+      "astrocyte": {
+        "peaks": 7951,
+        "coding_genes": 856,
+        "genes_read": 580,
+        "read_fraction": 0.6776,
+        "enhancers_active": 5723,
+        "enhancers_active_fraction": 0.1771,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 42
+      },
+      "CD14-positive monocyte": {
+        "peaks": 6589,
+        "coding_genes": 856,
+        "genes_read": 590,
+        "read_fraction": 0.6893,
+        "enhancers_active": 4808,
+        "enhancers_active_fraction": 0.1488,
+        "nodes": 563,
+        "nodes_open": 282,
+        "nodes_silent": 93
+      }
     },
     "chr17": {
       "K562": {
@@ -1494,7 +3087,106 @@
         "SNX11",
         "TM4SF5"
       ],
-      "read_in_both": 749
+      "read_in_both": 749,
+      "GM12878": {
+        "peaks": 3227,
+        "coding_genes": 1187,
+        "genes_read": 591,
+        "read_fraction": 0.4979,
+        "enhancers_active": 2535,
+        "enhancers_active_fraction": 0.0612,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 86
+      },
+      "H1": {
+        "peaks": 10416,
+        "coding_genes": 1187,
+        "genes_read": 909,
+        "read_fraction": 0.7658,
+        "enhancers_active": 7042,
+        "enhancers_active_fraction": 0.1701,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 14
+      },
+      "IMR-90": {
+        "peaks": 11803,
+        "coding_genes": 1187,
+        "genes_read": 840,
+        "read_fraction": 0.7077,
+        "enhancers_active": 8887,
+        "enhancers_active_fraction": 0.2147,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 24
+      },
+      "SK-N-SH": {
+        "peaks": 12290,
+        "coding_genes": 1187,
+        "genes_read": 890,
+        "read_fraction": 0.7498,
+        "enhancers_active": 8295,
+        "enhancers_active_fraction": 0.2004,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 12
+      },
+      "cardiac muscle cell": {
+        "peaks": 12721,
+        "coding_genes": 1187,
+        "genes_read": 909,
+        "read_fraction": 0.7658,
+        "enhancers_active": 9873,
+        "enhancers_active_fraction": 0.2385,
+        "nodes": 546,
+        "nodes_open": 274,
+        "nodes_silent": 13
+      },
+      "keratinocyte": {
+        "peaks": 3189,
+        "coding_genes": 1187,
+        "genes_read": 478,
+        "read_fraction": 0.4027,
+        "enhancers_active": 2470,
+        "enhancers_active_fraction": 0.0597,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 52
+      },
+      "hepatocyte": {
+        "peaks": 11550,
+        "coding_genes": 1187,
+        "genes_read": 923,
+        "read_fraction": 0.7776,
+        "enhancers_active": 9051,
+        "enhancers_active_fraction": 0.2186,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 2
+      },
+      "astrocyte": {
+        "peaks": 10088,
+        "coding_genes": 1187,
+        "genes_read": 814,
+        "read_fraction": 0.6858,
+        "enhancers_active": 7826,
+        "enhancers_active_fraction": 0.1891,
+        "nodes": 546,
+        "nodes_open": 273,
+        "nodes_silent": 18
+      },
+      "CD14-positive monocyte": {
+        "peaks": 9709,
+        "coding_genes": 1187,
+        "genes_read": 873,
+        "read_fraction": 0.7355,
+        "enhancers_active": 7261,
+        "enhancers_active_fraction": 0.1754,
+        "nodes": 546,
+        "nodes_open": 274,
+        "nodes_silent": 52
+      }
     },
     "chr18": {
       "K562": {
@@ -1568,7 +3260,106 @@
         "SYT4",
         "TUBB8B"
       ],
-      "read_in_both": 169
+      "read_in_both": 169,
+      "GM12878": {
+        "peaks": 1684,
+        "coding_genes": 267,
+        "genes_read": 131,
+        "read_fraction": 0.4906,
+        "enhancers_active": 1261,
+        "enhancers_active_fraction": 0.0574,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 152
+      },
+      "H1": {
+        "peaks": 5238,
+        "coding_genes": 267,
+        "genes_read": 224,
+        "read_fraction": 0.839,
+        "enhancers_active": 2763,
+        "enhancers_active_fraction": 0.1257,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 50
+      },
+      "IMR-90": {
+        "peaks": 7418,
+        "coding_genes": 267,
+        "genes_read": 198,
+        "read_fraction": 0.7416,
+        "enhancers_active": 4766,
+        "enhancers_active_fraction": 0.2169,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 59
+      },
+      "SK-N-SH": {
+        "peaks": 4675,
+        "coding_genes": 267,
+        "genes_read": 221,
+        "read_fraction": 0.8277,
+        "enhancers_active": 2677,
+        "enhancers_active_fraction": 0.1218,
+        "nodes": 560,
+        "nodes_open": 281,
+        "nodes_silent": 25
+      },
+      "cardiac muscle cell": {
+        "peaks": 8304,
+        "coding_genes": 267,
+        "genes_read": 226,
+        "read_fraction": 0.8464,
+        "enhancers_active": 5447,
+        "enhancers_active_fraction": 0.2479,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 21
+      },
+      "keratinocyte": {
+        "peaks": 2034,
+        "coding_genes": 267,
+        "genes_read": 118,
+        "read_fraction": 0.4419,
+        "enhancers_active": 1476,
+        "enhancers_active_fraction": 0.0672,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 143
+      },
+      "hepatocyte": {
+        "peaks": 6118,
+        "coding_genes": 267,
+        "genes_read": 219,
+        "read_fraction": 0.8202,
+        "enhancers_active": 4385,
+        "enhancers_active_fraction": 0.1996,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 8
+      },
+      "astrocyte": {
+        "peaks": 7452,
+        "coding_genes": 267,
+        "genes_read": 204,
+        "read_fraction": 0.764,
+        "enhancers_active": 4853,
+        "enhancers_active_fraction": 0.2209,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 21
+      },
+      "CD14-positive monocyte": {
+        "peaks": 4030,
+        "coding_genes": 267,
+        "genes_read": 188,
+        "read_fraction": 0.7041,
+        "enhancers_active": 2741,
+        "enhancers_active_fraction": 0.1247,
+        "nodes": 560,
+        "nodes_open": 280,
+        "nodes_silent": 107
+      }
     },
     "chr19": {
       "K562": {
@@ -1648,7 +3439,106 @@
         "ZNF875",
         "ZSCAN4"
       ],
-      "read_in_both": 950
+      "read_in_both": 950,
+      "GM12878": {
+        "peaks": 2721,
+        "coding_genes": 1479,
+        "genes_read": 816,
+        "read_fraction": 0.5517,
+        "enhancers_active": 1938,
+        "enhancers_active_fraction": 0.066,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 44
+      },
+      "H1": {
+        "peaks": 8652,
+        "coding_genes": 1479,
+        "genes_read": 1131,
+        "read_fraction": 0.7647,
+        "enhancers_active": 6003,
+        "enhancers_active_fraction": 0.2044,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 2
+      },
+      "IMR-90": {
+        "peaks": 7313,
+        "coding_genes": 1479,
+        "genes_read": 1025,
+        "read_fraction": 0.693,
+        "enhancers_active": 5532,
+        "enhancers_active_fraction": 0.1883,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 12
+      },
+      "SK-N-SH": {
+        "peaks": 10580,
+        "coding_genes": 1479,
+        "genes_read": 1155,
+        "read_fraction": 0.7809,
+        "enhancers_active": 6705,
+        "enhancers_active_fraction": 0.2283,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 3
+      },
+      "cardiac muscle cell": {
+        "peaks": 8692,
+        "coding_genes": 1479,
+        "genes_read": 1131,
+        "read_fraction": 0.7647,
+        "enhancers_active": 6677,
+        "enhancers_active_fraction": 0.2273,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 4
+      },
+      "keratinocyte": {
+        "peaks": 2484,
+        "coding_genes": 1479,
+        "genes_read": 740,
+        "read_fraction": 0.5003,
+        "enhancers_active": 1750,
+        "enhancers_active_fraction": 0.0596,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 44
+      },
+      "hepatocyte": {
+        "peaks": 8923,
+        "coding_genes": 1479,
+        "genes_read": 1143,
+        "read_fraction": 0.7728,
+        "enhancers_active": 6925,
+        "enhancers_active_fraction": 0.2358,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 8
+      },
+      "astrocyte": {
+        "peaks": 6220,
+        "coding_genes": 1479,
+        "genes_read": 995,
+        "read_fraction": 0.6728,
+        "enhancers_active": 4612,
+        "enhancers_active_fraction": 0.157,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 9
+      },
+      "CD14-positive monocyte": {
+        "peaks": 7967,
+        "coding_genes": 1479,
+        "genes_read": 1088,
+        "read_fraction": 0.7356,
+        "enhancers_active": 6002,
+        "enhancers_active_fraction": 0.2043,
+        "nodes": 339,
+        "nodes_open": 170,
+        "nodes_silent": 29
+      }
     },
     "chr20": {
       "K562": {
@@ -1737,7 +3627,106 @@
         "TGM2",
         "TP53INP2"
       ],
-      "read_in_both": 346
+      "read_in_both": 346,
+      "GM12878": {
+        "peaks": 1967,
+        "coding_genes": 548,
+        "genes_read": 260,
+        "read_fraction": 0.4745,
+        "enhancers_active": 1518,
+        "enhancers_active_fraction": 0.0563,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 90
+      },
+      "H1": {
+        "peaks": 6987,
+        "coding_genes": 548,
+        "genes_read": 448,
+        "read_fraction": 0.8175,
+        "enhancers_active": 4178,
+        "enhancers_active_fraction": 0.155,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 17
+      },
+      "IMR-90": {
+        "peaks": 7142,
+        "coding_genes": 548,
+        "genes_read": 390,
+        "read_fraction": 0.7117,
+        "enhancers_active": 5202,
+        "enhancers_active_fraction": 0.193,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 34
+      },
+      "SK-N-SH": {
+        "peaks": 6399,
+        "coding_genes": 548,
+        "genes_read": 427,
+        "read_fraction": 0.7792,
+        "enhancers_active": 4092,
+        "enhancers_active_fraction": 0.1518,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 12
+      },
+      "cardiac muscle cell": {
+        "peaks": 8177,
+        "coding_genes": 548,
+        "genes_read": 426,
+        "read_fraction": 0.7774,
+        "enhancers_active": 6060,
+        "enhancers_active_fraction": 0.2248,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 16
+      },
+      "keratinocyte": {
+        "peaks": 2206,
+        "coding_genes": 548,
+        "genes_read": 225,
+        "read_fraction": 0.4106,
+        "enhancers_active": 1731,
+        "enhancers_active_fraction": 0.0642,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 78
+      },
+      "hepatocyte": {
+        "peaks": 7269,
+        "coding_genes": 548,
+        "genes_read": 438,
+        "read_fraction": 0.7993,
+        "enhancers_active": 5576,
+        "enhancers_active_fraction": 0.2069,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 4
+      },
+      "astrocyte": {
+        "peaks": 6471,
+        "coding_genes": 548,
+        "genes_read": 383,
+        "read_fraction": 0.6989,
+        "enhancers_active": 4845,
+        "enhancers_active_fraction": 0.1798,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 25
+      },
+      "CD14-positive monocyte": {
+        "peaks": 5498,
+        "coding_genes": 548,
+        "genes_read": 377,
+        "read_fraction": 0.688,
+        "enhancers_active": 4088,
+        "enhancers_active_fraction": 0.1517,
+        "nodes": 478,
+        "nodes_open": 239,
+        "nodes_silent": 73
+      }
     },
     "chr21": {
       "K562": {
@@ -1807,7 +3796,106 @@
         "TFF1",
         "TFF3"
       ],
-      "read_in_both": 106
+      "read_in_both": 106,
+      "GM12878": {
+        "peaks": 805,
+        "coding_genes": 221,
+        "genes_read": 89,
+        "read_fraction": 0.4027,
+        "enhancers_active": 648,
+        "enhancers_active_fraction": 0.0534,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 77
+      },
+      "H1": {
+        "peaks": 2778,
+        "coding_genes": 221,
+        "genes_read": 148,
+        "read_fraction": 0.6697,
+        "enhancers_active": 1603,
+        "enhancers_active_fraction": 0.1321,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 23
+      },
+      "IMR-90": {
+        "peaks": 3587,
+        "coding_genes": 221,
+        "genes_read": 130,
+        "read_fraction": 0.5882,
+        "enhancers_active": 2582,
+        "enhancers_active_fraction": 0.2127,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 23
+      },
+      "SK-N-SH": {
+        "peaks": 2619,
+        "coding_genes": 221,
+        "genes_read": 130,
+        "read_fraction": 0.5882,
+        "enhancers_active": 1579,
+        "enhancers_active_fraction": 0.1301,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 8
+      },
+      "cardiac muscle cell": {
+        "peaks": 3765,
+        "coding_genes": 221,
+        "genes_read": 137,
+        "read_fraction": 0.6199,
+        "enhancers_active": 2744,
+        "enhancers_active_fraction": 0.226,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 10
+      },
+      "keratinocyte": {
+        "peaks": 898,
+        "coding_genes": 221,
+        "genes_read": 75,
+        "read_fraction": 0.3394,
+        "enhancers_active": 722,
+        "enhancers_active_fraction": 0.0595,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 64
+      },
+      "hepatocyte": {
+        "peaks": 3156,
+        "coding_genes": 221,
+        "genes_read": 139,
+        "read_fraction": 0.629,
+        "enhancers_active": 2321,
+        "enhancers_active_fraction": 0.1912,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 5
+      },
+      "astrocyte": {
+        "peaks": 3400,
+        "coding_genes": 221,
+        "genes_read": 131,
+        "read_fraction": 0.5928,
+        "enhancers_active": 2423,
+        "enhancers_active_fraction": 0.1996,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 17
+      },
+      "CD14-positive monocyte": {
+        "peaks": 2527,
+        "coding_genes": 221,
+        "genes_read": 128,
+        "read_fraction": 0.5792,
+        "enhancers_active": 1812,
+        "enhancers_active_fraction": 0.1493,
+        "nodes": 228,
+        "nodes_open": 114,
+        "nodes_silent": 22
+      }
     },
     "chr22": {
       "K562": {
@@ -1885,7 +3973,106 @@
         "TYMP",
         "XKR3"
       ],
-      "read_in_both": 281
+      "read_in_both": 281,
+      "GM12878": {
+        "peaks": 1436,
+        "coding_genes": 447,
+        "genes_read": 213,
+        "read_fraction": 0.4765,
+        "enhancers_active": 1111,
+        "enhancers_active_fraction": 0.0564,
+        "nodes": 247,
+        "nodes_open": 125,
+        "nodes_silent": 35
+      },
+      "H1": {
+        "peaks": 5459,
+        "coding_genes": 447,
+        "genes_read": 350,
+        "read_fraction": 0.783,
+        "enhancers_active": 3094,
+        "enhancers_active_fraction": 0.157,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 5
+      },
+      "IMR-90": {
+        "peaks": 4806,
+        "coding_genes": 447,
+        "genes_read": 321,
+        "read_fraction": 0.7181,
+        "enhancers_active": 3694,
+        "enhancers_active_fraction": 0.1874,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 14
+      },
+      "SK-N-SH": {
+        "peaks": 5284,
+        "coding_genes": 447,
+        "genes_read": 342,
+        "read_fraction": 0.7651,
+        "enhancers_active": 3512,
+        "enhancers_active_fraction": 0.1782,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 8
+      },
+      "cardiac muscle cell": {
+        "peaks": 5180,
+        "coding_genes": 447,
+        "genes_read": 351,
+        "read_fraction": 0.7852,
+        "enhancers_active": 4122,
+        "enhancers_active_fraction": 0.2092,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 15
+      },
+      "keratinocyte": {
+        "peaks": 1368,
+        "coding_genes": 447,
+        "genes_read": 181,
+        "read_fraction": 0.4049,
+        "enhancers_active": 1083,
+        "enhancers_active_fraction": 0.055,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 37
+      },
+      "hepatocyte": {
+        "peaks": 5486,
+        "coding_genes": 447,
+        "genes_read": 358,
+        "read_fraction": 0.8009,
+        "enhancers_active": 4221,
+        "enhancers_active_fraction": 0.2142,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 4
+      },
+      "astrocyte": {
+        "peaks": 4193,
+        "coding_genes": 447,
+        "genes_read": 304,
+        "read_fraction": 0.6801,
+        "enhancers_active": 3325,
+        "enhancers_active_fraction": 0.1687,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 13
+      },
+      "CD14-positive monocyte": {
+        "peaks": 4000,
+        "coding_genes": 447,
+        "genes_read": 307,
+        "read_fraction": 0.6868,
+        "enhancers_active": 3025,
+        "enhancers_active_fraction": 0.1535,
+        "nodes": 247,
+        "nodes_open": 124,
+        "nodes_silent": 27
+      }
     },
     "chrX": {
       "K562": {
@@ -1974,7 +4161,106 @@
         "SNX12",
         "VEGFD"
       ],
-      "read_in_both": 382
+      "read_in_both": 382,
+      "GM12878": {
+        "peaks": 2349,
+        "coding_genes": 867,
+        "genes_read": 306,
+        "read_fraction": 0.3529,
+        "enhancers_active": 1541,
+        "enhancers_active_fraction": 0.0673,
+        "nodes": 822,
+        "nodes_open": 413,
+        "nodes_silent": 235
+      },
+      "H1": {
+        "peaks": 5634,
+        "coding_genes": 867,
+        "genes_read": 532,
+        "read_fraction": 0.6136,
+        "enhancers_active": 3118,
+        "enhancers_active_fraction": 0.1362,
+        "nodes": 822,
+        "nodes_open": 411,
+        "nodes_silent": 55
+      },
+      "IMR-90": {
+        "peaks": 8675,
+        "coding_genes": 867,
+        "genes_read": 457,
+        "read_fraction": 0.5271,
+        "enhancers_active": 5020,
+        "enhancers_active_fraction": 0.2193,
+        "nodes": 822,
+        "nodes_open": 411,
+        "nodes_silent": 52
+      },
+      "SK-N-SH": {
+        "peaks": 6157,
+        "coding_genes": 867,
+        "genes_read": 556,
+        "read_fraction": 0.6413,
+        "enhancers_active": 3119,
+        "enhancers_active_fraction": 0.1362,
+        "nodes": 822,
+        "nodes_open": 412,
+        "nodes_silent": 39
+      },
+      "cardiac muscle cell": {
+        "peaks": 10327,
+        "coding_genes": 867,
+        "genes_read": 522,
+        "read_fraction": 0.6021,
+        "enhancers_active": 6013,
+        "enhancers_active_fraction": 0.2626,
+        "nodes": 822,
+        "nodes_open": 411,
+        "nodes_silent": 44
+      },
+      "keratinocyte": {
+        "peaks": 2497,
+        "coding_genes": 867,
+        "genes_read": 258,
+        "read_fraction": 0.2976,
+        "enhancers_active": 1607,
+        "enhancers_active_fraction": 0.0702,
+        "nodes": 822,
+        "nodes_open": 411,
+        "nodes_silent": 198
+      },
+      "hepatocyte": {
+        "peaks": 8345,
+        "coding_genes": 867,
+        "genes_read": 557,
+        "read_fraction": 0.6424,
+        "enhancers_active": 5069,
+        "enhancers_active_fraction": 0.2214,
+        "nodes": 822,
+        "nodes_open": 411,
+        "nodes_silent": 16
+      },
+      "astrocyte": {
+        "peaks": 8783,
+        "coding_genes": 867,
+        "genes_read": 462,
+        "read_fraction": 0.5329,
+        "enhancers_active": 5033,
+        "enhancers_active_fraction": 0.2198,
+        "nodes": 822,
+        "nodes_open": 411,
+        "nodes_silent": 57
+      },
+      "CD14-positive monocyte": {
+        "peaks": 6360,
+        "coding_genes": 867,
+        "genes_read": 466,
+        "read_fraction": 0.5375,
+        "enhancers_active": 3801,
+        "enhancers_active_fraction": 0.166,
+        "nodes": 822,
+        "nodes_open": 412,
+        "nodes_silent": 113
+      }
     },
     "chrY": {
       "K562": {
@@ -2011,7 +4297,106 @@
         "TMSB4Y",
         "ZFY"
       ],
-      "read_in_both": 0
+      "read_in_both": 0,
+      "GM12878": {
+        "peaks": 3,
+        "coding_genes": 61,
+        "genes_read": 0,
+        "read_fraction": 0.0,
+        "enhancers_active": 1,
+        "enhancers_active_fraction": 0.0011,
+        "nodes": 49,
+        "nodes_open": 0,
+        "nodes_silent": 46
+      },
+      "H1": {
+        "peaks": 290,
+        "coding_genes": 61,
+        "genes_read": 12,
+        "read_fraction": 0.1967,
+        "enhancers_active": 97,
+        "enhancers_active_fraction": 0.1069,
+        "nodes": 49,
+        "nodes_open": 25,
+        "nodes_silent": 4
+      },
+      "IMR-90": {
+        "peaks": 96,
+        "coding_genes": 61,
+        "genes_read": 0,
+        "read_fraction": 0.0,
+        "enhancers_active": 1,
+        "enhancers_active_fraction": 0.0011,
+        "nodes": 49,
+        "nodes_open": 8,
+        "nodes_silent": 17
+      },
+      "SK-N-SH": {
+        "peaks": 24,
+        "coding_genes": 61,
+        "genes_read": 1,
+        "read_fraction": 0.0164,
+        "enhancers_active": 1,
+        "enhancers_active_fraction": 0.0011,
+        "nodes": 49,
+        "nodes_open": 1,
+        "nodes_silent": 35
+      },
+      "cardiac muscle cell": {
+        "peaks": 448,
+        "coding_genes": 61,
+        "genes_read": 10,
+        "read_fraction": 0.1639,
+        "enhancers_active": 182,
+        "enhancers_active_fraction": 0.2007,
+        "nodes": 49,
+        "nodes_open": 25,
+        "nodes_silent": 6
+      },
+      "keratinocyte": {
+        "peaks": 5,
+        "coding_genes": 61,
+        "genes_read": 0,
+        "read_fraction": 0.0,
+        "enhancers_active": 0,
+        "enhancers_active_fraction": 0.0,
+        "nodes": 49,
+        "nodes_open": 0,
+        "nodes_silent": 48
+      },
+      "hepatocyte": {
+        "peaks": 74,
+        "coding_genes": 61,
+        "genes_read": 0,
+        "read_fraction": 0.0,
+        "enhancers_active": 6,
+        "enhancers_active_fraction": 0.0066,
+        "nodes": 49,
+        "nodes_open": 4,
+        "nodes_silent": 23
+      },
+      "astrocyte": {
+        "peaks": 60,
+        "coding_genes": 61,
+        "genes_read": 0,
+        "read_fraction": 0.0,
+        "enhancers_active": 1,
+        "enhancers_active_fraction": 0.0011,
+        "nodes": 49,
+        "nodes_open": 5,
+        "nodes_silent": 19
+      },
+      "CD14-positive monocyte": {
+        "peaks": 309,
+        "coding_genes": 61,
+        "genes_read": 8,
+        "read_fraction": 0.1311,
+        "enhancers_active": 116,
+        "enhancers_active_fraction": 0.1279,
+        "nodes": 49,
+        "nodes_open": 24,
+        "nodes_silent": 6
+      }
     }
   },
   "totals": {
@@ -2027,7 +4412,61 @@
       "enhancers_active": 124478,
       "nodes_silent": 1465
     },
-    "seconds": 110
+    "GM12878": {
+      "coding_genes": 20094,
+      "genes_read": 9802,
+      "enhancers_active": 57321,
+      "nodes_silent": 4933
+    },
+    "H1": {
+      "coding_genes": 20094,
+      "genes_read": 15129,
+      "enhancers_active": 133114,
+      "nodes_silent": 1351
+    },
+    "IMR-90": {
+      "coding_genes": 20094,
+      "genes_read": 14057,
+      "enhancers_active": 213753,
+      "nodes_silent": 1411
+    },
+    "SK-N-SH": {
+      "coding_genes": 20094,
+      "genes_read": 14883,
+      "enhancers_active": 143197,
+      "nodes_silent": 850
+    },
+    "cardiac muscle cell": {
+      "coding_genes": 20094,
+      "genes_read": 15268,
+      "enhancers_active": 233853,
+      "nodes_silent": 775
+    },
+    "keratinocyte": {
+      "coding_genes": 20094,
+      "genes_read": 8432,
+      "enhancers_active": 63062,
+      "nodes_silent": 4259
+    },
+    "hepatocyte": {
+      "coding_genes": 20094,
+      "genes_read": 15489,
+      "enhancers_active": 197561,
+      "nodes_silent": 382
+    },
+    "astrocyte": {
+      "coding_genes": 20094,
+      "genes_read": 13885,
+      "enhancers_active": 203756,
+      "nodes_silent": 743
+    },
+    "CD14-positive monocyte": {
+      "coding_genes": 20094,
+      "genes_read": 13647,
+      "enhancers_active": 141431,
+      "nodes_silent": 2989
+    },
+    "seconds": 218
   },
   "evidence": "experimental: ENCODE DNase-seq peaks; inferred: read = promoter open"
 }

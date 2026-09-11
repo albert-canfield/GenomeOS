@@ -1710,9 +1710,30 @@ def cmd_segments(args: argparse.Namespace) -> int:
         )
         sites = ss.local
         name = f"segments_{args.chrom}_predicted_sites"
-    r = parse_chromosome(args.chrom, seq, sig, ann, min_relative=args.min_relative, sites=sites)
+    start_windows = None
+    if args.promoter_anchored is not None:
+        from genomeos.genome.regulatory import load_ccres
+        from genomeos.genome.segments import promoter_start_windows
+
+        ccres = load_ccres(args.chrom)
+        if not ccres:
+            print(f"{args.chrom}: no ENCODE elements (genomeos data fetch --chrom {args.chrom})")
+            return 1
+        start_windows = promoter_start_windows(ccres, args.promoter_anchored)
+        allowed = sum(b - a for a, b in start_windows["+"])
+        print(
+            f"{args.chrom}: gene starts confined to {allowed / length:.1%} of the chromosome "
+            f"(ENCODE promoter-like elements, {args.promoter_anchored:,} bp downstream)"
+        )
+        name += "_anchored"
+    r = parse_chromosome(
+        args.chrom, seq, sig, ann, min_relative=args.min_relative, sites=sites, start_windows=start_windows
+    )
     if args.predicted_sites:
         r["splice_sites"] = sm
+    if start_windows is not None:
+        r["promoter_anchored_bp"] = args.promoter_anchored
+        r["evidence"] += "; gene starts confined to ENCODE promoter-like elements (curated)"
     save_result(name, r)
     print(
         f"{args.chrom}: {r['predictions']} candidate genes from signals alone, {r['predicted_exons']} exons"
@@ -3019,6 +3040,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--predicted-sites",
         action="store_true",
         help="feature c: take donors and acceptors from AlphaGenome's splice-site tracks (needs the key)",
+    )
+    p.add_argument(
+        "--promoter-anchored",
+        type=int,
+        nargs="?",
+        const=5_000,
+        default=None,
+        metavar="REACH",
+        help="only begin a gene within REACH bp downstream of an ENCODE promoter-like element (default 5000)",
     )
     p.set_defaults(fn=cmd_segments)
 

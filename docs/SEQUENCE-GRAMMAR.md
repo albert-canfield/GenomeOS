@@ -145,15 +145,26 @@ tested against it.
    enters the Viterbi as log2(p/(1−p)) + 10 bits, so a confident site sits
    where a perfect matrix hit would.
 
-   | level | matrices alone | AlphaGenome sites |
-   |---|---|---|
-   | CDS segment (exact both ends) | 4.7% / 5.2% | **40.1% / 46.2%** |
-   | splice site (exact position) | 7.5% / 6.9% | **51.6% / 49.2%** |
-   | gene (any overlap, same strand) | 89.1% / 21.9% | 84.2% / 20.0% |
-   | candidates | 556 | 1,003 |
+   | level | matrices alone | AlphaGenome sites | + starts at ENCODE promoters |
+   |---|---|---|---|
+   | CDS segment (exact both ends) | 4.7% / 5.2% | **40.1% / 46.2%** | 30.2% / **61.9%** |
+   | splice site (exact position) | 7.5% / 6.9% | **51.6% / 49.2%** | 38.9% / **66.0%** |
+   | gene (any overlap, same strand) | 89.1% / 21.9% | 84.2% / 20.0% | 59.3% / **53.8%** |
+   | candidates | 556 | 1,003 | 158 |
 
-   (`data/results/segments_chr21_predicted_sites.json`; sensitivity /
-   precision.) Nine times the exact exons from the same parser: the
+   (`data/results/segments_chr21_predicted_sites.json` and
+   `segments_chr21_predicted_sites_anchored.json`; sensitivity / precision.)
+   The third column adds the one local, curated signal for where a gene may
+   begin: `--promoter-anchored` confines start codons to 5 kb downstream of
+   an ENCODE promoter-like element (4.2% of the chromosome; both strands,
+   since an element does not say which strand it serves). It is a trade, not
+   a free gain: candidates fall from 1,003 to 158 and precision doubles or
+   triples at every level, while sensitivity drops to the genes whose
+   promoter the registry has marked (59% of coding genes). Swept: 2 kb
+   confines harder (gene 53.8% / 57.1%), 20 kb looser (68.3% / 37.7%); with
+   the matrices alone the windows help precision just as much (gene 67.9% /
+   65.5% at 5 kb) but exons stay at 3.5% / 9.1%, because the windows say
+   where a gene starts and nothing about where its exons end. Nine times the exact exons from the same parser: the
    delimiters were the limit, as section 1 said. What did not move is as
    telling: gene precision stays at one in five because the start codons and
    the coding model are unchanged, and the 1,003 candidates are mostly

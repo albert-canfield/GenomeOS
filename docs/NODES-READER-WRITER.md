@@ -158,6 +158,37 @@ experimental for the peaks, inferred for "read" (an open promoter is
 necessary for transcription, not proof of it). Results:
 `reader_<cell>_<chrom>.json`, `reader_K562_vs_HepG2_chr21.json`.
 
+### Eleven cell types, every chromosome (2026-09-11)
+
+`scripts/reader_genome_wide.py` now takes any list of ENCODE biosamples (the
+reader resolves the released GRCh38 DNase peak file by name) and resumes per
+cell type; the default list adds nine to K562 and HepG2. Genome-wide, coding
+genes whose promoter is open (read) out of 20,094:
+
+| cell type | read | share | active enhancers | silent nodes |
+|---|---|---|---|---|
+| hepatocyte | 15,489 | 77.1% | 197,561 | 382 |
+| cardiac muscle cell | 15,268 | 76.0% | 233,853 | 775 |
+| H1 (embryonic stem) | 15,129 | 75.3% | 133,114 | 1,351 |
+| SK-N-SH (neuroblastoma) | 14,883 | 74.1% | 143,197 | 850 |
+| K562 (erythroleukaemia) | 14,828 | 73.8% | 193,255 | 2,085 |
+| IMR-90 (lung fibroblast) | 14,057 | 70.0% | 213,753 | 1,411 |
+| astrocyte | 13,885 | 69.1% | 203,756 | 743 |
+| CD14-positive monocyte | 13,647 | 67.9% | 141,431 | 2,989 |
+| HepG2 (liver cancer) | 13,015 | 64.8% | 124,478 | 1,465 |
+| GM12878 (B lymphoblastoid) | 9,802 | 48.8% | 57,321 | 4,933 |
+| keratinocyte | 8,432 | 42.0% | 63,062 | 4,259 |
+
+Read with the caveat that peak counts differ by experiment depth as much as
+by biology: GM12878 and keratinocyte have the fewest peaks in their files,
+so their low shares are partly the assay. What holds across all eleven is
+the shape: two thirds to three quarters of coding genes have an open
+promoter in any one cell, the rest is the cell's identity, and the silent
+nodes (whole CTCF domains without a peak) are where the reader is not
+looking at all. Every cell type is a reader lane on the Blocks tab and a
+column on the Progress tab; chr21's per-cell results are committed, the
+other chromosomes stay local.
+
 ### The reader lane in the block map (2026-09-11)
 
 The Blocks tab has a `reader` selector listing every cell type read on the

@@ -21,6 +21,7 @@ flat intron prior, no length model in v1).
 
 from __future__ import annotations
 
+import bisect
 import math
 from collections import deque
 from dataclasses import dataclass
@@ -118,12 +119,20 @@ class SegmentParser:
     (feature c: AlphaGenome splice-site tracks). Start codons always come from the learned Kozak matrix."""
 
     def __init__(
-        self, signals: SignalSet, codon_lo: dict[str, float], min_relative: float = 0.6, sites=None
+        self,
+        signals: SignalSet,
+        codon_lo: dict[str, float],
+        min_relative: float = 0.6,
+        sites=None,
+        start_windows: dict[str, list[tuple[int, int]]] | None = None,
     ) -> None:
         self.signals = signals
         self.codon_lo = codon_lo
         self.min_relative = min_relative
         self.sites = sites
+        # optional: a gene may only begin inside these genomic windows per strand (e.g. downstream of
+        # a promoter-like element), sorted and non-overlapping
+        self.start_windows = start_windows
 
     def _prefix_and_stops(self, s: str) -> tuple[list[list[float]], list[list[int]]]:
         n = len(s)
@@ -196,6 +205,16 @@ class SegmentParser:
             donors, acceptors = self.sites(strand, offset, n)
             donors = [(p, sc) for p, sc in donors if 1 <= p < n - 2]
             acceptors = [(p, sc) for p, sc in acceptors if 1 <= p < n]
+        if self.start_windows is not None:
+            wins = self.start_windows.get(strand, [])
+            lo_ends = [b for _, b in wins]
+
+            def allowed(p: int) -> bool:
+                g = offset + p if strand == "+" else offset + (n - 1 - p)
+                i = bisect.bisect_right(lo_ends, g)
+                return i < len(wins) and wins[i][0] <= g < wins[i][1]
+
+            starts = [(p, sc) for p, sc in starts if allowed(p)]
         return donors, acceptors, starts
 
     def parse_strand(
@@ -365,9 +384,11 @@ def parse_chromosome(
     window: int = 2_000_000,
     overlap: int = 200_000,
     sites=None,
+    start_windows: dict[str, list[tuple[int, int]]] | None = None,
 ) -> dict[str, Any]:
     """Learn coding potential from the annotation, parse the chromosome in windows, evaluate.
-    `sites` is an optional external splice-site oracle (see SegmentParser)."""
+    `sites` is an optional external splice-site oracle, `start_windows` an optional restriction of
+    where a gene may begin (see SegmentParser)."""
     from genomeos.genome import Genome
     from genomeos.runtime.central_dogma import coding_sequence
 
@@ -384,7 +405,7 @@ def parse_chromosome(
             if t.cds_segments and "Ensembl_canonical" in t.tags:
                 cds.append(coding_sequence(genome, t).replace("U", "T"))
     lo = codon_log_odds(cds, seq)
-    parser = SegmentParser(signals, lo, min_relative, sites)
+    parser = SegmentParser(signals, lo, min_relative, sites, start_windows)
     preds: list[Prediction] = []
     n = len(seq)
     pos = 0
@@ -416,3 +437,30 @@ def parse_chromosome(
         "evidence": EVIDENCE if sites is None else EVIDENCE_PREDICTED_SITES,
         "note": "scored against every coding transcript's CDS; a prediction is a candidate, not an assertion",
     }
+
+
+def promoter_start_windows(
+    ccres, reach: int = 5_000, upstream: int = 500
+) -> dict[str, list[tuple[int, int]]]:
+    """Where a gene may begin if it begins near an ENCODE promoter-like element: from `upstream` bases
+    before the element to `reach` bases after it, in the direction of each strand. Curated evidence,
+    no expression data: an element marks a candidate promoter, not which strand it serves, so both
+    strands get a window."""
+    plus, minus = [], []
+    for c in ccres:
+        if c.cls != "PLS":
+            continue
+        plus.append((max(0, c.start - upstream), c.end + reach))
+        minus.append((max(0, c.start - reach), c.end + upstream))
+
+    def merge(ws: list[tuple[int, int]]) -> list[tuple[int, int]]:
+        ws.sort()
+        out: list[tuple[int, int]] = []
+        for a, b in ws:
+            if out and a <= out[-1][1]:
+                out[-1] = (out[-1][0], max(out[-1][1], b))
+            else:
+                out.append((a, b))
+        return out
+
+    return {"+": merge(plus), "-": merge(minus)}
