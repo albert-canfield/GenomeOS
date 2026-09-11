@@ -43,7 +43,11 @@ def _archive() -> bytes:
 
 def test_distil_calls_presence_per_factor_and_merges_strains():
     table = distil(_archive())
-    assert set(table) == {"ELT-2", "HLH-1"} and table["ELT-2"]["strains"] == ["ELT-2_S1", "ELT-2_S2"]
+    assert set(table) == {"ELT-2", "HLH-1", "_lifetimes"} and table["ELT-2"]["strains"] == [
+        "ELT-2_S1",
+        "ELT-2_S2",
+    ]
+    assert table["_lifetimes"] == {"ABa": [1, 3], "Ea": [1, 3], "Ep": [1, 3]}  # first and last frame tracked
     assert table["ELT-2"]["max"] == 120.0 and table["ELT-2"]["threshold"] == 24.0
     assert set(table["ELT-2"]["cells"]) == {"Ea", "Ep"}  # ABa at 5 is under a fifth of the maximum
     assert table["ELT-2"]["cells"]["Ea"] == [120.0, 2] and table["ELT-2"]["cells"]["Ep"] == [90.0, 2]

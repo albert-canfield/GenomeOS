@@ -64,6 +64,8 @@ def distil(archive: bytes, fraction: float = PRESENCE_FRACTION) -> dict:
     peak: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))  # tf -> cell -> max
     first: dict[str, dict[str, int]] = defaultdict(dict)  # tf -> cell -> first frame with expression
     strains: dict[str, list[str]] = defaultdict(list)
+    seen_first: dict[str, int] = {}  # cell -> first frame it is tracked in any strain (its birth)
+    seen_last: dict[str, int] = {}  # cell -> last frame (its division or the end of imaging)
     for name in z.namelist():
         if not name.endswith(".csv"):
             continue
@@ -80,6 +82,10 @@ def distil(archive: bytes, fraction: float = PRESENCE_FRACTION) -> dict:
                 peak[tf][cell] = v
             if v > 0 and (cell not in first[tf] or t < first[tf][cell]):
                 first[tf][cell] = t
+            if t < seen_first.get(cell, 10**9):
+                seen_first[cell] = t
+            if t > seen_last.get(cell, -1):
+                seen_last[cell] = t
     table: dict[str, dict] = {}
     for tf, cells in peak.items():
         top = max(cells.values(), default=0.0)
@@ -91,6 +97,7 @@ def distil(archive: bytes, fraction: float = PRESENCE_FRACTION) -> dict:
             "strains": strains[tf],
             "cells": expressing,
         }
+    table["_lifetimes"] = {c: [seen_first[c], seen_last[c]] for c in sorted(seen_first)}
     return table
 
 
@@ -98,6 +105,8 @@ def cells_expressing(table: dict) -> dict[str, list[str]]:
     """cell -> factors present, from the per-factor table."""
     out: dict[str, set[str]] = defaultdict(set)
     for tf, rec in table.items():
+        if tf.startswith("_"):
+            continue
         for cell in rec["cells"]:
             out[cell].add(tf)
     return {c: sorted(v) for c, v in sorted(out.items())}
@@ -203,16 +212,17 @@ def to_bio_reader(table: dict, module_name: str = "organism.celegans.reader") ->
 
 
 def summary(table: dict, checks: list[dict]) -> dict:
+    real = {tf: rec for tf, rec in table.items() if not tf.startswith("_")}
     by_cell = cells_expressing(table)
-    per_tf = {tf: len(rec["cells"]) for tf, rec in table.items()}
-    firsts = [FRAME_MIN * min(v[1] for v in rec["cells"].values()) for rec in table.values() if rec["cells"]]
+    per_tf = {tf: len(rec["cells"]) for tf, rec in real.items()}
+    firsts = [FRAME_MIN * min(v[1] for v in rec["cells"].values()) for rec in real.values() if rec["cells"]]
     return {
         "source": SOURCE,
         "url": ZENODO_URL,
         "licence": "CC BY 4.0",
         "presence_fraction_of_max": PRESENCE_FRACTION,
-        "factors": len(table),
-        "strains": sum(len(rec["strains"]) for rec in table.values()),
+        "factors": len(real),
+        "strains": sum(len(rec["strains"]) for rec in real.values()),
         "cells_with_a_factor": len(by_cell),
         "factors_per_cell_median": sorted(len(v) for v in by_cell.values())[len(by_cell) // 2]
         if by_cell
@@ -228,10 +238,12 @@ def save_cells(table: dict, path: Path = CELLS_FILE) -> Path:
     """Compact per-cell table: factor names once, then for each cell the indices of the factors it carries
     and the frame each was first seen (about a fifth of the size of a per-factor listing)."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    factors = sorted(table)
+    factors = sorted(tf for tf in table if not tf.startswith("_"))
     index = {tf: i for i, tf in enumerate(factors)}
     cells: dict[str, list[list[int]]] = defaultdict(list)
     for tf, rec in table.items():
+        if tf.startswith("_"):
+            continue
         for cell, (_, first_frame) in rec["cells"].items():
             cells[cell].append([index[tf], int(first_frame)])
     compact = {
@@ -241,6 +253,7 @@ def save_cells(table: dict, path: Path = CELLS_FILE) -> Path:
         "factors": factors,
         "thresholds": [table[tf]["threshold"] for tf in factors],
         "cells": {c: sorted(v) for c, v in sorted(cells.items())},
+        "lifetimes": table.get("_lifetimes", {}),
     }
     path.write_text(json.dumps(compact, separators=(",", ":")))
     return path

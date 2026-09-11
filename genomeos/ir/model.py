@@ -72,6 +72,8 @@ def matches(when: dict[str, str], context: dict[str, str]) -> bool:
         if wanted == "any":
             continue
         got = context.get(key)
+        if got == wanted:  # the common case: plain equality
+            continue
         if wanted == "absent":
             if got is not None:
                 return False

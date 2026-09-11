@@ -9,9 +9,13 @@ every terminal cell. It is streamed once, distilled to a compact JSON under
 data/results/ (committed) and the raw file discarded (stream, distil, discard).
 
 The time axis is the one given by the source, in minutes from first
-cleavage. Its absolute scale has not been re-verified against the 20 °C
-chart of Sulston 1983, so timing comparisons are made on this axis and said
-to be so; topology (who divides into whom), fates and deaths are exact.
+cleavage. Measured against two independent clocks (`genomeos data distil
+--only celegans_time_axis`: the Ma 2021 imaging frames and the Packer 2019
+embryo times of the same named cells), one reference minute is about 0.6 to
+0.7 real minutes, so this axis runs slow by a factor of about 1.5. The
+reference is kept as the source gave it, so topology (who divides into
+whom), fates and deaths stay exact; a timing statement in reference minutes
+converts by that factor.
 """
 
 from __future__ import annotations

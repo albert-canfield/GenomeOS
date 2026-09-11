@@ -292,6 +292,12 @@ def _distil_celegans_digital_development() -> dict:
     return distil()
 
 
+def _distil_celegans_time_axis() -> dict:
+    from genomeos.organism.time_axis import distil
+
+    return distil()
+
+
 def _distil_celegans_packer() -> dict:
     from genomeos.organism.packer import distil, stream_annotation
     from genomeos.organism.reference import ReferenceLineage
@@ -323,6 +329,12 @@ DISTILLERS: list[Distiller] = [
         [],
         _distil_celegans_digital_development,
         "Du 2014 founder fate changes per knockout (17 KB streamed) scored against the program's knockouts",
+    ),
+    Distiller(
+        "celegans_time_axis",
+        [],
+        _distil_celegans_time_axis,
+        "the reference lineage's minute against the Ma 2021 frames and the Packer 2019 embryo times",
     ),
     Distiller(
         "celegans_packer2019",

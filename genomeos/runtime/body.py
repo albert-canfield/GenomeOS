@@ -127,6 +127,19 @@ class Body:
                 self._by_cell.setdefault(d.when["cell"], []).append(d)
         named = {x.id for v in self._by_cell.values() for x in v}
         self._general = [d for d in module.decisions if d.id not in named]
+        # decisions on one cell type are indexed by it; the rest apply to any type. Candidate lists are
+        # rebuilt in module order per (cell name, cell type) so precedence is unchanged, and cached.
+        self._order = {id(d): i for i, d in enumerate(module.decisions)}
+        self._by_type: dict[str, list[Decision]] = {}
+        self._untyped: list[Decision] = []
+        for d in self._general:
+            ct = d.when.get("cell_type")
+            if ct and ct != "any" and "|" not in ct and ct[:1] not in ("<", ">") and ct != "absent":
+                self._by_type.setdefault(ct, []).append(d)
+            else:
+                self._untyped.append(d)
+        self._cand_cache: dict[tuple[str, str], list[Decision]] = {}
+        self._stage_cache: tuple[float, str] = (-1.0, "")
         self._divide_ids = {d.id for d in module.decisions if d.action == "divide"}
         self._expressed_names = {f for d in module.decisions if d.action == "express" for f in d.sets}
         self._bootstrap()
@@ -181,12 +194,14 @@ class Body:
 
     def context(self, c: Cell, t: float | None = None) -> dict[str, str]:
         t = self.time if t is None else t
+        if self._stage_cache[0] != t:
+            self._stage_cache = (t, self.module.stage_at(t))
         ctx = {
             "cell": c.name,
             "lineage": c.lineage,
             "generation": str(c.generation),
             "cell_type": c.cell_type,
-            "stage": self.module.stage_at(t),
+            "stage": self._stage_cache[1],
             "count": str(c.count),
         }
         ctx.update(self.environment)
@@ -196,7 +211,13 @@ class Body:
         return ctx
 
     def _candidates(self, c: Cell) -> list[Decision]:
-        return self._by_cell.get(c.name, []) + self._general
+        key = (c.name if c.name in self._by_cell else "", c.cell_type)
+        lst = self._cand_cache.get(key)
+        if lst is None:
+            lst = self._by_cell.get(key[0], []) + self._by_type.get(c.cell_type, []) + self._untyped
+            lst.sort(key=lambda d: self._order[id(d)])
+            self._cand_cache[key] = lst
+        return lst
 
     def _first(self, c: Cell, action: str, ctx: dict[str, str], unfired: bool = False) -> Decision | None:
         for d in self._candidates(c):
@@ -270,7 +291,12 @@ class Body:
             # a signal changed what the cell reads: an earlier-precedence division may now apply
             d = self._first(c, "divide", ctx)
             current = next((x for x in c.fired if x in self._divide_ids), None)
-            if d is not None and current is not None and d.id != current:
+            if d is None and current is not None:
+                # no division applies to what the cell has become: the pending one is cancelled
+                c.fired.remove(current)
+                self.fired[current] -= 1
+                c.divides_at = None
+            elif d is not None and current is not None and d.id != current:
                 c.fired.remove(current)
                 self.fired[current] -= 1
                 if d.after is not None and self.population(c):

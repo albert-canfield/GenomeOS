@@ -451,6 +451,10 @@ cells born 2,183/2,183, parent mismatches 0, terminal fates 961/961, deaths 131/
 (embryo median 8 min, p90 25 min). The alive-cell curve runs under the reference between 350 and 500 min because
 per-generation mean timers smooth the real spread; the program's own `assert` flags it.
 
+Time axis (`genomeos data distil --only celegans_time_axis`): one reference minute is about 0.6 to 0.7 real minutes
+(Ma 2021 frames: births 0.58, divisions 0.61; Packer 2019 times: 0.70), so the WormWeb axis runs slow by about 1.5;
+topology, fates and deaths are unaffected.
+
 Knockouts against the published set (`genomeos data distil --only celegans_digital_development`): 7 of 11 modelled
 founder transformations of Du et al. 2014 reproduced; the misses are the PAR polarity genes, whose rules are not written.
 
