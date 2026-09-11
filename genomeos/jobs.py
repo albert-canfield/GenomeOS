@@ -166,7 +166,10 @@ def start(name: str, root: Path = Path(".")) -> JobStatus:
         return status(name, root)
     JOBS_DIR.mkdir(parents=True, exist_ok=True)
     log = JOBS_DIR / f"{name}.log"
-    fh = open(log, "w")  # noqa: SIM115  (the subprocess owns the handle)
+    log.write_text("")
+    # append mode: every write lands at the end, so a log can never carry stale lines from an
+    # earlier process after its own newer ones
+    fh = open(log, "a")  # noqa: SIM115  (the subprocess owns the handle)
     proc = subprocess.Popen(CATALOG[name]["argv"], cwd=root, stdout=fh, stderr=subprocess.STDOUT)  # noqa: S603
     _running[name] = proc
     _meta_path(name).write_text(
