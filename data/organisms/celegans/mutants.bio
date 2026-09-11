@@ -1,0 +1,13 @@
+# Knockouts against the published phenotypes: each experiment removes a maternal factor
+# or a signal from the wild-type program and states what the literature saw. `genomeos grow
+# data/organisms/celegans/mutants.bio --experiments` runs each against the wild type and
+# reports which founders decided differently and how many descendants that touches.
+module organism.celegans.mutants
+import embryo.bio
+
+experiment pop1 { knockout: POP-1; until: 800 min; expect: "MS adopts the E fate: extra intestine, no MS-derived pharynx or muscle (Lin, Thorpe & Priess 1995)"; assert: type EPrecursor at 100 min = 2; assert: type MSPrecursor at 100 min = 0; evidence: experimental "Lin et al. 1995, Cell 83:599"; confidence: 0.9 }
+experiment skn1 { knockout: SKN-1; until: 800 min; expect: "EMS daughters take the C fate through PAL-1: hypodermis and body muscle instead of pharynx and intestine (Bowerman 1992; Hunter & Kenyon 1996)"; assert: type CPrecursor at 100 min = 3; assert: type MSPrecursor at 100 min = 0; evidence: experimental "Bowerman et al. 1992, Cell 68:1061"; confidence: 0.9 }
+experiment pie1 { knockout: PIE-1; until: 800 min; expect: "P2 takes the EMS fate: extra pharynx and intestine, no germline (Mello et al. 1992)"; assert: type EMSPrecursor at 60 min = 2; assert: type GermCell at 200 min = 0; evidence: experimental "Mello et al. 1992, Cell 70:163"; confidence: 0.9 }
+experiment apx1 { knockout: APX-1; until: 800 min; expect: "ABp becomes ABa-like: no P2 signal reaches GLP-1 (Mello et al. 1994; Mickey et al. 1996)"; assert: type ABaPrecursor at 50 min = 2; assert: type ABpPrecursor at 50 min = 0; evidence: experimental "Mello et al. 1994, Cell 77:95"; confidence: 0.9 }
+experiment glp1 { knockout: GLP-1; until: 800 min; expect: "ABp becomes ABa-like and the second Notch interaction is lost too (Priess et al. 1987)"; assert: type ABaPrecursor at 50 min = 2; evidence: experimental "Priess, Schnabel & Schnabel 1987, Cell 51:601"; confidence: 0.9 }
+experiment pal1 { knockout: PAL-1; until: 800 min; expect: "C and D lose their fates: no C-derived hypodermis or muscle, no D muscle (Hunter & Kenyon 1996)"; assert: type CPrecursor at 200 min = 0; assert: type DPrecursor at 200 min = 0; evidence: experimental "Hunter & Kenyon 1996, Cell 87:217"; confidence: 0.9 }

@@ -671,6 +671,20 @@ def cmd_grow(args: argparse.Namespace) -> int:
         print(f"{args.module}: no organism block (see docs/BIOLANG-v0.3.md)", file=sys.stderr)
         return 2
     o = module.organism
+    if args.experiments is not None:
+        from genomeos.organism.experiment import run_experiments
+
+        names = [x for x in args.experiments.split(",") if x] or None
+        results = run_experiments(module, names, seed=args.seed)
+        if not results:
+            print(f"{args.module}: no experiment blocks" + (f" named {names}" if names else ""))
+            return 1
+        for r in results:
+            print(r.format())
+        if args.json:
+            Path(args.json).write_text(json.dumps([r.to_dict() for r in results], indent=1, default=str))
+            print(f"  wrote {args.json}")
+        return 0
     parts = str(args.until).split()
     args.until = to_minutes(float(parts[0]), parts[1] if len(parts) > 1 else "min")
     body = Body(module, seed=args.seed, max_cells=args.max_cells, means=args.means).run(until=args.until)
@@ -2310,6 +2324,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--max-cells", type=int, default=200_000)
     p.add_argument("--compare", action="store_true", help="score against the organism's reference lineage")
     p.add_argument("--json", help="write summary, asserts, uncertainty and diff to this file")
+    p.add_argument(
+        "--experiments",
+        nargs="?",
+        const="",
+        default=None,
+        metavar="NAMES",
+        help="run the program's experiment blocks (all, or a comma-separated list) against the wild type",
+    )
     p.set_defaults(fn=cmd_grow)
 
     p = sub.add_parser("organism", help="minimal organism: C. elegans early lineage")

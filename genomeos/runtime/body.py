@@ -64,13 +64,25 @@ class Cell:
 
 class Body:
     def __init__(
-        self, module: Module, seed: int | None = None, max_cells: int = 200_000, means: bool = False
+        self,
+        module: Module,
+        seed: int | None = None,
+        max_cells: int = 200_000,
+        means: bool = False,
+        knockouts: set[str] | frozenset[str] = frozenset(),
+        adds: set[str] | frozenset[str] = frozenset(),
+        environment: dict[str, str] | None = None,
     ):
-        """`seed` overrides the organism's declared seed; `means=True` runs every timer at its mean."""
+        """`seed` overrides the organism's declared seed; `means=True` runs every timer at its mean;
+        `knockouts` are factors never present and signals (by id, ligand or receptor) never sent;
+        `adds` are extra factors in the zygote; `environment` overrides the organism's."""
         if module.organism is None:
             raise ValueError(f"module {module.name!r} declares no organism block")
         self.module = module
         self.organism = module.organism
+        self.knockouts = set(knockouts)
+        self.adds = set(adds)
+        self.environment = {**module.organism.environment, **(environment or {})}
         if seed is None:
             seed = self.organism.seed
         self.rng = random.Random(seed) if seed is not None and not means else None
@@ -102,7 +114,8 @@ class Body:
         o = self.organism
         for st in self.module.stages:
             self._push(to_minutes(st.start, st.unit), "", "stage")
-        root = Cell(o.root, "", 0, 0.0, o.cell_type, {f: "present" for f in o.factors})
+        factors = {f: "present" for f in list(o.factors) + sorted(self.adds) if f not in self.knockouts}
+        root = Cell(o.root, "", 0, 0.0, o.cell_type, factors)
         root.population = o.resolution == "populations"
         self._add(root, None)
 
@@ -131,7 +144,7 @@ class Body:
             "stage": self.module.stage_at(t),
             "count": str(c.count),
         }
-        ctx.update(self.organism.environment)
+        ctx.update(self.environment)
         ctx.update(c.factors)
         return ctx
 
@@ -261,7 +274,7 @@ class Body:
         alive = [x for x in self.cells.values() if x.born <= self.time < x.end and x is not newborn]
         ctx_new = self.context(newborn)
         for sg in signals:
-            if not sg.sets:
+            if not sg.sets or {sg.id, sg.ligand, sg.receptor, sg.sets} & self.knockouts:
                 continue
             if _match(sg.receiver, ctx_new) and any(_match(sg.sender, self.context(x)) for x in alive):
                 newborn.factors[sg.sets] = sg.value
@@ -298,7 +311,7 @@ class Body:
                 keep = (
                     keeper == name or (name.endswith(keeper) and len(keeper) == 1) or keeper == ("a", "p")[i]
                 )
-                if keep:
+                if keep and factor not in self.knockouts:
                     factors[factor] = factors.get(factor, "present")
                 else:
                     factors.pop(factor, None)
@@ -379,7 +392,7 @@ class Body:
     def fates_at(self, t: float) -> dict[str, float]:
         out: dict[str, float] = {}
         for c in self.alive_at(t):
-            if c.divides_at is None or c.quiescent:  # nothing scheduled: terminal, quiescent or UNKNOWN
+            if (c.divides_at is None and c.dies_at is None) or c.quiescent:  # terminal, quiescent or UNKNOWN
                 key = c.cell_type or "UNKNOWN"
                 out[key] = out.get(key, 0) + c.count
         return dict(sorted(out.items(), key=lambda kv: -kv[1]))
@@ -458,9 +471,11 @@ def _match(when: dict[str, str], ctx: dict[str, str]) -> bool:
 
 def evaluate_assert(body: Body, text: str) -> dict:
     """`count at 100 min in 24..34` · `deaths at 800 min = 113` · `fate Neuron at 800 min >= 200`
+    · `type EPrecursor at 100 min = 2` (alive cells of that type, dividing or not)
     · `lineage AB at 120 min >= 8`."""
     m = re.match(
-        r"^(count|deaths|fate|lineage)\s*(\S+)?\s+at\s+([-0-9.]+)\s*(\w+)?\s*(in|=|>=|<=|>|<)\s*(.+)$", text
+        r"^(count|deaths|fate|type|lineage)\s*(\S+)?\s+at\s+([-0-9.]+)\s*(\w+)?\s*(in|=|>=|<=|>|<)\s*(.+)$",
+        text,
     )
     if not m:
         return {"assert": text, "ok": False, "error": "cannot parse"}
@@ -472,6 +487,8 @@ def evaluate_assert(body: Body, text: str) -> dict:
         value = body.deaths_by(t_min)
     elif metric == "fate":
         value = body.fates_at(t_min).get(arg or "", 0)
+    elif metric == "type":
+        value = sum(c.count for c in body.alive_at(t_min) if c.cell_type == (arg or ""))
     else:
         value = body.lineage_count_at(arg or "", t_min)
     if op == "in":

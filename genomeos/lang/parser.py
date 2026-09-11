@@ -18,6 +18,7 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     timer <Id> { duration: 20 min; sd: 2; lengthening: 1.1; when: lineage = AB }
     signal <Id> { mode: contact; ligand: APX-1; receptor: GLP-1; from: cell = P2; to: cell = ABp; sets: N }
     decision <Id> { action: divide|differentiate|migrate|quiesce|die; when: ...; daughters: A, B; to: T; ... }
+    experiment <Id> { knockout: POP-1; until: 800 min; expect: "..."; assert: ... }
 
 Properties are `key: value`, one per line or `;`-separated; a block may sit on
 one line. Blocks may nest (transcript inside gene). `#` starts a comment.
@@ -42,6 +43,7 @@ from genomeos.ir import (
     Event,
     Evidence,
     EvidenceKind,
+    Experiment,
     Gene,
     Module,
     Organism,
@@ -74,6 +76,7 @@ _KINDS = (
     "timer",
     "signal",
     "decision",
+    "experiment",
 )
 _REPEATABLE = ("effect", "assert", "observe")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
@@ -437,6 +440,17 @@ def _compile_block(b: Block, module: Module) -> None:
         org.asserts = [x.strip() for x in p.get("assert", "").split(" ; ") if x.strip()]
         org.reference = p.get("reference", "")
         module.organism = org
+    elif b.kind == "experiment":
+        ex = Experiment(name=b.header, evidence=ev, confidence=conf)
+        ex.knockouts = _list(p.get("knockout", ""))
+        ex.adds = _list(p.get("add", ""))
+        ex.environment = _parse_when(p.get("environment", ""))
+        if "until" in p:
+            val, unit = _quantity(p["until"], "until", b.line)
+            ex.until = to_minutes(val, unit)
+        ex.asserts = [x.strip() for x in p.get("assert", "").split(" ; ") if x.strip()]
+        ex.expect = p.get("expect", "")
+        module.experiments.append(ex)
     elif b.kind == "stage":
         st = Stage(name=b.header, evidence=ev, confidence=conf)
         if "from" in p:

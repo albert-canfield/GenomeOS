@@ -62,10 +62,22 @@ decision die_ABalaaaalar  { action: die; when: cell = ABalaaaalar; after: 85 min
 decision germline         { action: quiesce; when: cell = P4; ... }
 
 domain APP_node { locus: chr21:25880000-26055000; genes: APP; boundaries: EH38E2135001, EH38E2135420 }
+
+experiment pop1 {
+  knockout: POP-1                    # factors never present; signals by id, ligand or receptor never sent
+  until: 800 min                     # omitted = the organism's last stage
+  expect: "MS adopts the E fate (Lin, Thorpe & Priess 1995)"
+  assert: type EPrecursor at 100 min = 2
+  evidence: experimental "Lin et al. 1995, Cell 83:599"; confidence: 0.9
+}
 ```
 
-`when` clauses accept `any`, alternatives `a|b`, and comparisons `>=n`,
-`<=n`, `>n`, `<n` (`generation = >=3`). Repeated `assert` and `observe`
+`when` clauses also accept `absent` (`POP-1 = absent`: the factor is not
+carried), which is how a mechanistic rule states what happens without a
+factor, and what a knockout then triggers.
+
+`when` clauses accept `any`, `absent`, alternatives `a|b`, and comparisons
+`>=n`, `<=n`, `>n`, `<n` (`generation = >=3`). Repeated `assert` and `observe`
 lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
 
 ## Semantics
@@ -106,6 +118,23 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   timers used to the cellular level, rules to the molecular level; every
   UNKNOWN stop counts against the organism level with confidence 0.
 
+## Experiments
+
+`genomeos grow FILE --experiments [names]` grows the wild type and each
+perturbed organism with the same program, seed and horizon, and reports
+every cell that decided differently: the founder-window cells first (which
+decision was lost or gained, what type the cell took, how many descendants
+that touches), then the counts and the experiment's own asserts. The
+C. elegans mutants in `data/organisms/celegans/mutants.bio` remove POP-1,
+SKN-1, PIE-1, APX-1, GLP-1 and PAL-1; the founder rules in `founders.bio`
+are written from the genetics, so each knockout reproduces the published
+phenotype at the founder level (MS becomes E-like without POP-1, EMS
+daughters become C-like without SKN-1 through PAL-1, P2 becomes EMS-like
+without PIE-1, ABp becomes ABa-like without the Notch signal, C and D lose
+their fates without PAL-1). Terminal fates below the founders still come
+from the observed lineage program, so the report is explicit about where
+mechanism stops.
+
 ## Running
 
 ```
@@ -113,6 +142,8 @@ genomeos grow data/demo/celegans_lineage.bio --until 150 --depth 3
 genomeos grow data/organisms/celegans/embryo.bio --until 800 --compare
 genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare --json out.json
 genomeos grow data/organisms/human/body.bio --until "20 yr" --depth 2
+genomeos grow data/organisms/celegans/mutants.bio --experiments
+genomeos grow data/organisms/celegans/mutants.bio --experiments pop1,skn1 --json mutants.json
 ```
 
 The human program (`data/organisms/human/body.bio` with the generated

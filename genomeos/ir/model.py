@@ -72,6 +72,10 @@ def matches(when: dict[str, str], context: dict[str, str]) -> bool:
         if wanted == "any":
             continue
         got = context.get(key)
+        if wanted == "absent":
+            if got is not None:
+                return False
+            continue
         if got is None:
             return False
         if wanted[:2] in (">=", "<=") or wanted[:1] in (">", "<"):
@@ -378,6 +382,22 @@ class Decision:
 
 
 @dataclass(slots=True)
+class Experiment:
+    """A perturbation of the organism run against the wild type: factors or signals knocked out,
+    factors added, the environment changed; `asserts` are checked on the perturbed body."""
+
+    name: str
+    knockouts: list[str] = field(default_factory=list)  # factor names, signal ids or ligands
+    adds: list[str] = field(default_factory=list)  # factors present in the zygote in addition
+    environment: dict[str, str] = field(default_factory=dict)
+    until: float | None = None  # minutes; None = the organism's last stage or 800
+    asserts: list[str] = field(default_factory=list)
+    expect: str = ""  # the published phenotype, in words
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
 class Organism:
     """The program root: one genome, one bootstrap cell state, one environment."""
 
@@ -412,6 +432,7 @@ class Module:
     timers: list[Timer] = field(default_factory=list)
     stages: list[Stage] = field(default_factory=list)
     decisions: list[Decision] = field(default_factory=list)
+    experiments: list[Experiment] = field(default_factory=list)
     organism: Organism | None = None
 
     def add(self, entity: Entity) -> None:
@@ -449,6 +470,7 @@ class Module:
         self.timers.extend(other.timers)
         self.stages.extend(other.stages)
         self.decisions.extend(other.decisions)
+        self.experiments.extend(other.experiments)
         if self.organism is None:
             self.organism = other.organism
         for k, v in other.parameters.items():
@@ -517,6 +539,7 @@ class Module:
             "timers": [conv(t) for t in self.timers],
             "stages": [conv(st) for st in self.stages],
             "decisions": [conv(d) for d in self.decisions],
+            "experiments": [conv(x) for x in self.experiments],
             "organism": conv(self.organism) if self.organism else None,
         }
 
@@ -585,6 +608,7 @@ class Module:
             ("timers", Timer, m.timers),
             ("stages", Stage, m.stages),
             ("decisions", Decision, m.decisions),
+            ("experiments", Experiment, m.experiments),
         ):
             for d in data.get(key, []):
                 d.pop("__type__", None)
