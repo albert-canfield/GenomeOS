@@ -458,6 +458,7 @@ def investigate(
         "classified_fraction": round(1 - by_class.get("unclassified", {"bp": 0})["bp"] / total, 4)
         if total
         else None,
+        "curated_repeats": bool(rindex),
         "high_copy_threshold": HIGH_COPY,
         "patterns": [p.name for p in patterns],
         "ccres_used": len(ccres),

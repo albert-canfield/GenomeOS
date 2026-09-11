@@ -40,7 +40,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--chroms", nargs="*", default=ALL)
     args = ap.parse_args()
-    todo = [c for c in args.chroms if not (RESULTS / f"unknown_{c}.json").exists()]
+    # a chromosome is done only if it was classified with the curated repeat annotation
+    todo = [c for c in args.chroms if not (load_result(f"unknown_{c}") or {}).get("curated_repeats")]
     if not todo:
         print("all chromosomes already investigated")
         return
