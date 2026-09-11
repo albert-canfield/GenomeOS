@@ -36,6 +36,7 @@ CACHE = Path("data/knowledge/proteins")
 
 SOURCES = {
     "ensembl": ("Ensembl REST (rest.ensembl.org)", "curated", 0.95),
+    "gencode": ("GENCODE gene models (local)", "curated", 0.95),
     "uniprot": ("UniProtKB/Swiss-Prot reviewed (rest.uniprot.org)", "curated", 0.95),
     "interpro": ("InterPro via UniProt cross-references", "curated", 0.9),
     "pdb": ("PDB via UniProt cross-references (method and resolution as deposited)", "experimental", 0.95),
@@ -376,11 +377,18 @@ class ProteinState:
 
 
 def compile_protein(
-    symbol: str, cache_dir: Path = CACHE, refresh: bool = False, sources: set[str] | None = None
+    symbol: str,
+    cache_dir: Path = CACHE,
+    refresh: bool = False,
+    sources: set[str] | None = None,
+    origin: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Compile one protein definition from the federated sources; cached by gene symbol."""
+    """Compile one protein definition from the federated sources; cached by gene symbol.
+    `origin` (gene id, locus, transcripts from local gene models) replaces the Ensembl call."""
     symbol = symbol.upper()
     want = sources or set(SOURCES)
+    if origin is not None:
+        want = want - {"ensembl"}
     cache_dir.mkdir(parents=True, exist_ok=True)
     cached = cache_dir / f"{symbol}.json"
     prior: dict[str, Any] | None = None
@@ -427,7 +435,10 @@ def compile_protein(
             "error": "no reviewed entry",
         }
     ens = None
-    if prior is not None and "ensembl" not in want:
+    if origin is not None:
+        sec["genomic_origin"] = _section("gencode", origin)
+        ens = origin
+    elif prior is not None and "ensembl" not in want:
         ens = (sec.get("genomic_origin") or {}).get("items")
     if "ensembl" in want:
         try:

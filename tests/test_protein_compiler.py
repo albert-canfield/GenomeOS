@@ -168,3 +168,27 @@ def test_cached_failures_are_refetched(tmp_path, monkeypatch):
     # second load: nothing failed, nothing refetched
     compiler.compile_protein("TST1", cache_dir=tmp_path)
     assert calls == ["TST1"]
+
+
+def test_origin_from_local_models_skips_ensembl(tmp_path, monkeypatch):
+    from genomeos.molecules import compiler
+
+    monkeypatch.setattr(compiler, "uniprot_raw", lambda sym: FIXTURE)
+    monkeypatch.setattr(
+        compiler, "ensembl_gene", lambda sym: (_ for _ in ()).throw(AssertionError("no Ensembl"))
+    )
+    monkeypatch.setattr(compiler, "string_network", lambda sym: [])
+    monkeypatch.setattr(compiler, "hpa_entry", lambda gid: {"tissue_specificity": "x", "gene_id_seen": gid})
+    origin = {
+        "gene_id": "ENSG1",
+        "biotype": "protein_coding",
+        "locus": "chr1:1-2(+)",
+        "description": None,
+        "transcripts": [],
+        "protein_products": 1,
+    }
+    d = compiler.compile_protein("TST1", cache_dir=tmp_path, origin=origin)
+    go = d["sections"]["genomic_origin"]
+    assert go["evidence"] == "curated" and "GENCODE" in go["source"] and go["items"]["gene_id"] == "ENSG1"
+    assert d["sections"]["expression"]["items"]["gene_id_seen"] == "ENSG1"
+    assert d["coverage"]["genomic_origin"] and d["coverage"]["expression"]

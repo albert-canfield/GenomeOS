@@ -84,12 +84,44 @@ def coding_symbols_from_ensembl(chrom: str, window: int = 5_000_000) -> list[str
     return sorted(out)
 
 
+def origins_from_annotation(annotation, chrom: str) -> dict[str, dict[str, Any]]:
+    """The genomic-origin section from local gene models: no Ensembl call needed (the slowest source)."""
+    out: dict[str, dict[str, Any]] = {}
+    for g in annotation.genes.values():
+        if g.locus.chrom != chrom or g.type != "protein_coding":
+            continue
+        txs = []
+        for t in g.transcripts.values():
+            cds_len = sum(loc.length for loc, _phase in t.cds)
+            txs.append(
+                {
+                    "transcript": t.id.split(".")[0],
+                    "name": t.name,
+                    "biotype": t.type,
+                    "canonical": "Ensembl_canonical" in t.tags,
+                    "protein": t.id.split(".")[0] if cds_len else None,
+                    "protein_length": (cds_len // 3 - 1) if cds_len >= 6 else None,
+                }
+            )
+        txs.sort(key=lambda x: (not x["canonical"], x["name"] or ""))
+        out[g.symbol] = {
+            "gene_id": g.id.split(".")[0],
+            "biotype": g.type,
+            "locus": f"{chrom}:{g.locus.start + 1}-{g.locus.end}({g.locus.strand.value})",
+            "description": None,
+            "transcripts": txs,
+            "protein_products": sum(1 for x in txs if x["protein"]),
+        }
+    return out
+
+
 def compile_chromosome(
     chrom: str, gff3: str | None = None, limit: int | None = None, log=sys.stdout, workers: int = 8
 ) -> dict[str, Any]:
     from genomeos.genome import Annotation, default_gencode
 
     gff = gff3 or default_gencode({chrom})
+    origins: dict[str, dict[str, Any]] = {}
     if gff:
         ann = Annotation.from_gff3(gff, {chrom})
         symbols = sorted(
@@ -98,6 +130,7 @@ def compile_chromosome(
             if g.type == "protein_coding" and not g.symbol.startswith("ENSG")
         )
         symbol_source = "GENCODE (local models)"
+        origins = origins_from_annotation(ann, chrom)
     else:
         symbols = coding_symbols_from_ensembl(chrom)
         symbol_source = "Ensembl REST gene list"
@@ -115,7 +148,7 @@ def compile_chromosome(
     def one(sym: str) -> tuple[str, dict[str, bool]]:
         for attempt in range(2):
             try:
-                d = compile_protein(sym)
+                d = compile_protein(sym, origin=origins.get(sym))
                 return sym, d.get("coverage") or coverage(d)
             except Exception:  # noqa: BLE001
                 if attempt:
