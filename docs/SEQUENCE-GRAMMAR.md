@@ -98,9 +98,29 @@ tested against it.
 
 ## 5. What comes next
 
-1. A segment parser that chains signal hits into candidate transcripts and
-   scores them (Viterbi over the grammar), evaluated against GENCODE as
-   sensitivity/precision per signal, per chromosome.
+1. ✅ (v1, 2026-09-11) A segment parser that chains signal hits into
+   candidate genes and scores them: `genomeos segments --chrom chr21`
+   (`genomeos/genome/segments.py`). Coding potential is a codon log-odds
+   table learned from the chromosome's canonical CDS; the parser is a
+   Viterbi-style dynamic programme over candidate starts, donors, acceptors
+   and stops (prefix sums for exon scores, a next-in-frame-stop table, a
+   sliding-window maximum for introns; 46 Mb in about two minutes). Scored
+   against every coding transcript of GENCODE on chr21:
+
+   | level | sensitivity | precision |
+   |---|---|---|
+   | gene (any overlap, same strand) | 89.1% | 21.9% |
+   | splice site (exact position) | 7.5% | 6.9% |
+   | CDS segment (exact both ends) | 4.7% | 5.2% |
+
+   That is the honest state of "signals alone": the parser lands on nine in
+   ten coding genes but draws their exon boundaries right only rarely, and
+   it invents 556 candidates for 221 genes. The scoring is the limit,
+   not the search: three PWMs and codon usage carry no exon or intron
+   length model, no hexamer frame model, no promoter or polyA signal, no
+   conservation. Each of those is a measurable step up on this table. Every
+   prediction is saved as `predicted` evidence next to this measurement
+   (`data/results/segments_chr21.json`); none enters the block map.
 2. Promoter motif scanning with JASPAR matrices to derive `requires` lists
    with evidence, and to give `cell_type ... expresses:` a sequence-level
    justification.

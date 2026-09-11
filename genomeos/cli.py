@@ -1618,6 +1618,43 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_segments(args: argparse.Namespace) -> int:
+    """Segment parser v1: chain learned signals into candidate genes and score them against GENCODE."""
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome.segments import parse_chromosome
+    from genomeos.genome.signals import SignalSet
+    from genomeos.results import save_result
+
+    gff = default_gencode({args.chrom})
+    if not gff or not Path(args.genome).exists() or not Path(args.signals).exists():
+        print(f"{args.chrom}: needs local models, sequence and learned signals ({args.signals})")
+        return 1
+    ann = Annotation.from_gff3(gff, {args.chrom})
+    g = IndexedGenome(args.genome)
+    from genomeos.coords import Locus
+
+    length = g.lengths[args.chrom]
+    seq = str(g.fetch(Locus(args.chrom, 0, length)))
+    g.close()
+    sig = SignalSet.load(args.signals)
+    r = parse_chromosome(args.chrom, seq, sig, ann, min_relative=args.min_relative)
+    save_result(f"segments_{args.chrom}", r)
+    print(
+        f"{args.chrom}: {r['predictions']} candidate genes from signals alone, {r['predicted_exons']} exons"
+    )
+    print(
+        f"  exons: sensitivity {r['exon_sensitivity']:.1%} precision {r['exon_precision']:.1%} "
+        f"(of {r['true_exons']} annotated CDS segments)"
+    )
+    print(f"  splice sites: sensitivity {r['site_sensitivity']:.1%} precision {r['site_precision']:.1%}")
+    print(
+        f"  genes: sensitivity {r['gene_sensitivity']:.1%} precision {r['gene_precision']:.1%} "
+        f"(of {r['true_genes']} coding genes)"
+    )
+    print(f"  [{r['evidence']}]  saved data/results/segments_{args.chrom}.json")
+    return 0
+
+
 def cmd_reader(args: argparse.Namespace) -> int:
     """Reader v1: which nodes and genes a cell type reads, from ENCODE DNase peaks."""
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
@@ -2552,6 +2589,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser(
+        "segments", help="segment parser v1: genes from learned signals alone, scored vs GENCODE"
+    )
+    p.add_argument("--chrom", default="chr21")
+    p.add_argument("--genome", default="data/reference/chr21.fa.gz")
+    p.add_argument("--signals", default="data/results/signals_chr21.json")
+    p.add_argument("--min-relative", type=float, default=0.6)
+    p.set_defaults(fn=cmd_segments)
 
     p = sub.add_parser(
         "reader", help="reader v1: which nodes and genes a cell type reads (ENCODE DNase peaks)"
