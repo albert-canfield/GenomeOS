@@ -1561,6 +1561,64 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lookup(args: argparse.Namespace) -> int:
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome.lookup import lookup, parse_variant
+
+    chrom, pos, ref, alt = parse_variant(" ".join(args.variant))
+    ann = genome = None
+    gff = default_gencode({chrom})
+    fa = Path(f"data/reference/{chrom}.fa.gz")
+    if gff and fa.exists():
+        ann = Annotation.from_gff3(gff, {chrom})
+        genome = IndexedGenome(fa)
+    r = lookup(chrom, pos, ref, alt, ann, genome, pathways=0 if args.no_pathways else 10)
+    if genome:
+        genome.close()
+    v = r["vep"]
+    damage = f"  SIFT {v['sift']}" if v["sift"] else ""
+    damage += f"  PolyPhen {v['polyphen']}" if v["polyphen"] else ""
+    print(r["variant"])
+    print(f"  consequence: {v['consequence']} in {v['gene'] or '-'} {v['hgvsc']} {v['hgvsp']}{damage}")
+    print(f"    [{v['evidence']}]")
+    ids = f"  ({', '.join(v['dbsnp'])})" if v.get("dbsnp") else ""
+    print("  known: " + "; ".join(r["known"]) + ids)
+    if v.get("pubmed"):
+        more = " …" if v["pubmed_count"] > 8 else ""
+        print("  PubMed: " + ", ".join(str(p) for p in v["pubmed"][:8]) + more)
+    lt = r.get("local_trace")
+    if lt:
+        verdict = "agrees with VEP" if lt["agrees_with_vep"] else "differs from VEP (isoform or region)"
+        names = f"{lt['hgvs_c'] or ''} {lt['hgvs_p'] or ''}"
+        print(f"  local trace ({lt['transcript']}): {lt['consequence']} {names}")
+        print(f"    {verdict}  [{lt['evidence']}]")
+    p = r.get("protein")
+    if p and "error" not in p:
+        feats = "; ".join(
+            f"{f['type']} {f['description']} ({f['start']}-{f['end']})" for f in p["features_at_residue"]
+        )
+        iso = "" if p["reference_residue_matches"] else " (reference residue differs: isoform?)"
+        print(f"  protein {p['accession']} {p['name']} ({p['length']} aa), residue {p['residue']}{iso}:")
+        af = ", AlphaFold" if p["alphafold"] else ""
+        nx = p["structures_experimental"]
+        print(f"    {feats or 'no annotated feature'}; structures: {nx} experimental{af}")
+        print(f"    [{p['evidence']}]")
+    elif p:
+        print(f"  protein: {p['error']}")
+    pw = r.get("pathways")
+    if pw:
+        w = pw["most_affected"]
+        worst = f"; most affected {w['name']} ({w['fraction_lost']:.0%})" if w else ""
+        print(
+            f"  pathways: {pw['reactions_lost']} reactions lost over {pw['checked']} pathways with the "
+            f"protein {pw['treated_as']}{worst}"
+        )
+        print(f"    [{pw['evidence']}]")
+    if args.json:
+        print(json.dumps(r, indent=1))
+    return 0
+
+
 def cmd_graph(args: argparse.Namespace) -> int:
     from genomeos.molecules.graph import build, summarise
     from genomeos.results import save_result
@@ -2289,6 +2347,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser(
+        "lookup",
+        help="one variant through every layer: VEP, ClinVar, gnomAD, COSMIC, local trace, protein, pathways",
+    )
+    p.add_argument("variant", nargs="+", help="chr21:25897620 C>T (1-based, plus strand)")
+    p.add_argument("--no-pathways", action="store_true")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(fn=cmd_lookup)
 
     p = sub.add_parser("graph", help="the local protein knowledge graph built from compiled definitions")
     p.add_argument("gene", nargs="?", help="show one protein's neighbourhood instead of the summary")

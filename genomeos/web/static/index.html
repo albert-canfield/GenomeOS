@@ -523,6 +523,15 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div id="f-hover" style="margin-top:6px;font-size:12.5px"><span class="muted">hover a lane</span></div>
     <div id="f-summary" style="margin-top:8px;font-size:12.5px;line-height:1.6"><span class="muted">Trace a gene. Every step is derived from the reference sequence with the evidence shown; the protein is what GenomeOS translates, which the Molecules tab checks against UniProt.</span></div>
   </div>
+  <div class="card" style="margin-top:16px">
+    <h2><i class="ic">🔎</i>Look a variant up<span class="help" data-tip="Any chromosome, 1-based, plus strand. Ensembl VEP gives the consequence on the canonical transcript, SIFT and PolyPhen, and what is already known: ClinVar significance, dbSNP and COSMIC ids, gnomAD frequency, PubMed citations. When the chromosome is local the GenomeOS trace is checked against VEP. The protein's annotated features at the residue and, for a truncating change, the pathway reactions lost complete the picture.">?</span></h2>
+    <div class="row">
+      <label>variant <input id="l-variant" placeholder="chr17:7675088 C>T" style="width:200px" class="mono"></label>
+      <button class="primary" id="l-run" data-tip="Look it up through every layer."><i class="ic">🔎</i>Look up</button>
+      <span class="muted" id="l-status"></span>
+    </div>
+    <div id="l-out" style="font-size:12.5px;line-height:1.6;margin-top:6px"><span class="muted">Try TP53 R175H: chr17:7675088 C>T, or the APP variant above.</span></div>
+  </div>
 </section>
 
 <!-- ================= CANCER ================= -->

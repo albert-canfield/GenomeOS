@@ -19,7 +19,17 @@ def main() -> None:
     print(f"{len(ORDER) - len(chroms)} chromosomes already compiled; {len(chroms)} to go: {' '.join(chroms)}")
     t0 = time.time()
     for c in chroms:
-        r = compile_chromosome(c, log=sys.stdout)
+        r = None
+        for attempt in range(3):
+            try:
+                r = compile_chromosome(c, log=sys.stdout)
+                break
+            except Exception as e:  # noqa: BLE001  (a source outage must not end the whole run)
+                print(f"{c}: attempt {attempt + 1} failed ({str(e)[:80]}); waiting 60 s", flush=True)
+                time.sleep(60)
+        if r is None:
+            print(f"{c}: skipped after 3 attempts", flush=True)
+            continue
         save_result(f"proteome_{c}", r)
         cov = r["coverage_fraction"]
         print(

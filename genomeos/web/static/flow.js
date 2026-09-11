@@ -157,6 +157,25 @@
       draw();
     } catch (e) { $('#f-status').textContent = e.message; }
   };
+  window.lookupVariant = async function () {
+    const v = $('#l-variant').value.trim(); if (!v) return;
+    $('#l-status').textContent = 'asking VEP, reading the local layers…';
+    try {
+      const r = await window.api(`/api/lookup?variant=${encodeURIComponent(v)}`);
+      const x = r.vep, lt = r.local_trace, p = r.protein, pw = r.pathways;
+      const sev = x.consequence.includes('stop') || x.consequence.includes('frameshift') || x.consequence.includes('start_lost') ? 'var(--bad)' : x.consequence.includes('missense') ? 'var(--warn)' : 'var(--ok)';
+      $('#l-out').innerHTML = `
+        <div><b>${r.variant}</b> → <b style="color:${sev}">${x.consequence.replace(/_/g, ' ')}</b> in <b>${x.gene || '-'}</b> <span class="mono">${x.hgvsc || ''} ${x.hgvsp || ''}</span>${x.sift ? ` · SIFT ${x.sift}` : ''}${x.polyphen ? ` · PolyPhen ${x.polyphen.replace(/_/g, ' ')}` : ''} <span class="pill curated">curated: VEP</span></div>
+        <div><b>known</b>: ${r.known.join('; ')}${x.dbsnp && x.dbsnp.length ? ` (${x.dbsnp.join(', ')})` : ''}${x.pubmed && x.pubmed.length ? `<div class="muted" style="font-size:11.5px">PubMed: ${x.pubmed.slice(0, 8).map(id => `<a href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank" rel="noopener">${id}</a>`).join(', ')}${x.pubmed_count > 8 ? ' …' : ''}</div>` : ''}</div>
+        ${lt ? `<div><b>local trace</b> (${lt.transcript}): ${lt.consequence} <span class="mono">${lt.hgvs_c || ''} ${lt.hgvs_p || ''}</span> · ${lt.agrees_with_vep ? 'agrees with VEP' : 'differs from VEP (isoform numbering or region)'} <span class="pill derived">derived</span></div>` : ''}
+        ${p && !p.error ? `<div><b>protein</b> ${p.accession} ${p.name} (${p.length} aa), residue ${p.residue}${p.reference_residue_matches ? '' : ' <span class="muted">(reference residue differs: isoform?)</span>'}: ${p.features_at_residue.length ? p.features_at_residue.map(f => `<span class="chip">${f.type}${f.description ? ' · ' + f.description : ''} ${f.start}–${f.end}</span>`).join(' ') : '<span class="muted">no annotated feature at this residue</span>'} · structures: ${p.structures_experimental} experimental${p.alphafold ? ', AlphaFold' : ''} <span class="pill curated">curated: UniProt</span> <button class="ghost" id="l-to-structure" style="padding:1px 8px;font-size:11px">🧊 show on structure</button></div>` : p ? `<div class="muted">protein: ${p.error}</div>` : ''}
+        ${pw ? `<div><b>pathways</b>: ${pw.reactions_lost} reactions lost over ${pw.checked} pathways with the protein ${pw.treated_as}${pw.most_affected ? `; most affected ${pw.most_affected.name} (${(pw.most_affected.fraction_lost * 100).toFixed(0)}%)` : ''} <span class="pill inferred">inferred</span></div>` : ''}`;
+      const b = $('#l-to-structure');
+      if (b) b.onclick = () => { $('#m-gene').value = x.gene; $('#m-chrom').value = r.chrom; $('#m-residue').value = p.residue; const t = document.querySelector('nav button[data-tab="molecules"]'); if (t) t.click(); setTimeout(() => $('#m-load').click(), 200); };
+      $('#l-status').textContent = '';
+    } catch (e) { $('#l-status').textContent = e.message; }
+  };
+  document.addEventListener('DOMContentLoaded', () => { const b = $('#l-run'); if (b) { b.onclick = window.lookupVariant; $('#l-variant').onkeydown = e => { if (e.key === 'Enter') window.lookupVariant(); }; } });
   window.flowResize = draw;
   document.addEventListener('DOMContentLoaded', () => {
     const c = canvas(); if (!c) return;

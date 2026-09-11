@@ -57,6 +57,26 @@ Checked on APP: chr21:25,897,620 C>T on the plus strand of a minus-strand
 gene reads G>A in the mRNA, codon 673 GCA→ACA, p.Ala673Thr, the protective
 Icelandic variant.
 
+## One variant through every layer
+
+`genomeos lookup chr17:7675088 C>T` (any chromosome, 1-based, plus strand),
+`/api/lookup`, and the "Look a variant up" card in the Flow tab put the
+layers together for one change:
+
+| layer | what comes back | evidence |
+|---|---|---|
+| consequence | Ensembl VEP on the canonical transcript: effect, gene, HGVS c. and p., SIFT, PolyPhen | curated / predicted |
+| known | ClinVar significance, dbSNP and COSMIC ids, gnomAD frequency, PubMed citations; or "novel" | curated |
+| local trace | the GenomeOS trace of the same change when the chromosome is local, checked against VEP | derived |
+| protein | UniProt features at the residue (domains, regions, sites, cleavage products, modifications), structures available | curated |
+| pathways | for a truncating change, the Reactome reactions lost with the protein absent | curated + inferred |
+
+TP53 R175H comes back pathogenic in ClinVar with 65 citations and 311
+experimental structures; APP A673T comes back protective, at the residue
+where the amyloid-beta chains begin (672), which is the mechanism: the
+change weakens beta-secretase cleavage. The local trace agrees with VEP on
+both.
+
 ## From ATGCG… to a protein: the executable piece
 
 This is the first piece of biology GenomeOS could run, and it is fully

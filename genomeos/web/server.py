@@ -901,6 +901,26 @@ class Api:
             if genome:
                 genome.close()
 
+    def lookup(self, variant: str) -> dict:
+        """One variant through every layer: VEP anywhere, local trace when the chromosome is local."""
+        from genomeos.genome import IndexedGenome, default_gencode
+        from genomeos.genome.lookup import lookup, parse_variant
+
+        try:
+            chrom, pos, ref, alt = parse_variant(variant)
+        except ValueError as e:
+            raise ApiError(str(e)) from e
+        ann = genome = None
+        fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+        if default_gencode({chrom}) and fa.exists():
+            ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+            genome = IndexedGenome(fa)
+        try:
+            return lookup(chrom, pos, ref, alt, ann, genome)
+        finally:
+            if genome:
+                genome.close()
+
     def graph(self, gene: str, max_nodes: int = 40) -> dict:
         """One protein's neighbourhood in the local knowledge graph (cached definitions only)."""
         from genomeos.molecules.graph import build
@@ -1124,6 +1144,8 @@ class Handler(BaseHTTPRequestHandler):
                         int(self._q(qs, "end", 0)),
                     )
                 )
+            if u.path == "/api/lookup":
+                return self._json(self.api.lookup(self._q(qs, "variant", "")))
             if u.path == "/api/graph":
                 return self._json(self.api.graph(self._q(qs, "gene", ""), int(self._q(qs, "max", 40))))
             if u.path == "/api/rna":

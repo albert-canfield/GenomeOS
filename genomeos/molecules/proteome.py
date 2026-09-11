@@ -60,10 +60,9 @@ CHROM_LENGTHS = {  # hg38, for windowing the Ensembl gene listing
 
 
 def coding_symbols_from_ensembl(chrom: str, window: int = 5_000_000) -> list[str]:
-    """Protein-coding gene symbols of a chromosome from Ensembl REST (5 Mb windows), for
-    chromosomes without local gene models."""
-    import json
-    import urllib.request
+    """Protein-coding gene symbols of a chromosome from Ensembl REST (5 Mb windows, with the
+    compiler's retry and back-off), for chromosomes without local gene models."""
+    from genomeos.molecules.compiler import _get
 
     name = chrom.removeprefix("chr")
     if name == "M":
@@ -78,14 +77,10 @@ def coding_symbols_from_ensembl(chrom: str, window: int = 5_000_000) -> list[str
             f"https://rest.ensembl.org/overlap/region/human/{name}:{start}-{end}"
             "?feature=gene;biotype=protein_coding;content-type=application/json"
         )
-        req = urllib.request.Request(
-            url, headers={"Accept": "application/json", "User-Agent": "GenomeOS/0.1"}
-        )
-        with urllib.request.urlopen(req, timeout=120) as r:  # noqa: S310
-            for g in json.load(r):
-                sym = g.get("external_name")
-                if sym and not sym.startswith("ENSG"):
-                    out.add(sym)
+        for g in _get(url, timeout=120, retries=5):
+            sym = g.get("external_name")
+            if sym and not sym.startswith("ENSG"):
+                out.add(sym)
     return sorted(out)
 
 
