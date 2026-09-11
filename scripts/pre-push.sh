@@ -13,6 +13,10 @@ while read -r local_ref local_sha remote_ref remote_sha; do
   tmp=$(mktemp -d "${TMPDIR:-/tmp}/genomeos-push.XXXXXX")
   echo "pre-push: checking $(git rev-parse --short "$local_sha") in a clean worktree"
   if git -C "$root" worktree add -q --detach "$tmp" "$local_sha"; then
+    # the local caches are shared read-only, so real-data tests run as they do here
+    for d in reference knowledge cache; do
+      [ -d "$root/data/$d" ] && [ ! -e "$tmp/data/$d" ] && ln -s "$root/data/$d" "$tmp/data/$d"
+    done
     (cd "$tmp" && UV_NO_SYNC=1 UV_PROJECT_ENVIRONMENT="$root/.venv" PYTHONPATH="$tmp" scripts/check.sh) || status=1
     git -C "$root" worktree remove --force "$tmp"
   else

@@ -1,3 +1,7 @@
+from pathlib import Path
+
+import pytest
+
 from genomeos.design import IDENTITY, design, essential_genes
 
 
@@ -6,6 +10,7 @@ def test_essential_list_ships_with_the_package():
     assert len(e) == 684 and {"POLR2A", "RPL3", "PCNA"} <= e
 
 
+@pytest.mark.skipif(not Path("data/knowledge/go-basic.obo").exists(), reason="GO ontology not downloaded")
 def test_neuron_budget_is_a_small_fraction_of_the_genome():
     d = design("neuron")
     assert d.essential_genes == 684
