@@ -40,4 +40,4 @@ jobs:
       - name: Test
         run: uv run pytest -q -rs
       - name: BioLang programs test themselves
-        run: uv run bio test data/demo genomeos/std
+        run: uv run bio test data/demo genomeos/std data/organisms
