@@ -13,7 +13,7 @@ walks one gene through all of them with the evidence at each step.
 |---|---|---|---|
 | DNA sequence | bases, loci, chromosomes, an individual's alleles | `Sequence`, `Locus`, `Chromosome`, `Genome`, `IndexedGenome`, `Variant` (VCF) | curated (assembly), measured (a person's VCF) |
 | regulation | promoters, enhancers, CTCF boundaries, CpG islands, motifs that name required factors | `RegulatoryElement` with targets bounded by the CTCF domain (`genomeos regulation`), ENCODE cCREs, pattern file, learned signals | curated (ENCODE), inferred (targets), predicted (patterns) |
-| RNA | transcripts and isoforms, exons spliced to mRNA, non-coding RNA classes | `Transcript` (GENCODE), `splice()`, `transcribe()`, anatomy counts of ncRNA | curated |
+| RNA | transcripts and isoforms, exons spliced to mRNA, non-coding RNA classes, where the gene is expressed | `Transcript` (GENCODE), `splice()`, `transcribe()`, `genomeos rna GENE` (isoforms with lengths and tags; GTEx median TPM in 54 tissues), anatomy counts of ncRNA | curated; measured (GTEx) |
 | protein | translation with the right genetic code and initiators, UniProt record, AlphaFold structure | `translate_transcript()`, `Protein`, molecules layer | curated (UniProt), predicted (AlphaFold) |
 | cell behaviour | rules with context, libraries the gene belongs to, cell-type expression | `Rule`, `CellType`, `Module.active_rules()`, `KnowledgeBase.libraries_of()`, network runtime | curated (GO/Reactome), inferred |
 | tissues, organs | blueprint and systems libraries, spatial development, ligand–receptor protocol | `blueprint.*`, `systems.*`, spatial/segmentation/gastrulation engines | curated, inferred |

@@ -1561,6 +1561,48 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_graph(args: argparse.Namespace) -> int:
+    from genomeos.molecules.graph import build, summarise
+    from genomeos.results import save_result
+
+    g = build(min_score=args.min_score)
+    if args.gene:
+        n = g.neighbourhood(args.gene.upper(), args.max_nodes)
+        if not n["nodes"]:
+            print(f"{args.gene} is not in the local knowledge graph; compile it first:")
+            print(f"  genomeos protein {args.gene} --compile")
+            return 1
+        c = n["centre"]
+        print(f"{c}: {len(n['nodes']) - 1} neighbours, {len(n['edges'])} edges in the neighbourhood")
+        rows = []
+        for e in sorted(n["edges"], key=lambda e: -e["confidence"]):
+            if c not in (e["a"], e["b"]):
+                continue
+            other = e["b"] if e["a"] == c else e["a"]
+            node = g.nodes[other]
+            detail = f"score {e['score']}" if "score" in e else ""
+            if "ntpm" in e:
+                detail = f"{e['ntpm']:.0f} nTPM"
+            rows.append({"relation": e["rel"], "node": node.get("name") or other, "kind": node["kind"],
+                         "evidence": e["evidence"], "conf": e["confidence"], "detail": detail})
+        print(_table(rows[: args.top], ["relation", "node", "kind", "evidence", "conf", "detail"]))
+        return 0
+    s = summarise(g)
+    print(f"knowledge graph: {s['nodes']:,} nodes {s['node_kinds']}, {s['edges']:,} edges {s['edge_kinds']}")
+    print(
+        f"  compiled proteins {s['compiled_proteins']}, physical associations "
+        f"{s['physical_associations']:,}, isolated {s['isolated_proteins']}, components {s['components']} "
+        f"(largest {s['largest_component']})"
+    )
+    print("  hubs: " + ", ".join(f"{h['gene']} {h['associations']}" for h in s["hubs"][:8]))
+    print("  biggest pathways: " + "; ".join(f"{n} ({c})" for n, c in s["biggest_pathways"][:6]))
+    print(f"  [{s['evidence']}]")
+    if args.save:
+        save_result(f"graph_{args.save}", s)
+        print(f"  saved data/results/graph_{args.save}.json")
+    return 0
+
+
 def cmd_rna(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
     from genomeos.molecules.rna import rna_report
@@ -2247,6 +2289,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--gff3")
     p.add_argument("--limit", type=int, help="first N genes only (no result saved)")
     p.set_defaults(fn=cmd_proteome)
+
+    p = sub.add_parser("graph", help="the local protein knowledge graph built from compiled definitions")
+    p.add_argument("gene", nargs="?", help="show one protein's neighbourhood instead of the summary")
+    p.add_argument("--min-score", type=float, default=0.7)
+    p.add_argument("--max-nodes", type=int, default=40)
+    p.add_argument("--top", type=int, default=25)
+    p.add_argument("--save", help="save the summary as data/results/graph_<name>.json")
+    p.set_defaults(fn=cmd_graph)
 
     p = sub.add_parser(
         "rna", help="the RNA layer of a gene: transcripts and isoforms, GTEx expression per tissue"

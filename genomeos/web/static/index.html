@@ -477,6 +477,12 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="m-rna"><span class="muted">Load a gene.</span></div>
     </div>
     <div class="card" style="grid-column:1/-1">
+      <h2><i class="ic">🔗</i>Neighbourhood in the knowledge graph<span class="help" data-tip="The compiled definitions form a local graph: proteins linked by STRING associations (solid = experimental channel, dashed = other channels), pathways they belong to (Reactome), InterPro domains and HPA tissues. This is the loaded gene's neighbourhood, laid out by a small force simulation; drag nodes, hover for names. Only proteins compiled locally are in the graph.">?</span>
+        <span class="muted" id="m-graph-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+      <canvas id="m-graph" style="width:100%;height:380px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></canvas>
+      <div id="m-graph-info" class="muted" style="font-size:12px;margin-top:4px"></div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
       <h2><i class="ic">🕸️</i>Protein definition<span class="help" data-tip="Everything the public databases know about this protein, compiled into one object keyed by its UniProt accession: genomic origin and transcripts (Ensembl), sequence, isoforms, domains, modifications and diseases (UniProt, InterPro), experimental structures with their method (PDB), the predicted structure (AlphaFold), pathways (Reactome), associations (STRING) and where it is expressed (Human Protein Atlas). Each section carries its source, evidence kind and confidence. Compiled once, then read from the local knowledge cache.">?</span>
         <span class="muted" id="m-def-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
       <div id="m-def"><span class="muted">Load a gene to compile its definition.</span></div>

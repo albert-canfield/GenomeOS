@@ -67,6 +67,46 @@
         ${d.reactions.map(r => `<tr style="${lostIds.has(r.id) ? 'color:var(--bad)' : ''}"><td>${lostIds.has(r.id) ? '✗' : '✓'}</td><td>${r.name}</td><td class="muted">${r.inputs.join(' + ')}</td><td class="muted">${r.outputs.join(' + ')}</td><td class="muted">${r.catalysts.map(c => '⚙ ' + c).concat(r.inhibitors.map(i => '⊣ ' + i)).join('; ')}</td></tr>`).join('')}</table>`;
     } catch (e) { $('#m-pw-status').textContent = e.message; }
   };
+  // ---- knowledge-graph neighbourhood: a small force layout on a canvas
+  const G = {nodes: [], edges: [], drag: null, raf: 0, ticks: 0};
+  const KIND_COL = {protein: '#1f6feb', pathway: '#1a7f37', domain: '#8250df', tissue: '#bf8700'};
+  function gCanvas() { return $('#m-graph'); }
+  function gDraw() {
+    const c = gCanvas(); if (!c) return; const dpr = window.devicePixelRatio || 1; const W = c.clientWidth, H = c.clientHeight; if (!W) return;
+    c.width = W * dpr; c.height = H * dpr; const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    const byId = Object.fromEntries(G.nodes.map(n => [n.id, n]));
+    for (const e of G.edges) { const a = byId[e.a], b = byId[e.b]; if (!a || !b) continue; ctx.strokeStyle = e.rel === 'associates' ? (e.physical ? '#1f6feb' : '#8b949e') : KIND_COL[b.kind] || '#999'; ctx.globalAlpha = 0.25 + e.confidence * 0.5; ctx.lineWidth = e.rel === 'associates' ? 0.6 + (e.score || 0.7) : 1; ctx.setLineDash(e.rel === 'associates' && !e.physical ? [3, 3] : []); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    ctx.setLineDash([]); ctx.globalAlpha = 1; ctx.font = '11px system-ui'; ctx.textAlign = 'center';
+    const ink = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#222';
+    for (const n of G.nodes) { const r = n.centre ? 9 : n.kind === 'protein' ? 6 : 5; ctx.fillStyle = KIND_COL[n.kind] || '#999'; ctx.globalAlpha = n.compiled === false ? 0.55 : 1; ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1; if (n.centre || n.kind === 'protein' || G.nodes.length <= 25) { ctx.fillStyle = ink; ctx.fillText(n.kind === 'tissue' ? n.name : (n.kind === 'pathway' || n.kind === 'domain') ? (n.name || n.id).slice(0, 22) : n.id, n.x, n.y - r - 3); } }
+  }
+  function gStep() {
+    const c = gCanvas(); const W = c.clientWidth, H = c.clientHeight; const byId = Object.fromEntries(G.nodes.map(n => [n.id, n]));
+    for (const n of G.nodes) { n.vx = (n.vx || 0) * 0.85; n.vy = (n.vy || 0) * 0.85; }
+    for (let i = 0; i < G.nodes.length; i++) for (let k = i + 1; k < G.nodes.length; k++) { const a = G.nodes[i], b = G.nodes[k]; let dx = b.x - a.x, dy = b.y - a.y; const d2 = dx * dx + dy * dy + 0.01; const f = 900 / d2; const d = Math.sqrt(d2); dx /= d; dy /= d; a.vx -= dx * f; a.vy -= dy * f; b.vx += dx * f; b.vy += dy * f; }
+    for (const e of G.edges) { const a = byId[e.a], b = byId[e.b]; if (!a || !b) continue; const dx = b.x - a.x, dy = b.y - a.y; const d = Math.sqrt(dx * dx + dy * dy) + 0.01; const want = e.rel === 'associates' ? 90 : 70; const f = (d - want) * 0.02; a.vx += dx / d * f; a.vy += dy / d * f; b.vx -= dx / d * f; b.vy -= dy / d * f; }
+    for (const n of G.nodes) { if (n === G.drag) continue; n.vx += (W / 2 - n.x) * 0.002; n.vy += (H / 2 - n.y) * 0.002; n.x = Math.max(10, Math.min(W - 10, n.x + n.vx)); n.y = Math.max(14, Math.min(H - 10, n.y + n.vy)); }
+    gDraw(); if (G.ticks++ < 300) G.raf = requestAnimationFrame(gStep);
+  }
+  window.moleculesGraph = async function (gene) {
+    $('#m-graph-status').textContent = 'building from the local definitions…';
+    try {
+      const n = await window.api(`/api/graph?gene=${encodeURIComponent(gene)}&max=40`);
+      if (!n.nodes.length) { $('#m-graph-status').textContent = 'not compiled locally yet'; G.nodes = []; G.edges = []; gDraw(); return; }
+      const c = gCanvas(); const W = c.clientWidth || 800, H = c.clientHeight || 380;
+      G.nodes = n.nodes.map((x, i) => ({...x, centre: x.id === n.centre, x: W / 2 + (x.id === n.centre ? 0 : Math.cos(i) * 120), y: H / 2 + (x.id === n.centre ? 0 : Math.sin(i) * 120)}));
+      G.edges = n.edges; G.ticks = 0; cancelAnimationFrame(G.raf); gStep();
+      const d = n.degree; $('#m-graph-status').textContent = `${n.centre}: ${d.associates} associations, ${d.member_of} pathways, ${d.has_domain} domains, ${d.expressed_in} tissues with nTPM`;
+      $('#m-graph-info').innerHTML = `showing ${n.nodes.length - 1} of its neighbours (highest confidence first) · blue protein (faded = not compiled locally), green pathway, purple domain, amber tissue · solid blue association = STRING experimental channel, dashed = other channels`;
+    } catch (e) { $('#m-graph-status').textContent = e.message; }
+  };
+  document.addEventListener('DOMContentLoaded', () => {
+    const c = gCanvas(); if (!c) return;
+    const pick = ev => { const r = c.getBoundingClientRect(); const x = ev.clientX - r.left, y = ev.clientY - r.top; return G.nodes.find(n => (n.x - x) ** 2 + (n.y - y) ** 2 < 100); };
+    c.addEventListener('mousedown', ev => { G.drag = pick(ev); });
+    c.addEventListener('mousemove', ev => { if (G.drag) { const r = c.getBoundingClientRect(); G.drag.x = ev.clientX - r.left; G.drag.y = ev.clientY - r.top; gDraw(); } else { const n = pick(ev); c.title = n ? `${n.kind}: ${n.name || n.id}` : ''; } });
+    window.addEventListener('mouseup', () => { G.drag = null; });
+  });
   window.moleculesRna = async function (gene, chrom) {
     $('#m-rna-status').textContent = 'listing transcripts, fetching GTEx…';
     try {
@@ -97,6 +137,7 @@
   window.moleculesLoad = async function (gene, chrom) {
     window.moleculesDefinition(gene);
     window.moleculesRna(gene, chrom);
+    window.moleculesGraph(gene);
     $('#m-status').textContent = 'fetching UniProt and AlphaFold…';
     try {
       const r = await window.api(`/api/protein?gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom || '')}`);

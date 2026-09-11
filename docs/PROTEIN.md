@@ -140,6 +140,31 @@ regulation of TP53 activity through phosphorylation (18 of 21 reactions,
 signalling, lose 2 to 3%. The ranking is what a reachability model can say;
 how much each loss matters in a given cell needs the rates it does not have.
 
+## The knowledge graph itself
+
+The compiled definitions are one graph (`genomeos.molecules.graph`, no
+network): proteins linked by STRING associations (score kept, physical
+channel flagged), pathways they belong to (Reactome), InterPro domains and
+HPA tissues, every edge carrying the evidence of the section it came from.
+`genomeos graph` summarises it, `genomeos graph APP` prints one
+neighbourhood, and the Molecules tab lays the neighbourhood out as a small
+force graph. After chromosome 21 and the mitochondrial genome:
+
+| measure | value |
+|---|---|
+| nodes | 4,175 (2,919 proteins of which 260 compiled, 458 pathways, 794 domains) |
+| edges | 32,520 (30,404 associations, 15,139 with experimental support) |
+| components among compiled proteins | 133, largest 49 |
+| hubs | MRPL39 1271, PWP2 1265, MRPS6 1210, NDUFV3 1101, LTN1 1048 |
+
+The hubs are mitochondrial ribosomal and respiratory proteins: STRING's
+co-expression channel links every member of a large complex to every
+other, so degree measures complex size, not importance. Read it with the
+evidence kind in view. Tissue edges are few because HPA records per-tissue
+values only for tissue-enhanced genes; GTEx (`genomeos rna`) covers the
+rest. The mitochondrial proteome compiles at 100% on every question, the
+13 best-studied proteins in the cell.
+
 ## BioLang importer
 
 `genomeos protein TP53 --bio` writes the compiled definition as a BioLang

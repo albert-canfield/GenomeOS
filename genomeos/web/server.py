@@ -898,6 +898,18 @@ class Api:
             if genome:
                 genome.close()
 
+    def graph(self, gene: str, max_nodes: int = 40) -> dict:
+        """One protein's neighbourhood in the local knowledge graph (cached definitions only)."""
+        from genomeos.molecules.graph import build
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        g = build()
+        n = g.neighbourhood(gene.upper(), max_nodes)
+        rels = ("associates", "member_of", "has_domain", "expressed_in")
+        n["degree"] = {k: g.degree(gene.upper(), k) for k in rels}
+        return n
+
     def rna(self, gene: str, chrom: str | None) -> dict:
         """Transcripts (local models) and GTEx expression per tissue for one gene."""
         from genomeos.genome import IndexedGenome, default_gencode
@@ -1109,6 +1121,8 @@ class Handler(BaseHTTPRequestHandler):
                         int(self._q(qs, "end", 0)),
                     )
                 )
+            if u.path == "/api/graph":
+                return self._json(self.api.graph(self._q(qs, "gene", ""), int(self._q(qs, "max", 40))))
             if u.path == "/api/rna":
                 return self._json(self.api.rna(self._q(qs, "gene", ""), self._q(qs, "chrom")))
             if u.path == "/api/protein_definition":
