@@ -2272,6 +2272,14 @@ def cmd_individual(args: argparse.Namespace) -> int:
                     ["gene", "change", "gt", "where", "annotation"],
                 )
             )
+        rt = r.get("reference_truncating")
+        if rt:
+            hidden = [x["gene"] for x in r.get("reference_truncating_rows", []) if x["matches_reference"]]
+            print(
+                f"  reference truncating alleles: hg38 carries one in {rt['genes']} genes; this person "
+                f"matches the reference in {rt['matches_reference']} of {rt['checked']} on file "
+                f"(carries the truncation): " + ", ".join(hidden[:14]) + ("…" if len(hidden) > 14 else "")
+            )
         print(f"  [{r['evidence']}]  {r['note']}")
         return 0
     if args.action == "knockouts":

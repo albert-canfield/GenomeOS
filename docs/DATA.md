@@ -232,6 +232,15 @@ comparison of three benchmark files measures the callers' agreement first
 and inheritance second. Stored under the child's directory as
 `trio_<father>_<mother>.json`, never under `data/results`.
 
+The inventory also surfaces what the reference hides. hg38 itself carries a
+frameshift or nonsense allele against the curated protein in 31 genes (the
+verified translation disagreements triaged by mechanism); a person who
+matches the reference across such a gene carries that truncation, and no
+caller will ever list it as a variant. HG002 matches hg38 in 5 of the 30 on
+file (OR2T7, OR4C45, OR4K3, OR1P1, SCYGR10, olfactory receptors and a
+keratin-associated gene) and differs somewhere inside the other 25, though
+none of those differences restores the curated protein. The dossier says so.
+
 `individual protein` is the twin's isoform: for one gene, GTEx's dominant
 transcript in each tissue, traced, with the person's coding variants read on
 that transcript rather than on the canonical one. HG002 × APP: APP-201 (770

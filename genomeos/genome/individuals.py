@@ -590,6 +590,23 @@ def dossier(name: str, root: Path | None = None) -> str:
                     f"{r['homozygous_changing']} | {r['coding_snvs']} | "
                     f"{'; '.join(r['examples'][:4])} |"
                 )
+        rt = cv.get("reference_truncating")
+        if rt:
+            hidden = [r for r in cv.get("reference_truncating_rows", []) if r["matches_reference"]][:12]
+            lines.append("")
+            lines.append(
+                f"**Reference truncating alleles** — hg38 itself carries a frameshift or nonsense allele in "
+                f"{rt['genes']} genes against the curated protein; this person matches the reference in "
+                f"{rt['matches_reference']} of the {rt['checked']} on file (so carries that truncation) "
+                f"and has "
+                f"variants inside the gene in {rt['has_variants_in_gene']}"
+                + (
+                    ": " + ", ".join(f"{r['gene']} ({r['kind'].split(' allele')[0]})" for r in hidden)
+                    if hidden
+                    else ""
+                )
+                + f". _{rt['evidence']}_"
+            )
         lines.append("")
         lines.append(f"_{cv['note']}_")
     else:
@@ -808,7 +825,10 @@ def coding_inventory(
         done.append(chrom)
     per_gene.sort(key=lambda r: (-r["protein_changing"], -r["coding_snvs"]))
     ranked = rank_missense(missense)
+    ref_trunc = reference_alleles_carried(name, root)
     out = {
+        "reference_truncating": {k: v for k, v in ref_trunc.items() if k != "rows"},
+        "reference_truncating_rows": [r for r in ref_trunc["rows"] if r["chromosome_on_file"]],
         "individual": name,
         "chromosomes": done,
         "coding_genes_traced": genes_seen,
@@ -1130,4 +1150,89 @@ def tissue_proteins(
         "evidence": "measured: GTEx v8 transcript TPM per tissue; measured genotypes; consequence derived "
         "by the local trace on the tissue's dominant transcript",
         "note": "the isoform a tissue makes is GTEx's population median, not this person's own expression",
+    }
+
+
+def reference_truncating_genes(results_dir: Path = Path("data/results")) -> list[dict[str, Any]]:
+    """The genes where hg38 itself carries a frameshift or nonsense allele against the curated protein
+    (the verified translation disagreements triaged by mechanism): a person who matches the reference
+    there carries a truncation the reference hides."""
+    out = []
+    for f in sorted(results_dir.glob("translation_vs_uniprot_chr*.json")):
+        try:
+            d = json.loads(f.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        chrom = d.get("chrom")
+        if chrom == "chrM":
+            continue
+        for r in d.get("disagreements", []):
+            frac = r.get("translated_fraction_of_cds")
+            if r.get("cds_out_of_frame"):
+                kind = "frameshift allele in hg38"
+            elif frac is not None and frac < 0.7 and r["ours_aa"] < 0.7 * r["uniprot_aa"]:
+                kind = "nonsense allele in hg38"
+            else:
+                continue
+            out.append(
+                {
+                    "gene": r["gene"],
+                    "chrom": chrom,
+                    "kind": kind,
+                    "reference_protein_aa": r["ours_aa"],
+                    "curated_aa": r["uniprot_aa"],
+                }
+            )
+    return out
+
+
+def reference_alleles_carried(name: str, root: Path | None = None, annotation_for=None) -> dict[str, Any]:
+    """For each reference truncating allele: does the person differ from the reference inside that gene's
+    CDS at all? No variant inside the CDS means the person matches hg38 there, hence carries the
+    truncation the curated protein does not have."""
+    root = root or ROOT
+    genes = reference_truncating_genes()
+    rows = []
+    by_chrom: dict[str, list[dict]] = {}
+    for g in genes:
+        by_chrom.setdefault(g["chrom"], []).append(g)
+    for chrom, gs in sorted(by_chrom.items()):
+        vcf = vcf_path(name, chrom, root)
+        ann = annotation_for(chrom) if annotation_for else None
+        if ann is None:
+            from genomeos.genome import Annotation, default_gencode
+
+            gff = default_gencode({chrom})
+            if not gff:
+                continue
+            ann = Annotation.from_gff3(gff, {chrom})
+        for g in gs:
+            try:
+                gene = ann.gene(g["gene"])
+            except KeyError:
+                continue
+            inside = list(rows_in(vcf, gene.locus.start + 1, gene.locus.end)) if vcf else []
+            snvs = sum(1 for f in inside if len(f[3]) == 1 and len(f[4]) == 1)
+            rows.append(
+                {
+                    **g,
+                    "variants_in_gene": len(inside),
+                    "snvs_in_gene": snvs,
+                    "indels_in_gene": len(inside) - snvs,
+                    "matches_reference": not inside,
+                    "chromosome_on_file": vcf is not None,
+                }
+            )
+    on_file = [r for r in rows if r["chromosome_on_file"]]
+    return {
+        "individual": name,
+        "genes": len(genes),
+        "checked": len(on_file),
+        "matches_reference": sum(1 for r in on_file if r["matches_reference"]),
+        "has_variants_in_gene": sum(1 for r in on_file if not r["matches_reference"]),
+        "rows": rows,
+        "evidence": "derived: hg38 translation against UniProt (verified per chromosome); measured genotypes",
+        "note": "a variant inside the gene does not restore the curated protein on its own (none of the "
+        "GIAB trio's do); no variant at all means the person carries hg38's allele there, a truncation the "
+        "reference hides",
     }
