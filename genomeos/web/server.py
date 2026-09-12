@@ -291,10 +291,13 @@ class Api:
     def individual_coding(self, name: str) -> dict:
         """Genome-wide coding SNVs by consequence and by gene for one person."""
         from genomeos.genome.individuals import coding_inventory
+        from genomeos.genome.missense import cache_path
 
+        root = self.root / "data" / "individuals"
         try:
+            # the predicted scores are read only when the person already has them (the stream is a CLI step)
             return coding_inventory(
-                name, None, self.root / "data" / "individuals", self.root / "data" / "reference"
+                name, None, root, self.root / "data" / "reference", predict=cache_path(name, root).exists()
             )
         except FileNotFoundError as ex:
             raise ApiError(str(ex)) from ex

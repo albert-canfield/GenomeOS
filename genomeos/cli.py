@@ -2905,7 +2905,12 @@ def cmd_individual(args: argparse.Namespace) -> int:
         return 0
     if args.action == "coding":
         try:
-            r = ind.coding_inventory(args.name, args.chrom or None)
+            r = ind.coding_inventory(
+                args.name,
+                args.chrom or None,
+                predict=getattr(args, "predict", False),
+                progress=lambda m: print("  " + m, flush=True),
+            )
         except FileNotFoundError as ex:
             print(ex)
             return 1
@@ -2929,6 +2934,31 @@ def cmd_individual(args: argparse.Namespace) -> int:
             for x in r["top"][: args.top]
         ]
         print(_table(rows, ["gene", "chrom", "changing", "homozygous", "coding", "aa", "examples"]))
+        if r.get("missense_by_effect"):
+            c = r["missense_predicted"]
+            print(
+                f"  missense predicted (AlphaMissense): {c['likely_pathogenic']:,} likely pathogenic "
+                f"({r['missense_likely_pathogenic_homozygous']:,} homozygous), {c['ambiguous']:,} ambiguous, "
+                f"{c['likely_benign']:,} likely benign, {c['unscored']:,} unscored; strongest first:"
+            )
+            print(
+                _table(
+                    [
+                        {
+                            "gene": m["gene"],
+                            "change": m["hgvs_p"] or (m["predicted"] or {}).get("protein_variant") or "",
+                            "genotype": m["genotype"],
+                            "score": f"{m['predicted']['score']:.3f}" if m.get("predicted") else "",
+                            "class": ((m.get("predicted") or {}).get("class") or "unscored").replace(
+                                "_", " "
+                            ),
+                            "site": m["site"],
+                        }
+                        for m in r["missense_by_effect"][: args.top]
+                    ],
+                    ["gene", "change", "genotype", "score", "class", "site"],
+                )
+            )
         mr = [m for m in r.get("missense_ranked", []) if m["site"] != "none"][: args.top]
         if mr:
             print(
@@ -4624,6 +4654,11 @@ def build_parser() -> argparse.ArgumentParser:
     q.add_argument("--name", required=True)
     q.add_argument("--chrom", nargs="*")
     q.add_argument("--top", type=int, default=25)
+    q.add_argument(
+        "--predict",
+        action="store_true",
+        help="AlphaMissense pathogenicity per missense variant (643 MB streamed once, kept under the person)",
+    )
     q = isub.add_parser(
         "knockouts", help="genome-wide truncating SNVs (nonsense, start/stop lost), homozygous first"
     )

@@ -264,6 +264,20 @@ variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
 missense, 133 synonymous, 1 nonsense), the KRTAP10 cluster on top as
 expected for a highly polymorphic family.
 
+## Optional: AlphaMissense (predicted missense effect, 2026-09-12)
+
+`genomeos individual coding --name N --predict` streams DeepMind's AlphaMissense
+hg38 table (643 MB compressed, 71 million rows, public bucket
+`dm_alphamissense`) once and keeps only the rows for that person's missense
+variants, under the person's own git-ignored directory
+(`data/individuals/N/alphamissense.json`, with the variants asked so a second
+call streams nothing). Each variant gets the score on the person's transcript
+when the table has it, else the highest across transcripts, with the model's
+class (likely pathogenic ≥ 0.564, likely benign ≤ 0.34, ambiguous between) and
+confidence capped at 0.7; indels and variants the table lacks stay unscored.
+Evidence class `predicted`. Licence: CC BY-NC-SA 4.0, research and personal use
+only, so the scores never enter a committed result.
+
 ## Optional: 4D Nucleome boundary calls (measured node edges)
 
 The 4DN portal publishes boundary calls (insulation-based BED files) for

@@ -562,6 +562,26 @@ def dossier(name: str, root: Path | None = None) -> str:
             + f"; {cv['genes_with_protein_changing']:,} genes carry a protein-changing variant, "
             f"{cv['genes_with_homozygous_changing']:,} a homozygous one. _{cv['evidence']}_"
         )
+        pe = cv.get("missense_by_effect") or []
+        if pe:
+            c = cv["missense_predicted"]
+            lines.append("")
+            lines.append(
+                f"Missense variants by predicted effect (AlphaMissense): {c['likely_pathogenic']:,} likely "
+                f"pathogenic ({cv.get('missense_likely_pathogenic_homozygous', 0):,} homozygous), "
+                f"{c['ambiguous']:,} ambiguous, {c['likely_benign']:,} likely benign, {c['unscored']:,} "
+                f"unscored; strongest first. _{cv.get('missense_evidence', '')}_"
+            )
+            lines.append("")
+            lines.append("| gene | change | genotype | score | class | UniProt says |")
+            lines.append("|---|---|---|---|---|---|")
+            for m in pe[:15]:
+                pr = m.get("predicted") or {}
+                lines.append(
+                    f"| {m['gene']} | {m['hgvs_p'] or pr.get('protein_variant') or ''} | {m['genotype']} | "
+                    f"{pr.get('score', '')} | {(pr.get('class') or 'unscored').replace('_', ' ')} | "
+                    f"{'; '.join(m['features'][:2])} |"
+                )
         mr = [m for m in cv.get("missense_ranked", []) if m["site"] == "site"][:15]
         if mr:
             lines.append("")
@@ -672,6 +692,16 @@ DOMAIN_TYPES = {
 }
 
 
+def _predicted_missense(
+    name: str, missense: list[dict[str, Any]], root: Path, progress=None
+) -> dict[str, Any]:
+    """AlphaMissense scores for the person's missense variants (streamed once, cached under the person)."""
+    from genomeos.genome import missense as am
+
+    scores = am.scores_for(name, missense, root, progress)
+    return am.annotate(missense, scores)
+
+
 def site_class(features: list[dict[str, Any]]) -> str:
     """How much UniProt says about the residue a missense variant hits: a site, a domain, or nothing."""
     types = {f.get("type") for f in features}
@@ -694,6 +724,8 @@ def coding_inventory(
     chroms: list[str] | None = None,
     root: Path | None = None,
     reference: Path = Path("data/reference"),
+    predict: bool = False,
+    progress=None,
 ):
     """Genome-wide: every coding SNV of the person on canonical transcripts, counted by consequence and by
     gene; the genes with the most protein-changing variants first. Derived by the local trace, SNVs only.
@@ -792,6 +824,7 @@ def coding_inventory(
                                     "pos": pos,
                                     "ref": f[3],
                                     "alt": f[4],
+                                    "transcript": getattr(tr, "transcript", None),
                                     "hgvs_p": sub.get("hgvs_p"),
                                     "residue": sub.get("residue"),
                                     "protein_length": len(tr.protein),
@@ -840,6 +873,7 @@ def coding_inventory(
         "missense_at_annotated_site": sum(1 for m in missense if m["site"] == "site"),
         "missense_in_domain": sum(1 for m in missense if m["site"] == "domain"),
         "missense_ranked": ranked[:60],
+        **(_predicted_missense(name, missense, root or ROOT, progress) if predict and missense else {}),
         "top": per_gene[:60],
         "date": time.strftime("%Y-%m-%d"),
         "evidence": "measured genotypes; consequence derived by the local trace on the canonical transcript "
