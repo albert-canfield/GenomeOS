@@ -228,9 +228,19 @@ element, most of them in GM12878, whose reader has the fewest peaks.
 The reading is not that the targets are wrong. VISTA and the eQTLs say the
 target and the tissue are usually right. It is that a target plus "active where
 a DNase peak overlaps" plus a magnitude scored in whichever tissue moved most
-does not reproduce a cell. The closure asks for the deletion scored in the
-cell's own track, which AlphaGenome has for all four lines, and that is the next
-step; the test then runs again on the same table.
+does not reproduce a cell. The deletion scored on each cell's own track was
+the obvious repair, and it ran the same day: across cells, over 71 genes, the
+most active cell is the most expressed 24% of the time, the shuffled rate
+exactly. Within a cell the sign carries a little, since open-promoter genes with
+a repressing input are expressed less often than those with an activating one
+in all four lines (by 5 to 21 points): the model's direction is right where its
+magnitude is too small to rank cells. The negative stands and is sharper for
+having the right magnitudes. Only 83 of the 221 genes have any attributed
+element and most have one, with effects of 0.1 to 0.2 log2; a gene's expression
+in a cell is set by its promoter and by the elements the two sampled runs never
+scored. An attribution of "this element, this gene" is not yet an attribution of
+"this cell". Scoring every element in a gene's node per cell, about 6,600 on
+chromosome 21 alone, is the self-hosted model's first job.
 
 One measurement lesson on the way: IMR-90's ENCODE total RNA-seq carries its
 strand labels inverted (APP reads on the "plus" file), so the module probes each
@@ -239,8 +249,9 @@ swapped orientation carries more than twice the signal, recording the choice.
 
 ## What comes next, in order
 
-1. **The deletion effect scored per cell line**, then the gene-level closure
-   again: the test the elements have to pass.
+1. **Every element in a gene's node scored per cell**, not a sample, so the
+   closure judges a gene's whole regulatory input; the self-hosted model's
+   first job.
 2. **The rest of the organising evidence** on the compiled blocks: repeat
    family and segmental duplication on regions, the reader's openness on the
    element itself rather than its node.

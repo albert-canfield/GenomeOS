@@ -939,9 +939,25 @@ in order. "Owner" is the session that holds the files today (see §7).
   the closure asks for the deletion scored in the cell's own track. One
   measurement lesson on the way: IMR-90's ENCODE RNA-seq carries its strands
   inverted, so the module probes each cell's orientation and swaps when needed.
-- **Next.** 1. The deletion effect scored per cell line (AlphaGenome has K562,
-  HepG2, GM12878 and IMR-90 as tracks), then the gene-level closure again:
-  the test the elements have to pass. 2. The rest of the organising evidence
+  **Rerun with the deletion scored on each cell's own track** (genomeos-fe
+  back-filled `predicted_coding_by_cell` for the 200 named chr21 elements the
+  same day): across cells no better. Ungated, over 71 genes, the most active
+  cell is the most expressed 24% of the time, the shuffled rate exactly; gated
+  by a DNase peak, 15% over 39 genes. Within a cell the sign carries a little:
+  open-promoter genes with a repressing input are expressed less often than
+  those with an activating one in all four cells (K562 56% against 63%, HepG2
+  53% against 74%, GM12878 85% against 91%, IMR-90 61% against 81%), which is
+  the model's direction being right where its magnitude is too small to rank
+  cells. The negative stands and is sharper: 83 of 221 genes have any
+  attributed element and most have one, with effects of 0.1 to 0.2 log2,
+  while a gene's expression in a cell is set by its promoter and by the
+  elements the two sampled runs never scored. An attribution of "this
+  element, this gene" is not yet an attribution of "this cell", and the
+  elements that would carry it are the ones not yet asked.
+- **Next.** 1. Every element in a gene's node scored per cell, not a sample:
+  the closure needs a gene's whole regulatory input before it can judge it,
+  which is the self-hosted model's first job (about 6,600 elements on chr21).
+  2. The rest of the organising evidence
   on the compiled blocks: repeat family and segmental duplication on regions,
   the reader's openness on the element itself rather than its node. 3. The
   remaining attribution: AlphaGenome's predicted chromatin tracks for activity
