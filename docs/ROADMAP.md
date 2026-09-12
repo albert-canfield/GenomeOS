@@ -1140,8 +1140,32 @@ in order. "Owner" is the session that holds the files today (see §7).
   disagreeing. GRAMMAR-BY-COMPARISON.md §7. Paralogues per gene come from
   step 2's Compara stream (in progress: `knowledge/homology.py`,
   `scripts/origin_genome_wide.py`, `genomeos origin`).
-- **Missing.** The human axis genome-wide (job running) and as a Blocks-tab
-  lane; the origin per gene and library (job running); the motif scan and
+- **Step 4 built (2026-09-12).** `genomeos motifs --chrom C [--gene G] |
+  --library L` (`genome/motifs.py`, `motifs_chr*`, `motifs_genome_wide`):
+  JASPAR 2026's 1,019 CORE vertebrate profiles scanned over every canonical
+  promoter (TSS ± 1 kb) and scored element through a k-mer index of feasible
+  motif cores (chr21 in 16 s), held against a dinucleotide-preserving shuffle;
+  a gene's `requires:` is its enriched factors with a hit (eight per promoter);
+  per library the enriched factors and the factor pairs recurring across
+  members beyond the two shares (the operators). Lesson: a single-base
+  shuffle made long zinc-finger matrices the only enriched class; the
+  dinucleotide control restored MEF2, FOX, PBX, PKNOX1 and MLXIP on real
+  promoters. The genome (20,067 promoters): at the factor level the
+  libraries recover REST for the nervous system (7.7x), IRF2/3/7/9 for
+  immunity and ZNF143 and THAP11 for the housekeeping cores without being
+  told; at the pair level the recurring pairs are near-identical matrices
+  (MEF2A with MEF2D) and GC-rich profiles co-hitting, the promoter's GC
+  content read twice, so the operator table stays inferred at low
+  confidence until profiles are clustered into families and the expectation
+  is GC-matched. GRAMMAR-BY-COMPARISON.md §8.
+- **Step 6 built (2026-09-12).** `genomeos decompile GENE --chrom C`
+  (`genomeos/decompile.py`): every layer read for one gene assembled into a
+  BioLang-flavoured view with an evidence note per line and an `unknown { }`
+  block naming the layers not yet read; assembly only, no inference.
+  GRAMMAR-BY-COMPARISON.md §9.
+- **Missing.** The human axis as a Blocks-tab lane; the origin per gene and
+  library (job running: 356 species placed on the ladder, then the 109 MB
+  Compara stream); the motif scan and
   operator patterns; phylogenetic profiling between libraries; the
   decompiled locus view; one developmental locus run end to end.
 - **Next.** 1. The human axis over the other 22 chromosomes as a resumable
@@ -1149,10 +1173,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   `region` as a second evidence line (compiled note done; the job runs). 2. Origin per gene through
   Ensembl homology at eight taxa; age distribution per library; the graph
   gains `orthologue_of`. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
-  and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. JASPAR scan of promoters and
-  constrained elements; `requires:` with evidence; recurring motif
-  combinations per library. 5. Phylogenetic profiling between libraries.
-  6. `genomeos decompile LOCUS`. 7. OCA2/HERC2 and the SHH ZRS across human,
+  and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done: the scan, `requires:` and the operator pairs; next profiles clustered
+  into families, a GC-matched expectation, and enhancers rather than promoters
+  for the developmental combinations (GATA plus T-box in heart). 5. Phylogenetic profiling between libraries.
+  6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. OCA2/HERC2 and the SHH ZRS across human,
   mouse, chicken and zebrafish.
 - **Owner.** genomeos-bb (this lane's files: `attribution/variation.py`,
   `knowledge/homology.py`, GRAMMAR-BY-COMPARISON.md); the compiled output

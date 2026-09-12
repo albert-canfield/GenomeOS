@@ -94,6 +94,20 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   `similar_to` fired once genome-wide (and was right): curated pairs replace
   it, the heuristic stays as fallback (`duplication_genome_wide`).
 
+- A motif control must keep the dinucleotides: shuffling single bases
+  destroys the CpG and GC runs promoters have, and long GC-rich zinc-finger
+  matrices then read as the only enriched class; a dinucleotide-preserving
+  shuffle (Altschul and Erickson) restores MEF2, FOX, PBX and PKNOX1 on real
+  promoters. And a factor-pair statistic that assumes independence finds the
+  GC content twice (MEF2A with MEF2D, CGGBP1 with GC-rich zinc fingers);
+  operators need profiles clustered into families and a GC-matched
+  expectation first (`motifs_genome_wide`).
+- Library-level motif enrichment recovers textbook associations without
+  being told them: REST 7.7x in `systems.nervous`, IRF2/3/7/9 in
+  `systems.immune`, ZNF143 and THAP11 in `core.translation` and
+  `core.replication`; the heart's GATA plus T-box pair is not in promoters,
+  where the scan looked, but in enhancers.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory

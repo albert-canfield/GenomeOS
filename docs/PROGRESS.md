@@ -640,3 +640,25 @@ right; curated pairs replace it. Area J step 2 (origin per gene, age per
 library, paralogues from Ensembl Compara streamed once; `knowledge/homology.py`,
 `genomeos origin`) is built, tested and running. docs/GRAMMAR-BY-COMPARISON.md
 §7; one LESSONS row.
+
+## 2026-09-12 — the dependency list from sequence, and the decompiled locus
+
+Area J steps 4 and 6. `genomeos motifs --chrom C` scans JASPAR 2026's 1,019
+CORE vertebrate profiles over a chromosome's canonical promoters (TSS ± 1 kb)
+and scored elements through a k-mer index of each motif's feasible cores,
+which turns hours of sliding into 16 s for chromosome 21, and holds every hit
+against a dinucleotide-preserving shuffle of the same promoters; a gene's
+`requires:` is its enriched factors with a hit, eight per promoter, and the
+genome summary reports per library the factors and factor pairs that recur
+across members' promoters beyond expectation, the operators. The control
+taught its lesson on the first run: shuffling single bases made long
+zinc-finger matrices the only enriched class, because that shuffle destroys
+the CpG and GC runs promoters have; keeping every dinucleotide count restored
+MEF2, FOX, PBX, PKNOX1 and MLXIP on real promoters. `genomeos decompile GENE
+--chrom C` assembles every layer read for one gene into one BioLang-flavoured
+view with an evidence note per line and an `unknown { }` block for the layers
+not yet read, inferring nothing; APP on chr21 decompiles with three elements
+and, while the Compara job runs, origin and paralogues as the only residue.
+Three jobs run in the background (the human axis over the genome, origin per
+gene, motifs over the genome); results are committed as they land.
+docs/GRAMMAR-BY-COMPARISON.md §8 and §9.

@@ -387,3 +387,87 @@ scored one copy. They are listed per chromosome for the organiser.
 
 **Paralogues** (the gene-level copy-and-paste) come from the Compara stream
 of step 2 (§8), not from this track.
+
+## 8. Step 4 built: motifs as the dependency list, and the operator search (2026-09-12)
+
+`genomeos motifs --chrom C [--gene G]` and `--library L` (`genome/motifs.py`;
+results `motifs_chr*`, `motifs_genome_wide`) derive what SEQUENCE-GRAMMAR.md
+§2 designed and never built: a gene's `requires:` list from its own promoter
+sequence. JASPAR 2026's CORE vertebrate collection (1,019 non-redundant
+profiles, cached once) is scanned over every canonical promoter (TSS ± 1 kb)
+and every scored element of a chromosome.
+
+**Method, and why it is fast.** Each profile becomes a log-odds matrix; a hit
+is a window at or above 85% of the way from the matrix minimum to its
+maximum, on either strand. The scan is indexed rather than sliding: every
+sequence is indexed by its 8-mers (or by its whole width for shorter
+motifs), each motif enumerates by branch and bound the k-mers of its most
+informative window that can still reach the threshold, and only those
+positions are scored in full. Chromosome 21's 221 promoters against every
+profile take 16 s; chromosome 19's 1,479 take 117 s.
+
+**Control, and the lesson it taught.** Every promoter is also shuffled and
+scanned the same way, and a factor's enrichment is the share of real
+promoters with a hit over the share of shuffled ones. With a single-base
+shuffle the enriched list was long zinc-finger matrices and nothing else,
+because that shuffle destroys the CpG and GC runs real promoters have and
+long GC-rich matrices then read as enriched against nothing. The control is
+now a dinucleotide-preserving shuffle (Altschul and Erickson), which keeps
+every dinucleotide count; the `requires:` lists then carry MEF2, FOX, PBX,
+PKNOX1, MLXIP and ZNF143 on real promoters, and the most enriched class is
+still, honestly, the long zinc-finger profiles (ZNF143, a promoter-binding
+factor, is real; several others are the resolution of an 85% threshold on a
+20-column matrix). A `requires:` entry is a factor with a hit whose
+enrichment on the chromosome is 1.5 or more, eight per promoter on average.
+Nothing here says a factor binds in a cell: that is the reader's claim, and
+the decompiled locus (§9) prints both side by side.
+
+**Operators, the genome (20,067 promoters, 24 chromosomes, 42 libraries).**
+The genome summary pools every gene's list and, per BioLib library with
+eight or more members, reports the factors that hit its members' promoters
+at 1.5 times the genome share and the factor *pairs* present together in
+members' promoters at twice what the two shares predict and in a quarter of
+the members or more. Two readings, one per level.
+
+At the factor level the libraries recover textbook biology without being
+told it: REST, the neuronal-gene repressor, is enriched 7.7 times in
+`systems.nervous` (28 members) and again in `blueprint.organ_nervous`,
+`organ_eye`, `endocrine` and `circadian`; the interferon-response factors
+IRF2, IRF3, IRF7 and IRF9 in `systems.immune` (2,821 members) and
+`blueprint.organ_blood_immune`; the housekeeping promoter factors ZNF143 and
+THAP11 in `core.translation` and `core.replication`, where they belong. The
+heart library shows nuclear receptors (NR3C1, NR3C2) and PRDM9 but not the
+GATA plus T-box pair the textbook names, which sits in enhancers more than in
+promoters, so the promoter scan was the wrong place to look for it.
+
+At the pair level the result is a lesson, not an operator table: the pairs
+that recur beyond the two shares are near-identical matrices co-hitting
+(MEF2A with MEF2D, MEF2B with MEF2D) and the CGG-repeat binder CGGBP1 with
+GC-rich zinc-finger profiles (ZNF93, ZNF131), in every library alike. Both
+are the promoter's GC content read twice, and a factor-pair statistic that
+assumes independence between two shares cannot see that. An operator test
+that means something needs the profiles clustered into families first (one
+MEF2, one GC-rich zinc-finger class) and an expectation matched on GC, and
+then enhancers, not promoters, for the developmental combinations. That is
+the next step of step 4, and the table stands as `inferred` at low
+confidence until it is done.
+
+## 9. Step 6 built: the decompiled locus (2026-09-12)
+
+`genomeos decompile GENE --chrom C` (`genomeos/decompile.py`) is the view
+the conversation imagined, built by assembly alone: it reads the results on
+disk and infers nothing, fetches nothing. For one gene it prints, as a
+BioLang-flavoured block with an evidence note per line: the gene and its
+canonical structure (GENCODE), the protein with its domains and pathways
+(UniProt, InterPro, Reactome), origin and paralogues (Compara, when read),
+the promoter's `requires:` (the motif scan), the node it sits in and where
+the reader finds its promoter open (eleven ENCODE cell types), every element
+whose deletion the model says moves it, with the predicted magnitude and
+tissue, both constraint axes and the case, whether the element lies in a
+segmental duplication and which motifs it carries, GTEx expression, and
+last an `unknown { }` block naming every layer not yet read for that locus.
+APP on chr21 decompiles with three elements (one `relaxed`, 46% of its bases
+constrained across mammals and none of its kilobases among people) and, at
+the time of writing, origin and paralogues as the only residue. The view is
+the product form of area J: what the project knows about a locus, layer by
+layer, with the gap stated.
