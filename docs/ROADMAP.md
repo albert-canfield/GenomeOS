@@ -1317,6 +1317,19 @@ in order. "Owner" is the session that holds the files today (see §7).
   least alike (−0.87); shared members inflate pairs and 102 of the species
   are bacteria, so the correlation is `inferred` and a dependency claim
   needs a gene-level profile and a shuffled null. GRAMMAR-BY-COMPARISON.md §11.
+- **Step 7 built (2026-09-12).** `genomeos across --locus ZRS | HERC2_OCA2`
+  (`knowledge/across.py`, `across_ZRS`, `across_HERC2_OCA2`): the human
+  element aligned to mouse, opossum, chicken, frog and zebrafish through
+  Compara's pairwise LASTZ alignments, both constraint axes, and the JASPAR
+  factors whose motif holds the *same aligned site* in every species (a first
+  version counting presence anywhere called 170 factors conserved). The ZRS
+  aligns fully to mouse, opossum and chicken (87 to 89%) and 10% to
+  zebrafish; 23 of 606 factors hold their site in all four, the HOX, PBX and
+  MEIS class with an ETS site, which is the enhancer's known logic, and HAND2
+  holds in the three amniotes. The OCA2 enhancer aligns only to mammals,
+  constrained among people (Z 3.46) far more than across mammals (7.7%);
+  the MiT E-box class and SOX10 hold their sites. Matrix families still
+  count many times over. GRAMMAR-BY-COMPARISON.md §12.
 - **Step 6 built (2026-09-12).** `genomeos decompile GENE --chrom C`
   (`genomeos/decompile.py`): every layer read for one gene assembled into a
   BioLang-flavoured view with an evidence note per line and an `unknown { }`
@@ -1332,8 +1345,9 @@ in order. "Owner" is the session that holds the files today (see §7).
   into families, a GC-matched expectation, and enhancers rather than promoters
   for the developmental combinations (GATA plus T-box in heart). 5. Done at library level; next a gene-level profile with a shuffled-library
   null before any pair is called a dependency.
-  6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. OCA2/HERC2 and the SHH ZRS across human,
-  mouse, chicken and zebrafish.
+  6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. Done for the ZRS and the OCA2 enhancer; next JASPAR clustered into
+  families before counting (shared with step 4), and more loci from VISTA's
+  limb and neural positives.
 - **Owner.** genomeos-bb (this lane's files: `attribution/variation.py`,
   `knowledge/homology.py`, GRAMMAR-BY-COMPARISON.md); the compiled output
   stays with genomeos-f7's `attribution/compile.py` and takes isolated hunks.

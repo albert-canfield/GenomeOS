@@ -1,0 +1,5843 @@
+{
+  "result": "across_ZRS",
+  "date": "2026-09-12",
+  "locus": "ZRS",
+  "chrom": "chr7",
+  "start": 156791086,
+  "end": 156791875,
+  "gene": "SHH",
+  "note": "VISTA hs2496, limb positive; the SHH limb enhancer inside LMBR1 intron 5, 1 Mb from its target",
+  "length": 789,
+  "species": {
+    "mus_musculus": {
+      "species": "mus_musculus",
+      "blocks": 1,
+      "locus": "5:29519879-29520665(+)",
+      "human_bases_aligned": 789,
+      "coverage": 1.0,
+      "identity": 0.882,
+      "aligned_columns": 787
+    },
+    "monodelphis_domestica": {
+      "species": "monodelphis_domestica",
+      "blocks": 1,
+      "locus": "8:223237144-223237937(+)",
+      "human_bases_aligned": 789,
+      "coverage": 1.0,
+      "identity": 0.886,
+      "aligned_columns": 789
+    },
+    "gallus_gallus": {
+      "species": "gallus_gallus",
+      "blocks": 1,
+      "locus": "2:8473995-8474804(+)",
+      "human_bases_aligned": 789,
+      "coverage": 1.0,
+      "identity": 0.875,
+      "aligned_columns": 789
+    },
+    "xenopus_tropicalis": {
+      "species": "xenopus_tropicalis",
+      "error": "HTTP Error 400: Bad Request",
+      "coverage": 0.0,
+      "identity": null
+    },
+    "danio_rerio": {
+      "species": "danio_rerio",
+      "blocks": 1,
+      "locus": "7:40669336-40669413(-)",
+      "human_bases_aligned": 77,
+      "coverage": 0.098,
+      "identity": 0.805,
+      "aligned_columns": 77
+    }
+  },
+  "aligned_in": [
+    "mus_musculus",
+    "monodelphis_domestica",
+    "gallus_gallus",
+    "danio_rerio"
+  ],
+  "grammar": {
+    "factors_in_human": 606,
+    "species_compared": [
+      "mus_musculus",
+      "monodelphis_domestica",
+      "gallus_gallus",
+      "danio_rerio"
+    ],
+    "same_site_window": 15,
+    "everywhere": [
+      "CRX",
+      "EMX2",
+      "GSC2",
+      "HOXB5",
+      "HOXC8",
+      "NKX6-1",
+      "NKX6-2",
+      "NR2C2",
+      "PDX1",
+      "ZNF536",
+      "HOXC10",
+      "CDX1",
+      "CDX4",
+      "HOXA10",
+      "MEIS3",
+      "MEIS2",
+      "LIN54",
+      "HOXA9",
+      "NR2E1",
+      "ZBTB32",
+      "ZNF766",
+      "PBX2",
+      "ETV5::FOXO1"
+    ],
+    "rows": [
+      {
+        "factor": "CRX",
+        "human_score": 1.0,
+        "human_position": 661,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "EMX2",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "GSC2",
+        "human_score": 1.0,
+        "human_position": 661,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXB5",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXC8",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "NKX6-1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "NKX6-2",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "NR2C2",
+        "human_score": 1.0,
+        "human_position": 392,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "PDX1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZNF536",
+        "human_score": 1.0,
+        "human_position": 323,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXC10",
+        "human_score": 0.996,
+        "human_position": 374,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "CDX1",
+        "human_score": 0.993,
+        "human_position": 373,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "CDX4",
+        "human_score": 0.993,
+        "human_position": 374,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXA10",
+        "human_score": 0.984,
+        "human_position": 374,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MEIS3",
+        "human_score": 0.984,
+        "human_position": 500,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MEIS2",
+        "human_score": 0.973,
+        "human_position": 499,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LIN54",
+        "human_score": 0.973,
+        "human_position": 762,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXA9",
+        "human_score": 0.973,
+        "human_position": 374,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "NR2E1",
+        "human_score": 0.971,
+        "human_position": 362,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZBTB32",
+        "human_score": 0.929,
+        "human_position": 381,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZNF766",
+        "human_score": 0.902,
+        "human_position": 424,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "PBX2",
+        "human_score": 0.883,
+        "human_position": 424,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ETV5::FOXO1",
+        "human_score": 0.881,
+        "human_position": 449,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ARID3A",
+        "human_score": 1.0,
+        "human_position": 468,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BCL11A",
+        "human_score": 1.0,
+        "human_position": 723,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IKZF2",
+        "human_score": 1.0,
+        "human_position": 585,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1H3",
+        "human_score": 1.0,
+        "human_position": 392,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ALX1",
+        "human_score": 1.0,
+        "human_position": 574,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ALX3",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DRGX",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EMX1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EN1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FIGLA",
+        "human_score": 1.0,
+        "human_position": 558,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA2",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EVX1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EVX2",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PITX1",
+        "human_score": 1.0,
+        "human_position": 661,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GSC",
+        "human_score": 1.0,
+        "human_position": 661,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GSX1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HAND2",
+        "human_score": 1.0,
+        "human_position": 368,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HESX1",
+        "human_score": 1.0,
+        "human_position": 719,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB2",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB3",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ISX",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX4",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX8",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LMX1A",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LMX1B",
+        "human_score": 1.0,
+        "human_position": 574,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MEIS1",
+        "human_score": 1.0,
+        "human_position": 449,
+        "same_site_in": [
+          "danio_rerio",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MIX-A",
+        "human_score": 1.0,
+        "human_position": 574,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MIXL1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MNX1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFATC3",
+        "human_score": 1.0,
+        "human_position": 212,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFIX",
+        "human_score": 1.0,
+        "human_position": 412,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NOBOX",
+        "human_score": 1.0,
+        "human_position": 719,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2C1",
+        "human_score": 1.0,
+        "human_position": 392,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2F2",
+        "human_score": 1.0,
+        "human_position": 391,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "OTX1",
+        "human_score": 1.0,
+        "human_position": 661,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PITX3",
+        "human_score": 1.0,
+        "human_position": 661,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "POU6F1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PRRX1",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RBPJ",
+        "human_score": 1.0,
+        "human_position": 104,
+        "same_site_in": [
+          "danio_rerio",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RHOXF1",
+        "human_score": 1.0,
+        "human_position": 661,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SHOX",
+        "human_score": 1.0,
+        "human_position": 719,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX15",
+        "human_score": 1.0,
+        "human_position": 492,
+        "same_site_in": [
+          "danio_rerio",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TLX2",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "UNCX",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VAX2",
+        "human_score": 1.0,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZEB1",
+        "human_score": 1.0,
+        "human_position": 558,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIC1::ZIC2",
+        "human_score": 1.0,
+        "human_position": 108,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIC3",
+        "human_score": 1.0,
+        "human_position": 108,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZGLP1",
+        "human_score": 1.0,
+        "human_position": 67,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF70",
+        "human_score": 1.0,
+        "human_position": 486,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MKX",
+        "human_score": 1.0,
+        "human_position": 504,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRX5",
+        "human_score": 1.0,
+        "human_position": 504,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZEB2",
+        "human_score": 1.0,
+        "human_position": 558,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXL1",
+        "human_score": 0.996,
+        "human_position": 56,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VAX1",
+        "human_score": 0.995,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX18",
+        "human_score": 0.993,
+        "human_position": 20,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRTA2",
+        "human_score": 0.992,
+        "human_position": 338,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ESX1",
+        "human_score": 0.992,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRX1",
+        "human_score": 0.992,
+        "human_position": 504,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PITX2",
+        "human_score": 0.991,
+        "human_position": 660,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX9",
+        "human_score": 0.99,
+        "human_position": 570,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT3",
+        "human_score": 0.99,
+        "human_position": 104,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NOTO",
+        "human_score": 0.989,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "OTX2",
+        "human_score": 0.987,
+        "human_position": 661,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD9",
+        "human_score": 0.986,
+        "human_position": 374,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB9",
+        "human_score": 0.985,
+        "human_position": 374,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC9",
+        "human_score": 0.985,
+        "human_position": 374,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX5",
+        "human_score": 0.985,
+        "human_position": 570,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PRRX2",
+        "human_score": 0.985,
+        "human_position": 570,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD10",
+        "human_score": 0.984,
+        "human_position": 373,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARX",
+        "human_score": 0.98,
+        "human_position": 572,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA11",
+        "human_score": 0.98,
+        "human_position": 374,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX6",
+        "human_score": 0.98,
+        "human_position": 574,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VSX1",
+        "human_score": 0.98,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HIC2",
+        "human_score": 0.978,
+        "human_position": 174,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD11",
+        "human_score": 0.978,
+        "human_position": 374,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARGFX",
+        "human_score": 0.977,
+        "human_position": 574,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ESRRG",
+        "human_score": 0.977,
+        "human_position": 389,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ISL2",
+        "human_score": 0.977,
+        "human_position": 719,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TLX3",
+        "human_score": 0.974,
+        "human_position": 571,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VSX2",
+        "human_score": 0.971,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD12",
+        "human_score": 0.97,
+        "human_position": 373,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXG1",
+        "human_score": 0.969,
+        "human_position": 56,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RORA",
+        "human_score": 0.966,
+        "human_position": 388,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ALX4",
+        "human_score": 0.966,
+        "human_position": 570,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC12",
+        "human_score": 0.966,
+        "human_position": 373,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EHF",
+        "human_score": 0.964,
+        "human_position": 194,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ELF3",
+        "human_score": 0.964,
+        "human_position": 194,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIC2",
+        "human_score": 0.964,
+        "human_position": 106,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX6",
+        "human_score": 0.963,
+        "human_position": 478,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VENTX",
+        "human_score": 0.961,
+        "human_position": 718,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA5",
+        "human_score": 0.959,
+        "human_position": 570,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT4",
+        "human_score": 0.959,
+        "human_position": 91,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD1",
+        "human_score": 0.959,
+        "human_position": 573,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBP",
+        "human_score": 0.958,
+        "human_position": 516,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT1",
+        "human_score": 0.953,
+        "human_position": 104,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LEUTX",
+        "human_score": 0.952,
+        "human_position": 661,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZFP809",
+        "human_score": 0.948,
+        "human_position": 104,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ATOH1",
+        "human_score": 0.948,
+        "human_position": 368,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD3",
+        "human_score": 0.946,
+        "human_position": 574,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC11",
+        "human_score": 0.946,
+        "human_position": 372,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX2",
+        "human_score": 0.941,
+        "human_position": 11,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CDX2",
+        "human_score": 0.938,
+        "human_position": 53,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX4",
+        "human_score": 0.937,
+        "human_position": 12,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MEOX2",
+        "human_score": 0.937,
+        "human_position": 574,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX13",
+        "human_score": 0.936,
+        "human_position": 492,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRTA1",
+        "human_score": 0.935,
+        "human_position": 336,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX2",
+        "human_score": 0.933,
+        "human_position": 492,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SNAI1",
+        "human_score": 0.932,
+        "human_position": 558,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV2",
+        "human_score": 0.931,
+        "human_position": 134,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX2-4",
+        "human_score": 0.931,
+        "human_position": 656,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TWIST1",
+        "human_score": 0.931,
+        "human_position": 367,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ELF1",
+        "human_score": 0.93,
+        "human_position": 194,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX3",
+        "human_score": 0.928,
+        "human_position": 11,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DPRX",
+        "human_score": 0.926,
+        "human_position": 227,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DUX4",
+        "human_score": 0.925,
+        "human_position": 362,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ELK4",
+        "human_score": 0.925,
+        "human_position": 194,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SIX4",
+        "human_score": 0.925,
+        "human_position": 503,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF4",
+        "human_score": 0.921,
+        "human_position": 557,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2F1",
+        "human_score": 0.92,
+        "human_position": 390,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IKZF3",
+        "human_score": 0.916,
+        "human_position": 194,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MEF2C",
+        "human_score": 0.915,
+        "human_position": 250,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB13",
+        "human_score": 0.914,
+        "human_position": 616,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC13",
+        "human_score": 0.913,
+        "human_position": 374,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NEUROG2",
+        "human_score": 0.912,
+        "human_position": 367,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FLI1::FOXI1",
+        "human_score": 0.912,
+        "human_position": 450,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "POU6F2",
+        "human_score": 0.912,
+        "human_position": 572,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMBX1",
+        "human_score": 0.911,
+        "human_position": 661,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR4A1",
+        "human_score": 0.91,
+        "human_position": 362,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BHLHE22",
+        "human_score": 0.909,
+        "human_position": 558,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ATOH7",
+        "human_score": 0.908,
+        "human_position": 366,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX3-2",
+        "human_score": 0.908,
+        "human_position": 654,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF214",
+        "human_score": 0.906,
+        "human_position": 728,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MAF::NFE2",
+        "human_score": 0.904,
+        "human_position": 448,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF21",
+        "human_score": 0.904,
+        "human_position": 366,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HMX3",
+        "human_score": 0.903,
+        "human_position": 217,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ATF3",
+        "human_score": 0.901,
+        "human_position": 449,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA1::TAL1",
+        "human_score": 0.901,
+        "human_position": 705,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PTF1A",
+        "human_score": 0.901,
+        "human_position": 557,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB21",
+        "human_score": 0.901,
+        "human_position": 593,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MYCN",
+        "human_score": 0.9,
+        "human_position": 557,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF524",
+        "human_score": 0.897,
+        "human_position": 139,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX14",
+        "human_score": 0.896,
+        "human_position": 215,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HMX2",
+        "human_score": 0.893,
+        "human_position": 216,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "USF3",
+        "human_score": 0.891,
+        "human_position": 557,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZKSCAN1",
+        "human_score": 0.889,
+        "human_position": 302,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BATF3",
+        "human_score": 0.888,
+        "human_position": 449,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SIX1",
+        "human_score": 0.888,
+        "human_position": 503,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT5B",
+        "human_score": 0.887,
+        "human_position": 104,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF263",
+        "human_score": 0.887,
+        "human_position": 485,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF12",
+        "human_score": 0.886,
+        "human_position": 558,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BNC2",
+        "human_score": 0.885,
+        "human_position": 449,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NEUROD1",
+        "human_score": 0.885,
+        "human_position": 557,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFE2L2",
+        "human_score": 0.885,
+        "human_position": 448,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSB",
+        "human_score": 0.884,
+        "human_position": 449,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SP2",
+        "human_score": 0.88,
+        "human_position": 484,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SNAI2",
+        "human_score": 0.88,
+        "human_position": 557,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MYC",
+        "human_score": 0.872,
+        "human_position": 557,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF490",
+        "human_score": 0.872,
+        "human_position": 495,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB11",
+        "human_score": 0.871,
+        "human_position": 194,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TAL1::TCF3",
+        "human_score": 0.869,
+        "human_position": 556,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BHLHA15",
+        "human_score": 0.866,
+        "human_position": 366,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MEF2A",
+        "human_score": 0.863,
+        "human_position": 250,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MYOD1",
+        "human_score": 0.863,
+        "human_position": 557,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFYB",
+        "human_score": 0.861,
+        "human_position": 348,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SPDEF",
+        "human_score": 0.86,
+        "human_position": 725,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RARA::RXRG",
+        "human_score": 0.858,
+        "human_position": 392,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PRDM13",
+        "human_score": 0.858,
+        "human_position": 556,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1D2",
+        "human_score": 0.857,
+        "human_position": 722,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MAFG::NRF1",
+        "human_score": 0.857,
+        "human_position": 448,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PAX8",
+        "human_score": 0.854,
+        "human_position": 221,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "THAP1",
+        "human_score": 0.852,
+        "human_position": 430,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PPARA",
+        "human_score": 1.0,
+        "human_position": 391,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRT3",
+        "human_score": 1.0,
+        "human_position": 337,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ELF5",
+        "human_score": 1.0,
+        "human_position": 584,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB4",
+        "human_score": 1.0,
+        "human_position": 257,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC4",
+        "human_score": 1.0,
+        "human_position": 257,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD4",
+        "human_score": 1.0,
+        "human_position": 257,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MXI1",
+        "human_score": 1.0,
+        "human_position": 171,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFATC1",
+        "human_score": 1.0,
+        "human_position": 212,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFIA",
+        "human_score": 1.0,
+        "human_position": 412,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SMAD2",
+        "human_score": 1.0,
+        "human_position": 703,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX11",
+        "human_score": 1.0,
+        "human_position": 479,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TEAD2",
+        "human_score": 1.0,
+        "human_position": 524,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZXDB",
+        "human_score": 1.0,
+        "human_position": 111,
+        "same_site_in": [
+          "danio_rerio",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXN1",
+        "human_score": 0.996,
+        "human_position": 553,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX8",
+        "human_score": 0.993,
+        "human_position": 20,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SMAD4",
+        "human_score": 0.992,
+        "human_position": 702,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX4",
+        "human_score": 0.991,
+        "human_position": 478,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXP3",
+        "human_score": 0.987,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX9",
+        "human_score": 0.986,
+        "human_position": 20,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARID3B",
+        "human_score": 0.984,
+        "human_position": 573,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXF1",
+        "human_score": 0.981,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO6",
+        "human_score": 0.978,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HSF5",
+        "human_score": 0.976,
+        "human_position": 524,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO4",
+        "human_score": 0.975,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXJ2",
+        "human_score": 0.971,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX30",
+        "human_score": 0.97,
+        "human_position": 20,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXP2",
+        "human_score": 0.968,
+        "human_position": 55,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXI1",
+        "human_score": 0.961,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB7",
+        "human_score": 0.96,
+        "human_position": 575,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA6",
+        "human_score": 0.959,
+        "human_position": 53,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX5",
+        "human_score": 0.959,
+        "human_position": 20,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA5",
+        "human_score": 0.958,
+        "human_position": 619,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV7",
+        "human_score": 0.957,
+        "human_position": 194,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TFAP4",
+        "human_score": 0.952,
+        "human_position": 366,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FEZF2",
+        "human_score": 0.952,
+        "human_position": 292,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX2-8",
+        "human_score": 0.948,
+        "human_position": 193,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SALL3",
+        "human_score": 0.945,
+        "human_position": 400,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXK1",
+        "human_score": 0.944,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXK2",
+        "human_score": 0.944,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MAX",
+        "human_score": 0.942,
+        "human_position": 171,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB7C",
+        "human_score": 0.941,
+        "human_position": 143,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO3",
+        "human_score": 0.939,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXP1",
+        "human_score": 0.939,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF853",
+        "human_score": 0.936,
+        "human_position": 529,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF5",
+        "human_score": 0.934,
+        "human_position": 139,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HAND1::TCF3",
+        "human_score": 0.934,
+        "human_position": 703,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX2-3",
+        "human_score": 0.934,
+        "human_position": 656,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NPAS2",
+        "human_score": 0.933,
+        "human_position": 170,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TFEB",
+        "human_score": 0.933,
+        "human_position": 171,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CLOCK",
+        "human_score": 0.932,
+        "human_position": 170,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV6",
+        "human_score": 0.932,
+        "human_position": 194,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HES1",
+        "human_score": 0.932,
+        "human_position": 169,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ASCL1",
+        "human_score": 0.93,
+        "human_position": 170,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXM1",
+        "human_score": 0.929,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MGA::EVX1",
+        "human_score": 0.927,
+        "human_position": 9,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF175",
+        "human_score": 0.926,
+        "human_position": 583,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETS1",
+        "human_score": 0.924,
+        "human_position": 134,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXP4",
+        "human_score": 0.923,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HEY2",
+        "human_score": 0.923,
+        "human_position": 170,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOMEZ",
+        "human_score": 0.923,
+        "human_position": 244,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PAX3",
+        "human_score": 0.92,
+        "human_position": 571,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ONECUT2",
+        "human_score": 0.92,
+        "human_position": 224,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXA3",
+        "human_score": 0.92,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBR1",
+        "human_score": 0.92,
+        "human_position": 11,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MGA",
+        "human_score": 0.919,
+        "human_position": 12,
+        "same_site_in": [
+          "danio_rerio",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO1",
+        "human_score": 0.919,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL2",
+        "human_score": 0.918,
+        "human_position": 200,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX5",
+        "human_score": 0.917,
+        "human_position": 12,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOS",
+        "human_score": 0.916,
+        "human_position": 201,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXA2",
+        "human_score": 0.916,
+        "human_position": 55,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HIC1",
+        "human_score": 0.915,
+        "human_position": 174,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXJ3",
+        "human_score": 0.914,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB26",
+        "human_score": 0.913,
+        "human_position": 703,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DUXA",
+        "human_score": 0.912,
+        "human_position": 2,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXD1",
+        "human_score": 0.909,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PAX7",
+        "human_score": 0.909,
+        "human_position": 571,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "JUN",
+        "human_score": 0.906,
+        "human_position": 76,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NHLH1",
+        "human_score": 0.906,
+        "human_position": 169,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXF2",
+        "human_score": 0.906,
+        "human_position": 55,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PPARG::RXRA",
+        "human_score": 0.906,
+        "human_position": 357,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOHLH2",
+        "human_score": 0.906,
+        "human_position": 170,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HAND1",
+        "human_score": 0.905,
+        "human_position": 701,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "REL",
+        "human_score": 0.904,
+        "human_position": 130,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX1",
+        "human_score": 0.904,
+        "human_position": 12,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXB1",
+        "human_score": 0.904,
+        "human_position": 518,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX2-5",
+        "human_score": 0.904,
+        "human_position": 206,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZKSCAN5",
+        "human_score": 0.904,
+        "human_position": 208,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXQ1",
+        "human_score": 0.903,
+        "human_position": 55,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HES2",
+        "human_score": 0.903,
+        "human_position": 169,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MYF6",
+        "human_score": 0.902,
+        "human_position": 20,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD13",
+        "human_score": 0.902,
+        "human_position": 617,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MAFB",
+        "human_score": 0.901,
+        "human_position": 511,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "JDP2",
+        "human_score": 0.9,
+        "human_position": 204,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL2::JUNB",
+        "human_score": 0.9,
+        "human_position": 200,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BHLHE40",
+        "human_score": 0.899,
+        "human_position": 170,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF121",
+        "human_score": 0.899,
+        "human_position": 505,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MLXIPL",
+        "human_score": 0.897,
+        "human_position": 171,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF3",
+        "human_score": 0.896,
+        "human_position": 170,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "OSR1",
+        "human_score": 0.895,
+        "human_position": 349,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MYBL1",
+        "human_score": 0.893,
+        "human_position": 648,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSB::JUNB",
+        "human_score": 0.891,
+        "human_position": 200,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HMGA1",
+        "human_score": 0.891,
+        "human_position": 471,
+        "same_site_in": [
+          "danio_rerio",
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "POU4F3",
+        "human_score": 0.891,
+        "human_position": 573,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOS::JUND",
+        "human_score": 0.89,
+        "human_position": 448,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "POU4F1",
+        "human_score": 0.89,
+        "human_position": 573,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXS1",
+        "human_score": 0.889,
+        "human_position": 55,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF43",
+        "human_score": 0.889,
+        "human_position": 595,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX7",
+        "human_score": 0.888,
+        "human_position": 492,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL2::JUND",
+        "human_score": 0.888,
+        "human_position": 200,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX18",
+        "human_score": 0.887,
+        "human_position": 139,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB47",
+        "human_score": 0.887,
+        "human_position": 652,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRTB1",
+        "human_score": 0.887,
+        "human_position": 338,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX20",
+        "human_score": 0.884,
+        "human_position": 10,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB17",
+        "human_score": 0.883,
+        "human_position": 572,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BATF",
+        "human_score": 0.882,
+        "human_position": 449,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX17",
+        "human_score": 0.881,
+        "human_position": 492,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SPIC",
+        "human_score": 0.881,
+        "human_position": 115,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BATF::JUN",
+        "human_score": 0.879,
+        "human_position": 449,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SP5",
+        "human_score": 0.879,
+        "human_position": 698,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA1",
+        "human_score": 0.878,
+        "human_position": 343,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIC4",
+        "human_score": 0.878,
+        "human_position": 106,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX21",
+        "human_score": 0.877,
+        "human_position": 11,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL1::JUNB",
+        "human_score": 0.877,
+        "human_position": 204,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NPAS4",
+        "human_score": 0.876,
+        "human_position": 725,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF6",
+        "human_score": 0.875,
+        "human_position": 140,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "YY2",
+        "human_score": 0.875,
+        "human_position": 328,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "JUNB",
+        "human_score": 0.873,
+        "human_position": 204,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV2::HOXB13",
+        "human_score": 0.872,
+        "human_position": 85,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR4A2",
+        "human_score": 0.872,
+        "human_position": 362,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF317",
+        "human_score": 0.872,
+        "human_position": 496,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL1",
+        "human_score": 0.871,
+        "human_position": 204,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA6",
+        "human_score": 0.871,
+        "human_position": 619,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIC1",
+        "human_score": 0.87,
+        "human_position": 106,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX5",
+        "human_score": 0.87,
+        "human_position": 718,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1D1",
+        "human_score": 0.87,
+        "human_position": 653,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF250",
+        "human_score": 0.87,
+        "human_position": 66,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFE2",
+        "human_score": 0.869,
+        "human_position": 204,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOS::JUNB",
+        "human_score": 0.868,
+        "human_position": 204,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SPIB",
+        "human_score": 0.868,
+        "human_position": 193,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRF6",
+        "human_score": 0.867,
+        "human_position": 68,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF367",
+        "human_score": 0.867,
+        "human_position": 85,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PBX1",
+        "human_score": 0.865,
+        "human_position": 204,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF746",
+        "human_score": 0.863,
+        "human_position": 484,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX3",
+        "human_score": 0.862,
+        "human_position": 569,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF11",
+        "human_score": 0.861,
+        "human_position": 140,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZFP42",
+        "human_score": 0.859,
+        "human_position": 324,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NANOG",
+        "human_score": 0.857,
+        "human_position": 269,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF7L1",
+        "human_score": 0.853,
+        "human_position": 634,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "THRB",
+        "human_score": 0.853,
+        "human_position": 442,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF2",
+        "human_score": 0.852,
+        "human_position": 140,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CUX1",
+        "human_score": 0.851,
+        "human_position": 572,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFAT5",
+        "human_score": 0.851,
+        "human_position": 90,
+        "same_site_in": [
+          "gallus_gallus",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PRDM5",
+        "human_score": 0.851,
+        "human_position": 326,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX6",
+        "human_score": 0.851,
+        "human_position": 139,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV5",
+        "human_score": 0.85,
+        "human_position": 726,
+        "same_site_in": [
+          "gallus_gallus",
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BARX1",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [
+          "danio_rerio"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1H2",
+        "human_score": 1.0,
+        "human_position": 392,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1H4",
+        "human_score": 1.0,
+        "human_position": 392,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX10",
+        "human_score": 1.0,
+        "human_position": 631,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TEAD4",
+        "human_score": 1.0,
+        "human_position": 524,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VEZF1",
+        "human_score": 1.0,
+        "human_position": 355,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZFP335",
+        "human_score": 1.0,
+        "human_position": 624,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NACC2",
+        "human_score": 1.0,
+        "human_position": 74,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF800",
+        "human_score": 1.0,
+        "human_position": 167,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZXDC",
+        "human_score": 1.0,
+        "human_position": 110,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZXDA",
+        "human_score": 1.0,
+        "human_position": 110,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRX2",
+        "human_score": 1.0,
+        "human_position": 73,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SRY",
+        "human_score": 0.986,
+        "human_position": 19,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF384",
+        "human_score": 0.974,
+        "human_position": 471,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXH1",
+        "human_score": 0.97,
+        "human_position": 55,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GFI1B",
+        "human_score": 0.969,
+        "human_position": 128,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF7L2",
+        "human_score": 0.965,
+        "human_position": 66,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB7A",
+        "human_score": 0.96,
+        "human_position": 112,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PHOX2B",
+        "human_score": 0.959,
+        "human_position": 3,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TEAD1",
+        "human_score": 0.955,
+        "human_position": 524,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PROP1",
+        "human_score": 0.948,
+        "human_position": 3,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ESRRA",
+        "human_score": 0.948,
+        "human_position": 389,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HLF",
+        "human_score": 0.948,
+        "human_position": 401,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT5A::STAT5B",
+        "human_score": 0.948,
+        "human_position": 527,
+        "same_site_in": [
+          "danio_rerio"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MYT1",
+        "human_score": 0.948,
+        "human_position": 406,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFIL3",
+        "human_score": 0.947,
+        "human_position": 401,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BARX2",
+        "human_score": 0.945,
+        "human_position": 572,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCFL5",
+        "human_score": 0.943,
+        "human_position": 278,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX3",
+        "human_score": 0.941,
+        "human_position": 21,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZSCAN21",
+        "human_score": 0.937,
+        "human_position": 191,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ESRRB",
+        "human_score": 0.936,
+        "human_position": 389,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETS2",
+        "human_score": 0.936,
+        "human_position": 583,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GFI1",
+        "human_score": 0.935,
+        "human_position": 127,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GMEB1",
+        "human_score": 0.935,
+        "human_position": 167,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PHOX2A",
+        "human_score": 0.933,
+        "human_position": 3,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF648",
+        "human_score": 0.932,
+        "human_position": 117,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRT1",
+        "human_score": 0.931,
+        "human_position": 629,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DBP",
+        "human_score": 0.929,
+        "human_position": 400,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GCM1",
+        "human_score": 0.924,
+        "human_position": 533,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF652",
+        "human_score": 0.921,
+        "human_position": 647,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR5A1",
+        "human_score": 0.921,
+        "human_position": 386,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR5A2",
+        "human_score": 0.915,
+        "human_position": 389,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV5::FOXI1",
+        "human_score": 0.912,
+        "human_position": 56,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF574",
+        "human_score": 0.912,
+        "human_position": 679,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TFEC",
+        "human_score": 0.91,
+        "human_position": 171,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF878",
+        "human_score": 0.909,
+        "human_position": 414,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NEUROG1",
+        "human_score": 0.908,
+        "human_position": 33,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "JUND",
+        "human_score": 0.907,
+        "human_position": 75,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRTC2",
+        "human_score": 0.906,
+        "human_position": 16,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV2::FOXI1",
+        "human_score": 0.904,
+        "human_position": 581,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GCM2",
+        "human_score": 0.902,
+        "human_position": 535,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFATC4",
+        "human_score": 0.902,
+        "human_position": 357,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA2",
+        "human_score": 0.901,
+        "human_position": 34,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1H3::RXRA",
+        "human_score": 0.9,
+        "human_position": 77,
+        "same_site_in": [
+          "danio_rerio"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RUNX1",
+        "human_score": 0.899,
+        "human_position": 129,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "OLIG1",
+        "human_score": 0.898,
+        "human_position": 735,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GMEB2",
+        "human_score": 0.898,
+        "human_position": 591,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RELB",
+        "human_score": 0.897,
+        "human_position": 357,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ERF",
+        "human_score": 0.896,
+        "human_position": 583,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB7B",
+        "human_score": 0.896,
+        "human_position": 143,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SNAI3",
+        "human_score": 0.895,
+        "human_position": 170,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ELF2",
+        "human_score": 0.894,
+        "human_position": 195,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EOMES",
+        "human_score": 0.894,
+        "human_position": 11,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "YY1",
+        "human_score": 0.894,
+        "human_position": 324,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "OLIG3",
+        "human_score": 0.893,
+        "human_position": 735,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BHLHE23",
+        "human_score": 0.892,
+        "human_position": 735,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZSCAN29",
+        "human_score": 0.891,
+        "human_position": 280,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MSANTD4",
+        "human_score": 0.891,
+        "human_position": 24,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL2::JUN",
+        "human_score": 0.888,
+        "human_position": 448,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR6A1",
+        "human_score": 0.888,
+        "human_position": 390,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VDR",
+        "human_score": 0.888,
+        "human_position": 649,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF784",
+        "human_score": 0.887,
+        "human_position": 144,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MYB",
+        "human_score": 0.886,
+        "human_position": 368,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BACH1",
+        "human_score": 0.884,
+        "human_position": 204,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF700",
+        "human_score": 0.884,
+        "human_position": 266,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOS::JUN",
+        "human_score": 0.883,
+        "human_position": 448,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HES5",
+        "human_score": 0.882,
+        "human_position": 169,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB5",
+        "human_score": 0.882,
+        "human_position": 224,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL1::JUN",
+        "human_score": 0.877,
+        "human_position": 448,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARNTL",
+        "human_score": 0.877,
+        "human_position": 171,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "OLIG2",
+        "human_score": 0.876,
+        "human_position": 368,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ESR2",
+        "human_score": 0.875,
+        "human_position": 386,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX12",
+        "human_score": 0.875,
+        "human_position": 16,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HELT",
+        "human_score": 0.875,
+        "human_position": 366,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SMAD5",
+        "human_score": 0.874,
+        "human_position": 281,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF66",
+        "human_score": 0.873,
+        "human_position": 110,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZFX",
+        "human_score": 0.872,
+        "human_position": 332,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXC1",
+        "human_score": 0.869,
+        "human_position": 249,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GRHL2",
+        "human_score": 0.869,
+        "human_position": 654,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NEUROD2",
+        "human_score": 0.868,
+        "human_position": 557,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBED2",
+        "human_score": 0.867,
+        "human_position": 711,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TWIST2",
+        "human_score": 0.866,
+        "human_position": 368,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CASZ1",
+        "human_score": 0.866,
+        "human_position": 46,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF343",
+        "human_score": 0.864,
+        "human_position": 551,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PPARA::RXRA",
+        "human_score": 0.862,
+        "human_position": 353,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RUNX2",
+        "human_score": 0.861,
+        "human_position": 143,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX15",
+        "human_score": 0.861,
+        "human_position": 12,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF24",
+        "human_score": 0.861,
+        "human_position": 257,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFATC2",
+        "human_score": 0.861,
+        "human_position": 91,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF728",
+        "human_score": 0.861,
+        "human_position": 530,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ERF::HOXB13",
+        "human_score": 0.855,
+        "human_position": 128,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRF1",
+        "human_score": 0.855,
+        "human_position": 42,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV5::HOXA2",
+        "human_score": 0.853,
+        "human_position": 264,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CREB3L1",
+        "human_score": 0.852,
+        "human_position": 12,
+        "same_site_in": [
+          "gallus_gallus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TEAD3",
+        "human_score": 1.0,
+        "human_position": 524,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ARNT::HIF1A",
+        "human_score": 1.0,
+        "human_position": 15,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BSX",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX1",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX3",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX4",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX6",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "EN2",
+        "human_score": 1.0,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GBX1",
+        "human_score": 1.0,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GBX2",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA7",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "LBX2",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX2",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MSX1",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MSX2",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MSX3",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RAX",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RAX2",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SHOX2",
+        "human_score": 1.0,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF827",
+        "human_score": 1.0,
+        "human_position": 594,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MYT1L",
+        "human_score": 1.0,
+        "human_position": 783,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB48",
+        "human_score": 0.996,
+        "human_position": 695,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF354C",
+        "human_score": 0.994,
+        "human_position": 282,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GSX2",
+        "human_score": 0.985,
+        "human_position": 719,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "LBX1",
+        "human_score": 0.981,
+        "human_position": 719,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB8",
+        "human_score": 0.973,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA3",
+        "human_score": 0.971,
+        "human_position": 719,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB6",
+        "human_score": 0.971,
+        "human_position": 719,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD8",
+        "human_score": 0.971,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB1",
+        "human_score": 0.97,
+        "human_position": 202,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BARHL2",
+        "human_score": 0.968,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA4",
+        "human_score": 0.964,
+        "human_position": 24,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX6-3",
+        "human_score": 0.959,
+        "human_position": 201,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MSANTD3",
+        "human_score": 0.957,
+        "human_position": 305,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MEOX1",
+        "human_score": 0.955,
+        "human_position": 719,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HMBOX1",
+        "human_score": 0.954,
+        "human_position": 25,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HIF3A",
+        "human_score": 0.954,
+        "human_position": 14,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PAX4",
+        "human_score": 0.95,
+        "human_position": 342,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF362",
+        "human_score": 0.947,
+        "human_position": 469,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ATF1",
+        "human_score": 0.943,
+        "human_position": 15,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1I3",
+        "human_score": 0.941,
+        "human_position": 604,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RFX7",
+        "human_score": 0.938,
+        "human_position": 459,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ERF::FOXI1",
+        "human_score": 0.937,
+        "human_position": 451,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NPAS3",
+        "human_score": 0.936,
+        "human_position": 14,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SCAND3",
+        "human_score": 0.935,
+        "human_position": 687,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX3-1",
+        "human_score": 0.93,
+        "human_position": 628,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL1::JUND",
+        "human_score": 0.928,
+        "human_position": 757,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MNT",
+        "human_score": 0.927,
+        "human_position": 279,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TEF",
+        "human_score": 0.925,
+        "human_position": 737,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FLI1",
+        "human_score": 0.922,
+        "human_position": 583,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HIF1A",
+        "human_score": 0.919,
+        "human_position": 14,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV1",
+        "human_score": 0.918,
+        "human_position": 583,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BARHL1",
+        "human_score": 0.917,
+        "human_position": 243,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA13",
+        "human_score": 0.917,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF500",
+        "human_score": 0.916,
+        "human_position": 281,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PRDM14",
+        "human_score": 0.915,
+        "human_position": 667,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ERF::FOXO1",
+        "human_score": 0.913,
+        "human_position": 56,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PGR",
+        "human_score": 0.911,
+        "human_position": 668,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RELA",
+        "human_score": 0.91,
+        "human_position": 113,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF770",
+        "human_score": 0.908,
+        "human_position": 290,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HMX1",
+        "human_score": 0.906,
+        "human_position": 569,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FAM200B",
+        "human_score": 0.905,
+        "human_position": 75,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MSGN1",
+        "human_score": 0.903,
+        "human_position": 120,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU5F1",
+        "human_score": 0.903,
+        "human_position": 339,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT6",
+        "human_score": 0.902,
+        "human_position": 47,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "LEF1",
+        "human_score": 0.901,
+        "human_position": 746,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF831",
+        "human_score": 0.901,
+        "human_position": 112,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXJ2::ELF1",
+        "human_score": 0.9,
+        "human_position": 581,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFKB2",
+        "human_score": 0.9,
+        "human_position": 113,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "JUN::JUNB",
+        "human_score": 0.898,
+        "human_position": 76,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF726",
+        "human_score": 0.897,
+        "human_position": 730,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CREB1",
+        "human_score": 0.895,
+        "human_position": 758,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RORB",
+        "human_score": 0.895,
+        "human_position": 77,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RORC",
+        "human_score": 0.895,
+        "human_position": 153,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ARNT2",
+        "human_score": 0.894,
+        "human_position": 277,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "E2F6",
+        "human_score": 0.894,
+        "human_position": 355,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV3",
+        "human_score": 0.892,
+        "human_position": 583,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXE1",
+        "human_score": 0.892,
+        "human_position": 764,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CTCF",
+        "human_score": 0.891,
+        "human_position": 349,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF7",
+        "human_score": 0.891,
+        "human_position": 747,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB41",
+        "human_score": 0.891,
+        "human_position": 101,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ARID5A",
+        "human_score": 0.89,
+        "human_position": 596,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXD2",
+        "human_score": 0.89,
+        "human_position": 6,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF768",
+        "human_score": 0.888,
+        "human_position": 307,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CREB3L4",
+        "human_score": 0.887,
+        "human_position": 13,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA4",
+        "human_score": 0.887,
+        "human_position": 34,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFYC",
+        "human_score": 0.887,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFAP2A",
+        "human_score": 0.886,
+        "human_position": 348,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ERG",
+        "human_score": 0.886,
+        "human_position": 583,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV4",
+        "human_score": 0.886,
+        "human_position": 583,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT1::STAT2",
+        "human_score": 0.886,
+        "human_position": 40,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HES6",
+        "human_score": 0.885,
+        "human_position": 13,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "OSR2",
+        "human_score": 0.885,
+        "human_position": 288,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF320",
+        "human_score": 0.885,
+        "human_position": 356,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GABPA",
+        "human_score": 0.883,
+        "human_position": 583,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HNF1A",
+        "human_score": 0.883,
+        "human_position": 66,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NRL",
+        "human_score": 0.882,
+        "human_position": 731,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ISL1",
+        "human_score": 0.881,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFIC",
+        "human_score": 0.881,
+        "human_position": 412,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB12",
+        "human_score": 0.881,
+        "human_position": 149,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF35",
+        "human_score": 0.88,
+        "human_position": 596,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF530",
+        "human_score": 0.88,
+        "human_position": 683,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CEBPD",
+        "human_score": 0.879,
+        "human_position": 401,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PRDM1",
+        "human_score": 0.878,
+        "human_position": 285,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RHOX11",
+        "human_score": 0.878,
+        "human_position": 613,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT5A",
+        "human_score": 0.877,
+        "human_position": 527,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFKB1",
+        "human_score": 0.875,
+        "human_position": 112,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "IKZF1",
+        "human_score": 0.874,
+        "human_position": 136,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MLX",
+        "human_score": 0.873,
+        "human_position": 13,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFAP2C",
+        "human_score": 0.873,
+        "human_position": 348,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "E2F8",
+        "human_score": 0.873,
+        "human_position": 354,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DNTTIP1",
+        "human_score": 0.873,
+        "human_position": 611,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU3F3",
+        "human_score": 0.872,
+        "human_position": 400,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FEV",
+        "human_score": 0.872,
+        "human_position": 583,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU3F1",
+        "human_score": 0.872,
+        "human_position": 401,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NRF1",
+        "human_score": 0.872,
+        "human_position": 166,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "AHR::ARNT",
+        "human_score": 0.871,
+        "human_position": 280,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXD3",
+        "human_score": 0.871,
+        "human_position": 3,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MAZ",
+        "human_score": 0.87,
+        "human_position": 109,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "XBP1",
+        "human_score": 0.87,
+        "human_position": 13,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SATB1",
+        "human_score": 0.868,
+        "human_position": 618,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX2",
+        "human_score": 0.867,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFYA",
+        "human_score": 0.867,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP140L",
+        "human_score": 0.866,
+        "human_position": 16,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB8A",
+        "human_score": 0.866,
+        "human_position": 117,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SRF",
+        "human_score": 0.865,
+        "human_position": 157,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU3F4",
+        "human_score": 0.865,
+        "human_position": 402,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFDP1",
+        "human_score": 0.864,
+        "human_position": 355,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "USF2",
+        "human_score": 0.864,
+        "human_position": 13,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFAP2B",
+        "human_score": 0.863,
+        "human_position": 348,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF184",
+        "human_score": 0.863,
+        "human_position": 358,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBED5",
+        "human_score": 0.863,
+        "human_position": 101,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFE3",
+        "human_score": 0.861,
+        "human_position": 169,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CREB3",
+        "human_score": 0.86,
+        "human_position": 12,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CUX2",
+        "human_score": 0.86,
+        "human_position": 224,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ELK1",
+        "human_score": 0.859,
+        "human_position": 583,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CREB3L2",
+        "human_score": 0.858,
+        "human_position": 14,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HEY1",
+        "human_score": 0.858,
+        "human_position": 13,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ERF::FIGLA",
+        "human_score": 0.858,
+        "human_position": 111,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX1",
+        "human_score": 0.858,
+        "human_position": 341,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU3F2",
+        "human_score": 0.857,
+        "human_position": 337,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXC2",
+        "human_score": 0.857,
+        "human_position": 734,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZFP3",
+        "human_score": 0.855,
+        "human_position": 643,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HSF2",
+        "human_score": 0.854,
+        "human_position": 703,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ATF2",
+        "human_score": 0.854,
+        "human_position": 757,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF606",
+        "human_score": 0.854,
+        "human_position": 281,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFAP2E",
+        "human_score": 0.853,
+        "human_position": 351,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU5F1B",
+        "human_score": 0.852,
+        "human_position": 402,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MAX::MYC",
+        "human_score": 0.852,
+        "human_position": 672,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF682",
+        "human_score": 0.852,
+        "human_position": 113,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RUNX3",
+        "human_score": 0.85,
+        "human_position": 637,
+        "same_site_in": [],
+        "everywhere": false
+      }
+    ]
+  },
+  "constraint": {
+    "phylop": {
+      "bases": 789,
+      "mean": 3.236,
+      "maximum": 8.866,
+      "fraction_above": 0.546
+    },
+    "gnocchi": {
+      "bases": 1000,
+      "mean": 1.967,
+      "maximum": 1.967,
+      "fraction_above": 0.0,
+      "strong": false
+    }
+  },
+  "evidence": {
+    "alignment": "curated: Ensembl Compara LASTZ_NET pairwise alignment of the human region",
+    "motif": "predicted: JASPAR 2026 log-odds hit at >= 85% of the matrix range",
+    "grammar": "inferred: a factor whose motif holds the same aligned site in human and every species"
+  },
+  "cost": {
+    "seconds": 10.2
+  }
+}

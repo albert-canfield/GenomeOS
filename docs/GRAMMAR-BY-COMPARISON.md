@@ -622,3 +622,76 @@ correlation is `inferred` evidence. The step the conversation called
 covariance is built; making it a dependency claim needs a gene-level
 profile and a null over shuffled libraries, which is recorded as its next
 step.
+
+
+## 12. Step 7 built: one locus across species (2026-09-12)
+
+`genomeos across --locus ZRS | HERC2_OCA2` (`knowledge/across.py`, results
+`across_ZRS`, `across_HERC2_OCA2`) is the experiment the conversation ended
+on: take a developmental locus with every layer available and see whether
+its grammar is still there in other vertebrates. For each species Ensembl
+Compara's pairwise LASTZ alignment of the human element is fetched (under a
+second, cached), giving the other locus, the share of the element that
+aligns and the identity over aligned columns; both constraint axes are read
+over the human element; and the JASPAR scan runs over both sides of each
+alignment.
+
+**The method had to be corrected before it said anything.** The first
+version counted a factor as conserved when its motif hit anywhere in the
+other species' aligned sequence, and called 170 factors conserved across the
+ZRS to fish: at 88% identity over 800 bases nearly every motif is "present".
+A factor now counts only when its hit sits at the *same aligned site*: the
+human hit's start is mapped through the alignment columns, gaps kept, and the
+other species' hit must land within 15 bases of it. Two further defects were
+caught in review of the code, not by the tests: the alignment summary had
+stripped the gaps the mapping needs, and the stored factor list was capped at
+60, so a factor ranked 61st read as "no hit". Both are fixed and tested (an
+insertion case, and every factor kept).
+
+**The ZRS** (VISTA hs2496, 789 bp, limb enhancer of SHH inside LMBR1, a
+megabase from its target):
+
+| species | element aligned | identity |
+|---|---|---|
+| mouse | 100% | 88.2% |
+| opossum | 100% | 88.6% |
+| chicken | 100% | 87.5% |
+| zebrafish | 9.8% | 80.5% |
+| frog | no pairwise alignment in Compara | |
+
+54.6% of its bases are constrained across mammals (mean phyloP 3.24); among
+people its kilobase reads Z 1.97, just under the 2.18 bar. Of 606 factors
+whose motif hits the human element, 151 hold their site in none of the four
+species and 23 hold it in all four. Those 23 are one class read many times:
+homeodomain matrices sharing the TAAT core (CRX, EMX2, GSC2, NKX6-1, NKX6-2,
+PDX1, the posterior HOX matrices HOXA9, HOXA10, HOXB5, HOXC8, HOXC10, and
+CDX1, CDX4), the HOX cofactors MEIS2, MEIS3 and PBX2, and one ETS composite
+(ETV5::FOXO1). Among the factors the literature names for the ZRS, HAND2
+holds its site in the three amniotes and not in fish, HOXD13 in mouse and
+chicken, ETS1 and ETV5 in chicken and opossum. The site-conserved core is
+therefore the HOX, PBX and MEIS class with an ETS site, which is the known
+logic of this enhancer, and the tetrapod-only HAND2 site fits a limb program
+that fish fins do not share in full.
+
+**The HERC2 enhancer of OCA2** (957 bp around rs12913832) aligns to mouse
+(74.4% of the element at 70.6%) and opossum (28.9% at 79.4%) and to no
+chicken, frog or fish genome: it is a mammalian element. Only 7.7% of its
+bases are constrained across mammals, while its scored kilobase is
+constrained among people (Z 3.46), the `recent` case. Of 551 factors hitting
+it, 75 hold their site in both mammals; with two close species that is a low
+bar. What holds is the E-box class of the MiT family (TFEB, TFEC) with USF1
+and MLXIPL, a SOX10 site and RUNX1. MITF and SOX10 drive the melanocyte
+program that includes OCA2, and the MiT E-box and SOX10 site holding in
+mammals is consistent with it; the MITF matrix itself does not hold its site,
+and LEF1 holds in opossum only.
+
+**What the experiment says, and does not.** The abstraction survives its
+first test: on the element conserved to fish, the grammar that holds its site
+is the one biologists describe for it, found without being told. It does not
+yet give a clean operator list, because matrix families (one TAAT core, one
+E-box) are counted per matrix, which is the redundancy step 4 found at
+promoters; clustering JASPAR into families before counting is the shared fix.
+An alignment says a site is kept, not that it is used: VISTA's mouse assay
+says the ZRS is active in the limb, and for the rest that is the reader's
+claim. Frog is missing because Compara holds no human-to-Xenopus pairwise
+alignment for this pair, recorded as unavailable rather than as absent.

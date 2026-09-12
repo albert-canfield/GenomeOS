@@ -38,7 +38,7 @@ CODON_TABLES = {"standard": STANDARD_CODE, "mito": VERTEBRATE_MITOCHONDRIAL_CODE
 
 
 def _table(rows: list[dict], cols: list[str]) -> str:
-    widths = {c: max(len(c), *(len(str(r.get(c, ""))) for r in rows)) for c in cols}
+    widths = {c: max([len(c), *(len(str(r.get(c, ""))) for r in rows)]) for c in cols}  # rows may be empty
     line = "  ".join(c.ljust(widths[c]) for c in cols)
     out = [line, "  ".join("-" * widths[c] for c in cols)]
     for r in rows:
@@ -1635,6 +1635,66 @@ def cmd_duplications(args: argparse.Namespace) -> int:
             )
         )
     print(f"  [{r['evidence']['pairs']}; {r['cost']['seconds']} s]")
+    return 0
+
+
+def cmd_across(args: argparse.Namespace) -> int:
+    """One locus across species: alignment, conserved grammar, both constraint axes (area J step 7)."""
+    from genomeos.knowledge.across import LOCI
+    from genomeos.results import load_result
+
+    if args.locus not in LOCI:
+        print(f"unknown locus {args.locus}; known: {', '.join(LOCI)}")
+        return 1
+    r = load_result(f"across_{args.locus}") if args.cached else None
+    if r is None:
+        from genomeos.knowledge.across import run_and_save
+
+        r = run_and_save(args.locus, progress=lambda m: print(f"  {m}", flush=True))
+    print(
+        f"{args.locus}: {r['chrom']}:{r['start']:,}-{r['end']:,} ({r['length']} bp), "
+        f"target {r['gene']}; {r['note']}"
+    )
+    print(
+        _table(
+            [
+                {
+                    "species": sp,
+                    "aligned": _pct(v.get("coverage")),
+                    "identity": _pct(v.get("identity")),
+                    "locus": v.get("locus") or v.get("error") or "no alignment",
+                }
+                for sp, v in r["species"].items()
+            ],
+            ["species", "aligned", "identity", "locus"],
+        )
+    )
+    c = r["constraint"]
+    ph, gn = c["phylop"], c["gnocchi"]
+    print(
+        f"  mammals: phyloP mean {ph['mean']}, {_pct(ph['fraction_above'])} of bases constrained; "
+        + (
+            f"people: {_pct(gn['fraction_above'])} of kilobases constrained (max Z {gn['maximum']})"
+            if gn
+            else "people: kilobase not scored by Gnocchi"
+        )
+    )
+    g = r.get("grammar") or {}
+    if g:
+        print(
+            f"  {g['factors_in_human']} factors hit the human element; holding the same aligned site in "
+            f"every species: {', '.join(g['everywhere']) or 'none'}"
+        )
+        rows = [
+            {
+                "factor": x["factor"],
+                "human": x["human_score"],
+                "same site in": ", ".join(x["same_site_in"]) or "human only",
+            }
+            for x in g["rows"][: args.top]
+        ]
+        print(_table(rows, ["factor", "human", "same site in"]))
+    print(f"  [{r['evidence']['alignment']}; {r['evidence']['grammar']}; {r['cost']['seconds']} s]")
     return 0
 
 
@@ -4508,6 +4568,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--cached", action="store_true", help="show the saved result instead of refetching")
     p.add_argument("--top", type=int, default=10)
     p.set_defaults(fn=cmd_duplications)
+
+    p = sub.add_parser(
+        "across", help="one locus across species: alignment, conserved grammar, both constraint axes"
+    )
+    p.add_argument("--locus", default="ZRS", help="ZRS (the SHH limb enhancer) or HERC2_OCA2 (eye colour)")
+    p.add_argument("--cached", action="store_true", help="show the saved result instead of refetching")
+    p.add_argument("--top", type=int, default=15)
+    p.set_defaults(fn=cmd_across)
 
     p = sub.add_parser(
         "profiling",

@@ -1,0 +1,4537 @@
+{
+  "result": "across_HERC2_OCA2",
+  "date": "2026-09-12",
+  "locus": "HERC2_OCA2",
+  "chrom": "chr15",
+  "start": 28120106,
+  "end": 28121063,
+  "gene": "OCA2",
+  "note": "the HERC2 intron-86 enhancer of OCA2 around rs12913832 (chr15:28,120,472), eye colour's slot",
+  "length": 957,
+  "species": {
+    "mus_musculus": {
+      "species": "mus_musculus",
+      "blocks": 3,
+      "locus": "7:55873075-55873674(-), 7:55873069-55873074(-), 7:55872982-55873068(-)",
+      "human_bases_aligned": 712,
+      "coverage": 0.744,
+      "identity": 0.706,
+      "aligned_columns": 693
+    },
+    "monodelphis_domestica": {
+      "species": "monodelphis_domestica",
+      "blocks": 1,
+      "locus": "7:53880488-53880811(-)",
+      "human_bases_aligned": 277,
+      "coverage": 0.289,
+      "identity": 0.794,
+      "aligned_columns": 277
+    },
+    "gallus_gallus": {
+      "species": "gallus_gallus",
+      "error": "HTTP Error 400: Bad Request",
+      "coverage": 0.0,
+      "identity": null
+    },
+    "xenopus_tropicalis": {
+      "species": "xenopus_tropicalis",
+      "error": "HTTP Error 400: Bad Request",
+      "coverage": 0.0,
+      "identity": null
+    },
+    "danio_rerio": {
+      "species": "danio_rerio",
+      "error": "HTTP Error 400: Bad Request",
+      "coverage": 0.0,
+      "identity": null
+    }
+  },
+  "aligned_in": [
+    "mus_musculus",
+    "monodelphis_domestica"
+  ],
+  "grammar": {
+    "factors_in_human": 551,
+    "species_compared": [
+      "mus_musculus",
+      "monodelphis_domestica"
+    ],
+    "same_site_window": 15,
+    "everywhere": [
+      "ALX1",
+      "ALX3",
+      "BARX1",
+      "BSX",
+      "DLX1",
+      "DRGX",
+      "HOXA1",
+      "EN1",
+      "HOXA2",
+      "EVX1",
+      "EVX2",
+      "GBX2",
+      "HOXB3",
+      "LBX2",
+      "LHX2",
+      "LHX4",
+      "LHX8",
+      "LMX1B",
+      "MIXL1",
+      "MNX1",
+      "MSX1",
+      "MSX2",
+      "MSX3",
+      "MXI1",
+      "PDX1",
+      "PRRX1",
+      "RAX2",
+      "SHOX",
+      "SOX10",
+      "SOX4",
+      "UNCX",
+      "NACC2",
+      "ZNF536",
+      "ESX1",
+      "NOTO",
+      "TFAP4",
+      "LHX5",
+      "LHX6",
+      "VSX1",
+      "TLX3",
+      "ZBTB21",
+      "GBX1",
+      "HOXB1",
+      "BARHL1",
+      "TFEB",
+      "HOXB7",
+      "HMGA1",
+      "TFEC",
+      "MEOX2",
+      "PAX4",
+      "MEOX1",
+      "ZNF367",
+      "USF1",
+      "NANOG",
+      "TBX2",
+      "ZNF320",
+      "SOX5",
+      "TBR1",
+      "ARNTL",
+      "MLXIPL",
+      "BCL11A",
+      "SOX9",
+      "RUNX1",
+      "RUNX2",
+      "CDX2",
+      "ATOH1",
+      "FOXD2",
+      "ZNF35",
+      "YY1",
+      "ZNF878",
+      "PLAGL1",
+      "PAX6",
+      "CRX",
+      "MGA::EVX1",
+      "RUNX3"
+    ],
+    "rows": [
+      {
+        "factor": "ALX1",
+        "human_score": 1.0,
+        "human_position": 417,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ALX3",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "BARX1",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "BSX",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "DLX1",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "DRGX",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXA1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "EN1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXA2",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "EVX1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "EVX2",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "GBX2",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXB3",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LBX2",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LHX2",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LHX4",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LHX8",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LMX1B",
+        "human_score": 1.0,
+        "human_position": 417,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MIXL1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MNX1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MSX1",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MSX2",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MSX3",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MXI1",
+        "human_score": 1.0,
+        "human_position": 160,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "PDX1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "PRRX1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "RAX2",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "SHOX",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "SOX10",
+        "human_score": 1.0,
+        "human_position": 175,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "SOX4",
+        "human_score": 1.0,
+        "human_position": 174,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "UNCX",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "NACC2",
+        "human_score": 1.0,
+        "human_position": 161,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZNF536",
+        "human_score": 1.0,
+        "human_position": 197,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ESX1",
+        "human_score": 0.992,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "NOTO",
+        "human_score": 0.989,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "TFAP4",
+        "human_score": 0.983,
+        "human_position": 267,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LHX5",
+        "human_score": 0.982,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LHX6",
+        "human_score": 0.98,
+        "human_position": 417,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "VSX1",
+        "human_score": 0.98,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "TLX3",
+        "human_score": 0.974,
+        "human_position": 420,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZBTB21",
+        "human_score": 0.972,
+        "human_position": 126,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "GBX1",
+        "human_score": 0.968,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXB1",
+        "human_score": 0.967,
+        "human_position": 246,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "BARHL1",
+        "human_score": 0.962,
+        "human_position": 362,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "TFEB",
+        "human_score": 0.962,
+        "human_position": 267,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HOXB7",
+        "human_score": 0.96,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "HMGA1",
+        "human_score": 0.955,
+        "human_position": 261,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "TFEC",
+        "human_score": 0.95,
+        "human_position": 158,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MEOX2",
+        "human_score": 0.949,
+        "human_position": 246,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "PAX4",
+        "human_score": 0.945,
+        "human_position": 417,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MEOX1",
+        "human_score": 0.94,
+        "human_position": 418,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZNF367",
+        "human_score": 0.936,
+        "human_position": 360,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "USF1",
+        "human_score": 0.935,
+        "human_position": 158,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "NANOG",
+        "human_score": 0.932,
+        "human_position": 246,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "TBX2",
+        "human_score": 0.932,
+        "human_position": 270,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZNF320",
+        "human_score": 0.927,
+        "human_position": 206,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "SOX5",
+        "human_score": 0.926,
+        "human_position": 174,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "TBR1",
+        "human_score": 0.926,
+        "human_position": 270,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ARNTL",
+        "human_score": 0.921,
+        "human_position": 158,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MLXIPL",
+        "human_score": 0.921,
+        "human_position": 158,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "BCL11A",
+        "human_score": 0.917,
+        "human_position": 156,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "SOX9",
+        "human_score": 0.915,
+        "human_position": 174,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "RUNX1",
+        "human_score": 0.915,
+        "human_position": 153,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "RUNX2",
+        "human_score": 0.913,
+        "human_position": 153,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "CDX2",
+        "human_score": 0.905,
+        "human_position": 40,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ATOH1",
+        "human_score": 0.903,
+        "human_position": 269,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "FOXD2",
+        "human_score": 0.903,
+        "human_position": 440,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZNF35",
+        "human_score": 0.895,
+        "human_position": 234,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "YY1",
+        "human_score": 0.889,
+        "human_position": 204,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "ZNF878",
+        "human_score": 0.887,
+        "human_position": 252,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "PLAGL1",
+        "human_score": 0.879,
+        "human_position": 209,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "PAX6",
+        "human_score": 0.878,
+        "human_position": 265,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "CRX",
+        "human_score": 0.875,
+        "human_position": 276,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "MGA::EVX1",
+        "human_score": 0.859,
+        "human_position": 270,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "RUNX3",
+        "human_score": 0.857,
+        "human_position": 153,
+        "same_site_in": [
+          "monodelphis_domestica",
+          "mus_musculus"
+        ],
+        "everywhere": true
+      },
+      {
+        "factor": "LIN54",
+        "human_score": 1.0,
+        "human_position": 201,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX3",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX4",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX6",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRTA2",
+        "human_score": 1.0,
+        "human_position": 680,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EMX1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EMX2",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GSX1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HESX1",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HIC2",
+        "human_score": 1.0,
+        "human_position": 208,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA7",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB2",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB5",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC8",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ISX",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LMX1A",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MEIS1",
+        "human_score": 1.0,
+        "human_position": 366,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MIX-A",
+        "human_score": 1.0,
+        "human_position": 417,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX6-1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX6-2",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NOBOX",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2E3",
+        "human_score": 1.0,
+        "human_position": 47,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "POU6F1",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RAX",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RHOXF1",
+        "human_score": 1.0,
+        "human_position": 327,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SHOX2",
+        "human_score": 1.0,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SRY",
+        "human_score": 1.0,
+        "human_position": 424,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF7",
+        "human_score": 1.0,
+        "human_position": 493,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TLX2",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VAX2",
+        "human_score": 1.0,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZXDB",
+        "human_score": 1.0,
+        "human_position": 392,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRX2",
+        "human_score": 1.0,
+        "human_position": 588,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRX5",
+        "human_score": 1.0,
+        "human_position": 588,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD4",
+        "human_score": 0.997,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VAX1",
+        "human_score": 0.995,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC4",
+        "human_score": 0.994,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB4",
+        "human_score": 0.993,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRX1",
+        "human_score": 0.992,
+        "human_position": 588,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BARHL2",
+        "human_score": 0.99,
+        "human_position": 466,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NPAS3",
+        "human_score": 0.986,
+        "human_position": 90,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARID3B",
+        "human_score": 0.984,
+        "human_position": 420,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA5",
+        "human_score": 0.984,
+        "human_position": 692,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXH1",
+        "human_score": 0.981,
+        "human_position": 248,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARX",
+        "human_score": 0.98,
+        "human_position": 417,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HIF3A",
+        "human_score": 0.979,
+        "human_position": 90,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PRRX2",
+        "human_score": 0.978,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX15",
+        "human_score": 0.978,
+        "human_position": 280,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARGFX",
+        "human_score": 0.977,
+        "human_position": 417,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRTA1",
+        "human_score": 0.977,
+        "human_position": 678,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR4A2",
+        "human_score": 0.977,
+        "human_position": 363,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VENTX",
+        "human_score": 0.976,
+        "human_position": 421,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD8",
+        "human_score": 0.975,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX9",
+        "human_score": 0.974,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CREB3L4",
+        "human_score": 0.973,
+        "human_position": 123,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB8",
+        "human_score": 0.972,
+        "human_position": 422,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VSX2",
+        "human_score": 0.971,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MEIS3",
+        "human_score": 0.968,
+        "human_position": 365,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EN2",
+        "human_score": 0.964,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF257",
+        "human_score": 0.964,
+        "human_position": 335,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "VEZF1",
+        "human_score": 0.963,
+        "human_position": 210,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR4A1",
+        "human_score": 0.962,
+        "human_position": 363,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA3",
+        "human_score": 0.961,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA9",
+        "human_score": 0.961,
+        "human_position": 0,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD1",
+        "human_score": 0.959,
+        "human_position": 417,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA5",
+        "human_score": 0.958,
+        "human_position": 417,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX8",
+        "human_score": 0.956,
+        "human_position": 423,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX1",
+        "human_score": 0.955,
+        "human_position": 570,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX4",
+        "human_score": 0.954,
+        "human_position": 570,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MYT1L",
+        "human_score": 0.954,
+        "human_position": 369,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA6",
+        "human_score": 0.953,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MAFB",
+        "human_score": 0.951,
+        "human_position": 616,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF648",
+        "human_score": 0.951,
+        "human_position": 562,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX15",
+        "human_score": 0.946,
+        "human_position": 570,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD3",
+        "human_score": 0.946,
+        "human_position": 417,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1H3::RXRA",
+        "human_score": 0.944,
+        "human_position": 592,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF354C",
+        "human_score": 0.942,
+        "human_position": 560,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GSC2",
+        "human_score": 0.942,
+        "human_position": 276,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD9",
+        "human_score": 0.941,
+        "human_position": 53,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX30",
+        "human_score": 0.941,
+        "human_position": 422,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HINFP",
+        "human_score": 0.94,
+        "human_position": 86,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CDX1",
+        "human_score": 0.939,
+        "human_position": 53,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ALX4",
+        "human_score": 0.939,
+        "human_position": 417,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RHOX11",
+        "human_score": 0.937,
+        "human_position": 681,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA13",
+        "human_score": 0.936,
+        "human_position": 605,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "OTX1",
+        "human_score": 0.936,
+        "human_position": 496,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX18",
+        "human_score": 0.936,
+        "human_position": 570,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HIC1",
+        "human_score": 0.935,
+        "human_position": 208,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA10",
+        "human_score": 0.935,
+        "human_position": 53,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NRL",
+        "human_score": 0.934,
+        "human_position": 615,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CDX4",
+        "human_score": 0.93,
+        "human_position": 53,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB7A",
+        "human_score": 0.93,
+        "human_position": 393,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX3",
+        "human_score": 0.925,
+        "human_position": 570,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LEF1",
+        "human_score": 0.925,
+        "human_position": 492,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MSANTD3",
+        "human_score": 0.925,
+        "human_position": 437,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ATOH7",
+        "human_score": 0.924,
+        "human_position": 267,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PLAGL2",
+        "human_score": 0.923,
+        "human_position": 393,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MEF2C",
+        "human_score": 0.922,
+        "human_position": 75,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MNT",
+        "human_score": 0.921,
+        "human_position": 160,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRTC2",
+        "human_score": 0.919,
+        "human_position": 652,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX21",
+        "human_score": 0.918,
+        "human_position": 569,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV7",
+        "human_score": 0.918,
+        "human_position": 37,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX3",
+        "human_score": 0.911,
+        "human_position": 418,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXD1",
+        "human_score": 0.909,
+        "human_position": 67,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PITX3",
+        "human_score": 0.909,
+        "human_position": 276,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ONECUT2",
+        "human_score": 0.908,
+        "human_position": 148,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX2",
+        "human_score": 0.907,
+        "human_position": 175,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2E1",
+        "human_score": 0.906,
+        "human_position": 263,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB18",
+        "human_score": 0.905,
+        "human_position": 252,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARNT2",
+        "human_score": 0.904,
+        "human_position": 158,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXP4",
+        "human_score": 0.903,
+        "human_position": 67,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "BHLHE22",
+        "human_score": 0.903,
+        "human_position": 688,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "EOMES",
+        "human_score": 0.901,
+        "human_position": 570,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1H3",
+        "human_score": 0.899,
+        "human_position": 126,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TFAP2A",
+        "human_score": 0.898,
+        "human_position": 209,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXB1",
+        "human_score": 0.897,
+        "human_position": 443,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RELB",
+        "human_score": 0.897,
+        "human_position": 38,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CUX1",
+        "human_score": 0.896,
+        "human_position": 247,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF21",
+        "human_score": 0.896,
+        "human_position": 267,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX3-1",
+        "human_score": 0.895,
+        "human_position": 449,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "MAFF",
+        "human_score": 0.894,
+        "human_position": 616,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXD3",
+        "human_score": 0.891,
+        "human_position": 440,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIC1::ZIC2",
+        "human_score": 0.891,
+        "human_position": 685,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB13",
+        "human_score": 0.89,
+        "human_position": 40,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HSF5",
+        "human_score": 0.887,
+        "human_position": 585,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PRDM14",
+        "human_score": 0.886,
+        "human_position": 135,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "RORB",
+        "human_score": 0.884,
+        "human_position": 602,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXQ1",
+        "human_score": 0.882,
+        "human_position": 424,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF8",
+        "human_score": 0.881,
+        "human_position": 334,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CASZ1",
+        "human_score": 0.88,
+        "human_position": 352,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXF2",
+        "human_score": 0.877,
+        "human_position": 66,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "PITX2",
+        "human_score": 0.876,
+        "human_position": 104,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRT1",
+        "human_score": 0.876,
+        "human_position": 293,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT1",
+        "human_score": 0.876,
+        "human_position": 581,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "TFAP2B",
+        "human_score": 0.876,
+        "human_position": 210,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF3",
+        "human_score": 0.875,
+        "human_position": 336,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "GFI1",
+        "human_score": 0.874,
+        "human_position": 491,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX14",
+        "human_score": 0.869,
+        "human_position": 423,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "SREBF2",
+        "human_score": 0.866,
+        "human_position": 267,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "NFATC1",
+        "human_score": 0.864,
+        "human_position": 38,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "OVOL1",
+        "human_score": 0.864,
+        "human_position": 593,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "LHX1",
+        "human_score": 0.86,
+        "human_position": 416,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "INSM1",
+        "human_score": 0.859,
+        "human_position": 209,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC9",
+        "human_score": 0.859,
+        "human_position": 53,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "IRF7",
+        "human_score": 0.858,
+        "human_position": 346,
+        "same_site_in": [
+          "mus_musculus"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "CUX2",
+        "human_score": 0.854,
+        "human_position": 247,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF568",
+        "human_score": 0.851,
+        "human_position": 136,
+        "same_site_in": [
+          "monodelphis_domestica"
+        ],
+        "everywhere": false
+      },
+      {
+        "factor": "ARID3A",
+        "human_score": 1.0,
+        "human_position": 113,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "AHR::ARNT",
+        "human_score": 1.0,
+        "human_position": 378,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ARNT::HIF1A",
+        "human_score": 1.0,
+        "human_position": 90,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HMBOX1",
+        "human_score": 1.0,
+        "human_position": 64,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFIA",
+        "human_score": 1.0,
+        "human_position": 541,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFIX",
+        "human_score": 1.0,
+        "human_position": 541,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX2-1",
+        "human_score": 1.0,
+        "human_position": 450,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RBPJ",
+        "human_score": 1.0,
+        "human_position": 584,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX11",
+        "human_score": 1.0,
+        "human_position": 292,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP5",
+        "human_score": 1.0,
+        "human_position": 672,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZGLP1",
+        "human_score": 1.0,
+        "human_position": 328,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MKX",
+        "human_score": 1.0,
+        "human_position": 588,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX18",
+        "human_score": 0.993,
+        "human_position": 422,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF70",
+        "human_score": 0.991,
+        "human_position": 672,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BARX2",
+        "human_score": 0.99,
+        "human_position": 422,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX2-8",
+        "human_score": 0.99,
+        "human_position": 449,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXN1",
+        "human_score": 0.986,
+        "human_position": 403,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GMEB1",
+        "human_score": 0.98,
+        "human_position": 98,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "LBX1",
+        "human_score": 0.98,
+        "human_position": 63,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2C2",
+        "human_score": 0.98,
+        "human_position": 592,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TBP",
+        "human_score": 0.98,
+        "human_position": 443,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXL1",
+        "human_score": 0.977,
+        "human_position": 77,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ISL2",
+        "human_score": 0.977,
+        "human_position": 422,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB6",
+        "human_score": 0.976,
+        "human_position": 422,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX6",
+        "human_score": 0.974,
+        "human_position": 408,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DMRT3",
+        "human_score": 0.974,
+        "human_position": 653,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX2-3",
+        "human_score": 0.974,
+        "human_position": 449,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MGA",
+        "human_score": 0.973,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX2-4",
+        "human_score": 0.971,
+        "human_position": 449,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF66",
+        "human_score": 0.971,
+        "human_position": 141,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA4",
+        "human_score": 0.97,
+        "human_position": 422,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HMX3",
+        "human_score": 0.969,
+        "human_position": 421,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ATF1",
+        "human_score": 0.968,
+        "human_position": 96,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GSX2",
+        "human_score": 0.967,
+        "human_position": 422,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1I3",
+        "human_score": 0.967,
+        "human_position": 592,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF746",
+        "human_score": 0.963,
+        "human_position": 563,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HMX1",
+        "human_score": 0.962,
+        "human_position": 421,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CLOCK",
+        "human_score": 0.96,
+        "human_position": 269,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP140L",
+        "human_score": 0.96,
+        "human_position": 97,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX5",
+        "human_score": 0.958,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CREB1",
+        "human_score": 0.955,
+        "human_position": 124,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB48",
+        "human_score": 0.954,
+        "human_position": 391,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF5",
+        "human_score": 0.953,
+        "human_position": 569,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO6",
+        "human_score": 0.953,
+        "human_position": 249,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFATC3",
+        "human_score": 0.953,
+        "human_position": 584,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXJ2",
+        "human_score": 0.951,
+        "human_position": 249,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXP3",
+        "human_score": 0.951,
+        "human_position": 77,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBED2",
+        "human_score": 0.951,
+        "human_position": 187,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF362",
+        "human_score": 0.951,
+        "human_position": 49,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MSANTD4",
+        "human_score": 0.95,
+        "human_position": 519,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ATF3",
+        "human_score": 0.949,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GSC",
+        "human_score": 0.949,
+        "human_position": 523,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GMEB2",
+        "human_score": 0.948,
+        "human_position": 97,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO4",
+        "human_score": 0.944,
+        "human_position": 249,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZXDC",
+        "human_score": 0.943,
+        "human_position": 391,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MAX",
+        "human_score": 0.942,
+        "human_position": 269,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HIF1A",
+        "human_score": 0.942,
+        "human_position": 90,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF827",
+        "human_score": 0.94,
+        "human_position": 62,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2C1",
+        "human_score": 0.939,
+        "human_position": 365,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "VDR",
+        "human_score": 0.938,
+        "human_position": 592,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "JDP2",
+        "human_score": 0.937,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXI1",
+        "human_score": 0.936,
+        "human_position": 261,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXP2",
+        "human_score": 0.936,
+        "human_position": 425,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX6-3",
+        "human_score": 0.936,
+        "human_position": 384,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF384",
+        "human_score": 0.934,
+        "human_position": 49,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1H4",
+        "human_score": 0.933,
+        "human_position": 602,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HELT",
+        "human_score": 0.933,
+        "human_position": 89,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "JUN",
+        "human_score": 0.931,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF6",
+        "human_score": 0.931,
+        "human_position": 569,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF7L2",
+        "human_score": 0.931,
+        "human_position": 291,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF768",
+        "human_score": 0.93,
+        "human_position": 314,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "JUND",
+        "human_score": 0.929,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RFX7",
+        "human_score": 0.929,
+        "human_position": 685,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFE3",
+        "human_score": 0.928,
+        "human_position": 158,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CREB5",
+        "human_score": 0.928,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "E2F6",
+        "human_score": 0.927,
+        "human_position": 582,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXF1",
+        "human_score": 0.927,
+        "human_position": 114,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MITF",
+        "human_score": 0.927,
+        "human_position": 158,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TCFL5",
+        "human_score": 0.927,
+        "human_position": 88,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PITX1",
+        "human_score": 0.926,
+        "human_position": 523,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF800",
+        "human_score": 0.926,
+        "human_position": 98,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB7C",
+        "human_score": 0.926,
+        "human_position": 559,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF11",
+        "human_score": 0.925,
+        "human_position": 568,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF2",
+        "human_score": 0.925,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SIX4",
+        "human_score": 0.925,
+        "human_position": 588,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB5",
+        "human_score": 0.925,
+        "human_position": 637,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "OLIG2",
+        "human_score": 0.924,
+        "human_position": 688,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FIGLA",
+        "human_score": 0.924,
+        "human_position": 392,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC10",
+        "human_score": 0.924,
+        "human_position": 63,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF18",
+        "human_score": 0.924,
+        "human_position": 571,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZEB2",
+        "human_score": 0.923,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SNAI1",
+        "human_score": 0.922,
+        "human_position": 450,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB8A",
+        "human_score": 0.922,
+        "human_position": 582,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MEIS2",
+        "human_score": 0.921,
+        "human_position": 167,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PAX3",
+        "human_score": 0.92,
+        "human_position": 418,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF524",
+        "human_score": 0.92,
+        "human_position": 394,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HES1",
+        "human_score": 0.92,
+        "human_position": 160,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "IKZF1",
+        "human_score": 0.92,
+        "human_position": 287,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP4",
+        "human_score": 0.919,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX6",
+        "human_score": 0.919,
+        "human_position": 570,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF692",
+        "human_score": 0.919,
+        "human_position": 395,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF500",
+        "human_score": 0.919,
+        "human_position": 83,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "OSR1",
+        "human_score": 0.918,
+        "human_position": 684,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU5F1",
+        "human_score": 0.918,
+        "human_position": 108,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HMX2",
+        "human_score": 0.916,
+        "human_position": 416,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT3",
+        "human_score": 0.916,
+        "human_position": 53,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT5A::STAT5B",
+        "human_score": 0.916,
+        "human_position": 224,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZXDA",
+        "human_score": 0.916,
+        "human_position": 391,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXK1",
+        "human_score": 0.915,
+        "human_position": 228,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MAZ",
+        "human_score": 0.915,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NPAS2",
+        "human_score": 0.915,
+        "human_position": 449,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ERF::FOXI1",
+        "human_score": 0.914,
+        "human_position": 639,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF7",
+        "human_score": 0.914,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TWIST2",
+        "human_score": 0.914,
+        "human_position": 688,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "E2F8",
+        "human_score": 0.913,
+        "human_position": 581,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF740",
+        "human_score": 0.913,
+        "human_position": 563,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NEUROD2",
+        "human_score": 0.912,
+        "human_position": 688,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU6F2",
+        "human_score": 0.912,
+        "human_position": 418,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ASCL1",
+        "human_score": 0.911,
+        "human_position": 684,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TBX20",
+        "human_score": 0.91,
+        "human_position": 569,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "JUN::JUNB",
+        "human_score": 0.91,
+        "human_position": 122,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RORC",
+        "human_score": 0.91,
+        "human_position": 72,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT6",
+        "human_score": 0.91,
+        "human_position": 52,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BACH1",
+        "human_score": 0.909,
+        "human_position": 518,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOS::JUND",
+        "human_score": 0.909,
+        "human_position": 518,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL2::JUN",
+        "human_score": 0.909,
+        "human_position": 2,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PAX7",
+        "human_score": 0.909,
+        "human_position": 418,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT1::STAT2",
+        "human_score": 0.909,
+        "human_position": 38,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL1::JUND",
+        "human_score": 0.908,
+        "human_position": 2,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HEY2",
+        "human_score": 0.908,
+        "human_position": 88,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXC1",
+        "human_score": 0.907,
+        "human_position": 225,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO3",
+        "human_score": 0.907,
+        "human_position": 228,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD11",
+        "human_score": 0.907,
+        "human_position": 63,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXE1",
+        "human_score": 0.906,
+        "human_position": 545,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF708",
+        "human_score": 0.906,
+        "human_position": 284,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "IKZF2",
+        "human_score": 0.905,
+        "human_position": 87,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BHLHE40",
+        "human_score": 0.905,
+        "human_position": 159,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO1",
+        "human_score": 0.904,
+        "human_position": 228,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXJ3",
+        "human_score": 0.904,
+        "human_position": 494,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXA11",
+        "human_score": 0.904,
+        "human_position": 63,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "OVOL2",
+        "human_score": 0.903,
+        "human_position": 688,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SATB1",
+        "human_score": 0.903,
+        "human_position": 516,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX3",
+        "human_score": 0.903,
+        "human_position": 280,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXM1",
+        "human_score": 0.903,
+        "human_position": 114,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF16",
+        "human_score": 0.902,
+        "human_position": 666,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF10",
+        "human_score": 0.902,
+        "human_position": 565,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CREM",
+        "human_score": 0.902,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD12",
+        "human_score": 0.902,
+        "human_position": 53,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "IRF6",
+        "human_score": 0.901,
+        "human_position": 187,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP2",
+        "human_score": 0.901,
+        "human_position": 565,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF1",
+        "human_score": 0.901,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "OSR2",
+        "human_score": 0.901,
+        "human_position": 684,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TEAD2",
+        "human_score": 0.901,
+        "human_position": 232,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSB::JUNB",
+        "human_score": 0.9,
+        "human_position": 518,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL2::JUNB",
+        "human_score": 0.9,
+        "human_position": 518,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL2::JUND",
+        "human_score": 0.9,
+        "human_position": 2,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXA3",
+        "human_score": 0.9,
+        "human_position": 114,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV5::HOXA2",
+        "human_score": 0.899,
+        "human_position": 496,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXA2",
+        "human_score": 0.899,
+        "human_position": 460,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFDP1",
+        "human_score": 0.899,
+        "human_position": 582,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF680",
+        "human_score": 0.899,
+        "human_position": 545,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB8B",
+        "human_score": 0.899,
+        "human_position": 502,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD13",
+        "human_score": 0.898,
+        "human_position": 606,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZFP335",
+        "human_score": 0.898,
+        "human_position": 93,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV5::FOXO1",
+        "human_score": 0.897,
+        "human_position": 641,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXA1",
+        "human_score": 0.897,
+        "human_position": 228,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NPAS4",
+        "human_score": 0.897,
+        "human_position": 90,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXS1",
+        "human_score": 0.896,
+        "human_position": 227,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXP1",
+        "human_score": 0.896,
+        "human_position": 114,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TIGD3",
+        "human_score": 0.896,
+        "human_position": 700,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ATF7",
+        "human_score": 0.895,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL1::JUN",
+        "human_score": 0.894,
+        "human_position": 2,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF766",
+        "human_score": 0.894,
+        "human_position": 547,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DBP",
+        "human_score": 0.894,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ESRRG",
+        "human_score": 0.894,
+        "human_position": 362,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXK2",
+        "human_score": 0.894,
+        "human_position": 114,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GFI1B",
+        "human_score": 0.894,
+        "human_position": 492,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MYB",
+        "human_score": 0.894,
+        "human_position": 432,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ATF2",
+        "human_score": 0.893,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SIX1",
+        "human_score": 0.893,
+        "human_position": 586,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOS::JUNB",
+        "human_score": 0.892,
+        "human_position": 518,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA2",
+        "human_score": 0.892,
+        "human_position": 693,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "YY2",
+        "human_score": 0.892,
+        "human_position": 580,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZEB1",
+        "human_score": 0.892,
+        "human_position": 269,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NEUROG1",
+        "human_score": 0.891,
+        "human_position": 267,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF3",
+        "human_score": 0.891,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SNAI3",
+        "human_score": 0.891,
+        "human_position": 448,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP8",
+        "human_score": 0.891,
+        "human_position": 667,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TEAD3",
+        "human_score": 0.89,
+        "human_position": 206,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ERF::FOXO1",
+        "human_score": 0.89,
+        "human_position": 284,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV5::FOXI1",
+        "human_score": 0.89,
+        "human_position": 72,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOS::JUN",
+        "human_score": 0.89,
+        "human_position": 2,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC13",
+        "human_score": 0.89,
+        "human_position": 63,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SOHLH2",
+        "human_score": 0.89,
+        "human_position": 88,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "STAT4",
+        "human_score": 0.89,
+        "human_position": 490,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ASCL2",
+        "human_score": 0.889,
+        "human_position": 683,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFATC4",
+        "human_score": 0.889,
+        "human_position": 37,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFIC",
+        "human_score": 0.889,
+        "human_position": 540,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP9",
+        "human_score": 0.889,
+        "human_position": 568,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "USF2",
+        "human_score": 0.889,
+        "human_position": 158,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TEF",
+        "human_score": 0.888,
+        "human_position": 66,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX13",
+        "human_score": 0.888,
+        "human_position": 280,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIC3",
+        "human_score": 0.888,
+        "human_position": 685,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF12",
+        "human_score": 0.887,
+        "human_position": 565,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "EPAS1",
+        "human_score": 0.887,
+        "human_position": 88,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV3",
+        "human_score": 0.887,
+        "human_position": 253,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXB9",
+        "human_score": 0.887,
+        "human_position": 53,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FERD3L",
+        "human_score": 0.886,
+        "human_position": 681,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CTCFL",
+        "human_score": 0.886,
+        "human_position": 392,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR1H2",
+        "human_score": 0.886,
+        "human_position": 602,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU3F1",
+        "human_score": 0.885,
+        "human_position": 107,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF317",
+        "human_score": 0.885,
+        "human_position": 9,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF93",
+        "human_score": 0.885,
+        "human_position": 680,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF4",
+        "human_score": 0.884,
+        "human_position": 561,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NKX3-2",
+        "human_score": 0.884,
+        "human_position": 421,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIC2",
+        "human_score": 0.884,
+        "human_position": 642,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MYT1",
+        "human_score": 0.884,
+        "human_position": 369,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB17",
+        "human_score": 0.883,
+        "human_position": 419,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL1::JUNB",
+        "human_score": 0.883,
+        "human_position": 518,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZFX",
+        "human_score": 0.883,
+        "human_position": 397,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF263",
+        "human_score": 0.883,
+        "human_position": 566,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF341",
+        "human_score": 0.883,
+        "human_position": 682,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PPARA",
+        "human_score": 0.882,
+        "human_position": 364,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXL2",
+        "human_score": 0.882,
+        "human_position": 440,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2F2",
+        "human_score": 0.882,
+        "human_position": 364,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TCF12",
+        "human_score": 0.882,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ISL1",
+        "human_score": 0.881,
+        "human_position": 421,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DNTTIP1",
+        "human_score": 0.881,
+        "human_position": 661,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXG1",
+        "human_score": 0.88,
+        "human_position": 67,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DUXA",
+        "human_score": 0.88,
+        "human_position": 58,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BHLHE41",
+        "human_score": 0.879,
+        "human_position": 158,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NFYB",
+        "human_score": 0.879,
+        "human_position": 530,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SMAD2",
+        "human_score": 0.879,
+        "human_position": 324,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZSCAN21",
+        "human_score": 0.878,
+        "human_position": 456,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PRDM1",
+        "human_score": 0.878,
+        "human_position": 510,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SREBF1",
+        "human_score": 0.877,
+        "human_position": 158,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PHOX2A",
+        "human_score": 0.877,
+        "human_position": 422,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB12",
+        "human_score": 0.877,
+        "human_position": 289,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZKSCAN5",
+        "human_score": 0.877,
+        "human_position": 668,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MLX",
+        "human_score": 0.876,
+        "human_position": 87,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP1",
+        "human_score": 0.876,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETS2",
+        "human_score": 0.876,
+        "human_position": 15,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV2::FOXI1",
+        "human_score": 0.876,
+        "human_position": 188,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXC2",
+        "human_score": 0.876,
+        "human_position": 225,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXN3",
+        "human_score": 0.875,
+        "human_position": 246,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX5",
+        "human_score": 0.875,
+        "human_position": 421,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC12",
+        "human_score": 0.875,
+        "human_position": 62,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BATF3",
+        "human_score": 0.874,
+        "human_position": 519,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ELF5",
+        "human_score": 0.874,
+        "human_position": 631,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HES2",
+        "human_score": 0.874,
+        "human_position": 88,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RFX2",
+        "human_score": 0.874,
+        "human_position": 489,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SP3",
+        "human_score": 0.874,
+        "human_position": 666,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "XBP1",
+        "human_score": 0.874,
+        "human_position": 86,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF770",
+        "human_score": 0.873,
+        "human_position": 85,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "KLF14",
+        "human_score": 0.873,
+        "human_position": 569,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MEF2A",
+        "human_score": 0.872,
+        "human_position": 76,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF20",
+        "human_score": 0.872,
+        "human_position": 458,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MYF6",
+        "human_score": 0.871,
+        "human_position": 686,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MAF::NFE2",
+        "human_score": 0.871,
+        "human_position": 508,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "OTX2",
+        "human_score": 0.871,
+        "human_position": 523,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF189",
+        "human_score": 0.871,
+        "human_position": 681,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BATF",
+        "human_score": 0.87,
+        "human_position": 93,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BATF::JUN",
+        "human_score": 0.87,
+        "human_position": 93,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "JUNB",
+        "human_score": 0.869,
+        "human_position": 122,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFAP2E",
+        "human_score": 0.869,
+        "human_position": 396,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETV6",
+        "human_score": 0.868,
+        "human_position": 86,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FAM200B",
+        "human_score": 0.868,
+        "human_position": 395,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ESR2",
+        "human_score": 0.867,
+        "human_position": 200,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DPRX",
+        "human_score": 0.867,
+        "human_position": 273,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DLX2",
+        "human_score": 0.866,
+        "human_position": 421,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXD10",
+        "human_score": 0.866,
+        "human_position": 53,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SCAND3",
+        "human_score": 0.866,
+        "human_position": 528,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ARID5A",
+        "human_score": 0.865,
+        "human_position": 514,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CEBPD",
+        "human_score": 0.865,
+        "human_position": 625,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF274",
+        "human_score": 0.865,
+        "human_position": 610,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CEBPG",
+        "human_score": 0.864,
+        "human_position": 66,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSB::JUN",
+        "human_score": 0.864,
+        "human_position": 123,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SOX7",
+        "human_score": 0.864,
+        "human_position": 291,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HNF1A",
+        "human_score": 0.864,
+        "human_position": 492,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TWIST1",
+        "human_score": 0.864,
+        "human_position": 253,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DDIT3::CEBPA",
+        "human_score": 0.863,
+        "human_position": 679,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TFCP2",
+        "human_score": 0.863,
+        "human_position": 342,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU3F4",
+        "human_score": 0.862,
+        "human_position": 107,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HOXC11",
+        "human_score": 0.862,
+        "human_position": 61,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PBX1",
+        "human_score": 0.862,
+        "human_position": 145,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU5F1B",
+        "human_score": 0.861,
+        "human_position": 107,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ETS1",
+        "human_score": 0.861,
+        "human_position": 188,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FLI1::FOXI1",
+        "human_score": 0.861,
+        "human_position": 639,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXJ2::ELF1",
+        "human_score": 0.861,
+        "human_position": 286,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR6A1",
+        "human_score": 0.861,
+        "human_position": 363,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "THRB",
+        "human_score": 0.861,
+        "human_position": 529,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF518B",
+        "human_score": 0.861,
+        "human_position": 546,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSB",
+        "human_score": 0.861,
+        "human_position": 519,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MSC",
+        "human_score": 0.86,
+        "human_position": 686,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "OLIG3",
+        "human_score": 0.86,
+        "human_position": 267,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZBTB32",
+        "human_score": 0.86,
+        "human_position": 100,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ELF2",
+        "human_score": 0.86,
+        "human_position": 287,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "SPDEF",
+        "human_score": 0.86,
+        "human_position": 253,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOXO1::ELF1",
+        "human_score": 0.859,
+        "human_position": 71,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GLI2",
+        "human_score": 0.859,
+        "human_position": 670,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MZF1",
+        "human_score": 0.859,
+        "human_position": 564,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PGR",
+        "human_score": 0.858,
+        "human_position": 71,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GCM2",
+        "human_score": 0.858,
+        "human_position": 255,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL2",
+        "human_score": 0.857,
+        "human_position": 91,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF43",
+        "human_score": 0.857,
+        "human_position": 494,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BNC2",
+        "human_score": 0.856,
+        "human_position": 509,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "GATA1",
+        "human_score": 0.856,
+        "human_position": 238,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "POU2F1",
+        "human_score": 0.856,
+        "human_position": 107,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PRDM9",
+        "human_score": 0.856,
+        "human_position": 559,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZNF250",
+        "human_score": 0.856,
+        "human_position": 409,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "EBF2",
+        "human_score": 0.855,
+        "human_position": 505,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FLI1",
+        "human_score": 0.855,
+        "human_position": 288,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR2F1",
+        "human_score": 0.855,
+        "human_position": 529,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RXRG",
+        "human_score": 0.854,
+        "human_position": 585,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "DMBX1",
+        "human_score": 0.854,
+        "human_position": 638,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "HAND2",
+        "human_score": 0.854,
+        "human_position": 269,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "TEAD4",
+        "human_score": 0.854,
+        "human_position": 232,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "CEBPA",
+        "human_score": 0.853,
+        "human_position": 624,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ELK4",
+        "human_score": 0.853,
+        "human_position": 289,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NHLH1",
+        "human_score": 0.853,
+        "human_position": 687,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "MYOG",
+        "human_score": 0.853,
+        "human_position": 687,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "PROP1",
+        "human_score": 0.852,
+        "human_position": 422,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RFX1",
+        "human_score": 0.852,
+        "human_position": 488,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "RARB",
+        "human_score": 0.852,
+        "human_position": 86,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "BHLHA15",
+        "human_score": 0.851,
+        "human_position": 684,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOS",
+        "human_score": 0.851,
+        "human_position": 121,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "FOSL1",
+        "human_score": 0.851,
+        "human_position": 518,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NR4A2::RXRA",
+        "human_score": 0.851,
+        "human_position": 65,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "ZIM3",
+        "human_score": 0.851,
+        "human_position": 402,
+        "same_site_in": [],
+        "everywhere": false
+      },
+      {
+        "factor": "NEUROG2",
+        "human_score": 0.85,
+        "human_position": 267,
+        "same_site_in": [],
+        "everywhere": false
+      }
+    ]
+  },
+  "constraint": {
+    "phylop": {
+      "bases": 957,
+      "mean": 0.112,
+      "maximum": 8.586,
+      "fraction_above": 0.077
+    },
+    "gnocchi": {
+      "bases": 1000,
+      "mean": 3.455,
+      "maximum": 3.455,
+      "fraction_above": 1.0,
+      "strong": false
+    }
+  },
+  "evidence": {
+    "alignment": "curated: Ensembl Compara LASTZ_NET pairwise alignment of the human region",
+    "motif": "predicted: JASPAR 2026 log-odds hit at >= 85% of the matrix range",
+    "grammar": "inferred: a factor whose motif holds the same aligned site in human and every species"
+  },
+  "cost": {
+    "seconds": 11.7
+  }
+}
