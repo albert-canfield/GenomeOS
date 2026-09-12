@@ -194,23 +194,68 @@ what the evidence supports and is stated rather than rounded up. A program that
 imports it can knock an element out, run the network, and see which gene moves,
 which is what the closure tests in the next section will do.
 
+## Closure at the gene level (2026-09-12)
+
+`genomeos closure --chrom chr21` is the first of the three closure tests, the one
+with enough bandwidth to falsify. For each coding gene and each of four ENCODE
+cell lines that have both a DNase reader and a total RNA-seq track (K562, HepG2,
+GM12878, IMR-90) it reads three things independently:
+
+- the promoter's openness, a DNase peak within 1 kb of the TSS (the reader);
+- the regulatory input from the elements attributed to the gene: an element is
+  active where a DNase peak overlaps it, and the input is the signed sum of the
+  predicted magnitudes over the active elements;
+- the measured expression, the fraction of the canonical exons' bases carrying
+  RNA-seq signal on the gene's strand, read through the bigWig range reader
+  (2.9 MB for the chromosome).
+
+| cell | expressed, promoter open | expressed, promoter closed | open with activating input | open, no element |
+|---|---|---|---|---|
+| K562 | 64% (135) | 7% (86) | 57% (7) | 65% (122) |
+| HepG2 | 73% (118) | 8% (103) | 62% (8) | 76% (107) |
+| GM12878 | 84% (89) | 22% (132) | 100% (3) | 85% (85) |
+| IMR-90 | 76% (130) | 2% (91) | 60% (15) | 77% (108) |
+
+The reader's claim holds in every cell. The elements add nothing at this
+resolution: within a cell they do not raise the expressed fraction, and across
+cells, for the 39 genes whose input and expression both vary, the cell where the
+elements are most active is the most expressed cell 15% of the time, against 25%
+by chance and 33% under shuffled cells. Twelve attributions are rejected by name
+(MAP3K7CL in HepG2 with input 0.77 and no expression; SIM2 and EVA1C in K562;
+OLIG1 in IMR-90), and 43 expressed genes have a closed promoter and no active
+element, most of them in GM12878, whose reader has the fewest peaks.
+
+The reading is not that the targets are wrong. VISTA and the eQTLs say the
+target and the tissue are usually right. It is that a target plus "active where
+a DNase peak overlaps" plus a magnitude scored in whichever tissue moved most
+does not reproduce a cell. The closure asks for the deletion scored in the
+cell's own track, which AlphaGenome has for all four lines, and that is the next
+step; the test then runs again on the same table.
+
+One measurement lesson on the way: IMR-90's ENCODE total RNA-seq carries its
+strand labels inverted (APP reads on the "plus" file), so the module probes each
+cell's orientation over forty exons per strand and swaps the tracks when the
+swapped orientation carries more than twice the signal, recording the choice.
+
 ## What comes next, in order
 
-1. **The rest of the organising evidence** on the compiled blocks: repeat
+1. **The deletion effect scored per cell line**, then the gene-level closure
+   again: the test the elements have to pass.
+2. **The rest of the organising evidence** on the compiled blocks: repeat
    family and segmental duplication on regions, the reader's openness on the
    element itself rather than its node.
-2. **The remaining attribution**: AlphaGenome's predicted DNase, histone and
+3. **The remaining attribution**: AlphaGenome's predicted DNase, histone and
    CAGE tracks say whether a block is active and where, and in-silico
    mutagenesis says which bases inside it matter; both on the 15,536
    regulatory blocks. The hosted service handles
    thousands of predictions, not a million blocks, so the self-hosted model in
    the roadmap pool gates the move from chromosome 21 to the genome.
-3. **Score against measured ground truth**, the way the segment parser was
+4. **Score against measured ground truth**, the way the segment parser was
    scored against GENCODE: VISTA enhancers (about 3,300 tested in mouse
    embryos), ENCODE4 lentiMPRA (hundreds of thousands of elements in K562,
    HepG2, WTC11), GTEx eQTL, the GWAS catalog and ClinVar. Precision and
    sensitivity reported plainly per tier.
-4. **Closure tests at three levels.** Gene level: open elements with their
+5. **Closure tests at three levels.** Gene level: open elements with their
    predicted effects must reproduce GTEx expression per tissue (19,000 genes by
    54 tissues). Cell level: an element deleted in silico moves its gene and
    changes the cell type's program; compare with IMPC knockouts and DepMap.
@@ -218,7 +263,7 @@ which is what the closure tests in the next section will do.
    produce a human's cell counts and proportions over decades. The last one
    validates the mechanism modules, not single blocks, and stays as the sanity
    check Albert described.
-5. **Simpler genomes as the comparison.** C. elegans first (GenomeOS already
+6. **Simpler genomes as the comparison.** C. elegans first (GenomeOS already
    grows it; the lineage is the finished house), Drosophila for enhancer
    grammar (genome-wide STARR-seq), fugu as the compact vertebrate with the
    same gene count and an eighth of the sequence, mouse (already in) for

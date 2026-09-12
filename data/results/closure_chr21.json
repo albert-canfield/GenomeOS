@@ -1,0 +1,7922 @@
+{
+  "result": "closure_chr21",
+  "date": "2026-09-12",
+  "chrom": "chr21",
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "strand_orientation": {
+    "K562": "as labelled",
+    "HepG2": "as labelled",
+    "GM12878": "as labelled",
+    "IMR-90": "swapped"
+  },
+  "coding_genes": 221,
+  "genes_with_elements": 83,
+  "signal_threshold": 0.05,
+  "expressed_threshold": 0.3,
+  "within_cell": {
+    "K562": {
+      "expressed_promoter_open": [
+        0.644,
+        135
+      ],
+      "expressed_promoter_closed": [
+        0.07,
+        86
+      ],
+      "expressed_open_with_activating_input": [
+        0.571,
+        7
+      ],
+      "expressed_open_without_input": [
+        0.648,
+        122
+      ],
+      "expressed_open_with_repressing_input": [
+        0.667,
+        6
+      ]
+    },
+    "HepG2": {
+      "expressed_promoter_open": [
+        0.729,
+        118
+      ],
+      "expressed_promoter_closed": [
+        0.078,
+        103
+      ],
+      "expressed_open_with_activating_input": [
+        0.625,
+        8
+      ],
+      "expressed_open_without_input": [
+        0.757,
+        107
+      ],
+      "expressed_open_with_repressing_input": [
+        0.0,
+        3
+      ]
+    },
+    "GM12878": {
+      "expressed_promoter_open": [
+        0.843,
+        89
+      ],
+      "expressed_promoter_closed": [
+        0.22,
+        132
+      ],
+      "expressed_open_with_activating_input": [
+        1.0,
+        3
+      ],
+      "expressed_open_without_input": [
+        0.847,
+        85
+      ],
+      "expressed_open_with_repressing_input": [
+        0.0,
+        1
+      ]
+    },
+    "IMR-90": {
+      "expressed_promoter_open": [
+        0.762,
+        130
+      ],
+      "expressed_promoter_closed": [
+        0.022,
+        91
+      ],
+      "expressed_open_with_activating_input": [
+        0.6,
+        15
+      ],
+      "expressed_open_without_input": [
+        0.769,
+        108
+      ],
+      "expressed_open_with_repressing_input": [
+        1.0,
+        7
+      ]
+    }
+  },
+  "across_cells": {
+    "genes_tested": 39,
+    "mean_rho_input_vs_expression": 0.093,
+    "mean_rho_promoter_vs_expression": 0.137,
+    "most_active_cell_is_most_expressed": 0.154,
+    "same_under_shuffled_cells": 0.333,
+    "chance": 0.25
+  },
+  "rejected_attributions": [
+    {
+      "gene": "MAP3K7CL",
+      "cell": "HepG2",
+      "input": 0.774,
+      "expression": 0.0
+    },
+    {
+      "gene": "SIM2",
+      "cell": "K562",
+      "input": 0.553,
+      "expression": 0.0
+    },
+    {
+      "gene": "EVA1C",
+      "cell": "K562",
+      "input": 0.477,
+      "expression": 0.0
+    },
+    {
+      "gene": "EVA1C",
+      "cell": "IMR-90",
+      "input": 0.477,
+      "expression": 0.0772
+    },
+    {
+      "gene": "ADAMTS5",
+      "cell": "IMR-90",
+      "input": 0.404,
+      "expression": 0.178
+    },
+    {
+      "gene": "ADAMTS1",
+      "cell": "HepG2",
+      "input": 0.387,
+      "expression": 0.0
+    },
+    {
+      "gene": "OLIG1",
+      "cell": "IMR-90",
+      "input": 0.377,
+      "expression": 0.0
+    },
+    {
+      "gene": "KCNE2",
+      "cell": "K562",
+      "input": 0.215,
+      "expression": 0.0
+    },
+    {
+      "gene": "HUNK",
+      "cell": "IMR-90",
+      "input": 0.179,
+      "expression": 0.2004
+    },
+    {
+      "gene": "SYNJ1",
+      "cell": "IMR-90",
+      "input": 0.158,
+      "expression": 0.2438
+    },
+    {
+      "gene": "RIPK4",
+      "cell": "HepG2",
+      "input": 0.003,
+      "expression": 0.0967
+    },
+    {
+      "gene": "RIPK4",
+      "cell": "IMR-90",
+      "input": 0.003,
+      "expression": 0.0605
+    }
+  ],
+  "rejected_count": 12,
+  "unexplained_expression": [
+    {
+      "gene": "SAMSN1",
+      "cell": "GM12878",
+      "expression": 1.0
+    },
+    {
+      "gene": "SLX9",
+      "cell": "GM12878",
+      "expression": 1.0
+    },
+    {
+      "gene": "COL6A2",
+      "cell": "IMR-90",
+      "expression": 1.0
+    },
+    {
+      "gene": "SLC19A1",
+      "cell": "GM12878",
+      "expression": 0.9974
+    },
+    {
+      "gene": "IFNGR2",
+      "cell": "GM12878",
+      "expression": 0.9963
+    },
+    {
+      "gene": "C2CD2",
+      "cell": "GM12878",
+      "expression": 0.9961
+    },
+    {
+      "gene": "IFNAR2-IL10RB",
+      "cell": "GM12878",
+      "expression": 0.9954
+    },
+    {
+      "gene": "PRDM15",
+      "cell": "GM12878",
+      "expression": 0.9944
+    },
+    {
+      "gene": "CSTB",
+      "cell": "GM12878",
+      "expression": 0.9939
+    },
+    {
+      "gene": "BACH1",
+      "cell": "GM12878",
+      "expression": 0.9929
+    },
+    {
+      "gene": "AGPAT3",
+      "cell": "GM12878",
+      "expression": 0.9922
+    },
+    {
+      "gene": "TRPM2",
+      "cell": "GM12878",
+      "expression": 0.9915
+    },
+    {
+      "gene": "SETD4",
+      "cell": "GM12878",
+      "expression": 0.9904
+    },
+    {
+      "gene": "APP",
+      "cell": "GM12878",
+      "expression": 0.9887
+    },
+    {
+      "gene": "RRP1B",
+      "cell": "GM12878",
+      "expression": 0.9883
+    },
+    {
+      "gene": "CBR3",
+      "cell": "GM12878",
+      "expression": 0.9857
+    },
+    {
+      "gene": "SAMSN1",
+      "cell": "K562",
+      "expression": 0.9851
+    },
+    {
+      "gene": "BRWD1",
+      "cell": "GM12878",
+      "expression": 0.9794
+    },
+    {
+      "gene": "ADARB1",
+      "cell": "GM12878",
+      "expression": 0.9696
+    },
+    {
+      "gene": "CLIC6",
+      "cell": "GM12878",
+      "expression": 0.9627
+    },
+    {
+      "gene": "BRWD1",
+      "cell": "K562",
+      "expression": 0.9617
+    },
+    {
+      "gene": "ENSG00000293606",
+      "cell": "GM12878",
+      "expression": 0.9479
+    },
+    {
+      "gene": "NRIP1",
+      "cell": "GM12878",
+      "expression": 0.9474
+    },
+    {
+      "gene": "MRPS6",
+      "cell": "GM12878",
+      "expression": 0.9314
+    },
+    {
+      "gene": "GET1",
+      "cell": "GM12878",
+      "expression": 0.9282
+    },
+    {
+      "gene": "SLC19A1",
+      "cell": "K562",
+      "expression": 0.9225
+    },
+    {
+      "gene": "CRYZL1",
+      "cell": "GM12878",
+      "expression": 0.9213
+    },
+    {
+      "gene": "FAM3B",
+      "cell": "HepG2",
+      "expression": 0.9103
+    },
+    {
+      "gene": "AGPAT3",
+      "cell": "HepG2",
+      "expression": 0.9067
+    },
+    {
+      "gene": "SLC5A3",
+      "cell": "GM12878",
+      "expression": 0.8975
+    },
+    {
+      "gene": "IFNAR2",
+      "cell": "K562",
+      "expression": 0.8595
+    },
+    {
+      "gene": "IFNAR2",
+      "cell": "HepG2",
+      "expression": 0.793
+    },
+    {
+      "gene": "ENSG00000249209",
+      "cell": "HepG2",
+      "expression": 0.793
+    },
+    {
+      "gene": "ENSG00000249209",
+      "cell": "GM12878",
+      "expression": 0.7795
+    },
+    {
+      "gene": "SLC19A1",
+      "cell": "HepG2",
+      "expression": 0.7183
+    },
+    {
+      "gene": "ENSG00000286224",
+      "cell": "GM12878",
+      "expression": 0.7053
+    },
+    {
+      "gene": "TPTE",
+      "cell": "K562",
+      "expression": 0.6569
+    },
+    {
+      "gene": "TCP10L",
+      "cell": "HepG2",
+      "expression": 0.5024
+    },
+    {
+      "gene": "SLC19A1",
+      "cell": "IMR-90",
+      "expression": 0.4721
+    },
+    {
+      "gene": "TMPRSS3",
+      "cell": "HepG2",
+      "expression": 0.3677
+    }
+  ],
+  "unexplained_count": 43,
+  "genes": [
+    {
+      "gene": "TPTE",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.6569,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "POTED",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "LIPI",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RBM11",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.013,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.1587,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0117,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "HSPA13",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.774,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.626,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8838,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7805,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SAMSN1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.9851,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0358,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "NRIP1",
+      "elements": 6,
+      "cells": {
+        "K562": {
+          "expression": 0.7169,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8084,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.147
+        },
+        "GM12878": {
+          "expression": 0.9474,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6661,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": 0.305
+        }
+      }
+    },
+    {
+      "gene": "USP25",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.8687,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.868,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9554,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7221,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CXADR",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8992,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0046,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3052,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.179
+        }
+      }
+    },
+    {
+      "gene": "BTG3",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9156,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.739,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9893,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5903,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "C21orf91",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.7961,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.2229,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9718,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6004,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CHODL",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0892,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0051,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TMPRSS15",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "NCAM2",
+      "elements": 3,
+      "cells": {
+        "K562": {
+          "expression": 0.8947,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.36
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.36
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.462,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.36
+        }
+      }
+    },
+    {
+      "gene": "MRPL39",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9828,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9125,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8893,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "JAM2",
+      "elements": 3,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9424,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.109
+        },
+        "IMR-90": {
+          "expression": 0.0827,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ATP5PF",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9888,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8654,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.917,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "GABPA",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.7005,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.709,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8566,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4756,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "APP",
+      "elements": 3,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9121,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9887,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9787,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CYYR1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.009,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ADAMTS1",
+      "elements": 6,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.387
+        },
+        "GM12878": {
+          "expression": 0.01,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8239,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.387
+        }
+      }
+    },
+    {
+      "gene": "ADAMTS5",
+      "elements": 4,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.178,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": 0.404
+        }
+      }
+    },
+    {
+      "gene": "HEMK2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.8233,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0406,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.887,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4816,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "LTN1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.8286,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.5975,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9914,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.2865,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RWDD2B",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.8694,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.52
+        },
+        "HepG2": {
+          "expression": 0.8707,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8705,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8528,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.52
+        }
+      }
+    },
+    {
+      "gene": "USP16",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9954,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.968,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9964,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8297,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CCT8",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9994,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9985,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9916,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "MAP3K7CL",
+      "elements": 5,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.774
+        },
+        "GM12878": {
+          "expression": 0.8631,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6405,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.774
+        }
+      }
+    },
+    {
+      "gene": "BACH1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.7776,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.6185,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9929,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6746,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "GRIK1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0562,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CLDN17",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CLDN8",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP24-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP25-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP26-1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP27-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP23-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP13-2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP13-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP13-3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP13-4",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP15-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP19-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP19-2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP19-3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP19-4",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP19-5",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP19-6",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP19-7",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP22-2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP6-3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP6-2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP22-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP6-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP20-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP20-4",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.2232,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP20-2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP20-3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP21-3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP21-2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP21-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP8-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP7-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP11-1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP19-8",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TIAM1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0226,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.4068,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.1267,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SOD1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9978,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9978,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9938,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9046,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SCAF4",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.7556,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.57,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.997,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5034,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "HUNK",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.525
+        },
+        "HepG2": {
+          "expression": 0.2693,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.525
+        },
+        "IMR-90": {
+          "expression": 0.2004,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.179
+        }
+      }
+    },
+    {
+      "gene": "MIS18A",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9858,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9795,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9819,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4241,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "MRAP",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.119
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.119
+        }
+      }
+    },
+    {
+      "gene": "URB1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.8551,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.3825,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9943,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5685,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.104
+        }
+      }
+    },
+    {
+      "gene": "CFAP298-TCP10L",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.6945,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.7819,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.5884,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6435,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "EVA1C",
+      "elements": 4,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": 0.477
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.213
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0772,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": 0.477
+        }
+      }
+    },
+    {
+      "gene": "TCP10L",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.3114,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.121
+        },
+        "HepG2": {
+          "expression": 0.5024,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.1261,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CFAP298",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.8513,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.279
+        },
+        "HepG2": {
+          "expression": 0.8137,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8606,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7997,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SYNJ1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.3312,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0835,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8137,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.2438,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.158
+        }
+      }
+    },
+    {
+      "gene": "PAXBP1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9306,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.6655,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.999,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5789,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "EPCIP",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "OLIG2",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "OLIG1",
+      "elements": 3,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.407
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.377
+        }
+      }
+    },
+    {
+      "gene": "IFNAR2",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.8595,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.793,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9933,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3249,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "IFNAR2-IL10RB",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9649,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9135,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9954,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4943,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "IL10RB",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9937,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9593,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9986,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5491,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "IFNAR1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.909,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.7662,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9708,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6152,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "IFNGR2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9778,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9862,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9963,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7781,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TMEM50B",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9701,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9296,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9187,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3381,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "DNAJC28",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0223,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0307,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0832,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.1157,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "GART",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9988,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9227,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.994,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3054,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SON",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9279,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9097,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.988,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8296,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "DONSON",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9893,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9506,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.183
+        },
+        "GM12878": {
+          "expression": 0.9957,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6809,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.183
+        }
+      }
+    },
+    {
+      "gene": "ENSG00000249209",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.7965,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.793,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.7795,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7615,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CRYZL1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9646,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8978,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9213,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5912,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ITSN1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.2503,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.5326,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.5999,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5391,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ATP5PO",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9103,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9055,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8909,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8421,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "MRPS6",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9589,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9497,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9314,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7055,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SLC5A3",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.646,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.5439,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8975,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4741,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ENSG00000293606",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.8206,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.768,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9479,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6006,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KCNE2",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.215
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.215
+        }
+      }
+    },
+    {
+      "gene": "SMIM11",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "C21orf140",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SMIM34",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KCNE1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0073,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ENSG00000288711",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.5181,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.4475,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.6,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.452,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RCAN1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.8885,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.7852,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9928,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.727,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CLIC6",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.343
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9627,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RUNX1",
+      "elements": 4,
+      "cells": {
+        "K562": {
+          "expression": 0.7767,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.36,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.151
+        },
+        "GM12878": {
+          "expression": 0.9464,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.151
+        },
+        "IMR-90": {
+          "expression": 0.4314,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.151
+        }
+      }
+    },
+    {
+      "gene": "SETD4",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9534,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.309
+        },
+        "HepG2": {
+          "expression": 0.4135,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9904,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3163,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CBR1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.9903,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9305,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CBR3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9857,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.355,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "DOP1B",
+      "elements": 4,
+      "cells": {
+        "K562": {
+          "expression": 0.1391,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": -0.011
+        },
+        "HepG2": {
+          "expression": 0.2477,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9745,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.2617,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "MORC3",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9371,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8233,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9725,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7363,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CHAF1B",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.954,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8548,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9485,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5865,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CLDN14",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.1183,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.2461,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SIM2",
+      "elements": 7,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": 0.553
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": -0.031
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.59,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 3,
+          "input": -0.215
+        }
+      }
+    },
+    {
+      "gene": "HLCS",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.7901,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.6029,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.932,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5905,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RIPPLY3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0588,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PIGP",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9799,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9268,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6704,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TTC3",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9487,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9932,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.168
+        },
+        "GM12878": {
+          "expression": 0.9963,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8224,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.168
+        }
+      }
+    },
+    {
+      "gene": "VPS26C",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9949,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9595,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7638,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "DYRK1A",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.8553,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.145
+        },
+        "HepG2": {
+          "expression": 0.7798,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9493,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.791,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KCNJ6",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0003,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KCNJ15",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0041,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.1177,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.45
+        }
+      }
+    },
+    {
+      "gene": "ERG",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0036,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ETS2",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.6927,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9306,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.126
+        },
+        "GM12878": {
+          "expression": 0.968,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8413,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PSMG1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9055,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8881,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9038,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6003,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "BRWD1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9617,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9516,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9794,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3721,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "HMGN1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9767,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8805,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "GET1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9973,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9411,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9282,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6814,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "GET1-SH3BGR",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9841,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.3244,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.4698,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8431,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "LCA5L",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.1258,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0404,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SH3BGR",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9795,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.2118,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6803,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "B3GALT5",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.002,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0118,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "IGSF5",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.1397,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PCP4",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.16
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "DSCAM",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "BACE2",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0796,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6124,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "FAM3B",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.373,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.428
+        },
+        "HepG2": {
+          "expression": 0.9103,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "MX2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0296,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8966,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9973,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.2623,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "MX1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.1017,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.2239,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TMPRSS2",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0282,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.364
+        },
+        "GM12878": {
+          "expression": 0.0154,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": -0.181
+        },
+        "IMR-90": {
+          "expression": 0.2329,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RIPK4",
+      "elements": 6,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 2,
+          "input": 0.003
+        },
+        "HepG2": {
+          "expression": 0.0967,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": 0.003
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.12
+        },
+        "IMR-90": {
+          "expression": 0.0605,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 2,
+          "input": 0.003
+        }
+      }
+    },
+    {
+      "gene": "PRDM15",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.5118,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.2002,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9944,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5012,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "C2CD2",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.7524,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.5769,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9961,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7082,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.186
+        }
+      }
+    },
+    {
+      "gene": "ZBTB21",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.7266,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0189,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9428,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.727,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.832
+        }
+      }
+    },
+    {
+      "gene": "UMODL1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ABCG1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9713,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4028,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TFF3",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.7451,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.058,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TFF2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TFF1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.2584,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.1435,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.1215,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TMPRSS3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.3677,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.3353,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "UBASH3A",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0883,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.11,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RSPH1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.167,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SLC37A1",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.2097,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9874,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0755,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PDE9A",
+      "elements": 3,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8494,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.019,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5306,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "WDR4",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9362,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8365,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9535,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8248,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "NDUFV3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.8586,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8149,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9323,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6693,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ERVH48-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3782,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PKNOX1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.8781,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.8572,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9511,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8565,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.108
+        }
+      }
+    },
+    {
+      "gene": "CBS",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.2938,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0914,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0754,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.117,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "U2AF1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.1042,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CRYAA",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SIK1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "HSF2BP",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.2261,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.7261,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.1331,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.2708,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "H2BC12L",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RRP1B",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9333,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9399,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9883,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7955,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PDXK",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9714,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9449,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9156,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CSTB",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9913,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9939,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9841,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "RRP1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9488,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9149,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9784,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8311,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "AGPAT3",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9156,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9067,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9922,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7327,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ENSG00000288593",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.5605,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.5,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.136
+        },
+        "IMR-90": {
+          "expression": 0.3687,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TRAPPC10",
+      "elements": 3,
+      "cells": {
+        "K562": {
+          "expression": 0.876,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.859,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8862,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4884,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.158
+        }
+      }
+    },
+    {
+      "gene": "PWP2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.2879,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0372,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0687,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "GATD3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.3379,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0742,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ICOSLG",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0611,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "DNMT3L",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0706,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "AIRE",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PFKL",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9999,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9945,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9904,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9437,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "CFAP410",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.8628,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9136,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9682,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3371,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TRPM2",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.1268,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": -0.34
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9915,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "LRRC3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.3274,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0425,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0471,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "TSPEAR",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0074,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-4",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-5",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-6",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-7",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-8",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-9",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-10",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-11",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP12-4",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP12-3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP12-2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP12-1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "KRTAP10-12",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "UBE2G2",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9534,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9115,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9426,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9301,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SUMO3",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8654,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PTTG1IP",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.9808,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ITGB2",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0326,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0574,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 1,
+          "input": 0.294
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SLX9",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7235,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ADARB1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.5915,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.111
+        },
+        "HepG2": {
+          "expression": 0.79,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9696,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6158,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "POFUT2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.8898,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.511,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9643,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8735,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "COL18A1",
+      "elements": 3,
+      "cells": {
+        "K562": {
+          "expression": 0.23,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.6736,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 0.173
+        },
+        "GM12878": {
+          "expression": 0.2113,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.923,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SLC19A1",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9225,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.7183,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9974,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4721,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PCBP3",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.3748,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "COL6A1",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.3312,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "COL6A2",
+      "elements": 2,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.205
+        },
+        "HepG2": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.3246,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 1.0,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "FTCD",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9482,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0471,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "SPATC1L",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.8174,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.4068,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.7354,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4596,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "LSS",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9855,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9372,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9949,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.8729,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "MCM3AP",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9044,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.7454,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9994,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.726,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "YBEY",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.9385,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": 1.048
+        },
+        "HepG2": {
+          "expression": 0.3747,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.8204,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7072,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "C21orf58",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.932,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.6247,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9954,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.4543,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PCNT",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.6693,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.4346,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.99,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.6417,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "ENSG00000286224",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.7053,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.5464,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.7053,
+          "expressed": true,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.7053,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "DIP2A",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.618,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.5036,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9927,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.5367,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 1,
+          "input": -0.152
+        }
+      }
+    },
+    {
+      "gene": "S100B",
+      "elements": 1,
+      "cells": {
+        "K562": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.0107,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.0,
+          "expressed": false,
+          "promoter_open": false,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    },
+    {
+      "gene": "PRMT2",
+      "elements": 0,
+      "cells": {
+        "K562": {
+          "expression": 0.9819,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "HepG2": {
+          "expression": 0.9817,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "GM12878": {
+          "expression": 0.9678,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        },
+        "IMR-90": {
+          "expression": 0.913,
+          "expressed": true,
+          "promoter_open": true,
+          "active_elements": 0,
+          "input": 0
+        }
+      }
+    }
+  ],
+  "cost": {
+    "seconds": 192.8,
+    "mb_fetched": 2.9
+  },
+  "evidence": {
+    "expression": "experimental: ENCODE total RNA-seq signal over the canonical exons, per strand",
+    "promoter": "experimental: ENCODE DNase-seq peak within 1 kb of the TSS (the reader)",
+    "elements": "predicted: AlphaGenome deletion target and magnitude, active where a DNase peak overlaps"
+  }
+}

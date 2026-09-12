@@ -906,28 +906,53 @@ in order. "Owner" is the session that holds the files today (see §7).
   mean confidence 0.62 for regions and 0.25 for elements, which is what the
   evidence supports. The non-coding space of a chromosome is now something
   the engine reads, not a table.
-- **Next.** 1. The rest of the organising evidence on the compiled blocks:
-  repeat family and segmental duplication on regions, the reader's openness on
-  the element itself rather than its node. 2. The remaining attribution:
-  AlphaGenome's predicted chromatin tracks for activity and tissue on the
-  15,536 regulatory blocks, in-silico mutagenesis for the bases that matter;
-  the self-hosted model gates the move from chromosome 21 to the genome.
-  3. Scoring against measured
-  ground truth the way the parser was scored against GENCODE: VISTA begun
-  (above); GTEx eQTLs done for the target gene itself (above); VISTA done
-  genome-wide (above); ENCODE4 lentiMPRA (K562, HepG2, WTC11) for activity
-  built and running, same cell against the model's own track and cross-cell
-  reported apart (chr21: rank correlation 0.39 same-cell against 0.07
-  cross-cell for K562, 0.35 against 0.13 for HepG2; the model's predicted
-  DNase higher in the active cell for 74% of 47 cell-specific elements); GWAS
-  and ClinVar done as enrichment tests with a shifted control, weak by
-  construction (above). What remains of step 3 is the lentiMPRA genome row.
-  4. Closure
-  at three levels: gene (open elements reproduce GTEx expression per tissue),
-  cell (a deleted element moves its gene and the cell program; IMPC, DepMap),
-  organism (the Body runtime still produces a human's cell counts over
-  decades). 5. Simpler genomes as the comparison, C. elegans first, then
-  Drosophila enhancers, fugu as the compact vertebrate, mouse for transfer.
+- **Closure at the gene level (2026-09-12).** `genomeos closure --chrom chr21`
+  (`attribution/closure.py`, `closure_chr21`) reads, for each of the 221
+  coding genes and each of four ENCODE cell lines with both a DNase reader and
+  a total RNA-seq track (K562, HepG2, GM12878, IMR-90), three things
+  independently: the promoter's openness (the reader), the regulatory input
+  from the attributed elements (an element counts as active where a DNase
+  peak overlaps it, its predicted magnitude signed by action), and the
+  measured expression (fraction of canonical-exon bases with RNA-seq signal on
+  the gene's strand; 2.9 MB of ranges). The reader's claim holds in every
+  cell: genes with an open promoter are expressed in 64% to 84% of cases
+  against 2% to 22% with a closed one. The elements add nothing at this
+  resolution: within a cell, open-promoter genes with activating input are
+  expressed no more often than those with no element (57% to 100% on 3 to 15
+  genes against 65% to 85%); across cells, for the 39 genes whose input and
+  expression both vary, the cell where the elements are most active is the
+  most expressed cell 15% of the time, against 25% by chance and 33% under
+  shuffled cells. Twelve attributions are rejected by name (MAP3K7CL in HepG2
+  with input 0.77 and no expression, SIM2 and EVA1C in K562, OLIG1 in IMR-90)
+  and 43 expressed genes have a closed promoter and no active element, most
+  in GM12878, whose reader has the fewest peaks. Reading: the target gene may
+  be right and still not reproduce the cell, because the deletion's magnitude
+  was scored in whichever tissue moved most and "active" is a DNase overlap;
+  the closure asks for the deletion scored in the cell's own track. One
+  measurement lesson on the way: IMR-90's ENCODE RNA-seq carries its strands
+  inverted, so the module probes each cell's orientation and swaps when needed.
+- **Next.** 1. The deletion effect scored per cell line (AlphaGenome has K562,
+  HepG2, GM12878 and IMR-90 as tracks), then the gene-level closure again:
+  the test the elements have to pass. 2. The rest of the organising evidence
+  on the compiled blocks: repeat family and segmental duplication on regions,
+  the reader's openness on the element itself rather than its node. 3. The
+  remaining attribution: AlphaGenome's predicted chromatin tracks for activity
+  and tissue on the 15,536 regulatory blocks, in-silico mutagenesis for the
+  bases that matter; the self-hosted model gates the move from chromosome 21
+  to the genome. 4. Scoring against measured ground truth the way the parser
+  was scored against GENCODE: VISTA done genome-wide, GTEx eQTLs done for the
+  target gene, GWAS and ClinVar done as enrichment tests with a shifted
+  control, weak by construction (all above); ENCODE4 lentiMPRA (K562, HepG2,
+  WTC11) for activity built and running, same cell against the model's own
+  track and cross-cell reported apart (chr21: rank correlation 0.39 same-cell
+  against 0.07 cross-cell for K562, 0.35 against 0.13 for HepG2; predicted
+  DNase higher in the active cell for 74% of 47 cell-specific elements); its
+  genome row is what remains. 5. Closure at the cell level (a deleted element
+  moves its gene and the cell program; IMPC, DepMap) and the organism level
+  (the Body runtime still produces a human's cell counts over decades); the
+  gene level ran once (above) and returns after step 1. 6. Simpler genomes as
+  the comparison, C. elegans first, then Drosophila enhancers, fugu as the
+  compact vertebrate, mouse for transfer.
 - **Owner.** genomeos-f7 (this lane's files); the organism-level closure runs
   on genomeos-73's Body runtime and the block evidence on genomeos-fe's
   decoding results.

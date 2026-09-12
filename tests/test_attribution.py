@@ -266,3 +266,67 @@ def test_compile_chromosome_to_biolang(tmp_path):
     assert e1.targets[0]["gene"] == "KRTAP26_1" and e1.domain == "chrT_D1" and e1.confidence == 0.7  # capped
     out = write_program("chrT", tmp_path / "prog" / "noncoding_chrT.bio", tmp_path)
     assert out.exists() and out.read_text() == text
+
+
+def test_closure_helpers_and_judge():
+    """Rank correlation with ties, exon merging, and the closure verdicts on a synthetic gene table."""
+    from genomeos.attribution.closure import judge, merge, spearman
+
+    assert spearman([1, 2, 3, 4], [10, 20, 30, 40]) == pytest.approx(1.0)
+    assert spearman([1, 2, 3, 4], [4, 3, 2, 1]) == pytest.approx(-1.0)
+    assert spearman([1, 1, 1, 1], [1, 2, 3, 4]) is None and spearman([1, 2], [1, 2]) is None
+    assert spearman([1, 2, 2, 4], [1, 3, 3, 4]) == pytest.approx(1.0)  # ties on both sides, same order
+    assert merge([(10, 20), (15, 30), (40, 50), (50, 60)]) == [(10, 30), (40, 60)]
+
+    def cell(expr, prom, active, inp):
+        return {
+            "expression": expr,
+            "expressed": expr >= 0.3,
+            "promoter_open": prom,
+            "active_elements": active,
+            "input": inp,
+        }
+
+    cells = ["A", "B", "C"]
+    rows = [
+        # a gene whose elements are most active where it is most expressed
+        {
+            "gene": "G1",
+            "elements": 2,
+            "cells": {
+                "A": cell(0.9, True, 2, 0.8),
+                "B": cell(0.1, False, 0, 0.0),
+                "C": cell(0.4, True, 1, 0.3),
+            },
+        },
+        # a gene the cell rejects in B: open promoter, activating input, silent
+        {
+            "gene": "G2",
+            "elements": 1,
+            "cells": {
+                "A": cell(0.0, False, 0, 0.0),
+                "B": cell(0.0, True, 1, 0.5),
+                "C": cell(0.5, True, 1, 0.5),
+            },
+        },
+        # expressed with a closed promoter and no element in C: unexplained
+        {
+            "gene": "G3",
+            "elements": 0,
+            "cells": {
+                "A": cell(0.0, False, 0, 0.0),
+                "B": cell(0.0, False, 0, 0.0),
+                "C": cell(0.8, False, 0, 0.0),
+            },
+        },
+    ]
+    j = judge(rows, cells, seed=1)
+    assert j["within_cell"]["A"]["expressed_promoter_open"] == (1.0, 1)
+    assert j["within_cell"]["B"]["expressed_open_with_activating_input"] == (0.0, 1)
+    assert j["within_cell"]["C"]["expressed_promoter_closed"] == (1.0, 1)  # G3 only
+    assert j["across_cells"]["genes_tested"] == 2 and j["across_cells"]["chance"] == pytest.approx(
+        1 / 3, abs=1e-3
+    )
+    assert j["across_cells"]["most_active_cell_is_most_expressed"] == 0.5  # G1 yes, G2 tie broken to B
+    assert j["rejected_attributions"] == [{"gene": "G2", "cell": "B", "input": 0.5, "expression": 0.0}]
+    assert j["unexplained_expression"] == [{"gene": "G3", "cell": "C", "expression": 0.8}]

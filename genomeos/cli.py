@@ -1365,6 +1365,84 @@ def cmd_budget(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_closure(args: argparse.Namespace) -> int:
+    """The gene-level closure test: do the attributions reproduce what each cell makes? (area I)"""
+    import time
+
+    from genomeos.attribution.closure import CELLS, run_and_save
+    from genomeos.results import load_result
+
+    out = load_result(f"closure_{args.chrom}") if args.cached else None
+    if out is None:
+        last = [0.0]
+
+        def progress(done: int, total: int, mb: int) -> None:
+            if time.time() - last[0] > 15:
+                last[0] = time.time()
+                print(f"  RNA: {done}/{total} data blocks, {mb / 1e6:.0f} MB", flush=True)
+
+        cells = tuple(c.strip() for c in args.cells.split(",")) if args.cells else CELLS
+        out = run_and_save(args.chrom, cells=cells, signal=args.signal, progress=progress)
+    swapped = [k for k, v in out.get("strand_orientation", {}).items() if v == "swapped"]
+    print(
+        f"{args.chrom}: {out['coding_genes']} coding genes, {out['genes_with_elements']} with attributed "
+        f"elements, cells {', '.join(out['cells'])}; expressed = canonical exons "
+        f"≥ {out['expressed_threshold']:.0%} covered at signal {out['signal_threshold']}"
+        + (f"; RNA strands read swapped for {', '.join(swapped)}" if swapped else "")
+    )
+
+    def f(w: dict, k: str) -> str:
+        return f"{w[k][0]:.0%} ({w[k][1]})" if w[k][0] is not None else f"- ({w[k][1]})"
+
+    rows = []
+    for cell, w in out["within_cell"].items():
+        rows.append(
+            {
+                "cell": cell,
+                "promoter open": f(w, "expressed_promoter_open"),
+                "promoter closed": f(w, "expressed_promoter_closed"),
+                "open + activating input": f(w, "expressed_open_with_activating_input"),
+                "open, no element": f(w, "expressed_open_without_input"),
+                "open + repressing input": f(w, "expressed_open_with_repressing_input"),
+            }
+        )
+    print("\nexpressed fraction (genes) by what the attribution says:")
+    print(
+        _table(
+            rows,
+            [
+                "cell",
+                "promoter open",
+                "promoter closed",
+                "open + activating input",
+                "open, no element",
+                "open + repressing input",
+            ],
+        )
+    )
+    a = out["across_cells"]
+    print(
+        f"\nacross cells, {a['genes_tested']} genes with elements and variation: most active cell is "
+        f"the most expressed for {_pct(a['most_active_cell_is_most_expressed'], 0)} (shuffled cells "
+        f"{_pct(a['same_under_shuffled_cells'], 0)}, chance {_pct(a['chance'], 0)}); mean rank correlation "
+        f"input vs expression {a['mean_rho_input_vs_expression']}, promoter vs expression "
+        f"{a['mean_rho_promoter_vs_expression']}"
+    )
+    if out["rejected_attributions"]:
+        print(
+            f"\nrejected by the cell ({out['rejected_count']}): promoter open, activating input, gene silent"
+        )
+        print(_table(out["rejected_attributions"][: args.top], ["gene", "cell", "input", "expression"]))
+    if out["unexplained_expression"]:
+        print(f"\nunexplained ({out['unexplained_count']}): expressed, promoter closed, no active element")
+        print(_table(out["unexplained_expression"][: args.top], ["gene", "cell", "expression"]))
+    print(
+        "  [expression: ENCODE total RNA-seq over canonical exons; promoter: DNase peak at the TSS; "
+        "elements: AlphaGenome deletion target, active where a DNase peak overlaps; docs/ATTRIBUTION.md]"
+    )
+    return 0
+
+
 def cmd_unknown(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, Genome, default_gencode
     from genomeos.genome.unknown import investigate, load_patterns
@@ -3731,6 +3809,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--out", help="with --bio: write the program here instead of printing it")
     p.set_defaults(fn=cmd_budget)
+
+    p = sub.add_parser(
+        "closure", help="the 98%%: do the attributions reproduce what each cell makes (gene level)"
+    )
+    p.add_argument("--chrom", required=True)
+    p.add_argument("--cells", help="comma list of ENCODE cell lines with a reader and RNA-seq (default four)")
+    p.add_argument("--signal", type=float, default=0.05, help="RNA-seq signal a base must reach")
+    p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
+    p.add_argument("--top", type=int, default=12)
+    p.set_defaults(fn=cmd_closure)
 
     p = sub.add_parser(
         "protein", help="a gene's protein: our translation, UniProt record, AlphaFold structure"
