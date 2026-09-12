@@ -67,7 +67,8 @@ def attributed_elements(chrom: str) -> dict[str, list[dict]]:
     """Elements with a predicted coding target, by target symbol; the constrained run first."""
     seen: set[str] = set()
     by: dict[str, list[dict]] = {}
-    for name in ("constrained_targets", "enhancer_targets"):
+    # the whole-chromosome scoring first when it exists, then the constrained and uniform samples
+    for name in ("enhancer_targets_all", "constrained_targets", "enhancer_targets"):
         for e in (load_result(f"{name}_{chrom}") or {}).get("elements", []):
             pc = e.get("predicted_coding") or {}
             if not pc.get("gene") or e["id"] in seen:

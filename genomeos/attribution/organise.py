@@ -91,7 +91,7 @@ def blocks(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, Any]]:
 def _attributed(chrom: str, results_dir: Path) -> list[dict[str, Any]]:
     seen: set[str] = set()
     out = []
-    for name in ("constrained_targets", "enhancer_targets"):
+    for name in ("enhancer_targets_all", "constrained_targets", "enhancer_targets"):
         for e in (load_result(f"{name}_{chrom}", results_dir) or {}).get("elements", []):
             pc = e.get("predicted_coding") or {}
             if pc.get("gene") and e["id"] not in seen:

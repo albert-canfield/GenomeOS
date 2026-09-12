@@ -101,7 +101,11 @@ def _attributed(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict]:
     """Elements with a predicted coding target, constrained-target run first, deduplicated by id."""
     seen: set[str] = set()
     out: list[dict] = []
-    for name, origin in (("constrained_targets", "constrained"), ("enhancer_targets", "uniform")):
+    for name, origin in (
+        ("enhancer_targets_all", "all"),
+        ("constrained_targets", "constrained"),
+        ("enhancer_targets", "uniform"),
+    ):
         r = load_result(f"{name}_{chrom}", results_dir) or {}
         for e in r.get("elements", []):
             pc = e.get("predicted_coding") or {}
