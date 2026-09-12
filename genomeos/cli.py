@@ -1258,6 +1258,15 @@ def cmd_budget(args: argparse.Namespace) -> int:
     from genomeos.attribution.budget import TIERS, distil, run_and_save
     from genomeos.results import load_result, save_result
 
+    if args.chrom and args.bio:
+        from genomeos.attribution.compile import compile_chromosome, write_program
+
+        if args.out:
+            p = write_program(args.chrom, Path(args.out))
+            print(f"wrote {p} ({p.stat().st_size / 1e3:.0f} kB); check it with: bio test {p}")
+        else:
+            print(compile_chromosome(args.chrom), end="")
+        return 0
     if args.chrom:
         out = load_result(f"budget_{args.chrom}") if args.cached else None
         if out is None:
@@ -3717,6 +3726,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--no-elements", action="store_true")
     p.add_argument("--cached", action="store_true", help="show the saved budget instead of recomputing")
     p.add_argument("--top", type=int, default=15)
+    p.add_argument(
+        "--bio", action="store_true", help="emit the chromosome's attributions as a BioLang program"
+    )
+    p.add_argument("--out", help="with --bio: write the program here instead of printing it")
     p.set_defaults(fn=cmd_budget)
 
     p = sub.add_parser(

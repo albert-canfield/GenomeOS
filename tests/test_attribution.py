@@ -173,3 +173,96 @@ def test_live_zoonomia_range():  # pragma: no cover - network
     bw = BigWig(PHYLOP_241_URL)
     (st,) = bw.summarise("chr21", [(25_880_000, 25_881_000)], 2.27)
     assert st.bases == 1000 and 0.1 < st.fraction_above < 0.3  # APP exon neighbourhood
+
+
+def test_compile_chromosome_to_biolang(tmp_path):
+    """The attributions as a program: regions per tier (constrained_unknown keeps role unknown),
+    elements with targets and rules, domains with the reader's view; the engine parses and checks it."""
+    from genomeos.attribution.compile import compile_chromosome, ident, write_program
+    from genomeos.lang.parser import parse
+
+    def block(start, end, cls, tier, label, conf, phylop=None, elements=None):
+        return {
+            "start": start,
+            "end": end,
+            "length": end - start,
+            "class": cls,
+            "phylop": phylop,
+            "elements": elements,
+            "guess": {"tier": tier, "label": label, "confidence": conf},
+        }
+
+    blocks = [
+        block(0, 100, "gap", "structural", "assembly gap: no sequence to attribute", 1.0),
+        block(
+            100,
+            300,
+            "unique_intergenic",
+            "constrained_unknown",
+            "constrained non-coding",
+            0.6,
+            {"bases": 200, "fraction_above": 0.08, "above": 16},
+            {"n": 4},
+        ),
+        block(
+            300,
+            400,
+            "regulatory",
+            "regulatory",
+            "regulatory elements; target unassigned",
+            0.5,
+            {"bases": 100, "fraction_above": 0.01, "above": 1},
+            {"n": 0},
+        ),
+    ]
+    (tmp_path / "budget_chrT.json").write_text(
+        json.dumps({"chrom": "chrT", "unknown_bp": 400, "constrained_fraction": 0.05, "blocks": blocks})
+    )
+    (tmp_path / "domains_chrT.json").write_text(
+        json.dumps({"domains": [{"id": "chrT:D1", "start": 0, "end": 1000, "confidence": 0.4}]})
+    )
+    for cell, frac in (("K562", 0.3), ("HepG2", 0.0)):
+        (tmp_path / f"reader_{cell}_chrT.json").write_text(
+            json.dumps({"cell_type": cell, "node_table": [{"id": "chrT:D1", "open_fraction": frac}]})
+        )
+    el = {
+        "id": "EH38E0000001",
+        "start": 310,
+        "end": 330,
+        "domain": "chrT:D1",
+        "constrained_fraction": 0.5,
+        "verdict_coding": "agrees with nearest TSS in domain",
+        "predicted_coding": {
+            "gene": "KRTAP26-1",
+            "action": "represses",
+            "log2_fold_change": 0.9,
+            "tissue": "liver: left lobe",
+            "strength": "strong",
+            "confidence": 0.9,
+        },
+    }
+    el2 = {
+        **el,
+        "id": "EH38E0000002",
+        "start": 350,
+        "end": 360,
+        "predicted_coding": {
+            **el["predicted_coding"],
+            "action": "activates",
+            "log2_fold_change": -0.2,
+            "confidence": 0.2,
+        },
+    }
+    (tmp_path / "constrained_targets_chrT.json").write_text(json.dumps({"elements": [el]}))
+    (tmp_path / "enhancer_targets_chrT.json").write_text(json.dumps({"elements": [el, el2]}))
+    text = compile_chromosome("chrT", tmp_path)
+    assert ident("KRTAP26-1") == "KRTAP26_1" and ident("1abc") == "g_1abc"
+    assert "# test: unknowns == 1" in text and "# test: rules == 2" in text
+    assert "# chrT:D1: open in K562 (0.30); silent in HepG2" in text
+    m = parse(text, "chrT")
+    assert len(m.unknowns()) == 1 and len(m.rules) == 2
+    assert {e.kind for e in m.entities.values()} == {"region", "regulatory_element", "gene", "domain"}
+    e1 = m.entities["EH38E0000001"]
+    assert e1.targets[0]["gene"] == "KRTAP26_1" and e1.domain == "chrT_D1" and e1.confidence == 0.7  # capped
+    out = write_program("chrT", tmp_path / "prog" / "noncoding_chrT.bio", tmp_path)
+    assert out.exists() and out.read_text() == text

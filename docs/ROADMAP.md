@@ -108,7 +108,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 reached | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader on 25 with eleven cell types; the node model tested genome-wide (90.2% of enhancers act inside their node) and on two mouse chromosomes; the segment parser on chr21 at 92.7% gene precision once RNA over the exons counts as evidence | the parser on every chromosome with measured RNA; enhancer targets and boundaries from Hi-C |
 | **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph; the dominant isoform per tissue from GTEx (APP695 in the cerebellum) | measured modification state; isoform expression per cell type or stage; an engine that handles 100-species models |
-| **The 98%** (GenomeOS) | genome budgeted | every UNKNOWN block of the 24 chromosomes tiered with Zoonomia constraint read per base (1,009 Mb): structural 23%, fossil 33%, regulatory 34%, neutral 7%, constrained-unknown 3.2% (1,098 blocks, 32 Mb, 1% of the genome); `genomeos budget`, the Progress tab card | a gene and a tissue attributed to each constrained-unknown and regulatory block; scoring against VISTA, MPRA, eQTL |
+| **The 98%** (GenomeOS) | genome budgeted | every UNKNOWN block of the 24 chromosomes tiered with Zoonomia constraint read per base (1,009 Mb): structural 23%, fossil 33%, regulatory 34%, neutral 7%, constrained-unknown 3.2% (1,098 blocks, 32 Mb, 1% of the genome); `genomeos budget`, the Progress tab card; the attributions compiled to a BioLang program per chromosome (`--bio`), chr21 with 747 entities and 155 rules passing its own checks; scored against VISTA, eQTL, GWAS and ClinVar | AlphaGenome chromatin tracks on the 15,536 regulatory blocks; closure at gene, cell and organism level |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
 
@@ -890,14 +890,29 @@ in order. "Owner" is the session that holds the files today (see §7).
   today, barely above chance and moved a few points the right way by a named
   target and a strong effect; the measured layers (VISTA, eQTL, lentiMPRA, the
   reader) are where it is tested.
-- **Next.** 1. The blocks organised by the
-  evidence that exists: CTCF node, reader open fraction per cell type,
-  AlphaGenome enhancer target, repeat family, segmental duplication,
-  constraint. 2. Attribution as BioLang `element` blocks with a function, a
-  target gene, a tissue and a `predicted` confidence: AlphaGenome's predicted
-  chromatin tracks for activity and tissue, in-silico deletion for the target,
-  in-silico mutagenesis for the bases that matter; the self-hosted model gates
-  the move from chromosome 21 to the genome. 3. Scoring against measured
+- **The attributions as a program (2026-09-12).** `genomeos budget --chrom
+  chr21 --bio` compiles what the lane has computed into BioLang
+  (`attribution/compile.py`, `data/organisms/human/noncoding_chr21.bio`, 244
+  kB): every UNKNOWN block as a `region` whose role is its tier and label with
+  constraint as evidence, the constrained_unknown tier keeping `role: unknown`
+  so the program's own count of unknowns is the chromosome's real unknown;
+  every element with a predicted coding target as an `element` with its
+  domain, target and basis plus one `rule` (activates or inhibits) carrying
+  the predicted magnitude as strength, the targets declared once; the 63 CTCF
+  nodes those elements sit in, each with the reader's view as a comment (open
+  in which cell types, silent in which). chr21: 747 entities (446 regions,
+  155 elements, 83 genes, 63 domains), 155 rules, 20 unknowns, three `# test:`
+  lines that `bio test` passes in 0.13 s; predicted evidence capped at 0.7,
+  mean confidence 0.62 for regions and 0.25 for elements, which is what the
+  evidence supports. The non-coding space of a chromosome is now something
+  the engine reads, not a table.
+- **Next.** 1. The rest of the organising evidence on the compiled blocks:
+  repeat family and segmental duplication on regions, the reader's openness on
+  the element itself rather than its node. 2. The remaining attribution:
+  AlphaGenome's predicted chromatin tracks for activity and tissue on the
+  15,536 regulatory blocks, in-silico mutagenesis for the bases that matter;
+  the self-hosted model gates the move from chromosome 21 to the genome.
+  3. Scoring against measured
   ground truth the way the parser was scored against GENCODE: VISTA begun
   (above); GTEx eQTLs done for the target gene itself (above); VISTA done
   genome-wide (above); ENCODE4 lentiMPRA (K562, HepG2, WTC11) for activity

@@ -165,16 +165,44 @@ constrained-unknown sequence. Per-chromosome budgets are in
 `data/results/budget_<chrom>.json`, the sum in `budget_genome_wide.json`, and
 the Progress tab shows both.
 
+## The attributions as a program (2026-09-12)
+
+`genomeos budget --chrom chr21 --bio` compiles the chromosome's attributions into
+BioLang (`genomeos/attribution/compile.py`), and the result is committed as
+`data/organisms/human/noncoding_chr21.bio`, where `bio test` checks it with the
+other organism programs.
+
+- Every UNKNOWN block is a `region` whose role is its tier and label, with the
+  constraint numbers and the sequence class as evidence. The constrained_unknown
+  tier keeps `role: unknown`, so the program's own count of unknowns is the
+  chromosome's real unknown, and a `# test:` line pins it.
+- Every regulatory element with a predicted coding target, from the
+  constrained-target run and the uniform enhancer-deletion run, is an
+  `element` with its class, locus, domain, target and basis (the deletion's
+  gene, magnitude and tissue, the constrained fraction, the node verdict), and
+  one `rule` that activates or inhibits the target with the predicted magnitude
+  as strength. Predicted evidence is capped at 0.7. Target genes are declared
+  once as stubs.
+- The CTCF nodes those elements sit in are `domain` blocks, each preceded by a
+  comment with the reader's view: in which cell types the node is open and in
+  which it is silent.
+
+Chromosome 21 compiles to 747 entities (446 regions, 155 elements, 83 genes,
+63 domains) and 155 rules with 20 unknowns, and passes its three checks in
+0.13 s. Mean confidence is 0.62 for regions and 0.25 for elements, which is
+what the evidence supports and is stated rather than rounded up. A program that
+imports it can knock an element out, run the network, and see which gene moves,
+which is what the closure tests in the next section will do.
+
 ## What comes next, in order
 
-1. **Organise the blocks** by the evidence that already exists: CTCF node
-   membership, the reader's open fraction per cell type, the AlphaGenome
-   enhancer target, repeat family, segmental duplication, and now constraint.
-2. **Attribution as BioLang `element` blocks**: a function, a target gene, a
-   tissue and a confidence labelled `predicted`, from priors per tier.
-   AlphaGenome's predicted DNase, histone and CAGE tracks say whether a block is
-   active and where; deleting it in silico says which gene moves; in-silico
-   mutagenesis says which bases inside it matter. The hosted service handles
+1. **The rest of the organising evidence** on the compiled blocks: repeat
+   family and segmental duplication on regions, the reader's openness on the
+   element itself rather than its node.
+2. **The remaining attribution**: AlphaGenome's predicted DNase, histone and
+   CAGE tracks say whether a block is active and where, and in-silico
+   mutagenesis says which bases inside it matter; both on the 15,536
+   regulatory blocks. The hosted service handles
    thousands of predictions, not a million blocks, so the self-hosted model in
    the roadmap pool gates the move from chromosome 21 to the genome.
 3. **Score against measured ground truth**, the way the segment parser was
