@@ -695,3 +695,65 @@ An alignment says a site is kept, not that it is used: VISTA's mouse assay
 says the ZRS is active in the limb, and for the rest that is the reader's
 claim. Frog is missing because Compara holds no human-to-Xenopus pairwise
 alignment for this pair, recorded as unavailable rather than as absent.
+
+
+## 13. Refinement: families, composition and sites (2026-09-12)
+
+Sections 8 and 12 both ended on the same defect: matrices were counted one
+by one, so one binding mode read by many JASPAR profiles looked like many
+factors. Three corrections, each tested, now sit under both the promoter
+operators and the cross-species grammar.
+
+**Families.** JASPAR's TRANSFAC release carries the curated TFClass family
+and class of every matrix (`load_families`). A factor is counted as its
+family, so MEF2A and MEF2D are one unit and cannot form a pair; a
+heterodimer counts as its two families joined; and C2H2 zinc-finger
+factors stay individual, because those families are structural ("more
+than three adjacent zinc fingers" holds 195 matrices binding unrelated
+sequences). 158 matrices in the promoter lists become 110 units.
+
+**Composition.** A pair statistic that assumes independence between two
+shares finds the promoter's composition twice. GC was the known case
+(CGGBP1 with ZNF93, in 27 libraries). The check for what remained found a
+second one: promoters carrying both ZNF135 and ZNF460 sites are 19.4% Alu
+on chr1, chr17 and chr19, against 8.8% with one and 1.1% with neither, so
+the last surviving "operator" was a transposon matched by two KRAB zinc
+fingers. `promoter_composition_genome_wide` now records GC and the
+interspersed-repeat share (RepeatMasker SINE, LINE, LTR, DNA) of all 20,067
+promoters (median GC 0.56, median repeat share 12%, a quarter repeat-free),
+and every expectation is taken within GC-decile by repeat-share strata (39
+strata of 30 promoters or more; thinner ones fall back to their GC decile).
+
+**The promoter result, corrected.** No factor-family pair recurs across a
+library's promoters beyond its composition-matched expectation, in any of
+the 42 libraries; 84 pairs that passed the naive test are explained by GC
+or repeats. The single-family enrichments survive the same correction:
+REST in `systems.nervous` at 5.7 times its matched expectation (28
+members), the THAP and ZNF143 promoter families in the translation and
+replication cores, AP-1 in the circadian timer. Promoters say which
+families a library's genes share; they do not carry pair logic. That
+matches the textbook placement of combinatorial logic in enhancers, and it
+is now a measured negative rather than an impression.
+
+**Sites.** Families do not finish the job across species either, because
+the homeodomain families (HOX, NK, paired-related, HD-LIM) are separate in
+TFClass but share the TAAT core. The honest unit is the site: every held
+factor's hit is mapped back to the genome through its alignment block's
+start (positions had been recorded in whichever species' concatenated
+alignment scored best, frames that differ when coverage is partial), and
+hits overlapping on the human genome are one site.
+
+| locus | factors hitting human | held in every species | as families | as sites |
+|---|---|---|---|---|
+| ZRS | 606 | 23 matrices | 10 | **10** |
+| OCA2 enhancer | 551 | 75 matrices | 25 | **11** |
+
+For the ZRS the family count already was the site count: the element keeps
+two HOX sites, two TALE (MEIS and PBX) sites, two NR2 sites, the ETS
+composite and three single zinc-finger sites across 789 bases from human to
+zebrafish, a multi-site grammar and the known HOX, PBX, MEIS and ETS logic.
+For the OCA2 enhancer the families still overcounted: one 11-base site at
+element position 417 is read by 38 matrices from five homeodomain families,
+and a 36-base stretch at 246 by 13 matrices from 11 families. Its grammar is
+11 sites in two mammals, the E-box (bHLH-ZIP, RUNX and PAS matrices at one
+site) and a SOX site among them.

@@ -124,11 +124,56 @@ def test_distil_aggregates_requires_across_chromosomes_and_finds_operator_pairs(
         json.dumps(result("chrA", {**lib, **dict(list(rest.items())[:15])}))
     )
     (tmp_path / "motifs_chrB.json").write_text(json.dumps(result("chrB", dict(list(rest.items())[15:]))))
-    s = distil(tmp_path, members={"lib.ab": list(lib), "lib.tiny": ["L0"]})
+    # no family annotation and no GC table: units are the factors, expectations are global shares
+    s = distil(tmp_path, members={"lib.ab": list(lib), "lib.tiny": ["L0"]}, families={}, composition={})
     assert s["chromosomes"] == 2
-    assert s["promoters"] == 38 and s["factor_share"]["TFA"] == round(18 / 38, 4)
+    assert s["promoters"] == 38 and s["unit_share"]["TFA"] == round(18 / 38, 4)
     ab = s["libraries"]["lib.ab"]
-    assert ab["members_placed"] == 8 and {f["factor"] for f in ab["factors"]} == {"TFA", "TFB"}
+    assert ab["members_placed"] == 8 and {f["family"] for f in ab["families"]} == {"TFA", "TFB"}
     pair = ab["operators"][0]
-    assert set(pair["factors"]) == {"TFA", "TFB"} and pair["members_with_both"] == 8 and pair["ratio"] > 2
+    assert set(pair["families"]) == {"TFA", "TFB"} and pair["members_with_both"] == 8 and pair["ratio"] > 2
+    assert pair["naive_ratio"] == pair["ratio"]  # without GC bins the two expectations agree
     assert "lib.tiny" not in s["libraries"]
+
+    # families: TFA and TFB are one binding mode, so they are one unit and form no pair
+    fam = {
+        "TFA": {"family": "HOX", "class": "Homeo domain factors"},
+        "TFB": {"family": "HOX", "class": "Homeo"},
+    }
+    s2 = distil(tmp_path, members={"lib.ab": list(lib)}, families=fam, composition={})
+    assert s2["libraries"]["lib.ab"]["operators"] == [] and "HOX" in s2["unit_share"]
+
+    # GC: the pair lives only in GC-rich promoters, and so does the library; within GC bins it is expected
+    gc = {**{g: {"gc": 0.8, "repeat": None} for g in lib}, **{g: {"gc": 0.3, "repeat": None} for g in rest}}
+    s3 = distil(tmp_path, members={"lib.ab": list(lib)}, families={}, composition=gc)
+    ab3 = s3["libraries"]["lib.ab"]
+    assert ab3["operators"] == [] and ab3["pairs_explained_by_gc"] == 1 and s3["pairs_explained_by_gc"] == 1
+
+
+def test_family_unit_and_gc_bins():
+    from genomeos.genome.motifs import family_unit, gc_bins, gc_content
+
+    fam = {
+        "HOXA9": {"family": "HOX", "class": "Homeo domain factors"},
+        "ZNF93": {"family": "More than 3 adjacent zinc fingers", "class": "C2H2 zinc finger factors"},
+        "ETV5::FOXO1": {"family": "FOX; Ets-related", "class": "Tryptophan cluster factors; Fork head"},
+        "CGGBP1": {"family": "", "class": "C2H2 zinc finger factors"},
+    }
+    assert family_unit("hoxa9", fam) == "HOX"
+    assert (
+        family_unit("ZNF93", fam) == "ZNF93"
+    )  # zinc-finger families are structural: the factor stays itself
+    assert family_unit("ETV5::FOXO1", fam) == "Ets-related + FOX"
+    assert family_unit("CGGBP1", fam) == "CGGBP1" and family_unit("UNKNOWN", fam) == "UNKNOWN"
+    assert gc_content("GGCCAATT") == 0.5 and gc_content("NNNN") is None
+    bins = gc_bins({f"g{i}": i / 20 for i in range(20)}, bins=10)
+    assert bins["g0"] == 0 and bins["g19"] == 9 and bins["g10"] == 5
+
+
+def test_repeat_bins_and_fraction():
+    from genomeos.genome.motifs import repeat_bin, repeat_fraction
+
+    assert [repeat_bin(x) for x in (None, 0.0, 0.05, 0.2, 0.6)] == [None, 0, 1, 2, 3]
+    # overlapping repeats are merged before counting; intervals may start inside a repeat
+    reps = [(100, 200), (150, 260), (500, 520)]
+    assert repeat_fraction([(0, 1000), (180, 280), (600, 700)], reps) == [0.18, 0.8, 0.0]

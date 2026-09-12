@@ -51,6 +51,332 @@
     "monodelphis_domestica"
   ],
   "grammar": {
+    "sites_everywhere": [
+      {
+        "start": 28120146,
+        "end": 28120154,
+        "factors": [
+          "CDX2"
+        ],
+        "families": [
+          "HOX"
+        ]
+      },
+      {
+        "start": 28120232,
+        "end": 28120238,
+        "factors": [
+          "ZBTB21"
+        ],
+        "families": [
+          "ZBTB21"
+        ]
+      },
+      {
+        "start": 28120259,
+        "end": 28120274,
+        "factors": [
+          "RUNX3",
+          "RUNX1",
+          "RUNX2",
+          "BCL11A",
+          "TFEC",
+          "ARNTL",
+          "MLXIPL",
+          "USF1",
+          "MXI1",
+          "NACC2"
+        ],
+        "families": [
+          "BCL11A",
+          "NACC2",
+          "PAS domain factors",
+          "Runt-related factors",
+          "bHLH-ZIP"
+        ]
+      },
+      {
+        "start": 28120280,
+        "end": 28120288,
+        "factors": [
+          "SOX4",
+          "SOX5",
+          "SOX9",
+          "SOX10"
+        ],
+        "families": [
+          "SOX-related factors"
+        ]
+      },
+      {
+        "start": 28120303,
+        "end": 28120308,
+        "factors": [
+          "ZNF536"
+        ],
+        "families": [
+          "ZNF536"
+        ]
+      },
+      {
+        "start": 28120310,
+        "end": 28120323,
+        "factors": [
+          "YY1",
+          "ZNF320",
+          "PLAGL1"
+        ],
+        "families": [
+          "PLAGL1",
+          "YY1",
+          "ZNF320"
+        ]
+      },
+      {
+        "start": 28120340,
+        "end": 28120347,
+        "factors": [
+          "ZNF35"
+        ],
+        "families": [
+          "ZNF35"
+        ]
+      },
+      {
+        "start": 28120352,
+        "end": 28120388,
+        "factors": [
+          "HOXB1",
+          "MEOX2",
+          "NANOG",
+          "ZNF878",
+          "HMGA1",
+          "PAX6",
+          "TFEB",
+          "TFAP4",
+          "ATOH1",
+          "TBX2",
+          "TBR1",
+          "MGA::EVX1",
+          "CRX"
+        ],
+        "families": [
+          "HMGA",
+          "HOX",
+          "HOX + TBX6-related factors",
+          "NK",
+          "Paired plus homeo domain",
+          "Paired-related HD factors",
+          "TBX2-related factors",
+          "TBrain-related factors",
+          "Tal-related",
+          "ZNF878",
+          "bHLH-ZIP"
+        ]
+      },
+      {
+        "start": 28120466,
+        "end": 28120475,
+        "factors": [
+          "ZNF367",
+          "BARHL1"
+        ],
+        "families": [
+          "NK",
+          "ZNF367"
+        ]
+      },
+      {
+        "start": 28120523,
+        "end": 28120534,
+        "factors": [
+          "ALX1",
+          "LMX1B",
+          "LHX6",
+          "PAX4",
+          "ALX3",
+          "DRGX",
+          "HOXA1",
+          "EN1",
+          "HOXA2",
+          "EVX1",
+          "EVX2",
+          "HOXB3",
+          "LHX4",
+          "LHX8",
+          "MIXL1",
+          "MNX1",
+          "PDX1",
+          "PRRX1",
+          "UNCX",
+          "ESX1",
+          "NOTO",
+          "LHX5",
+          "VSX1",
+          "GBX1",
+          "HOXB7",
+          "MEOX1",
+          "TLX3",
+          "BARX1",
+          "BSX",
+          "DLX1",
+          "GBX2",
+          "LBX2",
+          "LHX2",
+          "MSX1",
+          "MSX2",
+          "MSX3",
+          "RAX2",
+          "SHOX"
+        ],
+        "families": [
+          "HD-LIM",
+          "HOX",
+          "NK",
+          "Paired plus homeo domain",
+          "Paired-related HD factors"
+        ]
+      },
+      {
+        "start": 28120546,
+        "end": 28120557,
+        "factors": [
+          "FOXD2"
+        ],
+        "families": [
+          "FOX"
+        ]
+      }
+    ],
+    "sites_everywhere_count": 11,
+    "families_in_human": 189,
+    "families_everywhere": {
+      "HOX": [
+        "HOXA1",
+        "HOXA2",
+        "EVX1",
+        "EVX2",
+        "GBX2",
+        "HOXB3",
+        "MNX1",
+        "PDX1",
+        "GBX1",
+        "HOXB1",
+        "HOXB7",
+        "MEOX2",
+        "MEOX1",
+        "CDX2"
+      ],
+      "NK": [
+        "BARX1",
+        "BSX",
+        "DLX1",
+        "EN1",
+        "LBX2",
+        "MSX1",
+        "MSX2",
+        "MSX3",
+        "NOTO",
+        "TLX3",
+        "BARHL1",
+        "NANOG"
+      ],
+      "Paired-related HD factors": [
+        "ALX1",
+        "ALX3",
+        "DRGX",
+        "MIXL1",
+        "PRRX1",
+        "RAX2",
+        "SHOX",
+        "UNCX",
+        "ESX1",
+        "VSX1",
+        "CRX"
+      ],
+      "HD-LIM": [
+        "LHX2",
+        "LHX4",
+        "LHX8",
+        "LMX1B",
+        "LHX5",
+        "LHX6"
+      ],
+      "bHLH-ZIP": [
+        "MXI1",
+        "TFAP4",
+        "TFEB",
+        "TFEC",
+        "USF1",
+        "MLXIPL"
+      ],
+      "SOX-related factors": [
+        "SOX10",
+        "SOX4",
+        "SOX5",
+        "SOX9"
+      ],
+      "Runt-related factors": [
+        "RUNX1",
+        "RUNX2",
+        "RUNX3"
+      ],
+      "Paired plus homeo domain": [
+        "PAX4",
+        "PAX6"
+      ],
+      "BCL11A": [
+        "BCL11A"
+      ],
+      "FOX": [
+        "FOXD2"
+      ],
+      "HMGA": [
+        "HMGA1"
+      ],
+      "HOX + TBX6-related factors": [
+        "MGA::EVX1"
+      ],
+      "NACC2": [
+        "NACC2"
+      ],
+      "PAS domain factors": [
+        "ARNTL"
+      ],
+      "PLAGL1": [
+        "PLAGL1"
+      ],
+      "TBX2-related factors": [
+        "TBX2"
+      ],
+      "TBrain-related factors": [
+        "TBR1"
+      ],
+      "Tal-related": [
+        "ATOH1"
+      ],
+      "YY1": [
+        "YY1"
+      ],
+      "ZBTB21": [
+        "ZBTB21"
+      ],
+      "ZNF320": [
+        "ZNF320"
+      ],
+      "ZNF35": [
+        "ZNF35"
+      ],
+      "ZNF367": [
+        "ZNF367"
+      ],
+      "ZNF536": [
+        "ZNF536"
+      ],
+      "ZNF878": [
+        "ZNF878"
+      ]
+    },
     "factors_in_human": 551,
     "species_compared": [
       "mus_musculus",
@@ -139,4375 +465,5477 @@
         "factor": "ALX1",
         "human_score": 1.0,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "ALX3",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "BARX1",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "BSX",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "DLX1",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "DRGX",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "HOXA1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "EN1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "HOXA2",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "EVX1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "EVX2",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "GBX2",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "HOXB3",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "LBX2",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "LHX2",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HD-LIM"
       },
       {
         "factor": "LHX4",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HD-LIM"
       },
       {
         "factor": "LHX8",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HD-LIM"
       },
       {
         "factor": "LMX1B",
         "human_score": 1.0,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HD-LIM"
       },
       {
         "factor": "MIXL1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "MNX1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "MSX1",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "MSX2",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "MSX3",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "MXI1",
         "human_score": 1.0,
         "human_position": 160,
+        "human_genome": 28120266,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "PDX1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "PRRX1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "RAX2",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "SHOX",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "SOX10",
         "human_score": 1.0,
         "human_position": 175,
+        "human_genome": 28120281,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "SOX-related factors"
       },
       {
         "factor": "SOX4",
         "human_score": 1.0,
         "human_position": 174,
+        "human_genome": 28120280,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "SOX-related factors"
       },
       {
         "factor": "UNCX",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "NACC2",
         "human_score": 1.0,
         "human_position": 161,
+        "human_genome": 28120267,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NACC2"
       },
       {
         "factor": "ZNF536",
         "human_score": 1.0,
         "human_position": 197,
+        "human_genome": 28120303,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "ZNF536"
       },
       {
         "factor": "ESX1",
         "human_score": 0.992,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "NOTO",
         "human_score": 0.989,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "TFAP4",
         "human_score": 0.983,
         "human_position": 267,
+        "human_genome": 28120373,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "LHX5",
         "human_score": 0.982,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HD-LIM"
       },
       {
         "factor": "LHX6",
         "human_score": 0.98,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HD-LIM"
       },
       {
         "factor": "VSX1",
         "human_score": 0.98,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "TLX3",
         "human_score": 0.974,
         "human_position": 420,
+        "human_genome": 28120526,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "ZBTB21",
         "human_score": 0.972,
         "human_position": 126,
+        "human_genome": 28120232,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "ZBTB21"
       },
       {
         "factor": "GBX1",
         "human_score": 0.968,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "HOXB1",
         "human_score": 0.967,
         "human_position": 246,
+        "human_genome": 28120352,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "BARHL1",
         "human_score": 0.962,
         "human_position": 362,
+        "human_genome": 28120468,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "TFEB",
         "human_score": 0.962,
         "human_position": 267,
+        "human_genome": 28120373,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "HOXB7",
         "human_score": 0.96,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "HMGA1",
         "human_score": 0.955,
         "human_position": 261,
+        "human_genome": 28120367,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HMGA"
       },
       {
         "factor": "TFEC",
         "human_score": 0.95,
         "human_position": 158,
+        "human_genome": 28120264,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "MEOX2",
         "human_score": 0.949,
         "human_position": 246,
+        "human_genome": 28120352,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "PAX4",
         "human_score": 0.945,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired plus homeo domain"
       },
       {
         "factor": "MEOX1",
         "human_score": 0.94,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "ZNF367",
         "human_score": 0.936,
         "human_position": 360,
+        "human_genome": 28120466,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "ZNF367"
       },
       {
         "factor": "USF1",
         "human_score": 0.935,
         "human_position": 158,
+        "human_genome": 28120264,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "NANOG",
         "human_score": 0.932,
         "human_position": 246,
+        "human_genome": 28120352,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "NK"
       },
       {
         "factor": "TBX2",
         "human_score": 0.932,
         "human_position": 270,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "TBX2-related factors"
       },
       {
         "factor": "ZNF320",
         "human_score": 0.927,
         "human_position": 206,
+        "human_genome": 28120312,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "ZNF320"
       },
       {
         "factor": "SOX5",
         "human_score": 0.926,
         "human_position": 174,
+        "human_genome": 28120280,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "SOX-related factors"
       },
       {
         "factor": "TBR1",
         "human_score": 0.926,
         "human_position": 270,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "TBrain-related factors"
       },
       {
         "factor": "ARNTL",
         "human_score": 0.921,
         "human_position": 158,
+        "human_genome": 28120264,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "PAS domain factors"
       },
       {
         "factor": "MLXIPL",
         "human_score": 0.921,
         "human_position": 158,
+        "human_genome": 28120264,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "BCL11A",
         "human_score": 0.917,
         "human_position": 156,
+        "human_genome": 28120262,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "BCL11A"
       },
       {
         "factor": "SOX9",
         "human_score": 0.915,
         "human_position": 174,
+        "human_genome": 28120280,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "SOX-related factors"
       },
       {
         "factor": "RUNX1",
         "human_score": 0.915,
         "human_position": 153,
+        "human_genome": 28120259,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Runt-related factors"
       },
       {
         "factor": "RUNX2",
         "human_score": 0.913,
         "human_position": 153,
+        "human_genome": 28120259,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Runt-related factors"
       },
       {
         "factor": "CDX2",
         "human_score": 0.905,
         "human_position": 40,
+        "human_genome": 28120146,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX"
       },
       {
         "factor": "ATOH1",
         "human_score": 0.903,
         "human_position": 269,
+        "human_genome": 28120375,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Tal-related"
       },
       {
         "factor": "FOXD2",
         "human_score": 0.903,
         "human_position": 440,
+        "human_genome": 28120546,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "FOX"
       },
       {
         "factor": "ZNF35",
         "human_score": 0.895,
         "human_position": 234,
+        "human_genome": 28120340,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "ZNF35"
       },
       {
         "factor": "YY1",
         "human_score": 0.889,
         "human_position": 204,
+        "human_genome": 28120310,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "YY1"
       },
       {
         "factor": "ZNF878",
         "human_score": 0.887,
         "human_position": 252,
+        "human_genome": 28120358,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "ZNF878"
       },
       {
         "factor": "PLAGL1",
         "human_score": 0.879,
         "human_position": 209,
+        "human_genome": 28120315,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "PLAGL1"
       },
       {
         "factor": "PAX6",
         "human_score": 0.878,
         "human_position": 265,
+        "human_genome": 28120371,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired plus homeo domain"
       },
       {
         "factor": "CRX",
         "human_score": 0.875,
         "human_position": 276,
+        "human_genome": 28120382,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "MGA::EVX1",
         "human_score": 0.859,
         "human_position": 270,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "HOX + TBX6-related factors"
       },
       {
         "factor": "RUNX3",
         "human_score": 0.857,
         "human_position": 153,
+        "human_genome": 28120259,
         "same_site_in": [
           "monodelphis_domestica",
           "mus_musculus"
         ],
-        "everywhere": true
+        "everywhere": true,
+        "family": "Runt-related factors"
       },
       {
         "factor": "LIN54",
         "human_score": 1.0,
         "human_position": 201,
+        "human_genome": 28120307,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "tesmin/TSO1-family"
       },
       {
         "factor": "DLX3",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "DLX4",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "DLX6",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "DMRTA2",
         "human_score": 1.0,
         "human_position": 680,
+        "human_genome": 28120264,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "DMRT factors"
       },
       {
         "factor": "EMX1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "EMX2",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "GSX1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HESX1",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "HIC2",
         "human_score": 1.0,
         "human_position": 208,
+        "human_genome": 28120314,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HIC2"
       },
       {
         "factor": "HOXA7",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HOXB2",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HOXB5",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HOXC8",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "ISX",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "LMX1A",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-LIM"
       },
       {
         "factor": "MEIS1",
         "human_score": 1.0,
         "human_position": 366,
+        "human_genome": 28120472,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TALE-type homeo domain factors"
       },
       {
         "factor": "MIX-A",
         "human_score": 1.0,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "NKX6-1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "NKX6-2",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "NOBOX",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "NR2E3",
         "human_score": 1.0,
         "human_position": 47,
+        "human_genome": 28120153,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RXR-related receptors (NR2)"
       },
       {
         "factor": "POU6F1",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "RAX",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "RHOXF1",
         "human_score": 1.0,
         "human_position": 327,
+        "human_genome": 28120433,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "SHOX2",
         "human_score": 1.0,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "SRY",
         "human_score": 1.0,
         "human_position": 424,
+        "human_genome": 28120384,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "TCF7",
         "human_score": 1.0,
         "human_position": 493,
+        "human_genome": 28120255,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TCF-7-related factors"
       },
       {
         "factor": "TLX2",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "VAX2",
         "human_score": 1.0,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "ZXDB",
         "human_score": 1.0,
         "human_position": 392,
+        "human_genome": 28120316,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZXDB"
       },
       {
         "factor": "IRX2",
         "human_score": 1.0,
         "human_position": 588,
+        "human_genome": 28120349,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TALE-type HD"
       },
       {
         "factor": "IRX5",
         "human_score": 1.0,
         "human_position": 588,
+        "human_genome": 28120349,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TALE-type HD"
       },
       {
         "factor": "HOXD4",
         "human_score": 0.997,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "VAX1",
         "human_score": 0.995,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "HOXC4",
         "human_score": 0.994,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HOXB4",
         "human_score": 0.993,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "IRX1",
         "human_score": 0.992,
         "human_position": 588,
+        "human_genome": 28120349,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TALE-type HD"
       },
       {
         "factor": "BARHL2",
         "human_score": 0.99,
         "human_position": 466,
+        "human_genome": 28120468,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "NPAS3",
         "human_score": 0.986,
         "human_position": 90,
+        "human_genome": 28120265,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS"
       },
       {
         "factor": "ARID3B",
         "human_score": 0.984,
         "human_position": 420,
+        "human_genome": 28120526,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ARID-related"
       },
       {
         "factor": "GATA5",
         "human_score": 0.984,
         "human_position": 692,
+        "human_genome": 28120351,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "C4-GATA-related"
       },
       {
         "factor": "FOXH1",
         "human_score": 0.981,
         "human_position": 248,
+        "human_genome": 28120354,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "ARX",
         "human_score": 0.98,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "HIF3A",
         "human_score": 0.979,
         "human_position": 90,
+        "human_genome": 28120265,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS"
       },
       {
         "factor": "PRRX2",
         "human_score": 0.978,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "SOX15",
         "human_score": 0.978,
         "human_position": 280,
+        "human_genome": 28120386,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "ARGFX",
         "human_score": 0.977,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "DMRTA1",
         "human_score": 0.977,
         "human_position": 678,
+        "human_genome": 28120262,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "DMRT factors"
       },
       {
         "factor": "NR4A2",
         "human_score": 0.977,
         "human_position": 363,
+        "human_genome": 28120469,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NGFI-B-related receptors (NR4)"
       },
       {
         "factor": "VENTX",
         "human_score": 0.976,
         "human_position": 421,
+        "human_genome": 28120352,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "HOXD8",
         "human_score": 0.975,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "LHX9",
         "human_score": 0.974,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-LIM"
       },
       {
         "factor": "CREB3L4",
         "human_score": 0.973,
         "human_position": 123,
+        "human_genome": 28120229,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CREB-related factors"
       },
       {
         "factor": "HOXB8",
         "human_score": 0.972,
         "human_position": 422,
+        "human_genome": 28120528,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "VSX2",
         "human_score": 0.971,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "MEIS3",
         "human_score": 0.968,
         "human_position": 365,
+        "human_genome": 28120471,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TALE-type homeo domain factors"
       },
       {
         "factor": "EN2",
         "human_score": 0.964,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "ZNF257",
         "human_score": 0.964,
         "human_position": 335,
+        "human_genome": 28120441,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF257"
       },
       {
         "factor": "VEZF1",
         "human_score": 0.963,
         "human_position": 210,
+        "human_genome": 28120316,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "VEZF1"
       },
       {
         "factor": "NR4A1",
         "human_score": 0.962,
         "human_position": 363,
+        "human_genome": 28120469,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NGFI-B-related receptors (NR4)"
       },
       {
         "factor": "HOXA3",
         "human_score": 0.961,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HOXA9",
         "human_score": 0.961,
         "human_position": 0,
+        "human_genome": 28120216,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HOXD1",
         "human_score": 0.959,
         "human_position": 417,
+        "human_genome": 28120352,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HOXA5",
         "human_score": 0.958,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "SOX8",
         "human_score": 0.956,
         "human_position": 423,
+        "human_genome": 28120280,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "TBX1",
         "human_score": 0.955,
         "human_position": 570,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX1-related factors"
       },
       {
         "factor": "TBX4",
         "human_score": 0.954,
         "human_position": 570,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX2-related factors"
       },
       {
         "factor": "MYT1L",
         "human_score": 0.954,
         "human_position": 369,
+        "human_genome": 28120291,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "MYT"
       },
       {
         "factor": "HOXA6",
         "human_score": 0.953,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "MAFB",
         "human_score": 0.951,
         "human_position": 616,
+        "human_genome": 28120772,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Maf-related"
       },
       {
         "factor": "ZNF648",
         "human_score": 0.951,
         "human_position": 562,
+        "human_genome": 28120438,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF648"
       },
       {
         "factor": "TBX15",
         "human_score": 0.946,
         "human_position": 570,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX1-related factors"
       },
       {
         "factor": "HOXD3",
         "human_score": 0.946,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "NR1H3::RXRA",
         "human_score": 0.944,
         "human_position": 592,
+        "human_genome": 28120354,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RXR-related receptors (NR2) + Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "ZNF354C",
         "human_score": 0.942,
         "human_position": 560,
+        "human_genome": 28120261,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF354C"
       },
       {
         "factor": "GSC2",
         "human_score": 0.942,
         "human_position": 276,
+        "human_genome": 28120382,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "HOXD9",
         "human_score": 0.941,
         "human_position": 53,
+        "human_genome": 28120159,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "SOX30",
         "human_score": 0.941,
         "human_position": 422,
+        "human_genome": 28120280,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "HINFP",
         "human_score": 0.94,
         "human_position": 86,
+        "human_genome": 28120192,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HINFP"
       },
       {
         "factor": "CDX1",
         "human_score": 0.939,
         "human_position": 53,
+        "human_genome": 28120159,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "ALX4",
         "human_score": 0.939,
         "human_position": 417,
+        "human_genome": 28120523,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "RHOX11",
         "human_score": 0.937,
         "human_position": 681,
+        "human_genome": 28120356,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "HOXA13",
         "human_score": 0.936,
         "human_position": 605,
+        "human_genome": 28120278,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "OTX1",
         "human_score": 0.936,
         "human_position": 496,
+        "human_genome": 28120353,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "TBX18",
         "human_score": 0.936,
         "human_position": 570,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX1-related factors"
       },
       {
         "factor": "HIC1",
         "human_score": 0.935,
         "human_position": 208,
+        "human_genome": 28120314,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HIC1"
       },
       {
         "factor": "HOXA10",
         "human_score": 0.935,
         "human_position": 53,
+        "human_genome": 28120159,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "NRL",
         "human_score": 0.934,
         "human_position": 615,
+        "human_genome": 28120771,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Maf-related"
       },
       {
         "factor": "CDX4",
         "human_score": 0.93,
         "human_position": 53,
+        "human_genome": 28120159,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "ZBTB7A",
         "human_score": 0.93,
         "human_position": 393,
+        "human_genome": 28120314,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB7A"
       },
       {
         "factor": "TBX3",
         "human_score": 0.925,
         "human_position": 570,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX2-related factors"
       },
       {
         "factor": "LEF1",
         "human_score": 0.925,
         "human_position": 492,
+        "human_genome": 28120280,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TCF-7-related factors"
       },
       {
         "factor": "MSANTD3",
         "human_score": 0.925,
         "human_position": 437,
+        "human_genome": 28120234,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Myb/SANT domain factors"
       },
       {
         "factor": "ATOH7",
         "human_score": 0.924,
         "human_position": 267,
+        "human_genome": 28120373,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "PLAGL2",
         "human_score": 0.923,
         "human_position": 393,
+        "human_genome": 28120315,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PLAGL2"
       },
       {
         "factor": "MEF2C",
         "human_score": 0.922,
         "human_position": 75,
+        "human_genome": 28120320,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Regulators of differentiation"
       },
       {
         "factor": "MNT",
         "human_score": 0.921,
         "human_position": 160,
+        "human_genome": 28120266,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "DMRTC2",
         "human_score": 0.919,
         "human_position": 652,
+        "human_genome": 28120260,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "DMRT factors"
       },
       {
         "factor": "TBX21",
         "human_score": 0.918,
         "human_position": 569,
+        "human_genome": 28120375,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBrain-related factors"
       },
       {
         "factor": "ETV7",
         "human_score": 0.918,
         "human_position": 37,
+        "human_genome": 28120143,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "LHX3",
         "human_score": 0.911,
         "human_position": 418,
+        "human_genome": 28120524,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-LIM"
       },
       {
         "factor": "FOXD1",
         "human_score": 0.909,
         "human_position": 67,
+        "human_genome": 28120173,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "PITX3",
         "human_score": 0.909,
         "human_position": 276,
+        "human_genome": 28120382,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "ONECUT2",
         "human_score": 0.908,
         "human_position": 148,
+        "human_genome": 28120254,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-CUT"
       },
       {
         "factor": "SOX2",
         "human_score": 0.907,
         "human_position": 175,
+        "human_genome": 28120281,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "NR2E1",
         "human_score": 0.906,
         "human_position": 263,
+        "human_genome": 28120369,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RXR-related receptors (NR2)"
       },
       {
         "factor": "ZBTB18",
         "human_score": 0.905,
         "human_position": 252,
+        "human_genome": 28120358,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB18"
       },
       {
         "factor": "ARNT2",
         "human_score": 0.904,
         "human_position": 158,
+        "human_genome": 28120264,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "FOXP4",
         "human_score": 0.903,
         "human_position": 67,
+        "human_genome": 28120173,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "BHLHE22",
         "human_score": 0.903,
         "human_position": 688,
+        "human_genome": 28120271,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "EOMES",
         "human_score": 0.901,
         "human_position": 570,
+        "human_genome": 28120376,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBrain-related factors"
       },
       {
         "factor": "NR1H3",
         "human_score": 0.899,
         "human_position": 126,
+        "human_genome": 28120232,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "TFAP2A",
         "human_score": 0.898,
         "human_position": 209,
+        "human_genome": 28120315,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "AP-2"
       },
       {
         "factor": "FOXB1",
         "human_score": 0.897,
         "human_position": 443,
+        "human_genome": 28120549,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "RELB",
         "human_score": 0.897,
         "human_position": 38,
+        "human_genome": 28120144,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NF-kappaB-related factors"
       },
       {
         "factor": "CUX1",
         "human_score": 0.896,
         "human_position": 247,
+        "human_genome": 28120353,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-CUT"
       },
       {
         "factor": "TCF21",
         "human_score": 0.896,
         "human_position": 267,
+        "human_genome": 28120373,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "NKX3-1",
         "human_score": 0.895,
         "human_position": 449,
+        "human_genome": 28120555,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "MAFF",
         "human_score": 0.894,
         "human_position": 616,
+        "human_genome": 28120772,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Maf-related"
       },
       {
         "factor": "FOXD3",
         "human_score": 0.891,
         "human_position": 440,
+        "human_genome": 28120546,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "ZIC1::ZIC2",
         "human_score": 0.891,
         "human_position": 685,
+        "human_genome": 28120360,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZIC1::ZIC2"
       },
       {
         "factor": "HOXB13",
         "human_score": 0.89,
         "human_position": 40,
+        "human_genome": 28120146,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HSF5",
         "human_score": 0.887,
         "human_position": 585,
+        "human_genome": 28120691,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HSF factors"
       },
       {
         "factor": "PRDM14",
         "human_score": 0.886,
         "human_position": 135,
+        "human_genome": 28120241,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PRDM14"
       },
       {
         "factor": "RORB",
         "human_score": 0.884,
         "human_position": 602,
+        "human_genome": 28120258,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "FOXQ1",
         "human_score": 0.882,
         "human_position": 424,
+        "human_genome": 28120530,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "KLF8",
         "human_score": 0.881,
         "human_position": 334,
+        "human_genome": 28120440,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF8"
       },
       {
         "factor": "CASZ1",
         "human_score": 0.88,
         "human_position": 352,
+        "human_genome": 28120458,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CASZ1"
       },
       {
         "factor": "FOXF2",
         "human_score": 0.877,
         "human_position": 66,
+        "human_genome": 28120172,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "PITX2",
         "human_score": 0.876,
         "human_position": 104,
+        "human_genome": 28120210,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "DMRT1",
         "human_score": 0.876,
         "human_position": 293,
+        "human_genome": 28120399,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "DMRT factors"
       },
       {
         "factor": "STAT1",
         "human_score": 0.876,
         "human_position": 581,
+        "human_genome": 28120687,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "STAT factors"
       },
       {
         "factor": "TFAP2B",
         "human_score": 0.876,
         "human_position": 210,
+        "human_genome": 28120316,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "AP-2"
       },
       {
         "factor": "KLF3",
         "human_score": 0.875,
         "human_position": 336,
+        "human_genome": 28120442,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF3"
       },
       {
         "factor": "GFI1",
         "human_score": 0.874,
         "human_position": 491,
+        "human_genome": 28120597,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "GFI1"
       },
       {
         "factor": "SOX14",
         "human_score": 0.869,
         "human_position": 423,
+        "human_genome": 28120253,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "SREBF2",
         "human_score": 0.866,
         "human_position": 267,
+        "human_genome": 28120373,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "NFATC1",
         "human_score": 0.864,
         "human_position": 38,
+        "human_genome": 28120333,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NFAT-related factors"
       },
       {
         "factor": "OVOL1",
         "human_score": 0.864,
         "human_position": 593,
+        "human_genome": 28120699,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "OVOL1"
       },
       {
         "factor": "LHX1",
         "human_score": 0.86,
         "human_position": 416,
+        "human_genome": 28120522,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-LIM"
       },
       {
         "factor": "INSM1",
         "human_score": 0.859,
         "human_position": 209,
+        "human_genome": 28120315,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "INSM1"
       },
       {
         "factor": "HOXC9",
         "human_score": 0.859,
         "human_position": 53,
+        "human_genome": 28120159,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "IRF7",
         "human_score": 0.858,
         "human_position": 346,
+        "human_genome": 28120452,
         "same_site_in": [
           "mus_musculus"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Interferon-regulatory factors"
       },
       {
         "factor": "CUX2",
         "human_score": 0.854,
         "human_position": 247,
+        "human_genome": 28120353,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-CUT"
       },
       {
         "factor": "ZNF568",
         "human_score": 0.851,
         "human_position": 136,
+        "human_genome": 28120242,
         "same_site_in": [
           "monodelphis_domestica"
         ],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF568"
       },
       {
         "factor": "ARID3A",
         "human_score": 1.0,
         "human_position": 113,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ARID-related"
       },
       {
         "factor": "AHR::ARNT",
         "human_score": 1.0,
         "human_position": 378,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "ARNT::HIF1A",
         "human_score": 1.0,
         "human_position": 90,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "HMBOX1",
         "human_score": 1.0,
         "human_position": 64,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "NFIA",
         "human_score": 1.0,
         "human_position": 541,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Nuclear factor 1"
       },
       {
         "factor": "NFIX",
         "human_score": 1.0,
         "human_position": 541,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Nuclear factor 1"
       },
       {
         "factor": "NKX2-1",
         "human_score": 1.0,
         "human_position": 450,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "RBPJ",
         "human_score": 1.0,
         "human_position": 584,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CSL-related factors"
       },
       {
         "factor": "SOX11",
         "human_score": 1.0,
         "human_position": 292,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "SP5",
         "human_score": 1.0,
         "human_position": 672,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SP5"
       },
       {
         "factor": "ZGLP1",
         "human_score": 1.0,
         "human_position": 328,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "C4-GATA-related"
       },
       {
         "factor": "MKX",
         "human_score": 1.0,
         "human_position": 588,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TALE-type HD"
       },
       {
         "factor": "SOX18",
         "human_score": 0.993,
         "human_position": 422,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "ZNF70",
         "human_score": 0.991,
         "human_position": 672,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF70"
       },
       {
         "factor": "BARX2",
         "human_score": 0.99,
         "human_position": 422,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "NKX2-8",
         "human_score": 0.99,
         "human_position": 449,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "FOXN1",
         "human_score": 0.986,
         "human_position": 403,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "GMEB1",
         "human_score": 0.98,
         "human_position": 98,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "GMEB"
       },
       {
         "factor": "LBX1",
         "human_score": 0.98,
         "human_position": 63,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "NR2C2",
         "human_score": 0.98,
         "human_position": 592,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RXR-related receptors (NR2)"
       },
       {
         "factor": "TBP",
         "human_score": 0.98,
         "human_position": 443,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBP-related factors"
       },
       {
         "factor": "FOXL1",
         "human_score": 0.977,
         "human_position": 77,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "ISL2",
         "human_score": 0.977,
         "human_position": 422,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-LIM"
       },
       {
         "factor": "HOXB6",
         "human_score": 0.976,
         "human_position": 422,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "SOX6",
         "human_score": 0.974,
         "human_position": 408,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "DMRT3",
         "human_score": 0.974,
         "human_position": 653,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "DMRT factors"
       },
       {
         "factor": "NKX2-3",
         "human_score": 0.974,
         "human_position": 449,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "MGA",
         "human_score": 0.973,
         "human_position": 570,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX6-related factors"
       },
       {
         "factor": "NKX2-4",
         "human_score": 0.971,
         "human_position": 449,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "ZNF66",
         "human_score": 0.971,
         "human_position": 141,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF66"
       },
       {
         "factor": "HOXA4",
         "human_score": 0.97,
         "human_position": 422,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "HMX3",
         "human_score": 0.969,
         "human_position": 421,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "ATF1",
         "human_score": 0.968,
         "human_position": 96,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CREB-related factors"
       },
       {
         "factor": "GSX2",
         "human_score": 0.967,
         "human_position": 422,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "NR1I3",
         "human_score": 0.967,
         "human_position": 592,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "ZNF746",
         "human_score": 0.963,
         "human_position": 563,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF746"
       },
       {
         "factor": "HMX1",
         "human_score": 0.962,
         "human_position": 421,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "CLOCK",
         "human_score": 0.96,
         "human_position": 269,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "SP140L",
         "human_score": 0.96,
         "human_position": 97,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Sp140-Sp100"
       },
       {
         "factor": "TBX5",
         "human_score": 0.958,
         "human_position": 570,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX2-related factors"
       },
       {
         "factor": "CREB1",
         "human_score": 0.955,
         "human_position": 124,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CREB-related factors"
       },
       {
         "factor": "ZBTB48",
         "human_score": 0.954,
         "human_position": 391,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB48"
       },
       {
         "factor": "KLF5",
         "human_score": 0.953,
         "human_position": 569,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF5"
       },
       {
         "factor": "FOXO6",
         "human_score": 0.953,
         "human_position": 249,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "NFATC3",
         "human_score": 0.953,
         "human_position": 584,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NFAT-related factors"
       },
       {
         "factor": "FOXJ2",
         "human_score": 0.951,
         "human_position": 249,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "FOXP3",
         "human_score": 0.951,
         "human_position": 77,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "ZBED2",
         "human_score": 0.951,
         "human_position": 187,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBED2"
       },
       {
         "factor": "ZNF362",
         "human_score": 0.951,
         "human_position": 49,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF362"
       },
       {
         "factor": "MSANTD4",
         "human_score": 0.95,
         "human_position": 519,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Myb-SANT"
       },
       {
         "factor": "ATF3",
         "human_score": 0.949,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related"
       },
       {
         "factor": "GSC",
         "human_score": 0.949,
         "human_position": 523,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "GMEB2",
         "human_score": 0.948,
         "human_position": 97,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "GMEB"
       },
       {
         "factor": "FOXO4",
         "human_score": 0.944,
         "human_position": 249,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "ZXDC",
         "human_score": 0.943,
         "human_position": 391,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZXDC"
       },
       {
         "factor": "MAX",
         "human_score": 0.942,
         "human_position": 269,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "HIF1A",
         "human_score": 0.942,
         "human_position": 90,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "ZNF827",
         "human_score": 0.94,
         "human_position": 62,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF827"
       },
       {
         "factor": "NR2C1",
         "human_score": 0.939,
         "human_position": 365,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RXR-related receptors (NR2)"
       },
       {
         "factor": "VDR",
         "human_score": 0.938,
         "human_position": 592,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "JDP2",
         "human_score": 0.937,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related"
       },
       {
         "factor": "FOXI1",
         "human_score": 0.936,
         "human_position": 261,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "FOXP2",
         "human_score": 0.936,
         "human_position": 425,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "NKX6-3",
         "human_score": 0.936,
         "human_position": 384,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "ZNF384",
         "human_score": 0.934,
         "human_position": 49,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF384"
       },
       {
         "factor": "NR1H4",
         "human_score": 0.933,
         "human_position": 602,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "HELT",
         "human_score": 0.933,
         "human_position": 89,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Hairy-related factors"
       },
       {
         "factor": "JUN",
         "human_score": 0.931,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Jun-related"
       },
       {
         "factor": "KLF6",
         "human_score": 0.931,
         "human_position": 569,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF6"
       },
       {
         "factor": "TCF7L2",
         "human_score": 0.931,
         "human_position": 291,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TCF-7-related factors"
       },
       {
         "factor": "ZNF768",
         "human_score": 0.93,
         "human_position": 314,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF768"
       },
       {
         "factor": "JUND",
         "human_score": 0.929,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Jun-related"
       },
       {
         "factor": "RFX7",
         "human_score": 0.929,
         "human_position": 685,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RFX-related factors"
       },
       {
         "factor": "TFE3",
         "human_score": 0.928,
         "human_position": 158,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "CREB5",
         "human_score": 0.928,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CREB-related factors"
       },
       {
         "factor": "E2F6",
         "human_score": 0.927,
         "human_position": 582,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "E2F"
       },
       {
         "factor": "FOXF1",
         "human_score": 0.927,
         "human_position": 114,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "MITF",
         "human_score": 0.927,
         "human_position": 158,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "TCFL5",
         "human_score": 0.927,
         "human_position": 88,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "PITX1",
         "human_score": 0.926,
         "human_position": 523,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "ZNF800",
         "human_score": 0.926,
         "human_position": 98,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF800"
       },
       {
         "factor": "ZBTB7C",
         "human_score": 0.926,
         "human_position": 559,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB7C"
       },
       {
         "factor": "KLF11",
         "human_score": 0.925,
         "human_position": 568,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF11"
       },
       {
         "factor": "KLF2",
         "human_score": 0.925,
         "human_position": 570,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF2"
       },
       {
         "factor": "SIX4",
         "human_score": 0.925,
         "human_position": 588,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-SINE"
       },
       {
         "factor": "ZBTB5",
         "human_score": 0.925,
         "human_position": 637,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB5"
       },
       {
         "factor": "OLIG2",
         "human_score": 0.924,
         "human_position": 688,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "FIGLA",
         "human_score": 0.924,
         "human_position": 392,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "HOXC10",
         "human_score": 0.924,
         "human_position": 63,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "ZNF18",
         "human_score": 0.924,
         "human_position": 571,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF18"
       },
       {
         "factor": "ZEB2",
         "human_score": 0.923,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-ZF"
       },
       {
         "factor": "SNAI1",
         "human_score": 0.922,
         "human_position": 450,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SNAI1"
       },
       {
         "factor": "ZBTB8A",
         "human_score": 0.922,
         "human_position": 582,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB8A"
       },
       {
         "factor": "MEIS2",
         "human_score": 0.921,
         "human_position": 167,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TALE-type homeo domain factors"
       },
       {
         "factor": "PAX3",
         "human_score": 0.92,
         "human_position": 418,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired plus homeo domain"
       },
       {
         "factor": "ZNF524",
         "human_score": 0.92,
         "human_position": 394,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF524"
       },
       {
         "factor": "HES1",
         "human_score": 0.92,
         "human_position": 160,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Hairy-related factors"
       },
       {
         "factor": "IKZF1",
         "human_score": 0.92,
         "human_position": 287,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "IKZF1"
       },
       {
         "factor": "SP4",
         "human_score": 0.919,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SP4"
       },
       {
         "factor": "TBX6",
         "human_score": 0.919,
         "human_position": 570,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX6-related factors"
       },
       {
         "factor": "ZNF692",
         "human_score": 0.919,
         "human_position": 395,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF692"
       },
       {
         "factor": "ZNF500",
         "human_score": 0.919,
         "human_position": 83,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF500"
       },
       {
         "factor": "OSR1",
         "human_score": 0.918,
         "human_position": 684,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "OSR1"
       },
       {
         "factor": "POU5F1",
         "human_score": 0.918,
         "human_position": 108,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "HMX2",
         "human_score": 0.916,
         "human_position": 416,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "STAT3",
         "human_score": 0.916,
         "human_position": 53,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "STAT factors"
       },
       {
         "factor": "STAT5A::STAT5B",
         "human_score": 0.916,
         "human_position": 224,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "STAT factors"
       },
       {
         "factor": "ZXDA",
         "human_score": 0.916,
         "human_position": 391,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZXDA"
       },
       {
         "factor": "FOXK1",
         "human_score": 0.915,
         "human_position": 228,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "MAZ",
         "human_score": 0.915,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "MAZ"
       },
       {
         "factor": "NPAS2",
         "human_score": 0.915,
         "human_position": 449,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "ERF::FOXI1",
         "human_score": 0.914,
         "human_position": 639,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + FOX"
       },
       {
         "factor": "KLF7",
         "human_score": 0.914,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF7"
       },
       {
         "factor": "TWIST2",
         "human_score": 0.914,
         "human_position": 688,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "E2F8",
         "human_score": 0.913,
         "human_position": 581,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "E2F"
       },
       {
         "factor": "ZNF740",
         "human_score": 0.913,
         "human_position": 563,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF740"
       },
       {
         "factor": "NEUROD2",
         "human_score": 0.912,
         "human_position": 688,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "POU6F2",
         "human_score": 0.912,
         "human_position": 418,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "ASCL1",
         "human_score": 0.911,
         "human_position": 684,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "MyoD/ASC-related factors"
       },
       {
         "factor": "TBX20",
         "human_score": 0.91,
         "human_position": 569,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TBX1-related factors"
       },
       {
         "factor": "JUN::JUNB",
         "human_score": 0.91,
         "human_position": 122,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Jun-related"
       },
       {
         "factor": "RORC",
         "human_score": 0.91,
         "human_position": 72,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "STAT6",
         "human_score": 0.91,
         "human_position": 52,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "STAT factors"
       },
       {
         "factor": "BACH1",
         "human_score": 0.909,
         "human_position": 518,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Jun-related"
       },
       {
         "factor": "FOS::JUND",
         "human_score": 0.909,
         "human_position": 518,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "FOSL2::JUN",
         "human_score": 0.909,
         "human_position": 2,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "PAX7",
         "human_score": 0.909,
         "human_position": 418,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired plus homeo domain"
       },
       {
         "factor": "STAT1::STAT2",
         "human_score": 0.909,
         "human_position": 38,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "STAT factors"
       },
       {
         "factor": "FOSL1::JUND",
         "human_score": 0.908,
         "human_position": 2,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "HEY2",
         "human_score": 0.908,
         "human_position": 88,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Hairy-related factors"
       },
       {
         "factor": "FOXC1",
         "human_score": 0.907,
         "human_position": 225,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "FOXO3",
         "human_score": 0.907,
         "human_position": 228,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "HOXD11",
         "human_score": 0.907,
         "human_position": 63,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "FOXE1",
         "human_score": 0.906,
         "human_position": 545,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "ZNF708",
         "human_score": 0.906,
         "human_position": 284,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF708"
       },
       {
         "factor": "IKZF2",
         "human_score": 0.905,
         "human_position": 87,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "IKZF2"
       },
       {
         "factor": "BHLHE40",
         "human_score": 0.905,
         "human_position": 159,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Hairy-related factors"
       },
       {
         "factor": "FOXO1",
         "human_score": 0.904,
         "human_position": 228,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "FOXJ3",
         "human_score": 0.904,
         "human_position": 494,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "HOXA11",
         "human_score": 0.904,
         "human_position": 63,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "OVOL2",
         "human_score": 0.903,
         "human_position": 688,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "OVOL2"
       },
       {
         "factor": "SATB1",
         "human_score": 0.903,
         "human_position": 516,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-CUT"
       },
       {
         "factor": "SOX3",
         "human_score": 0.903,
         "human_position": 280,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "FOXM1",
         "human_score": 0.903,
         "human_position": 114,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "KLF16",
         "human_score": 0.902,
         "human_position": 666,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF16"
       },
       {
         "factor": "KLF10",
         "human_score": 0.902,
         "human_position": 565,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF10"
       },
       {
         "factor": "CREM",
         "human_score": 0.902,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CREB-related factors"
       },
       {
         "factor": "HOXD12",
         "human_score": 0.902,
         "human_position": 53,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "IRF6",
         "human_score": 0.901,
         "human_position": 187,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Interferon-regulatory factors"
       },
       {
         "factor": "SP2",
         "human_score": 0.901,
         "human_position": 565,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SP2"
       },
       {
         "factor": "KLF1",
         "human_score": 0.901,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF1"
       },
       {
         "factor": "OSR2",
         "human_score": 0.901,
         "human_position": 684,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "OSR2"
       },
       {
         "factor": "TEAD2",
         "human_score": 0.901,
         "human_position": 232,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TEF-1-related factors"
       },
       {
         "factor": "FOSB::JUNB",
         "human_score": 0.9,
         "human_position": 518,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "FOSL2::JUNB",
         "human_score": 0.9,
         "human_position": 518,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "FOSL2::JUND",
         "human_score": 0.9,
         "human_position": 2,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "FOXA3",
         "human_score": 0.9,
         "human_position": 114,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "ETV5::HOXA2",
         "human_score": 0.899,
         "human_position": 496,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + HOX-related factors"
       },
       {
         "factor": "FOXA2",
         "human_score": 0.899,
         "human_position": 460,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "TFDP1",
         "human_score": 0.899,
         "human_position": 582,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "E2F"
       },
       {
         "factor": "ZNF680",
         "human_score": 0.899,
         "human_position": 545,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF680"
       },
       {
         "factor": "ZBTB8B",
         "human_score": 0.899,
         "human_position": 502,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB8B"
       },
       {
         "factor": "HOXD13",
         "human_score": 0.898,
         "human_position": 606,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "ZFP335",
         "human_score": 0.898,
         "human_position": 93,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZFP335"
       },
       {
         "factor": "ETV5::FOXO1",
         "human_score": 0.897,
         "human_position": 641,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + FOX"
       },
       {
         "factor": "FOXA1",
         "human_score": 0.897,
         "human_position": 228,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "NPAS4",
         "human_score": 0.897,
         "human_position": 90,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "FOXS1",
         "human_score": 0.896,
         "human_position": 227,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "FOXP1",
         "human_score": 0.896,
         "human_position": 114,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "TIGD3",
         "human_score": 0.896,
         "human_position": 700,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TIGD3"
       },
       {
         "factor": "ATF7",
         "human_score": 0.895,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Jun-related"
       },
       {
         "factor": "FOSL1::JUN",
         "human_score": 0.894,
         "human_position": 2,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "ZNF766",
         "human_score": 0.894,
         "human_position": 547,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF766"
       },
       {
         "factor": "DBP",
         "human_score": 0.894,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CEBP-related"
       },
       {
         "factor": "ESRRG",
         "human_score": 0.894,
         "human_position": 362,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Steroid hormone receptors (NR3)"
       },
       {
         "factor": "FOXK2",
         "human_score": 0.894,
         "human_position": 114,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "GFI1B",
         "human_score": 0.894,
         "human_position": 492,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "GFI1B"
       },
       {
         "factor": "MYB",
         "human_score": 0.894,
         "human_position": 432,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Myb/SANT domain factors"
       },
       {
         "factor": "ATF2",
         "human_score": 0.893,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Jun-related"
       },
       {
         "factor": "SIX1",
         "human_score": 0.893,
         "human_position": 586,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-SINE"
       },
       {
         "factor": "FOS::JUNB",
         "human_score": 0.892,
         "human_position": 518,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "GATA2",
         "human_score": 0.892,
         "human_position": 693,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "C4-GATA-related"
       },
       {
         "factor": "YY2",
         "human_score": 0.892,
         "human_position": 580,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "YY2"
       },
       {
         "factor": "ZEB1",
         "human_score": 0.892,
         "human_position": 269,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-ZF factors"
       },
       {
         "factor": "NEUROG1",
         "human_score": 0.891,
         "human_position": 267,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "TCF3",
         "human_score": 0.891,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "E2A"
       },
       {
         "factor": "SNAI3",
         "human_score": 0.891,
         "human_position": 448,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SNAI3"
       },
       {
         "factor": "SP8",
         "human_score": 0.891,
         "human_position": 667,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SP8"
       },
       {
         "factor": "TEAD3",
         "human_score": 0.89,
         "human_position": 206,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TEF-1-related factors"
       },
       {
         "factor": "ERF::FOXO1",
         "human_score": 0.89,
         "human_position": 284,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + FOX"
       },
       {
         "factor": "ETV5::FOXI1",
         "human_score": 0.89,
         "human_position": 72,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + FOX"
       },
       {
         "factor": "FOS::JUN",
         "human_score": 0.89,
         "human_position": 2,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "HOXC13",
         "human_score": 0.89,
         "human_position": 63,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "SOHLH2",
         "human_score": 0.89,
         "human_position": 88,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "STAT4",
         "human_score": 0.89,
         "human_position": 490,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "STAT factors"
       },
       {
         "factor": "ASCL2",
         "human_score": 0.889,
         "human_position": 683,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "MyoD/ASC-related factors"
       },
       {
         "factor": "NFATC4",
         "human_score": 0.889,
         "human_position": 37,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NFAT-related factors"
       },
       {
         "factor": "NFIC",
         "human_score": 0.889,
         "human_position": 540,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Nuclear factor 1"
       },
       {
         "factor": "SP9",
         "human_score": 0.889,
         "human_position": 568,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SP9"
       },
       {
         "factor": "USF2",
         "human_score": 0.889,
         "human_position": 158,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "TEF",
         "human_score": 0.888,
         "human_position": 66,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CEBP-related"
       },
       {
         "factor": "SOX13",
         "human_score": 0.888,
         "human_position": 280,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "ZIC3",
         "human_score": 0.888,
         "human_position": 685,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZIC3"
       },
       {
         "factor": "KLF12",
         "human_score": 0.887,
         "human_position": 565,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF12"
       },
       {
         "factor": "EPAS1",
         "human_score": 0.887,
         "human_position": 88,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PAS domain factors"
       },
       {
         "factor": "ETV3",
         "human_score": 0.887,
         "human_position": 253,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "HOXB9",
         "human_score": 0.887,
         "human_position": 53,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "FERD3L",
         "human_score": 0.886,
         "human_position": 681,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "CTCFL",
         "human_score": 0.886,
         "human_position": 392,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CTCFL"
       },
       {
         "factor": "NR1H2",
         "human_score": 0.886,
         "human_position": 602,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "POU3F1",
         "human_score": 0.885,
         "human_position": 107,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "ZNF317",
         "human_score": 0.885,
         "human_position": 9,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF317"
       },
       {
         "factor": "ZNF93",
         "human_score": 0.885,
         "human_position": 680,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF93"
       },
       {
         "factor": "KLF4",
         "human_score": 0.884,
         "human_position": 561,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF4"
       },
       {
         "factor": "NKX3-2",
         "human_score": 0.884,
         "human_position": 421,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "ZIC2",
         "human_score": 0.884,
         "human_position": 642,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZIC2"
       },
       {
         "factor": "MYT1",
         "human_score": 0.884,
         "human_position": 369,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "MYT"
       },
       {
         "factor": "ZBTB17",
         "human_score": 0.883,
         "human_position": 419,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB17"
       },
       {
         "factor": "FOSL1::JUNB",
         "human_score": 0.883,
         "human_position": 518,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "ZFX",
         "human_score": 0.883,
         "human_position": 397,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZFX"
       },
       {
         "factor": "ZNF263",
         "human_score": 0.883,
         "human_position": 566,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF263"
       },
       {
         "factor": "ZNF341",
         "human_score": 0.883,
         "human_position": 682,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF341"
       },
       {
         "factor": "PPARA",
         "human_score": 0.882,
         "human_position": 364,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "FOXL2",
         "human_score": 0.882,
         "human_position": 440,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "NR2F2",
         "human_score": 0.882,
         "human_position": 364,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RXR-related receptors (NR2)"
       },
       {
         "factor": "TCF12",
         "human_score": 0.882,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "E2A"
       },
       {
         "factor": "ISL1",
         "human_score": 0.881,
         "human_position": 421,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HD-LIM"
       },
       {
         "factor": "DNTTIP1",
         "human_score": 0.881,
         "human_position": 661,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NFkappaB-related"
       },
       {
         "factor": "FOXG1",
         "human_score": 0.88,
         "human_position": 67,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "DUXA",
         "human_score": 0.88,
         "human_position": 58,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "BHLHE41",
         "human_score": 0.879,
         "human_position": 158,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Hairy-related factors"
       },
       {
         "factor": "NFYB",
         "human_score": 0.879,
         "human_position": 530,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Heteromeric CCAAT-binding"
       },
       {
         "factor": "SMAD2",
         "human_score": 0.879,
         "human_position": 324,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SMAD factors"
       },
       {
         "factor": "ZSCAN21",
         "human_score": 0.878,
         "human_position": 456,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZSCAN21"
       },
       {
         "factor": "PRDM1",
         "human_score": 0.878,
         "human_position": 510,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PRDM1"
       },
       {
         "factor": "SREBF1",
         "human_score": 0.877,
         "human_position": 158,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "PHOX2A",
         "human_score": 0.877,
         "human_position": 422,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "ZBTB12",
         "human_score": 0.877,
         "human_position": 289,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB12"
       },
       {
         "factor": "ZKSCAN5",
         "human_score": 0.877,
         "human_position": 668,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZKSCAN5"
       },
       {
         "factor": "MLX",
         "human_score": 0.876,
         "human_position": 87,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "bHLH-ZIP"
       },
       {
         "factor": "SP1",
         "human_score": 0.876,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SP1"
       },
       {
         "factor": "ETS2",
         "human_score": 0.876,
         "human_position": 15,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "ETV2::FOXI1",
         "human_score": 0.876,
         "human_position": 188,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + FOX"
       },
       {
         "factor": "FOXC2",
         "human_score": 0.876,
         "human_position": 225,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "FOXN3",
         "human_score": 0.875,
         "human_position": 246,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FOX"
       },
       {
         "factor": "DLX5",
         "human_score": 0.875,
         "human_position": 421,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "HOXC12",
         "human_score": 0.875,
         "human_position": 62,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "BATF3",
         "human_score": 0.874,
         "human_position": 519,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "B-ATF-related factors"
       },
       {
         "factor": "ELF5",
         "human_score": 0.874,
         "human_position": 631,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "HES2",
         "human_score": 0.874,
         "human_position": 88,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Hairy-related factors"
       },
       {
         "factor": "RFX2",
         "human_score": 0.874,
         "human_position": 489,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RFX-related factors"
       },
       {
         "factor": "SP3",
         "human_score": 0.874,
         "human_position": 666,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SP3"
       },
       {
         "factor": "XBP1",
         "human_score": 0.874,
         "human_position": 86,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "XBP-1-related factors"
       },
       {
         "factor": "ZNF770",
         "human_score": 0.873,
         "human_position": 85,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF770"
       },
       {
         "factor": "KLF14",
         "human_score": 0.873,
         "human_position": 569,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "KLF14"
       },
       {
         "factor": "MEF2A",
         "human_score": 0.872,
         "human_position": 76,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Regulators of differentiation"
       },
       {
         "factor": "ZNF20",
         "human_score": 0.872,
         "human_position": 458,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF20"
       },
       {
         "factor": "MYF6",
         "human_score": 0.871,
         "human_position": 686,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "MyoD/ASC-related factors"
       },
       {
         "factor": "MAF::NFE2",
         "human_score": 0.871,
         "human_position": 508,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Jun-related + Maf-related"
       },
       {
         "factor": "OTX2",
         "human_score": 0.871,
         "human_position": 523,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "ZNF189",
         "human_score": 0.871,
         "human_position": 681,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF189"
       },
       {
         "factor": "BATF",
         "human_score": 0.87,
         "human_position": 93,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "B-ATF-related factors"
       },
       {
         "factor": "BATF::JUN",
         "human_score": 0.87,
         "human_position": 93,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "B-ATF-related factors + Jun-related"
       },
       {
         "factor": "JUNB",
         "human_score": 0.869,
         "human_position": 122,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Jun-related"
       },
       {
         "factor": "TFAP2E",
         "human_score": 0.869,
         "human_position": 396,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "AP-2"
       },
       {
         "factor": "ETV6",
         "human_score": 0.868,
         "human_position": 86,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "FAM200B",
         "human_score": 0.868,
         "human_position": 395,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "FAM200B"
       },
       {
         "factor": "ESR2",
         "human_score": 0.867,
         "human_position": 200,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Steroid hormone receptors (NR3)"
       },
       {
         "factor": "DPRX",
         "human_score": 0.867,
         "human_position": 273,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "DLX2",
         "human_score": 0.866,
         "human_position": 421,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NK"
       },
       {
         "factor": "HOXD10",
         "human_score": 0.866,
         "human_position": 53,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "SCAND3",
         "human_score": 0.866,
         "human_position": 528,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SCAND3"
       },
       {
         "factor": "ARID5A",
         "human_score": 0.865,
         "human_position": 514,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ARID-related"
       },
       {
         "factor": "CEBPD",
         "human_score": 0.865,
         "human_position": 625,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CEBP-related"
       },
       {
         "factor": "ZNF274",
         "human_score": 0.865,
         "human_position": 610,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF274"
       },
       {
         "factor": "CEBPG",
         "human_score": 0.864,
         "human_position": 66,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CEBP-related"
       },
       {
         "factor": "FOSB::JUN",
         "human_score": 0.864,
         "human_position": 123,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related + Jun-related"
       },
       {
         "factor": "SOX7",
         "human_score": 0.864,
         "human_position": 291,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "SOX-related factors"
       },
       {
         "factor": "HNF1A",
         "human_score": 0.864,
         "human_position": 492,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "TWIST1",
         "human_score": 0.864,
         "human_position": 253,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "DDIT3::CEBPA",
         "human_score": 0.863,
         "human_position": 679,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CEBP-related"
       },
       {
         "factor": "TFCP2",
         "human_score": 0.863,
         "human_position": 342,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CP2-related factors"
       },
       {
         "factor": "POU3F4",
         "human_score": 0.862,
         "human_position": 107,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "HOXC11",
         "human_score": 0.862,
         "human_position": 61,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "HOX"
       },
       {
         "factor": "PBX1",
         "human_score": 0.862,
         "human_position": 145,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TALE-type homeo domain factors"
       },
       {
         "factor": "POU5F1B",
         "human_score": 0.861,
         "human_position": 107,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "ETS1",
         "human_score": 0.861,
         "human_position": 188,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "FLI1::FOXI1",
         "human_score": 0.861,
         "human_position": 639,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + FOX"
       },
       {
         "factor": "FOXJ2::ELF1",
         "human_score": 0.861,
         "human_position": 286,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + FOX"
       },
       {
         "factor": "NR6A1",
         "human_score": 0.861,
         "human_position": 363,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "GCNF-related receptors (NR6)"
       },
       {
         "factor": "THRB",
         "human_score": 0.861,
         "human_position": 529,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "ZNF518B",
         "human_score": 0.861,
         "human_position": 546,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF518B"
       },
       {
         "factor": "FOSB",
         "human_score": 0.861,
         "human_position": 519,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related"
       },
       {
         "factor": "MSC",
         "human_score": 0.86,
         "human_position": 686,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "OLIG3",
         "human_score": 0.86,
         "human_position": 267,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "ZBTB32",
         "human_score": 0.86,
         "human_position": 100,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZBTB32"
       },
       {
         "factor": "ELF2",
         "human_score": 0.86,
         "human_position": 287,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "SPDEF",
         "human_score": 0.86,
         "human_position": 253,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "FOXO1::ELF1",
         "human_score": 0.859,
         "human_position": 71,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related + FOX"
       },
       {
         "factor": "GLI2",
         "human_score": 0.859,
         "human_position": 670,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "GLI2"
       },
       {
         "factor": "MZF1",
         "human_score": 0.859,
         "human_position": 564,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "MZF1"
       },
       {
         "factor": "PGR",
         "human_score": 0.858,
         "human_position": 71,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Steroid hormone receptors (NR3)"
       },
       {
         "factor": "GCM2",
         "human_score": 0.858,
         "human_position": 255,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "GCM"
       },
       {
         "factor": "FOSL2",
         "human_score": 0.857,
         "human_position": 91,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related"
       },
       {
         "factor": "ZNF43",
         "human_score": 0.857,
         "human_position": 494,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF43"
       },
       {
         "factor": "BNC2",
         "human_score": 0.856,
         "human_position": 509,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "BNC2"
       },
       {
         "factor": "GATA1",
         "human_score": 0.856,
         "human_position": 238,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "C4-GATA-related"
       },
       {
         "factor": "POU2F1",
         "human_score": 0.856,
         "human_position": 107,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "POU domain factors"
       },
       {
         "factor": "PRDM9",
         "human_score": 0.856,
         "human_position": 559,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "PRDM9"
       },
       {
         "factor": "ZNF250",
         "human_score": 0.856,
         "human_position": 409,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZNF250"
       },
       {
         "factor": "EBF2",
         "human_score": 0.855,
         "human_position": 505,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Early B-Cell Factor-related factors"
       },
       {
         "factor": "FLI1",
         "human_score": 0.855,
         "human_position": 288,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "NR2F1",
         "human_score": 0.855,
         "human_position": 529,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RXR-related receptors (NR2)"
       },
       {
         "factor": "RXRG",
         "human_score": 0.854,
         "human_position": 585,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RXR-related receptors (NR2)"
       },
       {
         "factor": "DMBX1",
         "human_score": 0.854,
         "human_position": 638,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "HAND2",
         "human_score": 0.854,
         "human_position": 269,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "TEAD4",
         "human_score": 0.854,
         "human_position": 232,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "TEF-1-related factors"
       },
       {
         "factor": "CEBPA",
         "human_score": 0.853,
         "human_position": 624,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "CEBP-related"
       },
       {
         "factor": "ELK4",
         "human_score": 0.853,
         "human_position": 289,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Ets-related"
       },
       {
         "factor": "NHLH1",
         "human_score": 0.853,
         "human_position": 687,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "MYOG",
         "human_score": 0.853,
         "human_position": 687,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "MyoD/ASC-related factors"
       },
       {
         "factor": "PROP1",
         "human_score": 0.852,
         "human_position": 422,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Paired-related HD factors"
       },
       {
         "factor": "RFX1",
         "human_score": 0.852,
         "human_position": 488,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "RFX-related factors"
       },
       {
         "factor": "RARB",
         "human_score": 0.852,
         "human_position": 86,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Thyroid hormone receptor-related factors (NR1)"
       },
       {
         "factor": "BHLHA15",
         "human_score": 0.851,
         "human_position": 684,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       },
       {
         "factor": "FOS",
         "human_score": 0.851,
         "human_position": 121,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related"
       },
       {
         "factor": "FOSL1",
         "human_score": 0.851,
         "human_position": 518,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Fos-related"
       },
       {
         "factor": "NR4A2::RXRA",
         "human_score": 0.851,
         "human_position": 65,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "NGFI-B-related receptors (NR4) + RXR-related receptors (NR2)"
       },
       {
         "factor": "ZIM3",
         "human_score": 0.851,
         "human_position": 402,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "ZIM3"
       },
       {
         "factor": "NEUROG2",
         "human_score": 0.85,
         "human_position": 267,
+        "human_genome": null,
         "same_site_in": [],
-        "everywhere": false
+        "everywhere": false,
+        "family": "Tal-related"
       }
     ]
   },
@@ -4532,6 +5960,6 @@
     "grammar": "inferred: a factor whose motif holds the same aligned site in human and every species"
   },
   "cost": {
-    "seconds": 11.7
+    "seconds": 9.1
   }
 }

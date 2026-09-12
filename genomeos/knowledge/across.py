@@ -96,6 +96,8 @@ def summarise_alignment(blocks: list[dict], species: str, length: int) -> dict[s
     human_cols = other_cols = matches = 0
     human_seq_parts: list[str] = []
     other_seq_parts: list[str] = []
+    human_blocks: list[tuple[int, int]] = []  # (offset in the concatenated human bases, 0-based genome start)
+    offset = 0
     loci: list[str] = []
     for b in blocks:
         h = next((a for a in b.get("alignments", []) if a["species"] == "homo_sapiens"), None)
@@ -112,6 +114,8 @@ def summarise_alignment(blocks: list[dict], species: str, length: int) -> dict[s
         # gapped, column for column: the same-site test maps positions through these columns
         human_seq_parts.append(h["seq"])
         other_seq_parts.append(o["seq"])
+        human_blocks.append((offset, h["start"] - 1))
+        offset += len(h["seq"].replace("-", ""))
         loci.append(f"{o['seq_region']}:{o['start']}-{o['end']}({'+' if o['strand'] == 1 else '-'})")
     aligned = min(human_cols, other_cols)
     return {
@@ -123,6 +127,7 @@ def summarise_alignment(blocks: list[dict], species: str, length: int) -> dict[s
         "identity": round(matches / human_cols, 3) if human_cols else None,
         "other_sequence": "".join(other_seq_parts),
         "human_aligned_sequence": "".join(human_seq_parts),
+        "human_blocks": human_blocks,
         "aligned_columns": aligned,
     }
 
@@ -140,8 +145,40 @@ def base_at_column(gapped: str) -> dict[int, int]:
     return {i: n for n, i in enumerate(column_map(gapped))}
 
 
+def to_genome(pos: int, blocks: list[tuple[int, int]]) -> int | None:
+    """A position in the concatenated human bases of an alignment, as a 0-based genome coordinate."""
+    for off, start0 in reversed(blocks):
+        if pos >= off:
+            return start0 + (pos - off)
+    return None
+
+
+def held_sites(rows: list[dict], widths: dict[str, int]) -> list[dict]:
+    """Held factors grouped into sites: hits that overlap on the human genome are one site."""
+    ivs = sorted(
+        (
+            (r["human_genome"], r["human_genome"] + widths.get(r["factor"], 10), r)
+            for r in rows
+            if r["everywhere"] and r.get("human_genome") is not None
+        ),
+        key=lambda t: (t[0], t[1]),  # rows themselves are not comparable when two hits tie
+    )
+    sites: list[dict] = []
+    for a, b, r in ivs:
+        if sites and a < sites[-1]["end"]:
+            sites[-1]["end"] = max(sites[-1]["end"], b)
+            sites[-1]["factors"].append(r["factor"])
+            sites[-1]["families"].add(r["family"])
+        else:
+            sites.append({"start": a, "end": b, "factors": [r["factor"]], "families": {r["family"]}})
+    return [{**s_, "families": sorted(s_["families"])} for s_ in sites]
+
+
 def conserved_grammar(
-    pairs: dict[str, tuple[str, str]], motifs, window: int = SAME_SITE_WINDOW
+    pairs: dict[str, tuple],
+    motifs,
+    window: int = SAME_SITE_WINDOW,
+    families: dict[str, dict[str, str]] | None = None,
 ) -> dict[str, Any]:
     """Factors hitting the human element, and in which species they hit *the same aligned site*.
 
@@ -149,11 +186,18 @@ def conserved_grammar(
     question is whether the hit sits at the aligned position, so each hit's start is mapped through
     the alignment columns and must land within `window` bases of the other species' hit.
     """
-    from genomeos.genome.motifs import scan
+    from genomeos.genome.motifs import family_unit, load_families, scan
+
+    families = families if families is not None else load_families()
 
     per_species: dict[str, dict[str, int]] = {}
     human_hits: dict[str, tuple[float, int]] = {}
-    for sp, (human_gapped, other_gapped) in pairs.items():
+    genome_pos: dict[
+        str, int
+    ] = {}  # where the held human hit sits on the genome, from the species holding it
+    for sp, pair in pairs.items():
+        human_gapped, other_gapped = pair[0], pair[1]
+        blocks = pair[2] if len(pair) > 2 else None
         h_seq, o_seq = human_gapped.replace("-", ""), other_gapped.replace("-", "")
         if not h_seq or not o_seq:
             continue
@@ -177,7 +221,11 @@ def conserved_grammar(
                 continue
             if abs(per_seq[1][1] - expected) <= window:
                 per_species.setdefault(tf, {})[sp] = per_seq[1][1]
-    species = [sp for sp, (h, o) in pairs.items() if h.replace("-", "") and o.replace("-", "")]
+                if blocks and tf not in genome_pos:
+                    g = to_genome(pos, blocks)
+                    if g is not None:
+                        genome_pos[tf] = g
+    species = [sp for sp, pr in pairs.items() if pr[0].replace("-", "") and pr[1].replace("-", "")]
     rows = []
     for tf, (score, pos) in human_hits.items():
         same = sorted(per_species.get(tf, {}))
@@ -186,12 +234,25 @@ def conserved_grammar(
                 "factor": tf,
                 "human_score": score,
                 "human_position": pos,
+                "human_genome": genome_pos.get(tf),
                 "same_site_in": same,
                 "everywhere": bool(species) and len(same) == len(species),
             }
         )
     rows.sort(key=lambda r: (-len(r["same_site_in"]), -r["human_score"]))
+    # one binding mode read by many matrices is one site: report the held factors as families
+    held_families: dict[str, list[str]] = {}
+    for r in rows:
+        r["family"] = family_unit(r["factor"], families)
+        if r["everywhere"]:
+            held_families.setdefault(r["family"], []).append(r["factor"])
+    widths = {m.name.upper(): m.width for m in motifs}
+    sites = held_sites(rows, widths)
     return {
+        "sites_everywhere": sites,
+        "sites_everywhere_count": len(sites),
+        "families_in_human": len({r["family"] for r in rows}),
+        "families_everywhere": dict(sorted(held_families.items(), key=lambda kv: (-len(kv[1]), kv[0]))),
         "factors_in_human": len(rows),
         "species_compared": species,
         "same_site_window": window,
@@ -254,7 +315,7 @@ def build(name: str, species: tuple[str, ...] = SPECIES, motifs=None, progress=N
 
             motifs = load_motifs()
         pairs = {
-            sp: (v["human_aligned_sequence"], v["other_sequence"])
+            sp: (v["human_aligned_sequence"], v["other_sequence"], v.get("human_blocks") or [])
             for sp, v in per_species.items()
             if v.get("other_sequence") and v.get("human_aligned_sequence")
         }
@@ -264,7 +325,11 @@ def build(name: str, species: tuple[str, ...] = SPECIES, motifs=None, progress=N
         **loc,
         "length": length,
         "species": {
-            sp: {k: v for k, v in d.items() if k not in ("other_sequence", "human_aligned_sequence")}
+            sp: {
+                k: v
+                for k, v in d.items()
+                if k not in ("other_sequence", "human_aligned_sequence", "human_blocks")
+            }
             for sp, d in per_species.items()
         },
         "aligned_in": [sp for sp, v in per_species.items() if (v.get("coverage") or 0) > 0],

@@ -1362,6 +1362,18 @@ in order. "Owner" is the session that holds the files today (see §7).
   constrained among people (Z 3.46) far more than across mammals (7.7%);
   the MiT E-box class and SOX10 hold their sites. Matrix families still
   count many times over. GRAMMAR-BY-COMPARISON.md §12.
+- **Refinement: families, composition, sites (2026-09-12).** Matrices are
+  counted as curated TFClass families (C2H2 zinc fingers individually) and
+  operator expectations are taken within GC-decile by repeat-share strata of
+  all 20,067 promoters (`promoter_composition_genome_wide`). Result: no
+  family pair recurs beyond its matched expectation in any of the 42
+  libraries (84 naive pairs explained by GC or repeats; the last survivor,
+  ZNF135 with ZNF460, sat on Alu: 19.4% of those promoters' bases against
+  1.1%), while REST stays enriched in systems.nervous at 5.7x. Across
+  species the unit is the site, hits mapped to the genome and merged where
+  they overlap: the ZRS holds 10 sites (two HOX, two MEIS/PBX, two NR2, the
+  ETS composite) and the OCA2 enhancer 11, where one site had been read by
+  38 matrices. GRAMMAR-BY-COMPARISON.md §13.
 - **Step 6 built (2026-09-12).** `genomeos decompile GENE --chrom C`
   (`genomeos/decompile.py`): every layer read for one gene assembled into a
   BioLang-flavoured view with an evidence note per line and an `unknown { }`
@@ -1373,13 +1385,13 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Next.** 1. Done: the human axis over the genome and the case in the
   compiled `region` note; next a Blocks-tab lane. 2. Done: origin per gene and age per library, `orthologue_of` still to add
   as species counts per clade on the graph nodes. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
-  and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done: the scan, `requires:` and the operator pairs; next profiles clustered
-  into families, a GC-matched expectation, and enhancers rather than promoters
-  for the developmental combinations (GATA plus T-box in heart). 5. Done at library level; next a gene-level profile with a shuffled-library
+  and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done, with families and a GC-by-repeat null: promoters carry family
+  enrichments per library and no pair logic; the pair search moves to
+  enhancers (GATA plus T-box in heart). 5. Done at library level; next a gene-level profile with a shuffled-library
   null before any pair is called a dependency.
-  6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. Done for the ZRS and the OCA2 enhancer; next JASPAR clustered into
-  families before counting (shared with step 4), and more loci from VISTA's
-  limb and neural positives.
+  6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. Done for the ZRS and the OCA2 enhancer, counted as sites; next more loci
+  from VISTA's limb and neural positives, and pair logic sought in enhancers
+  now that promoters are shown to carry none.
 - **Owner.** genomeos-bb (this lane's files: `attribution/variation.py`,
   `knowledge/homology.py`, GRAMMAR-BY-COMPARISON.md); the compiled output
   stays with genomeos-f7's `attribution/compile.py` and takes isolated hunks.

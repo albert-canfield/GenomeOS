@@ -165,6 +165,115 @@ def load_motifs(path: Path = JASPAR_PATH, relative: float = RELATIVE_SCORE) -> l
     return [m.prepare(relative) for m in parse_jaspar(path.read_text())]
 
 
+JASPAR_TRANSFAC_URL = "https://jaspar.elixir.no/download/data/2026/CORE/JASPAR2026_CORE_vertebrates_non-redundant_pfms_transfac.txt"
+JASPAR_TRANSFAC_PATH = Path("data/knowledge/jaspar/core_vertebrates_2026.transfac")
+ZINC_FINGER_CLASS = "C2H2 zinc finger factors"
+
+
+def load_families(path: Path = JASPAR_TRANSFAC_PATH) -> dict[str, dict[str, str]]:
+    """Factor name (upper case) to its curated TFClass family and class, from JASPAR's TRANSFAC file.
+
+    Matrices of one family share a binding mode and hit the same sites, so counting them one by one
+    reads one site many times (the ZRS's 23 conserved factors are 10 families). Every record carries
+    `CC tf_family:` and `CC tf_class:`; a heterodimer lists two families separated by "; ".
+    """
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        req = urllib.request.Request(JASPAR_TRANSFAC_URL, headers={"User-Agent": "GenomeOS/0.9 (motifs)"})
+        with urllib.request.urlopen(req, timeout=300) as r:  # noqa: S310
+            path.write_bytes(r.read())
+    out: dict[str, dict[str, str]] = {}
+    cur: dict[str, str] = {}
+    for line in path.read_text().splitlines():
+        if line.startswith("ID "):
+            cur["name"] = line[3:].strip()
+        elif line.startswith("CC tf_family:"):
+            cur["family"] = line.split(":", 1)[1].strip()
+        elif line.startswith("CC tf_class:"):
+            cur["class"] = line.split(":", 1)[1].strip()
+        elif line.startswith("//"):
+            if cur.get("name"):
+                out[cur["name"].upper()] = {"family": cur.get("family", ""), "class": cur.get("class", "")}
+            cur = {}
+    return out
+
+
+def family_unit(factor: str, families: dict[str, dict[str, str]]) -> str:
+    """The unit a factor is counted as: its TFClass family, unless the family says nothing about the motif.
+
+    - C2H2 zinc-finger families are structural ("more than 3 adjacent zinc fingers" holds 195 matrices
+      that bind unrelated sequences), so a zinc-finger factor stays itself;
+    - a factor without a family annotation stays itself;
+    - a heterodimer's families are joined in a fixed order, so ETV5::FOXO1 is "Ets-related + FOX".
+    """
+    rec = families.get(factor.upper())
+    if not rec or not rec.get("family"):
+        return factor.upper()
+    if ZINC_FINGER_CLASS in rec.get("class", ""):
+        return factor.upper()
+    parts = sorted({p.strip() for p in rec["family"].split(";") if p.strip()})
+    return " + ".join(parts)
+
+
+def gc_content(seq: str) -> float | None:
+    s = seq.upper()
+    acgt = sum(s.count(b) for b in "ACGT")
+    return round((s.count("G") + s.count("C")) / acgt, 4) if acgt else None
+
+
+INTERSPERSED = {"SINE", "LINE", "LTR", "DNA", "Retroposon"}
+
+
+def repeat_fraction(intervals: list[tuple[int, int]], repeats: list[tuple[int, int]]) -> list[float]:
+    """For each interval, the share of its bases covered by the (sorted, possibly overlapping) repeats."""
+    import bisect
+
+    merged: list[tuple[int, int]] = []
+    for a, b in sorted(repeats):
+        if merged and a <= merged[-1][1]:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], b))
+        else:
+            merged.append((a, b))
+    starts = [a for a, _ in merged]
+    out = []
+    for lo, hi in intervals:
+        k = max(0, bisect.bisect_right(starts, lo) - 1)
+        cov = 0
+        for a, b in merged[k:]:
+            if a >= hi:
+                break
+            if b > lo:
+                cov += min(b, hi) - max(a, lo)
+        out.append(round(cov / (hi - lo), 4) if hi > lo else 0.0)
+    return out
+
+
+def promoter_composition(chrom: str) -> dict[str, dict[str, float]]:
+    """GC and interspersed-repeat share of every canonical promoter (TSS ± flank) on a chromosome.
+
+    Both confound a motif-pair statistic: GC-rich profiles co-hit GC-rich promoters, and profiles
+    that match a transposon co-hit every promoter carrying one (promoters holding both ZNF135 and
+    ZNF460 sites are 19% Alu against 1% for neither). The repeat share is read from RepeatMasker.
+    """
+    from genomeos.genome.repeats import load_repeats
+
+    prom = promoters(chrom)
+    loci = promoter_loci(chrom)
+    if prom is None or loci is None:
+        return {}
+    names, seqs = prom
+    where = {sym: (a, b) for sym, a, b in loci}
+    reps = [(r.start, r.end) for r in load_repeats(chrom) if r.cls in INTERSPERSED]
+    ivs = [where[n] for n in names]
+    fracs = repeat_fraction(ivs, reps) if reps else [None] * len(names)
+    out: dict[str, dict[str, float]] = {}
+    for n, seq, rf in zip(names, seqs, fracs, strict=True):
+        g = gc_content(seq)
+        if g is not None:
+            out[n] = {"gc": g, "repeat": rf}
+    return out
+
+
 def encode(seq: str) -> list[int]:
     return [BASES.get(c, -1) for c in seq.upper()]
 
@@ -307,20 +416,16 @@ def enrichment(real: dict[str, dict], control: dict[str, dict], n: int) -> dict[
     return out
 
 
-def promoters(chrom: str, flank: int = PROMOTER_FLANK) -> tuple[list[str], list[str]] | None:
-    """Gene symbols and their promoter sequences (TSS ± flank of the canonical transcript)."""
-    from genomeos.coords import Locus, Strand
+def promoter_loci(chrom: str, flank: int = PROMOTER_FLANK) -> list[tuple[str, int, int]] | None:
+    """(symbol, start, end) of every canonical promoter, TSS ± flank; the one place the TSS is chosen."""
+    from genomeos.coords import Strand
     from genomeos.genome.annotation import Annotation, default_gencode
-    from genomeos.genome.fetch import REFERENCE
-    from genomeos.genome.genome import Genome
 
     gff = default_gencode({chrom})
-    fa = REFERENCE / f"{chrom}.fa.gz"
-    if gff is None or not fa.exists():
+    if gff is None:
         return None
     ann = Annotation.from_gff3(gff, {chrom})
-    genome = Genome.from_fasta(fa)
-    names, seqs = [], []
+    out: list[tuple[str, int, int]] = []
     for g in ann.protein_coding():
         if g.locus.chrom != chrom:
             continue
@@ -332,11 +437,27 @@ def promoters(chrom: str, flank: int = PROMOTER_FLANK) -> tuple[list[str], list[
             continue
         t = canon[0]
         tss = t.locus.start if t.locus.strand == Strand.PLUS else t.locus.end
-        start, end = max(0, tss - flank), tss + flank
+        out.append((g.symbol, max(0, tss - flank), tss + flank))
+    return out
+
+
+def promoters(chrom: str, flank: int = PROMOTER_FLANK) -> tuple[list[str], list[str]] | None:
+    """Gene symbols and their promoter sequences (TSS ± flank of the canonical transcript)."""
+    from genomeos.coords import Locus
+    from genomeos.genome.fetch import REFERENCE
+    from genomeos.genome.genome import Genome
+
+    loci = promoter_loci(chrom, flank)
+    fa = REFERENCE / f"{chrom}.fa.gz"
+    if loci is None or not fa.exists():
+        return None
+    genome = Genome.from_fasta(fa)
+    names, seqs = [], []
+    for sym, start, end in loci:
         seq = str(genome.fetch(Locus(chrom, start, end)))
         if len(seq) < 2 * flank:
             continue
-        names.append(g.symbol)
+        names.append(sym)
         seqs.append(seq)
     return names, seqs
 
@@ -493,15 +614,52 @@ def run_and_save(
     return out
 
 
+OPERATOR_RATIO = 2.0  # a pair's observed co-occurrence over its GC-matched expectation
+OPERATOR_SHARE = 0.25  # and present together in at least this share of the library's members
+GC_BINS = 10
+REPEAT_EDGES = (0.0, 0.1, 0.3)  # repeat share bins: none, up to 10%, up to 30%, more
+MIN_STRATUM = 30  # a GC-by-repeat stratum thinner than this falls back to its GC decile
+
+
+def repeat_bin(share: float | None) -> int | None:
+    if share is None:
+        return None
+    if share <= REPEAT_EDGES[0]:
+        return 0
+    return 1 if share <= REPEAT_EDGES[1] else 2 if share <= REPEAT_EDGES[2] else 3
+
+
+def gc_bins(gc: dict[str, float], bins: int = GC_BINS) -> dict[str, int]:
+    """Gene to GC decile (0 lowest); genes with no GC value are left out."""
+    ranked = sorted(gc.items(), key=lambda kv: kv[1])
+    n = len(ranked)
+    return {g: min(bins - 1, i * bins // n) for i, (g, _) in enumerate(ranked)} if n else {}
+
+
 def distil(
-    results_dir: Path = RESULTS_DIR, members: dict[str, list[str]] | None = None, min_members: int = 8
+    results_dir: Path = RESULTS_DIR,
+    members: dict[str, list[str]] | None = None,
+    min_members: int = 8,
+    families: dict[str, dict[str, str]] | None = None,
+    composition: dict[str, dict[str, float]] | None = None,
 ) -> dict:
-    """The genome: `requires:` per gene pooled, factor shares, and per library the enriched factors and the
-    factor pairs that recur across its members' promoters beyond what the two shares predict (operators)."""
+    """The genome: `requires:` per gene pooled, and per library the enriched factor families and the family
+    pairs that recur across its members' promoters beyond a GC-matched expectation (operators).
+
+    Two corrections over counting matrices against global shares. Units are TFClass families
+    (`family_unit`), so near-identical matrices (MEF2A and MEF2D) are one unit and cannot form a pair.
+    Expectations are taken within strata of GC decile and interspersed-repeat share: a member is
+    expected to carry the units promoters of its own composition carry, so GC-rich profiles co-hitting
+    (CGGBP1 with ZNF93) and transposon-matching profiles co-hitting (ZNF135 with ZNF460, on Alu) are
+    explained by composition instead of reported as logic. The naive expectation is kept beside it.
+    """
     import glob
     from itertools import combinations
 
-    gene_factors: dict[str, set[str]] = {}
+    families = families if families is not None else load_families()
+    if composition is None:
+        composition = (load_result("promoter_composition_genome_wide", results_dir) or {}).get("genes") or {}
+    gene_units: dict[str, set[str]] = {}
     chroms = 0
     seconds = 0.0
     for f in sorted(glob.glob(str(results_dir / "motifs_chr*.json"))):
@@ -511,72 +669,115 @@ def distil(
         chroms += 1
         seconds += (r.get("cost") or {}).get("seconds", 0)
         for sym, g in r["genes"].items():
-            gene_factors[sym] = {x["factor"] for x in g.get("requires", [])}
-    n = len(gene_factors)
+            gene_units[sym] = {family_unit(x["factor"], families) for x in g.get("requires", [])}
+    n = len(gene_units)
     share = Counter()
-    for fs in gene_factors.values():
-        share.update(fs)
-    factor_share = {tf: round(c / n, 4) for tf, c in share.items()} if n else {}
+    for us in gene_units.values():
+        share.update(us)
+    unit_share = {u: round(c / n, 4) for u, c in share.items()} if n else {}
+    binned = gc_bins(
+        {g: v["gc"] for g, v in composition.items() if g in gene_units and v.get("gc") is not None}
+    )
+    stratum = {g: (b, repeat_bin(composition[g].get("repeat"))) for g, b in binned.items()}
+    gc_size, gc_counts = Counter(binned.values()), defaultdict(Counter)
+    st_size, st_counts = Counter(stratum.values()), defaultdict(Counter)
+    for g, b in binned.items():
+        gc_counts[b].update(gene_units[g])
+        st_counts[stratum[g]].update(gene_units[g])
+
+    def p_unit(u: str, gene: str) -> float:
+        st = stratum.get(gene)
+        if st is not None and st[1] is not None and st_size[st] >= MIN_STRATUM:
+            return st_counts[st][u] / st_size[st]
+        b = binned.get(gene)
+        if b is not None and gc_size[b]:
+            return gc_counts[b][u] / gc_size[b]
+        return unit_share.get(u, 0.0)
+
     members = members if members is not None else (library_members() or {})
     libraries: dict[str, dict] = {}
+    explained_total = 0
     for lib, syms in members.items():
-        here = {s_: gene_factors[s_] for s_ in syms if s_ in gene_factors}
+        here = {s_: gene_units[s_] for s_ in syms if s_ in gene_units}
         m = len(here)
         if m < min_members:
             continue
         cnt = Counter()
-        for fs in here.values():
-            cnt.update(fs)
+        for us in here.values():
+            cnt.update(us)
         factors = []
-        for tf, c in cnt.items():
-            base = factor_share.get(tf, 0)
-            if c >= 3 and base and (c / m) / base >= 1.5:
+        for u, c in cnt.items():
+            expected = sum(p_unit(u, g) for g in here) / m
+            if c >= 3 and expected and (c / m) / expected >= 1.5:
                 factors.append(
                     {
-                        "factor": tf,
+                        "family": u,
                         "members_with_hit": c,
                         "share": round(c / m, 3),
-                        "all_share": base,
-                        "ratio": round((c / m) / base, 2),
+                        "expected_share": round(expected, 4),
+                        "all_share": unit_share.get(u, 0),
+                        "ratio": round((c / m) / expected, 2),
                     }
                 )
         factors.sort(key=lambda r: (-r["ratio"], -r["members_with_hit"]))
-        # operators: pairs present together in members' promoters more than the two shares predict
         pairs = Counter()
-        for fs in here.values():
-            for a, b in combinations(sorted(fs), 2):
+        for us in here.values():
+            for a, b in combinations(sorted(us), 2):
                 pairs[(a, b)] += 1
         ops = []
+        explained = 0
         for (a, b), c in pairs.items():
-            expected = m * factor_share.get(a, 0) * factor_share.get(b, 0)
-            if c >= 3 and expected > 0 and c / expected >= 2.0 and c / m >= 0.25:
+            if c < 3 or c / m < OPERATOR_SHARE:
+                continue
+            naive = m * unit_share.get(a, 0) * unit_share.get(b, 0)
+            expected = sum(p_unit(a, g) * p_unit(b, g) for g in here)
+            naive_ratio = c / naive if naive else None
+            ratio = c / expected if expected else None
+            if ratio is not None and ratio >= OPERATOR_RATIO:
                 ops.append(
                     {
-                        "factors": [a, b],
+                        "families": [a, b],
                         "members_with_both": c,
                         "share": round(c / m, 3),
                         "expected": round(expected, 2),
-                        "ratio": round(c / expected, 2),
+                        "ratio": round(ratio, 2),
+                        "naive_ratio": round(naive_ratio, 2) if naive_ratio else None,
                     }
                 )
+            elif naive_ratio is not None and naive_ratio >= OPERATOR_RATIO:
+                explained += 1
+        explained_total += explained
         ops.sort(key=lambda r: (-r["ratio"], -r["members_with_both"]))
         libraries[lib] = {
             "members_placed": m,
             "members": len(syms),
-            "factors": factors[:12],
+            "families": factors[:12],
             "operators": ops[:12],
+            "pairs_explained_by_gc": explained,
         }
     return {
         "chromosomes": chroms,
         "promoters": n,
-        "factor_share": factor_share,
+        "units": len(unit_share),
+        "promoters_with_composition": len(binned),
+        "strata_used": sum(1 for st, k in st_size.items() if st[1] is not None and k >= MIN_STRATUM),
+        "unit_share": unit_share,
         "libraries": libraries,
+        "pairs_explained_by_gc": explained_total,
+        "libraries_with_operators": sum(1 for v in libraries.values() if v["operators"]),
         "thresholds": {
             "relative_score": RELATIVE_SCORE,
             "requires_enrichment": REQUIRES_ENRICHMENT,
-            "operator_ratio": 2.0,
-            "operator_share": 0.25,
+            "operator_ratio": OPERATOR_RATIO,
+            "operator_share": OPERATOR_SHARE,
+            "gc_bins": GC_BINS,
+            "repeat_edges": list(REPEAT_EDGES),
+            "min_stratum": MIN_STRATUM,
         },
-        "evidence": EVIDENCE,
+        "evidence": {
+            **EVIDENCE,
+            "units": "curated: TFClass family per JASPAR matrix; C2H2 zinc-finger factors counted one by one",
+            "null": "inferred: expectation within GC-decile by repeat-share strata; naive one kept too",
+        },
         "cost": {"seconds": round(seconds, 1)},
     }

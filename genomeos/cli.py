@@ -1691,9 +1691,11 @@ def cmd_across(args: argparse.Namespace) -> int:
     g = r.get("grammar") or {}
     if g:
         print(
-            f"  {g['factors_in_human']} factors hit the human element; holding the same aligned site in "
-            f"every species: {', '.join(g['everywhere']) or 'none'}"
+            f"  {g['factors_in_human']} factors ({g.get('families_in_human', '?')} families) hit the human "
+            f"element; {len(g['everywhere'])} hold the same aligned site in every species, as families:"
         )
+        for fam, members in (g.get("families_everywhere") or {}).items():
+            print(f"    {fam}: {', '.join(members)}")
         rows = [
             {
                 "factor": x["factor"],

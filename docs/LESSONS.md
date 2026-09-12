@@ -125,6 +125,21 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   family-level call (HOXA1 eukaryote-wide through plant homeobox proteins):
   read the grade, not the exact stratum (`origin_genome_wide`).
 
+- A motif-pair statistic has three confounds, and each one produced
+  "operators" on its own: near-identical matrices (MEF2A with MEF2D), GC
+  (CGGBP1 with ZNF93 in 27 libraries) and transposons (ZNF135 with ZNF460:
+  promoters with both are 19.4% Alu against 1.1%). Count TFClass families
+  (C2H2 zinc fingers individually), take expectations within GC by
+  repeat-share strata, and the promoter operator table goes from 38
+  libraries to none while single-family enrichments such as REST in the
+  nervous system survive (`motifs_genome_wide`,
+  `promoter_composition_genome_wide`).
+- Across species, families still overcount homeodomains (HOX, NK,
+  paired-related and HD-LIM share the TAAT core): count sites, hits mapped
+  to genome coordinates and merged where they overlap. Record positions in
+  genome coordinates from the start; a position in a concatenated alignment
+  depends on which species' blocks were concatenated.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory

@@ -741,3 +741,21 @@ E-box class and a SOX10 site. The abstraction survives its first test; the
 operator list still counts matrix families many times, which is the shared
 next step with the promoter scan. A shared CLI table helper that crashed on
 an empty result was fixed on the way. docs/GRAMMAR-BY-COMPARISON.md §12.
+
+## 2026-09-12 — refinements: families, composition, sites
+
+The two open defects of area J shared one cause, JASPAR matrices counted one
+by one. Matrices are now counted as their curated TFClass family, promoter
+expectations are taken within strata of GC and repeat content over all
+20,067 promoters, and across species the unit is the site. Checking what
+survived the GC correction found a third confound: the last promoter
+"operator", ZNF135 with ZNF460, sat on Alu elements (19.4% of those
+promoters' bases against 1.1%). With all three corrections no factor-family
+pair recurs across any library's promoters beyond expectation (84 naive
+pairs explained), while REST stays enriched in the nervous system at 5.7
+times its matched expectation: promoters carry family enrichments, not pair
+logic, a measured negative that sends the pair search to enhancers. The
+ZRS keeps 10 sites from human to zebrafish, two of them HOX and two MEIS or
+PBX, with the ETS composite; the OCA2 enhancer's 75 held matrices are 11
+sites, one of them read by 38 matrices. docs/GRAMMAR-BY-COMPARISON.md §13;
+two LESSONS rows.

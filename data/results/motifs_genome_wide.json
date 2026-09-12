@@ -3,4464 +3,2312 @@
   "date": "2026-09-12",
   "chromosomes": 24,
   "promoters": 20067,
-  "factor_share": {
-    "FOXL2": 0.1951,
-    "MEF2A": 0.3184,
+  "units": 110,
+  "promoters_with_composition": 20067,
+  "strata_used": 39,
+  "unit_share": {
+    "FOX": 0.4379,
     "SALL3": 0.3062,
-    "MEF2B": 0.253,
+    "Regulators of differentiation": 0.4738,
+    "Paired-related HD factors": 0.1653,
     "ZNF24": 0.0543,
-    "MEF2D": 0.3862,
-    "POU3F3": 0.1124,
-    "PROP1": 0.148,
+    "POU domain factors": 0.3061,
+    "STAT factors": 0.3645,
     "ZNF250": 0.0951,
-    "STAT2": 0.3645,
-    "KLF17": 0.0573,
-    "ZNF93": 0.3322,
-    "ZNF865": 0.1403,
-    "CGGBP1": 0.4358,
     "ZNF131": 0.3124,
     "KLF9": 0.2597,
-    "NRF1": 0.2173,
-    "ZNF460": 0.3675,
+    "ZNF93": 0.3322,
+    "KLF17": 0.0573,
+    "NRF": 0.2173,
+    "ZNF865": 0.1403,
+    "CGGBP1": 0.4358,
     "ZNF436": 0.0114,
+    "ZNF460": 0.3675,
     "ZNF135": 0.3323,
-    "SPI1": 0.0988,
+    "Ets-related": 0.1797,
     "RREB1": 0.0904,
     "ZSCAN4": 0.0474,
-    "THRA": 0.0201,
-    "FOXD3": 0.2896,
-    "CREM": 0.0666,
+    "CREB-related factors": 0.0666,
+    "Thyroid hormone receptor-related factors (NR1)": 0.0201,
     "ZNF606": 0.0805,
+    "Interferon-regulatory factors": 0.1793,
     "ZNF683": 0.0876,
-    "IRF9": 0.0073,
-    "IRF3": 0.0151,
-    "IRF1": 0.1569,
-    "HNF1B": 0.046,
-    "THAP11": 0.0609,
+    "THAP-related factors": 0.0609,
     "ZNF143": 0.0465,
-    "ZNF471": 0.0885,
     "ZNF470": 0.0654,
+    "ZNF471": 0.0885,
     "ZNF407": 0.0186,
     "ZNF347": 0.0985,
-    "PHOX2B": 0.0452,
-    "RFX3": 0.0301,
-    "RFX1": 0.0271,
-    "GSC::TBX21": 0.0025,
-    "POU4F1": 0.1114,
-    "SPIB": 0.1257,
+    "RFX-related factors": 0.04,
+    "Paired-related HD factors + TBX1-related factors": 0.0025,
     "REST": 0.0082,
     "ZNF775": 0.0434,
-    "POU4F3": 0.0863,
-    "POU1F1": 0.0458,
     "ZNF146": 0.0094,
-    "LHX3": 0.1696,
-    "DMRTB1": 0.0123,
+    "HD-LIM": 0.1706,
+    "DMRT factors": 0.0123,
     "ZFP28": 0.0102,
-    "POU4F2": 0.0086,
     "FIZ1": 0.0148,
     "ZNF234": 0.0076,
-    "EWSR1-FLI1": 0.0155,
     "ZNF354A": 0.0059,
     "ZNF623": 0.0038,
     "ZNF251": 0.0033,
     "ZNF226": 0.0078,
-    "NR1H2::RXRA": 0.001,
-    "ZNF8": 0.0031,
+    "RXR-related receptors (NR2) + Thyroid hormone receptor-related factors (NR1)": 0.0014,
     "ZNF260": 0.0049,
+    "ZNF8": 0.0031,
     "FLYWCH1": 0.0008,
     "ZKSCAN4": 0.0008,
-    "MAFK": 0.0352,
-    "ETV5::FIGLA": 0.0127,
-    "FOXQ1": 0.041,
-    "PBX2": 0.0449,
-    "TFAP4::FLI1": 0.0058,
-    "ONECUT3": 0.0438,
-    "IRF7": 0.0159,
+    "Maf-related": 0.0367,
+    "TALE-type homeo domain factors": 0.0697,
+    "Ets-related + Tal-related": 0.0176,
+    "Ets-related + bHLH-ZIP": 0.0076,
+    "HD-CUT": 0.0493,
     "ZBTB40": 0.0376,
-    "POU3F2": 0.0748,
-    "POU2F2": 0.0464,
     "ZNF721": 0.0132,
-    "POU5F1::SOX2": 0.0133,
-    "IRF2": 0.0036,
-    "POU2F1::SOX2": 0.0104,
+    "POU domain factors + SOX-related factors": 0.0216,
     "ZSCAN2": 0.0014,
     "ZNF510": 0.0123,
-    "FOSB::JUN": 0.0378,
-    "RFX5": 0.0073,
-    "TBX19": 0.0004,
+    "Fos-related + Jun-related": 0.0378,
+    "Brachyury-related factors": 0.0005,
     "ZNF382": 0.0001,
     "ZNF596": 0.0896,
-    "MLXIP": 0.1202,
+    "bHLH-ZIP": 0.121,
     "PRDM9": 0.0442,
-    "ERF::NHLH1": 0.001,
-    "ETV2::FIGLA": 0.0059,
-    "ONECUT1": 0.0071,
     "MECOM": 0.0095,
-    "TBXT": 0.0,
-    "SOX21": 0.0003,
-    "ESR1": 0.0026,
+    "SOX-related factors": 0.0003,
+    "Steroid hormone receptors (NR3)": 0.0057,
     "ZNF814": 0.009,
-    "TGIF2LX": 0.0032,
-    "TGIF1": 0.0025,
     "ZNF286B": 0.0001,
-    "ATF7": 0.011,
+    "Jun-related": 0.0162,
     "ZNF582": 0.0003,
+    "HOX": 0.0301,
     "ZNF362": 0.1012,
-    "HOXB13": 0.0301,
-    "HMGA1": 0.0798,
-    "HOXD12::ELK1": 0.0007,
+    "HMGA": 0.0798,
+    "Ets-related + HOX": 0.0009,
     "ZNF772": 0.0002,
     "MTF1": 0.0005,
     "ZSCAN16": 0.0001,
-    "MYPOP": 0.0215,
-    "RFX2": 0.0051,
+    "Myb-SANT": 0.0215,
     "ZNF211": 0.0055,
-    "PRDM5": 0.0015,
     "ZIM3": 0.0023,
+    "PRDM5": 0.0015,
     "ZNF677": 0.0009,
-    "ELK1::SREBF2": 0.0016,
-    "PBX3": 0.0187,
     "ZNF16": 0.0023,
-    "NR5A1": 0.0062,
+    "FTZF1-related (NR5A)": 0.0062,
     "ZNF696": 0.0002,
     "ZNF551": 0.0001,
-    "PAX7": 0.0047,
-    "ATF2": 0.0066,
-    "ELK1::HOXA1": 0.0003,
-    "MLX": 0.002,
-    "PKNOX1": 0.0026,
+    "Paired plus homeo domain": 0.0047,
+    "Ets-related + HOX-related factors": 0.0003,
     "ZNF76": 0.001,
-    "TGIF2LY": 0.0005,
-    "IRF4": 0.0,
-    "FOXB1": 0.0055,
-    "POU3F1": 0.0044,
-    "CREB3L3": 0.0014,
+    "CREB-related": 0.0014,
     "ZFP42": 0.0077,
     "ZNF85": 0.001,
-    "PPARA::RXRA": 0.0004,
     "ZNF282": 0.0008,
-    "HMX2": 0.0004,
-    "IRF8": 0.0002,
+    "NK": 0.0004,
     "ZNF707": 0.0025,
     "ZNF732": 0.0009,
     "ZNF816": 0.0027,
     "ZNF410": 0.0003,
-    "NR3C2": 0.0028,
-    "NR3C1": 0.0025,
     "ZNF57": 0.0,
-    "MITF": 0.0003,
+    "Hairy-related factors": 0.0002,
     "EGR3": 0.0006,
-    "HES7": 0.0002,
-    "TFAP4::ETV1": 0.0003,
-    "TCF7L1": 0.0003,
-    "LMX1B": 0.001,
-    "POU3F4": 0.0006,
+    "TCF-7-related factors": 0.0003,
     "ZNF418": 0.0001,
-    "BANP": 0.0005,
+    "ARID-related": 0.0005,
     "KLF13": 0.0001,
-    "MAFA": 0.0015,
-    "HOXB2::ELK1": 0.0002,
-    "ZNF669": 0.0003,
-    "RFX4": 0.0001
+    "ZNF669": 0.0003
   },
   "libraries": {
     "core.replication": {
       "members_placed": 201,
       "members": 235,
-      "factors": [
+      "families": [
         {
-          "factor": "IRF2",
-          "members_with_hit": 3,
-          "share": 0.015,
-          "all_share": 0.0036,
-          "ratio": 4.15
-        },
-        {
-          "factor": "ZNF721",
+          "family": "ZNF721",
           "members_with_hit": 7,
           "share": 0.035,
+          "expected_share": 0.0131,
           "all_share": 0.0132,
-          "ratio": 2.64
+          "ratio": 2.66
         },
         {
-          "factor": "ZNF143",
+          "family": "ZNF143",
           "members_with_hit": 24,
           "share": 0.119,
+          "expected_share": 0.0535,
           "all_share": 0.0465,
-          "ratio": 2.57
+          "ratio": 2.23
         },
         {
-          "factor": "IRF7",
-          "members_with_hit": 8,
-          "share": 0.04,
-          "all_share": 0.0159,
-          "ratio": 2.5
-        },
-        {
-          "factor": "THAP11",
+          "family": "THAP-related factors",
           "members_with_hit": 25,
           "share": 0.124,
+          "expected_share": 0.0682,
           "all_share": 0.0609,
-          "ratio": 2.04
+          "ratio": 1.82
         },
         {
-          "factor": "IRF9",
-          "members_with_hit": 3,
-          "share": 0.015,
-          "all_share": 0.0073,
-          "ratio": 2.04
-        },
-        {
-          "factor": "IRF3",
-          "members_with_hit": 6,
-          "share": 0.03,
-          "all_share": 0.0151,
-          "ratio": 1.98
-        },
-        {
-          "factor": "POU2F1::SOX2",
-          "members_with_hit": 4,
-          "share": 0.02,
-          "all_share": 0.0104,
-          "ratio": 1.91
-        },
-        {
-          "factor": "POU3F2",
-          "members_with_hit": 26,
-          "share": 0.129,
-          "all_share": 0.0748,
-          "ratio": 1.73
-        },
-        {
-          "factor": "ZNF24",
-          "members_with_hit": 17,
-          "share": 0.085,
-          "all_share": 0.0543,
-          "ratio": 1.56
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 7,
+          "share": 0.035,
+          "expected_share": 0.0203,
+          "all_share": 0.0216,
+          "ratio": 1.72
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 54,
-          "share": 0.269,
-          "expected": 24.55,
-          "ratio": 2.2
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 1
     },
     "core.transcription": {
       "members_placed": 1580,
       "members": 1743,
-      "factors": [
+      "families": [
         {
-          "factor": "PBX3",
-          "members_with_hit": 67,
-          "share": 0.042,
-          "all_share": 0.0187,
-          "ratio": 2.27
-        },
-        {
-          "factor": "ZNF143",
+          "family": "ZNF143",
           "members_with_hit": 152,
           "share": 0.096,
+          "expected_share": 0.0496,
           "all_share": 0.0465,
-          "ratio": 2.07
+          "ratio": 1.94
         },
         {
-          "factor": "HOXB13",
-          "members_with_hit": 87,
-          "share": 0.055,
-          "all_share": 0.0301,
-          "ratio": 1.83
-        },
-        {
-          "factor": "ZNF362",
-          "members_with_hit": 290,
-          "share": 0.184,
-          "all_share": 0.1012,
-          "ratio": 1.81
-        },
-        {
-          "factor": "THAP11",
-          "members_with_hit": 171,
-          "share": 0.108,
-          "all_share": 0.0609,
-          "ratio": 1.78
-        },
-        {
-          "factor": "HMGA1",
-          "members_with_hit": 215,
-          "share": 0.136,
-          "all_share": 0.0798,
-          "ratio": 1.71
-        },
-        {
-          "factor": "MYPOP",
-          "members_with_hit": 53,
-          "share": 0.034,
-          "all_share": 0.0215,
-          "ratio": 1.56
-        },
-        {
-          "factor": "IRF9",
-          "members_with_hit": 18,
-          "share": 0.011,
-          "all_share": 0.0073,
-          "ratio": 1.56
-        },
-        {
-          "factor": "ZNF251",
+          "family": "ZNF251",
           "members_with_hit": 8,
           "share": 0.005,
+          "expected_share": 0.0026,
           "all_share": 0.0033,
-          "ratio": 1.53
+          "ratio": 1.94
         },
         {
-          "factor": "NR3C1",
-          "members_with_hit": 6,
-          "share": 0.004,
-          "all_share": 0.0025,
-          "ratio": 1.52
+          "family": "HOX",
+          "members_with_hit": 87,
+          "share": 0.055,
+          "expected_share": 0.0312,
+          "all_share": 0.0301,
+          "ratio": 1.76
+        },
+        {
+          "family": "ZNF362",
+          "members_with_hit": 290,
+          "share": 0.184,
+          "expected_share": 0.1062,
+          "all_share": 0.1012,
+          "ratio": 1.73
+        },
+        {
+          "family": "THAP-related factors",
+          "members_with_hit": 171,
+          "share": 0.108,
+          "expected_share": 0.0643,
+          "all_share": 0.0609,
+          "ratio": 1.68
+        },
+        {
+          "family": "HMGA",
+          "members_with_hit": 215,
+          "share": 0.136,
+          "expected_share": 0.0842,
+          "all_share": 0.0798,
+          "ratio": 1.62
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 486,
-          "share": 0.308,
-          "expected": 228.74,
-          "ratio": 2.12
-        },
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 403,
-          "share": 0.255,
-          "expected": 192.95,
-          "ratio": 2.09
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 2
     },
     "core.splicing": {
       "members_placed": 264,
       "members": 1160,
-      "factors": [
+      "families": [
         {
-          "factor": "BANP",
+          "family": "ARID-related",
           "members_with_hit": 5,
           "share": 0.019,
+          "expected_share": 0.0009,
           "all_share": 0.0005,
-          "ratio": 37.88
+          "ratio": 21.29
         },
         {
-          "factor": "CREB3L3",
+          "family": "CREB-related",
           "members_with_hit": 4,
           "share": 0.015,
+          "expected_share": 0.0016,
           "all_share": 0.0014,
-          "ratio": 10.82
+          "ratio": 9.5
         },
         {
-          "factor": "ZFP42",
-          "members_with_hit": 11,
-          "share": 0.042,
-          "all_share": 0.0077,
-          "ratio": 5.41
-        },
-        {
-          "factor": "ONECUT1",
-          "members_with_hit": 7,
-          "share": 0.027,
-          "all_share": 0.0071,
-          "ratio": 3.73
-        },
-        {
-          "factor": "RFX5",
-          "members_with_hit": 5,
-          "share": 0.019,
-          "all_share": 0.0073,
-          "ratio": 2.59
-        },
-        {
-          "factor": "ZNF354A",
-          "members_with_hit": 4,
-          "share": 0.015,
-          "all_share": 0.0059,
-          "ratio": 2.57
-        },
-        {
-          "factor": "RFX2",
+          "family": "RXR-related receptors (NR2) + Thyroid hormone receptor-related factors (NR1)",
           "members_with_hit": 3,
           "share": 0.011,
-          "all_share": 0.0051,
-          "ratio": 2.23
+          "expected_share": 0.0014,
+          "all_share": 0.0014,
+          "ratio": 8.22
         },
         {
-          "factor": "MYPOP",
-          "members_with_hit": 12,
-          "share": 0.045,
-          "all_share": 0.0215,
-          "ratio": 2.11
+          "family": "ZFP42",
+          "members_with_hit": 11,
+          "share": 0.042,
+          "expected_share": 0.0082,
+          "all_share": 0.0077,
+          "ratio": 5.06
         },
         {
-          "factor": "ZNF407",
+          "family": "ZNF354A",
+          "members_with_hit": 4,
+          "share": 0.015,
+          "expected_share": 0.0051,
+          "all_share": 0.0059,
+          "ratio": 2.94
+        },
+        {
+          "family": "ZNF407",
           "members_with_hit": 8,
           "share": 0.03,
+          "expected_share": 0.0148,
           "all_share": 0.0186,
-          "ratio": 1.63
+          "ratio": 2.05
         },
         {
-          "factor": "ZNF143",
-          "members_with_hit": 19,
-          "share": 0.072,
-          "all_share": 0.0465,
+          "family": "REST",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0065,
+          "all_share": 0.0082,
+          "ratio": 1.76
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 12,
+          "share": 0.045,
+          "expected_share": 0.0293,
+          "all_share": 0.0215,
           "ratio": 1.55
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "MEF2B",
-            "MEF2D"
-          ],
-          "members_with_both": 76,
-          "share": 0.288,
-          "expected": 25.8,
-          "ratio": 2.95
-        },
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 83,
-          "share": 0.314,
-          "expected": 32.24,
-          "ratio": 2.57
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "MEF2D"
-          ],
-          "members_with_both": 73,
-          "share": 0.277,
-          "expected": 32.46,
-          "ratio": 2.25
-        },
-        {
-          "factors": [
-            "MEF2D",
-            "ZNF460"
-          ],
-          "members_with_both": 75,
-          "share": 0.284,
-          "expected": 37.47,
-          "ratio": 2.0
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 1
     },
     "core.translation": {
       "members_placed": 452,
       "members": 1750,
-      "factors": [
+      "families": [
         {
-          "factor": "POU3F4",
-          "members_with_hit": 3,
-          "share": 0.007,
-          "all_share": 0.0006,
-          "ratio": 11.06
-        },
-        {
-          "factor": "ZNF143",
-          "members_with_hit": 45,
-          "share": 0.1,
-          "all_share": 0.0465,
-          "ratio": 2.14
-        },
-        {
-          "factor": "IRF9",
-          "members_with_hit": 7,
-          "share": 0.015,
-          "all_share": 0.0073,
-          "ratio": 2.12
-        },
-        {
-          "factor": "ZNF211",
+          "family": "ZNF211",
           "members_with_hit": 5,
           "share": 0.011,
+          "expected_share": 0.0053,
           "all_share": 0.0055,
-          "ratio": 2.01
+          "ratio": 2.1
         },
         {
-          "factor": "THAP11",
-          "members_with_hit": 54,
-          "share": 0.119,
-          "all_share": 0.0609,
-          "ratio": 1.96
+          "family": "ZNF143",
+          "members_with_hit": 45,
+          "share": 0.1,
+          "expected_share": 0.054,
+          "all_share": 0.0465,
+          "ratio": 1.84
         },
         {
-          "factor": "PAX7",
+          "family": "Paired plus homeo domain",
           "members_with_hit": 4,
           "share": 0.009,
+          "expected_share": 0.005,
           "all_share": 0.0047,
-          "ratio": 1.88
+          "ratio": 1.77
         },
         {
-          "factor": "IRF2",
-          "members_with_hit": 3,
-          "share": 0.007,
-          "all_share": 0.0036,
-          "ratio": 1.84
+          "family": "THAP-related factors",
+          "members_with_hit": 54,
+          "share": 0.119,
+          "expected_share": 0.0687,
+          "all_share": 0.0609,
+          "ratio": 1.74
+        },
+        {
+          "family": "ZNF814",
+          "members_with_hit": 6,
+          "share": 0.013,
+          "expected_share": 0.0087,
+          "all_share": 0.009,
+          "ratio": 1.52
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 175,
-          "share": 0.387,
-          "expected": 55.2,
-          "ratio": 3.17
-        },
-        {
-          "factors": [
-            "MEF2B",
-            "MEF2D"
-          ],
-          "members_with_both": 128,
-          "share": 0.283,
-          "expected": 44.16,
-          "ratio": 2.9
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "MEF2D"
-          ],
-          "members_with_both": 140,
-          "share": 0.31,
-          "expected": 55.58,
-          "ratio": 2.52
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "ZNF460"
-          ],
-          "members_with_both": 121,
-          "share": 0.268,
-          "expected": 52.89,
-          "ratio": 2.29
-        },
-        {
-          "factors": [
-            "MEF2D",
-            "ZNF460"
-          ],
-          "members_with_both": 141,
-          "share": 0.312,
-          "expected": 64.15,
-          "ratio": 2.2
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 2
     },
     "core.folding_proteostasis": {
       "members_placed": 266,
       "members": 290,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF251",
+          "family": "ZNF251",
           "members_with_hit": 7,
           "share": 0.026,
+          "expected_share": 0.0034,
           "all_share": 0.0033,
-          "ratio": 7.97
+          "ratio": 7.7
         },
         {
-          "factor": "TGIF1",
-          "members_with_hit": 5,
-          "share": 0.019,
-          "all_share": 0.0025,
-          "ratio": 7.52
-        },
-        {
-          "factor": "MLX",
-          "members_with_hit": 3,
-          "share": 0.011,
-          "all_share": 0.002,
-          "ratio": 5.64
-        },
-        {
-          "factor": "POU3F1",
-          "members_with_hit": 4,
-          "share": 0.015,
-          "all_share": 0.0044,
-          "ratio": 3.42
-        },
-        {
-          "factor": "ZNF146",
+          "family": "ZNF146",
           "members_with_hit": 7,
           "share": 0.026,
+          "expected_share": 0.0093,
           "all_share": 0.0094,
-          "ratio": 2.8
+          "ratio": 2.84
         },
         {
-          "factor": "RFX5",
-          "members_with_hit": 5,
-          "share": 0.019,
-          "all_share": 0.0073,
-          "ratio": 2.57
-        },
-        {
-          "factor": "PAX7",
+          "family": "Paired plus homeo domain",
           "members_with_hit": 3,
           "share": 0.011,
+          "expected_share": 0.0048,
           "all_share": 0.0047,
-          "ratio": 2.4
+          "ratio": 2.37
         },
         {
-          "factor": "DMRTB1",
+          "family": "DMRT factors",
           "members_with_hit": 7,
           "share": 0.026,
+          "expected_share": 0.0129,
           "all_share": 0.0123,
-          "ratio": 2.14
+          "ratio": 2.04
         },
         {
-          "factor": "ZNF814",
+          "family": "ZNF814",
           "members_with_hit": 5,
           "share": 0.019,
+          "expected_share": 0.0094,
           "all_share": 0.009,
-          "ratio": 2.09
+          "ratio": 2.0
         },
         {
-          "factor": "ZNF143",
+          "family": "ZNF143",
           "members_with_hit": 25,
           "share": 0.094,
+          "expected_share": 0.0509,
           "all_share": 0.0465,
-          "ratio": 2.02
+          "ratio": 1.85
         },
         {
-          "factor": "THAP11",
+          "family": "THAP-related factors",
           "members_with_hit": 31,
           "share": 0.117,
+          "expected_share": 0.066,
           "all_share": 0.0609,
-          "ratio": 1.91
+          "ratio": 1.77
         },
         {
-          "factor": "THRA",
+          "family": "Thyroid hormone receptor-related factors (NR1)",
           "members_with_hit": 9,
           "share": 0.034,
+          "expected_share": 0.0205,
           "all_share": 0.0201,
-          "ratio": 1.68
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 73,
-          "share": 0.274,
-          "expected": 32.48,
-          "ratio": 2.25
+          "ratio": 1.65
         },
         {
-          "factors": [
-            "MEF2A",
-            "MEF2D"
-          ],
-          "members_with_both": 69,
-          "share": 0.259,
-          "expected": 32.71,
-          "ratio": 2.11
+          "family": "RFX-related factors",
+          "members_with_hit": 17,
+          "share": 0.064,
+          "expected_share": 0.0409,
+          "all_share": 0.04,
+          "ratio": 1.56
+        },
+        {
+          "family": "Fos-related + Jun-related",
+          "members_with_hit": 16,
+          "share": 0.06,
+          "expected_share": 0.0389,
+          "all_share": 0.0378,
+          "ratio": 1.55
         }
-      ]
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
     },
     "core.degradation": {
       "members_placed": 1056,
       "members": 1258,
-      "factors": [
+      "families": [
         {
-          "factor": "HOXD12::ELK1",
+          "family": "Ets-related + HOX",
           "members_with_hit": 3,
           "share": 0.003,
-          "all_share": 0.0007,
-          "ratio": 4.06
+          "expected_share": 0.0011,
+          "all_share": 0.0009,
+          "ratio": 2.67
         },
         {
-          "factor": "IRF2",
-          "members_with_hit": 7,
-          "share": 0.007,
-          "all_share": 0.0036,
-          "ratio": 1.84
-        },
-        {
-          "factor": "ZNF143",
+          "family": "ZNF143",
           "members_with_hit": 83,
           "share": 0.079,
+          "expected_share": 0.0499,
           "all_share": 0.0465,
-          "ratio": 1.69
-        },
-        {
-          "factor": "IRF9",
-          "members_with_hit": 13,
-          "share": 0.012,
-          "all_share": 0.0073,
-          "ratio": 1.69
-        },
-        {
-          "factor": "NR3C2",
-          "members_with_hit": 5,
-          "share": 0.005,
-          "all_share": 0.0028,
-          "ratio": 1.69
-        },
-        {
-          "factor": "ETV2::FIGLA",
-          "members_with_hit": 10,
-          "share": 0.009,
-          "all_share": 0.0059,
-          "ratio": 1.61
-        },
-        {
-          "factor": "ZNF707",
-          "members_with_hit": 4,
-          "share": 0.004,
-          "all_share": 0.0025,
-          "ratio": 1.52
-        },
-        {
-          "factor": "NR3C1",
-          "members_with_hit": 4,
-          "share": 0.004,
-          "all_share": 0.0025,
-          "ratio": 1.52
+          "ratio": 1.58
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "MEF2B",
-            "MEF2D"
-          ],
-          "members_with_both": 274,
-          "share": 0.259,
-          "expected": 103.18,
-          "ratio": 2.66
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 359,
-          "share": 0.34,
-          "expected": 152.88,
-          "ratio": 2.35
-        },
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 280,
-          "share": 0.265,
-          "expected": 128.96,
-          "ratio": 2.17
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 303,
-          "share": 0.287,
-          "expected": 143.77,
-          "ratio": 2.11
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "core.dna_repair": {
       "members_placed": 581,
       "members": 665,
-      "factors": [
+      "families": [
         {
-          "factor": "IRF9",
-          "members_with_hit": 13,
-          "share": 0.022,
-          "all_share": 0.0073,
-          "ratio": 3.07
+          "family": "ZNF251",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0025,
+          "all_share": 0.0033,
+          "ratio": 2.07
         },
         {
-          "factor": "MYPOP",
+          "family": "Myb-SANT",
           "members_with_hit": 25,
           "share": 0.043,
+          "expected_share": 0.0258,
           "all_share": 0.0215,
-          "ratio": 2.0
-        },
-        {
-          "factor": "ESR1",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0026,
-          "ratio": 1.99
-        },
-        {
-          "factor": "IRF3",
-          "members_with_hit": 16,
-          "share": 0.028,
-          "all_share": 0.0151,
-          "ratio": 1.82
-        },
-        {
-          "factor": "IRF7",
-          "members_with_hit": 16,
-          "share": 0.028,
-          "all_share": 0.0159,
-          "ratio": 1.73
-        },
-        {
-          "factor": "ZNF251",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0033,
-          "ratio": 1.56
-        },
-        {
-          "factor": "POU2F2",
-          "members_with_hit": 41,
-          "share": 0.071,
-          "all_share": 0.0464,
-          "ratio": 1.52
-        },
-        {
-          "factor": "ZNF143",
-          "members_with_hit": 41,
-          "share": 0.071,
-          "all_share": 0.0465,
-          "ratio": 1.52
-        },
-        {
-          "factor": "POU1F1",
-          "members_with_hit": 40,
-          "share": 0.069,
-          "all_share": 0.0458,
-          "ratio": 1.5
+          "ratio": 1.67
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 186,
-          "share": 0.32,
-          "expected": 70.95,
-          "ratio": 2.62
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 1
     },
     "core.cell_cycle": {
       "members_placed": 1821,
       "members": 2107,
-      "factors": [
-        {
-          "factor": "ELK1::SREBF2",
-          "members_with_hit": 6,
-          "share": 0.003,
-          "all_share": 0.0016,
-          "ratio": 2.06
-        },
-        {
-          "factor": "ZNF143",
-          "members_with_hit": 131,
-          "share": 0.072,
-          "all_share": 0.0465,
-          "ratio": 1.55
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 485,
-          "share": 0.266,
-          "expected": 222.38,
-          "ratio": 2.18
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 560,
-          "share": 0.308,
-          "expected": 263.63,
-          "ratio": 2.12
-        }
-      ]
+      "families": [],
+      "operators": [],
+      "pairs_explained_by_gc": 2
     },
     "core.apoptosis": {
       "members_placed": 638,
       "members": 674,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF732",
+          "family": "ZNF732",
           "members_with_hit": 3,
           "share": 0.005,
+          "expected_share": 0.001,
           "all_share": 0.0009,
-          "ratio": 5.22
+          "ratio": 4.75
         },
         {
-          "factor": "ZIM3",
+          "family": "ZIM3",
           "members_with_hit": 5,
           "share": 0.008,
+          "expected_share": 0.0024,
           "all_share": 0.0023,
-          "ratio": 3.41
+          "ratio": 3.33
         },
         {
-          "factor": "IRF9",
-          "members_with_hit": 10,
-          "share": 0.016,
-          "all_share": 0.0073,
-          "ratio": 2.15
-        },
-        {
-          "factor": "TGIF2LX",
-          "members_with_hit": 4,
-          "share": 0.006,
-          "all_share": 0.0032,
-          "ratio": 1.96
-        },
-        {
-          "factor": "ZNF814",
+          "family": "ZNF814",
           "members_with_hit": 11,
           "share": 0.017,
+          "expected_share": 0.0096,
           "all_share": 0.009,
-          "ratio": 1.92
+          "ratio": 1.79
         },
         {
-          "factor": "ZNF707",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0025,
-          "ratio": 1.88
-        },
-        {
-          "factor": "ZNF816",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0027,
-          "ratio": 1.74
-        },
-        {
-          "factor": "FOXB1",
-          "members_with_hit": 6,
-          "share": 0.009,
-          "all_share": 0.0055,
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 5,
+          "share": 0.008,
+          "expected_share": 0.0046,
+          "all_share": 0.0047,
           "ratio": 1.71
         },
         {
-          "factor": "PAX7",
-          "members_with_hit": 5,
-          "share": 0.008,
-          "all_share": 0.0047,
-          "ratio": 1.67
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0028,
+          "all_share": 0.0025,
+          "ratio": 1.69
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 227,
-          "share": 0.356,
-          "expected": 92.37,
-          "ratio": 2.46
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 1
     },
     "core.energy": {
       "members_placed": 151,
       "members": 182,
-      "factors": [
+      "families": [
         {
-          "factor": "ZFP28",
+          "family": "ZNF226",
+          "members_with_hit": 3,
+          "share": 0.02,
+          "expected_share": 0.0075,
+          "all_share": 0.0078,
+          "ratio": 2.66
+        },
+        {
+          "family": "ZFP28",
           "members_with_hit": 4,
           "share": 0.026,
+          "expected_share": 0.0102,
           "all_share": 0.0102,
           "ratio": 2.6
         },
         {
-          "factor": "ZFP42",
+          "family": "ZFP42",
           "members_with_hit": 3,
           "share": 0.02,
+          "expected_share": 0.0086,
           "all_share": 0.0077,
-          "ratio": 2.58
+          "ratio": 2.32
         },
         {
-          "factor": "ZNF226",
-          "members_with_hit": 3,
-          "share": 0.02,
-          "all_share": 0.0078,
-          "ratio": 2.55
-        },
-        {
-          "factor": "ZNF510",
+          "family": "ZNF510",
           "members_with_hit": 4,
           "share": 0.026,
+          "expected_share": 0.0123,
           "all_share": 0.0123,
           "ratio": 2.15
         },
         {
-          "factor": "POU5F1::SOX2",
-          "members_with_hit": 4,
-          "share": 0.026,
-          "all_share": 0.0133,
-          "ratio": 1.99
-        },
-        {
-          "factor": "FOXQ1",
-          "members_with_hit": 12,
-          "share": 0.079,
-          "all_share": 0.041,
-          "ratio": 1.94
-        },
-        {
-          "factor": "FIZ1",
-          "members_with_hit": 4,
-          "share": 0.026,
-          "all_share": 0.0148,
-          "ratio": 1.79
-        },
-        {
-          "factor": "IRF7",
-          "members_with_hit": 4,
-          "share": 0.026,
-          "all_share": 0.0159,
-          "ratio": 1.67
-        },
-        {
-          "factor": "CREM",
+          "family": "CREB-related factors",
           "members_with_hit": 16,
           "share": 0.106,
+          "expected_share": 0.067,
           "all_share": 0.0666,
-          "ratio": 1.59
+          "ratio": 1.58
         },
         {
-          "factor": "ETV5::FIGLA",
+          "family": "ZNF721",
           "members_with_hit": 3,
           "share": 0.02,
-          "all_share": 0.0127,
-          "ratio": 1.56
-        },
-        {
-          "factor": "MAFK",
-          "members_with_hit": 8,
-          "share": 0.053,
-          "all_share": 0.0352,
-          "ratio": 1.51
-        },
-        {
-          "factor": "ZNF721",
-          "members_with_hit": 3,
-          "share": 0.02,
+          "expected_share": 0.0129,
           "all_share": 0.0132,
-          "ratio": 1.51
+          "ratio": 1.54
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "MEF2B",
-            "MEF2D"
-          ],
-          "members_with_both": 50,
-          "share": 0.331,
-          "expected": 14.75,
-          "ratio": 3.39
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "MEF2B"
-          ],
-          "members_with_both": 38,
-          "share": 0.252,
-          "expected": 12.16,
-          "ratio": 3.12
-        },
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 55,
-          "share": 0.364,
-          "expected": 18.44,
-          "ratio": 2.98
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "MEF2D"
-          ],
-          "members_with_both": 46,
-          "share": 0.305,
-          "expected": 18.57,
-          "ratio": 2.48
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "ZNF460"
-          ],
-          "members_with_both": 39,
-          "share": 0.258,
-          "expected": 17.67,
-          "ratio": 2.21
-        },
-        {
-          "factors": [
-            "MEF2D",
-            "ZNF460"
-          ],
-          "members_with_both": 44,
-          "share": 0.291,
-          "expected": 21.43,
-          "ratio": 2.05
-        },
-        {
-          "factors": [
-            "MEF2D",
-            "ZNF135"
-          ],
-          "members_with_both": 39,
-          "share": 0.258,
-          "expected": 19.38,
-          "ratio": 2.01
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 1
     },
     "core.cytoskeleton": {
       "members_placed": 2335,
       "members": 2388,
-      "factors": [
+      "families": [
         {
-          "factor": "TGIF2LY",
-          "members_with_hit": 4,
-          "share": 0.002,
-          "all_share": 0.0005,
-          "ratio": 3.43
-        },
-        {
-          "factor": "PKNOX1",
-          "members_with_hit": 14,
-          "share": 0.006,
-          "all_share": 0.0026,
-          "ratio": 2.31
-        },
-        {
-          "factor": "RFX5",
-          "members_with_hit": 39,
-          "share": 0.017,
-          "all_share": 0.0073,
-          "ratio": 2.29
-        },
-        {
-          "factor": "PRDM5",
+          "family": "PRDM5",
           "members_with_hit": 8,
           "share": 0.003,
+          "expected_share": 0.0016,
           "all_share": 0.0015,
-          "ratio": 2.28
+          "ratio": 2.12
         },
         {
-          "factor": "ZNF282",
-          "members_with_hit": 4,
-          "share": 0.002,
-          "all_share": 0.0008,
-          "ratio": 2.14
-        },
-        {
-          "factor": "ZNF16",
+          "family": "ZNF16",
           "members_with_hit": 11,
           "share": 0.005,
+          "expected_share": 0.0025,
           "all_share": 0.0023,
-          "ratio": 2.05
+          "ratio": 1.86
         },
         {
-          "factor": "ZSCAN2",
-          "members_with_hit": 6,
-          "share": 0.003,
-          "all_share": 0.0014,
-          "ratio": 1.84
-        },
-        {
-          "factor": "RFX2",
-          "members_with_hit": 21,
-          "share": 0.009,
-          "all_share": 0.0051,
-          "ratio": 1.76
-        },
-        {
-          "factor": "TGIF2LX",
-          "members_with_hit": 13,
-          "share": 0.006,
-          "all_share": 0.0032,
-          "ratio": 1.74
-        },
-        {
-          "factor": "MAFA",
-          "members_with_hit": 6,
-          "share": 0.003,
-          "all_share": 0.0015,
-          "ratio": 1.71
-        },
-        {
-          "factor": "ZNF85",
+          "family": "ZNF282",
           "members_with_hit": 4,
           "share": 0.002,
-          "all_share": 0.001,
+          "expected_share": 0.0009,
+          "all_share": 0.0008,
+          "ratio": 1.83
+        },
+        {
+          "family": "ZSCAN2",
+          "members_with_hit": 6,
+          "share": 0.003,
+          "expected_share": 0.0015,
+          "all_share": 0.0014,
           "ratio": 1.71
         },
         {
-          "factor": "RFX3",
-          "members_with_hit": 112,
-          "share": 0.048,
-          "all_share": 0.0301,
-          "ratio": 1.59
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 694,
-          "share": 0.297,
-          "expected": 338.04,
-          "ratio": 2.05
+          "family": "ZNF85",
+          "members_with_hit": 4,
+          "share": 0.002,
+          "expected_share": 0.0011,
+          "all_share": 0.001,
+          "ratio": 1.61
         },
         {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 636,
-          "share": 0.272,
-          "expected": 317.9,
-          "ratio": 2.0
+          "family": "RFX-related factors",
+          "members_with_hit": 147,
+          "share": 0.063,
+          "expected_share": 0.0416,
+          "all_share": 0.04,
+          "ratio": 1.51
         }
-      ]
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 2
     },
     "core.membrane_transport": {
       "members_placed": 1241,
       "members": 1416,
-      "factors": [
+      "families": [
         {
-          "factor": "REST",
+          "family": "REST",
           "members_with_hit": 21,
           "share": 0.017,
+          "expected_share": 0.0085,
           "all_share": 0.0082,
-          "ratio": 2.06
+          "ratio": 1.99
         },
         {
-          "factor": "ZNF623",
+          "family": "ZNF260",
+          "members_with_hit": 9,
+          "share": 0.007,
+          "expected_share": 0.0039,
+          "all_share": 0.0049,
+          "ratio": 1.85
+        },
+        {
+          "family": "ZNF623",
           "members_with_hit": 8,
           "share": 0.006,
+          "expected_share": 0.0037,
           "all_share": 0.0038,
-          "ratio": 1.7
+          "ratio": 1.73
         },
         {
-          "factor": "TGIF1",
-          "members_with_hit": 5,
-          "share": 0.004,
-          "all_share": 0.0025,
-          "ratio": 1.61
-        },
-        {
-          "factor": "PRDM5",
+          "family": "RXR-related receptors (NR2) + Thyroid hormone receptor-related factors (NR1)",
           "members_with_hit": 3,
           "share": 0.002,
-          "all_share": 0.0015,
-          "ratio": 1.61
+          "expected_share": 0.0015,
+          "all_share": 0.0014,
+          "ratio": 1.62
         }
       ],
-      "operators": []
+      "operators": [],
+      "pairs_explained_by_gc": 0
     },
     "core.chromatin_epigenome": {
       "members_placed": 884,
       "members": 1473,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF669",
+          "family": "ZNF669",
           "members_with_hit": 6,
           "share": 0.007,
+          "expected_share": 0.0005,
           "all_share": 0.0003,
-          "ratio": 22.62
+          "ratio": 13.5
         },
         {
-          "factor": "LMX1B",
-          "members_with_hit": 3,
-          "share": 0.003,
-          "all_share": 0.001,
-          "ratio": 3.39
-        },
-        {
-          "factor": "ZFP42",
+          "family": "ZFP42",
           "members_with_hit": 18,
           "share": 0.02,
+          "expected_share": 0.0083,
           "all_share": 0.0077,
-          "ratio": 2.64
+          "ratio": 2.47
         },
         {
-          "factor": "MLX",
-          "members_with_hit": 4,
-          "share": 0.005,
-          "all_share": 0.002,
-          "ratio": 2.26
-        },
-        {
-          "factor": "ELK1::SREBF2",
-          "members_with_hit": 3,
-          "share": 0.003,
-          "all_share": 0.0016,
-          "ratio": 2.12
-        },
-        {
-          "factor": "ONECUT1",
-          "members_with_hit": 13,
-          "share": 0.015,
-          "all_share": 0.0071,
-          "ratio": 2.07
-        },
-        {
-          "factor": "IRF9",
-          "members_with_hit": 11,
-          "share": 0.012,
-          "all_share": 0.0073,
-          "ratio": 1.7
-        },
-        {
-          "factor": "DMRTB1",
+          "family": "DMRT factors",
           "members_with_hit": 18,
           "share": 0.02,
+          "expected_share": 0.0121,
           "all_share": 0.0123,
-          "ratio": 1.66
+          "ratio": 1.68
         },
         {
-          "factor": "ATF7",
-          "members_with_hit": 15,
-          "share": 0.017,
-          "all_share": 0.011,
-          "ratio": 1.54
+          "family": "ZNF354A",
+          "members_with_hit": 7,
+          "share": 0.008,
+          "expected_share": 0.005,
+          "all_share": 0.0059,
+          "ratio": 1.57
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 331,
-          "share": 0.374,
-          "expected": 127.98,
-          "ratio": 2.59
-        },
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 226,
-          "share": 0.256,
-          "expected": 91.74,
-          "ratio": 2.46
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 283,
-          "share": 0.32,
-          "expected": 120.35,
-          "ratio": 2.35
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.pluripotency": {
       "members_placed": 73,
       "members": 75,
-      "factors": [
+      "families": [
         {
-          "factor": "THRA",
+          "family": "Thyroid hormone receptor-related factors (NR1)",
           "members_with_hit": 4,
           "share": 0.055,
+          "expected_share": 0.0224,
           "all_share": 0.0201,
-          "ratio": 2.73
+          "ratio": 2.44
         },
         {
-          "factor": "ZNF407",
-          "members_with_hit": 3,
-          "share": 0.041,
-          "all_share": 0.0186,
-          "ratio": 2.21
-        },
-        {
-          "factor": "RFX1",
+          "family": "ZBTB40",
           "members_with_hit": 4,
           "share": 0.055,
-          "all_share": 0.0271,
-          "ratio": 2.02
+          "expected_share": 0.0331,
+          "all_share": 0.0376,
+          "ratio": 1.66
         },
         {
-          "factor": "KLF9",
-          "members_with_hit": 31,
-          "share": 0.425,
-          "all_share": 0.2597,
-          "ratio": 1.64
-        },
-        {
-          "factor": "ZNF775",
-          "members_with_hit": 5,
-          "share": 0.068,
-          "all_share": 0.0434,
+          "family": "ZNF470",
+          "members_with_hit": 7,
+          "share": 0.096,
+          "expected_share": 0.0605,
+          "all_share": 0.0654,
           "ratio": 1.58
-        },
-        {
-          "factor": "ZNF93",
-          "members_with_hit": 38,
-          "share": 0.521,
-          "all_share": 0.3322,
-          "ratio": 1.57
-        },
-        {
-          "factor": "PRDM9",
-          "members_with_hit": 5,
-          "share": 0.068,
-          "all_share": 0.0442,
-          "ratio": 1.55
-        },
-        {
-          "factor": "ZNF131",
-          "members_with_hit": 35,
-          "share": 0.479,
-          "all_share": 0.3124,
-          "ratio": 1.53
-        },
-        {
-          "factor": "ZNF347",
-          "members_with_hit": 11,
-          "share": 0.151,
-          "all_share": 0.0985,
-          "ratio": 1.53
-        },
-        {
-          "factor": "RREB1",
-          "members_with_hit": 10,
-          "share": 0.137,
-          "all_share": 0.0904,
-          "ratio": 1.52
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 26,
-          "share": 0.356,
-          "expected": 7.58,
-          "ratio": 3.43
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 33,
-          "share": 0.452,
-          "expected": 10.57,
-          "ratio": 3.12
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 29,
-          "share": 0.397,
-          "expected": 9.94,
-          "ratio": 2.92
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.germ_layers": {
       "members_placed": 800,
       "members": 851,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF76",
-          "members_with_hit": 3,
-          "share": 0.004,
-          "all_share": 0.001,
-          "ratio": 3.75
+          "family": "ZNF8",
+          "members_with_hit": 4,
+          "share": 0.005,
+          "expected_share": 0.0013,
+          "all_share": 0.0031,
+          "ratio": 3.92
         },
         {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 15,
           "share": 0.019,
+          "expected_share": 0.0051,
           "all_share": 0.0059,
-          "ratio": 3.18
+          "ratio": 3.71
         },
         {
-          "factor": "ZNF707",
+          "family": "ZNF76",
+          "members_with_hit": 3,
+          "share": 0.004,
+          "expected_share": 0.0011,
+          "all_share": 0.001,
+          "ratio": 3.51
+        },
+        {
+          "family": "ZNF260",
           "members_with_hit": 4,
           "share": 0.005,
+          "expected_share": 0.0018,
+          "all_share": 0.0049,
+          "ratio": 2.73
+        },
+        {
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 4,
+          "share": 0.005,
+          "expected_share": 0.0028,
           "all_share": 0.0025,
-          "ratio": 2.0
+          "ratio": 1.75
         },
         {
-          "factor": "GSC::TBX21",
+          "family": "ZNF707",
           "members_with_hit": 4,
           "share": 0.005,
+          "expected_share": 0.0033,
           "all_share": 0.0025,
-          "ratio": 2.0
-        },
-        {
-          "factor": "ETV5::FIGLA",
-          "members_with_hit": 20,
-          "share": 0.025,
-          "all_share": 0.0127,
-          "ratio": 1.97
-        },
-        {
-          "factor": "ZNF596",
-          "members_with_hit": 128,
-          "share": 0.16,
-          "all_share": 0.0896,
-          "ratio": 1.79
-        },
-        {
-          "factor": "ZNF8",
-          "members_with_hit": 4,
-          "share": 0.005,
-          "all_share": 0.0031,
-          "ratio": 1.61
-        },
-        {
-          "factor": "ZNF865",
-          "members_with_hit": 180,
-          "share": 0.225,
-          "all_share": 0.1403,
-          "ratio": 1.6
-        },
-        {
-          "factor": "ZSCAN4",
-          "members_with_hit": 60,
-          "share": 0.075,
-          "all_share": 0.0474,
-          "ratio": 1.58
-        },
-        {
-          "factor": "ZNF93",
-          "members_with_hit": 415,
-          "share": 0.519,
-          "all_share": 0.3322,
-          "ratio": 1.56
-        },
-        {
-          "factor": "ZNF775",
-          "members_with_hit": 53,
-          "share": 0.066,
-          "all_share": 0.0434,
           "ratio": 1.53
-        },
-        {
-          "factor": "ZNF131",
-          "members_with_hit": 380,
-          "share": 0.475,
-          "all_share": 0.3124,
-          "ratio": 1.52
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 261,
-          "share": 0.326,
-          "expected": 83.02,
-          "ratio": 3.14
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 363,
-          "share": 0.454,
-          "expected": 115.82,
-          "ratio": 3.13
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 319,
-          "share": 0.399,
-          "expected": 108.92,
-          "ratio": 2.93
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.axes": {
       "members_placed": 429,
       "members": 432,
-      "factors": [
+      "families": [
         {
-          "factor": "RFX2",
-          "members_with_hit": 6,
-          "share": 0.014,
-          "all_share": 0.0051,
-          "ratio": 2.74
-        },
-        {
-          "factor": "ZNF816",
-          "members_with_hit": 3,
-          "share": 0.007,
-          "all_share": 0.0027,
-          "ratio": 2.59
-        },
-        {
-          "factor": "POU4F2",
-          "members_with_hit": 8,
-          "share": 0.019,
-          "all_share": 0.0086,
-          "ratio": 2.17
-        },
-        {
-          "factor": "ZNF814",
-          "members_with_hit": 8,
-          "share": 0.019,
-          "all_share": 0.009,
-          "ratio": 2.07
-        },
-        {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 5,
           "share": 0.012,
+          "expected_share": 0.005,
           "all_share": 0.0059,
-          "ratio": 1.98
+          "ratio": 2.35
         },
         {
-          "factor": "PAX7",
+          "family": "Paired plus homeo domain",
           "members_with_hit": 4,
           "share": 0.009,
+          "expected_share": 0.0044,
           "all_share": 0.0047,
-          "ratio": 1.98
+          "ratio": 2.1
         },
         {
-          "factor": "ZNF596",
-          "members_with_hit": 71,
-          "share": 0.166,
-          "all_share": 0.0896,
-          "ratio": 1.85
+          "family": "ZNF816",
+          "members_with_hit": 3,
+          "share": 0.007,
+          "expected_share": 0.0041,
+          "all_share": 0.0027,
+          "ratio": 1.71
         },
         {
-          "factor": "ETV5::FIGLA",
-          "members_with_hit": 10,
-          "share": 0.023,
-          "all_share": 0.0127,
-          "ratio": 1.84
+          "family": "ZNF234",
+          "members_with_hit": 5,
+          "share": 0.012,
+          "expected_share": 0.0069,
+          "all_share": 0.0076,
+          "ratio": 1.7
         },
         {
-          "factor": "ZNF93",
-          "members_with_hit": 235,
-          "share": 0.548,
-          "all_share": 0.3322,
-          "ratio": 1.65
-        },
-        {
-          "factor": "ZSCAN4",
-          "members_with_hit": 33,
-          "share": 0.077,
-          "all_share": 0.0474,
-          "ratio": 1.62
-        },
-        {
-          "factor": "ZNF865",
-          "members_with_hit": 97,
-          "share": 0.226,
-          "all_share": 0.1403,
-          "ratio": 1.61
-        },
-        {
-          "factor": "TFAP4::FLI1",
-          "members_with_hit": 4,
-          "share": 0.009,
-          "all_share": 0.0058,
-          "ratio": 1.61
+          "family": "ZNF814",
+          "members_with_hit": 8,
+          "share": 0.019,
+          "expected_share": 0.0117,
+          "all_share": 0.009,
+          "ratio": 1.6
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 150,
-          "share": 0.35,
-          "expected": 44.52,
-          "ratio": 3.37
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 205,
-          "share": 0.478,
-          "expected": 62.11,
-          "ratio": 3.3
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 170,
-          "share": 0.396,
-          "expected": 58.41,
-          "ratio": 2.91
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.segmentation": {
       "members_placed": 265,
       "members": 266,
-      "factors": [
+      "families": [
         {
-          "factor": "RFX2",
-          "members_with_hit": 6,
-          "share": 0.023,
-          "all_share": 0.0051,
-          "ratio": 4.44
-        },
-        {
-          "factor": "ZNF816",
+          "family": "ZNF816",
           "members_with_hit": 3,
           "share": 0.011,
+          "expected_share": 0.0041,
           "all_share": 0.0027,
-          "ratio": 4.19
+          "ratio": 2.79
         },
         {
-          "factor": "POU4F2",
-          "members_with_hit": 6,
-          "share": 0.023,
-          "all_share": 0.0086,
-          "ratio": 2.63
-        },
-        {
-          "factor": "POU2F1::SOX2",
-          "members_with_hit": 7,
-          "share": 0.026,
-          "all_share": 0.0104,
-          "ratio": 2.54
-        },
-        {
-          "factor": "POU5F1::SOX2",
-          "members_with_hit": 7,
-          "share": 0.026,
-          "all_share": 0.0133,
-          "ratio": 1.99
-        },
-        {
-          "factor": "POU1F1",
-          "members_with_hit": 24,
-          "share": 0.091,
-          "all_share": 0.0458,
-          "ratio": 1.98
-        },
-        {
-          "factor": "ZNF596",
-          "members_with_hit": 46,
-          "share": 0.174,
-          "all_share": 0.0896,
-          "ratio": 1.94
-        },
-        {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 3,
           "share": 0.011,
+          "expected_share": 0.005,
           "all_share": 0.0059,
-          "ratio": 1.92
+          "ratio": 2.29
         },
         {
-          "factor": "ZNF407",
-          "members_with_hit": 9,
-          "share": 0.034,
-          "all_share": 0.0186,
-          "ratio": 1.83
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 11,
+          "share": 0.042,
+          "expected_share": 0.0186,
+          "all_share": 0.0216,
+          "ratio": 2.23
         },
         {
-          "factor": "RFX3",
-          "members_with_hit": 13,
-          "share": 0.049,
-          "all_share": 0.0301,
-          "ratio": 1.63
-        },
-        {
-          "factor": "ZNF131",
-          "members_with_hit": 132,
-          "share": 0.498,
-          "all_share": 0.3124,
-          "ratio": 1.59
-        },
-        {
-          "factor": "ZNF93",
-          "members_with_hit": 139,
-          "share": 0.525,
-          "all_share": 0.3322,
-          "ratio": 1.58
+          "family": "ZNF234",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0067,
+          "all_share": 0.0076,
+          "ratio": 1.68
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 88,
-          "share": 0.332,
-          "expected": 27.5,
-          "ratio": 3.2
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 122,
-          "share": 0.46,
-          "expected": 38.36,
-          "ratio": 3.18
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 106,
-          "share": 0.4,
-          "expected": 36.08,
-          "ratio": 2.94
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.signalling_toolkit": {
       "members_placed": 1973,
       "members": 2185,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF732",
+          "family": "ZNF732",
           "members_with_hit": 5,
           "share": 0.003,
+          "expected_share": 0.0011,
           "all_share": 0.0009,
-          "ratio": 2.82
+          "ratio": 2.28
         },
         {
-          "factor": "LMX1B",
-          "members_with_hit": 5,
-          "share": 0.003,
-          "all_share": 0.001,
-          "ratio": 2.53
-        },
-        {
-          "factor": "ZNF85",
+          "family": "ZNF85",
           "members_with_hit": 4,
           "share": 0.002,
+          "expected_share": 0.001,
           "all_share": 0.001,
-          "ratio": 2.03
+          "ratio": 1.98
         },
         {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 18,
           "share": 0.009,
+          "expected_share": 0.0052,
           "all_share": 0.0059,
-          "ratio": 1.55
+          "ratio": 1.75
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 793,
-          "share": 0.402,
-          "expected": 285.64,
-          "ratio": 2.78
-        },
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 550,
-          "share": 0.279,
-          "expected": 204.76,
-          "ratio": 2.69
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 679,
-          "share": 0.344,
-          "expected": 268.61,
-          "ratio": 2.53
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.organ_heart": {
       "members_placed": 384,
       "members": 399,
-      "factors": [
+      "families": [
         {
-          "factor": "PRDM5",
+          "family": "PRDM5",
           "members_with_hit": 3,
           "share": 0.008,
+          "expected_share": 0.0017,
           "all_share": 0.0015,
-          "ratio": 5.21
+          "ratio": 4.49
         },
         {
-          "factor": "NR3C1",
-          "members_with_hit": 4,
-          "share": 0.01,
-          "all_share": 0.0025,
-          "ratio": 4.17
-        },
-        {
-          "factor": "NR3C2",
-          "members_with_hit": 4,
-          "share": 0.01,
-          "all_share": 0.0028,
-          "ratio": 3.72
-        },
-        {
-          "factor": "ZNF707",
-          "members_with_hit": 3,
-          "share": 0.008,
-          "all_share": 0.0025,
-          "ratio": 3.12
-        },
-        {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 6,
           "share": 0.016,
+          "expected_share": 0.0053,
           "all_share": 0.0059,
-          "ratio": 2.65
+          "ratio": 2.97
         },
         {
-          "factor": "PRDM9",
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.008,
+          "expected_share": 0.0033,
+          "all_share": 0.0025,
+          "ratio": 2.33
+        },
+        {
+          "family": "PRDM9",
           "members_with_hit": 40,
           "share": 0.104,
+          "expected_share": 0.0605,
           "all_share": 0.0442,
-          "ratio": 2.36
+          "ratio": 1.72
         },
         {
-          "factor": "POU4F2",
-          "members_with_hit": 7,
-          "share": 0.018,
-          "all_share": 0.0086,
-          "ratio": 2.12
+          "family": "Steroid hormone receptors (NR3)",
+          "members_with_hit": 5,
+          "share": 0.013,
+          "expected_share": 0.0076,
+          "all_share": 0.0057,
+          "ratio": 1.72
         },
         {
-          "factor": "POU5F1::SOX2",
-          "members_with_hit": 10,
-          "share": 0.026,
-          "all_share": 0.0133,
-          "ratio": 1.96
-        },
-        {
-          "factor": "ZNF596",
-          "members_with_hit": 62,
-          "share": 0.161,
-          "all_share": 0.0896,
-          "ratio": 1.8
-        },
-        {
-          "factor": "ZNF814",
+          "family": "MECOM",
           "members_with_hit": 6,
           "share": 0.016,
-          "all_share": 0.009,
-          "ratio": 1.74
-        },
-        {
-          "factor": "MECOM",
-          "members_with_hit": 6,
-          "share": 0.016,
+          "expected_share": 0.0099,
           "all_share": 0.0095,
-          "ratio": 1.64
+          "ratio": 1.58
         },
         {
-          "factor": "ZNF865",
-          "members_with_hit": 86,
-          "share": 0.224,
-          "all_share": 0.1403,
-          "ratio": 1.6
+          "family": "ZNF510",
+          "members_with_hit": 6,
+          "share": 0.016,
+          "expected_share": 0.0104,
+          "all_share": 0.0123,
+          "ratio": 1.5
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 120,
-          "share": 0.312,
-          "expected": 39.85,
-          "ratio": 3.01
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 164,
-          "share": 0.427,
-          "expected": 55.59,
-          "ratio": 2.95
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 143,
-          "share": 0.372,
-          "expected": 52.28,
-          "ratio": 2.74
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.organ_nervous": {
       "members_placed": 1750,
       "members": 1810,
-      "factors": [
+      "families": [
         {
-          "factor": "MTF1",
+          "family": "MTF1",
           "members_with_hit": 5,
           "share": 0.003,
+          "expected_share": 0.0007,
           "all_share": 0.0005,
-          "ratio": 5.71
+          "ratio": 4.33
         },
         {
-          "factor": "ZNF354A",
+          "family": "ZNF8",
+          "members_with_hit": 5,
+          "share": 0.003,
+          "expected_share": 0.0012,
+          "all_share": 0.0031,
+          "ratio": 2.32
+        },
+        {
+          "family": "ZNF354A",
           "members_with_hit": 20,
           "share": 0.011,
+          "expected_share": 0.0054,
           "all_share": 0.0059,
-          "ratio": 1.94
+          "ratio": 2.11
         },
         {
-          "factor": "REST",
-          "members_with_hit": 27,
-          "share": 0.015,
-          "all_share": 0.0082,
-          "ratio": 1.88
-        },
-        {
-          "factor": "ZNF707",
-          "members_with_hit": 8,
-          "share": 0.005,
-          "all_share": 0.0025,
-          "ratio": 1.83
-        },
-        {
-          "factor": "ZNF76",
+          "family": "ZNF76",
           "members_with_hit": 3,
           "share": 0.002,
+          "expected_share": 0.001,
           "all_share": 0.001,
-          "ratio": 1.71
-        },
-        {
-          "factor": "ERF::NHLH1",
-          "members_with_hit": 3,
-          "share": 0.002,
-          "all_share": 0.001,
-          "ratio": 1.71
-        },
-        {
-          "factor": "ETV5::FIGLA",
-          "members_with_hit": 36,
-          "share": 0.021,
-          "all_share": 0.0127,
-          "ratio": 1.62
-        },
-        {
-          "factor": "ZNF596",
-          "members_with_hit": 250,
-          "share": 0.143,
-          "all_share": 0.0896,
-          "ratio": 1.59
-        },
-        {
-          "factor": "ZSCAN4",
-          "members_with_hit": 131,
-          "share": 0.075,
-          "all_share": 0.0474,
-          "ratio": 1.58
-        },
-        {
-          "factor": "ZFP42",
-          "members_with_hit": 21,
-          "share": 0.012,
-          "all_share": 0.0077,
-          "ratio": 1.56
-        },
-        {
-          "factor": "ZNF865",
-          "members_with_hit": 374,
-          "share": 0.214,
-          "all_share": 0.1403,
-          "ratio": 1.52
+          "ratio": 1.65
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 756,
-          "share": 0.432,
-          "expected": 253.35,
-          "ratio": 2.98
-        },
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 537,
-          "share": 0.307,
-          "expected": 181.61,
-          "ratio": 2.96
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 656,
-          "share": 0.375,
-          "expected": 238.25,
-          "ratio": 2.75
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.organ_eye": {
       "members_placed": 499,
       "members": 546,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF816",
+          "family": "ZNF816",
           "members_with_hit": 5,
           "share": 0.01,
+          "expected_share": 0.0037,
           "all_share": 0.0027,
-          "ratio": 3.71
+          "ratio": 2.74
         },
         {
-          "factor": "REST",
+          "family": "REST",
           "members_with_hit": 12,
           "share": 0.024,
+          "expected_share": 0.0106,
           "all_share": 0.0082,
-          "ratio": 2.93
+          "ratio": 2.27
         },
         {
-          "factor": "ZNF707",
-          "members_with_hit": 3,
-          "share": 0.006,
-          "all_share": 0.0025,
-          "ratio": 2.4
-        },
-        {
-          "factor": "GSC::TBX21",
-          "members_with_hit": 3,
-          "share": 0.006,
-          "all_share": 0.0025,
-          "ratio": 2.4
-        },
-        {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 6,
           "share": 0.012,
+          "expected_share": 0.0054,
           "all_share": 0.0059,
-          "ratio": 2.04
+          "ratio": 2.22
         },
         {
-          "factor": "ZSCAN4",
-          "members_with_hit": 45,
-          "share": 0.09,
-          "all_share": 0.0474,
-          "ratio": 1.9
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 3,
+          "share": 0.006,
+          "expected_share": 0.0027,
+          "all_share": 0.0025,
+          "ratio": 2.22
         },
         {
-          "factor": "ZNF226",
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.006,
+          "expected_share": 0.0032,
+          "all_share": 0.0025,
+          "ratio": 1.88
+        },
+        {
+          "family": "ZNF226",
           "members_with_hit": 7,
           "share": 0.014,
+          "expected_share": 0.008,
           "all_share": 0.0078,
-          "ratio": 1.8
-        },
-        {
-          "factor": "ZNF775",
-          "members_with_hit": 38,
-          "share": 0.076,
-          "all_share": 0.0434,
           "ratio": 1.75
         },
         {
-          "factor": "ZNF596",
-          "members_with_hit": 73,
-          "share": 0.146,
-          "all_share": 0.0896,
+          "family": "ZNF510",
+          "members_with_hit": 9,
+          "share": 0.018,
+          "expected_share": 0.0111,
+          "all_share": 0.0123,
           "ratio": 1.63
         },
         {
-          "factor": "ZNF93",
-          "members_with_hit": 255,
-          "share": 0.511,
-          "all_share": 0.3322,
-          "ratio": 1.54
-        },
-        {
-          "factor": "MAFK",
-          "members_with_hit": 27,
-          "share": 0.054,
-          "all_share": 0.0352,
-          "ratio": 1.54
-        },
-        {
-          "factor": "ZNF865",
-          "members_with_hit": 107,
-          "share": 0.214,
-          "all_share": 0.1403,
-          "ratio": 1.53
+          "family": "ZSCAN4",
+          "members_with_hit": 45,
+          "share": 0.09,
+          "expected_share": 0.0579,
+          "all_share": 0.0474,
+          "ratio": 1.56
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 225,
-          "share": 0.451,
-          "expected": 72.24,
-          "ratio": 3.11
-        },
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 157,
-          "share": 0.315,
-          "expected": 51.79,
-          "ratio": 3.03
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 192,
-          "share": 0.385,
-          "expected": 67.94,
-          "ratio": 2.83
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.organ_endoderm_gut": {
       "members_placed": 242,
       "members": 245,
-      "factors": [
+      "families": [
         {
-          "factor": "TFAP4::FLI1",
-          "members_with_hit": 5,
-          "share": 0.021,
-          "all_share": 0.0058,
-          "ratio": 3.56
-        },
-        {
-          "factor": "IRF2",
-          "members_with_hit": 3,
-          "share": 0.012,
-          "all_share": 0.0036,
-          "ratio": 3.44
-        },
-        {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 4,
           "share": 0.017,
+          "expected_share": 0.0053,
           "all_share": 0.0059,
-          "ratio": 2.8
+          "ratio": 3.14
         },
         {
-          "factor": "ZNF226",
-          "members_with_hit": 5,
-          "share": 0.021,
-          "all_share": 0.0078,
-          "ratio": 2.65
-        },
-        {
-          "factor": "PAX7",
+          "family": "Paired plus homeo domain",
           "members_with_hit": 3,
           "share": 0.012,
+          "expected_share": 0.0046,
           "all_share": 0.0047,
-          "ratio": 2.64
+          "ratio": 2.71
         },
         {
-          "factor": "EWSR1-FLI1",
-          "members_with_hit": 9,
-          "share": 0.037,
-          "all_share": 0.0155,
-          "ratio": 2.4
-        },
-        {
-          "factor": "ZNF814",
-          "members_with_hit": 5,
-          "share": 0.021,
-          "all_share": 0.009,
-          "ratio": 2.3
-        },
-        {
-          "factor": "ATF7",
-          "members_with_hit": 5,
-          "share": 0.021,
-          "all_share": 0.011,
-          "ratio": 1.88
-        },
-        {
-          "factor": "POU5F1::SOX2",
+          "family": "Ets-related + bHLH-ZIP",
           "members_with_hit": 6,
           "share": 0.025,
-          "all_share": 0.0133,
-          "ratio": 1.86
+          "expected_share": 0.0095,
+          "all_share": 0.0076,
+          "ratio": 2.62
         },
         {
-          "factor": "POU2F2",
-          "members_with_hit": 19,
-          "share": 0.079,
-          "all_share": 0.0464,
-          "ratio": 1.69
-        },
-        {
-          "factor": "ZNF596",
-          "members_with_hit": 36,
-          "share": 0.149,
-          "all_share": 0.0896,
-          "ratio": 1.66
-        },
-        {
-          "factor": "ETV5::FIGLA",
+          "family": "ZNF226",
           "members_with_hit": 5,
           "share": 0.021,
-          "all_share": 0.0127,
-          "ratio": 1.63
+          "expected_share": 0.008,
+          "all_share": 0.0078,
+          "ratio": 2.59
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 9,
+          "share": 0.037,
+          "expected_share": 0.0195,
+          "all_share": 0.0216,
+          "ratio": 1.91
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 4,
+          "share": 0.017,
+          "expected_share": 0.0087,
+          "all_share": 0.0102,
+          "ratio": 1.9
+        },
+        {
+          "family": "ZNF814",
+          "members_with_hit": 5,
+          "share": 0.021,
+          "expected_share": 0.0115,
+          "all_share": 0.009,
+          "ratio": 1.8
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 4,
+          "share": 0.017,
+          "expected_share": 0.0108,
+          "all_share": 0.0123,
+          "ratio": 1.54
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 75,
-          "share": 0.31,
-          "expected": 25.11,
-          "ratio": 2.99
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 93,
-          "share": 0.384,
-          "expected": 32.95,
-          "ratio": 2.82
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 93,
-          "share": 0.384,
-          "expected": 35.04,
-          "ratio": 2.65
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.organ_kidney_urogenital": {
       "members_placed": 314,
       "members": 317,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF814",
+          "family": "ZNF814",
           "members_with_hit": 8,
           "share": 0.025,
+          "expected_share": 0.0112,
           "all_share": 0.009,
-          "ratio": 2.83
+          "ratio": 2.28
         },
         {
-          "factor": "PRDM9",
-          "members_with_hit": 31,
-          "share": 0.099,
-          "all_share": 0.0442,
-          "ratio": 2.23
-        },
-        {
-          "factor": "TFAP4::FLI1",
-          "members_with_hit": 4,
-          "share": 0.013,
-          "all_share": 0.0058,
-          "ratio": 2.2
-        },
-        {
-          "factor": "ETV5::FIGLA",
-          "members_with_hit": 8,
-          "share": 0.025,
-          "all_share": 0.0127,
-          "ratio": 2.01
-        },
-        {
-          "factor": "MECOM",
+          "family": "MECOM",
           "members_with_hit": 6,
           "share": 0.019,
+          "expected_share": 0.0097,
           "all_share": 0.0095,
-          "ratio": 2.01
+          "ratio": 1.98
         },
         {
-          "factor": "ZNF596",
-          "members_with_hit": 56,
-          "share": 0.178,
-          "all_share": 0.0896,
-          "ratio": 1.99
-        },
-        {
-          "factor": "DMRTB1",
+          "family": "DMRT factors",
           "members_with_hit": 7,
           "share": 0.022,
+          "expected_share": 0.0122,
           "all_share": 0.0123,
-          "ratio": 1.81
+          "ratio": 1.83
         },
         {
-          "factor": "KLF17",
-          "members_with_hit": 30,
-          "share": 0.096,
-          "all_share": 0.0573,
+          "family": "PRDM9",
+          "members_with_hit": 31,
+          "share": 0.099,
+          "expected_share": 0.0582,
+          "all_share": 0.0442,
+          "ratio": 1.7
+        },
+        {
+          "family": "Ets-related + bHLH-ZIP",
+          "members_with_hit": 5,
+          "share": 0.016,
+          "expected_share": 0.0096,
+          "all_share": 0.0076,
           "ratio": 1.67
         },
         {
-          "factor": "ZNF131",
-          "members_with_hit": 151,
-          "share": 0.481,
-          "all_share": 0.3124,
-          "ratio": 1.54
-        },
-        {
-          "factor": "RREB1",
-          "members_with_hit": 43,
-          "share": 0.137,
-          "all_share": 0.0904,
-          "ratio": 1.51
+          "family": "ZNF596",
+          "members_with_hit": 56,
+          "share": 0.178,
+          "expected_share": 0.113,
+          "all_share": 0.0896,
+          "ratio": 1.58
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 98,
-          "share": 0.312,
-          "expected": 32.59,
-          "ratio": 3.01
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 135,
-          "share": 0.43,
-          "expected": 45.46,
-          "ratio": 2.97
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 118,
-          "share": 0.376,
-          "expected": 42.75,
-          "ratio": 2.76
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.organ_musculoskeletal": {
       "members_placed": 596,
       "members": 604,
-      "factors": [
+      "families": [
         {
-          "factor": "NR3C1",
-          "members_with_hit": 4,
-          "share": 0.007,
-          "all_share": 0.0025,
-          "ratio": 2.68
-        },
-        {
-          "factor": "ZNF814",
+          "family": "ZNF814",
           "members_with_hit": 14,
           "share": 0.023,
+          "expected_share": 0.0105,
           "all_share": 0.009,
-          "ratio": 2.61
+          "ratio": 2.23
         },
         {
-          "factor": "NR3C2",
+          "family": "ZNF623",
           "members_with_hit": 4,
           "share": 0.007,
-          "all_share": 0.0028,
-          "ratio": 2.4
-        },
-        {
-          "factor": "ZNF707",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0025,
+          "expected_share": 0.0033,
+          "all_share": 0.0038,
           "ratio": 2.01
         },
         {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 7,
           "share": 0.012,
+          "expected_share": 0.006,
           "all_share": 0.0059,
-          "ratio": 1.99
+          "ratio": 1.97
         },
         {
-          "factor": "ZNF816",
+          "family": "ZNF707",
           "members_with_hit": 3,
           "share": 0.005,
-          "all_share": 0.0027,
-          "ratio": 1.86
+          "expected_share": 0.0029,
+          "all_share": 0.0025,
+          "ratio": 1.75
         },
         {
-          "factor": "PAX7",
+          "family": "Paired plus homeo domain",
           "members_with_hit": 5,
           "share": 0.008,
+          "expected_share": 0.0049,
           "all_share": 0.0047,
-          "ratio": 1.78
+          "ratio": 1.7
         },
         {
-          "factor": "ZNF623",
-          "members_with_hit": 4,
-          "share": 0.007,
-          "all_share": 0.0038,
-          "ratio": 1.77
+          "family": "ZNF510",
+          "members_with_hit": 10,
+          "share": 0.017,
+          "expected_share": 0.0106,
+          "all_share": 0.0123,
+          "ratio": 1.58
         },
         {
-          "factor": "RREB1",
-          "members_with_hit": 94,
-          "share": 0.158,
-          "all_share": 0.0904,
-          "ratio": 1.74
-        },
-        {
-          "factor": "ZNF596",
-          "members_with_hit": 89,
-          "share": 0.149,
-          "all_share": 0.0896,
-          "ratio": 1.67
-        },
-        {
-          "factor": "ZSCAN4",
-          "members_with_hit": 46,
-          "share": 0.077,
-          "all_share": 0.0474,
-          "ratio": 1.63
-        },
-        {
-          "factor": "MECOM",
+          "family": "MECOM",
           "members_with_hit": 9,
           "share": 0.015,
+          "expected_share": 0.0098,
           "all_share": 0.0095,
-          "ratio": 1.59
+          "ratio": 1.54
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 174,
-          "share": 0.292,
-          "expected": 61.85,
-          "ratio": 2.81
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 242,
-          "share": 0.406,
-          "expected": 86.28,
-          "ratio": 2.8
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 212,
-          "share": 0.356,
-          "expected": 81.14,
-          "ratio": 2.61
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "blueprint.organ_blood_immune": {
       "members_placed": 483,
       "members": 511,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF354A",
+          "family": "ZNF354A",
           "members_with_hit": 7,
           "share": 0.014,
+          "expected_share": 0.0056,
           "all_share": 0.0059,
-          "ratio": 2.46
+          "ratio": 2.58
         },
         {
-          "factor": "IRF2",
-          "members_with_hit": 4,
-          "share": 0.008,
-          "all_share": 0.0036,
-          "ratio": 2.3
-        },
-        {
-          "factor": "ZNF816",
+          "family": "ZNF816",
           "members_with_hit": 3,
           "share": 0.006,
+          "expected_share": 0.0031,
           "all_share": 0.0027,
-          "ratio": 2.3
-        },
-        {
-          "factor": "IRF9",
-          "members_with_hit": 8,
-          "share": 0.017,
-          "all_share": 0.0073,
-          "ratio": 2.27
-        },
-        {
-          "factor": "POU4F2",
-          "members_with_hit": 9,
-          "share": 0.019,
-          "all_share": 0.0086,
-          "ratio": 2.17
-        },
-        {
-          "factor": "IRF7",
-          "members_with_hit": 12,
-          "share": 0.025,
-          "all_share": 0.0159,
-          "ratio": 1.56
+          "ratio": 2.02
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 143,
-          "share": 0.296,
-          "expected": 65.76,
-          "ratio": 2.17
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 143,
-          "share": 0.296,
-          "expected": 69.93,
-          "ratio": 2.05
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "MEF2D"
-          ],
-          "members_with_both": 122,
-          "share": 0.253,
-          "expected": 59.39,
-          "ratio": 2.05
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 2
     },
     "blueprint.organ_skin": {
       "members_placed": 237,
       "members": 238,
-      "factors": [
+      "families": [
         {
-          "factor": "ZSCAN2",
+          "family": "ZSCAN2",
           "members_with_hit": 4,
           "share": 0.017,
+          "expected_share": 0.0015,
           "all_share": 0.0014,
-          "ratio": 12.06
+          "ratio": 11.28
         },
         {
-          "factor": "ZNF211",
+          "family": "ZNF211",
           "members_with_hit": 8,
           "share": 0.034,
+          "expected_share": 0.0066,
           "all_share": 0.0055,
-          "ratio": 6.14
+          "ratio": 5.11
         },
         {
-          "factor": "ZNF234",
-          "members_with_hit": 6,
-          "share": 0.025,
-          "all_share": 0.0076,
-          "ratio": 3.33
-        },
-        {
-          "factor": "DMRTB1",
-          "members_with_hit": 8,
-          "share": 0.034,
-          "all_share": 0.0123,
-          "ratio": 2.74
-        },
-        {
-          "factor": "ZNF226",
-          "members_with_hit": 5,
-          "share": 0.021,
-          "all_share": 0.0078,
-          "ratio": 2.7
-        },
-        {
-          "factor": "ZNF146",
-          "members_with_hit": 6,
-          "share": 0.025,
-          "all_share": 0.0094,
-          "ratio": 2.69
-        },
-        {
-          "factor": "ZNF260",
+          "family": "ZNF260",
           "members_with_hit": 3,
           "share": 0.013,
+          "expected_share": 0.0033,
           "all_share": 0.0049,
-          "ratio": 2.58
+          "ratio": 3.81
         },
         {
-          "factor": "ZFP28",
+          "family": "ZNF146",
+          "members_with_hit": 6,
+          "share": 0.025,
+          "expected_share": 0.0082,
+          "all_share": 0.0094,
+          "ratio": 3.09
+        },
+        {
+          "family": "ZNF234",
+          "members_with_hit": 6,
+          "share": 0.025,
+          "expected_share": 0.009,
+          "all_share": 0.0076,
+          "ratio": 2.82
+        },
+        {
+          "family": "DMRT factors",
+          "members_with_hit": 8,
+          "share": 0.034,
+          "expected_share": 0.0134,
+          "all_share": 0.0123,
+          "ratio": 2.51
+        },
+        {
+          "family": "ZNF226",
           "members_with_hit": 5,
           "share": 0.021,
+          "expected_share": 0.0094,
+          "all_share": 0.0078,
+          "ratio": 2.25
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 5,
+          "share": 0.021,
+          "expected_share": 0.0094,
           "all_share": 0.0102,
-          "ratio": 2.07
+          "ratio": 2.25
         },
         {
-          "factor": "ZNF721",
+          "family": "FIZ1",
           "members_with_hit": 6,
           "share": 0.025,
-          "all_share": 0.0132,
-          "ratio": 1.92
-        },
-        {
-          "factor": "POU4F3",
-          "members_with_hit": 35,
-          "share": 0.148,
-          "all_share": 0.0863,
-          "ratio": 1.71
-        },
-        {
-          "factor": "FIZ1",
-          "members_with_hit": 6,
-          "share": 0.025,
+          "expected_share": 0.0127,
           "all_share": 0.0148,
-          "ratio": 1.71
+          "ratio": 1.99
         },
         {
-          "factor": "FOXL2",
-          "members_with_hit": 73,
-          "share": 0.308,
-          "all_share": 0.1951,
-          "ratio": 1.58
+          "family": "ZNF721",
+          "members_with_hit": 6,
+          "share": 0.025,
+          "expected_share": 0.0141,
+          "all_share": 0.0132,
+          "ratio": 1.79
+        },
+        {
+          "family": "ZNF436",
+          "members_with_hit": 4,
+          "share": 0.017,
+          "expected_share": 0.0098,
+          "all_share": 0.0114,
+          "ratio": 1.73
+        },
+        {
+          "family": "Maf-related",
+          "members_with_hit": 13,
+          "share": 0.055,
+          "expected_share": 0.033,
+          "all_share": 0.0367,
+          "ratio": 1.66
         }
       ],
-      "operators": []
+      "operators": [],
+      "pairs_explained_by_gc": 0
     },
     "timer.telomere": {
       "members_placed": 179,
       "members": 201,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF251",
+          "family": "ZNF251",
           "members_with_hit": 3,
           "share": 0.017,
+          "expected_share": 0.0029,
           "all_share": 0.0033,
-          "ratio": 5.08
+          "ratio": 5.74
         },
         {
-          "factor": "IRF9",
-          "members_with_hit": 5,
-          "share": 0.028,
-          "all_share": 0.0073,
-          "ratio": 3.83
-        },
-        {
-          "factor": "POU2F2",
-          "members_with_hit": 27,
-          "share": 0.151,
-          "all_share": 0.0464,
-          "ratio": 3.25
-        },
-        {
-          "factor": "POU1F1",
-          "members_with_hit": 25,
-          "share": 0.14,
-          "all_share": 0.0458,
-          "ratio": 3.05
-        },
-        {
-          "factor": "IRF3",
-          "members_with_hit": 6,
-          "share": 0.034,
-          "all_share": 0.0151,
-          "ratio": 2.22
-        },
-        {
-          "factor": "FOSB::JUN",
+          "family": "Fos-related + Jun-related",
           "members_with_hit": 13,
           "share": 0.073,
+          "expected_share": 0.0367,
           "all_share": 0.0378,
-          "ratio": 1.92
-        },
-        {
-          "factor": "POU3F3",
-          "members_with_hit": 37,
-          "share": 0.207,
-          "all_share": 0.1124,
-          "ratio": 1.84
-        },
-        {
-          "factor": "IRF7",
-          "members_with_hit": 5,
-          "share": 0.028,
-          "all_share": 0.0159,
-          "ratio": 1.76
-        },
-        {
-          "factor": "ZNF721",
-          "members_with_hit": 4,
-          "share": 0.022,
-          "all_share": 0.0132,
-          "ratio": 1.69
-        },
-        {
-          "factor": "ZFP28",
-          "members_with_hit": 3,
-          "share": 0.017,
-          "all_share": 0.0102,
-          "ratio": 1.64
-        },
-        {
-          "factor": "NRF1",
-          "members_with_hit": 60,
-          "share": 0.335,
-          "all_share": 0.2173,
-          "ratio": 1.54
-        },
-        {
-          "factor": "ATF7",
-          "members_with_hit": 3,
-          "share": 0.017,
-          "all_share": 0.011,
-          "ratio": 1.52
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 54,
-          "share": 0.302,
-          "expected": 21.86,
-          "ratio": 2.47
-        }
-      ]
-    },
-    "timer.circadian": {
-      "members_placed": 207,
-      "members": 219,
-      "factors": [
-        {
-          "factor": "ZFP42",
-          "members_with_hit": 5,
-          "share": 0.024,
-          "all_share": 0.0077,
-          "ratio": 3.14
-        },
-        {
-          "factor": "PAX7",
-          "members_with_hit": 3,
-          "share": 0.014,
-          "all_share": 0.0047,
-          "ratio": 3.08
-        },
-        {
-          "factor": "ATF2",
-          "members_with_hit": 4,
-          "share": 0.019,
-          "all_share": 0.0066,
-          "ratio": 2.93
-        },
-        {
-          "factor": "IRF9",
-          "members_with_hit": 4,
-          "share": 0.019,
-          "all_share": 0.0073,
-          "ratio": 2.65
-        },
-        {
-          "factor": "ZNF354A",
-          "members_with_hit": 3,
-          "share": 0.014,
-          "all_share": 0.0059,
-          "ratio": 2.46
-        },
-        {
-          "factor": "EWSR1-FLI1",
-          "members_with_hit": 7,
-          "share": 0.034,
-          "all_share": 0.0155,
-          "ratio": 2.18
-        },
-        {
-          "factor": "REST",
-          "members_with_hit": 3,
-          "share": 0.014,
-          "all_share": 0.0082,
-          "ratio": 1.77
-        },
-        {
-          "factor": "ATF7",
-          "members_with_hit": 4,
-          "share": 0.019,
-          "all_share": 0.011,
-          "ratio": 1.76
-        },
-        {
-          "factor": "ZNF143",
-          "members_with_hit": 16,
-          "share": 0.077,
-          "all_share": 0.0465,
-          "ratio": 1.66
-        },
-        {
-          "factor": "FOSB::JUN",
-          "members_with_hit": 13,
-          "share": 0.063,
-          "all_share": 0.0378,
-          "ratio": 1.66
-        },
-        {
-          "factor": "ZNF814",
-          "members_with_hit": 3,
-          "share": 0.014,
-          "all_share": 0.009,
-          "ratio": 1.61
-        },
-        {
-          "factor": "IRF3",
-          "members_with_hit": 5,
-          "share": 0.024,
-          "all_share": 0.0151,
-          "ratio": 1.6
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 83,
-          "share": 0.401,
-          "expected": 29.97,
-          "ratio": 2.77
-        },
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 59,
-          "share": 0.285,
-          "expected": 21.48,
-          "ratio": 2.75
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 68,
-          "share": 0.329,
-          "expected": 28.18,
-          "ratio": 2.41
-        }
-      ]
-    },
-    "timer.segmentation_clock": {
-      "members_placed": 265,
-      "members": 266,
-      "factors": [
-        {
-          "factor": "RFX2",
-          "members_with_hit": 6,
-          "share": 0.023,
-          "all_share": 0.0051,
-          "ratio": 4.44
-        },
-        {
-          "factor": "ZNF816",
-          "members_with_hit": 3,
-          "share": 0.011,
-          "all_share": 0.0027,
-          "ratio": 4.19
-        },
-        {
-          "factor": "POU4F2",
-          "members_with_hit": 6,
-          "share": 0.023,
-          "all_share": 0.0086,
-          "ratio": 2.63
-        },
-        {
-          "factor": "POU2F1::SOX2",
-          "members_with_hit": 7,
-          "share": 0.026,
-          "all_share": 0.0104,
-          "ratio": 2.54
-        },
-        {
-          "factor": "POU5F1::SOX2",
-          "members_with_hit": 7,
-          "share": 0.026,
-          "all_share": 0.0133,
-          "ratio": 1.99
-        },
-        {
-          "factor": "POU1F1",
-          "members_with_hit": 24,
-          "share": 0.091,
-          "all_share": 0.0458,
           "ratio": 1.98
         },
         {
-          "factor": "ZNF596",
-          "members_with_hit": 46,
-          "share": 0.174,
-          "all_share": 0.0896,
-          "ratio": 1.94
-        },
-        {
-          "factor": "ZNF354A",
-          "members_with_hit": 3,
-          "share": 0.011,
-          "all_share": 0.0059,
-          "ratio": 1.92
-        },
-        {
-          "factor": "ZNF407",
-          "members_with_hit": 9,
-          "share": 0.034,
+          "family": "ZNF407",
+          "members_with_hit": 5,
+          "share": 0.028,
+          "expected_share": 0.016,
           "all_share": 0.0186,
-          "ratio": 1.83
-        },
-        {
-          "factor": "RFX3",
-          "members_with_hit": 13,
-          "share": 0.049,
-          "all_share": 0.0301,
-          "ratio": 1.63
-        },
-        {
-          "factor": "ZNF131",
-          "members_with_hit": 132,
-          "share": 0.498,
-          "all_share": 0.3124,
-          "ratio": 1.59
-        },
-        {
-          "factor": "ZNF93",
-          "members_with_hit": 139,
-          "share": 0.525,
-          "all_share": 0.3322,
-          "ratio": 1.58
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 88,
-          "share": 0.332,
-          "expected": 27.5,
-          "ratio": 3.2
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 122,
-          "share": 0.46,
-          "expected": 38.36,
-          "ratio": 3.18
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 106,
-          "share": 0.4,
-          "expected": 36.08,
-          "ratio": 2.94
-        }
-      ]
-    },
-    "timer.developmental_timing": {
-      "members_placed": 121,
-      "members": 135,
-      "factors": [
-        {
-          "factor": "PRDM9",
-          "members_with_hit": 14,
-          "share": 0.116,
-          "all_share": 0.0442,
-          "ratio": 2.62
-        },
-        {
-          "factor": "POU5F1::SOX2",
-          "members_with_hit": 4,
-          "share": 0.033,
-          "all_share": 0.0133,
-          "ratio": 2.49
-        },
-        {
-          "factor": "ZNF775",
-          "members_with_hit": 12,
-          "share": 0.099,
-          "all_share": 0.0434,
-          "ratio": 2.29
-        },
-        {
-          "factor": "FIZ1",
-          "members_with_hit": 4,
-          "share": 0.033,
-          "all_share": 0.0148,
-          "ratio": 2.23
-        },
-        {
-          "factor": "FOXQ1",
-          "members_with_hit": 10,
-          "share": 0.083,
-          "all_share": 0.041,
-          "ratio": 2.02
-        },
-        {
-          "factor": "ZNF596",
-          "members_with_hit": 20,
-          "share": 0.165,
-          "all_share": 0.0896,
-          "ratio": 1.84
-        },
-        {
-          "factor": "RREB1",
-          "members_with_hit": 20,
-          "share": 0.165,
-          "all_share": 0.0904,
-          "ratio": 1.83
-        },
-        {
-          "factor": "KLF17",
-          "members_with_hit": 12,
-          "share": 0.099,
-          "all_share": 0.0573,
-          "ratio": 1.73
-        },
-        {
-          "factor": "ZNF470",
-          "members_with_hit": 13,
-          "share": 0.107,
-          "all_share": 0.0654,
-          "ratio": 1.64
-        },
-        {
-          "factor": "IRF3",
-          "members_with_hit": 3,
-          "share": 0.025,
-          "all_share": 0.0151,
-          "ratio": 1.64
-        },
-        {
-          "factor": "ZNF865",
-          "members_with_hit": 27,
-          "share": 0.223,
-          "all_share": 0.1403,
-          "ratio": 1.59
-        },
-        {
-          "factor": "CGGBP1",
-          "members_with_hit": 83,
-          "share": 0.686,
-          "all_share": 0.4358,
-          "ratio": 1.57
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 57,
-          "share": 0.471,
-          "expected": 17.52,
-          "ratio": 3.25
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 53,
-          "share": 0.438,
-          "expected": 16.47,
-          "ratio": 3.22
-        },
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 39,
-          "share": 0.322,
-          "expected": 12.56,
-          "ratio": 3.11
-        }
-      ]
-    },
-    "timer.puberty_reproduction": {
-      "members_placed": 1233,
-      "members": 1272,
-      "factors": [
-        {
-          "factor": "ZNF282",
-          "members_with_hit": 4,
-          "share": 0.003,
-          "all_share": 0.0008,
-          "ratio": 4.06
-        },
-        {
-          "factor": "EGR3",
-          "members_with_hit": 3,
-          "share": 0.002,
-          "all_share": 0.0006,
-          "ratio": 4.06
-        },
-        {
-          "factor": "LMX1B",
-          "members_with_hit": 4,
-          "share": 0.003,
-          "all_share": 0.001,
-          "ratio": 3.24
-        },
-        {
-          "factor": "ZNF707",
-          "members_with_hit": 7,
-          "share": 0.006,
-          "all_share": 0.0025,
-          "ratio": 2.27
-        },
-        {
-          "factor": "ELK1::SREBF2",
-          "members_with_hit": 4,
-          "share": 0.003,
-          "all_share": 0.0016,
-          "ratio": 2.03
-        },
-        {
-          "factor": "RFX3",
-          "members_with_hit": 63,
-          "share": 0.051,
-          "all_share": 0.0301,
-          "ratio": 1.7
-        },
-        {
-          "factor": "ATF7",
-          "members_with_hit": 22,
-          "share": 0.018,
-          "all_share": 0.011,
-          "ratio": 1.62
-        },
-        {
-          "factor": "RFX2",
-          "members_with_hit": 10,
-          "share": 0.008,
-          "all_share": 0.0051,
-          "ratio": 1.59
-        },
-        {
-          "factor": "ZFP42",
-          "members_with_hit": 15,
-          "share": 0.012,
-          "all_share": 0.0077,
-          "ratio": 1.58
-        },
-        {
-          "factor": "ZNF8",
-          "members_with_hit": 6,
-          "share": 0.005,
-          "all_share": 0.0031,
-          "ratio": 1.57
-        },
-        {
-          "factor": "TGIF2LX",
-          "members_with_hit": 6,
-          "share": 0.005,
-          "all_share": 0.0032,
-          "ratio": 1.52
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 320,
-          "share": 0.26,
-          "expected": 150.57,
-          "ratio": 2.13
-        }
-      ]
-    },
-    "timer.growth_longevity_axis": {
-      "members_placed": 560,
-      "members": 583,
-      "factors": [
-        {
-          "factor": "PRDM5",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0015,
-          "ratio": 3.57
-        },
-        {
-          "factor": "ZNF816",
-          "members_with_hit": 5,
-          "share": 0.009,
-          "all_share": 0.0027,
-          "ratio": 3.31
-        },
-        {
-          "factor": "TGIF1",
-          "members_with_hit": 4,
-          "share": 0.007,
-          "all_share": 0.0025,
-          "ratio": 2.86
-        },
-        {
-          "factor": "ZIM3",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0023,
-          "ratio": 2.33
-        },
-        {
-          "factor": "ZNF707",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0025,
-          "ratio": 2.14
-        },
-        {
-          "factor": "NR5A1",
-          "members_with_hit": 7,
-          "share": 0.013,
-          "all_share": 0.0062,
-          "ratio": 2.02
-        },
-        {
-          "factor": "TGIF2LX",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0032,
-          "ratio": 1.67
-        },
-        {
-          "factor": "ZFP42",
-          "members_with_hit": 7,
-          "share": 0.013,
-          "all_share": 0.0077,
-          "ratio": 1.62
-        },
-        {
-          "factor": "FOXB1",
-          "members_with_hit": 5,
-          "share": 0.009,
-          "all_share": 0.0055,
-          "ratio": 1.62
-        }
-      ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 211,
-          "share": 0.377,
-          "expected": 81.07,
-          "ratio": 2.6
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 157,
-          "share": 0.28,
-          "expected": 76.24,
-          "ratio": 2.06
-        }
-      ]
-    },
-    "timer.senescence_checkpoint": {
-      "members_placed": 260,
-      "members": 290,
-      "factors": [
-        {
-          "factor": "IRF9",
-          "members_with_hit": 8,
-          "share": 0.031,
-          "all_share": 0.0073,
-          "ratio": 4.21
-        },
-        {
-          "factor": "POU2F2",
-          "members_with_hit": 38,
-          "share": 0.146,
-          "all_share": 0.0464,
-          "ratio": 3.15
-        },
-        {
-          "factor": "RFX2",
-          "members_with_hit": 4,
-          "share": 0.015,
-          "all_share": 0.0051,
-          "ratio": 3.02
-        },
-        {
-          "factor": "POU1F1",
-          "members_with_hit": 33,
-          "share": 0.127,
-          "all_share": 0.0458,
-          "ratio": 2.77
-        },
-        {
-          "factor": "IRF3",
-          "members_with_hit": 9,
-          "share": 0.035,
-          "all_share": 0.0151,
-          "ratio": 2.29
-        },
-        {
-          "factor": "ONECUT1",
-          "members_with_hit": 4,
-          "share": 0.015,
-          "all_share": 0.0071,
-          "ratio": 2.17
-        },
-        {
-          "factor": "FOSB::JUN",
-          "members_with_hit": 19,
-          "share": 0.073,
-          "all_share": 0.0378,
-          "ratio": 1.93
-        },
-        {
-          "factor": "POU5F1::SOX2",
-          "members_with_hit": 6,
-          "share": 0.023,
-          "all_share": 0.0133,
           "ratio": 1.74
         },
         {
-          "factor": "RFX5",
-          "members_with_hit": 3,
-          "share": 0.012,
-          "all_share": 0.0073,
-          "ratio": 1.58
+          "family": "NRF",
+          "members_with_hit": 60,
+          "share": 0.335,
+          "expected_share": 0.2031,
+          "all_share": 0.2173,
+          "ratio": 1.65
         },
         {
-          "factor": "CREM",
-          "members_with_hit": 27,
-          "share": 0.104,
-          "all_share": 0.0666,
+          "family": "ZNF721",
+          "members_with_hit": 4,
+          "share": 0.022,
+          "expected_share": 0.0143,
+          "all_share": 0.0132,
           "ratio": 1.56
         },
         {
-          "factor": "ZFP28",
-          "members_with_hit": 4,
-          "share": 0.015,
+          "family": "ZFP28",
+          "members_with_hit": 3,
+          "share": 0.017,
+          "expected_share": 0.0111,
           "all_share": 0.0102,
           "ratio": 1.51
         }
       ],
-      "operators": [
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "timer.circadian": {
+      "members_placed": 207,
+      "members": 219,
+      "families": [
         {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 93,
-          "share": 0.358,
-          "expected": 37.64,
-          "ratio": 2.47
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 3,
+          "share": 0.014,
+          "expected_share": 0.0045,
+          "all_share": 0.0047,
+          "ratio": 3.2
         },
         {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 66,
-          "share": 0.254,
-          "expected": 26.98,
-          "ratio": 2.45
+          "family": "ZFP42",
+          "members_with_hit": 5,
+          "share": 0.024,
+          "expected_share": 0.008,
+          "all_share": 0.0077,
+          "ratio": 3.04
         },
         {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 75,
-          "share": 0.288,
-          "expected": 35.4,
-          "ratio": 2.12
+          "family": "ZNF354A",
+          "members_with_hit": 3,
+          "share": 0.014,
+          "expected_share": 0.0049,
+          "all_share": 0.0059,
+          "ratio": 2.96
+        },
+        {
+          "family": "Jun-related",
+          "members_with_hit": 7,
+          "share": 0.034,
+          "expected_share": 0.0181,
+          "all_share": 0.0162,
+          "ratio": 1.86
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 6,
+          "share": 0.029,
+          "expected_share": 0.0164,
+          "all_share": 0.0215,
+          "ratio": 1.77
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 4,
+          "share": 0.019,
+          "expected_share": 0.0116,
+          "all_share": 0.0123,
+          "ratio": 1.67
+        },
+        {
+          "family": "ZNF143",
+          "members_with_hit": 16,
+          "share": 0.077,
+          "expected_share": 0.0494,
+          "all_share": 0.0465,
+          "ratio": 1.57
+        },
+        {
+          "family": "Fos-related + Jun-related",
+          "members_with_hit": 13,
+          "share": 0.063,
+          "expected_share": 0.0399,
+          "all_share": 0.0378,
+          "ratio": 1.57
         }
-      ]
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "timer.segmentation_clock": {
+      "members_placed": 265,
+      "members": 266,
+      "families": [
+        {
+          "family": "ZNF816",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0041,
+          "all_share": 0.0027,
+          "ratio": 2.79
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.005,
+          "all_share": 0.0059,
+          "ratio": 2.29
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 11,
+          "share": 0.042,
+          "expected_share": 0.0186,
+          "all_share": 0.0216,
+          "ratio": 2.23
+        },
+        {
+          "family": "ZNF234",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0067,
+          "all_share": 0.0076,
+          "ratio": 1.68
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "timer.developmental_timing": {
+      "members_placed": 121,
+      "members": 135,
+      "families": [
+        {
+          "family": "FIZ1",
+          "members_with_hit": 4,
+          "share": 0.033,
+          "expected_share": 0.0122,
+          "all_share": 0.0148,
+          "ratio": 2.72
+        },
+        {
+          "family": "PRDM9",
+          "members_with_hit": 14,
+          "share": 0.116,
+          "expected_share": 0.0563,
+          "all_share": 0.0442,
+          "ratio": 2.05
+        },
+        {
+          "family": "ZNF775",
+          "members_with_hit": 12,
+          "share": 0.099,
+          "expected_share": 0.0516,
+          "all_share": 0.0434,
+          "ratio": 1.92
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 4,
+          "share": 0.033,
+          "expected_share": 0.0193,
+          "all_share": 0.0216,
+          "ratio": 1.71
+        },
+        {
+          "family": "ZNF470",
+          "members_with_hit": 13,
+          "share": 0.107,
+          "expected_share": 0.0635,
+          "all_share": 0.0654,
+          "ratio": 1.69
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 3,
+          "share": 0.025,
+          "expected_share": 0.0153,
+          "all_share": 0.0215,
+          "ratio": 1.62
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "timer.puberty_reproduction": {
+      "members_placed": 1233,
+      "members": 1272,
+      "families": [
+        {
+          "family": "ZNF282",
+          "members_with_hit": 4,
+          "share": 0.003,
+          "expected_share": 0.0009,
+          "all_share": 0.0008,
+          "ratio": 3.73
+        },
+        {
+          "family": "EGR3",
+          "members_with_hit": 3,
+          "share": 0.002,
+          "expected_share": 0.0007,
+          "all_share": 0.0006,
+          "ratio": 3.56
+        },
+        {
+          "family": "Ets-related + HOX",
+          "members_with_hit": 4,
+          "share": 0.003,
+          "expected_share": 0.001,
+          "all_share": 0.0009,
+          "ratio": 3.31
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 7,
+          "share": 0.006,
+          "expected_share": 0.0027,
+          "all_share": 0.0025,
+          "ratio": 2.13
+        },
+        {
+          "family": "ZNF8",
+          "members_with_hit": 6,
+          "share": 0.005,
+          "expected_share": 0.0031,
+          "all_share": 0.0031,
+          "ratio": 1.55
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 15,
+          "share": 0.012,
+          "expected_share": 0.008,
+          "all_share": 0.0077,
+          "ratio": 1.52
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "timer.growth_longevity_axis": {
+      "members_placed": 560,
+      "members": 583,
+      "families": [
+        {
+          "family": "PRDM5",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0016,
+          "all_share": 0.0015,
+          "ratio": 3.3
+        },
+        {
+          "family": "ZNF816",
+          "members_with_hit": 5,
+          "share": 0.009,
+          "expected_share": 0.0031,
+          "all_share": 0.0027,
+          "ratio": 2.87
+        },
+        {
+          "family": "ZIM3",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0023,
+          "all_share": 0.0023,
+          "ratio": 2.38
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0029,
+          "all_share": 0.0025,
+          "ratio": 1.82
+        },
+        {
+          "family": "FTZF1-related (NR5A)",
+          "members_with_hit": 7,
+          "share": 0.013,
+          "expected_share": 0.007,
+          "all_share": 0.0062,
+          "ratio": 1.79
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 7,
+          "share": 0.013,
+          "expected_share": 0.008,
+          "all_share": 0.0077,
+          "ratio": 1.57
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 2
+    },
+    "timer.senescence_checkpoint": {
+      "members_placed": 260,
+      "members": 290,
+      "families": [
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 8,
+          "share": 0.031,
+          "expected_share": 0.0155,
+          "all_share": 0.0215,
+          "ratio": 1.99
+        },
+        {
+          "family": "Fos-related + Jun-related",
+          "members_with_hit": 19,
+          "share": 0.073,
+          "expected_share": 0.0394,
+          "all_share": 0.0378,
+          "ratio": 1.85
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 4,
+          "share": 0.015,
+          "expected_share": 0.0099,
+          "all_share": 0.0102,
+          "ratio": 1.55
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "timer.progeroid_maintenance": {
       "members_placed": 525,
       "members": 584,
-      "factors": [
+      "families": [
         {
-          "factor": "ESR1",
-          "members_with_hit": 3,
-          "share": 0.006,
-          "all_share": 0.0026,
-          "ratio": 2.2
-        },
-        {
-          "factor": "IRF9",
-          "members_with_hit": 8,
-          "share": 0.015,
-          "all_share": 0.0073,
-          "ratio": 2.09
-        },
-        {
-          "factor": "IRF7",
-          "members_with_hit": 15,
-          "share": 0.029,
-          "all_share": 0.0159,
-          "ratio": 1.8
-        },
-        {
-          "factor": "ZNF143",
-          "members_with_hit": 42,
-          "share": 0.08,
-          "all_share": 0.0465,
+          "family": "DMRT factors",
+          "members_with_hit": 11,
+          "share": 0.021,
+          "expected_share": 0.0122,
+          "all_share": 0.0123,
           "ratio": 1.72
         },
         {
-          "factor": "DMRTB1",
-          "members_with_hit": 11,
-          "share": 0.021,
-          "all_share": 0.0123,
-          "ratio": 1.7
-        },
-        {
-          "factor": "MYPOP",
-          "members_with_hit": 19,
-          "share": 0.036,
-          "all_share": 0.0215,
-          "ratio": 1.68
-        },
-        {
-          "factor": "THAP11",
-          "members_with_hit": 53,
-          "share": 0.101,
-          "all_share": 0.0609,
-          "ratio": 1.66
-        },
-        {
-          "factor": "IRF3",
-          "members_with_hit": 13,
-          "share": 0.025,
-          "all_share": 0.0151,
-          "ratio": 1.64
-        },
-        {
-          "factor": "ZBTB40",
+          "family": "ZBTB40",
           "members_with_hit": 31,
           "share": 0.059,
+          "expected_share": 0.0365,
           "all_share": 0.0376,
-          "ratio": 1.57
+          "ratio": 1.62
         },
         {
-          "factor": "ZNF623",
-          "members_with_hit": 3,
-          "share": 0.006,
-          "all_share": 0.0038,
-          "ratio": 1.5
+          "family": "ZNF143",
+          "members_with_hit": 42,
+          "share": 0.08,
+          "expected_share": 0.0515,
+          "all_share": 0.0465,
+          "ratio": 1.55
+        },
+        {
+          "family": "Ets-related + bHLH-ZIP",
+          "members_with_hit": 6,
+          "share": 0.011,
+          "expected_share": 0.0075,
+          "all_share": 0.0076,
+          "ratio": 1.53
+        },
+        {
+          "family": "THAP-related factors",
+          "members_with_hit": 53,
+          "share": 0.101,
+          "expected_share": 0.0666,
+          "all_share": 0.0609,
+          "ratio": 1.52
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 162,
-          "share": 0.309,
-          "expected": 64.11,
-          "ratio": 2.53
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 1
     },
     "timer.stem_cell_niches": {
       "members_placed": 195,
       "members": 200,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF596",
+          "family": "DMRT factors",
+          "members_with_hit": 5,
+          "share": 0.026,
+          "expected_share": 0.0123,
+          "all_share": 0.0123,
+          "ratio": 2.09
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 3,
+          "share": 0.015,
+          "expected_share": 0.0086,
+          "all_share": 0.0077,
+          "ratio": 1.78
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 3,
+          "share": 0.015,
+          "expected_share": 0.0097,
+          "all_share": 0.0102,
+          "ratio": 1.58
+        },
+        {
+          "family": "ZNF596",
           "members_with_hit": 37,
           "share": 0.19,
+          "expected_share": 0.1218,
           "all_share": 0.0896,
-          "ratio": 2.12
+          "ratio": 1.56
         },
         {
-          "factor": "DMRTB1",
-          "members_with_hit": 5,
-          "share": 0.026,
-          "all_share": 0.0123,
-          "ratio": 2.08
-        },
-        {
-          "factor": "ZFP42",
-          "members_with_hit": 3,
-          "share": 0.015,
-          "all_share": 0.0077,
-          "ratio": 2.0
-        },
-        {
-          "factor": "PRDM9",
-          "members_with_hit": 17,
-          "share": 0.087,
-          "all_share": 0.0442,
-          "ratio": 1.97
-        },
-        {
-          "factor": "ZSCAN4",
+          "family": "ZSCAN4",
           "members_with_hit": 18,
           "share": 0.092,
+          "expected_share": 0.0592,
           "all_share": 0.0474,
-          "ratio": 1.95
-        },
-        {
-          "factor": "ATF7",
-          "members_with_hit": 4,
-          "share": 0.021,
-          "all_share": 0.011,
-          "ratio": 1.86
-        },
-        {
-          "factor": "RREB1",
-          "members_with_hit": 32,
-          "share": 0.164,
-          "all_share": 0.0904,
-          "ratio": 1.82
-        },
-        {
-          "factor": "ZNF775",
-          "members_with_hit": 15,
-          "share": 0.077,
-          "all_share": 0.0434,
-          "ratio": 1.77
-        },
-        {
-          "factor": "ZNF93",
-          "members_with_hit": 114,
-          "share": 0.585,
-          "all_share": 0.3322,
-          "ratio": 1.76
-        },
-        {
-          "factor": "ZNF814",
-          "members_with_hit": 3,
-          "share": 0.015,
-          "all_share": 0.009,
-          "ratio": 1.71
-        },
-        {
-          "factor": "ZNF407",
-          "members_with_hit": 6,
-          "share": 0.031,
-          "all_share": 0.0186,
-          "ratio": 1.65
-        },
-        {
-          "factor": "EWSR1-FLI1",
-          "members_with_hit": 5,
-          "share": 0.026,
-          "all_share": 0.0155,
-          "ratio": 1.65
+          "ratio": 1.56
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 98,
-          "share": 0.503,
-          "expected": 28.23,
-          "ratio": 3.47
-        },
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 63,
-          "share": 0.323,
-          "expected": 20.24,
-          "ratio": 3.11
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 70,
-          "share": 0.359,
-          "expected": 26.55,
-          "ratio": 2.64
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "systems.endocrine": {
       "members_placed": 727,
       "members": 749,
-      "factors": [
+      "families": [
         {
-          "factor": "ZNF816",
+          "family": "ZNF816",
           "members_with_hit": 5,
           "share": 0.007,
+          "expected_share": 0.003,
           "all_share": 0.0027,
-          "ratio": 2.55
+          "ratio": 2.32
         },
         {
-          "factor": "TFAP4::FLI1",
-          "members_with_hit": 10,
-          "share": 0.014,
-          "all_share": 0.0058,
-          "ratio": 2.37
+          "family": "Ets-related + bHLH-ZIP",
+          "members_with_hit": 12,
+          "share": 0.017,
+          "expected_share": 0.008,
+          "all_share": 0.0076,
+          "ratio": 2.07
         },
         {
-          "factor": "REST",
+          "family": "REST",
           "members_with_hit": 13,
           "share": 0.018,
+          "expected_share": 0.009,
           "all_share": 0.0082,
-          "ratio": 2.18
+          "ratio": 1.98
         },
         {
-          "factor": "ZNF510",
-          "members_with_hit": 15,
-          "share": 0.021,
-          "all_share": 0.0123,
-          "ratio": 1.68
-        },
-        {
-          "factor": "ZNF251",
+          "family": "ZNF251",
           "members_with_hit": 4,
           "share": 0.006,
+          "expected_share": 0.0032,
           "all_share": 0.0033,
-          "ratio": 1.67
+          "ratio": 1.74
         },
         {
-          "factor": "GSC::TBX21",
-          "members_with_hit": 3,
-          "share": 0.004,
-          "all_share": 0.0025,
-          "ratio": 1.65
-        },
-        {
-          "factor": "ZNF354A",
-          "members_with_hit": 7,
-          "share": 0.01,
-          "all_share": 0.0059,
-          "ratio": 1.63
-        },
-        {
-          "factor": "POU5F1::SOX2",
+          "family": "ZNF510",
           "members_with_hit": 15,
           "share": 0.021,
-          "all_share": 0.0133,
-          "ratio": 1.55
-        }
-      ],
-      "operators": []
-    },
-    "systems.nervous": {
-      "members_placed": 443,
-      "members": 491,
-      "factors": [
-        {
-          "factor": "REST",
-          "members_with_hit": 28,
-          "share": 0.063,
-          "all_share": 0.0082,
-          "ratio": 7.71
+          "expected_share": 0.012,
+          "all_share": 0.0123,
+          "ratio": 1.72
         },
         {
-          "factor": "TGIF2LX",
-          "members_with_hit": 4,
-          "share": 0.009,
-          "all_share": 0.0032,
-          "ratio": 2.82
-        },
-        {
-          "factor": "ZSCAN4",
-          "members_with_hit": 47,
-          "share": 0.106,
-          "all_share": 0.0474,
-          "ratio": 2.24
-        },
-        {
-          "factor": "ZNF596",
-          "members_with_hit": 74,
-          "share": 0.167,
-          "all_share": 0.0896,
-          "ratio": 1.86
-        },
-        {
-          "factor": "RFX5",
-          "members_with_hit": 6,
-          "share": 0.014,
-          "all_share": 0.0073,
-          "ratio": 1.86
-        },
-        {
-          "factor": "ZNF623",
+          "family": "Paired-related HD factors + TBX1-related factors",
           "members_with_hit": 3,
-          "share": 0.007,
-          "all_share": 0.0038,
-          "ratio": 1.78
-        },
-        {
-          "factor": "RFX2",
-          "members_with_hit": 4,
-          "share": 0.009,
-          "all_share": 0.0051,
-          "ratio": 1.77
-        },
-        {
-          "factor": "ZNF775",
-          "members_with_hit": 32,
-          "share": 0.072,
-          "all_share": 0.0434,
+          "share": 0.004,
+          "expected_share": 0.0025,
+          "all_share": 0.0025,
           "ratio": 1.66
         },
         {
-          "factor": "RREB1",
-          "members_with_hit": 63,
-          "share": 0.142,
-          "all_share": 0.0904,
-          "ratio": 1.57
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 26,
+          "share": 0.036,
+          "expected_share": 0.0224,
+          "all_share": 0.0216,
+          "ratio": 1.6
         },
         {
-          "factor": "POU3F1",
-          "members_with_hit": 3,
-          "share": 0.007,
-          "all_share": 0.0044,
-          "ratio": 1.54
-        },
-        {
-          "factor": "ETV2::FIGLA",
-          "members_with_hit": 4,
-          "share": 0.009,
+          "family": "ZNF354A",
+          "members_with_hit": 7,
+          "share": 0.01,
+          "expected_share": 0.0063,
           "all_share": 0.0059,
           "ratio": 1.53
         }
       ],
-      "operators": [
+      "operators": [],
+      "pairs_explained_by_gc": 0
+    },
+    "systems.nervous": {
+      "members_placed": 443,
+      "members": 491,
+      "families": [
         {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 173,
-          "share": 0.391,
-          "expected": 64.13,
-          "ratio": 2.7
+          "family": "REST",
+          "members_with_hit": 28,
+          "share": 0.063,
+          "expected_share": 0.0111,
+          "all_share": 0.0082,
+          "ratio": 5.69
         },
         {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 118,
-          "share": 0.266,
-          "expected": 45.97,
-          "ratio": 2.57
+          "family": "ZNF623",
+          "members_with_hit": 3,
+          "share": 0.007,
+          "expected_share": 0.0034,
+          "all_share": 0.0038,
+          "ratio": 1.97
         },
         {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 147,
-          "share": 0.332,
-          "expected": 60.31,
-          "ratio": 2.44
+          "family": "ZSCAN4",
+          "members_with_hit": 47,
+          "share": 0.106,
+          "expected_share": 0.057,
+          "all_share": 0.0474,
+          "ratio": 1.86
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 11,
+          "share": 0.025,
+          "expected_share": 0.0143,
+          "all_share": 0.0215,
+          "ratio": 1.74
         }
-      ]
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "systems.immune": {
       "members_placed": 2821,
       "members": 3842,
-      "factors": [
+      "families": [
         {
-          "factor": "ZKSCAN4",
+          "family": "ZKSCAN4",
           "members_with_hit": 5,
           "share": 0.002,
+          "expected_share": 0.0009,
           "all_share": 0.0008,
-          "ratio": 2.22
-        },
-        {
-          "factor": "IRF9",
-          "members_with_hit": 45,
-          "share": 0.016,
-          "all_share": 0.0073,
-          "ratio": 2.19
-        },
-        {
-          "factor": "IRF2",
-          "members_with_hit": 20,
-          "share": 0.007,
-          "all_share": 0.0036,
-          "ratio": 1.97
-        },
-        {
-          "factor": "IRF3",
-          "members_with_hit": 68,
-          "share": 0.024,
-          "all_share": 0.0151,
-          "ratio": 1.6
-        },
-        {
-          "factor": "ZNF732",
-          "members_with_hit": 4,
-          "share": 0.001,
-          "all_share": 0.0009,
-          "ratio": 1.58
-        },
-        {
-          "factor": "IRF7",
-          "members_with_hit": 69,
-          "share": 0.024,
-          "all_share": 0.0159,
-          "ratio": 1.54
-        },
-        {
-          "factor": "HOXD12::ELK1",
-          "members_with_hit": 3,
-          "share": 0.001,
-          "all_share": 0.0007,
-          "ratio": 1.52
+          "ratio": 1.93
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 713,
-          "share": 0.253,
-          "expected": 344.5,
-          "ratio": 2.07
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 1
     },
     "systems.circulation_respiration": {
       "members_placed": 569,
       "members": 599,
-      "factors": [
+      "families": [
         {
-          "factor": "REST",
+          "family": "REST",
           "members_with_hit": 15,
           "share": 0.026,
+          "expected_share": 0.0104,
           "all_share": 0.0082,
-          "ratio": 3.21
+          "ratio": 2.55
         },
         {
-          "factor": "ZNF354A",
+          "family": "FTZF1-related (NR5A)",
           "members_with_hit": 8,
           "share": 0.014,
-          "all_share": 0.0059,
-          "ratio": 2.38
-        },
-        {
-          "factor": "NR5A1",
-          "members_with_hit": 8,
-          "share": 0.014,
+          "expected_share": 0.0057,
           "all_share": 0.0062,
-          "ratio": 2.27
+          "ratio": 2.47
         },
         {
-          "factor": "ZNF814",
+          "family": "ZNF354A",
+          "members_with_hit": 8,
+          "share": 0.014,
+          "expected_share": 0.0058,
+          "all_share": 0.0059,
+          "ratio": 2.43
+        },
+        {
+          "family": "ZNF814",
           "members_with_hit": 11,
           "share": 0.019,
+          "expected_share": 0.0105,
           "all_share": 0.009,
-          "ratio": 2.15
+          "ratio": 1.84
         },
         {
-          "factor": "TGIF1",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0025,
-          "ratio": 2.11
-        },
-        {
-          "factor": "POU4F2",
+          "family": "ZNF510",
           "members_with_hit": 10,
           "share": 0.018,
-          "all_share": 0.0086,
-          "ratio": 2.04
+          "expected_share": 0.011,
+          "all_share": 0.0123,
+          "ratio": 1.6
         },
         {
-          "factor": "ZNF816",
+          "family": "ZNF816",
           "members_with_hit": 3,
           "share": 0.005,
+          "expected_share": 0.0034,
           "all_share": 0.0027,
-          "ratio": 1.95
-        },
-        {
-          "factor": "ETV2::FIGLA",
-          "members_with_hit": 6,
-          "share": 0.011,
-          "all_share": 0.0059,
-          "ratio": 1.79
-        },
-        {
-          "factor": "RREB1",
-          "members_with_hit": 86,
-          "share": 0.151,
-          "all_share": 0.0904,
-          "ratio": 1.67
-        },
-        {
-          "factor": "ZNF347",
-          "members_with_hit": 87,
-          "share": 0.153,
-          "all_share": 0.0985,
-          "ratio": 1.55
+          "ratio": 1.54
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF131",
-            "ZNF93"
-          ],
-          "members_with_both": 147,
-          "share": 0.258,
-          "expected": 59.05,
-          "ratio": 2.49
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF131"
-          ],
-          "members_with_both": 179,
-          "share": 0.315,
-          "expected": 77.47,
-          "ratio": 2.31
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 189,
-          "share": 0.332,
-          "expected": 82.38,
-          "ratio": 2.29
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 3
     },
     "systems.extracellular_matrix_adhesion": {
       "members_placed": 1249,
       "members": 1303,
-      "factors": [
+      "families": [
         {
-          "factor": "EGR3",
+          "family": "EGR3",
           "members_with_hit": 4,
           "share": 0.003,
+          "expected_share": 0.0007,
           "all_share": 0.0006,
-          "ratio": 5.34
+          "ratio": 4.38
         },
         {
-          "factor": "ZIM3",
-          "members_with_hit": 7,
-          "share": 0.006,
-          "all_share": 0.0023,
-          "ratio": 2.44
-        },
-        {
-          "factor": "ZSCAN2",
-          "members_with_hit": 4,
-          "share": 0.003,
-          "all_share": 0.0014,
-          "ratio": 2.29
-        },
-        {
-          "factor": "POU5F1::SOX2",
-          "members_with_hit": 37,
-          "share": 0.03,
-          "all_share": 0.0133,
-          "ratio": 2.23
-        },
-        {
-          "factor": "GSC::TBX21",
-          "members_with_hit": 6,
-          "share": 0.005,
-          "all_share": 0.0025,
-          "ratio": 1.92
-        },
-        {
-          "factor": "ZNF510",
-          "members_with_hit": 28,
-          "share": 0.022,
-          "all_share": 0.0123,
-          "ratio": 1.82
-        },
-        {
-          "factor": "ZNF816",
-          "members_with_hit": 6,
-          "share": 0.005,
-          "all_share": 0.0027,
-          "ratio": 1.78
-        },
-        {
-          "factor": "TGIF1",
-          "members_with_hit": 5,
-          "share": 0.004,
-          "all_share": 0.0025,
-          "ratio": 1.6
-        },
-        {
-          "factor": "MAFA",
+          "family": "Ets-related + HOX",
           "members_with_hit": 3,
           "share": 0.002,
-          "all_share": 0.0015,
-          "ratio": 1.6
+          "expected_share": 0.001,
+          "all_share": 0.0009,
+          "ratio": 2.34
         },
         {
-          "factor": "ZNF775",
-          "members_with_hit": 84,
-          "share": 0.067,
-          "all_share": 0.0434,
-          "ratio": 1.55
+          "family": "ZSCAN2",
+          "members_with_hit": 4,
+          "share": 0.003,
+          "expected_share": 0.0014,
+          "all_share": 0.0014,
+          "ratio": 2.31
         },
         {
-          "factor": "ZNF226",
-          "members_with_hit": 15,
-          "share": 0.012,
-          "all_share": 0.0078,
-          "ratio": 1.54
+          "family": "ZIM3",
+          "members_with_hit": 7,
+          "share": 0.006,
+          "expected_share": 0.0025,
+          "all_share": 0.0023,
+          "ratio": 2.21
         },
         {
-          "factor": "ESR1",
+          "family": "ZNF510",
+          "members_with_hit": 28,
+          "share": 0.022,
+          "expected_share": 0.0115,
+          "all_share": 0.0123,
+          "ratio": 1.94
+        },
+        {
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 6,
+          "share": 0.005,
+          "expected_share": 0.0025,
+          "all_share": 0.0025,
+          "ratio": 1.93
+        },
+        {
+          "family": "ZNF8",
           "members_with_hit": 5,
           "share": 0.004,
-          "all_share": 0.0026,
-          "ratio": 1.54
+          "expected_share": 0.0021,
+          "all_share": 0.0031,
+          "ratio": 1.9
+        },
+        {
+          "family": "FIZ1",
+          "members_with_hit": 27,
+          "share": 0.022,
+          "expected_share": 0.0126,
+          "all_share": 0.0148,
+          "ratio": 1.72
+        },
+        {
+          "family": "ZNF816",
+          "members_with_hit": 6,
+          "share": 0.005,
+          "expected_share": 0.003,
+          "all_share": 0.0027,
+          "ratio": 1.59
+        },
+        {
+          "family": "FTZF1-related (NR5A)",
+          "members_with_hit": 11,
+          "share": 0.009,
+          "expected_share": 0.0056,
+          "all_share": 0.0062,
+          "ratio": 1.57
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 44,
+          "share": 0.035,
+          "expected_share": 0.0225,
+          "all_share": 0.0216,
+          "ratio": 1.56
         }
       ],
-      "operators": []
+      "operators": [],
+      "pairs_explained_by_gc": 0
     },
     "systems.ligand_receptor_protocol": {
       "members_placed": 2085,
       "members": 2417,
-      "factors": [
+      "families": [
         {
-          "factor": "TBX19",
+          "family": "Brachyury-related factors",
           "members_with_hit": 6,
           "share": 0.003,
-          "all_share": 0.0004,
-          "ratio": 7.19
+          "expected_share": 0.0007,
+          "all_share": 0.0005,
+          "ratio": 4.05
         },
         {
-          "factor": "FLYWCH1",
-          "members_with_hit": 4,
-          "share": 0.002,
-          "all_share": 0.0008,
-          "ratio": 2.4
-        },
-        {
-          "factor": "REST",
+          "family": "REST",
           "members_with_hit": 40,
           "share": 0.019,
+          "expected_share": 0.0086,
           "all_share": 0.0082,
-          "ratio": 2.34
+          "ratio": 2.23
         },
         {
-          "factor": "ZNF354A",
-          "members_with_hit": 24,
-          "share": 0.012,
-          "all_share": 0.0059,
-          "ratio": 1.95
+          "family": "FLYWCH1",
+          "members_with_hit": 4,
+          "share": 0.002,
+          "expected_share": 0.0009,
+          "all_share": 0.0008,
+          "ratio": 2.05
         },
         {
-          "factor": "PHOX2B",
-          "members_with_hit": 179,
-          "share": 0.086,
-          "all_share": 0.0452,
+          "family": "FTZF1-related (NR5A)",
+          "members_with_hit": 18,
+          "share": 0.009,
+          "expected_share": 0.0045,
+          "all_share": 0.0062,
           "ratio": 1.9
         },
         {
-          "factor": "ZNF226",
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 7,
+          "share": 0.003,
+          "expected_share": 0.002,
+          "all_share": 0.0025,
+          "ratio": 1.71
+        },
+        {
+          "family": "ZNF226",
           "members_with_hit": 29,
           "share": 0.014,
+          "expected_share": 0.0092,
           "all_share": 0.0078,
-          "ratio": 1.78
-        },
-        {
-          "factor": "ZNF146",
-          "members_with_hit": 32,
-          "share": 0.015,
-          "all_share": 0.0094,
-          "ratio": 1.63
-        },
-        {
-          "factor": "ZNF732",
-          "members_with_hit": 3,
-          "share": 0.001,
-          "all_share": 0.0009,
-          "ratio": 1.6
-        },
-        {
-          "factor": "POU2F1::SOX2",
-          "members_with_hit": 33,
-          "share": 0.016,
-          "all_share": 0.0104,
-          "ratio": 1.52
+          "ratio": 1.51
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "MEF2B",
-            "MEF2D"
-          ],
-          "members_with_both": 525,
-          "share": 0.252,
-          "expected": 203.72,
-          "ratio": 2.58
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "MEF2D"
-          ],
-          "members_with_both": 540,
-          "share": 0.259,
-          "expected": 256.38,
-          "ratio": 2.11
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 0
     },
     "systems.metabolic_homeostasis": {
       "members_placed": 583,
       "members": 663,
-      "factors": [
+      "families": [
         {
-          "factor": "PRDM5",
+          "family": "PRDM5",
           "members_with_hit": 3,
           "share": 0.005,
+          "expected_share": 0.0016,
           "all_share": 0.0015,
-          "ratio": 3.43
+          "ratio": 3.21
         },
         {
-          "factor": "TGIF2LX",
-          "members_with_hit": 5,
-          "share": 0.009,
-          "all_share": 0.0032,
-          "ratio": 2.68
-        },
-        {
-          "factor": "ZNF816",
+          "family": "ZNF816",
           "members_with_hit": 4,
           "share": 0.007,
+          "expected_share": 0.0032,
           "all_share": 0.0027,
-          "ratio": 2.54
+          "ratio": 2.11
         },
         {
-          "factor": "ZNF623",
+          "family": "ZNF623",
           "members_with_hit": 5,
           "share": 0.009,
+          "expected_share": 0.0041,
           "all_share": 0.0038,
-          "ratio": 2.26
+          "ratio": 2.08
         },
         {
-          "factor": "TGIF1",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0025,
-          "ratio": 2.06
-        },
-        {
-          "factor": "ZNF707",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0025,
-          "ratio": 2.06
-        },
-        {
-          "factor": "NR3C2",
-          "members_with_hit": 3,
-          "share": 0.005,
-          "all_share": 0.0028,
-          "ratio": 1.84
-        },
-        {
-          "factor": "HNF1B",
-          "members_with_hit": 49,
-          "share": 0.084,
-          "all_share": 0.046,
-          "ratio": 1.83
-        },
-        {
-          "factor": "PAX7",
+          "family": "Paired plus homeo domain",
           "members_with_hit": 5,
           "share": 0.009,
+          "expected_share": 0.0043,
           "all_share": 0.0047,
-          "ratio": 1.82
+          "ratio": 2.0
         },
         {
-          "factor": "NR5A1",
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0029,
+          "all_share": 0.0025,
+          "ratio": 1.78
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 5,
+          "share": 0.009,
+          "expected_share": 0.0052,
+          "all_share": 0.0059,
+          "ratio": 1.65
+        },
+        {
+          "family": "FTZF1-related (NR5A)",
           "members_with_hit": 6,
           "share": 0.01,
+          "expected_share": 0.0066,
           "all_share": 0.0062,
-          "ratio": 1.66
+          "ratio": 1.56
         }
       ],
-      "operators": [
-        {
-          "factors": [
-            "ZNF135",
-            "ZNF460"
-          ],
-          "members_with_both": 157,
-          "share": 0.269,
-          "expected": 71.2,
-          "ratio": 2.21
-        },
-        {
-          "factors": [
-            "CGGBP1",
-            "ZNF93"
-          ],
-          "members_with_both": 186,
-          "share": 0.319,
-          "expected": 84.4,
-          "ratio": 2.2
-        },
-        {
-          "factors": [
-            "MEF2A",
-            "MEF2D"
-          ],
-          "members_with_both": 154,
-          "share": 0.264,
-          "expected": 71.69,
-          "ratio": 2.15
-        }
-      ]
+      "operators": [],
+      "pairs_explained_by_gc": 2
     }
   },
+  "pairs_explained_by_gc": 84,
+  "libraries_with_operators": 0,
   "thresholds": {
     "relative_score": 0.85,
     "requires_enrichment": 1.5,
     "operator_ratio": 2.0,
-    "operator_share": 0.25
+    "operator_share": 0.25,
+    "gc_bins": 10,
+    "repeat_edges": [
+      0.0,
+      0.1,
+      0.3
+    ],
+    "min_stratum": 30
   },
   "evidence": {
     "matrix": "curated: JASPAR 2026 CORE vertebrates, non-redundant",
     "hit": "predicted: log-odds window at >= 85% of the matrix range, either strand",
     "requires": "inferred: factors with a hit whose share of real promoters is >= 1.5x the shuffled share",
-    "operator": "inferred: factor combinations recurring across a library's promoters beyond expectation"
+    "operator": "inferred: factor combinations recurring across a library's promoters beyond expectation",
+    "units": "curated: TFClass family per JASPAR matrix; C2H2 zinc-finger factors counted one by one",
+    "null": "inferred: expectation within GC-decile by repeat-share strata; naive one kept too"
   },
   "cost": {
     "seconds": 1590.9
