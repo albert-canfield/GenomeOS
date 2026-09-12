@@ -1040,7 +1040,24 @@ in order. "Owner" is the session that holds the files today (see §7).
   intergenic blocks is not matched by human depletion at 1 kb; and VISTA
   positives are 20.2% human-constrained against negatives 16.9% over 2,223
   elements, a lean rather than a separation. Gnocchi counts whole kilobases,
-  so sub-kb elements read their window.
+  so sub-kb elements read their window. **Genome-wide** (`variation_genome_wide`,
+  24 chromosomes, 137 MB of ranges): kilobases human-constrained are 38.1% of
+  coding segments, 18.9% of introns, 11.9% of the regulatory tier, 3.0% fossil,
+  2.7% neutral, 2.4% constrained_unknown, 0.4% structural.
+
+  | element case (mammals × people) | elements | name a coding gene |
+  |---|---|---|
+  | syntax (constrained on both) | 825 | **73.9%** |
+  | relaxed (mammals only) | 1,337 | 56.0% |
+  | recent (people only) | 782 | 50.0% |
+  | tolerant (neither) | 2,235 | 45.3% |
+
+  The pair beats either axis alone on every count and on every chromosome
+  (51% on chr1 to 87% on chr6 for the syntax elements). The
+  constrained_unknown tier's 948 measured blocks split 492 relaxed, 346
+  tolerant, 77 syntax and 30 recent: half the real unknown is held across
+  mammals and variable among people, which is where the copies sit. chrY has no
+  Gnocchi coverage and every block there is recorded as unmeasured, never zero.
 - **Next.** 1. Every element in a gene's node scored per cell, not a sample:
   the closure needs a gene's whole regulatory input before it can judge it,
   which is the self-hosted model's first job (about 6,600 elements on chr21).
@@ -1126,7 +1143,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   name a gene 75% and 72% of the time, above every other case on both
   chromosomes. VISTA positives 20.2% against negatives 16.9% over 2,223
   elements. rs12913832 is constrained across mammals at the base and its
-  kilobase is unscored by Gnocchi. GRAMMAR-BY-COMPARISON.md §6.
+  kilobase is unscored by Gnocchi. The genome (24 chromosomes, 137 MB of
+  ranges): coding 38.1%, introns 18.9%, regulatory tier 11.9%, neutral 2.7%,
+  constrained_unknown 2.4%; elements by case name a gene 73.9% (syntax, 825),
+  56.0% (relaxed), 50.0% (recent), 45.3% (tolerant), the pair beating either
+  axis alone on every count; the constrained_unknown tier is 492 relaxed, 346
+  tolerant, 77 syntax and 30 recent of 948 measured; chrY unmeasured, not
+  zero. GRAMMAR-BY-COMPARISON.md §6.
 - **Step 3 done (2026-09-12).** `genomeos duplications --chrom C`
   (`genome/duplications.py`, `duplication_chr*` for 24 chromosomes,
   `duplication_genome_wide`): UCSC's curated segmental duplications over
@@ -1164,13 +1187,11 @@ in order. "Owner" is the session that holds the files today (see §7).
   block naming the layers not yet read; assembly only, no inference.
   GRAMMAR-BY-COMPARISON.md §9.
 - **Missing.** The human axis as a Blocks-tab lane; the origin per gene and
-  library (job running: 356 species placed on the ladder, then the 109 MB
-  Compara stream); the motif scan and
+  library (job rerunning with the pan-taxonomic dump for the deep strata); the motif scan and
   operator patterns; phylogenetic profiling between libraries; the
   decompiled locus view; one developmental locus run end to end.
-- **Next.** 1. The human axis over the other 22 chromosomes as a resumable
-  job (a few MB each) and the case per block in the compiled BioLang
-  `region` as a second evidence line (compiled note done; the job runs). 2. Origin per gene through
+- **Next.** 1. Done: the human axis over the genome and the case in the
+  compiled `region` note; next a Blocks-tab lane. 2. Origin per gene through
   Ensembl homology at eight taxa; age distribution per library; the graph
   gains `orthologue_of`. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
   and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done: the scan, `requires:` and the operator pairs; next profiles clustered
