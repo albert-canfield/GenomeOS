@@ -127,6 +127,15 @@ chromosomes (ALPHAGENOME.md, feature b, "The constrained ones first";
 `data/results/constrained_targets_<chrom>.json` and
 `constrained_targets_genome_wide.json`).
 
+Scoring against measured ground truth has started with VISTA's 2,442
+transgenic-mouse enhancer elements, read blind through the registry, the node,
+constraint and the AlphaGenome deletion. On chromosomes 21 and 22 the registry
+and constraint lean the right way and the predicted tissue matches the
+measured one in 8 of 9 judged cases against 36% by chance, while the deletion
+names a gene for negatives as often as positives: the deletion effect is a
+target finder, not an activity assay (ALPHAGENOME.md "Against measured
+enhancers"; `vista_<chrom>.json`, `vista_genome_wide.json`).
+
 The chromosomes sort themselves without being told. chrY and chrX are the
 controls: 0.66% and 0.88% constrained, fossils 27% and 73% of their space.
 The gene-dense chr17, chr19 and chr20 put half their space in the regulatory

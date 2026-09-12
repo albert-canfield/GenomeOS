@@ -823,6 +823,24 @@ in order. "Owner" is the session that holds the files today (see §7).
   the node model holding on the elements that matter most. Area I's step 2
   has begun: a constrained regulatory block now comes with a predicted target,
   tissue and magnitude wherever AlphaGenome has been asked.
+- **Against measured enhancers (2026-09-12, genomeos-fe; step 3 begun).**
+  VISTA's 2,442 human elements tested in transgenic mouse embryos at e11.5,
+  positive with tissues or negative, read blind through the registry, the
+  CTCF node, Zoonomia constraint and the AlphaGenome deletion of the whole
+  element (`attribution/vista.py`, `scripts/vista_score.py`, job
+  `vista_genome_wide`, `vista_chr*`; the loci cached under
+  `data/knowledge/vista`). chr21 and chr22, 28 positive and 22 negative: an
+  ENCODE enhancer-like element sits there in 100% of positives and 86% of
+  negatives; constrained in 43% and 23%; the deletion moves some gene in 75%
+  and 91%; the predicted tissue falls in the measured tissue group in 8 of 9
+  judged, against 36% by shuffling the labels (hs1304 forebrain to neural
+  tube, 2.7 log2 in neural cells; hs2543 brain, 2.6 in cerebellum). Reading:
+  registry and constraint lean the right way and the tissue is the part of
+  the prediction the assay confirms; the deletion names a gene for negatives
+  as often as positives, so the deletion effect is a target finder, not an
+  activity assay. A VISTA negative is conserved sequence next to a gene that
+  did not drive expression on one embryonic day, and the model reads adult
+  and cell-line tracks. The other 21 chromosomes are running.
 - **Next.** 1. The blocks organised by the
   evidence that exists: CTCF node, reader open fraction per cell type,
   AlphaGenome enhancer target, repeat family, segmental duplication,
@@ -831,8 +849,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   chromatin tracks for activity and tissue, in-silico deletion for the target,
   in-silico mutagenesis for the bases that matter; the self-hosted model gates
   the move from chromosome 21 to the genome. 3. Scoring against measured
-  ground truth (VISTA enhancers, ENCODE4 lentiMPRA, GTEx eQTL, the GWAS
-  catalog, ClinVar) the way the parser was scored against GENCODE. 4. Closure
+  ground truth the way the parser was scored against GENCODE: VISTA begun
+  (above); GTEx eQTLs next, as the measured ground truth for the target gene
+  itself, which VISTA cannot test; then ENCODE4 lentiMPRA for activity, the
+  GWAS catalog and ClinVar for consequence. 4. Closure
   at three levels: gene (open elements reproduce GTEx expression per tissue),
   cell (a deleted element moves its gene and the cell program; IMPC, DepMap),
   organism (the Body runtime still produces a human's cell counts over
