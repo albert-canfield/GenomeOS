@@ -125,10 +125,25 @@ unphased sequence, so it does not see a diploid individual.
    sites from 7.5% / 6.9% to 51.6% / 49.2% (sensitivity / precision;
    docs/SEQUENCE-GRAMMAR.md has the table and what did not move). Everything
    stays `predicted`; without the key the grammar runs as before.
-4. **Domains from a predicted contact map**. `genomeos domains` infers a node
-   between CTCF-only elements and labels it inferred. A predicted contact map
-   at 2 kb over a 1 Mb window is a different kind of evidence for the same
-   boundary, and where the two agree the domain earns a higher confidence.
+4. **Domains from a predicted contact map** (built, 2026-09-12; a weak
+   agreement, recorded). `genomeos domains --chrom chr21 --contact-map`
+   asks for the contact map of every 1 Mb window (45 requests, 28 4DN
+   Micro-C and Hi-C cell types at 2 kb), computes the insulation score of
+   each bin (mean contact across the diagonal over 20 kb, averaged over the
+   cell types) and takes its local minima as predicted boundaries
+   (`genomeos/predict/contact_maps.py`, `data/results/domains_chr21_contact.json`).
+   Against the 227 CTCF-only boundaries: 83 sit within 20 kb of one of the
+   353 predicted minima (37%), and boundaries placed at random get 28%; 24%
+   of predicted minima have an inferred boundary; the median distance from
+   an inferred boundary to the nearest minimum is 34 kb. The depth threshold
+   was swept (0.02 to 0.3; stricter thresholds give fewer minima and less
+   support, never more above chance). So the two kinds of evidence agree
+   only a little above chance: the CTCF-only proxy draws boundaries where
+   the predicted map sees no insulation dip, and the map's dips mostly lack
+   a CTCF-only element. The node's confidence stays at 0.4, and the honest
+   conclusion is that node *content* is what the project has evidence for
+   (the enhancer and mouse results) while node *edges* remain a proxy that
+   neither this prediction nor, without Hi-C, a measurement has confirmed.
 5. **The reader, predicted where it is not measured**. Reader v1 reads ENCODE
    DNase peaks per biosample, so it only knows the cell types ENCODE assayed.
    Predicted DNase and ATAC extend "which nodes are open in this cell type" to

@@ -190,6 +190,20 @@ what the symbol-identity run had predicted. The 262 mouse nodes with fewer
 than two matches are mostly nodes with no or one coding gene (115 of 371
 have none).
 
+## The edges of the nodes, held against a predicted contact map (2026-09-12)
+
+The CTCF-only boundaries were never more than a proxy. AlphaGenome's
+predicted contact map gives an independent opinion: insulation minima at
+2 kb over 28 cell types. On chr21, 37% of the 227 inferred boundaries sit
+within 20 kb of a predicted minimum, against 28% for boundaries placed at
+random, and the median distance is 34 kb (docs/ALPHAGENOME.md, use 4). That
+is agreement a little above chance, not confirmation. The results that
+carry the node model are therefore about node *content*: the enhancer
+deletions landing inside the node on 24 chromosomes (90%) and the mouse
+nodes landing in one human neighbourhood (93 to 94%). Where the edges sit
+is a resolution question the project cannot settle without Hi-C or a
+better predictor of insulation, and the node confidence stays at 0.4.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first

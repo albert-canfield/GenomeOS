@@ -3087,6 +3087,58 @@ def cmd_domains(args: argparse.Namespace) -> int:
     ann = Annotation.from_gff3(args.gff3 or default_gencode({args.chrom}), {args.chrom})
     doms = infer_domains(args.chrom, length, ccres, ann)
     s = summarise(doms)
+    if getattr(args, "contact_map", False):
+        from genomeos.predict import status
+        from genomeos.predict.contact_maps import Insulation, compare
+        from genomeos.predict.splice_sites import client_factory
+
+        st = status()
+        if not st["enabled"]:
+            print(f"AlphaGenome contact maps are disabled: {st['reason']}. To enable: {st['how']}")
+            return 2
+        ins = Insulation(args.chrom, length).load(
+            client_factory, progress=lambda m: print("  " + m, flush=True)
+        )
+        predicted = ins.boundaries()
+        inferred = sorted({d.start for d in doms} | {d.end for d in doms})
+        inferred = [b for b in inferred if 0 < b < length]
+        from genomeos.predict.contact_maps import random_control
+
+        cmp = compare(inferred, [b["pos"] for b in predicted])
+        cmp["random_control"] = random_control(inferred, [b["pos"] for b in predicted], length)
+        save_result(
+            f"domains_{args.chrom}_contact",
+            {
+                "chrom": args.chrom,
+                "windows": len(ins.windows),
+                "tracks_per_window": ins.windows[0]["tracks"] if ins.windows else 0,
+                "predicted_boundaries": predicted,
+                "comparison": cmp,
+                "evidence": {
+                    "inferred": "inferred: CTCF-only ENCODE elements as boundaries",
+                    "predicted": (
+                        f"predicted: {st['model']} contact maps, insulation minima at 2 kb, 28 cell types"
+                    ),
+                },
+            },
+        )
+        print(
+            f"{args.chrom}: {cmp['inferred']} CTCF-only boundaries against {cmp['predicted']} insulation "
+            f"minima from the predicted contact map ({len(ins.windows)} windows, "
+            f"{ins.windows[0]['tracks']} cell types):"
+        )
+        print(
+            f"  {cmp['inferred_on_a_predicted_boundary']} inferred boundaries sit within "
+            f"{cmp['tolerance'] // 1000} kb of a predicted one ({cmp['fraction_inferred_supported']:.0%}, "
+            f"against {cmp['random_control']:.0%} for boundaries placed at random); "
+            f"{cmp['predicted_on_an_inferred_boundary']} predicted minima have an inferred boundary "
+            f"({cmp['fraction_predicted_matched']:.0%}); median distance "
+            f"{cmp['median_distance_inferred_to_predicted']:,} bp"
+        )
+        print(
+            "  [predicted evidence, capped at 0.7; where the two agree the node's edge has two kinds of evidence]"
+        )
+        return 0
     print(
         f"{args.chrom}: {s['domains']} domains from CTCF-only boundaries; "
         f"median {s['size_median']:,} bp, max {s['size_max']:,} bp"
@@ -3885,6 +3937,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.add_argument("--gff3")
     p.add_argument("--top", type=int, default=12)
+    p.add_argument(
+        "--contact-map",
+        action="store_true",
+        help="hold the CTCF-only boundaries against insulation minima of AlphaGenome's predicted contact map",
+    )
     p.set_defaults(fn=cmd_domains)
 
     p = sub.add_parser("libs", help="list the biological libraries found in the genome")
