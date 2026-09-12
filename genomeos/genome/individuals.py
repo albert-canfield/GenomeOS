@@ -887,7 +887,32 @@ def coding_inventory(
     return out
 
 
-def _genotypes(path: Path) -> dict[tuple[int, str, str], str]:
+def normalise_variant(pos: int, ref: str, alt: str, base_at=None) -> tuple[int, str, str]:
+    """One representation for one allele: the common suffix trimmed, then the common prefix (one anchor
+    base kept, as in a VCF), then the indel left-aligned along the reference while the base before it
+    equals its last base. `base_at(pos1)` returns the reference base at a 1-based position; without it
+    the trimming alone is applied. Three files that write TGG>TGGG, T>TG and TGG>T at one position are
+    describing an insertion of G and a deletion of GG; after this they compare."""
+    ref, alt = ref.upper(), alt.upper()
+    if ref == alt:
+        return pos, ref, alt
+    while len(ref) > 1 and len(alt) > 1 and ref[-1] == alt[-1]:
+        ref, alt = ref[:-1], alt[:-1]
+    while len(ref) > 1 and len(alt) > 1 and ref[0] == alt[0]:
+        ref, alt = ref[1:], alt[1:]
+        pos += 1
+    if base_at is not None and len(ref) != len(alt) and ref[0] == alt[0]:
+        # an indel with its anchor: shift left while the base before equals the indel's last base
+        while pos > 1 and ref[-1] == alt[-1]:
+            b = base_at(pos - 1)
+            if not b:
+                break
+            ref, alt = b + ref[:-1], b + alt[:-1]
+            pos -= 1
+    return pos, ref, alt
+
+
+def _genotypes(path: Path, base_at=None) -> dict[tuple[int, str, str], str]:
     out: dict[tuple[int, str, str], str] = {}
     with path.open() as fh:
         for line in fh:
@@ -898,11 +923,39 @@ def _genotypes(path: Path) -> dict[tuple[int, str, str], str]:
             alleles = gt.replace("|", "/").split("/")
             for i, alt in enumerate(f[4].split(","), 1):
                 if str(i) in alleles:
-                    out[(int(f[1]), f[3], alt)] = "hom" if alleles.count(str(i)) >= 2 else "het"
+                    key = (int(f[1]), f[3], alt)
+                    if base_at is not None and (len(f[3]) > 1 or len(alt) > 1):
+                        key = normalise_variant(*key, base_at=base_at)
+                    zyg = "hom" if alleles.count(str(i)) >= 2 else "het"
+                    out[key] = "hom" if out.get(key) == "hom" or zyg == "hom" else zyg
     return out
 
 
-def trio(child: str, father: str, mother: str, chroms: list[str] | None = None, root: Path | None = None):
+def _reference_base_reader(chrom: str, reference: Path = Path("data/reference")):
+    """A base_at(pos1) over the local reference, or None when the chromosome is not fetched."""
+    fa = reference / f"{chrom}.fa"
+    if not fa.exists():
+        return None, None
+    from genomeos.coords import Locus
+    from genomeos.genome import IndexedGenome
+
+    g = IndexedGenome(str(fa))
+
+    def base_at(pos1: int) -> str:
+        return str(g.fetch(Locus(chrom, pos1 - 1, pos1))).upper()
+
+    return base_at, g
+
+
+def trio(
+    child: str,
+    father: str,
+    mother: str,
+    chroms: list[str] | None = None,
+    root: Path | None = None,
+    normalise: bool = True,
+    reference: Path = Path("data/reference"),
+):
     """Mendelian consistency of a child's variants against both parents, chromosome by chromosome:
     inherited from one or both, present in neither (a de novo candidate), and the impossible ones
     (homozygous in the child, absent from one parent). Where both parents have trusted regions
@@ -920,8 +973,11 @@ def trio(child: str, father: str, mother: str, chroms: list[str] | None = None, 
         "de_novo_candidates",
         "mendelian_errors",
         "outside_a_parent_region",
+        "de_novo_snv",
+        "de_novo_indel",
     )
     tot = dict.fromkeys(keys, 0)
+    normalised_any = False
     per_chrom = {}
     de_novo: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
@@ -931,7 +987,13 @@ def trio(child: str, father: str, mother: str, chroms: list[str] | None = None, 
         pc, pf, pm = (vcf_path(n, chrom, root) for n in (child, father, mother))
         if not (pc and pf and pm):
             continue
-        gc, gf, gm = _genotypes(pc), _genotypes(pf), _genotypes(pm)
+        base_at, genome = _reference_base_reader(chrom, reference) if normalise else (None, None)
+        try:
+            gc, gf, gm = _genotypes(pc, base_at), _genotypes(pf, base_at), _genotypes(pm, base_at)
+        finally:
+            if genome is not None:
+                genome.close()
+        normalised_here = base_at is not None
         rf, rm = load_regions(father, chrom, root), load_regions(mother, chrom, root)
         rc = load_regions(child, chrom, root)  # the child's own trusted regions, when it has them
         sf, sm, sc = [x for x, _ in rf], [x for x, _ in rm], [x for x, _ in rc]
@@ -969,6 +1031,7 @@ def trio(child: str, father: str, mother: str, chroms: list[str] | None = None, 
                     row["outside_a_parent_region"] += 1
             elif trusted:
                 row["de_novo_candidates"] += 1
+                row["de_novo_snv" if len(key[1]) == 1 and len(key[2]) == 1 else "de_novo_indel"] += 1
                 if len(de_novo) < 500:
                     de_novo.append(
                         {"chrom": chrom, "pos": key[0], "ref": key[1], "alt": key[2], "child": zyg}
@@ -979,6 +1042,7 @@ def trio(child: str, father: str, mother: str, chroms: list[str] | None = None, 
             tot[k] += row[k]
         per_chrom[chrom] = row
         done.append(chrom)
+        normalised_any = normalised_any or normalised_here
     cv = tot["child_variants"] or 1
     out = {
         "child": child,
@@ -993,6 +1057,11 @@ def trio(child: str, father: str, mother: str, chroms: list[str] | None = None, 
             "trusted regions applied (both parents, and the child's where present)"
             if regions_used
             else "no trusted regions: every absence counts, most are no-calls"
+        ),
+        "representation": (
+            "alleles normalised: common suffix and prefix trimmed, indels left-aligned on the reference"
+            if normalised_any
+            else "alleles compared as written"
         ),
         "per_chromosome": per_chrom,
         "de_novo_candidates": de_novo,

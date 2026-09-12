@@ -167,3 +167,23 @@ def test_trio_counts_inheritance(tmp_path):
     t = r["totals"]
     assert (t["de_novo_candidates"], t["mendelian_errors"], t["outside_a_parent_region"]) == (0, 0, 2)
     assert r["regions"].startswith("trusted regions")
+
+
+def test_normalise_variant_makes_the_three_writings_of_one_indel_compare():
+    from genomeos.genome.individuals import normalise_variant
+
+    # TGG>TGGG, T>TG and TGG>T at one position: an insertion of G (twice) and a deletion of GG
+    ref_seq = "ACGTTGGA"  # 1-based: A1 C2 G3 T4 T5 G6 G7 A8
+    base_at = lambda p: ref_seq[p - 1]  # noqa: E731
+    assert normalise_variant(4, "TGG", "TGGG", base_at) == normalise_variant(4, "T", "TG", base_at)
+    assert normalise_variant(4, "TGG", "T", base_at) == (4, "TGG", "T")
+    # a deletion inside a repeat written at a later unit left-aligns to the first
+    seq = "CAGTGTGTGTA"  # C1 A2 G3 T4 G5 T6 G7 T8 G9 T10 A11
+    ba = lambda p: seq[p - 1]  # noqa: E731
+    assert normalise_variant(6, "TGT", "T", ba) == normalise_variant(4, "TGT", "T", ba) == (2, "AGT", "A")
+    # SNVs and identical alleles are untouched
+    assert normalise_variant(5, "G", "A", ba) == (5, "G", "A") and normalise_variant(5, "G", "G", ba) == (
+        5,
+        "G",
+        "G",
+    )

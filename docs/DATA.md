@@ -233,11 +233,18 @@ and 48,848 were "Mendelian errors" (homozygous in the child, absent from a
 parent); with all three region sets applied, 12,296 and 2,930, and 133,736
 child calls sit outside a parent's trusted region and are counted as
 untrusted rather than as events. Real de novo variation is about 60 to 100
-per genome, so the 12,296 that remain are still mostly representation
-differences between three separately produced call sets (indels aligned
-differently, multi-allelic sites), which is the honest state: a trio
-comparison of three benchmark files measures the callers' agreement first
-and inheritance second. Stored under the child's directory as
+per genome, so the 12,296 were mostly representation differences between
+three separately produced call sets: the same insertion written TGG>TGGG in
+one file, T>TG in another, a deletion of two repeat units placed at a
+different unit. Since 2026-09-12 the comparison normalises every allele
+first (common suffix and prefix trimmed to one anchor base, indels
+left-aligned along the local reference), and the excess falls to 1,430
+candidates (1,173 SNVs, 257 indels) and 7 Mendelian errors, with 124,881
+child calls outside a parent's region. What remains is child PASS calls
+inside both parents' high-confidence regions with no parent row within a
+base: the true de novos plus the benchmark files' own disagreements. The
+imported files carry genotypes only, unphased, so phasing by parent waits
+for a phased import. Stored under the child's directory as
 `trio_<father>_<mother>.json`, never under `data/results`.
 
 The inventory also surfaces what the reference hides. hg38 itself carries a

@@ -118,6 +118,13 @@ an individual's chromosome is a path; `fetch(locus)` is the contract that
 must survive that change. Diploid genomes are two `Genome` objects labelled
 `maternal` / `paternal` until phased-graph support lands.
 
+Large public files are read, not downloaded: two standard-library readers
+fetch byte ranges over HTTP and decode only what a question needs,
+`attribution/bigwig.py` for bigWig tracks (a 9.6 GB constraint track costs a
+chromosome tens of megabytes) and `genome/bam_range.py` for indexed BAMs (a
+600 GB alignment costs a telomere estimate 218 MB). Whatever is kept is the
+distilled answer under `data/knowledge` or `data/results`, never the file.
+
 ## 8. Resolution levels
 
 Simulating every molecule of every cell is impossible. BioVM will let each

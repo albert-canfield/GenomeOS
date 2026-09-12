@@ -2917,6 +2917,11 @@ def cmd_individual(args: argparse.Namespace) -> int:
             f"({r['fraction_mendelian_errors']:.3%}); {t['outside_a_parent_region']:,} outside a parent's "
             f"trusted region  [{r['regions']}]"
         )
+        if t.get("de_novo_snv") is not None:
+            print(
+                f"  de novo candidates: {t['de_novo_snv']:,} SNVs, {t['de_novo_indel']:,} indels  "
+                f"[{r.get('representation', '')}]"
+            )
         rows = [
             {
                 "chr": c,
