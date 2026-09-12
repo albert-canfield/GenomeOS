@@ -1010,9 +1010,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   syntax, operators and values; eye colour keeps the syntax and changes the
   value) and the two DNA-as-code conversations of the same day are the
   brief; GRAMMAR-BY-COMPARISON.md holds them against the code.
-- **Code.** `attribution/syntax.py` and `genomeos syntax GENE` (a peer lane,
-  in progress 2026-09-12: per base of one gene, constrained across mammals
-  against variable among the imported people, rs12913832 named). It builds
+- **Code.** `attribution/syntax.py` and `genomeos syntax --gene G --chrom C`
+  (area I's lane, landed 2026-09-12 as dd2b620: per base of one gene,
+  constrained across mammals against variable among the imported people,
+  rs12913832 named as HERC2's second most constrained variable base). It builds
   on `attribution/bigwig.py` and
   `attribution/constraint.py` (the species axis, done genome-wide),
   `genome/mouse.py` (MGI orthology, node synteny), `attribution/compile.py`
