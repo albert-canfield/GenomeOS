@@ -47,13 +47,13 @@ def run_missing(passes: int = 3) -> None:
                 print(f"{chrom}: exit {r.returncode}, continuing with the next chromosome", flush=True)
 
 
-def aggregate(results_dir: Path = Path("data/results")) -> dict:
+def aggregate(results_dir: Path = Path("data/results"), knowledge: Path = mpra.KNOWLEDGE) -> dict:
     rows: list[dict] = []
     per: dict[str, dict] = {}
     requests = 0
     for f in sorted(results_dir.glob("mpra_chr*.json")):
         d = json.loads(f.read_text())
-        rows.extend(d["rows"])
+        rows.extend(d.get("rows") or mpra.load_rows(d["chrom"], knowledge))
         s = d["summary"]
         per[d["chrom"]] = {
             "elements": d["annotated"],

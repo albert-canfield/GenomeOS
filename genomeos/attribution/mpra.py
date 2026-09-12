@@ -6,7 +6,8 @@ parallel reporter assay asks how much a sequence drives transcription in a given
 tens of thousands of sequences at once. The Ahituv lab's ENCODE4 joint lentiMPRA library tested
 the same 53,990 elements (200 bp, chosen from DNase peaks of each line) in K562, HepG2 and WTC11,
 so activity can be compared across cells for the same sequence. The three element files (1.1 MB
-each) are streamed once into data/knowledge/mpra, local.
+each) are streamed once into data/knowledge/mpra, local, where the per-element rows also stay; the
+committed result per chromosome is the summary.
 
 Every element is read blind, per cell: which ENCODE cCRE class sits there; whether the cell's
 own measured DNase (the reader) is open over it; how constrained it is; and, where the model is
@@ -20,6 +21,7 @@ above ACTIVE. Measured layers are `experimental`; the model's is `predicted`.
 from __future__ import annotations
 
 import gzip
+import json
 import math
 import urllib.request
 from dataclasses import dataclass, field
@@ -134,6 +136,19 @@ def annotate(
             }
         )
     return rows
+
+
+def save_rows(chrom: str, rows: list[dict[str, Any]], knowledge: Path = KNOWLEDGE) -> Path:
+    """The per-element rows stay local (a few MB per chromosome); the committed result keeps the summary."""
+    p = knowledge / f"rows_{chrom}.json"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(rows))
+    return p
+
+
+def load_rows(chrom: str, knowledge: Path = KNOWLEDGE) -> list[dict[str, Any]]:
+    p = knowledge / f"rows_{chrom}.json"
+    return json.loads(p.read_text()) if p.exists() else []
 
 
 def attach_predicted(rows: list[dict[str, Any]], predicted: dict[str, dict[str, float]]) -> None:

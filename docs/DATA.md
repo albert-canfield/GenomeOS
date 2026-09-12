@@ -315,7 +315,8 @@ WTC11 ENCSR336MKI) is read from the three element-quantification BED files
 (ENCFF802FUV, ENCFF475FKV, ENCFF769REH; 1.1 MB each), streamed once into
 `data/knowledge/mpra/` (git-ignored) by `attribution/mpra.py`; forward and
 reverse copies of an element are averaged. Column 7 is log2(RNA/DNA). The
-per-chromosome results (`mpra_chr*.json`, with rows) and the fold
+per-element rows stay local (`data/knowledge/mpra/rows_<chrom>.json`); the
+per-chromosome summaries (`mpra_chr*.json`) and the fold
 (`mpra_genome_wide.json`) are committed. Predicted DNase per cell line comes
 from AlphaGenome (K562 EFO:0002067, HepG2 EFO:0001187) through
 `predict/chromatin_tracks.py`, cached as element means under

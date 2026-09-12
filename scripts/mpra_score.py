@@ -88,7 +88,7 @@ def main() -> int:
         "annotated": len(rows),
         "reader_cells": sorted(peaks),
         "summary": summary,
-        "rows": rows,
+        "rows_where": str(mpra.save_rows(chrom, rows)),
         "phylop_cost": cost,
         "model_cost": model_cost,
         "evidence": f"{mpra.EVIDENCE}; experimental: ENCODE DNase peaks (reader); measured: Zoonomia phyloP; "
