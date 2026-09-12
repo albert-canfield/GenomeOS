@@ -7,16 +7,16 @@
   "codon_table_size": 64,
   "training_cds": 447,
   "predictions": 142,
-  "predicted_exons": 4153,
+  "predicted_exons": 4156,
   "true_exons": 8669,
-  "exon_sensitivity": 0.305,
-  "exon_precision": 0.6366,
+  "exon_sensitivity": 0.3053,
+  "exon_precision": 0.6369,
   "canonical_exons": 4041,
-  "canonical_exon_sensitivity": 0.6196,
-  "site_sensitivity": 0.4145,
-  "site_precision": 0.6937,
-  "gene_sensitivity": 0.7987,
-  "gene_precision": 0.9437,
+  "canonical_exon_sensitivity": 0.6204,
+  "site_sensitivity": 0.415,
+  "site_precision": 0.6941,
+  "gene_sensitivity": 0.8009,
+  "gene_precision": 0.9507,
   "true_genes": 447,
   "candidates_before_filter": 1293,
   "predictions_top": [
@@ -12493,8 +12493,8 @@
         "-": "ENCFF045ITU"
       },
       "IMR-90": {
-        "+": "ENCFF536EYJ",
-        "-": "ENCFF433DSZ"
+        "+": "ENCFF433DSZ",
+        "-": "ENCFF536EYJ"
       },
       "A549": {
         "+": "ENCFF600VCR",
@@ -12506,7 +12506,41 @@
       }
     },
     "signal_threshold": 0.05,
-    "exons_measured": 3656,
+    "orientation": {
+      "K562": "as labelled",
+      "HepG2": "as labelled",
+      "GM12878": "as labelled",
+      "IMR-90": "swapped",
+      "A549": "as labelled",
+      "MCF-7": "as labelled"
+    },
+    "orientation_probe": {
+      "K562": {
+        "as labelled": 30.74,
+        "swapped": 0.0
+      },
+      "HepG2": {
+        "as labelled": 12.64,
+        "swapped": 0.0
+      },
+      "GM12878": {
+        "as labelled": 48.23,
+        "swapped": 0.07
+      },
+      "IMR-90": {
+        "as labelled": 0.0,
+        "swapped": 30.86
+      },
+      "A549": {
+        "as labelled": 34.37,
+        "swapped": 5.09
+      },
+      "MCF-7": {
+        "as labelled": 44.95,
+        "swapped": 0.07
+      }
+    },
+    "exons_measured": 3667,
     "bytes_fetched": 12289216,
     "evidence": "experimental: ENCODE total RNA-seq, strand-specific signal of unique reads (GRCh38, released)",
     "min_exon_fraction": 0.3

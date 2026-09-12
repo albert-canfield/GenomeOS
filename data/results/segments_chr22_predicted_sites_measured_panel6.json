@@ -6,17 +6,17 @@
   "coding_model": "codon",
   "codon_table_size": 64,
   "training_cds": 447,
-  "predictions": 289,
-  "predicted_exons": 4624,
+  "predictions": 225,
+  "predicted_exons": 4559,
   "true_exons": 8669,
-  "exon_sensitivity": 0.3203,
-  "exon_precision": 0.6006,
+  "exon_sensitivity": 0.3207,
+  "exon_precision": 0.6098,
   "canonical_exons": 4041,
-  "canonical_exon_sensitivity": 0.6508,
-  "site_sensitivity": 0.4366,
-  "site_precision": 0.6562,
-  "gene_sensitivity": 0.8859,
-  "gene_precision": 0.5882,
+  "canonical_exon_sensitivity": 0.6516,
+  "site_sensitivity": 0.4371,
+  "site_precision": 0.6664,
+  "gene_sensitivity": 0.8881,
+  "gene_precision": 0.7422,
   "true_genes": 447,
   "candidates_before_filter": 1293,
   "predictions_top": [
@@ -12466,8 +12466,8 @@
         "-": "ENCFF045ITU"
       },
       "IMR-90": {
-        "+": "ENCFF536EYJ",
-        "-": "ENCFF433DSZ"
+        "+": "ENCFF433DSZ",
+        "-": "ENCFF536EYJ"
       },
       "A549": {
         "+": "ENCFF600VCR",
@@ -12479,7 +12479,41 @@
       }
     },
     "signal_threshold": 0.05,
-    "exons_measured": 4231,
+    "orientation": {
+      "K562": "as labelled",
+      "HepG2": "as labelled",
+      "GM12878": "as labelled",
+      "IMR-90": "swapped",
+      "A549": "as labelled",
+      "MCF-7": "as labelled"
+    },
+    "orientation_probe": {
+      "K562": {
+        "as labelled": 6.55,
+        "swapped": 0.48
+      },
+      "HepG2": {
+        "as labelled": 0.6,
+        "swapped": 0.0
+      },
+      "GM12878": {
+        "as labelled": 0.47,
+        "swapped": 0.0
+      },
+      "IMR-90": {
+        "as labelled": 0.46,
+        "swapped": 1.58
+      },
+      "A549": {
+        "as labelled": 1.36,
+        "swapped": 0.45
+      },
+      "MCF-7": {
+        "as labelled": 1.0,
+        "swapped": 0.15
+      }
+    },
+    "exons_measured": 4113,
     "bytes_fetched": 12293893,
     "evidence": "experimental: ENCODE total RNA-seq, strand-specific signal of unique reads (GRCh38, released)",
     "min_exon_fraction": 0.3

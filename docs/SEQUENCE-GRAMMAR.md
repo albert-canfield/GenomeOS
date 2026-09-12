@@ -244,9 +244,9 @@ tested against it.
    | + starts at ENCODE promoters, RNA ≥ 50% | 48 | 24.0% / 72.6% | 44.6% | 42.1% / 100% |
 
    | measured: ENCODE K562 total RNA-seq over ≥ 30% of exon bases (signal ≥ 0.05) | 55 | 26.0% / 72.1% | 47.9% | 44.8% / 89.1% |
-   | measured, six-line panel (K562, HepG2, GM12878, IMR-90, A549, MCF-7; best line per exon) | 143 | 36.1% / 65.9% | 67.4% | 62.9% / 62.9% |
-   | predicted panel **or** measured panel (union) | 154 | 36.7% / 63.7% | 68.4% | 66.1% / 63.0% |
-   | predicted panel **and** measured panel (intersection) | 71 | 32.3% / 71.6% | 60.6% | 54.3% / **97.2%** |
+   | measured, six-line panel (K562, HepG2, GM12878, IMR-90, A549, MCF-7; best line per exon; tracks oriented) | 127 | 36.6% / 66.3% | 68.1% | 63.8% / 72.4% |
+   | predicted panel **or** measured panel (union) | 137 | 37.2% / 64.4% | 69.3% | 67.0% / 72.3% |
+   | predicted panel **and** measured panel (intersection) | 72 | 32.3% / 71.2% | 59.9% | 54.3% / **95.8%** |
 
    (`segments_chr21_predicted_sites_rna.json`, `…_measured_K562.json`.) The
    measured row uses an experiment instead of a model: ENCODE's
@@ -261,8 +261,8 @@ tested against it.
    the measurement was for. A panel of six lines (`--rna-measured
    "K562,HepG2,…"`, an exon counted where its best line covers it, 6.3 MB
    moved; HeLa-S3 and SK-N-SH have no released strand-specific track) buys
-   sensitivity back, 45% → 63% of genes and 48% → 67% of canonical exons,
-   and pays in precision, 89% → 63%: the more lines are pooled, the more
+   sensitivity back, 45% → 64% of genes and 48% → 68% of canonical exons,
+   and pays in precision, 89% → 72%: the more lines are pooled, the more
    candidates sit under transcription that is not a coding gene (a
    pseudogene, a long non-coding RNA, an antisense read-through), and
    measured RNA cannot tell those apart, whereas the model's gene-level
@@ -270,9 +270,23 @@ tested against it.
    region is made, not that it is a gene; the two together, a model that
    knows genes and a measurement that knows this cell, are the honest
    filter. Combined (`--rna-combine`): the union adds three genes to the
-   measured panel and keeps its noise (66.1% / 63.0%); the intersection is
-   the strictest call the series has, 71 candidates of which 69 are genes
-   (97.2% precision at 54.3% sensitivity), with exons right 72% of the time.
+   measured panel and keeps its noise (67.0% / 72.3%); the intersection is
+   the strictest call the series has, 72 candidates of which 69 are genes
+   (95.8% precision at 54.3% sensitivity), with exons right 71% of the time.
+
+   **Oriented (2026-09-12).** The panel rows above were re-run after a
+   finding from the closure work: ENCODE labels a strand track by the read,
+   and IMR-90's total RNA-seq reads antisense, so its "plus" file carries
+   the minus-strand genes. `MeasuredRna` now probes forty exons per strand
+   in both orientations and swaps a line's tracks when the swapped
+   orientation carries twice the signal (IMR-90 swapped; the other five as
+   labelled). The effect was not the missing line but false candidates:
+   with IMR-90 read backwards, an antisense candidate over a real gene
+   found signal on the wrong track and passed, so the measured panel's
+   gene precision was 63% on chr21 and 59% on chr22; oriented, it is 72%
+   and 74% at the same sensitivity, and the intersection's 97.2% becomes
+   95.8% (one candidate more, the same 69 genes). The ordering of the
+   series does not move; the measurement got more honest.
    So the two filters are not redundant: the model supplies the gene-level
    judgement, the measurement supplies the cell, and asking for both is how
    a parser's call becomes something a geneticist would act on. This is
@@ -286,8 +300,8 @@ tested against it.
    | matrices alone | 297 | 3.0% / 8.3% | 5.9% | 72.3% / 30.0% |
    | AlphaGenome splice sites | 1,293 | 34.6% / 49.4% | 70.4% | 97.3% / 18.7% |
    | + predicted RNA (eight tissues) | 151 | 30.9% / 63.1% | 62.8% | 81.2% / 92.7% |
-   | + measured RNA (six ENCODE lines) | 289 | 32.0% / 60.1% | 65.1% | 88.6% / 58.8% |
-   | + both (intersection) | 142 | 30.5% / 63.7% | 62.0% | 79.9% / 94.4% |
+   | + measured RNA (six ENCODE lines, oriented) | 225 | 32.1% / 61.0% | 65.2% | 88.8% / 74.2% |
+   | + both (intersection) | 142 | 30.5% / 63.7% | 62.0% | 80.1% / 95.1% |
 
    The shape is chr21's shape: sites take canonical exons from 6% to 70%,
    the predicted panel turns one-in-five gene precision into nine-in-ten,

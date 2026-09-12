@@ -6,17 +6,17 @@
   "coding_model": "codon",
   "codon_table_size": 64,
   "training_cds": 221,
-  "predictions": 143,
-  "predicted_exons": 2052,
+  "predictions": 127,
+  "predicted_exons": 2064,
   "true_exons": 3743,
-  "exon_sensitivity": 0.3612,
-  "exon_precision": 0.6589,
+  "exon_sensitivity": 0.3657,
+  "exon_precision": 0.6633,
   "canonical_exons": 1907,
-  "canonical_exon_sensitivity": 0.6738,
-  "site_sensitivity": 0.464,
-  "site_precision": 0.701,
-  "gene_sensitivity": 0.629,
-  "gene_precision": 0.6294,
+  "canonical_exon_sensitivity": 0.6812,
+  "site_sensitivity": 0.4702,
+  "site_precision": 0.7064,
+  "gene_sensitivity": 0.638,
+  "gene_precision": 0.7244,
   "true_genes": 221,
   "candidates_before_filter": 1003,
   "predictions_top": [
@@ -5996,6 +5996,103 @@
     {
       "chrom": "chr21",
       "strand": "-",
+      "start": 43053879,
+      "end": 43104361,
+      "exons": [
+        [
+          43053879,
+          43053983
+        ],
+        [
+          43055203,
+          43055428
+        ],
+        [
+          43056057,
+          43056099
+        ],
+        [
+          43056802,
+          43056887
+        ],
+        [
+          43058144,
+          43058253
+        ],
+        [
+          43058833,
+          43058968
+        ],
+        [
+          43059225,
+          43059303
+        ],
+        [
+          43059729,
+          43059810
+        ],
+        [
+          43060440,
+          43060546
+        ],
+        [
+          43062310,
+          43062395
+        ],
+        [
+          43062952,
+          43063078
+        ],
+        [
+          43063899,
+          43063991
+        ],
+        [
+          43065202,
+          43065272
+        ],
+        [
+          43065386,
+          43065521
+        ],
+        [
+          43065615,
+          43065875
+        ],
+        [
+          43066242,
+          43066377
+        ],
+        [
+          43068508,
+          43068615
+        ],
+        [
+          43071984,
+          43072201
+        ],
+        [
+          43094670,
+          43094788
+        ],
+        [
+          43095437,
+          43095536
+        ],
+        [
+          43095693,
+          43095760
+        ],
+        [
+          43104314,
+          43104361
+        ]
+      ],
+      "score": 412.33
+    },
+    {
+      "chrom": "chr21",
+      "strand": "-",
       "start": 42312382,
       "end": 42395417,
       "exons": [
@@ -7472,61 +7569,12 @@
         ]
       ],
       "score": 273.43
-    },
-    {
-      "chrom": "chr21",
-      "strand": "+",
-      "start": 31911843,
-      "end": 31999184,
-      "exons": [
-        [
-          31911843,
-          31912249
-        ],
-        [
-          31946035,
-          31946171
-        ],
-        [
-          31958842,
-          31958970
-        ],
-        [
-          31968249,
-          31968385
-        ],
-        [
-          31974554,
-          31974717
-        ],
-        [
-          31983525,
-          31983609
-        ],
-        [
-          31990128,
-          31990176
-        ],
-        [
-          31991954,
-          31992110
-        ],
-        [
-          31995767,
-          31995948
-        ],
-        [
-          31998525,
-          31999184
-        ]
-      ],
-      "score": 267.34
     }
   ],
-  "evidence": "predicted: segment parser v1 with AlphaGenome splice sites as the donor/acceptor candidates (learned Kozak matrix for starts, codon log-odds, Viterbi); candidates kept only where ENCODE K562,HepG2,GM12878,HeLa-S3,IMR-90,SK-N-SH,A549,MCF-7 RNA-seq covers their exons",
+  "evidence": "predicted: segment parser v1 with AlphaGenome splice sites as the donor/acceptor candidates (learned Kozak matrix for starts, codon log-odds, Viterbi); candidates kept only where ENCODE K562,HepG2,GM12878,IMR-90,A549,MCF-7,HeLa-S3,SK-N-SH RNA-seq covers their exons",
   "note": "scored against every coding transcript's CDS; a prediction is a candidate, not an assertion",
   "rna_measured": {
-    "cell_type": "K562,HepG2,GM12878,HeLa-S3,IMR-90,SK-N-SH,A549,MCF-7",
+    "cell_type": "K562,HepG2,GM12878,IMR-90,A549,MCF-7,HeLa-S3,SK-N-SH",
     "panel": [
       "K562",
       "HepG2",
@@ -7561,8 +7609,8 @@
         "-": "ENCFF045ITU"
       },
       "IMR-90": {
-        "+": "ENCFF536EYJ",
-        "-": "ENCFF433DSZ"
+        "+": "ENCFF433DSZ",
+        "-": "ENCFF536EYJ"
       },
       "A549": {
         "+": "ENCFF600VCR",
@@ -7574,7 +7622,41 @@
       }
     },
     "signal_threshold": 0.05,
-    "exons_measured": 1999,
+    "orientation": {
+      "K562": "as labelled",
+      "HepG2": "as labelled",
+      "GM12878": "as labelled",
+      "IMR-90": "swapped",
+      "A549": "as labelled",
+      "MCF-7": "as labelled"
+    },
+    "orientation_probe": {
+      "K562": {
+        "as labelled": 4.76,
+        "swapped": 0.53
+      },
+      "HepG2": {
+        "as labelled": 1.04,
+        "swapped": 0.0
+      },
+      "GM12878": {
+        "as labelled": 9.74,
+        "swapped": 3.34
+      },
+      "IMR-90": {
+        "as labelled": 0.04,
+        "swapped": 1.06
+      },
+      "A549": {
+        "as labelled": 13.24,
+        "swapped": 0.41
+      },
+      "MCF-7": {
+        "as labelled": 9.7,
+        "swapped": 1.62
+      }
+    },
+    "exons_measured": 1967,
     "bytes_fetched": 6313752,
     "evidence": "experimental: ENCODE total RNA-seq, strand-specific signal of unique reads (GRCh38, released)",
     "min_exon_fraction": 0.3
