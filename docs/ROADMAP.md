@@ -287,7 +287,15 @@ in order. "Owner" is the session that holds the files today (see §7).
   measured transcription includes the non-coding transcription the model's
   gene-level tracks exclude. A model that knows genes plus a measurement that
   knows the cell is the honest filter. Results are
-  `segments_chr21_predicted_sites_measured_<cell|panelN>`.
+  `segments_chr21_predicted_sites_measured_<cell|panelN>`. A measurement
+  lesson found by the closure test (area I) and fixed here on 2026-09-12:
+  ENCODE labels a strand track by the read, and IMR-90's total RNA-seq reads
+  antisense, so `MeasuredRna` now probes sixty first exons per strand in both
+  orientations and swaps when the swapped one carries twice the signal (K562
+  26.4 against 1.8, HepG2 19.7 against 1.4, GM12878 36.3 against 6.4, A549 29.8
+  against 5.6, MCF-7 36.2 against 2.2, IMR-90 0.85 against 22.4, swapped). The
+  six-line panel numbers stand as five lines' worth until the rerun; SK-N-SH
+  and HeLa-S3 have no total RNA-seq bigWig on ENCODE.
 - **The two filters combined (2026-09-12).** `--rna-combine union|intersection`
   applies when both the predicted panel and the measured lines are given.
   The union is the most sensitive call of the series, 66.1% of genes; the
