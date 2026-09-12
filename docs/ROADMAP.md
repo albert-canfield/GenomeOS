@@ -370,7 +370,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   calls"). The L1 ORF2
   and Alu sequence signatures are superseded by the RepeatMasker pass and
   stay as the fallback for chromosomes not yet distilled.
-- **Owner.** genomeos-fe.
+- **Owner.** genomeos-8e (genomeos-fe before the restart of 2026-09-12).
 
 ### C. Molecules (RNA, proteins, pathways, the knowledge graph)
 
@@ -509,7 +509,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   2026-09-12 in area D: the 31 hg38 frameshift and nonsense alleles surfaced
   in the coding inventory and the dossier, a carrier of the reference allele
   being a carrier of a truncation.
-- **Owner.** genomeos-fe.
+- **Owner.** genomeos-8e (genomeos-fe before the restart of 2026-09-12).
 
 ### D. The individual (BioTwin)
 
@@ -631,13 +631,29 @@ in order. "Owner" is the session that holds the files today (see §7).
   normalisation, so a number to compare between people read the same way, not
   to quote (`telomere_range_HG002`, GIAB open consent).
 - **Missing.** No polygenic scores; the trace still uses the canonical
-  transcript rather than the one the tissue makes; the trio's 12,296
-  candidates are not yet reduced to the 60 to 100 that a child really carries;
-  the telomere estimate has no GC normalisation.
-- **Next.** 1. De novo candidates normalised across the three call sets
-  (representation, then phasing by parent) until the count lands where the
-  literature says.
-- **Owner.** genomeos-fe.
+  transcript rather than the one the tissue makes; the trio's 1,430
+  normalised candidates are not yet phased by parent or reduced to the 60 to
+  100 a child really carries; the telomere estimate has no GC normalisation.
+- **The trio normalised (2026-09-12).** The comparison normalises every
+  allele before matching (common suffix and prefix trimmed to one anchor base,
+  indels left-aligned along the local reference; `normalise_variant` in
+  `genome/individuals.py`), because the three GIAB files write one insertion
+  three ways. HG002 against HG003 and HG004 over 22 autosomes with all three
+  region sets applied: de novo candidates 12,296 to 1,430 (1,173 SNVs, 257
+  indels), Mendelian errors 2,930 to 7, inherited 96.4% to 96.9%, 124,881
+  child calls outside a parent's region. What remains is child PASS calls
+  inside both parents' high-confidence regions with no parent row within a
+  base (97% of a 300-candidate sample): the true de novos, 60 to 100 expected,
+  plus the benchmark files' own disagreements. `individual trio` prints the
+  SNV and indel split and the representation used. The three items area D's
+  Next held this morning are closed; ARCHITECTURE.md §7 now describes the two
+  standard-library range readers (`bigwig.py`, `bam_range.py`) and the rule
+  that only the distilled answer is kept.
+- **Next.** 1. Phasing by parent on the 1,430 candidates, which waits for a
+  phased import (the GIAB files carry unphased genotypes); until then the
+  1,430 stand as the trio's disagreement set. 2. Polygenic scores, the one
+  item of the original Missing list untouched.
+- **Owner.** genomeos-8e (genomeos-fe before the restart of 2026-09-12).
 
 ### E. From one cell to an organism
 
