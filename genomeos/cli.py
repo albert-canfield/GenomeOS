@@ -1457,6 +1457,80 @@ def cmd_closure(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_origin(args: argparse.Namespace) -> int:
+    """Origin per gene and age per library from Ensembl Compara, streamed once (area J step 2)."""
+    from genomeos.knowledge.homology import LADDER, STRATA
+    from genomeos.results import load_result
+
+    r = load_result("origin_genome_wide")
+    if r is None:
+        print("no origin_genome_wide result yet; run: uv run python scripts/origin_genome_wide.py")
+        return 1
+    if args.gene:
+        g = (r.get("genes") or {}).get(args.gene)
+        if not g:
+            print(f"{args.gene}: not a protein-coding gene in the dump (or unknown symbol)")
+            return 1
+        print(
+            f"{args.gene}: origin {g['origin']} ({g['ladder']}); orthologues in {g['species']} species, "
+            f"{g['one2one']} one-to-one; {len(g['paralogues'])} paralogues"
+            + (f": {', '.join(g['paralogues'][: args.top])}" if g["paralogues"] else "")
+            + (" …" if len(g["paralogues"]) > args.top else "")
+        )
+        print(f"  [{r['evidence']['origin']}; {r['evidence']['caveat']}]")
+        return 0
+    if args.library:
+        lib = (r.get("libraries") or {}).get(args.library)
+        if not lib:
+            print(f"{args.library}: no members placed")
+            return 1
+        print(
+            f"{args.library}: {lib['members_placed']} of {lib['members']} members placed; median origin "
+            f"{lib['median_origin']} ({lib['ladder']}), deepest {lib['deepest']}; animal or older "
+            f"{_pct(lib['share_animal_or_older'])}, vertebrate to tetrapod "
+            f"{_pct(lib['share_vertebrate_to_tetrapod'])}, amniote or younger "
+            f"{_pct(lib['share_amniote_or_younger'])}"
+        )
+        print(
+            _table([{"stratum": s, "genes": n} for s, n in lib["distribution"].items()], ["stratum", "genes"])
+        )
+        return 0
+    print(
+        f"{r['coding_genes']:,} protein-coding genes placed by origin "
+        f"({r['species_placed']} species on the ladder)"
+    )
+    print(
+        _table(
+            [
+                {"stratum": s, "ladder": LADDER[s], "genes": r["by_stratum"].get(s, 0)}
+                for s in STRATA
+                if r["by_stratum"].get(s)
+            ],
+            ["stratum", "ladder", "genes"],
+        )
+    )
+    rows = sorted(r["libraries"].items(), key=lambda kv: -kv[1]["share_animal_or_older"])
+    print(f"\nlibraries by age (oldest first, top {args.top}):")
+    print(
+        _table(
+            [
+                {
+                    "library": k,
+                    "placed": v["members_placed"],
+                    "median origin": v["median_origin"],
+                    "animal+": _pct(v["share_animal_or_older"]),
+                    "vertebrate": _pct(v["share_vertebrate_to_tetrapod"]),
+                    "amniote+": _pct(v["share_amniote_or_younger"]),
+                }
+                for k, v in rows[: args.top]
+            ],
+            ["library", "placed", "median origin", "animal+", "vertebrate", "amniote+"],
+        )
+    )
+    print(f"  [{r['evidence']['origin']}; {r['evidence']['caveat']}]")
+    return 0
+
+
 def cmd_variation(args: argparse.Namespace) -> int:
     """Constraint on two axes, mammals and people, per UNKNOWN block and element (area J step 1)."""
     from genomeos.attribution.variation import CASE_ORDER, run_and_save, vista_genome
@@ -3982,6 +4056,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
     p.add_argument("--top", type=int, default=12)
     p.set_defaults(fn=cmd_closure)
+
+    p = sub.add_parser(
+        "origin",
+        help="origin per gene and age per library: the deepest clade with an orthologue (Ensembl Compara)",
+    )
+    p.add_argument("--gene", help="one gene symbol")
+    p.add_argument("--library", help="one BioLib library id, e.g. core.translation")
+    p.add_argument("--top", type=int, default=15)
+    p.set_defaults(fn=cmd_origin)
 
     p = sub.add_parser(
         "variation",

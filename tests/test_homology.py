@@ -1,0 +1,101 @@
+"""Origin per gene and age per library from a streamed Compara dump (area J step 2)."""
+
+import gzip
+
+from genomeos.knowledge.homology import LADDER, PROXIES, RANK, STRATA, deepest, distil, place, stream
+
+HEADER = (
+    "gene_stable_id\tprotein_stable_id\tspecies\tidentity\thomology_type\thomology_gene_stable_id\t"
+    "homology_protein_stable_id\thomology_species\thomology_identity\tdn\tds\tgoc_score\twga_coverage\t"
+    "is_high_confidence\thomology_id\n"
+)
+
+
+def row(gene, typ, partner, species):
+    return (
+        f"{gene}\tP\thomo_sapiens\t50\t{typ}\t{partner}\tPP\t{species}\t50\tNULL\tNULL\tNULL\tNULL\tNULL\t1\n"
+    )
+
+
+def test_ladder_is_total_and_deepest_picks_the_oldest():
+    assert len(STRATA) == len(RANK) == len(LADDER)
+    assert deepest(["Mammalia", "Eukaryota", None, "Homo"]) == "Eukaryota"
+    assert deepest([None]) is None and deepest([]) is None
+
+
+def test_stream_and_distil(tmp_path):
+    dump = tmp_path / "compara.tsv.gz"
+    with gzip.open(dump, "wt") as fh:
+        fh.write(HEADER)
+        # RPL3-like: orthologues to yeast, fly, fish and mouse, one paralogue
+        fh.write(row("ENSG1", "ortholog_one2one", "Y1", "saccharomyces_cerevisiae"))
+        fh.write(row("ENSG1", "ortholog_one2one", "F1", "drosophila_melanogaster"))
+        fh.write(row("ENSG1", "ortholog_one2many", "Z1", "danio_rerio"))
+        fh.write(row("ENSG1", "ortholog_one2one", "M1", "mus_musculus"))
+        fh.write(row("ENSG1", "within_species_paralog", "ENSG2", "homo_sapiens"))
+        # a mammal-only gene, with a species the ladder has not placed
+        fh.write(row("ENSG2", "ortholog_one2one", "M2", "mus_musculus"))
+        fh.write(row("ENSG2", "ortholog_one2one", "X2", "unplaced_species"))
+        fh.write(row("ENSG2", "other_paralog", "ENSG1", "homo_sapiens"))
+        # a gene with paralogues only: human-specific as far as this set sees
+        fh.write(row("ENSG3", "within_species_paralog", "ENSG4", "homo_sapiens"))
+        # a non-coding gene that must drop out
+        fh.write(row("ENSG5", "ortholog_one2one", "M5", "mus_musculus"))
+    strata = {
+        "saccharomyces_cerevisiae": "Eukaryota",
+        "drosophila_melanogaster": "Metazoa",
+        "danio_rerio": "Euteleostomi",
+        "mus_musculus": "Euarchontoglires",
+    }
+    genes, cost = stream(str(dump), strata)
+    assert cost["rows"] == 10 and cost["unplaced_species"] == {"unplaced_species": 1}
+    assert genes["ENSG1"]["one2one"] == 3 and len(genes["ENSG1"]["species"]) == 4
+    symbols = {
+        "ENSG1": ("RPL3", "protein_coding"),
+        "ENSG2": ("MAMM1", "protein_coding"),
+        "ENSG3": ("NEW1", "protein_coding"),
+        "ENSG4": ("NEW2", "protein_coding"),
+        "ENSG5": ("LNC1", "lncRNA"),
+    }
+    members = {"core.translation": ["RPL3", "MAMM1", "MISSING"], "systems.immune": ["NEW1"]}
+    d = distil(genes, symbols, members)
+    g = d["genes"]
+    assert g["RPL3"]["origin"] == "Eukaryota" and g["RPL3"]["paralogues"] == ["MAMM1"]
+    assert g["RPL3"]["ladder"] == "Life/Eukaryote core"
+    assert g["MAMM1"]["origin"] == "Euarchontoglires" and g["MAMM1"]["paralogue_types"] == {
+        "other_paralog": 1
+    }
+    assert g["NEW1"]["origin"] == "Homo" and g["NEW1"]["species"] == 0
+    assert "LNC1" not in g and d["coding_genes"] == 3
+    assert d["by_stratum"] == {"Eukaryota": 1, "Euarchontoglires": 1, "Homo": 1}
+    lib = d["libraries"]["core.translation"]
+    assert lib["members_placed"] == 2 and lib["members"] == 3 and lib["deepest"] == "Eukaryota"
+    assert lib["median_origin"] == "Eukaryota" and lib["share_animal_or_older"] == 0.5
+    assert lib["share_amniote_or_younger"] == 0.5 and lib["distribution"] == {
+        "Eukaryota": 1,
+        "Euarchontoglires": 1,
+    }
+    assert d["libraries"]["systems.immune"]["median_origin"] == "Homo"
+
+
+def test_place_uses_proxies_for_the_nodes_ensembl_omits():
+    assert set(PROXIES.values()) <= set(STRATA)
+    chicken = {
+        "Gallus",
+        "Aves",
+        "Archosauria",
+        "Euteleostomi",
+        "Vertebrata",
+        "Chordata",
+        "Metazoa",
+        "Eukaryota",
+    }
+    assert place(chicken) == "Amniota"
+    assert place({"Xenopus", "Amphibia", "Euteleostomi", "Vertebrata", "Eukaryota"}) == "Tetrapoda"
+    assert place({"Bos", "Laurasiatheria", "Eutheria", "Mammalia", "Eukaryota"}) == "Boreoeutheria"
+    assert place({"Monodelphis", "Marsupialia", "Mammalia", "Eukaryota"}) == "Theria"
+    assert place({"Pan", "Homininae", "Hominidae", "Primates", "Eukaryota"}) == "Homininae"
+    assert place({"Saccharomyces", "Fungi", "Eukaryota"}) == "Opisthokonta"
+    assert place({"Eptatretus", "Cyclostomata", "Vertebrata", "Chordata", "Eukaryota"}) == "Vertebrata"
+    # human's own list must not place a species at Homo; an unknown list places nothing
+    assert place({"Homo", "Hominidae"}) == "Hominidae" and place({"Nothing"}) is None
