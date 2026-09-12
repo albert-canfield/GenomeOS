@@ -11,7 +11,9 @@ from genomeos.knowledge.homology import (
     distil,
     merge_genes,
     place,
+    presence_matrix,
     stream,
+    strip_species_sets,
     taxonomy_names,
 )
 
@@ -117,6 +119,8 @@ def test_taxonomy_names_strip_assembly_and_strain_suffixes():
     assert taxonomy_names("bos_taurus_gca963921495v1") == ["bos_taurus_gca963921495v1", "bos_taurus"]
     assert taxonomy_names("mus_musculus_129s1svimj") == ["mus_musculus_129s1svimj", "mus_musculus"]
     assert taxonomy_names("canis_lupus_familiaris") == ["canis_lupus_familiaris", "canis_lupus"]
+    bug = "escherichia_coli_str_k_12_substr_mg1655_gca_000005845"
+    assert taxonomy_names(bug) == [bug, "escherichia_coli_str_k_12_substr_mg1655", "escherichia_coli"]
 
 
 def test_life_stratum_and_merge_of_two_streams():
@@ -166,3 +170,21 @@ def test_species_fallback_places_renamed_species():
 
     assert set(SPECIES_FALLBACK.values()) <= set(STRATA)
     assert SPECIES_FALLBACK["physeter_catodon"] == "Boreoeutheria"
+
+
+def test_presence_matrix_orders_species_by_stratum_and_packs_bits():
+    per_gene = {
+        "A": {"_species_set": {"mus_musculus", "danio_rerio", "saccharomyces_cerevisiae"}},
+        "B": {"_species_set": {"mus_musculus"}},
+        "C": {"_species_set": set()},
+    }
+    strata = {
+        "mus_musculus": "Euarchontoglires",
+        "danio_rerio": "Euteleostomi",
+        "saccharomyces_cerevisiae": "Opisthokonta",
+    }
+    m = presence_matrix(per_gene, strata)
+    assert m["species"] == ["saccharomyces_cerevisiae", "danio_rerio", "mus_musculus"]  # deep to shallow
+    assert m["genes"]["A"] == "7" and m["genes"]["B"] == "1" and m["genes"]["C"] == "0"
+    strip_species_sets(per_gene)
+    assert "_species_set" not in per_gene["A"]

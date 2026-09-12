@@ -221,11 +221,11 @@ def taxonomy_names(species: str) -> list[str]:
     Ensembl names alternative assemblies `bos_taurus_gca963921495v1` and strains
     `mus_musculus_129s1svimj`; the taxonomy knows `bos_taurus` and `mus_musculus`.
     """
-    parts = species.split("_")
     tries = [species]
-    stripped = re.sub(r"_gca\d+v\d+$", "", species)
+    stripped = re.sub(r"_gca_?\d.*$", "", species)  # `_gca963921495v1`, `_gca_000005845`
     if stripped != species:
         tries.append(stripped)
+    parts = stripped.split("_")
     if len(parts) > 2:
         tries.append("_".join(parts[:2]))
     return list(dict.fromkeys(tries))
@@ -365,6 +365,7 @@ def stream(url: str, strata: dict[str, str | None], progress=None) -> tuple[dict
         "rows": rows,
         "seconds": round(time.time() - t0, 1),
         "unplaced_species": dict(unplaced.most_common(20)),
+        "unplaced_all": sorted(unplaced),
     }
     return genes, cost
 
@@ -387,6 +388,7 @@ def distil(
             "origin": origin,
             "ladder": LADDER[origin],
             "species": len(g["species"]),
+            "_species_set": g["species"],
             "one2one": g["one2one"],
             "paralogues": sorted(symbols.get(p, (p, ""))[0] for p in g["paralogues"]),
             "paralogue_types": dict(g["paralogue_types"]),
@@ -429,6 +431,38 @@ def distil(
     }
 
 
+def presence_matrix(per_gene: dict[str, dict], strata: dict[str, str | None]) -> dict:
+    """Which species carry an orthologue of each gene, as one hex bitmask per gene over a fixed species order.
+
+    Species are ordered by stratum (deep to shallow) then name, so a bitmask read left to right walks
+    the ladder. This is the raw material of phylogenetic profiling (area J step 5): libraries whose
+    members are present and absent in the same species were gained and lost together.
+    """
+    species = sorted(
+        {sp for g in per_gene.values() for sp in g.get("_species_set", ())},
+        key=lambda sp: (RANK.get(strata.get(sp) or "", 99), sp),
+    )
+    index = {sp: i for i, sp in enumerate(species)}
+    width = (len(species) + 3) // 4
+    genes: dict[str, str] = {}
+    for sym, g in per_gene.items():
+        bits = 0
+        for sp in g.get("_species_set", ()):
+            bits |= 1 << (len(species) - 1 - index[sp])
+        genes[sym] = format(bits, f"0{width}x") if species else ""
+    return {
+        "species": species,
+        "strata": {sp: strata.get(sp) for sp in species},
+        "genes": genes,
+        "note": "hex bitmask per gene; bit i (from the left) is presence of an orthologue in species[i]",
+    }
+
+
+def strip_species_sets(per_gene: dict[str, dict]) -> None:
+    for g in per_gene.values():
+        g.pop("_species_set", None)
+
+
 def library_members() -> dict[str, list[str]] | None:
     try:
         from genomeos.lib.membership import KnowledgeBase
@@ -459,13 +493,15 @@ def merge_genes(a: dict[str, dict], b: dict[str, dict]) -> dict[str, dict]:
 def _stream_placing(url: str, strata: dict[str, str | None], progress=None) -> tuple[dict, dict]:
     """Stream once; if the dump names species the ladder has not placed, place them and stream again."""
     genes, cost = stream(url, strata, progress)
-    missing = [sp for sp in cost["unplaced_species"] if not strata.get(sp)]
+    missing = [sp for sp in cost.pop("unplaced_all", cost["unplaced_species"]) if not strata.get(sp)]
     if missing:
         placed = classify_species(missing)
         for sp, v in placed.items():
             strata[sp] = v.get("stratum")
         genes, cost = stream(url, strata, progress)
+        cost.pop("unplaced_all", None)
         cost["placed_on_the_way"] = {sp: strata.get(sp) for sp in missing}
+        cost["still_unplaced"] = sorted(sp for sp in missing if not strata.get(sp))
     return genes, cost
 
 
@@ -490,6 +526,10 @@ def run_and_save(
             continue
         genes = merge_genes(genes, g) if genes else g
     out = distil(genes, load_symbols(), library_members())
+    presence = presence_matrix(out["genes"], strata)
+    strip_species_sets(out["genes"])
+    save_result("origin_presence_genome_wide", presence, results_dir)
+    out["presence_result"] = "origin_presence_genome_wide"
     out["cost"] = costs
     out["species_placed"] = sum(1 for v in strata.values() if v)
     out["species_unplaced"] = sorted(sp for sp, v in strata.items() if not v)
