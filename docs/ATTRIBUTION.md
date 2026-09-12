@@ -136,6 +136,15 @@ names a gene for negatives as often as positives: the deletion effect is a
 target finder, not an activity assay (ALPHAGENOME.md "Against measured
 enhancers"; `vista_<chrom>.json`, `vista_genome_wide.json`).
 
+GTEx eQTLs test the target itself. With the match defined by the eQTL's gene
+and the nearest coding TSS as the control, the deletion model's coding target
+is an eGene in 71.7% of the uniform elements that carry an eQTL against 66.2%
+for the nearest TSS, and where the two disagree the model is right 364 times
+to the node's 309. On the most constrained elements the two are level, and
+fewer of them carry an eQTL at all, since constrained sequence carries fewer
+common variants (ALPHAGENOME.md "Against measured targets";
+`eqtl_targets.json`).
+
 The chromosomes sort themselves without being told. chrY and chrX are the
 controls: 0.66% and 0.88% constrained, fossils 27% and 73% of their space.
 The gene-dense chr17, chr19 and chr20 put half their space in the regulatory

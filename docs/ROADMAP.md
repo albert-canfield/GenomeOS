@@ -841,6 +841,27 @@ in order. "Owner" is the session that holds the files today (see §7).
   activity assay. A VISTA negative is conserved sequence next to a gene that
   did not drive expression on one embryonic day, and the model reads adult
   and cell-line tracks. The other 21 chromosomes are running.
+- **Against measured targets (2026-09-12, genomeos-fe).** GTEx v8 eQTLs as
+  the ground truth for the target gene itself: the 1.56 GB archive streamed
+  member by member over HTTP ranges in 135 s into one TSV per tissue under
+  `data/knowledge/gtex` (34 MB), nothing else stored (`attribution/eqtl.py`,
+  job `eqtl_targets`, `eqtl_targets`). A match is an eQTL variant inside the
+  element or within 500 bp whose eGene is the named target; the control is
+  the nearest coding TSS in the node.
+
+  | elements | carry an eQTL | deletion target is an eGene (coding) | nearest TSS is an eGene | where they disagree |
+  |---|---|---|---|---|
+  | 4,800 uniform | 3,725 (78%) | **71.7%** (n = 1,851) | 66.2% (n = 3,725) | model 364, node 309 |
+  | 2,305 most constrained | 1,394 (60%) | 56.0% | 54.9% | 148 against 154, level |
+
+  Held to the same universe as the node (coding genes), the model beats the
+  heuristic on the measured targets as it did on the enhancer deletions. Asked
+  for any gene the model scores 52.9%, the drop being lncRNAs and pseudogenes
+  GTEx has little power on, not evidence they are wrong. Constrained elements
+  carry fewer common variants, so eQTLs are rarer there, which is why the
+  deletion model was pointed at that tier in the first place. Where the
+  predicted track is a GTEx tissue (101 elements) the eQTL for the same gene
+  is significant in that tissue for 40%.
 - **Next.** 1. The blocks organised by the
   evidence that exists: CTCF node, reader open fraction per cell type,
   AlphaGenome enhancer target, repeat family, segmental duplication,
@@ -850,9 +871,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   in-silico mutagenesis for the bases that matter; the self-hosted model gates
   the move from chromosome 21 to the genome. 3. Scoring against measured
   ground truth the way the parser was scored against GENCODE: VISTA begun
-  (above); GTEx eQTLs next, as the measured ground truth for the target gene
-  itself, which VISTA cannot test; then ENCODE4 lentiMPRA for activity, the
-  GWAS catalog and ClinVar for consequence. 4. Closure
+  (above); GTEx eQTLs done for the target gene itself (above); next ENCODE4
+  lentiMPRA (K562, HepG2, WTC11) for activity, where the model has the same
+  cell lines as tracks; then the GWAS catalog and ClinVar for consequence.
+  4. Closure
   at three levels: gene (open elements reproduce GTEx expression per tissue),
   cell (a deleted element moves its gene and the cell program; IMPC, DepMap),
   organism (the Body runtime still produces a human's cell counts over
