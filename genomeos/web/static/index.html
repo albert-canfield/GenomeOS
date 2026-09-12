@@ -384,6 +384,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label>chromosome <select id="ind-chrom"></select></label>
       <button class="ghost" id="ind-pgs" data-tip="Polygenic scores computed for this person from PGS Catalog weights (run `genomeos individual pgs --name N` once): a raw weighted sum with its coverage per score, placed against the other local people; not a percentile, and only within the score's own ancestries."><i class="ic">Σ</i> polygenic</button>
       <label>compare with <select id="ind-against"><option>reference</option></select></label>
+      <label data-tip="Tick to diff the variants inside the chosen chromosome's regulatory elements (ENCODE cCREs) instead of the protein-changing variants: element class, the node's target, the cached deletion prediction."><input type="checkbox" id="ind-reg"> regulatory (one chromosome)</label>
       <button class="ghost" id="ind-diff" data-tip="Genome diff as code review: this person against another local person, or against the reference. Protein-changing variants gene by gene, alleles normalised, + only this person, − only the other, with each variant's consequence, zygosity, AlphaMissense class where scored and ClinVar row where screened. Both people need their coding inventory run once."><i class="ic">⇄</i> diff</button>
       <button class="ghost" id="ind-genes" data-tip="Every coding gene of the chromosome with this person's variants and the consequence of each coding SNV on the canonical transcript."><i class="ic">🧬</i>Genes</button>
       <button class="ghost" id="ind-check" data-tip="Apply this person's variants of the chromosome to the local GRCh38 sequence and count the calls whose reference base disagrees: the assembly check. Statistics only, stored under the person's directory."><i class="ic">✅</i>Check vs reference</button>
@@ -1053,10 +1054,15 @@ async function individualPgs() {
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
 async function individualDiff() {
-  const name = $('#ind-who').value, against = $('#ind-against').value;
-  $('#ind-out').innerHTML = `<span class="muted">reading ${name} against ${against} gene by gene…</span>`;
+  const name = $('#ind-who').value, against = $('#ind-against').value, reg = $('#ind-reg').checked, chrom = $('#ind-chrom').value;
+  $('#ind-out').innerHTML = `<span class="muted">reading ${name} against ${against}${reg ? ' inside ' + chrom + "'s regulatory elements" : ' gene by gene'}…</span>`;
   try {
-    const r = await api(`/api/individual/diff?name=${encodeURIComponent(name)}&against=${encodeURIComponent(against)}`);
+    const r = await api(`/api/individual/diff?name=${encodeURIComponent(name)}&against=${encodeURIComponent(against)}${reg ? '&regulatory=1&chrom=' + encodeURIComponent(chrom) : ''}`);
+    if (reg) {
+      $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.variants_in_elements_a)}</b><span>${name}'s variants in ${chrom}'s ${fmt(r.elements)} elements</span></div>${against === 'reference' ? '' : `<div><b>${fmt(r.variants_in_elements_b)}</b><span>${against}'s</span></div><div><b>${fmt(r.shared)}</b><span>shared</span></div>`}<div><b>${fmt(r.only_a)}${against === 'reference' ? '' : ' / ' + fmt(r.only_b)}</b><span>only one side</span></div><div><b>${r.with_predicted_target_only_a}${against === 'reference' ? '' : ' / ' + r.with_predicted_target_only_b}</b><span>in an element the deletion job scored</span></div></div>
+        <pre style="white-space:pre-wrap;font-size:12px;line-height:1.5">${r.markdown.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
+      return;
+    }
     $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.genes_differing)}</b><span>genes differ</span></div><div><b>${fmt(r.only_a)}</b><span>only ${name}</span></div>${against === 'reference' ? '' : `<div><b>${fmt(r.only_b)}</b><span>only ${against}</span></div><div><b>${fmt(r.shared)}</b><span>shared</span></div>`}<div><b>${r.truncating_only_a}${against === 'reference' ? '' : ' / ' + r.truncating_only_b}</b><span>truncating</span></div><div><b>${r.likely_pathogenic_only_a}${against === 'reference' ? '' : ' / ' + r.likely_pathogenic_only_b}</b><span>predicted likely pathogenic</span></div><div><b>${r.clinvar_only_a}${against === 'reference' ? '' : ' / ' + r.clinvar_only_b}</b><span>in ClinVar</span></div></div>
       <pre style="white-space:pre-wrap;font-size:12px;line-height:1.5">${r.markdown.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }

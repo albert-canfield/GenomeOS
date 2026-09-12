@@ -307,12 +307,25 @@ class Api:
             scores.append({k: v for k, v in r.items() if k != "per_chromosome"})
         return {"name": name, "scores": scores}
 
-    def individual_diff(self, name: str, against: str) -> dict:
+    def individual_diff(self, name: str, against: str, regulatory: str = "", chrom: str = "") -> dict:
         """Two people (or one against the reference) as a diff of protein-changing variants, from the lists
-        the coding inventory saved; a person not yet inventoried is told to run it (minutes, a CLI step)."""
+        the coding inventory saved; a person not yet inventoried is told to run it (minutes, a CLI step).
+        With `regulatory` and a chromosome, the variants inside that chromosome's regulatory elements."""
         from genomeos.genome.diff import REFERENCE, genome_diff, render
 
         root = self.root / "data" / "individuals"
+        if regulatory:
+            from genomeos.genome.regdiff import regulatory_diff
+            from genomeos.genome.regdiff import render as render_reg
+
+            if not chrom:
+                raise ApiError("the regulatory diff reads one chromosome at a time: pick one")
+            try:
+                d = regulatory_diff(name, against, chrom, root, reference=self.root / "data" / "reference")
+            except FileNotFoundError as ex:
+                raise ApiError(str(ex)) from ex
+            summary = {k: v for k, v in d.items() if k != "genes"}
+            return {"name": name, "against": against, "markdown": render_reg(d, top=60), **summary}
         for who in (name, against):
             if who != REFERENCE and not (root / who / "coding_variants.json").exists():
                 raise ApiError(
@@ -1668,7 +1681,10 @@ class Handler(BaseHTTPRequestHandler):
             if u.path == "/api/individual/diff":
                 return self._json(
                     self.api.individual_diff(
-                        self._q(qs, "name") or "HG002", self._q(qs, "against") or "reference"
+                        self._q(qs, "name") or "HG002",
+                        self._q(qs, "against") or "reference",
+                        self._q(qs, "regulatory", ""),
+                        self._q(qs, "chrom", ""),
                     )
                 )
             if u.path == "/api/individual/report":

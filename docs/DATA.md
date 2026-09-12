@@ -258,6 +258,14 @@ every protein-changing variant under the person (`coding_variants.json`) for
 it; a person not yet inventoried is traced once. Markdown to the terminal or
 `--out`, never under `data/results`.
 
+`--regulatory --chrom C` reads the same two people at the regulatory level:
+the variants inside the chromosome's ENCODE elements, each with the element's
+class, the target the CTCF node infers for it (with basis and distance), the
+AlphaGenome deletion target where the element has been scored, and, with
+`--constraint`, the base's own phyloP read by range; grouped by target gene,
+constrained and predicted first. A variant in an element is a candidate, not
+an effect, and the page says so.
+
 The inventory also surfaces what the reference hides. hg38 itself carries a
 frameshift or nonsense allele against the curated protein in 31 genes (the
 verified translation disagreements triaged by mechanism); a person who

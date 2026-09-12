@@ -2958,11 +2958,21 @@ def cmd_individual(args: argparse.Namespace) -> int:
         from genomeos.genome.diff import genome_diff, render
 
         try:
-            d = genome_diff(args.name, args.against, progress=lambda m: print("  " + m, flush=True))
+            if args.regulatory:
+                from genomeos.genome.regdiff import regulatory_diff
+                from genomeos.genome.regdiff import render as render_reg
+
+                if not args.chrom:
+                    print("--regulatory needs --chrom (one chromosome at a time)")
+                    return 1
+                d = regulatory_diff(args.name, args.against, args.chrom[0], constraint=args.constraint)
+                md = render_reg(d, top=args.top)
+            else:
+                d = genome_diff(args.name, args.against, progress=lambda m: print("  " + m, flush=True))
+                md = render(d, top=args.top)
         except FileNotFoundError as ex:
             print(ex)
             return 1
-        md = render(d, top=args.top)
         if args.out:
             Path(args.out).write_text(md)
             print(f"wrote {args.out}")
@@ -4802,6 +4812,11 @@ def build_parser() -> argparse.ArgumentParser:
     q.add_argument("--against", default="reference", help="another local individual, or `reference`")
     q.add_argument("--top", type=int, default=40, help="genes to show")
     q.add_argument("--out", help="write the Markdown to a file instead of printing")
+    q.add_argument(
+        "--regulatory", action="store_true", help="variants inside regulatory elements (needs --chrom)"
+    )
+    q.add_argument("--chrom", nargs="*", help="chromosome for --regulatory")
+    q.add_argument("--constraint", action="store_true", help="read phyloP at each differing base (ranges)")
     q = isub.add_parser(
         "protein", help="which protein each tissue makes in this person (dominant isoform + variants)"
     )
