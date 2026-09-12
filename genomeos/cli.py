@@ -3087,6 +3087,49 @@ def cmd_domains(args: argparse.Namespace) -> int:
     ann = Annotation.from_gff3(args.gff3 or default_gencode({args.chrom}), {args.chrom})
     doms = infer_domains(args.chrom, length, ccres, ann)
     s = summarise(doms)
+    if getattr(args, "hic", None):
+        from genomeos.genome import hic
+        from genomeos.predict.contact_maps import compare, random_control
+
+        st = hic.status()
+        if not st["enabled"]:
+            print(f"4DN boundary downloads are disabled: {st['how']}")
+            return 2
+        try:
+            man = hic.fetch_boundaries(args.hic, progress=lambda m: print("  " + m, flush=True))
+        except (PermissionError, LookupError, OSError) as ex:
+            print(ex)
+            return 1
+        measured = hic.load_boundaries(args.hic, args.chrom)
+        inferred = sorted({d.start for d in doms} | {d.end for d in doms})
+        inferred = [b for b in inferred if 0 < b < length]
+        cmp = compare(inferred, measured)
+        cmp["random_control"] = random_control(inferred, measured, length)
+        save_result(
+            f"domains_{args.chrom}_hic_{args.hic.replace(' ', '_').replace('/', '_')}",
+            {
+                "chrom": args.chrom,
+                "biosource": args.hic,
+                "file": man.get("accession"),
+                "comparison": cmp,
+                "evidence": {
+                    "inferred": "inferred: CTCF-only ENCODE elements as boundaries",
+                    "measured": st["evidence"],
+                },
+            },
+        )
+        print(
+            f"{args.chrom}: {cmp['inferred']} CTCF-only boundaries against {cmp['predicted']} measured "
+            f"{args.hic} boundaries ({man.get('accession')}, {man.get('experiment_type')})"
+        )
+        print(
+            f"  {cmp['inferred_on_a_predicted_boundary']} inferred boundaries sit within "
+            f"{cmp['tolerance'] // 1000} kb of a measured one ({cmp['fraction_inferred_supported']:.0%}, "
+            f"against {cmp['random_control']:.0%} at random); {cmp['predicted_on_an_inferred_boundary']} "
+            f"measured boundaries have an inferred one ({cmp['fraction_predicted_matched']:.0%}); "
+            f"median distance {cmp['median_distance_inferred_to_predicted']:,} bp"
+        )
+        return 0
     if getattr(args, "contact_map", False):
         from genomeos.predict import status
         from genomeos.predict.contact_maps import Insulation, compare
@@ -3942,6 +3985,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--contact-map",
         action="store_true",
         help="hold the CTCF-only boundaries against insulation minima of AlphaGenome's predicted contact map",
+    )
+    p.add_argument(
+        "--hic",
+        metavar="BIOSOURCE",
+        help="hold the CTCF-only boundaries against 4DN's measured boundary calls of a biosource (needs a key)",
     )
     p.set_defaults(fn=cmd_domains)
 

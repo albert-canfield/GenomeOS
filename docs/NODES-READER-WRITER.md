@@ -203,6 +203,10 @@ deletions landing inside the node on 24 chromosomes (90%) and the mouse
 nodes landing in one human neighbourhood (93 to 94%). Where the edges sit
 is a resolution question the project cannot settle without Hi-C or a
 better predictor of insulation, and the node confidence stays at 0.4.
+The measurement is one key away: 4DN publishes boundary calls for GM12878,
+H1, HFFc6, K562, HCT116, HepG2 and IMR-90 as BED files, `genomeos domains
+--hic GM12878` reads and compares them, and only the account key is
+missing (docs/DATA.md).
 
 ## Reader v1 (built 2026-09-11)
 

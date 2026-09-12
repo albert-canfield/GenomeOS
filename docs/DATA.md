@@ -256,6 +256,30 @@ variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
 missense, 133 synonymous, 1 nonsense), the KRTAP10 cluster on top as
 expected for a highly polymorphic family.
 
+## Optional: 4D Nucleome boundary calls (measured node edges)
+
+The 4DN portal publishes boundary calls (insulation-based BED files) for
+hundreds of released GRCh38 Hi-C and Micro-C experiments: GM12878 (11
+files), H1-hESC, HFFc6, K562, HCT116, HepG2, IMR-90, HeLa-S3 among them.
+The search is open; the downloads return 403 without an account key, and
+a free account is all it takes: create one, generate an access key at
+https://data.4dnucleome.org and put
+
+```
+FOURDN_KEY=...
+FOURDN_SECRET=...
+```
+
+in the git-ignored `.env`. `genomeos domains --chrom chr21 --hic GM12878`
+then streams the biosource's deepest boundary file once into
+`data/knowledge/hic/<biosource>/<chrom>.bed` (local) and holds the CTCF-only
+boundaries against the measured ones with the same comparison and random
+control the predicted contact map got (`genomeos/genome/hic.py`,
+`data/results/domains_<chrom>_hic_<biosource>.json`). Without the key the
+feature loads disabled and says so; checked 2026-09-12, blocked on the key
+only. ENCODE has no open Hi-C domain BEDs and the 3D Genome Browser's hg38
+TAD archive is no longer served, so 4DN is the source.
+
 ## Optional: peptide/HLA binding predictors
 
 The therapeutic pipeline enumerates the peptides a mutation creates; whether
