@@ -3136,7 +3136,8 @@ def cmd_domains(args: argparse.Namespace) -> int:
             f"{cmp['median_distance_inferred_to_predicted']:,} bp"
         )
         print(
-            "  [predicted evidence, capped at 0.7; where the two agree the node's edge has two kinds of evidence]"
+            "  [predicted evidence, capped at 0.7; where the two agree the node's edge has two kinds "
+            "of evidence]"
         )
         return 0
     print(
