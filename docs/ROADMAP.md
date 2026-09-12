@@ -402,11 +402,18 @@ in order. "Owner" is the session that holds the files today (see §7).
   which is the textbook. The layer says which protein a tissue makes, which
   is what `ProteinState.isoform` was for. The Molecules protein card shows
   the modification classes and the writers UniProt names.
-- **Missing.** Modification state is possibility, not occupancy: no measured
-  phosphoproteome, and no rule that runs a writer against a site in the
-  runtime; isoform expression is GTEx's adult tissues, not a cell type or a
-  stage; kinetics only where BioModels has a curated model, which is a small
-  fraction of Reactome.
+- **Missing, and blocked on data (checked 2026-09-12).** Modification state
+  is possibility, not occupancy: measured phosphoproteomics has no open
+  per-site, per-tissue table the project could stream and distil as it does
+  ClinVar (PhosphoSitePlus needs registration, PRIDE holds raw or per-study
+  tables), so it is recorded as blocked rather than attempted. The person's
+  own expression: HG002's cell line GM24385 has no ENCODE experiment, and the
+  GIAB direct-RNA nanopore runs on ENA are raw reads with no aligner in the
+  zero-dependency core, so `individual protein` states GTEx's median and says
+  why; the day a processed signal track for the person exists,
+  `rna_measured.py` reads it as it reads ENCODE's. Isoform expression is
+  GTEx's adult tissues, not a cell type or a stage; kinetics only where
+  BioModels has a curated model, which is a small fraction of Reactome.
 - **The disagreements, read with the isoform the body makes (2026-09-11).**
   `scripts/disagreements_isoforms.py` took GTEx's dominant transcript for each
   of the 96 disagreement genes, translated it locally and compared it with
@@ -460,9 +467,9 @@ in order. "Owner" is the session that holds the files today (see §7).
   series: the 96 read from four sides are 31 hg38 frameshift or nonsense
   alleles, 8 residue-level population variants, 7 different products, and the
   rest gene-model differences. The item closes.
-- **Next.** 1. The person's own expression in place of GTEx's median where a
-  measurement exists. 2. Measured modification state (a phosphoproteome) so a
-  `modifies` rule can carry occupancy rather than possibility. 3. Done
+- **Next.** 1. The person's own expression in place of GTEx's median, blocked
+  until a processed track for the person exists (see Missing). 2. Measured
+  modification state, blocked on an open per-site table (see Missing). 3. Done
   2026-09-12 in area D: the 31 hg38 frameshift and nonsense alleles surfaced
   in the coding inventory and the dossier, a carrier of the reference allele
   being a carrier of a truncation.
