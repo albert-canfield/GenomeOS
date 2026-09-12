@@ -138,6 +138,37 @@ unphased sequence, so it does not see a diploid individual.
    boundary cuts off. That is the attribution the budget asked for, one
    chromosome in: the constrained regulatory tier is where the targets are
    worth naming, and the tool names them for three in four.
+
+   **The genome (2026-09-12).** The same script on the other 23 chromosomes,
+   nothing tuned (the `constrained_targets_genome_wide` job; 100 elements per
+   chromosome, chrY has only 5 that qualify; 59,415 of 513,972 distal
+   enhancers pass the 20% threshold), folded by
+   `scripts/constrained_targets_genome_wide.py` into
+   `constrained_targets_genome_wide.json`:
+
+   | distal enhancers, all chromosomes | constrained (2,305) | uniform (4,800) |
+   |---|---|---|
+   | some gene moves by ≥ 0.1 log2 | 75.7% | 62.4% |
+   | strong effect (≥ 0.3) among those named | 556 of 1,744 (31.9%) | 735 of 2,995 (24.5%) |
+   | silencer-like | 641 of 1,744 (36.8%) | 1,157 of 2,995 (38.6%) |
+   | coding target = nearest TSS in the node | 71.9% | 70.7% |
+   | coding target inside the node | 89.8% | 86.0% |
+
+   The first finding holds everywhere: constraint predicts function on 22 of
+   24 chromosomes (chr9 and chr15 are the exceptions, at 62% and 61% against
+   66% and 68%), from chr1's 65% to chr19's 92%, and the strong effects are a
+   third of the named ones instead of a quarter (C1QTNF7-AS1 −4.0 log2 from
+   a 76%-constrained element; MEF2C-AS2 −3.2; the homeobox gene ARX −3.0 in
+   Purkinje cells from a 92%-constrained element on chrX). The second one
+   does not: chr21's constrained elements reached beyond the CTCF-only node
+   twice as often as uniform ones, but over the genome the constrained
+   targets sit inside the node as often as anyone's (89.8% against 86.0%),
+   and name the nearest TSS at the same rate. The proxy boundary is not what
+   the conserved enhancers are escaping; chr21 was one chromosome's noise.
+   What stands is the attribution itself: of the 8.1 Mb of constrained
+   regulatory sequence the budget could not name a target for, the most
+   constrained elements name one three times in four, and the node they sit
+   in predicts which gene nine times in ten.
 3. **Splicing, at the resolution our grammar lacks** (built, feature c). Our
    learned donor and acceptor matrices reach about 90% recall at seven false
    hits per kilobase, which is why segments are parsed by grammar and never

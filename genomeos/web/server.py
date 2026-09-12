@@ -872,6 +872,7 @@ class Api:
                 for p in sorted(rd.glob("enhancer_targets_chr*.json"))
             },
             "enhancer_targets_genome_wide": load_result("enhancer_targets_genome_wide", rd),
+            "constrained_targets_genome_wide": load_result("constrained_targets_genome_wide", rd),
             "segments": [
                 {
                     "name": p.stem,

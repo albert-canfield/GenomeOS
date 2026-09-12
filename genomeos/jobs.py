@@ -181,6 +181,26 @@ CATALOG["enhancer_targets_genome_wide"] = {
     "complete": lambda root: _enhancer_chromosomes_done(root) >= 24,
     "auto_heal": True,
 }
+
+
+def _constrained_chromosomes_done(root: Path) -> int:
+    return sum(
+        1
+        for c in CHROMOSOMES
+        if c != "chrM" and _result_count(root, f"constrained_targets_{c}", "elements_scored") > 0
+    )
+
+
+CATALOG["constrained_targets_genome_wide"] = {
+    "argv": [sys.executable, "scripts/constrained_targets_genome_wide.py", "--run"],
+    "describe": "AlphaGenome on the 100 most constrained distal enhancers per chromosome, then one summary.",
+    "total": 24,
+    "result": "constrained_targets_genome_wide",
+    "count": None,
+    "progress": lambda root: float(_constrained_chromosomes_done(root)),
+    "complete": lambda root: _constrained_chromosomes_done(root) >= 24,
+    "auto_heal": True,
+}
 for _c in CHROMOSOMES:
     CATALOG[f"fetch_{_c}"] = {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--analyse", "--chrom", _c],
