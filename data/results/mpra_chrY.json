@@ -1,0 +1,1096 @@
+{
+  "result": "mpra_chrY",
+  "date": "2026-09-12",
+  "chrom": "chrY",
+  "elements": 35,
+  "annotated": 33,
+  "reader_cells": [
+    "HepG2",
+    "K562"
+  ],
+  "summary": {
+    "elements": 33,
+    "active_threshold_log2": 1.0,
+    "cells": {
+      "HepG2": {
+        "elements": 33,
+        "active": 0.091,
+        "median_activity": -0.081,
+        "active_by_ccre_class": {
+          "PLS": {
+            "elements": 3,
+            "active": 0.333
+          },
+          "pELS": {
+            "elements": 4,
+            "active": 0.0
+          },
+          "dELS": {
+            "elements": 19,
+            "active": 0.105
+          },
+          "CTCF-only": {
+            "elements": 4,
+            "active": 0.0
+          },
+          "DNase-H3K4me3": {
+            "elements": 1,
+            "active": 0.0
+          },
+          "none": {
+            "elements": 2,
+            "active": 0.0
+          }
+        },
+        "active_when_constrained": 0.5,
+        "active_when_not_constrained": 0.036,
+        "reader_open_predicts_active": {
+          "same_cell": {
+            "flagged": 26,
+            "precision": 0.115,
+            "recall": 1.0,
+            "base_rate": 0.091
+          },
+          "other_cells": {
+            "K562": {
+              "flagged": 0,
+              "precision": null,
+              "recall": 0.0,
+              "base_rate": 0.091
+            }
+          }
+        },
+        "predicted_dnase_vs_activity": {
+          "same_cell": {
+            "elements": 33,
+            "spearman": 0.473,
+            "active_in_top_quartile": 0.222,
+            "active_in_bottom_quartile": 0.0
+          },
+          "other_cells": {
+            "K562": {
+              "elements": 33,
+              "spearman": 0.103,
+              "active_in_top_quartile": 0.111,
+              "active_in_bottom_quartile": 0.0
+            }
+          }
+        }
+      },
+      "K562": {
+        "elements": 33,
+        "active": 0.061,
+        "median_activity": -0.594,
+        "active_by_ccre_class": {
+          "PLS": {
+            "elements": 3,
+            "active": 0.333
+          },
+          "pELS": {
+            "elements": 4,
+            "active": 0.0
+          },
+          "dELS": {
+            "elements": 19,
+            "active": 0.053
+          },
+          "CTCF-only": {
+            "elements": 4,
+            "active": 0.0
+          },
+          "DNase-H3K4me3": {
+            "elements": 1,
+            "active": 0.0
+          },
+          "none": {
+            "elements": 2,
+            "active": 0.0
+          }
+        },
+        "active_when_constrained": 0.5,
+        "active_when_not_constrained": 0.036,
+        "reader_open_predicts_active": {
+          "same_cell": {
+            "flagged": 0,
+            "precision": null,
+            "recall": 0.0,
+            "base_rate": 0.061
+          },
+          "other_cells": {
+            "HepG2": {
+              "flagged": 26,
+              "precision": 0.077,
+              "recall": 1.0,
+              "base_rate": 0.061
+            }
+          }
+        },
+        "predicted_dnase_vs_activity": {
+          "same_cell": {
+            "elements": 33,
+            "spearman": 0.459,
+            "active_in_top_quartile": 0.111,
+            "active_in_bottom_quartile": 0.0
+          },
+          "other_cells": {
+            "HepG2": {
+              "elements": 33,
+              "spearman": 0.132,
+              "active_in_top_quartile": 0.111,
+              "active_in_bottom_quartile": 0.0
+            }
+          }
+        }
+      },
+      "WTC11": {
+        "elements": 33,
+        "active": 0.121,
+        "median_activity": -0.728,
+        "active_by_ccre_class": {
+          "PLS": {
+            "elements": 3,
+            "active": 0.333
+          },
+          "pELS": {
+            "elements": 4,
+            "active": 0.0
+          },
+          "dELS": {
+            "elements": 19,
+            "active": 0.105
+          },
+          "CTCF-only": {
+            "elements": 4,
+            "active": 0.0
+          },
+          "DNase-H3K4me3": {
+            "elements": 1,
+            "active": 0.0
+          },
+          "none": {
+            "elements": 2,
+            "active": 0.5
+          }
+        },
+        "active_when_constrained": 0.5,
+        "active_when_not_constrained": 0.107,
+        "reader_open_predicts_active": {
+          "same_cell": null,
+          "other_cells": {
+            "HepG2": {
+              "flagged": 26,
+              "precision": 0.077,
+              "recall": 0.5,
+              "base_rate": 0.121
+            },
+            "K562": {
+              "flagged": 0,
+              "precision": null,
+              "recall": 0.0,
+              "base_rate": 0.121
+            }
+          }
+        },
+        "predicted_dnase_vs_activity": {
+          "same_cell": null,
+          "other_cells": {
+            "K562": {
+              "elements": 33,
+              "spearman": 0.315,
+              "active_in_top_quartile": 0.111,
+              "active_in_bottom_quartile": 0.111
+            },
+            "HepG2": {
+              "elements": 33,
+              "spearman": -0.268,
+              "active_in_top_quartile": 0.111,
+              "active_in_bottom_quartile": 0.222
+            }
+          }
+        }
+      }
+    },
+    "specific_elements": {
+      "elements": 1,
+      "active_in": {
+        "K562": 0,
+        "HepG2": 1
+      },
+      "reader_open_in_the_active_cell_only": 1.0,
+      "reader_open_in_the_inactive_cell_only": 0.0,
+      "predicted_dnase_higher_in_the_active_cell": 1.0,
+      "predicted_judged": 1
+    },
+    "evidence": "experimental: ENCODE4 lentiMPRA (Ahituv lab, UCSF), joint library ENCSR106SZM in K562, HepG2 and WTC11, log2(RNA/DNA) per 200 bp element"
+  },
+  "rows": [
+    {
+      "key": "chrY:2838009-2838209",
+      "name": "HepG2_DNasePeakNoPromoter65952",
+      "start": 2838009,
+      "end": 2838209,
+      "activity": {
+        "K562": -0.988,
+        "HepG2": -0.081,
+        "WTC11": -1.486
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.02563,
+        "HepG2": 1.57634
+      }
+    },
+    {
+      "key": "chrY:2953019-2953219",
+      "name": "HepG2_DNasePeakNoPromoter65953",
+      "start": 2953019,
+      "end": 2953219,
+      "activity": {
+        "K562": -1.009,
+        "HepG2": -0.174,
+        "WTC11": -1.421
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.06262,
+        "HepG2": 1.58993
+      }
+    },
+    {
+      "key": "chrY:3060779-3060979",
+      "name": "HepG2_DNasePeakNoPromoter65954",
+      "start": 3060779,
+      "end": 3060979,
+      "activity": {
+        "K562": -0.906,
+        "HepG2": -0.992,
+        "WTC11": -0.959
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "CTCF-only",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": null,
+      "predicted_dnase": {
+        "K562": 0.328,
+        "HepG2": 0.2857
+      }
+    },
+    {
+      "key": "chrY:6964849-6965049",
+      "name": "HepG2_DNasePeakNoPromoter65956",
+      "start": 6964849,
+      "end": 6965049,
+      "activity": {
+        "K562": -0.26,
+        "HepG2": -0.406,
+        "WTC11": 0.257
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "DNase-H3K4me3",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": null,
+      "predicted_dnase": {
+        "K562": 0.95641,
+        "HepG2": 0.58254
+      }
+    },
+    {
+      "key": "chrY:6996029-6996229",
+      "name": "HepG2_DNasePeakNoPromoter65957",
+      "start": 6996029,
+      "end": 6996229,
+      "activity": {
+        "K562": -0.594,
+        "HepG2": 0.701,
+        "WTC11": -1.194
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.025,
+      "predicted_dnase": {
+        "K562": 0.02537,
+        "HepG2": 2.16436
+      }
+    },
+    {
+      "key": "chrY:6997609-6997809",
+      "name": "HepG2_DNasePeakNoPromoter65958",
+      "start": 6997609,
+      "end": 6997809,
+      "activity": {
+        "K562": -0.238,
+        "HepG2": 0.959,
+        "WTC11": -0.827
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.01347,
+        "HepG2": 1.06722
+      }
+    },
+    {
+      "key": "chrY:7040669-7040869",
+      "name": "HepG2_DNasePeakNoPromoter65959",
+      "start": 7040669,
+      "end": 7040869,
+      "activity": {
+        "K562": -0.707,
+        "HepG2": -0.322,
+        "WTC11": -1.387
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.01,
+      "predicted_dnase": {
+        "K562": 0.0237,
+        "HepG2": 0.54256
+      }
+    },
+    {
+      "key": "chrY:7085709-7085909",
+      "name": "HepG2_DNasePeakNoPromoter65961",
+      "start": 7085709,
+      "end": 7085909,
+      "activity": {
+        "K562": 0.063,
+        "HepG2": -0.093,
+        "WTC11": -0.289
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.1,
+      "predicted_dnase": {
+        "K562": 1.6987,
+        "HepG2": 0.61937
+      }
+    },
+    {
+      "key": "chrY:7273609-7273809",
+      "name": "HepG2_DNasePeakNoPromoter65963",
+      "start": 7273609,
+      "end": 7273809,
+      "activity": {
+        "K562": 0.816,
+        "HepG2": 0.722,
+        "WTC11": -0.342
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "PLS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.03,
+      "predicted_dnase": {
+        "K562": 0.90223,
+        "HepG2": 0.166
+      }
+    },
+    {
+      "key": "chrY:7344789-7344989",
+      "name": "HepG2_DNasePeakNoPromoter65965",
+      "start": 7344789,
+      "end": 7344989,
+      "activity": {
+        "K562": 0.201,
+        "HepG2": 0.17,
+        "WTC11": 0.223
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.75574,
+        "HepG2": 0.39987
+      }
+    },
+    {
+      "key": "chrY:7415329-7415529",
+      "name": "HepG2_DNasePeakNoPromoter65966",
+      "start": 7415329,
+      "end": 7415529,
+      "activity": {
+        "K562": -0.881,
+        "HepG2": 0.011,
+        "WTC11": -1.242
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.015,
+      "predicted_dnase": {
+        "K562": 0.01411,
+        "HepG2": 0.1242
+      }
+    },
+    {
+      "key": "chrY:11070504-11070704",
+      "name": "HepG2_DNasePeakNoPromoter65978",
+      "start": 11070504,
+      "end": 11070704,
+      "activity": {
+        "K562": -0.843,
+        "HepG2": 0.343,
+        "WTC11": -1.256
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.095,
+      "predicted_dnase": {
+        "K562": 0.02033,
+        "HepG2": 0.47879
+      }
+    },
+    {
+      "key": "chrY:12309331-12309531",
+      "name": "WTC11_seq83096_F",
+      "start": 12309331,
+      "end": 12309531,
+      "activity": {
+        "K562": -0.441,
+        "HepG2": -0.14,
+        "WTC11": -0.381
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "CTCF-only",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.77007,
+        "HepG2": 0.36773
+      }
+    },
+    {
+      "key": "chrY:12359959-12360159",
+      "name": "HepG2_DNasePeakNoPromoter65982",
+      "start": 12359959,
+      "end": 12360159,
+      "activity": {
+        "K562": 0.084,
+        "HepG2": 0.168,
+        "WTC11": -0.064
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.02,
+      "predicted_dnase": {
+        "K562": 0.89488,
+        "HepG2": 0.06186
+      }
+    },
+    {
+      "key": "chrY:12391725-12391925",
+      "name": "HepG2_DNasePeakNoPromoter65983",
+      "start": 12391725,
+      "end": 12391925,
+      "activity": {
+        "K562": -1.033,
+        "HepG2": 0.019,
+        "WTC11": -1.772
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.08717,
+        "HepG2": 0.15416
+      }
+    },
+    {
+      "key": "chrY:12479503-12479703",
+      "name": "WTC11_seq83100_F",
+      "start": 12479503,
+      "end": 12479703,
+      "activity": {
+        "K562": -0.681,
+        "HepG2": -0.694,
+        "WTC11": -1.11
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "CTCF-only",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.11825,
+        "HepG2": 0.04577
+      }
+    },
+    {
+      "key": "chrY:12809145-12809345",
+      "name": "HepG2_DNasePeakNoPromoter65993",
+      "start": 12809145,
+      "end": 12809345,
+      "activity": {
+        "K562": -0.772,
+        "HepG2": -1.212,
+        "WTC11": -1.118
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.18815,
+        "HepG2": 0.18334
+      }
+    },
+    {
+      "key": "chrY:13091708-13091908",
+      "name": "WTC11_seq83107_F",
+      "start": 13091708,
+      "end": 13091908,
+      "activity": {
+        "K562": 2.697,
+        "HepG2": 1.768,
+        "WTC11": 2.437
+      },
+      "active": {
+        "K562": true,
+        "HepG2": true,
+        "WTC11": true
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.05013,
+        "HepG2": 0.20954
+      }
+    },
+    {
+      "key": "chrY:13282780-13282980",
+      "name": "HepG2_DNasePeakNoPromoter65996",
+      "start": 13282780,
+      "end": 13282980,
+      "activity": {
+        "K562": 0.606,
+        "HepG2": 0.025,
+        "WTC11": 0.346
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.07864,
+        "HepG2": 0.08049
+      }
+    },
+    {
+      "key": "chrY:13751375-13751575",
+      "name": "WTC11_seq83118_F",
+      "start": 13751375,
+      "end": 13751575,
+      "activity": {
+        "K562": 0.178,
+        "HepG2": 0.667,
+        "WTC11": -0.053
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "PLS",
+      "open": {
+        "K562": false,
+        "HepG2": false
+      },
+      "constrained_fraction": 0.03,
+      "predicted_dnase": {
+        "K562": 0.04473,
+        "HepG2": 0.0285
+      }
+    },
+    {
+      "key": "chrY:13802885-13803085",
+      "name": "WTC11_seq83120_F",
+      "start": 13802885,
+      "end": 13803085,
+      "activity": {
+        "K562": -0.995,
+        "HepG2": -0.367,
+        "WTC11": -0.385
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": false
+      },
+      "constrained_fraction": 0.04,
+      "predicted_dnase": {
+        "K562": 0.01036,
+        "HepG2": 0.01336
+      }
+    },
+    {
+      "key": "chrY:13804545-13804745",
+      "name": "WTC11_seq83121_F",
+      "start": 13804545,
+      "end": 13804745,
+      "activity": {
+        "K562": -0.517,
+        "HepG2": -0.622,
+        "WTC11": 1.081
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": true
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": false
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.01341,
+        "HepG2": 0.01169
+      }
+    },
+    {
+      "key": "chrY:14522509-14522709",
+      "name": "WTC11_seq83133_F",
+      "start": 14522509,
+      "end": 14522709,
+      "activity": {
+        "K562": 0.781,
+        "HepG2": 0.377,
+        "WTC11": 0.628
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "pELS",
+      "open": {
+        "K562": false,
+        "HepG2": false
+      },
+      "constrained_fraction": 0.16,
+      "predicted_dnase": {
+        "K562": 0.0179,
+        "HepG2": 0.01998
+      }
+    },
+    {
+      "key": "chrY:14524840-14525040",
+      "name": "WTC11_seq83135_F",
+      "start": 14524840,
+      "end": 14525040,
+      "activity": {
+        "K562": -0.7,
+        "HepG2": -1.011,
+        "WTC11": -1.124
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "pELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.04,
+      "predicted_dnase": {
+        "K562": 0.01112,
+        "HepG2": 0.02105
+      }
+    },
+    {
+      "key": "chrY:14525353-14525553",
+      "name": "WTC11_seq83136_F",
+      "start": 14525353,
+      "end": 14525553,
+      "activity": {
+        "K562": -1.14,
+        "HepG2": -1.129,
+        "WTC11": -1.781
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "pELS",
+      "open": {
+        "K562": false,
+        "HepG2": false
+      },
+      "constrained_fraction": 0.04,
+      "predicted_dnase": {
+        "K562": 0.01088,
+        "HepG2": 0.01436
+      }
+    },
+    {
+      "key": "chrY:14628360-14628560",
+      "name": "HepG2_DNasePeakNoPromoter66001",
+      "start": 14628360,
+      "end": 14628560,
+      "activity": {
+        "K562": -0.651,
+        "HepG2": 0.294,
+        "WTC11": -1.044
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "none",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.01086,
+        "HepG2": 0.23904
+      }
+    },
+    {
+      "key": "chrY:15360567-15360767",
+      "name": "WTC11_seq83141_F",
+      "start": 15360567,
+      "end": 15360767,
+      "activity": {
+        "K562": -0.182,
+        "HepG2": -0.216,
+        "WTC11": -0.629
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "CTCF-only",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.16122,
+        "HepG2": 0.07125
+      }
+    },
+    {
+      "key": "chrY:19042395-19042595",
+      "name": "WTC11_seq83175_F",
+      "start": 19042395,
+      "end": 19042595,
+      "activity": {
+        "K562": -0.774,
+        "HepG2": -1.084,
+        "WTC11": 0.635
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": false
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.04959,
+        "HepG2": 0.03364
+      }
+    },
+    {
+      "key": "chrY:19142210-19142410",
+      "name": "WTC11_seq83180_F",
+      "start": 19142210,
+      "end": 19142410,
+      "activity": {
+        "K562": -0.797,
+        "HepG2": -0.742,
+        "WTC11": 1.943
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": true
+      },
+      "ccre_class": "none",
+      "open": {
+        "K562": false,
+        "HepG2": false
+      },
+      "constrained_fraction": 0.0,
+      "predicted_dnase": {
+        "K562": 0.03197,
+        "HepG2": 0.02384
+      }
+    },
+    {
+      "key": "chrY:19550070-19550270",
+      "name": "WTC11_seq83191_F",
+      "start": 19550070,
+      "end": 19550270,
+      "activity": {
+        "K562": -0.687,
+        "HepG2": -0.491,
+        "WTC11": -0.728
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.585,
+      "predicted_dnase": {
+        "K562": 0.03672,
+        "HepG2": 0.04385
+      }
+    },
+    {
+      "key": "chrY:19567115-19567315",
+      "name": "WTC11_seq83192_F",
+      "start": 19567115,
+      "end": 19567315,
+      "activity": {
+        "K562": 2.151,
+        "HepG2": 1.657,
+        "WTC11": 1.315
+      },
+      "active": {
+        "K562": true,
+        "HepG2": true,
+        "WTC11": true
+      },
+      "ccre_class": "PLS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.27,
+      "predicted_dnase": {
+        "K562": 5.33618,
+        "HepG2": 3.83043
+      }
+    },
+    {
+      "key": "chrY:19567675-19567875",
+      "name": "WTC11_seq83193_F",
+      "start": 19567675,
+      "end": 19567875,
+      "activity": {
+        "K562": 0.273,
+        "HepG2": 0.245,
+        "WTC11": -0.853
+      },
+      "active": {
+        "K562": false,
+        "HepG2": false,
+        "WTC11": false
+      },
+      "ccre_class": "pELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": 0.17,
+      "predicted_dnase": {
+        "K562": 1.31483,
+        "HepG2": 0.61004
+      }
+    },
+    {
+      "key": "chrY:21021904-21022104",
+      "name": "HepG2_DNasePeakNoPromoter66016",
+      "start": 21021904,
+      "end": 21022104,
+      "activity": {
+        "K562": -0.592,
+        "HepG2": 1.159,
+        "WTC11": -1.286
+      },
+      "active": {
+        "K562": false,
+        "HepG2": true,
+        "WTC11": false
+      },
+      "ccre_class": "dELS",
+      "open": {
+        "K562": false,
+        "HepG2": true
+      },
+      "constrained_fraction": null,
+      "predicted_dnase": {
+        "K562": 0.02955,
+        "HepG2": 1.0859
+      }
+    }
+  ],
+  "phylop_cost": {
+    "requests": 44,
+    "mb_fetched": 0.3,
+    "seconds": 20.4
+  },
+  "model_cost": {
+    "requests": 0,
+    "seconds": 0.0
+  },
+  "evidence": "experimental: ENCODE4 lentiMPRA (Ahituv lab, UCSF), joint library ENCSR106SZM in K562, HepG2 and WTC11, log2(RNA/DNA) per 200 bp element; experimental: ENCODE DNase peaks (reader); measured: Zoonomia phyloP; curated: ENCODE cCREs; predicted: AlphaGenome DNase per cell line"
+}

@@ -307,6 +307,21 @@ archive is stored. `scripts/eqtl_targets.py` (job `eqtl_targets`) distils
 when the hits are missing and scores; `eqtl_targets.json` is committed.
 Variant ids are hg38 (`chr1_13550_G_A_b38`). Evidence class `experimental`.
 
+## Measured activity: ENCODE4 lentiMPRA (2026-09-12)
+
+The Ahituv lab's joint lentiMPRA library (ENCODE reference ENCSR106SZM:
+53,990 200-bp elements assayed in K562 ENCSR203UFY, HepG2 ENCSR405QCT and
+WTC11 ENCSR336MKI) is read from the three element-quantification BED files
+(ENCFF802FUV, ENCFF475FKV, ENCFF769REH; 1.1 MB each), streamed once into
+`data/knowledge/mpra/` (git-ignored) by `attribution/mpra.py`; forward and
+reverse copies of an element are averaged. Column 7 is log2(RNA/DNA). The
+per-chromosome results (`mpra_chr*.json`, with rows) and the fold
+(`mpra_genome_wide.json`) are committed. Predicted DNase per cell line comes
+from AlphaGenome (K562 EFO:0002067, HepG2 EFO:0001187) through
+`predict/chromatin_tracks.py`, cached as element means under
+`data/knowledge/alphagenome/dnase/`. Evidence class `experimental` for the
+assay and the reader's peaks, `predicted` for the model's track.
+
 ## Consequence: GWAS Catalog and ClinVar non-coding (2026-09-12)
 
 The NHGRI-EBI GWAS Catalog's full association table

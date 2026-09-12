@@ -248,6 +248,55 @@ unphased sequence, so it does not see a diploid individual.
    elements carry eQTLs less often (60% against 78%): where selection keeps
    the sequence, the common variants an eQTL needs are fewer, which is why
    the deletion model was pointed there in the first place.
+   **Against measured activity (2026-09-12).** The activity assay VISTA is
+   not: the Ahituv lab's ENCODE4 joint lentiMPRA library put the same
+   53,990 200-bp sequences (chosen from each line's DNase peaks) into K562,
+   HepG2 and WTC11 and read how much each drives a reporter, log2(RNA/DNA).
+   `attribution/mpra.py` streams the three element files once (3.3 MB) and
+   reads every element blind, per cell: the ENCODE class, whether the
+   cell's own measured DNase (the reader) is open over it, its constraint,
+   and, from `predict/chromatin_tracks.py`, AlphaGenome's predicted DNase
+   for that cell line over the element (use 5 below, built for this: one
+   request per 1 Mb window, element means cached, 2,727 requests for the
+   genome). Each layer is held against the same cell's activity and then
+   against the other cell's, so the result says whether the layer knows
+   the cell and not only the element (`mpra_<chrom>.json`, the
+   `mpra_genome_wide` job, 51,376 non-overlapping elements; active at
+   log2(RNA/DNA) ≥ 1, which 7.8% reach in K562, 6.6% in HepG2, 8.2% in
+   WTC11):
+
+   | per cell line | K562 | HepG2 | WTC11 |
+   |---|---|---|---|
+   | active when on a promoter-like / distal enhancer-like / CTCF-only cCRE / none | 27.5% / 7.6% / 2.0% / 6.9% | 18.5% / 7.1% / 0.7% / 4.9% | 27.5% / 8.1% / 2.7% / 6.8% |
+   | active when constrained / not | 8.2% / 7.7% | 7.7% / 6.5% | 11.1% / 7.7% |
+   | reader open in this cell: precision / recall (base rate) | 11.0% / 75.5% (7.8%) | 8.5% / 73.8% (6.6%) | no track |
+   | reader open in the other cell: precision / recall | 6.3% / 46.4% | 6.8% / 55.0% | K562 9.0%, HepG2 7.0% |
+   | predicted DNase, same cell: rank correlation with activity | 0.443 | 0.323 | no track |
+   | active in the top / bottom quartile of predicted DNase, same cell | 15.7% / 2.0% | 12.0% / 3.0% | |
+   | predicted DNase of the other cell: rank correlation | 0.030 | 0.119 | K562 0.279, HepG2 0.110 |
+
+   Three readings. The registry's classes order the activity as they
+   should: a promoter-like sequence drives the reporter three to four times
+   as often as a distal enhancer-like one, and a CTCF-only element almost
+   never, though a distal enhancer-like element is barely more active than
+   a sequence in no class at all, which is the known limit of a reporter
+   that measures a sequence out of its node. Constraint adds little here
+   (a point or two; four in WTC11, the stem cell). The cell is what the two
+   readers know. The measured reader, ENCODE's DNase in the same cell,
+   picks the active elements with 1.4 times the base-rate precision and
+   three quarters of the recall, and in the other cell falls below the
+   base rate. The predicted reader does the same and more sharply: rank
+   correlation 0.44 in K562 and 0.32 in HepG2 against 0.03 and 0.12 across
+   cells (per chromosome, K562 never below 0.39), the top quartile of
+   predicted DNase eight times as active as the bottom, and, on the 3,913
+   elements active in exactly one of the two lines, the predicted DNase is
+   higher in the active line for 84.6%, where the measured reader is open
+   in the active line only for 50.8% and in the inactive one only for
+   4.7%. The model knows the cell. It does not know the amount: a rank
+   correlation of 0.4 leaves most of the variance in activity to the
+   sequence's own promoter-like strength, which the reporter measures and
+   chromatin openness does not.
+
    **Against consequence (2026-09-12).** The last ground truth is the
    weakest and the one a person cares about: does anything that matters to
    a human land on the element? `attribution/gwas.py` streams the GWAS
@@ -319,10 +368,14 @@ unphased sequence, so it does not see a diploid individual.
    conclusion is that node *content* is what the project has evidence for
    (the enhancer and mouse results) while node *edges* remain a proxy that
    neither this prediction nor, without Hi-C, a measurement has confirmed.
-5. **The reader, predicted where it is not measured**. Reader v1 reads ENCODE
-   DNase peaks per biosample, so it only knows the cell types ENCODE assayed.
-   Predicted DNase and ATAC extend "which nodes are open in this cell type" to
-   tissues with no experiment, clearly marked predicted.
+5. **The reader, predicted where it is not measured** (built, 2026-09-12).
+   Reader v1 reads ENCODE DNase peaks per biosample, so it only knows the cell
+   types ENCODE assayed. Predicted DNase extends "which elements are open in
+   this cell type" to biosamples with no experiment, clearly marked predicted:
+   `predict/chromatin_tracks.py` asks once per 1 Mb window for the named
+   biosamples and keeps the mean over each element. Its first test is above,
+   against lentiMPRA in K562 and HepG2, where it knows the cell (rank
+   correlation 0.44 and 0.32 same cell against 0.03 and 0.12 across).
 6. **Which bases in a block matter**. In-silico mutagenesis over a few hundred
    base pairs of an unclassified block gives a contribution profile: a direct,
    if expensive, answer to "what is this sequence for". Roughly three requests
