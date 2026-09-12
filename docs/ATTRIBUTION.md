@@ -303,7 +303,14 @@ next question, what a slot controls, is asked of the right positions.
    carries far more human variation than expected (Gnocchi Z of -8.5 over its
    kilobases), which reads as a mutation hotspot or a mapping artefact rather
    than a value slot, and the constrained_unknown tier holds 18 such blocks on
-   chr15 to look at first.
+   chr15 to look at first. The cause is now measured: curated segmental
+   duplications cover 60.6% of chromosome 21's constrained_unknown tier (15 of
+   20 blocks mostly duplicated; the most constrained block of the chromosome is
+   100% duplicated with 8 partners) against 7.8% of the regulatory tier, so a
+   good part of "deep constraint with no human score" is a copy whose
+   alignment is paralogous and whose variants do not map. The organiser reads a
+   block's duplicated fraction first (`duplication_<chrom>.json`, area J) and
+   attributes second; the real unknown is what remains after the copies.
 3. **The remaining attribution**: AlphaGenome's predicted DNase, histone and
    CAGE tracks say whether a block is active and where, and in-silico
    mutagenesis says which bases inside it matter; both on the 15,536

@@ -1002,6 +1002,21 @@ in order. "Owner" is the session that holds the files today (see §7).
   ALPHAGENOME.md (the predicted reader) is built by this. The scoring step of
   area I closes: tissue (VISTA), target (eQTL), activity (lentiMPRA), openness
   (the readers) and consequence (GWAS, ClinVar) have each been asked.
+- **Copies first (2026-09-12, genomeos-bb).** Curated segmental duplications
+  (UCSC genomicSuperDups, 1 kb or more at 90% identity or more) read per
+  UNKNOWN block (`genomeos duplications --chrom C`, `duplication_<chrom>`, a
+  minute per chromosome): on chr21 the constrained_unknown tier is 60.6%
+  duplicated, 15 of its 20 blocks mostly so, against 7.8% for the regulatory
+  tier and 21.5% for neutral; the most constrained block of the chromosome
+  (chr21:5,502,603-5,553,601, 51 kb) is 100% duplicated with 8 partners. On
+  chr15 the tier is 11.2% duplicated (23 of 44 blocks mostly so) and neutral
+  63%. Reading: a good part of what reads as deep mammalian constraint with no
+  human score in intergenic space is a copy, where the alignment is paralogous
+  and variant mapping fails; the two axes disagreeing had a cause. The budget's
+  "real unknown" therefore splits: copies first, attribution second, and the
+  organiser reads `duplicated_fraction` at 0.5 or more as the copy flag. The
+  classifier's own `similar_to` heuristic fires almost never (1 pair on chr21,
+  0 on chr15); the curated pairs replace it.
 - **The human axis (2026-09-12, genomeos-bb).** gnomAD's Gnocchi constraint,
   the depletion of variation among 76,156 people at 1 kb, read per UNKNOWN
   block and per attributed element beside Zoonomia (`genomeos variation
@@ -1021,8 +1036,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   the closure needs a gene's whole regulatory input before it can judge it,
   which is the self-hosted model's first job (about 6,600 elements on chr21).
   2. The rest of the organising evidence
-  on the compiled blocks: repeat family and segmental duplication on regions,
-  the reader's openness on the element itself rather than its node. 3. The
+  on the compiled blocks: the copy flag and the human axis on regions (both
+  measured now), repeat family, the reader's openness on the element itself
+  rather than its node; the constrained_unknown tier re-read with copies set
+  apart, since on chr21 three quarters of its blocks are duplicated. 3. The
   remaining attribution: AlphaGenome's predicted chromatin tracks for activity
   and tissue on the 15,536 regulatory blocks, in-silico mutagenesis for the
   bases that matter; the self-hosted model gates the move from chromosome 21
