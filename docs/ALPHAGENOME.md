@@ -169,6 +169,40 @@ unphased sequence, so it does not see a diploid individual.
    regulatory sequence the budget could not name a target for, the most
    constrained elements name one three times in four, and the node they sit
    in predicts which gene nine times in ten.
+
+   **Against measured enhancers (2026-09-12).** VISTA (LBNL) has tested about
+   2,400 human sequences for enhancer activity in e11.5 mouse embryos, each
+   positive in named tissues or negative; it is the ground truth the parser
+   never had. `attribution/vista.py` streams the loci table (120 kB, hg38)
+   and `scripts/vista_score.py --chrom C` reads every element blind: is an
+   ENCODE enhancer-like element there, which node and nearest coding TSS,
+   how constrained, and what the deletion of the whole element does in the
+   model (`vista_<chrom>.json`; the `vista_genome_wide` job runs the 23
+   chromosomes). The first two chromosomes, 50 elements:
+
+   | VISTA elements, chr21 + chr22 | positive (28) | negative (22) |
+   |---|---|---|
+   | an ENCODE enhancer-like element sits there | 100% | 86% |
+   | constrained (≥ 20% phyloP bases) | 43% | 23% |
+   | deletion moves some gene by ≥ 0.1 log2 | 75% | 91% |
+   | strong effect (≥ 0.3) | 12 | 9 |
+   | predicted tissue falls in the measured one | 8 of 9 judged (chance 36%) | no tissue |
+
+   Two things hold on fifty elements and will be re-read on the genome: the
+   registry and constraint lean the right way (every positive sits on an
+   ENCODE enhancer-like element, and positives are twice as often
+   constrained, though VISTA chose all of them for conservation), and when
+   the model names a tissue group it is the measured one nine times in ten
+   against a chance level of a third (hs1304 on chr21, forebrain to neural
+   tube in the embryo, deleted: −2.7 log2 in neural cells; hs1684, dorsal
+   root and trigeminal ganglia and somites: −1.5 in muscle of trunk; hs2543
+   on chr22, brain: +2.6 in cerebellum). One does not: the deletion names a
+   gene for negatives as often as for positives, more often on these two
+   chromosomes. A VISTA negative is a conserved sequence next to a gene that
+   did not drive expression at one embryonic day; the model reads adult and
+   cell-line tracks, so "some gene moves" is not "active at e11.5", and the
+   deletion effect is a target finder, not an activity assay. The tissue is
+   the part of the prediction the assay confirms.
 3. **Splicing, at the resolution our grammar lacks** (built, feature c). Our
    learned donor and acceptor matrices reach about 90% recall at seven false
    hits per kilobase, which is why segments are parsed by grammar and never

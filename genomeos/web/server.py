@@ -873,6 +873,10 @@ class Api:
             },
             "enhancer_targets_genome_wide": load_result("enhancer_targets_genome_wide", rd),
             "constrained_targets_genome_wide": load_result("constrained_targets_genome_wide", rd),
+            "vista": {
+                p.stem.split("_")[-1]: load_result(p.stem, rd) for p in sorted(rd.glob("vista_chr*.json"))
+            },
+            "vista_genome_wide": load_result("vista_genome_wide", rd),
             "segments": [
                 {
                     "name": p.stem,

@@ -280,6 +280,19 @@ feature loads disabled and says so; checked 2026-09-12, blocked on the key
 only. ENCODE has no open Hi-C domain BEDs and the 3D Genome Browser's hg38
 TAD archive is no longer served, so 4DN is the source.
 
+## Measured enhancers: VISTA (2026-09-12)
+
+The VISTA Enhancer Browser (LBNL) publishes its data on GitLab
+(`egsb-mfgl/vista-data`): `locus.tsv.gz` (120 kB) lists every tested element
+with hg38 coordinates, curation status (positive or negative at e11.5 in the
+transgenic mouse) and the tissues where it drove expression. `genomeos`
+streams that file once into `data/knowledge/vista/` (git-ignored) the first
+time `scripts/vista_score.py` or the `vista_genome_wide` job runs; the
+per-element rows it derives stay there too, and only the per-chromosome
+summaries with the rows the docs quote are committed (`vista_chr*.json`,
+`vista_genome_wide.json`). About 2,440 human elements, 1,267 positive and
+1,175 negative, none on chrY. Evidence class `experimental`.
+
 ## Optional: peptide/HLA binding predictors
 
 The therapeutic pipeline enumerates the peptides a mutation creates; whether

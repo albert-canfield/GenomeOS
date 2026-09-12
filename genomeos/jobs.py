@@ -201,6 +201,22 @@ CATALOG["constrained_targets_genome_wide"] = {
     "complete": lambda root: _constrained_chromosomes_done(root) >= 24,
     "auto_heal": True,
 }
+
+
+def _vista_chromosomes_done(root: Path) -> int:
+    return sum(1 for c in CHROMOSOMES if (root / "data" / "results" / f"vista_{c}.json").exists())
+
+
+CATALOG["vista_genome_wide"] = {
+    "argv": [sys.executable, "scripts/vista_genome_wide.py", "--run"],
+    "describe": "VISTA's measured enhancers against registry, node, constraint and deletion, per chromosome.",
+    "total": 23,
+    "result": "vista_genome_wide",
+    "count": None,
+    "progress": lambda root: float(_vista_chromosomes_done(root)),
+    "complete": lambda root: _vista_chromosomes_done(root) >= 23,
+    "auto_heal": True,
+}
 for _c in CHROMOSOMES:
     CATALOG[f"fetch_{_c}"] = {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--analyse", "--chrom", _c],
