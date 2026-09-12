@@ -1428,6 +1428,20 @@ def cmd_closure(args: argparse.Namespace) -> int:
         f"input vs expression {a['mean_rho_input_vs_expression']}, promoter vs expression "
         f"{a['mean_rho_promoter_vs_expression']}"
     )
+    for mode, m in (out.get("modes") or {}).items():
+        if mode == "dnase":
+            continue
+        a = m["across_cells"]
+        label = {
+            "cell": "the deletion scored on the cell's own track, no DNase gating",
+            "both": "the cell's own score, only where a DNase peak sits on the element",
+        }.get(mode, mode)
+        print(
+            f"  with {label}: {a['genes_tested']} genes, most active cell is the most expressed for "
+            f"{_pct(a['most_active_cell_is_most_expressed'], 0)} (shuffled "
+            f"{_pct(a['same_under_shuffled_cells'], 0)}), mean rank correlation "
+            f"{a['mean_rho_input_vs_expression']}; rejected {m['rejected_count']}"
+        )
     if out["rejected_attributions"]:
         print(
             f"\nrejected by the cell ({out['rejected_count']}): promoter open, activating input, gene silent"

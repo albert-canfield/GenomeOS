@@ -74,12 +74,18 @@ def attributed_elements(chrom: str) -> dict[str, list[dict]]:
                 continue
             seen.add(e["id"])
             sign = 1.0 if pc.get("action") == "activates" else -1.0
+            # per-cell: the deletion scored on the cell line's own track; a fall in expression on
+            # deletion (negative log2) means the element activates the gene in that cell
+            by_cell = {
+                c: -float(v) for c, v in (e.get("predicted_coding_by_cell") or {}).items() if v is not None
+            }
             by.setdefault(pc["gene"], []).append(
                 {
                     "id": e["id"],
                     "start": e["start"],
                     "end": e["end"],
                     "effect": sign * abs(pc["log2_fold_change"]),
+                    "by_cell": by_cell,
                 }
             )
     return by
@@ -199,15 +205,30 @@ def closure(
         row: dict[str, Any] = {"gene": g.symbol, "elements": len(by_gene.get(g.symbol, [])), "cells": {}}
         for cell in used:
             m = measured[cell]
-            active = [e for e in by_gene.get(g.symbol, []) if m["index"].overlapping(e["start"], e["end"])]
+            els = by_gene.get(g.symbol, [])
+            active = [e for e in els if m["index"].overlapping(e["start"], e["end"])]
+            scored = [e for e in els if cell in e["by_cell"]]
             row["cells"][cell] = {
                 "expression": m["expression"][g.symbol],
                 "expressed": m["expression"][g.symbol] >= EXPRESSED,
                 "promoter_open": m["promoter_open"][g.symbol],
                 "active_elements": len(active),
+                # dnase: tissue-agnostic magnitude, gated by a DNase peak on the element
                 "input": round(sum(e["effect"] for e in active), 3),
+                # cell: the deletion scored on this cell's own track, no gating
+                "input_cell": round(sum(e["by_cell"][cell] for e in scored), 3) if scored else None,
+                # both: the cell's own magnitude, only where a DNase peak also sits on the element
+                "input_both": (
+                    round(sum(e["by_cell"][cell] for e in scored if e in active), 3) if scored else None
+                ),
+                "scored_elements": len(scored),
             }
         rows.append(row)
+    has_cell = any(x["scored_elements"] for r in rows for x in r["cells"].values())
+    modes = {"dnase": judge(rows, used, seed, "input")}
+    if has_cell:
+        modes["cell"] = judge(rows, used, seed, "input_cell")
+        modes["both"] = judge(rows, used, seed, "input_both")
     return {
         "chrom": chrom,
         "cells": used,
@@ -216,7 +237,9 @@ def closure(
         "genes_with_elements": sum(1 for r in rows if r["elements"]),
         "signal_threshold": signal,
         "expressed_threshold": EXPRESSED,
-        **judge(rows, used, seed),
+        **modes["dnase"],
+        "modes": modes,
+        "per_cell_scores": has_cell,
         "genes": rows,
         "cost": {
             "seconds": round(time.time() - t0, 1),
@@ -226,11 +249,14 @@ def closure(
     }
 
 
-def judge(rows: list[dict], cells: list[str], seed: int = 0) -> dict:
-    """The closure tests over the assembled gene by cell table."""
+def judge(rows: list[dict], cells: list[str], seed: int = 0, key: str = "input") -> dict:
+    """The closure tests over the assembled gene by cell table, with `key` as the element input:
+    `input` (DNase-gated, tissue-agnostic magnitude), `input_cell` (the cell's own deletion score) or
+    `input_both`. A None input means the model has no score for that cell; the pair is left out."""
     within: dict[str, dict] = {}
     for cell in cells:
-        c = [r["cells"][cell] for r in rows]
+        c = [dict(r["cells"][cell], input=r["cells"][cell].get(key)) for r in rows]
+        c = [x for x in c if x["input"] is not None]
 
         def frac(sel):
             sel = list(sel)
@@ -258,7 +284,9 @@ def judge(rows: list[dict], cells: list[str], seed: int = 0) -> dict:
     for r in rows:
         if not r["elements"] or len(cells) < 3:
             continue
-        inp = [r["cells"][c]["input"] for c in cells]
+        if any(r["cells"][c].get(key) is None for c in cells):
+            continue
+        inp = [r["cells"][c][key] for c in cells]
         exp = [r["cells"][c]["expression"] for c in cells]
         prom = [1.0 if r["cells"][c]["promoter_open"] else 0.0 for c in cells]
         if len(set(inp)) > 1 and len(set(exp)) > 1:
@@ -280,15 +308,15 @@ def judge(rows: list[dict], cells: list[str], seed: int = 0) -> dict:
     for r in rows:
         for c in cells:
             x = r["cells"][c]
-            if x["promoter_open"] and x["input"] > 0 and not x["expressed"]:
-                rejected.append(
-                    {"gene": r["gene"], "cell": c, "input": x["input"], "expression": x["expression"]}
-                )
+            inp = x.get(key)
+            if inp is not None and x["promoter_open"] and inp > 0 and not x["expressed"]:
+                rejected.append({"gene": r["gene"], "cell": c, "input": inp, "expression": x["expression"]})
             if x["expressed"] and not x["promoter_open"] and x["active_elements"] == 0:
                 unexplained.append({"gene": r["gene"], "cell": c, "expression": x["expression"]})
     rejected.sort(key=lambda d: -d["input"])
     unexplained.sort(key=lambda d: -d["expression"])
     return {
+        "input": key,
         "within_cell": within,
         "across_cells": {
             "genes_tested": argmax_n,

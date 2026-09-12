@@ -330,3 +330,58 @@ def test_closure_helpers_and_judge():
     assert j["across_cells"]["most_active_cell_is_most_expressed"] == 0.5  # G1 yes, G2 tie broken to B
     assert j["rejected_attributions"] == [{"gene": "G2", "cell": "B", "input": 0.5, "expression": 0.0}]
     assert j["unexplained_expression"] == [{"gene": "G3", "cell": "C", "expression": 0.8}]
+
+
+def test_judge_with_per_cell_scores():
+    """With the deletion scored on each cell's own track the judge reads that input; pairs the model did
+    not score are left out rather than counted as zero."""
+    from genomeos.attribution.closure import judge
+
+    def cell(expr, prom, inp, inp_cell):
+        return {
+            "expression": expr,
+            "expressed": expr >= 0.3,
+            "promoter_open": prom,
+            "active_elements": 1,
+            "input": inp,
+            "input_cell": inp_cell,
+            "input_both": inp_cell,
+            "scored_elements": 1,
+        }
+
+    cells = ["A", "B", "C"]
+    rows = [
+        {
+            "gene": "G1",
+            "elements": 1,
+            "cells": {
+                "A": cell(0.9, True, 0.1, 0.9),
+                "B": cell(0.1, True, 0.1, 0.0),
+                "C": cell(0.5, True, 0.9, 0.4),
+            },
+        },
+        {
+            "gene": "G2",
+            "elements": 1,
+            "cells": {
+                "A": cell(0.0, True, 0.2, None),
+                "B": cell(0.6, True, 0.2, 0.5),
+                "C": cell(0.2, True, 0.2, 0.1),
+            },
+        },
+    ]
+    dn = judge(rows, cells, key="input")
+    ce = judge(rows, cells, key="input_cell")
+    assert dn["input"] == "input" and ce["input"] == "input_cell"
+    assert dn["across_cells"]["genes_tested"] == 1  # G2's DNase input is constant across cells
+    assert dn["across_cells"]["most_active_cell_is_most_expressed"] == 0.0
+    assert ce["across_cells"]["genes_tested"] == 1  # G2 lacks a score in A and is left out
+    assert ce["across_cells"]["most_active_cell_is_most_expressed"] == 1.0
+    assert ce["within_cell"]["A"]["expressed_promoter_open"] == (1.0, 1)  # G2's A pair has no score
+    # cell mode: only G2 in C (input 0.1, expression 0.2); dnase mode: G2 in A and C, G1 in B
+    assert [(r["gene"], r["cell"]) for r in ce["rejected_attributions"]] == [("G2", "C")]
+    assert [(r["gene"], r["cell"]) for r in dn["rejected_attributions"]] == [
+        ("G2", "A"),
+        ("G2", "C"),
+        ("G1", "B"),
+    ]
