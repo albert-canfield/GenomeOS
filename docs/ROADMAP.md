@@ -314,11 +314,24 @@ in order. "Owner" is the session that holds the files today (see §7).
   finds the genes, splice-site prediction draws their exons, transcription
   evidence says which are real, and asking the model and the measurement
   together is the actionable call.
+- **Node edges against a predicted contact map (2026-09-12).** `genomeos
+  domains --chrom chr21 --contact-map` takes the insulation minima of
+  AlphaGenome's predicted contact map (45 windows, 2 kb bins, 28 4DN Micro-C
+  and Hi-C cell types averaged) as predicted boundaries and holds the 227
+  CTCF-only boundaries against them (`predict/contact_maps.py`,
+  `domains_chr21_contact`). 83 of 227 inferred boundaries sit within 20 kb of
+  one of the 353 predicted minima (37%), against 28% for the same number of
+  boundaries placed at random; 24% of predicted minima have an inferred
+  boundary; median distance 34 kb; the depth threshold swept 0.02 to 0.3
+  never helps beyond chance. Agreement a little above chance, recorded as
+  such: node content has the evidence (enhancer deletions 90% inside, mouse
+  93 to 94% same neighbourhood), node edges stay a proxy at 0.4 until
+  measured Hi-C or a better insulation predictor.
 - **Next.** 1. The `reader` construct in
   BioLang, so context gating comes from
   chromatin (the parser half belongs to the language owner). 2. Orthology
-  from Ensembl Compara, and a boundary source finer than CTCF alone (Hi-C
-  domains) to test whether the resolution limit is the biology. The L1 ORF2
+  from Ensembl Compara; measured Hi-C boundaries (4DN) for the node edges,
+  since the predicted map did not move them. The L1 ORF2
   and Alu sequence signatures are superseded by the RepeatMasker pass and
   stay as the fallback for chromosomes not yet distilled.
 - **Owner.** genomeos-fe.
