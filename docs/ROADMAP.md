@@ -1181,19 +1181,32 @@ in order. "Owner" is the session that holds the files today (see §7).
   content read twice, so the operator table stays inferred at low
   confidence until profiles are clustered into families and the expectation
   is GC-matched. GRAMMAR-BY-COMPARISON.md §8.
+- **Step 2 built (2026-09-12).** `genomeos origin [--gene G | --library L]`
+  (`knowledge/homology.py`, `scripts/origin_genome_wide.py`,
+  `origin_genome_wide`): 375 Ensembl species placed once on a 25-clade
+  ladder shared with human (proxy names for the nodes Ensembl's
+  classification omits), the vertebrate and pan-taxonomic Compara dumps
+  streamed once (3.9 and 2.6 million rows, 14 s together), the deepest clade
+  with an orthologue per gene and its paralogues. 19,392 coding genes: 9,935
+  eukaryote core, 5,866 animal core, 1,914 vertebrate core, 912 mammal core,
+  96 primate, 18 ape, 1 human-specific in this set; 64,050 `paralogue_of`
+  edges in the knowledge graph (394,068 edges). The 42 libraries aged: the
+  oldest are core.splicing, replication, translation and timer.telomere (96
+  to 98% animal-wide or older), the youngest systems.ligand_receptor_protocol
+  (54%) and organ_skin (15% amniote or younger). Caveats: a vertebrate-dump
+  origin is a lower bound, a pan-dump origin can overshoot (family-level
+  calls at the deep strata: HOXA1 reads eukaryote-wide). GRAMMAR-BY-COMPARISON.md §10.
 - **Step 6 built (2026-09-12).** `genomeos decompile GENE --chrom C`
   (`genomeos/decompile.py`): every layer read for one gene assembled into a
   BioLang-flavoured view with an evidence note per line and an `unknown { }`
   block naming the layers not yet read; assembly only, no inference.
   GRAMMAR-BY-COMPARISON.md §9.
-- **Missing.** The human axis as a Blocks-tab lane; the origin per gene and
-  library (job rerunning with the pan-taxonomic dump for the deep strata); the motif scan and
+- **Missing.** The human axis as a Blocks-tab lane; the motif scan and
   operator patterns; phylogenetic profiling between libraries; the
   decompiled locus view; one developmental locus run end to end.
 - **Next.** 1. Done: the human axis over the genome and the case in the
-  compiled `region` note; next a Blocks-tab lane. 2. Origin per gene through
-  Ensembl homology at eight taxa; age distribution per library; the graph
-  gains `orthologue_of`. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
+  compiled `region` note; next a Blocks-tab lane. 2. Done: origin per gene and age per library, `orthologue_of` still to add
+  as species counts per clade on the graph nodes. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
   and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done: the scan, `requires:` and the operator pairs; next profiles clustered
   into families, a GC-matched expectation, and enhancers rather than promoters
   for the developmental combinations (GATA plus T-box in heart). 5. Phylogenetic profiling between libraries.

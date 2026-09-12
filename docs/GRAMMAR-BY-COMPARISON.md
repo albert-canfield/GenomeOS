@@ -496,3 +496,76 @@ constrained across mammals and none of its kilobases among people) and, at
 the time of writing, origin and paralogues as the only residue. The view is
 the product form of area J: what the project knows about a locus, layer by
 layer, with the gap stated.
+
+## 10. Step 2 built: origin per gene, age per library, paralogues (2026-09-12)
+
+`genomeos origin [--gene G | --library L]` (`knowledge/homology.py`,
+`scripts/origin_genome_wide.py`, result `origin_genome_wide`) gives the
+ladder the conversation asked for. Every Ensembl species is placed once on a
+ladder of 25 clades shared with human, from Life through Eukaryota,
+Metazoa, Bilateria, Chordata, the vertebrate and mammal grades down to
+Homo, through Ensembl's taxonomy classification with proxy names for the
+nodes it omits (Aves stands for Amniota, Amphibia for Tetrapoda,
+Laurasiatheria for Boreoeutheria, Bacteria for Life). Then two Compara
+homology dumps for human are streamed once over HTTP and never stored: the
+vertebrate one (109 MB, 3.9 million rows, 9 s) and the pan-taxonomic one
+(46 MB, 2.6 million rows, 5 s; plants, fungi, protists, invertebrates).
+Per protein-coding gene the deepest clade with an orthologue is its
+origin, the deeper of the two dumps winning; its paralogues come from the
+same rows. Species the dumps name that the species list omitted (yeast, fly
+and worm are outgroups of the vertebrate trees but not "vertebrate species")
+are placed on the way and the stream is run again, which is what turned a
+first result with nothing below Chordata into the table below.
+
+**The genome's ladder (19,392 coding genes, 375 species placed).**
+
+| ladder | genes | strata |
+|---|---|---|
+| Eukaryote core | 9,935 | Eukaryota 9,532, Opisthokonta 403 |
+| Animal core | 5,866 | Metazoa 4,837, Bilateria 1,029 |
+| Chordate | 161 | |
+| Vertebrate core | 1,914 | Vertebrata 447, Gnathostomata 571, Euteleostomi 896 |
+| Tetrapod | 203 | |
+| Amniote | 286 | |
+| Mammal core | 912 | Mammalia 182, Theria 191, Eutheria 350, Boreoeutheria 176, Euarchontoglires 13 |
+| Primate | 96 | |
+| Ape | 18 | |
+| Human-specific in this species set | 1 | |
+
+Half the coding genes have a relative outside the animals, a third are
+animal inventions, one in ten vertebrate, one in twenty mammalian; 115
+genes are primate or younger and one has no orthologue anywhere Ensembl
+looks. Paralogues: 6,805 genes have none, 3,809 have ten or more; 64,050
+`paralogue_of` edges joined the knowledge graph (394,068 edges now), one
+per pair of compiled paralogues, with the origin as a node attribute.
+
+**The libraries, aged.** Every one of the 42 BioLib libraries with eight or
+more placed members now carries its origin distribution. The order is the
+one biology would give without being told: the oldest are `core.splicing`
+(98.5% of members animal-wide or older), `core.replication` (96.0%),
+`core.translation` (95.7%) and `timer.telomere` (95.5%), then the
+segmentation and circadian timers and the degradation, repair and
+chromatin cores (93 to 94%); the youngest are `systems.ligand_receptor_protocol`
+(54.4% animal or older, 38.8% vertebrate to tetrapod: the signalling
+protocol is largely a vertebrate invention), `blueprint.organ_skin` (15.2%
+amniote or younger, the keratin-associated proteins), `systems.immune`
+and `blueprint.organ_blood_immune` (6% and 5% amniote or younger). A
+library whose members span the whole ladder is a candidate for splitting;
+the ligand-receptor protocol is that library.
+
+**Two caveats the data forces.** An origin from the vertebrate dump is a
+lower bound on age (a gene lost in every sampled outgroup reads younger
+than it is); an origin from the pan-taxonomic dump can overshoot, because
+at the deepest levels Compara's "orthologue" is a family-level call: HOXA1
+reads eukaryote-wide through plant homeobox proteins, and OCA2 through
+transporter relatives. The ladder label is therefore right at the grade
+(eukaryote core, animal core, vertebrate core), and a single gene's exact
+stratum below Metazoa should be read with the species count beside it.
+Ten species stay unplaced by the taxonomy endpoint under any name and are
+placed by an explicit table (mink and sperm whale renamed in NCBI, two
+birds, and six pan-taxonomic invertebrates and a liverwort); each is
+redundant with others at its stratum, so no origin depends on them.
+
+The decompiled locus (§9) now prints origin and paralogues for every
+coding gene: APP is animal core with one paralogue, APLP1, and has no
+unknown residue left among the layers GenomeOS reads.

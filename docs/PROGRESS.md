@@ -677,3 +677,20 @@ the syntax elements). Coding segments read 38.1% human-constrained, introns
 variable among people, the signature of the copies the duplication read
 found there. chrY is unmeasured throughout, recorded as such and never as
 zero. docs/GRAMMAR-BY-COMPARISON.md §6.
+
+## 2026-09-12 — origin per gene, age per library
+
+Area J step 2. `genomeos origin` places 375 Ensembl species once on a
+25-clade ladder shared with human and streams two Compara homology dumps for
+human over HTTP, never stored (the vertebrate one, 3.9 million rows in 9 s,
+and the pan-taxonomic one, 2.6 million rows in 5 s), keeping per coding gene
+the deepest clade with an orthologue and its paralogues. The first run stopped
+at Chordata for every gene because Ensembl's vertebrate species list omits
+the outgroups its trees use; placing the species the dump names and adding
+the pan-taxonomic dump gave the ladder: 9,935 genes eukaryote core, 5,866
+animal core, 1,914 vertebrate core, 912 mammal core, 96 primate, 18 ape, one
+with no orthologue in the set. The 42 libraries come out in the order biology
+would give: splicing, replication, translation and the telomere machinery
+oldest, the ligand-receptor protocol and skin youngest. 64,050 paralogue
+edges joined the knowledge graph (394,068 edges). APP decompiles with no
+unknown residue left. docs/GRAMMAR-BY-COMPARISON.md §10; one LESSONS row.

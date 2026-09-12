@@ -113,6 +113,18 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   `core.replication`; the heart's GATA plus T-box pair is not in promoters,
   where the scan looked, but in enhancers.
 
+- Ensembl's "vertebrate species" list omits the outgroups its gene trees
+  use: yeast, fly and worm are in the vertebrate Compara dump (50,000 rows)
+  but not in `info/species?division=EnsemblVertebrates`, so a ladder built
+  from the species list stopped at Chordata for every gene. Place the species
+  the dump names, not the species the list names (`_stream_placing`), and
+  read the pan-taxonomic dump for the strata below the animals. Ensembl's
+  taxonomy classification also omits Amniota, Tetrapoda, Theria and
+  Boreoeutheria, so a duck reads as a fish unless Aves stands in for Amniota
+  (`PROXIES`). At the deepest strata a Compara "orthologue" is a
+  family-level call (HOXA1 eukaryote-wide through plant homeobox proteins):
+  read the grade, not the exact stratum (`origin_genome_wide`).
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory

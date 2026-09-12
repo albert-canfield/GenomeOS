@@ -46,9 +46,10 @@ def main() -> None:
 
     out = run_and_save(DUMP_URL.format(release=args.release), progress=progress)
     heartbeat(JOB)
+    rows = sum(c.get("rows", 0) for c in out["cost"].values())
     print(
         f"origin: {out['coding_genes']:,} coding genes; by ladder {out['by_ladder']}; "
-        f"{len(out['libraries'])} libraries aged; {out['cost']['rows'] / 1e6:.1f} M rows in "
+        f"{len(out['libraries'])} libraries aged; {rows / 1e6:.1f} M rows over {len(out['cost'])} dumps in "
         f"{time.time() - t0:.0f} s",
         flush=True,
     )

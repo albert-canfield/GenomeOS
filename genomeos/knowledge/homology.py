@@ -259,6 +259,12 @@ SPECIES_FALLBACK = {
     "physeter_catodon": "Boreoeutheria",  # sperm whale, now Physeter macrocephalus
     "erythrura_gouldiae": "Amniota",  # Gouldian finch
     "stachyris_ruficeps": "Amniota",  # rufous-capped babbler
+    "strigamia_maritima": "Bilateria",  # centipede (pan-taxonomic set)
+    "heliconius_melpomene": "Bilateria",  # butterfly
+    "tetranychus_urticae": "Bilateria",  # spider mite
+    "brugia_malayi": "Bilateria",  # filarial nematode
+    "trichoplax_adhaerens": "Metazoa",  # placozoan
+    "marchantia_polymorpha": "Eukaryota",  # liverwort
 }
 
 ORTHOLOG_TYPES = {"ortholog_one2one", "ortholog_one2many", "ortholog_many2many"}
