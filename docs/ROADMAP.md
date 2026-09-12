@@ -1012,11 +1012,20 @@ in order. "Owner" is the session that holds the files today (see §7).
   chr15 the tier is 11.2% duplicated (23 of 44 blocks mostly so) and neutral
   63%. Reading: a good part of what reads as deep mammalian constraint with no
   human score in intergenic space is a copy, where the alignment is paralogous
-  and variant mapping fails; the two axes disagreeing had a cause. The budget's
-  "real unknown" therefore splits: copies first, attribution second, and the
-  organiser reads `duplicated_fraction` at 0.5 or more as the copy flag. The
-  classifier's own `similar_to` heuristic fires almost never (1 pair on chr21,
-  0 on chr15); the curated pairs replace it.
+  and variant mapping fails; the two axes disagreeing had a cause. **With the
+  genome in** (`duplication_genome_wide`, 24 chromosomes, 64,216 curated
+  pairs, 166.9 Mb, 5.4% of the genome) the chr21 number is the acrocentric
+  short arm, not the tier: genome-wide the constrained_unknown tier is 4.7%
+  duplicated by bases, concentrated on chrY (72%), chr21 (61%) and chr22
+  (42%), every other chromosome at 11% or below. What holds everywhere: 216 of
+  the tier's 1,098 blocks (19.7%) are mostly copies, so "copies first,
+  attribution second" applies to one block in five of the real unknown; the
+  neutral tier is the most duplicated by bases (10.3%, 26% of its blocks) and
+  the regulatory tier the least (2.8%, 4.4%); 2.0% of the 7,063 scored
+  elements sit inside a duplication. The organiser reads `duplicated_fraction`
+  at 0.5 or more as the copy flag. The classifier's own `similar_to` heuristic
+  fired once genome-wide, and that pair is supported; the curated pairs replace
+  it.
 - **The human axis (2026-09-12, genomeos-bb).** gnomAD's Gnocchi constraint,
   the depletion of variation among 76,156 people at 1 kb, read per UNKNOWN
   block and per attributed element beside Zoonomia (`genomeos variation
@@ -1039,7 +1048,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   on the compiled blocks: the copy flag and the human axis on regions (both
   measured now), repeat family, the reader's openness on the element itself
   rather than its node; the constrained_unknown tier re-read with copies set
-  apart, since on chr21 three quarters of its blocks are duplicated. 3. The
+  apart, one block in five genome-wide and most of chr21's. 3. The
   remaining attribution: AlphaGenome's predicted chromatin tracks for activity
   and tissue on the 15,536 regulatory blocks, in-silico mutagenesis for the
   bases that matter; the self-hosted model gates the move from chromosome 21
@@ -1118,16 +1127,29 @@ in order. "Owner" is the session that holds the files today (see §7).
   chromosomes. VISTA positives 20.2% against negatives 16.9% over 2,223
   elements. rs12913832 is constrained across mammals at the base and its
   kilobase is unscored by Gnocchi. GRAMMAR-BY-COMPARISON.md §6.
-- **Missing.** The human axis genome-wide and as a Blocks-tab lane; the
-  origin per gene and library; curated duplication; the motif scan and
+- **Step 3 done (2026-09-12).** `genomeos duplications --chrom C`
+  (`genome/duplications.py`, `duplication_chr*` for 24 chromosomes,
+  `duplication_genome_wide`): UCSC's curated segmental duplications over
+  every UNKNOWN block, tier, shared-k-mer pair and scored element. 64,216
+  pairs, 5.4% of the genome; the constrained_unknown tier is 4.7% duplicated
+  with 216 of 1,098 blocks (19.7%) mostly copies, concentrated on chrY (72%),
+  chr21 (61%) and chr22 (42%); neutral 10.3%, regulatory 2.8%; 2.0% of scored
+  elements sit inside a duplication; the `similar_to` heuristic fired once
+  and was right. A copy reads mammal-constrained (paralogous alignment) and
+  unscored by gnomAD (mapping), which is the cause of the two axes
+  disagreeing. GRAMMAR-BY-COMPARISON.md §7. Paralogues per gene come from
+  step 2's Compara stream (in progress: `knowledge/homology.py`,
+  `scripts/origin_genome_wide.py`, `genomeos origin`).
+- **Missing.** The human axis genome-wide (job running) and as a Blocks-tab
+  lane; the origin per gene and library (job running); the motif scan and
   operator patterns; phylogenetic profiling between libraries; the
   decompiled locus view; one developmental locus run end to end.
 - **Next.** 1. The human axis over the other 22 chromosomes as a resumable
   job (a few MB each) and the case per block in the compiled BioLang
-  `region` as a second evidence line. 2. Origin per gene through
+  `region` as a second evidence line (compiled note done; the job runs). 2. Origin per gene through
   Ensembl homology at eight taxa; age distribution per library; the graph
-  gains `orthologue_of`. 3. Paralogues and `genomicSuperDups`; `paralogue_of`
-  edges; `similar_to` demoted to fallback. 4. JASPAR scan of promoters and
+  gains `orthologue_of`. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
+  and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. JASPAR scan of promoters and
   constrained elements; `requires:` with evidence; recurring motif
   combinations per library. 5. Phylogenetic profiling between libraries.
   6. `genomeos decompile LOCUS`. 7. OCA2/HERC2 and the SHH ZRS across human,
