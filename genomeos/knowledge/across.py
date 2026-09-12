@@ -153,25 +153,43 @@ def to_genome(pos: int, blocks: list[tuple[int, int]]) -> int | None:
     return None
 
 
-def held_sites(rows: list[dict], widths: dict[str, int]) -> list[dict]:
-    """Held factors grouped into sites: hits that overlap on the human genome are one site."""
-    ivs = sorted(
-        (
-            (r["human_genome"], r["human_genome"] + widths.get(r["factor"], 10), r)
-            for r in rows
-            if r["everywhere"] and r.get("human_genome") is not None
-        ),
-        key=lambda t: (t[0], t[1]),  # rows themselves are not comparable when two hits tie
-    )
+MIN_CORE_COVERAGE = 0.5  # a species aligning over at least this share of the element must hold a site
+
+
+def cluster_sites(held: list[tuple[int, int, str, str, str]], core: list[str]) -> list[dict]:
+    """Held hits (genome start, end, factor, family, species) clustered into sites where they overlap.
+
+    A site records every species holding a hit in it; it is held *everywhere* when all core species do.
+    Hits of one site may come from different matrices in different species (a HOX site read by HOXA9 in
+    mouse and CDX1 in chicken): what is conserved is the site, not the matrix.
+    """
     sites: list[dict] = []
-    for a, b, r in ivs:
+    for a, b, tf, fam, sp in sorted(held, key=lambda t: (t[0], t[1], t[2], t[4])):
         if sites and a < sites[-1]["end"]:
-            sites[-1]["end"] = max(sites[-1]["end"], b)
-            sites[-1]["factors"].append(r["factor"])
-            sites[-1]["families"].add(r["family"])
+            st = sites[-1]
+            st["end"] = max(st["end"], b)
         else:
-            sites.append({"start": a, "end": b, "factors": [r["factor"]], "families": {r["family"]}})
-    return [{**s_, "families": sorted(s_["families"])} for s_ in sites]
+            st = {"start": a, "end": b, "factors": {}, "families": set(), "species": set()}
+            sites.append(st)
+        st["factors"].setdefault(tf, set()).add(sp)
+        st["families"].add(fam)
+        st["species"].add(sp)
+    out = []
+    for st in sites:
+        everywhere = bool(core) and set(core) <= st["species"]
+        out.append(
+            {
+                "start": st["start"],
+                "end": st["end"],
+                "families": sorted(st["families"]),
+                "factors": sorted(st["factors"]),
+                "species": sorted(st["species"]),
+                "everywhere": everywhere,
+                # a factor held at this site by every core species on its own
+                "factors_everywhere": sorted(f for f, sps in st["factors"].items() if set(core) <= sps),
+            }
+        )
+    return out
 
 
 def conserved_grammar(
@@ -179,22 +197,25 @@ def conserved_grammar(
     motifs,
     window: int = SAME_SITE_WINDOW,
     families: dict[str, dict[str, str]] | None = None,
+    core: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Factors hitting the human element, and in which species they hit *the same aligned site*.
+    """Factors hitting the human element, and the sites whose motif the other species keep in place.
 
-    Sequence identity alone makes almost every motif "present" in a close species: the honest
-    question is whether the hit sits at the aligned position, so each hit's start is mapped through
-    the alignment columns and must land within `window` bases of the other species' hit.
+    Sequence identity alone makes almost every motif "present" in a close species, so a hit counts as
+    held only where the other species' hit sits at the aligned position: the human hit's start is mapped
+    through the gapped alignment columns and must land within `window` bases of the other hit. Each held
+    human hit is placed on the genome through that species' own alignment blocks, and held hits from all
+    species are clustered into sites. A site is held everywhere when every `core` species holds it (by
+    default every species compared). Only each factor's best hit per sequence is scanned, so a site held
+    by a weaker hit can be missed: the call is conservative, never inflated.
     """
     from genomeos.genome.motifs import family_unit, load_families, scan
 
     families = families if families is not None else load_families()
-
+    widths = {m.name.upper(): m.width for m in motifs}
     per_species: dict[str, dict[str, int]] = {}
     human_hits: dict[str, tuple[float, int]] = {}
-    genome_pos: dict[
-        str, int
-    ] = {}  # where the held human hit sits on the genome, from the species holding it
+    held: list[tuple[int, int, str, str, str]] = []
     for sp, pair in pairs.items():
         human_gapped, other_gapped = pair[0], pair[1]
         blocks = pair[2] if len(pair) > 2 else None
@@ -214,48 +235,48 @@ def conserved_grammar(
             col = h_cols[pos] if pos < len(h_cols) else None
             if col is None:
                 continue
-            # the nearest column that exists in the other sequence, then its base index
             near = min(o_base, key=lambda c: abs(c - col)) if o_base else None
             expected = o_base.get(near) if near is not None else None
-            if expected is None:
+            if expected is None or abs(per_seq[1][1] - expected) > window:
                 continue
-            if abs(per_seq[1][1] - expected) <= window:
-                per_species.setdefault(tf, {})[sp] = per_seq[1][1]
-                if blocks and tf not in genome_pos:
-                    g = to_genome(pos, blocks)
-                    if g is not None:
-                        genome_pos[tf] = g
+            per_species.setdefault(tf, {})[sp] = per_seq[1][1]
+            g = to_genome(pos, blocks) if blocks else pos
+            if g is not None:
+                held.append((g, g + widths.get(tf, 10), tf, family_unit(tf, families), sp))
     species = [sp for sp, pr in pairs.items() if pr[0].replace("-", "") and pr[1].replace("-", "")]
+    core = [sp for sp in (core if core is not None else species) if sp in species]
+    sites = cluster_sites(held, core)
+    held_factor = {f for st in sites if st["everywhere"] for f in st["factors_everywhere"]}
     rows = []
     for tf, (score, pos) in human_hits.items():
-        same = sorted(per_species.get(tf, {}))
         rows.append(
             {
                 "factor": tf,
+                "family": family_unit(tf, families),
                 "human_score": score,
                 "human_position": pos,
-                "human_genome": genome_pos.get(tf),
-                "same_site_in": same,
-                "everywhere": bool(species) and len(same) == len(species),
+                "same_site_in": sorted(per_species.get(tf, {})),
+                "everywhere": tf in held_factor,
             }
         )
     rows.sort(key=lambda r: (-len(r["same_site_in"]), -r["human_score"]))
-    # one binding mode read by many matrices is one site: report the held factors as families
+    everywhere_sites = [st for st in sites if st["everywhere"]]
     held_families: dict[str, list[str]] = {}
-    for r in rows:
-        r["family"] = family_unit(r["factor"], families)
-        if r["everywhere"]:
-            held_families.setdefault(r["family"], []).append(r["factor"])
-    widths = {m.name.upper(): m.width for m in motifs}
-    sites = held_sites(rows, widths)
+    for st in everywhere_sites:
+        for f in st["factors_everywhere"]:
+            held_families.setdefault(family_unit(f, families), [])
+            if f not in held_families[family_unit(f, families)]:
+                held_families[family_unit(f, families)].append(f)
     return {
-        "sites_everywhere": sites,
-        "sites_everywhere_count": len(sites),
-        "families_in_human": len({r["family"] for r in rows}),
-        "families_everywhere": dict(sorted(held_families.items(), key=lambda kv: (-len(kv[1]), kv[0]))),
-        "factors_in_human": len(rows),
+        "core_species": core,
         "species_compared": species,
         "same_site_window": window,
+        "factors_in_human": len(rows),
+        "families_in_human": len({r["family"] for r in rows}),
+        "sites_held": sites,
+        "sites_everywhere": everywhere_sites,
+        "sites_everywhere_count": len(everywhere_sites),
+        "families_everywhere": dict(sorted(held_families.items(), key=lambda kv: (-len(kv[1]), kv[0]))),
         "everywhere": [r["factor"] for r in rows if r["everywhere"]],
         "rows": rows,  # every factor that hit human: a capped list made absent and unranked look alike
     }
@@ -290,10 +311,47 @@ def human_sequence(chrom: str, start: int, end: int) -> str | None:
     return str(Genome.from_fasta(fa).fetch(Locus(chrom, start, end)))
 
 
-def build(name: str, species: tuple[str, ...] = SPECIES, motifs=None, progress=None) -> dict[str, Any]:
-    if name not in LOCI:
-        raise KeyError(f"unknown locus {name}; known: {', '.join(LOCI)}")
-    loc = LOCI[name]
+def vista_loci(results_dir: Path = RESULTS_DIR) -> dict[str, dict]:
+    """Every VISTA element read genome-wide, as a locus: id, place, status, tissues, constraint."""
+    import glob
+
+    from genomeos.results import load_result
+
+    out: dict[str, dict] = {}
+    for f in sorted(glob.glob(str(results_dir / "vista_chr*.json"))):
+        r = load_result(Path(f).stem, results_dir) or {}
+        for x in r.get("rows", []):
+            if x.get("status") not in ("positive", "negative"):
+                continue
+            target = (x.get("predicted") or {}).get("gene") or (x.get("inferred") or {}).get("gene")
+            out[x["id"]] = {
+                "chrom": r["chrom"],
+                "start": x["start"],
+                "end": x["end"],
+                "gene": target,
+                "status": x["status"],
+                "tissues": x.get("tissues") or [],
+                "constrained_fraction": x.get("constrained_fraction"),
+                "note": f"VISTA {x['id']}, {x['status']}"
+                + (f" ({', '.join(x.get('tissues') or [])})" if x.get("tissues") else ""),
+            }
+    return out
+
+
+def build(
+    name: str | dict,
+    species: tuple[str, ...] = SPECIES,
+    motifs=None,
+    progress=None,
+    with_constraint: bool = True,
+) -> dict[str, Any]:
+    if isinstance(name, dict):
+        loc = name
+        name = loc.get("id") or f"{loc['chrom']}_{loc['start']}"
+    else:
+        if name not in LOCI:
+            raise KeyError(f"unknown locus {name}; known: {', '.join(LOCI)}")
+        loc = LOCI[name]
     chrom, start, end = loc["chrom"], loc["start"], loc["end"]
     t0 = time.time()
     length = end - start
@@ -319,7 +377,8 @@ def build(name: str, species: tuple[str, ...] = SPECIES, motifs=None, progress=N
             for sp, v in per_species.items()
             if v.get("other_sequence") and v.get("human_aligned_sequence")
         }
-        grammar = conserved_grammar(pairs, motifs)
+        core = [sp for sp, v in per_species.items() if (v.get("coverage") or 0) >= MIN_CORE_COVERAGE]
+        grammar = conserved_grammar(pairs, motifs, core=core)
     out = {
         "locus": name,
         **loc,
@@ -334,7 +393,7 @@ def build(name: str, species: tuple[str, ...] = SPECIES, motifs=None, progress=N
         },
         "aligned_in": [sp for sp, v in per_species.items() if (v.get("coverage") or 0) > 0],
         "grammar": grammar,
-        "constraint": constraint(chrom, start, end),
+        "constraint": constraint(chrom, start, end) if with_constraint else None,
         "evidence": EVIDENCE,
         "cost": {"seconds": round(time.time() - t0, 1)},
     }
@@ -344,4 +403,192 @@ def build(name: str, species: tuple[str, ...] = SPECIES, motifs=None, progress=N
 def run_and_save(name: str, results_dir: Path = RESULTS_DIR, progress=None) -> dict:
     out = build(name, progress=progress)
     save_result(f"across_{name}", out, results_dir)
+    return out
+
+
+# ------------------------------------------------------------------------------------------ panel
+NEURAL_TISSUES = {"fb", "mb", "hb", "nt"}
+PANEL_CACHE = CACHE / "panel"
+MIN_CORE_SPECIES = 2  # "held" must mean more than one other genome
+
+
+def fisher_greater(a: int, b: int, c: int, d: int) -> float:
+    """One-sided Fisher exact p for a 2x2 table [[a, b], [c, d]]: P(X >= a) with margins fixed."""
+    from math import comb
+
+    n, row1, col1 = a + b + c + d, a + b, a + c
+    denom = comb(n, col1)
+    lo = a
+    hi = min(row1, col1)
+    return min(1.0, sum(comb(row1, k) * comb(n - row1, col1 - k) for k in range(lo, hi + 1)) / denom)
+
+
+def mann_whitney_greater(x: list[float], y: list[float]) -> float | None:
+    """One-sided Mann–Whitney p that x tends to exceed y (normal approximation with tie-averaged ranks)."""
+    from statistics import NormalDist
+
+    if not x or not y:
+        return None
+    allv = sorted((v, 0) for v in x) + sorted((v, 1) for v in y)
+    allv.sort(key=lambda t: t[0])
+    ranks = [0.0] * len(allv)
+    i = 0
+    while i < len(allv):
+        j = i
+        while j + 1 < len(allv) and allv[j + 1][0] == allv[i][0]:
+            j += 1
+        for k in range(i, j + 1):
+            ranks[k] = (i + j) / 2 + 1
+        i = j + 1
+    r1 = sum(r for r, (_, g) in zip(ranks, allv, strict=True) if g == 0)
+    n1, n2 = len(x), len(y)
+    u = r1 - n1 * (n1 + 1) / 2
+    mu, sd = n1 * n2 / 2, (n1 * n2 * (n1 + n2 + 1) / 12) ** 0.5
+    return round(1 - NormalDist().cdf((u - mu) / sd), 6) if sd else None
+
+
+def bh(pvalues: list[float]) -> list[float]:
+    """Benjamini–Hochberg q-values in the input order."""
+    m = len(pvalues)
+    order = sorted(range(m), key=lambda k: pvalues[k])
+    q = [1.0] * m
+    prev = 1.0
+    for rank in range(m - 1, -1, -1):
+        k = order[rank]
+        prev = min(prev, pvalues[k] * m / (rank + 1))
+        q[k] = prev
+    return q
+
+
+def locus_group(tissues: list[str], status: str) -> str | None:
+    if status == "negative":
+        return "negative"
+    t = set(tissues)
+    if "lb" in t and not t & NEURAL_TISSUES:
+        return "limb"
+    if t & NEURAL_TISSUES and "lb" not in t:
+        return "neural"
+    return None
+
+
+def select_panel(loci: dict[str, dict], per_group: int = 40, seed: int = 5) -> list[dict]:
+    """Limb-only and neural-only positives, and negatives matched to the positives' constraint bins."""
+    import random
+
+    rng = random.Random(seed)
+
+    def ok(v: dict) -> bool:
+        cf = v.get("constrained_fraction") or 0
+        return 0.3 <= cf <= 0.9 and 500 <= v["end"] - v["start"] <= 2000
+
+    edges = (0.3, 0.45, 0.6, 0.75, 0.9001)
+
+    def cbin(v: dict) -> int:
+        cf = v["constrained_fraction"]
+        return next(i for i in range(len(edges) - 1) if edges[i] <= cf < edges[i + 1])
+
+    chosen: list[dict] = []
+    for grp in ("limb", "neural"):
+        pool = sorted(
+            (
+                {**v, "id": k, "group": grp}
+                for k, v in loci.items()
+                if ok(v) and locus_group(v["tissues"], v["status"]) == grp
+            ),
+            key=lambda v: v["id"],
+        )
+        rng.shuffle(pool)
+        chosen += pool[:per_group]
+    need: dict[int, int] = {}
+    for v in chosen:
+        need[cbin(v)] = need.get(cbin(v), 0) + 1
+    negatives = sorted(
+        ({**v, "id": k, "group": "negative"} for k, v in loci.items() if ok(v) and v["status"] == "negative"),
+        key=lambda v: v["id"],
+    )
+    rng.shuffle(negatives)
+    for bin_, k in sorted(need.items()):
+        chosen += [v for v in negatives if cbin(v) == bin_][:k]
+    return chosen
+
+
+def panel_record(locus: dict, motifs) -> dict:
+    """One locus through `build`, kept compact and cached: coverage, core species, strict held sites."""
+    PANEL_CACHE.mkdir(parents=True, exist_ok=True)
+    cache = PANEL_CACHE / f"{locus['id']}.json"
+    if cache.exists():
+        return json.loads(cache.read_text())
+    r = build(locus, motifs=motifs, with_constraint=False)
+    g = r.get("grammar") or {}
+    strict = [st for st in g.get("sites_held", []) if st["everywhere"] and st["factors_everywhere"]]
+    from genomeos.genome.motifs import family_unit, load_families
+
+    fam = load_families()
+    rec = {
+        "id": locus["id"],
+        "group": locus["group"],
+        "chrom": locus["chrom"],
+        "start": locus["start"],
+        "end": locus["end"],
+        "length": r["length"],
+        "constrained_fraction": locus.get("constrained_fraction"),
+        "coverage": {sp: v.get("coverage") for sp, v in r["species"].items()},
+        "core_species": g.get("core_species", []),
+        "strict_sites": len(strict),
+        "families_held": sorted({family_unit(f, fam) for st in strict for f in st["factors_everywhere"]}),
+        "families_hit": sorted({row["family"] for row in g.get("rows", [])}),
+    }
+    cache.write_text(json.dumps(rec))
+    return rec
+
+
+def panel_summary(records: list[dict], min_core: int = MIN_CORE_SPECIES) -> dict[str, Any]:
+    """Per positive group against the negatives: held-site density, and which families are held more often."""
+    usable = [r for r in records if len(r["core_species"]) >= min_core]
+    groups: dict[str, list[dict]] = {}
+    for r in usable:
+        groups.setdefault(r["group"], []).append(r)
+    neg = groups.get("negative", [])
+    out: dict[str, Any] = {
+        "loci": len(records),
+        "usable": {k: len(v) for k, v in groups.items()},
+        "min_core_species": min_core,
+        "groups": {},
+    }
+    density = {k: [1000 * r["strict_sites"] / r["length"] for r in v] for k, v in groups.items()}
+    for grp in ("limb", "neural"):
+        pos = groups.get(grp, [])
+        if not pos or not neg:
+            continue
+        fams = sorted({f for r in pos + neg for f in r["families_held"]})
+        rows = []
+        for f in fams:
+            a = sum(1 for r in pos if f in r["families_held"])
+            c = sum(1 for r in neg if f in r["families_held"])
+            if a + c < 3:
+                continue
+            rows.append(
+                {
+                    "family": f,
+                    "positives_held": a,
+                    "negatives_held": c,
+                    "positive_share": round(a / len(pos), 3),
+                    "negative_share": round(c / len(neg), 3),
+                    "p": fisher_greater(a, len(pos) - a, c, len(neg) - c),
+                }
+            )
+        for row, q in zip(rows, bh([r["p"] for r in rows]), strict=True):
+            row["q"] = round(q, 6)
+        rows.sort(key=lambda r: r["p"])
+        dp, dn = density.get(grp, []), density.get("negative", [])
+        out["groups"][grp] = {
+            "positives": len(pos),
+            "negatives": len(neg),
+            "density_median_positive": sorted(dp)[len(dp) // 2] if dp else None,
+            "density_median_negative": sorted(dn)[len(dn) // 2] if dn else None,
+            "density_p_greater": mann_whitney_greater(dp, dn),
+            "families_tested": len(rows),
+            "families_q05": [r for r in rows if r["q"] <= 0.05],
+            "families": rows[:40],
+        }
     return out

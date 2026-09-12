@@ -748,6 +748,27 @@ hits overlapping on the human genome are one site.
 | ZRS | 606 | 23 matrices | 10 | **10** |
 | OCA2 enhancer | 551 | 75 matrices | 25 | **11** |
 
+**Correction, the same day: the site table above is superseded.** The
+site call behind it had a flaw found while designing the panel below. A
+factor counted as held "in every species" when each species held *some*
+hit for it, but the site's genome coordinate came from the first species
+holding it, so a factor held at one place in mouse and another in zebrafish
+(which aligns to 77 of the ZRS's 789 bases) was reported as one site. The
+call now places every species' held hit on the genome through that
+species' own alignment blocks, clusters the hits into sites, and requires
+every core species (those aligning over half the element) to hold the same
+site, with one factor holding it in all of them. Under that definition a
+single locus says little: the ZRS holds 15 such sites covering 79% of its
+bases and 151 families among them, because at 88% identity across three
+amniotes nearly every window of conserved sequence keeps some matrix; the
+OCA2 enhancer has one core species (mouse) and cannot be judged. Four limb
+enhancers and four constraint-matched VISTA negatives held 10.6 to 15.9 and
+7.6 to 19.8 sites per kilobase: the count does not separate enhancers from
+inactive conserved sequence. The grammar question is therefore a
+comparison, positives against negatives family by family, which is the
+panel in §15. The paragraphs below describe the first site call and are
+kept as the record of what it showed.
+
 For the ZRS the family count already was the site count: the element keeps
 two HOX sites, two TALE (MEIS and PBX) sites, two NR2 sites, the ETS
 composite and three single zinc-finger sites across 789 bases from human to
@@ -757,3 +778,38 @@ element position 417 is read by 38 matrices from five homeodomain families,
 and a 36-base stretch at 246 by 13 matrices from 11 families. Its grammar is
 11 sites in two mammals, the E-box (bHLH-ZIP, RUNX and PAS matrices at one
 site) and a SOX site among them.
+
+
+## 14. Refinement: library histories against an age-matched null (2026-09-12)
+
+The library-history table of §11 correlated presence profiles and found
+the developmental libraries sharing one history (0.97 to 0.99) and the
+cores opposed to the ligand-receptor protocol (−0.87). Three things make
+two libraries correlate without a shared history: identical members, the
+same age, and the 102 bacterial species dominating the profile. `pair_null`
+(`knowledge/profiling.py`) takes the correlation on the members exclusive
+to each library, over all species and over the 245 eukaryotic species
+alone, and compares it with 200 pairs of random gene sets matching each
+side's origin-stratum make-up. Each species is held as a bitmask over genes,
+so a profile is 355 popcounts and the 860 testable pairs take 195 s.
+
+**Both headline findings of §11 are age.** Random age-matched sets already
+correlate at 0.55 to 0.73 where the developmental libraries sit, so axes
+with segmentation reads z 1.9, heart with musculoskeletal 2.2, germ layers
+with the nervous system 1.6, none significant. The cores against the
+ligand-receptor protocol match their null (replication −0.87 against −0.79,
+z −0.9). Segmentation and its clock are the same genes under two names and
+are flagged instead of tested.
+
+**What is more alike than age predicts.** 35 of 860 pairs at a false
+discovery rate of 5%, led by the immune and signalling libraries: immune
+against the ligand-receptor protocol (observed −0.76, age-matched −0.93,
+z 9.3), degradation and cytoskeleton against the same protocol (z 8.5),
+the cell cycle against immunity (z 6.7), blood with the growth-longevity
+axis (observed +0.72 against −0.27). Immune and signalling gene families
+expand in lineages, so the obvious confound is gene-family structure; with
+every gene of more than four paralogues removed, and again of more than
+one, seven of the top eight pairs stay significant (z 3.7 to 12.7) and one
+disappears (the protocol with the telomere machinery, z 5.0 to 0.1). The
+test is one-sided, "more alike than age"; pairs far less alike than their
+age (z down to −35) are recorded and not called.

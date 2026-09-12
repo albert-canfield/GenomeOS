@@ -18,6 +18,7 @@ the other, and the Reactome hierarchy the libraries were built from is the check
 from __future__ import annotations
 
 import math
+import time
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -26,6 +27,8 @@ from genomeos.knowledge.homology import RANK, STRATA
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
 MIN_MEMBERS = 8
+NULL_DRAWS = 200  # age-matched random pairs per library pair
+NULL_SEED = 7
 EVIDENCE = {
     "profile": "curated: presence of an orthologue per species from Ensembl Compara (release 116)",
     "correlation": (
@@ -126,14 +129,180 @@ def build(
     }
 
 
-def run_and_save(results_dir: Path = RESULTS_DIR) -> dict:
+def run_and_save(results_dir: Path = RESULTS_DIR, null: bool = True, draws: int = NULL_DRAWS) -> dict:
     presence = load_result("origin_presence_genome_wide", results_dir)
     origin = load_result("origin_genome_wide", results_dir)
     if not presence or not origin:
         raise FileNotFoundError("run scripts/origin_genome_wide.py first (origin and presence results)")
     from genomeos.knowledge.homology import library_members
 
-    out = build(presence, origin, library_members() or {})
+    members = library_members() or {}
+    out = build(presence, origin, members)
     out["pairs"] = out["pairs"][:400]  # the full list is derivable; keep the file small
+    if null:
+        t0 = time.time()
+        nl = pair_null(presence, origin, members, draws=draws)
+        nl["seconds"] = round(time.time() - t0, 1)
+        out["null"] = nl
     save_result("profiling_genome_wide", out, results_dir)
     return out
+
+
+# --------------------------------------------------------------------------------------------- null
+
+
+def species_masks(presence: dict) -> tuple[list[str], list[int], dict[str, int]]:
+    """Each species as one integer bitmask over genes: bit g is set when gene g has an orthologue there.
+
+    A gene set is then one integer too, and a set's presence count in a species is a popcount of the
+    AND, so a profile over 355 species costs 355 popcounts instead of a loop over thousands of genes.
+    """
+    species: list[str] = presence["species"]
+    n = len(species)
+    genes = sorted(presence["genes"])
+    index = {g: i for i, g in enumerate(genes)}
+    masks = [0] * n
+    for g, i in index.items():
+        bits = unpack(presence["genes"][g], n)
+        for j, b in enumerate(bits):
+            if b:
+                masks[j] |= 1 << i
+    return species, masks, index
+
+
+def set_mask(symbols, index: dict[str, int]) -> int:
+    m = 0
+    for s_ in symbols:
+        i = index.get(s_)
+        if i is not None:
+            m |= 1 << i
+    return m
+
+
+def mask_profile(gene_set: int, masks: list[int], keep: list[int] | None = None) -> list[float]:
+    size = gene_set.bit_count()
+    cols = keep if keep is not None else range(len(masks))
+    return [(masks[j] & gene_set).bit_count() / size if size else 0.0 for j in cols]
+
+
+def matched_sampler(origins: dict[str, str], index: dict[str, int], rng):
+    """Draw a random gene set with the same origin-stratum make-up as a given set."""
+    pool: dict[str, list[int]] = defaultdict(list)
+    for g, i in index.items():
+        if g in origins:
+            pool[origins[g]].append(i)
+
+    def draw(symbols) -> int:
+        need: dict[str, int] = defaultdict(int)
+        for s_ in symbols:
+            if s_ in origins and s_ in index:
+                need[origins[s_]] += 1
+        m = 0
+        for stratum, k in need.items():
+            for i in rng.sample(pool[stratum], min(k, len(pool[stratum]))):
+                m |= 1 << i
+        return m
+
+    return draw
+
+
+def pair_null(
+    presence: dict,
+    origin: dict,
+    members: dict[str, list[str]],
+    min_members: int = MIN_MEMBERS,
+    draws: int = NULL_DRAWS,
+    seed: int = NULL_SEED,
+) -> dict[str, Any]:
+    """Library pairs held against age-matched random gene sets, on members exclusive to each library.
+
+    Two libraries' presence profiles correlate for three reasons besides a shared history: shared
+    members (the same genes under two names), shared age (two ancient libraries look alike because
+    both are ancient) and the bacterial species dominating the profile. For each pair the observed
+    residual correlation is taken on the members exclusive to each side, over all species and over
+    eukaryotic species alone, and compared with `draws` pairs of random sets matching each side's
+    origin-stratum make-up; z is (observed − null mean) / null sd, and q the Benjamini–Hochberg
+    false-discovery rate of the normal upper-tail p over all pairs.
+    """
+    import random
+    from itertools import combinations
+    from statistics import NormalDist
+
+    rng = random.Random(seed)
+    species, masks, index = species_masks(presence)
+    strata = presence.get("strata") or {}
+    euk = [j for j, sp in enumerate(species) if strata.get(sp) not in (None, "Life")]
+    origins = {g: v["origin"] for g, v in (origin.get("genes") or {}).items()}
+    everyone = set_mask(index, index)
+    genome_all = mask_profile(everyone, masks)
+    genome_euk = [genome_all[j] for j in euk]
+    sets = {lib: {s_ for s_ in syms if s_ in index} for lib, syms in members.items()}
+    sets = {lib: s_ for lib, s_ in sets.items() if len(s_) >= min_members}
+    draw = matched_sampler(origins, index, rng)
+
+    def residual(profile: list[float], base: list[float]) -> list[float]:
+        return [p - b for p, b in zip(profile, base, strict=True)]
+
+    rows = []
+    for a, b in combinations(sorted(sets), 2):
+        only_a, only_b = sets[a] - sets[b], sets[b] - sets[a]
+        shared = len(sets[a] & sets[b])
+        row: dict[str, Any] = {
+            "libraries": [a, b],
+            "shared_members": shared,
+            "exclusive_members": [len(only_a), len(only_b)],
+        }
+        if len(only_a) < min_members or len(only_b) < min_members:
+            row["note"] = "too few exclusive members: the pair is mostly the same genes"
+            rows.append(row)
+            continue
+        ma, mb = set_mask(only_a, index), set_mask(only_b, index)
+        obs = pearson(
+            residual(mask_profile(ma, masks), genome_all), residual(mask_profile(mb, masks), genome_all)
+        )
+        obs_euk = pearson(
+            residual(mask_profile(ma, masks, euk), genome_euk),
+            residual(mask_profile(mb, masks, euk), genome_euk),
+        )
+        null: list[float] = []
+        for _ in range(draws):
+            ra, rb = draw(only_a), draw(only_b)
+            r = pearson(
+                residual(mask_profile(ra, masks), genome_all), residual(mask_profile(rb, masks), genome_all)
+            )
+            if r is not None:
+                null.append(r)
+        mean = sum(null) / len(null) if null else None
+        sd = (sum((x - mean) ** 2 for x in null) / (len(null) - 1)) ** 0.5 if len(null) > 1 else None
+        z = (obs - mean) / sd if obs is not None and mean is not None and sd else None
+        row.update(
+            {
+                "r_exclusive": obs,
+                "r_exclusive_eukaryotes": obs_euk,
+                "null_mean": round(mean, 4) if mean is not None else None,
+                "null_sd": round(sd, 4) if sd else None,
+                "z": round(z, 2) if z is not None else None,
+                "p": round(1 - NormalDist().cdf(z), 6) if z is not None else None,
+            }
+        )
+        rows.append(row)
+    tested = sorted((r for r in rows if r.get("p") is not None), key=lambda r: r["p"])
+    m = len(tested)
+    prev = 1.0
+    for k in range(m - 1, -1, -1):  # Benjamini–Hochberg, monotone from the largest p down
+        q = min(prev, tested[k]["p"] * m / (k + 1))
+        tested[k]["q"] = round(q, 6)
+        prev = q
+    return {
+        "pairs": rows,
+        "tested": m,
+        "significant_q05": [r for r in tested if r["q"] <= 0.05],
+        "draws": draws,
+        "seed": seed,
+        "species": len(species),
+        "eukaryotic_species": len(euk),
+        "evidence": (
+            "inferred: residual presence-profile correlation on exclusive members, against "
+            "age-matched random gene sets; Benjamini–Hochberg over all pairs"
+        ),
+    }

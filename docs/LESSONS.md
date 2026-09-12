@@ -134,11 +134,19 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   libraries to none while single-family enrichments such as REST in the
   nervous system survive (`motifs_genome_wide`,
   `promoter_composition_genome_wide`).
-- Across species, families still overcount homeodomains (HOX, NK,
-  paired-related and HD-LIM share the TAAT core): count sites, hits mapped
-  to genome coordinates and merged where they overlap. Record positions in
-  genome coordinates from the start; a position in a concatenated alignment
-  depends on which species' blocks were concatenated.
+- Across species, a list of "held" motif sites at one locus mostly restates
+  that the sequence is conserved: at 88% identity nearly every window keeps
+  some of 1,019 matrices, and held-site density does not separate VISTA
+  enhancers from matched negatives. A site must be one genome position held
+  by the same factor in every well-aligned species (the first call mixed a
+  factor's positions across species), and grammar claims need negatives.
+  Record positions in genome coordinates from the start; a position in a
+  concatenated alignment depends on which species' blocks were joined.
+- Correlated presence profiles are mostly shared age: random gene sets of
+  the same origin make-up correlate at 0.55 to 0.73, which is where the
+  "one developmental history" sat. Test library pairs against age-matched
+  sets on exclusive members, and remove duplicated genes before calling a
+  shared history (`profiling_genome_wide` null).
 
 ## The reference is one haplotype
 

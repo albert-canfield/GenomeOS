@@ -87,27 +87,30 @@ def test_cli_table_accepts_no_rows():
 
 
 def test_genome_coordinates_and_sites():
-    from genomeos.knowledge.across import held_sites, to_genome
+    from genomeos.knowledge.across import cluster_sites, to_genome
 
     blocks = [(0, 1000), (50, 2000)]  # 50 bases from genome 1000, then the next block from genome 2000
     assert to_genome(10, blocks) == 1010 and to_genome(60, blocks) == 2010 and to_genome(-1, blocks) is None
-    rows = [
-        {"factor": "HOXA9", "family": "HOX", "everywhere": True, "human_genome": 100},
-        {"factor": "CDX1", "family": "HOX", "everywhere": True, "human_genome": 104},
-        {"factor": "NKX6-1", "family": "NK", "everywhere": True, "human_genome": 106},
-        {"factor": "MEIS2", "family": "TALE", "everywhere": True, "human_genome": 300},
-        {
-            "factor": "MEIS3",
-            "family": "TALE",
-            "everywhere": True,
-            "human_genome": 300,
-        },  # a tie: same start, width
-        {"factor": "LOST", "family": "X", "everywhere": False, "human_genome": 102},
+    held = [
+        (100, 108, "HOXA9", "HOX", "mouse"),
+        (100, 108, "HOXA9", "HOX", "chicken"),
+        (104, 112, "CDX1", "HOX", "chicken"),
+        (106, 114, "NKX6-1", "NK", "mouse"),
+        (300, 310, "MEIS2", "TALE", "mouse"),  # held by mouse only
+        (300, 310, "MEIS3", "TALE", "mouse"),  # a tie on start and width
+        (500, 508, "ETS1", "Ets", "fish"),  # a poorly aligned species, not core
     ]
-    sites = held_sites(rows, {"HOXA9": 8, "CDX1": 8, "NKX6-1": 8, "MEIS2": 10, "MEIS3": 10})
-    assert [(s["start"], s["end"]) for s in sites] == [(100, 114), (300, 310)]
-    assert sites[1]["factors"] == ["MEIS2", "MEIS3"] and sites[1]["families"] == ["TALE"]
-    assert sites[0]["families"] == ["HOX", "NK"] and sites[0]["factors"] == ["HOXA9", "CDX1", "NKX6-1"]
+    sites = cluster_sites(held, core=["mouse", "chicken"])
+    assert [(s["start"], s["end"]) for s in sites] == [(100, 114), (300, 310), (500, 508)]
+    first, second, third = sites
+    assert (
+        first["everywhere"]
+        and first["families"] == ["HOX", "NK"]
+        and first["species"] == ["chicken", "mouse"]
+    )
+    assert first["factors_everywhere"] == ["HOXA9"]  # CDX1 and NKX6-1 hold it in one species each
+    assert not second["everywhere"] and second["factors"] == ["MEIS2", "MEIS3"]
+    assert not third["everywhere"] and third["species"] == ["fish"]
 
 
 def test_summary_records_human_blocks():
@@ -155,3 +158,41 @@ def test_summary_records_human_blocks():
     ]
     s = summarise_alignment(blocks, "danio_rerio", 10)
     assert s["human_blocks"] == [(0, 100), (4, 200)]
+
+
+def test_panel_statistics():
+    from genomeos.knowledge.across import bh, fisher_greater, locus_group, mann_whitney_greater, panel_summary
+
+    # Fisher: all 5 positives hold, none of 5 negatives: p = 1 / C(10, 5)
+    assert abs(fisher_greater(5, 0, 0, 5) - 1 / 252) < 1e-12 and fisher_greater(0, 5, 5, 0) == 1.0
+    assert (
+        mann_whitney_greater([5, 6, 7, 8], [1, 2, 3, 4]) < 0.05 and mann_whitney_greater([1, 2], [5, 6]) > 0.5
+    )
+    assert mann_whitney_greater([], [1]) is None
+    q = bh([0.01, 0.04, 0.03, 0.5])
+    assert [round(x, 4) for x in q] == [0.04, 0.0533, 0.0533, 0.5]
+    assert locus_group(["lb"], "positive") == "limb" and locus_group(["fb", "hb"], "positive") == "neural"
+    assert locus_group(["lb", "fb"], "positive") is None and locus_group([], "negative") == "negative"
+
+    def rec(i, group, held, sites, core=2):
+        return {
+            "id": f"{group}{i}",
+            "group": group,
+            "length": 1000,
+            "core_species": ["mouse", "chicken"][:core],
+            "strict_sites": sites,
+            "families_held": held,
+            "families_hit": held,
+        }
+
+    records = [rec(i, "limb", ["HOX", "SOX"] if i < 6 else ["HOX"], 12) for i in range(10)]  # SOX 6 of 10
+    records += [rec(i, "negative", ["SOX"] if i % 2 else [], 6) for i in range(10)]
+    records += [rec(99, "limb", ["HOX"], 30, core=1)]  # one core species only: not usable
+    s = panel_summary(records)
+    assert s["usable"] == {"limb": 10, "negative": 10}
+    limb = s["groups"]["limb"]
+    hox = next(r for r in limb["families"] if r["family"] == "HOX")
+    assert hox["positives_held"] == 10 and hox["negatives_held"] == 0 and hox["q"] <= 0.05
+    sox = next(r for r in limb["families"] if r["family"] == "SOX")
+    assert sox["q"] > 0.05 and limb["density_p_greater"] < 0.05
+    assert [r["family"] for r in limb["families_q05"]] == ["HOX"]

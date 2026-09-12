@@ -759,3 +759,21 @@ ZRS keeps 10 sites from human to zebrafish, two of them HOX and two MEIS or
 PBX, with the ETS composite; the OCA2 enhancer's 75 held matrices are 11
 sites, one of them read by 38 matrices. docs/GRAMMAR-BY-COMPARISON.md §13;
 two LESSONS rows.
+
+## 2026-09-12 — two corrections and a null
+
+The site counts reported in the previous entry for the ZRS (10) and the OCA2
+enhancer (11) are withdrawn. The site call placed a factor's hit on the
+genome from the first species holding it, so a factor held at different
+places in different species was counted once; corrected, a site is one
+genome position held by the same factor in every well-aligned species, and
+under that definition a single locus's site list is uninformative (the ZRS
+holds 15 sites over 79% of its bases). Four limb enhancers and four matched
+VISTA negatives hold the same density of such sites, so the grammar question
+is now a panel of positives against negatives, family by family, running.
+The library-history table got its null the same way: against random gene sets
+of the same age, the "one developmental history" and the cores' opposition to
+the signalling protocol are what age predicts, while 35 of 860 pairs are more
+alike than age, led by immunity and signalling, seven of the top eight
+surviving removal of duplicated genes. docs/GRAMMAR-BY-COMPARISON.md §13
+correction and §14.

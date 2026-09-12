@@ -1370,10 +1370,21 @@ in order. "Owner" is the session that holds the files today (see §7).
   libraries (84 naive pairs explained by GC or repeats; the last survivor,
   ZNF135 with ZNF460, sat on Alu: 19.4% of those promoters' bases against
   1.1%), while REST stays enriched in systems.nervous at 5.7x. Across
-  species the unit is the site, hits mapped to the genome and merged where
-  they overlap: the ZRS holds 10 sites (two HOX, two MEIS/PBX, two NR2, the
-  ETS composite) and the OCA2 enhancer 11, where one site had been read by
-  38 matrices. GRAMMAR-BY-COMPARISON.md §13.
+  species the site call was corrected the same day (a factor held at
+  different places in different species had been counted as one site): at
+  88% identity nearly every window of conserved sequence keeps some matrix,
+  so a single locus's site list is uninformative and held-site density does
+  not separate four limb enhancers from four matched negatives; the grammar
+  question became a positives-against-negatives panel (running).
+  GRAMMAR-BY-COMPARISON.md §13.
+- **Refinement: library histories against an age-matched null
+  (2026-09-12).** Exclusive members, eukaryotic species alone, 200 random
+  gene sets per pair matching each side's origin make-up: the developmental
+  libraries' shared history (§11) and the cores against the ligand-receptor
+  protocol are what their ages predict (z −0.9 to 2.2); 35 of 860 pairs are
+  more alike than age predicts, led by immunity and signalling (immune with
+  the protocol z 9.3), and seven of the top eight survive removing
+  duplicated genes. GRAMMAR-BY-COMPARISON.md §14.
 - **Step 6 built (2026-09-12).** `genomeos decompile GENE --chrom C`
   (`genomeos/decompile.py`): every layer read for one gene assembled into a
   BioLang-flavoured view with an evidence note per line and an `unknown { }`
