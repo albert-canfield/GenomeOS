@@ -247,6 +247,17 @@ imported files carry genotypes only, unphased, so phasing by parent waits
 for a phased import. Stored under the child's directory as
 `trio_<father>_<mother>.json`, never under `data/results`.
 
+`individual diff --name A --against B` (or `--against reference`) is the same
+comparison read as a code review: the two people's protein-changing variants
+gene by gene, alleles normalised, the lines only A carries marked `+`, only B
+`-`, with each variant's consequence on the canonical transcript, its
+zygosity, AlphaMissense's class where the person has been scored and ClinVar's
+row where the person has been screened; genes are ordered by what matters
+(ClinVar first, then truncations, then predicted class). The inventory keeps
+every protein-changing variant under the person (`coding_variants.json`) for
+it; a person not yet inventoried is traced once. Markdown to the terminal or
+`--out`, never under `data/results`.
+
 The inventory also surfaces what the reference hides. hg38 itself carries a
 frameshift or nonsense allele against the curated protein in 31 genes (the
 verified translation disagreements triaged by mechanism); a person who

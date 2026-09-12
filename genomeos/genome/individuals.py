@@ -743,6 +743,7 @@ def coding_inventory(
     by_consequence: dict[str, int] = {}
     per_gene: list[dict[str, Any]] = []
     missense: list[dict[str, Any]] = []
+    changing_all: list[dict[str, Any]] = []
     done = []
     genes_seen = 0
     protein_cache = Path("data/knowledge/proteins")
@@ -803,6 +804,20 @@ def coding_inventory(
                         hom = gt.replace("|", "/").split("/").count("1") >= 2
                         if hom:
                             hom_changing += 1
+                        changing_all.append(
+                            {
+                                "gene": g.symbol,
+                                "chrom": chrom,
+                                "pos": pos,
+                                "ref": f[3],
+                                "alt": f[4],
+                                "consequence": c,
+                                "hgvs_p": sub.get("hgvs_p"),
+                                "genotype": gt,
+                                "zygosity": "homozygous" if hom else "heterozygous",
+                                "transcript": getattr(tr, "transcript", None),
+                            }
+                        )
                         if len(examples) < 6:
                             examples.append(f"{sub.get('hgvs_p') or c} ({gt})")
                         if c == "missense":
@@ -884,6 +899,7 @@ def coding_inventory(
     d = root / name
     d.mkdir(parents=True, exist_ok=True)
     (d / "coding.json").write_text(json.dumps(out, indent=1))
+    (d / "coding_variants.json").write_text(json.dumps(changing_all))
     return out
 
 

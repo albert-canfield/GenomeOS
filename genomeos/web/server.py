@@ -288,6 +288,24 @@ class Api:
         except FileNotFoundError as ex:
             raise ApiError(str(ex)) from ex
 
+    def individual_diff(self, name: str, against: str) -> dict:
+        """Two people (or one against the reference) as a diff of protein-changing variants, from the lists
+        the coding inventory saved; a person not yet inventoried is told to run it (minutes, a CLI step)."""
+        from genomeos.genome.diff import REFERENCE, genome_diff, render
+
+        root = self.root / "data" / "individuals"
+        for who in (name, against):
+            if who != REFERENCE and not (root / who / "coding_variants.json").exists():
+                raise ApiError(
+                    f"{who} has no coding inventory yet: run `genomeos individual coding --name {who}` once"
+                )
+        try:
+            d = genome_diff(name, against, root)
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+        summary = {k: v for k, v in d.items() if k != "genes"}
+        return {"name": name, "against": against, "markdown": render(d, top=60), **summary}
+
     def individual_coding(self, name: str) -> dict:
         """Genome-wide coding SNVs by consequence and by gene for one person."""
         from genomeos.genome.individuals import coding_inventory
@@ -1626,6 +1644,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/individuals":
                 return self._json(self.api.individuals())
+            if u.path == "/api/individual/diff":
+                return self._json(
+                    self.api.individual_diff(
+                        self._q(qs, "name") or "HG002", self._q(qs, "against") or "reference"
+                    )
+                )
             if u.path == "/api/individual/report":
                 return self._json(self.api.individual_report(self._q(qs, "name") or "HG002"))
             if u.path == "/api/individual/coding":

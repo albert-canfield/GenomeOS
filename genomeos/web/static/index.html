@@ -382,6 +382,8 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div class="row" style="margin-top:8px">
       <label>person <select id="ind-who"></select></label>
       <label>chromosome <select id="ind-chrom"></select></label>
+      <label>compare with <select id="ind-against"><option>reference</option></select></label>
+      <button class="ghost" id="ind-diff" data-tip="Genome diff as code review: this person against another local person, or against the reference. Protein-changing variants gene by gene, alleles normalised, + only this person, − only the other, with each variant's consequence, zygosity, AlphaMissense class where scored and ClinVar row where screened. Both people need their coding inventory run once."><i class="ic">⇄</i> diff</button>
       <button class="ghost" id="ind-genes" data-tip="Every coding gene of the chromosome with this person's variants and the consequence of each coding SNV on the canonical transcript."><i class="ic">🧬</i>Genes</button>
       <button class="ghost" id="ind-check" data-tip="Apply this person's variants of the chromosome to the local GRCh38 sequence and count the calls whose reference base disagrees: the assembly check. Statistics only, stored under the person's directory."><i class="ic">✅</i>Check vs reference</button>
       <button class="ghost" id="ind-screen" data-tip="ClinVar carrier screen over every chromosome the person has: pathogenic and likely pathogenic alleles carried, with genotype, zygosity and ClinVar's review stars. ClinVar is streamed once and kept locally; the result stays under the person's directory. Research annotation, not a clinical report."><i class="ic">🩺</i>ClinVar screen</button>
@@ -1014,6 +1016,7 @@ async function loadIndividuals() {
     $('#ind-list').innerHTML = `<table><tr><th>person</th><th class="num">variants</th><th>chromosomes</th><th>source</th><th>reference check</th><th>evidence</th></tr>` +
       list.map(p => `<tr><td class="mono">${p.name}</td><td class="num">${p.variants ? fmt(p.variants) : ''}</td><td>${p.chromosomes.length}${p.chromosomes.length && p.chromosomes.length < 25 ? ` (${p.chromosomes.slice(0, 6).join(', ')}${p.chromosomes.length > 6 ? '…' : ''})` : ''}</td><td>${p.builtin ? 'built-in test human' : (p.note || p.source_file || '')}</td><td>${checkCell(p)}</td><td><span class="pill experimental">${p.evidence.split(':')[0]}</span> <span class="muted">${p.evidence.split(':').slice(1).join(':').trim()}</span></td></tr>`).join('') + '</table>';
     const who = $('#ind-who'); const cur = who.value; who.innerHTML = list.map(p => `<option>${p.name}</option>`).join(''); if (cur) who.value = cur;
+    const ag = $('#ind-against'); if (ag) { const curA = ag.value; ag.innerHTML = '<option>reference</option>' + list.map(p => `<option>${p.name}</option>`).join(''); if (curA) ag.value = curA; }
     const chroms = [...new Set(list.flatMap(p => p.chromosomes))]; const order = c => { const k = c.slice(3); return k === 'X' ? 23 : k === 'Y' ? 24 : k === 'M' ? 25 : +k; };
     const cs = $('#ind-chrom'); const cc = cs.value; cs.innerHTML = chroms.sort((a, b) => order(a) - order(b)).map(c => `<option>${c}</option>`).join(''); if (cc) cs.value = cc; else if (chroms.includes('chr21')) cs.value = 'chr21';
   } catch (e) { $('#ind-list').innerHTML = `<span class="muted">${e.message}</span>`; }
@@ -1036,6 +1039,15 @@ async function individualGenes() {
       <table><tr><th>gene</th><th class="num">variants</th><th class="num">coding SNVs</th><th class="num">protein-changing</th><th>changes (genotype)</th></tr>` +
       r.genes.map(g => `<tr><td class="mono"><a href="#flow?gene=${g.gene}&chrom=${chrom}" onclick="document.querySelector('nav button[data-tab=flow]').click(); $('#f-gene').value='${g.gene}'; if ($('#f-chrom')) $('#f-chrom').value='${chrom}'; if (window.loadFlow) loadFlow(); return false;">${g.gene}</a></td><td class="num">${fmt(g.variants)}</td><td class="num">${g.coding_snvs}</td><td class="num">${g.protein_changing}</td><td>${g.changes.filter(c => c.consequence !== 'synonymous').map(c => `${c.hgvs_p || c.consequence} <span class="muted">(${c.genotype})</span>`).join('; ')}</td></tr>`).join('') +
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> consequence by the local trace on the canonical transcript</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualDiff() {
+  const name = $('#ind-who').value, against = $('#ind-against').value;
+  $('#ind-out').innerHTML = `<span class="muted">reading ${name} against ${against} gene by gene…</span>`;
+  try {
+    const r = await api(`/api/individual/diff?name=${encodeURIComponent(name)}&against=${encodeURIComponent(against)}`);
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.genes_differing)}</b><span>genes differ</span></div><div><b>${fmt(r.only_a)}</b><span>only ${name}</span></div>${against === 'reference' ? '' : `<div><b>${fmt(r.only_b)}</b><span>only ${against}</span></div><div><b>${fmt(r.shared)}</b><span>shared</span></div>`}<div><b>${r.truncating_only_a}${against === 'reference' ? '' : ' / ' + r.truncating_only_b}</b><span>truncating</span></div><div><b>${r.likely_pathogenic_only_a}${against === 'reference' ? '' : ' / ' + r.likely_pathogenic_only_b}</b><span>predicted likely pathogenic</span></div><div><b>${r.clinvar_only_a}${against === 'reference' ? '' : ' / ' + r.clinvar_only_b}</b><span>in ClinVar</span></div></div>
+      <pre style="white-space:pre-wrap;font-size:12px;line-height:1.5">${r.markdown.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
 async function individualReport() {
@@ -1104,7 +1116,7 @@ async function individualPredict() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill predicted">predicted</span> ${(r.model || 'AlphaGenome').split(' (')[0]} · ${h.note}</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
-document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; $('#ind-ko').onclick = individualKnockouts; $('#ind-coding').onclick = individualCoding; $('#ind-report').onclick = individualReport; } });
+document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; $('#ind-ko').onclick = individualKnockouts; $('#ind-coding').onclick = individualCoding; $('#ind-report').onclick = individualReport; $('#ind-diff').onclick = individualDiff; } });
 async function loadTwins() {
   loadIndividuals();
   twins = (await api('/api/twins')).twins;

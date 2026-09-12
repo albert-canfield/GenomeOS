@@ -2862,6 +2862,21 @@ def cmd_individual(args: argparse.Namespace) -> int:
         else:
             print(md)
         return 0
+    if args.action == "diff":
+        from genomeos.genome.diff import genome_diff, render
+
+        try:
+            d = genome_diff(args.name, args.against, progress=lambda m: print("  " + m, flush=True))
+        except FileNotFoundError as ex:
+            print(ex)
+            return 1
+        md = render(d, top=args.top)
+        if args.out:
+            Path(args.out).write_text(md)
+            print(f"wrote {args.out}")
+        else:
+            print(md)
+        return 0
     if args.action == "protein":
         try:
             r = ind.tissue_proteins(args.name, args.gene, args.chrom)
@@ -4672,6 +4687,13 @@ def build_parser() -> argparse.ArgumentParser:
     q = isub.add_parser("report", help="one Markdown page from what has been computed for the person")
     q.add_argument("--name", required=True)
     q.add_argument("--out", help="write to a file instead of printing")
+    q = isub.add_parser(
+        "diff", help="two people, or one against the reference: protein-changing variants by gene, as a diff"
+    )
+    q.add_argument("--name", required=True)
+    q.add_argument("--against", default="reference", help="another local individual, or `reference`")
+    q.add_argument("--top", type=int, default=40, help="genes to show")
+    q.add_argument("--out", help="write the Markdown to a file instead of printing")
     q = isub.add_parser(
         "protein", help="which protein each tissue makes in this person (dominant isoform + variants)"
     )
