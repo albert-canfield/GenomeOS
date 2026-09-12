@@ -1,6 +1,6 @@
 {
   "result": "mouse_mm10_chr11",
-  "date": "2026-09-11",
+  "date": "2026-09-12",
   "organism": "mouse",
   "assembly": "mm10",
   "chrom": "chr11",
@@ -42,6 +42,25 @@
     "unmapped": 586,
     "fraction_conserved": 0.592,
     "fraction_same_neighbourhood": 0.948
+  },
+  "node_comparison_compara": {
+    "orthology": "curated: Ensembl Compara 116 mouse\u2013human orthologues (gene trees)",
+    "nodes": 836,
+    "tested": 280,
+    "conserved": 157,
+    "split_adjacent": 100,
+    "split_scattered": 23,
+    "unmapped": 556,
+    "fraction_conserved": 0.561,
+    "fraction_same_neighbourhood": 0.918
+  },
+  "orthology_agreement": {
+    "genes": 1621,
+    "in_both": 1361,
+    "identical_when_in_both": 0.963,
+    "mgi_only": 42,
+    "compara_only": 86,
+    "neither": 132
   },
   "node_rows": [
     {

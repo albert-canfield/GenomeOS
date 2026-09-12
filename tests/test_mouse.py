@@ -43,3 +43,50 @@ def test_compare_nodes_by_symbol(tmp_path):
         "unmapped",
         "split_adjacent",
     ]
+
+
+def test_compara_orthology_from_a_small_dump(tmp_path, monkeypatch):
+    import gzip
+
+    from genomeos.genome import mouse
+
+    # human gene table and a mouse GENCODE file the resolver reads
+    genes = tmp_path / "genes.tsv"
+    genes.write_text(
+        "gene_id\tsymbol\tgene_type\tchrom\tstart\tend\tstrand\nENSG1.2\tAPP\tprotein_coding\tchr21\t1\t2\t+\n"
+    )
+    from genomeos.knowledge import homology
+
+    monkeypatch.setattr(homology, "GENES_TSV", genes)
+    ref = tmp_path / "ref"
+    ref.mkdir()
+    with gzip.open(ref / "gencode_vM25_chr16.gff3.gz", "wt") as fh:
+        fh.write("##gff-version 3\n")
+        fh.write("chr16\tHAVANA\tgene\t1\t2\t.\t+\t.\tID=ENSMUSG1.3;gene_id=ENSMUSG1.3;gene_name=App\n")
+    monkeypatch.setattr(mouse, "REFERENCE", ref)
+    header = ["gene_stable_id", "homology_type", "homology_gene_stable_id", "homology_species"]
+    rows = iter(
+        [
+            header,
+            ["ENSMUSG1", "ortholog_one2one", "ENSG1", "homo_sapiens"],
+            ["ENSMUSG1", "ortholog_one2one", "ENSRNOG1", "rattus_norvegicus"],
+            ["ENSMUSG1", "within_species_paralog", "ENSMUSG9", "mus_musculus"],
+            ["ENSMUSG1", "ortholog_one2one", "ENSG7", "homo_sapiens"],  # human id unknown locally
+        ]
+    )
+    p = mouse.fetch_compara_orthology(tmp_path, rows=rows)
+    with gzip.open(p, "rt") as fh:
+        text = fh.read()
+    assert "2 human rows" in text and "1 human ids" in text
+    assert mouse.load_orthology(tmp_path, source="compara") == {"App": ["APP"]}
+    agreement = mouse.orthology_agreement(
+        {"App": ["APP"], "Sod1": ["SOD1"]}, {"App": ["APP"]}, ["App", "Sod1", "X"]
+    )
+    assert agreement == {
+        "genes": 3,
+        "in_both": 1,
+        "identical_when_in_both": 1.0,
+        "mgi_only": 1,
+        "compara_only": 0,
+        "neither": 1,
+    }

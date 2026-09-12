@@ -75,6 +75,14 @@ The node comparison maps mouse genes to human through MGI's curated
 mouse–human homology report, streamed once (15 MB) and kept as symbol pairs
 (`data/results/mgi_mouse_human_orthology.tsv.gz`, 24,584 pairs).
 
+Orthology comes from two curated sources, both streamed once and kept as symbol pairs under
+`data/results`: MGI's mouse–human homology classes (`mgi_mouse_human_orthology.tsv.gz`) and Ensembl
+Compara 116's gene trees (`compara_mouse_human_orthology.tsv.gz`, 2026-09-12), read from the *mouse*
+homology dump (`homologies/mus_musculus/`), since the human dump omits *Mus musculus*. Mouse ids resolve
+through the mouse GENCODE files fetched so far, so the Compara pairs cover the mouse chromosomes GenomeOS
+has looked at; the file's header counts the unresolved ids. `genomeos mouse` reports both comparisons
+and their agreement.
+
 ## Optional: AlphaGenome (predicted regulatory effects)
 
 Google DeepMind's AlphaGenome predicts what a sequence change does to

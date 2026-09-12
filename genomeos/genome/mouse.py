@@ -153,17 +153,116 @@ def fetch_orthology(results_dir: Path = RESULTS, progress=None) -> Path:
     return dest
 
 
-def load_orthology(results_dir: Path = RESULTS) -> dict[str, list[str]]:
-    """Mouse symbol → human symbols (curated, MGI); empty if the report has not been fetched."""
-    p = orthology_path(results_dir)
+# the mouse dump, not the human one: Ensembl's human homology dump lists mus_caroli, mus_spretus and the
+# rat among 199 species but not the reference mouse; mouse–human pairs live in the mouse dump
+COMPARA_URL = (
+    "https://ftp.ensembl.org/pub/release-116/tsv/ensembl-compara/homologies/mus_musculus/"
+    "Compara.116.protein_default.homologies.tsv.gz"
+)
+COMPARA_ORTHOLOG_TYPES = {"ortholog_one2one", "ortholog_one2many", "ortholog_many2many"}
+COMPARA_EVIDENCE = "curated: Ensembl Compara 116 mouse–human orthologues (gene trees)"
+
+
+def compara_path(results_dir: Path = RESULTS) -> Path:
+    return results_dir / "compara_mouse_human_orthology.tsv.gz"
+
+
+def mouse_symbols(chroms: list[str] | None = None, reference: Path | None = None) -> dict[str, str]:
+    """Mouse Ensembl gene id (no version) → symbol from the mouse GENCODE files already fetched."""
+    reference = reference or REFERENCE
+    out: dict[str, str] = {}
+    paths = (
+        [reference / f"gencode_vM25_{c}.gff3.gz" for c in chroms]
+        if chroms
+        else sorted(reference.glob("gencode_vM25_chr*.gff3.gz"))
+    )
+    for path in paths:
+        if not path.exists():
+            continue
+        with gzip.open(path, "rt") as fh:
+            for line in fh:
+                if line.startswith("#"):
+                    continue
+                f = line.split("\t")
+                if len(f) < 9 or f[2] != "gene":
+                    continue
+                attrs = dict(kv.split("=", 1) for kv in f[8].strip().split(";") if "=" in kv)
+                gid, name = attrs.get("gene_id"), attrs.get("gene_name")
+                if gid and name:
+                    out[gid.split(".")[0]] = name
+    return out
+
+
+def fetch_compara_orthology(
+    results_dir: Path = RESULTS, progress=None, url: str = COMPARA_URL, rows=None
+) -> Path:
+    """Stream Ensembl Compara's mouse homology dump once (about 110 MB) and keep the human orthologue pairs
+    as symbols: mouse symbol, human symbol, type. Human ids resolve through the cached GENCODE gene table,
+    mouse ids through the mouse GENCODE files fetched so far, so the pairs cover the mouse chromosomes
+    GenomeOS has looked at; unresolved ids are counted in the header, not dropped silently."""
+    dest = compara_path(results_dir)
+    if dest.exists():
+        return dest
+    from genomeos.knowledge import homology
+
+    human = {k: v[0] for k, v in homology.load_symbols(homology.GENES_TSV).items()}
+    mouse = mouse_symbols()
+    if rows is None:
+        req = urllib.request.Request(url, headers={"User-Agent": "GenomeOS/0.1 (stream)"})
+        resp = urllib.request.urlopen(req, timeout=1800)  # noqa: S310
+        rows = (
+            line.rstrip("\n").split("\t")
+            for line in io.TextIOWrapper(gzip.GzipFile(fileobj=io.BufferedReader(resp, 1 << 20)))
+        )
+    header = next(rows)
+    col = {name: i for i, name in enumerate(header)}
+    gi, ht, hg, hs = (
+        col["gene_stable_id"],
+        col["homology_type"],
+        col["homology_gene_stable_id"],
+        col["homology_species"],
+    )
+    pairs: set[tuple[str, str, str]] = set()
+    seen = unresolved_h = unresolved_m = 0
+    for f in rows:
+        if len(f) <= max(gi, ht, hg, hs) or f[hs] != "homo_sapiens" or f[ht] not in COMPARA_ORTHOLOG_TYPES:
+            continue
+        seen += 1
+        mo = mouse.get(f[gi].split(".")[0])  # the dump's own genes are the mouse ones
+        hu = human.get(f[hg].split(".")[0])
+        if hu is None:
+            unresolved_h += 1
+        if mo is None:
+            unresolved_m += 1
+        if hu and mo:
+            pairs.add((mo, hu, f[ht]))
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(dest, "wt") as fh:
+        fh.write(
+            f"# Ensembl Compara mouse–human orthologues as symbol pairs from {url}; {seen:,} human rows, "
+            f"{unresolved_h:,} human ids and {unresolved_m:,} mouse ids not in the local gene tables "
+            f"({len(mouse):,} mouse symbols known)\n"
+        )
+        for mo, hu, typ in sorted(pairs):
+            fh.write(f"{mo}\t{hu}\t{typ}\n")
+    if progress:
+        progress(f"Compara orthology: {len(pairs):,} mouse–human symbol pairs from {seen:,} human rows")
+    return dest
+
+
+def load_orthology(results_dir: Path = RESULTS, source: str = "mgi") -> dict[str, list[str]]:
+    """Mouse symbol → human symbols; `source` is "mgi" (curated homology classes) or "compara" (Ensembl
+    gene trees). Empty if that source has not been fetched."""
+    p = orthology_path(results_dir) if source == "mgi" else compara_path(results_dir)
     out: dict[str, list[str]] = {}
     if p.exists():
         with gzip.open(p, "rt") as fh:
             for line in fh:
                 if line.startswith("#"):
                     continue
-                mo, _, hu = line.rstrip("\n").partition("\t")
-                out.setdefault(mo, []).append(hu)
+                f = line.rstrip("\n").split("\t")
+                if len(f) >= 2 and f[1] not in out.setdefault(f[0], []):
+                    out[f[0]].append(f[1])
     return out
 
 
@@ -181,6 +280,32 @@ def human_nodes_by_symbol(results_dir: Path = RESULTS) -> tuple[dict[str, str], 
             for g in dom.get("genes", []):
                 index.setdefault(g.upper(), dom["id"])
     return index, n
+
+
+def orthology_agreement(
+    mgi: dict[str, list[str]], compara: dict[str, list[str]], symbols: list[str]
+) -> dict[str, Any]:
+    """Over the chromosome's coding genes: how often the two curated sources name the same human genes."""
+    both = same = mgi_only = compara_only = neither = 0
+    for s in set(symbols):
+        a, b = set(mgi.get(s, [])), set(compara.get(s, []))
+        if a and b:
+            both += 1
+            same += a == b
+        elif a:
+            mgi_only += 1
+        elif b:
+            compara_only += 1
+        else:
+            neither += 1
+    return {
+        "genes": len(set(symbols)),
+        "in_both": both,
+        "identical_when_in_both": round(same / both, 3) if both else None,
+        "mgi_only": mgi_only,
+        "compara_only": compara_only,
+        "neither": neither,
+    }
 
 
 def compare_nodes(
@@ -283,6 +408,17 @@ def analyse(chrom: str, progress=None) -> dict[str, Any]:
     orthology = load_orthology()
     cmp = compare_nodes(rows, human_index, orthology)
     cmp_symbol = compare_nodes(rows, human_index)
+    try:
+        fetch_compara_orthology(progress=progress)
+        compara = load_orthology(source="compara")
+    except OSError as ex:  # the dump is optional; the comparison stands on MGI without it
+        if progress:
+            progress(f"Compara orthology not fetched: {str(ex)[:80]}")
+        compara = {}
+    cmp_compara = compare_nodes(rows, human_index, compara) if compara else None
+    if cmp_compara:
+        cmp_compara["orthology"] = COMPARA_EVIDENCE
+    agreement = orthology_agreement(orthology, compara, [s for r in rows for s in r["coding_symbols"]])
     cls: dict[str, int] = {}
     for c in ccres:
         cls[c.cls] = cls.get(c.cls, 0) + 1
@@ -303,6 +439,10 @@ def analyse(chrom: str, progress=None) -> dict[str, Any]:
         "orthology_pairs": sum(len(v) for v in orthology.values()),
         "node_comparison": {k: v for k, v in cmp.items() if k != "rows"},
         "node_comparison_symbol_identity": {k: v for k, v in cmp_symbol.items() if k != "rows"},
+        "node_comparison_compara": (
+            {k: v for k, v in cmp_compara.items() if k != "rows"} if cmp_compara else None
+        ),
+        "orthology_agreement": agreement,
         "node_rows": cmp["rows"],
         "mouse_domains": rows,
         "evidence": EVIDENCE,
