@@ -649,10 +649,29 @@ in order. "Owner" is the session that holds the files today (see §7).
   Next held this morning are closed; ARCHITECTURE.md §7 now describes the two
   standard-library range readers (`bigwig.py`, `bam_range.py`) and the rule
   that only the distilled answer is kept.
+- **Genome diff as code review (2026-09-12, from the pool).** `genomeos
+  individual diff --name A --against B|reference` (`genome/diff.py`) renders
+  two people's protein-changing variants gene by gene as a review: alleles
+  normalised, `+` only A, `-` only B, the shared count per gene, each line
+  with its consequence on the canonical transcript, zygosity, AlphaMissense
+  class where the person is scored and the ClinVar row where screened; genes
+  ordered ClinVar first, then truncations, then predicted class. The coding
+  inventory keeps every protein-changing variant under the person for it, the
+  Twin card gains a "compare with" control, and the Markdown goes to the
+  terminal or a file, never under `data/results`. HG002 against HG003 over 22
+  autosomes: 9,745 and 9,649 protein-changing variants, 7,513 shared, 2,857
+  genes differ; only HG002 2,232 (23 truncating, 75 predicted likely
+  pathogenic), only HG003 2,136 (30 truncating). HG002 against the reference:
+  5,344 genes carry a change. This is the pool bullet's diff at the
+  protein-changing level; the regulatory level (a person's elements and their
+  predicted effects) is the next layer and not done.
 - **Next.** 1. Phasing by parent on the 1,430 candidates, which waits for a
   phased import (the GIAB files carry unphased genotypes); until then the
   1,430 stand as the trio's disagreement set. 2. Polygenic scores, the one
-  item of the original Missing list untouched.
+  item of the original Missing list untouched: a score per trait from a
+  published weight table over the person's genotypes, curated evidence for
+  the weights and derived for the sum, the ancestry caveat stated. 3. The
+  genome diff at the regulatory level.
 - **Owner.** genomeos-8e (genomeos-fe before the restart of 2026-09-12).
 
 ### E. From one cell to an organism
@@ -1449,7 +1468,8 @@ ambition in §1 before it is started.
   block with its rate and evidence, run by the Body runtime.
 - **Genome diff as code review.** Two individuals, or an individual against
   the reference, as a diff of BioIR modules with consequences and evidence,
-  not a VCF.
+  not a VCF. Done at the protein-changing level on 2026-09-12 (`genomeos
+  individual diff`, area D); the regulatory level remains.
 - **Time-lapse view.** The Organism tab replayed with the block map: which
   nodes are being read at each stage.
 - **`bio` package registry.** `import bio.std.*` from a versioned registry
