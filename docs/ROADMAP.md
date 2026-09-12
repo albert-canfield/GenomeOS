@@ -969,6 +969,35 @@ in order. "Owner" is the session that holds the files today (see §7).
   expression and eye colour, HG002 and HG003 carrying the alternative twice
   and HG004 once. The tool did not know the answer; the literature's value fell
   out of the reading.
+- **Against measured activity (2026-09-12, genomeos-fe; step 3 closes).**
+  ENCODE4's joint lentiMPRA library, 51,376 non-overlapping 200 bp elements
+  assayed in K562, HepG2 and WTC11 (active at log2 RNA/DNA of 1 or more:
+  7.8%, 6.6%, 8.2%), read through the registry, constraint, the measured
+  reader and AlphaGenome's predicted DNase on the cell's own track
+  (`attribution/mpra.py`, `predict/chromatin_tracks.py`, job
+  `mpra_genome_wide`, `mpra_chr*`, `mpra_genome_wide`; 2,727 model windows).
+
+  | layer, same cell | K562 | HepG2 |
+  |---|---|---|
+  | active when promoter-like / distal enhancer-like / no cCRE | 27.5% / 7.6% / 6.9% | 18.5% / 7.1% / 4.9% |
+  | active when constrained / not | 8.2% / 7.7% | 7.7% / 6.5% |
+  | measured reader: precision (base rate), recall | 11.0% (7.8%), 75.5% | 8.5% (6.6%), 73.8% |
+  | predicted reader: rank correlation with activity | 0.443 | 0.323 |
+  | predicted reader, the other cell's track | 0.030 | 0.119 |
+  | top against bottom quartile active | 15.7% / 2.0% | 12.0% / 3.0% |
+
+  Of 3,913 elements active in exactly one of K562 and HepG2, the predicted
+  DNase is higher in the active line for 84.6%; the measured reader is open in
+  the active line only for 50.8%. Reading: the registry orders activity as it
+  should, but a distal enhancer-like element is barely more active than no
+  class at all, because the reporter measures a sequence out of its node;
+  constraint adds a point or two; the cell is what the two readers know, the
+  predicted one more sharply than the measured one. The model knows the cell,
+  not the amount: a rank correlation of 0.4 leaves most of the variance to
+  promoter-like strength, which openness does not measure. Use 5 of
+  ALPHAGENOME.md (the predicted reader) is built by this. The scoring step of
+  area I closes: tissue (VISTA), target (eQTL), activity (lentiMPRA), openness
+  (the readers) and consequence (GWAS, ClinVar) have each been asked.
 - **The human axis (2026-09-12, genomeos-bb).** gnomAD's Gnocchi constraint,
   the depletion of variation among 76,156 people at 1 kb, read per UNKNOWN
   block and per attributed element beside Zoonomia (`genomeos variation
@@ -1000,8 +1029,8 @@ in order. "Owner" is the session that holds the files today (see §7).
   WTC11) for activity built and running, same cell against the model's own
   track and cross-cell reported apart (chr21: rank correlation 0.39 same-cell
   against 0.07 cross-cell for K562, 0.35 against 0.13 for HepG2; predicted
-  DNase higher in the active cell for 74% of 47 cell-specific elements); its
-  genome row is what remains. 5. Closure at the cell level (a deleted element
+  DNase higher in the active cell for 74% of 47 cell-specific elements) and
+  done genome-wide (above). Step 4 is closed. 5. Closure at the cell level (a deleted element
   moves its gene and the cell program; IMPC, DepMap) and the organism level
   (the Body runtime still produces a human's cell counts over decades); the
   gene level ran once (above) and returns after step 1. 6. Simpler genomes as

@@ -148,6 +148,18 @@ fewer of them carry an eQTL at all, since constrained sequence carries fewer
 common variants (ALPHAGENOME.md "Against measured targets";
 `eqtl_targets.json`).
 
+Activity was scored last and closes the series: ENCODE4's lentiMPRA library,
+51,376 elements assayed in K562, HepG2 and WTC11, against the registry,
+constraint, the measured reader and AlphaGenome's predicted DNase on the cell's
+own track. The registry orders activity (promoter-like 27.5% active against 6.9%
+with no class in K562) but a distal enhancer-like element is barely more active
+than none, since the reporter measures the sequence out of its node; constraint
+adds a point or two; the predicted reader on the cell's own track correlates
+with activity at 0.44 in K562 and 0.32 in HepG2 against 0.03 and 0.12 on the
+other cell's track, and picks the active line for 84.6% of elements active in
+exactly one. The model knows the cell, not the amount (ALPHAGENOME.md "Against
+measured activity"; `mpra_genome_wide.json`).
+
 Consequence is the weakest test by construction. GWAS lead variants sit in
 regulatory elements barely above a shifted control (1.1 to 1.2 times), a named
 target and a strong effect move it a few points the right way, and constrained
@@ -298,11 +310,10 @@ next question, what a slot controls, is asked of the right positions.
    regulatory blocks. The hosted service handles
    thousands of predictions, not a million blocks, so the self-hosted model in
    the roadmap pool gates the move from chromosome 21 to the genome.
-4. **Score against measured ground truth**, the way the segment parser was
-   scored against GENCODE: VISTA enhancers (about 3,300 tested in mouse
-   embryos), ENCODE4 lentiMPRA (hundreds of thousands of elements in K562,
-   HepG2, WTC11), GTEx eQTL, the GWAS catalog and ClinVar. Precision and
-   sensitivity reported plainly per tier.
+4. **Score against measured ground truth**: done for tissue (VISTA), target
+   (eQTL), activity (lentiMPRA), openness (the readers) and consequence
+   (GWAS, ClinVar), each recorded above with its precision and its limit.
+
 5. **Closure tests at three levels.** Gene level: open elements with their
    predicted effects must reproduce GTEx expression per tissue (19,000 genes by
    54 tissues). Cell level: an element deleted in silico moves its gene and
