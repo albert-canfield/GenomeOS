@@ -1271,19 +1271,33 @@ in order. "Owner" is the session that holds the files today (see §7).
   is GC-matched. GRAMMAR-BY-COMPARISON.md §8.
 - **Step 2 built (2026-09-12).** `genomeos origin [--gene G | --library L]`
   (`knowledge/homology.py`, `scripts/origin_genome_wide.py`,
-  `origin_genome_wide`): 375 Ensembl species placed once on a 25-clade
-  ladder shared with human (proxy names for the nodes Ensembl's
-  classification omits), the vertebrate and pan-taxonomic Compara dumps
-  streamed once (3.9 and 2.6 million rows, 14 s together), the deepest clade
-  with an orthologue per gene and its paralogues. 19,392 coding genes: 9,935
-  eukaryote core, 5,866 animal core, 1,914 vertebrate core, 912 mammal core,
-  96 primate, 18 ape, 1 human-specific in this set; 64,050 `paralogue_of`
-  edges in the knowledge graph (394,068 edges). The 42 libraries aged: the
-  oldest are core.splicing, replication, translation and timer.telomere (96
-  to 98% animal-wide or older), the youngest systems.ligand_receptor_protocol
-  (54%) and organ_skin (15% amniote or younger). Caveats: a vertebrate-dump
-  origin is a lower bound, a pan-dump origin can overshoot (family-level
-  calls at the deep strata: HOXA1 reads eukaryote-wide). GRAMMAR-BY-COMPARISON.md §10.
+  `origin_genome_wide`, `origin_presence_genome_wide`): 508 species placed
+  once on a 25-clade ladder shared with human (Life to Homo; proxy names for
+  the nodes Ensembl's classification omits; strain and assembly suffixes
+  stripped for the lookup), the vertebrate and pan-taxonomic Compara dumps
+  streamed once (3.9 and 2.6 million rows, 15 s together, species the dumps
+  name placed on the way), the deepest clade with an orthologue per gene and
+  its paralogues. 19,392 coding genes: 3,774 Life core, 8,250 eukaryote core,
+  3,935 animal core, 1,815 vertebrate core, 905 mammal core, 281 amniote,
+  200 tetrapod, 121 chordate, 92 primate, 18 ape, 1 human-specific in the
+  set; 64,050 `paralogue_of` edges in the knowledge graph (394,068 edges).
+  The 42 libraries aged: the oldest are core.splicing, replication,
+  translation and timer.telomere (96 to 98% animal-wide or older), the
+  youngest systems.ligand_receptor_protocol (55%) and organ_skin (15%
+  amniote or younger). Caveats: a vertebrate-dump origin is a lower bound, a
+  pan-dump origin can overshoot (family-level calls at the deep strata:
+  HOXA1 reads eukaryote-wide); Mus musculus is absent from the human dump
+  (its relatives place the grade); a dump with fewer than fifty species
+  fails loudly. GRAMMAR-BY-COMPARISON.md §10.
+- **Step 5 built (2026-09-12).** `genomeos profiling [--library L]`
+  (`knowledge/profiling.py`, `profiling_genome_wide`): each library's
+  presence profile over the 355 species, its gain curve along the ladder,
+  and pairwise residual correlations as gained-and-lost-together candidates.
+  The developmental blueprint libraries share one history (0.97 to 0.99),
+  the cores against the vertebrate-born ligand-receptor protocol are the
+  least alike (−0.87); shared members inflate pairs and 102 of the species
+  are bacteria, so the correlation is `inferred` and a dependency claim
+  needs a gene-level profile and a shuffled null. GRAMMAR-BY-COMPARISON.md §11.
 - **Step 6 built (2026-09-12).** `genomeos decompile GENE --chrom C`
   (`genomeos/decompile.py`): every layer read for one gene assembled into a
   BioLang-flavoured view with an evidence note per line and an `unknown { }`
@@ -1297,7 +1311,8 @@ in order. "Owner" is the session that holds the files today (see §7).
   as species counts per clade on the graph nodes. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
   and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done: the scan, `requires:` and the operator pairs; next profiles clustered
   into families, a GC-matched expectation, and enhancers rather than promoters
-  for the developmental combinations (GATA plus T-box in heart). 5. Phylogenetic profiling between libraries.
+  for the developmental combinations (GATA plus T-box in heart). 5. Done at library level; next a gene-level profile with a shuffled-library
+  null before any pair is called a dependency.
   6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. OCA2/HERC2 and the SHH ZRS across human,
   mouse, chicken and zebrafish.
 - **Owner.** genomeos-bb (this lane's files: `attribution/variation.py`,

@@ -700,3 +700,20 @@ oldest, the ligand-receptor protocol and skin youngest. 64,050 paralogue
 edges joined the knowledge graph (394,068 edges). APP decompiles with no
 unknown residue left. docs/GRAMMAR-BY-COMPARISON.md §10; one LESSONS row.
 - **The organiser**: `genomeos organise --chrom C` (genomeos/attribution/organise.py) joins the budget, the human axis and the copy flag per UNKNOWN block, copies first; genome-wide the constrained_unknown tier's 1,098 blocks lose 216 copies and the real unknown is 882 blocks (30.6 Mb): 69 constrained on both axes (387 kb, the sharpest candidates), 437 relaxed, 329 tolerant, 29 recent, 18 unmeasured; `organised_chr*.json` (720 kB in all), `organised_genome_wide.json`; the compiled program's regions carry the copy flag (116 of chr21's 446), checks unchanged.
+
+## 2026-09-12 — the ladder's bottom rung, and libraries with the same history
+
+Area J steps 2 and 5, finished. Placing the pan-taxonomic dump's 117
+bacteria and archaea (their strain-suffixed names resolve once the suffix is
+stripped) gave the origin ladder its bottom rung: 3,774 of 19,392 coding
+genes have an orthologue in bacteria or archaea (RPL3 among them), 8,250
+are eukaryote core, 3,935 animal core, 1,815 vertebrate core, 905 mammal
+core, 281 amniote, 200 tetrapod, 121 chordate, 92 primate, 18 ape, one
+human-specific in Ensembl's set; 508 species placed, eight irregular names
+left unplaced and redundant, no Mus musculus column because the human dump
+does not carry it. `genomeos profiling` then reads the presence matrix the
+origin job writes beside its summary and correlates the libraries' residual
+profiles over 355 species: the developmental blueprint libraries share one
+history (0.97 to 0.99), the cores against the vertebrate-born
+ligand-receptor protocol are the least alike (−0.87), inferred evidence with
+its two caveats stated. docs/GRAMMAR-BY-COMPARISON.md §10 and §11.

@@ -490,9 +490,20 @@ def merge_genes(a: dict[str, dict], b: dict[str, dict]) -> dict[str, dict]:
     return out
 
 
+MIN_SPECIES_IN_DUMP = (
+    50  # a human homology dump names hundreds of species; fewer means a truncated or wrong file
+)
+
+
 def _stream_placing(url: str, strata: dict[str, str | None], progress=None) -> tuple[dict, dict]:
     """Stream once; if the dump names species the ladder has not placed, place them and stream again."""
     genes, cost = stream(url, strata, progress)
+    seen = {sp for g in genes.values() for sp in g["species"]}
+    if len(seen) < MIN_SPECIES_IN_DUMP:
+        raise ValueError(
+            f"{url} yielded orthologues in {len(seen)} species; a truncated or changed dump would otherwise "
+            "read as a genome of human-specific genes"
+        )
     missing = [sp for sp in cost.pop("unplaced_all", cost["unplaced_species"]) if not strata.get(sp)]
     if missing:
         placed = classify_species(missing)

@@ -517,27 +517,40 @@ and worm are outgroups of the vertebrate trees but not "vertebrate species")
 are placed on the way and the stream is run again, which is what turned a
 first result with nothing below Chordata into the table below.
 
-**The genome's ladder (19,392 coding genes, 375 species placed).**
+**The genome's ladder (19,392 coding genes, 508 species placed).** The
+first pass stopped at Chordata for every gene, because Ensembl's vertebrate
+species list omits the outgroups its trees use; the second reached the
+animals and eukaryotes through the pan-taxonomic dump; the third placed
+that dump's 117 bacteria and archaea, whose strain-suffixed names the
+taxonomy endpoint resolves only once the suffix is stripped, and gave the
+ladder its bottom rung.
 
 | ladder | genes | strata |
 |---|---|---|
-| Eukaryote core | 9,935 | Eukaryota 9,532, Opisthokonta 403 |
-| Animal core | 5,866 | Metazoa 4,837, Bilateria 1,029 |
-| Chordate | 161 | |
-| Vertebrate core | 1,914 | Vertebrata 447, Gnathostomata 571, Euteleostomi 896 |
-| Tetrapod | 203 | |
-| Amniote | 286 | |
-| Mammal core | 912 | Mammalia 182, Theria 191, Eutheria 350, Boreoeutheria 176, Euarchontoglires 13 |
-| Primate | 96 | |
+| Life core | 3,774 | an orthologue in bacteria or archaea |
+| Eukaryote core | 8,250 | Eukaryota 7,403, Opisthokonta 847 |
+| Animal core | 3,935 | Metazoa 3,267, Bilateria 668 |
+| Chordate | 121 | |
+| Vertebrate core | 1,815 | Vertebrata 412, Gnathostomata 540, Euteleostomi 863 |
+| Tetrapod | 200 | |
+| Amniote | 281 | |
+| Mammal core | 905 | Mammalia 180, Theria 188, Eutheria 348, Boreoeutheria 176, Euarchontoglires 13 |
+| Primate | 92 | |
 | Ape | 18 | |
 | Human-specific in this species set | 1 | |
 
-Half the coding genes have a relative outside the animals, a third are
-animal inventions, one in ten vertebrate, one in twenty mammalian; 115
-genes are primate or younger and one has no orthologue anywhere Ensembl
-looks. Paralogues: 6,805 genes have none, 3,809 have ten or more; 64,050
+One coding gene in five has a relative in bacteria (RPL3 reads Life core,
+ACTB and HOXA1 eukaryote core, TP53 opisthokont, APP, RAG1 and HBB animal
+core, INS vertebrate, KRTAP10-1 mammal); three in five are older than the
+animals; one in ten is vertebrate, one in twenty mammalian; 111 genes are
+primate or younger and one has no orthologue anywhere Ensembl looks.
+Paralogues: 6,803 genes have none, 3,809 have ten or more; 64,050
 `paralogue_of` edges joined the knowledge graph (394,068 edges now), one
-per pair of compiled paralogues, with the origin as a node attribute.
+per pair of compiled paralogues, with the origin as a node attribute. Mouse
+is not a column: Ensembl's human dump lists Mus caroli, spretus, spicilegus
+and pahari and the rat but not Mus musculus (its pairs sit in the mouse-side
+dump, which `genome/mouse.py` reads for the node comparison), so the grade
+is placed by its relatives and the decompiled locus claims no mouse count.
 
 **The libraries, aged.** Every one of the 42 BioLib libraries with eight or
 more placed members now carries its origin distribution. The order is the
@@ -561,11 +574,51 @@ reads eukaryote-wide through plant homeobox proteins, and OCA2 through
 transporter relatives. The ladder label is therefore right at the grade
 (eukaryote core, animal core, vertebrate core), and a single gene's exact
 stratum below Metazoa should be read with the species count beside it.
-Ten species stay unplaced by the taxonomy endpoint under any name and are
-placed by an explicit table (mink and sperm whale renamed in NCBI, two
-birds, and six pan-taxonomic invertebrates and a liverwort); each is
-redundant with others at its stratum, so no origin depends on them.
+Ten species the taxonomy endpoint cannot resolve under any name are placed
+by an explicit table (mink and sperm whale renamed in NCBI, two birds, six
+pan-taxonomic invertebrates and a liverwort), and eight bacteria and
+protists with irregular strain names stay unplaced; each is redundant with
+others at its stratum, so no origin depends on them. A dump that yields
+orthologues in fewer than fifty species now fails loudly rather than read
+as a genome of human-specific genes.
 
 The decompiled locus (§9) now prints origin and paralogues for every
 coding gene: APP is animal core with one paralogue, APLP1, and has no
 unknown residue left among the layers GenomeOS reads.
+
+
+## 11. Step 5 built: phylogenetic profiling between libraries (2026-09-12)
+
+`genomeos profiling [--library L]` (`knowledge/profiling.py`, result
+`profiling_genome_wide`) reads the presence matrix the origin job writes
+beside its summary (`origin_presence_genome_wide`: one bit per gene per
+species, 355 species with an orthologue of some human gene, ordered by
+clade) and gives every library with eight or more placed members its
+profile, the share of members with an orthologue in each species; its gain
+curve, the share of members whose origin is at or before each stratum; and
+its residual profile, what it does beyond the genome's own presence
+pattern. Between libraries, the Pearson correlation of residual profiles is
+the "gained and lost together" candidate the conversation asked for.
+
+**What it finds.** The developmental blueprint is one history: the axis,
+segmentation, germ-layer and organ libraries correlate at 0.97 to 0.99 with
+one another (segmentation and its clock at 1.0, which is the same gene list
+under two names, and a reminder that shared members inflate the pair). The
+least alike are the cores against the vertebrate-born signalling protocol:
+`core.replication` against `systems.ligand_receptor_protocol` at −0.87,
+`core.splicing` and `core.chromatin_epigenome` against the same at −0.84,
+`timer.telomere` against `extracellular_matrix_adhesion` at −0.82. The
+immune system's nearest histories are the senescence checkpoint, puberty
+and the telomere machinery (0.50 to 0.57), which is the vertebrate-and-later
+signature shared with the timers that tune adult life.
+
+**How far to trust it.** A high correlation says two libraries appeared and
+persisted in the same species, not that one calls the other; libraries
+that share members share history by construction; and 102 of the 355
+species are bacteria and archaea, so the profiles weigh the Life boundary
+heavily, which is exactly the boundary the cores sit on. The Reactome
+hierarchy the libraries were built from is the check, and the residual
+correlation is `inferred` evidence. The step the conversation called
+covariance is built; making it a dependency claim needs a gene-level
+profile and a null over shuffled libraries, which is recorded as its next
+step.
