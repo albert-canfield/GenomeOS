@@ -4222,6 +4222,42 @@ def _fmt(v: float | None) -> str:
     return "-" if v is None else f"{v:.2f}"
 
 
+def cmd_work(args: argparse.Namespace) -> int:
+    import os
+
+    from genomeos import work
+
+    root = Path.cwd()
+    args.who = args.who or os.environ.get("GENOMEOS_WHO", "")
+    try:
+        if args.action != "list" and not args.who:
+            raise ValueError("say who with --who NAME or GENOMEOS_WHO")
+        if args.action == "start":
+            if not args.task:
+                raise ValueError("start needs a task")
+            work.start(root, args.who, args.task, args.area, args.files, args.next)
+        elif args.action == "update":
+            work.update(root, args.who, args.note, args.task, args.area, args.files, args.next, args.state)
+        elif args.action == "done":
+            work.done(root, args.who, args.note)
+    except ValueError as e:
+        print(f"genomeos work: {e}", file=sys.stderr)
+        return 2
+    board = work.board(root)
+    if not board:
+        print("nobody has an entry on the work board")
+    for e in board:
+        mins = e["age"] // 60
+        area = f" [{e['area']}]" if e.get("area") else ""
+        print(f"{e['who']:<14} {e['state']:<8}{area} {e['task']}  ({mins} min ago)")
+        for label, key in (("note", "note"), ("next", "next")):
+            if e.get(key):
+                print(f"{'':15}{label}: {e[key]}")
+        if e.get("files"):
+            print(f"{'':15}files: {', '.join(e['files'])}")
+    return 0
+
+
 def cmd_serve(args: argparse.Namespace) -> int:
     from genomeos.web import serve
 
@@ -5029,6 +5065,17 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--offline", action="store_true", help="local caches only, no network")
     p.add_argument("--no-indirect", action="store_true", help="skip pathway-induced candidates")
     p.set_defaults(fn=cmd_therapeutic)
+
+    p = sub.add_parser("work", help="the work board: say what you are working on, shown on the Progress tab")
+    p.add_argument("action", nargs="?", choices=["list", "start", "update", "done"], default="list")
+    p.add_argument("task", nargs="?", help="what is being worked on (start; update replaces it)")
+    p.add_argument("--who", help="contributor name (default: the GENOMEOS_WHO environment variable)")
+    p.add_argument("--area", help="roadmap area letter, A to J")
+    p.add_argument("--files", nargs="*", help="files held (comma or space separated; dir/ holds a directory)")
+    p.add_argument("--next", help="what comes after this task")
+    p.add_argument("--note", help="progress note (update, done)")
+    p.add_argument("--state", choices=["working", "waiting"], help="update: working or waiting on something")
+    p.set_defaults(fn=cmd_work)
 
     p = sub.add_parser("serve", help="start the light web UI on localhost")
     p.add_argument("--host", default="127.0.0.1")

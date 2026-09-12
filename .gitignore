@@ -50,3 +50,5 @@ data/results/dnase_*_chr*.bed.gz
 # console output that mean nothing on another checkout. The job registry lives in
 # genomeos/jobs.py and the results the jobs produce are under data/results.
 data/jobs/
+# The work board (genomeos work): who is working on what right now, per machine like data/jobs
+data/work/

@@ -793,3 +793,22 @@ the readout: permissive PWM hits held across amniotes track conservation, not
 binding, and VISTA negatives are conserved regulatory-like sequence. The next
 readout is in-silico mutagenesis on the same panel.
 docs/GRAMMAR-BY-COMPARISON.md §15; one LESSONS row.
+
+## 2026-09-12 — the Progress tab says what is going on
+
+The Project progress card moves to the top of the Progress tab and becomes two
+tabs. **Current work and plan** (the default) shows the work board first: each
+contributor keeps one entry with `genomeos work start "task" --who NAME --area X
+--files … --next …`, then `update --note/--state waiting` and `done`
+(`genomeos/work.py`, git-ignored `data/work/<who>.json`, stale after six hours,
+finished entries kept a day). Next to the board are the running jobs, the files
+changed but not committed (grouped by who holds them, otherwise by roadmap
+area), and the last day's commits. Below that is docs/ROADMAP.md read as data
+(`genomeos/roadmap.py`): milestones, one card per area with its open Next
+steps marked planned, partial or blocked, who is on it now, and the jobs
+waiting on a decision. **Done** lists every finished roadmap item (the dated
+bullets of each area, done sentences inside Missing, closed Next steps),
+newest first with a filter and the full entry. It also holds the finished
+data jobs and this task log. `/api/work` and `/api/roadmap`;
+`tests/test_roadmap_work.py`. The roadmap stays the single plan and this card
+only reads it.

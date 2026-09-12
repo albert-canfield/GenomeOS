@@ -865,6 +865,37 @@ class Api:
             "done": sum(1 for r in rows if r["status"].startswith("done")),
         }
 
+    def roadmap(self) -> dict:
+        """docs/ROADMAP.md as areas with planned steps and finished items, milestones and data jobs."""
+        from genomeos import roadmap
+
+        return roadmap.load(self.root)
+
+    def work(self) -> dict:
+        """What is going on: the work board, running jobs, uncommitted files by area, the day's commits."""
+        from genomeos import jobs, roadmap, work
+
+        areas = roadmap.parse_areas((self.root / "docs" / "ROADMAP.md").read_text())
+        titles = {a["letter"]: a["title"] for a in areas}
+        board = work.board(self.root)
+        holder = {f: e["who"] for e in board if e.get("state") != "done" for f in e.get("files", [])}
+        files = []
+        for f in work.uncommitted(self.root):
+            who = holder.get(f["path"]) or next(
+                (w for held, w in holder.items() if held.endswith("/") and f["path"].startswith(held)), None
+            )
+            files.append({**f, "area": roadmap.area_of_path(f["path"], areas), "who": who})
+        running = [
+            j.to_dict() for j in jobs.all_status(self.root) if j.state in ("running", "stalled", "failed")
+        ]
+        return {
+            "board": board,
+            "jobs": running,
+            "uncommitted": files,
+            "commits": work.recent_commits(self.root),
+            "areas": titles,
+        }
+
     def unknown_wide(self) -> dict:
         """Genome-wide UNKNOWN classification: per-chromosome rows and class totals, as far as it has run."""
         from genomeos.results import load_result
@@ -1766,6 +1797,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.budget_wide())
             if u.path == "/api/progress":
                 return self._json(self.api.progress())
+            if u.path == "/api/roadmap":
+                return self._json(self.api.roadmap())
+            if u.path == "/api/work":
+                return self._json(self.api.work())
             if u.path == "/api/features":
                 return self._json(self.api.features())
             if u.path == "/api/predict":

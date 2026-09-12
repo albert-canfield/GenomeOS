@@ -134,6 +134,36 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 .log{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:pre-wrap;max-height:90px;overflow:auto;margin-top:4px}
 .pstatus{font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
 .pstatus.done{color:var(--ok);border-color:var(--ok)}.pstatus.progress{color:var(--warn);border-color:var(--warn)}
+.pp-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.pp-tabs button{background:transparent;border:1px solid transparent;border-bottom:0;border-radius:6px 6px 0 0;padding:6px 12px;color:var(--muted);cursor:pointer;font:inherit;margin-bottom:-1px}
+.pp-tabs button.on{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.pp-h{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:14px 0 6px;font-weight:600}
+.pp-who{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.pp-entry{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);font-size:12.5px;min-width:0}
+.pp-entry.stale,.pp-entry.done{opacity:.65}
+.pp-entry b.task{display:block;font-size:13.5px;margin:4px 0}
+.pp-entry .files{font-family:var(--mono);font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.pp-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.pp-areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:10px}
+.pp-area{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px;min-width:0}
+.pp-area h4{margin:0 0 2px;font-size:13.5px;display:flex;gap:6px;align-items:baseline}
+.pp-area ol{margin:6px 0 0;padding-left:20px}
+.pp-area li{margin-bottom:5px;overflow-wrap:anywhere}
+.pp-letter{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:5px;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:600}
+.st{font-size:10.5px;padding:0 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;margin-right:4px}
+.st.done,.st.working{color:var(--ok);border-color:var(--ok)}
+.st.partial,.st.waiting,.st.running{color:var(--warn);border-color:var(--warn)}
+.st.blocked,.st.failed,.st.stalled{color:var(--bad);border-color:var(--bad)}
+.pp-sec{margin-top:10px;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.pp-sec>summary{cursor:pointer;font-weight:600}
+.pp-item{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
+.pp-item:first-of-type{border-top:0}
+.pp-item details summary{cursor:pointer;color:var(--muted);font-size:12px}
+.pp-md{overflow-x:auto;margin-top:6px;line-height:1.5}
+.pp-md table{font-size:12px;margin:6px 0}
+.pp-md code,.pp-area code,.pp-entry code{font-family:var(--mono);font-size:11.5px;background:var(--bg);padding:0 3px;border-radius:3px}
+.pp-commit{display:flex;gap:8px;font-size:12.5px;padding:3px 0;align-items:baseline}
+.pp-commit .mono{color:var(--muted);flex:0 0 auto}
 .unc{margin-top:10px;font-size:12px}
 .unc table{font-size:12px}
 .unc .lbl{display:inline-block;width:64px;text-align:right;padding-right:6px}
@@ -184,7 +214,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div class="step"><i class="ic">🔍</i><b>Debugger</b> — why. Stop when a condition is met and read the rules and evidence behind the value.</div>
       <div class="step"><i class="ic">🧫</i><b>Molecules</b> — RNA and proteins. Every isoform of a gene and where it is expressed (GTEx); our translation checked against UniProt; the AlphaFold structure with confidence per residue; the protein's compiled definition from seven public databases with evidence per section; its neighbourhood in the local knowledge graph; and any of its Reactome pathways run as a reachability graph with the protein knocked out.</div>
       <div class="step"><i class="ic">🎗️</i><b>Cancer</b> — the same genome, changed. Compare a person's normal and tumour samples, or analyse a tumour alone (VEP on any chromosome, likely-germline variants set aside, mutant peptides, pathway reactions lost): consequences, driver frequencies and hotspots from 10,945 tumours, suggested cancer types, reachable surface targets, and a packet for a focused AI agent.</div>
-      <div class="step"><i class="ic">📊</i><b>Progress</b> — jobs running in the background with live progress, the project's task log, and the measurements obtained so far.</div>
+      <div class="step"><i class="ic">📊</i><b>Progress</b> — who is working on what right now, the roadmap planned area by area and everything already done, jobs running in the background, and the measurements obtained so far.</div>
       <div class="step"><i class="ic">📚</i><b>Libraries</b> — the parts list. 45 reusable modules the genome contains, verified against curated databases.</div>
     </div>
     <h2 style="margin-top:16px">A first walk-through</h2>
@@ -670,6 +700,38 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 
 <!-- ================= PROGRESS ================= -->
 <section id="progress">
+  <div class="card" id="pp" style="margin-bottom:16px">
+    <h2><i class="ic">🗺️</i>Project progress<span class="help" data-tip="What is going on, read from the project itself rather than asked: the work board (genomeos work start | update | done), running jobs, files changed but not committed, the day's commits, and docs/ROADMAP.md split into what is planned and what is done.">?</span>
+      <span class="muted" id="pp-stamp" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div class="pp-tabs" role="tablist">
+      <button class="on" data-pp="now" role="tab"><i class="ic">🛠️</i>Current work and plan</button>
+      <button data-pp="done" role="tab"><i class="ic">✅</i>Done <span class="muted" id="pp-done-n"></span></button>
+    </div>
+    <div id="pp-now">
+      <h3 class="pp-h">Working now</h3>
+      <div id="pp-board"></div>
+      <div class="grid cols-2" style="margin-top:12px">
+        <div><h3 class="pp-h">Jobs running</h3><div id="pp-jobs"></div></div>
+        <div><h3 class="pp-h">Changed, not committed yet</h3><div id="pp-files"></div></div>
+      </div>
+      <h3 class="pp-h">Landed in the last 24 hours</h3>
+      <div id="pp-commits"></div>
+      <h3 class="pp-h" style="margin-top:18px">Planned, by roadmap area</h3>
+      <div id="pp-milestones" class="pp-chips"></div>
+      <div id="pp-areas" class="pp-areas"></div>
+      <div id="pp-waiting"></div>
+    </div>
+    <div id="pp-done" hidden>
+      <div id="pp-done-kpi" class="kpi"></div>
+      <div class="row"><label>filter <input id="pp-filter" placeholder="Hi-C, telomere, VISTA…" style="width:240px"></label><span class="muted" id="pp-filter-n" style="font-size:12px"></span></div>
+      <div id="pp-done-areas"></div>
+      <details class="pp-sec"><summary>Data jobs finished (roadmap §4)</summary><div id="pp-done-jobs"></div></details>
+      <details class="pp-sec"><summary>Task log (docs/PROGRESS.md)</summary>
+        <div id="p-summary" class="kpi" style="margin-top:8px"></div>
+        <div id="p-rows" class="scroll" style="max-height:520px"></div>
+      </details>
+    </div>
+  </div>
   <div class="grid cols-2">
     <div class="card">
       <h2><i class="ic">⚙️</i>Jobs<span class="help" data-tip="Long computations run in the background as separate processes; this panel polls their progress every few seconds. Jobs write their outcome to data/results, never raw data.">?</span></h2>
@@ -715,11 +777,6 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <h2><i class="ic">🔌</i>Optional features<span class="help" data-tip="Features that need an external key or package (AlphaGenome). Always listed; without the key they load disabled and say how to enable them. Nothing in the core depends on them, and their output is always labelled predicted.">?</span></h2>
       <div id="j-features"></div>
     </div>
-  </div>
-  <div class="card" style="margin-top:16px">
-    <h2><i class="ic">🗺️</i>Project progress<span class="help" data-tip="The task log the project keeps in docs/PROGRESS.md: what was built, its status, and the evidence that it works.">?</span></h2>
-    <div id="p-summary" class="kpi"></div>
-    <div id="p-rows" class="scroll" style="max-height:520px"></div>
   </div>
 </section>
 
@@ -809,7 +866,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
   b.scrollIntoView({block: 'nearest', inline: 'nearest'});
-  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadBudgetWide(); loadProgress(); loadFeatures(); }
+  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadBudgetWide(); loadProjectProgress(); loadFeatures(); }
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
   // first visit to a simulation tab runs its default example
@@ -1518,6 +1575,113 @@ async function loadIndividualWide() {
     } else $('#j-enhancers').innerHTML = '<span class="muted">not run yet (job enhancer_targets_chr21 on this tab, needs ALPHAGENOME_API_KEY)</span>';
   } catch (e) { $('#j-twin').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
+// ---- project progress: current work and plan, done
+const escH = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const ago = s => s < 90 ? `${s} s ago` : s < 5400 ? `${Math.round(s / 60)} min ago` : s < 172800 ? `${Math.round(s / 3600)} h ago` : `${Math.round(s / 86400)} d ago`;
+// the roadmap's inline markdown: code, bold, italics, links as their text, pipe tables, paragraphs
+function mdInline(t) {
+  return escH(t).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, '$1<i>$2</i>').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+}
+function md(text) {
+  return String(text || '').split(/\n\n+/).map(block => {
+    const lines = block.split('\n');
+    if (lines.every(l => l.trim().startsWith('|'))) {
+      const rows = lines.filter(l => !/^\|[\s:|-]+\|?$/.test(l.trim())).map(l => l.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim()));
+      return '<table>' + rows.map((r, i) => '<tr>' + r.map(c => i ? `<td>${mdInline(c)}</td>` : `<th>${mdInline(c)}</th>`).join('') + '</tr>').join('') + '</table>';
+    }
+    return `<p style="margin:4px 0">${mdInline(block)}</p>`;
+  }).join('');
+}
+let ppRoadmap = null, ppTimer = null;
+document.querySelectorAll('.pp-tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.pp-tabs button').forEach(x => x.classList.toggle('on', x === b));
+  $('#pp-now').hidden = b.dataset.pp !== 'now';
+  $('#pp-done').hidden = b.dataset.pp !== 'done';
+});
+async function loadProjectProgress() {
+  await Promise.allSettled([loadWork(), loadRoadmap(), loadProgress()]);
+}
+async function loadWork() {
+  try {
+    const w = await api('/api/work');
+    const areaName = l => l ? `${l} · ${escH(w.areas[l] || '')}` : 'no area';
+    $('#pp-board').innerHTML = w.board.length ? '<div class="pp-who">' + w.board.map(e => `<div class="pp-entry ${e.state}">
+        <div class="row" style="margin:0;gap:6px"><b class="mono">${escH(e.who)}</b><span class="st ${e.state}">${e.state}</span>${e.area ? `<span class="pill">${areaName(e.area)}</span>` : ''}<span class="muted" style="margin-left:auto;font-size:11px">${ago(e.age)}</span></div>
+        <b class="task">${mdInline(e.task)}</b>
+        ${e.note ? `<div>${mdInline(e.note)}</div>` : ''}
+        ${e.next ? `<div class="muted">next: ${mdInline(e.next)}</div>` : ''}
+        ${e.files && e.files.length ? `<details><summary class="muted" style="cursor:pointer;font-size:11px">${e.files.length} file${e.files.length === 1 ? '' : 's'} held</summary><div class="files">${e.files.map(escH).join('<br>')}</div></details>` : ''}
+      </div>`).join('') + '</div>'
+      : '<div class="muted" style="font-size:12.5px">Nobody has an entry on the work board yet. Each contributor keeps one with <code>genomeos work start "task" --who NAME --area B --files … --next …</code>, then <code>genomeos work update --note …</code> and <code>genomeos work done</code>.</div>';
+    $('#pp-jobs').innerHTML = w.jobs.length ? w.jobs.map(j => `<div style="margin-bottom:8px;font-size:12.5px">
+        <b class="mono">${escH(j.name)}</b> <span class="st ${j.state}">${j.state}</span>${j.activity != null ? `<span class="muted" style="font-size:11px">active ${ago(j.activity)}</span>` : ''}
+        <div class="muted">${escH(j.describe)}</div>
+        ${j.total > 1 ? `<div class="prog ${j.state}"><i style="width:${(j.fraction || 0) * 100}%"></i></div><div class="muted" style="font-size:11px">${fmt(j.done)} of ${fmt(j.total)}${j.detail ? ' · ' + escH(j.detail) : ''}</div>` : ''}</div>`).join('')
+      : '<div class="muted" style="font-size:12.5px">no job running (the Jobs card below lists them all)</div>';
+    const groups = {};
+    w.uncommitted.forEach(f => { const k = f.who ? `${f.who}` : (f.area ? `area ${f.area}` : 'no area'); (groups[k] = groups[k] || []).push(f); });
+    $('#pp-files').innerHTML = w.uncommitted.length ? Object.entries(groups).map(([k, fs]) => `<details style="margin-bottom:4px;font-size:12.5px"${Object.keys(groups).length < 4 ? ' open' : ''}><summary style="cursor:pointer"><b>${escH(k)}</b>${fs[0].area && !k.startsWith('area') ? '' : fs[0].area ? ` <span class="muted">${escH(w.areas[fs[0].area] || '')}</span>` : ''} <span class="muted">(${fs.length})</span></summary>
+        <div class="files mono" style="font-size:11px">${fs.map(f => `<span class="muted">${f.change === 'new' ? '+' : f.change === 'deleted' ? '−' : '~'}</span> ${escH(f.path)}`).join('<br>')}</div></details>`).join('')
+      : '<div class="muted" style="font-size:12.5px">the checkout is clean</div>';
+    $('#pp-commits').innerHTML = w.commits.length ? w.commits.slice(0, 10).map(c => `<div class="pp-commit" title="${escH(c.subject)}"><span class="mono">${new Date(c.time * 1000).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} ${c.sha}</span><span>${mdInline(c.title)}</span></div>`).join('')
+      + (w.commits.length > 10 ? `<details><summary class="muted" style="cursor:pointer;font-size:12px">${w.commits.length - 10} more</summary>${w.commits.slice(10).map(c => `<div class="pp-commit" title="${escH(c.subject)}"><span class="mono">${new Date(c.time * 1000).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} ${c.sha}</span><span>${mdInline(c.title)}</span></div>`).join('')}</details>` : '')
+      : '<div class="muted" style="font-size:12.5px">no commits in the last day</div>';
+    // live contributors per area feed the planned cards
+    window.ppBoard = w.board;
+    if (ppRoadmap) renderPlanned(ppRoadmap);
+    $('#pp-stamp').textContent = `updated ${new Date().toLocaleTimeString()}`;
+  } catch (e) { $('#pp-board').innerHTML = `<span class="muted">${escH(e.message)}</span>`; }
+  clearTimeout(ppTimer);
+  if ($('#progress').classList.contains('active')) ppTimer = setTimeout(loadWork, 30000);
+}
+function renderPlanned(r) {
+  const board = (window.ppBoard || []).filter(e => e.state !== 'done');
+  $('#pp-milestones').innerHTML = r.milestones.map(m => `<span class="pill" data-tip="${escH(m.goal)} — ${escH(m.proof)}"><span class="st ${m.state}" style="border:0;padding:0">${m.state === 'done' ? '✓' : m.state === 'partial' ? '◐' : '○'}</span>${escH(m.milestone)}</span>`).join('');
+  $('#pp-areas').innerHTML = r.areas.map(a => {
+    const open = a.next.filter(s => s.state !== 'done');
+    const now = board.filter(e => e.area === a.letter);
+    return `<div class="pp-area">
+      <h4><span class="pp-letter">${a.letter}</span>${escH(a.title)}</h4>
+      <div class="muted" style="font-size:11.5px">${a.counts.done} done · ${open.length} planned${a.counts.blocked ? ` · ${a.counts.blocked} blocked` : ''}${a.owner ? ` · roadmap owner: ${mdInline(a.owner)}` : ''}</div>
+      ${now.length ? `<div style="margin-top:4px">${now.map(e => `<span class="st ${e.state}">now: ${escH(e.who)}</span> ${mdInline(e.task)}`).join('<br>')}</div>` : ''}
+      ${open.length ? `<ol>${open.map(s => `<li><span class="st ${s.state}">${s.state}</span>${mdInline(s.text)}</li>`).join('')}</ol>` : '<div class="muted" style="margin-top:6px">no open step in the roadmap</div>'}
+      ${a.missing ? `<details style="margin-top:4px"><summary class="muted" style="cursor:pointer;font-size:12px">missing for complete</summary><div class="pp-md">${md(a.missing)}</div></details>` : ''}
+    </div>`;
+  }).join('');
+  const waiting = r.data_jobs.filter(j => j.state !== 'done');
+  $('#pp-waiting').innerHTML = waiting.length ? `<h3 class="pp-h">Jobs waiting on a decision or a resource</h3><table>${waiting.map(j => `<tr><td>${mdInline(j.job)}</td><td class="muted" style="font-size:12px">${mdInline(j.detail)}</td><td class="mono">${escH(j.owner || '')}</td></tr>`).join('')}</table>` : '';
+}
+function renderDone(r) {
+  const q = ($('#pp-filter').value || '').trim().toLowerCase();
+  const match = it => !q || (it.title + ' ' + it.body).toLowerCase().includes(q);
+  let shown = 0;
+  $('#pp-done-areas').innerHTML = r.areas.map(a => {
+    const steps = a.next.filter(s => s.state === 'done').map(s => ({title: 'Step closed', date: null, summary: s.text, body: s.text}));
+    const items = [...a.done, ...steps].filter(match).sort((x, y) => (y.date || '').localeCompare(x.date || ''));
+    shown += items.length;
+    if (!items.length) return '';
+    return `<details class="pp-sec"${q ? ' open' : ''}><summary><span class="pp-letter">${a.letter}</span> ${escH(a.title)} <span class="muted" style="font-weight:400">(${items.length})</span></summary>
+      ${items.map(it => `<div class="pp-item"><div>${it.date ? `<span class="st done">${it.date}</span>` : '<span class="st done">done</span>'}<b>${mdInline(it.title)}</b></div>
+        <div style="margin-top:2px">${mdInline(it.summary)}</div>
+        ${it.body.length > it.summary.length + 20 ? `<details><summary>full entry</summary><div class="pp-md">${md(it.body)}</div></details>` : ''}</div>`).join('')}
+    </details>`;
+  }).join('') || '<div class="muted">nothing matches</div>';
+  $('#pp-filter-n').textContent = q ? `${shown} matching` : '';
+  const jobs = r.data_jobs.filter(j => j.state === 'done');
+  $('#pp-done-jobs').innerHTML = `<table>${jobs.map(j => `<tr><td>${mdInline(j.job)}</td><td class="muted" style="font-size:12px">${mdInline(j.detail)}</td></tr>`).join('')}</table>`;
+}
+async function loadRoadmap() {
+  try {
+    const r = ppRoadmap = await api('/api/roadmap');
+    renderPlanned(r);
+    renderDone(r);
+    const doneSteps = r.areas.reduce((n, a) => n + a.next.filter(s => s.state === 'done').length, 0);
+    const reached = r.milestones.filter(m => m.state === 'done').length;
+    $('#pp-done-n').textContent = `(${r.totals.done + doneSteps})`;
+    $('#pp-done-kpi').innerHTML = `<div><b>${r.totals.done + doneSteps}</b><span>roadmap items done</span></div><div><b>${reached} of ${r.milestones.length}</b><span>milestones reached</span></div><div><b>${r.data_jobs.filter(j => j.state === 'done').length}</b><span>data jobs finished</span></div><div><b>${r.totals.next - doneSteps}</b><span>steps still planned</span></div>`;
+  } catch (e) { $('#pp-areas').innerHTML = `<span class="muted">${escH(e.message)}</span>`; }
+}
+$('#pp-filter').oninput = () => { if (ppRoadmap) renderDone(ppRoadmap); };
 async function loadProgress() {
   const p = await api('/api/progress');
   $('#p-summary').innerHTML = `<div><b>${p.done}</b><span>tasks done</span></div><div><b>${p.count - p.done}</b><span>in progress / partial</span></div><div><b>${p.count}</b><span>tasks logged</span></div>`;
