@@ -285,7 +285,13 @@ next question, what a slot controls, is asked of the right positions.
    first job.
 2. **The rest of the organising evidence** on the compiled blocks: repeat
    family and segmental duplication on regions, the reader's openness on the
-   element itself rather than its node.
+   element itself rather than its node, and the human axis (area J's Gnocchi
+   score) beside the mammalian one. The two axes disagreeing is itself a
+   flag: chr15:84,395,903-84,398,315 is 23% constrained across mammals and
+   carries far more human variation than expected (Gnocchi Z of -8.5 over its
+   kilobases), which reads as a mutation hotspot or a mapping artefact rather
+   than a value slot, and the constrained_unknown tier holds 18 such blocks on
+   chr15 to look at first.
 3. **The remaining attribution**: AlphaGenome's predicted DNase, histone and
    CAGE tracks say whether a block is active and where, and in-silico
    mutagenesis says which bases inside it matter; both on the 15,536
