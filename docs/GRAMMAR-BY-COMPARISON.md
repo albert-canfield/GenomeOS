@@ -813,3 +813,53 @@ one, seven of the top eight pairs stay significant (z 3.7 to 12.7) and one
 disappears (the protocol with the telomere machinery, z 5.0 to 0.1). The
 test is one-sided, "more alike than age"; pairs far less alike than their
 age (z down to −35) are recorded and not called.
+
+
+## 15. The panel: VISTA enhancers against matched negatives (2026-09-12)
+
+The question §13 left: do enhancers keep particular factor families in
+place across species more often than conserved sequence that is not an
+enhancer? `scripts/across_panel.py` (`knowledge/across.py`, result
+`across_panel_vista`) drew 40 limb-only and 40 neural-only VISTA positives
+and 80 negatives sampled to the positives' constraint bins, all 500 bp to
+2 kb with 30% to 90% of bases constrained across mammals; aligned each to
+mouse, opossum, chicken, frog and zebrafish; and recorded the families held
+at factor-strict sites (one genome position, the same factor, every species
+aligning over half the element). Loci with fewer than two such species were
+set aside, leaving 39 limb, 33 neural and 76 negatives, balanced in
+constraint (medians 0.53, 0.62, 0.57), length and the share where chicken
+or zebrafish align (limb 79% and 15%, neural 91% and 30%, negatives 83% and
+18%). 1,258 s for 160 loci.
+
+| comparison | held sites per kb, median | density p (one-sided) | families tested | families at q ≤ 0.05 |
+|---|---|---|---|---|
+| limb 39 vs negatives 76 | 10.2 vs 10.6 | 0.88 | 274 | 0 |
+| neural 33 vs negatives 76 | 10.7 vs 10.6 | 0.37 | 276 | 0 |
+
+The nearest calls do not survive the correction for testing 275 families:
+ATF4-related factors held in 13 of 33 neural enhancers against 8 of 76
+negatives (p 0.0008, q 0.23), ZBTB11 in 8 of 39 limb enhancers against 2 of
+76 (p 0.003, q 0.71). The HOX family, the reading the ZRS invited, is not
+among the leading limb families.
+
+**What the negative says.** It does not say enhancers lack a grammar. It
+says this readout cannot see one: JASPAR best hits at 85% of the matrix
+range, held at aligned positions across amniotes, occur at the same density
+and with the same families in active enhancers and in conserved elements
+that drove no expression. Four reasons are recorded rather than tried one
+after another until something passes. The threshold is permissive (a human
+element of 1 kb draws some 600 matrix hits), so conservation, not binding,
+decides what is held. Only each factor's best hit is scanned. VISTA
+negatives are conserved elements tested at one embryonic day, many of them
+enhancers of another tissue or stage, so the control is regulatory-like
+sequence rather than inert sequence. And 275 families at 35 to 76 loci per
+group leave power only for large differences. The ZRS reading of §12
+remains a single-locus observation consistent with the literature, not a
+validated signal; the promoter operators of §13 were a measured absence,
+and across species the grammar is, for now, not measured.
+
+A useful next step has to change the readout, not the threshold: a
+sequence model's in-silico mutagenesis of each element (which bases change
+predicted activity, AlphaGenome being the project's model), held against
+the same positives and negatives, asks whether the bases that matter are
+the ones that are kept.

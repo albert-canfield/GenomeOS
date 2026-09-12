@@ -148,6 +148,14 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   sets on exclusive members, and remove duplicated genes before calling a
   shared history (`profiling_genome_wide` null).
 
+- Motif sites held across species do not separate enhancers from inactive
+  conserved sequence: 39 limb and 33 neural VISTA enhancers against 76
+  constraint-matched negatives hold the same density of factor-strict sites
+  and no family more often after correcting for 275 families
+  (`across_panel_vista`). Do not read a single conserved locus's motif list
+  as its grammar (the ZRS looked like textbook HOX, PBX and MEIS logic), and
+  change the readout rather than sweeping thresholds until a test passes.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory

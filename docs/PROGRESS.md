@@ -777,3 +777,18 @@ the signalling protocol are what age predicts, while 35 of 860 pairs are more
 alike than age, led by immunity and signalling, seven of the top eight
 surviving removal of duplicated genes. docs/GRAMMAR-BY-COMPARISON.md §13
 correction and §14.
+
+## 2026-09-12 — the panel: no grammar this readout can see
+
+The controlled form of area J's last question. 40 limb-only and 40 neural-only
+VISTA enhancers and 80 negatives matched on constraint were aligned to five
+vertebrates and scanned; 39, 33 and 76 had two or more well-aligned species.
+Enhancers and negatives hold the same density of motif sites kept in place
+across species (10.2 and 10.7 against 10.6 per kilobase) and no factor family
+more often after correcting for 275 tests; the closest, ATF4-related factors
+in neural enhancers, reaches q 0.23. The HOX, PBX and MEIS reading of the ZRS
+does not generalise to limb enhancers by this method. The negative is about
+the readout: permissive PWM hits held across amniotes track conservation, not
+binding, and VISTA negatives are conserved regulatory-like sequence. The next
+readout is in-silico mutagenesis on the same panel.
+docs/GRAMMAR-BY-COMPARISON.md §15; one LESSONS row.

@@ -1375,7 +1375,12 @@ in order. "Owner" is the session that holds the files today (see §7).
   88% identity nearly every window of conserved sequence keeps some matrix,
   so a single locus's site list is uninformative and held-site density does
   not separate four limb enhancers from four matched negatives; the grammar
-  question became a positives-against-negatives panel (running).
+  question became a positives-against-negatives panel: 39 limb and 33
+  neural VISTA enhancers against 76 constraint-matched negatives hold the
+  same density of sites (10.2 and 10.7 against 10.6 per kb) and no family
+  more often at a false discovery rate of 5% (275 families tested). The
+  readout, not enhancer grammar, is what fails; the next readout is in-silico
+  mutagenesis against the same panel. GRAMMAR-BY-COMPARISON.md §15.
   GRAMMAR-BY-COMPARISON.md §13.
 - **Refinement: library histories against an age-matched null
   (2026-09-12).** Exclusive members, eukaryotic species alone, 200 random
@@ -1400,9 +1405,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   enrichments per library and no pair logic; the pair search moves to
   enhancers (GATA plus T-box in heart). 5. Done at library level; next a gene-level profile with a shuffled-library
   null before any pair is called a dependency.
-  6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. Done for the ZRS and the OCA2 enhancer, counted as sites; next more loci
-  from VISTA's limb and neural positives, and pair logic sought in enhancers
-  now that promoters are shown to carry none.
+  6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. Done, and tested on a VISTA panel with matched negatives: motif sites held
+  across species do not separate enhancers from inactive conserved sequence;
+  next a different readout, AlphaGenome in-silico mutagenesis per element on
+  the same panel (are the bases that matter the ones that are kept).
 - **Owner.** genomeos-bb (this lane's files: `attribution/variation.py`,
   `knowledge/homology.py`, GRAMMAR-BY-COMPARISON.md); the compiled output
   stays with genomeos-f7's `attribution/compile.py` and takes isolated hunks.
