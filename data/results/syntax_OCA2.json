@@ -1,0 +1,6883 @@
+{
+ "gene": "OCA2",
+ "chrom": "chr15",
+ "strand": "-",
+ "span": [
+  27754858,
+  28099664
+ ],
+ "flank": 0,
+ "bases": 344806,
+ "people": [
+  "HG002",
+  "HG003",
+  "HG004"
+ ],
+ "threshold": 2.27,
+ "syntax_bases": 2995,
+ "syntax_fraction": 0.0087,
+ "phylop_mean": -0.047,
+ "variant_positions": 618,
+ "snv_positions": 544,
+ "indel_positions": 74,
+ "values_in_syntax": 3,
+ "values_per_kb": 1.58,
+ "syntax_hit_rate": 0.0055,
+ "expected_if_random": 0.0087,
+ "rows": [
+  {
+   "pos": 27966695,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 6.13,
+   "class": "value in syntax",
+   "where": "exon (coding)",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27966775,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 4.55,
+   "class": "value in syntax",
+   "where": "exon (coding)",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27820229,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 2.29,
+   "class": "value in syntax",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28046869,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 1.79,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27847435,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 1.6,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27851392,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 1.44,
+   "class": "value",
+   "where": "exon (coding)",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28046761,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 1.44,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27825135,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 1.29,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27950388,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 1.26,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27905415,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 1.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27804365,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 1.12,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27827422,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 1.1,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27832816,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.92,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27799396,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.91,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27831857,
+   "ref": "C",
+   "alt": "A",
+   "phylop": 0.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28096463,
+   "ref": "C",
+   "alt": "A",
+   "phylop": 0.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27916656,
+   "ref": "C",
+   "alt": "A",
+   "phylop": 0.83,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27941512,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.82,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27928411,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27800388,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.69,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27932760,
+   "ref": "C",
+   "alt": "G",
+   "phylop": 0.67,
+   "class": "value",
+   "where": "intron, cCRE DNase-H3K4me3",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27932267,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.66,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27819889,
+   "ref": "T",
+   "alt": "G",
+   "phylop": 0.65,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27932591,
+   "ref": "G",
+   "alt": "C",
+   "phylop": 0.63,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27844776,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.59,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27879017,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.59,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27768958,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826761,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27904892,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27909688,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27910047,
+   "ref": "G",
+   "alt": "C",
+   "phylop": 0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27966176,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27993012,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27962871,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.57,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27828335,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.56,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27943858,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.56,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27905496,
+   "ref": "C",
+   "alt": "G",
+   "phylop": 0.55,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27894714,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.54,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27914806,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.54,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27972113,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.54,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27975890,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 0.54,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27992763,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.54,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27897760,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.52,
+   "class": "value",
+   "where": "intron, cCRE pELS",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27912800,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.52,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27932726,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.52,
+   "class": "value",
+   "where": "intron, cCRE DNase-H3K4me3",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27901147,
+   "ref": "G",
+   "alt": "C",
+   "phylop": 0.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27810470,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.47,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27844080,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.46,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27879797,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.46,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27907478,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 0.46,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27947078,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.46,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27823922,
+   "ref": "T",
+   "alt": "G",
+   "phylop": 0.44,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27759825,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.43,
+   "class": "value",
+   "where": "intron, cCRE DNase-H3K4me3",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27894702,
+   "ref": "T",
+   "alt": "G",
+   "phylop": 0.43,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27938208,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.43,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27996428,
+   "ref": "T",
+   "alt": "G",
+   "phylop": 0.43,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27766505,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.42,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27914633,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.42,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27768086,
+   "ref": "G",
+   "alt": "C",
+   "phylop": 0.41,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27837024,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.41,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27894592,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.41,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27897462,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.41,
+   "class": "value",
+   "where": "intron, cCRE pELS",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27901647,
+   "ref": "A",
+   "alt": "T",
+   "phylop": 0.41,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27847454,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.4,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27899226,
+   "ref": "T",
+   "alt": "A",
+   "phylop": 0.4,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27902714,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.4,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27957427,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.4,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27822937,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826027,
+   "ref": "T",
+   "alt": "A",
+   "phylop": 0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27939381,
+   "ref": "C",
+   "alt": "A",
+   "phylop": 0.38,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27817259,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.37,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27921858,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.37,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27923077,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.37,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27951206,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.36,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27827011,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.35,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27816070,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27840054,
+   "ref": "C",
+   "alt": "A",
+   "phylop": 0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27887284,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27888228,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27908617,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27996011,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.33,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28042198,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.33,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 28023844,
+   "ref": "C",
+   "alt": "A",
+   "phylop": 0.32,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27763513,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.3,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27910913,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.3,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28039574,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.3,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27855430,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.28,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27908182,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.27,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27908618,
+   "ref": "A",
+   "alt": "T",
+   "phylop": 0.27,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27953086,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.27,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27960910,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.27,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27975601,
+   "ref": "T",
+   "alt": "G",
+   "phylop": 0.27,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27939667,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.25,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27808998,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.24,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27764410,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.22,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28005844,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.22,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27804762,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.21,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27984951,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27903091,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.19,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27834915,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27971711,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27801425,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.17,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27808816,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.17,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27823895,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.17,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27873828,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.17,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27799154,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.15,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27955262,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.15,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27816632,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 0.14,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27843046,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.14,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28044411,
+   "ref": "A",
+   "alt": "T",
+   "phylop": 0.14,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27862145,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27893743,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27904551,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27926001,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27931803,
+   "ref": "C",
+   "alt": "G",
+   "phylop": 0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28035689,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27902796,
+   "ref": "G",
+   "alt": "C",
+   "phylop": 0.12,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27763965,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.11,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27873298,
+   "ref": "G",
+   "alt": "C",
+   "phylop": 0.11,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27925405,
+   "ref": "T",
+   "alt": "A",
+   "phylop": 0.11,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28034795,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.1,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27852999,
+   "ref": "G",
+   "alt": "C",
+   "phylop": 0.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27876119,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27997654,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998070,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998332,
+   "ref": "G",
+   "alt": "T",
+   "phylop": 0.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998698,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27823173,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27853288,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27853556,
+   "ref": "T",
+   "alt": "G",
+   "phylop": 0.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998031,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998770,
+   "ref": "T",
+   "alt": "G",
+   "phylop": 0.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998890,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27803664,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.07,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27929207,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.07,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27941314,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.07,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28093567,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 0.07,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27755871,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27798967,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27827933,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27833290,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27845876,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27995158,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28043403,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.06,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27835438,
+   "ref": "A",
+   "alt": "G",
+   "phylop": 0.05,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27983498,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.05,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27919322,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.04,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27822458,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.03,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28048481,
+   "ref": "A",
+   "alt": "C",
+   "phylop": 0.03,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27817832,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.02,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27846144,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.02,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27976183,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.02,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27806478,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826762,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27839034,
+   "ref": "C",
+   "alt": "A",
+   "phylop": 0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27903014,
+   "ref": "C",
+   "alt": "T",
+   "phylop": 0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27926524,
+   "ref": "T",
+   "alt": "A",
+   "phylop": 0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27981451,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27994888,
+   "ref": "G",
+   "alt": "A",
+   "phylop": 0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28010842,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27758238,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.0,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27866903,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.0,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27929086,
+   "ref": "T",
+   "alt": "C",
+   "phylop": 0.0,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27841591,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27889068,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27802148,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.02,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27838938,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.02,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27823155,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.04,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826765,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.04,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27924266,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.04,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27951675,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.04,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27981803,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.04,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27803589,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.05,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27820195,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -0.05,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27838277,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.05,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27840836,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27920733,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27993756,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28049776,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27934457,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.07,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "hom",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27822853,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27925248,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28026101,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27777006,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -0.11,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27931682,
+   "ref": "T",
+   "alt": "G",
+   "phylop": -0.11,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27836876,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.12,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27932383,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.12,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27806436,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27855193,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27916663,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27812944,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.14,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27835274,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.14,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27907527,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.14,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27759658,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.15,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27832014,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.16,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27924452,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.16,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27924803,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.16,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27924946,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -0.16,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27804158,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.17,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27756913,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "hom"
+   }
+  },
+  {
+   "pos": 27840030,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27848136,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27910131,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27925982,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27953972,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28050974,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27846342,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.19,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27875567,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.19,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27906430,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.19,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28021089,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.19,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27851907,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27866600,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27871027,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27904776,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27937218,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27994155,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27806674,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.21,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27822860,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.21,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27846555,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.21,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27896236,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.22,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28000188,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.22,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27915418,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.23,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27915426,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.23,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27916084,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.23,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27971865,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.23,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27862476,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.24,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27903375,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.24,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27914364,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.24,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27796326,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.25,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27904961,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.25,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27916336,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.25,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27920039,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.25,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27995455,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.25,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27999314,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.26,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28082689,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.26,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27812448,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.27,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27828508,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.28,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27912113,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.28,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27921093,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.28,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27929005,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.29,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27954717,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.29,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27823080,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.31,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27906205,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.31,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28051279,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.31,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27810386,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.32,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27902314,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.32,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27993749,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.32,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27879868,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.33,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27880281,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.33,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27905916,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.33,
+   "class": "value",
+   "where": "intron, cCRE DNase-H3K4me3",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27912355,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.33,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28019708,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.33,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27824837,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27827749,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27876713,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27879976,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27900274,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27907664,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.34,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27919681,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.35,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27912929,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.37,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27820104,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.38,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27834294,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.38,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27877279,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.38,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27965362,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.38,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27807185,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27869143,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27882227,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27895507,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27914547,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27914764,
+   "ref": "T",
+   "alt": "G",
+   "phylop": -0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27927647,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.39,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28052230,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.39,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27953421,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.4,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28048642,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -0.4,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27838061,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.41,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826540,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.42,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27832162,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.43,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27825594,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.44,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826541,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.44,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27904212,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.44,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27806928,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.45,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27822551,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.45,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27927646,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.45,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27831683,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.46,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28046666,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.46,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27819940,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.47,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27955508,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.47,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27846637,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.48,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27923181,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.49,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27969613,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.49,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27863281,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27955855,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826421,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.51,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27855991,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.51,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27869938,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.51,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27870603,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.51,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27763595,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.52,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27823880,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.55,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27904183,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.55,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27908447,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.55,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27973150,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.55,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28097794,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.55,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27908997,
+   "ref": "T",
+   "alt": "G",
+   "phylop": -0.56,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27939892,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.56,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28032537,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.56,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27803167,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.57,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27827908,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.57,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27835221,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.57,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27886487,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.57,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28001844,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.57,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27924972,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27984549,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27986211,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27995874,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27996043,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -0.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27762330,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.6,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27837683,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.6,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27824761,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.61,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27933722,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.61,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27840031,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.62,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27855797,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -0.62,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28023862,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -0.62,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27992937,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.63,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27823674,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -0.64,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27851203,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.64,
+   "class": "value",
+   "where": "intron, cCRE CTCF-only",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27910774,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.64,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27932041,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.64,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27767510,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.65,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27808337,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.65,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27888845,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.65,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28082760,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.67,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27812704,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -0.68,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826062,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.68,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28018897,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.68,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27820455,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -0.69,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27821716,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.69,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27835714,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.69,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27925548,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.69,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27992927,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.69,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27907452,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.7,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27992420,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.71,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27765762,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.72,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27825631,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.72,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27887699,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.72,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27909610,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.72,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27961949,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.72,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27975992,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.72,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27802623,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.73,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27905859,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.73,
+   "class": "value",
+   "where": "intron, cCRE DNase-H3K4me3",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27999998,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -0.73,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27887837,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.74,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27978690,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.74,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27966612,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28040821,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.76,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27919679,
+   "ref": "T",
+   "alt": "G",
+   "phylop": -0.77,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27937160,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.77,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27836394,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.78,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27805544,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -0.79,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27877272,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.79,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27946917,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.79,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27933689,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.8,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27767511,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.83,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27799289,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.84,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27822473,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.86,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27926786,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -0.86,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27887071,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.87,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27924310,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -0.89,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27896158,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27918207,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28092793,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27855733,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.91,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27757021,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.92,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27805134,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.92,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27984264,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -0.92,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27871129,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -0.93,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27845686,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.97,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27903503,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -0.97,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom"
+   }
+  },
+  {
+   "pos": 27926905,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.97,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27858692,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -0.98,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27847837,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -0.99,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27906552,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -0.99,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27839992,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -1.0,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27899904,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.0,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27848440,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.03,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27861441,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.04,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27809200,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.05,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27811366,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.05,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27903562,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -1.06,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27879807,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.07,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27918359,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.07,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27934160,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -1.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27862875,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27940064,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27988588,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.09,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27879071,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.1,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27977634,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.1,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27845662,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -1.11,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27924016,
+   "ref": "A",
+   "alt": "T",
+   "phylop": -1.11,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27934956,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.12,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28049880,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.12,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27877591,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27881027,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27910083,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27758643,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.14,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27831054,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.15,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28088666,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.16,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27892164,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.17,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27818504,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 28075818,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.18,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27855647,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.19,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27899924,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -1.19,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27904280,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -1.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27888745,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.21,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27993217,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -1.22,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27815703,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -1.23,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27917319,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -1.23,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27800391,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.24,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27940264,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.25,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27808820,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.27,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27813762,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.29,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27937569,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.29,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27815045,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.33,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27831066,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.33,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27899878,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.35,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27925592,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -1.36,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27936818,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.41,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27934991,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.42,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27891060,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.43,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27921613,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.43,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27808411,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.45,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27799570,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.49,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27976015,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.49,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27799606,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27818117,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27819887,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27992375,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28051695,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27845815,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.51,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27769801,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -1.53,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 28093482,
+   "ref": "G",
+   "alt": "C",
+   "phylop": -1.57,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27893371,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -1.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27943840,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 28001141,
+   "ref": "T",
+   "alt": "G",
+   "phylop": -1.58,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27995844,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.59,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27843768,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.64,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27960731,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.66,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27830354,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -1.67,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27841250,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.67,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27893386,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -1.67,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27932491,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.67,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27949364,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.67,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27932485,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.7,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27856062,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -1.71,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27863565,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.72,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27853340,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.73,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27981395,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.73,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27997230,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.73,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27852378,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.74,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27997863,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.74,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27807153,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -1.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27826156,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27994564,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27994589,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998159,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998267,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998384,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27872910,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.76,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27905700,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.78,
+   "class": "value",
+   "where": "intron, cCRE DNase-H3K4me3",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28036619,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.81,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27768493,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.82,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27835546,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.83,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27898004,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -1.83,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28022192,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.83,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27812717,
+   "ref": "C",
+   "alt": "G",
+   "phylop": -1.85,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27790307,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.88,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27861536,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27997382,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998183,
+   "ref": "A",
+   "alt": "C",
+   "phylop": -1.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28064949,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27892377,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.91,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27900263,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.91,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27942243,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.91,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27986647,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -1.93,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27997733,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -1.95,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27890982,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.97,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27993373,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -1.97,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27761160,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.98,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "hom"
+   }
+  },
+  {
+   "pos": 27823202,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -1.99,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27998314,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -1.99,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27827184,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.05,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28005010,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -2.06,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27863165,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.1,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27848288,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -2.12,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27875362,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -2.13,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27870237,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -2.16,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27880932,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -2.16,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27798244,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -2.17,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27851175,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.19,
+   "class": "value",
+   "where": "intron, cCRE CTCF-only",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27816530,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27924804,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -2.2,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27981898,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.23,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27825626,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.29,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27992851,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -2.36,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27821485,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.44,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27827082,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -2.47,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28019355,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.48,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27808632,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.51,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27932040,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.52,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27936278,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -2.54,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27860991,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.55,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27828221,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.62,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27976836,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.66,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27978226,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -2.67,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27827454,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.74,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27996053,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.75,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27823712,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.77,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27852132,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.77,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27954707,
+   "ref": "C",
+   "alt": "A",
+   "phylop": -2.79,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27827450,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -2.81,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27815483,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -2.9,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27897781,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -3.06,
+   "class": "value",
+   "where": "intron, cCRE pELS",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 27847243,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -3.11,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27805885,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -3.22,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27800369,
+   "ref": "T",
+   "alt": "A",
+   "phylop": -3.24,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27978673,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -3.27,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27902060,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -3.28,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27806913,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -3.4,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27814951,
+   "ref": "G",
+   "alt": "T",
+   "phylop": -3.47,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27869128,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -3.53,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 28037045,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -3.72,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27835020,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -4.04,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27803046,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -4.08,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27851307,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -4.12,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27768926,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -4.14,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27841435,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -4.14,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27990627,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -4.23,
+   "class": "value",
+   "where": "exon (coding), cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27810626,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -4.31,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27924176,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -4.5,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27825295,
+   "ref": "G",
+   "alt": "A",
+   "phylop": -4.69,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27931129,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -5.01,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  },
+  {
+   "pos": 28099619,
+   "ref": "A",
+   "alt": "G",
+   "phylop": -5.19,
+   "class": "value",
+   "where": "intron, cCRE pELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27767107,
+   "ref": "T",
+   "alt": "C",
+   "phylop": -5.3,
+   "class": "value",
+   "where": "intron",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het",
+    "HG004": "het"
+   }
+  },
+  {
+   "pos": 27826586,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -6.01,
+   "class": "value",
+   "where": "intron, cCRE dELS",
+   "carriers": {
+    "HG002": "hom",
+    "HG003": "hom",
+    "HG004": "hom"
+   }
+  },
+  {
+   "pos": 27845027,
+   "ref": "C",
+   "alt": "T",
+   "phylop": -7.18,
+   "class": "value",
+   "where": "exon (coding)",
+   "carriers": {
+    "HG002": "het",
+    "HG003": "het"
+   }
+  }
+ ],
+ "known_values": [
+  {
+   "id": "rs12913832",
+   "pos": 28120472,
+   "inside_span": false,
+   "note": "HERC2 intron 86 enhancer of OCA2; A brown, G blue (Sturm 2008)",
+   "carriers": {},
+   "reference_allele_in_everyone_else": true
+  }
+ ],
+ "features": {
+  "exons": 24,
+  "ccres": 89
+ },
+ "cost": {
+  "seconds": 9.3,
+  "mb_fetched": 1.74
+ },
+ "evidence": {
+  "syntax": "curated: Zoonomia phyloP over 241 placental mammals, constrained at >= 2.27 (5% FDR)",
+  "values": "measured: each person's own variant calls (GIAB benchmarks for HG002, HG003, HG004)",
+  "features": "curated: GENCODE canonical transcript; ENCODE cCRE registry"
+ },
+ "reading": "syntax is what selection held still; a value is where people differ; a value in syntax is a change on protected sequence, the positions worth asking about first"
+}

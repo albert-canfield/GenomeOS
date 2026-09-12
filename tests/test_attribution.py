@@ -5,6 +5,7 @@ import json
 import os
 import struct
 from array import array
+from pathlib import Path
 
 import pytest
 
@@ -385,3 +386,40 @@ def test_judge_with_per_cell_scores():
         ("G2", "C"),
         ("G1", "B"),
     ]
+
+
+def test_syntax_labels_and_variants(tmp_path):
+    """Feature labels for a position and the persons' variants read from their own files."""
+    from genomeos.attribution.syntax import label_for, read_variants
+
+    feats = [(100, 200, "exon (coding)"), (150, 400, "cCRE dELS"), (500, 600, "exon (UTR or non-coding)")]
+    assert label_for(120, feats) == "exon (coding)"
+    assert label_for(160, feats) == "exon (coding), cCRE dELS"
+    assert label_for(300, feats) == "intron, cCRE dELS"
+    assert label_for(450, feats) == "intron" and label_for(550, feats) == "exon (UTR or non-coding)"
+    # two imported people with rows on chrT
+    for name, rows in (
+        ("P1", [(1000, "A", "G", "0/1"), (2000, "C", "T", "1/1"), (3000, "G", "GA", "0/1")]),
+        ("P2", [(2000, "C", "T", "0/1"), (9000, "A", "C", "1|1")]),
+    ):
+        d = tmp_path / name
+        d.mkdir()
+        (d / "manifest.json").write_text(
+            json.dumps({"name": name, "evidence": "test calls", "chromosomes": {"chrT": 3}})
+        )
+        (d / f"{name}_chrT.vcf").write_text(
+            "##fileformat=VCFv4.2\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tS\n"
+            + "".join(f"chrT\t{p}\t.\t{r}\t{a}\t50\tPASS\t.\tGT\t{g}\n" for p, r, a, g in rows)
+        )
+    v = read_variants("chrT", 0, 5000, None, root=tmp_path)
+    assert v[1000]["carriers"] == {"P1": "het"} and v[1000]["snv"]
+    assert v[2000]["carriers"] == {"P1": "hom", "P2": "het"}
+    assert v[3000]["snv"] is False and 9000 not in v
+
+
+def test_syntax_save_path_keeps_private_genomes_off_results():
+    from genomeos.attribution.syntax import save_path
+    from genomeos.genome.individuals import ROOT
+
+    assert save_path("HERC2", ["HG002", "HG003"]) == Path("data/results/syntax_HERC2.json")
+    assert save_path("HERC2", ["HG002", "ME"]) == ROOT / "ME" / "syntax_HERC2.json"

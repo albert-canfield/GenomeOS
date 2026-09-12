@@ -247,6 +247,37 @@ strand labels inverted (APP reads on the "plus" file), so the module probes each
 cell's orientation over forty exons per strand and swaps the tracks when the
 swapped orientation carries more than twice the signal, recording the choice.
 
+## Syntax against values (2026-09-12)
+
+Albert's framing: a language has syntax, operators and values, and a variable
+trait should show the same syntax in every person with only the value changing.
+`genomeos syntax --gene HERC2 --chrom chr15` reads one gene three ways at once:
+Zoonomia constraint per base (what selection held still across 241 mammals, the
+syntax), the variants every imported person carries there (where people differ,
+the values), and the gene's features (canonical exons, cCREs). Each variable
+position is then a value or a value in syntax, the rare change on protected
+sequence.
+
+| gene | span | syntax bases | variable positions (SNV) | values in syntax | if variation ignored syntax |
+|---|---|---|---|---|---|
+| HERC2 | 211 kb | 11,817 (5.6%) | 160 (0.76 per kb) | 3 (1.9%) | 5.6% |
+| OCA2 | 345 kb | 2,995 (0.9%) | 544 (1.58 per kb) | 3 (0.6%) | 0.9% |
+
+Two things the table says. Variation avoids syntax: in both genes the persons'
+variants land on constrained bases less often than they would by chance, which is
+the language claim in one number. And the values in syntax are the ones worth
+asking about: in HERC2 the second most constrained variable position of the whole
+gene, phyloP 3.41 in an intron, is rs12913832, the base inside the HERC2 enhancer
+that sets OCA2 expression and with it eye colour. HG002 and HG003 carry the
+alternative allele twice, HG004 once. The tool did not know the answer; the
+literature's value fell out of the reading as the position a language-minded
+reader would ask about first. The other two HERC2 values in syntax are coding.
+
+The command works for any gene and any set of imported genomes (`--name`), reads
+about 1 to 2 MB of ranges, and saves `data/results/syntax_<GENE>.json`. With more
+genomes imported the value slots fill in; with the reader and the attributions the
+next question, what a slot controls, is asked of the right positions.
+
 ## What comes next, in order
 
 1. **Every element in a gene's node scored per cell**, not a sample, so the

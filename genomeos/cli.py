@@ -1457,6 +1457,59 @@ def cmd_closure(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_syntax(args: argparse.Namespace) -> int:
+    """Syntax against values at one gene: constrained bases, where people differ, and the overlap."""
+    from genomeos.attribution.syntax import save_path, syntax_values
+
+    names = [n.strip() for n in args.name.split(",")] if args.name else None
+    r = syntax_values(args.gene, args.chrom, names=names, flank=args.flank)
+    if args.save:
+        out = save_path(args.gene, r["people"])
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(r, indent=1))
+        print(f"saved {out}")
+    print(
+        f"{r['gene']} {r['chrom']}:{r['span'][0]:,}-{r['span'][1]:,} ({r['bases'] / 1e3:.0f} kb, strand "
+        f"{r['strand']}, flank {r['flank']}); people: {', '.join(r['people']) or 'none imported'}"
+    )
+    print(
+        f"  syntax: {r['syntax_bases']:,} bases constrained across 241 mammals "
+        f"({_pct(r['syntax_fraction'])}), mean phyloP {r['phylop_mean']}; "
+        f"{r['features']['exons']} exons, {r['features']['ccres']} cCREs"
+    )
+    print(
+        f"  values: {r['snv_positions']} SNV positions ({r['values_per_kb']} per kb) and "
+        f"{r['indel_positions']} indels where these people differ from the reference; "
+        f"{r['values_in_syntax']} of the SNVs sit on syntax ({_pct(r['syntax_hit_rate'])} against "
+        f"{_pct(r['expected_if_random'])} if variation ignored syntax)"
+    )
+    rows = [
+        {
+            "pos": f"{x['pos']:,}",
+            "ref>alt": f"{x['ref']}>{x['alt']}",
+            "phyloP": x["phylop"] if x["phylop"] is not None else "",
+            "class": x["class"],
+            "where": x["where"],
+            "carriers": ", ".join(f"{k} {v}" for k, v in x["carriers"].items()),
+        }
+        for x in r["rows"][: args.top]
+    ]
+    if rows:
+        print(f"\nmost constrained variable positions (top {len(rows)}):")
+        print(_table(rows, ["pos", "ref>alt", "phyloP", "class", "where", "carriers"]))
+    for k in r["known_values"]:
+        who = ", ".join(f"{a} {b}" for a, b in k["carriers"].items()) or "nobody here carries the alternative"
+        where = (
+            "inside the span" if k["inside_span"] else "outside this span (flank it, or ask the other gene)"
+        )
+        print(f"\n{k['id']} at {k['pos']:,}: {k['note']}; {where}; {who}")
+    print(
+        f"  [{r['evidence']['syntax']}; {r['evidence']['values']}; "
+        f"{r['cost']['mb_fetched']} MB in {r['cost']['seconds']} s]"
+    )
+    return 0
+
+
 def cmd_unknown(args: argparse.Namespace) -> int:
     from genomeos.genome import Annotation, Genome, default_gencode
     from genomeos.genome.unknown import investigate, load_patterns
@@ -3833,6 +3886,21 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
     p.add_argument("--top", type=int, default=12)
     p.set_defaults(fn=cmd_closure)
+
+    p = sub.add_parser(
+        "syntax", help="syntax against values at a gene: constrained bases, where people differ, the overlap"
+    )
+    p.add_argument("--gene", required=True)
+    p.add_argument("--chrom", required=True)
+    p.add_argument("--name", help="comma list of imported individuals (default: everyone imported)")
+    p.add_argument("--flank", type=int, default=0, help="bases to add on both sides of the gene")
+    p.add_argument("--top", type=int, default=12)
+    p.add_argument(
+        "--save",
+        action="store_true",
+        help="save syntax_<GENE>.json under data/results (open-consent GIAB people) or the person's dir",
+    )
+    p.set_defaults(fn=cmd_syntax)
 
     p = sub.add_parser(
         "protein", help="a gene's protein: our translation, UniProt record, AlphaFold structure"
