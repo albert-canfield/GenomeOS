@@ -552,3 +552,43 @@ Folded into the roadmap after reading each result out of the repository.
 - **The attributions as a BioLang program**: `genomeos budget --chrom chr21 --bio` compiles the budget, the constrained and uniform enhancer-deletion targets, the CTCF domains and the reader's view into `data/organisms/human/noncoding_chr21.bio` (genomeos/attribution/compile.py): 446 regions with tier and constraint as evidence (constrained_unknown keeps role unknown, 20 of them), 155 elements with target, basis and a rule carrying the predicted magnitude, 83 gene stubs, 63 domains with the cell types the reader finds them open in; 747 entities, 155 rules, three `# test:` lines green in 0.13 s under `bio test`; predicted evidence capped at 0.7.
 - **Closure at the gene level**: `genomeos closure --chrom chr21` (genomeos/attribution/closure.py) reads promoter openness (reader), attributed-element input (active where a DNase peak overlaps, AlphaGenome magnitude signed by action) and measured expression (ENCODE total RNA-seq over canonical exons, 2.9 MB of ranges) for 221 genes in K562, HepG2, GM12878 and IMR-90: open promoters are expressed 64–84% against 2–22% closed; the elements add nothing at this resolution (most-active cell is the most expressed 15% against 25% chance), 12 attributions rejected by name, 43 expressed genes unexplained; next is the deletion scored in the cell's own track. IMR-90's RNA-seq strands are inverted in ENCODE; the module probes and swaps.
 - **Closure rerun with per-cell deletion scores**: the 200 named chr21 elements carry the deletion scored on each of the four cell lines' own tracks; across cells no better (most active cell is the most expressed 24%, shuffled 24%), within a cell the sign carries a little (repressing input lowers the expressed fraction in all four lines by 5–21 points); 83 of 221 genes have any attributed element, most one, effects 0.1–0.2 log2; the closure needs every element in a gene's node scored per cell, the self-hosted model's first job (docs/ATTRIBUTION.md).
+
+## 2026-09-12 — the grammar by comparison, held against the code
+
+Two conversations proposed reading the genome as an undocumented executable
+whose grammar is recovered by comparing its versions across species and
+people: a five-level grammar, a decompiled view per locus, a compiler
+pipeline from alignment to BioIR. Held against GenomeOS idea by idea
+(docs/GRAMMAR-BY-COMPARISON.md): of twenty-six ideas, fifteen are built and
+measured (signals, the scored parser, Zoonomia constraint per block
+genome-wide, node synteny in mouse, the reader per cell type, the knowledge
+graph, the evidence model), five are partial (rules from a predictor rather
+than from motifs, one orthology pair, domains annotated but not analysed for
+reuse, two decompiled outputs rather than one view), six are missing and
+share one shape: comparisons GenomeOS has not made yet. Across people
+(constraint within humans per base), across the tree (clade of origin per
+gene and library, covariance between libraries) and within the genome
+(curated duplication).
+
+What the data corrects in the proposal: tokens are scores (a donor matrix
+fires seven times per kilobase at 90% recall); conserved means "matters",
+not "reserved code" (constraint separates VISTA positives from negatives by
+65% against 58%); variable does not mean tolerant; the pointer resolves
+inside the node 90% of the time; the reusable unit is the domain, rule or
+library, not the gene.
+
+Verified reachable the same day: gnomAD's Gnocchi within-human constraint
+as a bigWig, read through our own range reader (three chr21 windows, nine
+requests, 40 KB, 4.5 s; one window constrained in humans at Z 4.3), Ensembl's
+homology endpoint (92 mammalian orthologues of OCA2 in one call), JASPAR
+2026 (1,019 CORE vertebrate profiles), UCSC's 470-mammal phyloP,
+`genomicSuperDups` and the HPRC 90-way alignment. Opened as ROADMAP.md area
+J with seven ordered steps, the first being the two-axis table (mammals ×
+humans) per block on chr21, tested against VISTA and the HERC2 element at
+rs12913832, Albert's eye-colour value slot inside a constrained frame; a
+peer lane's `genomeos syntax GENE` (in progress the same day) reads that
+axis per base of one gene from the imported trio, and the population track
+extends it to every block.
+Decision D43; GENOME-AS-CODE.md §7 keeps the programming-to-biology
+dictionary with the GenomeOS construct per row and which rows data holds.
+- **Syntax against values**: `genomeos syntax --gene G --chrom C` (genomeos/attribution/syntax.py) reads Zoonomia constraint per base, every imported person's variants and the gene's features, and classes each variable position as a value or a value in syntax; HERC2 160 variable positions, 3 on syntax (1.9% against 5.6% by chance), OCA2 544 and 3 (0.6% against 0.9%): variation avoids syntax, and HERC2's second most constrained variable base is rs12913832, the eye-colour enhancer value (HG002 and HG003 hom, HG004 het); `syntax_HERC2.json`, `syntax_OCA2.json`.

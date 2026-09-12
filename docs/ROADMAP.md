@@ -954,6 +954,21 @@ in order. "Owner" is the session that holds the files today (see §7).
   elements the two sampled runs never scored. An attribution of "this
   element, this gene" is not yet an attribution of "this cell", and the
   elements that would carry it are the ones not yet asked.
+- **Syntax against values (2026-09-12).** Albert's framing, that a language has
+  syntax, operators and values and a variable trait should show the same
+  syntax in everyone with only the value changing, as a command: `genomeos
+  syntax --gene G --chrom C` reads Zoonomia constraint per base (the syntax),
+  every imported person's variants (the values) and the gene's features, and
+  classes each variable position as a value or a value in syntax
+  (`attribution/syntax.py`, `syntax_<GENE>`). HERC2: 211 kb, 5.6% of bases
+  constrained, 160 variable positions across the GIAB trio, 3 on syntax
+  (1.9% against 5.6% if variation ignored syntax); OCA2: 345 kb, 0.9%
+  constrained, 544 variable, 3 on syntax (0.6% against 0.9%). Variation avoids
+  syntax in both, and the second most constrained variable position of HERC2
+  (phyloP 3.41, intronic) is rs12913832, the enhancer base that sets OCA2
+  expression and eye colour, HG002 and HG003 carrying the alternative twice
+  and HG004 once. The tool did not know the answer; the literature's value fell
+  out of the reading.
 - **Next.** 1. Every element in a gene's node scored per cell, not a sample:
   the closure needs a gene's whole regulatory input before it can judge it,
   which is the self-hosted model's first job (about 6,600 elements on chr21).
@@ -980,6 +995,65 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Owner.** genomeos-f7 (this lane's files); the organism-level closure runs
   on genomeos-73's Body runtime and the block evidence on genomeos-fe's
   decoding results.
+
+---
+
+### J. The grammar by comparison (species × people, origin, duplication, operators)
+
+- **Goal.** Infer the genome's grammar the way an undocumented executable is
+  reverse-engineered from its many versions: compare across species and
+  across people, find what is conserved and what varies, and turn the
+  comparison into syntax (invariant), value slots (variable inside a
+  constrained frame), operators (recurring motif logic), libraries with an
+  age (the deepest clade that has them) and cross-references (libraries
+  gained and lost together). Albert's framing of 2026-09-12 (a language has
+  syntax, operators and values; eye colour keeps the syntax and changes the
+  value) and the two DNA-as-code conversations of the same day are the
+  brief; GRAMMAR-BY-COMPARISON.md holds them against the code.
+- **Code.** `attribution/syntax.py` and `genomeos syntax GENE` (a peer lane,
+  in progress 2026-09-12: per base of one gene, constrained across mammals
+  against variable among the imported people, rs12913832 named). It builds
+  on `attribution/bigwig.py` and
+  `attribution/constraint.py` (the species axis, done genome-wide),
+  `genome/mouse.py` (MGI orthology, node synteny), `attribution/compile.py`
+  (the BioLang output), `molecules/graph.py` (the graph the new edges join).
+- **Design.** GRAMMAR-BY-COMPARISON.md; GENOME-AS-CODE.md §7 (the mapping
+  table with the construct per row); SEQUENCE-GRAMMAR.md §2 and §5 (the
+  motif scan, `requires:`).
+- **Data.** To come: `variation_chr*` (Gnocchi per block and element, the
+  two-axis table), `origin_genome_wide` (stratum per gene, age per library),
+  `duplication_chr*`, `motifs_chr*`, the decompiled programs.
+- **Requirements.** Every comparison enters as evidence with a confidence
+  (D4, D42, D43); within-human constraint is never read as proof of
+  neutrality; curated duplication before heuristics (D20's order); the
+  species axis and the human axis are reported side by side in the same
+  table, never merged into one score; each step is scored on chr21 first and
+  run genome-wide second, as the budget was.
+- **Verified 2026-09-12.** The within-human track (gnomAD Gnocchi, 1 kb Z
+  score) reads through the in-house bigWig reader: three chr21 windows, nine
+  requests, 40 KB, 4.5 s, one of the three constrained in humans (max Z 4.3).
+  Ensembl's homology endpoint returns 92 mammalian orthologues of OCA2 in one
+  call; JASPAR 2026 serves 1,019 CORE vertebrate profiles; UCSC hosts the
+  470-mammal phyloP, `genomicSuperDups` and the HPRC 90-way human alignment.
+- **Missing.** All of it: the human axis per block, the origin per gene and
+  library, curated duplication, the motif scan and operator patterns,
+  phylogenetic profiling between libraries, the decompiled locus view, and
+  one developmental locus run end to end across species.
+- **Next.** 1. `attribution/variation.py`: the population axis next to the
+  trio's, Gnocchi (76,156 genomes) per UNKNOWN block and per attributed
+  element on chr21, the four-case table (mammals × humans) per tier and per
+  element class, tests against VISTA and against the HERC2 element at
+  rs12913832 where `genomeos syntax` reads the same base; then genome-wide. 2. Origin per gene through
+  Ensembl homology at eight taxa; age distribution per library; the graph
+  gains `orthologue_of`. 3. Paralogues and `genomicSuperDups`; `paralogue_of`
+  edges; `similar_to` demoted to fallback. 4. JASPAR scan of promoters and
+  constrained elements; `requires:` with evidence; recurring motif
+  combinations per library. 5. Phylogenetic profiling between libraries.
+  6. `genomeos decompile LOCUS`. 7. OCA2/HERC2 and the SHH ZRS across human,
+  mouse, chicken and zebrafish.
+- **Owner.** genomeos-bb (this lane's files: `attribution/variation.py`,
+  `knowledge/homology.py`, GRAMMAR-BY-COMPARISON.md); the compiled output
+  stays with genomeos-f7's `attribution/compile.py` and takes isolated hunks.
 
 ---
 
@@ -1075,6 +1149,11 @@ session that holds it. Items 1–4 run in parallel today.
     regulatory tier holding five times more constrained sequence). Next:
     organise the blocks, attribute a gene and a tissue with AlphaGenome,
     score against VISTA and MPRA. Milestone 1.3. genomeos-f7.
+14. The grammar by comparison (area J, opened 2026-09-12): the within-human
+    constraint axis per block and element (chr21, then the genome), origin
+    per gene and age per library, curated duplication, the motif scan, one
+    decompiled locus across species. Milestone 1.3 alongside area I.
+    genomeos-bb.
 
 ## 6. Milestones
 
@@ -1130,6 +1209,20 @@ ambition in §1 before it is started.
   tool instead of thirty. Their list is also a source checklist: JASPAR
   (the promoter motif scan SEQUENCE-GRAMMAR.md already plans), UniBind,
   Foldseek and the EBI Ontology Lookup Service are sources we do not use yet.
+- **The two-axis constraint map as a track.** Once `variation_chr*` exists
+  genome-wide, a Blocks-tab lane that colours every block by its case
+  (syntax, slot, recent, relaxed) beside the tier, so the "syntax versus
+  value" reading is a picture of the chromosome, not a table.
+- **Recurring operators as a BioLang library.** If step 4 of area J finds
+  motif combinations that recur across a library's promoters, write them as
+  `signal` and `rule` blocks in `bio.std.operators` with their enrichment as
+  evidence, so a program can `import` the heart-field or blood operator the
+  way it imports a pathway.
+- **Genome diff across species as code review.** The same locus decompiled
+  in human, mouse and zebrafish, diffed as BioIR: which elements, targets and
+  rules are shared, which are lineage-specific; the first output of area J's
+  step 7 in the form the "genome diff as code review" idea above proposes for
+  individuals.
 - **A self-hosted AlphaGenome.** The weights are published; self-deployment
   removes the per-request quota and turns enhancer-to-gene, the predicted
   reader and in-silico mutagenesis from per-chromosome jobs into genome-wide

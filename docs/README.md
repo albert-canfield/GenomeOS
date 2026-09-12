@@ -34,6 +34,7 @@ wide to narrow; read them top down.
 |---|---|
 | Genome decoding | [GENOME-ANATOMY.md](GENOME-ANATOMY.md), [UNKNOWN.md](UNKNOWN.md), [NODES-READER-WRITER.md](NODES-READER-WRITER.md) |
 | The 98% (attribution of the non-coding genome) | [ATTRIBUTION.md](ATTRIBUTION.md) |
+| The grammar by comparison (constraint on two axes, origin per gene, duplication, operators, the decompiled locus) | [GRAMMAR-BY-COMPARISON.md](GRAMMAR-BY-COMPARISON.md) |
 | Molecules and flow | [PROTEIN.md](PROTEIN.md), [FLOW.md](FLOW.md) |
 | Prediction (optional models) | [ALPHAGENOME.md](ALPHAGENOME.md) |
 | Organism | [ORGANISM-FROM-ONE-CELL.md](ORGANISM-FROM-ONE-CELL.md) |
