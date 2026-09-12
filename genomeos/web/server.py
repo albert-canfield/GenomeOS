@@ -878,6 +878,8 @@ class Api:
             },
             "vista_genome_wide": load_result("vista_genome_wide", rd),
             "eqtl_targets": load_result("eqtl_targets", rd),
+            "mpra_genome_wide": load_result("mpra_genome_wide", rd),
+            "consequence_targets": load_result("consequence_targets", rd),
             "segments": [
                 {
                     "name": p.stem,

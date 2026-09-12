@@ -241,6 +241,44 @@ unphased sequence, so it does not see a diploid individual.
    elements carry eQTLs less often (60% against 78%): where selection keeps
    the sequence, the common variants an eQTL needs are fewer, which is why
    the deletion model was pointed there in the first place.
+   **Against consequence (2026-09-12).** The last ground truth is the
+   weakest and the one a person cares about: does anything that matters to
+   a human land on the element? `attribution/gwas.py` streams the GWAS
+   Catalog's association table once (69 MB zipped, 982k rows with a GRCh38
+   position) and keeps the lead variants within 1 kb of an element, and of
+   the same element shifted 100 kb along the chromosome as the chance
+   level; `scripts/consequence_targets.py` (job `consequence_targets`)
+   reads them over the three element sets, with ClinVar's pathogenic
+   variants whose molecular consequence is not a coding change as the
+   second, sparser, witness (`consequence_targets.json`):
+
+   | elements | hold a lead variant | shifted control | enrichment | named target / none | strong effect |
+   |---|---|---|---|---|---|
+   | uniform samples (4,800) | 33.2% | 29.4% | 1.13× | 33.3% / 32.9% | 35.0% |
+   | most constrained (2,305) | 37.4% | 30.8% | 1.21× | 38.0% / 35.8% | 39.9% |
+   | VISTA elements (2,223) | 47.5% | 42.9% | 1.11× | 50.6% / 41.0% | 55.8% |
+
+   Lead variants land on the attributed elements barely more often than on
+   the same stretches 100 kb away: a fifth more on the constrained tier, a
+   tenth more elsewhere. Within the sets the attribution moves the rate a
+   little in the right direction: VISTA elements with a named target hold
+   a lead variant for 51% against 41% without, the strong
+   effects 56%, VISTA positives 49% against negatives
+   46%; and constrained VISTA elements hold fewer (42% against
+   56%), the eQTL lesson again: where selection keeps the sequence the
+   common variants a GWAS needs are missing. The traits are the polygenic
+   ones (height, body mass index, blood pressure, type 2 diabetes,
+   insomnia), which is what a random kilobase of the regulatory genome
+   carries. The catalog's mapped gene, its own nearest-gene call, agrees
+   with the node's nearest TSS for 63% of the uniform elements and with
+   the model's target for 39%, which measures the catalog's heuristic, not
+   the truth. ClinVar is the sparse witness: 20, 30 and 24 elements of the
+   three sets hold a pathogenic variant with a non-coding consequence, and
+   where they do, ClinVar's gene is the model's target for 11, 20 and 19
+   of them and the node's for 13, 17 and 12. Consequence is the level
+   where the regulatory attribution is least testable today; the four
+   measured layers above are where it is tested.
+
 3. **Splicing, at the resolution our grammar lacks** (built, feature c). Our
    learned donor and acceptor matrices reach about 90% recall at seven false
    hits per kilobase, which is why segments are parsed by grammar and never

@@ -217,6 +217,30 @@ CATALOG["vista_genome_wide"] = {
     "complete": lambda root: _vista_chromosomes_done(root) >= 23,
     "auto_heal": True,
 }
+
+
+def _mpra_chromosomes_done(root: Path) -> int:
+    return sum(1 for c in CHROMOSOMES if (root / "data" / "results" / f"mpra_{c}.json").exists())
+
+
+CATALOG["mpra_genome_wide"] = {
+    "argv": [sys.executable, "scripts/mpra_genome_wide.py", "--run"],
+    "describe": "lentiMPRA activity in K562, HepG2 and WTC11 against registry, reader, constraint and model.",
+    "total": 24,
+    "result": "mpra_genome_wide",
+    "count": None,
+    "progress": lambda root: float(_mpra_chromosomes_done(root)),
+    "complete": lambda root: _mpra_chromosomes_done(root) >= 24,
+    "auto_heal": True,
+}
+CATALOG["consequence_targets"] = {
+    "argv": [sys.executable, "scripts/consequence_targets.py"],
+    "describe": "GWAS lead variants against a shifted control; ClinVar non-coding variants on the elements.",
+    "total": None,
+    "result": "consequence_targets",
+    "count": None,
+    "auto_heal": True,
+}
 CATALOG["eqtl_targets"] = {
     "argv": [sys.executable, "scripts/eqtl_targets.py"],
     "describe": "GTEx eQTLs streamed once (1.4 GB, only the hits kept); both target callers judged.",

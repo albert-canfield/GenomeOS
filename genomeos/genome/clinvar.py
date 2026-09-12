@@ -3,9 +3,9 @@
 
 ClinVar's GRCh38 VCF (about 190 MB, weekly) is streamed once and distilled to the rows whose
 clinical significance is pathogenic or likely pathogenic (no conflicting calls): chromosome,
-position, alleles, gene, significance, conditions, review status. That file stays local under
-data/knowledge/clinvar; only its counts are committed. A screen then walks a person's per-chromosome
-files and reports every ClinVar pathogenic allele the person carries, with the genotype, so a
+position, alleles, gene, significance, conditions, review status and molecular consequence. That file
+stays local under data/knowledge/clinvar; only its counts are committed. A screen then walks a person's
+per-chromosome files and reports every ClinVar pathogenic allele the person carries, with the genotype, so a
 geneticist sees the recessive carrier state and the rare dominant hit in one table, offline.
 
 This is research annotation of a variant list against a public database, with ClinVar's own
@@ -68,7 +68,9 @@ def distil(knowledge: Path = KNOWLEDGE, url: str = CLINVAR_URL, progress=None) -
         gzip.open(dest, "wt") as out,
     ):
         out.write("# ClinVar GRCh38, pathogenic and likely pathogenic rows distilled by GenomeOS\n")
-        out.write("#chrom\tpos\tref\talt\tgene\tsignificance\tconditions\treview\tstars\tclinvar_id\trs\n")
+        out.write(
+            "#chrom\tpos\tref\talt\tgene\tsignificance\tconditions\treview\tstars\tclinvar_id\trs\tconsequence\n"
+        )
         for line in fh:
             if line.startswith("#"):
                 continue
@@ -88,9 +90,10 @@ def distil(knowledge: Path = KNOWLEDGE, url: str = CLINVAR_URL, progress=None) -
                 c.replace("_", " ") for c in info.get("CLNDN", "").split("|") if c and c != "not_provided"
             ]
             review = info.get("CLNREVSTAT", "")
+            mc = ",".join(sorted({m.split("|")[-1] for m in info.get("MC", "").split(",") if m}))
             out.write(
                 f"{chrom}\t{f[1]}\t{f[3]}\t{f[4]}\t{gene}\t{sig}\t{'; '.join(conds[:3])}\t{review}\t"
-                f"{STARS.get(review, 0)}\t{f[2]}\t{info.get('RS', '')}\n"
+                f"{STARS.get(review, 0)}\t{f[2]}\t{info.get('RS', '')}\t{mc}\n"
             )
             kept += 1
             key = (
@@ -139,6 +142,7 @@ def load_chromosome(chrom: str, knowledge: Path = KNOWLEDGE) -> dict[tuple[int, 
                 "stars": int(f[8]),
                 "clinvar_id": f[9],
                 "rs": f"rs{f[10]}" if f[10] else "",
+                "consequence": f[11] if len(f) > 11 else "",
             }
     return out
 

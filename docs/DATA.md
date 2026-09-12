@@ -307,6 +307,20 @@ archive is stored. `scripts/eqtl_targets.py` (job `eqtl_targets`) distils
 when the hits are missing and scores; `eqtl_targets.json` is committed.
 Variant ids are hg38 (`chr1_13550_G_A_b38`). Evidence class `experimental`.
 
+## Consequence: GWAS Catalog and ClinVar non-coding (2026-09-12)
+
+The NHGRI-EBI GWAS Catalog's full association table
+(`gwas-catalog-associations-full.zip`, 69 MB, on EBI's FTP under
+`releases/latest`) is streamed once by `attribution/gwas.py`; the 1.2 million
+rows are read from the zip in memory and only the lead variants within 1 kb of
+an element with a prediction, plus the same elements shifted 100 kb as the
+chance control, are kept in `data/knowledge/gwas/hits.tsv` (git-ignored, a few
+MB). ClinVar's distilled pathogenic table (see the individual's screen) now
+carries the molecular consequence as its last column, so
+`scripts/consequence_targets.py` can keep the non-coding ones; re-run
+`genomeos individual screen --distil` (or `clinvar.distil()`) once to add the
+column to an older local copy. `consequence_targets.json` is committed.
+
 ## Optional: peptide/HLA binding predictors
 
 The therapeutic pipeline enumerates the peptides a mutation creates; whether
