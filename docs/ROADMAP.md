@@ -332,8 +332,16 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Next.** 1. The `reader` construct in
   BioLang, so context gating comes from
   chromatin (the parser half belongs to the language owner). 2. Orthology
-  from Ensembl Compara; measured Hi-C boundaries (4DN) for the node edges,
-  since the predicted map did not move them. The L1 ORF2
+  from Ensembl Compara. 3. Measured Hi-C boundaries for the node edges: built
+  2026-09-12 (`genomeos domains --chrom C --hic BIOSOURCE`, `genome/hic.py`,
+  the biosource's deepest 4DN boundary file streamed once into
+  `data/knowledge/hic` and compared with the CTCF-only boundaries under the
+  same random control as the predicted map; tested offline) and blocked on a
+  free 4DN account key that only Albert can create, since every 4DN download
+  returns 403 without one, ENCODE has no Hi-C domain BEDs and the 3D Genome
+  Browser's hg38 archive is gone; one command once `FOURDN_KEY` and
+  `FOURDN_SECRET` are in `.env` (DATA.md "Optional: 4D Nucleome boundary
+  calls"). The L1 ORF2
   and Alu sequence signatures are superseded by the RepeatMasker pass and
   stay as the fallback for chromosomes not yet distilled.
 - **Owner.** genomeos-fe.
@@ -811,6 +819,7 @@ One-off jobs, each needing a decision or a resource:
 |---|---|---|
 | Telomere length from HG002 30x reads (stream a CRAM range, no download) | design of the range streaming | genomeos-fe |
 | AlphaGenome live predictions for UNKNOWN regulatory blocks | `ALPHAGENOME_API_KEY` | Albert |
+| Measured Hi-C boundaries against the CTCF-only node edges (`genomeos domains --hic GM12878`) | a free 4DN account: `FOURDN_KEY`, `FOURDN_SECRET` in `.env`; the code is built and tested | Albert |
 | Cohort expression for the other TCGA studies (`genomeos cancer expression --study`) | 30 s each, pick the studies | genomeos-f7 |
 | Retrospective therapeutic benchmark (public tumours with approved targets) | choose the cases | genomeos-f7 |
 | Packer 2019 disagreements resolved to one labelling depth | **done 2026-09-11**: 84% on the 164 single-tissue ids; the rest is depth | genomeos-73 |
