@@ -358,16 +358,26 @@ in order. "Owner" is the session that holds the files today (see §7).
   kept.
 - **Next.** 1. The `reader` construct in
   BioLang, so context gating comes from
-  chromatin (the parser half belongs to the language owner). 2. Measured Hi-C boundaries for the node edges: built
-  2026-09-12 (`genomeos domains --chrom C --hic BIOSOURCE`, `genome/hic.py`,
-  the biosource's deepest 4DN boundary file streamed once into
-  `data/knowledge/hic` and compared with the CTCF-only boundaries under the
-  same random control as the predicted map; tested offline) and blocked on a
-  free 4DN account key that only Albert can create, since every 4DN download
-  returns 403 without one, ENCODE has no Hi-C domain BEDs and the 3D Genome
-  Browser's hg38 archive is gone; one command once `FOURDN_KEY` and
-  `FOURDN_SECRET` are in `.env` (DATA.md "Optional: 4D Nucleome boundary
-  calls"). The L1 ORF2
+  chromatin (the parser half belongs to the language owner). 2. Done
+  2026-09-12: measured Hi-C boundaries for the node edges (`genomeos domains
+  --chrom C --hic BIOSOURCE`, `genome/hic.py`; the portal's Authorization
+  header was the 403 with a valid key and is dropped on the redirect to S3).
+  chr21's 227 CTCF-only boundaries against 4DN boundary calls within 20 kb,
+  the same random control as the predicted map:
+
+  | biosource, assay | measured boundaries | CTCF-only edges supported | at random | of the measured covered |
+  |---|---|---|---|---|
+  | GM12878, in situ Hi-C | 557 | **58%** | 42% | 27% |
+  | H1-hESC, Micro-C | 149 | 24% | 13% | 36% |
+  | K562 | 93 | 14% | 8% | 34% |
+  | HepG2 | 93 | 15% | 8% | 37% |
+  | IMR-90, dilution Hi-C | 126 | 12% | 11% | 22% |
+
+  Clearer than the predicted contact map (37% against 28%) and in the
+  direction the node model needs: the deepest measurement finds a boundary
+  near six in ten CTCF-only edges, and the edges find one in four of its
+  boundaries. Still a proxy, edges stay at 0.4; any 4DN biosource is one
+  command away (`domains_chr21_hic_<biosource>`). The L1 ORF2
   and Alu sequence signatures are superseded by the RepeatMasker pass and
   stay as the fallback for chromosomes not yet distilled.
 - **Owner.** genomeos-8e (genomeos-fe before the restart of 2026-09-12).
@@ -1444,7 +1454,7 @@ One-off jobs, each needing a decision or a resource:
 |---|---|---|
 | Telomere length from HG002 reads (stream a BAM range, no download) | **done 2026-09-12**: 218 MB in 48 range requests over the 601 GB BAM, about 2,676 bp per end at confidence 0.3 | genomeos-8e |
 | AlphaGenome live predictions for UNKNOWN regulatory blocks | `ALPHAGENOME_API_KEY` | Albert |
-| Measured Hi-C boundaries against the CTCF-only node edges (`genomeos domains --hic GM12878`) | a free 4DN account: `FOURDN_KEY`, `FOURDN_SECRET` in `.env`; the code is built and tested | Albert |
+| Measured Hi-C boundaries against the CTCF-only node edges (`genomeos domains --hic GM12878`) | **done 2026-09-12** with the 4DN key: five biosources on chr21, GM12878 supports 58% of the edges against 42% at random | genomeos-8e |
 | Cohort expression for the other TCGA studies (`genomeos cancer expression --study`) | 30 s each, pick the studies | genomeos-f7 |
 | Retrospective therapeutic benchmark (public tumours with approved targets) | choose the cases | genomeos-f7 |
 | Packer 2019 disagreements resolved to one labelling depth | **done 2026-09-11**: 84% on the 164 single-tissue ids; the rest is depth | genomeos-73 |
