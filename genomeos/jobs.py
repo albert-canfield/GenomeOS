@@ -233,6 +233,28 @@ CATALOG["mpra_genome_wide"] = {
     "complete": lambda root: _mpra_chromosomes_done(root) >= 24,
     "auto_heal": True,
 }
+
+
+def _all_elements_total(root: Path, chrom: str) -> int | None:
+    """The chromosome's element count once its all-elements result exists (the script writes it first)."""
+    p = root / "data" / "results" / f"enhancer_targets_all_{chrom}.json"
+    try:
+        return int(json.loads(p.read_text()).get("elements_total")) if p.exists() else None
+    except (OSError, json.JSONDecodeError, ValueError, TypeError):
+        return None
+
+
+for _c in CHROMOSOMES:
+    if _c == "chrM":
+        continue
+    CATALOG[f"enhancer_targets_all_{_c}"] = {
+        "argv": [sys.executable, "scripts/enhancer_targets_all.py", "--chrom", _c],
+        "describe": f"AlphaGenome: every enhancer in a {_c} node deleted, effect per cell line; quota paced.",
+        "total": _all_elements_total(Path("."), _c) or (12139 if _c == "chr21" else None),
+        "result": f"enhancer_targets_all_{_c}",
+        "count": lambda r: int(r.get("scored", 0)),
+        "auto_heal": True,
+    }
 CATALOG["consequence_targets"] = {
     "argv": [sys.executable, "scripts/consequence_targets.py"],
     "describe": "GWAS lead variants against a shifted control; ClinVar non-coding variants on the elements.",
@@ -458,14 +480,15 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
         r = load_result(spec["result"], root / "data" / "results")
         done = spec["count"](r) if r else 0
         # a job started outside this process (CLI, nohup) shows as running while its result keeps changing
+        total = spec.get("total")
         if (
             state in ("idle", "unknown")
             and rp.exists()
-            and done < spec["total"]
+            and (total is None or done < total)
             and time.time() - rp.stat().st_mtime < 600
         ):
             state = "running"
-        if state in ("idle", "unknown") and done >= spec["total"]:
+        if state in ("idle", "unknown") and total is not None and done >= total:
             state = "done"
     elif state == "done":
         done = spec["total"]
