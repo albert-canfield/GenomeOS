@@ -300,6 +300,28 @@ Evidence: the reads are `experimental`, the estimate `inferred` (0.3), since no
 GC normalisation is applied and the sampled tail is a sample. CRAM is not
 readable without htslib, so the range route is BAM only.
 
+## Polygenic scores: the PGS Catalog (2026-09-12)
+
+`genomeos individual pgs --name N [--score PGS000018 ...]` streams a score's
+harmonised GRCh38 weight table from the PGS Catalog's FTP (EBI; a few hundred
+variants to a few million per score) once into `data/knowledge/pgs/`
+(git-ignored), with the score's metadata from the catalog's REST API (name,
+trait, publication, the ancestries it was built and tested in, licence). The
+sum runs over the person's genotypes chromosome by chromosome: a called
+variant gives its effect-allele dosage; a position with no call inside the
+person's trusted regions is homozygous reference (dosage 2 when the effect
+allele is the reference base, else 0); a position outside the trusted regions
+is missing and counted, never guessed; an allele that matches neither the
+person's reference nor alternative is a mismatch and counted. The result is a
+raw weighted sum with its coverage, not a percentile: the catalog publishes
+weights, not any population's distribution, so the number places the person
+only against others scored the same way (`compare` gives a z within the local
+people), and the ancestry caveat is carried with every score. Defaults: breast
+cancer (PGS000004, 313 variants), LDL cholesterol (PGS000115), height
+(PGS000297), coronary artery disease (PGS000018, 1.7 million). Evidence:
+weights `curated`, the sum `derived`, confidence 0.3. Results under the
+person's directory (`pgs_<id>.json`), never under `data/results`.
+
 ## Optional: AlphaMissense (predicted missense effect, 2026-09-12)
 
 `genomeos individual coding --name N --predict` streams DeepMind's AlphaMissense

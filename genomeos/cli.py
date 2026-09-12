@@ -2922,6 +2922,38 @@ def cmd_individual(args: argparse.Namespace) -> int:
         else:
             print(md)
         return 0
+    if args.action == "pgs":
+        from genomeos.genome.polygenic import DEFAULT_SCORES, compare, score_person
+
+        scores = args.score or list(DEFAULT_SCORES)
+        for s in scores:
+            try:
+                r = score_person(
+                    args.name, s, progress=lambda m: print("  " + m, flush=True) if args.verbose else None
+                )
+            except FileNotFoundError as ex:
+                print(ex)
+                return 1
+            m = r["score"]
+            pub = m.get("publication") or {}
+            print(
+                f"{s} {m.get('name')} ({m.get('trait')}; {pub.get('author')} {pub.get('year')}): "
+                f"raw score {r['raw_score']:+.4f} over {r['variants_used']:,} of "
+                f"{r['variants_in_score']:,} variants "
+                f"({r['called']:,} called, {r['assumed_reference']:,} reference inside trusted regions, "
+                f"{r['missing']:,} missing, {r['allele_mismatch']:,} allele mismatches)"
+            )
+            others = compare([p["name"] for p in ind.list_individuals()], s)
+            if len(others) >= 2:
+                print(
+                    "    against the local people: "
+                    + ", ".join(
+                        f"{o['individual']} {o['raw_score']:+.3f} (z {o.get('z_within_group')})"
+                        for o in others
+                    )
+                )
+        print(f"  {r['note']}")
+        return 0
     if args.action == "diff":
         from genomeos.genome.diff import genome_diff, render
 
@@ -4755,6 +4787,14 @@ def build_parser() -> argparse.ArgumentParser:
     q = isub.add_parser("report", help="one Markdown page from what has been computed for the person")
     q.add_argument("--name", required=True)
     q.add_argument("--out", help="write to a file instead of printing")
+    q = isub.add_parser(
+        "pgs", help="polygenic scores from the PGS Catalog's weights over the person's genotypes"
+    )
+    q.add_argument("--name", required=True)
+    q.add_argument(
+        "--score", nargs="*", help="PGS Catalog ids (default: breast cancer 313, LDL, height, CAD)"
+    )
+    q.add_argument("--verbose", action="store_true")
     q = isub.add_parser(
         "diff", help="two people, or one against the reference: protein-changing variants by gene, as a diff"
     )

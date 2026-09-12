@@ -288,6 +288,25 @@ class Api:
         except FileNotFoundError as ex:
             raise ApiError(str(ex)) from ex
 
+    def individual_pgs(self, name: str) -> dict:
+        """The polygenic scores computed for the person (saved files only; the stream is a CLI step)."""
+        import json as _json
+
+        from genomeos.genome.individuals import list_individuals
+        from genomeos.genome.polygenic import compare
+
+        root = self.root / "data" / "individuals"
+        d = root / name
+        if not d.exists():
+            raise ApiError(f"{name} is not a local individual")
+        scores = []
+        for p in sorted(d.glob("pgs_*.json")):
+            r = _json.loads(p.read_text())
+            pid = r["score"]["id"]
+            r["compare"] = compare([x["name"] for x in list_individuals(root)], pid, root)
+            scores.append({k: v for k, v in r.items() if k != "per_chromosome"})
+        return {"name": name, "scores": scores}
+
     def individual_diff(self, name: str, against: str) -> dict:
         """Two people (or one against the reference) as a diff of protein-changing variants, from the lists
         the coding inventory saved; a person not yet inventoried is told to run it (minutes, a CLI step)."""
@@ -1644,6 +1663,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.twins())
             if u.path == "/api/individuals":
                 return self._json(self.api.individuals())
+            if u.path == "/api/individual/pgs":
+                return self._json(self.api.individual_pgs(self._q(qs, "name") or "HG002"))
             if u.path == "/api/individual/diff":
                 return self._json(
                     self.api.individual_diff(

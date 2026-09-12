@@ -382,6 +382,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div class="row" style="margin-top:8px">
       <label>person <select id="ind-who"></select></label>
       <label>chromosome <select id="ind-chrom"></select></label>
+      <button class="ghost" id="ind-pgs" data-tip="Polygenic scores computed for this person from PGS Catalog weights (run `genomeos individual pgs --name N` once): a raw weighted sum with its coverage per score, placed against the other local people; not a percentile, and only within the score's own ancestries."><i class="ic">Σ</i> polygenic</button>
       <label>compare with <select id="ind-against"><option>reference</option></select></label>
       <button class="ghost" id="ind-diff" data-tip="Genome diff as code review: this person against another local person, or against the reference. Protein-changing variants gene by gene, alleles normalised, + only this person, − only the other, with each variant's consequence, zygosity, AlphaMissense class where scored and ClinVar row where screened. Both people need their coding inventory run once."><i class="ic">⇄</i> diff</button>
       <button class="ghost" id="ind-genes" data-tip="Every coding gene of the chromosome with this person's variants and the consequence of each coding SNV on the canonical transcript."><i class="ic">🧬</i>Genes</button>
@@ -1041,6 +1042,16 @@ async function individualGenes() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> consequence by the local trace on the canonical transcript</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
+async function individualPgs() {
+  const name = $('#ind-who').value;
+  $('#ind-out').innerHTML = `<span class="muted">reading ${name}'s polygenic scores…</span>`;
+  try {
+    const r = await api(`/api/individual/pgs?name=${encodeURIComponent(name)}`);
+    if (!r.scores.length) { $('#ind-out').innerHTML = `<span class="muted">No polygenic scores yet for ${name}: run <span class="mono">genomeos individual pgs --name ${name}</span> once (weights streamed from the PGS Catalog, kept under the person).</span>`; return; }
+    $('#ind-out').innerHTML = `<table><tr><th>score</th><th>trait</th><th>publication</th><th class="num">variants used</th><th class="num">coverage</th><th class="num">raw score</th><th>against the local people</th></tr>${r.scores.map(s => `<tr><td class="mono">${s.score.id}</td><td>${s.score.trait || ''}</td><td>${(s.score.publication || {}).author || ''} ${(s.score.publication || {}).year || ''}</td><td class="num">${fmt(s.variants_used)} of ${fmt(s.variants_in_score)}</td><td class="num">${s.coverage == null ? '?' : (s.coverage * 100).toFixed(1) + '%'}</td><td class="num">${s.raw_score.toFixed(4)}</td><td>${(s.compare || []).map(c => `${c.individual} ${c.raw_score.toFixed(3)}${c.z_within_group == null ? '' : ' (z ' + c.z_within_group + ')'}`).join(', ')}</td></tr>`).join('')}</table>
+      <div class="muted" style="margin-top:6px"><span class="pill curated">curated</span> PGS Catalog weights · <span class="pill derived">derived</span> the sum over this person's genotypes, confidence ${r.scores[0].confidence} · ${r.scores[0].note}</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
 async function individualDiff() {
   const name = $('#ind-who').value, against = $('#ind-against').value;
   $('#ind-out').innerHTML = `<span class="muted">reading ${name} against ${against} gene by gene…</span>`;
@@ -1116,7 +1127,7 @@ async function individualPredict() {
       `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill predicted">predicted</span> ${(r.model || 'AlphaGenome').split(' (')[0]} · ${h.note}</div>`;
   } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
-document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; $('#ind-ko').onclick = individualKnockouts; $('#ind-coding').onclick = individualCoding; $('#ind-report').onclick = individualReport; $('#ind-diff').onclick = individualDiff; } });
+document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; $('#ind-ko').onclick = individualKnockouts; $('#ind-coding').onclick = individualCoding; $('#ind-report').onclick = individualReport; $('#ind-diff').onclick = individualDiff; $('#ind-pgs').onclick = individualPgs; } });
 async function loadTwins() {
   loadIndividuals();
   twins = (await api('/api/twins')).twins;
