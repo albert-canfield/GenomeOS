@@ -1457,6 +1457,74 @@ def cmd_closure(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_motifs(args: argparse.Namespace) -> int:
+    """JASPAR motifs over promoters and elements: `requires:` lists and operators (area J step 4)."""
+    from genomeos.results import load_result
+
+    if args.library:
+        r = load_result("motifs_genome_wide")
+        if r is None:
+            print("no motifs_genome_wide result yet; run: uv run python scripts/motifs_genome_wide.py")
+            return 1
+        lib = (r.get("libraries") or {}).get(args.library)
+        if not lib:
+            print(f"{args.library}: fewer members with a scanned promoter than the summary needs")
+            return 1
+        print(f"{args.library}: {lib['members_placed']} of {lib['members']} members with a scanned promoter")
+        if lib["factors"]:
+            print(
+                _table(
+                    lib["factors"][: args.top], ["factor", "members_with_hit", "share", "all_share", "ratio"]
+                )
+            )
+        if lib["operators"]:
+            print("\noperators (factor pairs recurring across the members beyond the two shares):")
+            print(
+                _table(
+                    [{**o, "factors": " + ".join(o["factors"])} for o in lib["operators"][: args.top]],
+                    ["factors", "members_with_both", "share", "expected", "ratio"],
+                )
+            )
+        print(f"  [{r['evidence']['operator']}]")
+        return 0
+    if not args.chrom:
+        print("give --chrom C (a chromosome's promoters and elements) or --library L (the genome summary)")
+        return 1
+    r = load_result(f"motifs_{args.chrom}") if args.cached else None
+    if r is None:
+        from genomeos.genome.motifs import run_and_save
+
+        r = run_and_save(args.chrom, progress=lambda m: print(f"  {m}", flush=True))
+    if args.gene:
+        g = r["genes"].get(args.gene)
+        if not g:
+            print(f"{args.gene}: no scanned promoter on {args.chrom}")
+            return 1
+        print(
+            f"{args.gene}: {g['factors_hit']} factors hit the promoter; "
+            "requires (enriched, best score first):"
+        )
+        print(_table(g["requires"], ["factor", "score", "position", "strand", "enrichment"]))
+        print(f"  [{r['evidence']['requires']}]")
+        return 0
+    print(
+        f"{args.chrom}: {r['promoters']} promoters (TSS ± {r['flank']} bp) and {len(r['elements'])} elements "
+        f"scanned against {r['profiles']} JASPAR profiles ({r['factors']} factors); "
+        f"{r['requires_per_promoter']} enriched factors per promoter on average"
+    )
+    print(_table(r["most_enriched"][: args.top], ["factor", "sequences", "shuffled", "share", "enrichment"]))
+    libs = [(k, v) for k, v in r["libraries"].items() if v["factors"]]
+    if libs:
+        print("\nlibraries whose members' promoters share a factor beyond the chromosome's rate:")
+        for k, v in libs[: args.top]:
+            print(
+                f"  {k} ({v['members_on_chromosome']} members): "
+                + ", ".join(f"{f['factor']} {f['ratio']}x" for f in v["factors"][:5])
+            )
+    print(f"  [{r['evidence']['hit']}; {r['cost']['seconds']} s]")
+    return 0
+
+
 def cmd_duplications(args: argparse.Namespace) -> int:
     """Segmental duplications over the UNKNOWN blocks: curated copy-and-paste (area J step 3)."""
     from genomeos.genome.duplications import run_and_save
@@ -4127,6 +4195,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
     p.add_argument("--top", type=int, default=12)
     p.set_defaults(fn=cmd_closure)
+
+    p = sub.add_parser(
+        "motifs", help="JASPAR motifs over promoters and elements: requires lists, enrichment, operators"
+    )
+    p.add_argument("--chrom", help="one chromosome (sequence and GENCODE models local)")
+    p.add_argument("--gene", help="with --chrom: one gene's requires list")
+    p.add_argument("--library", help="one BioLib library from the genome summary")
+    p.add_argument("--cached", action="store_true", help="show the saved result instead of rescanning")
+    p.add_argument("--top", type=int, default=12)
+    p.set_defaults(fn=cmd_motifs)
 
     p = sub.add_parser(
         "duplications", help="segmental duplications over the UNKNOWN blocks: curated copy-and-paste (UCSC)"
