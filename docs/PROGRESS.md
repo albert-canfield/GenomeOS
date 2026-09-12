@@ -592,3 +592,30 @@ extends it to every block.
 Decision D43; GENOME-AS-CODE.md §7 keeps the programming-to-biology
 dictionary with the GenomeOS construct per row and which rows data holds.
 - **Syntax against values**: `genomeos syntax --gene G --chrom C` (genomeos/attribution/syntax.py) reads Zoonomia constraint per base, every imported person's variants and the gene's features, and classes each variable position as a value or a value in syntax; HERC2 160 variable positions, 3 on syntax (1.9% against 5.6% by chance), OCA2 544 and 3 (0.6% against 0.9%): variation avoids syntax, and HERC2's second most constrained variable base is rs12913832, the eye-colour enhancer value (HG002 and HG003 hom, HG004 het); `syntax_HERC2.json`, `syntax_OCA2.json`.
+
+## 2026-09-12 — the human axis beside the mammalian one
+
+Area J's first step. `genomeos variation --chrom C` reads gnomAD's Gnocchi
+score (a Z per kilobase from 76,156 genomes; Z ≥ 2.18 the top decile of
+constrained non-coding sequence) over every UNKNOWN block of the budget and
+every element the target runs scored, through the same range reader that
+reads Zoonomia, and files each in one of four cases: syntax (constrained on
+both axes), relaxed (mammals only), recent (people only), tolerant (neither),
+as inferred evidence at 0.3 to 0.6. Chromosome 21 cost 4.2 MB and 156 s,
+chromosome 15 4.5 MB and 222 s; VISTA over 23 chromosomes 15 MB and 124 s.
+
+The controls hold: canonical coding segments are the most human-constrained
+set on both chromosomes (40% and 31% of kilobases), introns next (26%, 18%),
+the neutral tier 2% on chr21 and 17% on chr15, so the axis is real and noisy
+at block resolution. The most conserved intergenic blocks, area I's
+constrained_unknown tier, are not depleted of human variation at one kilobase
+(1.7%, 3.2%); 18 of chr15's 31 measured blocks read relaxed. On the elements
+the axes add: those constrained on both name a coding gene 75% and 72% of the
+time, above every other case on both chromosomes, the first result where the
+human axis adds to the species axis rather than repeating it. VISTA positives
+lean human-constrained more than negatives over the genome (20.2% against
+16.9%), about as far as they lean on the mammalian axis, for the same reason.
+rs12913832, the eye-colour value, is constrained across mammals at the base
+(phyloP 3.41) and its kilobase is one Gnocchi does not score; the element 242
+bp downstream sits in a kilobase at Z 3.46. docs/GRAMMAR-BY-COMPARISON.md §6;
+two LESSONS rows; `tests/test_variation.py`.

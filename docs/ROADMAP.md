@@ -1025,7 +1025,8 @@ in order. "Owner" is the session that holds the files today (see §7).
   syntax, operators and values; eye colour keeps the syntax and changes the
   value) and the two DNA-as-code conversations of the same day are the
   brief; GRAMMAR-BY-COMPARISON.md holds them against the code.
-- **Code.** `attribution/syntax.py` and `genomeos syntax --gene G --chrom C`
+- **Code.** `attribution/variation.py` and `genomeos variation --chrom C`
+  (this lane). `attribution/syntax.py` and `genomeos syntax --gene G --chrom C`
   (area I's lane, landed 2026-09-12 as dd2b620: per base of one gene,
   constrained across mammals against variable among the imported people,
   rs12913832 named as HERC2's second most constrained variable base). It builds
@@ -1036,8 +1037,9 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Design.** GRAMMAR-BY-COMPARISON.md; GENOME-AS-CODE.md §7 (the mapping
   table with the construct per row); SEQUENCE-GRAMMAR.md §2 and §5 (the
   motif scan, `requires:`).
-- **Data.** To come: `variation_chr*` (Gnocchi per block and element, the
-  two-axis table), `origin_genome_wide` (stratum per gene, age per library),
+- **Data.** `variation_chr21`, `variation_chr15`, `variation_vista_genome_wide`
+  (Gnocchi per block and element, the two-axis table, controls). To come:
+  the other chromosomes, `origin_genome_wide` (stratum per gene, age per library),
   `duplication_chr*`, `motifs_chr*`, the decompiled programs.
 - **Requirements.** Every comparison enters as evidence with a confidence
   (D4, D42, D43); within-human constraint is never read as proof of
@@ -1051,15 +1053,28 @@ in order. "Owner" is the session that holds the files today (see §7).
   Ensembl's homology endpoint returns 92 mammalian orthologues of OCA2 in one
   call; JASPAR 2026 serves 1,019 CORE vertebrate profiles; UCSC hosts the
   470-mammal phyloP, `genomicSuperDups` and the HPRC 90-way human alignment.
-- **Missing.** All of it: the human axis per block, the origin per gene and
-  library, curated duplication, the motif scan and operator patterns,
-  phylogenetic profiling between libraries, the decompiled locus view, and
-  one developmental locus run end to end across species.
-- **Next.** 1. `attribution/variation.py`: the population axis next to the
-  trio's, Gnocchi (76,156 genomes) per UNKNOWN block and per attributed
-  element on chr21, the four-case table (mammals × humans) per tier and per
-  element class, tests against VISTA and against the HERC2 element at
-  rs12913832 where `genomeos syntax` reads the same base; then genome-wide. 2. Origin per gene through
+- **Step 1 done (2026-09-12).** `genomeos variation --chrom C`
+  (`attribution/variation.py`, `variation_chr21`, `variation_chr15`,
+  `variation_vista_genome_wide`): gnomAD Gnocchi (Z per kilobase, 76,156
+  genomes; ≥ 2.18 the top decile) read over every UNKNOWN block and every
+  scored element beside Zoonomia, each filed in one of four cases (syntax,
+  relaxed, recent, tolerant) at confidence 0.3 to 0.6, with the canonical
+  coding segments and VISTA as controls. Coding segments read 40% and 31%
+  human-constrained (chr21, chr15) against 2% and 17% for the neutral tier,
+  so the axis is real and noisy at block resolution; the constrained_unknown
+  tier reads 1.7% and 3.2%, no more than neutral, 18 of chr15's 31 measured
+  blocks `relaxed`. On the elements the axes add: those constrained on both
+  name a gene 75% and 72% of the time, above every other case on both
+  chromosomes. VISTA positives 20.2% against negatives 16.9% over 2,223
+  elements. rs12913832 is constrained across mammals at the base and its
+  kilobase is unscored by Gnocchi. GRAMMAR-BY-COMPARISON.md §6.
+- **Missing.** The human axis genome-wide and as a Blocks-tab lane; the
+  origin per gene and library; curated duplication; the motif scan and
+  operator patterns; phylogenetic profiling between libraries; the
+  decompiled locus view; one developmental locus run end to end.
+- **Next.** 1. The human axis over the other 22 chromosomes as a resumable
+  job (a few MB each) and the case per block in the compiled BioLang
+  `region` as a second evidence line. 2. Origin per gene through
   Ensembl homology at eight taxa; age distribution per library; the graph
   gains `orthologue_of`. 3. Paralogues and `genomicSuperDups`; `paralogue_of`
   edges; `similar_to` demoted to fallback. 4. JASPAR scan of promoters and

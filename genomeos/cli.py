@@ -1457,6 +1457,102 @@ def cmd_closure(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_variation(args: argparse.Namespace) -> int:
+    """Constraint on two axes, mammals and people, per UNKNOWN block and element (area J step 1)."""
+    from genomeos.attribution.variation import CASE_ORDER, run_and_save, vista_genome
+    from genomeos.results import load_result, save_result
+
+    if args.vista_genome:
+        r = load_result("variation_vista_genome_wide") if args.cached else None
+        if r is None:
+            r = vista_genome(progress=lambda m: print(f"  {m}", flush=True))
+            save_result("variation_vista_genome_wide", r)
+        for k in ("positive", "negative"):
+            a = r[k]
+            print(
+                f"VISTA {k}s: {a['intervals']} elements, {_pct(a['fraction_above'])} of their kilobases "
+                f"constrained among people (Z >= {r['thresholds']['gnocchi']}), "
+                f"{_pct(a['share_intervals_constrained'])} touch one, "
+                f"{_pct(a['share_intervals_strong'])} a strong one"
+            )
+        print(f"  [{r['evidence']}; {r['cost']['mb_fetched']} MB in {r['cost']['seconds']} s]")
+        return 0
+    r = load_result(f"variation_{args.chrom}") if args.cached else None
+    if r is None:
+        r = run_and_save(args.chrom)
+    print(
+        f"{args.chrom}: {len(r['blocks'])} UNKNOWN blocks and {len(r['elements'])} attributed elements "
+        f"read on both axes (mammals: phyloP >= {r['thresholds']['phylop']}; people: Gnocchi Z >= "
+        f"{r['thresholds']['gnocchi']} over >= {_pct(r['thresholds']['human_min_fraction'], 0)} "
+        "of the kilobases)"
+    )
+    rows = []
+    for tier, v in r["by_tier"].items():
+        cases = v.get("cases", {})
+        rows.append(
+            {
+                "tier": tier,
+                "blocks": v["blocks"],
+                "Mb": f"{v['bp'] / 1e6:.2f}",
+                "human-constrained": _pct(v["human_constrained_fraction"]),
+                **{c: cases.get(c, {}).get("blocks", 0) for c in CASE_ORDER},
+            }
+        )
+    print(_table(rows, ["tier", "blocks", "Mb", "human-constrained", *CASE_ORDER]))
+    ctrl = r["controls"]
+    if "canonical_cds" in ctrl:
+        print(
+            f"  controls: canonical coding segments {_pct(ctrl['canonical_cds']['fraction_above'])} of "
+            f"kilobases constrained among people, introns "
+            f"{_pct(ctrl['canonical_introns']['fraction_above'])}, "
+            + ", ".join(f"{t} {_pct(f)}" for t, f in ctrl["unknown_by_tier"].items() if f is not None)
+        )
+    ec = r["by_element_case"]["by_case"]
+    print(
+        "  elements by case: "
+        + "; ".join(
+            f"{c} {ec[c]['elements']} (name a gene {_pct(ec[c]['name_a_gene_share'])})"
+            for c in CASE_ORDER
+            if ec[c]["elements"]
+        )
+        + f"; unmeasured {r['by_element_case']['unmeasured']}"
+    )
+    if r["vista"]:
+        v = r["vista"]
+        print(
+            f"  VISTA on this chromosome: positives {_pct(v['positive']['fraction_above'])} of kilobases "
+            f"constrained among people against negatives {_pct(v['negative']['fraction_above'])}"
+        )
+    for kv in r["known_values"]:
+        print(f"  {kv['rsid']} ({kv['note']}): {kv['reading']}")
+    top = sorted(
+        (b for b in r["blocks"] if b["case"] and b["case"]["case"] in ("syntax", "relaxed")),
+        key=lambda b: -(b["mammal_fraction"] or 0),
+    )[: args.top]
+    if top:
+        print(f"\nmammal-constrained blocks by case (top {len(top)}):")
+        print(
+            _table(
+                [
+                    {
+                        "locus": f"{args.chrom}:{b['start']:,}-{b['end']:,}",
+                        "kb": f"{b['length'] / 1e3:.0f}",
+                        "tier": b["tier"],
+                        "mammals": _pct(b["mammal_fraction"]),
+                        "people": _pct(b["gnocchi"]["fraction_above"]),
+                        "max Z": b["gnocchi"]["maximum"],
+                        "case": b["case"]["case"],
+                        "conf": b["case"]["confidence"],
+                    }
+                    for b in top
+                ],
+                ["locus", "kb", "tier", "mammals", "people", "max Z", "case", "conf"],
+            )
+        )
+    print(f"  [{r['evidence']['case']}; {r['cost']['seconds']} s]")
+    return 0
+
+
 def cmd_syntax(args: argparse.Namespace) -> int:
     """Syntax against values at one gene: constrained bases, where people differ, and the overlap."""
     from genomeos.attribution.syntax import save_path, syntax_values
@@ -3886,6 +3982,18 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
     p.add_argument("--top", type=int, default=12)
     p.set_defaults(fn=cmd_closure)
+
+    p = sub.add_parser(
+        "variation",
+        help="constraint on two axes, 241 mammals and 76,156 people, per UNKNOWN block and element",
+    )
+    p.add_argument("--chrom", help="one chromosome with a budget result")
+    p.add_argument(
+        "--vista-genome", action="store_true", help="VISTA positives against negatives, all chromosomes"
+    )
+    p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
+    p.add_argument("--top", type=int, default=12)
+    p.set_defaults(fn=cmd_variation)
 
     p = sub.add_parser(
         "syntax", help="syntax against values at a gene: constrained bases, where people differ, the overlap"

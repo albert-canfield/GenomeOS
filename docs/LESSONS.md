@@ -70,6 +70,20 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   named "long ORF" is only honest once the repeat signatures are subtracted
   first. Order of classification matters more than the classifiers.
 
+- gnomAD's Gnocchi is one Z score per kilobase, and the range reader counts
+  every kilobase an interval touches: a 170 bp exon measures 1,000 track
+  bases. Report shares of kilobases, never of bases, for anything shorter
+  than the step (`aggregate()` in `attribution/variation.py` says
+  `track_bases` for that reason).
+- Within-human constraint at one kilobase agrees with the mammalian axis
+  where both are strong and adds little on its own: elements constrained on
+  both axes name a gene 75% and 72% of the time (chr21, chr15), above every
+  other case; the constrained_unknown tier reads 1.7% and 3.2%
+  human-constrained, no more than the neutral tier, and chr15's neutral tier
+  reads 17%. Coding segments read 40% and 31%, introns 26% and 18%, so the
+  axis is real and its block-level form is noisy; the case is `inferred` at
+  0.3 to 0.6, never a verdict (`variation_chr21`, `variation_chr15`).
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory

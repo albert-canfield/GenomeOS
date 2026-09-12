@@ -251,3 +251,92 @@ in a table, and evidence in BioIR. Owner: area J in ROADMAP.md.
 
 Not found: a phyloP bigWig for the 447-way (primate-expanded) alignment
 under UCSC's `cactus447way/`, which holds only the alignment and the trees.
+
+## 6. Step 1 built: the human axis beside the mammalian one (2026-09-12)
+
+`genomeos variation --chrom C` (`attribution/variation.py`; results
+`variation_chr21`, `variation_chr15`, `variation_vista_genome_wide`) reads
+gnomAD's Gnocchi score over every UNKNOWN block of the budget and every
+element the target runs scored, next to the Zoonomia constraint the budget
+already holds, and files each in one of the four cases of §2 with a
+confidence capped at 0.6. Two controls travel with every chromosome: the
+canonical coding segments and introns of its genes (which must read as
+constrained among people if the axis is real) and VISTA's measured elements
+(positives should lean further than negatives). Gnocchi is one value per
+kilobase, so an interval shorter than 1 kb counts its whole kilobase and
+every share below is a share of kilobases touched. Chromosome 21 cost 4.2 MB
+of ranges and 156 s (most of it phyloP for the uniform elements the
+constrained run had not scored), chromosome 15 4.5 MB and 222 s.
+
+**The controls hold, and the tiers separate less than the exons do.** Share
+of kilobases with Z ≥ 2.18:
+
+| set | chr21 | chr15 |
+|---|---|---|
+| canonical coding segments | **40.3%** | **30.9%** |
+| canonical introns | 25.9% | 17.6% |
+| UNKNOWN, regulatory tier | 16.9% | 14.5% |
+| UNKNOWN, neutral tier | 2.1% | 17.3% |
+| UNKNOWN, fossil tier | 1.7% | 7.6% |
+| UNKNOWN, constrained_unknown tier | **1.7%** | **3.2%** |
+
+Coding sequence is the most constrained among people on both chromosomes,
+introns next, which is the published shape and says the reader and the
+threshold are right. Below that the human axis is noisy at block resolution:
+chr21's neutral tier reads 2% and chr15's 17%, with 31 measured blocks. And
+the most conserved intergenic blocks, the constrained_unknown tier that
+area I named as the real unknown, are *not* depleted of human variation at
+this resolution: 1.7% and 3.2%, no more than the neutral tier. Of chr15's 31
+measured constrained_unknown blocks, 18 read `relaxed` (held across mammals,
+variable among people) and 3 `syntax`. Either their function does not show
+at one kilobase in 76,156 genomes, or what varies inside them is a value the
+frame permits, which is exactly the question step 7 asks of one locus.
+
+**On the elements the two axes add.** Share of elements whose deletion names
+a coding gene in AlphaGenome, by case:
+
+| case (mammals, people) | chr21 | chr15 |
+|---|---|---|
+| syntax (constrained, constrained) | **75.0%** (44) | **72.2%** (36) |
+| relaxed (constrained, free) | 59.6% (47) | 27.3% (66) |
+| recent (free, constrained) | 49.1% (55) | 54.5% (33) |
+| tolerant (free, free) | 38.8% (85) | 46.1% (102) |
+| unmeasured on one axis | 63 | 60 |
+
+The elements constrained on both axes name a gene three times in four on
+both chromosomes, above every other case; that is the first result in the
+project where the human axis adds to the species axis rather than repeating
+it. The order of the middle two rows swaps between chromosomes, so neither
+axis alone is a stable second predictor at this sample size; the pair is.
+Elements strong in humans (Z ≥ 4.0 somewhere) occur only in the two
+human-constrained cases (14 and 15 on chr21, 12 and 6 on chr15), as the
+definition requires.
+
+**VISTA.** Share of kilobases constrained among people, positives against
+negatives: chr21 32.4% against 25.0% (13 and 6 elements), chr15 18.8% against
+19.5% (28 and 34), the genome 20.2% against 16.9% over 1,133 positives and
+1,090 negatives on 23 chromosomes (32.9% against 26.9% touch a constrained
+kilobase, 6.4% against 5.4% a strong one; 15 MB, 124 s). The lean is the
+right way and about the size of the mammalian one (65% against 58% in
+ATTRIBUTION.md), for the same reason: VISTA chose conserved sequence on both
+sides.
+
+**The known value.** rs12913832, the eye-colour position in HERC2's intron
+86 (hg38 chr15:28,120,472), read by the module on both axes: the base is
+constrained across mammals (phyloP 3.41, above the 2.27 bar); the kilobase
+around it holds 7.7% constrained bases with a maximum of 8.59 inside the
+registry element 366 bp upstream (EH38E1749549, 18% constrained), and that
+kilobase is one Gnocchi does not score at all; the element 242 bp downstream
+sits in a kilobase at Z 3.46. So the textbook value slot is a constrained
+base in a constrained frame, and the population axis is silent exactly
+there. The per-base form of the same question, the trio's variants against
+phyloP at one gene, is `genomeos syntax --gene OCA2 --chrom chr15` in the
+peer lane.
+
+**Reading.** The axis is real (the exons say so), agrees with the species
+axis where both are strong (the `syntax` elements), and on its own, at one
+kilobase, is a weak and chromosome-dependent signal for blocks. The two
+axes are reported side by side and never merged (D43); the case is
+`inferred` evidence at 0.3 to 0.6. What it changes for area I: the
+constrained_unknown blocks now carry a second fact, that people vary in
+them, which narrows what they can be.
