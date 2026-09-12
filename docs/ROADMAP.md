@@ -264,9 +264,9 @@ in order. "Owner" is the session that holds the files today (see §7).
   | + starts confined to open chromatin | 614 | 53% | not recorded | 76% |
   | + RNA over the exons, eight tissues | **82** | **68.6%** | **92.7%** | 57.9% |
   | + measured RNA, ENCODE K562 total RNA-seq | 55 | 72.1% | 89.1% | 44.8% |
-  | + measured RNA, six ENCODE cell lines pooled | 143 | 65.9% | 62.9% | 62.9% |
-  | predicted panel ∪ measured lines | 154 | 63.7% | 63.0% | 66.1% |
-  | predicted panel ∩ measured lines | 71 | 71.6% | **97.2%** | 54.3% |
+  | + measured RNA, six ENCODE cell lines pooled | 127 | 66.3% | 72.4% | 63.8% |
+  | predicted panel ∪ measured lines | 137 | 64.4% | 72.3% | 67.0% |
+  | predicted panel ∩ measured lines | 72 | 71.2% | **95.8%** | 54.3% |
 
   Nine candidates in ten were sequence that is never transcribed in the
   panel. The panel is eight tissues rather than the body, and that is where
@@ -283,7 +283,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   sweep sits next to the table in SEQUENCE-GRAMMAR.md. Pooling six lines
   (K562, HepG2, GM12878, IMR-90, A549, MCF-7; HeLa-S3 and SK-N-SH have no
   released strand-specific track, recorded as missing) buys sensitivity, 44.8%
-  to 62.9% of genes, and pays for it in precision, 89.1% to 62.9%, because
+  to 63.8% of genes, and pays for it in precision, 89.1% to 72.4%, because
   measured transcription includes the non-coding transcription the model's
   gene-level tracks exclude. A model that knows genes plus a measurement that
   knows the cell is the honest filter. Results are
@@ -293,13 +293,17 @@ in order. "Owner" is the session that holds the files today (see §7).
   antisense, so `MeasuredRna` now probes sixty first exons per strand in both
   orientations and swaps when the swapped one carries twice the signal (K562
   26.4 against 1.8, HepG2 19.7 against 1.4, GM12878 36.3 against 6.4, A549 29.8
-  against 5.6, MCF-7 36.2 against 2.2, IMR-90 0.85 against 22.4, swapped). The
-  six-line panel numbers stand as five lines' worth until the rerun; SK-N-SH
-  and HeLa-S3 have no total RNA-seq bigWig on ENCODE.
+  against 5.6, MCF-7 36.2 against 2.2, IMR-90 0.85 against 22.4, swapped).
+  Rerun oriented (abfbd4c), the tables above carry the six-line numbers: the
+  inverted line had not merely contributed nothing, read backwards it passed
+  antisense candidates over real genes, which is why the measured panel's gene
+  precision read 63% and 59%; oriented it is 72% and 74% at the same
+  sensitivity, and the series' ordering does not move. SK-N-SH and HeLa-S3
+  have no total RNA-seq bigWig on ENCODE.
 - **The two filters combined (2026-09-12).** `--rna-combine union|intersection`
   applies when both the predicted panel and the measured lines are given.
-  The union is the most sensitive call of the series, 66.1% of genes; the
-  intersection is the strictest, 69 of 71 candidates are genes (97.2%
+  The union is the most sensitive call of the series, 67.0% of genes; the
+  intersection is the strictest, 69 of 72 candidates are genes (95.8%
   precision at 54.3% sensitivity). The model supplies the gene-level
   judgement and the measurement the cell; asking for both is how a call
   becomes actionable. Results
@@ -312,8 +316,8 @@ in order. "Owner" is the session that holds the files today (see §7).
   | learned matrices | 297 | 8.3% | 30.0% | 72.3% | 5.9% |
   | AlphaGenome splice sites | 1,293 | 49.4% | 18.7% | 97.3% | 70.4% |
   | + predicted RNA, eight tissues | 151 | 63.1% | 92.7% | 81.2% | 62.8% |
-  | + measured RNA, six lines | 289 | 60.1% | 58.8% | 88.6% | 65.1% |
-  | predicted ∩ measured | 142 | 63.7% | **94.4%** | 79.9% | 62.0% |
+  | + measured RNA, six lines | 225 | 61.0% | 74.2% | 88.8% | 65.2% |
+  | predicted ∩ measured | 142 | 63.7% | **95.1%** | 80.1% | 62.0% |
 
   The same ordering as chr21 in every row, with higher sensitivity because
   the eight-tissue panel covers chr22's genes better; chr21 carries more
