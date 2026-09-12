@@ -119,9 +119,13 @@ of the genome; the regulatory tier holds five times more constrained sequence
 and its target genes are the next attribution. That attribution has started:
 ranking chromosome 21's distal enhancers by constraint and deleting the 100
 most constrained in AlphaGenome names a gene for 73% of them, against 63.5%
-of a uniform sample, and the constrained ones act beyond their CTCF node twice
-as often (ALPHAGENOME.md, feature b, "The constrained ones first";
-`data/results/constrained_targets_<chrom>.json`).
+of a uniform sample; genome-wide, 2,305 elements later, 75.7% against 62.4%,
+with the strongest effects among the constrained (31.9% at or above 0.3 log2
+against 24.5%) and the node model holding as well on them as on the rest
+(89.8% inside their node). Constraint predicts function on 22 of 24
+chromosomes (ALPHAGENOME.md, feature b, "The constrained ones first";
+`data/results/constrained_targets_<chrom>.json` and
+`constrained_targets_genome_wide.json`).
 
 The chromosomes sort themselves without being told. chrY and chrX are the
 controls: 0.66% and 0.88% constrained, fossils 27% and 73% of their space.

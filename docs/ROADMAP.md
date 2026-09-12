@@ -804,8 +804,25 @@ in order. "Owner" is the session that holds the files today (see §7).
   67.8%) and inside the CTCF node in 78.1% (uniform 87.4%), so the constrained
   elements reach beyond the CTCF-only boundary twice as often. Strongest: a
   46%-constrained element moving LINC00945 by 1.2 log2 in testis, KCNE1 by
-  0.93, SIM2 by 0.84. ALPHAGENOME.md feature b, "The constrained ones first";
-  the other 23 chromosomes are running.
+  0.93, SIM2 by 0.84. ALPHAGENOME.md feature b, "The constrained ones first".
+  Genome-wide the same day (`constrained_targets_genome_wide`, a resumable
+  job): 2,305 elements, the 100 most constrained per chromosome (59,415 of
+  513,972 distal enhancers have 20% or more constrained bases).
+
+  | distal enhancers deleted | name a gene | strong (≥ 0.3 log2) | silencer-like | target = nearest TSS | inside the node |
+  |---|---|---|---|---|---|
+  | 4,800 uniform | 62.4% | 24.5% | 38.6% | 70.7% | 86.0% |
+  | 2,305 most constrained | **75.7%** | **31.9%** | 36.8% | 71.9% | 89.8% |
+
+  Constraint predicts function on 22 of 24 chromosomes (chr1 65% to chr19
+  92%; chr9 and chr15 the exceptions) and the strongest effects sit there:
+  C1QTNF7-AS1 by 4.0 log2 (chr4, 76% constrained), MEF2C-AS2 by 3.2, ARX by
+  3.0 in Purkinje cells (chrX, 92% constrained). Chromosome 21's "reach
+  beyond the node twice as often" did not generalise: genome-wide the
+  constrained elements sit inside their node as often as the rest, which is
+  the node model holding on the elements that matter most. Area I's step 2
+  has begun: a constrained regulatory block now comes with a predicted target,
+  tissue and magnitude wherever AlphaGenome has been asked.
 - **Next.** 1. The blocks organised by the
   evidence that exists: CTCF node, reader open fraction per cell type,
   AlphaGenome enhancer target, repeat family, segmental duplication,
