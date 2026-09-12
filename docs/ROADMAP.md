@@ -913,7 +913,11 @@ in order. "Owner" is the session that holds the files today (see §7).
   lines that `bio test` passes in 0.13 s; predicted evidence capped at 0.7,
   mean confidence 0.62 for regions and 0.25 for elements, which is what the
   evidence supports. The non-coding space of a chromosome is now something
-  the engine reads, not a table.
+  the engine reads, not a table. Since 848abc6 (genomeos-bb's hunk) a region's
+  evidence note also carries the human axis where the chromosome has been read
+  on it: "people N% of kilobases constrained, case syntax, relaxed, recent or
+  tolerant"; the program's counts and checks do not move, since the axis is a
+  note and not a tier.
 - **Closure at the gene level (2026-09-12).** `genomeos closure --chrom chr21`
   (`attribution/closure.py`, `closure_chr21`) reads, for each of the 221
   coding genes and each of four ENCODE cell lines with both a DNase reader and
