@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import gzip
 import io
+import json
 import struct
 import urllib.request
 from collections.abc import Iterator
@@ -281,3 +282,25 @@ def estimate_remote(
         "so the number is a first estimate to compare between people read the same way, not a length "
         "to quote",
     }
+
+
+def saved_estimate(
+    name: str, results: Path = Path("data/results"), individuals: Path = Path("data/individuals")
+):
+    """A telomere estimate already computed for this person: the range-read result under data/results (an
+    open-consent person) or a telomere.json under the person's own directory. None when there is none."""
+    for p in (results / f"telomere_range_{name}.json", individuals / name / "telomere.json"):
+        if p.exists():
+            try:
+                d = json.loads(p.read_text())
+            except (OSError, json.JSONDecodeError):
+                continue
+            if d.get("telomere_bp") is not None:
+                return {
+                    "telomere_bp": float(d["telomere_bp"]),
+                    "confidence": d.get("confidence"),
+                    "source": str(p),
+                    "note": "TelSeq-scale estimate from reads (k repeats per read), not a Southern-blot "
+                    "length; calibrate the twin's attrition against it with care",
+                }
+    return None

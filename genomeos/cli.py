@@ -396,12 +396,21 @@ def cmd_twin_new(args: argparse.Namespace) -> int:
     from genomeos.twin import Twin
     from genomeos.twin.twin import MeasuredState
 
+    telomere, notes = args.telomere, ""
+    if telomere is None:
+        from genomeos.genome.telomere import saved_estimate
+
+        est = saved_estimate(args.name)
+        if est:
+            telomere = est["telomere_bp"]
+            notes = f"telomere from {est['source']} ({est['note']})"
+            print(f"  measured telomere taken from {est['source']}: {telomere:,.0f} bp (TelSeq scale)")
     t = Twin(
         args.name,
         genome=args.genome or "",
         vcf=args.vcf or "",
         sex=args.sex,
-        measured=MeasuredState(args.age, args.telomere, args.epigenetic_age),
+        measured=MeasuredState(args.age, telomere, args.epigenetic_age, notes),
     )
     p = t.save()
     print(f"created twin {t.name} -> {p}")

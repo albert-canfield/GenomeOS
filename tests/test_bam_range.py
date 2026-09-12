@@ -104,3 +104,19 @@ def test_estimate_remote_on_the_synthetic_bam(tmp_path, monkeypatch):
     # telomeric: 1 (unmapped, scaled 3/3) + 1 mapped = 2 of 7 reads
     assert r["telomeric_reads_estimated"] == 2 and abs(r["fraction"] - 2 / 7) < 1e-9
     assert r["telomere_bp"] == round(2 / 7 * telomere.GENOME_BP / telomere.CHROMOSOME_ENDS)
+
+
+def test_saved_estimate_reads_the_range_result_or_the_persons_file(tmp_path):
+    import json
+
+    from genomeos.genome.telomere import saved_estimate
+
+    results, people = tmp_path / "results", tmp_path / "people"
+    results.mkdir()
+    (people / "P").mkdir(parents=True)
+    assert saved_estimate("P", results, people) is None
+    (people / "P" / "telomere.json").write_text(json.dumps({"telomere_bp": 3100, "confidence": 0.2}))
+    est = saved_estimate("P", results, people)
+    assert est["telomere_bp"] == 3100.0 and est["confidence"] == 0.2 and "TelSeq" in est["note"]
+    (results / "telomere_range_P.json").write_text(json.dumps({"telomere_bp": 2676, "confidence": 0.3}))
+    assert saved_estimate("P", results, people)["telomere_bp"] == 2676.0  # the range result wins
