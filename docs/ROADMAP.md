@@ -969,6 +969,21 @@ in order. "Owner" is the session that holds the files today (see §7).
   expression and eye colour, HG002 and HG003 carrying the alternative twice
   and HG004 once. The tool did not know the answer; the literature's value fell
   out of the reading.
+- **The human axis (2026-09-12, genomeos-bb).** gnomAD's Gnocchi constraint,
+  the depletion of variation among 76,156 people at 1 kb, read per UNKNOWN
+  block and per attributed element beside Zoonomia (`genomeos variation
+  --chrom C`, `attribution/variation.py`, `variation_chr21`,
+  `variation_chr15`, `variation_vista_genome_wide`; area J's step 1). The two
+  axes agree where they should and add where it matters: canonical coding
+  segments are 40% human-constrained against 2% for neutral blocks; on chr21's
+  231 measured elements, those constrained on both axes name a gene 75% of the
+  time against 60% (mammals only), 49% (people only) and 39% (neither). Two
+  cautions the table carries: the constrained_unknown tier reads 1.7%
+  human-constrained, no more than neutral, so deep mammalian constraint in
+  intergenic blocks is not matched by human depletion at 1 kb; and VISTA
+  positives are 20.2% human-constrained against negatives 16.9% over 2,223
+  elements, a lean rather than a separation. Gnocchi counts whole kilobases,
+  so sub-kb elements read their window.
 - **Next.** 1. Every element in a gene's node scored per cell, not a sample:
   the closure needs a gene's whole regulatory input before it can judge it,
   which is the self-hosted model's first job (about 6,600 elements on chr21).
