@@ -127,14 +127,17 @@ chromosomes (ALPHAGENOME.md, feature b, "The constrained ones first";
 `data/results/constrained_targets_<chrom>.json` and
 `constrained_targets_genome_wide.json`).
 
-Scoring against measured ground truth has started with VISTA's 2,442
+Scoring against measured ground truth started with VISTA's 2,442
 transgenic-mouse enhancer elements, read blind through the registry, the node,
-constraint and the AlphaGenome deletion. On chromosomes 21 and 22 the registry
-and constraint lean the right way and the predicted tissue matches the
-measured one in 8 of 9 judged cases against 36% by chance, while the deletion
-names a gene for negatives as often as positives: the deletion effect is a
-target finder, not an activity assay (ALPHAGENOME.md "Against measured
-enhancers"; `vista_<chrom>.json`, `vista_genome_wide.json`).
+constraint and the AlphaGenome deletion. Over 23 chromosomes and 2,223
+elements every layer leans the right way: an ENCODE element sits on 84.5% of
+positives against 66.1% of negatives, the deletion moves a gene for 72.7%
+against 64.9% with the difference concentrated in the strong effects (52%
+against 39%), and the predicted tissue falls in the measured tissue group for
+68% of the judged cases against 35.5% by chance. Constraint separates least,
+because VISTA chose its elements for conservation to begin with. The deletion
+effect is a target finder first and an activity call second (ALPHAGENOME.md
+"Against measured enhancers"; `vista_<chrom>.json`, `vista_genome_wide.json`).
 
 GTEx eQTLs test the target itself. With the match defined by the eQTL's gene
 and the nearest coding TSS as the control, the deletion model's coding target

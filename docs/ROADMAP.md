@@ -823,24 +823,33 @@ in order. "Owner" is the session that holds the files today (see §7).
   the node model holding on the elements that matter most. Area I's step 2
   has begun: a constrained regulatory block now comes with a predicted target,
   tissue and magnitude wherever AlphaGenome has been asked.
-- **Against measured enhancers (2026-09-12, genomeos-fe; step 3 begun).**
-  VISTA's 2,442 human elements tested in transgenic mouse embryos at e11.5,
-  positive with tissues or negative, read blind through the registry, the
-  CTCF node, Zoonomia constraint and the AlphaGenome deletion of the whole
-  element (`attribution/vista.py`, `scripts/vista_score.py`, job
-  `vista_genome_wide`, `vista_chr*`; the loci cached under
-  `data/knowledge/vista`). chr21 and chr22, 28 positive and 22 negative: an
-  ENCODE enhancer-like element sits there in 100% of positives and 86% of
-  negatives; constrained in 43% and 23%; the deletion moves some gene in 75%
-  and 91%; the predicted tissue falls in the measured tissue group in 8 of 9
-  judged, against 36% by shuffling the labels (hs1304 forebrain to neural
-  tube, 2.7 log2 in neural cells; hs2543 brain, 2.6 in cerebellum). Reading:
-  registry and constraint lean the right way and the tissue is the part of
-  the prediction the assay confirms; the deletion names a gene for negatives
-  as often as positives, so the deletion effect is a target finder, not an
-  activity assay. A VISTA negative is conserved sequence next to a gene that
-  did not drive expression on one embryonic day, and the model reads adult
-  and cell-line tracks. The other 21 chromosomes are running.
+- **Against measured enhancers (2026-09-12, genomeos-fe; step 3).** VISTA's
+  2,442 human elements tested in transgenic mouse embryos at e11.5, positive
+  with tissues or negative, read blind through the registry, the CTCF node,
+  Zoonomia constraint and the AlphaGenome deletion of the whole element
+  (`attribution/vista.py`, job `vista_genome_wide`, `vista_chr*`,
+  `vista_genome_wide`; the loci cached under `data/knowledge/vista`). Over 23
+  chromosomes in five hours, 2,223 non-overlapping elements, 1,133 positive
+  and 1,090 negative:
+
+  | layer | positives | negatives | chromosomes leaning this way |
+  |---|---|---|---|
+  | an ENCODE enhancer-like element sits there | 84.5% | 66.1% | 22 of 23 |
+  | constrained (≥ 20% phyloP bases) | 65.0% | 57.7% | 18 of 23 |
+  | the deletion moves some gene | 72.7% | 64.9% | 17 of 23 |
+  | strong effect (≥ 0.3 log2) among those named | 52% (422 of 806) | 39% (271 of 695) | |
+  | predicted tissue in the measured tissue group | 68% (195 of 286 judged) | 35.5% by shuffling the labels | |
+
+  Every layer leans the right way over the genome. The registry separates
+  best, constraint least because VISTA chose its elements for conservation in
+  the first place, and the two-chromosome reversal on the deletion (75% of
+  positives against 91% of negatives on chr21 and chr22) was fifty elements'
+  noise: over 2,200 the deletion names a gene more often for positives and
+  the difference is in the strong effects. The tissue remains the part of the
+  prediction the assay confirms most. A VISTA negative is conserved sequence
+  next to a gene that did not drive expression on one embryonic day, while
+  the model reads adult and cell-line tracks; the deletion effect stays a
+  target finder first and an activity call second.
 - **Against measured targets (2026-09-12, genomeos-fe).** GTEx v8 eQTLs as
   the ground truth for the target gene itself: the 1.56 GB archive streamed
   member by member over HTTP ranges in 135 s into one TSV per tissue under
@@ -871,9 +880,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   in-silico mutagenesis for the bases that matter; the self-hosted model gates
   the move from chromosome 21 to the genome. 3. Scoring against measured
   ground truth the way the parser was scored against GENCODE: VISTA begun
-  (above); GTEx eQTLs done for the target gene itself (above); next ENCODE4
-  lentiMPRA (K562, HepG2, WTC11) for activity, where the model has the same
-  cell lines as tracks; then the GWAS catalog and ClinVar for consequence.
+  (above); GTEx eQTLs done for the target gene itself (above); VISTA done
+  genome-wide (above); ENCODE4 lentiMPRA (K562, HepG2, WTC11) for activity
+  built and running, same cell against the model's own track and cross-cell
+  reported apart (chr21: rank correlation 0.39 same-cell against 0.07
+  cross-cell for K562, 0.35 against 0.13 for HepG2; the model's predicted
+  DNase higher in the active cell for 74% of 47 cell-specific elements); then
+  the GWAS catalog and ClinVar for consequence.
   4. Closure
   at three levels: gene (open elements reproduce GTEx expression per tissue),
   cell (a deleted element moves its gene and the cell program; IMPC, DepMap),
