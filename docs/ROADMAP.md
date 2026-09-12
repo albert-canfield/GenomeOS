@@ -313,7 +313,9 @@ in order. "Owner" is the session that holds the files today (see §7).
   the series holds, and the parser thread of this area closes: the grammar
   finds the genes, splice-site prediction draws their exons, transcription
   evidence says which are real, and asking the model and the measurement
-  together is the actionable call.
+  together is the actionable call. The Progress tab shows the whole series
+  ("The segment parser, by evidence", one table per chromosome from the
+  committed results), next to the composition budget of area I.
 - **Node edges against a predicted contact map (2026-09-12).** `genomeos
   domains --chrom chr21 --contact-map` takes the insulation minima of
   AlphaGenome's predicted contact map (45 windows, 2 kb bins, 28 4DN Micro-C
