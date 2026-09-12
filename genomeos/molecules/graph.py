@@ -126,7 +126,34 @@ def build(cache_dir: Path = CACHE, min_score: float = 0.7) -> Graph:
                 g.add_edge(
                     writer, substrate, "modifies", "curated: UniProt modified residue, by", 0.8, sites=n
                 )
+    _add_origins(g)
     return g
+
+
+def _add_origins(g: Graph) -> None:
+    """Evolution (area J step 2): origin per gene and its copy-and-paste edges from the Compara stream.
+
+    Reads origin_genome_wide through the results layer; a no-op when it has not been computed. One
+    `paralogue_of` edge per unordered pair of protein nodes, carrying the same evidence and
+    confidence fields as every other edge plus its source, so summarise() counts it as it counts them.
+    """
+    from genomeos.results import load_result
+
+    origin = load_result("origin_genome_wide") or {}
+    for sym, o in (origin.get("genes") or {}).items():
+        if sym not in g.nodes:
+            continue
+        g.nodes[sym].update(origin=o["origin"], origin_ladder=o["ladder"], orthologue_species=o["species"])
+        for other in o.get("paralogues", []):
+            if other in g.nodes and sym < other:
+                g.add_edge(
+                    sym,
+                    other,
+                    "paralogue_of",
+                    "curated: Ensembl Compara paralogues",
+                    0.9,
+                    source="Ensembl Compara",
+                )
 
 
 def summarise(g: Graph) -> dict[str, Any]:

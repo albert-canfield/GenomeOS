@@ -9,6 +9,7 @@ from genomeos.knowledge.homology import (
     STRATA,
     deepest,
     distil,
+    merge_genes,
     place,
     stream,
     taxonomy_names,
@@ -71,7 +72,7 @@ def test_stream_and_distil(tmp_path):
     d = distil(genes, symbols, members)
     g = d["genes"]
     assert g["RPL3"]["origin"] == "Eukaryota" and g["RPL3"]["paralogues"] == ["MAMM1"]
-    assert g["RPL3"]["ladder"] == "Life/Eukaryote core"
+    assert g["RPL3"]["ladder"] == "Eukaryote core"
     assert g["MAMM1"]["origin"] == "Euarchontoglires" and g["MAMM1"]["paralogue_types"] == {
         "other_paralog": 1
     }
@@ -116,3 +117,52 @@ def test_taxonomy_names_strip_assembly_and_strain_suffixes():
     assert taxonomy_names("bos_taurus_gca963921495v1") == ["bos_taurus_gca963921495v1", "bos_taurus"]
     assert taxonomy_names("mus_musculus_129s1svimj") == ["mus_musculus_129s1svimj", "mus_musculus"]
     assert taxonomy_names("canis_lupus_familiaris") == ["canis_lupus_familiaris", "canis_lupus"]
+
+
+def test_life_stratum_and_merge_of_two_streams():
+    from collections import Counter
+
+    assert STRATA[0] == "Life" and LADDER["Life"] == "Life core"
+    assert (
+        place({"Escherichia", "Bacteria"}) == "Life"
+        and place({"Arabidopsis", "Viridiplantae", "Eukaryota"}) == "Eukaryota"
+    )
+    a = {
+        "G1": {
+            "rank": RANK["Chordata"],
+            "species": {"ciona"},
+            "one2one": 1,
+            "paralogues": {"G2"},
+            "paralogue_types": Counter({"within_species_paralog": 1}),
+        }
+    }
+    b = {
+        "G1": {
+            "rank": RANK["Life"],
+            "species": {"e_coli"},
+            "one2one": 1,
+            "paralogues": set(),
+            "paralogue_types": Counter(),
+        },
+        "G3": {
+            "rank": None,
+            "species": set(),
+            "one2one": 0,
+            "paralogues": set(),
+            "paralogue_types": Counter(),
+        },
+    }
+    m = merge_genes(a, b)
+    assert (
+        m["G1"]["rank"] == RANK["Life"]
+        and m["G1"]["species"] == {"ciona", "e_coli"}
+        and m["G1"]["one2one"] == 2
+    )
+    assert m["G1"]["paralogues"] == {"G2"} and "G3" in m
+
+
+def test_species_fallback_places_renamed_species():
+    from genomeos.knowledge.homology import SPECIES_FALLBACK
+
+    assert set(SPECIES_FALLBACK.values()) <= set(STRATA)
+    assert SPECIES_FALLBACK["physeter_catodon"] == "Boreoeutheria"

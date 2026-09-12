@@ -341,6 +341,31 @@ axes are reported side by side and never merged (D43); the case is
 constrained_unknown blocks now carry a second fact, that people vary in
 them, which narrows what they can be.
 
+**The genome (24 chromosomes, 136.9 MB of ranges, 2026-09-12).** The ordering
+two chromosomes suggested holds at scale. Share of kilobases constrained
+among people: canonical coding segments 38.1%, introns 18.9%, the
+regulatory tier 11.9%, fossil 3.0%, neutral 2.7%, constrained_unknown 2.4%,
+structural 0.4%; per chromosome the coding share runs from 22% (chr4) to
+58% (chr19), and chrY is unmeasured throughout because Gnocchi has no
+kilobase there, which the result records as unmeasured rather than as
+zero. Elements by case, share whose deletion names a coding gene:
+
+| case (mammals, people) | elements | name a gene | strong in people |
+|---|---|---|---|
+| syntax (constrained, constrained) | 825 | **73.9%** | 315 |
+| relaxed (constrained, free) | 1,337 | 56.0% | 0 |
+| recent (free, constrained) | 782 | 50.0% | 123 |
+| tolerant (free, free) | 2,235 | 45.3% | 0 |
+
+Both axes beat either alone on every count; per chromosome the syntax
+elements name a gene between 51% (chr1) and 87% (chr6). The
+constrained_unknown tier splits into 77 `syntax`, 492 `relaxed`, 30
+`recent` and 346 `tolerant` blocks of 948 measured: half of area I's real
+unknown is held across mammals and variable among people, which is the
+signature of the copies §7 finds there and, where it is not a copy, the
+value-slot reading. VISTA positives 20.2% against negatives 16.9% over
+2,223 elements, as reported above.
+
 ## 7. Step 3 built: duplication from curated data (2026-09-12)
 
 `genomeos duplications --chrom C` (`genome/duplications.py`; results

@@ -82,7 +82,12 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   human-constrained, no more than the neutral tier, and chr15's neutral tier
   reads 17%. Coding segments read 40% and 31%, introns 26% and 18%, so the
   axis is real and its block-level form is noisy; the case is `inferred` at
-  0.3 to 0.6, never a verdict (`variation_chr21`, `variation_chr15`).
+  0.3 to 0.6, never a verdict (`variation_chr21`, `variation_chr15`). Over
+  the genome the ordering holds on every count: elements constrained on both
+  axes name a gene 73.9% (825), mammals only 56.0%, people only 50.0%,
+  neither 45.3% (`variation_genome_wide`). A track with no coverage (Gnocchi
+  on chrY) is recorded as unmeasured on every block, never as zero: absence
+  of a score is not evidence of tolerance.
 
 - The most constrained intergenic blocks are often copies: UCSC's curated
   segmental duplications cover 4.7% of the constrained_unknown tier genome-wide

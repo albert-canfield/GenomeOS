@@ -662,3 +662,18 @@ and, while the Compara job runs, origin and paralogues as the only residue.
 Three jobs run in the background (the human axis over the genome, origin per
 gene, motifs over the genome); results are committed as they land.
 docs/GRAMMAR-BY-COMPARISON.md §8 and §9.
+
+## 2026-09-12 — the human axis over the genome
+
+The `variation_genome_wide` job finished over 24 chromosomes and 137 MB of
+range requests, one network timeout on chr6 resumed without loss. The
+ordering two chromosomes suggested holds at scale: elements constrained on
+both axes name a coding gene 73.9% of the time (825 elements), mammals only
+56.0% (1,337), people only 50.0% (782), neither 45.3% (2,235), both axes
+beating either alone on every count and on every chromosome (51% to 87% for
+the syntax elements). Coding segments read 38.1% human-constrained, introns
+18.9%, the regulatory tier 11.9%, neutral 2.7%, the constrained_unknown tier
+2.4%, of which 492 of 948 measured blocks are `relaxed`: held across mammals,
+variable among people, the signature of the copies the duplication read
+found there. chrY is unmeasured throughout, recorded as such and never as
+zero. docs/GRAMMAR-BY-COMPARISON.md §6.

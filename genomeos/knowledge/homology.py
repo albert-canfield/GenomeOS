@@ -44,10 +44,16 @@ DUMP_URL = (
     "https://ftp.ensembl.org/pub/release-{release}/tsv/ensembl-compara/homologies/homo_sapiens/"
     "Compara.{release}.protein_default.homologies.tsv.gz"
 )
+# the pan-taxonomic Compara: human against plants, fungi, protists, bacteria and archaea
+PAN_URL = (
+    "https://ftp.ensemblgenomes.ebi.ac.uk/pub/pan_ensembl/current/tsv/ensembl-compara/homologies/"
+    "homo_sapiens/Compara.{release}.protein_default.homologies.tsv.gz"
+)
 KNOWLEDGE = Path("data/knowledge/homology")
 GENES_TSV = Path("data/cache/gencode_genes.tsv")
 # deep to shallow: the clade ladder every species is placed on, relative to human
 STRATA = (
+    "Life",
     "Eukaryota",
     "Opisthokonta",
     "Metazoa",
@@ -76,7 +82,8 @@ STRATA = (
 RANK = {s: i for i, s in enumerate(STRATA)}
 # the conversation's library ladder, as the stratum each name begins at
 LADDER = {
-    "Eukaryota": "Life/Eukaryote core",
+    "Life": "Life core",
+    "Eukaryota": "Eukaryote core",
     "Opisthokonta": "Eukaryote core",
     "Metazoa": "Animal core",
     "Bilateria": "Animal core",
@@ -104,6 +111,13 @@ LADDER = {
 # Ensembl's classification lists only some nodes (no Amniota, Tetrapoda, Theria, Boreoeutheria ...), so
 # these node names stand in for the stratum they imply relative to human
 PROXIES = {
+    "Bacteria": "Life",
+    "Archaea": "Life",
+    "Viridiplantae": "Eukaryota",
+    "Alveolata": "Eukaryota",
+    "Amoebozoa": "Eukaryota",
+    "Stramenopiles": "Eukaryota",
+    "Euglenozoa": "Eukaryota",
     "Fungi": "Opisthokonta",
     "Ascomycota": "Opisthokonta",
     "Saccharomycetes": "Opisthokonta",
@@ -180,6 +194,9 @@ def classify_species(
         if sp in done and done[sp].get("stratum"):
             continue
         done[sp] = {"stratum": None, "error": "no taxonomy match"}
+        if sp in SPECIES_FALLBACK:
+            done[sp] = {"stratum": SPECIES_FALLBACK[sp], "queried_as": "fallback table"}
+            continue
         for name in taxonomy_names(sp):
             try:
                 nodes = _rest(f"https://rest.ensembl.org/taxonomy/classification/{name}")
@@ -235,6 +252,14 @@ def _rest(url: str, tries: int = 4):
             time.sleep(3 * (i + 1))
     return None
 
+
+# production names the taxonomy endpoint does not resolve under any form (renamed or absent in NCBI)
+SPECIES_FALLBACK = {
+    "neovison_vison": "Boreoeutheria",  # American mink, now Neogale vison
+    "physeter_catodon": "Boreoeutheria",  # sperm whale, now Physeter macrocephalus
+    "erythrura_gouldiae": "Amniota",  # Gouldian finch
+    "stachyris_ruficeps": "Amniota",  # rufous-capped babbler
+}
 
 ORTHOLOG_TYPES = {"ortholog_one2one", "ortholog_one2many", "ortholog_many2many"}
 PARALOG_TYPES = {"within_species_paralog", "other_paralog", "gene_split"}
@@ -408,16 +433,61 @@ def library_members() -> dict[str, list[str]] | None:
         return None
 
 
+def merge_genes(a: dict[str, dict], b: dict[str, dict]) -> dict[str, dict]:
+    """Two streams of the same human genes: the deeper origin wins, species and paralogues are pooled."""
+    out = dict(a)
+    for gid, g in b.items():
+        if gid not in out:
+            out[gid] = g
+            continue
+        o = out[gid]
+        if g["rank"] is not None and (o["rank"] is None or g["rank"] < o["rank"]):
+            o["rank"] = g["rank"]
+        o["species"] |= g["species"]
+        o["one2one"] += g["one2one"]
+        o["paralogues"] |= g["paralogues"]
+        o["paralogue_types"].update(g["paralogue_types"])
+    return out
+
+
+def _stream_placing(url: str, strata: dict[str, str | None], progress=None) -> tuple[dict, dict]:
+    """Stream once; if the dump names species the ladder has not placed, place them and stream again."""
+    genes, cost = stream(url, strata, progress)
+    missing = [sp for sp in cost["unplaced_species"] if not strata.get(sp)]
+    if missing:
+        placed = classify_species(missing)
+        for sp, v in placed.items():
+            strata[sp] = v.get("stratum")
+        genes, cost = stream(url, strata, progress)
+        cost["placed_on_the_way"] = {sp: strata.get(sp) for sp in missing}
+    return genes, cost
+
+
 def run_and_save(
-    url: str | None = None, results_dir: Path = RESULTS_DIR, progress=None, name: str = "origin_genome_wide"
+    url: str | None = None,
+    results_dir: Path = RESULTS_DIR,
+    progress=None,
+    name: str = "origin_genome_wide",
+    pan_url: str | None = None,
 ) -> dict:
     strata = load_species_strata()
-    genes, cost = stream(url or DUMP_URL.format(release=RELEASE), strata, progress)
+    urls = {"vertebrates": url or DUMP_URL.format(release=RELEASE)}
+    if pan_url != "":
+        urls["pan_taxonomic"] = pan_url or PAN_URL.format(release=RELEASE)
+    genes: dict[str, dict] = {}
+    costs: dict[str, dict] = {}
+    for label, u in urls.items():
+        try:
+            g, costs[label] = _stream_placing(u, strata, progress)
+        except OSError as e:  # the pan dump is optional: say so and go on
+            costs[label] = {"error": str(e)[:120]}
+            continue
+        genes = merge_genes(genes, g) if genes else g
     out = distil(genes, load_symbols(), library_members())
-    out["cost"] = cost
+    out["cost"] = costs
     out["species_placed"] = sum(1 for v in strata.values() if v)
     out["species_unplaced"] = sorted(sp for sp, v in strata.items() if not v)
-    out["source"] = url or DUMP_URL.format(release=RELEASE)
+    out["sources"] = urls
     save_result(name, out, results_dir)
     return out
 
