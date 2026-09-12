@@ -696,6 +696,10 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div id="j-budget" class="scroll"></div>
     </div>
     <div class="card">
+      <h2><i class="ic">📐</i>The segment parser, by evidence<span class="help" data-tip="Reading genes from sequence alone and then adding evidence: the learned splice matrices (grammar), AlphaGenome's predicted splice sites, predicted RNA over the exons (eight tissues), measured RNA (ENCODE cell lines) and both. Sensitivity / precision against every GENCODE coding transcript; every configuration's result file is committed side by side, so the trade-offs stay checkable.">?</span></h2>
+      <div id="j-segments" class="scroll"></div>
+    </div>
+    <div class="card">
       <h2><i class="ic">🎯</i>Enhancer targets, predicted<span class="help" data-tip="AlphaGenome feature b. Each sampled distal enhancer is deleted in its 1 Mb window and the predicted expression of every gene in the window is read across all RNA-seq tracks; the gene that moves most is the predicted target, the track is the tissue. Compared with the domain inference (nearest TSS inside the CTCF node): agreement is a test of the node model. Predicted evidence, confidence capped at 0.7.">?</span></h2>
       <div id="j-enhancers" class="scroll"></div>
     </div>
@@ -1404,6 +1408,14 @@ async function loadIndividualWide() {
         return `<div class="kpi"><div><b>mouse ${c}</b><span>${fmt(r.length)} bp · ${fmt(r.genes)} genes (${fmt(r.coding_genes)} coding)</span></div><div><b>${fmt(r.domains)}</b><span>nodes, median ${fmt(r.domain_length_median)} bp</span></div><div><b>${n.tested}</b><span>nodes with ≥ 2 symbol-matched genes</span></div><div><b>${pct(n.fraction_conserved)}</b><span>in one human node</span></div><div><b>${pct(n.fraction_same_neighbourhood)}</b><span>same human neighbourhood</span></div><div><b>${n.split_scattered}</b><span>scattered</span></div></div>
           <div class="muted">${Object.entries(r.evidence || {}).map(([k, v]) => `<span class="pill ${v.startsWith('curated') ? 'curated' : 'inferred'}">${k}</span> ${v.split(': ').slice(1).join(': ')}`).join(' · ')}</div>`; }).join('');
     } else $('#j-mouse').innerHTML = '<span class="muted">not run yet (genomeos mouse --chrom chr19)</span>';
+    const segs = d.segments || [];
+    if (segs.length) {
+      const pct = x => x == null ? '?' : (x * 100).toFixed(1) + '%';
+      const label = c => ({grammar: 'matrices alone', predicted_sites: '+ predicted splice sites', predicted_sites_rna: '+ predicted RNA (8 tissues)', predicted_sites_markov: '+ sites, Markov coding model', predicted_sites_anchored: '+ sites, starts at ENCODE promoters', predicted_sites_measured_K562: '+ sites, measured RNA (K562)', predicted_sites_measured_panel6: '+ sites, measured RNA (6 lines)', predicted_sites_measured_panel8: '+ sites, measured RNA (6 lines)', predicted_sites_rna_measured_panel6_union: '+ sites, predicted or measured RNA', predicted_sites_rna_measured_panel6_intersection: '+ sites, predicted and measured RNA'}[c] || c.replace(/_/g, ' '));
+      const byChrom = {}; segs.forEach(s => (byChrom[s.chrom] = byChrom[s.chrom] || []).push(s));
+      $('#j-segments').innerHTML = Object.entries(byChrom).map(([c, rows]) => `<div style="margin-bottom:8px"><b class="mono">${c}</b> <span class="muted">${rows[0].true_genes || '?'} coding genes</span>
+        <table><tr><th>configuration</th><th class="num">candidates</th><th class="num">exons sens / prec</th><th class="num">canonical exons</th><th class="num">genes sens / prec</th></tr>${rows.map(s => `<tr><td>${label(s.config)}</td><td class="num">${fmt(s.predictions || 0)}</td><td class="num">${pct(s.exon_sensitivity)} / ${pct(s.exon_precision)}</td><td class="num">${pct(s.canonical_exon_sensitivity)}</td><td class="num">${pct(s.gene_sensitivity)} / ${pct(s.gene_precision)}</td></tr>`).join('')}</table></div>`).join('') + '<div class="muted"><span class="pill predicted">predicted</span> every configuration; scored against GENCODE (curated); docs/SEQUENCE-GRAMMAR.md</div>';
+    } else $('#j-segments').innerHTML = '<span class="muted">not run yet (genomeos segments --chrom chr21)</span>';
     const et = d.enhancer_targets || {};
     const chroms = Object.keys(et);
     if (chroms.length) {

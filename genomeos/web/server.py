@@ -872,6 +872,28 @@ class Api:
                 for p in sorted(rd.glob("enhancer_targets_chr*.json"))
             },
             "enhancer_targets_genome_wide": load_result("enhancer_targets_genome_wide", rd),
+            "segments": [
+                {
+                    "name": p.stem,
+                    "chrom": p.stem.split("_")[1],
+                    "config": "_".join(p.stem.split("_")[2:]) or "grammar",
+                    **{
+                        k: v
+                        for k, v in (load_result(p.stem, rd) or {}).items()
+                        if k
+                        in (
+                            "predictions",
+                            "exon_sensitivity",
+                            "exon_precision",
+                            "canonical_exon_sensitivity",
+                            "gene_sensitivity",
+                            "gene_precision",
+                            "true_genes",
+                        )
+                    },
+                }
+                for p in sorted(rd.glob("segments_chr*.json"))
+            ],
             "mouse": {
                 p.stem.split("_")[-1]: {
                     k: v
