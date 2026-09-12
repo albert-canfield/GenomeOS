@@ -264,6 +264,24 @@ variants; 194 of 221 coding genes carry a variant, 269 coding SNVs (135
 missense, 133 synonymous, 1 nonsense), the KRTAP10 cluster on top as
 expected for a highly polymorphic family.
 
+## Telomere from a BAM read by ranges (2026-09-12)
+
+GIAB's 300x Illumina BAM of HG002 on GRCh38 (601 GB, NCBI FTP over HTTPS,
+`NHGRI_Illumina300X_AJtrio_novoalign_bams/HG002.GRCh38.300x.bam`) answers
+range requests and comes with its index (`.bai`, 12 MB). `genomeos telomere
+<bam-url> --bai <index> --save NAME` never downloads the BAM: the index's
+pseudo-bins give the mapped read count per chromosome and the unmapped count
+(`genome/bam_range.py`, standard library only); the unmapped tail, where the
+pure TTAGGG reads sit, is sampled by range (100 MB by default) and scaled by
+that count; the last and first 10 kb of assembled sequence of each chromosome
+(found from the local reference, past the terminal N runs) are read whole for
+the boundary reads and the coverage; TelSeq's arithmetic then gives a length
+per chromosome end. The index is cached under `data/knowledge/telomere/`
+(git-ignored); the result for a GIAB person goes under `data/results`.
+Evidence: the reads are `experimental`, the estimate `inferred` (0.3), since no
+GC normalisation is applied and the sampled tail is a sample. CRAM is not
+readable without htslib, so the range route is BAM only.
+
 ## Optional: AlphaMissense (predicted missense effect, 2026-09-12)
 
 `genomeos individual coding --name N --predict` streams DeepMind's AlphaMissense

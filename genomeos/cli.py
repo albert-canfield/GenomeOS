@@ -489,6 +489,36 @@ def cmd_clock(args: argparse.Namespace) -> int:
 def cmd_telomere(args: argparse.Namespace) -> int:
     from genomeos.genome.telomere import estimate_file
 
+    if args.bai:
+        from genomeos.genome.telomere import estimate_remote
+        from genomeos.results import save_result
+
+        chroms = args.chrom or [f"chr{i}" for i in range(1, 23)] + ["chrX"]
+        r = estimate_remote(
+            args.reads,
+            args.bai,
+            chroms,
+            window=args.window,
+            sample_bytes=int(args.sample_mb * 1e6),
+            k=args.k,
+            progress=lambda m: print("  " + m, flush=True),
+        )
+        p = r.pop("parameter")
+        r["confidence"] = p.confidence
+        r["evidence"] = {"kind": p.evidence.kind.value, "source": p.evidence.source}
+        with_reads = [e for e in r["ends"] if e["reads"]]
+        print(
+            f"{args.reads}: {r['reads_total_from_index']:,} reads in the index "
+            f"({r['reads_unmapped']:,} unmapped); "
+            f"{r['unmapped_sampled']:,} unmapped sampled, {r['unmapped_sample_telomeric']:,} telomeric "
+            f"({r['unmapped_telomeric_fraction']}); {len(with_reads)} chromosome ends read, "
+            f"mean coverage {r['mean_end_coverage']}x; {r['bytes_fetched'] / 1e6:.0f} MB "
+            f"in {r['requests']} requests"
+        )
+        print(f"  telomere ≈ {r['telomere_bp']:,} bp per end (TelSeq over ranges, confidence {p.confidence})")
+        if args.save:
+            print(f"  saved {save_result(args.save, r)}")
+        return 0
     est = estimate_file(args.reads, k=args.k, max_reads=args.max_reads)
     if args.save:
         from genomeos.results import save_result
@@ -4205,6 +4235,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("-k", type=int, default=7, help="TTAGGG repeats per read to call it telomeric")
     p.add_argument("--max-reads", type=int)
     p.add_argument("--save", metavar="NAME", help="write a result summary to data/results/NAME.json")
+    p.add_argument("--bai", help="index of an indexed BAM given as `reads` (URL or path): read it by ranges")
+    p.add_argument("--chrom", nargs="*", help="chromosome ends to read (default: autosomes and chrX)")
+    p.add_argument("--window", type=int, default=10_000, help="bases read at each chromosome end")
+    p.add_argument("--sample-mb", type=float, default=100.0, help="megabytes of the unmapped tail to sample")
     p.set_defaults(fn=cmd_telomere)
 
     p = sub.add_parser("debug", help="step a module or a cell with breakpoints and an evidence trace")
