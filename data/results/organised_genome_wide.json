@@ -1,0 +1,321 @@
+{
+  "result": "organised_genome_wide",
+  "date": "2026-09-12",
+  "chromosomes": 24,
+  "per_chromosome": {
+    "chr1": {
+      "blocks": 2425,
+      "copies": 199,
+      "real_unknown_blocks": 73,
+      "real_unknown_bp": 1934693,
+      "syntax_candidates": 7
+    },
+    "chr2": {
+      "blocks": 1943,
+      "copies": 219,
+      "real_unknown_blocks": 93,
+      "real_unknown_bp": 3168912,
+      "syntax_candidates": 9
+    },
+    "chr3": {
+      "blocks": 1298,
+      "copies": 40,
+      "real_unknown_blocks": 48,
+      "real_unknown_bp": 1606359,
+      "syntax_candidates": 5
+    },
+    "chr4": {
+      "blocks": 1398,
+      "copies": 84,
+      "real_unknown_blocks": 52,
+      "real_unknown_bp": 1711870,
+      "syntax_candidates": 0
+    },
+    "chr5": {
+      "blocks": 1363,
+      "copies": 58,
+      "real_unknown_blocks": 47,
+      "real_unknown_bp": 2368714,
+      "syntax_candidates": 3
+    },
+    "chr6": {
+      "blocks": 1396,
+      "copies": 40,
+      "real_unknown_blocks": 58,
+      "real_unknown_bp": 2475567,
+      "syntax_candidates": 7
+    },
+    "chr7": {
+      "blocks": 1400,
+      "copies": 209,
+      "real_unknown_blocks": 39,
+      "real_unknown_bp": 1002287,
+      "syntax_candidates": 7
+    },
+    "chr8": {
+      "blocks": 1180,
+      "copies": 95,
+      "real_unknown_blocks": 50,
+      "real_unknown_bp": 1825718,
+      "syntax_candidates": 2
+    },
+    "chr9": {
+      "blocks": 1080,
+      "copies": 180,
+      "real_unknown_blocks": 39,
+      "real_unknown_bp": 1299661,
+      "syntax_candidates": 5
+    },
+    "chr10": {
+      "blocks": 1190,
+      "copies": 105,
+      "real_unknown_blocks": 38,
+      "real_unknown_bp": 810185,
+      "syntax_candidates": 3
+    },
+    "chr11": {
+      "blocks": 1453,
+      "copies": 141,
+      "real_unknown_blocks": 39,
+      "real_unknown_bp": 947616,
+      "syntax_candidates": 2
+    },
+    "chr12": {
+      "blocks": 1165,
+      "copies": 33,
+      "real_unknown_blocks": 31,
+      "real_unknown_bp": 269658,
+      "syntax_candidates": 3
+    },
+    "chr13": {
+      "blocks": 771,
+      "copies": 49,
+      "real_unknown_blocks": 40,
+      "real_unknown_bp": 2190618,
+      "syntax_candidates": 0
+    },
+    "chr14": {
+      "blocks": 942,
+      "copies": 122,
+      "real_unknown_blocks": 35,
+      "real_unknown_bp": 1420411,
+      "syntax_candidates": 1
+    },
+    "chr15": {
+      "blocks": 684,
+      "copies": 168,
+      "real_unknown_blocks": 21,
+      "real_unknown_bp": 885460,
+      "syntax_candidates": 3
+    },
+    "chr16": {
+      "blocks": 862,
+      "copies": 148,
+      "real_unknown_blocks": 39,
+      "real_unknown_bp": 1832950,
+      "syntax_candidates": 1
+    },
+    "chr17": {
+      "blocks": 1022,
+      "copies": 147,
+      "real_unknown_blocks": 24,
+      "real_unknown_bp": 620617,
+      "syntax_candidates": 3
+    },
+    "chr18": {
+      "blocks": 612,
+      "copies": 37,
+      "real_unknown_blocks": 37,
+      "real_unknown_bp": 2831617,
+      "syntax_candidates": 2
+    },
+    "chr19": {
+      "blocks": 1066,
+      "copies": 79,
+      "real_unknown_blocks": 14,
+      "real_unknown_bp": 163667,
+      "syntax_candidates": 1
+    },
+    "chr20": {
+      "blocks": 762,
+      "copies": 41,
+      "real_unknown_blocks": 21,
+      "real_unknown_bp": 777658,
+      "syntax_candidates": 0
+    },
+    "chr21": {
+      "blocks": 446,
+      "copies": 131,
+      "real_unknown_blocks": 5,
+      "real_unknown_bp": 113090,
+      "syntax_candidates": 0
+    },
+    "chr22": {
+      "blocks": 635,
+      "copies": 137,
+      "real_unknown_blocks": 10,
+      "real_unknown_bp": 34661,
+      "syntax_candidates": 1
+    },
+    "chrX": {
+      "blocks": 1338,
+      "copies": 185,
+      "real_unknown_blocks": 25,
+      "real_unknown_bp": 228991,
+      "syntax_candidates": 4
+    },
+    "chrY": {
+      "blocks": 375,
+      "copies": 247,
+      "real_unknown_blocks": 4,
+      "real_unknown_bp": 81202,
+      "syntax_candidates": 0
+    }
+  },
+  "by_tier": {
+    "structural": {
+      "blocks": 238,
+      "bp": 229707851,
+      "copies": 56,
+      "copies_bp": 3923624,
+      "cases_after_copies": {
+        "unmeasured": {
+          "blocks": 144,
+          "bp": 171613046
+        },
+        "tolerant": {
+          "blocks": 37,
+          "bp": 54166843
+        },
+        "recent": {
+          "blocks": 1,
+          "bp": 4338
+        }
+      }
+    },
+    "fossil": {
+      "blocks": 7302,
+      "bp": 328523829,
+      "copies": 1240,
+      "copies_bp": 26691385,
+      "cases_after_copies": {
+        "tolerant": {
+          "blocks": 5130,
+          "bp": 283423902
+        },
+        "unmeasured": {
+          "blocks": 200,
+          "bp": 8048287
+        },
+        "recent": {
+          "blocks": 732,
+          "bp": 10360255
+        }
+      }
+    },
+    "regulatory": {
+      "blocks": 15536,
+      "bp": 345170726,
+      "copies": 689,
+      "copies_bp": 8228042,
+      "cases_after_copies": {
+        "recent": {
+          "blocks": 3831,
+          "bp": 57007096
+        },
+        "tolerant": {
+          "blocks": 8932,
+          "bp": 243719386
+        },
+        "unmeasured": {
+          "blocks": 461,
+          "bp": 3293719
+        },
+        "syntax": {
+          "blocks": 612,
+          "bp": 5905286
+        },
+        "relaxed": {
+          "blocks": 1011,
+          "bp": 27017197
+        }
+      }
+    },
+    "constrained_unknown": {
+      "blocks": 1098,
+      "bp": 32025494,
+      "copies": 216,
+      "copies_bp": 1423312,
+      "cases_after_copies": {
+        "tolerant": {
+          "blocks": 329,
+          "bp": 16427815
+        },
+        "recent": {
+          "blocks": 29,
+          "bp": 243992
+        },
+        "relaxed": {
+          "blocks": 437,
+          "bp": 13438999
+        },
+        "syntax": {
+          "blocks": 69,
+          "bp": 386621
+        },
+        "unmeasured": {
+          "blocks": 18,
+          "bp": 104755
+        }
+      }
+    },
+    "neutral": {
+      "blocks": 2632,
+      "bp": 73328371,
+      "copies": 693,
+      "copies_bp": 7402463,
+      "cases_after_copies": {
+        "unmeasured": {
+          "blocks": 96,
+          "bp": 815324
+        },
+        "recent": {
+          "blocks": 306,
+          "bp": 2212029
+        },
+        "tolerant": {
+          "blocks": 1537,
+          "bp": 62898555
+        }
+      }
+    }
+  },
+  "real_unknown": {
+    "blocks": 882,
+    "bp": 30602182,
+    "by_case": {
+      "tolerant": {
+        "blocks": 329,
+        "bp": 16427815
+      },
+      "recent": {
+        "blocks": 29,
+        "bp": 243992
+      },
+      "relaxed": {
+        "blocks": 437,
+        "bp": 13438999
+      },
+      "syntax": {
+        "blocks": 69,
+        "bp": 386621
+      },
+      "unmeasured": {
+        "blocks": 18,
+        "bp": 104755
+      }
+    }
+  },
+  "copy_min_fraction": 0.5,
+  "note": "The budget's constrained_unknown tier re-read with copies set apart and the human axis attached: the real unknown is what remains, split by the case the two axes make."
+}

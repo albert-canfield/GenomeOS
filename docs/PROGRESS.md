@@ -694,3 +694,4 @@ would give: splicing, replication, translation and the telomere machinery
 oldest, the ligand-receptor protocol and skin youngest. 64,050 paralogue
 edges joined the knowledge graph (394,068 edges). APP decompiles with no
 unknown residue left. docs/GRAMMAR-BY-COMPARISON.md §10; one LESSONS row.
+- **The organiser**: `genomeos organise --chrom C` (genomeos/attribution/organise.py) joins the budget, the human axis and the copy flag per UNKNOWN block, copies first; genome-wide the constrained_unknown tier's 1,098 blocks lose 216 copies and the real unknown is 882 blocks (30.6 Mb): 69 constrained on both axes (387 kb, the sharpest candidates), 437 relaxed, 329 tolerant, 29 recent, 18 unmeasured; `organised_chr*.json` (720 kB in all), `organised_genome_wide.json`; the compiled program's regions carry the copy flag (116 of chr21's 446), checks unchanged.

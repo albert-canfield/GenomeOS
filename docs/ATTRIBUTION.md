@@ -290,15 +290,47 @@ about 1 to 2 MB of ranges, and saves `data/results/syntax_<GENE>.json`. With mor
 genomes imported the value slots fill in; with the reader and the attributions the
 next question, what a slot controls, is asked of the right positions.
 
+## The organiser (2026-09-12)
+
+`genomeos organise --chrom C` joins, per UNKNOWN block, the three readings that
+exist: the budget's tier and mammalian constraint, area J's human axis and the
+case the two axes make, and the copy flag from curated segmental duplications.
+It recomputes nothing and it reads copies first. A block half or more of which is
+a duplication is a copy before anything else is said about it, because its
+mammalian alignment is paralogous and its human variants do not map, so both
+axes lie about it. A constrained_unknown block that is not a copy is then read by
+its case.
+
+| tier | blocks | copies | after copies | syntax | relaxed | recent | tolerant | unmeasured |
+|---|---|---|---|---|---|---|---|---|
+| constrained_unknown | 1,098 | 216 | 882 | 69 | 437 | 29 | 329 | 18 |
+| regulatory | 15,536 | 689 | 14,847 | 612 | 1,011 | 3,831 | 8,932 | 461 |
+| fossil | 7,302 | 1,240 | 6,062 | 0 | 0 | 732 | 5,130 | 200 |
+| neutral | 2,632 | 693 | 1,939 | 0 | 0 | 306 | 1,537 | 96 |
+| structural | 238 | 56 | 182 | 0 | 0 | 1 | 37 | 144 |
+
+The real unknown after copies is 882 blocks and 30.6 Mb, and it is three things
+rather than one. Sixty-nine blocks, 387 kb in all, are constrained on both axes
+with no annotation: the sharpest candidates for an unannotated element or gene,
+and the first to read one by one. Four hundred and thirty-seven, 13.4 Mb, are held
+across mammals yet variable among people: a frame whose value varies, or a
+function this lineage has lost. Three hundred and twenty-nine, 16.4 Mb, are free
+on both scales at kilobase resolution, and want their alignment checked before
+anything is attributed. Chromosome 21's twenty unknown blocks become five after
+copies, none of them syntax. The compiled program carries the copy flag as well:
+a copy's region says so in its role and its note, with the program's checks and
+unknown count unchanged. Results are `organised_<chrom>.json` (tallies, copies,
+candidates; the full join is recomputed on demand) and `organised_genome_wide.json`.
+
 ## What comes next, in order
 
 1. **Every element in a gene's node scored per cell**, not a sample, so the
    closure judges a gene's whole regulatory input; the self-hosted model's
    first job.
-2. **The rest of the organising evidence** on the compiled blocks: repeat
-   family and segmental duplication on regions, the reader's openness on the
-   element itself rather than its node, and the human axis (area J's Gnocchi
-   score) beside the mammalian one. The two axes disagreeing is itself a
+2. **The 69 syntax candidates read one by one**: which node, which gene next
+   door, what AlphaGenome says of each in silico, and whether any is an
+   unannotated exon (the segment parser over the block); then the reader's
+   openness on the element itself rather than its node. The two axes disagreeing is itself a
    flag: chr15:84,395,903-84,398,315 is 23% constrained across mammals and
    carries far more human variation than expected (Gnocchi Z of -8.5 over its
    kilobases), which reads as a mutation hotspot or a mapping artefact rather

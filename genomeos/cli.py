@@ -1608,6 +1608,68 @@ def cmd_duplications(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_profiling(args: argparse.Namespace) -> int:
+    """Phylogenetic profiling between libraries: gained and lost together across species (area J step 5)."""
+    from genomeos.knowledge.homology import STRATA
+    from genomeos.results import load_result
+
+    r = load_result("profiling_genome_wide") if args.cached else None
+    if r is None:
+        from genomeos.knowledge.profiling import run_and_save
+
+        r = run_and_save()
+    if args.library:
+        lib = r["libraries"].get(args.library)
+        if not lib:
+            print(f"{args.library}: fewer than {r['min_members']} members placed")
+            return 1
+        print(
+            f"{args.library}: {lib['members_placed']} members; profile against the genome's r = "
+            f"{lib['against_genome']}; gain curve (share of members with an origin at or before the stratum):"
+        )
+        gc = lib["gain_curve"]
+        print(
+            _table(
+                [{"stratum": s_, "share": _pct(gc[s_])} for s_ in STRATA if s_ in gc], ["stratum", "share"]
+            )
+        )
+        partners = [p_ for p_ in r["pairs"] if args.library in p_["libraries"]]
+        rows = [
+            {"library": [x for x in p_["libraries"] if x != args.library][0], "r": p_["residual_correlation"]}
+            for p_ in partners[: args.top]
+        ]
+        if rows:
+            print("\nlibraries with the most similar history (residual profile correlation):")
+            print(_table(rows, ["library", "r"]))
+        print(f"  [{r['evidence']['correlation']}]")
+        return 0
+    print(
+        f"{len(r['libraries'])} libraries profiled over {r['species']} species "
+        f"({', '.join(f'{k} {v}' for k, v in r['species_by_stratum'].items())})"
+    )
+    print(
+        _table(
+            [
+                {"libraries": " ~ ".join(p_["libraries"]), "r": p_["residual_correlation"]}
+                for p_ in r["top_pairs"][: args.top]
+            ],
+            ["libraries", "r"],
+        )
+    )
+    print("\nleast alike:")
+    print(
+        _table(
+            [
+                {"libraries": " ~ ".join(p_["libraries"]), "r": p_["residual_correlation"]}
+                for p_ in r["bottom_pairs"][-min(args.top, 5) :]
+            ],
+            ["libraries", "r"],
+        )
+    )
+    print(f"  [{r['evidence']['profile']}; {r['evidence']['correlation']}]")
+    return 0
+
+
 def cmd_origin(args: argparse.Namespace) -> int:
     """Origin per gene and age per library from Ensembl Compara, streamed once (area J step 2)."""
     from genomeos.knowledge.homology import LADDER, STRATA
@@ -1775,6 +1837,134 @@ def cmd_variation(args: argparse.Namespace) -> int:
             )
         )
     print(f"  [{r['evidence']['case']}; {r['cost']['seconds']} s]")
+    return 0
+
+
+def cmd_organise(args: argparse.Namespace) -> int:
+    """The block organiser: every UNKNOWN block with both constraint axes and the copy flag, copies first."""
+    from genomeos.attribution.organise import blocks, distil, run_and_save
+    from genomeos.results import load_result, save_result
+
+    if not args.chrom:
+        s = distil()
+        if not s["chromosomes"]:
+            print("no organised_chr*.json yet: genomeos organise --chrom chr21")
+            return 1
+        save_result("organised_genome_wide", s)
+        ru = s["real_unknown"]
+        print(
+            f"{s['chromosomes']} chromosomes organised; copies (>= {s['copy_min_fraction']:.0%} duplicated) "
+            f"set apart; the real unknown after copies: {ru['blocks']:,} blocks, {ru['bp'] / 1e6:.1f} Mb"
+        )
+        rows = [
+            {
+                "tier": t,
+                "blocks": v["blocks"],
+                "copies": v["copies"],
+                "after copies": v["blocks"] - v["copies"],
+                **{
+                    k: (v["cases_after_copies"].get(k) or {}).get("blocks", 0)
+                    for k in ("syntax", "relaxed", "recent", "tolerant", "unmeasured")
+                },
+            }
+            for t, v in s["by_tier"].items()
+        ]
+        print(
+            _table(
+                rows,
+                [
+                    "tier",
+                    "blocks",
+                    "copies",
+                    "after copies",
+                    "syntax",
+                    "relaxed",
+                    "recent",
+                    "tolerant",
+                    "unmeasured",
+                ],
+            )
+        )
+        return 0
+    out = load_result(f"organised_{args.chrom}") if args.cached else None
+    if out is None:
+        out = run_and_save(args.chrom, top=args.top)
+    ru = out["real_unknown"]
+    print(
+        f"{args.chrom}: {out['blocks']} UNKNOWN blocks, {out['with_human_axis']} read on the human axis, "
+        f"{out['with_copy_flag']} with a copy flag; {out['copies']} copies ({out['copies_bp'] / 1e6:.2f} Mb) "
+        f"set apart; the real unknown after copies: {ru['blocks']} blocks, {ru['bp'] / 1e3:.0f} kb"
+    )
+    rows = [
+        {
+            "tier": t,
+            "blocks": v["blocks"],
+            "copies": v["copies"],
+            "after copies": v["after_copies"],
+            **{
+                k: (v["cases_after_copies"].get(k) or {}).get("blocks", 0)
+                for k in ("syntax", "relaxed", "recent", "tolerant", "unmeasured")
+            },
+        }
+        for t, v in out["by_tier"].items()
+    ]
+    print(
+        _table(
+            rows,
+            [
+                "tier",
+                "blocks",
+                "copies",
+                "after copies",
+                "syntax",
+                "relaxed",
+                "recent",
+                "tolerant",
+                "unmeasured",
+            ],
+        )
+    )
+    if out["candidates"]:
+        print(f"\nthe real unknown, sharpest first (top {min(args.top, len(out['candidates']))}):")
+        print(
+            _table(
+                [
+                    {
+                        "block": f"{r['start']:,}-{r['end']:,}",
+                        "kb": f"{r['length'] / 1e3:.0f}",
+                        "class": r["class"],
+                        "mammals": _pct(r["mammal_fraction"]),
+                        "people": _pct(r["human_fraction"]),
+                        "case": r["case"] or "",
+                        "reading": r["reading"][:70],
+                    }
+                    for r in out["candidates"][: args.top]
+                ],
+                ["block", "kb", "class", "mammals", "people", "case", "reading"],
+            )
+        )
+    if args.blocks:
+        print(f"\nevery block ({out['blocks']}):")
+        print(
+            _table(
+                [
+                    {
+                        "block": f"{r['start']:,}-{r['end']:,}",
+                        "tier": r["tier"],
+                        "copy": "copy" if r["copy"] else "",
+                        "case": r["case"] or "",
+                        "elements": r["attributed_elements"] or "",
+                        "reading": r["reading"][:60],
+                    }
+                    for r in blocks(args.chrom)
+                ],
+                ["block", "tier", "copy", "case", "elements", "reading"],
+            )
+        )
+    print(
+        "  [tier: the budget; case: Zoonomia against gnomAD Gnocchi (area J); copy: UCSC genomicSuperDups "
+        "at >= 50% of the block; nothing recomputed; docs/ATTRIBUTION.md]"
+    )
     return 0
 
 
@@ -4236,6 +4426,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(fn=cmd_duplications)
 
     p = sub.add_parser(
+        "profiling",
+        help="phylogenetic profiling between libraries: gained and lost together across the species",
+    )
+    p.add_argument("--library", help="one BioLib library: its gain curve and most similar libraries")
+    p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
+    p.add_argument("--top", type=int, default=12)
+    p.set_defaults(fn=cmd_profiling)
+
+    p = sub.add_parser(
         "origin",
         help="origin per gene and age per library: the deepest clade with an orthologue (Ensembl Compara)",
     )
@@ -4270,6 +4469,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="save syntax_<GENE>.json under data/results (open-consent GIAB people) or the person's dir",
     )
     p.set_defaults(fn=cmd_syntax)
+
+    p = sub.add_parser(
+        "organise",
+        help="the 98%%: every UNKNOWN block with both constraint axes and the copy flag, copies first",
+    )
+    p.add_argument("--chrom", help="one chromosome; omit to distil the genome from the saved results")
+    p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
+    p.add_argument("--blocks", action="store_true", help="list every block, not only the candidates")
+    p.add_argument("--top", type=int, default=15)
+    p.set_defaults(fn=cmd_organise)
 
     p = sub.add_parser(
         "protein", help="a gene's protein: our translation, UniProt record, AlphaFold structure"

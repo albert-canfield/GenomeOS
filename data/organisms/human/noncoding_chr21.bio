@@ -17,751 +17,751 @@ module human.noncoding.chr21
 region U_chr21_0 {
   locus: chr21:0-5011798
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 0% with 1 partners
   confidence: 1.00
 }
 region U_chr21_5017145 {
   locus: chr21:5017145-5022530
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.3% of 5,385 bases
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.3% of 5,385 bases, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_5036771 {
   locus: chr21:5036771-5073457
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat, constrained 0.9% of 36,686 bases, 12 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat, constrained 0.9% of 36,686 bases, 12 conserved elements, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_5087867 {
   locus: chr21:5087867-5116340
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.5% of 28,473 bases, 17 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.5% of 28,473 bases, 17 conserved elements, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_5128369 {
   locus: chr21:5128369-5130870
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.2% of 2,501 bases, 1 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.2% of 2,501 bases, 1 conserved elements, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_5163695 {
   locus: chr21:5163695-5232667
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 28% with 15 partners
   confidence: 1.00
 }
 region U_chr21_5243903 {
   locus: chr21:5243903-5448586
-  role: structural, satellite array, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.2% of 30,784 bases, 15 conserved elements
+  role: copy, structural, satellite array, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.2% of 30,784 bases, 15 conserved elements, duplicated 76% with 25 partners
   confidence: 0.90
 }
 region U_chr21_5502603 {
   locus: chr21:5502603-5553601
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unique_intergenic, constrained 5.0% of 50,998 bases, 80 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unique_intergenic, constrained 5.0% of 50,998 bases, 80 conserved elements, duplicated 100% with 8 partners
   confidence: 0.60
 }
 region U_chr21_5695242 {
   locus: chr21:5695242-5698175
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 10.2% of 2,933 bases, 58 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 10.2% of 2,933 bases, 58 conserved elements, duplicated 100% with 9 partners
   confidence: 0.60
 }
 region U_chr21_5698863 {
   locus: chr21:5698863-5703181
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class interspersed_repeat_LINE, constrained 11.3% of 4,318 bases, 1 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class interspersed_repeat_LINE, constrained 11.3% of 4,318 bases, 1 conserved elements, duplicated 100% with 10 partners
   confidence: 0.50
 }
 region U_chr21_5709737 {
   locus: chr21:5709737-5972923
-  role: structural, satellite array, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.1% of 163,398 bases, 23 conserved elements
+  role: copy, structural, satellite array, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.1% of 163,398 bases, 23 conserved elements, duplicated 62% with 19 partners
   confidence: 0.50
 }
 region U_chr21_5973383 {
   locus: chr21:5973383-6008603
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.1% of 35,220 bases, 20 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.1% of 35,220 bases, 20 conserved elements, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_6008810 {
   locus: chr21:6008810-6060339
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat, constrained 0.8% of 51,529 bases, 34 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat, constrained 0.8% of 51,529 bases, 34 conserved elements, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_6076305 {
   locus: chr21:6076305-6084380
-  role: neutral, long open reading frame without constraint, a chance frame or a dead pseudogene
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class long_orf, constrained 0.6% of 8,075 bases, 1 conserved elements
+  role: copy, neutral, long open reading frame without constraint, a chance frame or a dead pseudogene
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class long_orf, constrained 0.6% of 8,075 bases, 1 conserved elements, duplicated 100% with 2 partners
   confidence: 0.50
 }
 region U_chr21_6091407 {
   locus: chr21:6091407-6111130
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 1.6% of 19,723 bases, 17 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 1.6% of 19,723 bases, 17 conserved elements, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_6123778 {
   locus: chr21:6123778-6127316
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.7% of 3,538 bases
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.7% of 3,538 bases, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_6128972 {
   locus: chr21:6128972-6133735
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.5% of 4,763 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.5% of 4,763 bases, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_6136940 {
   locus: chr21:6136940-6140712
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.3% of 3,772 bases, 3 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.3% of 3,772 bases, 3 conserved elements, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_6145730 {
   locus: chr21:6145730-6214498
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 27% with 10 partners
   confidence: 1.00
 }
 region U_chr21_6217885 {
   locus: chr21:6217885-6223479
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 5,594 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 5,594 bases, duplicated 100% with 6 partners
   confidence: 0.80
 }
 region U_chr21_6223580 {
   locus: chr21:6223580-6228127
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 4,547 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 4,547 bases, duplicated 100% with 6 partners
   confidence: 0.80
 }
 region U_chr21_6267431 {
   locus: chr21:6267431-6272134
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.4% of 4,703 bases, 1 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.4% of 4,703 bases, 1 conserved elements, duplicated 100% with 6 partners
   confidence: 0.60
 }
 region U_chr21_6276532 {
   locus: chr21:6276532-6309160
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 0.9% of 32,628 bases, 13 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 0.9% of 32,628 bases, 13 conserved elements, duplicated 100% with 8 partners
   confidence: 0.60
 }
 region U_chr21_6312948 {
   locus: chr21:6312948-6318369
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.7% of 5,421 bases, 5 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.7% of 5,421 bases, 5 conserved elements, duplicated 100% with 7 partners
   confidence: 0.60
 }
 region U_chr21_6360415 {
   locus: chr21:6360415-6365954
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 5,539 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 5,539 bases, duplicated 100% with 7 partners
   confidence: 0.80
 }
 region U_chr21_6366055 {
   locus: chr21:6366055-6444868
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 37% with 9 partners
   confidence: 1.00
 }
 region U_chr21_6467513 {
   locus: chr21:6467513-6484622
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.3% of 17,109 bases, 9 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.3% of 17,109 bases, 9 conserved elements, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_6564489 {
   locus: chr21:6564489-6569560
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 1.2% of 5,071 bases, 5 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 1.2% of 5,071 bases, 5 conserved elements, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_6576813 {
   locus: chr21:6576813-6630181
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 6% with 1 partners
   confidence: 1.00
 }
 region U_chr21_6670761 {
   locus: chr21:6670761-6676177
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.7% of 5,416 bases, 3 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.7% of 5,416 bases, 3 conserved elements, duplicated 100% with 7 partners
   confidence: 0.60
 }
 region U_chr21_6679962 {
   locus: chr21:6679962-6712595
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 0.9% of 32,633 bases, 13 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 0.9% of 32,633 bases, 13 conserved elements, duplicated 100% with 8 partners
   confidence: 0.60
 }
 region U_chr21_6716361 {
   locus: chr21:6716361-6721710
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.6% of 5,349 bases, 5 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.6% of 5,349 bases, 5 conserved elements, duplicated 100% with 6 partners
   confidence: 0.60
 }
 region U_chr21_6737596 {
   locus: chr21:6737596-6789591
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 4% with 16 partners
   confidence: 1.00
 }
 region U_chr21_6812297 {
   locus: chr21:6812297-6858449
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 2.2% of 46,152 bases, 47 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 2.2% of 46,152 bases, 47 conserved elements, duplicated 100% with 17 partners
   confidence: 0.50
 }
 region U_chr21_6892971 {
   locus: chr21:6892971-6897290
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 3.3% of 4,319 bases, 18 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 3.3% of 4,319 bases, 18 conserved elements, duplicated 100% with 5 partners
   confidence: 0.60
 }
 region U_chr21_6899280 {
   locus: chr21:6899280-6904883
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 6.2% of 5,603 bases, 20 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 6.2% of 5,603 bases, 20 conserved elements, duplicated 100% with 5 partners
   confidence: 0.60
 }
 region U_chr21_6906692 {
   locus: chr21:6906692-6986240
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 37% with 17 partners
   confidence: 1.00
 }
 region U_chr21_6997903 {
   locus: chr21:6997903-7003247
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.8% of 5,344 bases, 3 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.8% of 5,344 bases, 3 conserved elements, duplicated 100% with 7 partners
   confidence: 0.60
 }
 region U_chr21_7007022 {
   locus: chr21:7007022-7020598
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.5% of 13,576 bases, 4 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.5% of 13,576 bases, 4 conserved elements, duplicated 100% with 7 partners
   confidence: 0.60
 }
 region U_chr21_7025166 {
   locus: chr21:7025166-7048747
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unique_intergenic, constrained 5.5% of 23,581 bases, 41 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unique_intergenic, constrained 5.5% of 23,581 bases, 41 conserved elements, duplicated 100% with 7 partners
   confidence: 0.60
 }
 region U_chr21_7116635 {
   locus: chr21:7116635-7129102
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.2% of 12,467 bases, 33 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.2% of 12,467 bases, 33 conserved elements, duplicated 100% with 7 partners
   confidence: 0.80
 }
 region U_chr21_7131029 {
   locus: chr21:7131029-7135333
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class interspersed_repeat_LINE, constrained 11.1% of 4,304 bases, 2 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class interspersed_repeat_LINE, constrained 11.1% of 4,304 bases, 2 conserved elements, duplicated 100% with 10 partners
   confidence: 0.50
 }
 region U_chr21_7137789 {
   locus: chr21:7137789-7139155
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.0% of 1,366 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.0% of 1,366 bases, duplicated 100% with 5 partners
   confidence: 0.80
 }
 region U_chr21_7142308 {
   locus: chr21:7142308-7385057
-  role: structural, satellite array, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.8% of 22,417 bases, 9 conserved elements
+  role: copy, structural, satellite array, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.8% of 22,417 bases, 9 conserved elements, duplicated 57% with 21 partners
   confidence: 0.50
 }
 region U_chr21_7388799 {
   locus: chr21:7388799-7421441
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 0.9% of 32,642 bases, 12 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 0.9% of 32,642 bases, 12 conserved elements, duplicated 100% with 8 partners
   confidence: 0.60
 }
 region U_chr21_7425839 {
   locus: chr21:7425839-7430539
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.4% of 4,700 bases, 1 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.4% of 4,700 bases, 1 conserved elements, duplicated 100% with 7 partners
   confidence: 0.60
 }
 region U_chr21_7498413 {
   locus: chr21:7498413-7614321
-  role: structural, satellite array, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.0% of 53,713 bases, 5 conserved elements
+  role: copy, structural, satellite array, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.0% of 53,713 bases, 5 conserved elements, duplicated 57% with 12 partners
   confidence: 0.50
 }
 region U_chr21_7618077 {
   locus: chr21:7618077-7625601
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class interspersed_repeat_LINE, constrained 6.5% of 7,524 bases, 1 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class interspersed_repeat_LINE, constrained 6.5% of 7,524 bases, 1 conserved elements, duplicated 100% with 10 partners
   confidence: 0.50
 }
 region U_chr21_7627528 {
   locus: chr21:7627528-7629235
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.2% of 1,707 bases, 2 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.2% of 1,707 bases, 2 conserved elements, duplicated 100% with 5 partners
   confidence: 0.60
 }
 region U_chr21_7692266 {
   locus: chr21:7692266-7744950
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 5% with 11 partners
   confidence: 1.00
 }
 region U_chr21_7758630 {
   locus: chr21:7758630-7769587
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.0% of 10,957 bases, 4 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.0% of 10,957 bases, 4 conserved elements, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_7770548 {
   locus: chr21:7770548-7788702
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.7% of 18,154 bases, 14 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.7% of 18,154 bases, 14 conserved elements, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_7793954 {
   locus: chr21:7793954-7816676
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.7% of 22,722 bases, 13 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.7% of 22,722 bases, 13 conserved elements, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_7829632 {
   locus: chr21:7829632-8101250
   role: structural, satellite array, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.7% of 38,568 bases, 24 conserved elements
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.7% of 38,568 bases, 24 conserved elements, duplicated 14% with 6 partners
   confidence: 0.50
 }
 region U_chr21_8103706 {
   locus: chr21:8103706-8104757
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.0% of 1,051 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.0% of 1,051 bases, duplicated 100% with 5 partners
   confidence: 0.80
 }
 region U_chr21_8108225 {
   locus: chr21:8108225-8131902
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 23,677 bases, 6 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 23,677 bases, 6 conserved elements, duplicated 100% with 7 partners
   confidence: 0.80
 }
 region U_chr21_8227646 {
   locus: chr21:8227646-8235353
-  role: structural, tandem repeat, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class tandem_repeat, constrained 0.0% of 7,707 bases, 4 conserved elements
+  role: copy, structural, tandem repeat, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class tandem_repeat, constrained 0.0% of 7,707 bases, 4 conserved elements, duplicated 100% with 6 partners
   confidence: 0.90
 }
 region U_chr21_8235832 {
   locus: chr21:8235832-8237648
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.0% of 1,816 bases
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.0% of 1,816 bases, duplicated 100% with 4 partners
   confidence: 0.60
 }
 region U_chr21_8239092 {
   locus: chr21:8239092-8240735
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 1.6% of 1,643 bases
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 1.6% of 1,643 bases, duplicated 100% with 4 partners
   confidence: 0.50
 }
 region U_chr21_8241047 {
   locus: chr21:8241047-8248434
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class interspersed_repeat_SINE, constrained 16.4% of 7,387 bases, 22 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class interspersed_repeat_SINE, constrained 16.4% of 7,387 bases, 22 conserved elements, duplicated 100% with 6 partners
   confidence: 0.50
 }
 region U_chr21_8250149 {
   locus: chr21:8250149-8254591
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.1% of 4,442 bases, 6 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.1% of 4,442 bases, 6 conserved elements, duplicated 100% with 7 partners
   confidence: 0.50
 }
 region U_chr21_8255514 {
   locus: chr21:8255514-8256780
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.0% of 1,266 bases, 5 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.0% of 1,266 bases, 5 conserved elements, duplicated 100% with 5 partners
   confidence: 0.50
 }
 region U_chr21_8256933 {
   locus: chr21:8256933-8380642
-  role: structural, satellite array, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.0% of 73,797 bases, 33 conserved elements
+  role: copy, structural, satellite array, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.0% of 73,797 bases, 33 conserved elements, duplicated 60% with 16 partners
   confidence: 0.50
 }
 region U_chr21_8454792 {
   locus: chr21:8454792-8462319
-  role: structural, tandem repeat, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class tandem_repeat, constrained 0.0% of 7,527 bases, 5 conserved elements
+  role: copy, structural, tandem repeat, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class tandem_repeat, constrained 0.0% of 7,527 bases, 5 conserved elements, duplicated 100% with 5 partners
   confidence: 0.90
 }
 region U_chr21_8462798 {
   locus: chr21:8462798-8465253
-  role: structural, tandem repeat, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class tandem_repeat, constrained 0.0% of 2,455 bases
+  role: copy, structural, tandem repeat, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class tandem_repeat, constrained 0.0% of 2,455 bases, duplicated 100% with 3 partners
   confidence: 0.90
 }
 region U_chr21_8466699 {
   locus: chr21:8466699-8468319
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 1.7% of 1,620 bases
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 1.7% of 1,620 bases, duplicated 100% with 3 partners
   confidence: 0.50
 }
 region U_chr21_8468631 {
   locus: chr21:8468631-8547297
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 36% with 12 partners
   confidence: 1.00
 }
 region U_chr21_8552231 {
   locus: chr21:8552231-8603546
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 0.5% of 51,315 bases, 46 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 0.5% of 51,315 bases, 46 conserved elements, duplicated 100% with 174 partners
   confidence: 0.60
 }
 region U_chr21_8603984 {
   locus: chr21:8603984-8680537
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 1.7% of 75,989 bases, 163 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 1.7% of 75,989 bases, 163 conserved elements, duplicated 100% with 53 partners
   confidence: 0.60
 }
 region U_chr21_8680934 {
   locus: chr21:8680934-8701460
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.3% of 20,526 bases, 3 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.3% of 20,526 bases, 3 conserved elements, duplicated 100% with 19 partners
   confidence: 0.80
 }
 region U_chr21_8701562 {
   locus: chr21:8701562-8759052
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 13% with 40 partners
   confidence: 1.00
 }
 region U_chr21_8880976 {
   locus: chr21:8880976-8986998
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 6% with 29 partners
   confidence: 1.00
 }
 region U_chr21_8987430 {
   locus: chr21:8987430-8995097
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.0% of 5,868 bases, 2 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.0% of 5,868 bases, 2 conserved elements, duplicated 74% with 10 partners
   confidence: 0.50
 }
 region U_chr21_9129773 {
   locus: chr21:9129773-9160574
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 0.0% of 30,801 bases, 4 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 0.0% of 30,801 bases, 4 conserved elements, duplicated 100% with 26 partners
   confidence: 0.80
 }
 region U_chr21_9171493 {
   locus: chr21:9171493-9283346
-  role: neutral, long open reading frame without constraint, a chance frame or a dead pseudogene
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class long_orf, constrained 1.7% of 60,853 bases, 128 conserved elements
+  role: copy, neutral, long open reading frame without constraint, a chance frame or a dead pseudogene
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class long_orf, constrained 1.7% of 60,853 bases, 128 conserved elements, duplicated 55% with 34 partners
   confidence: 0.50
 }
 region U_chr21_9376645 {
   locus: chr21:9376645-9529927
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 2% with 33 partners
   confidence: 1.00
 }
 region U_chr21_9681769 {
   locus: chr21:9681769-9757216
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 2.8% of 75,447 bases, 273 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 2.8% of 75,447 bases, 273 conserved elements, duplicated 78% with 7 partners
   confidence: 0.50
 }
 region U_chr21_9758365 {
   locus: chr21:9758365-9764228
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 5,863 bases, 1 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 5,863 bases, 1 conserved elements, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_9767339 {
   locus: chr21:9767339-9781847
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 3.4% of 14,508 bases, 40 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 3.4% of 14,508 bases, 40 conserved elements, duplicated 92% with 2 partners
   confidence: 0.50
 }
 region U_chr21_9839362 {
   locus: chr21:9839362-9902343
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.6% of 62,170 bases, 44 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.6% of 62,170 bases, 44 conserved elements, duplicated 100% with 6 partners
   confidence: 0.80
 }
 region U_chr21_9902627 {
   locus: chr21:9902627-9907915
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 0.4% of 5,288 bases, 6 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 0.4% of 5,288 bases, 6 conserved elements, duplicated 100% with 7 partners
   confidence: 0.80
 }
 region U_chr21_9908010 {
   locus: chr21:9908010-9913116
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.9% of 5,106 bases, 23 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.9% of 5,106 bases, 23 conserved elements, duplicated 100% with 6 partners
   confidence: 0.60
 }
 region U_chr21_9914846 {
   locus: chr21:9914846-9966971
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.8% of 52,125 bases, 52 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.8% of 52,125 bases, 52 conserved elements, duplicated 100% with 7 partners
   confidence: 0.80
 }
 region U_chr21_10137213 {
   locus: chr21:10137213-10327671
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 18% with 18 partners
   confidence: 1.00
 }
 region U_chr21_10342757 {
   locus: chr21:10342757-10357399
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.2% of 14,642 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.2% of 14,642 bases, duplicated 100% with 2 partners
   confidence: 0.80
 }
 region U_chr21_10358620 {
   locus: chr21:10358620-10362948
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 4,328 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 4,328 bases, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_10363634 {
   locus: chr21:10363634-10371967
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 3.8% of 8,333 bases, 7 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 3.8% of 8,333 bases, 7 conserved elements, duplicated 100% with 3 partners
   confidence: 0.60
 }
 region U_chr21_10381763 {
   locus: chr21:10381763-10397643
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.1% of 15,880 bases, 24 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.1% of 15,880 bases, 24 conserved elements, duplicated 100% with 3 partners
   confidence: 0.60
 }
 region U_chr21_10397778 {
   locus: chr21:10397778-10413466
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.6% of 15,688 bases, 12 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.6% of 15,688 bases, 12 conserved elements, duplicated 100% with 5 partners
   confidence: 0.50
 }
 region U_chr21_10606140 {
   locus: chr21:10606140-10612454
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 2.6% of 6,314 bases, 7 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 2.6% of 6,314 bases, 7 conserved elements, duplicated 100% with 7 partners
   confidence: 0.80
 }
 region U_chr21_10613379 {
   locus: chr21:10613379-10640027
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.1% of 26,648 bases, 9 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.1% of 26,648 bases, 9 conserved elements, duplicated 99% with 91 partners
   confidence: 0.80
 }
 region U_chr21_10640338 {
   locus: chr21:10640338-10649399
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.0% of 9,061 bases, 4 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.0% of 9,061 bases, 4 conserved elements, duplicated 100% with 2 partners
   confidence: 0.60
 }
 region U_chr21_10649835 {
   locus: chr21:10649835-12999675
   role: structural, centromere, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class centromere, constrained 2.8% of 5,405 bases, 9 conserved elements
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class centromere, constrained 2.8% of 5,405 bases, 9 conserved elements, duplicated 0% with 13 partners
   confidence: 0.90
 }
 region U_chr21_13016692 {
   locus: chr21:13016692-13026199
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.6% of 9,507 bases, 4 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.6% of 9,507 bases, 4 conserved elements, duplicated 100% with 8 partners
   confidence: 0.80
 }
 region U_chr21_13029493 {
   locus: chr21:13029493-13037970
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 8,477 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.0% of 8,477 bases, duplicated 100% with 9 partners
   confidence: 0.80
 }
 region U_chr21_13067033 {
   locus: chr21:13067033-13095304
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.4% of 28,271 bases, 10 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.4% of 28,271 bases, 10 conserved elements, duplicated 100% with 10 partners
   confidence: 0.80
 }
 region U_chr21_13113790 {
   locus: chr21:13113790-13120243
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.0% of 6,453 bases, 1 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.0% of 6,453 bases, 1 conserved elements, duplicated 100% with 10 partners
   confidence: 0.60
 }
 region U_chr21_13120807 {
   locus: chr21:13120807-13167142
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.6% of 41,252 bases, 12 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.6% of 41,252 bases, 12 conserved elements, duplicated 100% with 88 partners
   confidence: 0.80
 }
 region U_chr21_13179089 {
   locus: chr21:13179089-13190741
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.4% of 11,652 bases, 5 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.4% of 11,652 bases, 5 conserved elements, duplicated 100% with 4 partners
   confidence: 0.80
 }
 region U_chr21_13205547 {
   locus: chr21:13205547-13305151
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.8% of 99,604 bases, 181 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.8% of 99,604 bases, 181 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 8 partners
   confidence: 0.80
 }
 region U_chr21_13314944 {
   locus: chr21:13314944-13337481
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 0.3% of 22,537 bases, 7 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 0.3% of 22,537 bases, 7 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 5 partners
   confidence: 0.80
 }
 region U_chr21_13351638 {
   locus: chr21:13351638-13384248
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 1.9% of 32,610 bases, 47 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 1.9% of 32,610 bases, 47 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 14 partners
   confidence: 0.60
 }
 region U_chr21_13427773 {
   locus: chr21:13427773-13443372
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.9% of 15,599 bases, 8 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.9% of 15,599 bases, 8 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 5 partners
   confidence: 0.80
 }
 region U_chr21_13489176 {
   locus: chr21:13489176-13516101
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class mixed_intergenic, constrained 1.4% of 26,925 bases, 12 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class mixed_intergenic, constrained 1.4% of 26,925 bases, 12 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 3 partners
   confidence: 0.60
 }
 region U_chr21_13598187 {
   locus: chr21:13598187-13609776
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.4% of 11,589 bases, 8 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.4% of 11,589 bases, 8 conserved elements, duplicated 100% with 12 partners
   confidence: 0.60
 }
 region U_chr21_13645823 {
   locus: chr21:13645823-13654072
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.4% of 8,249 bases
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.4% of 8,249 bases, duplicated 100% with 11 partners
   confidence: 0.60
 }
 region U_chr21_13654356 {
   locus: chr21:13654356-13665867
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 3.5% of 11,511 bases, 13 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 3.5% of 11,511 bases, 13 conserved elements, duplicated 100% with 10 partners
   confidence: 0.60
 }
 region U_chr21_13667546 {
   locus: chr21:13667546-13676021
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.4% of 8,475 bases, 12 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.4% of 8,475 bases, 12 conserved elements, duplicated 100% with 10 partners
   confidence: 0.80
 }
 region U_chr21_13677116 {
   locus: chr21:13677116-13679299
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 22.8% of 2,183 bases, 6 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 22.8% of 2,183 bases, 6 conserved elements, duplicated 100% with 11 partners
   confidence: 0.60
 }
 region U_chr21_13681138 {
   locus: chr21:13681138-13704852
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.9% of 23,714 bases, 9 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.9% of 23,714 bases, 9 conserved elements, duplicated 100% with 12 partners
   confidence: 0.50
 }
 region U_chr21_13705518 {
   locus: chr21:13705518-13723463
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.5% of 17,945 bases, 23 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.5% of 17,945 bases, 23 conserved elements, duplicated 100% with 13 partners
   confidence: 0.60
 }
 region U_chr21_13752941 {
   locus: chr21:13752941-13762337
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.9% of 9,396 bases, 20 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.9% of 9,396 bases, 20 conserved elements, duplicated 100% with 5 partners
   confidence: 0.60
 }
 region U_chr21_13764332 {
   locus: chr21:13764332-13769931
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 6.2% of 5,599 bases, 16 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 6.2% of 5,599 bases, 16 conserved elements, duplicated 100% with 5 partners
   confidence: 0.60
 }
 region U_chr21_13771740 {
   locus: chr21:13771740-13776085
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 7.0% of 4,345 bases, 10 conserved elements
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class unclassified, constrained 7.0% of 4,345 bases, 10 conserved elements, duplicated 100% with 4 partners
   confidence: 0.60
 }
 region U_chr21_13777266 {
   locus: chr21:13777266-13792634
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 1.3% of 15,368 bases, 16 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 1.3% of 15,368 bases, 16 conserved elements, duplicated 100% with 10 partners
   confidence: 0.80
 }
 region U_chr21_13793141 {
   locus: chr21:13793141-13824405
   role: unknown
-  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class mixed_intergenic, constrained 6.6% of 31,264 bases, 122 conserved elements, people 0% of kilobases constrained, case relaxed
+  evidence: inferred "Zoonomia phyloP over 241 mammals, 100-vertebrate elements" class mixed_intergenic, constrained 6.6% of 31,264 bases, 122 conserved elements, people 0% of kilobases constrained, case relaxed, duplicated 100% with 17 partners
   confidence: 0.60
 }
 region U_chr21_13825635 {
   locus: chr21:13825635-13826695
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.5% of 1,060 bases, 3 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.5% of 1,060 bases, 3 conserved elements, duplicated 100% with 6 partners
   confidence: 0.60
 }
 region U_chr21_13827627 {
   locus: chr21:13827627-13839117
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.3% of 11,490 bases, 27 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.3% of 11,490 bases, 27 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 13 partners
   confidence: 0.60
 }
 region U_chr21_13839409 {
   locus: chr21:13839409-13843131
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.9% of 3,722 bases, 25 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.9% of 3,722 bases, 25 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 6 partners
   confidence: 0.60
 }
 region U_chr21_13897298 {
   locus: chr21:13897298-13905959
-  role: fossil, transposable-element fossil, weak constraint
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 4.8% of 8,661 bases, 5 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, fossil, transposable-element fossil, weak constraint
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 4.8% of 8,661 bases, 5 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 16 partners
   confidence: 0.60
 }
 region U_chr21_13906488 {
   locus: chr21:13906488-13909573
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.4% of 3,085 bases, 17 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.4% of 3,085 bases, 17 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 15 partners
   confidence: 0.60
 }
 region U_chr21_13981899 {
   locus: chr21:13981899-14000926
   role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.3% of 19,027 bases, 6 conserved elements, people 0% of kilobases constrained, case tolerant
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.3% of 19,027 bases, 6 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 49% with 8 partners
   confidence: 0.80
 }
 region U_chr21_14005279 {
   locus: chr21:14005279-14007133
-  role: fossil, transposable-element fossil, weak constraint
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_DNA, constrained 3.4% of 1,854 bases, 5 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, fossil, transposable-element fossil, weak constraint
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_DNA, constrained 3.4% of 1,854 bases, 5 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 3 partners
   confidence: 0.60
 }
 region U_chr21_14014880 {
   locus: chr21:14014880-14019059
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.5% of 4,179 bases, people 0% of kilobases constrained, case tolerant
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.5% of 4,179 bases, people 0% of kilobases constrained, case tolerant, duplicated 100% with 2 partners
   confidence: 0.60
 }
 region U_chr21_14020725 {
   locus: chr21:14020725-14027362
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.6% of 6,637 bases, 1 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.6% of 6,637 bases, 1 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_14210955 {
@@ -1121,7 +1121,7 @@ region U_chr21_21806909 {
 region U_chr21_21844972 {
   locus: chr21:21844972-21933314
   role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 1.9% of 88,342 bases, 166 conserved elements, people 0% of kilobases constrained, case tolerant
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unique_intergenic, constrained 1.9% of 88,342 bases, 166 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 2% with 1 partners
   confidence: 0.60
 }
 region U_chr21_21975681 {
@@ -1391,19 +1391,19 @@ region U_chr21_27675024 {
 region U_chr21_27751239 {
   locus: chr21:27751239-27883612
   role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.6% of 132,373 bases, 187 conserved elements, people 0% of kilobases constrained, case tolerant
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.6% of 132,373 bases, 187 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 30% with 32 partners
   confidence: 0.80
 }
 region U_chr21_27893722 {
   locus: chr21:27893722-27954904
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.3% of 61,182 bases, 80 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.3% of 61,182 bases, 80 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 8 partners
   confidence: 0.80
 }
 region U_chr21_28023232 {
   locus: chr21:28023232-28048403
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 0.5% of 25,171 bases, 21 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LTR, constrained 0.5% of 25,171 bases, 21 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 100% with 7 partners
   confidence: 0.80
 }
 region U_chr21_28228667 {
@@ -1426,8 +1426,8 @@ region U_chr21_28836786 {
 }
 region U_chr21_28896386 {
   locus: chr21:28896386-28901778
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 4.1% of 5,392 bases, 11 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 4.1% of 5,392 bases, 11 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 71% with 1 partners
   confidence: 0.50
 }
 region U_chr21_28911170 {
@@ -1619,13 +1619,13 @@ region U_chr21_30742595 {
 region U_chr21_30747259 {
   locus: chr21:30747259-30755014
   role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.0% of 7,755 bases, 3 conserved elements, people 0% of kilobases constrained, case tolerant
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 1.0% of 7,755 bases, 3 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 2% with 3 partners
   confidence: 0.80
 }
 region U_chr21_30755428 {
   locus: chr21:30755428-30762681
   role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.5% of 7,253 bases, 12 conserved elements, people 12% of kilobases constrained, case tolerant
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.5% of 7,253 bases, 12 conserved elements, people 12% of kilobases constrained, case tolerant, duplicated 9% with 3 partners
   confidence: 0.60
 }
 region U_chr21_30762882 {
@@ -1679,7 +1679,7 @@ region U_chr21_31566113 {
 region U_chr21_31593723 {
   locus: chr21:31593723-31624033
   role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.6% of 30,310 bases, 17 conserved elements, people 16% of kilobases constrained, case tolerant
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.6% of 30,310 bases, 17 conserved elements, people 16% of kilobases constrained, case tolerant, duplicated 0% with 1 partners
   confidence: 0.50
 }
 region U_chr21_31732874 {
@@ -1732,14 +1732,14 @@ region U_chr21_32394380 {
 }
 region U_chr21_32612881 {
   locus: chr21:32612881-32621083
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.1% of 8,202 bases, 3 conserved elements, people 20% of kilobases constrained, case tolerant
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.1% of 8,202 bases, 3 conserved elements, people 20% of kilobases constrained, case tolerant, duplicated 91% with 56 partners
   confidence: 0.50
 }
 region U_chr21_32622083 {
   locus: chr21:32622083-32624415
-  role: structural, satellite array, repeat array with a mechanical role, not read as genes
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.3% of 2,332 bases, 4 conserved elements, people 0% of kilobases constrained, case tolerant
+  role: copy, structural, satellite array, repeat array with a mechanical role, not read as genes
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class satellite_array, constrained 0.3% of 2,332 bases, 4 conserved elements, people 0% of kilobases constrained, case tolerant, duplicated 77% with 31 partners
   confidence: 0.90
 }
 region U_chr21_32625096 {
@@ -1810,14 +1810,14 @@ region U_chr21_34039762 {
 }
 region U_chr21_34423951 {
   locus: chr21:34423951-34425507
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.8% of 1,556 bases, 6 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 2.8% of 1,556 bases, 6 conserved elements, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_34426017 {
   locus: chr21:34426017-34446687
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.5% of 20,670 bases, 11 conserved elements
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_LINE, constrained 0.5% of 20,670 bases, 11 conserved elements, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_34615323 {
@@ -2213,7 +2213,7 @@ region U_chr21_42462020 {
 region U_chr21_42581440 {
   locus: chr21:42581440-42599279
   role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.4% of 17,839 bases, 4 conserved elements, people 100% of kilobases constrained, case recent
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.4% of 17,839 bases, 4 conserved elements, people 100% of kilobases constrained, case recent, duplicated 17% with 2 partners
   confidence: 0.50
 }
 region U_chr21_42615094 {
@@ -2243,7 +2243,7 @@ region U_chr21_42817780 {
 region U_chr21_42836477 {
   locus: chr21:42836477-42843012
   role: neutral, long open reading frame without constraint, a chance frame or a dead pseudogene
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class long_orf, constrained 0.7% of 6,535 bases, 3 conserved elements, people 100% of kilobases constrained, case recent
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class long_orf, constrained 0.7% of 6,535 bases, 3 conserved elements, people 100% of kilobases constrained, case recent, duplicated 21% with 1 partners
   confidence: 0.50
 }
 region U_chr21_42913304 {
@@ -2278,20 +2278,20 @@ region U_chr21_42965363 {
 }
 region U_chr21_43034494 {
   locus: chr21:43034494-43050899
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.1% of 16,405 bases, people 100% of kilobases constrained, case recent
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.1% of 16,405 bases, people 100% of kilobases constrained, case recent, duplicated 93% with 1 partners
   confidence: 0.50
 }
 region U_chr21_43076943 {
   locus: chr21:43076943-43079862
-  role: fossil, transposable-element fossil, unconstrained
-  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.0% of 2,919 bases
+  role: copy, fossil, transposable-element fossil, unconstrained
+  evidence: curated "RepeatMasker family, Zoonomia phyloP over 241 mammals" class interspersed_repeat_SINE, constrained 0.0% of 2,919 bases, duplicated 100% with 1 partners
   confidence: 0.80
 }
 region U_chr21_43172810 {
   locus: chr21:43172810-43177029
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 1.4% of 4,219 bases, 4 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 1.4% of 4,219 bases, 4 conserved elements, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_43197548 {
@@ -2320,38 +2320,38 @@ region U_chr21_43344347 {
 }
 region U_chr21_43366576 {
   locus: chr21:43366576-43392477
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.5% of 25,901 bases, 14 conserved elements, people 86% of kilobases constrained, case recent
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.5% of 25,901 bases, 14 conserved elements, people 86% of kilobases constrained, case recent, duplicated 60% with 1 partners
   confidence: 0.50
 }
 region U_chr21_43396950 {
   locus: chr21:43396950-43409293
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.1% of 12,343 bases, 7 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 1.1% of 12,343 bases, 7 conserved elements, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_43410724 {
   locus: chr21:43410724-43414482
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.8% of 3,758 bases
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.8% of 3,758 bases, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_43427137 {
   locus: chr21:43427137-43433449
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 3.4% of 6,312 bases, 11 conserved elements
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 3.4% of 6,312 bases, 11 conserved elements, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_43437465 {
   locus: chr21:43437465-43439233
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.6% of 1,768 bases, 3 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.6% of 1,768 bases, 3 conserved elements, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_43479534 {
   locus: chr21:43479534-43529185
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class mixed_intergenic, constrained 0.7% of 49,651 bases, 24 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class mixed_intergenic, constrained 0.7% of 49,651 bases, 24 conserved elements, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_43703238 {
@@ -2404,26 +2404,26 @@ region U_chr21_43996420 {
 }
 region U_chr21_44131181 {
   locus: chr21:44131181-44132183
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.0% of 1,002 bases
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.0% of 1,002 bases, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_44210114 {
   locus: chr21:44210114-44215381
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.4% of 5,267 bases, 2 conserved elements
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.4% of 5,267 bases, 2 conserved elements, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_44242085 {
   locus: chr21:44242085-44244544
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.4% of 2,459 bases
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class promoter_like, constrained 0.4% of 2,459 bases, duplicated 100% with 1 partners
   confidence: 0.50
 }
 region U_chr21_44244993 {
   locus: chr21:44244993-44246338
-  role: neutral, unconstrained unique sequence, no evidence of function, best guess neutral
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.5% of 1,345 bases
+  role: copy, neutral, unconstrained unique sequence, no evidence of function, best guess neutral
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class unclassified, constrained 0.5% of 1,345 bases, duplicated 100% with 1 partners
   confidence: 0.60
 }
 region U_chr21_44262216 {
@@ -2524,8 +2524,8 @@ region U_chr21_44875810 {
 }
 region U_chr21_44977014 {
   locus: chr21:44977014-44978831
-  role: neutral, long open reading frame without constraint, a chance frame or a dead pseudogene
-  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class long_orf, constrained 0.0% of 1,817 bases
+  role: copy, neutral, long open reading frame without constraint, a chance frame or a dead pseudogene
+  evidence: inferred "Zoonomia phyloP over 241 mammals, no registry element" class long_orf, constrained 0.0% of 1,817 bases, duplicated 100% with 4 partners
   confidence: 0.50
 }
 region U_chr21_44979274 {
@@ -2680,14 +2680,14 @@ region U_chr21_46666229 {
 }
 region U_chr21_46669252 {
   locus: chr21:46669252-46682339
-  role: regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
-  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.3% of 13,047 bases, 1 conserved elements, people 30% of kilobases constrained, case recent
+  role: copy, regulatory, regulatory elements by the registry, little constraint, lineage-specific or weak
+  evidence: curated "ENCODE cCRE registry, Zoonomia phyloP over 241 mammals" class regulatory, constrained 0.3% of 13,047 bases, 1 conserved elements, people 30% of kilobases constrained, case recent, duplicated 72% with 34 partners
   confidence: 0.50
 }
 region U_chr21_46691226 {
   locus: chr21:46691226-46709983
   role: structural, assembly gap, no sequence to attribute
-  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap
+  evidence: curated "RepeatMasker and the assembly, classified by genomeos unknown" class gap, duplicated 47% with 18 partners
   confidence: 1.00
 }
 

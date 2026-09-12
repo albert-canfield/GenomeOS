@@ -55,7 +55,15 @@ def _human_axis(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[int, dict]:
     return {blk["start"]: blk for blk in r.get("blocks", []) if blk.get("gnocchi")}
 
 
-def _region(chrom: str, b: dict, human: dict[int, dict] | None = None) -> list[str]:
+def _copies(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[int, dict]:
+    """The copy flag per block start, from duplication_<chrom> when it has been read (area J)."""
+    r = load_result(f"duplication_{chrom}", results_dir) or {}
+    return {blk["start"]: blk for blk in r.get("blocks", []) if blk.get("duplicated_fraction") is not None}
+
+
+def _region(
+    chrom: str, b: dict, human: dict[int, dict] | None = None, copies: dict[int, dict] | None = None
+) -> list[str]:
     tier = b["guess"]["tier"]
     kind, source = EVIDENCE_BY_TIER.get(tier, ("inferred", "genomeos budget"))
     ph = b.get("phylop") or {}
@@ -71,7 +79,14 @@ def _region(chrom: str, b: dict, human: dict[int, dict] | None = None) -> list[s
         facts.append(f"people {h['gnocchi']['fraction_above'] * 100:.0f}% of kilobases constrained")
         if h.get("case"):
             facts.append(f"case {h['case']['case']}")
+    c = (copies or {}).get(b["start"])
+    is_copy = bool(c and c["duplicated_fraction"] >= 0.5)
+    if c and c["duplicated_fraction"] > 0:
+        facts.append(f"duplicated {c['duplicated_fraction'] * 100:.0f}% with {c.get('pairs', 0)} partners")
     role = "unknown" if tier == "constrained_unknown" else _text(f"{tier}, {b['guess']['label']}")
+    if is_copy:
+        # a copy is read as a copy first, whatever its tier; an unknown that is a copy stays unknown
+        role = role if role == "unknown" else _text(f"copy, {role}")
     return [
         f"region U_{chrom}_{b['start']} {{",
         f"  locus: {chrom}:{b['start']}-{b['end']}",
@@ -120,6 +135,7 @@ def _open_in(chrom: str, domain_id: str, readers: list[dict]) -> str:
 def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR) -> str:
     budget = load_result(f"budget_{chrom}", results_dir)
     human = _human_axis(chrom, results_dir)
+    copies = _copies(chrom, results_dir)
     if not budget:
         raise FileNotFoundError(f"no budget_{chrom} result; run genomeos budget --chrom {chrom}")
     domains = {d["id"]: d for d in (load_result(f"domains_{chrom}", results_dir) or {}).get("domains", [])}
@@ -158,7 +174,7 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR) -> str:
         f"constrained {((budget.get('constrained_fraction') or 0) * 100):.2f}% of measured bases",
     ]
     for b in regions:
-        lines += _region(chrom, b, human)
+        lines += _region(chrom, b, human, copies)
     if used_domains:
         lines += [
             "",

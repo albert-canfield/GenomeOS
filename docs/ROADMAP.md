@@ -108,7 +108,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 reached | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader on 25 with eleven cell types; the node model tested genome-wide (90.2% of enhancers act inside their node) and on two mouse chromosomes; the segment parser on chr21 at 92.7% gene precision once RNA over the exons counts as evidence | the parser on every chromosome with measured RNA; enhancer targets and boundaries from Hi-C |
 | **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph; the dominant isoform per tissue from GTEx (APP695 in the cerebellum) | measured modification state; isoform expression per cell type or stage; an engine that handles 100-species models |
-| **The 98%** (GenomeOS) | genome budgeted | every UNKNOWN block of the 24 chromosomes tiered with Zoonomia constraint read per base (1,009 Mb): structural 23%, fossil 33%, regulatory 34%, neutral 7%, constrained-unknown 3.2% (1,098 blocks, 32 Mb, 1% of the genome); `genomeos budget`, the Progress tab card; the attributions compiled to a BioLang program per chromosome (`--bio`), chr21 with 747 entities and 155 rules passing its own checks; scored against VISTA, eQTL, GWAS and ClinVar | AlphaGenome chromatin tracks on the 15,536 regulatory blocks; closure at gene, cell and organism level |
+| **The 98%** (GenomeOS) | genome budgeted | every UNKNOWN block of the 24 chromosomes tiered with Zoonomia constraint read per base (1,009 Mb): structural 23%, fossil 33%, regulatory 34%, neutral 7%, constrained-unknown 3.2% (1,098 blocks, 32 Mb, 1% of the genome); `genomeos budget`, the Progress tab card; the attributions compiled to a BioLang program per chromosome (`--bio`); scored against VISTA, eQTL, lentiMPRA, GWAS and ClinVar; the organiser reads copies first and leaves a real unknown of 882 blocks, 69 of them constrained on both axes | AlphaGenome chromatin tracks on the 15,536 regulatory blocks; closure at gene, cell and organism level |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
 
@@ -1058,14 +1058,39 @@ in order. "Owner" is the session that holds the files today (see §7).
   tolerant, 77 syntax and 30 recent: half the real unknown is held across
   mammals and variable among people, which is where the copies sit. chrY has no
   Gnocchi coverage and every block there is recorded as unmeasured, never zero.
+- **The organiser (2026-09-12).** `genomeos organise --chrom C`
+  (`attribution/organise.py`, `organised_chr*`, `organised_genome_wide`) joins
+  the budget, the human axis and the copy flag per block, recomputes nothing,
+  and re-reads every block copies first: a block half or more duplicated is a
+  copy before anything else is said of it; a constrained_unknown block that is
+  not a copy is read by the case the two axes make. Genome-wide:
+
+  | tier | blocks | copies | after copies | syntax | relaxed | recent | tolerant | unmeasured |
+  |---|---|---|---|---|---|---|---|---|
+  | structural | 238 | 56 | 182 | 0 | 0 | 1 | 37 | 144 |
+  | fossil | 7,302 | 1,240 | 6,062 | 0 | 0 | 732 | 5,130 | 200 |
+  | regulatory | 15,536 | 689 | 14,847 | 612 | 1,011 | 3,831 | 8,932 | 461 |
+  | constrained_unknown | 1,098 | 216 | 882 | **69** | 437 | 29 | 329 | 18 |
+  | neutral | 2,632 | 693 | 1,939 | 0 | 0 | 306 | 1,537 | 96 |
+
+  The real unknown after copies is 882 blocks and 30.6 Mb, and it is not one
+  thing: 69 blocks (387 kb) are constrained on both axes and are the sharpest
+  candidates for something unannotated; 437 (13.4 Mb) are held across mammals
+  yet variable among people, a frame whose value varies or a function lost;
+  329 (16.4 Mb) are free on both scales at kilobase resolution and want their
+  alignment checked before anything is attributed. chr21's twenty blocks
+  become five after copies, none of them syntax; chr2 has nine syntax
+  candidates, chr1 and chr6 seven each, chr7 seven. The compiled program
+  carries the copy flag too: a copy's region reads "copy, ..." in its role and
+  the duplicated fraction and partner count in its note (116 of chr21's 446
+  regions), with the checks and the unknown count unchanged.
 - **Next.** 1. Every element in a gene's node scored per cell, not a sample:
   the closure needs a gene's whole regulatory input before it can judge it,
   which is the self-hosted model's first job (about 6,600 elements on chr21).
-  2. The rest of the organising evidence
-  on the compiled blocks: the copy flag and the human axis on regions (both
-  measured now), repeat family, the reader's openness on the element itself
-  rather than its node; the constrained_unknown tier re-read with copies set
-  apart, one block in five genome-wide and most of chr21's. 3. The
+  2. The 69 syntax candidates read one by one: which node, which gene next
+  door, what AlphaGenome says of each in silico, and whether any is an
+  unannotated exon (the segment parser over the block); the reader's openness
+  on the element itself rather than its node. 3. The
   remaining attribution: AlphaGenome's predicted chromatin tracks for activity
   and tissue on the 15,536 regulatory blocks, in-silico mutagenesis for the
   bases that matter; the self-hosted model gates the move from chromosome 21

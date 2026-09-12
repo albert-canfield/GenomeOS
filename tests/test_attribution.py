@@ -448,3 +448,99 @@ def test_syntax_save_path_keeps_private_genomes_off_results():
 
     assert save_path("HERC2", ["HG002", "HG003"]) == Path("data/results/syntax_HERC2.json")
     assert save_path("HERC2", ["HG002", "ME"]) == ROOT / "ME" / "syntax_HERC2.json"
+
+
+def test_organise_reads_copies_first(tmp_path):
+    """The organiser joins the budget, the human axis and the copy flag per block, reads copies first,
+    and leaves the real unknown split by case."""
+    from genomeos.attribution.organise import blocks, distil, organise, reading, run_and_save
+
+    def b(start, end, cls, tier, conf=0.6, fa=0.08):
+        return {
+            "start": start,
+            "end": end,
+            "length": end - start,
+            "class": cls,
+            "phylop": {"bases": end - start, "fraction_above": fa, "above": int((end - start) * fa)},
+            "elements": {"n": 2},
+            "guess": {"tier": tier, "label": "x", "confidence": conf},
+        }
+
+    (tmp_path / "budget_chrT.json").write_text(
+        json.dumps(
+            {
+                "chrom": "chrT",
+                "unknown_bp": 4000,
+                "blocks": [
+                    b(0, 1000, "unique_intergenic", "constrained_unknown"),  # a copy
+                    b(1000, 2000, "unique_intergenic", "constrained_unknown"),  # syntax case: the candidate
+                    b(2000, 3000, "unique_intergenic", "constrained_unknown"),  # unmeasured on the human axis
+                    b(
+                        3000, 4000, "regulatory", "regulatory", 0.5, 0.01
+                    ),  # regulatory with an attributed element
+                ],
+            }
+        )
+    )
+    (tmp_path / "variation_chrT.json").write_text(
+        json.dumps(
+            {
+                "blocks": [
+                    {
+                        "start": 0,
+                        "end": 1000,
+                        "gnocchi": {"fraction_above": 0.0},
+                        "case": {"case": "relaxed"},
+                    },
+                    {
+                        "start": 1000,
+                        "end": 2000,
+                        "gnocchi": {"fraction_above": 0.6},
+                        "case": {"case": "syntax"},
+                    },
+                    {"start": 2000, "end": 3000, "gnocchi": None, "case": None},
+                    {
+                        "start": 3000,
+                        "end": 4000,
+                        "gnocchi": {"fraction_above": 0.3},
+                        "case": {"case": "recent"},
+                    },
+                ]
+            }
+        )
+    )
+    (tmp_path / "duplication_chrT.json").write_text(
+        json.dumps(
+            {
+                "blocks": [
+                    {"start": 0, "end": 1000, "duplicated_fraction": 0.9, "pairs": 3},
+                    {"start": 1000, "end": 2000, "duplicated_fraction": 0.0, "pairs": 0},
+                    {"start": 2000, "end": 3000, "duplicated_fraction": 0.2, "pairs": 1},
+                    {"start": 3000, "end": 4000, "duplicated_fraction": 0.0, "pairs": 0},
+                ]
+            }
+        )
+    )
+    (tmp_path / "enhancer_targets_chrT.json").write_text(
+        json.dumps(
+            {"elements": [{"id": "E1", "start": 3100, "end": 3300, "predicted_coding": {"gene": "G1"}}]}
+        )
+    )
+    rows = blocks("chrT", tmp_path)
+    assert [r["copy"] for r in rows] == [True, False, False, False]
+    assert rows[0]["reading"].startswith("copy: 90%") and "3 partners" in rows[0]["reading"]
+    assert rows[1]["case"] == "syntax" and "sharpest candidate" in rows[1]["reading"]
+    assert rows[2]["case"] == "unmeasured" and "mammals only" in rows[2]["reading"]
+    assert rows[3]["attributed_elements"] == 1 and rows[3]["targets"] == ["G1"]
+    assert reading({**rows[3], "case": None}) == "regulatory, 1 attributed element"
+    out = run_and_save("chrT", results_dir=tmp_path)
+    cu = out["by_tier"]["constrained_unknown"]
+    assert (cu["blocks"], cu["copies"], cu["after_copies"]) == (3, 1, 2)
+    assert out["real_unknown"]["blocks"] == 2 and out["real_unknown"]["by_case"]["syntax"]["blocks"] == 1
+    assert out["candidates"][0]["start"] == 1000  # syntax first
+    assert out["largest_copies"][0]["start"] == 0
+    (tmp_path / "organised_chr21.json").write_text((tmp_path / "organised_chrT.json").read_text())
+    d = distil(tmp_path)
+    assert d["chromosomes"] == 1 and d["real_unknown"]["blocks"] == 2
+    assert d["by_tier"]["constrained_unknown"]["copies"] == 1
+    assert organise("chrT", tmp_path)["copies"] == 1
