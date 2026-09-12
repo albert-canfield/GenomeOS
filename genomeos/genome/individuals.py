@@ -551,6 +551,26 @@ def dossier(name: str, root: Path | None = None) -> str:
     else:
         lines.append("**ClinVar carrier screen** — not run (`genomeos individual screen`).")
     lines.append("")
+    pgs = [json.loads(f.read_text()) for f in sorted(d.glob("pgs_*.json")) if f.exists()]
+    if pgs:
+        lines.append("")
+        lines.append("## Polygenic scores")
+        lines.append("")
+        lines.append(
+            "Raw weighted sums over the person's genotypes from PGS Catalog weight tables, with the share of "
+            "each score's variants read; not percentiles (the catalog publishes no population distribution), "
+            "and only within the ancestries each score was built in. _weights curated; the sum derived_"
+        )
+        lines.append("")
+        lines.append("| score | trait | publication | variants used | raw score |")
+        lines.append("|---|---|---|---|---|")
+        for r in pgs:
+            m = r.get("score") or {}
+            pub = m.get("publication") or {}
+            who = f"{pub.get('author') or ''} {pub.get('year') or ''}".strip()
+            used = f"{r.get('variants_used', 0):,} of {r.get('variants_in_score', 0):,}"
+            raw = f"{r.get('raw_score', 0):+.4f}"
+            lines.append(f"| {m.get('id', '')} | {m.get('trait') or ''} | {who} | {used} | {raw} |")
     cv = load("coding.json")
     if cv:
         bc = cv["by_consequence"]
