@@ -49,7 +49,13 @@ def _text(s: str) -> str:
     return re.sub(r"[;{}\"]", ",", str(s)).replace(":", ",")
 
 
-def _region(chrom: str, b: dict) -> list[str]:
+def _human_axis(chrom: str, results_dir: Path = RESULTS_DIR) -> dict[int, dict]:
+    """The human constraint axis per block start, from variation_<chrom> when it has been read."""
+    r = load_result(f"variation_{chrom}", results_dir) or {}
+    return {blk["start"]: blk for blk in r.get("blocks", []) if blk.get("gnocchi")}
+
+
+def _region(chrom: str, b: dict, human: dict[int, dict] | None = None) -> list[str]:
     tier = b["guess"]["tier"]
     kind, source = EVIDENCE_BY_TIER.get(tier, ("inferred", "genomeos budget"))
     ph = b.get("phylop") or {}
@@ -59,6 +65,12 @@ def _region(chrom: str, b: dict) -> list[str]:
         facts.append(f"constrained {ph['fraction_above'] * 100:.1f}% of {ph['bases']:,} bases")
     if el.get("n"):
         facts.append(f"{el['n']} conserved elements")
+    h = (human or {}).get(b["start"])
+    if h:
+        # the second axis (area J): variation among people, gnomAD Gnocchi per kilobase
+        facts.append(f"people {h['gnocchi']['fraction_above'] * 100:.0f}% of kilobases constrained")
+        if h.get("case"):
+            facts.append(f"case {h['case']['case']}")
     role = "unknown" if tier == "constrained_unknown" else _text(f"{tier}, {b['guess']['label']}")
     return [
         f"region U_{chrom}_{b['start']} {{",
@@ -107,6 +119,7 @@ def _open_in(chrom: str, domain_id: str, readers: list[dict]) -> str:
 
 def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR) -> str:
     budget = load_result(f"budget_{chrom}", results_dir)
+    human = _human_axis(chrom, results_dir)
     if not budget:
         raise FileNotFoundError(f"no budget_{chrom} result; run genomeos budget --chrom {chrom}")
     domains = {d["id"]: d for d in (load_result(f"domains_{chrom}", results_dir) or {}).get("domains", [])}
@@ -145,7 +158,7 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR) -> str:
         f"constrained {((budget.get('constrained_fraction') or 0) * 100):.2f}% of measured bases",
     ]
     for b in regions:
-        lines += _region(chrom, b)
+        lines += _region(chrom, b, human)
     if used_domains:
         lines += [
             "",

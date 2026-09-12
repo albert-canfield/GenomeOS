@@ -494,3 +494,92 @@ def vista_genome(results_dir: Path = RESULTS_DIR, progress=None) -> dict:
         "cost": {**cost, "seconds": round(time.time() - t0, 1)},
     }
     return out
+
+
+def distil(results_dir: Path = RESULTS_DIR) -> dict:
+    """The genome-wide summary of every saved variation_<chrom> result: one number per tier and case."""
+    per_chrom: dict[str, dict] = {}
+    by_tier: dict[str, dict] = {}
+    by_case: dict[str, dict] = {k: {"elements": 0, "name_a_gene": 0, "strong": 0} for k in CASE_ORDER}
+    controls: dict[str, dict] = {
+        "canonical_cds": {"track_bases": 0, "above": 0},
+        "canonical_introns": {"track_bases": 0, "above": 0},
+    }
+    vista: dict[str, dict] = {
+        "positive": {"track_bases": 0, "above": 0, "intervals": 0},
+        "negative": {"track_bases": 0, "above": 0, "intervals": 0},
+    }
+    mb = 0.0
+    for f in sorted(glob.glob(str(results_dir / "variation_chr*.json"))):
+        r = load_result(Path(f).stem, results_dir)
+        if not r or "by_tier" not in r:
+            continue
+        chrom = r["chrom"]
+        mb += sum(v.get("mb_fetched", 0) for v in r["cost"].values() if isinstance(v, dict))
+        for tier, v in r["by_tier"].items():
+            t = by_tier.setdefault(
+                tier,
+                {
+                    "blocks": 0,
+                    "measured_blocks": 0,
+                    "bp": 0,
+                    "measured_bp": 0,
+                    "human_constrained_bp": 0,
+                    "cases": {k: {"blocks": 0, "bp": 0} for k in CASE_ORDER},
+                },
+            )
+            for k in ("blocks", "measured_blocks", "bp", "measured_bp", "human_constrained_bp"):
+                t[k] += v[k]
+            for c, cv in v.get("cases", {}).items():
+                t["cases"][c]["blocks"] += cv["blocks"]
+                t["cases"][c]["bp"] += cv["bp"]
+        for c, cv in r["by_element_case"]["by_case"].items():
+            for k in ("elements", "name_a_gene", "strong"):
+                by_case[c][k] += cv[k]
+        ctrl = r.get("controls") or {}
+        for k in controls:
+            a = ctrl.get(k)
+            if a and a["fraction_above"] is not None:
+                controls[k]["track_bases"] += a["track_bases"]
+                controls[k]["above"] += round(a["fraction_above"] * a["track_bases"])
+        for k in vista:
+            a = (r.get("vista") or {}).get(k)
+            if a and a["fraction_above"] is not None:
+                vista[k]["track_bases"] += a["track_bases"]
+                vista[k]["above"] += round(a["fraction_above"] * a["track_bases"])
+                vista[k]["intervals"] += a["intervals"]
+        per_chrom[chrom] = {
+            "blocks": len(r["blocks"]),
+            "elements": len(r["elements"]),
+            "cds_fraction": (ctrl.get("canonical_cds") or {}).get("fraction_above"),
+            "neutral_fraction": (ctrl.get("unknown_by_tier") or {}).get("neutral"),
+            "constrained_unknown_fraction": (ctrl.get("unknown_by_tier") or {}).get("constrained_unknown"),
+            "syntax_elements_name_a_gene": r["by_element_case"]["by_case"]["syntax"]["name_a_gene_share"],
+            "tolerant_elements_name_a_gene": r["by_element_case"]["by_case"]["tolerant"]["name_a_gene_share"],
+        }
+    for t in by_tier.values():
+        t["human_constrained_fraction"] = (
+            round(t["human_constrained_bp"] / t["measured_bp"], 4) if t["measured_bp"] else None
+        )
+    for c in by_case.values():
+        c["name_a_gene_share"] = round(c["name_a_gene"] / c["elements"], 3) if c["elements"] else None
+    for d in (*controls.values(), *vista.values()):
+        d["fraction_above"] = round(d["above"] / d["track_bases"], 4) if d["track_bases"] else None
+    return {
+        "chromosomes": len(per_chrom),
+        "per_chromosome": per_chrom,
+        "by_tier": by_tier,
+        "by_element_case": by_case,
+        "controls": controls,
+        "vista": vista,
+        "thresholds": {
+            "gnocchi": GNOCCHI_THRESHOLD,
+            "gnocchi_strong": GNOCCHI_STRONG,
+            "human_min_fraction": HUMAN_MIN_FRACTION,
+            "mammal_min_fraction_blocks": CONSTRAINED_MIN,
+            "mammal_min_fraction_elements": ELEMENT_MAMMAL_MIN,
+        },
+        "evidence": EVIDENCE,
+        "gnocchi_mb_fetched": round(mb, 1),
+        "note": "the human axis read per chromosome by genomeos variation; shares are of kilobases touched",
+    }

@@ -154,3 +154,72 @@ def test_live_gnocchi_range():  # pragma: no cover - network
     (st,) = bw.summarise("chr21", [(40_000_000, 40_020_000)], GNOCCHI_THRESHOLD)
     bw.close()
     assert st.bases > 0 and st.maximum > 4.0  # a kilobase in the top percentile sits here
+
+
+def test_distil_sums_two_chromosomes(tmp_path):
+    from genomeos.attribution.variation import distil
+
+    def result(chrom, cds, neutral, syntax_named):
+        return {
+            "result": f"variation_{chrom}",
+            "chrom": chrom,
+            "blocks": [1, 2],
+            "elements": [1],
+            "cost": {"blocks": {"mb_fetched": 0.5}, "seconds": 1},
+            "by_tier": {
+                "neutral": {
+                    "blocks": 2,
+                    "measured_blocks": 2,
+                    "bp": 2000,
+                    "measured_bp": 2000,
+                    "human_constrained_bp": round(neutral * 2000),
+                    "cases": {
+                        "syntax": {"blocks": 0, "bp": 0},
+                        "relaxed": {"blocks": 0, "bp": 0},
+                        "recent": {"blocks": 1, "bp": 1000},
+                        "tolerant": {"blocks": 1, "bp": 1000},
+                    },
+                }
+            },
+            "by_element_case": {
+                "by_case": {
+                    "syntax": {
+                        "elements": 2,
+                        "name_a_gene": syntax_named,
+                        "strong": 1,
+                        "name_a_gene_share": syntax_named / 2,
+                    },
+                    "relaxed": {"elements": 0, "name_a_gene": 0, "strong": 0, "name_a_gene_share": None},
+                    "recent": {"elements": 0, "name_a_gene": 0, "strong": 0, "name_a_gene_share": None},
+                    "tolerant": {"elements": 1, "name_a_gene": 0, "strong": 0, "name_a_gene_share": 0.0},
+                },
+                "unmeasured": 0,
+            },
+            "controls": {
+                "canonical_cds": {"intervals": 1, "track_bases": 1000, "fraction_above": cds},
+                "canonical_introns": {"intervals": 1, "track_bases": 1000, "fraction_above": 0.1},
+                "unknown_by_tier": {"neutral": neutral},
+            },
+            "vista": {
+                "positive": {"intervals": 1, "track_bases": 1000, "fraction_above": 0.5},
+                "negative": {"intervals": 1, "track_bases": 1000, "fraction_above": 0.0},
+            },
+        }
+
+    for chrom, cds, neutral, named in (("chr21", 0.4, 0.0, 2), ("chr15", 0.2, 0.2, 1)):
+        (tmp_path / f"variation_{chrom}.json").write_text(json.dumps(result(chrom, cds, neutral, named)))
+    s = distil(tmp_path)
+    assert s["chromosomes"] == 2 and set(s["per_chromosome"]) == {"chr21", "chr15"}
+    assert (
+        s["by_tier"]["neutral"]["bp"] == 4000 and s["by_tier"]["neutral"]["human_constrained_fraction"] == 0.1
+    )
+    assert s["by_tier"]["neutral"]["cases"]["recent"]["blocks"] == 2
+    assert s["by_element_case"]["syntax"] == {
+        "elements": 4,
+        "name_a_gene": 3,
+        "strong": 2,
+        "name_a_gene_share": 0.75,
+    }
+    assert s["controls"]["canonical_cds"]["fraction_above"] == 0.3
+    assert s["vista"]["positive"]["fraction_above"] == 0.5 and s["vista"]["negative"]["intervals"] == 2
+    assert s["gnocchi_mb_fetched"] == 1.0

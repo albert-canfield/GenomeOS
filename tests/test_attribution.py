@@ -256,7 +256,32 @@ def test_compile_chromosome_to_biolang(tmp_path):
     }
     (tmp_path / "constrained_targets_chrT.json").write_text(json.dumps({"elements": [el]}))
     (tmp_path / "enhancer_targets_chrT.json").write_text(json.dumps({"elements": [el, el2]}))
+    # the human axis (area J): read for one block only; it is a note on the region, not a tier
+    (tmp_path / "variation_chrT.json").write_text(
+        json.dumps(
+            {
+                "chrom": "chrT",
+                "blocks": [
+                    {
+                        "start": 100,
+                        "gnocchi": {"bases": 1000, "fraction_above": 0.0, "maximum": -1.2, "strong": False},
+                        "case": {
+                            "case": "relaxed",
+                            "mammals": "constrained",
+                            "humans": "free",
+                            "confidence": 0.5,
+                        },
+                    },
+                    {"start": 300, "gnocchi": None, "case": None},
+                ],
+            }
+        )
+    )
     text = compile_chromosome("chrT", tmp_path)
+    regions = {ln.split()[1]: i for i, ln in enumerate(text.splitlines()) if ln.startswith("region ")}
+    lines = text.splitlines()
+    assert "people 0% of kilobases constrained, case relaxed" in lines[regions["U_chrT_100"] + 3]
+    assert "people" not in lines[regions["U_chrT_300"] + 3] and text.count("people ") == 1
     assert ident("KRTAP26-1") == "KRTAP26_1" and ident("1abc") == "g_1abc"
     assert "# test: unknowns == 1" in text and "# test: rules == 2" in text
     assert "# chrT:D1: open in K562 (0.30); silent in HepG2" in text
