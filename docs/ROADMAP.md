@@ -337,10 +337,24 @@ in order. "Owner" is the session that holds the files today (see §7).
   such: node content has the evidence (enhancer deletions 90% inside, mouse
   93 to 94% same neighbourhood), node edges stay a proxy at 0.4 until
   measured Hi-C or a better insulation predictor.
+- **Orthology from Compara (2026-09-12).** `genome/mouse.py` streams the
+  mouse-side Ensembl Compara 116 dump once (112 MB) and keeps the mouse to
+  human orthologue pairs for the mouse chromosomes fetched (2,176 pairs for
+  chr19 and chr11, `compara_mouse_human_orthology.tsv.gz`); `genomeos mouse`
+  compares nodes under MGI and under Compara and reports their agreement.
+  Same human neighbourhood: chr19 94.5% under MGI and 95.5% under Compara,
+  chr11 92.6% and 91.8%; in one node 53.2% and 55.9%, 58.9% and 56.1%. Where
+  both sources name orthologues for a gene they name the same human genes
+  97.3% (chr19) and 96.3% (chr11) of the time; Compara covers 65 and 86 genes
+  MGI lacks, MGI 34 and 42 Compara lacks. The node finding does not depend on
+  the orthology source. A lesson recorded in LESSONS.md: Ensembl's human
+  homology dump has Mus caroli, Mus spretus and the rat but not Mus musculus;
+  the mouse to human pairs live in the mouse dump, and the first pass wrote an
+  empty file and fell back to MGI silently, so the header now counts what it
+  kept.
 - **Next.** 1. The `reader` construct in
   BioLang, so context gating comes from
-  chromatin (the parser half belongs to the language owner). 2. Orthology
-  from Ensembl Compara. 3. Measured Hi-C boundaries for the node edges: built
+  chromatin (the parser half belongs to the language owner). 2. Measured Hi-C boundaries for the node edges: built
   2026-09-12 (`genomeos domains --chrom C --hic BIOSOURCE`, `genome/hic.py`,
   the biosource's deepest 4DN boundary file streamed once into
   `data/knowledge/hic` and compared with the CTCF-only boundaries under the
