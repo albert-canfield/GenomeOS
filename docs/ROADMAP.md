@@ -108,7 +108,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 reached | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader on 25 with eleven cell types; the node model tested genome-wide (90.2% of enhancers act inside their node) and on two mouse chromosomes; the segment parser on chr21 at 92.7% gene precision once RNA over the exons counts as evidence | the parser on every chromosome with measured RNA; enhancer targets and boundaries from Hi-C |
 | **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph; the dominant isoform per tissue from GTEx (APP695 in the cerebellum) | measured modification state; isoform expression per cell type or stage; an engine that handles 100-species models |
-| **The 98%** (GenomeOS) | first budget | chromosome 21's 446 UNKNOWN blocks tiered with Zoonomia constraint read per base: structural 47%, fossil 19%, regulatory 19%, neutral 14%, constrained-unknown 1.4% (287 kb in 20 blocks); `genomeos budget` | the other 23 chromosomes (job running); a gene and a tissue attributed to each constrained-unknown block; scoring against VISTA, MPRA, eQTL |
+| **The 98%** (GenomeOS) | genome budgeted | every UNKNOWN block of the 24 chromosomes tiered with Zoonomia constraint read per base (1,009 Mb): structural 23%, fossil 33%, regulatory 34%, neutral 7%, constrained-unknown 3.2% (1,098 blocks, 32 Mb, 1% of the genome); `genomeos budget`, the Progress tab card | a gene and a tissue attributed to each constrained-unknown and regulatory block; scoring against VISTA, MPRA, eQTL |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
 | **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
 
@@ -742,7 +742,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   241 mammals, the 100-vertebrate conserved elements), `attribution/budget.py`
   (the tiers and the budget), `scripts/budget_genome_wide.py`, `genomeos budget`.
 - **Design.** ATTRIBUTION.md.
-- **Data.** `budget_chr*` (1 of 24), `budget_genome_wide` (from the job);
+- **Data.** `budget_chr*` (24 of 24), `budget_genome_wide`;
   `data/knowledge/constraint`, the conserved elements per chromosome (cache).
 - **Requirements.** Constraint is read per base and never stored (the Zoonomia
   track is 9.6 GB; chromosome 21 costs 33 MB of ranges); a tier is a best
@@ -768,21 +768,45 @@ in order. "Owner" is the session that holds the files today (see §7).
   conserved elements, which is what an unannotated regulatory region or gene
   looks like. The registry's regulatory class is only 1.2% constrained: a cCRE
   is a chromatin state, mostly lineage-specific, not a conserved element.
-- **Next.** 1. Every chromosome through the `budget_genome_wide` job (started
-  2026-09-11, smallest first, resumable). 2. The blocks organised by the
+- **The genome (2026-09-12).** The `budget_genome_wide` job ran the 24
+  chromosomes in eight hours, smallest first, 2,252 MB of range requests over
+  a 9.6 GB track that was never downloaded. 1,009 Mb of UNKNOWN blocks in
+  3,088 Mb of genome, 780 Mb of them holding sequence, of which 15.0 Mb are
+  constrained (1.93%, against 10.7% for the genome as a whole):
+
+  | tier | blocks | Mb | of UNKNOWN | of genome | constrained Mb |
+  |---|---|---|---|---|---|
+  | structural | 238 | 229.7 | 22.8% | 7.4% | 0.05 |
+  | fossil | 7,302 | 328.5 | 32.6% | 10.6% | 4.13 |
+  | regulatory | 15,536 | 345.2 | 34.2% | 11.2% | 8.10 |
+  | constrained_unknown | 1,098 | 32.0 | 3.2% | 1.0% | 1.66 |
+  | neutral | 2,632 | 73.3 | 7.3% | 2.4% | 1.07 |
+
+  Every block carries a guess at confidence 0.5 or above. The real unknown of
+  the UNKNOWN space is 1,098 blocks and 32 Mb, one percent of the genome,
+  holding 1.66 Mb of constrained bases; the regulatory tier holds five times
+  more constrained sequence (8.1 Mb) with its target genes still to be named.
+  The chromosomes sort themselves: chrY and chrX are the controls (0.66% and
+  0.88% constrained, fossils 27% and 73%), the gene-dense chr17, chr19 and
+  chr20 put half their space in the regulatory tier, the gene-poor chr4,
+  chr13 and chr18 carry the most neutral and constrained-unknown sequence.
+  Constraint per class ranges from 0.6% (centromere) to 2.5% (unique
+  intergenic); no class of the UNKNOWN space approaches the genome's average,
+  which is the quantitative form of "constraint lives in and around genes".
+- **Next.** 1. The blocks organised by the
   evidence that exists: CTCF node, reader open fraction per cell type,
   AlphaGenome enhancer target, repeat family, segmental duplication,
-  constraint. 3. Attribution as BioLang `element` blocks with a function, a
+  constraint. 2. Attribution as BioLang `element` blocks with a function, a
   target gene, a tissue and a `predicted` confidence: AlphaGenome's predicted
   chromatin tracks for activity and tissue, in-silico deletion for the target,
   in-silico mutagenesis for the bases that matter; the self-hosted model gates
-  the move from chromosome 21 to the genome. 4. Scoring against measured
+  the move from chromosome 21 to the genome. 3. Scoring against measured
   ground truth (VISTA enhancers, ENCODE4 lentiMPRA, GTEx eQTL, the GWAS
-  catalog, ClinVar) the way the parser was scored against GENCODE. 5. Closure
+  catalog, ClinVar) the way the parser was scored against GENCODE. 4. Closure
   at three levels: gene (open elements reproduce GTEx expression per tissue),
   cell (a deleted element moves its gene and the cell program; IMPC, DepMap),
   organism (the Body runtime still produces a human's cell counts over
-  decades). 6. Simpler genomes as the comparison, C. elegans first, then
+  decades). 5. Simpler genomes as the comparison, C. elegans first, then
   Drosophila enhancers, fugu as the compact vertebrate, mouse for transfer.
 - **Owner.** genomeos-f7 (this lane's files); the organism-level closure runs
   on genomeos-73's Body runtime and the block evidence on genomeos-fe's
@@ -810,7 +834,7 @@ or the CLI; results land in `data/results` and are committed.
 | Enhancer targets, predicted (AlphaGenome) | 24 of 24 chromosomes (4,800 elements) | done | 2,994 elements move a gene, 2,291 name a coding gene; **90.2% of those sit inside the element's CTCF node** (79.8% to 91.8% per chromosome) and 71.2% are exactly the nearest TSS; 1,157 behave as silencers. Needs a key; the daily quota ran out mid-run and the job waited and resumed rather than failing |
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
-| Composition budget: constraint per UNKNOWN block, a tier per block | 1 of 24 (chr21, 2026-09-11); job `budget_genome_wide` running | `genomeos budget --chrom C`; `genomeos budget` distils | Zoonomia phyloP read per base over HTTP ranges, never stored; about 2.5 GB of ranges for the genome; see area I |
+| Composition budget: constraint per UNKNOWN block, a tier per block | 24 of 24 (2026-09-12) | done | Zoonomia phyloP read per base over HTTP ranges, never stored, 2,252 MB for the genome in eight hours; 1,009 Mb tiered, constrained 1.93%, constrained-unknown 32 Mb; see area I |
 | Segment parser scored against GENCODE | chr21 and chr22, twelve runs, series closed 2026-09-12 | `genomeos segments --chrom C [--predicted-sites] [--promoter-anchored] [--coding markov] [--rna-filter]` | every result kept side by side; RNA over the exons reaches 92.7% gene precision at 57.9% sensitivity; see area B |
 
 One-off jobs, each needing a decision or a resource:
@@ -877,11 +901,11 @@ session that holds it. Items 1–4 run in parallel today.
     a concrete reason: Schoeberl2002 (100 species) does not reproduce on the
     in-house SBML engine, so a reference implementation is needed for models
     of that size. Milestone 1.1. unassigned.
-13. The 98%: chromosome 21 budgeted 2026-09-11 (constraint per UNKNOWN
-    block, five tiers, 1.4% of the space left as constrained unknown); the
-    genome-wide job running. Next: organise the blocks, attribute a gene and
-    a tissue with AlphaGenome, score against VISTA and MPRA. Milestone 1.3.
-    genomeos-f7.
+13. The 98%: the genome budgeted 2026-09-12 (constraint per UNKNOWN block,
+    five tiers; 3.2% of the space, 32 Mb, left as constrained unknown, the
+    regulatory tier holding five times more constrained sequence). Next:
+    organise the blocks, attribute a gene and a tissue with AlphaGenome,
+    score against VISTA and MPRA. Milestone 1.3. genomeos-f7.
 
 ## 6. Milestones
 
@@ -892,7 +916,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
 | **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. Outstanding: the two remaining ranking defects, CNA and SV, the library layer |
-| **1.3 the 98%** ◔ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements | chromosome 21 budgeted 2026-09-11; the genome-wide budget is the running job; scoring needs VISTA and MPRA as ground truth |
+| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
 ---

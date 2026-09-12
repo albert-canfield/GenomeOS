@@ -97,26 +97,53 @@ an unannotated gene looks like. The registry's regulatory class shows only
 1.2% constrained bases, a reminder that a cCRE is a class of chromatin state
 and mostly lineage-specific, not a conserved element.
 
+## The genome (2026-09-12)
+
+The job ran the 24 chromosomes in eight hours, smallest first, 2,252 MB of
+range requests over a track that was never downloaded.
+
+| tier | blocks | Mb | of UNKNOWN | of genome | constrained Mb |
+|---|---|---|---|---|---|
+| structural | 238 | 229.7 | 22.8% | 7.4% | 0.05 |
+| fossil | 7,302 | 328.5 | 32.6% | 10.6% | 4.13 |
+| regulatory | 15,536 | 345.2 | 34.2% | 11.2% | 8.10 |
+| constrained_unknown | 1,098 | 32.0 | 3.2% | 1.0% | 1.66 |
+| neutral | 2,632 | 73.3 | 7.3% | 2.4% | 1.07 |
+
+1,009 Mb of UNKNOWN blocks, 780 Mb of them holding sequence, 15.0 Mb of
+those constrained: 1.93%, against 10.7% for the genome as a whole. No class
+of the UNKNOWN space comes near the genome's average (centromere 0.6%,
+unique intergenic 2.5%), which is the quantitative form of "constraint lives
+in and around genes". The real unknown is 1,098 blocks and 32 Mb, one percent
+of the genome; the regulatory tier holds five times more constrained sequence
+and its target genes are the next attribution.
+
+The chromosomes sort themselves without being told. chrY and chrX are the
+controls: 0.66% and 0.88% constrained, fossils 27% and 73% of their space.
+The gene-dense chr17, chr19 and chr20 put half their space in the regulatory
+tier. The gene-poor chr4, chr13 and chr18 carry the most neutral and
+constrained-unknown sequence. Per-chromosome budgets are in
+`data/results/budget_<chrom>.json`, the sum in `budget_genome_wide.json`, and
+the Progress tab shows both.
+
 ## What comes next, in order
 
-1. **Every chromosome** through `budget_genome_wide` (the job, resumable,
-   smallest first; about 2.5 GB of range requests over the genome).
-2. **Organise the blocks** by the evidence that already exists: CTCF node
+1. **Organise the blocks** by the evidence that already exists: CTCF node
    membership, the reader's open fraction per cell type, the AlphaGenome
    enhancer target, repeat family, segmental duplication, and now constraint.
-3. **Attribution as BioLang `element` blocks**: a function, a target gene, a
+2. **Attribution as BioLang `element` blocks**: a function, a target gene, a
    tissue and a confidence labelled `predicted`, from priors per tier.
    AlphaGenome's predicted DNase, histone and CAGE tracks say whether a block is
    active and where; deleting it in silico says which gene moves; in-silico
    mutagenesis says which bases inside it matter. The hosted service handles
    thousands of predictions, not a million blocks, so the self-hosted model in
    the roadmap pool gates the move from chromosome 21 to the genome.
-4. **Score against measured ground truth**, the way the segment parser was
+3. **Score against measured ground truth**, the way the segment parser was
    scored against GENCODE: VISTA enhancers (about 3,300 tested in mouse
    embryos), ENCODE4 lentiMPRA (hundreds of thousands of elements in K562,
    HepG2, WTC11), GTEx eQTL, the GWAS catalog and ClinVar. Precision and
    sensitivity reported plainly per tier.
-5. **Closure tests at three levels.** Gene level: open elements with their
+4. **Closure tests at three levels.** Gene level: open elements with their
    predicted effects must reproduce GTEx expression per tissue (19,000 genes by
    54 tissues). Cell level: an element deleted in silico moves its gene and
    changes the cell type's program; compare with IMPC knockouts and DepMap.
@@ -124,7 +151,7 @@ and mostly lineage-specific, not a conserved element.
    produce a human's cell counts and proportions over decades. The last one
    validates the mechanism modules, not single blocks, and stays as the sanity
    check Albert described.
-6. **Simpler genomes as the comparison.** C. elegans first (GenomeOS already
+5. **Simpler genomes as the comparison.** C. elegans first (GenomeOS already
    grows it; the lineage is the finished house), Drosophila for enhancer
    grammar (genome-wide STARR-seq), fugu as the compact vertebrate with the
    same gene count and an eighth of the sequence, mouse (already in) for
