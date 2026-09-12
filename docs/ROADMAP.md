@@ -818,23 +818,36 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Requirements.** One HTML page, inline SVG, no build step; every control
   explained; jobs visible with progress; the Progress tab reads this
   project's own log.
+- **Project progress as current work and done (2026-09-12).** The Progress
+  tab's Project progress card reads the roadmap and a work board as data:
+  `genomeos/roadmap.py` parses ROADMAP.md §3, §4 and §6 into areas, planned
+  steps and finished items; `genomeos/work.py` is the board, one git-ignored
+  `data/work/<session>.json` per session written by `genomeos work
+  start|update|done --who SESSION`; served by `/api/work` and
+  `/api/roadmap`. The panel shows who is working on what, jobs running,
+  changes not yet committed, what landed in the last day and what is planned
+  per area (genomeos-77). It reads this file's formats as they are: a bullet
+  whose bold lead is not one of Goal, Code, Design, Data, Requirements,
+  Missing, Next or Owner is a done item; a "Done YYYY-MM-DD:" sentence inside
+  Missing is done; Next steps are numbered "1. … 2. …", and a step that
+  starts with "Done" is done, or partial if it also says "next".
 - **Missing.** Two views promised in the UI track were never built:
   **Evidence explorer** (filter every rule by evidence kind and confidence,
   export the weak ones) and **Cell** (a cell type's active rule set and
-  graph, run and watch). `pyproject` still says 0.1.0 and there are no
-  release tags or PyPI package; the README "Project family" table still
-  says BioLang and BioLib are "designed, not built"; no nightly real-data
-  CI; no "known phenotypes it must reproduce" list per library from a
-  biologist; `data/jobs` metadata and logs are tracked in git and change
-  on every run; the jobs registry de-duplicated only in memory, so server
-  restarts spawned five copies of the proteome job (fixed 2026-09-11 with
-  a pid liveness check).
+  graph, run and watch). No git tag and no PyPI package; no nightly
+  real-data CI; no "known phenotypes it must reproduce" list per library from
+  a biologist. Done 2026-09-11: version 0.9.0 in `pyproject.toml` and the
+  README rewritten around what the release measures. Done 2026-09-11: the jobs
+  registry de-duplicates by pid liveness, so server restarts no longer spawn
+  copies of a job. Done 2026-09-11: `data/jobs` metadata and logs are
+  git-ignored, the registry kept in code.
 - **Next.** 1. Evidence explorer view over every loaded module.
-  2. README refresh and a version bump to 0.9.0 with a git tag when the
-  whole-genome milestone lands. 3. `.gitignore` for `data/jobs`, keeping
-  the registry in code. 4. Nightly CI job that runs the real-data tests
-  against cached reference data. 5. Cell view.
-- **Owner.** genomeos-f7 (views, packaging, CI); genomeos-fe (jobs).
+  2. Done 2026-09-11: README refresh and the version bump to 0.9.0; the git
+  tag follows the merge to `main`, which only Albert opens. 3. Done
+  2026-09-11: `.gitignore` for `data/jobs`, keeping the registry in code.
+  4. Nightly CI job that runs the real-data tests against cached reference
+  data. 5. Cell view.
+- **Owner.** genomeos-c6 (views, packaging, CI; genomeos-f7 before the restart of 2026-09-12); genomeos-8e (jobs); genomeos-77 (the Project progress card and the work board).
 
 ### H. BioForge (design under constraints)
 
