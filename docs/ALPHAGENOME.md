@@ -177,32 +177,38 @@ unphased sequence, so it does not see a diploid individual.
    and `scripts/vista_score.py --chrom C` reads every element blind: is an
    ENCODE enhancer-like element there, which node and nearest coding TSS,
    how constrained, and what the deletion of the whole element does in the
-   model (`vista_<chrom>.json`; the `vista_genome_wide` job runs the 23
-   chromosomes). The first two chromosomes, 50 elements:
+   model (`vista_<chrom>.json`; the `vista_genome_wide` job ran the 23
+   chromosomes in five hours, 2,223 non-overlapping elements of 2,442):
 
-   | VISTA elements, chr21 + chr22 | positive (28) | negative (22) |
-   |---|---|---|
-   | an ENCODE enhancer-like element sits there | 100% | 86% |
-   | constrained (≥ 20% phyloP bases) | 43% | 23% |
-   | deletion moves some gene by ≥ 0.1 log2 | 75% | 91% |
-   | strong effect (≥ 0.3) | 12 | 9 |
-   | predicted tissue falls in the measured one | 8 of 9 judged (chance 36%) | no tissue |
+   | VISTA elements, genome | positive (1,133) | negative (1,090) | chromosomes leaning this way |
+   |---|---|---|---|
+   | an ENCODE enhancer-like element sits there | 84.5% | 66.1% | 22 of 23 |
+   | constrained (≥ 20% phyloP bases) | 65.0% | 57.7% | 18 of 23 |
+   | deletion moves some gene by ≥ 0.1 log2 | 72.7% | 64.9% | 17 of 23 |
+   | strong effect (≥ 0.3) among those named | 422 of 806 (52%) | 271 of 695 (39%) | |
+   | coding target = nearest TSS in the node | 40.0% | 34.2% | |
+   | predicted tissue falls in the measured one | 195 of 286 judged (68%; chance 36%) | no tissue | |
 
-   Two things hold on fifty elements and will be re-read on the genome: the
-   registry and constraint lean the right way (every positive sits on an
-   ENCODE enhancer-like element, and positives are twice as often
-   constrained, though VISTA chose all of them for conservation), and when
-   the model names a tissue group it is the measured one nine times in ten
-   against a chance level of a third (hs1304 on chr21, forebrain to neural
-   tube in the embryo, deleted: −2.7 log2 in neural cells; hs1684, dorsal
-   root and trigeminal ganglia and somites: −1.5 in muscle of trunk; hs2543
-   on chr22, brain: +2.6 in cerebellum). One does not: the deletion names a
-   gene for negatives as often as for positives, more often on these two
-   chromosomes. A VISTA negative is a conserved sequence next to a gene that
-   did not drive expression at one embryonic day; the model reads adult and
-   cell-line tracks, so "some gene moves" is not "active at e11.5", and the
-   deletion effect is a target finder, not an activity assay. The tissue is
-   the part of the prediction the assay confirms.
+   Every layer leans the right way over the genome, and by different
+   amounts. The registry separates best: a VISTA positive sits on an ENCODE
+   enhancer-like element five times in six, a negative two times in three.
+   Constraint separates least, as it must: VISTA chose every element for
+   conservation, so both sides are constrained twice as often as the
+   genome's regulatory tier. The deletion model names a gene for positives
+   more often than for negatives (the two-chromosome reading of 75% against
+   91% was fifty elements' noise; over 2,200 it is 73% against 65%), and the
+   difference is in the strong effects: half the positives that name a gene
+   move it by 0.3 log2 or more, against two fifths of the negatives. What
+   the assay confirms most is the tissue: where the model's strongest track
+   is a brain, heart, muscle or liver tissue, it is the tissue the embryo
+   stained in two cases of three, against one in three if the labels were
+   shuffled (hs1304 on chr21, forebrain to neural tube: −2.7 log2 in neural
+   cells; hs2543 on chr22, brain: +2.6 in cerebellum; ARX's enhancer on
+   chrX). The caveat stands: a VISTA negative is conserved sequence next to
+   a gene that did not drive expression on one embryonic day, and the model
+   reads adult and cell-line tracks, so "some gene moves" is a target
+   finder with a bias towards real enhancers, not an activity assay; the
+   activity assay is lentiMPRA, below.
 
    **Against measured targets (2026-09-12).** GTEx's cis-eQTLs are the
    measured answer to "which gene": a variant whose alleles go with a gene's
