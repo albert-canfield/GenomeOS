@@ -3989,7 +3989,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--hic",
         metavar="BIOSOURCE",
-        help="hold the CTCF-only boundaries against 4DN's measured boundary calls of a biosource (needs a key)",
+        help="hold the CTCF-only boundaries against 4DN's measured boundary calls (needs a 4DN key)",
     )
     p.set_defaults(fn=cmd_domains)
 
