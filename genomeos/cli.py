@@ -1457,6 +1457,18 @@ def cmd_closure(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_decompile(args: argparse.Namespace) -> int:
+    """One gene, every layer GenomeOS has read for it, as a BioLang-flavoured view (area J step 6)."""
+    from genomeos.decompile import decompile, render
+
+    d = decompile(args.gene, args.chrom)
+    if args.json:
+        print(json.dumps(d, indent=1))
+        return 0
+    print(render(d), end="")
+    return 0
+
+
 def cmd_motifs(args: argparse.Namespace) -> int:
     """JASPAR motifs over promoters and elements: `requires:` lists and operators (area J step 4)."""
     from genomeos.results import load_result
@@ -4195,6 +4207,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
     p.add_argument("--top", type=int, default=12)
     p.set_defaults(fn=cmd_closure)
+
+    p = sub.add_parser(
+        "decompile",
+        help="one gene as a decompiled locus: every layer read for it, evidence per line, the unknown",
+    )
+    p.add_argument("gene")
+    p.add_argument("--chrom", required=True)
+    p.add_argument("--json", action="store_true", help="the layers as JSON instead of the view")
+    p.set_defaults(fn=cmd_decompile)
 
     p = sub.add_parser(
         "motifs", help="JASPAR motifs over promoters and elements: requires lists, enrichment, operators"
