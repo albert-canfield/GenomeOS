@@ -196,6 +196,25 @@ scripts/fetch_reference.sh hg002     # a real individual's diploid genome (open 
 ```
 See [docs/DATA.md](docs/DATA.md) for every open dataset and its verified URL.
 
+To read a person's own genome (a VCF against GRCh38; the Genome in a Bottle
+trio is the worked example, and everything about a person stays in a
+git-ignored directory, never in a committed result):
+
+```bash
+uv run genomeos individual import HG002.vcf.gz --name HG002        # a file or a URL, streamed once
+uv run genomeos individual check --name HG002 --chrom chr21        # is this file really GRCh38?
+uv run genomeos individual screen --name HG002                     # ClinVar carrier screen
+uv run genomeos individual knockouts --name HG002                  # truncating variants, homozygous first
+uv run genomeos individual coding --name HG002 --predict           # every coding SNV; AlphaMissense per missense
+uv run genomeos individual protein --name HG002 --gene APP --chrom chr21   # the protein each tissue makes
+uv run genomeos individual trio --name HG002 --father HG003 --mother HG004  # inheritance, de novo candidates
+uv run genomeos individual diff --name HG002 --against HG003 [--regulatory --chrom chr21]  # a code review
+uv run genomeos individual pgs --name HG002                        # polygenic scores from PGS Catalog weights
+uv run genomeos individual report --name HG002                     # the one-page dossier
+uv run genomeos telomere <bam-url> --bai <index> --save telomere_HG002   # telomere from a BAM read by ranges
+```
+The Twin card of the web UI runs the same steps with a click.
+
 ## Storage principle
 
 Stream, distil, discard: raw data is streamed or downloaded once, every real-data run leaves a small committed summary under `data/results/`, and the raw file is deleted (`genomeos data status|distil|clean`). See [docs/STORAGE.md](docs/STORAGE.md).
