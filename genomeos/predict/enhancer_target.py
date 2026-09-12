@@ -34,6 +34,8 @@ STRONG_EFFECT = 0.3
 CONFIDENCE_CAP = 0.7
 
 Scorer = Callable[[str, int, str, str], list[tuple[str, str, float]]]
+# cell lines whose own RNA-seq track is kept per gene, so a closure test can take the cell's magnitude
+CELLS = ("K562", "HepG2", "GM12878", "IMR-90")
 
 
 def cache_path(chrom: str, element_id: str, cache: Path = CACHE) -> Path:
@@ -45,8 +47,9 @@ def load_cached(chrom: str, element_id: str, cache: Path = CACHE) -> dict[str, A
     return json.loads(p.read_text()) if p.exists() else None
 
 
-def aggregate(effects: list[tuple[str, str, float]]) -> list[dict[str, Any]]:
-    """Per gene over every track: mean, the largest drop and the largest rise with their tissues."""
+def aggregate(effects: list[tuple[str, str, float]], cells: tuple[str, ...] = CELLS) -> list[dict[str, Any]]:
+    """Per gene over every track: mean, the largest drop and the largest rise with their tissues, and the
+    value on each of `cells`' own tracks."""
     by_gene: dict[str, dict[str, Any]] = {}
     for gene, tissue, val in effects:
         g = by_gene.setdefault(
@@ -59,10 +62,13 @@ def aggregate(effects: list[tuple[str, str, float]]) -> list[dict[str, Any]]:
                 "min_tissue": "",
                 "max": 0.0,
                 "max_tissue": "",
+                "by_cell": {},
             },
         )
         g["n_tracks"] += 1
         g["sum"] += val
+        if tissue in cells:
+            g["by_cell"][tissue] = round(float(val), 4)
         if val < g["min"]:
             g["min"], g["min_tissue"] = val, tissue
         if val > g["max"]:
@@ -78,10 +84,26 @@ def aggregate(effects: list[tuple[str, str, float]]) -> list[dict[str, Any]]:
                 "max_drop_tissue": g["min_tissue"],
                 "max_rise_log2fc": round(g["max"], 4),
                 "max_rise_tissue": g["max_tissue"],
+                "by_cell": g["by_cell"],
             }
         )
     rows.sort(key=lambda r: r["max_drop_log2fc"])
     return rows
+
+
+def has_cells(hit: dict[str, Any] | None) -> bool:
+    """Whether a cached answer carries the per-cell values (older caches do not)."""
+    return bool(hit) and all("by_cell" in g for g in hit["genes"][:1])
+
+
+def by_cell_of(rows: list[dict[str, Any]], pred: dict[str, Any] | None) -> dict[str, float] | None:
+    """The predicted target's log2 fold change on each cell line's own track, or None."""
+    if not pred:
+        return None
+    for r in rows:
+        if r["gene"] == pred["gene"]:
+            return r.get("by_cell") or None
+    return None
 
 
 def predict_target(rows: list[dict[str, Any]], min_effect: float = MIN_EFFECT) -> dict[str, Any] | None:
@@ -175,6 +197,8 @@ def score_element(
     out = {k: v for k, v in hit.items() if k != "genes"}
     out["predicted"] = pred
     out["predicted_coding"] = pred_coding
+    out["predicted_by_cell"] = by_cell_of(hit["genes"], pred)
+    out["predicted_coding_by_cell"] = by_cell_of(hit["genes"], pred_coding)
     out["top_genes"] = hit["genes"][:5]
     if inferred_targets is not None:
         out["inferred"] = inferred_targets[0] if inferred_targets else None

@@ -112,7 +112,14 @@ unphased sequence, so it does not see a diploid individual.
    targets fall inside the node the element sits in, and the nearest-TSS
    heuristic names the wrong gene for three in ten.
 
-   **The constrained ones first (2026-09-12).** The composition budget
+   **Per cell line (2026-09-12).** The tissue where the deletion moves the
+   gene most is rarely the cell a closure test runs in, so the scorer now
+   keeps each gene's fold change on the K562, HepG2, GM12878 and IMR-90
+   tracks (`predicted_by_cell` per element; `scripts/
+   enhancer_targets_by_cell.py` back-fills a chromosome); the gene-level
+   closure in ATTRIBUTION.md takes the cell's own magnitude from there.
+
+ The composition budget
    (docs/ATTRIBUTION.md) found that the regulatory tier holds 8.1 Mb of
    constrained sequence genome-wide with no target named. So the deletion
    tool was pointed at constraint: `scripts/constrained_targets.py` ranks a

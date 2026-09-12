@@ -70,3 +70,14 @@ def test_cached_prediction_reads_only_the_cache(tmp_path):
     score_element(fake_scorer, lambda loc: "G" + "A" * 10, "chr21", "EH2", 50, 60, cache=tmp_path)
     p = cached_prediction("chr21", "EH2", cache=tmp_path)
     assert p["gene"] == "GENE_A" and p["action"] == "activates"
+
+
+def test_aggregate_keeps_the_cell_lines_own_tracks():
+    from genomeos.predict.enhancer_target import aggregate, by_cell_of, has_cells
+
+    rows = aggregate([("G", "K562", -0.5), ("G", "liver", -0.9), ("G", "IMR-90", 0.1), ("H", "HepG2", 0.2)])
+    g = next(r for r in rows if r["gene"] == "G")
+    assert g["by_cell"] == {"K562": -0.5, "IMR-90": 0.1} and g["max_drop_tissue"] == "liver"
+    assert by_cell_of(rows, {"gene": "G"}) == {"K562": -0.5, "IMR-90": 0.1}
+    assert by_cell_of(rows, {"gene": "Z"}) is None and by_cell_of(rows, None) is None
+    assert has_cells({"genes": rows}) and not has_cells({"genes": [{"gene": "old"}]}) and not has_cells(None)

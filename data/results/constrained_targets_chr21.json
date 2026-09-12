@@ -85,7 +85,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": {
+        "HepG2": -0.0107,
+        "IMR-90": 0.0226,
+        "K562": -0.026,
+        "GM12878": 0.0905
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0107,
+        "IMR-90": 0.0226,
+        "K562": -0.026,
+        "GM12878": 0.0905
+      }
     },
     {
       "id": "EH38E2138150",
@@ -118,7 +130,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D146"
+      "domain": "chr21:D146",
+      "predicted_by_cell": {
+        "HepG2": -0.0919,
+        "IMR-90": -0.0157,
+        "K562": 0.014,
+        "GM12878": 0.0187
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0919,
+        "IMR-90": -0.0157,
+        "K562": 0.014,
+        "GM12878": 0.0187
+      }
     },
     {
       "id": "EH38E2130888",
@@ -151,7 +175,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": {
+        "HepG2": 0.0107,
+        "IMR-90": 0.0423,
+        "K562": 0.0252,
+        "GM12878": 0.0307
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.04,
+        "IMR-90": 0.0158,
+        "K562": 0.056,
+        "GM12878": 0.0166
+      }
     },
     {
       "id": "EH38E2130733",
@@ -168,7 +204,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D16"
+      "domain": "chr21:D16",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457690",
@@ -185,7 +223,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D168"
+      "domain": "chr21:D168",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2141034",
@@ -202,7 +242,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D170"
+      "domain": "chr21:D170",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3450638",
@@ -235,7 +277,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D16"
+      "domain": "chr21:D16",
+      "predicted_by_cell": {
+        "HepG2": -0.0407,
+        "IMR-90": -0.0235,
+        "K562": 0.027,
+        "GM12878": 0.0372
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0407,
+        "IMR-90": -0.0235,
+        "K562": 0.027,
+        "GM12878": 0.0372
+      }
     },
     {
       "id": "EH38E3456465",
@@ -268,7 +322,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": {
+        "HepG2": 0.1388,
+        "IMR-90": 0.187,
+        "K562": 0.0889,
+        "GM12878": 0.0765
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.1388,
+        "IMR-90": 0.187,
+        "K562": 0.0889,
+        "GM12878": 0.0765
+      }
     },
     {
       "id": "EH38E2140621",
@@ -285,7 +351,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D168"
+      "domain": "chr21:D168",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3464772",
@@ -318,7 +386,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D227"
+      "domain": "chr21:D227",
+      "predicted_by_cell": {
+        "HepG2": -0.0929,
+        "IMR-90": -0.0859,
+        "K562": -0.0024,
+        "GM12878": 0.0105
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0929,
+        "IMR-90": -0.0859,
+        "K562": -0.0024,
+        "GM12878": 0.0105
+      }
     },
     {
       "id": "EH38E2140163",
@@ -335,7 +415,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D164"
+      "domain": "chr21:D164",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457342",
@@ -368,7 +450,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D164"
+      "domain": "chr21:D164",
+      "predicted_by_cell": {
+        "HepG2": 0.0192,
+        "IMR-90": 0.0141,
+        "K562": 0.0033,
+        "GM12878": 0.0063
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0192,
+        "IMR-90": 0.0141,
+        "K562": 0.0033,
+        "GM12878": 0.0063
+      }
     },
     {
       "id": "EH38E3459273",
@@ -401,7 +495,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D186"
+      "domain": "chr21:D186",
+      "predicted_by_cell": {
+        "HepG2": -0.1039,
+        "IMR-90": -0.0986,
+        "K562": -0.1232,
+        "GM12878": -0.0484
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1039,
+        "IMR-90": -0.0986,
+        "K562": -0.1232,
+        "GM12878": -0.0484
+      }
     },
     {
       "id": "EH38E3455466",
@@ -434,7 +540,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D143"
+      "domain": "chr21:D143",
+      "predicted_by_cell": {
+        "HepG2": -0.0015,
+        "IMR-90": -0.0001,
+        "K562": -0.0057,
+        "GM12878": -0.006
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0162,
+        "IMR-90": -0.0009,
+        "K562": -0.0104,
+        "GM12878": 0.003
+      }
     },
     {
       "id": "EH38E2131983",
@@ -459,7 +577,14 @@
       },
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D34"
+      "domain": "chr21:D34",
+      "predicted_by_cell": {
+        "HepG2": 0.0026,
+        "IMR-90": -0.0053,
+        "K562": 0.0071,
+        "GM12878": -0.0178
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3450893",
@@ -476,7 +601,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2144205",
@@ -509,7 +636,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D199"
+      "domain": "chr21:D199",
+      "predicted_by_cell": {
+        "HepG2": -0.6581,
+        "IMR-90": -0.8037,
+        "K562": -0.5013,
+        "GM12878": -0.4792
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.6581,
+        "IMR-90": -0.8037,
+        "K562": -0.5013,
+        "GM12878": -0.4792
+      }
     },
     {
       "id": "EH38E3453292",
@@ -542,7 +681,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": {
+        "HepG2": -0.2772,
+        "IMR-90": -0.1078,
+        "K562": -0.1816,
+        "GM12878": -0.0413
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.2772,
+        "IMR-90": -0.1078,
+        "K562": -0.1816,
+        "GM12878": -0.0413
+      }
     },
     {
       "id": "EH38E3450839",
@@ -559,7 +710,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2140556",
@@ -592,7 +745,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D168"
+      "domain": "chr21:D168",
+      "predicted_by_cell": {
+        "HepG2": 0.134,
+        "IMR-90": 0.1246,
+        "K562": 0.1582,
+        "GM12878": 0.05
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.134,
+        "IMR-90": 0.1246,
+        "K562": 0.1582,
+        "GM12878": 0.05
+      }
     },
     {
       "id": "EH38E3464581",
@@ -625,7 +790,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D226"
+      "domain": "chr21:D226",
+      "predicted_by_cell": {
+        "HepG2": -0.0025,
+        "IMR-90": -0.0635,
+        "K562": -0.0134,
+        "GM12878": 0.0335
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0025,
+        "IMR-90": -0.0635,
+        "K562": -0.0134,
+        "GM12878": 0.0335
+      }
     },
     {
       "id": "EH38E3457199",
@@ -658,7 +835,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D164"
+      "domain": "chr21:D164",
+      "predicted_by_cell": {
+        "HepG2": 0.0485,
+        "IMR-90": 0.0139,
+        "K562": 0.0616,
+        "GM12878": 0.0839
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0069,
+        "IMR-90": -0.191,
+        "K562": -0.1311,
+        "GM12878": -0.0818
+      }
     },
     {
       "id": "EH38E3462319",
@@ -691,7 +880,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D210"
+      "domain": "chr21:D210",
+      "predicted_by_cell": {
+        "HepG2": -0.0534,
+        "IMR-90": -0.0799,
+        "K562": -0.0676,
+        "GM12878": -0.0816
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0534,
+        "IMR-90": -0.0799,
+        "K562": -0.0676,
+        "GM12878": -0.0816
+      }
     },
     {
       "id": "EH38E2130882",
@@ -708,7 +909,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3456131",
@@ -741,7 +944,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D149"
+      "domain": "chr21:D149",
+      "predicted_by_cell": {
+        "HepG2": -0.0445,
+        "IMR-90": -0.044,
+        "K562": -0.003,
+        "GM12878": -0.0396
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0445,
+        "IMR-90": -0.044,
+        "K562": -0.003,
+        "GM12878": -0.0396
+      }
     },
     {
       "id": "EH38E2135962",
@@ -774,7 +989,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D106"
+      "domain": "chr21:D106",
+      "predicted_by_cell": {
+        "HepG2": 0.1978,
+        "IMR-90": 0.2172,
+        "K562": 0.3674,
+        "GM12878": 0.3023
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.2044,
+        "IMR-90": -0.1422,
+        "K562": -0.1372,
+        "GM12878": -0.1564
+      }
     },
     {
       "id": "EH38E3457343",
@@ -799,7 +1026,14 @@
       },
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D164"
+      "domain": "chr21:D164",
+      "predicted_by_cell": {
+        "HepG2": 0.0149,
+        "IMR-90": 0.0158,
+        "K562": 0.0015,
+        "GM12878": 0.0084
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2136891",
@@ -832,7 +1066,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D130"
+      "domain": "chr21:D130",
+      "predicted_by_cell": {
+        "HepG2": 0.1852,
+        "IMR-90": 0.0898,
+        "K562": 0.1607,
+        "GM12878": 0.125
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0914,
+        "IMR-90": -0.1194,
+        "K562": -0.0375,
+        "GM12878": -0.0464
+      }
     },
     {
       "id": "EH38E3456496",
@@ -849,7 +1095,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3455404",
@@ -882,7 +1130,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D142"
+      "domain": "chr21:D142",
+      "predicted_by_cell": {
+        "HepG2": -0.0097,
+        "IMR-90": -0.0009,
+        "K562": -0.0082,
+        "GM12878": 0.0059
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0097,
+        "IMR-90": -0.0009,
+        "K562": -0.0082,
+        "GM12878": 0.0059
+      }
     },
     {
       "id": "EH38E3454123",
@@ -915,7 +1175,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D106"
+      "domain": "chr21:D106",
+      "predicted_by_cell": {
+        "HepG2": -0.0623,
+        "IMR-90": -0.0818,
+        "K562": -0.0478,
+        "GM12878": -0.0346
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0623,
+        "IMR-90": -0.0818,
+        "K562": -0.0478,
+        "GM12878": -0.0346
+      }
     },
     {
       "id": "EH38E3450841",
@@ -948,7 +1220,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": {
+        "HepG2": 0.0101,
+        "IMR-90": -0.0037,
+        "K562": -0.0036,
+        "GM12878": -0.0028
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0358,
+        "IMR-90": -0.0087,
+        "K562": -0.0326,
+        "GM12878": -0.047
+      }
     },
     {
       "id": "EH38E3459110",
@@ -981,7 +1265,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D184"
+      "domain": "chr21:D184",
+      "predicted_by_cell": {
+        "HepG2": 0.0335,
+        "IMR-90": 0.071,
+        "K562": 0.0111,
+        "GM12878": 0.0052
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0453,
+        "IMR-90": 0.091,
+        "K562": 0.0006,
+        "GM12878": 0.0056
+      }
     },
     {
       "id": "EH38E2134573",
@@ -1014,7 +1310,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": {
+        "HepG2": 0.0381,
+        "IMR-90": 0.1255,
+        "K562": 0.0347,
+        "GM12878": -0.006
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0381,
+        "IMR-90": 0.1255,
+        "K562": 0.0347,
+        "GM12878": -0.006
+      }
     },
     {
       "id": "EH38E3452744",
@@ -1047,7 +1355,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D87"
+      "domain": "chr21:D87",
+      "predicted_by_cell": {
+        "HepG2": 0.0,
+        "IMR-90": 0.0113,
+        "K562": 0.0,
+        "GM12878": -0.1176
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0101,
+        "IMR-90": -0.0033,
+        "K562": -0.0052,
+        "GM12878": -0.1091
+      }
     },
     {
       "id": "EH38E2139053",
@@ -1064,7 +1384,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458294",
@@ -1097,7 +1419,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D175"
+      "domain": "chr21:D175",
+      "predicted_by_cell": {
+        "HepG2": 0.0026,
+        "IMR-90": -0.0438,
+        "K562": 0.0174,
+        "GM12878": 0.0233
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0124,
+        "IMR-90": -0.0004,
+        "K562": -0.0252,
+        "GM12878": 0.0523
+      }
     },
     {
       "id": "EH38E3452124",
@@ -1114,7 +1448,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D62"
+      "domain": "chr21:D62",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3456472",
@@ -1131,7 +1467,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2134636",
@@ -1164,7 +1502,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": {
+        "HepG2": -0.0009,
+        "IMR-90": 0.0052,
+        "K562": 0.0033,
+        "GM12878": -0.0021
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0273,
+        "IMR-90": -0.0102,
+        "K562": -0.0136,
+        "GM12878": -0.0749
+      }
     },
     {
       "id": "EH38E2136892",
@@ -1197,7 +1547,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D130"
+      "domain": "chr21:D130",
+      "predicted_by_cell": {
+        "HepG2": 0.1073,
+        "IMR-90": 0.0489,
+        "K562": 0.1205,
+        "GM12878": 0.0911
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0565,
+        "IMR-90": 0.0611,
+        "K562": 0.0389,
+        "GM12878": 0.0379
+      }
     },
     {
       "id": "EH38E3453917",
@@ -1214,7 +1576,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D105"
+      "domain": "chr21:D105",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457641",
@@ -1247,7 +1611,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D168"
+      "domain": "chr21:D168",
+      "predicted_by_cell": {
+        "HepG2": 0.0041,
+        "IMR-90": 0.0689,
+        "K562": 0.0317,
+        "GM12878": -0.0117
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0041,
+        "IMR-90": 0.0689,
+        "K562": 0.0317,
+        "GM12878": -0.0117
+      }
     },
     {
       "id": "EH38E2135644",
@@ -1264,7 +1640,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D105"
+      "domain": "chr21:D105",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461530",
@@ -1297,7 +1675,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D204"
+      "domain": "chr21:D204",
+      "predicted_by_cell": {
+        "HepG2": -0.5271,
+        "IMR-90": -0.4848,
+        "K562": -0.3581,
+        "GM12878": -0.362
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.5271,
+        "IMR-90": -0.4848,
+        "K562": -0.3581,
+        "GM12878": -0.362
+      }
     },
     {
       "id": "EH38E3453984",
@@ -1330,7 +1720,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D106"
+      "domain": "chr21:D106",
+      "predicted_by_cell": {
+        "HepG2": 0.0001,
+        "IMR-90": -0.0001,
+        "K562": 0.0,
+        "GM12878": 0.0004
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.1047,
+        "IMR-90": -0.0362,
+        "K562": 0.0553,
+        "GM12878": 0.0698
+      }
     },
     {
       "id": "EH38E3457861",
@@ -1347,7 +1749,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D169"
+      "domain": "chr21:D169",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3456530",
@@ -1380,7 +1784,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": {
+        "HepG2": -0.0105,
+        "IMR-90": -0.0152,
+        "K562": -0.2256,
+        "GM12878": -0.0515
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0136,
+        "IMR-90": -0.0228,
+        "K562": -0.1515,
+        "GM12878": -0.0256
+      }
     },
     {
       "id": "EH38E2135780",
@@ -1413,7 +1829,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D106"
+      "domain": "chr21:D106",
+      "predicted_by_cell": {
+        "HepG2": 0.0294,
+        "IMR-90": 0.0587,
+        "K562": 0.0274,
+        "GM12878": 0.1006
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0294,
+        "IMR-90": 0.0587,
+        "K562": 0.0274,
+        "GM12878": 0.1006
+      }
     },
     {
       "id": "EH38E2130938",
@@ -1430,7 +1858,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2130885",
@@ -1463,7 +1893,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": {
+        "HepG2": 0.0242,
+        "IMR-90": -0.0016,
+        "K562": 0.082,
+        "GM12878": 0.0538
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0242,
+        "IMR-90": -0.0016,
+        "K562": 0.082,
+        "GM12878": 0.0538
+      }
     },
     {
       "id": "EH38E3462306",
@@ -1496,7 +1938,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D210"
+      "domain": "chr21:D210",
+      "predicted_by_cell": {
+        "HepG2": -0.1022,
+        "IMR-90": -0.0694,
+        "K562": -0.0623,
+        "GM12878": -0.0691
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1022,
+        "IMR-90": -0.0694,
+        "K562": -0.0623,
+        "GM12878": -0.0691
+      }
     },
     {
       "id": "EH38E3458043",
@@ -1513,7 +1967,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D170"
+      "domain": "chr21:D170",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2140639",
@@ -1530,7 +1986,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D168"
+      "domain": "chr21:D168",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3453293",
@@ -1563,7 +2021,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": {
+        "HepG2": -0.1025,
+        "IMR-90": -0.1134,
+        "K562": -0.07,
+        "GM12878": -0.0176
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1025,
+        "IMR-90": -0.1134,
+        "K562": -0.07,
+        "GM12878": -0.0176
+      }
     },
     {
       "id": "EH38E2133832",
@@ -1596,7 +2066,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D87"
+      "domain": "chr21:D87",
+      "predicted_by_cell": {
+        "HepG2": 0.0267,
+        "IMR-90": 0.086,
+        "K562": -0.0828,
+        "GM12878": 0.0236
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0267,
+        "IMR-90": 0.086,
+        "K562": -0.0828,
+        "GM12878": 0.0236
+      }
     },
     {
       "id": "EH38E2134513",
@@ -1613,7 +2095,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2139239",
@@ -1630,7 +2114,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2138756",
@@ -1663,7 +2149,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D152"
+      "domain": "chr21:D152",
+      "predicted_by_cell": {
+        "HepG2": 0.0298,
+        "IMR-90": -0.0263,
+        "K562": -0.0016,
+        "GM12878": -0.0066
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0298,
+        "IMR-90": -0.0263,
+        "K562": -0.0016,
+        "GM12878": -0.0066
+      }
     },
     {
       "id": "EH38E3452734",
@@ -1688,7 +2186,14 @@
       },
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D87"
+      "domain": "chr21:D87",
+      "predicted_by_cell": {
+        "HepG2": -0.0175,
+        "IMR-90": -0.1022,
+        "K562": -0.0126,
+        "GM12878": -0.5941
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3455159",
@@ -1721,7 +2226,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D138"
+      "domain": "chr21:D138",
+      "predicted_by_cell": {
+        "HepG2": -0.0509,
+        "IMR-90": -0.0002,
+        "K562": -0.133,
+        "GM12878": 0.06
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0509,
+        "IMR-90": -0.0002,
+        "K562": -0.133,
+        "GM12878": 0.06
+      }
     },
     {
       "id": "EH38E2130940",
@@ -1754,7 +2271,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": {
+        "HepG2": -0.0026,
+        "IMR-90": 0.0,
+        "K562": 0.0079,
+        "GM12878": 0.0014
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0114,
+        "IMR-90": 0.0106,
+        "K562": 0.0467,
+        "GM12878": -0.0006
+      }
     },
     {
       "id": "EH38E3456478",
@@ -1771,7 +2300,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457544",
@@ -1804,7 +2335,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D166"
+      "domain": "chr21:D166",
+      "predicted_by_cell": {
+        "HepG2": -0.006,
+        "IMR-90": -0.0439,
+        "K562": 0.0071,
+        "GM12878": 0.0019
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0431,
+        "IMR-90": -0.0985,
+        "K562": 0.0352,
+        "GM12878": 0.0309
+      }
     },
     {
       "id": "EH38E3455816",
@@ -1837,7 +2380,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D146"
+      "domain": "chr21:D146",
+      "predicted_by_cell": {
+        "HepG2": -0.028,
+        "IMR-90": 0.0067,
+        "K562": -0.0042,
+        "GM12878": -0.0124
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.061,
+        "IMR-90": -0.0212,
+        "K562": -0.0613,
+        "GM12878": -0.0549
+      }
     },
     {
       "id": "EH38E3450845",
@@ -1870,7 +2425,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D19"
+      "domain": "chr21:D19",
+      "predicted_by_cell": {
+        "HepG2": -0.0501,
+        "IMR-90": -0.0033,
+        "K562": 0.0498,
+        "GM12878": 0.0529
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0501,
+        "IMR-90": -0.0033,
+        "K562": 0.0498,
+        "GM12878": 0.0529
+      }
     },
     {
       "id": "EH38E2134671",
@@ -1903,7 +2470,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": {
+        "HepG2": -0.018,
+        "IMR-90": 0.0231,
+        "K562": 0.0543,
+        "GM12878": -0.0337
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.018,
+        "IMR-90": 0.0231,
+        "K562": 0.0543,
+        "GM12878": -0.0337
+      }
     },
     {
       "id": "EH38E2132882",
@@ -1920,7 +2499,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D62"
+      "domain": "chr21:D62",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457333",
@@ -1953,7 +2534,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D164"
+      "domain": "chr21:D164",
+      "predicted_by_cell": {
+        "HepG2": 0.0081,
+        "IMR-90": 0.0211,
+        "K562": -0.0169,
+        "GM12878": 0.0266
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0081,
+        "IMR-90": 0.0211,
+        "K562": -0.0169,
+        "GM12878": 0.0266
+      }
     },
     {
       "id": "EH38E2134578",
@@ -1986,7 +2579,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": {
+        "HepG2": 0.0653,
+        "IMR-90": -0.1271,
+        "K562": 0.2676,
+        "GM12878": 0.0768
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0653,
+        "IMR-90": -0.1271,
+        "K562": 0.2676,
+        "GM12878": 0.0768
+      }
     },
     {
       "id": "EH38E2132951",
@@ -2019,7 +2624,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D62"
+      "domain": "chr21:D62",
+      "predicted_by_cell": {
+        "HepG2": 0.0238,
+        "IMR-90": 0.1787,
+        "K562": -0.013,
+        "GM12878": -0.0315
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0238,
+        "IMR-90": 0.1787,
+        "K562": -0.013,
+        "GM12878": -0.0315
+      }
     },
     {
       "id": "EH38E3457551",
@@ -2052,7 +2669,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D166"
+      "domain": "chr21:D166",
+      "predicted_by_cell": {
+        "HepG2": 0.0139,
+        "IMR-90": 0.2361,
+        "K562": 0.248,
+        "GM12878": 0.0243
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0139,
+        "IMR-90": 0.2361,
+        "K562": 0.248,
+        "GM12878": 0.0243
+      }
     },
     {
       "id": "EH38E3454000",
@@ -2085,7 +2714,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D106"
+      "domain": "chr21:D106",
+      "predicted_by_cell": {
+        "HepG2": -0.0398,
+        "IMR-90": -0.406,
+        "K562": -0.0989,
+        "GM12878": 0.0856
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0398,
+        "IMR-90": -0.406,
+        "K562": -0.0989,
+        "GM12878": 0.0856
+      }
     },
     {
       "id": "EH38E3460153",
@@ -2118,7 +2759,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D198"
+      "domain": "chr21:D198",
+      "predicted_by_cell": {
+        "HepG2": -0.0027,
+        "IMR-90": 0.0003,
+        "K562": 0.0002,
+        "GM12878": -0.0003
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0834,
+        "IMR-90": -0.0227,
+        "K562": 0.0177,
+        "GM12878": -0.0892
+      }
     },
     {
       "id": "EH38E3456477",
@@ -2151,7 +2804,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": {
+        "HepG2": -0.0179,
+        "IMR-90": -0.0032,
+        "K562": -0.077,
+        "GM12878": -0.0607
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0179,
+        "IMR-90": -0.0032,
+        "K562": -0.077,
+        "GM12878": -0.0607
+      }
     },
     {
       "id": "EH38E2137731",
@@ -2184,7 +2849,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D143"
+      "domain": "chr21:D143",
+      "predicted_by_cell": {
+        "HepG2": -0.0022,
+        "IMR-90": -0.0002,
+        "K562": -0.0116,
+        "GM12878": -0.0066
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0198,
+        "IMR-90": 0.003,
+        "K562": 0.0319,
+        "GM12878": -0.0228
+      }
     },
     {
       "id": "EH38E3452757",
@@ -2209,7 +2886,14 @@
       },
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D87"
+      "domain": "chr21:D87",
+      "predicted_by_cell": {
+        "HepG2": 0.0051,
+        "IMR-90": 0.0011,
+        "K562": 0.0158,
+        "GM12878": -0.0946
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463940",
@@ -2242,7 +2926,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D220"
+      "domain": "chr21:D220",
+      "predicted_by_cell": {
+        "HepG2": -0.0419,
+        "IMR-90": -0.244,
+        "K562": -0.19,
+        "GM12878": 0.0097
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0419,
+        "IMR-90": -0.244,
+        "K562": -0.19,
+        "GM12878": 0.0097
+      }
     },
     {
       "id": "EH38E2134122",
@@ -2275,7 +2971,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D91"
+      "domain": "chr21:D91",
+      "predicted_by_cell": {
+        "HepG2": -0.0884,
+        "IMR-90": -0.1815,
+        "K562": -0.0387,
+        "GM12878": -0.1221
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0884,
+        "IMR-90": -0.1815,
+        "K562": -0.0387,
+        "GM12878": -0.1221
+      }
     },
     {
       "id": "EH38E3456560",
@@ -2308,7 +3016,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D154"
+      "domain": "chr21:D154",
+      "predicted_by_cell": {
+        "HepG2": -0.0155,
+        "IMR-90": -0.0234,
+        "K562": -0.0571,
+        "GM12878": -0.0772
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0193,
+        "IMR-90": -0.0173,
+        "K562": -0.044,
+        "GM12878": -0.0459
+      }
     },
     {
       "id": "EH38E2137380",
@@ -2341,7 +3061,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D138"
+      "domain": "chr21:D138",
+      "predicted_by_cell": {
+        "HepG2": -0.1356,
+        "IMR-90": -0.0449,
+        "K562": 0.0249,
+        "GM12878": -0.0061
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1356,
+        "IMR-90": -0.0449,
+        "K562": 0.0249,
+        "GM12878": -0.0061
+      }
     },
     {
       "id": "EH38E2138265",
@@ -2374,7 +3106,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D147"
+      "domain": "chr21:D147",
+      "predicted_by_cell": {
+        "HepG2": -0.0543,
+        "IMR-90": -0.0437,
+        "K562": -0.1533,
+        "GM12878": -0.0456
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0543,
+        "IMR-90": -0.0437,
+        "K562": -0.1533,
+        "GM12878": -0.0456
+      }
     },
     {
       "id": "EH38E3452875",
@@ -2407,7 +3151,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D88"
+      "domain": "chr21:D88",
+      "predicted_by_cell": {
+        "HepG2": -0.0173,
+        "IMR-90": 0.193,
+        "K562": -0.2194,
+        "GM12878": -0.0038
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0173,
+        "IMR-90": 0.193,
+        "K562": -0.2194,
+        "GM12878": -0.0038
+      }
     },
     {
       "id": "EH38E2140193",
@@ -2440,7 +3196,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D164"
+      "domain": "chr21:D164",
+      "predicted_by_cell": {
+        "HepG2": 0.0641,
+        "IMR-90": 0.0757,
+        "K562": 0.0298,
+        "GM12878": 0.0198
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0641,
+        "IMR-90": 0.0757,
+        "K562": 0.0298,
+        "GM12878": 0.0198
+      }
     },
     {
       "id": "EH38E2138385",
@@ -2457,7 +3225,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D149"
+      "domain": "chr21:D149",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2140120",
@@ -2490,7 +3260,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D164"
+      "domain": "chr21:D164",
+      "predicted_by_cell": {
+        "HepG2": -0.0123,
+        "IMR-90": -0.011,
+        "K562": -0.0295,
+        "GM12878": -0.0205
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0347,
+        "IMR-90": 0.0335,
+        "K562": 0.0447,
+        "GM12878": 0.0931
+      }
     },
     {
       "id": "EH38E2132956",
@@ -2507,7 +3289,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D62"
+      "domain": "chr21:D62",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2140257",
@@ -2540,7 +3324,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D164"
+      "domain": "chr21:D164",
+      "predicted_by_cell": {
+        "HepG2": -0.0304,
+        "IMR-90": -0.0264,
+        "K562": -0.0139,
+        "GM12878": -0.0224
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0304,
+        "IMR-90": -0.0264,
+        "K562": -0.0139,
+        "GM12878": -0.0224
+      }
     },
     {
       "id": "EH38E3464580",
@@ -2573,7 +3369,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D226"
+      "domain": "chr21:D226",
+      "predicted_by_cell": {
+        "HepG2": 0.0104,
+        "IMR-90": -0.0358,
+        "K562": -0.0199,
+        "GM12878": 0.0177
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0104,
+        "IMR-90": -0.0358,
+        "K562": -0.0199,
+        "GM12878": 0.0177
+      }
     },
     {
       "id": "EH38E3462239",
@@ -2606,7 +3414,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D210"
+      "domain": "chr21:D210",
+      "predicted_by_cell": {
+        "HepG2": 0.0006,
+        "IMR-90": 0.0002,
+        "K562": 0.0006,
+        "GM12878": 0.0014
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1765,
+        "IMR-90": -0.202,
+        "K562": -0.1458,
+        "GM12878": -0.1224
+      }
     },
     {
       "id": "EH38E3451593",
@@ -2639,7 +3459,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D35"
+      "domain": "chr21:D35",
+      "predicted_by_cell": {
+        "HepG2": -0.3519,
+        "IMR-90": -0.3349,
+        "K562": -0.2711,
+        "GM12878": -0.2398
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.3519,
+        "IMR-90": -0.3349,
+        "K562": -0.2711,
+        "GM12878": -0.2398
+      }
     },
     {
       "id": "EH38E2134537",
@@ -2656,7 +3488,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2135637",
@@ -2673,7 +3507,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D105"
+      "domain": "chr21:D105",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458613",
@@ -2706,7 +3542,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D180"
+      "domain": "chr21:D180",
+      "predicted_by_cell": {
+        "HepG2": 0.0234,
+        "IMR-90": 0.0227,
+        "K562": 0.0335,
+        "GM12878": 0.0078
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0595,
+        "IMR-90": -0.1337,
+        "K562": 0.0948,
+        "GM12878": 0.0355
+      }
     },
     {
       "id": "EH38E2134712",
@@ -2739,7 +3587,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D96"
+      "domain": "chr21:D96",
+      "predicted_by_cell": {
+        "HepG2": -0.0416,
+        "IMR-90": -0.0001,
+        "K562": 0.0346,
+        "GM12878": 0.0031
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0416,
+        "IMR-90": -0.0001,
+        "K562": 0.0346,
+        "GM12878": 0.0031
+      }
     },
     {
       "id": "EH38E2137483",
@@ -2772,7 +3632,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "another gene in the same domain",
-      "domain": "chr21:D139"
+      "domain": "chr21:D139",
+      "predicted_by_cell": {
+        "HepG2": -0.2061,
+        "IMR-90": -0.2789,
+        "K562": -0.1867,
+        "GM12878": -0.1833
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.2061,
+        "IMR-90": -0.2789,
+        "K562": -0.1867,
+        "GM12878": -0.1833
+      }
     },
     {
       "id": "EH38E3462560",
@@ -2805,7 +3677,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D212"
+      "domain": "chr21:D212",
+      "predicted_by_cell": {
+        "HepG2": -0.0035,
+        "IMR-90": -0.0183,
+        "K562": -0.0326,
+        "GM12878": -0.0434
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0297,
+        "IMR-90": -0.0171,
+        "K562": -0.0545,
+        "GM12878": -0.0848
+      }
     },
     {
       "id": "EH38E3460205",
@@ -2822,7 +3706,9 @@
       "predicted": null,
       "predicted_coding": null,
       "verdict_coding": "no predicted effect",
-      "domain": "chr21:D198"
+      "domain": "chr21:D198",
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2135675",
@@ -2855,7 +3741,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "gene outside the domain",
-      "domain": "chr21:D105"
+      "domain": "chr21:D105",
+      "predicted_by_cell": {
+        "HepG2": 0.1662,
+        "IMR-90": -0.2233,
+        "K562": 0.1423,
+        "GM12878": 0.1252
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.1662,
+        "IMR-90": -0.2233,
+        "K562": 0.1423,
+        "GM12878": 0.1252
+      }
     },
     {
       "id": "EH38E3456302",
@@ -2888,7 +3786,19 @@
         "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
       },
       "verdict_coding": "agrees with nearest TSS in domain",
-      "domain": "chr21:D153"
+      "domain": "chr21:D153",
+      "predicted_by_cell": {
+        "HepG2": 0.4774,
+        "IMR-90": 0.5088,
+        "K562": 0.3929,
+        "GM12878": 0.4639
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.4774,
+        "IMR-90": 0.5088,
+        "K562": 0.3929,
+        "GM12878": 0.4639
+      }
     }
   ],
   "phylop_cost": {
@@ -2896,5 +3806,11 @@
     "mb_fetched": 37.2,
     "seconds": 127.9
   },
-  "evidence": "measured: Zoonomia phyloP constraint; predicted: AlphaGenome deletion effect per element"
+  "evidence": "measured: Zoonomia phyloP constraint; predicted: AlphaGenome deletion effect per element",
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ]
 }

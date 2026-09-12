@@ -1,6 +1,6 @@
 {
   "result": "enhancer_targets_chr21",
-  "date": "2026-09-11",
+  "date": "2026-09-12",
   "chrom": "chr21",
   "model": "AlphaGenome (google-deepmind/alphagenome 0.9)",
   "evidence": "predicted",
@@ -94,7 +94,19 @@
           "drop": -0.1733,
           "tissue": "neural progenitor cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0472,
+        "IMR-90": -0.0055,
+        "K562": -0.0878,
+        "GM12878": -0.0106
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0503,
+        "IMR-90": -0.0041,
+        "K562": -0.07,
+        "GM12878": -0.0045
+      }
     },
     {
       "id": "EH38E3450625",
@@ -143,7 +155,19 @@
           "drop": -0.0432,
           "tissue": "BLaER1"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0972,
+        "IMR-90": 0.0482,
+        "K562": 0.0091,
+        "GM12878": -0.034
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0972,
+        "IMR-90": 0.0482,
+        "K562": 0.0091,
+        "GM12878": -0.034
+      }
     },
     {
       "id": "EH38E3450682",
@@ -184,7 +208,14 @@
           "drop": -0.0225,
           "tissue": "liver"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0002,
+        "IMR-90": -0.0001,
+        "K562": -0.0972,
+        "GM12878": -0.029
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2130706",
@@ -217,7 +248,9 @@
           "drop": -0.0345,
           "tissue": "melanocyte of skin"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3450839",
@@ -250,7 +283,9 @@
           "drop": -0.0484,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2130939",
@@ -283,7 +318,9 @@
           "drop": -0.054,
           "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2131316",
@@ -316,7 +353,9 @@
           "drop": -0.0134,
           "tissue": "right lung"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3451494",
@@ -349,7 +388,9 @@
           "drop": -0.0118,
           "tissue": "peripheral blood mononuclear cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3451533",
@@ -382,7 +423,9 @@
           "drop": -0.0444,
           "tissue": "left lobe of liver"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2132127",
@@ -431,7 +474,19 @@
           "drop": -0.0242,
           "tissue": "thyroid gland"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0794,
+        "IMR-90": 0.0821,
+        "K562": 0.1649,
+        "GM12878": 0.0218
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0794,
+        "IMR-90": 0.0821,
+        "K562": 0.1649,
+        "GM12878": 0.0218
+      }
     },
     {
       "id": "EH38E3451639",
@@ -472,7 +527,14 @@
           "drop": -0.0399,
           "tissue": "Kidney_Cortex"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0203,
+        "IMR-90": -0.0001,
+        "K562": -0.0074,
+        "GM12878": -0.0078
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3451668",
@@ -513,7 +575,14 @@
           "drop": -0.0231,
           "tissue": "body of pancreas"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0749,
+        "IMR-90": -0.1185,
+        "K562": -0.1128,
+        "GM12878": -0.1462
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2132450",
@@ -562,7 +631,19 @@
           "drop": -0.0181,
           "tissue": "K562"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0208,
+        "IMR-90": -0.0136,
+        "K562": -0.2079,
+        "GM12878": -0.0998
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0208,
+        "IMR-90": -0.0136,
+        "K562": -0.2079,
+        "GM12878": -0.0998
+      }
     },
     {
       "id": "EH38E2132913",
@@ -611,7 +692,19 @@
           "drop": -0.032,
           "tissue": "SK-MEL-5"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0536,
+        "IMR-90": -0.0445,
+        "K562": -0.0518,
+        "GM12878": 0.067
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0536,
+        "IMR-90": -0.0445,
+        "K562": -0.0518,
+        "GM12878": 0.067
+      }
     },
     {
       "id": "EH38E2132970",
@@ -660,7 +753,19 @@
           "drop": -0.0044,
           "tissue": "muscle of back"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0008,
+        "IMR-90": -0.053,
+        "K562": -0.072,
+        "GM12878": -0.0115
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0008,
+        "IMR-90": -0.053,
+        "K562": -0.072,
+        "GM12878": -0.0115
+      }
     },
     {
       "id": "EH38E2133708",
@@ -701,7 +806,14 @@
           "drop": -0.0515,
           "tissue": "IMR-90"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0001,
+        "IMR-90": -0.0327,
+        "K562": -0.0009,
+        "GM12878": -0.0075
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3452750",
@@ -734,7 +846,9 @@
           "drop": -0.0232,
           "tissue": "heart"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3452799",
@@ -775,7 +889,14 @@
           "drop": -0.0653,
           "tissue": "mammary stem cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.1526,
+        "IMR-90": 0.0235,
+        "K562": -0.0079,
+        "GM12878": 0.0472
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3452886",
@@ -816,7 +937,14 @@
           "drop": -0.0643,
           "tissue": "CD8-positive, alpha-beta memory T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.003,
+        "IMR-90": -0.0097,
+        "K562": 0.0002,
+        "GM12878": -0.0102
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2133952",
@@ -849,7 +977,9 @@
           "drop": -0.0124,
           "tissue": "psoas muscle"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2134159",
@@ -898,7 +1028,19 @@
           "drop": -0.1254,
           "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0042,
+        "IMR-90": 0.0112,
+        "K562": 0.0227,
+        "GM12878": -0.0142
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0042,
+        "IMR-90": 0.0112,
+        "K562": 0.0227,
+        "GM12878": -0.0142
+      }
     },
     {
       "id": "EH38E3453088",
@@ -947,7 +1089,19 @@
           "drop": -0.0397,
           "tissue": "GM23338"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.062,
+        "IMR-90": 0.0196,
+        "K562": -0.1763,
+        "GM12878": -0.0153
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.062,
+        "IMR-90": 0.0196,
+        "K562": -0.1763,
+        "GM12878": -0.0153
+      }
     },
     {
       "id": "EH38E2134401",
@@ -996,7 +1150,19 @@
           "drop": -0.094,
           "tissue": "common myeloid progenitor, CD34-positive"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0024,
+        "IMR-90": -0.0045,
+        "K562": -0.0059,
+        "GM12878": -0.0061
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.1105,
+        "IMR-90": 0.1062,
+        "K562": 0.0306,
+        "GM12878": 0.1008
+      }
     },
     {
       "id": "EH38E2134473",
@@ -1029,7 +1195,9 @@
           "drop": -0.0231,
           "tissue": "Esophagus_Mucosa"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2134534",
@@ -1078,7 +1246,19 @@
           "drop": -0.0208,
           "tissue": "keratinocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0548,
+        "IMR-90": -0.0015,
+        "K562": -0.1192,
+        "GM12878": -0.0108
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0548,
+        "IMR-90": -0.0015,
+        "K562": -0.1192,
+        "GM12878": -0.0108
+      }
     },
     {
       "id": "EH38E3453294",
@@ -1127,7 +1307,19 @@
           "drop": -0.0229,
           "tissue": "forelimb muscle"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1661,
+        "IMR-90": -0.08,
+        "K562": 0.0627,
+        "GM12878": -0.0218
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1661,
+        "IMR-90": -0.08,
+        "K562": 0.0627,
+        "GM12878": -0.0218
+      }
     },
     {
       "id": "EH38E2134672",
@@ -1176,7 +1368,19 @@
           "drop": -0.0945,
           "tissue": "Adipose_Visceral_Omentum"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0621,
+        "IMR-90": 0.0595,
+        "K562": 0.0915,
+        "GM12878": 0.0673
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0621,
+        "IMR-90": 0.0595,
+        "K562": 0.0915,
+        "GM12878": 0.0673
+      }
     },
     {
       "id": "EH38E2135562",
@@ -1217,7 +1421,14 @@
           "drop": -0.0744,
           "tissue": "hepatocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0021,
+        "IMR-90": 0.0117,
+        "K562": 0.0055,
+        "GM12878": -0.0012
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3453918",
@@ -1250,7 +1461,9 @@
           "drop": -0.0141,
           "tissue": "HT-29"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3453985",
@@ -1299,7 +1512,19 @@
           "drop": -0.0813,
           "tissue": "Purkinje cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0,
+        "IMR-90": 0.0003,
+        "K562": 0.0001,
+        "GM12878": 0.001
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0516,
+        "IMR-90": -0.0334,
+        "K562": 0.0758,
+        "GM12878": 0.0825
+      }
     },
     {
       "id": "EH38E3454015",
@@ -1348,7 +1573,19 @@
           "drop": -0.1113,
           "tissue": "myocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0001,
+        "IMR-90": -0.0048,
+        "K562": -0.0005,
+        "GM12878": 0.0031
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0545,
+        "IMR-90": -0.0732,
+        "K562": 0.0254,
+        "GM12878": 0.1273
+      }
     },
     {
       "id": "EH38E2135852",
@@ -1389,7 +1626,14 @@
           "drop": -0.0446,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0744,
+        "IMR-90": 0.0422,
+        "K562": -0.0149,
+        "GM12878": 0.028
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3454081",
@@ -1430,7 +1674,14 @@
           "drop": -0.0631,
           "tissue": "Whole_Blood"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.004,
+        "IMR-90": 0.0243,
+        "K562": 0.0461,
+        "GM12878": 0.0077
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3454129",
@@ -1471,7 +1722,14 @@
           "drop": -0.1037,
           "tissue": "CD4-positive, CD25-positive, alpha-beta regulatory T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0234,
+        "IMR-90": 0.0741,
+        "K562": -0.0057,
+        "GM12878": -0.0041
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3454341",
@@ -1520,7 +1778,19 @@
           "drop": -0.0943,
           "tissue": "esophagus mucosa"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0006,
+        "IMR-90": -0.0006,
+        "K562": 0.0062,
+        "GM12878": 0.0012
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0006,
+        "IMR-90": -0.0006,
+        "K562": 0.0062,
+        "GM12878": 0.0012
+      }
     },
     {
       "id": "EH38E2136310",
@@ -1569,7 +1839,19 @@
           "drop": -0.137,
           "tissue": "U-87 MG"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0001,
+        "IMR-90": -0.0041,
+        "K562": -0.001,
+        "GM12878": -0.0017
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0001,
+        "IMR-90": -0.0041,
+        "K562": -0.001,
+        "GM12878": -0.0017
+      }
     },
     {
       "id": "EH38E3454446",
@@ -1618,7 +1900,19 @@
           "drop": -0.2588,
           "tissue": "lower leg skin"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0001,
+        "IMR-90": -0.0,
+        "K562": 0.0849,
+        "GM12878": 0.03
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0001,
+        "IMR-90": -0.0,
+        "K562": 0.0849,
+        "GM12878": 0.03
+      }
     },
     {
       "id": "EH38E3454775",
@@ -1659,7 +1953,14 @@
           "drop": -0.0689,
           "tissue": "left lobe of liver"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1654,
+        "IMR-90": -0.1059,
+        "K562": -0.0671,
+        "GM12878": -0.0647
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3454846",
@@ -1708,7 +2009,19 @@
           "drop": -0.4143,
           "tissue": "OCI-LY7"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0279,
+        "IMR-90": -0.0048,
+        "K562": -0.0904,
+        "GM12878": -0.7112
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0276,
+        "IMR-90": 0.0534,
+        "K562": 0.0258,
+        "GM12878": -0.3629
+      }
     },
     {
       "id": "EH38E3454911",
@@ -1757,7 +2070,19 @@
           "drop": -0.0204,
           "tissue": "Liver"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1326,
+        "IMR-90": -0.0656,
+        "K562": -0.0783,
+        "GM12878": -0.101
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1326,
+        "IMR-90": -0.0656,
+        "K562": -0.0783,
+        "GM12878": -0.101
+      }
     },
     {
       "id": "EH38E2137266",
@@ -1806,7 +2131,19 @@
           "drop": -0.1084,
           "tissue": "Brain_Spinal_cord_cervical_c-1"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0151,
+        "IMR-90": -0.011,
+        "K562": 0.0211,
+        "GM12878": 0.0435
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0151,
+        "IMR-90": -0.011,
+        "K562": 0.0211,
+        "GM12878": 0.0435
+      }
     },
     {
       "id": "EH38E3455120",
@@ -1855,7 +2192,19 @@
           "drop": -0.0745,
           "tissue": "left lung"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0661,
+        "IMR-90": 0.0102,
+        "K562": 0.0907,
+        "GM12878": 0.0469
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0661,
+        "IMR-90": 0.0102,
+        "K562": 0.0907,
+        "GM12878": 0.0469
+      }
     },
     {
       "id": "EH38E2137370",
@@ -1904,7 +2253,19 @@
           "drop": -0.0536,
           "tissue": "Peyer's patch"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1415,
+        "IMR-90": -0.0443,
+        "K562": -0.0857,
+        "GM12878": 0.0972
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1415,
+        "IMR-90": -0.0443,
+        "K562": -0.0857,
+        "GM12878": 0.0972
+      }
     },
     {
       "id": "EH38E3455200",
@@ -1953,7 +2314,19 @@
           "drop": -0.0261,
           "tissue": "GM23338"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0107,
+        "IMR-90": 0.0191,
+        "K562": -0.0303,
+        "GM12878": 0.002
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0537,
+        "IMR-90": 0.0518,
+        "K562": 0.0191,
+        "GM12878": 0.011
+      }
     },
     {
       "id": "EH38E2137467",
@@ -2002,7 +2375,19 @@
           "drop": -0.0979,
           "tissue": "Testis"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0007,
+        "IMR-90": -0.0003,
+        "K562": -0.0001,
+        "GM12878": -0.0019
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0213,
+        "IMR-90": -0.0232,
+        "K562": -0.0251,
+        "GM12878": -0.0632
+      }
     },
     {
       "id": "EH38E2137537",
@@ -2051,7 +2436,19 @@
           "drop": -0.0635,
           "tissue": "CD14-positive monocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0084,
+        "IMR-90": -0.0156,
+        "K562": -0.0497,
+        "GM12878": -0.0297
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0084,
+        "IMR-90": -0.0156,
+        "K562": -0.0497,
+        "GM12878": -0.0297
+      }
     },
     {
       "id": "EH38E3455344",
@@ -2092,7 +2489,14 @@
           "drop": -0.0278,
           "tissue": "U-87 MG"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0003,
+        "IMR-90": -0.0005,
+        "K562": -0.0,
+        "GM12878": -0.0001
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2137748",
@@ -2141,7 +2545,19 @@
           "drop": -0.104,
           "tissue": "neuronal stem cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0393,
+        "IMR-90": -0.0003,
+        "K562": 0.0626,
+        "GM12878": -0.003
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0393,
+        "IMR-90": -0.0003,
+        "K562": 0.0626,
+        "GM12878": -0.003
+      }
     },
     {
       "id": "EH38E3455566",
@@ -2174,7 +2590,9 @@
           "drop": -0.0369,
           "tissue": "hair follicular keratinocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2137887",
@@ -2223,7 +2641,19 @@
           "drop": -0.1093,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0633,
+        "IMR-90": 0.0283,
+        "K562": 0.046,
+        "GM12878": -0.006
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0633,
+        "IMR-90": 0.0283,
+        "K562": 0.046,
+        "GM12878": -0.006
+      }
     },
     {
       "id": "EH38E3455645",
@@ -2256,7 +2686,9 @@
           "drop": -0.0243,
           "tissue": "Whole_Blood"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2137989",
@@ -2289,7 +2721,9 @@
           "drop": -0.0231,
           "tissue": "Whole_Blood"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3455722",
@@ -2322,7 +2756,9 @@
           "drop": -0.0156,
           "tissue": "immature natural killer cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3455763",
@@ -2355,7 +2791,9 @@
           "drop": -0.0118,
           "tissue": "K562"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3455869",
@@ -2404,7 +2842,19 @@
           "drop": -0.0087,
           "tissue": "psoas muscle"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0379,
+        "IMR-90": -0.0246,
+        "K562": -0.0158,
+        "GM12878": -0.1488
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0379,
+        "IMR-90": -0.0246,
+        "K562": -0.0158,
+        "GM12878": -0.1488
+      }
     },
     {
       "id": "EH38E3455900",
@@ -2437,7 +2887,9 @@
           "drop": -0.0113,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3456019",
@@ -2478,7 +2930,14 @@
           "drop": -0.0191,
           "tissue": "peripheral blood mononuclear cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0397,
+        "IMR-90": 0.0363,
+        "K562": 0.083,
+        "GM12878": 0.0518
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2138505",
@@ -2511,7 +2970,9 @@
           "drop": -0.0379,
           "tissue": "CD14-positive monocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2138564",
@@ -2560,7 +3021,19 @@
           "drop": -0.1047,
           "tissue": "CD8-positive, alpha-beta memory T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0141,
+        "IMR-90": 0.0331,
+        "K562": -0.0193,
+        "GM12878": -0.0142
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0141,
+        "IMR-90": 0.0331,
+        "K562": -0.0193,
+        "GM12878": -0.0142
+      }
     },
     {
       "id": "EH38E2138626",
@@ -2601,7 +3074,14 @@
           "drop": -0.0266,
           "tissue": "K562"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0285,
+        "IMR-90": -0.009,
+        "K562": 0.1141,
+        "GM12878": 0.0359
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3456205",
@@ -2634,7 +3114,9 @@
           "drop": -0.0272,
           "tissue": "Brain_Cerebellum"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2138756",
@@ -2683,7 +3165,19 @@
           "drop": -0.1877,
           "tissue": "Artery_Tibial"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0298,
+        "IMR-90": -0.0263,
+        "K562": -0.0016,
+        "GM12878": -0.0066
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0298,
+        "IMR-90": -0.0263,
+        "K562": -0.0016,
+        "GM12878": -0.0066
+      }
     },
     {
       "id": "EH38E2138825",
@@ -2732,7 +3226,19 @@
           "drop": -0.0831,
           "tissue": "dermis blood vessel endothelial cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0579,
+        "IMR-90": -0.0031,
+        "K562": 0.1563,
+        "GM12878": 0.0444
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0579,
+        "IMR-90": -0.0031,
+        "K562": 0.1563,
+        "GM12878": 0.0444
+      }
     },
     {
       "id": "EH38E3456365",
@@ -2765,7 +3271,9 @@
           "drop": -0.0233,
           "tissue": "thoracic aorta"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3456409",
@@ -2814,7 +3322,19 @@
           "drop": -0.0286,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0053,
+        "IMR-90": -0.015,
+        "K562": -0.0207,
+        "GM12878": -0.0335
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0053,
+        "IMR-90": -0.015,
+        "K562": -0.0207,
+        "GM12878": -0.0335
+      }
     },
     {
       "id": "EH38E2138990",
@@ -2855,7 +3375,14 @@
           "drop": -0.0283,
           "tissue": "transverse colon"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0037,
+        "IMR-90": -0.0076,
+        "K562": -0.0033,
+        "GM12878": -0.0066
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2139049",
@@ -2888,7 +3415,9 @@
           "drop": -0.0183,
           "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3456537",
@@ -2921,7 +3450,9 @@
           "drop": -0.0473,
           "tissue": "common myeloid progenitor, CD34-positive"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3456560",
@@ -2970,7 +3501,19 @@
           "drop": -0.0233,
           "tissue": "K562"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0155,
+        "IMR-90": -0.0234,
+        "K562": -0.0571,
+        "GM12878": -0.0772
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0193,
+        "IMR-90": -0.0173,
+        "K562": -0.044,
+        "GM12878": -0.0459
+      }
     },
     {
       "id": "EH38E2139192",
@@ -3003,7 +3546,9 @@
           "drop": -0.0294,
           "tissue": "common myeloid progenitor, CD34-positive"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2139246",
@@ -3036,7 +3581,9 @@
           "drop": -0.031,
           "tissue": "common myeloid progenitor, CD34-positive"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457175",
@@ -3085,7 +3632,19 @@
           "drop": -0.0527,
           "tissue": "H4"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.1758,
+        "IMR-90": 0.1458,
+        "K562": 0.2267,
+        "GM12878": 0.2498
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.169,
+        "IMR-90": -0.1568,
+        "K562": -0.1288,
+        "GM12878": -0.1313
+      }
     },
     {
       "id": "EH38E3457222",
@@ -3134,7 +3693,19 @@
           "drop": -0.3731,
           "tissue": "H1"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.1783,
+        "IMR-90": 0.0195,
+        "K562": 0.059,
+        "GM12878": 0.0137
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0117,
+        "IMR-90": -0.022,
+        "K562": -0.0369,
+        "GM12878": -0.0335
+      }
     },
     {
       "id": "EH38E2140110",
@@ -3167,7 +3738,9 @@
           "drop": -0.0365,
           "tissue": "Brain_Cerebellar_Hemisphere"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457342",
@@ -3216,7 +3789,19 @@
           "drop": -0.0249,
           "tissue": "mammary microvascular endothelial cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0192,
+        "IMR-90": 0.0141,
+        "K562": 0.0033,
+        "GM12878": 0.0063
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0192,
+        "IMR-90": 0.0141,
+        "K562": 0.0033,
+        "GM12878": 0.0063
+      }
     },
     {
       "id": "EH38E3457368",
@@ -3249,7 +3834,9 @@
           "drop": -0.0195,
           "tissue": "luminal epithelial cell of mammary gland"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457519",
@@ -3282,7 +3869,9 @@
           "drop": -0.0365,
           "tissue": "Calu3"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2140477",
@@ -3331,7 +3920,19 @@
           "drop": -0.102,
           "tissue": "myocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0097,
+        "IMR-90": -0.0028,
+        "K562": -0.0018,
+        "GM12878": -0.001
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0458,
+        "IMR-90": -0.0562,
+        "K562": -0.0497,
+        "GM12878": -0.0275
+      }
     },
     {
       "id": "EH38E3457614",
@@ -3380,7 +3981,19 @@
           "drop": -0.0343,
           "tissue": "Kidney_Medulla"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0429,
+        "IMR-90": 0.0477,
+        "K562": 0.0232,
+        "GM12878": 0.0142
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0429,
+        "IMR-90": 0.0477,
+        "K562": 0.0232,
+        "GM12878": 0.0142
+      }
     },
     {
       "id": "EH38E3457653",
@@ -3429,7 +4042,19 @@
           "drop": -0.1138,
           "tissue": "HT-29"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0316,
+        "IMR-90": -0.0735,
+        "K562": 0.0773,
+        "GM12878": 0.016
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0316,
+        "IMR-90": -0.0735,
+        "K562": 0.0773,
+        "GM12878": 0.016
+      }
     },
     {
       "id": "EH38E2140632",
@@ -3470,7 +4095,14 @@
           "drop": -0.0319,
           "tissue": "Brain_Cerebellar_Hemisphere"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0647,
+        "IMR-90": 0.0416,
+        "K562": 0.1321,
+        "GM12878": 0.0673
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457738",
@@ -3503,7 +4135,9 @@
           "drop": -0.0463,
           "tissue": "GM23338"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457788",
@@ -3536,7 +4170,9 @@
           "drop": -0.0454,
           "tissue": "GM23338"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2140848",
@@ -3585,7 +4221,19 @@
           "drop": -0.099,
           "tissue": "HepG2"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0424,
+        "IMR-90": -0.0023,
+        "K562": 0.0011,
+        "GM12878": 0.0018
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0988,
+        "IMR-90": -0.0159,
+        "K562": -0.0214,
+        "GM12878": -0.0035
+      }
     },
     {
       "id": "EH38E3457925",
@@ -3618,7 +4266,9 @@
           "drop": -0.031,
           "tissue": "smooth muscle cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3457966",
@@ -3667,7 +4317,19 @@
           "drop": -0.0825,
           "tissue": "common myeloid progenitor, CD34-positive"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0119,
+        "IMR-90": -0.0312,
+        "K562": -0.1235,
+        "GM12878": -0.0702
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0119,
+        "IMR-90": -0.0312,
+        "K562": -0.1235,
+        "GM12878": -0.0702
+      }
     },
     {
       "id": "EH38E2141040",
@@ -3700,7 +4362,9 @@
           "drop": -0.0117,
           "tissue": "neural cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458043",
@@ -3733,7 +4397,9 @@
           "drop": -0.0189,
           "tissue": "Cells_EBV-transformed_lymphocytes"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2141457",
@@ -3774,7 +4440,14 @@
           "drop": -0.0302,
           "tissue": "cardiac muscle cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0014,
+        "IMR-90": -0.0003,
+        "K562": -0.0989,
+        "GM12878": -0.0003
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458298",
@@ -3815,7 +4488,14 @@
           "drop": -0.1143,
           "tissue": "renal cortical epithelial cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0199,
+        "IMR-90": 0.1421,
+        "K562": 0.0546,
+        "GM12878": 0.0376
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458338",
@@ -3864,7 +4544,19 @@
           "drop": -0.1161,
           "tissue": "left kidney"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.1095,
+        "IMR-90": -0.2353,
+        "K562": -0.0003,
+        "GM12878": -0.0864
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.1095,
+        "IMR-90": -0.2353,
+        "K562": -0.0003,
+        "GM12878": -0.0864
+      }
     },
     {
       "id": "EH38E2141831",
@@ -3897,7 +4589,9 @@
           "drop": -0.0499,
           "tissue": "K562"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458558",
@@ -3938,7 +4632,14 @@
           "drop": -0.0445,
           "tissue": "GM23338"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0043,
+        "IMR-90": 0.0331,
+        "K562": 0.0054,
+        "GM12878": 0.0187
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458583",
@@ -3971,7 +4672,9 @@
           "drop": -0.0254,
           "tissue": "liver"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458616",
@@ -4020,7 +4723,19 @@
           "drop": -0.0406,
           "tissue": "mammary stem cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0514,
+        "IMR-90": -0.0063,
+        "K562": -0.0763,
+        "GM12878": -0.0054
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0514,
+        "IMR-90": -0.0063,
+        "K562": -0.0763,
+        "GM12878": -0.0054
+      }
     },
     {
       "id": "EH38E2142069",
@@ -4061,7 +4776,14 @@
           "drop": -0.0484,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.032,
+        "IMR-90": -0.0003,
+        "K562": 0.0125,
+        "GM12878": 0.0074
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2142129",
@@ -4102,7 +4824,14 @@
           "drop": -0.1173,
           "tissue": "CD14-positive monocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0742,
+        "IMR-90": -0.0392,
+        "K562": 0.0034,
+        "GM12878": -0.0014
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458740",
@@ -4143,7 +4872,14 @@
           "drop": -0.0628,
           "tissue": "K562"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0034,
+        "IMR-90": 0.0006,
+        "K562": -0.0183,
+        "GM12878": -0.0039
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458772",
@@ -4184,7 +4920,14 @@
           "drop": -0.064,
           "tissue": "tibial nerve"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0551,
+        "IMR-90": -0.0091,
+        "K562": -0.069,
+        "GM12878": -0.065
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458814",
@@ -4225,7 +4968,14 @@
           "drop": -0.3371,
           "tissue": "Brain_Cerebellum"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.19,
+        "IMR-90": -0.0604,
+        "K562": 0.068,
+        "GM12878": 0.0272
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458844",
@@ -4258,7 +5008,9 @@
           "drop": -0.0284,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458891",
@@ -4291,7 +5043,9 @@
           "drop": -0.0159,
           "tissue": "heart left ventricle"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3458981",
@@ -4340,7 +5094,19 @@
           "drop": -0.0458,
           "tissue": "CD8-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0311,
+        "IMR-90": 0.0222,
+        "K562": -0.0246,
+        "GM12878": -0.0203
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0311,
+        "IMR-90": 0.0222,
+        "K562": -0.0246,
+        "GM12878": -0.0203
+      }
     },
     {
       "id": "EH38E2142611",
@@ -4381,7 +5147,14 @@
           "drop": -0.0464,
           "tissue": "H7"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0161,
+        "IMR-90": -0.0092,
+        "K562": -0.0071,
+        "GM12878": -0.0016
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3459091",
@@ -4430,7 +5203,19 @@
           "drop": -0.2336,
           "tissue": "myocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0086,
+        "IMR-90": -0.0917,
+        "K562": -0.0567,
+        "GM12878": -0.0394
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0086,
+        "IMR-90": -0.0917,
+        "K562": -0.0567,
+        "GM12878": -0.0394
+      }
     },
     {
       "id": "EH38E2142726",
@@ -4479,7 +5264,19 @@
           "drop": -0.1749,
           "tissue": "Brain_Cerebellar_Hemisphere"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0474,
+        "IMR-90": -0.0611,
+        "K562": -0.0104,
+        "GM12878": -0.0016
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0661,
+        "IMR-90": -0.0538,
+        "K562": 0.006,
+        "GM12878": -0.0009
+      }
     },
     {
       "id": "EH38E2142786",
@@ -4528,7 +5325,19 @@
           "drop": -0.0543,
           "tissue": "small intestine"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0075,
+        "IMR-90": 0.0219,
+        "K562": -0.0024,
+        "GM12878": 0.0011
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0075,
+        "IMR-90": 0.0219,
+        "K562": -0.0024,
+        "GM12878": 0.0011
+      }
     },
     {
       "id": "EH38E3459247",
@@ -4561,7 +5370,9 @@
           "drop": -0.0087,
           "tissue": "sigmoid colon"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2142909",
@@ -4610,7 +5421,19 @@
           "drop": -0.0967,
           "tissue": "Purkinje cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1378,
+        "IMR-90": -0.1515,
+        "K562": -0.1319,
+        "GM12878": -0.0673
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1378,
+        "IMR-90": -0.1515,
+        "K562": -0.1319,
+        "GM12878": -0.0673
+      }
     },
     {
       "id": "EH38E2143252",
@@ -4643,7 +5466,9 @@
           "drop": -0.0169,
           "tissue": "HT1080"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3459612",
@@ -4684,7 +5509,14 @@
           "drop": -0.0643,
           "tissue": "Purkinje cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0262,
+        "IMR-90": 0.058,
+        "K562": 0.0308,
+        "GM12878": -0.0068
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3459676",
@@ -4733,7 +5565,19 @@
           "drop": -0.084,
           "tissue": "left colon"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1676,
+        "IMR-90": -0.0266,
+        "K562": -0.3181,
+        "GM12878": -0.1909
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1676,
+        "IMR-90": -0.0266,
+        "K562": -0.3181,
+        "GM12878": -0.1909
+      }
     },
     {
       "id": "EH38E3459714",
@@ -4782,7 +5626,19 @@
           "drop": -0.0287,
           "tissue": "natural killer cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0027,
+        "IMR-90": 0.0008,
+        "K562": -0.0254,
+        "GM12878": -0.0579
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0027,
+        "IMR-90": 0.0008,
+        "K562": -0.0254,
+        "GM12878": -0.0579
+      }
     },
     {
       "id": "EH38E3459770",
@@ -4831,7 +5687,19 @@
           "drop": -0.0237,
           "tissue": "LHCN-M2"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.201,
+        "IMR-90": -0.003,
+        "K562": -0.1464,
+        "GM12878": -0.1466
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.201,
+        "IMR-90": -0.003,
+        "K562": -0.1464,
+        "GM12878": -0.1466
+      }
     },
     {
       "id": "EH38E3459866",
@@ -4864,7 +5732,9 @@
           "drop": -0.0288,
           "tissue": "left lobe of liver"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2143692",
@@ -4913,7 +5783,19 @@
           "drop": -0.0162,
           "tissue": "small intestine"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0696,
+        "IMR-90": 0.0225,
+        "K562": -0.0128,
+        "GM12878": -0.0078
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0696,
+        "IMR-90": 0.0225,
+        "K562": -0.0128,
+        "GM12878": -0.0078
+      }
     },
     {
       "id": "EH38E3459943",
@@ -4962,7 +5844,19 @@
           "drop": -0.0584,
           "tissue": "cardiac muscle cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0294,
+        "IMR-90": -0.003,
+        "K562": -0.0075,
+        "GM12878": -0.0349
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0346,
+        "IMR-90": 0.007,
+        "K562": -0.0009,
+        "GM12878": 0.0554
+      }
     },
     {
       "id": "EH38E2143796",
@@ -5011,7 +5905,19 @@
           "drop": -0.0808,
           "tissue": "Skin_Sun_Exposed_Lower_leg"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0286,
+        "IMR-90": -0.0733,
+        "K562": 0.0822,
+        "GM12878": 0.0281
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0286,
+        "IMR-90": -0.0733,
+        "K562": 0.0822,
+        "GM12878": 0.0281
+      }
     },
     {
       "id": "EH38E2143837",
@@ -5044,7 +5950,9 @@
           "drop": -0.0417,
           "tissue": "psoas muscle"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3460081",
@@ -5093,7 +6001,19 @@
           "drop": -0.0665,
           "tissue": "Heart_Left_Ventricle"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0074,
+        "IMR-90": -0.0213,
+        "K562": 0.0394,
+        "GM12878": 0.0147
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0074,
+        "IMR-90": -0.0213,
+        "K562": 0.0394,
+        "GM12878": 0.0147
+      }
     },
     {
       "id": "EH38E3460145",
@@ -5142,7 +6062,19 @@
           "drop": -0.1914,
           "tissue": "hematopoietic multipotent progenitor cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0335,
+        "IMR-90": -0.0616,
+        "K562": 0.0357,
+        "GM12878": 0.0478
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0335,
+        "IMR-90": -0.0616,
+        "K562": 0.0357,
+        "GM12878": 0.0478
+      }
     },
     {
       "id": "EH38E3460178",
@@ -5191,7 +6123,19 @@
           "drop": -0.1117,
           "tissue": "CD4-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.1873,
+        "IMR-90": 0.053,
+        "K562": 0.0471,
+        "GM12878": 0.0072
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0322,
+        "IMR-90": 0.0005,
+        "K562": -0.0316,
+        "GM12878": -0.0423
+      }
     },
     {
       "id": "EH38E3460213",
@@ -5240,7 +6184,19 @@
           "drop": -0.0333,
           "tissue": "PC-3"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0059,
+        "IMR-90": 0.0116,
+        "K562": 0.0442,
+        "GM12878": 0.0661
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0059,
+        "IMR-90": 0.0116,
+        "K562": 0.0442,
+        "GM12878": 0.0661
+      }
     },
     {
       "id": "EH38E3460267",
@@ -5273,7 +6229,9 @@
           "drop": -0.0331,
           "tissue": "CD4-positive, CD25-positive, alpha-beta regulatory T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3460321",
@@ -5322,7 +6280,19 @@
           "drop": -0.0205,
           "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0119,
+        "IMR-90": -0.0105,
+        "K562": -0.0985,
+        "GM12878": -0.0472
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0119,
+        "IMR-90": -0.0105,
+        "K562": -0.0985,
+        "GM12878": -0.0472
+      }
     },
     {
       "id": "EH38E3460361",
@@ -5371,7 +6341,19 @@
           "drop": -0.0165,
           "tissue": "Caki2"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.042,
+        "IMR-90": -0.0052,
+        "K562": -0.1447,
+        "GM12878": -0.0786
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.042,
+        "IMR-90": -0.0052,
+        "K562": -0.1447,
+        "GM12878": -0.0786
+      }
     },
     {
       "id": "EH38E3460414",
@@ -5404,7 +6386,9 @@
           "drop": -0.0194,
           "tissue": "BLaER1"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3460465",
@@ -5437,7 +6421,9 @@
           "drop": -0.0354,
           "tissue": "large intestine"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3460514",
@@ -5486,7 +6472,19 @@
           "drop": -0.0849,
           "tissue": "MCF-7"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0033,
+        "IMR-90": -0.0123,
+        "K562": 0.0013,
+        "GM12878": 0.022
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0033,
+        "IMR-90": -0.0123,
+        "K562": 0.0013,
+        "GM12878": 0.022
+      }
     },
     {
       "id": "EH38E3460556",
@@ -5535,7 +6533,19 @@
           "drop": -0.0225,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0051,
+        "IMR-90": -0.0138,
+        "K562": -0.01,
+        "GM12878": -0.0979
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0051,
+        "IMR-90": -0.0138,
+        "K562": -0.01,
+        "GM12878": -0.0979
+      }
     },
     {
       "id": "EH38E2144394",
@@ -5568,7 +6578,9 @@
           "drop": -0.0168,
           "tissue": "Brain_Cerebellum"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3460668",
@@ -5617,7 +6629,19 @@
           "drop": -0.0543,
           "tissue": "endothelial cell of umbilical vein"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.1046,
+        "IMR-90": 0.0676,
+        "K562": 0.1825,
+        "GM12878": 0.1215
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.1046,
+        "IMR-90": 0.0676,
+        "K562": 0.1825,
+        "GM12878": 0.1215
+      }
     },
     {
       "id": "EH38E3460705",
@@ -5666,7 +6690,19 @@
           "drop": -0.0329,
           "tissue": "esophagus mucosa"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.057,
+        "IMR-90": -0.0171,
+        "K562": 0.1064,
+        "GM12878": -0.0664
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.057,
+        "IMR-90": -0.0171,
+        "K562": 0.1064,
+        "GM12878": -0.0664
+      }
     },
     {
       "id": "EH38E3460779",
@@ -5715,7 +6751,19 @@
           "drop": -0.1541,
           "tissue": "endothelial cell of umbilical vein"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0545,
+        "IMR-90": -0.0093,
+        "K562": 0.022,
+        "GM12878": -0.0173
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0545,
+        "IMR-90": -0.0093,
+        "K562": 0.022,
+        "GM12878": -0.0173
+      }
     },
     {
       "id": "EH38E3460835",
@@ -5764,7 +6812,19 @@
           "drop": -0.0763,
           "tissue": "Brain_Cerebellar_Hemisphere"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.5482,
+        "IMR-90": -0.0022,
+        "K562": 0.0015,
+        "GM12878": 0.0007
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.5482,
+        "IMR-90": -0.0022,
+        "K562": 0.0015,
+        "GM12878": 0.0007
+      }
     },
     {
       "id": "EH38E3460883",
@@ -5813,7 +6873,19 @@
           "drop": -0.0658,
           "tissue": "GM12892"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0981,
+        "IMR-90": -0.0072,
+        "K562": -0.0408,
+        "GM12878": -0.1494
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0981,
+        "IMR-90": -0.0072,
+        "K562": -0.0408,
+        "GM12878": -0.1494
+      }
     },
     {
       "id": "EH38E2144695",
@@ -5846,7 +6918,9 @@
           "drop": -0.0522,
           "tissue": "Jurkat, Clone E6-1"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2144731",
@@ -5879,7 +6953,9 @@
           "drop": -0.0302,
           "tissue": "MCF-7"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461019",
@@ -5928,7 +7004,19 @@
           "drop": -0.0264,
           "tissue": "body of pancreas"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.046,
+        "IMR-90": 0.0264,
+        "K562": 0.0356,
+        "GM12878": 0.0492
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.046,
+        "IMR-90": 0.0264,
+        "K562": 0.0356,
+        "GM12878": 0.0492
+      }
     },
     {
       "id": "EH38E3461049",
@@ -5969,7 +7057,14 @@
           "drop": -0.0221,
           "tissue": "HepG2"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0005,
+        "IMR-90": 0.0,
+        "K562": 0.0065,
+        "GM12878": -0.0204
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461100",
@@ -6002,7 +7097,9 @@
           "drop": -0.0169,
           "tissue": "Brain_Cerebellar_Hemisphere"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461163",
@@ -6051,7 +7148,19 @@
           "drop": -0.0459,
           "tissue": "CD8-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0206,
+        "IMR-90": 0.1011,
+        "K562": 0.014,
+        "GM12878": 0.001
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0206,
+        "IMR-90": 0.1011,
+        "K562": 0.014,
+        "GM12878": 0.001
+      }
     },
     {
       "id": "EH38E2144955",
@@ -6100,7 +7209,19 @@
           "drop": -0.1168,
           "tissue": "Ovary"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0274,
+        "IMR-90": -0.1031,
+        "K562": -0.0498,
+        "GM12878": 0.0085
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0274,
+        "IMR-90": -0.1031,
+        "K562": -0.0498,
+        "GM12878": 0.0085
+      }
     },
     {
       "id": "EH38E3461264",
@@ -6149,7 +7270,19 @@
           "drop": -0.0521,
           "tissue": "SK-N-DZ"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0422,
+        "IMR-90": -0.0124,
+        "K562": -0.008,
+        "GM12878": -0.0987
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0422,
+        "IMR-90": -0.0124,
+        "K562": -0.008,
+        "GM12878": -0.0987
+      }
     },
     {
       "id": "EH38E2145044",
@@ -6190,7 +7323,14 @@
           "drop": -0.0792,
           "tissue": "Karpas-422"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0079,
+        "IMR-90": -0.0163,
+        "K562": 0.0019,
+        "GM12878": -0.0292
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461385",
@@ -6223,7 +7363,9 @@
           "drop": -0.0253,
           "tissue": "NCI-H460"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2145148",
@@ -6256,7 +7398,9 @@
           "drop": -0.0539,
           "tissue": "Skin_Not_Sun_Exposed_Suprapubic"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461495",
@@ -6305,7 +7449,19 @@
           "drop": -0.0328,
           "tissue": "trophoblast"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0623,
+        "IMR-90": -0.0055,
+        "K562": 0.0437,
+        "GM12878": 0.0137
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0623,
+        "IMR-90": -0.0055,
+        "K562": 0.0437,
+        "GM12878": 0.0137
+      }
     },
     {
       "id": "EH38E3461530",
@@ -6354,7 +7510,19 @@
           "drop": -0.0469,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.5271,
+        "IMR-90": -0.4848,
+        "K562": -0.3581,
+        "GM12878": -0.362
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.5271,
+        "IMR-90": -0.4848,
+        "K562": -0.3581,
+        "GM12878": -0.362
+      }
     },
     {
       "id": "EH38E3461574",
@@ -6387,7 +7555,9 @@
           "drop": -0.0123,
           "tissue": "glutamatergic neuron"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461634",
@@ -6420,7 +7590,9 @@
           "drop": -0.0161,
           "tissue": "HepG2"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2145370",
@@ -6453,7 +7625,9 @@
           "drop": -0.027,
           "tissue": "kidney"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461732",
@@ -6486,7 +7660,9 @@
           "drop": -0.059,
           "tissue": "colonic mucosa"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2145451",
@@ -6519,7 +7695,9 @@
           "drop": -0.0319,
           "tissue": "Testis"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461818",
@@ -6552,7 +7730,9 @@
           "drop": -0.0167,
           "tissue": "left lobe of liver"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2145577",
@@ -6585,7 +7765,9 @@
           "drop": -0.0164,
           "tissue": "B cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3461979",
@@ -6618,7 +7800,9 @@
           "drop": -0.027,
           "tissue": "OCI-LY7"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3462065",
@@ -6659,7 +7843,14 @@
           "drop": -0.0183,
           "tissue": "CD4-positive, CD25-positive, alpha-beta regulatory T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0474,
+        "IMR-90": 0.0283,
+        "K562": 0.1063,
+        "GM12878": -0.0005
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2145756",
@@ -6692,7 +7883,9 @@
           "drop": -0.0628,
           "tissue": "left lobe of liver"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3462204",
@@ -6741,7 +7934,19 @@
           "drop": -0.0491,
           "tissue": "GM12891"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0566,
+        "IMR-90": -0.0177,
+        "K562": -0.0162,
+        "GM12878": -0.1301
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0566,
+        "IMR-90": -0.0177,
+        "K562": -0.0162,
+        "GM12878": -0.1301
+      }
     },
     {
       "id": "EH38E3462266",
@@ -6774,7 +7979,9 @@
           "drop": -0.0099,
           "tissue": "naive thymus-derived CD8-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3462303",
@@ -6807,7 +8014,9 @@
           "drop": -0.0161,
           "tissue": "muscle of trunk"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3462343",
@@ -6856,7 +8065,19 @@
           "drop": -0.0336,
           "tissue": "peripheral blood mononuclear cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0182,
+        "IMR-90": -0.0383,
+        "K562": -0.0147,
+        "GM12878": -0.0284
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0182,
+        "IMR-90": -0.0383,
+        "K562": -0.0147,
+        "GM12878": -0.0284
+      }
     },
     {
       "id": "EH38E3462438",
@@ -6905,7 +8126,19 @@
           "drop": -0.0197,
           "tissue": "small intestine"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0566,
+        "IMR-90": -0.004,
+        "K562": -0.0154,
+        "GM12878": -0.0499
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0566,
+        "IMR-90": -0.004,
+        "K562": -0.0154,
+        "GM12878": -0.0499
+      }
     },
     {
       "id": "EH38E3462556",
@@ -6954,7 +8187,19 @@
           "drop": -0.3891,
           "tissue": "GM12878"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0385,
+        "IMR-90": -0.0166,
+        "K562": -0.1469,
+        "GM12878": -0.4883
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0385,
+        "IMR-90": -0.0166,
+        "K562": -0.1469,
+        "GM12878": -0.4883
+      }
     },
     {
       "id": "EH38E3462722",
@@ -7003,7 +8248,19 @@
           "drop": -0.1754,
           "tissue": "heart right ventricle"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1402,
+        "IMR-90": -0.0039,
+        "K562": -0.0364,
+        "GM12878": -0.0193
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1402,
+        "IMR-90": -0.0039,
+        "K562": -0.0364,
+        "GM12878": -0.0193
+      }
     },
     {
       "id": "EH38E2146284",
@@ -7036,7 +8293,9 @@
           "drop": -0.045,
           "tissue": "cardiac muscle cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3462940",
@@ -7085,7 +8344,19 @@
           "drop": -0.0313,
           "tissue": "H7"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0109,
+        "IMR-90": 0.0004,
+        "K562": 0.0107,
+        "GM12878": 0.0032
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.1281,
+        "IMR-90": -0.1593,
+        "K562": -0.1261,
+        "GM12878": -0.1226
+      }
     },
     {
       "id": "EH38E2146386",
@@ -7118,7 +8389,9 @@
           "drop": -0.0236,
           "tissue": "Whole_Blood"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463058",
@@ -7151,7 +8424,9 @@
           "drop": -0.0194,
           "tissue": "heart right ventricle"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2146475",
@@ -7200,7 +8475,19 @@
           "drop": -0.1636,
           "tissue": "CD14-positive monocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0844,
+        "IMR-90": -0.0115,
+        "K562": 0.0132,
+        "GM12878": -0.2472
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0844,
+        "IMR-90": -0.0115,
+        "K562": 0.0132,
+        "GM12878": -0.2472
+      }
     },
     {
       "id": "EH38E3463224",
@@ -7233,7 +8520,9 @@
           "drop": -0.037,
           "tissue": "Brain_Cerebellum"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463279",
@@ -7274,7 +8563,14 @@
           "drop": -0.3008,
           "tissue": "heart right ventricle"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0676,
+        "IMR-90": 0.0054,
+        "K562": 0.0057,
+        "GM12878": -0.0022
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2146624",
@@ -7307,7 +8603,9 @@
           "drop": -0.0329,
           "tissue": "hair follicular keratinocyte"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2146656",
@@ -7348,7 +8646,14 @@
           "drop": -0.0802,
           "tissue": "GM12891"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0093,
+        "IMR-90": 0.0212,
+        "K562": 0.0206,
+        "GM12878": 0.0023
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463438",
@@ -7381,7 +8686,9 @@
           "drop": -0.0297,
           "tissue": "placenta"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463473",
@@ -7430,7 +8737,19 @@
           "drop": -0.0167,
           "tissue": "lower leg skin"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0509,
+        "IMR-90": -0.0647,
+        "K562": 0.0767,
+        "GM12878": -0.1617
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0509,
+        "IMR-90": -0.0647,
+        "K562": 0.0767,
+        "GM12878": -0.1617
+      }
     },
     {
       "id": "EH38E2146805",
@@ -7479,7 +8798,19 @@
           "drop": -0.0243,
           "tissue": "K562"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0756,
+        "IMR-90": 0.0005,
+        "K562": -0.0513,
+        "GM12878": -0.0419
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0756,
+        "IMR-90": 0.0005,
+        "K562": -0.0513,
+        "GM12878": -0.0419
+      }
     },
     {
       "id": "EH38E3463623",
@@ -7520,7 +8851,14 @@
           "drop": -0.6699,
           "tissue": "Brain_Cerebellum"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1566,
+        "IMR-90": -0.1773,
+        "K562": -0.0318,
+        "GM12878": -0.0171
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463671",
@@ -7561,7 +8899,14 @@
           "drop": -0.1575,
           "tissue": "naive thymus-derived CD4-positive, alpha-beta T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.083,
+        "IMR-90": 0.0178,
+        "K562": -0.0163,
+        "GM12878": -0.0112
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463722",
@@ -7602,7 +8947,14 @@
           "drop": -0.0826,
           "tissue": "large intestine"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0151,
+        "IMR-90": 0.0188,
+        "K562": 0.0029,
+        "GM12878": 0.0005
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463770",
@@ -7635,7 +8987,9 @@
           "drop": -0.0305,
           "tissue": "Brain_Cerebellum"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463847",
@@ -7676,7 +9030,14 @@
           "drop": -0.0905,
           "tissue": "HepG2"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.1206,
+        "IMR-90": -0.0523,
+        "K562": 0.0196,
+        "GM12878": -0.0031
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3463925",
@@ -7725,7 +9086,19 @@
           "drop": -0.0559,
           "tissue": "LHCN-M2"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0256,
+        "IMR-90": -0.1016,
+        "K562": -0.0475,
+        "GM12878": 0.0011
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0256,
+        "IMR-90": -0.1016,
+        "K562": -0.0475,
+        "GM12878": 0.0011
+      }
     },
     {
       "id": "EH38E3463999",
@@ -7774,7 +9147,19 @@
           "drop": -0.0244,
           "tissue": "B cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0089,
+        "IMR-90": 0.0061,
+        "K562": 0.0174,
+        "GM12878": 0.0897
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0089,
+        "IMR-90": 0.0061,
+        "K562": 0.0174,
+        "GM12878": 0.0897
+      }
     },
     {
       "id": "EH38E3464084",
@@ -7807,7 +9192,9 @@
           "drop": -0.0097,
           "tissue": "GM12892"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3464167",
@@ -7848,7 +9235,14 @@
           "drop": -0.1346,
           "tissue": "Jurkat, Clone E6-1"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0123,
+        "IMR-90": 0.0032,
+        "K562": -0.3032,
+        "GM12878": -0.0991
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3464219",
@@ -7897,7 +9291,19 @@
           "drop": -0.1799,
           "tissue": "GM12892"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0115,
+        "IMR-90": 0.035,
+        "K562": -0.0371,
+        "GM12878": -0.2312
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0115,
+        "IMR-90": 0.035,
+        "K562": -0.0371,
+        "GM12878": -0.2312
+      }
     },
     {
       "id": "EH38E3464486",
@@ -7930,7 +9336,9 @@
           "drop": -0.0205,
           "tissue": "HT1080"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3464549",
@@ -7963,7 +9371,9 @@
           "drop": -0.0318,
           "tissue": "CD4-positive, alpha-beta memory T cell"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2147640",
@@ -7996,7 +9406,9 @@
           "drop": -0.0562,
           "tissue": "HepG2"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3464685",
@@ -8045,7 +9457,19 @@
           "drop": -0.0571,
           "tissue": "mammary stem cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0017,
+        "IMR-90": 0.0343,
+        "K562": -0.0854,
+        "GM12878": -0.0442
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0017,
+        "IMR-90": 0.0343,
+        "K562": -0.0854,
+        "GM12878": -0.0442
+      }
     },
     {
       "id": "EH38E3464775",
@@ -8078,7 +9502,9 @@
           "drop": -0.0181,
           "tissue": "liver"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3464871",
@@ -8127,7 +9553,19 @@
           "drop": -0.0296,
           "tissue": "GM23338"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0357,
+        "IMR-90": -0.0041,
+        "K562": -0.0287,
+        "GM12878": 0.0238
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.0336,
+        "IMR-90": -0.0068,
+        "K562": -0.0153,
+        "GM12878": 0.0111
+      }
     },
     {
       "id": "EH38E3464972",
@@ -8176,7 +9614,19 @@
           "drop": -0.0166,
           "tissue": "A549"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.6158,
+        "IMR-90": -0.4559,
+        "K562": -0.5826,
+        "GM12878": -0.477
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.6158,
+        "IMR-90": -0.4559,
+        "K562": -0.5826,
+        "GM12878": -0.477
+      }
     },
     {
       "id": "EH38E3465029",
@@ -8209,7 +9659,9 @@
           "drop": -0.0196,
           "tissue": "IMR-90"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3465064",
@@ -8242,7 +9694,9 @@
           "drop": -0.0161,
           "tissue": "NCI-H460"
         }
-      ]
+      ],
+      "predicted_by_cell": null,
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E3465125",
@@ -8283,7 +9737,14 @@
           "drop": -0.0252,
           "tissue": "liver"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.0196,
+        "IMR-90": 0.0246,
+        "K562": 0.0318,
+        "GM12878": 0.0207
+      },
+      "predicted_coding_by_cell": null
     },
     {
       "id": "EH38E2148053",
@@ -8332,7 +9793,19 @@
           "drop": -0.0223,
           "tissue": "mammary epithelial cell"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": 0.1024,
+        "IMR-90": 0.0717,
+        "K562": 0.1103,
+        "GM12878": 0.1046
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": 0.1024,
+        "IMR-90": 0.0717,
+        "K562": 0.1103,
+        "GM12878": 0.1046
+      }
     },
     {
       "id": "EH38E2148099",
@@ -8381,7 +9854,25 @@
           "drop": -0.0134,
           "tissue": "BE2C"
         }
-      ]
+      ],
+      "predicted_by_cell": {
+        "HepG2": -0.0115,
+        "IMR-90": 0.0054,
+        "K562": -0.0009,
+        "GM12878": 0.0112
+      },
+      "predicted_coding_by_cell": {
+        "HepG2": -0.0115,
+        "IMR-90": 0.0054,
+        "K562": -0.0009,
+        "GM12878": 0.0112
+      }
     }
+  ],
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
   ]
 }
