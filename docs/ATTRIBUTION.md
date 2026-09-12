@@ -116,7 +116,12 @@ of the UNKNOWN space comes near the genome's average (centromere 0.6%,
 unique intergenic 2.5%), which is the quantitative form of "constraint lives
 in and around genes". The real unknown is 1,098 blocks and 32 Mb, one percent
 of the genome; the regulatory tier holds five times more constrained sequence
-and its target genes are the next attribution.
+and its target genes are the next attribution. That attribution has started:
+ranking chromosome 21's distal enhancers by constraint and deleting the 100
+most constrained in AlphaGenome names a gene for 73% of them, against 63.5%
+of a uniform sample, and the constrained ones act beyond their CTCF node twice
+as often (ALPHAGENOME.md, feature b, "The constrained ones first";
+`data/results/constrained_targets_<chrom>.json`).
 
 The chromosomes sort themselves without being told. chrY and chrX are the
 controls: 0.66% and 0.88% constrained, fossils 27% and 73% of their space.

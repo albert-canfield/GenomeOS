@@ -793,6 +793,19 @@ in order. "Owner" is the session that holds the files today (see §7).
   Constraint per class ranges from 0.6% (centromere) to 2.5% (unique
   intergenic); no class of the UNKNOWN space approaches the genome's average,
   which is the quantitative form of "constraint lives in and around genes".
+- **The constrained elements first (2026-09-12, genomeos-fe).** The first
+  attribution of targets follows the budget's pointer: `scripts/
+  constrained_targets.py` ranks a chromosome's distal enhancers by Zoonomia
+  constraint through `attribution/constraint.py` (chr21: 6,618 elements, 37
+  MB of ranges, 130 s; 412 have 20% or more constrained bases) and deletes
+  the 100 most constrained in AlphaGenome (`constrained_targets_chr21`). 73%
+  name a gene against 63.5% of the uniform sample of 200; 28 are
+  silencer-like; the coding target is the nearest TSS in 60.9% (uniform
+  67.8%) and inside the CTCF node in 78.1% (uniform 87.4%), so the constrained
+  elements reach beyond the CTCF-only boundary twice as often. Strongest: a
+  46%-constrained element moving LINC00945 by 1.2 log2 in testis, KCNE1 by
+  0.93, SIM2 by 0.84. ALPHAGENOME.md feature b, "The constrained ones first";
+  the other 23 chromosomes are running.
 - **Next.** 1. The blocks organised by the
   evidence that exists: CTCF node, reader open fraction per cell type,
   AlphaGenome enhancer target, repeat family, segmental duplication,
