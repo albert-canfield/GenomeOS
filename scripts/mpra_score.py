@@ -10,6 +10,7 @@ Saves data/results/mpra_<chrom>.json.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import time
 
@@ -20,6 +21,15 @@ from genomeos.genome.regulatory import load_ccres
 from genomeos.jobs import heartbeat
 from genomeos.predict import status
 from genomeos.results import save_result
+
+
+def beat(name: str, msg: str | None = None) -> None:
+    """Proof of life for this chromosome's job and for the genome job that may be running it."""
+    heartbeat(name)
+    if os.environ.get("GENOMEOS_JOB"):
+        heartbeat(os.environ["GENOMEOS_JOB"])
+    if msg:
+        print(msg, flush=True)
 
 
 def main() -> int:
@@ -41,9 +51,13 @@ def main() -> int:
             intervals.append((e.start, e.end))
             keep.append(e)
             last_end = e.end
-    heartbeat(name)
+    beat(name)
     t0 = time.time()
-    stats, cost = phylop_over_blocks(chrom, intervals)
+    stats, cost = phylop_over_blocks(
+        chrom,
+        intervals,
+        progress=lambda d, n, b: beat(name, f"{chrom}: phyloP {d}/{n} blocks, {b / 1e6:.0f} MB"),
+    )
     print(f"{chrom}: phyloP over {len(keep):,} elements in {time.time() - t0:.0f} s ({cost})", flush=True)
     rows = mpra.annotate(keep, ccres, peaks, stats)
     model_cost = None
@@ -61,7 +75,7 @@ def main() -> int:
             g.close()
 
             def progress(msg: str) -> None:
-                heartbeat(name)
+                beat(name)
                 print(msg, flush=True)
 
             means = pd_.means([(e.start, e.end, e.key) for e in keep], client_factory, progress)

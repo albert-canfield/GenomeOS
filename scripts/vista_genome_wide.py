@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -25,17 +26,25 @@ ORDER = ["chr21", "chr22", "chr19", "chr20", "chr18", "chr17", "chr16", "chr15",
 ORDER += [c for c in CHROMOSOMES if c not in ORDER and c not in ("chrM", "chrY")][::-1]  # VISTA has no chrY
 
 
-def run_missing() -> None:
-    for i, chrom in enumerate(ORDER, 1):
-        if Path(f"data/results/vista_{chrom}.json").exists():
-            continue
-        heartbeat(
-            f"{chrom}: VISTA elements against registry, node, constraint and deletion ({i}/{len(ORDER)})"
-        )
-        cmd = [sys.executable, "scripts/vista_score.py", "--chrom", chrom]
-        r = subprocess.run(cmd, check=False)  # noqa: S603 - our own script
-        if r.returncode != 0:
-            heartbeat(f"{chrom}: exit {r.returncode}, continuing with the next chromosome")
+def run_missing(passes: int = 3) -> None:
+    """Score every chromosome without a result; a chromosome that fails (a dropped connection) is retried
+    on the next pass, up to `passes`."""
+    for n in range(1, passes + 1):
+        missing = [c for c in ORDER if not Path(f"data/results/vista_{c}.json").exists()]
+        if not missing:
+            return
+        for i, chrom in enumerate(missing, 1):
+            if Path(f"data/results/vista_{chrom}.json").exists():
+                continue  # landed meanwhile (another worker)
+            heartbeat("vista_genome_wide")
+            print(f"{chrom}: VISTA elements scored ({i}/{len(missing)}, pass {n})", flush=True)
+            r = subprocess.run(
+                [sys.executable, "scripts/vista_score.py", "--chrom", chrom],
+                check=False,
+                env={**os.environ, "GENOMEOS_JOB": "vista_genome_wide"},
+            )  # noqa: S603
+            if r.returncode != 0:
+                print(f"{chrom}: exit {r.returncode}, continuing with the next chromosome", flush=True)
 
 
 def aggregate(results_dir: Path = Path("data/results")) -> dict:

@@ -23,6 +23,8 @@ ENCODE = "https://www.encodeproject.org"
 KNOWLEDGE = Path("data/knowledge/rna")
 SIGNAL = 0.05  # signal a base must reach to count as transcribed; swept on chr21 (0.05, 0.2, 0.5, 1.0)
 EVIDENCE = "experimental: ENCODE total RNA-seq, strand-specific signal of unique reads (GRCh38, released)"
+PROBE = 40  # exons per strand read in both orientations before a cell's tracks are trusted
+SWAP_RATIO = 2.0  # the swapped orientation must carry this many times the signal to win
 
 
 def find_tracks(cell_type: str, timeout: int = 60) -> dict[str, Any]:
@@ -62,6 +64,24 @@ def find_tracks(cell_type: str, timeout: int = 60) -> dict[str, Any]:
     return out
 
 
+def _covered(
+    href: str, chrom: str, exons: list[tuple[int, int]], signal: float, progress=None, with_bytes=False
+):
+    """Covered fraction (bases at or above `signal`) of each exon on one bigWig; one range pass."""
+    from genomeos.attribution.bigwig import BigWig
+
+    bw = BigWig(href)
+    try:
+        stats = bw.summarise(chrom, exons, signal, progress=progress)
+        out = [
+            min(1.0, st.above / (b - a)) if b > a else 0.0 for (a, b), st in zip(exons, stats, strict=False)
+        ]
+        fetched = getattr(bw.src, "bytes_fetched", 0)
+    finally:
+        bw.close()
+    return (out, fetched) if with_bytes else out
+
+
 class MeasuredRna:
     """Signal over the exons of the parser's candidates, one strand's bigWig at a time; with several cell
     types (a comma-separated panel) an exon's covered fraction is the best over the panel, so a gene made
@@ -87,27 +107,62 @@ class MeasuredRna:
         self.tracks = next(iter(self.tracks_by_cell.values()), {"tracks": {}})
         self.fractions: dict[tuple[str, int, int], float] = {}
         self.bytes_fetched = 0
+        self.orientation: dict[str, str] = {}
+        self.orientation_scores: dict[str, dict[str, float]] = {}
+
+    def orient(self, exons_by_strand: dict[str, list[tuple[int, int]]], probe: int = PROBE) -> dict[str, str]:
+        """Decide, per cell type, whether the tracks are labelled by the transcript's strand or by the read.
+
+        ENCODE names a track "plus strand signal" by the read; for some library protocols (IMR-90's total
+        RNA-seq) the read is antisense, so the gene on the minus strand carries its signal on the "plus"
+        file. A probe over a few dozen exons per strand in both orientations decides: the tracks are
+        swapped when the swapped orientation carries more than SWAP_RATIO times the signal. Recorded in
+        the summary as `orientation`; a cell with one track or no signal either way stays as labelled.
+        """
+        if self.orientation:
+            return self.orientation
+        sample = {s: sorted(set(v))[:probe] for s, v in exons_by_strand.items() if v}
+        for cell, tracks in self.tracks_by_cell.items():
+            tr = tracks.get("tracks", {})
+            if not sample or "+" not in tr or "-" not in tr:
+                self.orientation[cell] = "as labelled"
+                continue
+            swapped = {"+": tr["-"], "-": tr["+"]}
+            scores = {}
+            for name, files in (("as labelled", tr), ("swapped", swapped)):
+                total = 0.0
+                for strand, exons in sample.items():
+                    total += sum(_covered(files[strand]["href"], self.chrom, exons, self.signal))
+                scores[name] = total
+            if scores["swapped"] > SWAP_RATIO * scores["as labelled"]:
+                tracks["tracks"] = swapped
+                self.orientation[cell] = "swapped"
+            else:
+                self.orientation[cell] = "as labelled"
+            self.orientation_scores[cell] = {k: round(v, 2) for k, v in scores.items()}
+        return self.orientation
 
     def prepare(self, exons_by_strand: dict[str, list[tuple[int, int]]], progress=None) -> None:
         """One pass per cell type and strand over every exon interval (non-overlapping), keeping the best
-        covered fraction seen."""
-        from genomeos.attribution.bigwig import BigWig
-
+        covered fraction seen; the tracks are oriented first (see `orient`)."""
+        self.orient(exons_by_strand)
         for tracks in self.tracks_by_cell.values():
             for strand, exons in exons_by_strand.items():
                 if not exons or strand not in tracks["tracks"]:
                     continue
-                bw = BigWig(tracks["tracks"][strand]["href"])
-                try:
-                    stats = bw.summarise(self.chrom, exons, self.signal, progress=progress)
-                    for (a, b), st in zip(exons, stats, strict=False):
-                        fr = min(1.0, st.above / (b - a)) if b > a else 0.0
-                        key = (strand, a, b)
-                        if fr > self.fractions.get(key, 0.0):
-                            self.fractions[key] = fr
-                    self.bytes_fetched += getattr(bw.src, "bytes_fetched", 0)
-                finally:
-                    bw.close()
+                fractions, fetched = _covered(
+                    tracks["tracks"][strand]["href"],
+                    self.chrom,
+                    exons,
+                    self.signal,
+                    progress,
+                    with_bytes=True,
+                )
+                for (a, b), fr in zip(exons, fractions, strict=False):
+                    key = (strand, a, b)
+                    if fr > self.fractions.get(key, 0.0):
+                        self.fractions[key] = fr
+                self.bytes_fetched += fetched
 
     def covered_fraction(self, strand: str, start: int, end: int) -> float:
         return self.fractions.get((strand, start, end), 0.0)
@@ -138,6 +193,8 @@ class MeasuredRna:
                 for c, tr in self.tracks_by_cell.items()
             },
             "signal_threshold": self.signal,
+            "orientation": self.orientation,
+            "orientation_probe": self.orientation_scores,
             "exons_measured": len(self.fractions),
             "bytes_fetched": self.bytes_fetched,
             "evidence": EVIDENCE,

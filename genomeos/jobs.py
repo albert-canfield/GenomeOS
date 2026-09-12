@@ -417,6 +417,11 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
     spec = CATALOG[name]
     meta = json.loads(_meta_path(name).read_text()) if _meta_path(name).exists() else {}
     proc = _running.get(name)
+    if proc is not None and meta.get("pid") not in (None, proc.pid):
+        # the job was started again elsewhere (CLI, another server): this process's handle is stale and
+        # must not report that newer run as finished when the old one exits
+        _running.pop(name, None)
+        proc = None
     state = "idle"
     if proc is not None:
         code = proc.poll()

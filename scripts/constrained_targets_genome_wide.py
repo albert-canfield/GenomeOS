@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -24,11 +25,15 @@ def run_missing(top: int) -> None:
     for i, chrom in enumerate(ORDER, 1):
         if Path(f"data/results/constrained_targets_{chrom}.json").exists():
             continue
-        heartbeat(f"{chrom}: scoring the {top} most constrained distal enhancers ({i}/{len(ORDER)})")
+        heartbeat("constrained_targets_genome_wide")
+        print(f"{chrom}: scoring the {top} most constrained distal enhancers ({i}/{len(ORDER)})", flush=True)
         cmd = [sys.executable, "scripts/constrained_targets.py", "--chrom", chrom, "--top", str(top)]
-        r = subprocess.run(cmd, check=False)  # noqa: S603 - our own script
+        r = subprocess.run(
+            cmd, check=False, env={**os.environ, "GENOMEOS_JOB": "constrained_targets_genome_wide"}
+        )  # noqa: S603 - our own script
         if r.returncode != 0:
-            heartbeat(f"{chrom}: exit {r.returncode}, continuing with the next chromosome")
+            heartbeat("constrained_targets_genome_wide")
+            print(f"{chrom}: exit {r.returncode}, continuing with the next chromosome", flush=True)
 
 
 def aggregate(results_dir: Path = Path("data/results")) -> dict:

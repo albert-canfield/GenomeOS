@@ -10,6 +10,7 @@ Saves data/results/vista_<chrom>.json: positives against negatives on what Genom
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import time
 
@@ -19,6 +20,15 @@ from genomeos.jobs import heartbeat
 from genomeos.predict import AlphaGenomeAdapter, status
 from genomeos.predict.enhancer_target import Context, load_cached
 from genomeos.results import save_result
+
+
+def beat(name: str, msg: str | None = None) -> None:
+    """Proof of life for this chromosome's job and for the genome job that may be running it."""
+    heartbeat(name)
+    if os.environ.get("GENOMEOS_JOB"):
+        heartbeat(os.environ["GENOMEOS_JOB"])
+    if msg:
+        print(msg, flush=True)
 
 
 def main() -> int:
@@ -40,7 +50,11 @@ def main() -> int:
             keep.append(e)
             last_end = e.end
     t0 = time.time()
-    stats, cost = phylop_over_blocks(chrom, intervals)
+    stats, cost = phylop_over_blocks(
+        chrom,
+        intervals,
+        progress=lambda d, n, b: beat(name, f"{chrom}: phyloP {d}/{n} blocks, {b / 1e6:.0f} MB"),
+    )
     print(f"{chrom}: phyloP over {len(keep)} VISTA elements in {time.time() - t0:.0f} s ({cost})", flush=True)
     rows = vista.annotate(ctx, keep, stats)
     if not args.no_model:
@@ -51,7 +65,7 @@ def main() -> int:
             adapter = AlphaGenomeAdapter()
             scorer = None
             for i, row in enumerate(rows, 1):
-                heartbeat(name)
+                beat(name)
                 while True:
                     try:
                         if scorer is None and load_cached(chrom, row["id"]) is None:

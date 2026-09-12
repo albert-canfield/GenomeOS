@@ -1,6 +1,6 @@
 {
   "result": "clinvar_pathogenic_summary",
-  "date": "2026-09-11",
+  "date": "2026-09-12",
   "source": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz",
   "rows_read": 4469028,
   "rows_kept": 346571,
@@ -35,7 +35,7 @@
     "chrY": 52,
     "chrM": 189
   },
-  "seconds": 21,
+  "seconds": 23,
   "kept_where": "data/knowledge/clinvar/pathogenic.tsv.gz",
   "evidence": "curated: ClinVar (NCBI) pathogenic and likely pathogenic assertions, with their review status"
 }
