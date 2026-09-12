@@ -111,6 +111,33 @@ unphased sequence, so it does not see a diploid individual.
    across chromosomes, which is the point: nine in ten predicted coding
    targets fall inside the node the element sits in, and the nearest-TSS
    heuristic names the wrong gene for three in ten.
+
+   **The constrained ones first (2026-09-12).** The composition budget
+   (docs/ATTRIBUTION.md) found that the regulatory tier holds 8.1 Mb of
+   constrained sequence genome-wide with no target named. So the deletion
+   tool was pointed at constraint: `scripts/constrained_targets.py` ranks a
+   chromosome's distal enhancers by their phyloP-constrained fraction
+   (Zoonomia, 37 MB of bigWig ranges for chr21's 6,618 elements) and scores
+   the 100 most constrained (all ≥ 20% constrained bases; 412 qualify)
+   against the uniform sample of 200 (`constrained_targets_chr21.json`):
+
+   | chr21 distal enhancers | constrained top 100 | uniform 200 |
+   |---|---|---|
+   | some gene moves by ≥ 0.1 log2 | 73% | 63.5% |
+   | strong effect (≥ 0.3) among those named | 25 of 73 (34%) | 40 of 127 (31%) |
+   | silencer-like | 28 of 73 | 43 of 127 |
+   | coding target = nearest TSS in the node | 60.9% | 67.8% |
+   | coding target inside the node | 78.1% | 87.4% |
+
+   Constraint predicts function: a constrained enhancer names a gene more
+   often and the strongest effects are there (a 46%-constrained element
+   moving the testis lncRNA LINC00945 by −1.2 log2; KCNE1, SIM2). It also
+   reaches further: the constrained elements land beyond the CTCF-only node
+   twice as often as the uniform ones (22% against 13%), which reads as the
+   long-range, conserved enhancers being exactly the ones the proxy
+   boundary cuts off. That is the attribution the budget asked for, one
+   chromosome in: the constrained regulatory tier is where the targets are
+   worth naming, and the tool names them for three in four.
 3. **Splicing, at the resolution our grammar lacks** (built, feature c). Our
    learned donor and acceptor matrices reach about 90% recall at seven false
    hits per kilobase, which is why segments are parsed by grammar and never
