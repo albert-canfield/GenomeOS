@@ -148,6 +148,15 @@ fewer of them carry an eQTL at all, since constrained sequence carries fewer
 common variants (ALPHAGENOME.md "Against measured targets";
 `eqtl_targets.json`).
 
+Consequence is the weakest test by construction. GWAS lead variants sit in
+regulatory elements barely above a shifted control (1.1 to 1.2 times), a named
+target and a strong effect move it a few points the right way, and constrained
+elements hold fewer because selection removes the common variants a GWAS
+needs; ClinVar's non-coding pathogenic variants number a few dozen per set.
+The measured layers, VISTA for tissue, eQTL for target, lentiMPRA for
+activity, the reader for openness, are where the attribution is tested
+(ALPHAGENOME.md "Against consequence"; `consequence_targets.json`).
+
 The chromosomes sort themselves without being told. chrY and chrX are the
 controls: 0.66% and 0.88% constrained, fossils 27% and 73% of their space.
 The gene-dense chr17, chr19 and chr20 put half their space in the regulatory

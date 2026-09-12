@@ -871,6 +871,25 @@ in order. "Owner" is the session that holds the files today (see §7).
   deletion model was pointed at that tier in the first place. Where the
   predicted track is a GTEx tissue (101 elements) the eQTL for the same gene
   is significant in that tissue for 40%.
+- **Against consequence (2026-09-12, genomeos-fe).** GWAS Catalog lead
+  variants within 1 kb of an element, read against the same elements shifted
+  100 kb as chance (`attribution/gwas.py`, job `consequence_targets`,
+  `consequence_targets`): uniform elements hold one in 33.2% against 29.4%
+  shifted (1.13 times), the most constrained 37.4% against 30.8% (1.21), VISTA
+  47.5% against 42.9% (1.11). Within VISTA a named target raises it (50.6%
+  against 41.0% with none), a strong effect more (55.8%), and constrained
+  elements hold fewer (42.4% against 55.6%), the eQTL lesson again: selection
+  removes the common variants a GWAS needs. The traits are the polygenic ones
+  (height, BMI, blood pressure, type 2 diabetes, insomnia). The catalog's
+  mapped gene equals the node's nearest TSS for 63% of hits and the model's
+  target for 39%, which measures the catalog's own nearest-gene heuristic, not
+  truth. ClinVar pathogenic variants with a non-coding consequence sit in 20,
+  30 and 24 elements of the three sets; ClinVar's gene is the model's target
+  for 11, 20 and 19 of them and the node's for 13, 17 and 12. Reading:
+  consequence is the level where the regulatory attribution is least testable
+  today, barely above chance and moved a few points the right way by a named
+  target and a strong effect; the measured layers (VISTA, eQTL, lentiMPRA, the
+  reader) are where it is tested.
 - **Next.** 1. The blocks organised by the
   evidence that exists: CTCF node, reader open fraction per cell type,
   AlphaGenome enhancer target, repeat family, segmental duplication,
@@ -885,8 +904,9 @@ in order. "Owner" is the session that holds the files today (see §7).
   built and running, same cell against the model's own track and cross-cell
   reported apart (chr21: rank correlation 0.39 same-cell against 0.07
   cross-cell for K562, 0.35 against 0.13 for HepG2; the model's predicted
-  DNase higher in the active cell for 74% of 47 cell-specific elements); then
-  the GWAS catalog and ClinVar for consequence.
+  DNase higher in the active cell for 74% of 47 cell-specific elements); GWAS
+  and ClinVar done as enrichment tests with a shifted control, weak by
+  construction (above). What remains of step 3 is the lentiMPRA genome row.
   4. Closure
   at three levels: gene (open elements reproduce GTEx expression per tissue),
   cell (a deleted element moves its gene and the cell program; IMPC, DepMap),
