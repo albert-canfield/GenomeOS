@@ -364,9 +364,20 @@ then streams the biosource's deepest boundary file once into
 boundaries against the measured ones with the same comparison and random
 control the predicted contact map got (`genomeos/genome/hic.py`,
 `data/results/domains_<chrom>_hic_<biosource>.json`). Without the key the
-feature loads disabled and says so; checked 2026-09-12, blocked on the key
-only. ENCODE has no open Hi-C domain BEDs and the 3D Genome Browser's hg38
-TAD archive is no longer served, so 4DN is the source.
+feature loads disabled and says so. ENCODE has no open Hi-C domain BEDs and
+the 3D Genome Browser's hg38 TAD archive is no longer served, so 4DN is the
+source. The key went in on 2026-09-12 (the portal answers an authenticated
+download with a redirect to S3, and S3 refuses the portal's Authorization
+header, so the reader drops it on the way); chr21's 227 CTCF-only boundaries
+against five biosources, within 20 kb:
+
+| biosource (assay) | measured boundaries | inferred supported | at random | measured covered | median distance |
+|---|---|---|---|---|---|
+| GM12878 (in situ Hi-C, 4DNFINFT8NR9) | 557 | 58% | 42% | 27% | 15 kb |
+| H1-hESC (Micro-C, 4DNFIM86H1MI) | 149 | 24% | 13% | 36% | 49 kb |
+| K562 (in situ Hi-C, 4DNFI4EFYN3Q) | 93 | 14% | 8% | 34% | 99 kb |
+| HepG2 (in situ Hi-C, 4DNFIFH6XF5T) | 93 | 15% | 8% | 37% | 99 kb |
+| IMR-90 (dilution Hi-C, 4DNFIOSQFOPV) | 126 | 12% | 11% | 22% | 70 kb |
 
 ## Measured enhancers: VISTA (2026-09-12)
 

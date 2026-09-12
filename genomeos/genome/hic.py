@@ -48,6 +48,20 @@ def status() -> dict[str, Any]:
     }
 
 
+class _DropAuthOnRedirect(urllib.request.HTTPRedirectHandler):
+    """4DN answers an authenticated download with a redirect to S3; S3 refuses a request that still carries
+    the portal's Authorization header, so the header is dropped when the redirect leaves the portal's host."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: PLR0913
+        new = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if (
+            new is not None
+            and urllib.parse.urlparse(newurl).netloc != urllib.parse.urlparse(req.full_url).netloc
+        ):
+            new.remove_header("Authorization")
+        return new
+
+
 def _get(
     url: str, auth: tuple[str, str] | None = None, accept: str = "application/json", timeout: int = 120
 ) -> bytes:
@@ -56,7 +70,8 @@ def _get(
         token = base64.b64encode(f"{auth[0]}:{auth[1]}".encode()).decode()
         headers["Authorization"] = f"Basic {token}"
     req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=timeout) as r:  # noqa: S310
+    opener = urllib.request.build_opener(_DropAuthOnRedirect())
+    with opener.open(req, timeout=timeout) as r:  # noqa: S310
         return r.read()
 
 

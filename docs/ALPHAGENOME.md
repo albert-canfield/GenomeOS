@@ -368,6 +368,20 @@ unphased sequence, so it does not see a diploid individual.
    conclusion is that node *content* is what the project has evidence for
    (the enhancer and mouse results) while node *edges* remain a proxy that
    neither this prediction nor, without Hi-C, a measurement has confirmed.
+
+   **Against measured boundaries (2026-09-12).** With the 4DN key in place,
+   `genomeos domains --chrom chr21 --hic B` holds the same 227 CTCF-only
+   boundaries against 4DN's own boundary calls (DATA.md has the table).
+   Against GM12878's deep in situ Hi-C (557 boundaries on chr21) 58% of the
+   inferred boundaries sit within 20 kb of a measured one, against 42% at
+   random, median distance 15 kb, and 27% of the measured boundaries have
+   an inferred one; the thinner call sets (H1-hESC Micro-C 149 boundaries,
+   K562 and HepG2 93, IMR-90 126) agree at 1.1 to 1.9 times chance. That is
+   a clearer signal than the predicted contact map gave (37% against 28%),
+   in the direction the node model needs, and still a proxy: the deepest
+   measurement finds a boundary near six in ten CTCF-only edges and the
+   CTCF-only edges find one in four of its boundaries. The edges stay at
+   0.4; the measured file is now one command away for any biosource 4DN has.
 5. **The reader, predicted where it is not measured** (built, 2026-09-12).
    Reader v1 reads ENCODE DNase peaks per biosample, so it only knows the cell
    types ENCODE assayed. Predicted DNase extends "which elements are open in

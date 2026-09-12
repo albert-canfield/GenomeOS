@@ -24,3 +24,20 @@ def test_load_and_compare(tmp_path, monkeypatch):
         assert "account key" in str(ex)
     else:  # pragma: no cover
         raise AssertionError("a download without a key must be refused before any request")
+
+
+def test_authorization_is_dropped_when_the_redirect_leaves_the_portal():
+    import urllib.request
+
+    from genomeos.genome.hic import _DropAuthOnRedirect
+
+    h = _DropAuthOnRedirect()
+    req = urllib.request.Request(
+        "https://data.4dnucleome.org/files/x", headers={"Authorization": "Basic abc"}
+    )
+    to_s3 = h.redirect_request(
+        req, None, 307, "Temporary Redirect", {}, "https://s3.amazonaws.com/b/x.bed.gz"
+    )
+    assert to_s3 is not None and not to_s3.has_header("Authorization")
+    same = h.redirect_request(req, None, 307, "Temporary Redirect", {}, "https://data.4dnucleome.org/files/y")
+    assert same is not None and same.has_header("Authorization")
