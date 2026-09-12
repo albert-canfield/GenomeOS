@@ -2,7 +2,17 @@
 
 import gzip
 
-from genomeos.knowledge.homology import LADDER, PROXIES, RANK, STRATA, deepest, distil, place, stream
+from genomeos.knowledge.homology import (
+    LADDER,
+    PROXIES,
+    RANK,
+    STRATA,
+    deepest,
+    distil,
+    place,
+    stream,
+    taxonomy_names,
+)
 
 HEADER = (
     "gene_stable_id\tprotein_stable_id\tspecies\tidentity\thomology_type\thomology_gene_stable_id\t"
@@ -99,3 +109,10 @@ def test_place_uses_proxies_for_the_nodes_ensembl_omits():
     assert place({"Eptatretus", "Cyclostomata", "Vertebrata", "Chordata", "Eukaryota"}) == "Vertebrata"
     # human's own list must not place a species at Homo; an unknown list places nothing
     assert place({"Homo", "Hominidae"}) == "Hominidae" and place({"Nothing"}) is None
+
+
+def test_taxonomy_names_strip_assembly_and_strain_suffixes():
+    assert taxonomy_names("bos_taurus") == ["bos_taurus"]
+    assert taxonomy_names("bos_taurus_gca963921495v1") == ["bos_taurus_gca963921495v1", "bos_taurus"]
+    assert taxonomy_names("mus_musculus_129s1svimj") == ["mus_musculus_129s1svimj", "mus_musculus"]
+    assert taxonomy_names("canis_lupus_familiaris") == ["canis_lupus_familiaris", "canis_lupus"]

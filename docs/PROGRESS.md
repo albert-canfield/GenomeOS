@@ -620,3 +620,23 @@ rs12913832, the eye-colour value, is constrained across mammals at the base
 (phyloP 3.41) and its kilobase is one Gnocchi does not score; the element 242
 bp downstream sits in a kilobase at Z 3.46. docs/GRAMMAR-BY-COMPARISON.md §6;
 two LESSONS rows; `tests/test_variation.py`.
+
+## 2026-09-12 — copies first: curated duplication over the unknown blocks
+
+Area J step 3. `genomeos duplications --chrom C` reads UCSC's curated
+segmental duplications (pairs over 1 kb at 90% identity or more) through the
+track API, two seconds a chromosome, and lays them over the budget's UNKNOWN
+blocks, the classifier's shared-k-mer pairs and the scored regulatory
+elements; all 24 chromosomes and the genome summary are committed. 64,216
+pairs cover 5.4% of the genome. The constrained_unknown tier, area I's real
+unknown, is 4.7% duplicated over the genome and one block in five of it is
+mostly a copy, concentrated on chrY (72%), chr21 (61%, 15 of 20 blocks) and
+chr22 (42%); the neutral tier is the most duplicated by bases (10.3%) and the
+regulatory tier the least (2.8%); 142 of 7,063 scored elements sit inside a
+duplication. A copy reads as constrained across mammals and unscored among
+people, which is the cause behind the two constraint axes disagreeing on
+those blocks. The shared-20-mer heuristic fired once genome-wide and was
+right; curated pairs replace it. Area J step 2 (origin per gene, age per
+library, paralogues from Ensembl Compara streamed once; `knowledge/homology.py`,
+`genomeos origin`) is built, tested and running. docs/GRAMMAR-BY-COMPARISON.md
+§7; one LESSONS row.

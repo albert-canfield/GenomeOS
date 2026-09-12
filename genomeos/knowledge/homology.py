@@ -30,6 +30,7 @@ import csv
 import gzip
 import io
 import json
+import re
 import time
 import urllib.request
 from collections import Counter
@@ -178,12 +179,16 @@ def classify_species(
     for i, sp in enumerate(sorted(species)):
         if sp in done and done[sp].get("stratum"):
             continue
-        try:
-            nodes = _rest(f"https://rest.ensembl.org/taxonomy/classification/{sp}")
+        done[sp] = {"stratum": None, "error": "no taxonomy match"}
+        for name in taxonomy_names(sp):
+            try:
+                nodes = _rest(f"https://rest.ensembl.org/taxonomy/classification/{name}")
+            except OSError as e:
+                done[sp] = {"stratum": None, "error": str(e)[:100]}
+                continue
             names = {x.get("scientific_name") for x in nodes} | {x.get("name") for x in nodes}
-            done[sp] = {"stratum": place(names), "nodes": sorted(n for n in names if n)}
-        except Exception as e:  # noqa: BLE001 - one species failing must not stop the pass
-            done[sp] = {"stratum": None, "error": str(e)[:100]}
+            done[sp] = {"stratum": place(names), "queried_as": name, "nodes": sorted(n for n in names if n)}
+            break
         if i % 10 == 0:
             cache.write_text(json.dumps(done, indent=0, sort_keys=True))
             if progress:
@@ -191,6 +196,22 @@ def classify_species(
         time.sleep(0.2)
     cache.write_text(json.dumps(done, indent=0, sort_keys=True))
     return done
+
+
+def taxonomy_names(species: str) -> list[str]:
+    """The names to try for a production name: as is, without an assembly or strain suffix, genus and species.
+
+    Ensembl names alternative assemblies `bos_taurus_gca963921495v1` and strains
+    `mus_musculus_129s1svimj`; the taxonomy knows `bos_taurus` and `mus_musculus`.
+    """
+    parts = species.split("_")
+    tries = [species]
+    stripped = re.sub(r"_gca\d+v\d+$", "", species)
+    if stripped != species:
+        tries.append(stripped)
+    if len(parts) > 2:
+        tries.append("_".join(parts[:2]))
+    return list(dict.fromkeys(tries))
 
 
 def ensembl_species() -> list[str]:

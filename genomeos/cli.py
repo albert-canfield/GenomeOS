@@ -1457,6 +1457,77 @@ def cmd_closure(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_duplications(args: argparse.Namespace) -> int:
+    """Segmental duplications over the UNKNOWN blocks: curated copy-and-paste (area J step 3)."""
+    from genomeos.genome.duplications import run_and_save
+    from genomeos.results import load_result
+
+    r = load_result(f"duplication_{args.chrom}") if args.cached else None
+    if r is None:
+        r = run_and_save(args.chrom)
+    print(
+        f"{args.chrom}: {r['pairs']:,} curated duplication pairs ({r['intra_chromosomal']:,} within the "
+        f"chromosome), {r['duplicated_bp'] / 1e6:.2f} Mb duplicated "
+        + (
+            f"({_pct(r['duplicated_fraction'])} of the chromosome)"
+            if r["duplicated_fraction"] is not None
+            else ""
+        )
+        + f"; identity bands young {r['bands']['young']}, middle {r['bands']['middle']}, "
+        f"old {r['bands']['old']}"
+    )
+    if r["by_tier"]:
+        print(
+            _table(
+                [
+                    {
+                        "tier": t,
+                        "blocks": v["blocks"],
+                        "Mb": f"{v['bp'] / 1e6:.2f}",
+                        "duplicated": _pct(v["duplicated_fraction"]),
+                        "mostly duplicated": v["blocks_mostly_duplicated"],
+                    }
+                    for t, v in r["by_tier"].items()
+                ],
+                ["tier", "blocks", "Mb", "duplicated", "mostly duplicated"],
+            )
+        )
+    sp = r.get("similar_to_pairs")
+    if sp:
+        print(
+            f"  the classifier's shared-k-mer pairs: {sp['pairs']} pairs, "
+            f"{sp['supported_by_curated_duplication']} supported by a curated duplication "
+            f"({_pct(sp['share'])})"
+        )
+    el = r.get("elements")
+    if el:
+        print(
+            f"  scored elements inside a duplication: {el['inside_a_duplication']} of {el['scored']} "
+            f"({_pct(el['share'])})"
+        )
+    top = sorted((b for b in r["blocks"] if b["pairs"]), key=lambda b: -b["duplicated_fraction"])[: args.top]
+    if top:
+        print(f"\nmost duplicated UNKNOWN blocks (top {len(top)}):")
+        print(
+            _table(
+                [
+                    {
+                        "locus": f"{args.chrom}:{b['start']:,}-{b['end']:,}",
+                        "kb": f"{(b['end'] - b['start']) / 1e3:.0f}",
+                        "tier": b["tier"],
+                        "duplicated": _pct(b["duplicated_fraction"]),
+                        "pairs": b["pairs"],
+                        "partner": b["partners"][0] if b["partners"] else "",
+                    }
+                    for b in top
+                ],
+                ["locus", "kb", "tier", "duplicated", "pairs", "partner"],
+            )
+        )
+    print(f"  [{r['evidence']['pairs']}; {r['cost']['seconds']} s]")
+    return 0
+
+
 def cmd_origin(args: argparse.Namespace) -> int:
     """Origin per gene and age per library from Ensembl Compara, streamed once (area J step 2)."""
     from genomeos.knowledge.homology import LADDER, STRATA
@@ -4056,6 +4127,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--cached", action="store_true", help="show the saved result instead of recomputing")
     p.add_argument("--top", type=int, default=12)
     p.set_defaults(fn=cmd_closure)
+
+    p = sub.add_parser(
+        "duplications", help="segmental duplications over the UNKNOWN blocks: curated copy-and-paste (UCSC)"
+    )
+    p.add_argument("--chrom", required=True)
+    p.add_argument("--cached", action="store_true", help="show the saved result instead of refetching")
+    p.add_argument("--top", type=int, default=10)
+    p.set_defaults(fn=cmd_duplications)
 
     p = sub.add_parser(
         "origin",

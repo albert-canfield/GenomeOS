@@ -84,6 +84,16 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   axis is real and its block-level form is noisy; the case is `inferred` at
   0.3 to 0.6, never a verdict (`variation_chr21`, `variation_chr15`).
 
+- The most constrained intergenic blocks are often copies: UCSC's curated
+  segmental duplications cover 4.7% of the constrained_unknown tier genome-wide
+  but 61% of it on chr21 (15 of 20 blocks), 72% on chrY and 42% on chr22, and
+  one block in five of the tier is mostly a copy. A duplicated block reads as
+  constrained across mammals because the alignment lands on its paralogue and
+  is unscored by gnomAD because variant mapping fails there, so the two axes
+  disagreeing is a duplication flag first. The classifier's shared-20-mer
+  `similar_to` fired once genome-wide (and was right): curated pairs replace
+  it, the heuristic stays as fallback (`duplication_genome_wide`).
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory

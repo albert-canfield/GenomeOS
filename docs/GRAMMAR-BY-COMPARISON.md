@@ -340,3 +340,50 @@ axes are reported side by side and never merged (D43); the case is
 `inferred` evidence at 0.3 to 0.6. What it changes for area I: the
 constrained_unknown blocks now carry a second fact, that people vary in
 them, which narrows what they can be.
+
+## 7. Step 3 built: duplication from curated data (2026-09-12)
+
+`genomeos duplications --chrom C` (`genome/duplications.py`; results
+`duplication_chr*` for all 24 chromosomes and `duplication_genome_wide`)
+reads UCSC's `genomicSuperDups`, the curated list of segmental duplications
+(pairs over 1 kb at 90% identity or more, with the partner locus and the
+fraction of matching bases), through the track API the way RepeatMasker is
+read, two seconds per chromosome, and lays it over the budget's UNKNOWN
+blocks, the classifier's shared-k-mer pairs and the scored elements.
+
+**The genome.** 64,216 pairs, 21,834 within their own chromosome, 166.9 Mb
+duplicated (5.4% of the genome); by identity 5,281 young pairs (≥ 98%,
+primate-era), 17,825 middle, 41,110 old. Duplicated fraction of the UNKNOWN
+tiers, bp-weighted, with the share of blocks that are mostly (≥ 50%) a copy:
+
+| tier | Mb | duplicated | blocks mostly duplicated |
+|---|---|---|---|
+| neutral | 73.3 | **10.3%** | 693 of 2,632 (26.3%) |
+| fossil | 328.5 | 8.5% | 1,240 of 7,302 (17.0%) |
+| constrained_unknown | 32.0 | 4.7% | **216 of 1,098 (19.7%)** |
+| structural | 229.7 | 3.6% | 56 of 238 |
+| regulatory | 345.2 | 2.8% | 689 of 15,536 (4.4%) |
+
+**What it changes for the real unknown.** One block in five of area I's
+constrained_unknown tier is mostly a copy of sequence elsewhere, and the
+share is a property of the chromosome: chrY 72%, chr21 61% (15 of 20
+blocks; the most constrained block of the chromosome, 51 kb at 5.50 Mb, is
+100% duplicated with eight partners, some on unplaced scaffolds), chr22
+42%, every other chromosome 11% or below. A duplicated block reads as
+constrained across mammals because the alignment lands on the paralogue,
+and is unscored by gnomAD because variant mapping fails in copies; the two
+axes disagreeing (§6) had a cause, and the block organiser now has it as
+`duplicated_fraction` per block. Copy first, attribute second.
+
+**The heuristic.** The UNKNOWN classifier's `similar_to` (shared 20-mers
+among the sixty largest blocks) fired once genome-wide, and that pair is a
+curated duplication. It was never wrong; it was silent. The curated pairs
+replace it as the duplication evidence and the heuristic stays as the
+fallback for a chromosome without the track (D20's order).
+
+**The elements.** 142 of 7,063 scored regulatory elements (2.0%) sit inside
+a duplication: regulatory code pasted twice, of which the deletion model
+scored one copy. They are listed per chromosome for the organiser.
+
+**Paralogues** (the gene-level copy-and-paste) come from the Compara stream
+of step 2 (§8), not from this track.
