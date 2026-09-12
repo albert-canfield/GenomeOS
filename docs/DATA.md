@@ -293,6 +293,20 @@ summaries with the rows the docs quote are committed (`vista_chr*.json`,
 `vista_genome_wide.json`). About 2,440 human elements, 1,267 positive and
 1,175 negative, none on chrY. Evidence class `experimental`.
 
+## Measured targets: GTEx v8 cis-eQTLs (2026-09-12)
+
+GTEx's single-tissue eQTL archive (`GTEx_Analysis_v8_eQTL.tar`, 1.56 GB, 49
+tissues) sits in a public Google Cloud bucket that answers range requests.
+`attribution/eqtl.py` reads the tar's member headers over ranges, streams
+each tissue's significant variant-gene pairs (71.5 million rows in all)
+through gzip without touching the disk, and keeps only the pairs whose
+variant falls inside (± 500 bp) an element a committed result carries a
+prediction for: one small TSV per tissue under `data/knowledge/gtex/`
+(git-ignored, 34 MB), resumable tissue by tissue. Nothing else of the
+archive is stored. `scripts/eqtl_targets.py` (job `eqtl_targets`) distils
+when the hits are missing and scores; `eqtl_targets.json` is committed.
+Variant ids are hg38 (`chr1_13550_G_A_b38`). Evidence class `experimental`.
+
 ## Optional: peptide/HLA binding predictors
 
 The therapeutic pipeline enumerates the peptides a mutation creates; whether

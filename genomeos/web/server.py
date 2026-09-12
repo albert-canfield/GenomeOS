@@ -877,6 +877,7 @@ class Api:
                 p.stem.split("_")[-1]: load_result(p.stem, rd) for p in sorted(rd.glob("vista_chr*.json"))
             },
             "vista_genome_wide": load_result("vista_genome_wide", rd),
+            "eqtl_targets": load_result("eqtl_targets", rd),
             "segments": [
                 {
                     "name": p.stem,

@@ -217,6 +217,14 @@ CATALOG["vista_genome_wide"] = {
     "complete": lambda root: _vista_chromosomes_done(root) >= 23,
     "auto_heal": True,
 }
+CATALOG["eqtl_targets"] = {
+    "argv": [sys.executable, "scripts/eqtl_targets.py"],
+    "describe": "GTEx eQTLs streamed once (1.4 GB, only the hits kept); both target callers judged.",
+    "total": None,
+    "result": "eqtl_targets",
+    "count": None,
+    "auto_heal": True,
+}
 for _c in CHROMOSOMES:
     CATALOG[f"fetch_{_c}"] = {
         "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--analyse", "--chrom", _c],

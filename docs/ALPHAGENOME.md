@@ -203,6 +203,38 @@ unphased sequence, so it does not see a diploid individual.
    cell-line tracks, so "some gene moves" is not "active at e11.5", and the
    deletion effect is a target finder, not an activity assay. The tissue is
    the part of the prediction the assay confirms.
+
+   **Against measured targets (2026-09-12).** GTEx's cis-eQTLs are the
+   measured answer to "which gene": a variant whose alleles go with a gene's
+   expression across hundreds of donors, per tissue. `attribution/eqtl.py`
+   streams GTEx v8's single-tissue archive (1.56 GB, 49 tissues, 71.5
+   million significant pairs) member by member over HTTP ranges in 135 s,
+   keeps the 295,139 pairs that fall inside or within 500 bp of an element
+   GenomeOS has a prediction for, and discards the rest (34 MB under
+   data/knowledge/gtex, local). `scripts/eqtl_targets.py` then asks, for
+   every element with an eQTL, whether the gene each attribution names is
+   one of the element's eGenes (`eqtl_targets.json`, job `eqtl_targets`):
+
+   | elements | with an eQTL | eGenes each | deletion target is an eGene | coding genes only | nearest coding TSS is an eGene | coding model vs node when they disagree |
+   |---|---|---|---|---|---|---|
+   | uniform samples (4,800) | 3,725 (78%) | 4.8 | 52.9% (2,372) | 71.7% (1,851) | 66.2% (3,725) | 364 vs 309 of 554 |
+   | most constrained (2,305) | 1,394 (60%) | 4.2 | 44.8% (1,054) | 56.0% (921) | 54.9% (1,394) | 148 vs 154 of 292 |
+
+   Read with the model's universe in mind. Asked for any gene, the deletion
+   model names an eGene for half the elements; the node's nearest coding TSS
+   for two thirds. Asked for a coding gene, the same comparison the enhancer
+   deletions were held to, the model is right for 71.7% against 66.2% on the
+   uniform sample, and where the two disagree it wins 364 to 309; on the
+   constrained tier the two are level. The gap between "any gene" and
+   "coding" is the model naming lncRNAs and pseudogenes that GTEx has little
+   power to test, not evidence that those calls are wrong, and the 4.8
+   eGenes per element mean "is an eGene" is a loose bar that both callers
+   clear more often than a random neighbour would. The tissue is harder: for
+   the 101 elements whose predicted track is a GTEx tissue, that tissue is
+   one where the eQTL for the same gene is significant in 40%. Constrained
+   elements carry eQTLs less often (60% against 78%): where selection keeps
+   the sequence, the common variants an eQTL needs are fewer, which is why
+   the deletion model was pointed there in the first place.
 3. **Splicing, at the resolution our grammar lacks** (built, feature c). Our
    learned donor and acceptor matrices reach about 90% recall at seven false
    hits per kilobase, which is why segments are parsed by grammar and never
