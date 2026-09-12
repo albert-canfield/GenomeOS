@@ -68,6 +68,36 @@ class SegDup:
         return cls(r[0], r[1], r[2], r[3], r[4], r[5], r[6])
 
 
+def rows_path(chrom: str, results_dir: Path = RESULTS_DIR) -> Path:
+    return results_dir / f"superdups_{chrom}.bed.gz"
+
+
+def save_rows(chrom: str, dups: list[SegDup], results_dir: Path = RESULTS_DIR) -> Path:
+    """The curated pairs as a local compressed BED (raw track rows stay out of the repository)."""
+    import gzip
+
+    p = rows_path(chrom, results_dir)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(p, "wt") as fh:
+        for d in dups:
+            fh.write("\t".join(str(x) for x in d.as_row()) + "\n")
+    return p
+
+
+def load_rows(chrom: str, results_dir: Path = RESULTS_DIR) -> list[SegDup]:
+    import gzip
+
+    p = rows_path(chrom, results_dir)
+    if not p.exists():
+        return []
+    out = []
+    with gzip.open(p, "rt") as fh:
+        for line in fh:
+            s, e, oc, os_, oe, fm, st = line.rstrip("\n").split("\t")
+            out.append(SegDup(int(s), int(e), oc, int(os_), int(oe), float(fm), st))
+    return out
+
+
 def fetch(chrom: str, timeout: int = 300) -> list[SegDup]:
     req = urllib.request.Request(
         UCSC.format(chrom=chrom), headers={"User-Agent": "GenomeOS/0.9 (duplications)"}
@@ -244,7 +274,9 @@ def elements_of(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict]:
 
 def run_and_save(chrom: str, results_dir: Path = RESULTS_DIR, dups: list[SegDup] | None = None) -> dict:
     t0 = time.time()
-    dups = dups if dups is not None else fetch(chrom)
+    if dups is None:
+        dups = load_rows(chrom, results_dir) or fetch(chrom)
+    save_rows(chrom, dups, results_dir)
     budget = load_result(f"budget_{chrom}", results_dir) or {}
     unknown = load_result(f"unknown_{chrom}", results_dir) or {}
     out = summarise(
@@ -258,7 +290,7 @@ def run_and_save(chrom: str, results_dir: Path = RESULTS_DIR, dups: list[SegDup]
     out.update(
         {
             "chrom": chrom,
-            "rows": [d.as_row() for d in dups],
+            "rows_file": str(rows_path(chrom, results_dir)),
             "row_fields": ["start", "end", "other_chrom", "other_start", "other_end", "frac_match", "strand"],
             "bands_definition": {"young": f">= {YOUNG}", "middle": f"{OLD} to {YOUNG}", "old": f"< {OLD}"},
             "evidence": EVIDENCE,

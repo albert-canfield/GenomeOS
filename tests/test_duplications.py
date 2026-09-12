@@ -114,3 +114,24 @@ def test_distil_sums_chromosomes(tmp_path):
     assert s["similar_to_pairs"] == {"pairs": 2, "supported": 2, "share": 1.0}
     assert s["elements"] == {"scored": 200, "inside": 4, "share": 0.02}
     assert s["per_chromosome"]["chrA"]["constrained_unknown_duplicated"] == 0.6
+
+
+def test_rows_round_trip_and_run_without_network(tmp_path):
+    import json
+
+    from genomeos.genome.duplications import load_rows, run_and_save, save_rows
+
+    dups = [SegDup(10, 20, "chr9", 100, 200, 0.97, "+")]
+    save_rows("chrT", dups, tmp_path)
+    assert load_rows("chrT", tmp_path) == dups
+    (tmp_path / "budget_chrT.json").write_text(
+        json.dumps(
+            {
+                "chromosome_length": 1000,
+                "blocks": [{"start": 0, "end": 50, "length": 50, "class": "x", "guess": {"tier": "neutral"}}],
+            }
+        )
+    )
+    r = run_and_save("chrT", tmp_path)  # reads the saved rows, no fetch
+    assert "rows" not in r and r["rows_file"].endswith("superdups_chrT.bed.gz") and r["pairs"] == 1
+    assert r["blocks"][0]["duplicated_fraction"] == 0.2 and (tmp_path / "duplication_chrT.json").exists()
