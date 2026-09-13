@@ -31,20 +31,19 @@ def test_compact_keeps_the_fields_the_closure_reads():
     assert c["predicted_by_cell"] == {"K562": -0.1} and "genes" not in c and c["inferred"] is None
 
 
-def test_the_watchdog_cuts_off_a_request_that_never_returns():
-    import signal
+def test_the_pacer_holds_every_worker_and_escalates():
     import time
 
-    signal.signal(signal.SIGALRM, eta._hang)
-    signal.setitimer(signal.ITIMER_REAL, 0.05)
-    try:
-        try:
-            time.sleep(5)
-        except eta.HungError as ex:
-            assert "no answer in" in str(ex)
-        else:
-            raise AssertionError("the alarm did not fire")
-    finally:
-        signal.setitimer(signal.ITIMER_REAL, 0)
-    # a hang is not a quota answer, so the loop's generic branch retries it
-    assert eta.retry_seconds("Hung: no answer in 300s") is None
+    p = eta.Pacer(patience=0.05, long_sleep=7200)
+    held = p.hold(1)
+    assert 0 < held <= 1 and p.waits == 1
+    time.sleep(0.06)
+    held = p.hold(1)  # still refusing after the patience: the long sleep takes over
+    assert held > 3600 and p.waits == 2
+    p.clear()
+    assert p.since is None
+
+
+def test_a_hang_is_not_a_quota_answer():
+    assert eta.retry_seconds("DeadlineExceeded: no answer") is None
+    assert eta.retry_seconds('RESOURCE_EXHAUSTED details = "Quota exceeded; retry in 30s"') == 30

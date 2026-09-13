@@ -248,12 +248,15 @@ for _c in CHROMOSOMES:
     if _c == "chrM":
         continue
     CATALOG[f"enhancer_targets_all_{_c}"] = {
-        "argv": [sys.executable, "scripts/enhancer_targets_all.py", "--chrom", _c],
-        "describe": f"AlphaGenome: every enhancer in a {_c} node deleted, effect per cell line; quota paced.",
+        "argv": [sys.executable, "scripts/enhancer_targets_all.py", "--chrom", _c, "--workers", "8"],
+        "describe": f"AlphaGenome: every enhancer in a {_c} node deleted, effect per cell line; 8 at a time.",
         "total": _all_elements_total(Path("."), _c) or (12139 if _c == "chr21" else None),
         "result": f"enhancer_targets_all_{_c}",
         "count": lambda r: int(r.get("scored", 0)),
-        "auto_heal": True,
+        # not auto-healed: each chromosome spends the shared quota and their order matters, so restarts
+        # belong to whoever is sequencing them (scripts/enhancer_targets_all_chain.py), not to a
+        # supervisor tick that would start a chromosome nobody asked for on the next `serve` restart
+        "auto_heal": False,
     }
 CATALOG["consequence_targets"] = {
     "argv": [sys.executable, "scripts/consequence_targets.py"],
