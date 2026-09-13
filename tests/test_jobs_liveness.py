@@ -64,3 +64,24 @@ def test_stalled_and_heal(tmp_path, monkeypatch):
     finally:
         sleeper.kill()
         sleeper.wait()
+
+
+def test_a_zombie_is_not_alive(monkeypatch):
+    """A process killed but not reaped answers signal 0; the registry must not call that running."""
+    import os
+
+    from genomeos import jobs
+
+    monkeypatch.setattr(jobs, "_is_zombie", lambda pid: True)
+    assert jobs._alive(os.getpid()) is False
+    monkeypatch.setattr(jobs, "_is_zombie", lambda pid: False)
+    assert jobs._alive(os.getpid()) is True
+    assert jobs._alive(None) is False
+
+
+def test_is_zombie_reads_a_live_process_as_not_a_zombie():
+    import os
+
+    from genomeos import jobs
+
+    assert jobs._is_zombie(os.getpid()) is False

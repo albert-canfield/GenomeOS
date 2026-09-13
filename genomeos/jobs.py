@@ -249,7 +249,7 @@ for _c in CHROMOSOMES:
         continue
     CATALOG[f"enhancer_targets_all_{_c}"] = {
         "argv": [sys.executable, "scripts/enhancer_targets_all.py", "--chrom", _c, "--workers", "16"],
-        "describe": f"AlphaGenome: every enhancer in a {_c} node deleted, effect per cell line; 16 at a time.",
+        "describe": f"AlphaGenome: every enhancer in a {_c} node deleted, effect per cell; 16 at a time.",
         "total": _all_elements_total(Path("."), _c) or (12139 if _c == "chr21" else None),
         "result": f"enhancer_targets_all_{_c}",
         "count": lambda r: int(r.get("scored", 0)),
@@ -322,15 +322,28 @@ def _meta_path(name: str) -> Path:
     return JOBS_DIR / f"{name}.json"
 
 
+def _is_zombie(pid: int) -> bool:
+    """A killed child whose parent has not reaped it: still answers signal 0, runs nothing."""
+    try:
+        out = subprocess.run(  # noqa: S603, S607 - ps is the portable way to read a process state
+            ["ps", "-o", "state=", "-p", str(pid)], capture_output=True, text=True, timeout=5, check=False
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return out.stdout.strip().startswith("Z")
+
+
 def _alive(pid: int | None) -> bool:
-    """Is a job process started by any earlier server or shell still running?"""
+    """Is a job process started by any earlier server or shell still running? A zombie is not: a job
+    started through the registry by a driver that never waits leaves one behind, and counting it as
+    running refuses every restart of that chromosome (chr19, 2026-09-13)."""
     if not pid:
         return False
     try:
         os.kill(pid, 0)
     except (ProcessLookupError, PermissionError):
         return False
-    return True
+    return not _is_zombie(pid)
 
 
 STALL_AFTER = 20 * 60  # seconds without a heartbeat or a log line before a running job counts as stalled
