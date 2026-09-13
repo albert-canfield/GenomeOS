@@ -1,10 +1,10 @@
 # The 98%: attributing function to the non-coding genome
 
 Area I of ROADMAP.md. Code: `genomeos/attribution/` (`bigwig.py`, `constraint.py`,
-`budget.py`, `organise.py`, `candidates.py`, `unknown_scoring.py`), `scripts/budget_genome_wide.py`,
-`scripts/syntax_candidates.py`, `genomeos budget`. Results:
-`data/results/budget_<chrom>.json`, `budget_genome_wide.json`,
-`syntax_candidates_genome_wide.json`, `unknown_scoring_chr21.json`.
+`budget.py`, `organise.py`, `candidates.py`, `unknown_scoring.py`, `lexicon.py`),
+`scripts/budget_genome_wide.py`, `scripts/syntax_candidates.py`, `scripts/lexicon.py`,
+`genomeos budget`. Results: `data/results/budget_<chrom>.json`, `budget_genome_wide.json`,
+`syntax_candidates_genome_wide.json`, `unknown_scoring_chr21.json`, `lexicon_<chrom>.json`.
 
 ## The question, and the house
 
@@ -578,6 +578,168 @@ readings of the candidate section. The closure's replication on a third chromoso
 no quota, since chr19 is complete. What is weak: one chromosome, and a small one with no
 syntax block; the cell panel of four lines; and an element counted as over unknown space
 when any base of it touches a block.
+
+## The lexicon: the genome's units at every scale, with their nulls (2026-09-13)
+
+Albert's brief: treat the genome as a maths problem. Take its units from small to big, put
+them in one index with statistics, and make every count carry its expectation. Then ask two
+questions of it. Is the fossil tier a library for its node? Does the index separate syntax
+from value slots? Code: `attribution/lexicon.py`, run by `scripts/lexicon.py chr21 chr22`,
+with no model call and nothing streamed. The index itself is
+`data/knowledge/lexicon/lexicon_<chrom>.json.gz` (git-ignored). The committed summaries are
+`data/results/lexicon_chr21.json` and `lexicon_chr22.json`.
+
+**Schema.** One index per chromosome, so the genome is added one chromosome at a time.
+
+- **Levels.**
+  1. `kmers`: every 6-mer counted in each of 13 contexts, against an order-2 Markov chain
+     fitted inside the same context.
+  2. `seeds`: the data-driven vocabulary. These are the 2,000 most frequent exact 16-mers
+     occurring at least 50 times, extended by consensus and joined into families when their
+     occurrences co-occur at a fixed offset.
+  3. Curated units: RepeatMasker subfamilies and families (simple repeats and low complexity
+     left out), cCRE classes, GENCODE CDS and exons, segmental duplications, and the JASPAR
+     sites the motif runs recorded.
+  4. UNKNOWN blocks with class, budget tier and human-axis case.
+  5. CTCF nodes.
+  6. Libraries with at least five coding genes on the chromosome.
+- **The 13 contexts.** Each base gets one context, painted in rising priority: tier of the
+  UNKNOWN block, gene body, cCRE class, exon, CDS. The contexts are cds, utr_or_exon,
+  exon_noncoding, promoter_like, enhancer_like, ctcf_only, intron, one per budget tier
+  (unknown_structural, unknown_fossil, unknown_regulatory, unknown_constrained,
+  unknown_neutral) and other.
+- **What every unit records.**
+  - Occurrences (sampled to 400 for a seed, by one pseudo-random key per 256-base bin shared
+    by all seeds, so the seeds of one segment keep the same loci) and the context of each.
+  - Composition: the repeat share.
+  - Conservation: the share of its bases inside a 100-vertebrate conserved element.
+  - The human axis: the share of its measured bases in blocks whose Gnocchi kilobases pass
+    variation.py's bar, and the share measured at all.
+  - The tiers and cases of the blocks it falls in, and its overlap with the 69 candidates.
+  - A context-enrichment table.
+- **The background model.** Windows of 10 kb carry a GC bin (5) and a repeat-share bin (4),
+  giving 20 strata.
+  - A unit's expected count in a context is its own density inside each stratum spread over
+    that context's bases in the stratum.
+  - Its expected conservation is the conserved share of the same context inside the same
+    strata.
+  - Its expected human share is the share over measured bases of the same strata.
+  - Tails are Poisson and are taken on occurrence-equivalents (bases divided by the mean
+    occurrence length), because the bases of one occurrence are not independent draws.
+  - Every family of tests is corrected by Benjamini-Hochberg at 5% and its size is reported.
+  - A unit that paints a context (a cCRE class, the CDS) is not tested in it.
+  - A JASPAR site is also read against the rest of its own element, because the motif runs
+    only record sites inside the constrained and enhancer targets.
+
+**Two errors caught before any number was read.**
+1. The first Poisson tail summed the lower tail from exp(-expected). That underflows to zero
+   above an expectation of about 745, so every large count came back with p = 1.0.
+2. The first seed sample was independent per seed. That broke the co-occurrence the families
+   are found by: families went from 29 to 288 with it and back to 32 with the shared key.
+
+Both are now tests.
+
+**The numbers, chr21 then chr22.**
+
+- **Size.** 3,143 and 3,098 units: 1,022 and 962 subfamilies, 46 families each, 67 and 82
+  JASPAR factors, 2,000 seeds each. 446 and 635 blocks, 228 and 247 nodes, 16 and 33
+  libraries.
+- **Context enrichment.** 22,076 and 22,795 tests; 2,172 and 2,279 pass at a threshold of
+  0.0049. The strongest with at least ten occurrences are known biology or known structure:
+  - U6 snRNA copies in non-coding exons (18.6x and 17.6x);
+  - the (CATTC)n satellite in the structural tier (17x);
+  - (GA)n in promoter-like elements (23.8x on chr21);
+  - L1MB2 in chr21's constrained unknown (29 against 1.24);
+  - JASPAR sites in enhancer-like elements (8x to 10x). Those sites were recorded only
+    inside elements, so that enrichment is their selection, not a finding.
+- **k-mers.** 52,411 and 52,568 tests over the contexts; 10,377 and 10,096 pass BH, and
+  1,168 and 1,317 are also twofold over the Markov expectation. The top five per context
+  contain CG in 60 of 65 words on chr21 and 49 of 65 on chr22, in every context. An order-2
+  chain fitted over a whole context cannot absorb CpG islands, which cluster, so at this
+  depth the k-mer level records that heterogeneity and no vocabulary. Poisson on counts of
+  thousands is overdispersed besides. **Negative as a lexicon; kept as a level.**
+- **Seeds.** The vocabulary found from sequence is the repeat library.
+  - 1,965 of chr21's 2,000 seeds and 1,980 of chr22's lie at least half in RepeatMasker, and
+    every other one is a tandem word of period six or less. On neither chromosome is there a
+    recurring 16-mer that is neither.
+  - The largest family, 1,360 and 1,004 seeds, is the alpha satellite (span capped at 135 by
+    the extension reach). The next ones are Alu and L1 pieces.
+  - **Negative:** at 50 occurrences and the top 2,000 words, no unannotated recurring
+    segment exists on these two chromosomes.
+
+**Question 1, the fossil tier as a library for its node.**
+
+- **Within-node similarity.** 104 fossil-tier blocks with at least 500 repeat bases on
+  chr21 (19 nodes holding two or more) and 106 on chr22 (20 nodes).
+  - Within a node the mean cosine of subfamily composition is 0.089 against 0.071 between
+    nodes (chr21), and 0.178 against 0.100 (chr22).
+  - Against a label permutation inside repeat-base strata: null 0.069 and 0.092, p 0.044
+    and 0.001, Fisher-combined p 0.0005.
+  - Against the same partition shifted along the chromosome, which keeps node sizes and
+    contiguity: null 0.088 and 0.142, p 0.47 and 0.11, combined p 0.21.
+  - Fossils of one node are alike because neighbours are alike. The CTCF partition adds
+    nothing to proximity. **Negative.**
+- **Link to the libraries of the node's genes.**
+  - 772 and 995 library by subfamily tests; 4 and 5 pass BH.
+  - Random gene sets of the same sizes pass 7 to 16 (chr21) and 8 to 23 (chr22) in ten
+    draws each.
+  - The real libraries pass fewer pairs than random gene sets. **Negative.**
+
+**Question 2, syntax against value slots.** A unit is syntax when it is held across species
+(conserved share at least 0.10) and constrained among people (human share at least 0.25).
+It is a value slot when held but free among people, or free on both axes, while present in
+at least four contexts with 100 occurrences and conserved above its neighbourhood.
+
+- **Classes.** chr21 then chr22: 2,445 and 2,395 units tested; syntax 21 and 22, relaxed 16
+  and 8, recent 271 and 443, tolerant 764 and 1,277, unmeasured 1,373 and 645 (the
+  satellite seeds of the structural tier, which Gnocchi does not cover).
+- **Syntax against the nulls.**
+  - 12 and 12 survive the context-matched conservation null (26 and 23 pass it at all, of
+    2,445 and 2,395 tests).
+  - 10 and 10 of those are JASPAR factors that then fail against their own elements: 0 of
+    22 factors pass on either chromosome.
+  - Pooled, the sites are 0.335 conserved against 0.308 for the rest of their elements on
+    chr21 (p 0.050) and 0.336 against 0.310 on chr22 (p 0.045). Overlapping sites make both
+    p optimistic.
+  - What survives every null is two units per chromosome, none of them new: the
+    promoter-like cCREs (0.16 against 0.09 and 0.17 against 0.11), an LSU rRNA copy on
+    chr21's acrocentric arm (0.58 against 0.02), and chr22's (GATG)n tandem in
+    regulatory-tier blocks (0.11 against 0.025).
+- **Value slots.** 1 on chr21 (the hAT family, 0.126 conserved against 0.033 expected) and
+  0 on chr22.
+- **By tier.** Almost all syntax units sit in the regulatory tier (20 of 21, 22 of 22).
+  Their human case follows the case of their blocks, because the human axis is block-level.
+- **Candidates.** chr22's one candidate holds Alu, L1 and L2 pieces, all tolerant or recent.
+- **Verdict.** The index does not separate syntax from value slots at unit scale. It finds
+  the syntax already known (promoters), shows that a motif site's apparent conservation is
+  its element's, and has no resolution on the human axis. **Negative.** It is the resolution
+  of the axes that fails, not the idea. The human axis is a kilobase score attached to
+  blocks. Conservation is element membership, not Zoonomia's per-base phyloP; the brief
+  asked for phyloP and the index does not yet read it.
+
+**Cost of the genome-wide index.**
+- **Time and memory.** The chr21 and chr22 run took 135 s on one core with a peak resident
+  set of 1.03 GB: 1.38 to 1.39 s per Mb including both questions. That puts the 3.1 Gb
+  genome at about 71 minutes one chromosome at a time. Peak memory grows with the largest
+  chromosome, about 5 GB for chr1 by linear extrapolation.
+- **Disk.** The index is 8.9 to 9.4 kB per Mb gzipped, about 29 MB genome-wide under
+  data/knowledge. The committed summaries are 34 to 37 kB per chromosome, under 1 MB for
+  the 24.
+- **What would give the axes their resolution, not spent here:**
+  - per-base Zoonomia phyloP streamed from the bigWig by range requests (a local one-bit
+    constrained flag would cost about 390 MB uncompressed genome-wide);
+  - per-kilobase Gnocchi in place of the block summary;
+  - a genome-wide JASPAR scan at 0.95 (motifs.py's calibrated threshold) so sites stop
+    being a sample of selected elements.
+- **Per chromosome, not pooled.** Each chromosome's seed vocabulary is its own top 2,000,
+  so a genome-wide vocabulary needs the seed counts merged across chromosomes. That is
+  another pass of the same cost.
+
+**What is weak.** Two small chromosomes. Conservation by element membership rather than
+per-base phyloP. A human axis that is a property of blocks rather than units. Seeds capped
+at the top 2,000 per chromosome. JASPAR sites that are a sample of selected elements.
+Poisson tails that remain optimistic wherever occurrences cluster, which is why the library
+link carries its random-gene-set calibration.
 
 ## What comes next, in order
 

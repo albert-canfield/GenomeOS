@@ -1405,7 +1405,40 @@ in order. "Owner" is the session that holds the files today (see §7).
   as an instrument for the 98% after chr20 and spend the next quota on the
   constrained unknown and the candidates directly. ATTRIBUTION.md "What the
   whole-chromosome scoring bought the 98%".
-- **Next.** 1. What remains of the candidate reading: measured RNA (ENCODE
+- **The lexicon, chr21 and chr22 (2026-09-13, genomeos-i1).**
+  - **What it is.** One index of the genome's units at six levels, built per chromosome from
+    the sequence and the results on disk: k-mers per context, recurring 16-mer seeds and
+    their families, curated units, blocks, nodes and libraries. Every count carries a GC by
+    repeat-share stratified expectation, Poisson tails on occurrence-equivalents,
+    Benjamini-Hochberg and the number of tests.
+  - **Where it lives.** `attribution/lexicon.py` and `scripts/lexicon.py`; summaries in
+    `lexicon_chr21` and `lexicon_chr22`; the index under `data/knowledge/lexicon`.
+  - **Tests.** 22,076 and 22,795 context tests, 2,172 and 2,279 passing.
+  - **Seeds.** The vocabulary found from sequence is the repeat library: 1,965 and 1,980 of
+    the 2,000 seeds are RepeatMasker and the rest are tandem words, with no recurring
+    segment that is neither. **Negative.**
+  - **k-mers.** The top words are CpG words in every context, the heterogeneity an order-2
+    chain cannot absorb. **Negative as a lexicon.**
+  - **Fossils within a node.** They are alike against a label permutation (p 0.044 and
+    0.001) but not against the same partition shifted (p 0.47 and 0.11, combined 0.21):
+    proximity, not the CTCF node. **Negative.**
+  - **Fossils and the node genes' libraries.** 4 and 5 pairs pass against 7 to 16 and 8 to
+    23 for random gene sets. **Negative.**
+  - **Syntax against value slots.**
+    - 21 and 22 units are syntax by thresholds, and 12 and 12 survive the context-matched
+      null.
+    - Every JASPAR factor among them fails against its own element (0 of 22 pass; pooled,
+      0.335 against 0.308).
+    - What survives is known: promoter cCREs, one rRNA copy and one (GATG)n tandem.
+    - Value slots: 1 and 0. **Negative:** the axes lack the resolution. Conservation is
+      element membership, not per-base phyloP, and the human axis is block-level.
+  - **Genome-wide cost.** About 1.4 s per Mb (71 minutes for the genome on one core), a
+    5 GB peak for chr1, about 29 MB of index and under 1 MB of summaries. ATTRIBUTION.md
+    "The lexicon".
+- **Next.** 0. The lexicon's axes before its genome-wide build: per-base Zoonomia phyloP
+  and per-kilobase Gnocchi joined to every unit occurrence, and a genome-wide JASPAR scan
+  at 0.95, then Question 2 asked again on chr21 and chr22. The build of the other
+  chromosomes follows only if a unit separates. 1. What remains of the candidate reading: measured RNA (ENCODE
   total RNA-seq, as the closure reads it) over the 69 blocks and their
   controls, to test the 5 coding and 9 3'-extension readings; then, with the
   next quota (the recommendation above), the deletion of the 882 non-copy
