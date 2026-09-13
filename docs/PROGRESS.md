@@ -813,3 +813,4 @@ newest first with a filter and the full entry. It also holds the finished
 data jobs and this task log. `/api/work` and `/api/roadmap`;
 `tests/test_roadmap_work.py`. The roadmap stays the single plan and this card
 only reads it.
+- **The closure passes on a gene's whole regulatory input**: with every one of chr21's 12,139 enhancer elements scored per cell line (genomeos-8e) and `attribution/targets.py` following the committed summary to the local table, the gene-level closure reran with a fair judge (random tie-breaking, 1,000 permutations): the deletion on the cell's own track picks the most-expressed cell for 36% of 146 genes (null 25%, p 0.002), 41% of 141 when DNase-gated (p 0.001); the tissue-agnostic input stays at 30% (p 0.07); unexplained genes 43 to 9; 72 attributions rejected by name; the compiled chr21 program holds 5,174 elements and rules.

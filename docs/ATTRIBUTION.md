@@ -199,9 +199,11 @@ other organism programs.
   comment with the reader's view: in which cell types the node is open and in
   which it is silent.
 
-Chromosome 21 compiles to 747 entities (446 regions, 155 elements, 83 genes,
-63 domains) and 155 rules with 20 unknowns, and passes its three checks in
-0.13 s. Mean confidence is 0.62 for regions and 0.25 for elements, which is
+Chromosome 21 first compiled to 747 entities (446 regions, 155 elements, 83
+genes, 63 domains) and 155 rules with 20 unknowns, from the two samples; with
+every element scored it compiles to 5,972 entities (446 regions, 5,174 elements,
+193 genes, 159 domains) and 5,174 rules, still 20 unknowns, 2.7 MB, and passes
+its three checks in 0.26 s. Mean confidence is 0.62 for regions and 0.25 for elements, which is
 what the evidence supports and is stated rather than rounded up. A program that
 imports it can knock an element out, run the network, and see which gene moves,
 which is what the closure tests in the next section will do.
@@ -253,6 +255,30 @@ in a cell is set by its promoter and by the elements the two sampled runs never
 scored. An attribution of "this element, this gene" is not yet an attribution of
 "this cell". Scoring every element in a gene's node per cell, about 6,600 on
 chromosome 21 alone, is the self-hosted model's first job.
+
+### The closure passes on the whole input (2026-09-13)
+
+Every one of chromosome 21's 12,139 enhancer elements was then scored in
+AlphaGenome on the four cell lines' own tracks, and the closure reran on the same
+table with a fair judge: ties among cells broken at random rather than by cell
+order, and a null that permutes each gene's inputs across cells 1,000 times.
+
+| element input across the four cells | genes | most active cell is the most expressed | null | p |
+|---|---|---|---|---|
+| tissue-agnostic magnitude, DNase-gated | 138 | 30% | 25% | 0.07 |
+| the deletion on the cell's own track | 146 | 36% | 25% | 0.002 |
+| the cell's own score, DNase-gated | 141 | 41% | 25% | 0.001 |
+
+A gene's whole regulatory input, scored in the cell's own track and read where
+the cell's chromatin is open, picks the cell that makes the gene well above
+chance. Within a cell it carries too: open-promoter genes with activating input
+are expressed more often than those with no element in three of the four lines,
+and the unexplained genes fall from 43 to 9. The tissue-agnostic magnitude still
+fails, so the earlier negative was read correctly: one sampled element per gene
+cannot carry a cell, the whole input can. The effect is modest, a mean rank
+correlation of 0.19, and 72 attributions are rejected by name, S100B in K562
+first. Those are the list to read next, with the same test on a second
+chromosome.
 
 One measurement lesson on the way: IMR-90's ENCODE total RNA-seq carries its
 strand labels inverted (APP reads on the "plus" file), so the module probes each
@@ -324,9 +350,9 @@ candidates; the full join is recomputed on demand) and `organised_genome_wide.js
 
 ## What comes next, in order
 
-1. **Every element in a gene's node scored per cell**, not a sample, so the
-   closure judges a gene's whole regulatory input; the self-hosted model's
-   first job.
+1. **The whole-input closure on a second chromosome**, and the 72 rejected
+   attributions of chromosome 21 read one by one. Done for chromosome 21 on
+   2026-09-13: every element scored per cell, the closure passes (above).
 2. **The 69 syntax candidates read one by one**: which node, which gene next
    door, what AlphaGenome says of each in silico, and whether any is an
    unannotated exon (the segment parser over the block); then the reader's

@@ -31,7 +31,7 @@ from genomeos.coords import Strand
 from genomeos.genome.annotation import Annotation, default_gencode
 from genomeos.genome.reader import PROMOTER_WINDOW, PeakIndex, load_peaks
 from genomeos.genome.rna_measured import MeasuredRna
-from genomeos.results import load_result, save_result
+from genomeos.results import save_result
 
 CELLS = ("K562", "HepG2", "GM12878", "IMR-90")  # a reader and a total RNA-seq track exist for each
 EXPRESSED = 0.3  # mean covered fraction of the canonical exons from which a gene counts as made
@@ -64,31 +64,27 @@ def merge(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:
 
 
 def attributed_elements(chrom: str) -> dict[str, list[dict]]:
-    """Elements with a predicted coding target, by target symbol; the constrained run first."""
-    seen: set[str] = set()
+    """Elements with a predicted coding target, by target symbol; the whole-chromosome run first."""
+    from genomeos.attribution.targets import attributed
+
     by: dict[str, list[dict]] = {}
-    # the whole-chromosome scoring first when it exists, then the constrained and uniform samples
-    for name in ("enhancer_targets_all", "constrained_targets", "enhancer_targets"):
-        for e in (load_result(f"{name}_{chrom}") or {}).get("elements", []):
-            pc = e.get("predicted_coding") or {}
-            if not pc.get("gene") or e["id"] in seen:
-                continue
-            seen.add(e["id"])
-            sign = 1.0 if pc.get("action") == "activates" else -1.0
-            # per-cell: the deletion scored on the cell line's own track; a fall in expression on
-            # deletion (negative log2) means the element activates the gene in that cell
-            by_cell = {
-                c: -float(v) for c, v in (e.get("predicted_coding_by_cell") or {}).items() if v is not None
+    for e in attributed(chrom):
+        pc = e["predicted_coding"]
+        sign = 1.0 if pc.get("action") == "activates" else -1.0
+        # per-cell: the deletion scored on the cell line's own track; a fall in expression on
+        # deletion (negative log2) means the element activates the gene in that cell
+        by_cell = {
+            c: -float(v) for c, v in (e.get("predicted_coding_by_cell") or {}).items() if v is not None
+        }
+        by.setdefault(pc["gene"], []).append(
+            {
+                "id": e["id"],
+                "start": e["start"],
+                "end": e["end"],
+                "effect": sign * abs(pc["log2_fold_change"]),
+                "by_cell": by_cell,
             }
-            by.setdefault(pc["gene"], []).append(
-                {
-                    "id": e["id"],
-                    "start": e["start"],
-                    "end": e["end"],
-                    "effect": sign * abs(pc["log2_fold_change"]),
-                    "by_cell": by_cell,
-                }
-            )
+        )
     return by
 
 
@@ -250,7 +246,17 @@ def closure(
     }
 
 
-def judge(rows: list[dict], cells: list[str], seed: int = 0, key: str = "input") -> dict:
+def tie_fair_hit(inp: list[float], exp: list[float]) -> float:
+    """Probability that a random cell among the most active and a random cell among the most expressed
+    are the same cell."""
+    a = {i for i, v in enumerate(inp) if v == max(inp)}
+    b = {i for i, v in enumerate(exp) if v == max(exp)}
+    return len(a & b) / (len(a) * len(b))
+
+
+def judge(
+    rows: list[dict], cells: list[str], seed: int = 0, key: str = "input", permutations: int = 1000
+) -> dict:
     """The closure tests over the assembled gene by cell table, with `key` as the element input:
     `input` (DNase-gated, tissue-agnostic magnitude), `input_cell` (the cell's own deletion score) or
     `input_both`. A None input means the model has no score for that cell; the pair is left out."""
@@ -278,10 +284,12 @@ def judge(rows: list[dict], cells: list[str], seed: int = 0, key: str = "input")
                 x for x in c if x["promoter_open"] and x["input"] < 0
             ),
         }
-    # across cells: genes with elements whose input and expression both vary
+    # across cells: genes with elements whose input and expression both vary. Ties are broken fairly:
+    # a gene scores the probability that a random pick among its most-active cells and a random pick
+    # among its most-expressed cells land on the same cell, so no cell order can inflate the rate.
+    # The null permutes each gene's inputs across cells, the same gene set and the same tie rule.
     rng = random.Random(seed)
-    rhos, prom_rhos, argmax_hits, argmax_n = [], [], 0, 0
-    shuffled_hits = 0
+    rhos, prom_rhos, pairs = [], [], []
     for r in rows:
         if not r["elements"] or len(cells) < 3:
             continue
@@ -297,13 +305,18 @@ def judge(rows: list[dict], cells: list[str], seed: int = 0, key: str = "input")
             prho = spearman(prom, exp)
             if prho is not None:
                 prom_rhos.append(prho)
-            best_in = max(range(len(cells)), key=lambda i: inp[i])
-            best_ex = max(range(len(cells)), key=lambda i: exp[i])
-            argmax_n += 1
-            argmax_hits += int(best_in == best_ex)
-            sh = list(range(len(cells)))
-            rng.shuffle(sh)
-            shuffled_hits += int(sh[best_in] == best_ex)
+            pairs.append((inp, exp))
+    argmax_n = len(pairs)
+    observed = sum(tie_fair_hit(i, e) for i, e in pairs) / argmax_n if argmax_n else None
+    null = []
+    for _ in range(permutations if argmax_n else 0):
+        h = 0.0
+        for i, e in pairs:
+            y = i[:]
+            rng.shuffle(y)
+            h += tie_fair_hit(y, e)
+        null.append(h / argmax_n)
+    p_value = (sum(1 for h in null if h >= observed) + 1) / (len(null) + 1) if null else None
     rejected = []
     unexplained = []
     for r in rows:
@@ -325,8 +338,10 @@ def judge(rows: list[dict], cells: list[str], seed: int = 0, key: str = "input")
             "mean_rho_promoter_vs_expression": round(sum(prom_rhos) / len(prom_rhos), 3)
             if prom_rhos
             else None,
-            "most_active_cell_is_most_expressed": round(argmax_hits / argmax_n, 3) if argmax_n else None,
-            "same_under_shuffled_cells": round(shuffled_hits / argmax_n, 3) if argmax_n else None,
+            "most_active_cell_is_most_expressed": round(observed, 3) if observed is not None else None,
+            "same_under_shuffled_cells": round(sum(null) / len(null), 3) if null else None,
+            "p_value": round(p_value, 4) if p_value is not None else None,
+            "permutations": len(null),
             "chance": round(1 / len(cells), 3) if cells else None,
         },
         "rejected_attributions": rejected[:40],

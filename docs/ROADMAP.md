@@ -1045,9 +1045,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   domain, target and basis plus one `rule` (activates or inhibits) carrying
   the predicted magnitude as strength, the targets declared once; the 63 CTCF
   nodes those elements sit in, each with the reader's view as a comment (open
-  in which cell types, silent in which). chr21: 747 entities (446 regions,
-  155 elements, 83 genes, 63 domains), 155 rules, 20 unknowns, three `# test:`
-  lines that `bio test` passes in 0.13 s; predicted evidence capped at 0.7,
+  in which cell types, silent in which). chr21 from the two samples: 747
+  entities (446 regions, 155 elements, 83 genes, 63 domains), 155 rules, 20
+  unknowns, three `# test:` lines that `bio test` passes in 0.13 s (with every
+  element scored, 5,972 entities and 5,174 rules, see the closure below); predicted evidence capped at 0.7,
   mean confidence 0.62 for regions and 0.25 for elements, which is what the
   evidence supports. The non-coding space of a chromosome is now something
   the engine reads, not a table. Since 848abc6 (genomeos-bb's hunk) a region's
@@ -1221,10 +1222,40 @@ in order. "Owner" is the session that holds the files today (see §7).
   carries the copy flag too: a copy's region reads "copy, ..." in its role and
   the duplicated fraction and partner count in its note (116 of chr21's 446
   regions), with the checks and the unknown count unchanged.
-- **Next.** 1. Every element in a gene's node scored per cell, not a sample:
-  the closure needs a gene's whole regulatory input before it can judge it,
-  which is the self-hosted model's first job (about 6,600 elements on chr21).
-  2. The 69 syntax candidates read one by one: which node, which gene next
+- **The closure passes on a gene's whole regulatory input (2026-09-13).**
+  genomeos-8e's job scored every one of chr21's 12,139 enhancer elements in
+  AlphaGenome on the four cell lines' own tracks (102 minutes, no quota
+  answer; `enhancer_targets_all_chr21`, the table kept local, 5,174 elements
+  naming a coding gene), and the closure reran on the same gene by cell
+  table; `attribution/targets.py` follows the committed summary to that local
+  table, so no reader falls back to a sample. With 193 of the 221 genes now
+  carrying a median of 11 elements, the verdict turns. The judge was made
+  fair first: a tie among cells is broken at random rather than by cell
+  order, and the null permutes each gene's inputs across cells 1,000 times.
+
+  | element input across the four cells | genes | most active cell is the most expressed | null | p |
+  |---|---|---|---|---|
+  | tissue-agnostic magnitude, DNase-gated | 138 | 30% | 25% | 0.07 |
+  | the deletion on the cell's own track | 146 | **36%** | 25% | 0.002 |
+  | the cell's own score, DNase-gated | 141 | **41%** | 25% | 0.001 |
+
+  Within a cell the whole input now carries too: open-promoter genes with
+  activating input are expressed more often than those with no element in
+  K562 (68% against 55%), HepG2 (80% against 67%) and IMR-90 (79% against
+  57%), not in GM12878 (81% against 85%), and the unexplained genes fall from
+  43 to 9, all but one in GM12878. What passes is specific: the deletion
+  scored in the cell's own track, read where the cell's chromatin is open.
+  The tissue-agnostic magnitude still fails, which is the earlier negative
+  read correctly; a sample of one element per gene could not carry a cell,
+  the whole input can. The effect is modest (mean rank correlation 0.19) and
+  72 attributions are rejected by name (S100B in K562 with input 7.0 and no
+  expression, TFF1 in HepG2 and IMR-90, RIPK4 in IMR-90), which is the list
+  to read next. The compiled chr21 program now holds every attributed
+  element: 5,972 entities (446 regions, 5,174 elements, 193 genes, 159
+  domains), 5,174 rules, 20 unknowns, 2.7 MB, checked by `bio test` in 0.26 s.
+- **Next.** 1. The same whole-input closure on a second chromosome (chr22's
+  scoring has started in genomeos-79's chain), and the 72 rejected
+  attributions read one by one. 2. The 69 syntax candidates read one by one: which node, which gene next
   door, what AlphaGenome says of each in silico, and whether any is an
   unannotated exon (the segment parser over the block); the reader's openness
   on the element itself rather than its node. 3. The

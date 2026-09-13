@@ -353,7 +353,10 @@ def test_closure_helpers_and_judge():
     assert j["across_cells"]["genes_tested"] == 2 and j["across_cells"]["chance"] == pytest.approx(
         1 / 3, abs=1e-3
     )
-    assert j["across_cells"]["most_active_cell_is_most_expressed"] == 0.5  # G1 yes, G2 tie broken to B
+    # G1: most active and most expressed both A -> 1.0
+    # G2: inputs tie in B and C, expression peaks in C -> 0.5
+    assert j["across_cells"]["most_active_cell_is_most_expressed"] == 0.75
+    assert 0 < j["across_cells"]["p_value"] <= 1 and j["across_cells"]["permutations"] == 1000
     assert j["rejected_attributions"] == [{"gene": "G2", "cell": "B", "input": 0.5, "expression": 0.0}]
     assert j["unexplained_expression"] == [{"gene": "G3", "cell": "C", "expression": 0.8}]
 
@@ -544,3 +547,50 @@ def test_organise_reads_copies_first(tmp_path):
     assert d["chromosomes"] == 1 and d["real_unknown"]["blocks"] == 2
     assert d["by_tier"]["constrained_unknown"]["copies"] == 1
     assert organise("chrT", tmp_path)["copies"] == 1
+
+
+def test_targets_follow_the_summary_pointer(tmp_path):
+    """A committed summary whose elements live in a local table is followed, the whole-chromosome run
+    wins over the samples, and a missing table raises instead of reading as no elements."""
+    from genomeos.attribution.targets import attributed, run_elements
+
+    table = tmp_path / "all_chrT.json"
+    table.write_text(
+        json.dumps(
+            [
+                {"id": "E1", "start": 1, "end": 2, "predicted_coding": {"gene": "G1"}},
+                {"id": "E2", "start": 3, "end": 4, "predicted_coding": {}},
+            ]
+        )
+    )
+    (tmp_path / "enhancer_targets_all_chrT.json").write_text(
+        json.dumps({"complete": True, "elements_where": str(table)})
+    )
+    (tmp_path / "enhancer_targets_chrT.json").write_text(
+        json.dumps(
+            {
+                "elements": [
+                    {"id": "E1", "start": 1, "end": 2, "predicted_coding": {"gene": "OTHER"}},
+                    {"id": "E3", "start": 5, "end": 6, "predicted_coding": {"gene": "G3"}},
+                ]
+            }
+        )
+    )
+    assert len(run_elements("enhancer_targets_all", "chrT", tmp_path)) == 2
+    got = attributed("chrT", tmp_path)
+    assert [(e["id"], e["predicted_coding"]["gene"], e["origin"]) for e in got] == [
+        ("E1", "G1", "all"),
+        ("E3", "G3", "uniform"),
+    ]
+    table.unlink()
+    with pytest.raises(FileNotFoundError):
+        run_elements("enhancer_targets_all", "chrT", tmp_path)
+
+
+def test_tie_fair_hit_is_order_free():
+    from genomeos.attribution.closure import tie_fair_hit
+
+    assert tie_fair_hit([1, 0, 0], [1, 0, 0]) == 1.0
+    assert tie_fair_hit([1, 1, 0], [1, 0, 0]) == 0.5  # two most active, one of them the expressed cell
+    assert tie_fair_hit([1, 1, 0], [1, 1, 0]) == 0.5  # first-index tie-breaking would have said 1.0
+    assert tie_fair_hit([0, 1, 0], [1, 0, 0]) == 0.0

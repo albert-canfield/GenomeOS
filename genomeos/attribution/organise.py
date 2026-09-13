@@ -89,15 +89,12 @@ def blocks(chrom: str, results_dir: Path = RESULTS_DIR) -> list[dict[str, Any]]:
 
 
 def _attributed(chrom: str, results_dir: Path) -> list[dict[str, Any]]:
-    seen: set[str] = set()
-    out = []
-    for name in ("enhancer_targets_all", "constrained_targets", "enhancer_targets"):
-        for e in (load_result(f"{name}_{chrom}", results_dir) or {}).get("elements", []):
-            pc = e.get("predicted_coding") or {}
-            if pc.get("gene") and e["id"] not in seen:
-                seen.add(e["id"])
-                out.append({"id": e["id"], "start": e["start"], "end": e["end"], "target": pc["gene"]})
-    return out
+    from genomeos.attribution.targets import attributed
+
+    return [
+        {"id": e["id"], "start": e["start"], "end": e["end"], "target": e["predicted_coding"]["gene"]}
+        for e in attributed(chrom, results_dir)
+    ]
 
 
 def reading(row: dict[str, Any]) -> str:

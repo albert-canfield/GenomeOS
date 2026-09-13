@@ -1,6 +1,6 @@
 {
   "result": "organised_chr21",
-  "date": "2026-09-12",
+  "date": "2026-09-13",
   "chrom": "chr21",
   "blocks": 446,
   "with_human_axis": 309,
@@ -184,42 +184,6 @@
       "attributed_elements": 0,
       "targets": [],
       "reading": "free on both scales at kilobase resolution: check the alignment before attributing"
-    },
-    {
-      "start": 23957862,
-      "end": 23960568,
-      "length": 2706,
-      "class": "unclassified",
-      "tier": "constrained_unknown",
-      "confidence": 0.6,
-      "mammal_fraction": 0.0455,
-      "conserved_elements": 10,
-      "human_fraction": 0.0,
-      "case": "tolerant",
-      "duplicated_fraction": 0.0,
-      "partners": 0,
-      "copy": false,
-      "attributed_elements": 0,
-      "targets": [],
-      "reading": "free on both scales at kilobase resolution: check the alignment before attributing"
-    },
-    {
-      "start": 33159110,
-      "end": 33164805,
-      "length": 5695,
-      "class": "unclassified",
-      "tier": "constrained_unknown",
-      "confidence": 0.6,
-      "mammal_fraction": 0.0395,
-      "conserved_elements": 18,
-      "human_fraction": 0.0,
-      "case": "tolerant",
-      "duplicated_fraction": 0.0,
-      "partners": 0,
-      "copy": false,
-      "attributed_elements": 0,
-      "targets": [],
-      "reading": "free on both scales at kilobase resolution: check the alignment before attributing"
     }
   ],
   "largest_copies": [
@@ -276,60 +240,6 @@
       "attributed_elements": 0,
       "targets": [],
       "reading": "copy: 76% of the block is a curated segmental duplication (25 partners); read the source first, attribute second"
-    },
-    {
-      "start": 8256933,
-      "end": 8380642,
-      "length": 123709,
-      "class": "satellite_array",
-      "tier": "structural",
-      "confidence": 0.5,
-      "mammal_fraction": 0.0004,
-      "conserved_elements": 33,
-      "human_fraction": null,
-      "case": "unmeasured",
-      "duplicated_fraction": 0.5958,
-      "partners": 16,
-      "copy": true,
-      "attributed_elements": 0,
-      "targets": [],
-      "reading": "copy: 60% of the block is a curated segmental duplication (16 partners); read the source first, attribute second"
-    },
-    {
-      "start": 7498413,
-      "end": 7614321,
-      "length": 115908,
-      "class": "satellite_array",
-      "tier": "structural",
-      "confidence": 0.5,
-      "mammal_fraction": 0.0,
-      "conserved_elements": 5,
-      "human_fraction": null,
-      "case": "unmeasured",
-      "duplicated_fraction": 0.5686,
-      "partners": 12,
-      "copy": true,
-      "attributed_elements": 0,
-      "targets": [],
-      "reading": "copy: 57% of the block is a curated segmental duplication (12 partners); read the source first, attribute second"
-    },
-    {
-      "start": 9171493,
-      "end": 9283346,
-      "length": 111853,
-      "class": "long_orf",
-      "tier": "neutral",
-      "confidence": 0.5,
-      "mammal_fraction": 0.0171,
-      "conserved_elements": 128,
-      "human_fraction": null,
-      "case": "unmeasured",
-      "duplicated_fraction": 0.552,
-      "partners": 34,
-      "copy": true,
-      "attributed_elements": 0,
-      "targets": [],
-      "reading": "copy: 55% of the block is a curated segmental duplication (34 partners); read the source first, attribute second"
     }
   ],
   "inputs": {
@@ -343,10 +253,10 @@
   },
   "evidence": {
     "tier": "inferred: sequence class plus Zoonomia constraint (the budget)",
-    "case": "inferred: Zoonomia phyloP against gnomAD Gnocchi (area J); unmeasured without a kilobase",
+    "case": "inferred: Zoonomia phyloP against gnomAD Gnocchi (area J); unmeasured below a kilobase",
     "copy": "curated: UCSC genomicSuperDups, >= 1 kb at >= 90% identity; copy at >= 50% of the block"
   },
   "cost": {
-    "seconds": 0.01
+    "seconds": 0.17
   }
 }

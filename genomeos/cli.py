@@ -1463,7 +1463,8 @@ def cmd_closure(args: argparse.Namespace) -> int:
     print(
         f"\nacross cells, {a['genes_tested']} genes with elements and variation: most active cell is "
         f"the most expressed for {_pct(a['most_active_cell_is_most_expressed'], 0)} (shuffled cells "
-        f"{_pct(a['same_under_shuffled_cells'], 0)}, chance {_pct(a['chance'], 0)}); mean rank correlation "
+        f"{_pct(a['same_under_shuffled_cells'], 0)}, p {a.get('p_value')}, chance {_pct(a['chance'], 0)}); "
+        "mean rank correlation "
         f"input vs expression {a['mean_rho_input_vs_expression']}, promoter vs expression "
         f"{a['mean_rho_promoter_vs_expression']}"
     )
@@ -1478,7 +1479,7 @@ def cmd_closure(args: argparse.Namespace) -> int:
         print(
             f"  with {label}: {a['genes_tested']} genes, most active cell is the most expressed for "
             f"{_pct(a['most_active_cell_is_most_expressed'], 0)} (shuffled "
-            f"{_pct(a['same_under_shuffled_cells'], 0)}), mean rank correlation "
+            f"{_pct(a['same_under_shuffled_cells'], 0)}, p {a.get('p_value')}), mean rank correlation "
             f"{a['mean_rho_input_vs_expression']}; rejected {m['rejected_count']}"
         )
     if out["rejected_attributions"]:
