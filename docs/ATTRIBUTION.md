@@ -301,8 +301,16 @@ rest, 22 genes on chromosome 21 and 96 on chromosome 22, are made by another lin
 and are the genuine wrong-cell cases. Against the attributions the cell honours
 they carry about twice as many elements, a higher summed input, and promoters
 open in fewer of the four lines. The closure is summing many weak elements into a
-large input for genes whose promoters are only marginally available, which is the
-error to correct next.
+large input for genes whose promoters are only marginally available.
+
+That reading was then tested, and it does not hold as a fix. The strongest open
+element, the mean over open elements, and the sum weighted by the promoter's DNase
+percentile all score at or below the plain sum on both chromosomes, and the
+rejected count barely moves. The control settles what the elements are worth: the
+promoter's own DNase percentile, with no elements, picks the expressing cell 27% and
+28% of the time, no better than chance, while the summed element input picks it 41%
+and 32%. The elements carry which-cell information that the promoter's openness
+does not.
 
 One measurement lesson on the way: IMR-90's ENCODE total RNA-seq carries its
 strand labels inverted (APP reads on the "plus" file), so the module probes each
@@ -374,13 +382,9 @@ candidates; the full join is recomputed on demand) and `organised_genome_wide.js
 
 ## What comes next, in order
 
-1. **The closure's input corrected for its systematic error**: many weak
-   elements summed into a large input for genes whose promoters are only
-   marginally open. Weight the input by the promoter's own openness, or take
-   the strongest element rather than the sum, and rerun on both chromosomes
-   with the 118 wrong-cell genes as the test set. Done 2026-09-13: the
-   whole-input closure passing on chromosomes 21 and 22, and the rejected set
-   read (below the closure section).
+1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
+   the rejected set read, and four corrections of the input tested and
+   rejected against a promoter-only control (the closure section above).
 2. **The 69 syntax candidates read one by one**: which node, which gene next
    door, what AlphaGenome says of each in silico, and whether any is an
    unannotated exon (the segment parser over the block); then the reader's

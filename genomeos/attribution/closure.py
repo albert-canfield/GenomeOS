@@ -23,6 +23,7 @@ attributions the cell rejects, and they are the point of the exercise.
 
 from __future__ import annotations
 
+import bisect
 import random
 import time
 from typing import Any
@@ -143,15 +144,26 @@ def measure(chrom: str, genes: list, cells: tuple[str, ...], signal: float, prog
         rna.prepare(merged, progress)
         expr: dict[str, float] = {}
         prom: dict[str, bool] = {}
+        prom_signal: dict[str, float] = {}
         for g in genes:
             ex = canonical_exons(g)
             fr = [_covered(rna, merged, g.locus.strand.value, a, b) for a, b in ex]
             expr[g.symbol] = round(sum(fr) / len(fr), 4) if fr else 0.0
             tss = g.locus.end - 1 if g.locus.strand is Strand.MINUS else g.locus.start
-            prom[g.symbol] = bool(idx.overlapping(tss - PROMOTER_WINDOW, tss + PROMOTER_WINDOW))
+            hits = idx.overlapping(tss - PROMOTER_WINDOW, tss + PROMOTER_WINDOW)
+            prom[g.symbol] = bool(hits)
+            prom_signal[g.symbol] = max((v for _, _, v in hits), default=0.0)
+        # the promoter's openness as a within-cell percentile of DNase signal, so sequencing depth does
+        # not decide which cell looks most open; 0 where no peak sits on the promoter
+        ranked = sorted(v for v in prom_signal.values() if v > 0)
+        pct = {
+            k: (bisect.bisect_right(ranked, v) / len(ranked) if v > 0 and ranked else 0.0)
+            for k, v in prom_signal.items()
+        }
         out[cell] = {
             "expression": expr,
             "promoter_open": prom,
+            "promoter_percentile": pct,
             "index": idx,
             "mb": rna.bytes_fetched / 1e6,
             "strand_orientation": orientation,
@@ -198,6 +210,7 @@ def closure(
                 "expression": m["expression"][g.symbol],
                 "expressed": m["expression"][g.symbol] >= EXPRESSED,
                 "promoter_open": m["promoter_open"][g.symbol],
+                "promoter_percentile": round(m["promoter_percentile"][g.symbol], 3),
                 "active_elements": len(active),
                 # dnase: tissue-agnostic magnitude, gated by a DNase peak on the element
                 "input": round(sum(e["effect"] for e in active), 3),
@@ -206,6 +219,23 @@ def closure(
                 # both: the cell's own magnitude, only where a DNase peak also sits on the element
                 "input_both": (
                     round(sum(e["by_cell"][cell] for e in scored if e in active), 3) if scored else None
+                ),
+                # the correction for the summing error: the strongest open element, and the mean over them
+                "input_both_max": (
+                    _strongest([e["by_cell"][cell] for e in scored if e in active]) if scored else None
+                ),
+                "input_both_mean": (
+                    _mean([e["by_cell"][cell] for e in scored if e in active]) if scored else None
+                ),
+                # the peer's suggestion: the cell's own input weighted by how open the promoter is there
+                "input_both_prom": (
+                    round(
+                        sum(e["by_cell"][cell] for e in scored if e in active)
+                        * m["promoter_percentile"][g.symbol],
+                        3,
+                    )
+                    if scored
+                    else None
                 ),
                 "scored_elements": len(scored),
             }
@@ -216,6 +246,10 @@ def closure(
     if has_cell:
         modes["cell"] = judge(rows, used, seed, "input_cell")
         modes["both"] = judge(rows, used, seed, "input_both")
+        modes["both_max"] = judge(rows, used, seed, "input_both_max")
+        modes["both_mean"] = judge(rows, used, seed, "input_both_mean")
+        modes["both_prom"] = judge(rows, used, seed, "input_both_prom")
+        modes["promoter_only"] = judge(rows, used, seed, "promoter_percentile")
     return {
         "chrom": chrom,
         "cells": used,
@@ -247,6 +281,15 @@ def tie_fair_hit(inp: list[float], exp: list[float]) -> float:
     a = {i for i, v in enumerate(inp) if v == max(inp)}
     b = {i for i, v in enumerate(exp) if v == max(exp)}
     return len(a & b) / (len(a) * len(b))
+
+
+def _strongest(values: list[float]) -> float:
+    """The element with the largest effect, sign kept; 0 when no element is open in the cell."""
+    return round(max(values, key=abs), 3) if values else 0.0
+
+
+def _mean(values: list[float]) -> float:
+    return round(sum(values) / len(values), 3) if values else 0.0
 
 
 def profile_rejected(rows: list[dict], cells: list[str], key: str) -> dict[str, Any]:

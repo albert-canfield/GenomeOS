@@ -594,3 +594,11 @@ def test_tie_fair_hit_is_order_free():
     assert tie_fair_hit([1, 1, 0], [1, 0, 0]) == 0.5  # two most active, one of them the expressed cell
     assert tie_fair_hit([1, 1, 0], [1, 1, 0]) == 0.5  # first-index tie-breaking would have said 1.0
     assert tie_fair_hit([0, 1, 0], [1, 0, 0]) == 0.0
+
+
+def test_closure_input_shapes():
+    from genomeos.attribution.closure import _mean, _strongest
+
+    assert _strongest([0.2, -0.7, 0.5]) == -0.7  # sign kept
+    assert _strongest([]) == 0.0 and _mean([]) == 0.0
+    assert _mean([0.2, -0.4, 0.8]) == 0.2

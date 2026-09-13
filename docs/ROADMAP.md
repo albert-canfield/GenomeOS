@@ -1301,13 +1301,29 @@ in order. "Owner" is the session that holds the files today (see §7).
   summed input, and promoters open in fewer of the four lines (2.6 against 3.6,
   2.8 against 3.6). The closure is summing many weak elements into a large
   input for genes whose promoters are only marginally available, which is the
-  model's systematic error and the next thing to correct: weight the input by
-  the promoter's own openness, or cap it by the strongest element rather than
-  the sum.
-- **Next.** 1. The closure's input corrected for that error (the promoter's
-  openness as a weight, or the strongest element rather than the sum) and
-  rerun on both chromosomes; the 118 wrong-cell genes are the test set.
-  2. The 69 syntax candidates read one by one: which node, which gene next
+  model's systematic error and the next thing to correct.
+- **The corrections, tested and rejected (2026-09-13).** Four other inputs
+  on the same gene by cell table, with a promoter-only control:
+
+  | input across the four cells | chr21 | chr22 |
+  |---|---|---|
+  | sum of the cell's own element scores, DNase-gated (headline) | **41%**, p 0.001 | **32%**, p 0.003 |
+  | strongest open element | 36%, p 0.001 | 30%, p 0.005 |
+  | mean over open elements | 37%, p 0.002 | 31%, p 0.008 |
+  | sum weighted by the promoter's DNase percentile | 29%, p 0.14 | 29%, p 0.05 |
+  | the promoter's DNase percentile alone, no elements | 27%, p 0.27 | 28%, p 0.12 |
+
+  None improves on the sum, the rejected count barely moves (73 to 71, 220
+  to 214), and sum and strongest element disagree in sign on 3% of pairs. The
+  control is the finding: the promoter's own openness does not pick the cell
+  that makes a gene, while the elements' summed input does, so the many-element
+  genes are not a summing artefact to compress away and the elements carry
+  which-cell information the promoter does not. The wrong-cell cases stay
+  open, and genomeos-8e's per-element reading suggests why: some (ITGB2, JAM2)
+  have one strongly cell-specific element that a per-element rule could
+  separate, others (COL6A1) are genuine multi-line genes whose expression
+  threshold rather than their input decides.
+- **Next.** 1. The 69 syntax candidates read one by one: which node, which gene next
   door, what AlphaGenome says of each in silico, and whether any is an
   unannotated exon (the segment parser over the block); the reader's openness
   on the element itself rather than its node. 3. The

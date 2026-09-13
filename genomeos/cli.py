@@ -1464,6 +1464,10 @@ def cmd_closure(args: argparse.Namespace) -> int:
         "dnase": "the tissue-agnostic magnitude, where a DNase peak sits on the element",
         "cell": "the deletion scored on the cell's own track, no DNase gating",
         "both": "the cell's own score, only where a DNase peak sits on the element",
+        "both_max": "the strongest open element's own score, not the sum",
+        "both_mean": "the mean over open elements' own scores, not the sum",
+        "both_prom": "the cell's own summed score weighted by the promoter's DNase percentile",
+        "promoter_only": "the promoter's DNase percentile alone, no elements (the control)",
     }
     primary = out.get("primary_mode", "dnase")
     print(f"\nheadline input: {labels.get(primary, primary)}")
