@@ -119,6 +119,18 @@ unphased sequence, so it does not see a diploid individual.
    enhancer_targets_by_cell.py` back-fills a chromosome); the gene-level
    closure in ATTRIBUTION.md takes the cell's own magnitude from there.
 
+   **The whole node (2026-09-13).** The closure test needs every element
+   that reaches a gene, not a sample. `scripts/enhancer_targets_all.py
+   --chrom C` (job `enhancer_targets_all_<chrom>`) deletes every enhancer
+   inside a node, keeps the per-cell values, respects the daily quota by
+   waiting out its answers, and writes the summary to the repository with
+   the element table local (`data/knowledge/alphagenome/all_elements`).
+   chr21's 12,139 elements took 5,409 requests in 102 minutes on top of the
+   6,800 already cached: 64.6% name a gene, 42.6% a coding gene, the coding
+   target is the nearest TSS for 60.9% and inside the node for 76.5%, the
+   uniform sample's shape at forty times the size. The other chromosomes
+   follow one at a time, smallest first, as the quota allows.
+
  The composition budget
    (docs/ATTRIBUTION.md) found that the regulatory tier holds 8.1 Mb of
    constrained sequence genome-wide with no target named. So the deletion
