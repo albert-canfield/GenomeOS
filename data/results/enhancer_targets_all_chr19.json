@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr19",
+  "date": "2026-09-13",
+  "chrom": "chr19",
+  "elements_total": 29374,
+  "scored": 29374,
+  "requests_this_run": 21590,
+  "workers": 16,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 29374,
+    "with_predicted_target": 20800,
+    "fraction_with_target": 0.708,
+    "strong": 8217,
+    "weak": 12583,
+    "silencer_like": 7280,
+    "verdicts": {
+      "another gene in the same domain": 9909,
+      "agrees with nearest TSS in domain": 8624,
+      "no predicted effect": 8574,
+      "gene outside the domain": 2267
+    },
+    "verdicts_coding": {
+      "no predicted effect": 12109,
+      "agrees with nearest TSS in domain": 11221,
+      "another gene in the same domain": 4528,
+      "gene outside the domain": 1516
+    },
+    "coding_target_agrees_with_nearest": 0.65,
+    "fraction_agreeing_with_nearest": 0.415,
+    "fraction_inside_domain": 0.891,
+    "top_tissues": {
+      "placenta": 811,
+      "Purkinje cell": 777,
+      "K562": 710,
+      "CD14-positive monocyte": 702,
+      "Whole_Blood": 442,
+      "neural cell": 417,
+      "CD8-positive, alpha-beta T cell": 416,
+      "HepG2": 385,
+      "small intestine": 384,
+      "testis": 363,
+      "psoas muscle": 301,
+      "GM23338": 283
+    },
+    "median_distance_when_agreeing": 4529
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr19.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}
