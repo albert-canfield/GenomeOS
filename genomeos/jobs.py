@@ -248,8 +248,8 @@ for _c in CHROMOSOMES:
     if _c == "chrM":
         continue
     CATALOG[f"enhancer_targets_all_{_c}"] = {
-        "argv": [sys.executable, "scripts/enhancer_targets_all.py", "--chrom", _c, "--workers", "8"],
-        "describe": f"AlphaGenome: every enhancer in a {_c} node deleted, effect per cell line; 8 at a time.",
+        "argv": [sys.executable, "scripts/enhancer_targets_all.py", "--chrom", _c, "--workers", "16"],
+        "describe": f"AlphaGenome: every enhancer in a {_c} node deleted, effect per cell line; 16 at a time.",
         "total": _all_elements_total(Path("."), _c) or (12139 if _c == "chr21" else None),
         "result": f"enhancer_targets_all_{_c}",
         "count": lambda r: int(r.get("scored", 0)),
