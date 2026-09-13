@@ -120,3 +120,33 @@ def test_saved_estimate_reads_the_range_result_or_the_persons_file(tmp_path):
     assert est["telomere_bp"] == 3100.0 and est["confidence"] == 0.2 and "TelSeq" in est["note"]
     (results / "telomere_range_P.json").write_text(json.dumps({"telomere_bp": 2676, "confidence": 0.3}))
     assert saved_estimate("P", results, people)["telomere_bp"] == 2676.0  # the range result wins
+
+
+def test_gc_helpers_pick_the_telomeric_bins():
+    from genomeos.genome.telomere import comparable_gc, gc_fraction
+
+    assert gc_fraction("GGCC") == 1.0 and gc_fraction("ATAT") == 0.0 and gc_fraction("NNNN") is None
+    assert abs(gc_fraction("TTAGGG" * 8) - 0.5) < 1e-9
+    assert comparable_gc("TTAGGG" * 8)  # a telomeric read is in its own bin
+    assert comparable_gc("GC" * 12 + "AT" * 13)  # 48%
+    assert not comparable_gc("GGCC" * 12) and not comparable_gc("ATAT" * 12)
+
+
+def test_estimate_remote_reports_both_denominators(tmp_path, monkeypatch):
+    from genomeos.genome import telomere
+
+    p = build(tmp_path)
+    monkeypatch.setattr(
+        telomere, "sequence_ends", lambda chrom, reference=None: (0, 40_000) if chrom == "chrA" else None
+    )
+    r = telomere.estimate_remote(
+        str(p), tmp_path / "t.bam.bai", ["chrA"], window=10_000, sample_bytes=10_000, k=7
+    )
+    # every read of the synthetic file is 50% GC, so the GC denominator is every read
+    assert r["gc_comparable_share_unmapped"] == 1.0
+    # the synthetic chromosome has no read in its middle window, so the tail's share stands in
+    assert r["gc_comparable_share_mapped"] is None and r["gc_mapped_share_assumed_from_tail"] is True
+    assert r["gc_comparable_share_of_reads"] == 1.0
+    # every read comparable, so the index is the plain telomeric fraction
+    assert r["telomeric_per_gc_comparable_read"] == round(r["fraction"], 6)
+    assert r["gc_window"] == [0.48, 0.52]

@@ -304,8 +304,18 @@ that count; the last and first 10 kb of assembled sequence of each chromosome
 the boundary reads and the coverage; TelSeq's arithmetic then gives a length
 per chromosome end. The index is cached under `data/knowledge/telomere/`
 (git-ignored); the result for a GIAB person goes under `data/results`.
-Evidence: the reads are `experimental`, the estimate `inferred` (0.3), since no
-GC normalisation is applied and the sampled tail is a sample. CRAM is not
+Evidence: the reads are `experimental`, the estimate `inferred` (0.3), since
+the sampled tail is a sample. Two figures come out. `telomere_bp` is the
+telomeric read fraction times the genome over its 92 ends: a derivation, and
+it reads low against Southern blots. TelSeq instead divides by the reads whose
+GC matches a telomeric read's (48 to 52%, since TTAGGG is half G or C) and
+multiplies by a constant fitted to blot lengths; that constant cannot be
+derived, so the GC correction is reported as
+`telomeric_per_gc_comparable_read`, a dimensionless index, with the GC shares
+measured separately on the unmapped tail and on 200,000 mapped reads from the
+middle of chromosomes (HG002: 4.3% and 4.1% of reads in the band, index
+0.0019 against a plain fraction of 0.00008). Both figures compare people read
+the same way; neither is a blot length. CRAM is not
 readable without htslib, so the range route is BAM only.
 
 ## The deletion cache, packed (2026-09-13)

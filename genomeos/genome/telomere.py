@@ -5,10 +5,12 @@ Their fraction, scaled by genome size and read length, gives an estimate of
 the mean telomere length per chromosome end. Inputs: FASTQ (plain or gzip) or
 BAM (BGZF is gzip-compatible, so the standard library can decode it).
 
-The method follows Ding et al. 2014 (TelSeq): length ≈ (telomeric reads /
-reads with comparable GC) × genome_length / (46 chromosome ends), but we
-normalise by *all* reads rather than a GC bin, which is simpler and adequate
-for a first estimate. Validation on a real 30x BAM is pending (docs/PROGRESS.md).
+The method follows Ding et al. 2014 (TelSeq) as far as it can be derived: the
+telomeric read fraction times the genome over its 92 ends. TelSeq's own scale
+divides by the reads of comparable GC and multiplies by a constant fitted to
+Southern-blot lengths; that constant is not derivable here, so the GC-corrected
+ratio is reported as a dimensionless index beside the base-pair figure. Read
+against GIAB's 300x BAM by ranges (docs/DATA.md).
 """
 
 from __future__ import annotations
@@ -161,6 +163,23 @@ def estimate_file(path: str | Path, **kw) -> TelomereEstimate:
     return estimate(reads, **kw)
 
 
+TELOMERIC_GC = 0.5  # TTAGGG is three of six bases G or C, so telomeric reads sit in the 48-52% bins
+GC_WINDOW = 0.02  # TelSeq's denominator: reads whose GC is within two points of a telomeric read's
+GC_SAMPLE_READS = 200_000  # mapped reads read for the GC distribution (the unmapped tail is biased)
+
+
+def gc_fraction(seq: str) -> float | None:
+    """G+C of a read over its called bases, or None when it has none."""
+    called = sum(1 for b in seq if b in "ACGTacgt")
+    return (sum(1 for b in seq if b in "GCgc") / called) if called else None
+
+
+def comparable_gc(seq: str, centre: float = TELOMERIC_GC, window: float = GC_WINDOW) -> bool:
+    """Whether a read's GC is in the 48-52% band a telomeric read falls in (TelSeq's denominator)."""
+    g = gc_fraction(seq)
+    return g is not None and abs(g - centre) <= window + 1e-9  # 0.48 is inside a two-point window
+
+
 def sequence_ends(chrom: str, reference: Path = Path("data/reference")) -> tuple[int, int] | None:
     """(first, last) non-N positions of the chromosome: where its assembled sequence starts and ends."""
     from genomeos.coords import Locus
@@ -240,19 +259,50 @@ def estimate_remote(
                 progress(
                     f"{chrom} {side} end: {n:,} reads, {tel:,} telomeric; {bam.bytes_fetched / 1e6:.0f} MB"
                 )
-    n_un = tel_un = bases_un = 0
+    gc_mapped_seen = gc_mapped_hits = 0
+    for chrom in chroms:  # one window inside a chromosome, away from its ends: the mapped GC distribution
+        se = sequence_ends(chrom, reference)
+        if se is None or chrom not in idx.by_name or gc_mapped_seen >= GC_SAMPLE_READS:
+            continue
+        first, last = se
+        mid = (first + last) // 2
+        for rd in bam.reads(chrom, mid, mid + window):
+            gc_mapped_seen += 1
+            gc_mapped_hits += comparable_gc(rd.seq)
+            if gc_mapped_seen >= GC_SAMPLE_READS:
+                break
+        if progress:
+            progress(
+                f"GC sample {chrom}:{mid:,}: {gc_mapped_seen:,} mapped reads, {gc_mapped_hits:,} in band"
+            )
+    n_un = tel_un = bases_un = gc_un = 0
     for rd in bam.unmapped_sample(sample_bytes):
         n_un += 1
         bases_un += len(rd.seq)
         if is_telomeric(rd.seq, k):
             tel_un += 1
+        if comparable_gc(rd.seq):
+            gc_un += 1
     read_len = bases_un / n_un if n_un else 0.0
     no_coor = idx.no_coor or 0
     mapped_total = idx.mapped_total or 0
     tel_unmapped_total = (tel_un / n_un) * no_coor if n_un else 0.0
     total_reads = mapped_total + no_coor
-    fraction = (tel_unmapped_total + mapped_tel) / total_reads if total_reads else 0.0
+    telomeric_total = tel_unmapped_total + mapped_tel
+    fraction = telomeric_total / total_reads if total_reads else 0.0
     telomere_bp = fraction * genome_bp / ends
+    # TelSeq's own denominator: reads whose GC is comparable to a telomeric read's, not every read
+    gc_share_unmapped = gc_un / n_un if n_un else None
+    gc_share_mapped = gc_mapped_hits / gc_mapped_seen if gc_mapped_seen else None
+    # the tail is GC-biased, so the two populations are counted apart and added; when no mapped read was
+    # sampled (a thin file, or a middle window with no coverage) the tail's share stands in for both
+    mapped_share = gc_share_mapped if gc_share_mapped is not None else gc_share_unmapped
+    gc_reads = (gc_share_unmapped or 0.0) * no_coor + (mapped_share or 0.0) * mapped_total
+    gc_share = gc_reads / total_reads if total_reads else None
+    # TelSeq divides by the GC-comparable reads and multiplies by a constant fitted to Southern-blot
+    # lengths, which is not derivable here; the ratio itself is kept as a dimensionless index, comparable
+    # between people read the same way, and the base-pair figure keeps the all-reads derivation
+    gc_index = telomeric_total / gc_reads if gc_reads else None
     covs = [r["coverage"] for r in end_rows if r["reads"]]
     return {
         "source": url,
@@ -269,6 +319,16 @@ def estimate_remote(
         "ends": end_rows,
         "telomere_bp": round(telomere_bp),
         "fraction": fraction,
+        "telomeric_per_gc_comparable_read": round(gc_index, 6) if gc_index else None,
+        "gc_comparable_share_of_reads": round(gc_share, 4) if gc_share is not None else None,
+        "gc_comparable_share_unmapped": round(gc_share_unmapped, 4)
+        if gc_share_unmapped is not None
+        else None,
+        "gc_comparable_share_mapped": round(gc_share_mapped, 4) if gc_share_mapped is not None else None,
+        "gc_sample_mapped_reads": gc_mapped_seen,
+        "gc_mapped_share_assumed_from_tail": gc_share_mapped is None,
+        "gc_comparable_reads_estimated": round(gc_reads) if gc_reads else None,
+        "gc_window": [round(TELOMERIC_GC - GC_WINDOW, 2), round(TELOMERIC_GC + GC_WINDOW, 2)],
         "k": k,
         "window": window,
         "bytes_fetched": bam.bytes_fetched,
@@ -276,11 +336,14 @@ def estimate_remote(
         "parameter": Parameter(
             "telomere_bp_measured", round(telomere_bp), "bp", RANGE_EVIDENCE, 0.3 if n_un >= 100_000 else 0.15
         ),
-        "note": "TelSeq counts reads with at least k TTAGGG repeats among all reads; here the unmapped tail, "
-        "where the pure-repeat reads sit, is sampled and scaled by the index's unmapped count, the mapped "
-        "chromosome ends are read whole, and the mapped total comes from the index; no GC normalisation, "
-        "so the number is a first estimate to compare between people read the same way, not a length "
-        "to quote",
+        "note": "`telomere_bp` is the telomeric read fraction times the genome over its 92 ends, which is "
+        "a derivation, not a calibration, and reads low against Southern blots. TelSeq instead divides by "
+        "the reads of comparable GC (48 to 52%, since TTAGGG is half G or C) and multiplies by a constant "
+        "fitted to blot lengths; that constant is not derivable here, so the GC correction is reported as "
+        "`telomeric_per_gc_comparable_read`, a dimensionless index. Both compare people read the same way; "
+        "neither is a blot length. The unmapped tail, where the pure-repeat reads sit, is sampled and "
+        "scaled by the index's unmapped count, the GC shares are measured on that tail and on 200,000 "
+        "mapped reads from the middle of chromosomes, and the chromosome ends are read whole",
     }
 
 

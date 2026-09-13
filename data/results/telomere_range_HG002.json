@@ -1,6 +1,6 @@
 {
   "result": "telomere_range_HG002",
-  "date": "2026-09-12",
+  "date": "2026-09-13",
   "source": "https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/data/AshkenazimTrio/HG002_NA24385_son/NIST_HiSeq_HG002_Homogeneity-10953946/NHGRI_Illumina300X_AJtrio_novoalign_bams/HG002.GRCh38.300x.bam",
   "index": "data/knowledge/telomere/HG002.GRCh38.300x.bam.bai",
   "reads_total_from_index": 6182841975,
@@ -568,11 +568,22 @@
   ],
   "telomere_bp": 2676,
   "fraction": 7.941866841756189e-05,
+  "telomeric_per_gc_comparable_read": 0.001915,
+  "gc_comparable_share_of_reads": 0.0415,
+  "gc_comparable_share_unmapped": 0.043,
+  "gc_comparable_share_mapped": 0.0414,
+  "gc_sample_mapped_reads": 200000,
+  "gc_mapped_share_assumed_from_tail": false,
+  "gc_comparable_reads_estimated": 256463310,
+  "gc_window": [
+    0.48,
+    0.52
+  ],
   "k": 7,
   "window": 10000,
-  "bytes_fetched": 217650149,
-  "requests": 48,
-  "note": "TelSeq counts reads with at least k TTAGGG repeats among all reads; here the unmapped tail, where the pure-repeat reads sit, is sampled and scaled by the index's unmapped count, the mapped chromosome ends are read whole, and the mapped total comes from the index; no GC normalisation, so the number is a first estimate to compare between people read the same way, not a length to quote",
+  "bytes_fetched": 298178652,
+  "requests": 56,
+  "note": "`telomere_bp` is the telomeric read fraction times the genome over its 92 ends, which is a derivation, not a calibration, and reads low against Southern blots. TelSeq instead divides by the reads of comparable GC (48 to 52%, since TTAGGG is half G or C) and multiplies by a constant fitted to blot lengths; that constant is not derivable here, so the GC correction is reported as `telomeric_per_gc_comparable_read`, a dimensionless index. Both compare people read the same way; neither is a blot length. The unmapped tail, where the pure-repeat reads sit, is sampled and scaled by the index's unmapped count, the GC shares are measured on that tail and on 200,000 mapped reads from the middle of chromosomes, and the chromosome ends are read whole",
   "confidence": 0.3,
   "evidence": {
     "kind": "inferred",
