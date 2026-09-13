@@ -17,6 +17,8 @@ Rules it keeps:
 - each chromosome is started through the job registry (`jobs.start`), so the Progress tab shows it and
   the registry refuses to start a twin of a live run;
 - a run that ends without completing is retried after a pause;
+- a completed chromosome's per-element cache is packed into one archive (scripts/pack_element_cache.py,
+  about eight times smaller, read transparently), so the genome costs about 1.5 GB instead of 13 GB;
 - a completed chromosome's summary result is committed alone through a private index and pushed; a
   result still carrying the per-element table (the old shape, megabytes) is refused and logged, never
   committed. The tables stay local under data/knowledge/alphagenome/all_elements.
@@ -163,6 +165,27 @@ def commit_result(chrom: str) -> bool:
     return False
 
 
+def pack_cache(chrom: str) -> bool:
+    """Fold the finished chromosome's per-element cache into one archive; a failure is logged, not fatal."""
+    try:
+        r = subprocess.run(
+            [sys.executable, "scripts/pack_element_cache.py", "--chrom", chrom],
+            capture_output=True,
+            text=True,
+            timeout=3600,
+        )
+    except subprocess.TimeoutExpired:
+        log(f"{chrom}: packing the cache timed out; files left as they are")
+        return False
+    last = (r.stdout.strip().splitlines() or [""])[-1]
+    log(
+        f"{chrom}: cache packed ({last[:160]})"
+        if r.returncode == 0
+        else f"{chrom}: packing failed: {r.stderr[-160:]}"
+    )
+    return r.returncode == 0
+
+
 def run_one(chrom: str) -> bool:
     """Score one chromosome to completion through the registry, retrying runs that end early."""
     name = f"enhancer_targets_all_{chrom}"
@@ -192,6 +215,7 @@ def run_one(chrom: str) -> bool:
         return False
     sc = scored(chrom)
     log(f"{chrom}: complete, {sc[0]:,} elements" if sc else f"{chrom}: complete")
+    pack_cache(chrom)
     commit_result(chrom)
     return True
 
