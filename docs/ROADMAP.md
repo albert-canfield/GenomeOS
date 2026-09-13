@@ -110,7 +110,7 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph; the dominant isoform per tissue from GTEx (APP695 in the cerebellum) | measured modification state; isoform expression per cell type or stage; an engine that handles 100-species models |
 | **The 98%** (GenomeOS) | genome budgeted | every UNKNOWN block of the 24 chromosomes tiered with Zoonomia constraint read per base (1,009 Mb): structural 23%, fossil 33%, regulatory 34%, neutral 7%, constrained-unknown 3.2% (1,098 blocks, 32 Mb, 1% of the genome); `genomeos budget`, the Progress tab card; the attributions compiled to a BioLang program per chromosome (`--bio`); scored against VISTA, eQTL, lentiMPRA, GWAS and ClinVar; the organiser reads copies first and leaves a real unknown of 882 blocks, 69 of them constrained on both axes | AlphaGenome chromatin tracks on the 15,536 regulatory blocks; closure at gene, cell and organism level |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
-| **Web UI and CLI** (GenomeOS) | 16 views, 43 commands | every layer visible with evidence pills; jobs with progress; gene dossier | Evidence explorer and Cell views; release tags; nightly CI |
+| **Web UI and CLI** (GenomeOS) | 17 views, 45 commands | every layer visible with evidence pills; jobs with progress; gene dossier; the Progress tab says what is going on and what is planned; the Evidence explorer reads the project's own confidence (22,419 facts, mean 0.57) | Cell view; release tags; nightly CI |
 
 Data architecture: `data/reference` and `data/knowledge` are caches (git
 ignored, rebuilt by `genomeos data fetch` and the compilers); `data/results`
@@ -831,23 +831,43 @@ in order. "Owner" is the session that holds the files today (see §7).
   Missing, Next or Owner is a done item; a "Done YYYY-MM-DD:" sentence inside
   Missing is done; Next steps are numbered "1. … 2. …", and a step that
   starts with "Done" is done, or partial if it also says "next".
-- **Missing.** Two views promised in the UI track were never built:
-  **Evidence explorer** (filter every rule by evidence kind and confidence,
-  export the weak ones) and **Cell** (a cell type's active rule set and
-  graph, run and watch). No git tag and no PyPI package; no nightly
+- **The Evidence explorer (2026-09-13).** The view the UI track promised in
+  2026-09-10 and never built. `genomeos/evidence.py` reads every BioLang
+  program in the project (the demos, the organism programs, the `bio.std`
+  prelude) into one row per stated fact: the block it comes from, its
+  evidence kind, source, note and confidence. A program is credited only with
+  the facts its imports do not already declare, so `bio.std` is counted once
+  rather than once per importer. The Evidence tab filters by evidence kind,
+  by a confidence ceiling, by program and by text, shows the mix as a bar and
+  one line per program, and exports the selection as a CSV review list;
+  `genomeos evidence [--kind K] [--max-confidence X] [--by-program] [--csv F]`
+  answers the same from the command line, and `/api/evidence` serves it.
+  The first reading of the project's own model: 22,419 facts over 27
+  programs, mean confidence 0.57, 48% experimental, 46% predicted, 4%
+  curated, 2% inferred and 2 facts with no evidence at all; 9,974 facts sit
+  at or below 0.5, and 9,782 of those are the compiled chr21 non-coding
+  program, whose mean confidence is 0.27. Measured and predicted are almost
+  equal in number, which is what a project that compiles public data and then
+  predicts on it should look like; the weak half is concentrated in exactly
+  one place, area I's attributions, rather than spread through the
+  hand-written biology.
+- **Missing.** One view promised in the UI track is still unbuilt:
+  **Cell** (a cell type's active rule set and graph, run and watch). No git tag and no PyPI package; no nightly
   real-data CI; no "known phenotypes it must reproduce" list per library from
   a biologist. Done 2026-09-11: version 0.9.0 in `pyproject.toml` and the
   README rewritten around what the release measures. Done 2026-09-11: the jobs
   registry de-duplicates by pid liveness, so server restarts no longer spawn
   copies of a job. Done 2026-09-11: `data/jobs` metadata and logs are
   git-ignored, the registry kept in code.
-- **Next.** 1. Evidence explorer view over every loaded module.
+- **Next.** 1. Done 2026-09-13: the Evidence explorer over every program,
+  with the CSV review list; next, the same reading over the compiled
+  chromosome programs of area I, which is where the weak half sits.
   2. Done 2026-09-11: README refresh and the version bump to 0.9.0; the git
   tag follows the merge to `main`, which only Albert opens. 3. Done
   2026-09-11: `.gitignore` for `data/jobs`, keeping the registry in code.
   4. Nightly CI job that runs the real-data tests against cached reference
   data. 5. Cell view.
-- **Owner.** genomeos-c6 (views, packaging, CI; genomeos-f7 before the restart of 2026-09-12); genomeos-8e (jobs); genomeos-77 (the Project progress card and the work board).
+- **Owner.** genomeos-9c (views, packaging, CI, the Project progress card, the work board and the Evidence explorer; genomeos-77, genomeos-c6 and genomeos-f7 before the restarts); genomeos-f3 (jobs).
 
 ### H. BioForge (design under constraints)
 

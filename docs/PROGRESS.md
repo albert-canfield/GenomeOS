@@ -819,3 +819,28 @@ only reads it.
 - **The whole-input closure replicated on chr22**: 19,708 elements scored per cell line, 432 of 447 genes with a median of 13; the most active cell is the most expressed for 32% of 375 genes with the cell's own DNase-gated score (null 25%, p 0.003), 30% ungated (p 0.013), 31% tissue-agnostic (p 0.003); within a cell repressing input lowers expression in three lines while activating input does not raise it in K562 and HepG2; 235 rejected in the tissue-agnostic reading (VPREB1, UPK3A, VPREB3 in K562 first), 59 unexplained (GM12878); the closure now reports MeasuredRna's own strand orientation (IMR-90 swapped on both chromosomes).
 - **The rejected attributions as a set**: the closure's headline is now the cell's own score where a DNase peak sits on the element (the tissue-agnostic input read Jurkat and muscle effects as K562's for VPREB1, UPK3A, VPREB3, per genomeos-8e); in that reading 59% (chr21) and 42% (chr22) of the rejected pairs are genes no line of the panel makes (OLIG1, S100B, CRYBB1, CYP2D6), and the 22 and 96 wrong-cell genes carry about twice the elements, a higher summed input and promoters open in fewer lines than honoured ones; `rejected_profile` in closure_chr21/22.json; next, weight the input by promoter openness.
 - **Closure input corrections tested and rejected**: the strongest open element (36% and 30%), the mean (37%, 31%) and the sum weighted by the promoter's DNase percentile (29%, 29%) all score at or below the summed input (41%, 32%) on chr21 and chr22; the promoter's DNase percentile alone picks the expressing cell 27% and 28% of the time (p 0.27, 0.12), so the elements carry which-cell information the promoter does not; the summed, DNase-gated cell score stays the headline.
+
+## 2026-09-13 — the Evidence explorer, and what it says about this project
+
+The view the UI track promised on 2026-09-10 and never built (area G Next 1).
+`genomeos/evidence.py` reads every BioLang program — the demos, the organism
+programs, the `bio.std` prelude — into one row per stated fact: block,
+evidence kind, source, note, confidence. A program is credited only with the
+facts its imports do not already declare, so the prelude is counted once
+rather than once per importer, and an unparsable program is reported as a row
+with its error rather than failing the read. The Evidence tab filters by
+evidence kind, confidence ceiling, program and text, draws the mix as a bar,
+lists one line per program weakest first, and exports the selection as a CSV
+review list; `genomeos evidence [--kind K] [--max-confidence X]
+[--by-program] [--csv FILE]` gives the same from the command line, and
+`/api/evidence` serves it (`tests/test_evidence.py`, six tests including the
+import-credit rule and the unparsable case).
+The project's own model, measured for the first time: 22,419 facts over 27
+programs, mean confidence 0.57; 48% experimental, 46% predicted, 4% curated,
+2% inferred, and two facts with no evidence at all (a demo's
+`upstream_element`). 9,974 facts sit at or below 0.5, and 9,782 of them are
+the compiled chr21 non-coding program at mean 0.27. So the weak half is not
+spread through the hand-written biology; it is concentrated in area I's
+attributions, where a predicted regulatory element is capped at 0.1 to 0.4 by
+policy. The honest reading is that the model is half measurement and half
+prediction, and that the predictions are labelled as such.

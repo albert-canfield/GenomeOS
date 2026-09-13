@@ -4244,6 +4244,43 @@ def _fmt(v: float | None) -> str:
     return "-" if v is None else f"{v:.2f}"
 
 
+def cmd_evidence(args: argparse.Namespace) -> int:
+    from genomeos import evidence
+
+    kinds = {k for k in (args.kind or []) if k} or None
+    out = evidence.collect(Path.cwd(), kinds, args.max_confidence, args.query or "", args.module or "")
+    rows, whole = out["rows"], out["whole"]
+    if args.csv:
+        Path(args.csv).write_text(evidence.to_csv(rows))
+        print(f"{len(rows):,} facts written to {args.csv}, weakest first")
+        return 0
+    s = out["summary"]
+    print(
+        f"{whole['facts']:,} facts in {len(out['files'])} programs, "
+        f"mean confidence {whole['mean_confidence']}, {whole['weak']:,} at or below {out['weak_line']}"
+    )
+    print("evidence: " + ", ".join(f"{k} {v:,}" for k, v in whole["by_evidence"].items()))
+    if kinds or args.max_confidence is not None or args.query or args.module:
+        print(f"selected: {s['facts']:,} facts, mean confidence {s['mean_confidence']}")
+    if args.by_program:
+        for f in sorted(out["files"], key=lambda f: f.get("mean_confidence", 0)):
+            if f.get("error"):
+                print(f"  {f['path']}: {f['error']}")
+            else:
+                print(
+                    f"  {f['mean_confidence']:.2f}  {f['facts']:>6,} facts  {f['weak']:>6,} weak  {f['path']}"
+                )
+        return 0
+    for r in rows[: args.top]:
+        src = f"  [{r['source']}]" if r["source"] else ""
+        print(
+            f"  {r['confidence']:.2f} {r['evidence']:<12} {r['block']:<18} {r['label']}{src}  ({r['path']})"
+        )
+    if len(rows) > args.top:
+        print(f"  … {len(rows) - args.top:,} more (--top N, or --csv FILE for all)")
+    return 0
+
+
 def cmd_work(args: argparse.Namespace) -> int:
     import os
 
@@ -5087,6 +5124,23 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--offline", action="store_true", help="local caches only, no network")
     p.add_argument("--no-indirect", action="store_true", help="skip pathway-induced candidates")
     p.set_defaults(fn=cmd_therapeutic)
+
+    p = sub.add_parser(
+        "evidence", help="the evidence explorer: every stated fact by evidence kind and confidence"
+    )
+    p.add_argument(
+        "--kind",
+        nargs="*",
+        choices=["experimental", "curated", "predicted", "inferred", "none"],
+        help="keep these",
+    )
+    p.add_argument("--max-confidence", type=float, help="keep facts at or below this confidence (0.5 = weak)")
+    p.add_argument("--query", help="text in the fact, its source or its note")
+    p.add_argument("--module", help="one program, by module name or path")
+    p.add_argument("--top", type=int, default=30, help="rows to print, weakest first")
+    p.add_argument("--by-program", action="store_true", help="one line per program instead of facts")
+    p.add_argument("--csv", help="write every selected fact to this CSV file (the review list)")
+    p.set_defaults(fn=cmd_evidence)
 
     p = sub.add_parser("work", help="the work board: say what you are working on, shown on the Progress tab")
     p.add_argument("action", nargs="?", choices=["list", "start", "update", "done"], default="list")

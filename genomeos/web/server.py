@@ -874,6 +874,37 @@ class Api:
             "done": sum(1 for r in rows if r["status"].startswith("done")),
         }
 
+    def evidence(
+        self,
+        kinds: str = "",
+        max_confidence: str = "",
+        query: str = "",
+        module: str = "",
+        limit: int = 400,
+        csv: bool = False,
+    ) -> dict:
+        """Every fact stated by every BioLang program, filtered by evidence kind and confidence."""
+        from genomeos import evidence as ev
+
+        try:
+            ceiling = float(max_confidence) if max_confidence not in ("", None) else None
+        except ValueError:
+            raise ApiError(f"max_confidence must be a number, not {max_confidence!r}") from None
+        picked = {k for k in kinds.split(",") if k} or None
+        if picked and picked - set(ev.KINDS):
+            bad = sorted(picked - set(ev.KINDS))
+            raise ApiError(f"unknown evidence kind {bad}; use {', '.join(ev.KINDS)}")
+        out = ev.collect(self.root, picked, ceiling, query, module)
+        rows = out["rows"]
+        if csv:
+            return {"csv": ev.to_csv(rows), "matched": len(rows)}
+        return {
+            **out,
+            "rows": rows[:limit],
+            "matched": len(rows),
+            "truncated": len(rows) > limit,
+        }
+
     def roadmap(self) -> dict:
         """docs/ROADMAP.md as areas with planned steps and finished items, milestones and data jobs."""
         from genomeos import roadmap
@@ -1810,6 +1841,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(self.api.budget_wide())
             if u.path == "/api/progress":
                 return self._json(self.api.progress())
+            if u.path == "/api/evidence":
+                return self._json(
+                    self.api.evidence(
+                        self._q(qs, "kinds", ""),
+                        self._q(qs, "max_confidence", ""),
+                        self._q(qs, "q", ""),
+                        self._q(qs, "module", ""),
+                        int(self._q(qs, "limit", 400)),
+                        self._q(qs, "csv", "") == "1",
+                    )
+                )
             if u.path == "/api/roadmap":
                 return self._json(self.api.roadmap())
             if u.path == "/api/work":

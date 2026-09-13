@@ -164,6 +164,21 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 .pp-md code,.pp-area code,.pp-entry code{font-family:var(--mono);font-size:11.5px;background:var(--bg);padding:0 3px;border-radius:3px}
 .pp-commit{display:flex;gap:8px;font-size:12.5px;padding:3px 0;align-items:baseline}
 .pp-commit .mono{color:var(--muted);flex:0 0 auto}
+.ev-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,2fr)}
+#ev-files{overflow-x:auto}
+#ev-files td,#ev-files th{padding:5px 6px}
+@media(max-width:900px){.ev-grid{grid-template-columns:1fr}}
+.ev-kind{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;cursor:pointer;color:var(--ink)}
+.ev-kind input{margin:0}
+.ev-bar{display:flex;height:14px;border-radius:4px;overflow:hidden;background:var(--line);margin:4px 0 2px}
+.ev-bar i{display:block;height:100%}
+.ev-legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted)}
+.ev-legend span::before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;background:var(--sw)}
+.ev-file{cursor:pointer}
+.ev-file:hover td{background:var(--bg)}
+.ev-file.on td{background:var(--bg);font-weight:600}
+.ev-conf{font-variant-numeric:tabular-nums;font-weight:600}
+.ev-conf.weak{color:var(--bad)}.ev-conf.mid{color:var(--warn)}.ev-conf.strong{color:var(--ok)}
 .unc{margin-top:10px;font-size:12px}
 .unc table{font-size:12px}
 .unc .lbl{display:inline-block;width:64px;text-align:right;padding-right:6px}
@@ -181,6 +196,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="blocks" data-tip="A 2-D map of the blocks of a chromosome, to scale and nested: genes containing transcripts containing exons, the UNKNOWN space between genes, islands, repeats and gaps. Zoom, pan, search, filter, and propose moves in edit mode."><i class="ic">🧩</i>Blocks</button>
     <button data-tab="flow" data-tip="How a gene becomes a protein: DNA locus with exons, the spliced mRNA (UTRs and coding sequence), and the translated residues, linked base to codon to residue. Drop a single-base change on the DNA and see what it does to the protein."><i class="ic">🔁</i>Flow</button>
     <button data-tab="program" data-tip="Write biology as code in BioLang, compile it to BioIR and run the regulatory network through time."><i class="ic">📝</i>Program</button>
+    <button data-tab="evidence" data-tip="Every fact the BioLang programs state, with its evidence kind and confidence. Filter to the weak ones and export them as a review list."><i class="ic">🧾</i>Evidence</button>
     <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
     <button data-tab="space" data-tip="Development in space: morphogen gradients, the segmentation clock and germ-layer choice."><i class="ic">🌱</i>Space</button>
@@ -207,6 +223,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div class="step"><i class="ic">🧱</i><b>Anatomy</b> — the inventory. Counts coding, UTR, intron and intergenic bases, exons and introns, gene density and layout, CpG islands and repeats; compares mitochondrion, human and worm.</div>
       <div class="step"><i class="ic">🧩</i><b>Blocks</b> — the map. Every delimited block of a chromosome drawn to scale and nested: domains (the genome's nodes between CTCF boundaries), genes with their transcripts and exons, curated repeats, ENCODE regulatory elements and the classified UNKNOWN space; click for details, search a gene, highlight one class, and in edit mode drag blocks to propose a new layout with plausibility checks.</div>
       <div class="step"><i class="ic">🔁</i><b>Flow</b> — DNA to RNA to protein. One gene drawn as three linked lanes with its regulation above; hover to follow a base to its codon and residue; drop a single-base change and see what it does to the protein.</div>
+      <div class="step"><i class="ic">🧾</i><b>Evidence</b> — how much of the model is measured and how much is a guess: every stated fact by evidence kind and confidence, the weak ones exportable as a review list.</div>
       <div class="step"><i class="ic">📝</i><b>Program</b> — biology as code. Genes, proteins and rules in BioLang; compile checks references and evidence; run draws the trajectory.</div>
       <div class="step"><i class="ic">⏳</i><b>Ageing</b> — the timers. Telomere attrition, somatic mutations, epigenetic age and senescence for a chosen cell type and environment.</div>
       <div class="step"><i class="ic">👥</i><b>Twin</b> — one person. Measured state (streamed from real data), variants in timer genes, forks and side-by-side futures.</div>
@@ -362,6 +379,38 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
         <h2><i class="ic">✅</i>Compile report<span class="help" data-tip="Counts of entities, rules, parameters and UNKNOWN regions, mean confidence per kind, and the rules whose evidence is weak. UNKNOWN is a legal value: the compiler never invents a function for a region.">?</span></h2>
         <div id="p-report" class="muted">Compile a module to see entities, rules, confidence and unknowns.</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EVIDENCE ================= -->
+<section id="evidence">
+  <div class="card" style="margin-bottom:16px">
+    <h2><i class="ic">🧾</i>Evidence explorer<span class="help" data-tip="Every BioLang program (demos, organism programs, the bio.std prelude) read into one row per stated fact. A program is credited only with the facts it declares itself, not those it imports. Confidence at or below 0.5 counts as weak.">?</span>
+      <span class="muted" id="ev-status" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div id="ev-whole" class="kpi"></div>
+    <div id="ev-bands"></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="row" id="ev-kinds"></div>
+    <div class="row">
+      <label>confidence ≤ <input id="ev-max" type="range" min="0" max="1" step="0.05" value="1" style="width:150px"> <b id="ev-maxv" class="mono">1.00</b></label>
+      <label>program <select id="ev-module" style="max-width:260px"><option value="">every program</option></select></label>
+      <label>search <input id="ev-q" placeholder="SOX2, Sulston, AlphaGenome…" style="width:200px"></label>
+      <button class="ghost" id="ev-weak"><i class="ic">⚠️</i>Weak only</button>
+      <button class="ghost" id="ev-reset"><i class="ic">↺</i>Reset</button>
+      <button class="primary" id="ev-csv"><i class="ic">📤</i>Export CSV</button>
+    </div>
+    <div class="muted" id="ev-sel" style="font-size:12.5px"></div>
+  </div>
+  <div class="grid ev-grid">
+    <div class="card">
+      <h2><i class="ic">📚</i>By program</h2>
+      <div id="ev-files" class="scroll" style="max-height:640px"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🔎</i>Facts, weakest first</h2>
+      <div id="ev-rows" class="scroll" style="max-height:640px"></div>
     </div>
   </div>
 </section>
@@ -867,6 +916,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.blur());
   b.scrollIntoView({block: 'nearest', inline: 'nearest'});
   if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadBudgetWide(); loadProjectProgress(); loadFeatures(); }
+  if (b.dataset.tab === 'evidence') setTimeout(loadEvidence);  // a deep link clicks this tab before the script has finished defining it
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
   // first visit to a simulation tab runs its default example
@@ -1686,6 +1736,76 @@ async function loadRoadmap() {
   } catch (e) { $('#pp-areas').innerHTML = `<span class="muted">${escH(e.message)}</span>`; }
 }
 $('#pp-filter').oninput = () => { if (ppRoadmap) renderDone(ppRoadmap); };
+// ---- evidence explorer: every stated fact by evidence kind and confidence
+const EV_COLOUR = {experimental: '--c3', curated: '--c6', predicted: '--c4', inferred: '--c5', none: '--c2'};
+const evPicked = new Set();
+let evTimer = null, evFile = '';
+const evVar = k => `var(${EV_COLOUR[k] || '--line'})`;
+const evConfClass = c => c <= 0.5 ? 'weak' : c < 0.8 ? 'mid' : 'strong';
+function evQuery(extra) {
+  const p = new URLSearchParams();
+  if (evPicked.size) p.set('kinds', [...evPicked].join(','));
+  const max = parseFloat($('#ev-max').value);
+  if (max < 1) p.set('max_confidence', max.toFixed(2));
+  if ($('#ev-q').value.trim()) p.set('q', $('#ev-q').value.trim());
+  if (evFile) p.set('module', evFile);
+  for (const [k, v] of Object.entries(extra || {})) p.set(k, v);
+  return p.toString();
+}
+function evBars(el, counts, total) {
+  const entries = Object.entries(counts).filter(([, n]) => n > 0);
+  const bar = entries.map(([k, n]) => `<i style="width:${(n / (total || 1)) * 100}%;background:${evVar(k)}" title="${k}: ${n.toLocaleString()}"></i>`).join('');
+  const legend = entries.map(([k, n]) => `<span style="--sw:${evVar(k)}">${k} ${fmt(n)} (${Math.round(n / (total || 1) * 100)}%)</span>`).join('');
+  el.innerHTML = `<div class="ev-bar">${bar}</div><div class="ev-legend">${legend}</div>`;
+}
+async function loadEvidence() {
+  try {
+    $('#ev-status').textContent = 'reading the programs…';
+    const r = await api('/api/evidence?' + evQuery({limit: 300}));
+    const w = r.whole, s = r.summary;
+    $('#ev-whole').innerHTML = `<div><b>${fmt(w.facts)}</b><span>facts stated</span></div>
+      <div><b>${w.mean_confidence.toFixed(2)}</b><span>mean confidence</span></div>
+      <div><b>${fmt(w.weak)}</b><span>weak (≤ ${r.weak_line})</span></div>
+      <div><b>${fmt(r.files.length)}</b><span>programs</span></div>
+      <div><b>${fmt(w.by_evidence.experimental || 0)}</b><span>measured</span></div>
+      <div><b>${fmt((w.by_evidence.inferred || 0) + (w.by_evidence.none || 0))}</b><span>inferred or unstated</span></div>`;
+    evBars($('#ev-bands'), w.by_evidence, w.facts);
+    if (!$('#ev-kinds').children.length) {
+      $('#ev-kinds').innerHTML = r.evidence_kinds.map(k => `<label class="ev-kind" style="border-color:${evVar(k)}"><input type="checkbox" data-kind="${k}">${k}</label>`).join('');
+      $('#ev-kinds').querySelectorAll('input[data-kind]').forEach(b => b.onchange = () => { b.checked ? evPicked.add(b.dataset.kind) : evPicked.delete(b.dataset.kind); loadEvidence(); });
+      $('#ev-module').innerHTML += r.files.map(f => `<option value="${escH(f.path)}">${escH(f.path.replace(/^data\/|^genomeos\//, ''))}</option>`).join('');
+    }
+    const sel = evPicked.size || parseFloat($('#ev-max').value) < 1 || $('#ev-q').value.trim() || evFile;
+    $('#ev-sel').textContent = sel ? `${s.facts.toLocaleString()} facts selected, mean confidence ${s.mean_confidence.toFixed(2)}; ${s.weak.toLocaleString()} of them weak` : 'no filter: every fact in every program';
+    $('#ev-files').innerHTML = '<table><tr><th>program</th><th class="num">facts</th><th class="num">weak</th><th class="num">conf</th></tr>' +
+      r.files.slice().sort((a, b) => (a.mean_confidence || 0) - (b.mean_confidence || 0)).map(f => `<tr class="ev-file ${f.path === evFile ? 'on' : ''}" data-path="${escH(f.path)}">
+        <td>${escH(f.path.replace(/^data\/|^genomeos\//, ''))}${f.error ? ` <span class="pill none">unparsed</span>` : ''}</td>
+        <td class="num">${fmt(f.facts || 0)}</td><td class="num">${fmt(f.weak || 0)}</td>
+        <td class="num ev-conf ${evConfClass(f.mean_confidence || 0)}">${(f.mean_confidence || 0).toFixed(2)}</td></tr>`).join('') + '</table>';
+    $('#ev-files').querySelectorAll('tr.ev-file').forEach(tr => tr.onclick = () => { evFile = evFile === tr.dataset.path ? '' : tr.dataset.path; $('#ev-module').value = evFile; loadEvidence(); });
+    $('#ev-rows').innerHTML = (r.rows.length ? '<table><tr><th class="num">conf</th><th>evidence</th><th>fact</th></tr>' + r.rows.map(x => `<tr>
+        <td class="num ev-conf ${evConfClass(x.confidence)}">${x.confidence.toFixed(2)}</td>
+        <td><span class="pill" style="color:${evVar(x.evidence)};border-color:${evVar(x.evidence)}">${x.evidence}</span><div class="muted" style="font-size:11px">${escH(x.block)}</div></td>
+        <td><b>${escH(x.label)}</b>${x.source ? `<div class="muted" style="font-size:11.5px">${escH(x.source)}</div>` : ''}${x.note ? `<div class="muted" style="font-size:11.5px">${escH(x.note)}</div>` : ''}
+          <div class="mono muted" style="font-size:10.5px">${escH(x.path)}${Object.keys(x.detail || {}).length ? ' · ' + escH(Object.entries(x.detail).slice(0, 4).map(([k, v]) => `${k}=${v}`).join(' ')) : ''}</div></td></tr>`).join('') + '</table>' : '<div class="muted">no fact matches</div>')
+      + (r.truncated ? `<div class="muted" style="font-size:12px;margin-top:6px">showing ${r.rows.length} of ${fmt(r.matched)} matching facts; narrow the filter or export the CSV for all</div>` : '');
+    $('#ev-status').textContent = `${fmt(r.matched)} matching`;
+  } catch (e) { $('#ev-status').textContent = e.message; }
+}
+$('#ev-max').oninput = () => { $('#ev-maxv').textContent = parseFloat($('#ev-max').value).toFixed(2); clearTimeout(evTimer); evTimer = setTimeout(loadEvidence, 250); };
+$('#ev-q').oninput = () => { clearTimeout(evTimer); evTimer = setTimeout(loadEvidence, 350); };
+$('#ev-module').onchange = () => { evFile = $('#ev-module').value; loadEvidence(); };
+$('#ev-weak').onclick = () => { $('#ev-max').value = '0.5'; $('#ev-maxv').textContent = '0.50'; loadEvidence(); };
+$('#ev-reset').onclick = () => { evPicked.clear(); evFile = ''; $('#ev-max').value = '1'; $('#ev-maxv').textContent = '1.00'; $('#ev-q').value = ''; $('#ev-module').value = ''; $('#ev-kinds').querySelectorAll('input[data-kind]').forEach(b => b.checked = false); loadEvidence(); };
+$('#ev-csv').onclick = async () => {
+  const r = await api('/api/evidence?' + evQuery({csv: 1}));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([r.csv], {type: 'text/csv'}));
+  a.download = 'evidence_review.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  $('#ev-status').textContent = `${fmt(r.matched)} facts exported`;
+};
 async function loadProgress() {
   const p = await api('/api/progress');
   $('#p-summary').innerHTML = `<div><b>${p.done}</b><span>tasks done</span></div><div><b>${p.count - p.done}</b><span>in progress / partial</span></div><div><b>${p.count}</b><span>tasks logged</span></div>`;
