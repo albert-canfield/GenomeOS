@@ -1377,11 +1377,40 @@ in order. "Owner" is the session that holds the files today (see §7).
   a seven-exon parser structure and no known protein behind it. Nine blocks
   may borrow their human axis from a neighbour's exons. ATTRIBUTION.md "The
   syntax candidates read one by one".
+- **What the whole-chromosome scoring bought the 98% (2026-09-13, genomeos-i1).**
+  Decided on chr21 from the tables on disk (`attribution/unknown_scoring.py`,
+  `unknown_scoring_chr21`, no model call). 2,334 of 12,139 scored elements
+  overlap an UNKNOWN block (1,155 move a gene; only 17 over 5 of the 20
+  constrained_unknown blocks). The ablation: the closure rebuilt from its
+  committed table reproduces 40.7% (p 0.001); without the 665 unknown-block
+  elements of its input it keeps 40.5% (random removals of the same size
+  39.5%, rho 0.191 to 0.213, rejections 73 to 67); with only them it falls to
+  28.7% on 61 genes, p 0.26 (random subsets 35.8%). Inside 480 strata of
+  length, GC and distance to the nearest coding TSS they move a gene less
+  often (49.5% against 68.0%), name a coding gene less often (28.6% against
+  43.1%) and act in fewer cell lines (0.45 against 0.80), p 0.0005 each; the
+  magnitude barely differs (0.309 against 0.338, p 0.048) and the silencer
+  share not at all, and the rest is 99.9% intragenic, a confound no stratum
+  removes. chr21 has no syntax block; mammal-constrained blocks show nothing
+  that survives a block-level null; of the 69 candidates the two on complete
+  chromosomes gained one weak target (DMC1, 0.108 log2) and no cell. The
+  model agrees with measurement where they meet (signed effect against
+  lentiMPRA activity, rho 0.22 K562 and 0.24 HepG2, n 329, p 0.0005; 59 of
+  them over unknown blocks, too few to split). Coverage: unknown blocks with a
+  named coding target went from 11 to 140 of 446 (90 with a cell), but the
+  naming elements cover 185 kb, 0.9% of the unknown space. Finishing the
+  sweep is about 674,000 requests at the measured 0.76 per element; scoring
+  the 882 non-copy constrained-unknown blocks and the 69 candidates directly
+  is a few thousand. **Verdict:** for area I the sweep does not pay; stop it
+  as an instrument for the 98% after chr20 and spend the next quota on the
+  constrained unknown and the candidates directly. ATTRIBUTION.md "What the
+  whole-chromosome scoring bought the 98%".
 - **Next.** 1. What remains of the candidate reading: measured RNA (ENCODE
   total RNA-seq, as the closure reads it) over the 69 blocks and their
-  controls, to test the 5 coding and 9 3'-extension readings, and
-  AlphaGenome's predicted tracks and deletion per block once the
-  all-elements chain frees the quota. 3. The
+  controls, to test the 5 coding and 9 3'-extension readings; then, with the
+  next quota (the recommendation above), the deletion of the 882 non-copy
+  constrained-unknown blocks and the 69 candidates' conserved segments with
+  matched control windows. The closure's replication on chr19 needs no quota. 3. The
   remaining attribution: AlphaGenome's predicted chromatin tracks for activity
   and tissue on the 15,536 regulatory blocks, in-silico mutagenesis for the
   bases that matter; the self-hosted model gates the move from chromosome 21

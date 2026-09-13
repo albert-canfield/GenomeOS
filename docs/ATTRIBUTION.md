@@ -1,10 +1,10 @@
 # The 98%: attributing function to the non-coding genome
 
 Area I of ROADMAP.md. Code: `genomeos/attribution/` (`bigwig.py`, `constraint.py`,
-`budget.py`, `organise.py`, `candidates.py`), `scripts/budget_genome_wide.py`,
+`budget.py`, `organise.py`, `candidates.py`, `unknown_scoring.py`), `scripts/budget_genome_wide.py`,
 `scripts/syntax_candidates.py`, `genomeos budget`. Results:
 `data/results/budget_<chrom>.json`, `budget_genome_wide.json`,
-`syntax_candidates_genome_wide.json`.
+`syntax_candidates_genome_wide.json`, `unknown_scoring_chr21.json`.
 
 ## The question, and the house
 
@@ -473,6 +473,111 @@ constrained non-coding sequence is active. The layers that would settle most of 
 reads) and AlphaGenome's predicted tracks and deletion on each block, were not used
 here, the first because this run kept to local data and the second because the
 all-elements chain holds the request quota.
+
+## What the whole-chromosome scoring bought the 98%, decided on chr21 (2026-09-13)
+
+Albert's question before more quota goes to the sweep: chromosome 21's 12,139 elements
+have all been deleted in AlphaGenome with the effect per gene and per cell line (5,409
+requests), so what did that buy the UNKNOWN space, does it sharpen the syntax reading,
+and does measurement back it? `attribution/unknown_scoring.py`
+(`unknown_scoring_chr21.json`, 33 s, no model call) answers from the tables on disk.
+
+2,334 elements (19.2%) overlap an UNKNOWN block, edges counted, and 1,155 of them move a
+gene: 1,854 over 180 of the 194 regulatory blocks, 225 over 54 of 104 fossil, 203 over 44
+of 101 neutral, 35 over 5 of 27 structural, and 17 over 5 of the 20 constrained_unknown
+blocks. Of the 5,174 elements in the closure's input (those naming a coding gene), 665
+lie over an unknown block.
+
+**The ablation.** The closure was rebuilt from the committed gene by cell table and
+reproduces it exactly (40.7% against 24.8% shuffled, p 0.001, rho 0.191), then rerun
+without and with only those 665, each against fifty random removals of the same number
+of elements per gene, so a fall cannot be the mere amount of input taken away.
+
+| element input (the cell's own score, DNase-gated) | genes | most active cell is the most expressed | p | rho | rejected |
+|---|---|---|---|---|---|
+| all elements (the committed closure) | 141 | 40.7% | 0.001 | 0.191 | 73 |
+| without the unknown-block elements | 140 | **40.5%** | 0.001 | 0.213 | 67 |
+| random removals of the same size, 50 draws | 139.8 | 39.5% (36.2% to 41.4%) | | | |
+| only the unknown-block elements | 61 | **28.7%** (shuffled 25.2%) | 0.26 | 0.072 | 35 |
+| random subsets of the same size, 50 draws | 53.3 | 35.8% (23.8% to 49.1%) | | | |
+
+Dropping the elements over unknown space does not move the one test that works: the
+closure keeps 40.5%, above 86% of random removals of the same size, the correlation
+rises and six rejections disappear. On their own those elements do not pick the cell (p
+0.26) and do worse than 88% of random subsets of the same size, though that last gap is
+inside the draws' spread. The model's reading over unknown space adds nothing to the
+closure on this chromosome.
+
+**Are they different?** Against the other 9,805 elements, raw and inside 480 strata of
+length, GC and distance to the nearest coding TSS (40 distance bins, because eight left
+the unknown elements at 260 kb against 173 kb; with 40 the matched means are 254 and 246
+kb), with the flag permuted inside strata 2,000 times:
+
+| per element | over unknown blocks | the rest, matched | p |
+|---|---|---|---|
+| moves a gene | 49.5% | 68.0% | 0.0005 |
+| names a coding gene | 28.6% | 43.1% | 0.0005 |
+| abs log2 of the best target, movers | 0.309 | 0.338 | 0.048 |
+| silencer-like (expression up on deletion), movers | 37.7% | 38.8% | 0.49 |
+| cell lines at 0.1 log2 or more, of four, movers | 0.45 | 0.80 | 0.0005 |
+| distance to the coding target's TSS, kb | 45.0 | 49.3 | 0.11 |
+
+They move genes less often, name a coding gene less often and act in about half as many
+cell lines, with a marginally smaller effect; the silencer share and the reach to the
+target do not differ. One confound no stratum removes: 99.9% of the other elements sit
+inside a gene body (introns) against 3.9% of these, so the comparison is intergenic
+against intragenic, which is what the unknown space is by construction.
+
+**The syntax reading.** Chromosome 21 has no block constrained on both axes at any
+tier (the organiser found none), so the test the question asks for has no members here.
+The nearest one, mammal-constrained blocks (relaxed, 5 blocks, 23 elements) against the
+rest: moving 47.8% against 47.5% matched (p 0.96), abs log2 0.315 against 0.281 (p
+0.74), cell lines 0.91 against 0.35 (p 0.02 per element, but 0.28 with blocks as the
+unit, which is the honest null since elements share their block's label). Nothing
+survives. Of the 69 genome-wide syntax candidates none lies on chr21; two lie on
+chromosomes whose scoring is complete. chr19:53,943,950 holds one scored element that
+moves nothing. chr22:38,571,213 holds one that names DMC1 at 0.108 log2 (psoas muscle),
+with no cell line reaching the bar. So the sweep gave the candidates one weak target
+and no cell.
+
+**Against measurement.** lentiMPRA covers 329 scored elements in K562 and HepG2 (the
+library was drawn from those lines' DNase peaks): the signed deletion effect correlates
+with measured activity at rho 0.22 in K562 and 0.24 in HepG2 (both p 0.0005 by
+permutation), the unsigned magnitude at 0.10 (p 0.057) and 0.17 (p 0.002). Only 59 of
+the 329 lie over unknown blocks (rho 0.01 in K562, 0.25 in HepG2), too few to say the two
+groups differ. VISTA has 19 elements on chr21: 10 of 13 positives against 2 of 6
+negatives hold an element that moves a gene, reported and not read. ClinVar and the GWAS
+table are not used: the GWAS rows were distilled only near the sampled elements.
+
+**Coverage and cost.** Before the sweep the two samples named a coding target in 11 of
+the 446 unknown blocks; after it, 140, and 90 of those have a cell line where the
+deletion reaches 0.1 log2. By tier: regulatory 9 to 117 of 194, neutral 2 to 15 of 101,
+fossil 0 to 7 of 104, constrained_unknown 0 to 1 of 20 (no cell), structural 0 of 27.
+The blocks so touched span 3.9 Mb of the 20.8 Mb of unknown space, but the elements
+naming a target cover 185 kb of it, 0.9%, against 3.1 kb before. The runs cost 0.45
+requests per element on chr21, 0.74 on chr19 (21,590 requests, 603 quota waits) and 1.0
+on chr22, 0.76 over the complete runs. With 83,128 elements scored so far and about
+884,000 in a node left in the registry's 1.06 million, finishing the sweep is about
+674,000 requests, some 125 chromosome 21s. Scoring the constrained unknown directly is
+of another order: the 882 blocks that are not copies and the 69 candidates are about a
+thousand deletions (a few thousand if the long blocks are cut into their conserved
+segments), under a fifth of chr19.
+
+**Verdict.** For the 98% the sweep does not pay. Its elements over unknown space are
+removable from the closure without loss, carry no cell on their own, act in fewer cell
+lines than intragenic elements, barely reach the constrained unknown (17 elements, one
+block named, no cell), and gave the syntax candidates one weak target. What it did buy
+is bookkeeping: 129 more unknown blocks, mostly regulatory tier, with a named target that
+the one falsifying test does not use. The model itself is not the problem, since its
+signed effect tracks measured activity (rho 0.22 to 0.24): the registry's elements are
+simply not where the unknown space's constraint is. Recommendation: stop the sweep as an
+instrument for area I after chr20, and spend the next quota scoring the 882 non-copy
+constrained-unknown blocks and the 69 candidates directly, their conserved segments
+deleted with matched control windows, which is what would test the coding and regulatory
+readings of the candidate section. The closure's replication on a third chromosome needs
+no quota, since chr19 is complete. What is weak: one chromosome, and a small one with no
+syntax block; the cell panel of four lines; and an element counted as over unknown space
+when any base of it touches a block.
 
 ## What comes next, in order
 

@@ -1,0 +1,475 @@
+{
+  "result": "unknown_scoring_chr21",
+  "date": "2026-09-13",
+  "chrom": "chr21",
+  "elements_scored": 12139,
+  "elements_over_unknown_blocks": 2334,
+  "by_tier": {
+    "neutral": 203,
+    "regulatory": 1854,
+    "fossil": 225,
+    "constrained_unknown": 17,
+    "structural": 35
+  },
+  "blocks_touched_by_tier": {
+    "constrained_unknown": 5,
+    "fossil": 54,
+    "neutral": 44,
+    "regulatory": 180,
+    "structural": 5
+  },
+  "ablation": {
+    "elements_in_input": 5174,
+    "elements_over_unknown_blocks": 665,
+    "genes_losing_every_element": 13,
+    "full_input": {
+      "genes_tested": 141,
+      "most_active_cell_is_most_expressed": 0.407,
+      "shuffled": 0.248,
+      "p_value": 0.001,
+      "mean_rho": 0.191,
+      "rejected": 73,
+      "unexplained": 9
+    },
+    "reproduces_committed_closure": true,
+    "without_unknown_block_elements": {
+      "genes_tested": 140,
+      "most_active_cell_is_most_expressed": 0.405,
+      "shuffled": 0.248,
+      "p_value": 0.001,
+      "mean_rho": 0.213,
+      "rejected": 67,
+      "unexplained": 9
+    },
+    "random_removal_of_the_same_size": {
+      "draws": 50,
+      "mean_hit": 0.3945,
+      "min_hit": 0.362,
+      "max_hit": 0.414,
+      "mean_genes_tested": 139.8,
+      "draws_at_or_below_observed": 0.86
+    },
+    "only_unknown_block_elements": {
+      "genes_tested": 61,
+      "most_active_cell_is_most_expressed": 0.287,
+      "shuffled": 0.252,
+      "p_value": 0.2587,
+      "mean_rho": 0.072,
+      "rejected": 35,
+      "unexplained": 37
+    },
+    "random_subset_of_the_same_size": {
+      "draws": 50,
+      "mean_hit": 0.3578,
+      "min_hit": 0.238,
+      "max_hit": 0.491,
+      "mean_genes_tested": 53.3,
+      "draws_at_or_below_observed": 0.12
+    }
+  },
+  "comparison": {
+    "moves_gene": {
+      "metric": "moves_gene",
+      "unknown_n": 2334,
+      "rest_n": 9805,
+      "unknown_raw": 0.4949,
+      "rest_raw": 0.6824,
+      "unknown_matched": 0.4951,
+      "rest_matched": 0.6795,
+      "difference_matched": -0.1845,
+      "p_permuted_within_strata": 0.0005,
+      "strata_shared": 443,
+      "unknown_in_shared_strata": 2327
+    },
+    "names_coding": {
+      "metric": "names_coding",
+      "unknown_n": 2334,
+      "rest_n": 9805,
+      "unknown_raw": 0.2849,
+      "rest_raw": 0.4599,
+      "unknown_matched": 0.2858,
+      "rest_matched": 0.4311,
+      "difference_matched": -0.1453,
+      "p_permuted_within_strata": 0.0005,
+      "strata_shared": 443,
+      "unknown_in_shared_strata": 2327
+    },
+    "abs_log2": {
+      "metric": "abs_log2",
+      "unknown_n": 1155,
+      "rest_n": 6691,
+      "unknown_raw": 0.3088,
+      "rest_raw": 0.3237,
+      "unknown_matched": 0.3091,
+      "rest_matched": 0.3384,
+      "difference_matched": -0.0294,
+      "p_permuted_within_strata": 0.048,
+      "strata_shared": 382,
+      "unknown_in_shared_strata": 1152
+    },
+    "silencer": {
+      "metric": "silencer",
+      "unknown_n": 1155,
+      "rest_n": 6691,
+      "unknown_raw": 0.3775,
+      "rest_raw": 0.3914,
+      "unknown_matched": 0.3767,
+      "rest_matched": 0.3878,
+      "difference_matched": -0.0111,
+      "p_permuted_within_strata": 0.4933,
+      "strata_shared": 382,
+      "unknown_in_shared_strata": 1152
+    },
+    "cells_acting": {
+      "metric": "cells_acting",
+      "unknown_n": 1155,
+      "rest_n": 6691,
+      "unknown_raw": 0.4511,
+      "rest_raw": 0.7507,
+      "unknown_matched": 0.4523,
+      "rest_matched": 0.7962,
+      "difference_matched": -0.3439,
+      "p_permuted_within_strata": 0.0005,
+      "strata_shared": 382,
+      "unknown_in_shared_strata": 1152
+    },
+    "target_tss_distance": {
+      "metric": "target_tss_distance",
+      "unknown_n": 665,
+      "rest_n": 4509,
+      "unknown_raw": 51611.6887,
+      "rest_raw": 95956.8314,
+      "unknown_matched": 44954.2337,
+      "rest_matched": 49251.5093,
+      "difference_matched": -4297.2757,
+      "p_permuted_within_strata": 0.1074,
+      "strata_shared": 280,
+      "unknown_in_shared_strata": 659
+    },
+    "balance_inside_strata": {
+      "length": {
+        "unknown_matched": 276.1014,
+        "rest_matched": 275.7977
+      },
+      "gc": {
+        "unknown_matched": 0.4789,
+        "rest_matched": 0.4795
+      },
+      "nearest_coding_tss": {
+        "unknown_matched": 253915.8015,
+        "rest_matched": 245558.4294
+      }
+    },
+    "covariates": {
+      "unknown": {
+        "n": 2334,
+        "length": 276.3,
+        "gc": 0.4793,
+        "nearest_coding_tss": 260186.5,
+        "overlapping_a_gene_body": 0.039
+      },
+      "rest": {
+        "n": 9805,
+        "length": 271.6,
+        "gc": 0.4814,
+        "nearest_coding_tss": 138641.8,
+        "overlapping_a_gene_body": 0.9991
+      }
+    }
+  },
+  "syntax": {
+    "per_case": {
+      "recent": {
+        "elements": 957,
+        "blocks": 88,
+        "moves_gene": 0.5361,
+        "abs_log2_when_moving": 0.3369,
+        "cells_acting": 0.505
+      },
+      "relaxed": {
+        "elements": 23,
+        "blocks": 5,
+        "moves_gene": 0.4783,
+        "abs_log2_when_moving": 0.3152,
+        "cells_acting": 0.909
+      },
+      "tolerant": {
+        "elements": 1243,
+        "blocks": 165,
+        "moves_gene": 0.473,
+        "abs_log2_when_moving": 0.2858,
+        "cells_acting": 0.4
+      },
+      "unmeasured": {
+        "elements": 111,
+        "blocks": 30,
+        "moves_gene": 0.3874,
+        "abs_log2_when_moving": 0.2875,
+        "cells_acting": 0.395
+      }
+    },
+    "mammal_constrained_block": {
+      "moves_gene": {
+        "metric": "moves_gene",
+        "unknown_n": 23,
+        "rest_n": 2311,
+        "unknown_raw": 0.4783,
+        "rest_raw": 0.495,
+        "unknown_matched": 0.4783,
+        "rest_matched": 0.4914,
+        "difference_matched": -0.0131,
+        "p_permuted_within_strata": 0.8966,
+        "strata_shared": 17,
+        "unknown_in_shared_strata": 23,
+        "block_level": {
+          "constrained_blocks": 5,
+          "other_blocks": 283,
+          "difference": -0.0478,
+          "p_permuted_over_blocks": 0.7706
+        }
+      },
+      "abs_log2": {
+        "metric": "abs_log2",
+        "unknown_n": 11,
+        "rest_n": 1144,
+        "unknown_raw": 0.3152,
+        "rest_raw": 0.3088,
+        "unknown_matched": 0.3484,
+        "rest_matched": 0.4709,
+        "difference_matched": -0.1225,
+        "p_permuted_within_strata": 0.4803,
+        "strata_shared": 7,
+        "unknown_in_shared_strata": 9,
+        "block_level": {
+          "constrained_blocks": 4,
+          "other_blocks": 224,
+          "difference": -0.0008,
+          "p_permuted_over_blocks": 0.994
+        }
+      },
+      "cells_acting": {
+        "metric": "cells_acting",
+        "unknown_n": 11,
+        "rest_n": 1144,
+        "unknown_raw": 0.9091,
+        "rest_raw": 0.4467,
+        "unknown_matched": 1.1111,
+        "rest_matched": 0.4476,
+        "difference_matched": 0.6635,
+        "p_permuted_within_strata": 0.2334,
+        "strata_shared": 7,
+        "unknown_in_shared_strata": 9,
+        "block_level": {
+          "constrained_blocks": 4,
+          "other_blocks": 224,
+          "difference": 0.3571,
+          "p_permuted_over_blocks": 0.2849
+        }
+      }
+    },
+    "cases_present": [
+      "recent",
+      "relaxed",
+      "tolerant",
+      "unmeasured"
+    ],
+    "syntax_blocks": 0
+  },
+  "syntax_candidates": {
+    "candidates": 69,
+    "on_completely_scored_chromosomes": 2,
+    "chromosomes": [
+      "chr19",
+      "chr22"
+    ],
+    "rows": [
+      {
+        "block": "chr19:53943950-53945679",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 0,
+        "target": null,
+        "target_is_coding": false,
+        "log2": null,
+        "tissue": null,
+        "cells_at_bar": [],
+        "gain": "nothing"
+      },
+      {
+        "block": "chr22:38571213-38574930",
+        "reading_before": "regulatory",
+        "elements_scored": 1,
+        "elements_moving_a_gene": 1,
+        "target": "DMC1",
+        "target_is_coding": true,
+        "log2": 0.1078,
+        "tissue": "psoas muscle",
+        "cells_at_bar": [],
+        "gain": "target and magnitude, no cell line at the bar"
+      }
+    ]
+  },
+  "mpra": {
+    "elements_covered_by_both": 445,
+    "K562": {
+      "n": 329,
+      "rho_abs_effect_vs_activity": 0.10426244031402764,
+      "rho_signed_effect_vs_activity": 0.22076628546163138,
+      "p_signed_permuted": 0.0005,
+      "p_abs_permuted": 0.057,
+      "unknown": {
+        "n": 59,
+        "rho": 0.010432952935929732
+      },
+      "rest": {
+        "n": 270,
+        "rho": 0.11794034112140299
+      }
+    },
+    "HepG2": {
+      "n": 329,
+      "rho_abs_effect_vs_activity": 0.1698752591575749,
+      "rho_signed_effect_vs_activity": 0.2390566935971272,
+      "p_signed_permuted": 0.0005,
+      "p_abs_permuted": 0.002,
+      "unknown": {
+        "n": 59,
+        "rho": 0.25083289496756095
+      },
+      "rest": {
+        "n": 270,
+        "rho": 0.16486936206285316
+      }
+    }
+  },
+  "vista": {
+    "elements": 19,
+    "positives": 13,
+    "negatives": 6,
+    "positives_with_a_moving_element": 10,
+    "negatives_with_a_moving_element": 2,
+    "mean_max_abs_log2_positive": 0.4259,
+    "mean_max_abs_log2_negative": 0.0953,
+    "note": "too few VISTA elements here to conclude from; reported, not read"
+  },
+  "coverage": {
+    "unknown_blocks": 446,
+    "unknown_bp": 20813319,
+    "by_tier": {
+      "constrained_unknown": {
+        "blocks": 20,
+        "bp": 287292,
+        "elements_scored": 17,
+        "blocks_with_a_named_target_before": 0,
+        "blocks_with_a_named_target_after": 1,
+        "blocks_with_a_target_and_a_cell": 0,
+        "bp_with_a_named_target_after": 5695
+      },
+      "fossil": {
+        "blocks": 104,
+        "bp": 3913108,
+        "elements_scored": 225,
+        "blocks_with_a_named_target_before": 0,
+        "blocks_with_a_named_target_after": 7,
+        "blocks_with_a_target_and_a_cell": 3,
+        "bp_with_a_named_target_after": 485717
+      },
+      "neutral": {
+        "blocks": 101,
+        "bp": 2934323,
+        "elements_scored": 203,
+        "blocks_with_a_named_target_before": 2,
+        "blocks_with_a_named_target_after": 15,
+        "blocks_with_a_target_and_a_cell": 6,
+        "bp_with_a_named_target_after": 848438
+      },
+      "regulatory": {
+        "blocks": 194,
+        "bp": 3926601,
+        "elements_scored": 1854,
+        "blocks_with_a_named_target_before": 9,
+        "blocks_with_a_named_target_after": 117,
+        "blocks_with_a_target_and_a_cell": 81,
+        "bp_with_a_named_target_after": 2541021
+      },
+      "structural": {
+        "blocks": 27,
+        "bp": 9751995,
+        "elements_scored": 35,
+        "blocks_with_a_named_target_before": 0,
+        "blocks_with_a_named_target_after": 0,
+        "blocks_with_a_target_and_a_cell": 0,
+        "bp_with_a_named_target_after": 0
+      }
+    },
+    "blocks_with_a_named_target_before": 11,
+    "blocks_with_a_named_target_after": 140,
+    "blocks_with_a_target_and_a_cell": 90,
+    "bp_with_a_named_target_after": 3880871,
+    "element_bp_with_a_named_target_inside_unknown": 185305,
+    "element_bp_with_a_named_target_inside_unknown_before": 3141,
+    "elements_over_unknown_blocks": 2334,
+    "elements_over_unknown_naming_a_gene": 665,
+    "elements_over_unknown_moving_any_gene": 1155
+  },
+  "cost": {
+    "per_chromosome": {
+      "chr1": {
+        "elements_total": 88109,
+        "scored": 2200,
+        "requests_this_run": 2003,
+        "complete": false
+      },
+      "chr19": {
+        "elements_total": 29374,
+        "scored": 29374,
+        "requests_this_run": 21590,
+        "complete": true
+      },
+      "chr20": {
+        "elements_total": 26954,
+        "scored": 19400,
+        "requests_this_run": 19610,
+        "complete": false
+      },
+      "chr21": {
+        "elements_total": 12139,
+        "scored": 12139,
+        "requests_this_run": 5409,
+        "complete": true
+      },
+      "chr22": {
+        "elements_total": 19708,
+        "scored": 19708,
+        "requests_this_run": 19708,
+        "complete": true
+      },
+      "chrY": {
+        "elements_total": 907,
+        "scored": 907,
+        "requests_this_run": 0,
+        "complete": true
+      }
+    },
+    "requests_per_element_on_complete_runs": 0.763,
+    "registry_elements_genome": 1063878,
+    "share_inside_a_node_on_this_chromosome": 0.909,
+    "elements_scored_so_far": 83728,
+    "elements_remaining_estimate": 883209,
+    "requests_remaining_estimate": 673822
+  },
+  "thresholds": {
+    "min_effect_log2": 0.1,
+    "strata": "3 length x 4 GC x 40 distance-to-nearest-coding-TSS bins",
+    "permutations": 2000,
+    "random_draws": 50
+  },
+  "evidence": {
+    "elements": "predicted: AlphaGenome deletion per element, per gene and per cell line (already scored)",
+    "blocks": "inferred: genomeos unknown classes and the budget's tiers; curated sequence classes",
+    "axes": "inferred: Zoonomia phyloP against gnomAD Gnocchi per block (area J)",
+    "closure": "experimental: ENCODE total RNA-seq and DNase (the committed closure table)",
+    "measured": "experimental: ENCODE4 lentiMPRA, VISTA e11.5"
+  },
+  "seconds": 32.7
+}
