@@ -81,3 +81,24 @@ def test_aggregate_keeps_the_cell_lines_own_tracks():
     assert by_cell_of(rows, {"gene": "G"}) == {"K562": -0.5, "IMR-90": 0.1}
     assert by_cell_of(rows, {"gene": "Z"}) is None and by_cell_of(rows, None) is None
     assert has_cells({"genes": rows}) and not has_cells({"genes": [{"gene": "old"}]}) and not has_cells(None)
+
+
+def test_pack_folds_a_chromosome_and_load_cached_reads_the_archive(tmp_path):
+    import json
+
+    from genomeos.predict.enhancer_target import archive_path, cache_path, load_cached, pack
+
+    for eid, gene in (("E1", "APP"), ("E2", "SOD1")):
+        p = cache_path("chr21", eid, tmp_path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps({"id": eid, "genes": [{"gene": gene, "by_cell": {}}]}))
+    r = pack("chr21", tmp_path, remove=True)
+    assert r["elements"] == 2 and r["packed"] == 2 and r["removed"] == 2
+    assert archive_path("chr21", tmp_path).exists() and not cache_path("chr21", "E1", tmp_path).exists()
+    assert load_cached("chr21", "E1", tmp_path)["genes"][0]["gene"] == "APP"
+    assert load_cached("chr21", "E9", tmp_path) is None
+    # a per-element file written after the pack still wins, and a second pack absorbs it
+    cache_path("chr21", "E3", tmp_path).parent.mkdir(parents=True, exist_ok=True)
+    cache_path("chr21", "E3", tmp_path).write_text(json.dumps({"id": "E3", "genes": []}))
+    assert load_cached("chr21", "E3", tmp_path)["id"] == "E3"
+    assert pack("chr21", tmp_path, remove=True)["elements"] == 3

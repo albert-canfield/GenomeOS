@@ -308,6 +308,19 @@ Evidence: the reads are `experimental`, the estimate `inferred` (0.3), since no
 GC normalisation is applied and the sampled tail is a sample. CRAM is not
 readable without htslib, so the range route is BAM only.
 
+## The deletion cache, packed (2026-09-13)
+
+Every element AlphaGenome has been asked about is cached as one small JSON
+under `data/knowledge/alphagenome/elements/<chrom>/<element>.json` (about 14
+kB each; a chromosome scored whole is 12,000 to 30,000 of them, and the genome
+would be near a million files and 13 GB). A chromosome whose all-elements job
+is complete never needs those files individually again, so
+`scripts/pack_element_cache.py` folds each into one gzipped archive
+(`<chrom>.json.gz`, about eight times smaller) and removes the files only
+after every answer is inside; `load_cached` reads the per-element file when it
+exists and the archive otherwise, so nothing else changes. chr21, chr22 and
+chrY packed from 351 MB in 32,804 files to 34.7 MB in three.
+
 ## Polygenic scores: the PGS Catalog (2026-09-12)
 
 `genomeos individual pgs --name N [--score PGS000018 ...]` streams a score's

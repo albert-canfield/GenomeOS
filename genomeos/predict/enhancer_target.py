@@ -15,11 +15,14 @@ ALPHAGENOME.md). One request per element, about eight seconds, so a chromosome
 is a sampled job and the per-element answers are cached under
 data/knowledge/alphagenome/elements (local, not committed); the summary that is
 committed says how often the prediction agrees with the domain inference, which
-is a test of the node model itself.
+is a test of the node model itself. A finished chromosome's answers fold into one
+gzipped archive (`pack`), read transparently by `load_cached`: twenty thousand
+files of a few kilobytes become one file eight times smaller.
 """
 
 from __future__ import annotations
 
+import gzip
 import json
 import time
 from collections.abc import Callable
@@ -42,9 +45,71 @@ def cache_path(chrom: str, element_id: str, cache: Path = CACHE) -> Path:
     return cache / chrom / f"{element_id}.json"
 
 
+def archive_path(chrom: str, cache: Path = CACHE) -> Path:
+    """One finished chromosome's answers in a single gzipped file (see `pack`)."""
+    return cache / f"{chrom}.json.gz"
+
+
+_ARCHIVES: dict[Path, dict[str, Any]] = {}
+
+
+def _archive(chrom: str, cache: Path = CACHE) -> dict[str, Any]:
+    """A packed chromosome read once per process; {} when there is no archive."""
+    p = archive_path(chrom, cache)
+    if p not in _ARCHIVES:
+        try:
+            with gzip.open(p, "rt") as fh:
+                _ARCHIVES[p] = json.load(fh)
+        except (OSError, json.JSONDecodeError):
+            _ARCHIVES[p] = {}
+    return _ARCHIVES[p]
+
+
 def load_cached(chrom: str, element_id: str, cache: Path = CACHE) -> dict[str, Any] | None:
+    """One element's cached answer: the per-element file if it is there, else the chromosome's archive."""
     p = cache_path(chrom, element_id, cache)
-    return json.loads(p.read_text()) if p.exists() else None
+    if p.exists():
+        return json.loads(p.read_text())
+    return _archive(chrom, cache).get(element_id)
+
+
+def pack(chrom: str, cache: Path = CACHE, remove: bool = False) -> dict[str, Any]:
+    """Fold a finished chromosome's per-element files into one gzipped archive (about eight times smaller
+    and one file instead of twenty thousand). The files are removed only when `remove` is set, and only
+    after every one of them is in the archive."""
+    d = cache / chrom
+    files = sorted(d.glob("*.json")) if d.exists() else []
+    packed = dict(_archive(chrom, cache))
+    for f in files:
+        try:
+            packed[f.stem] = json.loads(f.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+    if not packed:
+        return {"chrom": chrom, "elements": 0, "packed": 0}
+    out = archive_path(chrom, cache)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    tmp = out.with_suffix(".part")
+    with gzip.open(tmp, "wt") as fh:
+        json.dump(packed, fh)
+    tmp.rename(out)
+    _ARCHIVES[out] = packed
+    removed = 0
+    if remove:
+        for f in files:
+            if f.stem in packed:
+                f.unlink(missing_ok=True)
+                removed += 1
+        if d.exists() and not any(d.iterdir()):
+            d.rmdir()
+    return {
+        "chrom": chrom,
+        "elements": len(packed),
+        "packed": len(files),
+        "removed": removed,
+        "archive": str(out),
+        "archive_mb": round(out.stat().st_size / 1e6, 1),
+    }
 
 
 def aggregate(effects: list[tuple[str, str, float]], cells: tuple[str, ...] = CELLS) -> list[dict[str, Any]]:
