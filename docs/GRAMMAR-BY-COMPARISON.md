@@ -863,3 +863,83 @@ sequence model's in-silico mutagenesis of each element (which bases change
 predicted activity, AlphaGenome being the project's model), held against
 the same positives and negatives, asks whether the bases that matter are
 the ones that are kept.
+
+
+## 16. Measured: which bases matter, and what marks them (2026-09-13)
+
+Section 15 ended with a negative it could not explain, because nothing in it
+measured which bases of an enhancer matter. Kircher et al. 2019 measured
+exactly that: saturation mutagenesis read out by a reporter assay over 21
+regulatory elements, nearly every single-base substitution with its effect on
+activity and a p-value (44,658 measurements on GRCh38; GEO GSE126550, the
+table published with the lab's data portal). `genomeos/knowledge/satmut.py`
+and `scripts/satmut_grammar.py` read it, call the bases whose substitution
+changes activity, and ask what marks them. No AlphaGenome quota, so it runs
+beside the deletion-scoring chain.
+
+A base counts as **functional** when some substitution at it is significant
+(p < 1e-5, at least 10 barcodes, the portal's defaults) and **strong** when
+that substitution also moves activity by at least 0.25 log2, about 19%: at
+deep coverage a p-value alone flags very small effects, and the share of
+functional bases swings from 1% of FOXE1 to 77% of IRF4. Both definitions are
+reported throughout. Loci measured twice or more (SORT1, PKLR, LDLR, TERT,
+the ZRS) contribute one primary experiment each; the repeats agree at r 0.63
+to 0.97 on shared substitutions, so the measurement is sound.
+
+**The panel's negative, explained.** The share of an element's bases covered
+by some JASPAR site, and what that buys:
+
+| match threshold | bases in a site | functional bases recovered | enrichment |
+|---|---|---|---|
+| 0.80 | 100% | 100% | 1.00 |
+| 0.85 | 99.9% | 100% | 1.00 |
+| 0.90 | 96.9% | 97.6% | 1.01 |
+| 0.95 | 65.0% | 72.0% | 1.11 |
+
+At 0.85, the threshold §8 and §15 used, some profile of the 1,019 covers
+essentially every base of a regulatory element. "The site is held across
+species" was therefore a statement about conserved sequence, not about
+binding, which is why enhancers and conserved negatives looked alike. Only at
+0.95 is a site selective, and then it enriches functional bases 1.11 times
+(1.16 for strong ones).
+
+**What does predict a functional base.** Area J's two candidate marks, ranked
+by the area under the ROC curve per locus (0.5 is chance):
+
+| mark | median AUC, functional | median AUC, strong | above chance |
+|---|---|---|---|
+| best motif score covering the base | 0.58 | 0.59 | 19 and 18 of 21 loci |
+| phyloP across 241 mammals | 0.54 | 0.54 | 15 and 13 of 21 |
+
+Both are weak, and the motif score is the better of the two, which is the
+reverse of what the project has leaned on. Per locus the spread is wide:
+phyloP reaches 0.74 at the LDLR promoter and sits at 0.45 for SORT1 and 0.40
+for FOXE1; the motif score reaches 0.71 at the TERT promoter.
+
+**Where they combine, they do better than either alone.** Among bases
+constrained across mammals (phyloP ≥ 2.27), those inside a strict (0.95)
+motif site are functional 36.5% of the time against 21.1% outside one
+(p 1e-15); for strong effects 24.1% against 13.3% (p 5e-11). That is the
+first quantified support in area J for the idea the conversation started
+from: conservation plus a recognisable site is a better statement about
+function than conservation alone. It is an enrichment of 1.7, not a rule.
+
+**No family stands out.** Of 89 families with at least five sites, none has a
+higher share of functional sites after correction; the leaders (KLF1, KLF5,
+KLF2, KLF14, SP) are all the same GC box, and the strong definition adds
+Ets-related and TEF-1 at q above 0.05. At 21 loci this asks too much of the
+data.
+
+**The ZRS.** The element §12 read as textbook HOX, PBX and MEIS logic has 6
+to 8 strongly functional bases of 485 measured, and 87 to 102 by the
+significance-only definition. Measurement gives that reading no support; it
+remains a motif list consistent with the literature.
+
+**What this changes.** The threshold calibration is now a comment where the
+scanner is defined: 0.85 stays for per-gene `requires` lists, which take each
+factor's best hit, and site-coverage questions must use 0.95. The area's
+honest summary is unchanged in shape but sharper: comparison across species
+and people places and dates function well, motif sites at a usual threshold
+say nothing about it, and the two marks together are modestly informative
+about individual bases. A readout that would do better is a model trained to
+predict activity, scored the same way against these 9,834 measured bases.

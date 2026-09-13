@@ -1537,6 +1537,19 @@ in order. "Owner" is the session that holds the files today (see §7).
   BioLang-flavoured view with an evidence note per line and an `unknown { }`
   block naming the layers not yet read; assembly only, no inference.
   GRAMMAR-BY-COMPARISON.md §9.
+- **Measured readout (2026-09-13).** `genomeos/knowledge/satmut.py`,
+  `scripts/satmut_grammar.py`, result `satmut_grammar`: Kircher et al. 2019's
+  saturation-mutagenesis MPRA (44,658 GRCh38 measurements over 21 elements)
+  as ground truth for which bases matter. It explains §15's negative: at the
+  0.85 match threshold JASPAR sites cover 99.9% of an element's bases, so a
+  "held site" was a statement about conserved sequence; at 0.95 they cover
+  65% and enrich functional bases 1.11x. Per base the motif score predicts
+  function better than conservation (median AUC 0.58 against 0.54) and both
+  are weak; together they are better than either alone (conserved bases in a
+  strict site are functional 36.5% against 21.1% outside, p 1e-15). No factor
+  family survives correction, and the ZRS has 6 strongly functional bases of
+  485, so §12's reading is unsupported by measurement. Uses no AlphaGenome
+  quota, so it runs beside the deletion chain. GRAMMAR-BY-COMPARISON.md §16.
 - **Missing.** The human axis as a Blocks-tab lane; the motif scan and
   operator patterns; phylogenetic profiling between libraries; the
   decompiled locus view; one developmental locus run end to end.

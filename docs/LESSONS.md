@@ -156,6 +156,20 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   as its grammar (the ZRS looked like textbook HOX, PBX and MEIS logic), and
   change the readout rather than sweeping thresholds until a test passes.
 
+- A motif-site call needs calibrating against measurement before it is used
+  as evidence: with 1,019 JASPAR profiles at 85% of the matrix range, some
+  site covers 99.9% of a regulatory element's bases, so "in a site" and
+  "held across species" say nothing; at 95% sites cover 65% and enrich
+  measured functional bases 1.11x. Use 0.95 for coverage questions and 0.85
+  only for per-gene best hits (`satmut_grammar`, Kircher 2019).
+- Measured against 9,834 saturation-mutagenesis bases, the motif score
+  predicts a functional base slightly better than mammalian conservation
+  (median AUC 0.58 against 0.54), both weakly, and the two together beat
+  either alone: conserved bases inside a strict site are functional 36.5% of
+  the time against 21.1% outside. Significance alone is depth-dependent (1%
+  of FOXE1's bases, 77% of IRF4's), so report an effect-size definition
+  beside it.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory

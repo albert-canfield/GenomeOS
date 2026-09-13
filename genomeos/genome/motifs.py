@@ -43,6 +43,11 @@ from genomeos.results import RESULTS_DIR, load_result, save_result
 JASPAR_URL = "https://jaspar.elixir.no/download/data/2026/CORE/JASPAR2026_CORE_vertebrates_non-redundant_pfms_jaspar.txt"
 JASPAR_PATH = Path("data/knowledge/jaspar/core_vertebrates_2026.jaspar")
 RELATIVE_SCORE = 0.85  # a hit scores at least this far from the matrix minimum to its maximum
+# Calibrated against measurement (knowledge/satmut.py, Kircher 2019 saturation mutagenesis): at 0.85
+# some profile covers 99.9% of a regulatory element's bases, so site *coverage* at this threshold carries
+# no information; use 0.95 (65% of bases covered, functional bases 1.1x enriched) for anything that asks
+# whether a base lies in a site. The 0.85 default stands for per-gene `requires` lists, which take each
+# factor's best hit rather than asking what a site covers.
 PSEUDOCOUNT = 0.25
 CORE_K = 8  # k-mer index width; motifs shorter than this use their whole width
 PROMOTER_FLANK = 1000  # TSS ± this many bases
@@ -328,6 +333,42 @@ class Index:
                 if i not in best or rel > best[i][0]:
                     best[i] = (round(rel, 3), fwd_start, strand)
         return best
+
+
+def all_hits(
+    motifs: list[Motif], seq: str, min_relative: float | None = None
+) -> list[tuple[str, int, int, int, float]]:
+    """Every hit of every profile on one sequence, not only each factor's best.
+
+    Each hit is (factor, start, end, strand, relative score).
+
+    Positions are 0-based on the forward strand, end exclusive; `min_relative` filters above the
+    thresholds the motifs were prepared with (prepare them at the lowest threshold of a sweep).
+    A factor with several profiles keeps one hit per start and strand, the best-scoring.
+    """
+    idx = Index([seq], {m.core_k for m in motifs})
+    best: dict[tuple[str, int, int], tuple[int, float]] = {}
+    for m in motifs:
+        table = idx.tables[m.core_k]
+        w, span = m.width, m.maximum - m.minimum
+        for code in m.feasible_cores():
+            for packed in table.get(code, ()):
+                strand, pos = (packed >> 11) & 1, packed & (MAX_POS - 1)
+                start = pos - m.core_offset
+                codes = idx.rev[0] if strand else idx.fwd[0]
+                if start < 0 or start + w > len(codes):
+                    continue
+                sc = m.score(codes, start)
+                if sc is None or sc < m.threshold:
+                    continue
+                rel = round((sc - m.minimum) / span, 3) if span else 1.0
+                if min_relative is not None and rel < min_relative:
+                    continue
+                fwd = len(codes) - start - w if strand else start
+                key = (m.name.upper(), fwd, strand)
+                if key not in best or rel > best[key][1]:
+                    best[key] = (w, rel)
+    return sorted((f, st, st + w, sd, rel) for (f, st, sd), (w, rel) in best.items())
 
 
 def scan(motifs: list[Motif], seqs: list[str]) -> dict[str, dict[int, tuple[float, int, int]]]:

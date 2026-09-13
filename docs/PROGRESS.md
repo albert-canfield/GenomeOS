@@ -820,6 +820,28 @@ only reads it.
 - **The rejected attributions as a set**: the closure's headline is now the cell's own score where a DNase peak sits on the element (the tissue-agnostic input read Jurkat and muscle effects as K562's for VPREB1, UPK3A, VPREB3, per genomeos-8e); in that reading 59% (chr21) and 42% (chr22) of the rejected pairs are genes no line of the panel makes (OLIG1, S100B, CRYBB1, CYP2D6), and the 22 and 96 wrong-cell genes carry about twice the elements, a higher summed input and promoters open in fewer lines than honoured ones; `rejected_profile` in closure_chr21/22.json; next, weight the input by promoter openness.
 - **Closure input corrections tested and rejected**: the strongest open element (36% and 30%), the mean (37%, 31%) and the sum weighted by the promoter's DNase percentile (29%, 29%) all score at or below the summed input (41%, 32%) on chr21 and chr22; the promoter's DNase percentile alone picks the expressing cell 27% and 28% of the time (p 0.27, 0.12), so the elements carry which-cell information the promoter does not; the summed, DNase-gated cell score stays the headline.
 
+## 2026-09-13 — measured: which bases matter
+
+Area J's panel said motif sites held across species do not separate enhancers
+from conserved negatives, and could not say why. Kircher et al. 2019's
+saturation mutagenesis says why: 44,658 measured substitutions over 21
+regulatory elements, read by genomeos/knowledge/satmut.py with no AlphaGenome
+quota. At the 0.85 match threshold the project has been using, some JASPAR
+profile covers 99.9% of an element's bases, so "the site is held" was a
+statement about conserved sequence rather than about binding; at 0.95 sites
+cover 65% and enrich functional bases 1.11 times. Per base, the best motif
+score covering it predicts function slightly better than mammalian
+conservation (median AUC 0.58 against 0.54 over 21 loci) and both are weak,
+but together they beat either alone: among conserved bases, 36.5% inside a
+strict site are functional against 21.1% outside (p 1e-15), the first
+quantified support in this area for conservation plus a recognisable site. No
+factor family survives correction over 89 tested, and the ZRS has 6 strongly
+functional bases of 485, so the earlier HOX, PBX and MEIS reading stands
+unsupported. The calibration is recorded where the scanner is defined, and the
+sources area J has used (Zoonomia, Gnocchi, VISTA, Compara, superdups, JASPAR,
+Kircher) are now credited in ACKNOWLEDGEMENTS.md.
+docs/GRAMMAR-BY-COMPARISON.md §16; two LESSONS rows.
+
 ## 2026-09-13 — the Evidence explorer, and what it says about this project
 
 The view the UI track promised on 2026-09-10 and never built (area G Next 1).

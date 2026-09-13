@@ -65,6 +65,13 @@ these; raw files are never redistributed (docs/DECISIONS.md D7).
 | Horvath 2013, Hannum 2013 | epigenetic clock coefficients | publications cited |
 | Hart et al. 2017 (CEGv2) | core-essential gene set | publication cited |
 | BioModels | SBML reference models | CC0 |
+| Zoonomia (Christmas et al. 2023), UCSC phyloP and phastCons tracks | constraint across 241 placental mammals per base, conserved elements | publication cited; UCSC tracks free for all uses |
+| gnomAD genomic constraint (Chen et al. 2024, "Gnocchi") | constraint within 76,156 human genomes per kilobase | gnomAD open terms, publication cited |
+| VISTA Enhancer Browser | transgenic mouse enhancer outcomes, the measured ground truth for elements | free for academic and commercial use, publication cited |
+| Ensembl Compara | orthologues, paralogues, gene trees, pairwise genome alignments | Apache 2.0 service, EMBL-EBI terms |
+| UCSC genomicSuperDups (Bailey and Eichler) | segmental duplications | free for all uses; publication cited |
+| JASPAR 2026 | transcription-factor binding profiles, TFClass families | CC BY 4.0 |
+| Kircher et al. 2019 (GEO GSE126550) | saturation-mutagenesis MPRA: which bases of 21 regulatory elements change activity | CC BY 4.0 publication; data portal code GPL-3 |
 
 ## Use and licence
 
