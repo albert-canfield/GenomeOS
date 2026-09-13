@@ -134,9 +134,11 @@ def main() -> int:
                         time.sleep(QUOTA_SLEEP)
                         quota_since = time.time()
                     else:
+                        heartbeat(name)  # a quota wait is life, not a stall
                         time.sleep(min(120, wait))
                 else:
                     print(f"  {e.id}: {type(ex).__name__}: {str(ex)[:100]}; retry in 30s", flush=True)
+                    heartbeat(name)
                     time.sleep(30)
                 scorer = None
                 adapter = AlphaGenomeAdapter()
