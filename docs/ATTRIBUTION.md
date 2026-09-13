@@ -1,8 +1,10 @@
 # The 98%: attributing function to the non-coding genome
 
 Area I of ROADMAP.md. Code: `genomeos/attribution/` (`bigwig.py`, `constraint.py`,
-`budget.py`), `scripts/budget_genome_wide.py`, `genomeos budget`. Results:
-`data/results/budget_<chrom>.json`, `budget_genome_wide.json`.
+`budget.py`, `organise.py`, `candidates.py`), `scripts/budget_genome_wide.py`,
+`scripts/syntax_candidates.py`, `genomeos budget`. Results:
+`data/results/budget_<chrom>.json`, `budget_genome_wide.json`,
+`syntax_candidates_genome_wide.json`.
 
 ## The question, and the house
 
@@ -380,15 +382,109 @@ a copy's region says so in its role and its note, with the program's checks and
 unknown count unchanged. Results are `organised_<chrom>.json` (tallies, copies,
 candidates; the full join is recomputed on demand) and `organised_genome_wide.json`.
 
+## The syntax candidates read one by one (2026-09-13)
+
+`genomeos/attribution/candidates.py` (`scripts/syntax_candidates.py`,
+`syntax_candidates_genome_wide.json`, six minutes) reads each of the organiser's 69
+blocks, 387 kb constrained on both axes and not copies, through every layer the
+repository already holds, with no model call and no remote track. Per block: the
+GENCODE v50 gene on each side and which of its ends faces the block, the CTCF node
+and its inferred target (nearest coding TSS inside it) and the targets the deletion
+runs named for elements of the same node; how many of the Gnocchi kilobases it
+touches hold a neighbour's exon bases; the 100-vertebrate conserved elements merged
+into segments and the repeats they sit in; the registry and the reader (ENCODE DNase
+in eleven cell types) on the conserved bases themselves; every conserved segment of
+45 bp or more scored for an open frame with the chromosome's codon usage, held
+against 300 canonical internal exons of the same chromosome, the segment parser over
+the block with 10 kb either side, and open frames translated against the local
+UniProt proteome; and VISTA, lentiMPRA, ClinVar, GWAS and GTEx where they overlap.
+Every layer is read again on up to forty same-length windows in nearby intergenic
+space, so each quantity has its chance level beside it.
+
+The controls changed the reading before any block was classed. A registry element
+lies in 54% of same-length windows in these neighbourhoods, so "a cCRE in the block"
+says little: the registry counts only where it sits on the conserved bases, and
+alone it adds 0.05 of confidence. The reader counts only when the element is open in
+at least two cell types and twice the control mean. The parser recovers 104 of 760
+known internal exons (13.7%) given the same flank, so its silence is not evidence;
+and one coding-like segment among many is what the control rate (5.6% of control
+segments) gives, so a coding reading needs a binomial tail of 0.05 or less, with
+segments inside transposon remnants not counted.
+
+| reading | blocks | kb | mean confidence | what carries it |
+|---|---|---|---|---|
+| regulatory element | 23 | 193.1 | 0.34 | a dELS, pELS or CTCF-only element on the conserved bases, or the reader alone; the reader above controls for 8, 14 of the 23 registry-only at 0.3 |
+| promoter-like | 8 | 20.6 | 0.39 | PLS or DNase-H3K4me3 on the conserved bases, the reader above controls for 3; beside FAM237A, CDKN1A, DHH, CRCT1, FAM167B, HOXC13-AS |
+| coding exon candidate | 5 | 21.5 | 0.36 | open frames above the median exon beyond chance, or the parser joining the block to a neighbour's exons |
+| extended 3' end, unmeasured | 9 | 23.5 | 0.19 | conserved sequence within 3 kb of a coding gene's 3' end, no chromatin mark (PGRMC1, NR2E1, INSM2, CACNA1F) |
+| unexplained | 24 | 127.8 | 0 | no layer supports a class; 15 of the 69 are closed in all eleven cells and carry no registry element |
+| copy of a known protein, structured-RNA copy, primate-repeat artefact | 0 | 0 | | the checks ran and found none: 330 of 47,523 conserved bases lie in primate-specific repeats |
+
+So of the 69: 31 plausible regulatory elements (0.2 to 0.55), 5 that look like
+unannotated coding sequence and 9 that may be unannotated RNA (3' extensions), and
+24 unexplained; mean confidence 0.21 over the set. The strongest single readings are
+chr2:206,641,282 (promoter-like at FAM237A, open in four cells, and the one lentiMPRA
+element that is active in K562, log2 1.04), chr12:49,094,807 (PLS next to DHH, open
+in five cells), chr7:25,257,129 and chr22:38,571,213 (enhancer-like, open in 11 and
+10 of 11 cells against control means of 1.2 and 4.3), and, on the coding side,
+chr7:55,588,336 (the block the classifier had called long_orf: 9 of 11 conserved
+segments open-framed with exon-like codon usage, binomial p 3e-10, and a seven-exon
+parser structure of 909 bp joining exons of the lncRNAs VOPP1-DT and ENSG00000233977,
+with no known human protein sharing its peptide) and chr8:43,271,960 (5 of 8
+segments, p 3e-5, a 903 bp parser structure beside the POTEA node). Ground truth
+reaches few blocks: lentiMPRA tested 7 (2 active, the other at TCF7L2's node in
+HepG2), VISTA one (hs1103, negative, inside the 84 kb PBX3 block), ClinVar none, and
+the GWAS and GTEx rows touch 2 and 1 blocks, but those two tables were distilled only
+near scored elements, so their absence says nothing.
+
+The set as a whole, against its control windows (the r-th window of every block is
+replicate r, 40 replicates):
+
+| layer | 69 candidates | control windows | p |
+|---|---|---|---|
+| a registry element anywhere in the block | 69.6% | 53.9% | 0.049 |
+| cell types open on the block (mean of 11) | 2.78 | 2.33 | 0.15 |
+| a parser exon on conserved sequence | 17.4% | 4.3% | 0.024 |
+| conserved segments coding-like | 13.2% of 227 | 5.6% of 2,711 | |
+| conserved bases inside a registry element | 7.6% | 19.8% of control conserved bases | |
+| conserved bases open, per cell type | 2.2% | 3.7% of control conserved bases | |
+
+This is the finding the table of readings should be read through. The candidates'
+constrained bases are less often a registry element and less often open than
+conserved bases a few tens of kilobases away, which is partly how they were chosen
+(a block dense in registry elements is tiered regulatory, not constrained_unknown)
+and partly what they are: sequence held on both axes that the chromatin assays of
+these cells do not mark. The coding signal is the one that stands above its control,
+more than twice the rate of coding-like segments and four times the parser exons, so
+unannotated coding or transcribed sequence is a better-supported hypothesis for part
+of this set than the regulatory count suggests, and the regulatory count is mostly
+registry-only readings at 0.3. Nine blocks have every touched Gnocchi kilobase
+holding a neighbour's exon bases (the human axis may be borrowed; their confidence is
+lowered by 0.1). Of the 69 nodes, 49 have a coding TSS to infer a target from and 26
+hold elements the deletion runs named a target for, but none of the scored elements
+lies on a candidate block, so no candidate has a deletion reading of its own.
+
+What is weak: codon log-odds partly measure GC content, and the coding-like peptides
+of chr8:43.27 Mb are proline and arginine rich, the mark of GC-rich sequence; the
+extended-3'-end reading is a rule of adjacency with no RNA behind it; the cell panel
+has no neural, gonadal or embryonic tissue beyond H1 and SK-N-SH, where much
+constrained non-coding sequence is active. The layers that would settle most of the
+69, measured RNA over the blocks (ENCODE total RNA-seq, which the closure already
+reads) and AlphaGenome's predicted tracks and deletion on each block, were not used
+here, the first because this run kept to local data and the second because the
+all-elements chain holds the request quota.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
    the rejected set read, and four corrections of the input tested and
    rejected against a promoter-only control (the closure section above).
-2. **The 69 syntax candidates read one by one**: which node, which gene next
-   door, what AlphaGenome says of each in silico, and whether any is an
-   unannotated exon (the segment parser over the block); then the reader's
-   openness on the element itself rather than its node. The two axes disagreeing is itself a
+2. Done 2026-09-13: **the 69 syntax candidates read one by one** (the section
+   above): 31 plausible regulatory, 5 coding candidates, 9 possible 3'
+   extensions, 24 unexplained. What remains of the step: measured RNA over the
+   69 blocks and their controls, to test the coding and 3'-extension readings,
+   and AlphaGenome's predicted tracks and deletion per block once the chain frees
+   the quota. The two axes disagreeing is itself a
    flag: chr15:84,395,903-84,398,315 is 23% constrained across mammals and
    carries far more human variation than expected (Gnocchi Z of -8.5 over its
    kilobases), which reads as a mutation hotspot or a mapping artefact rather

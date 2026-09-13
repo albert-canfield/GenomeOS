@@ -1343,10 +1343,45 @@ in order. "Owner" is the session that holds the files today (see §7).
   have one strongly cell-specific element that a per-element rule could
   separate, others (COL6A1) are genuine multi-line genes whose expression
   threshold rather than their input decides.
-- **Next.** 1. The 69 syntax candidates read one by one: which node, which gene next
-  door, what AlphaGenome says of each in silico, and whether any is an
-  unannotated exon (the segment parser over the block); the reader's openness
-  on the element itself rather than its node. 3. The
+- **The 69 syntax candidates read one by one (2026-09-13, genomeos-i1).**
+  `attribution/candidates.py` (`scripts/syntax_candidates.py`,
+  `syntax_candidates_genome_wide`, six minutes, no model call) reads each
+  block through the flanking GENCODE genes and the CTCF node, the reader and
+  registry on its conserved bases, an open-frame codon score against the
+  chromosome's canonical exons, the segment parser, the local proteome and
+  the measured ground truth, every layer also on up to forty same-length
+  intergenic control windows nearby.
+
+  | reading | blocks | kb | mean confidence |
+  |---|---|---|---|
+  | regulatory element (registry on the conserved bases, or the reader above controls) | 23 | 193.1 | 0.34 |
+  | promoter-like (PLS or DNase-H3K4me3 on the conserved bases) | 8 | 20.6 | 0.39 |
+  | coding exon candidate (open frames beyond chance, or parser joins a neighbour) | 5 | 21.5 | 0.36 |
+  | extended 3' end of a coding gene, unmeasured | 9 | 23.5 | 0.19 |
+  | unexplained | 24 | 127.8 | 0 |
+
+  31 plausible regulatory, 5 unannotated coding and 9 possible unannotated
+  RNA, 24 unexplained; no copy of a known protein, no structured-RNA copy, no
+  primate-repeat artefact. Against the controls the regulatory count is the
+  weak one: a registry element sits in 54% of control windows (candidates
+  70%, p 0.049), openness is not above chance (2.78 against 2.33 cells, p
+  0.15), and the candidates' conserved bases are less often a registry
+  element (7.6% against 19.8%) and less often open (2.2% against 3.7% per
+  cell) than conserved bases nearby. The coding signal stands: 13.2% of 227
+  conserved segments are coding-like against 5.6% of 2,711, and a parser exon
+  lands on conserved sequence in 17.4% of blocks against 4.3% (p 0.024; the
+  parser recovers 13.7% of known internal exons). Strongest: promoter-like
+  at FAM237A with the one active lentiMPRA element (K562), enhancer-like
+  chr7:25.26 Mb and chr22:38.57 Mb open in 11 and 10 of 11 cells, and the
+  long_orf block chr7:55.59 Mb with 9 of 11 segments exon-like (p 3e-10) and
+  a seven-exon parser structure and no known protein behind it. Nine blocks
+  may borrow their human axis from a neighbour's exons. ATTRIBUTION.md "The
+  syntax candidates read one by one".
+- **Next.** 1. What remains of the candidate reading: measured RNA (ENCODE
+  total RNA-seq, as the closure reads it) over the 69 blocks and their
+  controls, to test the 5 coding and 9 3'-extension readings, and
+  AlphaGenome's predicted tracks and deletion per block once the
+  all-elements chain frees the quota. 3. The
   remaining attribution: AlphaGenome's predicted chromatin tracks for activity
   and tissue on the 15,536 regulatory blocks, in-silico mutagenesis for the
   bases that matter; the self-hosted model gates the move from chromosome 21
@@ -1364,7 +1399,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   gene level ran once (above) and returns after step 1. 6. Simpler genomes as
   the comparison, C. elegans first, then Drosophila enhancers, fugu as the
   compact vertebrate, mouse for transfer.
-- **Owner.** genomeos-f7 (this lane's files); the organism-level closure runs
+- **Owner.** genomeos-i1 since 2026-09-13 (this lane's files; earlier genomeos-f7 and genomeos-c6); the organism-level closure runs
   on genomeos-73's Body runtime and the block evidence on genomeos-fe's
   decoding results.
 
