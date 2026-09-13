@@ -290,6 +290,20 @@ its activators. The 235 rejected attributions of the tissue-agnostic reading ope
 with lineage genes the model activates in the wrong line, VPREB1 and VPREB3,
 B-cell genes, in erythroid K562.
 
+Read from the scorer's side, those three are an artefact of the tissue-agnostic
+input: their magnitude comes from Jurkat and skeletal muscle, and their K562
+values sit near zero. The closure's headline is therefore the cell's own score
+counted where a DNase peak sits on the element. In that reading the rejected set
+splits in two. Between 42% and 59% of it are genes no line of the panel makes,
+neural (OLIG1, OLIG2, GRIK1, S100B), keratin, lens (CRYBB1, CRYBB2) and liver
+(CYP2D6) genes whose tissues the four lines do not cover: not wrong targets. The
+rest, 22 genes on chromosome 21 and 96 on chromosome 22, are made by another line
+and are the genuine wrong-cell cases. Against the attributions the cell honours
+they carry about twice as many elements, a higher summed input, and promoters
+open in fewer of the four lines. The closure is summing many weak elements into a
+large input for genes whose promoters are only marginally available, which is the
+error to correct next.
+
 One measurement lesson on the way: IMR-90's ENCODE total RNA-seq carries its
 strand labels inverted (APP reads on the "plus" file), so the module probes each
 cell's orientation over forty exons per strand and swaps the tracks when the
@@ -360,10 +374,13 @@ candidates; the full join is recomputed on demand) and `organised_genome_wide.js
 
 ## What comes next, in order
 
-1. **The rejected attributions read as a set**, 72 on chromosome 21 and 235 on
-   chromosome 22: whether they share a tissue class, a distance or a node
-   verdict, which says what the model gets wrong. Done 2026-09-13: the
-   whole-input closure on chromosomes 21 and 22, passing on both (above).
+1. **The closure's input corrected for its systematic error**: many weak
+   elements summed into a large input for genes whose promoters are only
+   marginally open. Weight the input by the promoter's own openness, or take
+   the strongest element rather than the sum, and rerun on both chromosomes
+   with the 118 wrong-cell genes as the test set. Done 2026-09-13: the
+   whole-input closure passing on chromosomes 21 and 22, and the rejected set
+   read (below the closure section).
 2. **The 69 syntax candidates read one by one**: which node, which gene next
    door, what AlphaGenome says of each in silico, and whether any is an
    unannotated exon (the segment parser over the block); then the reader's

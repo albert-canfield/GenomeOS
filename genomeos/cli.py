@@ -1460,8 +1460,15 @@ def cmd_closure(args: argparse.Namespace) -> int:
         )
     )
     a = out["across_cells"]
+    labels = {
+        "dnase": "the tissue-agnostic magnitude, where a DNase peak sits on the element",
+        "cell": "the deletion scored on the cell's own track, no DNase gating",
+        "both": "the cell's own score, only where a DNase peak sits on the element",
+    }
+    primary = out.get("primary_mode", "dnase")
+    print(f"\nheadline input: {labels.get(primary, primary)}")
     print(
-        f"\nacross cells, {a['genes_tested']} genes with elements and variation: most active cell is "
+        f"across cells, {a['genes_tested']} genes with elements and variation: most active cell is "
         f"the most expressed for {_pct(a['most_active_cell_is_most_expressed'], 0)} (shuffled cells "
         f"{_pct(a['same_under_shuffled_cells'], 0)}, p {a.get('p_value')}, chance {_pct(a['chance'], 0)}); "
         "mean rank correlation "
@@ -1469,13 +1476,10 @@ def cmd_closure(args: argparse.Namespace) -> int:
         f"{a['mean_rho_promoter_vs_expression']}"
     )
     for mode, m in (out.get("modes") or {}).items():
-        if mode == "dnase":
+        if mode == primary:
             continue
         a = m["across_cells"]
-        label = {
-            "cell": "the deletion scored on the cell's own track, no DNase gating",
-            "both": "the cell's own score, only where a DNase peak sits on the element",
-        }.get(mode, mode)
+        label = labels.get(mode, mode)
         print(
             f"  with {label}: {a['genes_tested']} genes, most active cell is the most expressed for "
             f"{_pct(a['most_active_cell_is_most_expressed'], 0)} (shuffled "
@@ -1487,6 +1491,19 @@ def cmd_closure(args: argparse.Namespace) -> int:
             f"\nrejected by the cell ({out['rejected_count']}): promoter open, activating input, gene silent"
         )
         print(_table(out["rejected_attributions"][: args.top], ["gene", "cell", "input", "expression"]))
+        pr = out.get("rejected_profile") or {}
+        if pr.get("rejected", {}).get("pairs"):
+            r, h = pr["rejected"], pr["honoured"]
+            print(
+                f"  of the {r['pairs']} rejected, {_pct(r['silent_in_every_cell'], 0)} are genes no line of "
+                "the panel makes (a tissue the four lines do not cover); the rest are made by another line "
+                "and are the wrong-cell cases"
+            )
+            print(
+                f"  rejected carry more elements ({r['mean_elements']} against {h['mean_elements']}) and "
+                f"a higher input ({r['mean_input']} against {h['mean_input']}), and their promoters are "
+                f"open in fewer cells ({r['mean_open_cells']} against {h['mean_open_cells']} of four)"
+            )
     if out["unexplained_expression"]:
         print(f"\nunexplained ({out['unexplained_count']}): expressed, promoter closed, no active element")
         print(_table(out["unexplained_expression"][: args.top], ["gene", "cell", "expression"]))

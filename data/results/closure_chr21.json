@@ -18,68 +18,68 @@
   "genes_with_elements": 193,
   "signal_threshold": 0.05,
   "expressed_threshold": 0.3,
-  "input": "input",
+  "input": "input_both",
   "within_cell": {
     "K562": {
       "expressed_promoter_open": [
-        0.644,
-        135
+        0.656,
+        125
       ],
       "expressed_promoter_closed": [
-        0.07,
-        86
+        0.088,
+        68
       ],
       "expressed_open_with_activating_input": [
-        0.685,
-        89
+        0.698,
+        86
       ],
       "expressed_open_without_input": [
-        0.545,
-        22
+        0.583,
+        12
       ],
       "expressed_open_with_repressing_input": [
-        0.583,
-        24
+        0.556,
+        27
       ]
     },
     "HepG2": {
       "expressed_promoter_open": [
-        0.729,
-        118
+        0.732,
+        112
       ],
       "expressed_promoter_closed": [
-        0.078,
-        103
+        0.099,
+        81
       ],
       "expressed_open_with_activating_input": [
-        0.803,
-        76
+        0.743,
+        74
       ],
       "expressed_open_without_input": [
         0.667,
-        18
+        12
       ],
       "expressed_open_with_repressing_input": [
-        0.542,
+        0.708,
         24
       ]
     },
     "GM12878": {
       "expressed_promoter_open": [
-        0.843,
-        89
+        0.857,
+        84
       ],
       "expressed_promoter_closed": [
-        0.22,
-        132
+        0.248,
+        109
       ],
       "expressed_open_with_activating_input": [
         0.809,
         47
       ],
       "expressed_open_without_input": [
-        0.853,
-        34
+        0.897,
+        29
       ],
       "expressed_open_with_repressing_input": [
         1.0,
@@ -88,34 +88,34 @@
     },
     "IMR-90": {
       "expressed_promoter_open": [
-        0.762,
-        130
+        0.76,
+        125
       ],
       "expressed_promoter_closed": [
-        0.022,
-        91
+        0.029,
+        68
       ],
       "expressed_open_with_activating_input": [
-        0.794,
-        97
+        0.789,
+        90
       ],
       "expressed_open_without_input": [
-        0.571,
-        14
+        0.444,
+        9
       ],
       "expressed_open_with_repressing_input": [
-        0.737,
-        19
+        0.769,
+        26
       ]
     }
   },
   "across_cells": {
-    "genes_tested": 138,
-    "mean_rho_input_vs_expression": 0.083,
+    "genes_tested": 141,
+    "mean_rho_input_vs_expression": 0.191,
     "mean_rho_promoter_vs_expression": 0.091,
-    "most_active_cell_is_most_expressed": 0.303,
-    "same_under_shuffled_cells": 0.249,
-    "p_value": 0.0669,
+    "most_active_cell_is_most_expressed": 0.407,
+    "same_under_shuffled_cells": 0.248,
+    "p_value": 0.001,
     "permutations": 1000,
     "chance": 0.25
   },
@@ -123,245 +123,245 @@
     {
       "gene": "RIPK4",
       "cell": "IMR-90",
-      "input": 7.162,
+      "input": 3.983,
       "expression": 0.0605
-    },
-    {
-      "gene": "S100B",
-      "cell": "K562",
-      "input": 6.959,
-      "expression": 0.0
-    },
-    {
-      "gene": "TFF1",
-      "cell": "HepG2",
-      "input": 5.799,
-      "expression": 0.1435
-    },
-    {
-      "gene": "TFF1",
-      "cell": "IMR-90",
-      "input": 5.432,
-      "expression": 0.0
-    },
-    {
-      "gene": "UMODL1",
-      "cell": "GM12878",
-      "input": 5.258,
-      "expression": 0.0
-    },
-    {
-      "gene": "TIAM1",
-      "cell": "IMR-90",
-      "input": 5.101,
-      "expression": 0.1267
-    },
-    {
-      "gene": "JAM2",
-      "cell": "IMR-90",
-      "input": 4.786,
-      "expression": 0.0827
     },
     {
       "gene": "HUNK",
       "cell": "HepG2",
-      "input": 4.278,
+      "input": 3.263,
       "expression": 0.2693
     },
     {
-      "gene": "MRAP",
+      "gene": "TFF1",
+      "cell": "HepG2",
+      "input": 2.616,
+      "expression": 0.1435
+    },
+    {
+      "gene": "UMODL1",
+      "cell": "GM12878",
+      "input": 2.488,
+      "expression": 0.0
+    },
+    {
+      "gene": "HUNK",
+      "cell": "IMR-90",
+      "input": 2.429,
+      "expression": 0.2004
+    },
+    {
+      "gene": "TIAM1",
+      "cell": "IMR-90",
+      "input": 2.303,
+      "expression": 0.1267
+    },
+    {
+      "gene": "COL18A1",
       "cell": "K562",
-      "input": 4.118,
+      "input": 2.284,
+      "expression": 0.23
+    },
+    {
+      "gene": "GRIK1",
+      "cell": "K562",
+      "input": 2.261,
+      "expression": 0.0562
+    },
+    {
+      "gene": "EVA1C",
+      "cell": "K562",
+      "input": 1.387,
       "expression": 0.0
     },
     {
       "gene": "RIPK4",
       "cell": "HepG2",
-      "input": 3.934,
+      "input": 1.373,
       "expression": 0.0967
     },
     {
-      "gene": "EVA1C",
+      "gene": "ERG",
       "cell": "IMR-90",
-      "input": 3.903,
-      "expression": 0.0772
+      "input": 1.285,
+      "expression": 0.0036
     },
     {
-      "gene": "EVA1C",
+      "gene": "RSPH1",
+      "cell": "GM12878",
+      "input": 1.074,
+      "expression": 0.167
+    },
+    {
+      "gene": "CLDN14",
+      "cell": "GM12878",
+      "input": 0.999,
+      "expression": 0.2461
+    },
+    {
+      "gene": "SLC37A1",
       "cell": "K562",
-      "input": 3.691,
-      "expression": 0.0
+      "input": 0.953,
+      "expression": 0.2097
     },
     {
-      "gene": "OLIG2",
-      "cell": "IMR-90",
-      "input": 3.633,
+      "gene": "CBR3",
+      "cell": "K562",
+      "input": 0.922,
       "expression": 0.0
     },
     {
       "gene": "GRIK1",
-      "cell": "K562",
-      "input": 3.312,
-      "expression": 0.0562
+      "cell": "IMR-90",
+      "input": 0.921,
+      "expression": 0.0
     },
     {
-      "gene": "DOP1B",
-      "cell": "K562",
-      "input": 3.301,
-      "expression": 0.1391
-    },
-    {
-      "gene": "SIM2",
-      "cell": "K562",
-      "input": 3.047,
+      "gene": "PCBP3",
+      "cell": "GM12878",
+      "input": 0.857,
       "expression": 0.0
     },
     {
       "gene": "ERVH48-1",
       "cell": "HepG2",
-      "input": 2.847,
+      "input": 0.818,
       "expression": 0.0
     },
     {
-      "gene": "COL18A1",
+      "gene": "JAM2",
+      "cell": "IMR-90",
+      "input": 0.763,
+      "expression": 0.0827
+    },
+    {
+      "gene": "ADAMTS1",
+      "cell": "HepG2",
+      "input": 0.677,
+      "expression": 0.0
+    },
+    {
+      "gene": "EVA1C",
+      "cell": "IMR-90",
+      "input": 0.648,
+      "expression": 0.0772
+    },
+    {
+      "gene": "DOP1B",
+      "cell": "IMR-90",
+      "input": 0.641,
+      "expression": 0.2617
+    },
+    {
+      "gene": "COL6A1",
       "cell": "K562",
-      "input": 2.8,
-      "expression": 0.23
+      "input": 0.6,
+      "expression": 0.0
+    },
+    {
+      "gene": "S100B",
+      "cell": "K562",
+      "input": 0.593,
+      "expression": 0.0
+    },
+    {
+      "gene": "MRAP",
+      "cell": "K562",
+      "input": 0.584,
+      "expression": 0.0
+    },
+    {
+      "gene": "BACE2",
+      "cell": "K562",
+      "input": 0.573,
+      "expression": 0.0796
+    },
+    {
+      "gene": "S100B",
+      "cell": "GM12878",
+      "input": 0.572,
+      "expression": 0.0
+    },
+    {
+      "gene": "ADAMTS5",
+      "cell": "IMR-90",
+      "input": 0.548,
+      "expression": 0.178
+    },
+    {
+      "gene": "CHODL",
+      "cell": "GM12878",
+      "input": 0.545,
+      "expression": 0.0892
+    },
+    {
+      "gene": "UBASH3A",
+      "cell": "K562",
+      "input": 0.537,
+      "expression": 0.0883
+    },
+    {
+      "gene": "CBR3",
+      "cell": "HepG2",
+      "input": 0.503,
+      "expression": 0.0
+    },
+    {
+      "gene": "MAP3K7CL",
+      "cell": "HepG2",
+      "input": 0.5,
+      "expression": 0.0
+    },
+    {
+      "gene": "U2AF1",
+      "cell": "K562",
+      "input": 0.473,
+      "expression": 0.1042
+    },
+    {
+      "gene": "DNMT3L",
+      "cell": "K562",
+      "input": 0.464,
+      "expression": 0.0
     },
     {
       "gene": "ABCG1",
       "cell": "HepG2",
-      "input": 2.635,
+      "input": 0.433,
       "expression": 0.0
     },
     {
-      "gene": "PCBP3",
-      "cell": "GM12878",
-      "input": 2.626,
+      "gene": "COL6A1",
+      "cell": "HepG2",
+      "input": 0.421,
       "expression": 0.0
     },
     {
       "gene": "SIM2",
       "cell": "HepG2",
-      "input": 2.454,
+      "input": 0.395,
       "expression": 0.0
     },
     {
-      "gene": "RIPK4",
+      "gene": "ITSN1",
+      "cell": "K562",
+      "input": 0.385,
+      "expression": 0.2503
+    },
+    {
+      "gene": "SH3BGR",
       "cell": "GM12878",
-      "input": 2.204,
-      "expression": 0.0
+      "input": 0.336,
+      "expression": 0.2118
     },
     {
-      "gene": "HUNK",
+      "gene": "KCNE1",
       "cell": "IMR-90",
-      "input": 2.134,
-      "expression": 0.2004
-    },
-    {
-      "gene": "MAP3K7CL",
-      "cell": "HepG2",
-      "input": 2.1,
-      "expression": 0.0
-    },
-    {
-      "gene": "COL6A1",
-      "cell": "K562",
-      "input": 2.022,
-      "expression": 0.0
-    },
-    {
-      "gene": "JAM2",
-      "cell": "K562",
-      "input": 2.001,
-      "expression": 0.0
-    },
-    {
-      "gene": "RIPPLY3",
-      "cell": "K562",
-      "input": 1.805,
-      "expression": 0.0
-    },
-    {
-      "gene": "PCBP3",
-      "cell": "K562",
-      "input": 1.795,
-      "expression": 0.0
-    },
-    {
-      "gene": "GRIK1",
-      "cell": "IMR-90",
-      "input": 1.767,
-      "expression": 0.0
-    },
-    {
-      "gene": "CLDN14",
-      "cell": "GM12878",
-      "input": 1.644,
-      "expression": 0.2461
-    },
-    {
-      "gene": "PDE9A",
-      "cell": "K562",
-      "input": 1.614,
-      "expression": 0.0
-    },
-    {
-      "gene": "MX2",
-      "cell": "IMR-90",
-      "input": 1.586,
-      "expression": 0.2623
-    },
-    {
-      "gene": "ADAMTS5",
-      "cell": "K562",
-      "input": 1.577,
-      "expression": 0.0
-    },
-    {
-      "gene": "UBASH3A",
-      "cell": "K562",
-      "input": 1.57,
-      "expression": 0.0883
-    },
-    {
-      "gene": "ADAMTS5",
-      "cell": "IMR-90",
-      "input": 1.51,
-      "expression": 0.178
-    },
-    {
-      "gene": "ERG",
-      "cell": "IMR-90",
-      "input": 1.461,
-      "expression": 0.0036
-    },
-    {
-      "gene": "DNMT3L",
-      "cell": "K562",
-      "input": 1.422,
-      "expression": 0.0
-    },
-    {
-      "gene": "S100B",
-      "cell": "GM12878",
-      "input": 1.421,
-      "expression": 0.0
-    },
-    {
-      "gene": "CHODL",
-      "cell": "K562",
-      "input": 1.333,
-      "expression": 0.0
-    },
-    {
-      "gene": "RSPH1",
-      "cell": "GM12878",
-      "input": 1.306,
-      "expression": 0.167
+      "input": 0.317,
+      "expression": 0.0073
     }
   ],
-  "rejected_count": 72,
+  "rejected_count": 73,
   "unexplained_expression": [
     {
       "gene": "IFNAR2-IL10RB",
@@ -410,6 +410,90 @@
     }
   ],
   "unexplained_count": 9,
+  "primary_mode": "both",
+  "rejected_profile": {
+    "rejected": {
+      "pairs": 73,
+      "silent_in_every_cell": 0.589,
+      "mean_input": 0.65,
+      "mean_elements": 56.7,
+      "mean_open_cells": 2.58,
+      "by_cell": {
+        "K562": 26,
+        "HepG2": 19,
+        "GM12878": 9,
+        "IMR-90": 19
+      }
+    },
+    "honoured": {
+      "pairs": 224,
+      "silent_in_every_cell": 0.0,
+      "mean_input": 0.462,
+      "mean_elements": 26.0,
+      "mean_open_cells": 3.63,
+      "by_cell": {
+        "K562": 60,
+        "HepG2": 55,
+        "GM12878": 38,
+        "IMR-90": 71
+      }
+    },
+    "genes_silent_in_every_cell": [
+      "ADAMTS5",
+      "CHODL",
+      "CLDN14",
+      "DNMT3L",
+      "ERG",
+      "EVA1C",
+      "GRIK1",
+      "HUNK",
+      "KCNE1",
+      "KCNE2",
+      "KCNJ6",
+      "KRTAP10-4",
+      "KRTAP10-7",
+      "KRTAP12-1",
+      "LCA5L",
+      "MRAP",
+      "OLIG1",
+      "OLIG2",
+      "PCP4",
+      "RBM11",
+      "RIPK4",
+      "RIPPLY3",
+      "RSPH1",
+      "S100B",
+      "TFF1",
+      "U2AF1",
+      "UBASH3A",
+      "UMODL1"
+    ],
+    "reading": "within the rejected set: a gene silent in every cell of the panel is one the four lines cannot make, a tissue they do not cover; a gene another line makes is a wrong-cell case. The honoured set is expressed by definition, so silent_in_every_cell is 0 there and is not a comparison",
+    "wrong_cell_genes": [
+      "ABCG1",
+      "ADAMTS1",
+      "BACE2",
+      "C21orf91",
+      "CBR3",
+      "COL18A1",
+      "COL6A1",
+      "COL6A2",
+      "CXADR",
+      "DOP1B",
+      "ERVH48-1",
+      "ITGB2",
+      "ITSN1",
+      "JAM2",
+      "MAP3K7CL",
+      "NCAM2",
+      "PCBP3",
+      "PDE9A",
+      "SH3BGR",
+      "SIM2",
+      "SLC37A1",
+      "TIAM1"
+    ]
+  },
   "modes": {
     "dnase": {
       "input": "input",
@@ -11764,7 +11848,7 @@
     }
   ],
   "cost": {
-    "seconds": 192.5,
+    "seconds": 190.5,
     "mb_fetched": 2.9
   },
   "evidence": {

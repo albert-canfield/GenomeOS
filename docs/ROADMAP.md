@@ -1278,10 +1278,36 @@ in order. "Owner" is the session that holds the files today (see §7).
   fewest peaks. A measurement note: `MeasuredRna` now orients itself, and
   the closure reports its decision rather than probing a second time, so IMR-90
   reads "swapped" on both chromosomes.
-- **Next.** 1. The rejected attributions read as a set (72 on chr21, 235 on
-  chr22): whether they share a tissue class (lineage genes activated in the
-  wrong line), a distance, or a node verdict, which says what the model gets
-  wrong. 2. The 69 syntax candidates read one by one: which node, which gene next
+- **The rejected attributions as a set (2026-09-13).** genomeos-8e read
+  VPREB1, UPK3A and VPREB3 from the scorer's side: their tissue-agnostic
+  magnitude comes from Jurkat and skeletal muscle and their K562 values sit
+  near zero, so "activated in an erythroid line" was that input mode reading
+  another tissue's effect as K562's. The closure's headline is now the cell's
+  own score counted where a DNase peak sits on the element whenever per-cell
+  scores exist (`primary_mode`), the tissue-agnostic reading kept as a
+  comparison. In the headline reading the rejected set splits in two:
+
+  | chromosome | rejected pairs | genes no line of the panel makes | genes another line makes |
+  |---|---|---|---|
+  | chr21 | 73 | 59% (OLIG1, OLIG2, GRIK1, S100B, KRTAPs) | 22 genes (COL6A1, COL6A2, ITGB2, JAM2) |
+  | chr22 | 220 | 42% (CRYBB1, CRYBB2, CYP2D6, CLDN5) | 96 genes (APOL1, ADORA2A, BIK, ARSA) |
+
+  Half the rejections are not wrong targets at all: neural, keratin, lens and
+  liver genes with an open promoter and active elements that no line of a
+  panel of erythroid, liver, lymphoid and fibroblast cells makes, because the
+  tissue's own factors are missing. The rest are the genuine wrong-cell cases,
+  and they share a shape: against the attributions the cell honours they carry
+  more elements (57 against 26 on chr21, 33 against 18 on chr22), a higher
+  summed input, and promoters open in fewer of the four lines (2.6 against 3.6,
+  2.8 against 3.6). The closure is summing many weak elements into a large
+  input for genes whose promoters are only marginally available, which is the
+  model's systematic error and the next thing to correct: weight the input by
+  the promoter's own openness, or cap it by the strongest element rather than
+  the sum.
+- **Next.** 1. The closure's input corrected for that error (the promoter's
+  openness as a weight, or the strongest element rather than the sum) and
+  rerun on both chromosomes; the 118 wrong-cell genes are the test set.
+  2. The 69 syntax candidates read one by one: which node, which gene next
   door, what AlphaGenome says of each in silico, and whether any is an
   unannotated exon (the segment parser over the block); the reader's openness
   on the element itself rather than its node. 3. The

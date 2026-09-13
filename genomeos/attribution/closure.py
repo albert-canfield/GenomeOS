@@ -211,6 +211,7 @@ def closure(
             }
         rows.append(row)
     has_cell = any(x["scored_elements"] for r in rows for x in r["cells"].values())
+    primary = "both" if has_cell else "dnase"
     modes = {"dnase": judge(rows, used, seed, "input")}
     if has_cell:
         modes["cell"] = judge(rows, used, seed, "input_cell")
@@ -223,7 +224,12 @@ def closure(
         "genes_with_elements": sum(1 for r in rows if r["elements"]),
         "signal_threshold": signal,
         "expressed_threshold": EXPRESSED,
-        **modes["dnase"],
+        # the headline is the cell's own deletion score where a DNase peak sits on the element, whenever
+        # per-cell scores exist: the tissue-agnostic magnitude reads another tissue's effect (a lymphoid
+        # element's pull on VPREB1) as if it were this cell's, and is kept only as a comparison
+        **modes[primary],
+        "primary_mode": primary,
+        "rejected_profile": profile_rejected(rows, used, "input_both" if primary == "both" else "input"),
         "modes": modes,
         "per_cell_scores": has_cell,
         "genes": rows,
@@ -241,6 +247,53 @@ def tie_fair_hit(inp: list[float], exp: list[float]) -> float:
     a = {i for i, v in enumerate(inp) if v == max(inp)}
     b = {i for i, v in enumerate(exp) if v == max(exp)}
     return len(a & b) / (len(a) * len(b))
+
+
+def profile_rejected(rows: list[dict], cells: list[str], key: str) -> dict[str, Any]:
+    """What separates the attributions the cell rejects from the ones it honours.
+
+    Both sets have an open promoter and activating input; one is expressed and one is not. A gene
+    silent in every cell of the panel is a gene the panel cannot make, whatever its elements say, so
+    the share of those is the first thing to know about a rejection.
+    """
+    groups: dict[str, list[dict]] = {"rejected": [], "honoured": []}
+    for r in rows:
+        for c in cells:
+            x = r["cells"][c]
+            inp = x.get(key)
+            if inp is None or not x["promoter_open"] or inp <= 0:
+                continue
+            groups["honoured" if x["expressed"] else "rejected"].append(
+                {
+                    "gene": r["gene"],
+                    "cell": c,
+                    "input": inp,
+                    "elements": x.get("scored_elements") or x["active_elements"],
+                    "silent_everywhere": all(r["cells"][o]["expression"] < EXPRESSED for o in cells),
+                    "open_cells": sum(1 for o in cells if r["cells"][o]["promoter_open"]),
+                }
+            )
+    out: dict[str, Any] = {}
+    for name, g in groups.items():
+        n = len(g)
+        out[name] = {
+            "pairs": n,
+            "silent_in_every_cell": round(sum(1 for x in g if x["silent_everywhere"]) / n, 3) if n else None,
+            "mean_input": round(sum(x["input"] for x in g) / n, 3) if n else None,
+            "mean_elements": round(sum(x["elements"] for x in g) / n, 1) if n else None,
+            "mean_open_cells": round(sum(x["open_cells"] for x in g) / n, 2) if n else None,
+            "by_cell": {c: sum(1 for x in g if x["cell"] == c) for c in cells},
+        }
+    out["genes_silent_in_every_cell"] = sorted(
+        {x["gene"] for x in groups["rejected"] if x["silent_everywhere"]}
+    )
+    out["reading"] = (
+        "within the rejected set: a gene silent in every cell of the panel is one the four lines cannot "
+        "make, a tissue they do not cover; a gene another line makes is a wrong-cell case. The honoured "
+        "set is expressed by definition, so silent_in_every_cell is 0 there and is not a comparison"
+    )
+    out["wrong_cell_genes"] = sorted({x["gene"] for x in groups["rejected"] if not x["silent_everywhere"]})
+    return out
 
 
 def judge(

@@ -18,102 +18,102 @@
   "genes_with_elements": 432,
   "signal_threshold": 0.05,
   "expressed_threshold": 0.3,
-  "input": "input",
+  "input": "input_both",
   "within_cell": {
     "K562": {
       "expressed_promoter_open": [
-        0.653,
-        363
+        0.658,
+        357
       ],
       "expressed_promoter_closed": [
-        0.202,
-        84
+        0.2,
+        75
       ],
       "expressed_open_with_activating_input": [
-        0.667,
-        291
+        0.681,
+        257
       ],
       "expressed_open_without_input": [
-        0.778,
-        27
+        0.905,
+        21
       ],
       "expressed_open_with_repressing_input": [
-        0.489,
-        45
+        0.526,
+        78
       ]
     },
     "HepG2": {
       "expressed_promoter_open": [
-        0.687,
-        300
+        0.686,
+        296
       ],
       "expressed_promoter_closed": [
-        0.177,
-        147
+        0.176,
+        136
       ],
       "expressed_open_with_activating_input": [
-        0.709,
-        223
+        0.682,
+        214
       ],
       "expressed_open_without_input": [
-        0.8,
-        45
+        0.805,
+        41
       ],
       "expressed_open_with_repressing_input": [
-        0.375,
-        32
+        0.585,
+        41
       ]
     },
     "GM12878": {
       "expressed_promoter_open": [
-        0.925,
-        213
+        0.924,
+        211
       ],
       "expressed_promoter_closed": [
-        0.41,
-        234
+        0.416,
+        221
       ],
       "expressed_open_with_activating_input": [
-        0.945,
-        110
+        0.919,
+        111
       ],
       "expressed_open_without_input": [
-        0.92,
-        88
+        0.919,
+        86
       ],
       "expressed_open_with_repressing_input": [
-        0.8,
-        15
+        1.0,
+        14
       ]
     },
     "IMR-90": {
       "expressed_promoter_open": [
-        0.673,
-        321
+        0.681,
+        317
       ],
       "expressed_promoter_closed": [
         0.278,
-        126
+        115
       ],
       "expressed_open_with_activating_input": [
-        0.711,
-        232
+        0.72,
+        218
       ],
       "expressed_open_without_input": [
-        0.61,
-        41
+        0.676,
+        37
       ],
       "expressed_open_with_repressing_input": [
-        0.542,
-        48
+        0.548,
+        62
       ]
     }
   },
   "across_cells": {
-    "genes_tested": 373,
-    "mean_rho_input_vs_expression": 0.061,
+    "genes_tested": 375,
+    "mean_rho_input_vs_expression": 0.103,
     "mean_rho_promoter_vs_expression": 0.005,
-    "most_active_cell_is_most_expressed": 0.314,
+    "most_active_cell_is_most_expressed": 0.321,
     "same_under_shuffled_cells": 0.251,
     "p_value": 0.003,
     "permutations": 1000,
@@ -121,247 +121,247 @@
   },
   "rejected_attributions": [
     {
-      "gene": "VPREB1",
-      "cell": "K562",
-      "input": 16.286,
-      "expression": 0.0
-    },
-    {
-      "gene": "UPK3A",
-      "cell": "K562",
-      "input": 12.812,
-      "expression": 0.0
-    },
-    {
-      "gene": "VPREB3",
-      "cell": "K562",
-      "input": 9.857,
-      "expression": 0.0
-    },
-    {
-      "gene": "BIK",
-      "cell": "K562",
-      "input": 9.073,
-      "expression": 0.0332
-    },
-    {
-      "gene": "LGALS2",
-      "cell": "K562",
-      "input": 7.983,
-      "expression": 0.0
-    },
-    {
-      "gene": "GGT5",
-      "cell": "IMR-90",
-      "input": 7.866,
-      "expression": 0.108
-    },
-    {
-      "gene": "EMID1",
-      "cell": "HepG2",
-      "input": 7.695,
-      "expression": 0.1486
-    },
-    {
-      "gene": "EMID1",
-      "cell": "IMR-90",
-      "input": 7.344,
-      "expression": 0.1264
-    },
-    {
-      "gene": "CSDC2",
-      "cell": "K562",
-      "input": 6.754,
-      "expression": 0.0
-    },
-    {
-      "gene": "ADA2",
-      "cell": "K562",
-      "input": 6.722,
-      "expression": 0.0
-    },
-    {
       "gene": "ADM2",
       "cell": "K562",
-      "input": 6.062,
+      "input": 3.771,
       "expression": 0.0434
     },
     {
-      "gene": "MCHR1",
-      "cell": "IMR-90",
-      "input": 5.964,
+      "gene": "PANX2",
+      "cell": "K562",
+      "input": 3.573,
+      "expression": 0.0345
+    },
+    {
+      "gene": "SEC14L4",
+      "cell": "HepG2",
+      "input": 3.399,
       "expression": 0.0
+    },
+    {
+      "gene": "GNAZ",
+      "cell": "K562",
+      "input": 3.05,
+      "expression": 0.0171
+    },
+    {
+      "gene": "MMP11",
+      "cell": "HepG2",
+      "input": 2.834,
+      "expression": 0.0807
     },
     {
       "gene": "MGAT3",
       "cell": "K562",
-      "input": 5.946,
+      "input": 2.785,
       "expression": 0.0991
     },
     {
-      "gene": "APOBEC3A",
-      "cell": "K562",
-      "input": 5.681,
+      "gene": "GGT5",
+      "cell": "IMR-90",
+      "input": 2.618,
+      "expression": 0.108
+    },
+    {
+      "gene": "PANX2",
+      "cell": "HepG2",
+      "input": 2.576,
+      "expression": 0.0213
+    },
+    {
+      "gene": "MCHR1",
+      "cell": "IMR-90",
+      "input": 2.432,
       "expression": 0.0
     },
     {
-      "gene": "TCN2",
-      "cell": "K562",
-      "input": 5.466,
-      "expression": 0.2963
-    },
-    {
-      "gene": "PNPLA3",
-      "cell": "K562",
-      "input": 5.303,
-      "expression": 0.0
+      "gene": "EMID1",
+      "cell": "HepG2",
+      "input": 2.345,
+      "expression": 0.1486
     },
     {
       "gene": "SMIM45",
       "cell": "K562",
-      "input": 5.279,
-      "expression": 0.0
-    },
-    {
-      "gene": "SLC25A18",
-      "cell": "K562",
-      "input": 5.167,
-      "expression": 0.0
-    },
-    {
-      "gene": "C1QTNF6",
-      "cell": "HepG2",
-      "input": 5.167,
-      "expression": 0.0981
-    },
-    {
-      "gene": "GGT5",
-      "cell": "HepG2",
-      "input": 5.113,
-      "expression": 0.0
-    },
-    {
-      "gene": "MEI1",
-      "cell": "IMR-90",
-      "input": 4.69,
-      "expression": 0.0
-    },
-    {
-      "gene": "CECR2",
-      "cell": "K562",
-      "input": 4.675,
-      "expression": 0.0162
-    },
-    {
-      "gene": "HMOX1",
-      "cell": "K562",
-      "input": 4.675,
+      "input": 2.339,
       "expression": 0.0
     },
     {
       "gene": "SHISA8",
       "cell": "K562",
-      "input": 4.668,
+      "input": 2.323,
       "expression": 0.0305
     },
     {
-      "gene": "RTN4R",
-      "cell": "K562",
-      "input": 4.644,
-      "expression": 0.1959
-    },
-    {
-      "gene": "NPTXR",
+      "gene": "RASD2",
       "cell": "IMR-90",
-      "input": 4.624,
-      "expression": 0.1946
-    },
-    {
-      "gene": "SLC25A18",
-      "cell": "IMR-90",
-      "input": 4.312,
-      "expression": 0.0917
-    },
-    {
-      "gene": "CSDC2",
-      "cell": "HepG2",
-      "input": 4.267,
-      "expression": 0.0019
-    },
-    {
-      "gene": "SMIM45",
-      "cell": "HepG2",
-      "input": 4.262,
+      "input": 2.193,
       "expression": 0.0
     },
     {
-      "gene": "MN1",
-      "cell": "IMR-90",
-      "input": 4.251,
-      "expression": 0.0757
-    },
-    {
-      "gene": "PANX2",
+      "gene": "CECR2",
       "cell": "K562",
-      "input": 4.232,
-      "expression": 0.0345
-    },
-    {
-      "gene": "GNAZ",
-      "cell": "K562",
-      "input": 4.138,
-      "expression": 0.0171
+      "input": 2.143,
+      "expression": 0.0162
     },
     {
       "gene": "C22orf15",
       "cell": "K562",
-      "input": 4.134,
+      "input": 2.028,
       "expression": 0.0583
     },
     {
-      "gene": "PNPLA5",
+      "gene": "RTN4R",
       "cell": "K562",
-      "input": 4.119,
+      "input": 2.012,
+      "expression": 0.1959
+    },
+    {
+      "gene": "SMIM45",
+      "cell": "HepG2",
+      "input": 2.01,
       "expression": 0.0
     },
     {
-      "gene": "SCARF2",
-      "cell": "K562",
-      "input": 4.104,
-      "expression": 0.0003
+      "gene": "LIF",
+      "cell": "HepG2",
+      "input": 1.977,
+      "expression": 0.0875
     },
     {
-      "gene": "ARHGAP8",
-      "cell": "K562",
-      "input": 4.086,
-      "expression": 0.1351
+      "gene": "NPTXR",
+      "cell": "IMR-90",
+      "input": 1.944,
+      "expression": 0.1946
     },
     {
-      "gene": "A4GALT",
+      "gene": "CELSR1",
+      "cell": "IMR-90",
+      "input": 1.881,
+      "expression": 0.1797
+    },
+    {
+      "gene": "TCN2",
+      "cell": "IMR-90",
+      "input": 1.81,
+      "expression": 0.0804
+    },
+    {
+      "gene": "OSM",
       "cell": "K562",
-      "input": 4.017,
+      "input": 1.807,
       "expression": 0.0
     },
     {
-      "gene": "GGT5",
+      "gene": "BIK",
       "cell": "K562",
-      "input": 3.991,
+      "input": 1.737,
+      "expression": 0.0332
+    },
+    {
+      "gene": "ADA2",
+      "cell": "IMR-90",
+      "input": 1.705,
+      "expression": 0.0078
+    },
+    {
+      "gene": "C1QTNF6",
+      "cell": "K562",
+      "input": 1.672,
       "expression": 0.0
     },
     {
-      "gene": "KIAA1671",
+      "gene": "GNAZ",
+      "cell": "IMR-90",
+      "input": 1.654,
+      "expression": 0.1635
+    },
+    {
+      "gene": "CCDC157",
       "cell": "K562",
-      "input": 3.984,
+      "input": 1.617,
+      "expression": 0.0291
+    },
+    {
+      "gene": "ASPHD2",
+      "cell": "IMR-90",
+      "input": 1.496,
+      "expression": 0.2351
+    },
+    {
+      "gene": "RAB36",
+      "cell": "K562",
+      "input": 1.495,
+      "expression": 0.0
+    },
+    {
+      "gene": "GNAZ",
+      "cell": "GM12878",
+      "input": 1.47,
+      "expression": 0.1532
+    },
+    {
+      "gene": "SEC14L4",
+      "cell": "K562",
+      "input": 1.394,
       "expression": 0.0
     },
     {
       "gene": "NPTXR",
       "cell": "K562",
-      "input": 3.925,
+      "input": 1.394,
       "expression": 0.1014
+    },
+    {
+      "gene": "APOL1",
+      "cell": "HepG2",
+      "input": 1.37,
+      "expression": 0.2494
+    },
+    {
+      "gene": "VPREB3",
+      "cell": "K562",
+      "input": 1.301,
+      "expression": 0.0
+    },
+    {
+      "gene": "TTC28",
+      "cell": "K562",
+      "input": 1.283,
+      "expression": 0.2709
+    },
+    {
+      "gene": "PNPLA5",
+      "cell": "IMR-90",
+      "input": 1.274,
+      "expression": 0.008
+    },
+    {
+      "gene": "ELFN2",
+      "cell": "IMR-90",
+      "input": 1.269,
+      "expression": 0.1357
+    },
+    {
+      "gene": "FAM83F",
+      "cell": "K562",
+      "input": 1.261,
+      "expression": 0.0
+    },
+    {
+      "gene": "SHANK3",
+      "cell": "HepG2",
+      "input": 1.256,
+      "expression": 0.2975
+    },
+    {
+      "gene": "CYTH4",
+      "cell": "K562",
+      "input": 1.228,
+      "expression": 0.0015
     }
   ],
-  "rejected_count": 235,
+  "rejected_count": 220,
   "unexplained_expression": [
     {
       "gene": "MIURF",
@@ -565,6 +565,194 @@
     }
   ],
   "unexplained_count": 59,
+  "primary_mode": "both",
+  "rejected_profile": {
+    "rejected": {
+      "pairs": 220,
+      "silent_in_every_cell": 0.418,
+      "mean_input": 0.699,
+      "mean_elements": 32.6,
+      "mean_open_cells": 2.8,
+      "by_cell": {
+        "K562": 82,
+        "HepG2": 68,
+        "GM12878": 9,
+        "IMR-90": 61
+      }
+    },
+    "honoured": {
+      "pairs": 580,
+      "silent_in_every_cell": 0.0,
+      "mean_input": 0.467,
+      "mean_elements": 18.3,
+      "mean_open_cells": 3.64,
+      "by_cell": {
+        "K562": 175,
+        "HepG2": 146,
+        "GM12878": 102,
+        "IMR-90": 157
+      }
+    },
+    "genes_silent_in_every_cell": [
+      "ADM2",
+      "APOBEC3A",
+      "ATP5MGL",
+      "C22orf15",
+      "C22orf23",
+      "CCDC188",
+      "CECR2",
+      "CHADL",
+      "CIMIP4",
+      "CLDN5",
+      "CRYBB1",
+      "CRYBB2",
+      "CYP2D6",
+      "DRICH1",
+      "EFCAB6",
+      "ELFN2",
+      "FAM227A",
+      "FAM246C",
+      "FAM83F",
+      "GGT5",
+      "GGTLC2",
+      "GSC2",
+      "IL17REL",
+      "ISX",
+      "KCNJ4",
+      "KIAA1671",
+      "LRRC74B",
+      "MB",
+      "MCHR1",
+      "MLC1",
+      "MN1",
+      "MOV10L1",
+      "NPTXR",
+      "P2RX6",
+      "PANX2",
+      "PNPLA5",
+      "RASD2",
+      "RFPL2",
+      "RIBC2",
+      "RSPH14",
+      "RTN4R",
+      "SCUBE1",
+      "SEC14L4",
+      "SEC14L6",
+      "SEZ6L",
+      "SGSM1",
+      "SHANK3",
+      "SLC16A8",
+      "SLC25A18",
+      "SMC1B",
+      "SUSD2",
+      "SYCE3",
+      "TMEM191B",
+      "TMEM191C",
+      "TTLL8",
+      "VPREB1",
+      "WBP2NL",
+      "WNT7B"
+    ],
+    "reading": "within the rejected set: a gene silent in every cell of the panel is one the four lines cannot make, a tissue they do not cover; a gene another line makes is a wrong-cell case. The honoured set is expressed by definition, so silent_in_every_cell is 0 there and is not a comparison",
+    "wrong_cell_genes": [
+      "A4GALT",
+      "ADA2",
+      "ADORA2A",
+      "AIFM3",
+      "APOBEC3F",
+      "APOBEC3H",
+      "APOL1",
+      "APOL6",
+      "ARSA",
+      "ARVCF",
+      "ASPHD2",
+      "BIK",
+      "C1QTNF6",
+      "CABIN1",
+      "CASTOR1",
+      "CCDC116",
+      "CCDC157",
+      "CDPF1",
+      "CELSR1",
+      "CIMAP1B",
+      "CLTCL1",
+      "CSDC2",
+      "CSF2RB",
+      "CYTH4",
+      "DENND6B",
+      "DERL3",
+      "DUSP18",
+      "EMID1",
+      "ENSG00000284554",
+      "FBLN1",
+      "FOXRED2",
+      "GAL3ST1",
+      "GGT1",
+      "GNAZ",
+      "H1-0",
+      "HDAC10",
+      "HMOX1",
+      "IFT27",
+      "IL17RA",
+      "IL2RB",
+      "KCTD17",
+      "KREMEN1",
+      "LARGE1",
+      "LGALS2",
+      "LIF",
+      "LIMK2",
+      "LRRC75B",
+      "MEI1",
+      "MFNG",
+      "MGAT3",
+      "MMP11",
+      "NEFH",
+      "OSBP2",
+      "OSM",
+      "PARVB",
+      "PATZ1",
+      "PDGFB",
+      "PIK3IP1",
+      "PLA2G3",
+      "PNPLA3",
+      "PRAME",
+      "PRR5-ARHGAP8",
+      "RAB36",
+      "RAC2",
+      "RTL6",
+      "SCARF2",
+      "SEC14L2",
+      "SEPTIN3",
+      "SERHL2",
+      "SERPIND1",
+      "SHISA8",
+      "SMIM45",
+      "SMTN",
+      "SYN3",
+      "TBC1D10A",
+      "TBX1",
+      "TCF20",
+      "TCN2",
+      "TEF",
+      "TIMP3",
+      "TMA7B",
+      "TNFRSF13C",
+      "TRIOBP",
+      "TTC28",
+      "TTLL1",
+      "TUBGCP6",
+      "TYMP",
+      "UPK3A",
+      "VPREB3",
+      "XKR3",
+      "YPEL1",
+      "ZBED4",
+      "ZNF280A",
+      "ZNF70",
+      "ZNF74",
+      "ZNRF3"
+    ]
+  },
   "modes": {
     "dnase": {
       "input": "input",
@@ -22780,7 +22968,7 @@
     }
   ],
   "cost": {
-    "seconds": 199.3,
+    "seconds": 198.1,
     "mb_fetched": 6.6
   },
   "evidence": {
