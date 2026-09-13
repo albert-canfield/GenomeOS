@@ -10,6 +10,8 @@ summary rewritten every 200 elements so the job is resumable and the Progress ta
 per-element table (megabytes per chromosome) stays local under data/knowledge/alphagenome. The daily
 quota is respected, not fought: a RESOURCE_EXHAUSTED answer is waited out for the seconds it names; when
 it keeps answering that for QUOTA_PATIENCE seconds the run sleeps an hour before asking again, and says so.
+A request that never returns (chr19 stopped that way once, silently) is cut off after CALL_TIMEOUT seconds
+and retried, so the run cannot hang on one element.
 """
 
 from __future__ import annotations
@@ -17,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import signal
 import sys
 import time
 from pathlib import Path
@@ -30,6 +33,15 @@ SAVE_EVERY = 200
 ELEMENTS_DIR = Path("data/knowledge/alphagenome/all_elements")  # the per-element table, local
 QUOTA_PATIENCE = 600  # seconds of continuous quota answers before the hour's sleep
 QUOTA_SLEEP = 3600
+CALL_TIMEOUT = 300  # a single deletion request that has not returned by then counts as hung
+
+
+class HungError(Exception):
+    """A request that never returned: chr19 stopped this way on 2026-09-13, silently, for 36 minutes."""
+
+
+def _hang(_signum, _frame):
+    raise HungError(f"no answer in {CALL_TIMEOUT}s")
 
 
 def retry_seconds(message: str) -> int | None:
@@ -119,7 +131,12 @@ def main() -> int:
                     cached = None
                 if cached is None:
                     requests += 1
-                r = ctx.score(scorer or (lambda *a: []), e)
+                signal.signal(signal.SIGALRM, _hang)
+                signal.setitimer(signal.ITIMER_REAL, CALL_TIMEOUT if cached is None else 0)
+                try:
+                    r = ctx.score(scorer or (lambda *a: []), e)
+                finally:
+                    signal.setitimer(signal.ITIMER_REAL, 0)
                 quota_since = None
                 break
             except Exception as ex:  # noqa: BLE001 - wait for the quota, retry the rest, never give up
