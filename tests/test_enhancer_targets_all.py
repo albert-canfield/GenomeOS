@@ -54,3 +54,11 @@ def test_a_capped_run_cannot_claim_the_chromosome_is_complete():
     src = Path("scripts/enhancer_targets_all.py").read_text()
     assert '"complete": bool(final and not args.limit and len(rows) >= total_elements)' in src
     assert '"elements_total": total_elements' in src and '"capped_to": args.limit' in src
+
+
+def test_the_run_ends_itself_when_nothing_is_scored():
+    """A parked worker must not leave the process alive and silent: the loop exits so a driver retries."""
+    src = Path("scripts/enhancer_targets_all.py").read_text()
+    assert "if idle > STALL_EXIT:" in src and "os._exit(3)" in src
+    assert "return_when=FIRST_COMPLETED" in src and "args.workers) * IN_FLIGHT" in src
+    assert eta.STALL_EXIT >= 300 and eta.CHECK_EVERY <= 120 and eta.IN_FLIGHT >= 1

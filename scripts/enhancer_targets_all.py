@@ -11,21 +11,24 @@ summary rewritten every 200 elements so the job is resumable and the Progress ta
 per-element table (megabytes per chromosome) stays local under data/knowledge/alphagenome. The daily
 quota is respected, not fought: a RESOURCE_EXHAUSTED answer is waited out for the seconds it names; when
 it keeps answering that for QUOTA_PATIENCE seconds the run sleeps an hour before asking again, and says so.
-A request that never returns (chr19 stopped that way once, silently) is cut off by the client's own
-timeout and retried, so the run cannot hang on one element. The run is paced by round trips rather than
-by the quota, so WORKERS requests are in flight at once and a quota answer to any of them holds all of
-them; --workers 1 is the old sequential behaviour.
+The run is paced by round trips rather than by the quota, so WORKERS requests are in flight at once and
+a quota answer to any of them holds all of them; --workers 1 is the old sequential behaviour. Hangs are
+survived rather than prevented: the client carries its own timeout, and if no element is scored for
+STALL_EXIT seconds the run saves and exits non-zero instead of sitting alive, so whoever sequences the
+chromosomes starts it again and it resumes from its cache. Twice on 2026-09-13 a run parked with every
+worker quiet, the process alive and nothing in the log; that is what this guards.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from pathlib import Path
 
 from genomeos.jobs import heartbeat
@@ -38,7 +41,10 @@ ELEMENTS_DIR = Path("data/knowledge/alphagenome/all_elements")  # the per-elemen
 QUOTA_PATIENCE = 600  # seconds of continuous quota answers before the hour's sleep
 QUOTA_SLEEP = 3600
 CALL_TIMEOUT = 300  # the client's own timeout: a request that has not answered by then raises
-WORKERS = 8  # requests in flight at once; 8 gave 400 requests a minute against 51 sequential, no waits
+WORKERS = 8  # requests in flight at once; eight gave 400 a minute against 51 sequential, no refusals
+IN_FLIGHT = 4  # tasks queued per worker: a bounded window, so a parked worker cannot hide behind 29,000
+CHECK_EVERY = 60  # seconds between looks at whether anything finished
+STALL_EXIT = 600  # no element scored for this long: end the run, the driver restarts it from the cache
 
 
 class Pacer:
@@ -201,13 +207,37 @@ def main() -> int:
                     time.sleep(5)
                 local.scorer = None
 
-    with ThreadPoolExecutor(max_workers=max(1, args.workers)) as pool:
-        pending = {pool.submit(score_one, i, e) for i, e in enumerate(elements)}
-        for fut in as_completed(pending):
+    todo = iter(enumerate(elements))
+    last_progress = time.time()
+    pool = ThreadPoolExecutor(max_workers=max(1, args.workers))
+    pending = set()
+    for _ in range(max(1, args.workers) * IN_FLIGHT):  # a bounded window, not 29,000 queued tasks
+        nxt = next(todo, None)
+        if nxt is None:
+            break
+        pending.add(pool.submit(score_one, *nxt))
+    while pending:
+        finished, pending = wait(pending, timeout=CHECK_EVERY, return_when=FIRST_COMPLETED)
+        heartbeat(name)
+        if not finished:
+            idle = time.time() - last_progress
+            if idle > STALL_EXIT:
+                # a worker parked on a socket with the process alive: end the run so its driver restarts
+                # it (the next run resumes from the cache); this is the 2h19m chr19 stall of 2026-09-13
+                save()
+                print(
+                    f"{chrom}: no element scored for {idle / 60:.0f} min at {len(done):,}/"
+                    f"{len(elements):,}; ending the run so it is restarted from the cache",
+                    flush=True,
+                )
+                os._exit(3)
+            print(f"{chrom}: waiting ({idle / 60:.0f} min since the last element)", flush=True)
+            continue
+        for fut in finished:
             index, r = fut.result()
             done[index] = r
+            last_progress = time.time()
             n = len(done)
-            heartbeat(name)
             if n % SAVE_EVERY == 0 or n == len(elements):
                 save(final=n == len(elements))
                 p = r.get("predicted")
@@ -217,6 +247,10 @@ def main() -> int:
                     f"last {r.get('id')} -> {p['gene'] if p else 'no effect'}",
                     flush=True,
                 )
+            nxt = next(todo, None)
+            if nxt is not None:
+                pending.add(pool.submit(score_one, *nxt))
+    pool.shutdown(wait=False)
     save(final=True)
     rows = [done[i] for i in sorted(done)]
     s = summarise(rows)
