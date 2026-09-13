@@ -2,6 +2,17 @@
   "result": "enhancer_targets_all_genome_wide",
   "date": "2026-09-13",
   "chromosomes": {
+    "chr19": {
+      "elements": 29374,
+      "scored": 1600,
+      "complete": false,
+      "fraction_with_target": 0.655,
+      "coding_target_agrees_with_nearest": 0.658,
+      "fraction_inside_domain": 0.932,
+      "strong": 279,
+      "silencer_like": 370,
+      "requests_this_run": 1600
+    },
     "chr21": {
       "elements": 12139,
       "scored": 12139,
@@ -26,35 +37,35 @@
     },
     "chrY": {
       "elements": 907,
-      "scored": 200,
-      "complete": false,
-      "fraction_with_target": 0.555,
-      "coding_target_agrees_with_nearest": 0.275,
-      "fraction_inside_domain": 0.874,
-      "strong": 41,
-      "silencer_like": 35,
-      "requests_this_run": 200
+      "scored": 907,
+      "complete": true,
+      "fraction_with_target": 0.611,
+      "coding_target_agrees_with_nearest": 0.488,
+      "fraction_inside_domain": 0.852,
+      "strong": 215,
+      "silencer_like": 182,
+      "requests_this_run": 0
     }
   },
-  "complete_chromosomes": 2,
+  "complete_chromosomes": 3,
   "genome": {
-    "elements": 31847,
-    "scored": 31847,
-    "named": 20954,
-    "coding_named": 14786,
-    "strong": 6297,
-    "silencer_like": 8007,
-    "fraction_with_target": 0.658,
-    "coding_target_agrees_with_nearest": 0.638,
-    "coding_target_inside_domain": 0.801,
+    "elements": 32754,
+    "scored": 32754,
+    "named": 21508,
+    "coding_named": 14911,
+    "strong": 6512,
+    "silencer_like": 8189,
+    "fraction_with_target": 0.657,
+    "coding_target_agrees_with_nearest": 0.637,
+    "coding_target_inside_domain": 0.8,
     "verdicts_coding": {
-      "no predicted effect": 17061,
-      "agrees with nearest TSS in domain": 9433,
-      "gene outside the domain": 2947,
-      "another gene in the same domain": 2406
+      "no predicted effect": 17843,
+      "agrees with nearest TSS in domain": 9494,
+      "gene outside the domain": 2983,
+      "another gene in the same domain": 2434
     }
   },
-  "requests_total": 25317,
+  "requests_total": 26717,
   "cells": [
     "K562",
     "HepG2",
