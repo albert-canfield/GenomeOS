@@ -1,0 +1,55 @@
+{
+  "result": "enhancer_targets_all_genome_wide",
+  "date": "2026-09-13",
+  "chromosomes": {
+    "chr21": {
+      "elements": 12139,
+      "scored": 12139,
+      "complete": true,
+      "fraction_with_target": 0.646,
+      "coding_target_agrees_with_nearest": 0.609,
+      "fraction_inside_domain": 0.765,
+      "strong": 2182,
+      "silencer_like": 3055,
+      "requests_this_run": 5409
+    },
+    "chr22": {
+      "elements": 19708,
+      "scored": 200,
+      "complete": false,
+      "fraction_with_target": 0.835,
+      "coding_target_agrees_with_nearest": 0.768,
+      "fraction_inside_domain": 0.802,
+      "strong": 49,
+      "silencer_like": 58,
+      "requests_this_run": 200
+    }
+  },
+  "complete_chromosomes": 1,
+  "genome": {
+    "elements": 12139,
+    "scored": 12139,
+    "named": 7846,
+    "coding_named": 5174,
+    "strong": 2182,
+    "silencer_like": 3055,
+    "fraction_with_target": 0.646,
+    "coding_target_agrees_with_nearest": 0.609,
+    "coding_target_inside_domain": 0.726,
+    "verdicts_coding": {
+      "no predicted effect": 6965,
+      "agrees with nearest TSS in domain": 3153,
+      "gene outside the domain": 1417,
+      "another gene in the same domain": 604
+    }
+  },
+  "requests_total": 5609,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "elements_where": "data/knowledge/alphagenome/all_elements/<chrom>.json (local)",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line; inferred: CTCF-only nodes"
+}

@@ -45,6 +45,15 @@ class ApiError(Exception):
         self.status = status
 
 
+def _all_elements_card(r: dict) -> dict:
+    """The fields the Progress tab shows for one chromosome's all-elements summary."""
+    return {
+        k: v
+        for k, v in r.items()
+        if k in ("elements_total", "scored", "complete", "summary", "requests_this_run")
+    }
+
+
 class Api:
     """All endpoints as plain methods so they can be unit-tested without HTTP."""
 
@@ -957,6 +966,10 @@ class Api:
             },
             "enhancer_targets_genome_wide": load_result("enhancer_targets_genome_wide", rd),
             "constrained_targets_genome_wide": load_result("constrained_targets_genome_wide", rd),
+            "enhancer_targets_all": {
+                p.stem.split("_")[-1]: _all_elements_card(load_result(p.stem, rd) or {})
+                for p in sorted(rd.glob("enhancer_targets_all_chr*.json"))
+            },
             "vista": {
                 p.stem.split("_")[-1]: load_result(p.stem, rd) for p in sorted(rd.glob("vista_chr*.json"))
             },
