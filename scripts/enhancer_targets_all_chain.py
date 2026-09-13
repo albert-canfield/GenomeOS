@@ -66,14 +66,52 @@ def log(msg: str) -> None:
         fh.write(line + "\n")
 
 
+def expected_elements(chrom: str) -> int | None:
+    """How many enhancer elements the chromosome has, counted from the committed cCRE file.
+
+    The scoring script scores every enhancer-like element inside a node, which is exactly the
+    distal and proximal enhancer-like cCREs (12,139 on chr21, 19,708 on chr22, 907 on chrY: the
+    counts its finished results carry). Counting them here gives the chain a number the result
+    cannot fake: a capped or test run writes its cap as `elements_total` and `complete: true`,
+    and without this check the chain skips that chromosome as done.
+    """
+    import gzip
+
+    p_ = RESULTS / f"ccres_{chrom}.bed.gz"
+    if not p_.exists():
+        return None
+    n = 0
+    with gzip.open(p_, "rt") as fh:
+        for line in fh:
+            if line.startswith("#"):
+                continue
+            f = line.rstrip("\n").split("\t")
+            if len(f) > 4 and f[4] in ("dELS", "pELS"):
+                n += 1
+    return n or None
+
+
 def complete(chrom: str) -> bool:
+    """True only when the result says complete *and* covers every element the chromosome has.
+
+    The flag alone is not enough: a run capped with --limit writes its cap as `elements_total` and
+    sets `complete`, which once made the chain skip chr20 after a 300-element test run.
+    """
     p = RESULTS / f"enhancer_targets_all_{chrom}.json"
     if not p.exists():
         return False
     try:
-        return bool(json.loads(p.read_text()).get("complete"))
+        d = json.loads(p.read_text())
     except (OSError, ValueError):
         return False
+    if not d.get("complete") or int(d.get("scored", 0)) < int(d.get("elements_total", 0) or 0):
+        return False
+    want = expected_elements(chrom)
+    have = int(d.get("elements_total", 0) or 0)
+    if want is not None and have < want:
+        log(f"{chrom}: result says complete but covers {have:,} of {want:,} elements; treated as unfinished")
+        return False
+    return True
 
 
 def scored(chrom: str) -> tuple[int, int] | None:
@@ -275,6 +313,10 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
     todo = [c for c in ORDER if c != FIRST and not complete(c)]
+    for chrom in ORDER:
+        if chrom != FIRST and chrom not in todo:
+            sc = scored(chrom)
+            log(f"{chrom}: skipped, already complete ({sc[0]:,} elements)" if sc else f"{chrom}: skipped")
     if args.dry_run:
         print(f"first: {FIRST} complete={complete(FIRST)} running={running(FIRST)} scored={scored(FIRST)}")
         print(f"then, in order: {' '.join(todo)}")

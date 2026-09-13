@@ -70,3 +70,29 @@ def test_suppress_strays(tmp_path, monkeypatch):
     assert out == ["chr1"] and [p for p, _ in killed] == [200]
     assert (tmp_path / "enhancer_targets_all_chr1.superseded-by-chain").exists()
     assert not (tmp_path / "enhancer_targets_all_chr1.json").exists()
+
+
+def _ccres(path, dels, pels, pls=1):
+    import gzip
+
+    with gzip.open(path, "wt") as fh:
+        fh.write("# header\n")
+        for cls, n in (("dELS", dels), ("pELS", pels), ("PLS", pls)):
+            for i in range(n):
+                fh.write(f"chrT\t{i}\t{i + 10}\tE{cls}{i}\t{cls}\t0\n")
+
+
+def test_a_capped_run_is_not_complete(tmp_path, monkeypatch):
+    chain = _chain()
+    monkeypatch.setattr(chain, "RESULTS", tmp_path)
+    logged = []
+    monkeypatch.setattr(chain, "log", logged.append)
+    _ccres(tmp_path / "ccres_chrT.bed.gz", dels=3, pels=2)
+    assert chain.expected_elements("chrT") == 5
+    result = tmp_path / "enhancer_targets_all_chrT.json"
+    result.write_text(json.dumps({"elements_total": 2, "scored": 2, "complete": True}))
+    assert chain.complete("chrT") is False and "covers 2 of 5" in logged[-1]
+    result.write_text(json.dumps({"elements_total": 5, "scored": 5, "complete": True}))
+    assert chain.complete("chrT") is True
+    result.write_text(json.dumps({"elements_total": 5, "scored": 4, "complete": True}))
+    assert chain.complete("chrT") is False
