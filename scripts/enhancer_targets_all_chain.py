@@ -16,6 +16,9 @@ Rules it keeps:
 - a chromosome another process is already scoring is waited on, never started twice;
 - each chromosome is started through the job registry (`jobs.start`), so the Progress tab shows it and
   the registry refuses to start a twin of a live run;
+- only the chromosome the chain is on may score: a scorer for any other chromosome (the registry
+  supervisor can revive a job record nobody asked for, as it did with chr1 on 2026-09-13) has its job
+  record set aside and is stopped, because two scorers share one quota and undo the order;
 - a run that ends without completing is retried after a pause;
 - a completed chromosome's per-element cache is packed into one archive (scripts/pack_element_cache.py,
   about eight times smaller, read transparently), so the genome costs about 1.5 GB instead of 13 GB;
@@ -30,6 +33,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
+import signal
 import subprocess
 import sys
 import time
@@ -99,6 +104,50 @@ def wait_for(chrom: str, why: str) -> None:
             state = f"{sc[0]:,}/{sc[1]:,} scored" if sc else "no result yet"
             log(f"waiting on {chrom} ({why}): {state}")
         time.sleep(POLL)
+
+
+SCORER = re.compile(r"^\s*(\d+)\s+.*[Pp]ython[^ ]* scripts/enhancer_targets_all\.py --chrom (chr[0-9XYM]+)")
+
+
+def scorer_processes(ps_output: str) -> list[tuple[int, str]]:
+    """(pid, chromosome) of every process scoring a chromosome, from `ps` output."""
+    out = []
+    for line in ps_output.splitlines():
+        m = SCORER.match(line)
+        if m:
+            out.append((int(m.group(1)), m.group(2)))
+    return out
+
+
+def suppress_strays(current: str, ps_output: str, kill=None) -> list[str]:
+    """Stop scorers of other chromosomes and set their job records aside, so nothing revives them.
+
+    The chain is the sequencer: one chromosome at a time on one shared quota, smallest first. A scorer
+    the chain did not start (the registry supervisor reviving an old record, or a hand-started run) both
+    halves the quota and breaks the order, so it is stopped and its record renamed; the elements it
+    already cached are kept and reused when the chain reaches that chromosome.
+    """
+    kill = kill or (lambda pid, sig: os.kill(pid, sig))
+    stopped = []
+    for pid, chrom in scorer_processes(ps_output):
+        if chrom == current:
+            continue
+        record = JOBS / f"enhancer_targets_all_{chrom}.json"
+        if record.exists():
+            record.rename(JOBS / f"enhancer_targets_all_{chrom}.superseded-by-chain")
+        try:
+            kill(pid, signal.SIGTERM)
+        except (ProcessLookupError, PermissionError) as e:
+            log(f"stray {chrom} (pid {pid}): could not stop it ({type(e).__name__})")
+            continue
+        stopped.append(chrom)
+        log(f"stray scorer for {chrom} (pid {pid}) stopped: the chain is on {current}, one at a time")
+    return stopped
+
+
+def guard(current: str) -> list[str]:
+    ps = subprocess.run(["ps", "-axo", "pid,command"], capture_output=True, text=True).stdout
+    return suppress_strays(current, ps)
 
 
 def committable(chrom: str) -> bool:
@@ -200,6 +249,7 @@ def run_one(chrom: str) -> bool:
         time.sleep(POLL)
         while running(chrom):
             heartbeat(JOB)
+            guard(chrom)
             time.sleep(POLL)
         log_tail = (JOBS / f"{name}.log").read_text(errors="replace").splitlines()[-3:]
         if any("AlphaGenome is disabled" in line for line in log_tail):

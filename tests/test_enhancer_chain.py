@@ -42,3 +42,31 @@ def test_committable_refuses_the_per_element_table(tmp_path, monkeypatch):
     assert chain.committable("chr22") is False  # not finished
     p.write_text(json.dumps({"complete": True, "scored": 5, "elements_where": "local"}))
     assert chain.committable("chr22") is True
+
+
+def test_scorer_processes_parses_ps_output():
+    chain = _chain()
+    ps = "\n".join(
+        [
+            "  PID COMMAND",
+            " 100 /usr/bin/Python scripts/enhancer_targets_all.py --chrom chr19",
+            " 200 /usr/bin/Python scripts/enhancer_targets_all.py --chrom chr1",
+            " 300 /bin/zsh -c pgrep -f 'enhancer_targets_all.py --chrom chr7'",
+            " 400 uv run python scripts/enhancer_targets_all_chain.py",
+        ]
+    )
+    assert chain.scorer_processes(ps) == [(100, "chr19"), (200, "chr1")]
+
+
+def test_suppress_strays(tmp_path, monkeypatch):
+    chain = _chain()
+    monkeypatch.setattr(chain, "JOBS", tmp_path)
+    monkeypatch.setattr(chain, "log", lambda m: None)
+    (tmp_path / "enhancer_targets_all_chr1.json").write_text("{}")
+    killed = []
+    line = " {pid} x Python scripts/enhancer_targets_all.py --chrom {c}"
+    ps = line.format(pid=100, c="chr19") + chr(10) + line.format(pid=200, c="chr1")
+    out = chain.suppress_strays("chr19", ps, kill=lambda pid, sig: killed.append((pid, sig)))
+    assert out == ["chr1"] and [p for p, _ in killed] == [200]
+    assert (tmp_path / "enhancer_targets_all_chr1.superseded-by-chain").exists()
+    assert not (tmp_path / "enhancer_targets_all_chr1.json").exists()
