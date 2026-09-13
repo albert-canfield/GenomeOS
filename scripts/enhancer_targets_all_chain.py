@@ -19,6 +19,8 @@ Rules it keeps:
 - only the chromosome the chain is on may score: a scorer for any other chromosome (the registry
   supervisor can revive a job record nobody asked for, as it did with chr1 on 2026-09-13) has its job
   record set aside and is stopped, because two scorers share one quota and undo the order;
+- a run that stops making progress (its heartbeat and result frozen for ten minutes, a request that
+  never returns) is stopped and started again at once, since the cache keeps every answer it had;
 - a run that ends without completing is retried after a pause;
 - a completed chromosome's per-element cache is packed into one archive (scripts/pack_element_cache.py,
   about eight times smaller, read transparently), so the genome costs about 1.5 GB instead of 13 GB;
@@ -54,6 +56,7 @@ ORDER = [
 ]  # fmt: skip
 POLL = 60
 RETRY_PAUSE = 600
+STALL_LIMIT = 600  # seconds without progress before the scorer counts as hung and is restarted
 MAX_RETRIES = 20
 PIDFILE = JOBS / f"{JOB}.pid"
 
@@ -64,6 +67,46 @@ def log(msg: str) -> None:
     JOBS.mkdir(parents=True, exist_ok=True)
     with open(JOBS / f"{JOB}.log", "a") as fh:
         fh.write(line + "\n")
+
+
+def progress_marker(chrom: str) -> float | None:
+    """The newest sign of life of a chromosome's run: its heartbeat or its saved result, whichever moved last.
+
+    The scoring script beats once per element and saves every 200, so either file moving means the run is
+    working. A request that never returns leaves the process alive at 0% CPU with both files frozen, which
+    is what happened twice on 2026-09-13 (2h15m polled against a hung scorer), so the chain watches the
+    marker rather than the process.
+    """
+    times = []
+    for p_ in (
+        JOBS / f"enhancer_targets_all_{chrom}.heartbeat",
+        RESULTS / f"enhancer_targets_all_{chrom}.json",
+    ):
+        if p_.exists():
+            times.append(p_.stat().st_mtime)
+    return max(times) if times else None
+
+
+def stall_state(marker, last, since, now, limit=STALL_LIMIT):
+    """Track a run's progress marker; returns (last marker, when it last moved, whether it has stalled)."""
+    if marker != last:
+        return marker, now, False
+    return last, since, (now - since) >= limit
+
+
+def stop_scorer(chrom: str) -> list[int]:
+    """SIGTERM every process scoring this chromosome; the cache means a restart loses no requests."""
+    ps = subprocess.run(["ps", "-axo", "pid,command"], capture_output=True, text=True).stdout
+    stopped = []
+    for pid, c in scorer_processes(ps):
+        if c != chrom:
+            continue
+        try:
+            os.kill(pid, signal.SIGTERM)
+            stopped.append(pid)
+        except (ProcessLookupError, PermissionError):
+            continue
+    return stopped
 
 
 def expected_elements(chrom: str) -> int | None:
@@ -285,16 +328,27 @@ def run_one(chrom: str) -> bool:
         log(f"{chrom}: starting through the registry (attempt {attempt})")
         jobs.start(name)
         time.sleep(POLL)
+        last, since, stalled = progress_marker(chrom), time.time(), False
         while running(chrom):
             heartbeat(JOB)
             guard(chrom)
             time.sleep(POLL)
+            last, since, stalled = stall_state(progress_marker(chrom), last, since, time.time())
+            if stalled:
+                idle = (time.time() - since) / 60
+                pids = stop_scorer(chrom)
+                sc = scored(chrom)
+                at = f" at {sc[0]:,} of {sc[1]:,}" if sc else ""
+                log(f"{chrom}: no progress for {idle:.0f} min{at}; stopped {pids} and starting it again")
+                break
         log_tail = (JOBS / f"{name}.log").read_text(errors="replace").splitlines()[-3:]
         if any("AlphaGenome is disabled" in line for line in log_tail):
             log(f"{chrom}: AlphaGenome is disabled; the chain stops here")
             return False
         if complete(chrom):
             break
+        if stalled:
+            continue  # a hung run was just stopped: start again now, the cache keeps every answer
         pause = RETRY_PAUSE // 60
         log(f"{chrom}: run ended before completing ({' | '.join(log_tail)[-160:]}); retry in {pause} min")
         time.sleep(RETRY_PAUSE)

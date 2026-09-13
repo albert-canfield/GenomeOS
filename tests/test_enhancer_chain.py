@@ -96,3 +96,23 @@ def test_a_capped_run_is_not_complete(tmp_path, monkeypatch):
     assert chain.complete("chrT") is True
     result.write_text(json.dumps({"elements_total": 5, "scored": 4, "complete": True}))
     assert chain.complete("chrT") is False
+
+
+def test_stall_state_flags_a_frozen_marker():
+    chain = _chain()
+    last, since, stalled = chain.stall_state(100.0, None, 0.0, 10.0, limit=600)
+    assert (last, since, stalled) == (100.0, 10.0, False)
+    same = chain.stall_state(100.0, 100.0, 10.0, 300.0, limit=600)
+    assert same == (100.0, 10.0, False)  # frozen, but not yet past the limit
+    stuck = chain.stall_state(100.0, 100.0, 10.0, 700.0, limit=600)
+    assert stuck == (100.0, 10.0, True)  # frozen for 690 s: stalled
+
+
+def test_progress_marker_reads_heartbeat_and_result(tmp_path, monkeypatch):
+    chain = _chain()
+    monkeypatch.setattr(chain, "JOBS", tmp_path)
+    monkeypatch.setattr(chain, "RESULTS", tmp_path)
+    assert chain.progress_marker("chrT") is None
+    beat = tmp_path / "enhancer_targets_all_chrT.heartbeat"
+    beat.write_text("1")
+    assert chain.progress_marker("chrT") == beat.stat().st_mtime
