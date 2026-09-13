@@ -160,29 +160,18 @@ def measure(chrom: str, genes: list, cells: tuple[str, ...], signal: float, prog
 
 
 def oriented(
-    cell: str, chrom: str, signal: float, merged: dict[str, list[tuple[int, int]]], probe: int = 40
+    cell: str, chrom: str, signal: float, merged: dict[str, list[tuple[int, int]]]
 ) -> tuple[MeasuredRna | None, str]:
-    """The cell's RNA-seq tracks in the orientation that puts signal on the genes' own strands.
+    """The cell's RNA-seq reader and the strand orientation it settled on.
 
     ENCODE labels a track "plus strand signal" by the read, and for some library protocols the read
-    is antisense to the transcript: IMR-90's total RNA-seq reads APP (minus strand) on the plus track.
-    A probe over a few dozen exons per strand decides; the choice is recorded with the result.
+    is antisense to the transcript (IMR-90's total RNA-seq). `MeasuredRna.orient` probes both
+    orientations and swaps when needed; this reports its decision rather than probing a second time.
     """
-    base = MeasuredRna(cell, chrom, signal=signal)
-    if base.missing or not base.tracks.get("tracks"):
+    rna = MeasuredRna(cell, chrom, signal=signal)
+    if rna.missing or not rna.tracks.get("tracks"):
         return None, "no track"
-    tracks = base.tracks
-    swapped = {**tracks, "tracks": {"+": tracks["tracks"].get("-"), "-": tracks["tracks"].get("+")}}
-    swapped["tracks"] = {k: v for k, v in swapped["tracks"].items() if v}
-    sample = {s: v[:probe] for s, v in merged.items()}
-    scores = {}
-    for name, tr in (("as labelled", tracks), ("swapped", swapped)):
-        m = MeasuredRna(cell, chrom, signal=signal, tracks=tr)
-        m.prepare(sample)
-        scores[name] = sum(m.covered_fraction(s, a, b) for s, v in sample.items() for a, b in v)
-    if scores["swapped"] > 2 * scores["as labelled"]:
-        return MeasuredRna(cell, chrom, signal=signal, tracks=swapped), "swapped"
-    return base, "as labelled"
+    return rna, rna.orient(merged).get(cell, "as labelled")
 
 
 def closure(

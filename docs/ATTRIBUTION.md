@@ -277,8 +277,18 @@ and the unexplained genes fall from 43 to 9. The tissue-agnostic magnitude still
 fails, so the earlier negative was read correctly: one sampled element per gene
 cannot carry a cell, the whole input can. The effect is modest, a mean rank
 correlation of 0.19, and 72 attributions are rejected by name, S100B in K562
-first. Those are the list to read next, with the same test on a second
-chromosome.
+first. Those are the list to read next.
+
+On chromosome 22, 19,708 elements scored the same way, the across-cell pass
+replicates at a smaller effect: 32% of 375 genes for the cell's own DNase-gated
+score against a 25% null (p 0.003), 30% (p 0.013) ungated, and 31% (p 0.003) for
+the tissue-agnostic input, which passes here though not on chromosome 21. Within
+a cell, repressing input lowers the expressed fraction of open-promoter genes in
+three of the four lines, while in K562 and HepG2 activating input does not raise
+it above genes with no element: the model's repressors carry a cell better than
+its activators. The 235 rejected attributions of the tissue-agnostic reading open
+with lineage genes the model activates in the wrong line, VPREB1 and VPREB3,
+B-cell genes, in erythroid K562.
 
 One measurement lesson on the way: IMR-90's ENCODE total RNA-seq carries its
 strand labels inverted (APP reads on the "plus" file), so the module probes each
@@ -350,9 +360,10 @@ candidates; the full join is recomputed on demand) and `organised_genome_wide.js
 
 ## What comes next, in order
 
-1. **The whole-input closure on a second chromosome**, and the 72 rejected
-   attributions of chromosome 21 read one by one. Done for chromosome 21 on
-   2026-09-13: every element scored per cell, the closure passes (above).
+1. **The rejected attributions read as a set**, 72 on chromosome 21 and 235 on
+   chromosome 22: whether they share a tissue class, a distance or a node
+   verdict, which says what the model gets wrong. Done 2026-09-13: the
+   whole-input closure on chromosomes 21 and 22, passing on both (above).
 2. **The 69 syntax candidates read one by one**: which node, which gene next
    door, what AlphaGenome says of each in silico, and whether any is an
    unannotated exon (the segment parser over the block); then the reader's

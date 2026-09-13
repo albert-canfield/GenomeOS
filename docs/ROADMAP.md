@@ -1253,9 +1253,35 @@ in order. "Owner" is the session that holds the files today (see §7).
   to read next. The compiled chr21 program now holds every attributed
   element: 5,972 entities (446 regions, 5,174 elements, 193 genes, 159
   domains), 5,174 rules, 20 unknowns, 2.7 MB, checked by `bio test` in 0.26 s.
-- **Next.** 1. The same whole-input closure on a second chromosome (chr22's
-  scoring has started in genomeos-79's chain), and the 72 rejected
-  attributions read one by one. 2. The 69 syntax candidates read one by one: which node, which gene next
+- **Replicated on chr22 (2026-09-13).** The same test on the second
+  chromosome, 19,708 elements scored per cell (genomeos-79's chain), 432 of
+  447 genes carrying a median of 13:
+
+  | element input across the four cells | chr21 genes | chr21 | chr22 genes | chr22 | null |
+  |---|---|---|---|---|---|
+  | tissue-agnostic magnitude, DNase-gated | 138 | 30% (p 0.07) | 373 | 31% (p 0.003) | 25% |
+  | the deletion on the cell's own track | 146 | 36% (p 0.002) | 386 | 30% (p 0.013) | 25% |
+  | the cell's own score, DNase-gated | 141 | **41%** (p 0.001) | 375 | **32%** (p 0.003) | 25% |
+
+  The across-cell pass replicates, smaller: every input beats the null on
+  chr22, the cell's own DNase-gated score best on both chromosomes. Within a
+  cell the two chromosomes differ, and the difference is informative: on chr22
+  repressing input lowers the expressed fraction of open-promoter genes in
+  K562 (53% against 68% with activating input), HepG2 (59% against 68%) and
+  IMR-90 (55% against 72%), but in K562 and HepG2 activating input does not
+  raise it above genes with no element (68% against 91% on 21 genes, 68%
+  against 81% on 41), so the model's repressors carry a cell better than its
+  activators. In the tissue-agnostic reading 235 attributions are rejected by
+  name (VPREB1, UPK3A and VPREB3 in K562 first, B-cell and urothelial genes
+  the model activates in an erythroid line; 220 in the cell's own reading) and 59
+  expressed genes are unexplained, nearly all in GM12878, whose reader has the
+  fewest peaks. A measurement note: `MeasuredRna` now orients itself, and
+  the closure reports its decision rather than probing a second time, so IMR-90
+  reads "swapped" on both chromosomes.
+- **Next.** 1. The rejected attributions read as a set (72 on chr21, 235 on
+  chr22): whether they share a tissue class (lineage genes activated in the
+  wrong line), a distance, or a node verdict, which says what the model gets
+  wrong. 2. The 69 syntax candidates read one by one: which node, which gene next
   door, what AlphaGenome says of each in silico, and whether any is an
   unannotated exon (the segment parser over the block); the reader's openness
   on the element itself rather than its node. 3. The
