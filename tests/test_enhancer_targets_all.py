@@ -47,3 +47,10 @@ def test_the_pacer_holds_every_worker_and_escalates():
 def test_a_hang_is_not_a_quota_answer():
     assert eta.retry_seconds("DeadlineExceeded: no answer") is None
     assert eta.retry_seconds('RESOURCE_EXHAUSTED details = "Quota exceeded; retry in 30s"') == 30
+
+
+def test_a_capped_run_cannot_claim_the_chromosome_is_complete():
+    """`--limit` scores a prefix; a result saying complete would drop the chromosome from the chain."""
+    src = Path("scripts/enhancer_targets_all.py").read_text()
+    assert '"complete": bool(final and not args.limit and len(rows) >= total_elements)' in src
+    assert '"elements_total": total_elements' in src and '"capped_to": args.limit' in src

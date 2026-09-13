@@ -2,6 +2,7 @@
 """Every enhancer inside a node of one chromosome deleted in AlphaGenome, with the effect per cell line.
 
     uv run python scripts/enhancer_targets_all.py --chrom chr21
+    uv run python scripts/enhancer_targets_all.py --chrom chr21 --limit 300 --workers 16   # a throughput test
 
 The sampled jobs scored 200 uniform and 100 constrained elements per chromosome; the gene-level closure
 needs every element that reaches a gene scored on the cell lines' own tracks (K562, HepG2, GM12878,
@@ -131,6 +132,7 @@ def main() -> int:
     distal = {e.id for e in ctx.distal_enhancers()}
     elements = [e for e in ctx.elements if e.cls == "enhancer" and e.domain]
     elements.sort(key=lambda e: (e.id not in distal, e.locus.start))  # the distal ones first
+    total_elements = len(elements)  # the chromosome's own count, whatever this run is asked to do
     if args.limit:
         elements = elements[: args.limit]
     # the sequence reader is one file handle: the workers take turns at it, the requests overlap
@@ -155,12 +157,14 @@ def main() -> int:
             name,
             {
                 "chrom": chrom,
-                "elements_total": len(elements),
+                "elements_total": total_elements,
                 "scored": len(rows),
                 "requests_this_run": requests,
                 "workers": args.workers,
+                "capped_to": args.limit,
                 "cells": ["K562", "HepG2", "GM12878", "IMR-90"],
-                "complete": final and len(rows) >= len(elements),
+                # a capped run cannot know the chromosome is finished, so it never claims it is
+                "complete": bool(final and not args.limit and len(rows) >= total_elements),
                 "summary": s,
                 "elements_where": str(table),
                 "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line "
