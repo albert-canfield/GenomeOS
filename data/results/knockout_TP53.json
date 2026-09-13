@@ -1,0 +1,423 @@
+{
+  "result": "knockout_TP53",
+  "date": "2026-09-10",
+  "gene": "TP53",
+  "accession": "P04637",
+  "pathways": [
+    {
+      "pathway": "R-HSA-6804756",
+      "name": "Regulation of TP53 Activity through Phosphorylatio",
+      "reactions": 26,
+      "reachable": 21,
+      "lost": 18,
+      "fraction_lost": "86%",
+      "unreachable_products": 12
+    },
+    {
+      "pathway": "R-HSA-6803204",
+      "name": "TP53 Regulates Transcription of Genes Involved in ",
+      "reactions": 25,
+      "reachable": 25,
+      "lost": 10,
+      "fraction_lost": "40%",
+      "unreachable_products": 10
+    },
+    {
+      "pathway": "R-HSA-6804759",
+      "name": "Regulation of TP53 Activity through Association wi",
+      "reactions": 10,
+      "reachable": 10,
+      "lost": 8,
+      "fraction_lost": "80%",
+      "unreachable_products": 8
+    },
+    {
+      "pathway": "R-HSA-6804760",
+      "name": "Regulation of TP53 Activity through Methylation",
+      "reactions": 12,
+      "reachable": 12,
+      "lost": 8,
+      "fraction_lost": "67%",
+      "unreachable_products": 9
+    },
+    {
+      "pathway": "R-HSA-5628897",
+      "name": "TP53 Regulates Metabolic Genes",
+      "reactions": 34,
+      "reachable": 29,
+      "lost": 7,
+      "fraction_lost": "24%",
+      "unreachable_products": 7
+    },
+    {
+      "pathway": "R-HSA-6803205",
+      "name": "TP53 regulates transcription of several additional",
+      "reactions": 19,
+      "reachable": 17,
+      "lost": 7,
+      "fraction_lost": "41%",
+      "unreachable_products": 7
+    },
+    {
+      "pathway": "R-HSA-6804758",
+      "name": "Regulation of TP53 Activity through Acetylation",
+      "reactions": 14,
+      "reachable": 11,
+      "lost": 7,
+      "fraction_lost": "64%",
+      "unreachable_products": 9
+    },
+    {
+      "pathway": "R-HSA-6796648",
+      "name": "TP53 Regulates Transcription of DNA Repair Genes",
+      "reactions": 17,
+      "reachable": 17,
+      "lost": 6,
+      "fraction_lost": "35%",
+      "unreachable_products": 6
+    },
+    {
+      "pathway": "R-HSA-6803207",
+      "name": "TP53 Regulates Transcription of Caspase Activators",
+      "reactions": 17,
+      "reachable": 17,
+      "lost": 6,
+      "fraction_lost": "35%",
+      "unreachable_products": 6
+    },
+    {
+      "pathway": "R-HSA-69541",
+      "name": "Stabilization of p53",
+      "reactions": 15,
+      "reachable": 13,
+      "lost": 6,
+      "fraction_lost": "46%",
+      "unreachable_products": 5
+    },
+    {
+      "pathway": "R-HSA-6804115",
+      "name": "TP53 regulates transcription of additional cell cy",
+      "reactions": 14,
+      "reachable": 14,
+      "lost": 5,
+      "fraction_lost": "36%",
+      "unreachable_products": 5
+    },
+    {
+      "pathway": "R-HSA-69481",
+      "name": "G2/M Checkpoints",
+      "reactions": 24,
+      "reachable": 19,
+      "lost": 5,
+      "fraction_lost": "26%",
+      "unreachable_products": 6
+    },
+    {
+      "pathway": "R-HSA-6804116",
+      "name": "TP53 Regulates Transcription of Genes Involved in ",
+      "reactions": 17,
+      "reachable": 17,
+      "lost": 4,
+      "fraction_lost": "24%",
+      "unreachable_products": 4
+    },
+    {
+      "pathway": "R-HSA-2559580",
+      "name": "Oxidative Stress Induced Senescence",
+      "reactions": 40,
+      "reachable": 26,
+      "lost": 3,
+      "fraction_lost": "12%",
+      "unreachable_products": 5
+    },
+    {
+      "pathway": "R-HSA-2559585",
+      "name": "Oncogene Induced Senescence",
+      "reactions": 19,
+      "reachable": 19,
+      "lost": 3,
+      "fraction_lost": "16%",
+      "unreachable_products": 5
+    },
+    {
+      "pathway": "R-HSA-2559586",
+      "name": "DNA Damage/Telomere Stress Induced Senescence",
+      "reactions": 18,
+      "reachable": 18,
+      "lost": 3,
+      "fraction_lost": "17%",
+      "unreachable_products": 3
+    },
+    {
+      "pathway": "R-HSA-6803211",
+      "name": "TP53 Regulates Transcription of Death Receptors an",
+      "reactions": 7,
+      "reachable": 7,
+      "lost": 3,
+      "fraction_lost": "43%",
+      "unreachable_products": 3
+    },
+    {
+      "pathway": "R-HSA-6804114",
+      "name": "TP53 Regulates Transcription of Genes Involved in ",
+      "reactions": 11,
+      "reachable": 11,
+      "lost": 3,
+      "fraction_lost": "27%",
+      "unreachable_products": 3
+    },
+    {
+      "pathway": "R-HSA-70635",
+      "name": "Urea cycle",
+      "reactions": 17,
+      "reachable": 13,
+      "lost": 3,
+      "fraction_lost": "23%",
+      "unreachable_products": 3
+    },
+    {
+      "pathway": "R-HSA-5689880",
+      "name": "Ub-specific processing proteases",
+      "reactions": 40,
+      "reachable": 38,
+      "lost": 2,
+      "fraction_lost": "5%",
+      "unreachable_products": 2
+    },
+    {
+      "pathway": "R-HSA-6804754",
+      "name": "Regulation of TP53 Expression",
+      "reactions": 5,
+      "reachable": 5,
+      "lost": 2,
+      "fraction_lost": "40%",
+      "unreachable_products": 3
+    },
+    {
+      "pathway": "R-HSA-6811555",
+      "name": "PI5P Regulates TP53 Acetylation",
+      "reactions": 8,
+      "reachable": 5,
+      "lost": 2,
+      "fraction_lost": "40%",
+      "unreachable_products": 3
+    },
+    {
+      "pathway": "R-HSA-69473",
+      "name": "G2/M DNA damage checkpoint",
+      "reactions": 12,
+      "reachable": 5,
+      "lost": 2,
+      "fraction_lost": "40%",
+      "unreachable_products": 2
+    },
+    {
+      "pathway": "R-HSA-69895",
+      "name": "Transcriptional  activation of  cell cycle inhibit",
+      "reactions": 5,
+      "reachable": 5,
+      "lost": 2,
+      "fraction_lost": "40%",
+      "unreachable_products": 2
+    },
+    {
+      "pathway": "R-HSA-9725370",
+      "name": "Signaling by ALK fusions and activated point mutan",
+      "reactions": 63,
+      "reachable": 63,
+      "lost": 2,
+      "fraction_lost": "3%",
+      "unreachable_products": 2
+    },
+    {
+      "pathway": "R-HSA-111448",
+      "name": "Activation of NOXA and translocation to mitochondr",
+      "reactions": 5,
+      "reachable": 5,
+      "lost": 1,
+      "fraction_lost": "20%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-139915",
+      "name": "Activation of PUMA and translocation to mitochondr",
+      "reactions": 5,
+      "reachable": 5,
+      "lost": 1,
+      "fraction_lost": "20%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-1912408",
+      "name": "Pre-NOTCH Transcription and Translation",
+      "reactions": 37,
+      "reachable": 35,
+      "lost": 1,
+      "fraction_lost": "3%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-3232118",
+      "name": "SUMOylation of transcription factors",
+      "reactions": 11,
+      "reachable": 11,
+      "lost": 1,
+      "fraction_lost": "9%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-349425",
+      "name": "Autodegradation of the E3 ubiquitin ligase COP1",
+      "reactions": 5,
+      "reachable": 3,
+      "lost": 1,
+      "fraction_lost": "33%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-390471",
+      "name": "Association of TriC/CCT with target proteins durin",
+      "reactions": 2,
+      "reachable": 2,
+      "lost": 1,
+      "fraction_lost": "50%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-5620971",
+      "name": "Pyroptosis",
+      "reactions": 24,
+      "reachable": 24,
+      "lost": 1,
+      "fraction_lost": "4%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-5689896",
+      "name": "Ovarian tumor domain proteases",
+      "reactions": 14,
+      "reachable": 14,
+      "lost": 1,
+      "fraction_lost": "7%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-5693565",
+      "name": "Recruitment and ATM-mediated phosphorylation of re",
+      "reactions": 41,
+      "reachable": 36,
+      "lost": 1,
+      "fraction_lost": "3%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-6804757",
+      "name": "Regulation of TP53 Degradation",
+      "reactions": 30,
+      "reachable": 14,
+      "lost": 1,
+      "fraction_lost": "7%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-8941855",
+      "name": "RUNX3 regulates CDKN1A transcription",
+      "reactions": 6,
+      "reachable": 6,
+      "lost": 1,
+      "fraction_lost": "17%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-8943724",
+      "name": "Regulation of PTEN gene transcription",
+      "reactions": 15,
+      "reachable": 15,
+      "lost": 1,
+      "fraction_lost": "7%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-9723905",
+      "name": "Loss of function of TP53 in cancer due to loss of ",
+      "reactions": 1,
+      "reachable": 1,
+      "lost": 1,
+      "fraction_lost": "100%",
+      "unreachable_products": 0
+    },
+    {
+      "pathway": "R-HSA-9758274",
+      "name": "Regulation of NF-kappa B signaling",
+      "reactions": 11,
+      "reachable": 6,
+      "lost": 1,
+      "fraction_lost": "17%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-9819196",
+      "name": "Zygotic genome activation (ZGA)",
+      "reactions": 17,
+      "reachable": 17,
+      "lost": 1,
+      "fraction_lost": "6%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-983231",
+      "name": "Factors involved in megakaryocyte development and ",
+      "reactions": 43,
+      "reachable": 43,
+      "lost": 1,
+      "fraction_lost": "2%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-9833482",
+      "name": "PKR-mediated signaling",
+      "reactions": 40,
+      "reachable": 40,
+      "lost": 1,
+      "fraction_lost": "2%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-2559584",
+      "name": "Formation of Senescence-Associated Heterochromatin",
+      "reactions": 2,
+      "reachable": 2,
+      "lost": 0,
+      "fraction_lost": "0%",
+      "unreachable_products": 0
+    },
+    {
+      "pathway": "R-HSA-6785807",
+      "name": "Interleukin-4 and Interleukin-13 signaling",
+      "reactions": 47,
+      "reachable": 46,
+      "lost": 0,
+      "fraction_lost": "0%",
+      "unreachable_products": 1
+    },
+    {
+      "pathway": "R-HSA-8852276",
+      "name": "The role of GTSE1 in G2/M progression after G2 che",
+      "reactions": 10,
+      "reachable": 2,
+      "lost": 0,
+      "fraction_lost": "0%",
+      "unreachable_products": 0
+    },
+    {
+      "pathway": "R-HSA-8853884",
+      "name": "Transcriptional Regulation by VENTX",
+      "reactions": 13,
+      "reachable": 13,
+      "lost": 0,
+      "fraction_lost": "0%",
+      "unreachable_products": 1
+    }
+  ],
+  "evidence": "curated: Reactome; logic inferred (reachability)"
+}

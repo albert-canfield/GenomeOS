@@ -10,6 +10,7 @@ a roadrunner adapter can replace `SbmlRuntime.run` without changing callers.
 
 from __future__ import annotations
 
+import contextvars
 import math
 import xml.etree.ElementTree as ET
 from collections.abc import Callable
@@ -21,6 +22,7 @@ from genomeos.ir import Action, Entity, Evidence, EvidenceKind, Module, Rule
 from .grn import Trajectory
 
 MATHML = "http://www.w3.org/1998/Math/MathML"
+_CALLER_ENV: contextvars.ContextVar[dict | None] = contextvars.ContextVar("sbml_caller_env", default=None)
 Env = dict[str, float]
 Fn = Callable[[Env], float]
 
@@ -55,9 +57,48 @@ def _tag(el: ET.Element) -> str:
     return el.tag.split("}", 1)[1] if "}" in el.tag else el.tag
 
 
-def compile_math(el: ET.Element) -> Fn:
-    """Compile a MathML element to a closure over an environment."""
+UserFn = Callable[[list[float]], float]
+
+
+def compile_math(el: ET.Element, functions: dict[str, UserFn] | None = None) -> Fn:
+    """Compile a MathML element to a closure over an environment. `functions` are the model's
+    functionDefinitions (lambda), callable as <apply><ci>name</ci>args…</apply>."""
+    functions = functions or {}
+
+    def compile_math(el: ET.Element) -> Fn:  # noqa: F811 - the recursion carries the registry
+        return _compile(el, functions)
+
+    return _compile(el, functions)
+
+
+def compile_lambda(el: ET.Element, functions: dict[str, UserFn]) -> UserFn:
+    """A functionDefinition body: <lambda><bvar><ci>x</ci></bvar>… <expr></lambda> → f(args)."""
+    lam = el.find(f"{{{MATHML}}}lambda") if _tag(el) == "math" else el
+    if lam is None or _tag(lam) != "lambda":
+        raise ValueError("functionDefinition without a lambda")
+    names = []
+    body = None
+    for child in lam:
+        if _tag(child) == "bvar":
+            names.append((list(child)[0].text or "").strip())
+        else:
+            body = child
+    if body is None:
+        raise ValueError("lambda without a body")
+    fn = _compile(body, functions)
+
+    def call(args: list[float], names=names, fn=fn) -> float:
+        return fn({**(_CALLER_ENV.get() or {}), **dict(zip(names, args, strict=False))})
+
+    return call
+
+
+def _compile(el: ET.Element, functions: dict[str, UserFn]) -> Fn:
     tag = _tag(el)
+
+    def compile_math(el: ET.Element) -> Fn:
+        return _compile(el, functions)
+
     if tag == "math":
         children = list(el)
         return compile_math(children[0]) if children else (lambda env: 0.0)
@@ -100,6 +141,21 @@ def compile_math(el: ET.Element) -> Fn:
         children = list(el)
         op = _tag(children[0])
         args = [compile_math(c) for c in children[1:]]
+        if op == "ci":  # a call of one of the model's own functions
+            name = (children[0].text or "").strip()
+            if name not in functions:
+                raise ValueError(f"call of undefined function {name!r}")
+            f = functions[name]
+
+            # the lambda's body sees the caller's environment too (SBML forbids it, models rely on it)
+            def call_user(env: Env, f=f, args=args) -> float:
+                token = _CALLER_ENV.set(env)
+                try:
+                    return f([a(env) for a in args])
+                finally:
+                    _CALLER_ENV.reset(token)
+
+            return call_user
         if op in ("plus", "times") and len(args) != 2:
             if op == "plus":
                 return lambda env, args=args: sum(a(env) for a in args)
@@ -155,6 +211,13 @@ class SbmlModel:
     assignments: list[tuple[str, Fn]]  # in dependency order
     reactions: list[Reaction]
     notes: str = ""
+    rate_rules: list[tuple[str, Fn]] = field(default_factory=list)  # d(var)/dt given directly
+    functions: dict[str, UserFn] = field(default_factory=dict)
+    names: dict[str, str] = field(default_factory=dict)  # species id -> display name
+    annotations: dict[str, list[str]] = field(default_factory=dict)  # species id -> MIRIAM resource URIs
+    amount_units: set[str] = field(
+        default_factory=set
+    )  # species whose value is an amount, not a concentration
 
     @classmethod
     def from_file(cls, path: str | Path) -> SbmlModel:
@@ -170,11 +233,30 @@ class SbmlModel:
 
         comps = {c.get("id"): float(c.get("size") or 1.0) for c in items("listOfCompartments")}
         species, species_comp, boundary, const = {}, {}, set(), set()
+        amount_units: set[str] = set()
+        names: dict[str, str] = {}
+        annotations: dict[str, list[str]] = {}
         for sp in items("listOfSpecies"):
             sid = sp.get("id")
-            val = sp.get("initialAmount") or sp.get("initialConcentration") or "0"
-            species[sid] = float(val)
-            species_comp[sid] = sp.get("compartment", "")
+            names[sid] = sp.get("name") or sid
+            uris = [
+                v
+                for el in sp.iter()
+                for k, v in el.attrib.items()
+                if k.endswith("}resource") and ("identifiers.org" in v or "miriam" in v)
+            ]
+            if uris:
+                annotations[sid] = uris
+            comp = sp.get("compartment", "")
+            size = comps.get(comp, 1.0) or 1.0
+            substance_only = sp.get("hasOnlySubstanceUnits") == "true"
+            if sp.get("initialAmount") not in (None, "") and not substance_only:
+                species[sid] = float(sp.get("initialAmount")) / size  # amount → concentration
+            else:
+                species[sid] = float(sp.get("initialAmount") or sp.get("initialConcentration") or "0")
+            species_comp[sid] = comp
+            if substance_only:
+                amount_units.add(sid)
             if sp.get("boundaryCondition") == "true":
                 boundary.add(sid)
             if sp.get("constant") == "true":
@@ -187,10 +269,18 @@ class SbmlModel:
         for p in items("listOfParameters"):
             params.setdefault(p.get("id"), 0.0)
 
+        functions: dict[str, UserFn] = {}
+        for fd in items("listOfFunctionDefinitions"):
+            functions[fd.get("id")] = compile_lambda(fd.find(f"{{{MATHML}}}math"), functions)
         raw_assign: dict[str, ET.Element] = {}
+        raw_rate: list[tuple[str, ET.Element]] = []
         for r in items("listOfRules"):
             if _tag(r) == "assignmentRule":
                 raw_assign[r.get("variable")] = r.find(f"{{{MATHML}}}math")
+            elif _tag(r) == "rateRule":
+                raw_rate.append((r.get("variable"), r.find(f"{{{MATHML}}}math")))
+        if items("listOfEvents"):
+            raise ValueError("SBML events are not supported by the in-house engine")
         # order assignment rules by dependency
         deps = {
             v: {ci.text.strip() for ci in m.iter(f"{{{MATHML}}}ci")} & set(raw_assign)
@@ -205,7 +295,8 @@ class SbmlModel:
                     progress = True
             if not progress:
                 raise ValueError("cyclic assignment rules")
-        assignments = [(v, compile_math(raw_assign[v])) for v in ordered]
+        assignments = [(v, compile_math(raw_assign[v], functions)) for v in ordered]
+        rate_rules = [(v, compile_math(m, functions)) for v, m in raw_rate]
 
         reactions = []
         for r in items("listOfReactions"):
@@ -224,7 +315,7 @@ class SbmlModel:
                 lp = kl.find(f"{ns}listOfParameters") or kl.find(f"{ns}listOfLocalParameters")
                 if lp is not None:
                     local = {p.get("id"): float(p.get("value")) for p in lp}
-                rate = compile_math(kl.find(f"{{{MATHML}}}math"))
+                rate = compile_math(kl.find(f"{{{MATHML}}}math"), functions)
             else:
                 rate = lambda env: 0.0  # noqa: E731
             reactions.append(
@@ -250,6 +341,11 @@ class SbmlModel:
             assignments,
             reactions,
             "".join(notes.itertext()).strip()[:500] if notes is not None else "",
+            rate_rules,
+            functions,
+            names,
+            annotations,
+            amount_units,
         )
 
     # ---- BioIR ------------------------------------------------------------
@@ -294,9 +390,12 @@ class SbmlModel:
 class SbmlRuntime:
     def __init__(self, model: SbmlModel) -> None:
         self.model = model
+        ruled = {v for v, _ in model.rate_rules}
         self.dynamic = [
-            s for s in model.species if s not in model.boundary and s not in model.constant_species
-        ]
+            s
+            for s in model.species
+            if (s not in model.boundary and s not in model.constant_species) or s in ruled
+        ] + [v for v in ruled if v not in model.species]
 
     def _env(self, state: dict[str, float]) -> Env:
         env: Env = dict(self.model.parameters)
@@ -309,16 +408,25 @@ class SbmlRuntime:
     def _derivatives(self, state: dict[str, float]) -> dict[str, float]:
         env = self._env(state)
         d = dict.fromkeys(self.dynamic, 0.0)
-        for rx in self.model.reactions:
+        for var, fn in self.model.rate_rules:
+            d[var] = fn(env)
+        m = self.model
+        for rx in m.reactions:
             local_env = {**env, **rx.local_params} if rx.local_params else env
-            v = rx.rate(local_env)
+            v = rx.rate(local_env)  # substance per time (SBML); a concentration changes by v / volume
             for s, st in rx.reactants:
                 if s in d:
-                    d[s] -= st * v
+                    d[s] -= st * v / self._volume(s)
             for s, st in rx.products:
                 if s in d:
-                    d[s] += st * v
+                    d[s] += st * v / self._volume(s)
         return d
+
+    def _volume(self, sid: str) -> float:
+        m = self.model
+        if sid in m.amount_units:
+            return 1.0
+        return m.compartments.get(m.species_compartment.get(sid, ""), 1.0) or 1.0
 
     def run(
         self,
@@ -328,6 +436,8 @@ class SbmlRuntime:
         initial: dict[str, float] | None = None,
     ) -> Trajectory:
         state = dict(self.model.species)
+        for v, _ in self.model.rate_rules:
+            state.setdefault(v, self.model.parameters.get(v, 0.0))
         if initial:
             state.update(initial)
         steps = int(round(duration / dt))

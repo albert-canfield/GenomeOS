@@ -1,0 +1,5 @@
+##fileformat=VCFv4.2
+##source=GenomeOS therapeutic benchmark: ERBB2-amplified breast carcinoma (trastuzumab, an antibody); the driver is copy number, the VCF carries a passenger
+##reference=GRCh38
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	BREAST
+chr17	39700064	.	G	A	.	PASS	.	GT	0/1

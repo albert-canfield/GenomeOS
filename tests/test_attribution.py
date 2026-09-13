@@ -1,0 +1,596 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+"""The 98%: bigWig sections decoded, constraint distributed over blocks, guesses tiered."""
+
+import json
+import os
+import struct
+from array import array
+from pathlib import Path
+
+import pytest
+
+from genomeos.attribution.bigwig import (
+    BEDGRAPH,
+    FIXED_STEP,
+    VARIABLE_STEP,
+    BigWig,
+    IntervalStats,
+    LeafItem,
+    coalesce,
+    decode_section,
+)
+from genomeos.attribution.budget import TIERS, build, distil, guess, tallies
+from genomeos.attribution.constraint import Element, elements_over_blocks
+
+
+def _section(kind: int, start: int, items, step: int = 1, span: int = 1) -> bytes:
+    head = struct.pack("<IIIIIBBH", 13, start, start + 10 * len(items), step, span, kind, 0, len(items))
+    if kind == VARIABLE_STEP:
+        body = b"".join(struct.pack("<If", s, v) for s, v in items)
+    elif kind == BEDGRAPH:
+        body = b"".join(struct.pack("<IIf", s, e, v) for s, e, v in items)
+    else:  # fixedStep, and any unknown type for the error path
+        body = array("f", items).tobytes()
+    return head + body
+
+
+def test_decode_three_section_types():
+    runs = decode_section(_section(FIXED_STEP, 100, [1.0, 2.0, 3.0]))
+    assert len(runs) == 1 and runs[0][0] == 100 and runs[0][1] == 1 and list(runs[0][2]) == [1.0, 2.0, 3.0]
+    runs = decode_section(_section(VARIABLE_STEP, 0, [(5, 0.5), (9, 2.5)], span=2))
+    assert [(s, n, list(v)) for s, n, v in runs] == [(5, 2, [0.5]), (9, 2, [2.5])]
+    runs = decode_section(_section(BEDGRAPH, 0, [(10, 20, 4.0)]))
+    assert [(s, n, list(v)) for s, n, v in runs] == [(10, 10, [4.0])]
+    with pytest.raises(ValueError):
+        decode_section(_section(7, 0, [1.0]))
+
+
+def test_accumulate_counts_only_inside_intervals_and_above_threshold():
+    ivs = [(100, 105), (110, 112)]
+    stats = [IntervalStats(*iv) for iv in ivs]
+    vals = array("f", [0.0, 3.0, 3.0, -1.0, 2.27, 9.0, 9.0, 9.0, 9.0, 9.0, 1.0, 5.0, 9.0])  # bases 100..112
+    BigWig._accumulate(100, 1, vals, ivs, [e for _, e in ivs], stats, 2.27)
+    a, b = stats
+    assert (a.bases, a.above, a.maximum) == (
+        5,
+        3,
+        3.0,
+    )  # 3.0, 3.0, 2.27 reach the threshold; 9.0 lies outside
+    assert a.mean == pytest.approx((0 + 3 + 3 - 1 + 2.27) / 5)
+    assert (b.bases, b.above, b.maximum) == (2, 1, 5.0)
+    assert stats[0].as_dict()["fraction_above"] == 0.6
+
+
+def test_coalesce_joins_neighbours_and_splits_far_blocks():
+    items = [LeafItem(0, 0, 0, 0, off, 100) for off in (0, 100, 250, 10_000_000)]
+    groups = coalesce(items, max_gap=100, max_size=1000)
+    assert [[i.offset for i in g] for g in groups] == [[0, 100, 250], [10_000_000]]
+
+
+def test_elements_over_blocks_clips_and_counts():
+    els = [Element(5, 15, 10), Element(20, 30, 50), Element(95, 105, 7)]
+    res = elements_over_blocks(els, [(0, 25), (100, 200)])
+    assert res[0] == {"n": 2, "bp": 15, "max_lod": 50, "fraction": 0.6}
+    assert res[1] == {"n": 1, "bp": 5, "max_lod": 7, "fraction": 0.05}
+
+
+def test_guess_tiers():
+    assert guess("gap", 1.0, None, None)["tier"] == "structural"
+    assert guess("centromere", 0.5, {"fraction_above": 0.0}, None)["tier"] == "structural"
+    assert guess("interspersed_repeat_LINE", 0.9, {"fraction_above": 0.01}, None)["tier"] == "fossil"
+    g = guess("interspersed_repeat_LINE", 0.9, {"fraction_above": 0.12}, None)
+    assert g["tier"] == "constrained_unknown" and "exapted" in g["label"]
+    assert guess("regulatory", 0.7, {"fraction_above": 0.08}, None)["tier"] == "regulatory"
+    assert guess("unique_intergenic", 0.3, {"fraction_above": 0.01}, {"n": 0})["tier"] == "neutral"
+    assert (
+        guess("unique_intergenic", 0.3, {"fraction_above": 0.07}, {"n": 0})["tier"] == "constrained_unknown"
+    )
+    assert guess("unclassified", 0.0, {"fraction_above": 0.035}, {"n": 4})["tier"] == "constrained_unknown"
+    assert guess("long_orf", 0.4, {"fraction_above": 0.0}, None)["tier"] == "neutral"
+    unmeasured = guess("unique_intergenic", 0.3, None, None)
+    assert unmeasured["confidence"] <= 0.3 and "not measured" in unmeasured["label"]
+    assert all(
+        guess(c, 0.5, {"fraction_above": 0.5}, None)["tier"] in TIERS
+        for c in ("regulatory", "mixed_intergenic", "gap")
+    )
+
+
+def _unknown():
+    return {
+        "unknown_bp": 300,
+        "blocks": [
+            {"start": 0, "end": 100, "length": 100, "class": "gap", "evidence": "curated", "confidence": 1.0},
+            {
+                "start": 100,
+                "end": 200,
+                "length": 100,
+                "class": "regulatory",
+                "evidence": "curated",
+                "confidence": 0.7,
+            },
+            {
+                "start": 200,
+                "end": 300,
+                "length": 100,
+                "class": "unique_intergenic",
+                "evidence": "inferred",
+                "confidence": 0.3,
+            },
+        ],
+    }
+
+
+def test_build_without_network_and_tallies():
+    out = build("chrTest", phylop=False, elements=False, unknown=_unknown(), length=1000)
+    assert [r["guess"]["tier"] for r in out["blocks"]] == ["structural", "regulatory", "constrained_unknown"]
+    assert out["by_tier"]["structural"]["fraction_of_unknown"] == pytest.approx(1 / 3, abs=1e-4)
+    assert out["by_tier"]["structural"]["fraction_of_chromosome"] == 0.1
+    assert out["constrained_fraction"] is None  # nothing measured
+    assert out["sources"] == {"phylop": None, "elements": None}
+
+
+def test_tallies_and_distil(tmp_path):
+    rows = [
+        {"length": 100, "class": "gap", "phylop": None, "guess": {"tier": "structural", "confidence": 1.0}},
+        {
+            "length": 200,
+            "class": "regulatory",
+            "phylop": {"above": 20, "bases": 200},
+            "guess": {"tier": "regulatory", "confidence": 0.7},
+        },
+        {
+            "length": 700,
+            "class": "unique_intergenic",
+            "phylop": {"above": 7, "bases": 700},
+            "guess": {"tier": "neutral", "confidence": 0.6},
+        },
+    ]
+    t = tallies(rows, 2000)
+    assert t["constrained_bp"] == 27 and t["measured_bp"] == 900 and t["constrained_fraction"] == 0.03
+    assert t["by_class"]["regulatory"]["constrained_fraction"] == 0.1
+    assert t["guessed_fraction"] == 1.0
+    res = {
+        "result": "budget_chr21",
+        "chromosome_length": 2000,
+        "unknown_bp": 1000,
+        "cost": {"phylop": {"mb_fetched": 3.5}},
+        **t,
+    }
+    (tmp_path / "budget_chr21.json").write_text(json.dumps(res))
+    (tmp_path / "budget_chr22.json").write_text(json.dumps({**res, "result": "budget_chr22"}))
+    d = distil(tmp_path)
+    assert d["chromosomes"] == 2 and d["genome_bp"] == 4000 and d["unknown_bp"] == 2000
+    assert d["constrained_bp"] == 54 and d["by_tier"]["neutral"]["bp"] == 1400
+    assert d["by_tier"]["neutral"]["fraction_of_genome"] == 0.35
+    assert d["phylop_mb_fetched"] == 7.0
+
+
+@pytest.mark.skipif(
+    not os.environ.get("GENOMEOS_LIVE"), reason="set GENOMEOS_LIVE=1 to read the Zoonomia track over HTTP"
+)
+def test_live_zoonomia_range():  # pragma: no cover - network
+    from genomeos.attribution.constraint import PHYLOP_241_URL
+
+    bw = BigWig(PHYLOP_241_URL)
+    (st,) = bw.summarise("chr21", [(25_880_000, 25_881_000)], 2.27)
+    assert st.bases == 1000 and 0.1 < st.fraction_above < 0.3  # APP exon neighbourhood
+
+
+def test_compile_chromosome_to_biolang(tmp_path):
+    """The attributions as a program: regions per tier (constrained_unknown keeps role unknown),
+    elements with targets and rules, domains with the reader's view; the engine parses and checks it."""
+    from genomeos.attribution.compile import compile_chromosome, ident, write_program
+    from genomeos.lang.parser import parse
+
+    def block(start, end, cls, tier, label, conf, phylop=None, elements=None):
+        return {
+            "start": start,
+            "end": end,
+            "length": end - start,
+            "class": cls,
+            "phylop": phylop,
+            "elements": elements,
+            "guess": {"tier": tier, "label": label, "confidence": conf},
+        }
+
+    blocks = [
+        block(0, 100, "gap", "structural", "assembly gap: no sequence to attribute", 1.0),
+        block(
+            100,
+            300,
+            "unique_intergenic",
+            "constrained_unknown",
+            "constrained non-coding",
+            0.6,
+            {"bases": 200, "fraction_above": 0.08, "above": 16},
+            {"n": 4},
+        ),
+        block(
+            300,
+            400,
+            "regulatory",
+            "regulatory",
+            "regulatory elements; target unassigned",
+            0.5,
+            {"bases": 100, "fraction_above": 0.01, "above": 1},
+            {"n": 0},
+        ),
+    ]
+    (tmp_path / "budget_chrT.json").write_text(
+        json.dumps({"chrom": "chrT", "unknown_bp": 400, "constrained_fraction": 0.05, "blocks": blocks})
+    )
+    (tmp_path / "domains_chrT.json").write_text(
+        json.dumps({"domains": [{"id": "chrT:D1", "start": 0, "end": 1000, "confidence": 0.4}]})
+    )
+    for cell, frac in (("K562", 0.3), ("HepG2", 0.0)):
+        (tmp_path / f"reader_{cell}_chrT.json").write_text(
+            json.dumps({"cell_type": cell, "node_table": [{"id": "chrT:D1", "open_fraction": frac}]})
+        )
+    el = {
+        "id": "EH38E0000001",
+        "start": 310,
+        "end": 330,
+        "domain": "chrT:D1",
+        "constrained_fraction": 0.5,
+        "verdict_coding": "agrees with nearest TSS in domain",
+        "predicted_coding": {
+            "gene": "KRTAP26-1",
+            "action": "represses",
+            "log2_fold_change": 0.9,
+            "tissue": "liver: left lobe",
+            "strength": "strong",
+            "confidence": 0.9,
+        },
+    }
+    el2 = {
+        **el,
+        "id": "EH38E0000002",
+        "start": 350,
+        "end": 360,
+        "predicted_coding": {
+            **el["predicted_coding"],
+            "action": "activates",
+            "log2_fold_change": -0.2,
+            "confidence": 0.2,
+        },
+    }
+    (tmp_path / "constrained_targets_chrT.json").write_text(json.dumps({"elements": [el]}))
+    (tmp_path / "enhancer_targets_chrT.json").write_text(json.dumps({"elements": [el, el2]}))
+    # the human axis (area J): read for one block only; it is a note on the region, not a tier
+    (tmp_path / "variation_chrT.json").write_text(
+        json.dumps(
+            {
+                "chrom": "chrT",
+                "blocks": [
+                    {
+                        "start": 100,
+                        "gnocchi": {"bases": 1000, "fraction_above": 0.0, "maximum": -1.2, "strong": False},
+                        "case": {
+                            "case": "relaxed",
+                            "mammals": "constrained",
+                            "humans": "free",
+                            "confidence": 0.5,
+                        },
+                    },
+                    {"start": 300, "gnocchi": None, "case": None},
+                ],
+            }
+        )
+    )
+    text = compile_chromosome("chrT", tmp_path)
+    regions = {ln.split()[1]: i for i, ln in enumerate(text.splitlines()) if ln.startswith("region ")}
+    lines = text.splitlines()
+    assert "people 0% of kilobases constrained, case relaxed" in lines[regions["U_chrT_100"] + 3]
+    assert "people" not in lines[regions["U_chrT_300"] + 3] and text.count("people ") == 1
+    assert ident("KRTAP26-1") == "KRTAP26_1" and ident("1abc") == "g_1abc"
+    assert "# test: unknowns == 1" in text and "# test: rules == 2" in text
+    assert "# chrT:D1: open in K562 (0.30); silent in HepG2" in text
+    m = parse(text, "chrT")
+    assert len(m.unknowns()) == 1 and len(m.rules) == 2
+    assert {e.kind for e in m.entities.values()} == {"region", "regulatory_element", "gene", "domain"}
+    e1 = m.entities["EH38E0000001"]
+    assert e1.targets[0]["gene"] == "KRTAP26_1" and e1.domain == "chrT_D1" and e1.confidence == 0.7  # capped
+    out = write_program("chrT", tmp_path / "prog" / "noncoding_chrT.bio", tmp_path)
+    assert out.exists() and out.read_text() == text
+
+
+def test_closure_helpers_and_judge():
+    """Rank correlation with ties, exon merging, and the closure verdicts on a synthetic gene table."""
+    from genomeos.attribution.closure import judge, merge, spearman
+
+    assert spearman([1, 2, 3, 4], [10, 20, 30, 40]) == pytest.approx(1.0)
+    assert spearman([1, 2, 3, 4], [4, 3, 2, 1]) == pytest.approx(-1.0)
+    assert spearman([1, 1, 1, 1], [1, 2, 3, 4]) is None and spearman([1, 2], [1, 2]) is None
+    assert spearman([1, 2, 2, 4], [1, 3, 3, 4]) == pytest.approx(1.0)  # ties on both sides, same order
+    assert merge([(10, 20), (15, 30), (40, 50), (50, 60)]) == [(10, 30), (40, 60)]
+
+    def cell(expr, prom, active, inp):
+        return {
+            "expression": expr,
+            "expressed": expr >= 0.3,
+            "promoter_open": prom,
+            "active_elements": active,
+            "input": inp,
+        }
+
+    cells = ["A", "B", "C"]
+    rows = [
+        # a gene whose elements are most active where it is most expressed
+        {
+            "gene": "G1",
+            "elements": 2,
+            "cells": {
+                "A": cell(0.9, True, 2, 0.8),
+                "B": cell(0.1, False, 0, 0.0),
+                "C": cell(0.4, True, 1, 0.3),
+            },
+        },
+        # a gene the cell rejects in B: open promoter, activating input, silent
+        {
+            "gene": "G2",
+            "elements": 1,
+            "cells": {
+                "A": cell(0.0, False, 0, 0.0),
+                "B": cell(0.0, True, 1, 0.5),
+                "C": cell(0.5, True, 1, 0.5),
+            },
+        },
+        # expressed with a closed promoter and no element in C: unexplained
+        {
+            "gene": "G3",
+            "elements": 0,
+            "cells": {
+                "A": cell(0.0, False, 0, 0.0),
+                "B": cell(0.0, False, 0, 0.0),
+                "C": cell(0.8, False, 0, 0.0),
+            },
+        },
+    ]
+    j = judge(rows, cells, seed=1)
+    assert j["within_cell"]["A"]["expressed_promoter_open"] == (1.0, 1)
+    assert j["within_cell"]["B"]["expressed_open_with_activating_input"] == (0.0, 1)
+    assert j["within_cell"]["C"]["expressed_promoter_closed"] == (1.0, 1)  # G3 only
+    assert j["across_cells"]["genes_tested"] == 2 and j["across_cells"]["chance"] == pytest.approx(
+        1 / 3, abs=1e-3
+    )
+    # G1: most active and most expressed both A -> 1.0
+    # G2: inputs tie in B and C, expression peaks in C -> 0.5
+    assert j["across_cells"]["most_active_cell_is_most_expressed"] == 0.75
+    assert 0 < j["across_cells"]["p_value"] <= 1 and j["across_cells"]["permutations"] == 1000
+    assert j["rejected_attributions"] == [{"gene": "G2", "cell": "B", "input": 0.5, "expression": 0.0}]
+    assert j["unexplained_expression"] == [{"gene": "G3", "cell": "C", "expression": 0.8}]
+
+
+def test_judge_with_per_cell_scores():
+    """With the deletion scored on each cell's own track the judge reads that input; pairs the model did
+    not score are left out rather than counted as zero."""
+    from genomeos.attribution.closure import judge
+
+    def cell(expr, prom, inp, inp_cell):
+        return {
+            "expression": expr,
+            "expressed": expr >= 0.3,
+            "promoter_open": prom,
+            "active_elements": 1,
+            "input": inp,
+            "input_cell": inp_cell,
+            "input_both": inp_cell,
+            "scored_elements": 1,
+        }
+
+    cells = ["A", "B", "C"]
+    rows = [
+        {
+            "gene": "G1",
+            "elements": 1,
+            "cells": {
+                "A": cell(0.9, True, 0.1, 0.9),
+                "B": cell(0.1, True, 0.1, 0.0),
+                "C": cell(0.5, True, 0.9, 0.4),
+            },
+        },
+        {
+            "gene": "G2",
+            "elements": 1,
+            "cells": {
+                "A": cell(0.0, True, 0.2, None),
+                "B": cell(0.6, True, 0.2, 0.5),
+                "C": cell(0.2, True, 0.2, 0.1),
+            },
+        },
+    ]
+    dn = judge(rows, cells, key="input")
+    ce = judge(rows, cells, key="input_cell")
+    assert dn["input"] == "input" and ce["input"] == "input_cell"
+    assert dn["across_cells"]["genes_tested"] == 1  # G2's DNase input is constant across cells
+    assert dn["across_cells"]["most_active_cell_is_most_expressed"] == 0.0
+    assert ce["across_cells"]["genes_tested"] == 1  # G2 lacks a score in A and is left out
+    assert ce["across_cells"]["most_active_cell_is_most_expressed"] == 1.0
+    assert ce["within_cell"]["A"]["expressed_promoter_open"] == (1.0, 1)  # G2's A pair has no score
+    # cell mode: only G2 in C (input 0.1, expression 0.2); dnase mode: G2 in A and C, G1 in B
+    assert [(r["gene"], r["cell"]) for r in ce["rejected_attributions"]] == [("G2", "C")]
+    assert [(r["gene"], r["cell"]) for r in dn["rejected_attributions"]] == [
+        ("G2", "A"),
+        ("G2", "C"),
+        ("G1", "B"),
+    ]
+
+
+def test_syntax_labels_and_variants(tmp_path):
+    """Feature labels for a position and the persons' variants read from their own files."""
+    from genomeos.attribution.syntax import label_for, read_variants
+
+    feats = [(100, 200, "exon (coding)"), (150, 400, "cCRE dELS"), (500, 600, "exon (UTR or non-coding)")]
+    assert label_for(120, feats) == "exon (coding)"
+    assert label_for(160, feats) == "exon (coding), cCRE dELS"
+    assert label_for(300, feats) == "intron, cCRE dELS"
+    assert label_for(450, feats) == "intron" and label_for(550, feats) == "exon (UTR or non-coding)"
+    # two imported people with rows on chrT
+    for name, rows in (
+        ("P1", [(1000, "A", "G", "0/1"), (2000, "C", "T", "1/1"), (3000, "G", "GA", "0/1")]),
+        ("P2", [(2000, "C", "T", "0/1"), (9000, "A", "C", "1|1")]),
+    ):
+        d = tmp_path / name
+        d.mkdir()
+        (d / "manifest.json").write_text(
+            json.dumps({"name": name, "evidence": "test calls", "chromosomes": {"chrT": 3}})
+        )
+        (d / f"{name}_chrT.vcf").write_text(
+            "##fileformat=VCFv4.2\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tS\n"
+            + "".join(f"chrT\t{p}\t.\t{r}\t{a}\t50\tPASS\t.\tGT\t{g}\n" for p, r, a, g in rows)
+        )
+    v = read_variants("chrT", 0, 5000, None, root=tmp_path)
+    assert v[1000]["carriers"] == {"P1": "het"} and v[1000]["snv"]
+    assert v[2000]["carriers"] == {"P1": "hom", "P2": "het"}
+    assert v[3000]["snv"] is False and 9000 not in v
+
+
+def test_syntax_save_path_keeps_private_genomes_off_results():
+    from genomeos.attribution.syntax import save_path
+    from genomeos.genome.individuals import ROOT
+
+    assert save_path("HERC2", ["HG002", "HG003"]) == Path("data/results/syntax_HERC2.json")
+    assert save_path("HERC2", ["HG002", "ME"]) == ROOT / "ME" / "syntax_HERC2.json"
+
+
+def test_organise_reads_copies_first(tmp_path):
+    """The organiser joins the budget, the human axis and the copy flag per block, reads copies first,
+    and leaves the real unknown split by case."""
+    from genomeos.attribution.organise import blocks, distil, organise, reading, run_and_save
+
+    def b(start, end, cls, tier, conf=0.6, fa=0.08):
+        return {
+            "start": start,
+            "end": end,
+            "length": end - start,
+            "class": cls,
+            "phylop": {"bases": end - start, "fraction_above": fa, "above": int((end - start) * fa)},
+            "elements": {"n": 2},
+            "guess": {"tier": tier, "label": "x", "confidence": conf},
+        }
+
+    (tmp_path / "budget_chrT.json").write_text(
+        json.dumps(
+            {
+                "chrom": "chrT",
+                "unknown_bp": 4000,
+                "blocks": [
+                    b(0, 1000, "unique_intergenic", "constrained_unknown"),  # a copy
+                    b(1000, 2000, "unique_intergenic", "constrained_unknown"),  # syntax case: the candidate
+                    b(2000, 3000, "unique_intergenic", "constrained_unknown"),  # unmeasured on the human axis
+                    b(
+                        3000, 4000, "regulatory", "regulatory", 0.5, 0.01
+                    ),  # regulatory with an attributed element
+                ],
+            }
+        )
+    )
+    (tmp_path / "variation_chrT.json").write_text(
+        json.dumps(
+            {
+                "blocks": [
+                    {
+                        "start": 0,
+                        "end": 1000,
+                        "gnocchi": {"fraction_above": 0.0},
+                        "case": {"case": "relaxed"},
+                    },
+                    {
+                        "start": 1000,
+                        "end": 2000,
+                        "gnocchi": {"fraction_above": 0.6},
+                        "case": {"case": "syntax"},
+                    },
+                    {"start": 2000, "end": 3000, "gnocchi": None, "case": None},
+                    {
+                        "start": 3000,
+                        "end": 4000,
+                        "gnocchi": {"fraction_above": 0.3},
+                        "case": {"case": "recent"},
+                    },
+                ]
+            }
+        )
+    )
+    (tmp_path / "duplication_chrT.json").write_text(
+        json.dumps(
+            {
+                "blocks": [
+                    {"start": 0, "end": 1000, "duplicated_fraction": 0.9, "pairs": 3},
+                    {"start": 1000, "end": 2000, "duplicated_fraction": 0.0, "pairs": 0},
+                    {"start": 2000, "end": 3000, "duplicated_fraction": 0.2, "pairs": 1},
+                    {"start": 3000, "end": 4000, "duplicated_fraction": 0.0, "pairs": 0},
+                ]
+            }
+        )
+    )
+    (tmp_path / "enhancer_targets_chrT.json").write_text(
+        json.dumps(
+            {"elements": [{"id": "E1", "start": 3100, "end": 3300, "predicted_coding": {"gene": "G1"}}]}
+        )
+    )
+    rows = blocks("chrT", tmp_path)
+    assert [r["copy"] for r in rows] == [True, False, False, False]
+    assert rows[0]["reading"].startswith("copy: 90%") and "3 partners" in rows[0]["reading"]
+    assert rows[1]["case"] == "syntax" and "sharpest candidate" in rows[1]["reading"]
+    assert rows[2]["case"] == "unmeasured" and "mammals only" in rows[2]["reading"]
+    assert rows[3]["attributed_elements"] == 1 and rows[3]["targets"] == ["G1"]
+    assert reading({**rows[3], "case": None}) == "regulatory, 1 attributed element"
+    out = run_and_save("chrT", results_dir=tmp_path)
+    cu = out["by_tier"]["constrained_unknown"]
+    assert (cu["blocks"], cu["copies"], cu["after_copies"]) == (3, 1, 2)
+    assert out["real_unknown"]["blocks"] == 2 and out["real_unknown"]["by_case"]["syntax"]["blocks"] == 1
+    assert out["candidates"][0]["start"] == 1000  # syntax first
+    assert out["largest_copies"][0]["start"] == 0
+    (tmp_path / "organised_chr21.json").write_text((tmp_path / "organised_chrT.json").read_text())
+    d = distil(tmp_path)
+    assert d["chromosomes"] == 1 and d["real_unknown"]["blocks"] == 2
+    assert d["by_tier"]["constrained_unknown"]["copies"] == 1
+    assert organise("chrT", tmp_path)["copies"] == 1
+
+
+def test_targets_follow_the_summary_pointer(tmp_path):
+    """A committed summary whose elements live in a local table is followed, the whole-chromosome run
+    wins over the samples, and a missing table raises instead of reading as no elements."""
+    from genomeos.attribution.targets import attributed, run_elements
+
+    table = tmp_path / "all_chrT.json"
+    table.write_text(
+        json.dumps(
+            [
+                {"id": "E1", "start": 1, "end": 2, "predicted_coding": {"gene": "G1"}},
+                {"id": "E2", "start": 3, "end": 4, "predicted_coding": {}},
+            ]
+        )
+    )
+    (tmp_path / "enhancer_targets_all_chrT.json").write_text(
+        json.dumps({"complete": True, "elements_where": str(table)})
+    )
+    (tmp_path / "enhancer_targets_chrT.json").write_text(
+        json.dumps(
+            {
+                "elements": [
+                    {"id": "E1", "start": 1, "end": 2, "predicted_coding": {"gene": "OTHER"}},
+                    {"id": "E3", "start": 5, "end": 6, "predicted_coding": {"gene": "G3"}},
+                ]
+            }
+        )
+    )
+    assert len(run_elements("enhancer_targets_all", "chrT", tmp_path)) == 2
+    got = attributed("chrT", tmp_path)
+    assert [(e["id"], e["predicted_coding"]["gene"], e["origin"]) for e in got] == [
+        ("E1", "G1", "all"),
+        ("E3", "G3", "uniform"),
+    ]
+    table.unlink()
+    with pytest.raises(FileNotFoundError):
+        run_elements("enhancer_targets_all", "chrT", tmp_path)
+
+
+def test_tie_fair_hit_is_order_free():
+    from genomeos.attribution.closure import tie_fair_hit
+
+    assert tie_fair_hit([1, 0, 0], [1, 0, 0]) == 1.0
+    assert tie_fair_hit([1, 1, 0], [1, 0, 0]) == 0.5  # two most active, one of them the expressed cell
+    assert tie_fair_hit([1, 1, 0], [1, 1, 0]) == 0.5  # first-index tie-breaking would have said 1.0
+    assert tie_fair_hit([0, 1, 0], [1, 0, 0]) == 0.0

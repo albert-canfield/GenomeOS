@@ -1,0 +1,581 @@
+{
+  "result": "telomere_range_HG002",
+  "date": "2026-09-12",
+  "source": "https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/data/AshkenazimTrio/HG002_NA24385_son/NIST_HiSeq_HG002_Homogeneity-10953946/NHGRI_Illumina300X_AJtrio_novoalign_bams/HG002.GRCh38.300x.bam",
+  "index": "data/knowledge/telomere/HG002.GRCh38.300x.bam.bai",
+  "reads_total_from_index": 6182841975,
+  "reads_mapped": 5810523215,
+  "reads_unmapped": 372318760,
+  "unmapped_sampled": 910358,
+  "unmapped_sample_telomeric": 1130,
+  "unmapped_telomeric_fraction": 0.001241,
+  "telomeric_reads_estimated": 491033,
+  "mean_read_length": 148.0,
+  "mean_end_coverage": 202.7,
+  "ends": [
+    {
+      "chrom": "chr1",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 9695,
+      "telomeric_reads": 877,
+      "coverage": 143.5,
+      "telomeric_fraction": 0.09046
+    },
+    {
+      "chrom": "chr1",
+      "end": "q",
+      "window": [
+        248936422,
+        248946422
+      ],
+      "reads": 17333,
+      "telomeric_reads": 829,
+      "coverage": 256.5,
+      "telomeric_fraction": 0.04783
+    },
+    {
+      "chrom": "chr2",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 17614,
+      "telomeric_reads": 152,
+      "coverage": 260.7,
+      "telomeric_fraction": 0.00863
+    },
+    {
+      "chrom": "chr2",
+      "end": "q",
+      "window": [
+        242173529,
+        242183529
+      ],
+      "reads": 14898,
+      "telomeric_reads": 385,
+      "coverage": 220.5,
+      "telomeric_fraction": 0.02584
+    },
+    {
+      "chrom": "chr3",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 18726,
+      "telomeric_reads": 269,
+      "coverage": 277.1,
+      "telomeric_fraction": 0.01437
+    },
+    {
+      "chrom": "chr3",
+      "end": "q",
+      "window": [
+        198225559,
+        198235559
+      ],
+      "reads": 1005,
+      "telomeric_reads": 0,
+      "coverage": 14.9,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr4",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 29626,
+      "telomeric_reads": 355,
+      "coverage": 438.5,
+      "telomeric_fraction": 0.01198
+    },
+    {
+      "chrom": "chr4",
+      "end": "q",
+      "window": [
+        190194555,
+        190204555
+      ],
+      "reads": 8606,
+      "telomeric_reads": 59,
+      "coverage": 127.4,
+      "telomeric_fraction": 0.00686
+    },
+    {
+      "chrom": "chr5",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 27221,
+      "telomeric_reads": 8490,
+      "coverage": 402.9,
+      "telomeric_fraction": 0.31189
+    },
+    {
+      "chrom": "chr5",
+      "end": "q",
+      "window": [
+        181468259,
+        181478259
+      ],
+      "reads": 18645,
+      "telomeric_reads": 0,
+      "coverage": 275.9,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr6",
+      "end": "p",
+      "window": [
+        60000,
+        70000
+      ],
+      "reads": 2707,
+      "telomeric_reads": 0,
+      "coverage": 40.1,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr6",
+      "end": "q",
+      "window": [
+        170735979,
+        170745979
+      ],
+      "reads": 18107,
+      "telomeric_reads": 0,
+      "coverage": 268.0,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr7",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 3123,
+      "telomeric_reads": 192,
+      "coverage": 46.2,
+      "telomeric_fraction": 0.06148
+    },
+    {
+      "chrom": "chr7",
+      "end": "q",
+      "window": [
+        159325973,
+        159335973
+      ],
+      "reads": 19786,
+      "telomeric_reads": 185,
+      "coverage": 292.8,
+      "telomeric_fraction": 0.00935
+    },
+    {
+      "chrom": "chr8",
+      "end": "p",
+      "window": [
+        60000,
+        70000
+      ],
+      "reads": 342,
+      "telomeric_reads": 0,
+      "coverage": 5.1,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr8",
+      "end": "q",
+      "window": [
+        145068636,
+        145078636
+      ],
+      "reads": 15829,
+      "telomeric_reads": 134,
+      "coverage": 234.3,
+      "telomeric_fraction": 0.00847
+    },
+    {
+      "chrom": "chr9",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 13045,
+      "telomeric_reads": 154,
+      "coverage": 193.1,
+      "telomeric_fraction": 0.01181
+    },
+    {
+      "chrom": "chr9",
+      "end": "q",
+      "window": [
+        138324717,
+        138334717
+      ],
+      "reads": 778,
+      "telomeric_reads": 0,
+      "coverage": 11.5,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr10",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 7364,
+      "telomeric_reads": 718,
+      "coverage": 109.0,
+      "telomeric_fraction": 0.0975
+    },
+    {
+      "chrom": "chr10",
+      "end": "q",
+      "window": [
+        133777422,
+        133787422
+      ],
+      "reads": 14820,
+      "telomeric_reads": 1009,
+      "coverage": 219.3,
+      "telomeric_fraction": 0.06808
+    },
+    {
+      "chrom": "chr11",
+      "end": "p",
+      "window": [
+        60000,
+        70000
+      ],
+      "reads": 181,
+      "telomeric_reads": 0,
+      "coverage": 2.7,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr11",
+      "end": "q",
+      "window": [
+        135066622,
+        135076622
+      ],
+      "reads": 18688,
+      "telomeric_reads": 53,
+      "coverage": 276.6,
+      "telomeric_fraction": 0.00284
+    },
+    {
+      "chrom": "chr12",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 15289,
+      "telomeric_reads": 856,
+      "coverage": 226.3,
+      "telomeric_fraction": 0.05599
+    },
+    {
+      "chrom": "chr12",
+      "end": "q",
+      "window": [
+        133255309,
+        133265309
+      ],
+      "reads": 23066,
+      "telomeric_reads": 1408,
+      "coverage": 341.4,
+      "telomeric_fraction": 0.06104
+    },
+    {
+      "chrom": "chr13",
+      "end": "p",
+      "window": [
+        16000000,
+        16010000
+      ],
+      "reads": 33372,
+      "telomeric_reads": 0,
+      "coverage": 493.9,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr13",
+      "end": "q",
+      "window": [
+        114344328,
+        114354328
+      ],
+      "reads": 22461,
+      "telomeric_reads": 421,
+      "coverage": 332.4,
+      "telomeric_fraction": 0.01874
+    },
+    {
+      "chrom": "chr14",
+      "end": "p",
+      "window": [
+        16000000,
+        16010000
+      ],
+      "reads": 0,
+      "telomeric_reads": 0,
+      "coverage": 0.0,
+      "telomeric_fraction": null
+    },
+    {
+      "chrom": "chr14",
+      "end": "q",
+      "window": [
+        106873718,
+        106883718
+      ],
+      "reads": 23059,
+      "telomeric_reads": 5,
+      "coverage": 341.3,
+      "telomeric_fraction": 0.00022
+    },
+    {
+      "chrom": "chr15",
+      "end": "p",
+      "window": [
+        17000000,
+        17010000
+      ],
+      "reads": 23015,
+      "telomeric_reads": 0,
+      "coverage": 340.6,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr15",
+      "end": "q",
+      "window": [
+        101971189,
+        101981189
+      ],
+      "reads": 7921,
+      "telomeric_reads": 353,
+      "coverage": 117.2,
+      "telomeric_fraction": 0.04457
+    },
+    {
+      "chrom": "chr16",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 6254,
+      "telomeric_reads": 14,
+      "coverage": 92.6,
+      "telomeric_fraction": 0.00224
+    },
+    {
+      "chrom": "chr16",
+      "end": "q",
+      "window": [
+        90218345,
+        90228345
+      ],
+      "reads": 5982,
+      "telomeric_reads": 0,
+      "coverage": 88.5,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr17",
+      "end": "p",
+      "window": [
+        60000,
+        70000
+      ],
+      "reads": 178,
+      "telomeric_reads": 0,
+      "coverage": 2.6,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr17",
+      "end": "q",
+      "window": [
+        83237441,
+        83247441
+      ],
+      "reads": 18602,
+      "telomeric_reads": 14,
+      "coverage": 275.3,
+      "telomeric_fraction": 0.00075
+    },
+    {
+      "chrom": "chr18",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 8220,
+      "telomeric_reads": 403,
+      "coverage": 121.7,
+      "telomeric_fraction": 0.04903
+    },
+    {
+      "chrom": "chr18",
+      "end": "q",
+      "window": [
+        80253285,
+        80263285
+      ],
+      "reads": 18777,
+      "telomeric_reads": 1604,
+      "coverage": 277.9,
+      "telomeric_fraction": 0.08542
+    },
+    {
+      "chrom": "chr19",
+      "end": "p",
+      "window": [
+        60000,
+        70000
+      ],
+      "reads": 6375,
+      "telomeric_reads": 0,
+      "coverage": 94.3,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr19",
+      "end": "q",
+      "window": [
+        58597616,
+        58607616
+      ],
+      "reads": 3362,
+      "telomeric_reads": 7,
+      "coverage": 49.8,
+      "telomeric_fraction": 0.00208
+    },
+    {
+      "chrom": "chr20",
+      "end": "p",
+      "window": [
+        60000,
+        70000
+      ],
+      "reads": 22305,
+      "telomeric_reads": 0,
+      "coverage": 330.1,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr20",
+      "end": "q",
+      "window": [
+        64324167,
+        64334167
+      ],
+      "reads": 22016,
+      "telomeric_reads": 0,
+      "coverage": 325.8,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr21",
+      "end": "p",
+      "window": [
+        5010000,
+        5020000
+      ],
+      "reads": 0,
+      "telomeric_reads": 0,
+      "coverage": 0.0,
+      "telomeric_fraction": null
+    },
+    {
+      "chrom": "chr21",
+      "end": "q",
+      "window": [
+        46689983,
+        46699983
+      ],
+      "reads": 21533,
+      "telomeric_reads": 333,
+      "coverage": 318.7,
+      "telomeric_fraction": 0.01546
+    },
+    {
+      "chrom": "chr22",
+      "end": "p",
+      "window": [
+        10510000,
+        10520000
+      ],
+      "reads": 1519,
+      "telomeric_reads": 0,
+      "coverage": 22.5,
+      "telomeric_fraction": 0.0
+    },
+    {
+      "chrom": "chr22",
+      "end": "q",
+      "window": [
+        50798468,
+        50808468
+      ],
+      "reads": 20907,
+      "telomeric_reads": 2239,
+      "coverage": 309.4,
+      "telomeric_fraction": 0.10709
+    },
+    {
+      "chrom": "chrX",
+      "end": "p",
+      "window": [
+        10000,
+        20000
+      ],
+      "reads": 438,
+      "telomeric_reads": 3,
+      "coverage": 6.5,
+      "telomeric_fraction": 0.00685
+    },
+    {
+      "chrom": "chrX",
+      "end": "q",
+      "window": [
+        156020895,
+        156030895
+      ],
+      "reads": 19892,
+      "telomeric_reads": 7364,
+      "coverage": 294.4,
+      "telomeric_fraction": 0.3702
+    }
+  ],
+  "telomere_bp": 2676,
+  "fraction": 7.941866841756189e-05,
+  "k": 7,
+  "window": 10000,
+  "bytes_fetched": 217650149,
+  "requests": 48,
+  "note": "TelSeq counts reads with at least k TTAGGG repeats among all reads; here the unmapped tail, where the pure-repeat reads sit, is sampled and scaled by the index's unmapped count, the mapped chromosome ends are read whole, and the mapped total comes from the index; no GC normalisation, so the number is a first estimate to compare between people read the same way, not a length to quote",
+  "confidence": 0.3,
+  "evidence": {
+    "kind": "inferred",
+    "source": "TelSeq (Ding et al. 2014) over an indexed BAM read by ranges: the unmapped tail sampled, the mapped ends read whole, totals from the index"
+  }
+}

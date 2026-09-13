@@ -1,0 +1,100 @@
+{
+  "result": "graph_chr21",
+  "date": "2026-09-11",
+  "nodes": 4175,
+  "edges": 32520,
+  "node_kinds": {
+    "protein": 2919,
+    "pathway": 458,
+    "domain": 794,
+    "tissue": 4
+  },
+  "edge_kinds": {
+    "member_of": 896,
+    "has_domain": 1202,
+    "associates": 30404,
+    "expressed_in": 18
+  },
+  "compiled_proteins": 260,
+  "physical_associations": 15139,
+  "hubs": [
+    {
+      "gene": "MRPL39",
+      "associations": 1271
+    },
+    {
+      "gene": "PWP2",
+      "associations": 1265
+    },
+    {
+      "gene": "MRPS6",
+      "associations": 1210
+    },
+    {
+      "gene": "NDUFV3",
+      "associations": 1101
+    },
+    {
+      "gene": "LTN1",
+      "associations": 1048
+    },
+    {
+      "gene": "RRP1B",
+      "associations": 1027
+    },
+    {
+      "gene": "RRP1",
+      "associations": 985
+    },
+    {
+      "gene": "ATP5PF",
+      "associations": 912
+    },
+    {
+      "gene": "HMGN1",
+      "associations": 861
+    },
+    {
+      "gene": "MX1",
+      "associations": 764
+    }
+  ],
+  "isolated_proteins": 35,
+  "largest_component": 49,
+  "components": 133,
+  "biggest_pathways": [
+    [
+      "Keratinization",
+      45
+    ],
+    [
+      "Mitochondrial translation termination",
+      15
+    ],
+    [
+      "Mitochondrial protein degradation",
+      11
+    ],
+    [
+      "Respiratory electron transport",
+      11
+    ],
+    [
+      "RUNX1 regulates transcription of genes involved in differentiation of HSCs",
+      10
+    ],
+    [
+      "Estrogen-dependent gene expression",
+      10
+    ],
+    [
+      "Transcriptional regulation of granulopoiesis",
+      10
+    ],
+    [
+      "RUNX1 regulates genes involved in megakaryocyte differentiation and platelet function",
+      7
+    ]
+  ],
+  "evidence": "edges carry the evidence of their source section: Reactome, InterPro (curated), HPA (experimental), STRING (predicted)"
+}

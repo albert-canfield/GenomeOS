@@ -1,3 +1,3 @@
-from .alphagenome_adapter import AlphaGenomeAdapter, PredictedEffect
+from .alphagenome_adapter import FEATURES, AlphaGenomeAdapter, PredictedEffect, status
 
-__all__ = ["AlphaGenomeAdapter", "PredictedEffect"]
+__all__ = ["FEATURES", "AlphaGenomeAdapter", "PredictedEffect", "status"]

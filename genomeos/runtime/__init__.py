@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 from .cell import CELL_TYPES, CellRuntime, CellState, Environment, TissueReport
 from .central_dogma import (
     STANDARD_CODE,

@@ -1,0 +1,112 @@
+{
+  "result": "celegans_tf_atlas",
+  "date": "2026-09-11",
+  "source": "Ma et al. 2021, Nat Methods 18:893 (Zenodo 4737593)",
+  "url": "https://zenodo.org/api/records/4737593/files/Time_series_expression_dataset.zip/content",
+  "licence": "CC BY 4.0",
+  "presence_fraction_of_max": 0.2,
+  "factors": 266,
+  "strains": 291,
+  "cells_with_a_factor": 1266,
+  "factors_per_cell_median": 53,
+  "cells_per_factor_median": 185,
+  "earliest_expression_min": 1.2,
+  "textbook": [
+    {
+      "factor": "ELT-2",
+      "tissue": "intestine",
+      "source": "Fukushige et al. 1998, Dev Biol 198:286",
+      "expressing_cells": 32,
+      "descendants_checked": 73,
+      "precision": 0.959,
+      "recall": 1.0
+    },
+    {
+      "factor": "END-1",
+      "tissue": "intestine",
+      "source": "Zhu et al. 1997, Genes Dev 11:2883",
+      "expressing_cells": 43,
+      "descendants_checked": 124,
+      "precision": 0.823,
+      "recall": 1.0
+    },
+    {
+      "factor": "ELT-7",
+      "tissue": "intestine",
+      "source": "Sommermann et al. 2010, Dev Biol 347:154",
+      "expressing_cells": 24,
+      "descendants_checked": 68,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    {
+      "factor": "HLH-1",
+      "tissue": "muscle",
+      "source": "Krause et al. 1990, Cell 63:907",
+      "expressing_cells": 132,
+      "descendants_checked": 197,
+      "precision": 0.939,
+      "recall": 0.52
+    },
+    {
+      "factor": "UNC-120",
+      "tissue": "muscle",
+      "source": "Fukushige et al. 2006, Genes Dev 20:3395",
+      "expressing_cells": 127,
+      "descendants_checked": 190,
+      "precision": 0.947,
+      "recall": 0.52
+    },
+    {
+      "factor": "ELT-1",
+      "tissue": "hypoderm",
+      "source": "Page et al. 1997, Genes Dev 11:1651",
+      "expressing_cells": 80,
+      "descendants_checked": 381,
+      "precision": 0.58,
+      "recall": 0.865
+    },
+    {
+      "factor": "LIN-26",
+      "tissue": "hypoderm",
+      "source": "Labouesse et al. 1994, Development 120:2359",
+      "expressing_cells": 56,
+      "descendants_checked": 245,
+      "precision": 0.633,
+      "recall": 0.807
+    },
+    {
+      "factor": "NHR-25",
+      "tissue": "hypoderm",
+      "source": "Gissendanner & Sluder 2000, Dev Biol 221:259",
+      "expressing_cells": 130,
+      "descendants_checked": 345,
+      "precision": 0.545,
+      "recall": 0.969
+    },
+    {
+      "factor": "PHA-4",
+      "tissue": "pharynx",
+      "source": "Mango et al. 1994, Development 120:3019",
+      "expressing_cells": 178,
+      "checked_against": "Packer 2019 lineage ids",
+      "descendants_checked": 195,
+      "precision": 0.851
+    },
+    {
+      "factor": "CEH-22",
+      "tissue": "pharynx",
+      "source": "Okkema & Fire 1994, Development 120:2175",
+      "expressing_cells": 165,
+      "checked_against": "Packer 2019 lineage ids",
+      "descendants_checked": 236,
+      "precision": 0.331
+    }
+  ],
+  "cells_file": "data/results/celegans_tf_atlas_cells.json",
+  "generated": [
+    "data/organisms/celegans/reader.bio"
+  ],
+  "inputs": [],
+  "describe": "Ma 2021 TF protein atlas (88 MB streamed): factor presence per cell, reader.bio, textbook check"
+}

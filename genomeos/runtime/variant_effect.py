@@ -10,12 +10,37 @@ splice_site, intron_variant, 5/3_prime_UTR_variant, non_coding).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Protocol, runtime_checkable
 
-from genomeos.genome.sequence import Locus, Strand
-from genomeos.genome.variants import Variant
+from genomeos.coords import Locus, Strand
 from genomeos.ir import Transcript
 
 from .central_dogma import STANDARD_CODE, translate
+
+_COMPLEMENT = str.maketrans("ACGTNacgtn", "TGCANtgcan")
+
+
+def reverse_complement(seq: str) -> str:
+    """Reverse complement of a plain string, so the engine needs no Sequence type."""
+    return seq.translate(_COMPLEMENT)[::-1]
+
+
+@runtime_checkable
+class Variant(Protocol):
+    """What the engine needs of a variant, structurally.
+
+    The application's VCF-backed `genomeos.genome.variants.Variant` satisfies
+    this; declaring it here keeps the engine from importing the application
+    (LICENSING.md: engine to application only, never the reverse).
+    """
+
+    chrom: str
+    pos: int  # 0-based
+    ref: str
+    alts: tuple[str, ...]
+
+    def allele(self, haplotype: int) -> str | None: ...
+
 
 _REF_CACHE: dict[tuple[int, str], list[str]] = {}
 _TRANSLATION_CACHE: dict[tuple[tuple[int, str], int], str] = {}
@@ -104,9 +129,7 @@ def classify(
     def cds(pieces: list[str]) -> str:
         joined = "".join(pieces)
         if strand is Strand.MINUS:
-            from genomeos.genome.sequence import Sequence
-
-            joined = str(Sequence(joined).reverse_complement())
+            joined = reverse_complement(joined)
         return joined[transcript.cds_phase :]
 
     alt_cds = cds(alt_pieces)

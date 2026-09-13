@@ -1,0 +1,2334 @@
+{
+  "result": "translation_disagreements_frequency",
+  "date": "2026-09-11",
+  "genes": 38,
+  "verdicts": {
+    "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference": 16,
+    "the curated allele is in dbSNP but rare or unmeasured": 10,
+    "the curated allele is a known polymorphism, not the majority": 6,
+    "no residue-level difference found (length or alignment)": 4,
+    "the curated allele is the common one: the reference carries a minor allele": 2
+  },
+  "rows": [
+    {
+      "gene": "OR9H1",
+      "chrom": "chr1",
+      "accession": "Q6UXT6",
+      "differing_residues": 1,
+      "sites": [
+        {
+          "residue": 232,
+          "ours": "R",
+          "uniprot": "C",
+          "single_base": true,
+          "pos": 247775603,
+          "ref": "C",
+          "alt": "T",
+          "gnomad_af": 0.9878,
+          "dbsnp": "rs7555046",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is the common one: the reference carries a minor allele"
+    },
+    {
+      "gene": "PLA2G2F",
+      "chrom": "chr1",
+      "accession": "Q9BZM2",
+      "differing_residues": 160,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "A",
+          "uniprot": "K",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "D",
+          "uniprot": "K",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "G",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "A",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "K",
+          "uniprot": "T",
+          "single_base": true,
+          "pos": 20139444,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 7,
+          "ours": "A",
+          "uniprot": "V",
+          "single_base": true,
+          "pos": 20139447,
+          "ref": "C",
+          "alt": "T",
+          "gnomad_af": 1.707e-05,
+          "dbsnp": "rs1290961317",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "AGAP9",
+      "chrom": "chr10",
+      "accession": "Q5VTM2",
+      "differing_residues": 629,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "G",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "N",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "I",
+          "uniprot": "D",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "V",
+          "single_base": true,
+          "pos": 47523514,
+          "ref": "G",
+          "alt": "C",
+          "gnomad_af": 0.0001017,
+          "dbsnp": "rs1391045882",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 6,
+          "ours": "T",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "C",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 47523508,
+          "ref": "A",
+          "alt": "T",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "PNLIPRP2",
+      "chrom": "chr10",
+      "accession": "P54317",
+      "differing_residues": 0,
+      "sites": [],
+      "verdict": "no residue-level difference found (length or alignment)"
+    },
+    {
+      "gene": "PANK1",
+      "chrom": "chr10",
+      "accession": "Q8TE04",
+      "differing_residues": 437,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "G",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "D",
+          "uniprot": "K",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "R",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 89644881,
+          "ref": "C",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 5,
+          "ours": "S",
+          "uniprot": "V",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "Q",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 8,
+          "ours": "Q",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "E",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 89644866,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "PTCHD3",
+      "chrom": "chr10",
+      "accession": "Q3KNS1",
+      "differing_residues": 0,
+      "sites": [],
+      "verdict": "no residue-level difference found (length or alignment)"
+    },
+    {
+      "gene": "KRTAP5-4",
+      "chrom": "chr11",
+      "accession": "Q6L8H1",
+      "differing_residues": 75,
+      "sites": [
+        {
+          "residue": 132,
+          "ours": "G",
+          "uniprot": "V",
+          "single_base": true,
+          "pos": 1621699,
+          "ref": "C",
+          "alt": "A",
+          "gnomad_af": 0,
+          "dbsnp": "rs77879645",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 136,
+          "ours": "C",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 1621688,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 138,
+          "ours": "Q",
+          "uniprot": "K",
+          "single_base": true,
+          "pos": 1621682,
+          "ref": "G",
+          "alt": "T",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 139,
+          "ours": "C",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 1621679,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 140,
+          "ours": "S",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 1621676,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": 2.492e-05,
+          "dbsnp": "rs1849601737",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 142,
+          "ours": "C",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 1621670,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "PRB4",
+      "chrom": "chr12",
+      "accession": "P10163",
+      "differing_residues": 63,
+      "sites": [
+        {
+          "residue": 113,
+          "ours": "T",
+          "uniprot": "P",
+          "single_base": true,
+          "pos": 11308646,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": 0.4414,
+          "dbsnp": "rs12303607",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 116,
+          "ours": "P",
+          "uniprot": "H",
+          "single_base": true,
+          "pos": 11308636,
+          "ref": "G",
+          "alt": "T",
+          "gnomad_af": 0.351,
+          "dbsnp": "rs59189129",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 122,
+          "ours": "R",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 11308617,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 123,
+          "ours": "P",
+          "uniprot": "R",
+          "single_base": true,
+          "pos": 11308615,
+          "ref": "G",
+          "alt": "C",
+          "gnomad_af": 0.003682,
+          "dbsnp": "rs11054243",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 129,
+          "ours": "N",
+          "uniprot": "H",
+          "single_base": true,
+          "pos": 11308598,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 132,
+          "ours": "H",
+          "uniprot": "Q",
+          "single_base": true,
+          "pos": 11308587,
+          "ref": "G",
+          "alt": "T",
+          "gnomad_af": 0.01727,
+          "dbsnp": "rs12369220",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is a known polymorphism, not the majority"
+    },
+    {
+      "gene": "OR11H7",
+      "chrom": "chr14",
+      "accession": "Q8NGC8",
+      "differing_residues": 0,
+      "sites": [],
+      "verdict": "no residue-level difference found (length or alignment)"
+    },
+    {
+      "gene": "SERPINA2",
+      "chrom": "chr14",
+      "accession": "P20848",
+      "differing_residues": 3,
+      "sites": [
+        {
+          "residue": 1,
+          "ours": "I",
+          "uniprot": "M",
+          "single_base": true,
+          "pos": 94366696,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": 0.994,
+          "dbsnp": "rs1956172",
+          "vep": "start_lost"
+        },
+        {
+          "residue": 9,
+          "ours": "V",
+          "uniprot": "I",
+          "single_base": true,
+          "pos": 94366674,
+          "ref": "C",
+          "alt": "T",
+          "gnomad_af": 0.0325,
+          "dbsnp": "rs74074959",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 229,
+          "ours": "R",
+          "uniprot": "H",
+          "single_base": true,
+          "pos": 94364558,
+          "ref": "C",
+          "alt": "T",
+          "gnomad_af": 0.0182,
+          "dbsnp": "rs74074956",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is a known polymorphism, not the majority"
+    },
+    {
+      "gene": "CALML4",
+      "chrom": "chr15",
+      "accession": "Q96GE6",
+      "differing_residues": 142,
+      "sites": [
+        {
+          "residue": 3,
+          "ours": "K",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "F",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "H",
+          "single_base": true,
+          "pos": 68205141,
+          "ref": "A",
+          "alt": "T",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 6,
+          "ours": "S",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "Q",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 68205135,
+          "ref": "T",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 8,
+          "ours": "D",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "Q",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 10,
+          "ours": "I",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 11,
+          "ours": "N",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 12,
+          "ours": "E",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 13,
+          "ours": "Y",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 68199678,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "C16orf82",
+      "chrom": "chr16",
+      "accession": "Q7Z2V1",
+      "differing_residues": 142,
+      "sites": [
+        {
+          "residue": 1,
+          "ours": "L",
+          "uniprot": "M",
+          "single_base": true,
+          "pos": 27066996,
+          "ref": "C",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "start_retained_variant"
+        },
+        {
+          "residue": 2,
+          "ours": "D",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "K",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "P",
+          "uniprot": "V",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "P",
+          "single_base": true,
+          "pos": 27067009,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 6,
+          "ours": "Q",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "L",
+          "uniprot": "Q",
+          "single_base": true,
+          "pos": 27067015,
+          "ref": "T",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "MSLNL",
+      "chrom": "chr16",
+      "accession": "Q96KJ4",
+      "differing_residues": 660,
+      "sites": [
+        {
+          "residue": 1,
+          "ours": "S",
+          "uniprot": "M",
+          "single_base": false
+        },
+        {
+          "residue": 2,
+          "ours": "W",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "T",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 782048,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "downstream_gene_variant"
+        },
+        {
+          "residue": 4,
+          "ours": "H",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "C",
+          "uniprot": "V",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "P",
+          "uniprot": "T",
+          "single_base": true,
+          "pos": 782039,
+          "ref": "G",
+          "alt": "T",
+          "gnomad_af": 1.47e-05,
+          "dbsnp": "rs2041812583",
+          "vep": "downstream_gene_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "SLC22A31",
+      "chrom": "chr16",
+      "accession": "A6NKX4",
+      "differing_residues": 403,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "P",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "H",
+          "uniprot": "Q",
+          "single_base": true,
+          "pos": 89200493,
+          "ref": "A",
+          "alt": "T",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 4,
+          "ours": "Q",
+          "uniprot": "E",
+          "single_base": true,
+          "pos": 89200492,
+          "ref": "G",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "S",
+          "uniprot": "R",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "Q",
+          "uniprot": "V",
+          "single_base": false
+        },
+        {
+          "residue": 8,
+          "ours": "N",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "W",
+          "uniprot": "R",
+          "single_base": true,
+          "pos": 89199816,
+          "ref": "A",
+          "alt": "T",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "PTGES3L",
+      "chrom": "chr17",
+      "accession": "E9PB15",
+      "differing_residues": 147,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "A",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "R",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "Q",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 42979661,
+          "ref": "T",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 5,
+          "ours": "H",
+          "uniprot": "P",
+          "single_base": true,
+          "pos": 42979658,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": 5.88e-05,
+          "dbsnp": "rs752926057",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 6,
+          "ours": "A",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "R",
+          "uniprot": "N",
+          "single_base": false
+        },
+        {
+          "residue": 8,
+          "ours": "T",
+          "uniprot": "C",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "L",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 42979646,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "RPL36",
+      "chrom": "chr19",
+      "accession": "C0HME6",
+      "differing_residues": 94,
+      "sites": [
+        {
+          "residue": 3,
+          "ours": "L",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "R",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "Y",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "P",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "M",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "V",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 5690533,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "RAVER1",
+      "chrom": "chr19",
+      "accession": "Q8IY67",
+      "differing_residues": 120,
+      "sites": [
+        {
+          "residue": 479,
+          "ours": "L",
+          "uniprot": "P",
+          "single_base": true,
+          "pos": 10321085,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 480,
+          "ours": "Q",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 10321082,
+          "ref": "T",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 481,
+          "ours": "K",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 482,
+          "ours": "D",
+          "uniprot": "H",
+          "single_base": true,
+          "pos": 10321077,
+          "ref": "C",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 483,
+          "ours": "S",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 484,
+          "ours": "G",
+          "uniprot": "Y",
+          "single_base": false
+        },
+        {
+          "residue": 485,
+          "ours": "P",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 10321068,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "FCGBP",
+      "chrom": "chr19",
+      "accession": "Q9Y6R7",
+      "differing_residues": 617,
+      "sites": [
+        {
+          "residue": 1160,
+          "ours": "E",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 39906242,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": 1,
+          "dbsnp": "rs782103783",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 1163,
+          "ours": "E",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 39906233,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": 1,
+          "dbsnp": "rs1320022007",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 1165,
+          "ours": "A",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 1167,
+          "ours": "R",
+          "uniprot": "H",
+          "single_base": true,
+          "pos": 39906221,
+          "ref": "C",
+          "alt": "T",
+          "gnomad_af": 1,
+          "dbsnp": "rs782328768",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 1174,
+          "ours": "A",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 1177,
+          "ours": "V",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 39906191,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": 1,
+          "dbsnp": "rs1599696672",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is the common one: the reference carries a minor allele"
+    },
+    {
+      "gene": "ZNF302",
+      "chrom": "chr19",
+      "accession": "Q9NR11",
+      "differing_residues": 308,
+      "sites": [
+        {
+          "residue": 72,
+          "ours": "D",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 34684252,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 73,
+          "ours": "W",
+          "uniprot": "Y",
+          "single_base": false
+        },
+        {
+          "residue": 74,
+          "ours": "E",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 75,
+          "ours": "S",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 76,
+          "ours": "R",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 77,
+          "ours": "W",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 34684267,
+          "ref": "G",
+          "alt": "T",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "SAMD1",
+      "chrom": "chr19",
+      "accession": "Q6SPF0",
+      "differing_residues": 295,
+      "sites": [
+        {
+          "residue": 113,
+          "ours": "A",
+          "uniprot": "R",
+          "single_base": false
+        },
+        {
+          "residue": 114,
+          "ours": "P",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 14090081,
+          "ref": "G",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "downstream_gene_variant"
+        },
+        {
+          "residue": 116,
+          "ours": "Q",
+          "uniprot": "R",
+          "single_base": true,
+          "pos": 14090074,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": 0,
+          "dbsnp": "rs1568523410",
+          "vep": "downstream_gene_variant"
+        },
+        {
+          "residue": 117,
+          "ours": "Q",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 118,
+          "ours": "Q",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 119,
+          "ours": "Q",
+          "uniprot": "P",
+          "single_base": true,
+          "pos": 14090065,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": 0.5,
+          "dbsnp": "rs1309397727",
+          "vep": "downstream_gene_variant"
+        }
+      ],
+      "verdict": "the curated allele is a known polymorphism, not the majority"
+    },
+    {
+      "gene": "ASPRV1",
+      "chrom": "chr2",
+      "accession": "Q53RT3",
+      "differing_residues": 245,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "A",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 69961432,
+          "ref": "G",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 3,
+          "ours": "G",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "S",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "R",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 69961416,
+          "ref": "C",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 8,
+          "ours": "S",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "E",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 69961411,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "KCNE4",
+      "chrom": "chr2",
+      "accession": "Q8WWG9",
+      "differing_residues": 155,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "L",
+          "uniprot": "H",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "K",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "M",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 223052840,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 5,
+          "ours": "E",
+          "uniprot": "T",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "P",
+          "uniprot": "I",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "L",
+          "uniprot": "Y",
+          "single_base": false
+        },
+        {
+          "residue": 8,
+          "ours": "N",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "S",
+          "uniprot": "N",
+          "single_base": true,
+          "pos": 223052856,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": 7.195e-06,
+          "dbsnp": "rs1279044307",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "RESP18",
+      "chrom": "chr2",
+      "accession": "Q5W5W9",
+      "differing_residues": 180,
+      "sites": [
+        {
+          "residue": 1,
+          "ours": "I",
+          "uniprot": "M",
+          "single_base": true,
+          "pos": 219332627,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "start_retained_variant"
+        },
+        {
+          "residue": 2,
+          "ours": "Q",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "H",
+          "uniprot": "V",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "P",
+          "uniprot": "D",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "V",
+          "single_base": true,
+          "pos": 219332617,
+          "ref": "G",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 6,
+          "ours": "W",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "P",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "S",
+          "uniprot": "V",
+          "single_base": false
+        },
+        {
+          "residue": 10,
+          "ours": "S",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 219332602,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "GCNT7",
+      "chrom": "chr20",
+      "accession": "Q6ZNI0",
+      "differing_residues": 292,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "F",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 56497238,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": 0.0082,
+          "dbsnp": "rs201052242",
+          "vep": "intron_variant"
+        },
+        {
+          "residue": 3,
+          "ours": "V",
+          "uniprot": "Q",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "Q",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 56497232,
+          "ref": "T",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "intron_variant"
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "R",
+          "single_base": true,
+          "pos": 56497229,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "intron_variant"
+        },
+        {
+          "residue": 6,
+          "ours": "L",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "R",
+          "uniprot": "T",
+          "single_base": true,
+          "pos": 56497223,
+          "ref": "C",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "intron_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "SH3BGR",
+      "chrom": "chr21",
+      "accession": "P55822",
+      "differing_residues": 165,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "V",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "I",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 39452103,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 4,
+          "ours": "K",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "V",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 39452109,
+          "ref": "G",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 6,
+          "ours": "F",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 39452112,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 7,
+          "ours": "V",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 39452116,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "GSTT2",
+      "chrom": "chr22",
+      "accession": "P0CG29",
+      "differing_residues": 2,
+      "sites": [
+        {
+          "residue": 118,
+          "ours": "M",
+          "uniprot": "V",
+          "single_base": true,
+          "pos": 23982871,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": 0,
+          "dbsnp": "rs2301423",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 129,
+          "ours": "E",
+          "uniprot": "K",
+          "single_base": true,
+          "pos": 23982904,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": 0.9846,
+          "dbsnp": "rs140195",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is a known polymorphism, not the majority"
+    },
+    {
+      "gene": "ARL9",
+      "chrom": "chr4",
+      "accession": "Q6T311",
+      "differing_residues": 174,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "E",
+          "uniprot": "R",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "R",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "G",
+          "uniprot": "T",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "K",
+          "uniprot": "W",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "V",
+          "uniprot": "K",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "K",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 8,
+          "ours": "K",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "K",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 10,
+          "ours": "E",
+          "uniprot": "H",
+          "single_base": false
+        },
+        {
+          "residue": 11,
+          "ours": "K",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 12,
+          "ours": "E",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 56505897,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "NPFFR2",
+      "chrom": "chr4",
+      "accession": "Q9Y5X5",
+      "differing_residues": 400,
+      "sites": [
+        {
+          "residue": 3,
+          "ours": "E",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "K",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "W",
+          "uniprot": "F",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "D",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 72128608,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 8,
+          "ours": "N",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "S",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 72128616,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "DEFB112",
+      "chrom": "chr6",
+      "accession": "Q30KQ8",
+      "differing_residues": 83,
+      "sites": [
+        {
+          "residue": 3,
+          "ours": "I",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 50049863,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "T",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "F",
+          "uniprot": "T",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "F",
+          "uniprot": "I",
+          "single_base": true,
+          "pos": 50049851,
+          "ref": "A",
+          "alt": "T",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 9,
+          "ours": "I",
+          "uniprot": "R",
+          "single_base": false
+        },
+        {
+          "residue": 11,
+          "ours": "L",
+          "uniprot": "K",
+          "single_base": false
+        },
+        {
+          "residue": 12,
+          "ours": "F",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 50049836,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "RSPH3",
+      "chrom": "chr6",
+      "accession": "Q86UC2",
+      "differing_residues": 395,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "A",
+          "uniprot": "T",
+          "single_base": true,
+          "pos": 158999547,
+          "ref": "C",
+          "alt": "T",
+          "gnomad_af": 2.536e-05,
+          "dbsnp": "rs1336606611",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 3,
+          "ours": "S",
+          "uniprot": "V",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "A",
+          "uniprot": "K",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "P",
+          "single_base": true,
+          "pos": 158999537,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": 1.185e-05,
+          "dbsnp": "rs867225111",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 6,
+          "ours": "T",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 158999535,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 7,
+          "ours": "D",
+          "uniprot": "K",
+          "single_base": false
+        },
+        {
+          "residue": 8,
+          "ours": "R",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 9,
+          "ours": "T",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 158999526,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": 3.002e-05,
+          "dbsnp": "rs935306023",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "MICA",
+      "chrom": "chr6",
+      "accession": "Q29983",
+      "differing_residues": 25,
+      "sites": [
+        {
+          "residue": 47,
+          "ours": "A",
+          "uniprot": "T",
+          "single_base": true,
+          "pos": 31410611,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": 0.1122,
+          "dbsnp": "rs1051785",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 59,
+          "ours": "Y",
+          "uniprot": "C",
+          "single_base": true,
+          "pos": 31410648,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": 0.4788,
+          "dbsnp": "rs1051786",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 148,
+          "ours": "E",
+          "uniprot": "K",
+          "single_base": true,
+          "pos": 31411188,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": 0.0245,
+          "dbsnp": "rs1051791",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 152,
+          "ours": "V",
+          "uniprot": "M",
+          "single_base": true,
+          "pos": 31411200,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": 0.4788,
+          "dbsnp": "rs1051792",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 196,
+          "ours": "E",
+          "uniprot": "K",
+          "single_base": true,
+          "pos": 31411332,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": 0.4796,
+          "dbsnp": "rs1051794",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 229,
+          "ours": "S",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 31412018,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": 0.4773,
+          "dbsnp": "rs1131898",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is a known polymorphism, not the majority"
+    },
+    {
+      "gene": "HLA-DQA1",
+      "chrom": "chr6",
+      "accession": "P01909",
+      "differing_residues": 180,
+      "sites": [
+        {
+          "residue": 8,
+          "ours": "L",
+          "uniprot": "M",
+          "single_base": true,
+          "pos": 32637480,
+          "ref": "C",
+          "alt": "A",
+          "gnomad_af": 0.6196,
+          "dbsnp": "rs1047989",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 34,
+          "ours": "C",
+          "uniprot": "Y",
+          "single_base": true,
+          "pos": 32641328,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": 0.6758,
+          "dbsnp": "rs1129740",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 41,
+          "ours": "F",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 32641349,
+          "ref": "T",
+          "alt": "C",
+          "gnomad_af": 0.6974,
+          "dbsnp": "rs1071630",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 63,
+          "ours": "E",
+          "uniprot": "G",
+          "single_base": true,
+          "pos": 32641415,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": 0.3487,
+          "dbsnp": "rs1142323",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 68,
+          "ours": "A",
+          "uniprot": "V",
+          "single_base": true,
+          "pos": 32641430,
+          "ref": "C",
+          "alt": "T",
+          "gnomad_af": 0.2003,
+          "dbsnp": "rs1142324",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 70,
+          "ours": "R",
+          "uniprot": "C",
+          "single_base": false
+        },
+        {
+          "residue": 71,
+          "ours": "W",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 32641439,
+          "ref": "G",
+          "alt": "T",
+          "gnomad_af": 0.6196,
+          "dbsnp": "rs1142328",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is a known polymorphism, not the majority"
+    },
+    {
+      "gene": "ZFP57",
+      "chrom": "chr6",
+      "accession": "Q9NU63",
+      "differing_residues": 413,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "F",
+          "uniprot": "A",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "E",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 29676996,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 4,
+          "ours": "Q",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "E",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "K",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "P",
+          "uniprot": "R",
+          "single_base": true,
+          "pos": 29676984,
+          "ref": "G",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "NOBOX",
+      "chrom": "chr7",
+      "accession": "O60393",
+      "differing_residues": 545,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "E",
+          "uniprot": "A",
+          "single_base": true,
+          "pos": 144403689,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 3,
+          "ours": "P",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 144403686,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": "rs2053960603",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 4,
+          "ours": "T",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "E",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "N",
+          "uniprot": "T",
+          "single_base": true,
+          "pos": 144403677,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 7,
+          "ours": "P",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 144403674,
+          "ref": "G",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": "rs2053960388",
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    },
+    {
+      "gene": "PINX1",
+      "chrom": "chr8",
+      "accession": "Q96BK5",
+      "differing_residues": 184,
+      "sites": [
+        {
+          "residue": 134,
+          "ours": "S",
+          "uniprot": "D",
+          "single_base": false
+        },
+        {
+          "residue": 135,
+          "ours": "W",
+          "uniprot": "L",
+          "single_base": true,
+          "pos": 10726657,
+          "ref": "C",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 136,
+          "ours": "K",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 137,
+          "ours": "A",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 10726652,
+          "ref": "C",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 138,
+          "ours": "L",
+          "uniprot": "R",
+          "single_base": true,
+          "pos": 10726648,
+          "ref": "A",
+          "alt": "C",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 139,
+          "ours": "T",
+          "uniprot": "S",
+          "single_base": true,
+          "pos": 10726646,
+          "ref": "T",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "MROH5",
+      "chrom": "chr8",
+      "accession": "Q6ZUA9",
+      "differing_residues": 0,
+      "sites": [],
+      "verdict": "no residue-level difference found (length or alignment)"
+    },
+    {
+      "gene": "PRSS3",
+      "chrom": "chr9",
+      "accession": "P35030",
+      "differing_residues": 234,
+      "sites": [
+        {
+          "residue": 2,
+          "ours": "N",
+          "uniprot": "C",
+          "single_base": false
+        },
+        {
+          "residue": 3,
+          "ours": "P",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 4,
+          "ours": "F",
+          "uniprot": "P",
+          "single_base": false
+        },
+        {
+          "residue": 5,
+          "ours": "L",
+          "uniprot": "D",
+          "single_base": false
+        },
+        {
+          "residue": 6,
+          "ours": "I",
+          "uniprot": "D",
+          "single_base": false
+        },
+        {
+          "residue": 7,
+          "ours": "L",
+          "uniprot": "R",
+          "single_base": true,
+          "pos": 33795593,
+          "ref": "T",
+          "alt": "G",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is unknown to dbSNP and gnomAD: gene model or entry difference"
+    },
+    {
+      "gene": "LCN9",
+      "chrom": "chr9",
+      "accession": "Q8WX39",
+      "differing_residues": 18,
+      "sites": [
+        {
+          "residue": 140,
+          "ours": "D",
+          "uniprot": "E",
+          "single_base": true,
+          "pos": 135665689,
+          "ref": "T",
+          "alt": "A",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 141,
+          "ours": "L",
+          "uniprot": "T",
+          "single_base": false
+        },
+        {
+          "residue": 142,
+          "ours": "K",
+          "uniprot": "C",
+          "single_base": false
+        },
+        {
+          "residue": 143,
+          "ours": "K",
+          "uniprot": "E",
+          "single_base": true,
+          "pos": 135665696,
+          "ref": "A",
+          "alt": "G",
+          "gnomad_af": 4.485e-05,
+          "dbsnp": "rs1324082274",
+          "vep": "missense_variant"
+        },
+        {
+          "residue": 144,
+          "ours": "P",
+          "uniprot": "K",
+          "single_base": false
+        },
+        {
+          "residue": 145,
+          "ours": "A",
+          "uniprot": "Y",
+          "single_base": false
+        },
+        {
+          "residue": 146,
+          "ours": "K",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 147,
+          "ours": "S",
+          "uniprot": "L",
+          "single_base": false
+        },
+        {
+          "residue": 148,
+          "ours": "T",
+          "uniprot": "G",
+          "single_base": false
+        },
+        {
+          "residue": 149,
+          "ours": "D",
+          "uniprot": "S",
+          "single_base": false
+        },
+        {
+          "residue": 150,
+          "ours": "L",
+          "uniprot": "Q",
+          "single_base": false
+        },
+        {
+          "residue": 151,
+          "ours": "A",
+          "uniprot": "N",
+          "single_base": false
+        },
+        {
+          "residue": 152,
+          "ours": "H",
+          "uniprot": "I",
+          "single_base": false
+        },
+        {
+          "residue": 153,
+          "ours": "K",
+          "uniprot": "I",
+          "single_base": true,
+          "pos": 135665727,
+          "ref": "A",
+          "alt": "T",
+          "gnomad_af": null,
+          "dbsnp": null,
+          "vep": "missense_variant"
+        }
+      ],
+      "verdict": "the curated allele is in dbSNP but rare or unmeasured"
+    }
+  ],
+  "seconds": 112,
+  "evidence": "derived: the single-base change giving the curated residue; measured: gnomAD allele frequency and dbSNP via Ensembl VEP"
+}

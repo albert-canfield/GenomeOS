@@ -37,6 +37,24 @@ it more.
 Among the 60 largest blocks, pairs that share many 20-mers are reported as
 duplication candidates (`similar_to`).
 
+## Curated repeats: RepeatMasker through the UCSC API
+
+Sequence patterns only find young repeats. `genomeos repeats --chrom chr21`
+fetches RepeatMasker's annotation of the chromosome from the public UCSC
+track API (20 MB of JSON once), keeps a 0.7 MB BED with class, family, name
+and divergence, and a class summary (`rmsk_chr21.json`: 64,812 copies,
+20.5 Mb; LINE/L1 6.3 Mb, SINE/Alu 3.5 Mb, alpha satellite 2.5 Mb). The
+UNKNOWN classifier then grades each block by curated coverage before any
+sequence rule: ≥ 50% interspersed repeat → `interspersed_repeat_<class>`
+(curated, 0.9); ≥ 50% satellite → centromere or satellite array; ≥ 50%
+simple or low-complexity → tandem repeat; and a block that is ≥ 30%
+interspersed repeat can no longer be called `long_orf`.
+
+On chromosome 21 this moved 2.1 of the 2.3 Mb of `long_orf` into
+`interspersed_repeat_LINE` (3.2 Mb in total, the LINE-1 ORF2 frames), added
+0.45 Mb of LTR, and raised the classified share from 96.3% to 97.6%. What
+remains `long_orf` (0.13 Mb) is non-repetitive and worth a look.
+
 ## Chromosome 21 (85 s, with ENCODE evidence)
 
 | class | blocks | bp | share of UNKNOWN |
@@ -65,6 +83,69 @@ matching of the Alu 5' core (up to 7 substitutions in 36 bases, zero hits in
 regulation: adding one experimental layer (chromatin) moved 17.5% of the
 UNKNOWN space from "unique" to "regulatory" with curated evidence.
 
+## The whole genome (84 min of compute, one chromosome on disk at a time)
+
+`unknown_genome_wide` streamed every chromosome from UCSC, fetched its
+RepeatMasker annotation and ENCODE elements, classified its UNKNOWN blocks
+with the curated evidence first, kept the summary and deleted the rest.
+chrM has no UNKNOWN space.
+
+| total | value |
+|---|---|
+| UNKNOWN blocks | 26,806 |
+| UNKNOWN bases | 1.009 Gb (33% of hg38) |
+| classified | 98.5% (was 96.6% before the curated repeat pass) |
+
+| class | bases | share of UNKNOWN |
+|---|---|---|
+| regulatory | 338.8 Mb | 33.6% |
+| interspersed repeat LINE | 287.1 Mb | 28.5% |
+| gap | 159.7 Mb | 15.8% |
+| unique intergenic | 74.8 Mb | 7.4% |
+| centromere | 48.2 Mb | 4.8% |
+| interspersed repeat LTR | 22.5 Mb | 2.2% |
+| satellite array | 21.5 Mb | 2.1% |
+| interspersed repeat SINE | 17.8 Mb | 1.8% |
+| unclassified | 14.8 Mb | 1.5% |
+| mixed intergenic | 10.0 Mb | 1.0% |
+| promoter like | 6.4 Mb | 0.6% |
+| interspersed repeat | 5.0 Mb | 0.5% |
+| long orf | 1.2 Mb | 0.1% |
+| interspersed repeat DNA | 0.6 Mb | 0.1% |
+
+| chr1 | 2,425 | 77.2 Mb | 99% | regulatory |
+| chr2 | 1,943 | 64.1 Mb | 98% | regulatory |
+| chr3 | 1,298 | 50.4 Mb | 99% | regulatory |
+| chr4 | 1,398 | 62.2 Mb | 99% | interspersed repeat LINE |
+| chr5 | 1,363 | 54.7 Mb | 99% | regulatory |
+| chr6 | 1,396 | 48.0 Mb | 99% | regulatory |
+| chr7 | 1,400 | 45.2 Mb | 98% | regulatory |
+| chr8 | 1,180 | 40.3 Mb | 98% | regulatory |
+| chr9 | 1,080 | 49.1 Mb | 99% | gap |
+| chrX | 1,338 | 71.7 Mb | 99% | interspersed repeat LINE |
+| chrY | 375 | 46.7 Mb | 99% | gap |
+| chr10 | 1,190 | 38.7 Mb | 98% | regulatory |
+| chr11 | 1,453 | 39.0 Mb | 97% | regulatory |
+| chr12 | 1,165 | 35.3 Mb | 99% | regulatory |
+| chr13 | 771 | 52.2 Mb | 99% | gap |
+| chr14 | 942 | 40.7 Mb | 99% | gap |
+| chr15 | 684 | 33.8 Mb | 98% | gap |
+| chr16 | 862 | 29.4 Mb | 98% | gap |
+| chr17 | 1,022 | 20.1 Mb | 98% | regulatory |
+| chr18 | 612 | 29.6 Mb | 99% | regulatory |
+| chr19 | 1,066 | 14.9 Mb | 98% | regulatory |
+| chr20 | 762 | 21.6 Mb | 99% | regulatory |
+| chr21 | 446 | 20.8 Mb | 98% | gap |
+| chr22 | 635 | 22.9 Mb | 99% | gap |
+
+What the table says. A third of the space between genes is regulatory by
+ENCODE's chromatin evidence; another third is LINE-1 and its relatives by
+RepeatMasker's curated library, which is where the earlier "long ORF"
+class went (it read the ORF2 frames of LINE-1 copies); gaps are the
+unassembled 16%; one in thirteen bases is unique intergenic sequence with
+no evidence of anything yet, which is the honest residue this tool exists
+to shrink. Only 1.5% stays unclassified.
+
 ## Where it shows
 
 - `genomeos unknown --chrom chr21` runs it and saves `data/results/unknown_chr21.json`
@@ -76,7 +157,14 @@ UNKNOWN space from "unique" to "regulatory" with curated evidence.
 ## What it cannot do yet
 
 Enhancers, silencers and insulators leave no signal a k-mer or a regex can
-read; they need cross-species conservation, chromatin data or a predictive
-model (AlphaGenome, `predicted` evidence). Repeat *families* are found but not
-named beyond Alu; a learned clustering of high-copy k-mers into families, and
-Dfam consensus sequences as patterns, are the next steps.
+read; ENCODE's chromatin evidence now places them (`regulatory` class,
+`genomeos regulation` for their targets), but which gene each one reaches
+is inferred from the CTCF domain, not measured. Where the AlphaGenome job
+has run (`enhancer_targets_chr21`: 200 chr21 enhancers deleted one by one,
+docs/ALPHAGENOME.md feature b) the element carries a `predicted` target with
+a tissue and a magnitude next to the inferred one; 87% of the predicted
+coding targets fall inside the inferred node. Hi-C would make it a
+measurement. Repeat families are
+named by RepeatMasker's curated library where a chromosome has been
+distilled with `genomeos repeats`; the sequence patterns remain the fallback
+for a chromosome that has not. Silencers have no curated source here yet.

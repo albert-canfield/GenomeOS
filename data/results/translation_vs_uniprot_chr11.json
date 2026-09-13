@@ -1,0 +1,189 @@
+{
+  "result": "translation_vs_uniprot_chr11",
+  "date": "2026-09-11",
+  "chrom": "chr11",
+  "genes_checked": 1281,
+  "exact_canonical": 1156,
+  "exact_canonical_fraction": 0.9024,
+  "exact_some_isoform": 1239,
+  "exact_some_isoform_fraction": 0.9672,
+  "canonical_differs_but_another_isoform_matches": 83,
+  "same_protein_different_boundaries": 26,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.1176,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.165,
+      "gene": "OR52P1",
+      "accession": "Q8NH57",
+      "transcript": "OR52P1-201",
+      "ours_aa": 53,
+      "uniprot_aa": 321,
+      "identity_canonical": 0.0498,
+      "identity_best_isoform": 0.0498,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.3233,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.192,
+      "gene": "OR4C45",
+      "accession": "A6NMZ5",
+      "transcript": "OR4C45-201",
+      "ours_aa": 59,
+      "uniprot_aa": 306,
+      "identity_canonical": 0.1928,
+      "identity_best_isoform": 0.1928,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.3333,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.199,
+      "gene": "OR8J2",
+      "accession": "Q8NGG1",
+      "transcript": "OR8J2-201",
+      "ours_aa": 63,
+      "uniprot_aa": 315,
+      "identity_canonical": 0.2,
+      "identity_best_isoform": 0.2,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.4166,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 1.0,
+      "gene": "MUC2",
+      "accession": "Q02817",
+      "transcript": "MUC2-203",
+      "ours_aa": 1394,
+      "uniprot_aa": 5289,
+      "identity_canonical": 0.2632,
+      "identity_best_isoform": 0.2632,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.5333,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.363,
+      "gene": "CASP12",
+      "accession": "Q6UXS9",
+      "transcript": "CASP12-201",
+      "ours_aa": 124,
+      "uniprot_aa": 341,
+      "identity_canonical": 0.3636,
+      "identity_best_isoform": 0.3636,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.5621,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.461,
+      "gene": "OR5G3",
+      "accession": "P0C626",
+      "transcript": "OR5G3-201",
+      "ours_aa": 145,
+      "uniprot_aa": 314,
+      "identity_canonical": 0.3662,
+      "identity_best_isoform": 0.3662,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.6,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.427,
+      "gene": "OR4A8",
+      "accession": "P0C604",
+      "transcript": "OR4A8-201",
+      "ours_aa": 135,
+      "uniprot_aa": 315,
+      "identity_canonical": 0.4286,
+      "identity_best_isoform": 0.4286,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.6461,
+      "cds_out_of_frame": true,
+      "translated_fraction_of_cds": 0.477,
+      "gene": "OR5AL1",
+      "accession": "P0C617",
+      "transcript": "OR5AL1-201",
+      "ours_aa": 157,
+      "uniprot_aa": 329,
+      "identity_canonical": 0.4742,
+      "identity_best_isoform": 0.4742,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.7818,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.995,
+      "gene": "OOSP1",
+      "accession": "A8MZH6",
+      "transcript": "OOSP1-202",
+      "ours_aa": 184,
+      "uniprot_aa": 123,
+      "identity_canonical": 0.6467,
+      "identity_best_isoform": 0.6467,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8173,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.998,
+      "gene": "PRR33",
+      "accession": "A8MZF0",
+      "transcript": "PRR33-201",
+      "ours_aa": 479,
+      "uniprot_aa": 331,
+      "identity_canonical": 0.0564,
+      "identity_best_isoform": 0.0564,
+      "exact": false,
+      "same_length": false
+    },
+    {
+      "similarity_best_isoform": 0.8798,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.996,
+      "gene": "KRTAP5-4",
+      "accession": "Q6L8H1",
+      "transcript": "KRTAP5-4-201",
+      "ours_aa": 228,
+      "uniprot_aa": 288,
+      "identity_canonical": 0.5312,
+      "identity_best_isoform": 0.5312,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 11,
+  "out_of_frame_canonical": [
+    {
+      "gene": "OR52E1",
+      "exact_some_isoform": false
+    },
+    {
+      "gene": "OR5AL1",
+      "exact_some_isoform": false
+    },
+    {
+      "gene": "OR5G3",
+      "exact_some_isoform": false
+    },
+    {
+      "gene": "OR8G2P",
+      "exact_some_isoform": false
+    }
+  ],
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

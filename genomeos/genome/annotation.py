@@ -22,11 +22,20 @@ GENCODE_SUBSET = Path("data/results/gencode_v50_chr21_chrM.gff3.gz")  # distille
 
 
 def default_gencode(chroms: set[str] | None = None) -> Path | None:
-    """Genome-wide GENCODE if present, else the distilled chr21+chrM subset when it covers `chroms`."""
+    """Genome-wide GENCODE if present, else the distilled chr21+chrM subset when it covers `chroms`,
+    else a single chromosome's distilled file (`genomeos data fetch --chrom C`)."""
     if GENCODE_FULL.exists():
         return GENCODE_FULL
     if GENCODE_SUBSET.exists() and (chroms is None or chroms <= {"chr21", "chrM"}):
         return GENCODE_SUBSET
+    if chroms and len(chroms) == 1:
+        c = next(iter(chroms))
+        for per in (
+            Path("data/reference") / f"gencode_v50_{c}.gff3.gz",
+            Path("data/results") / f"gencode_v50_{c}.gff3.gz",
+        ):
+            if per.exists():
+                return per
     return None
 
 

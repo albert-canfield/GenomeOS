@@ -72,13 +72,52 @@ that pipeline: from two genomes to a graded list of what is different and
 what is reachable. Binder design and anything involving a patient is outside
 this project and belongs to laboratories and clinicians.
 
+## Tumour alone: no matched normal
+
+`genomeos cancer tumour --vcf T.vcf --packet packet.json` takes the tumour's
+DNA by itself. What changes without the normal sample, and how each gap is
+handled:
+
+| step | with a normal | tumour alone | evidence |
+|---|---|---|---|
+| somatic vs germline | subtraction | gnomAD population frequency ≥ 1% → likely inherited, set aside; rare germline variants cannot be told apart | inferred |
+| consequence | local gene models (chr21, chrM) | Ensembl VEP REST on any chromosome: consequence, gene, HGVS c./p., SIFT, PolyPhen, COSMIC ids, gnomAD; cached per variant in `data/knowledge/vep/` | curated / predicted |
+| drivers | cBioPortal frequencies and hotspots | same | curated |
+| burden | – | coding somatic variants per Mb, assuming a whole exome; the assumption is written into the result | inferred |
+| protein | – | mutant peptide window around each top missense change, from the UniProt canonical sequence (neoantigen candidates; HLA binding not predicted) | derived |
+| pathways | – | a truncated driver is treated as absent and run through its Reactome pathways: reactions lost, most affected pathway | curated + inferred |
+
+The score adds severity, driver frequency, hotspot, COSMIC presence and
+predicted damage; likely-germline variants are kept in the packet but
+scaled down and listed separately so the agent does not build on them. The
+packet asks for driver events, cancer type, a surface target with payload,
+neoantigen candidates, risks and next experiments, each with confidence.
+The Cancer tab has a "Tumour alone" form for the same run.
+
+## From alterations to targets
+
+`surface_targets()` here answers one narrow question: which altered genes carry
+a Gene Ontology plasma-membrane or cell-surface annotation. That is a first
+filter, not a target assessment: it cannot tell a receptor's ectodomain from a
+kinase held against the inner leaflet, it says nothing about healthy tissue, and
+a mutated gene is not a surface target.
+
+The therapeutic pipeline answers the rest. `genomeos therapeutic --tumour T.vcf`
+takes the same ranked variants and works out where each protein sits and whether
+a binder can physically reach it, how the tumour differs from healthy tissue,
+what happens after binding, whether an intracellular mutation could still be
+seen through HLA, and which therapeutic mechanism the biology supports, with the
+evidence level and the missing data for each. See
+[docs/THERAPEUTICS.md](THERAPEUTICS.md). `genomeos cancer tumour --therapeutic`
+runs it from this command.
+
 ## Next
 
 - Copy-number and structural variants from cBioPortal (`_cna`,
   `_structural_variants` profiles) alongside mutations.
 - Expression: tumour-versus-normal RNA to find surface proteins that are
-  over-expressed rather than mutated, the more common target class.
-- A Cancer tab in the web UI: choose two VCFs, see the ranked table, the
-  suggested types and the targets, download the agent packet.
+  over-expressed rather than mutated, the more common target class. The
+  therapeutic pipeline already accepts patient RNA (`--rna`); what is missing is
+  a cohort reference to compare it against.
 - Add the distilled driver table as a library layer (`cancer.*`) with
   evidence, so the libraries know which genes break in which cancers.

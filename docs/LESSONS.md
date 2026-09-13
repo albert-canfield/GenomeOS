@@ -58,8 +58,155 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 | A tristable switch read against a clamped morphogen gives endoderm → mesoderm → ectoderm; half its rules are inferred and the report says "low" | gastrulation runtime | `clamp` argument on the network runtime; uncertainty report |
 | Sulston's early lineage follows from per-founder cycle times: 4 cells at 22 min, ~24 at 100 min, E slowest | lineage engine | `data/demo/celegans_lineage.bio` |
 
+## The UNKNOWN space, genome-wide
+
+- Streaming one chromosome at a time kept peak disk under 300 MB for a
+  1 Gb job; the summaries total a few hundred KB. Stream, distil, discard
+  scales.
+- The largest class of intergenic DNA by chromatin evidence is regulatory
+  (34%), not repeat: ENCODE's elements are dense enough that a 10 kb window
+  with two of them is the common case, not the exception.
+- An ORF finder run on repeat-rich DNA finds LINE-1 ORF2 everywhere; a class
+  named "long ORF" is only honest once the repeat signatures are subtracted
+  first. Order of classification matters more than the classifiers.
+
+- gnomAD's Gnocchi is one Z score per kilobase, and the range reader counts
+  every kilobase an interval touches: a 170 bp exon measures 1,000 track
+  bases. Report shares of kilobases, never of bases, for anything shorter
+  than the step (`aggregate()` in `attribution/variation.py` says
+  `track_bases` for that reason).
+- Within-human constraint at one kilobase agrees with the mammalian axis
+  where both are strong and adds little on its own: elements constrained on
+  both axes name a gene 75% and 72% of the time (chr21, chr15), above every
+  other case; the constrained_unknown tier reads 1.7% and 3.2%
+  human-constrained, no more than the neutral tier, and chr15's neutral tier
+  reads 17%. Coding segments read 40% and 31%, introns 26% and 18%, so the
+  axis is real and its block-level form is noisy; the case is `inferred` at
+  0.3 to 0.6, never a verdict (`variation_chr21`, `variation_chr15`). Over
+  the genome the ordering holds on every count: elements constrained on both
+  axes name a gene 73.9% (825), mammals only 56.0%, people only 50.0%,
+  neither 45.3% (`variation_genome_wide`). A track with no coverage (Gnocchi
+  on chrY) is recorded as unmeasured on every block, never as zero: absence
+  of a score is not evidence of tolerance.
+
+- The most constrained intergenic blocks are often copies: UCSC's curated
+  segmental duplications cover 4.7% of the constrained_unknown tier genome-wide
+  but 61% of it on chr21 (15 of 20 blocks), 72% on chrY and 42% on chr22, and
+  one block in five of the tier is mostly a copy. A duplicated block reads as
+  constrained across mammals because the alignment lands on its paralogue and
+  is unscored by gnomAD because variant mapping fails there, so the two axes
+  disagreeing is a duplication flag first. The classifier's shared-20-mer
+  `similar_to` fired once genome-wide (and was right): curated pairs replace
+  it, the heuristic stays as fallback (`duplication_genome_wide`).
+
+- A motif control must keep the dinucleotides: shuffling single bases
+  destroys the CpG and GC runs promoters have, and long GC-rich zinc-finger
+  matrices then read as the only enriched class; a dinucleotide-preserving
+  shuffle (Altschul and Erickson) restores MEF2, FOX, PBX and PKNOX1 on real
+  promoters. And a factor-pair statistic that assumes independence finds the
+  GC content twice (MEF2A with MEF2D, CGGBP1 with GC-rich zinc fingers);
+  operators need profiles clustered into families and a GC-matched
+  expectation first (`motifs_genome_wide`).
+- Library-level motif enrichment recovers textbook associations without
+  being told them: REST 7.7x in `systems.nervous`, IRF2/3/7/9 in
+  `systems.immune`, ZNF143 and THAP11 in `core.translation` and
+  `core.replication`; the heart's GATA plus T-box pair is not in promoters,
+  where the scan looked, but in enhancers.
+
+- Ensembl's "vertebrate species" list omits the outgroups its gene trees
+  use: yeast, fly and worm are in the vertebrate Compara dump (50,000 rows)
+  but not in `info/species?division=EnsemblVertebrates`, so a ladder built
+  from the species list stopped at Chordata for every gene. Place the species
+  the dump names, not the species the list names (`_stream_placing`), and
+  read the pan-taxonomic dump for the strata below the animals. Ensembl's
+  taxonomy classification also omits Amniota, Tetrapoda, Theria and
+  Boreoeutheria, so a duck reads as a fish unless Aves stands in for Amniota
+  (`PROXIES`). At the deepest strata a Compara "orthologue" is a
+  family-level call (HOXA1 eukaryote-wide through plant homeobox proteins):
+  read the grade, not the exact stratum (`origin_genome_wide`).
+
+- A motif-pair statistic has three confounds, and each one produced
+  "operators" on its own: near-identical matrices (MEF2A with MEF2D), GC
+  (CGGBP1 with ZNF93 in 27 libraries) and transposons (ZNF135 with ZNF460:
+  promoters with both are 19.4% Alu against 1.1%). Count TFClass families
+  (C2H2 zinc fingers individually), take expectations within GC by
+  repeat-share strata, and the promoter operator table goes from 38
+  libraries to none while single-family enrichments such as REST in the
+  nervous system survive (`motifs_genome_wide`,
+  `promoter_composition_genome_wide`).
+- Across species, a list of "held" motif sites at one locus mostly restates
+  that the sequence is conserved: at 88% identity nearly every window keeps
+  some of 1,019 matrices, and held-site density does not separate VISTA
+  enhancers from matched negatives. A site must be one genome position held
+  by the same factor in every well-aligned species (the first call mixed a
+  factor's positions across species), and grammar claims need negatives.
+  Record positions in genome coordinates from the start; a position in a
+  concatenated alignment depends on which species' blocks were joined.
+- Correlated presence profiles are mostly shared age: random gene sets of
+  the same origin make-up correlate at 0.55 to 0.73, which is where the
+  "one developmental history" sat. Test library pairs against age-matched
+  sets on exclusive members, and remove duplicated genes before calling a
+  shared history (`profiling_genome_wide` null).
+
+- Motif sites held across species do not separate enhancers from inactive
+  conserved sequence: 39 limb and 33 neural VISTA enhancers against 76
+  constraint-matched negatives hold the same density of factor-strict sites
+  and no family more often after correcting for 275 families
+  (`across_panel_vista`). Do not read a single conserved locus's motif list
+  as its grammar (the ZRS looked like textbook HOX, PBX and MEIS logic), and
+  change the readout rather than sweeping thresholds until a test passes.
+
+## The reference is one haplotype
+
+- hg38 carries loss-of-function alleles at dozens of loci (olfactory
+  receptors, CASP12, FCGR2C, IFNL4, CYP2D7, KIR2DS4, SIGLEC16): the
+  reference reading frame is shifted or stopped where UniProt describes the
+  working protein. A translation engine that disagrees with UniProt there is
+  right, and the disagreement is a fact about the genome to report, not to
+  fix.
+- Make the signature specific before trusting it: "CDS length not divisible
+  by three" holds for 5% of coding transcripts (5'-incomplete models); the
+  same test restricted to canonical transcripts without an incomplete tag
+  flags 29 genes, and the six mitochondrial genes among them that translate
+  perfectly prove it measures the annotation, not the engine.
+- Every batch of disagreements so far hid one real bug (a synonym match,
+  selenocysteine, a stop-word symbol). Read them; do not round them away.
+
+## Several sessions in one checkout
+
+- The git index is shared by everyone working in the same checkout: a
+  plain `git commit` ships whatever anyone has staged, and `git add -A`
+  sweeps half-finished work into someone else's commit. Commit through a
+  private index (`GIT_INDEX_FILE`, `read-tree HEAD`, add explicit paths,
+  apply your own hunks of shared files, `write-tree`, `commit-tree`,
+  `update-ref` with the old value) and the shared index stops mattering.
+- Format and lint only the files you changed; a package-wide `ruff format`
+  rewrites the other person's uncommitted lines.
+- Say which files are yours before you start; the overlap (cli.py,
+  server.py, index.html) is small when each feature is one subcommand, one
+  route and one card.
+- Committing through a private index solves the clobbering problem and
+  creates a second one: `update-ref` does not touch `.git/index`, so the
+  shared index falls behind by every commit made that way. After 125 commits
+  it reported 200 phantom changes to an editor and carried 64 staged
+  deletions of files that were on disk and committed. `git read-tree HEAD`
+  after each commit, and the drift never starts.
+- The shared index goes stale on its own: twice in one day it held staged
+  deletions of every committed result file (248,000 lines), one plain
+  commit away from leaving the repository. `git status` shows it as `D `
+  rows; a mixed `git reset -q` fixes the index without touching the tree.
+- Filtering shared-file hunks by keyword drops the hunk that does not
+  contain the keyword: an `individual predict` subparser went out in a later
+  fix-up because its hunk said "predict" and "regulatory", never
+  "individual". After every push of a shared file, run the new command once
+  from the pushed tree (the pre-push hook checks tests, not that the CLI
+  surface is complete), or filter by line range instead of by word.
+
 ## Engineering
 
+- SBML species given as `initialAmount` inside a compartment of size ≠ 1 are concentrations in the maths, and a kinetic law's value is substance per time: integrate rate/volume. Skipping that ran a 100-species model into zeros within a second and looked like instability; it was units.
 - process-bigraph registers processes with `core.register_link` and applies float updates additively; the composite ran our two engines on one clock.
 - libRoadRunner, MaBoSS, CompuCell3D and biolearn (torch) have no Python 3.14 wheels yet; the in-house engines keep their interfaces so adapters can replace them.
 - Streaming beats downloading: the HG002 telomere estimate cost 12 seconds and 0 bytes, the methylation clocks 54 seconds and 0 bytes for 1.2 GB of bedMethyl; the same information from BAM/CRAM would have cost 100-200 GB of disk.
+- A strand-specific RNA-seq track is labelled by the read, not the transcript: ENCODE's IMR-90 total RNA-seq (ENCSR424FAZ) reads antisense, so APP sits on the "plus strand" file, and a reader that takes an exon's signal from the file named after the gene's strand sees the cell as silent everywhere. The closure test caught it (every chr21 gene at zero in one cell of four); `MeasuredRna` and `attribution/closure.py` now probe a few dozen exons in both orientations and swap when the swapped one carries twice the signal. Never trust a strand label without a housekeeping gene to check it against.
+- **Ensembl's human homology dump has no mouse (2026-09-12).** `homologies/homo_sapiens/Compara.116.protein_default.homologies.tsv.gz` lists 199 species, among them *Mus caroli*, *Mus spretus* and the rat, but not *Mus musculus*; the mouse–human pairs are in the mouse dump (`homologies/mus_musculus/...`, `homology_species == homo_sapiens`). A reader that filters on the species it expects and finds zero rows should say so loudly; the first Compara pass wrote an empty orthology file and the comparison silently fell back to MGI.

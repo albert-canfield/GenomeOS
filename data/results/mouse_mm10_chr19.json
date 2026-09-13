@@ -1,0 +1,5216 @@
+{
+  "result": "mouse_mm10_chr19",
+  "date": "2026-09-12",
+  "organism": "mouse",
+  "assembly": "mm10",
+  "chrom": "chr19",
+  "length": 61431566,
+  "genes": 1394,
+  "coding_genes": 718,
+  "elements": 11597,
+  "element_classes": {
+    "dELS": 9084,
+    "pELS": 1334,
+    "CTCF-only": 668,
+    "DNase-H3K4me3": 399,
+    "PLS": 112
+  },
+  "domains": 371,
+  "domains_with_coding_genes": 256,
+  "domain_length_median": 109287,
+  "human_nodes_indexed": 20002,
+  "human_symbols_indexed": 65976,
+  "orthology_pairs": 24584,
+  "node_comparison": {
+    "orthology": "curated: MGI mouse\u2013human homology",
+    "nodes": 371,
+    "tested": 109,
+    "conserved": 58,
+    "split_adjacent": 45,
+    "split_scattered": 6,
+    "unmapped": 262,
+    "fraction_conserved": 0.532,
+    "fraction_same_neighbourhood": 0.945
+  },
+  "node_comparison_symbol_identity": {
+    "orthology": "inferred: symbol identity",
+    "nodes": 371,
+    "tested": 91,
+    "conserved": 49,
+    "split_adjacent": 39,
+    "split_scattered": 3,
+    "unmapped": 280,
+    "fraction_conserved": 0.538,
+    "fraction_same_neighbourhood": 0.967
+  },
+  "node_comparison_compara": {
+    "orthology": "curated: Ensembl Compara 116 mouse\u2013human orthologues (gene trees)",
+    "nodes": 371,
+    "tested": 111,
+    "conserved": 62,
+    "split_adjacent": 44,
+    "split_scattered": 5,
+    "unmapped": 260,
+    "fraction_conserved": 0.559,
+    "fraction_same_neighbourhood": 0.955
+  },
+  "orthology_agreement": {
+    "genes": 717,
+    "in_both": 565,
+    "identical_when_in_both": 0.973,
+    "mgi_only": 34,
+    "compara_only": 65,
+    "neither": 53
+  },
+  "node_rows": [
+    {
+      "id": "chr19:D1",
+      "start": 0,
+      "end": 3208498,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D2",
+      "start": 3208498,
+      "end": 3292201,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D441"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ighmbp2",
+        "Mrpl21"
+      ]
+    },
+    {
+      "id": "chr19:D3",
+      "start": 3292201,
+      "end": 3363705,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D440"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cpt1a"
+      ]
+    },
+    {
+      "id": "chr19:D4",
+      "start": 3363705,
+      "end": 3419479,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D437",
+        "chr11:D438"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Tesmin",
+        "Gal"
+      ]
+    },
+    {
+      "id": "chr19:D5",
+      "start": 3419479,
+      "end": 3581551,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D435"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Ppp6r3"
+      ]
+    },
+    {
+      "id": "chr19:D6",
+      "start": 3581551,
+      "end": 3699640,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D435"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Lrp5"
+      ]
+    },
+    {
+      "id": "chr19:D7",
+      "start": 3699640,
+      "end": 3774343,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D435"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "1810055G02Rik",
+        "Kmt5b"
+      ]
+    },
+    {
+      "id": "chr19:D8",
+      "start": 3774343,
+      "end": 3864963,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D435"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Chka"
+      ]
+    },
+    {
+      "id": "chr19:D9",
+      "start": 3864963,
+      "end": 3946884,
+      "coding_genes": 4,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D434"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Tcirg1",
+        "Ndufs8",
+        "Aldh3b1",
+        "Unc93b1"
+      ]
+    },
+    {
+      "id": "chr19:D10",
+      "start": 3946884,
+      "end": 4085164,
+      "coding_genes": 12,
+      "mapped": 6,
+      "human_nodes": [
+        "chr11:D431"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Aldh3b3",
+        "Aldh3b2",
+        "Acy3",
+        "Tbx10",
+        "Nudt8",
+        "Gm49405",
+        "Doc2g",
+        "Ndufv1",
+        "Gstp1",
+        "Gstp2",
+        "Gstp3",
+        "Cabp2"
+      ]
+    },
+    {
+      "id": "chr19:D11",
+      "start": 4085164,
+      "end": 4207181,
+      "coding_genes": 13,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D430",
+        "chr11:D431"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cdk2ap2",
+        "Pitpnm1",
+        "Aip",
+        "Tmem134",
+        "Cabp4",
+        "Gpr152",
+        "Coro1b",
+        "Ptprcap",
+        "Rps6kb2",
+        "Carns1",
+        "Tbc1d10c",
+        "Ppp1ca"
+      ]
+    },
+    {
+      "id": "chr19:D12",
+      "start": 4207181,
+      "end": 4266151,
+      "coding_genes": 3,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D430"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Clcf1",
+        "Gm45928",
+        "Pold4"
+      ]
+    },
+    {
+      "id": "chr19:D13",
+      "start": 4266151,
+      "end": 4338396,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D430"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ssh3",
+        "Ankrd13d",
+        "Grk2"
+      ]
+    },
+    {
+      "id": "chr19:D14",
+      "start": 4338396,
+      "end": 4456407,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D429"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Kdm2a",
+        "Rhod"
+      ]
+    },
+    {
+      "id": "chr19:D15",
+      "start": 4456407,
+      "end": 4573442,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D429"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Syt12",
+        "2010003K11Rik",
+        "Pcx"
+      ]
+    },
+    {
+      "id": "chr19:D16",
+      "start": 4573442,
+      "end": 4644478,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D428",
+        "chr11:D429"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Lrfn4",
+        "Rce1"
+      ]
+    },
+    {
+      "id": "chr19:D17",
+      "start": 4644478,
+      "end": 4743724,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D428"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Gm960",
+        "Sptbn2"
+      ]
+    },
+    {
+      "id": "chr19:D18",
+      "start": 4743724,
+      "end": 4847693,
+      "coding_genes": 6,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Gm21992",
+        "Rbm4b",
+        "Rbm4",
+        "Rbm14",
+        "Ccs",
+        "Ccdc87"
+      ]
+    },
+    {
+      "id": "chr19:D19",
+      "start": 4847693,
+      "end": 4908309,
+      "coding_genes": 4,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Ctsf",
+        "Actn3",
+        "Zdhhc24",
+        "Bbs1"
+      ]
+    },
+    {
+      "id": "chr19:D20",
+      "start": 4908309,
+      "end": 4981973,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D427"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Dpp3",
+        "Peli3",
+        "Mrpl11"
+      ]
+    },
+    {
+      "id": "chr19:D21",
+      "start": 4981973,
+      "end": 5129974,
+      "coding_genes": 12,
+      "mapped": 11,
+      "human_nodes": [
+        "chr11:D425",
+        "chr11:D426",
+        "chr11:D427"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Npas4",
+        "Slc29a2",
+        "B4gat1",
+        "Gm50388",
+        "Brms1",
+        "Rin1",
+        "Cd248",
+        "Tmem151a",
+        "Yif1a",
+        "Cnih2",
+        "Rab1b",
+        "Klc2"
+      ]
+    },
+    {
+      "id": "chr19:D22",
+      "start": 5129974,
+      "end": 5198328,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D23",
+      "start": 5198328,
+      "end": 5277299,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D423"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pacs1"
+      ]
+    },
+    {
+      "id": "chr19:D24",
+      "start": 5277299,
+      "end": 5525414,
+      "coding_genes": 19,
+      "mapped": 11,
+      "human_nodes": [
+        "chr11:D422",
+        "chr11:D423"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Sf3b2",
+        "Gal3st3",
+        "Catsper1",
+        "Cst6",
+        "Banf1",
+        "Eif1ad",
+        "Sart1",
+        "Tsga10ip",
+        "Drap1",
+        "AI837181",
+        "Fosl1",
+        "Ccdc85b"
+      ]
+    },
+    {
+      "id": "chr19:D25",
+      "start": 5525414,
+      "end": 5780395,
+      "coding_genes": 15,
+      "mapped": 10,
+      "human_nodes": [
+        "chr11:D419",
+        "chr11:D420",
+        "chr11:D421"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Ovol1",
+        "Ap5b1",
+        "Rnaseh2c",
+        "Kat5",
+        "Rela",
+        "Sipa1",
+        "Pcnx3",
+        "Map3k11",
+        "Kcnk7",
+        "Ehbp1l1",
+        "Fam89b",
+        "Gm50387"
+      ]
+    },
+    {
+      "id": "chr19:D26",
+      "start": 5780395,
+      "end": 6042275,
+      "coding_genes": 8,
+      "mapped": 6,
+      "human_nodes": [
+        "chr11:D417"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Frmd8",
+        "Slc25a45",
+        "Tigd3",
+        "Dpf2",
+        "Cdc42ep2",
+        "Pola2",
+        "Slc22a20",
+        "Capn1"
+      ]
+    },
+    {
+      "id": "chr19:D27",
+      "start": 6042275,
+      "end": 6260641,
+      "coding_genes": 20,
+      "mapped": 13,
+      "human_nodes": [
+        "chr11:D414",
+        "chr11:D415",
+        "chr11:D416"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Syvn1",
+        "Mrpl49",
+        "Fau",
+        "Znhit2",
+        "Tm7sf2",
+        "Vps51",
+        "Gm28374",
+        "Tmem262",
+        "Zfpl1",
+        "Cdca5",
+        "Gm550",
+        "Naaladl1"
+      ]
+    },
+    {
+      "id": "chr19:D28",
+      "start": 6260641,
+      "end": 6373973,
+      "coding_genes": 5,
+      "mapped": 5,
+      "human_nodes": [
+        "chr11:D413",
+        "chr11:D414"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Ehd1",
+        "Cdc42bpg",
+        "Men1",
+        "Map4k2",
+        "Sf1"
+      ]
+    },
+    {
+      "id": "chr19:D29",
+      "start": 6373973,
+      "end": 6467162,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D413"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Pygm",
+        "Rasgrp2",
+        "Nrxn2"
+      ]
+    },
+    {
+      "id": "chr19:D30",
+      "start": 6467162,
+      "end": 6594966,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D411"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Slc22a12"
+      ]
+    },
+    {
+      "id": "chr19:D31",
+      "start": 6594966,
+      "end": 6647441,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D32",
+      "start": 6647441,
+      "end": 6829211,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D33",
+      "start": 6829211,
+      "end": 6936464,
+      "coding_genes": 7,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Rps6ka4",
+        "Ccdc88b",
+        "Prdx5",
+        "Trmt112",
+        "Esrra",
+        "Catsperz",
+        "Kcnk4"
+      ]
+    },
+    {
+      "id": "chr19:D34",
+      "start": 6936464,
+      "end": 7048196,
+      "coding_genes": 11,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D408"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Gpr137",
+        "Bad",
+        "Plcb3",
+        "Ppp1r14b",
+        "Fkbp2",
+        "Vegfb",
+        "Dnajc4",
+        "Nudt22",
+        "Trpt1",
+        "Fermt3",
+        "Stip1"
+      ]
+    },
+    {
+      "id": "chr19:D35",
+      "start": 7048196,
+      "end": 7223697,
+      "coding_genes": 4,
+      "mapped": 4,
+      "human_nodes": [
+        "chr11:D407",
+        "chr11:D408"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Macrod1",
+        "Flrt1",
+        "Otub1",
+        "Cox8a"
+      ]
+    },
+    {
+      "id": "chr19:D36",
+      "start": 7223697,
+      "end": 7345583,
+      "coding_genes": 3,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D407"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Naa40",
+        "Rcor2",
+        "Mark2"
+      ]
+    },
+    {
+      "id": "chr19:D37",
+      "start": 7345583,
+      "end": 7397079,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Spindoc"
+      ]
+    },
+    {
+      "id": "chr19:D38",
+      "start": 7397079,
+      "end": 7456952,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "2700081O15Rik"
+      ]
+    },
+    {
+      "id": "chr19:D39",
+      "start": 7456952,
+      "end": 7523445,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D406"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Rtn3",
+        "Atl3"
+      ]
+    },
+    {
+      "id": "chr19:D40",
+      "start": 7523445,
+      "end": 7595705,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D406"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Plaat3"
+      ]
+    },
+    {
+      "id": "chr19:D41",
+      "start": 7595705,
+      "end": 8567328,
+      "coding_genes": 8,
+      "mapped": 8,
+      "human_nodes": [
+        "chr11:D403",
+        "chr11:D406"
+      ],
+      "verdict": "split_scattered",
+      "genes": [
+        "Lgals12",
+        "Plaat5",
+        "Slc22a19",
+        "Slc22a26",
+        "Slc22a27",
+        "Slc22a28",
+        "Slc22a29",
+        "Slc22a30"
+      ]
+    },
+    {
+      "id": "chr19:D42",
+      "start": 8567328,
+      "end": 8683214,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D400",
+        "chr11:D401"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Slc22a8",
+        "Slc22a6",
+        "Chrm1"
+      ]
+    },
+    {
+      "id": "chr19:D43",
+      "start": 8683214,
+      "end": 8816047,
+      "coding_genes": 10,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Slc3a2",
+        "Wdr74",
+        "1700092M07Rik",
+        "Stx5a",
+        "Nxf1",
+        "Tmem223",
+        "Tmem179b",
+        "Taf6l",
+        "Polr2g",
+        "Zbtb3"
+      ]
+    },
+    {
+      "id": "chr19:D44",
+      "start": 8816047,
+      "end": 9109584,
+      "coding_genes": 22,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D399"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ttc9c",
+        "Hnrnpul2",
+        "Gm50139",
+        "Gng3",
+        "Bscl2",
+        "Lrrn4cl",
+        "Ubxn1",
+        "Uqcc3",
+        "Lbhd1",
+        "Gm49403",
+        "1810009A15Rik",
+        "Gm49416"
+      ]
+    },
+    {
+      "id": "chr19:D45",
+      "start": 9109584,
+      "end": 9991493,
+      "coding_genes": 4,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D396",
+        "chr11:D398"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Asrgl1",
+        "Scgb2a2",
+        "Incenp",
+        "Fth1"
+      ]
+    },
+    {
+      "id": "chr19:D46",
+      "start": 9991493,
+      "end": 10198990,
+      "coding_genes": 5,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Best1",
+        "Rab3il1",
+        "Fads3",
+        "Fads2",
+        "Fads1"
+      ]
+    },
+    {
+      "id": "chr19:D47",
+      "start": 10198990,
+      "end": 10258585,
+      "coding_genes": 3,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Fen1",
+        "Tmem258",
+        "Myrf"
+      ]
+    },
+    {
+      "id": "chr19:D48",
+      "start": 10258585,
+      "end": 10332810,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Dagla"
+      ]
+    },
+    {
+      "id": "chr19:D49",
+      "start": 10332810,
+      "end": 10437092,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D394"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Syt7"
+      ]
+    },
+    {
+      "id": "chr19:D50",
+      "start": 10437092,
+      "end": 10502755,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D394"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Lrrc10b",
+        "Ppp1r32"
+      ]
+    },
+    {
+      "id": "chr19:D51",
+      "start": 10502755,
+      "end": 10598369,
+      "coding_genes": 5,
+      "mapped": 5,
+      "human_nodes": [
+        "chr11:D392",
+        "chr11:D393"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Sdhaf2",
+        "Cpsf7",
+        "Tmem216",
+        "Tmem138",
+        "Cyb561a3"
+      ]
+    },
+    {
+      "id": "chr19:D52",
+      "start": 10598369,
+      "end": 10665627,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D392"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Tkfc",
+        "Ddb1",
+        "Vwce"
+      ]
+    },
+    {
+      "id": "chr19:D53",
+      "start": 10665627,
+      "end": 10754010,
+      "coding_genes": 3,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D391"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pga5",
+        "Vps37c",
+        "Cd5"
+      ]
+    },
+    {
+      "id": "chr19:D54",
+      "start": 10754010,
+      "end": 10831628,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Cd6"
+      ]
+    },
+    {
+      "id": "chr19:D55",
+      "start": 10831628,
+      "end": 10983356,
+      "coding_genes": 8,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D390"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Slc15a3",
+        "Tmem132a",
+        "Tmem109",
+        "Prpf19",
+        "Zp1",
+        "Ptgdr2",
+        "Ccdc86",
+        "Ms4a10"
+      ]
+    },
+    {
+      "id": "chr19:D56",
+      "start": 10983356,
+      "end": 11184295,
+      "coding_genes": 5,
+      "mapped": 4,
+      "human_nodes": [
+        "chr11:D388",
+        "chr11:D390"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Ms4a15",
+        "Ms4a18",
+        "Ms4a8a",
+        "Ms4a20",
+        "Ms4a19"
+      ]
+    },
+    {
+      "id": "chr19:D57",
+      "start": 11184295,
+      "end": 11352097,
+      "coding_genes": 6,
+      "mapped": 6,
+      "human_nodes": [
+        "chr11:D387",
+        "chr11:D388"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Ms4a13",
+        "Ms4a12",
+        "Ms4a1",
+        "Ms4a5",
+        "Ms4a14",
+        "Ms4a7"
+      ]
+    },
+    {
+      "id": "chr19:D58",
+      "start": 11352097,
+      "end": 11602206,
+      "coding_genes": 7,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D386"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ms4a4a",
+        "Ms4a4c",
+        "Ms4a4b",
+        "Ms4a6c",
+        "Gm8369",
+        "Ms4a6b",
+        "Ms4a4d"
+      ]
+    },
+    {
+      "id": "chr19:D59",
+      "start": 11602206,
+      "end": 11768341,
+      "coding_genes": 7,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D385",
+        "chr11:D386"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Ms4a6d",
+        "Ms4a2",
+        "Ms4a3",
+        "Oosp2",
+        "Oosp1",
+        "Oosp3",
+        "Cblif"
+      ]
+    },
+    {
+      "id": "chr19:D60",
+      "start": 11768341,
+      "end": 12015924,
+      "coding_genes": 8,
+      "mapped": 4,
+      "human_nodes": [
+        "chr11:D384",
+        "chr11:D385"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Mrpl16",
+        "Stx3",
+        "Olfr1417",
+        "Olfr1418",
+        "Olfr1419",
+        "Olfr1420",
+        "Patl1",
+        "Osbp"
+      ]
+    },
+    {
+      "id": "chr19:D61",
+      "start": 12015924,
+      "end": 12134484,
+      "coding_genes": 7,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Olfr1423",
+        "Olfr1424",
+        "Olfr1425",
+        "Olfr1426",
+        "Olfr1427",
+        "Olfr1428",
+        "Olfr76"
+      ]
+    },
+    {
+      "id": "chr19:D62",
+      "start": 12134484,
+      "end": 12549361,
+      "coding_genes": 15,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Olfr1555-ps1",
+        "Olfr1431",
+        "Olfr1432",
+        "Olfr262",
+        "Olfr235",
+        "Olfr1434",
+        "Olfr1436",
+        "Olfr1437",
+        "Olfr1438-ps1",
+        "Olfr1440",
+        "Olfr1441",
+        "Pfpl"
+      ]
+    },
+    {
+      "id": "chr19:D63",
+      "start": 12549361,
+      "end": 12706269,
+      "coding_genes": 5,
+      "mapped": 2,
+      "human_nodes": [
+        "chr11:D381"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Gm4952",
+        "Glyat",
+        "Olfr1442",
+        "Olfr1443",
+        "Keg1"
+      ]
+    },
+    {
+      "id": "chr19:D64",
+      "start": 12706269,
+      "end": 12820583,
+      "coding_genes": 4,
+      "mapped": 3,
+      "human_nodes": [
+        "chr11:D380",
+        "chr11:D381"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cntf",
+        "Zfp91",
+        "Zfp91",
+        "Lpxn"
+      ]
+    },
+    {
+      "id": "chr19:D65",
+      "start": 12820583,
+      "end": 13812988,
+      "coding_genes": 37,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Gm5244",
+        "Olfr1444",
+        "Olfr1445",
+        "Olfr1446",
+        "Olfr1447",
+        "Olfr1448",
+        "Olfr1449",
+        "Olfr1450",
+        "Olfr1451",
+        "Olfr1453",
+        "Olfr1454",
+        "Olfr1457"
+      ]
+    },
+    {
+      "id": "chr19:D66",
+      "start": 13812988,
+      "end": 13982208,
+      "coding_genes": 6,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Olfr1499",
+        "Olfr1500",
+        "Olfr1501",
+        "Olfr1502",
+        "Olfr1504",
+        "Olfr1505"
+      ]
+    },
+    {
+      "id": "chr19:D67",
+      "start": 13982208,
+      "end": 14045631,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D68",
+      "start": 14045631,
+      "end": 14291118,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D69",
+      "start": 14291118,
+      "end": 14424224,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D70",
+      "start": 14424224,
+      "end": 14518604,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D71",
+      "start": 14518604,
+      "end": 14615028,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D382"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Tle4"
+      ]
+    },
+    {
+      "id": "chr19:D72",
+      "start": 14615028,
+      "end": 14692366,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D73",
+      "start": 14692366,
+      "end": 15035762,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D74",
+      "start": 15035762,
+      "end": 15299674,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D75",
+      "start": 15299674,
+      "end": 15617425,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D76",
+      "start": 15617425,
+      "end": 15868292,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D77",
+      "start": 15868292,
+      "end": 15965280,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D368"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Psat1"
+      ]
+    },
+    {
+      "id": "chr19:D78",
+      "start": 15965280,
+      "end": 16129140,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D367"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cep78"
+      ]
+    },
+    {
+      "id": "chr19:D79",
+      "start": 16129140,
+      "end": 16199990,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D366"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Gnaq"
+      ]
+    },
+    {
+      "id": "chr19:D80",
+      "start": 16199990,
+      "end": 16284546,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D81",
+      "start": 16284546,
+      "end": 16529498,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D364"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Gna14"
+      ]
+    },
+    {
+      "id": "chr19:D82",
+      "start": 16529498,
+      "end": 16585437,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D83",
+      "start": 16585437,
+      "end": 16785105,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D362"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Vps13a"
+      ]
+    },
+    {
+      "id": "chr19:D84",
+      "start": 16785105,
+      "end": 16903304,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D359"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Foxb2"
+      ]
+    },
+    {
+      "id": "chr19:D85",
+      "start": 16903304,
+      "end": 16985078,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D358"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Prune2"
+      ]
+    },
+    {
+      "id": "chr19:D86",
+      "start": 16985078,
+      "end": 17364932,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D87",
+      "start": 17364932,
+      "end": 17468008,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D355"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Gcnt1",
+        "Rfk"
+      ]
+    },
+    {
+      "id": "chr19:D88",
+      "start": 17468008,
+      "end": 17769849,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D89",
+      "start": 17769849,
+      "end": 17856945,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D352"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pcsk5"
+      ]
+    },
+    {
+      "id": "chr19:D90",
+      "start": 17856945,
+      "end": 18087646,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D91",
+      "start": 18087646,
+      "end": 18548872,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D92",
+      "start": 18548872,
+      "end": 18664102,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D344"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ostf1",
+        "Nmrk1"
+      ]
+    },
+    {
+      "id": "chr19:D93",
+      "start": 18664102,
+      "end": 18716565,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D343",
+        "chr9:D344"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Carnmt1",
+        "D030056L22Rik"
+      ]
+    },
+    {
+      "id": "chr19:D94",
+      "start": 18716565,
+      "end": 18817624,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D342"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Trpm6"
+      ]
+    },
+    {
+      "id": "chr19:D95",
+      "start": 18817624,
+      "end": 18975233,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D96",
+      "start": 18975233,
+      "end": 19043356,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D97",
+      "start": 19043356,
+      "end": 19122533,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D338"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Rorb"
+      ]
+    },
+    {
+      "id": "chr19:D98",
+      "start": 19122533,
+      "end": 19347229,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D99",
+      "start": 19347229,
+      "end": 19575141,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D100",
+      "start": 19575141,
+      "end": 20240680,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D101",
+      "start": 20240680,
+      "end": 20345739,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D102",
+      "start": 20345739,
+      "end": 20435988,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D327"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Anxa1"
+      ]
+    },
+    {
+      "id": "chr19:D103",
+      "start": 20435988,
+      "end": 20764431,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D326"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Aldh1a1",
+        "Aldh1a7"
+      ]
+    },
+    {
+      "id": "chr19:D104",
+      "start": 20764431,
+      "end": 20849101,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D105",
+      "start": 20849101,
+      "end": 21052951,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D322"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Tmc1"
+      ]
+    },
+    {
+      "id": "chr19:D106",
+      "start": 21052951,
+      "end": 21118585,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D107",
+      "start": 21118585,
+      "end": 21564313,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D318",
+        "chr9:D321"
+      ],
+      "verdict": "split_scattered",
+      "genes": [
+        "Zfand5",
+        "Gda"
+      ]
+    },
+    {
+      "id": "chr19:D108",
+      "start": 21564313,
+      "end": 21734397,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D317"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "1110059E24Rik",
+        "Abhd17b"
+      ]
+    },
+    {
+      "id": "chr19:D109",
+      "start": 21734397,
+      "end": 21918299,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D316"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cemip2"
+      ]
+    },
+    {
+      "id": "chr19:D110",
+      "start": 21918299,
+      "end": 22301103,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D313"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Trpm3"
+      ]
+    },
+    {
+      "id": "chr19:D111",
+      "start": 22301103,
+      "end": 22552380,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D112",
+      "start": 22552380,
+      "end": 22631405,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D113",
+      "start": 22631405,
+      "end": 23006706,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D114",
+      "start": 23006706,
+      "end": 23165050,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D307"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Klf9"
+      ]
+    },
+    {
+      "id": "chr19:D115",
+      "start": 23165050,
+      "end": 23225246,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D116",
+      "start": 23225246,
+      "end": 23310160,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D306"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Smc5"
+      ]
+    },
+    {
+      "id": "chr19:D117",
+      "start": 23310160,
+      "end": 23373503,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D118",
+      "start": 23373503,
+      "end": 23511492,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D306"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Mamdc2"
+      ]
+    },
+    {
+      "id": "chr19:D119",
+      "start": 23511492,
+      "end": 23614461,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D120",
+      "start": 23614461,
+      "end": 23694571,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D303"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "1700028P14Rik",
+        "Ptar1"
+      ]
+    },
+    {
+      "id": "chr19:D121",
+      "start": 23694571,
+      "end": 23772080,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D303"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Apba1"
+      ]
+    },
+    {
+      "id": "chr19:D122",
+      "start": 23772080,
+      "end": 23861760,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D123",
+      "start": 23861760,
+      "end": 23960439,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D124",
+      "start": 23960439,
+      "end": 24042611,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Fam189a2"
+      ]
+    },
+    {
+      "id": "chr19:D125",
+      "start": 24042611,
+      "end": 24101328,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D126",
+      "start": 24101328,
+      "end": 24153459,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D127",
+      "start": 24153459,
+      "end": 24352562,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D298"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Tjp2",
+        "Fxn"
+      ]
+    },
+    {
+      "id": "chr19:D128",
+      "start": 24352562,
+      "end": 24604285,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D297"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pip5k1b",
+        "Fam122a"
+      ]
+    },
+    {
+      "id": "chr19:D129",
+      "start": 24604285,
+      "end": 24705615,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Tmem252"
+      ]
+    },
+    {
+      "id": "chr19:D130",
+      "start": 24705615,
+      "end": 24885512,
+      "coding_genes": 2,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Pgm5",
+        "Gm10053"
+      ]
+    },
+    {
+      "id": "chr19:D131",
+      "start": 24885512,
+      "end": 24958733,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D1"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Foxd4"
+      ]
+    },
+    {
+      "id": "chr19:D132",
+      "start": 24958733,
+      "end": 25043172,
+      "coding_genes": 2,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Cbwd1",
+        "Dock8"
+      ]
+    },
+    {
+      "id": "chr19:D133",
+      "start": 25043172,
+      "end": 25107601,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D134",
+      "start": 25107601,
+      "end": 25294521,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D3"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Kank1"
+      ]
+    },
+    {
+      "id": "chr19:D135",
+      "start": 25294521,
+      "end": 25445222,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D136",
+      "start": 25445222,
+      "end": 25545879,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D4"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Dmrt1"
+      ]
+    },
+    {
+      "id": "chr19:D137",
+      "start": 25545879,
+      "end": 25628704,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D5"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Dmrt3"
+      ]
+    },
+    {
+      "id": "chr19:D138",
+      "start": 25628704,
+      "end": 25713587,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D6"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Dmrt2"
+      ]
+    },
+    {
+      "id": "chr19:D139",
+      "start": 25713587,
+      "end": 26037456,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D140",
+      "start": 26037456,
+      "end": 26181967,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D141",
+      "start": 26181967,
+      "end": 26465381,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D142",
+      "start": 26465381,
+      "end": 26711442,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D15"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Smarca2"
+      ]
+    },
+    {
+      "id": "chr19:D143",
+      "start": 26711442,
+      "end": 26814809,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D144",
+      "start": 26814809,
+      "end": 26893168,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Gm815"
+      ]
+    },
+    {
+      "id": "chr19:D145",
+      "start": 26893168,
+      "end": 26953558,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D146",
+      "start": 26953558,
+      "end": 27032825,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D147",
+      "start": 27032825,
+      "end": 27332530,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D18",
+        "chr9:D19"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Vldlr",
+        "Kcnv2"
+      ]
+    },
+    {
+      "id": "chr19:D148",
+      "start": 27332530,
+      "end": 27416794,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D149",
+      "start": 27416794,
+      "end": 27683608,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D19"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pum3"
+      ]
+    },
+    {
+      "id": "chr19:D150",
+      "start": 27683608,
+      "end": 27780214,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D151",
+      "start": 27780214,
+      "end": 28037478,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D27"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Rfx3"
+      ]
+    },
+    {
+      "id": "chr19:D152",
+      "start": 28037478,
+      "end": 28160803,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D153",
+      "start": 28160803,
+      "end": 28366078,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D154",
+      "start": 28366078,
+      "end": 28436698,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D155",
+      "start": 28436698,
+      "end": 28531058,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D156",
+      "start": 28531058,
+      "end": 28726378,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D31"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Glis3"
+      ]
+    },
+    {
+      "id": "chr19:D157",
+      "start": 28726378,
+      "end": 28777099,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D158",
+      "start": 28777099,
+      "end": 28883302,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D32"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Slc1a1"
+      ]
+    },
+    {
+      "id": "chr19:D159",
+      "start": 28883302,
+      "end": 29059905,
+      "coding_genes": 4,
+      "mapped": 3,
+      "human_nodes": [
+        "chr9:D33"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "4430402I18Rik",
+        "Plpp6",
+        "Cdc37l1",
+        "Ak3"
+      ]
+    },
+    {
+      "id": "chr19:D160",
+      "start": 29059905,
+      "end": 29205479,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D34"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Rcl1"
+      ]
+    },
+    {
+      "id": "chr19:D161",
+      "start": 29205479,
+      "end": 29336831,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr9:D34",
+        "chr9:D35"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Jak2",
+        "Insl6",
+        "Rln1"
+      ]
+    },
+    {
+      "id": "chr19:D162",
+      "start": 29336831,
+      "end": 29389009,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D36"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Plgrkt",
+        "Cd274"
+      ]
+    },
+    {
+      "id": "chr19:D163",
+      "start": 29389009,
+      "end": 29440825,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D36"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pdcd1lg2"
+      ]
+    },
+    {
+      "id": "chr19:D164",
+      "start": 29440825,
+      "end": 29597175,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D37"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Ric1"
+      ]
+    },
+    {
+      "id": "chr19:D165",
+      "start": 29597175,
+      "end": 29739822,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D37"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ermp1",
+        "Mlana"
+      ]
+    },
+    {
+      "id": "chr19:D166",
+      "start": 29739822,
+      "end": 29821168,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D38"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "9930021J03Rik",
+        "Ranbp6"
+      ]
+    },
+    {
+      "id": "chr19:D167",
+      "start": 29821168,
+      "end": 29979172,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D40"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Il33"
+      ]
+    },
+    {
+      "id": "chr19:D168",
+      "start": 29979172,
+      "end": 30045437,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr9:D41"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Trpd52l3",
+        "Uhrf2"
+      ]
+    },
+    {
+      "id": "chr19:D169",
+      "start": 30045437,
+      "end": 30128318,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D170",
+      "start": 30128318,
+      "end": 30205583,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr9:D43"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Gldc"
+      ]
+    },
+    {
+      "id": "chr19:D171",
+      "start": 30205583,
+      "end": 30553911,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D331",
+        "chr10:D335"
+      ],
+      "verdict": "split_scattered",
+      "genes": [
+        "Mbl2",
+        "Dkk1"
+      ]
+    },
+    {
+      "id": "chr19:D172",
+      "start": 30553911,
+      "end": 30664459,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D173",
+      "start": 30664459,
+      "end": 31342361,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D327"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cstf2t"
+      ]
+    },
+    {
+      "id": "chr19:D174",
+      "start": 31342361,
+      "end": 31616968,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D175",
+      "start": 31616968,
+      "end": 31679769,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D176",
+      "start": 31679769,
+      "end": 31746823,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D177",
+      "start": 31746823,
+      "end": 31811589,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D323"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Prkg1"
+      ]
+    },
+    {
+      "id": "chr19:D178",
+      "start": 31811589,
+      "end": 31863014,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D179",
+      "start": 31863014,
+      "end": 32030624,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D321"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "A1cf"
+      ]
+    },
+    {
+      "id": "chr19:D180",
+      "start": 32030624,
+      "end": 32127383,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D317"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Asah2"
+      ]
+    },
+    {
+      "id": "chr19:D181",
+      "start": 32127383,
+      "end": 32441723,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D318"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Sgms1"
+      ]
+    },
+    {
+      "id": "chr19:D182",
+      "start": 32441723,
+      "end": 32501648,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D576",
+        "chr4:D312"
+      ],
+      "verdict": "split_scattered",
+      "genes": [
+        "Rpl9-ps6",
+        "Minpp1"
+      ]
+    },
+    {
+      "id": "chr19:D183",
+      "start": 32501648,
+      "end": 32594122,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D184",
+      "start": 32594122,
+      "end": 32689946,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D576"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Papss2"
+      ]
+    },
+    {
+      "id": "chr19:D185",
+      "start": 32689946,
+      "end": 33226691,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D576"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Atad1",
+        "Pten"
+      ]
+    },
+    {
+      "id": "chr19:D186",
+      "start": 33226691,
+      "end": 33366828,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D187",
+      "start": 33366828,
+      "end": 33979201,
+      "coding_genes": 6,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D580"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Lipo4",
+        "Lipo3",
+        "Gm8978",
+        "Lipo2",
+        "Lipo1",
+        "Lipf"
+      ]
+    },
+    {
+      "id": "chr19:D188",
+      "start": 33979201,
+      "end": 34096453,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D581"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Lipk",
+        "Lipn"
+      ]
+    },
+    {
+      "id": "chr19:D189",
+      "start": 34096453,
+      "end": 34152109,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D581"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Lipm"
+      ]
+    },
+    {
+      "id": "chr19:D190",
+      "start": 34152109,
+      "end": 34241453,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D581"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ankrd22",
+        "Stambpl1"
+      ]
+    },
+    {
+      "id": "chr19:D191",
+      "start": 34241453,
+      "end": 34334499,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D581",
+        "chr10:D582"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Acta2",
+        "Fas"
+      ]
+    },
+    {
+      "id": "chr19:D192",
+      "start": 34334499,
+      "end": 34483784,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D583"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Ch25h"
+      ]
+    },
+    {
+      "id": "chr19:D193",
+      "start": 34483784,
+      "end": 34548185,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D583"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Lipa"
+      ]
+    },
+    {
+      "id": "chr19:D194",
+      "start": 34548185,
+      "end": 34637135,
+      "coding_genes": 4,
+      "mapped": 4,
+      "human_nodes": [
+        "chr10:D583"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ifit2",
+        "Ifit3",
+        "Ifit1bl1",
+        "Ifit3b"
+      ]
+    },
+    {
+      "id": "chr19:D195",
+      "start": 34637135,
+      "end": 34826464,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D583",
+        "chr10:D584"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Ifit1bl2",
+        "Ifit1",
+        "Slc16a12"
+      ]
+    },
+    {
+      "id": "chr19:D196",
+      "start": 34826464,
+      "end": 35125519,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D584"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Pank1",
+        "Kif20b"
+      ]
+    },
+    {
+      "id": "chr19:D197",
+      "start": 35125519,
+      "end": 35833191,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D198",
+      "start": 35833191,
+      "end": 36063346,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D590"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Htr7"
+      ]
+    },
+    {
+      "id": "chr19:D199",
+      "start": 36063346,
+      "end": 36440317,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D591",
+        "chr10:D592"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Rpp30",
+        "Ankrd1",
+        "Pcgf5"
+      ]
+    },
+    {
+      "id": "chr19:D200",
+      "start": 36440317,
+      "end": 36538740,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D201",
+      "start": 36538740,
+      "end": 36606471,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D593"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Hectd2"
+      ]
+    },
+    {
+      "id": "chr19:D202",
+      "start": 36606471,
+      "end": 36716352,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D203",
+      "start": 36716352,
+      "end": 36828556,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D594"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Ppp1r3c"
+      ]
+    },
+    {
+      "id": "chr19:D204",
+      "start": 36828556,
+      "end": 36884906,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D596"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Tnks2"
+      ]
+    },
+    {
+      "id": "chr19:D205",
+      "start": 36884906,
+      "end": 37017071,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D596",
+        "chr10:D597"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Fgfbp3",
+        "Btaf1"
+      ]
+    },
+    {
+      "id": "chr19:D206",
+      "start": 37017071,
+      "end": 37069464,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D207",
+      "start": 37069464,
+      "end": 37241387,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D599"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Cpeb3",
+        "Marchf5"
+      ]
+    },
+    {
+      "id": "chr19:D208",
+      "start": 37241387,
+      "end": 37419671,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D601"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ide",
+        "Kif11"
+      ]
+    },
+    {
+      "id": "chr19:D209",
+      "start": 37419671,
+      "end": 37530315,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D602"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Hhex",
+        "Exoc6"
+      ]
+    },
+    {
+      "id": "chr19:D210",
+      "start": 37530315,
+      "end": 37690965,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D604"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cyp26c1"
+      ]
+    },
+    {
+      "id": "chr19:D211",
+      "start": 37690965,
+      "end": 37755567,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D604"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cyp26a1"
+      ]
+    },
+    {
+      "id": "chr19:D212",
+      "start": 37755567,
+      "end": 37837114,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D213",
+      "start": 37837114,
+      "end": 37937286,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D214",
+      "start": 37937286,
+      "end": 38198920,
+      "coding_genes": 5,
+      "mapped": 5,
+      "human_nodes": [
+        "chr10:D606",
+        "chr10:D607",
+        "chr10:D608"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Myof",
+        "Cep55",
+        "Ffar4",
+        "Rbp4",
+        "Pde6c"
+      ]
+    },
+    {
+      "id": "chr19:D215",
+      "start": 38198920,
+      "end": 38253992,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D608"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Fra10ac1"
+      ]
+    },
+    {
+      "id": "chr19:D216",
+      "start": 38253992,
+      "end": 38329511,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D608"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Lgi1"
+      ]
+    },
+    {
+      "id": "chr19:D217",
+      "start": 38329511,
+      "end": 38424014,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D610"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Slc35g1"
+      ]
+    },
+    {
+      "id": "chr19:D218",
+      "start": 38424014,
+      "end": 38642716,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D612"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Plce1"
+      ]
+    },
+    {
+      "id": "chr19:D219",
+      "start": 38642716,
+      "end": 38709551,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D220",
+      "start": 38709551,
+      "end": 38775753,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D221",
+      "start": 38775753,
+      "end": 38858406,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D614"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Noc3l",
+        "Tbc1d12"
+      ]
+    },
+    {
+      "id": "chr19:D222",
+      "start": 38858406,
+      "end": 38914936,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D223",
+      "start": 38914936,
+      "end": 38982163,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D615"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Hells"
+      ]
+    },
+    {
+      "id": "chr19:D224",
+      "start": 38982163,
+      "end": 39098972,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D616",
+        "chr10:D617"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cyp2c55",
+        "Cyp2c65"
+      ]
+    },
+    {
+      "id": "chr19:D225",
+      "start": 39098972,
+      "end": 39227497,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D617"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cyp2c66"
+      ]
+    },
+    {
+      "id": "chr19:D226",
+      "start": 39227497,
+      "end": 39502309,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D616"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Cyp2c29",
+        "Cyp2c38"
+      ]
+    },
+    {
+      "id": "chr19:D227",
+      "start": 39502309,
+      "end": 39989667,
+      "coding_genes": 5,
+      "mapped": 5,
+      "human_nodes": [
+        "chr10:D616",
+        "chr10:D617"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cyp2c39",
+        "Cyp2c67",
+        "Cyp2c68",
+        "Cyp2c40",
+        "Cyp2c69"
+      ]
+    },
+    {
+      "id": "chr19:D228",
+      "start": 39989667,
+      "end": 40168558,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D616",
+        "chr10:D617"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cyp2c37",
+        "Cyp2c54",
+        "Cyp2c50"
+      ]
+    },
+    {
+      "id": "chr19:D229",
+      "start": 40168558,
+      "end": 40343219,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D619"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cyp2c70",
+        "Pdlim1"
+      ]
+    },
+    {
+      "id": "chr19:D230",
+      "start": 40343219,
+      "end": 40545044,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D619"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Sorbs1"
+      ]
+    },
+    {
+      "id": "chr19:D231",
+      "start": 40545044,
+      "end": 40746758,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D620",
+        "chr10:D621"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Aldh18a1",
+        "Tctn3",
+        "Entpd1"
+      ]
+    },
+    {
+      "id": "chr19:D232",
+      "start": 40746758,
+      "end": 40857623,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D621",
+        "chr10:D622"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cc2d2b",
+        "Ccnj"
+      ]
+    },
+    {
+      "id": "chr19:D233",
+      "start": 40857623,
+      "end": 41009184,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D622"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Zfp518a",
+        "Blnk"
+      ]
+    },
+    {
+      "id": "chr19:D234",
+      "start": 41009184,
+      "end": 41071733,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Dntt"
+      ]
+    },
+    {
+      "id": "chr19:D235",
+      "start": 41071733,
+      "end": 41204383,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D623"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Opalin"
+      ]
+    },
+    {
+      "id": "chr19:D236",
+      "start": 41204383,
+      "end": 41258906,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D625"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Tll2"
+      ]
+    },
+    {
+      "id": "chr19:D237",
+      "start": 41258906,
+      "end": 41315854,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D626"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Tm9sf3"
+      ]
+    },
+    {
+      "id": "chr19:D238",
+      "start": 41315854,
+      "end": 41629686,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D626"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Pik3ap1",
+        "Lcor"
+      ]
+    },
+    {
+      "id": "chr19:D239",
+      "start": 41629686,
+      "end": 41686393,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D240",
+      "start": 41686393,
+      "end": 41760832,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D629"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Slit1"
+      ]
+    },
+    {
+      "id": "chr19:D241",
+      "start": 41760832,
+      "end": 41870119,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D630"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Arhgap19",
+        "Frat1",
+        "Frat2"
+      ]
+    },
+    {
+      "id": "chr19:D242",
+      "start": 41870119,
+      "end": 41952494,
+      "coding_genes": 4,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D630",
+        "chrX:D397"
+      ],
+      "verdict": "split_scattered",
+      "genes": [
+        "Rrp12",
+        "Pgam1",
+        "Exosc1",
+        "Zdhhc16"
+      ]
+    },
+    {
+      "id": "chr19:D243",
+      "start": 41952494,
+      "end": 42026336,
+      "coding_genes": 2,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Mms19",
+        "Ubtd1"
+      ]
+    },
+    {
+      "id": "chr19:D244",
+      "start": 42026336,
+      "end": 42182879,
+      "coding_genes": 8,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D631"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ankrd2",
+        "Hoga1",
+        "4933411K16Rik",
+        "Morn4",
+        "Pi4k2a",
+        "Avpi1",
+        "Marveld1",
+        "Zfyve27"
+      ]
+    },
+    {
+      "id": "chr19:D245",
+      "start": 42182879,
+      "end": 42272485,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D631"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Sfrp5",
+        "Golga7b"
+      ]
+    },
+    {
+      "id": "chr19:D246",
+      "start": 42272485,
+      "end": 42341416,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D247",
+      "start": 42341416,
+      "end": 42397466,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D248",
+      "start": 42397466,
+      "end": 42589458,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D634",
+        "chr10:D636"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Crtac1",
+        "R3hcc1l"
+      ]
+    },
+    {
+      "id": "chr19:D249",
+      "start": 42589458,
+      "end": 42654264,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D637"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Loxl4"
+      ]
+    },
+    {
+      "id": "chr19:D250",
+      "start": 42654264,
+      "end": 42777483,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D637"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pyroxd2"
+      ]
+    },
+    {
+      "id": "chr19:D251",
+      "start": 42777483,
+      "end": 42852615,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D638"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Hps1"
+      ]
+    },
+    {
+      "id": "chr19:D252",
+      "start": 42852615,
+      "end": 43027499,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D253",
+      "start": 43027499,
+      "end": 43309130,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D254",
+      "start": 43309130,
+      "end": 43396527,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D643"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Hpse2"
+      ]
+    },
+    {
+      "id": "chr19:D255",
+      "start": 43396527,
+      "end": 43487628,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D645"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cnnm1"
+      ]
+    },
+    {
+      "id": "chr19:D256",
+      "start": 43487628,
+      "end": 43568489,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D646"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Got1"
+      ]
+    },
+    {
+      "id": "chr19:D257",
+      "start": 43568489,
+      "end": 43625833,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D646"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Nkx2-3"
+      ]
+    },
+    {
+      "id": "chr19:D258",
+      "start": 43625833,
+      "end": 43761249,
+      "coding_genes": 4,
+      "mapped": 4,
+      "human_nodes": [
+        "chr10:D647"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Slc25a28",
+        "Entpd7",
+        "Cox15",
+        "Cutc"
+      ]
+    },
+    {
+      "id": "chr19:D259",
+      "start": 43761249,
+      "end": 43843355,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D647"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Abcc2"
+      ]
+    },
+    {
+      "id": "chr19:D260",
+      "start": 43843355,
+      "end": 43908006,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D261",
+      "start": 43908006,
+      "end": 43960358,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D648"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Dnmbp"
+      ]
+    },
+    {
+      "id": "chr19:D262",
+      "start": 43960358,
+      "end": 44111761,
+      "coding_genes": 4,
+      "mapped": 4,
+      "human_nodes": [
+        "chr10:D648",
+        "chr10:D649",
+        "chr10:D650"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cpn1",
+        "Cyp2c23",
+        "Erlin1",
+        "Chuk"
+      ]
+    },
+    {
+      "id": "chr19:D263",
+      "start": 44111761,
+      "end": 44197246,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D650",
+        "chr10:D651"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cwf19l1",
+        "Bloc1s2",
+        "Pkd2l1"
+      ]
+    },
+    {
+      "id": "chr19:D264",
+      "start": 44197246,
+      "end": 44373171,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D651"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Scd3",
+        "Scd2",
+        "Scd4"
+      ]
+    },
+    {
+      "id": "chr19:D265",
+      "start": 44373171,
+      "end": 44432294,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D651"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Scd1"
+      ]
+    },
+    {
+      "id": "chr19:D266",
+      "start": 44432294,
+      "end": 44487628,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D267",
+      "start": 44487628,
+      "end": 44582847,
+      "coding_genes": 5,
+      "mapped": 4,
+      "human_nodes": [
+        "chr10:D652"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Wnt8b",
+        "Sec31b",
+        "Gm20538",
+        "Ndufb8",
+        "Hif1an"
+      ]
+    },
+    {
+      "id": "chr19:D268",
+      "start": 44582847,
+      "end": 44653811,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D269",
+      "start": 44653811,
+      "end": 44887863,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D655"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pax2"
+      ]
+    },
+    {
+      "id": "chr19:D270",
+      "start": 44887863,
+      "end": 45034878,
+      "coding_genes": 5,
+      "mapped": 5,
+      "human_nodes": [
+        "chr10:D658",
+        "chr10:D659"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Slf2",
+        "Sema4g",
+        "Mrpl43",
+        "Twnk",
+        "Lzts2"
+      ]
+    },
+    {
+      "id": "chr19:D271",
+      "start": 45034878,
+      "end": 45101104,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D659",
+        "chr10:D660"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Pdzd7",
+        "Sfxn3",
+        "Kazald1"
+      ]
+    },
+    {
+      "id": "chr19:D272",
+      "start": 45101104,
+      "end": 45175011,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D661"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Tlx1"
+      ]
+    },
+    {
+      "id": "chr19:D273",
+      "start": 45175011,
+      "end": 45244505,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D661"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Lbx1"
+      ]
+    },
+    {
+      "id": "chr19:D274",
+      "start": 45244505,
+      "end": 45298021,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D275",
+      "start": 45298021,
+      "end": 45411204,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D662"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Btrc"
+      ]
+    },
+    {
+      "id": "chr19:D276",
+      "start": 45411204,
+      "end": 45486837,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D277",
+      "start": 45486837,
+      "end": 45537731,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D278",
+      "start": 45537731,
+      "end": 45629396,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D665"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Poll",
+        "Gm17018"
+      ]
+    },
+    {
+      "id": "chr19:D279",
+      "start": 45629396,
+      "end": 45694280,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D666"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Fbxw4"
+      ]
+    },
+    {
+      "id": "chr19:D280",
+      "start": 45694280,
+      "end": 45807948,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D666"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Fgf8",
+        "Npm3",
+        "Oga"
+      ]
+    },
+    {
+      "id": "chr19:D281",
+      "start": 45807948,
+      "end": 45913319,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D666"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Kcnip2"
+      ]
+    },
+    {
+      "id": "chr19:D282",
+      "start": 45913319,
+      "end": 46008336,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D668"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Armh3",
+        "Hps6"
+      ]
+    },
+    {
+      "id": "chr19:D283",
+      "start": 46008336,
+      "end": 46086538,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D669"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Ldb1",
+        "Pprc1",
+        "Nolc1"
+      ]
+    },
+    {
+      "id": "chr19:D284",
+      "start": 46086538,
+      "end": 46252553,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D670"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Elovl3",
+        "Pitx3",
+        "Gbf1"
+      ]
+    },
+    {
+      "id": "chr19:D285",
+      "start": 46252553,
+      "end": 46377979,
+      "coding_genes": 6,
+      "mapped": 4,
+      "human_nodes": [
+        "chr10:D671"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Nfkb2",
+        "Psd",
+        "Fbxl15",
+        "Cuedc2",
+        "Mfsd13a",
+        "2310034G01Rik"
+      ]
+    },
+    {
+      "id": "chr19:D286",
+      "start": 46377979,
+      "end": 46538449,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D671",
+        "chr10:D672"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Actr1a",
+        "Sufu",
+        "Trim8"
+      ]
+    },
+    {
+      "id": "chr19:D287",
+      "start": 46538449,
+      "end": 46724867,
+      "coding_genes": 6,
+      "mapped": 6,
+      "human_nodes": [
+        "chr10:D672",
+        "chr10:D673"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Arl3",
+        "Sfxn2",
+        "Wbp1l",
+        "Cyp17a1",
+        "Borcs7",
+        "As3mt"
+      ]
+    },
+    {
+      "id": "chr19:D288",
+      "start": 46724867,
+      "end": 46804962,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D674"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cnnm2"
+      ]
+    },
+    {
+      "id": "chr19:D289",
+      "start": 46804962,
+      "end": 46857777,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D290",
+      "start": 46857777,
+      "end": 47043812,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D675"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Nt5c2",
+        "Ina"
+      ]
+    },
+    {
+      "id": "chr19:D291",
+      "start": 47043812,
+      "end": 47122126,
+      "coding_genes": 4,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D676",
+        "chr10:D677"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Pcgf6",
+        "Taf5",
+        "Atp5md",
+        "Pdcd11"
+      ]
+    },
+    {
+      "id": "chr19:D292",
+      "start": 47122126,
+      "end": 47175204,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D677"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Calhm2",
+        "Calhm1",
+        "Calhm3"
+      ]
+    },
+    {
+      "id": "chr19:D293",
+      "start": 47175204,
+      "end": 47262126,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Neurl1a"
+      ]
+    },
+    {
+      "id": "chr19:D294",
+      "start": 47262126,
+      "end": 47358931,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D295",
+      "start": 47358931,
+      "end": 47488476,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Sh3pxd2a"
+      ]
+    },
+    {
+      "id": "chr19:D296",
+      "start": 47488476,
+      "end": 47784450,
+      "coding_genes": 4,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D678"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Stn1",
+        "Slk",
+        "Col17a1",
+        "Sfr1"
+      ]
+    },
+    {
+      "id": "chr19:D297",
+      "start": 47784450,
+      "end": 47882698,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D680"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Gsto1",
+        "Gsto2"
+      ]
+    },
+    {
+      "id": "chr19:D298",
+      "start": 47882698,
+      "end": 47988655,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D680",
+        "chr10:D681"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Cfap43",
+        "Itprip",
+        "Cfap58"
+      ]
+    },
+    {
+      "id": "chr19:D299",
+      "start": 47988655,
+      "end": 48088915,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D300",
+      "start": 48088915,
+      "end": 48144360,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D301",
+      "start": 48144360,
+      "end": 48215601,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D684"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Sorcs3"
+      ]
+    },
+    {
+      "id": "chr19:D302",
+      "start": 48215601,
+      "end": 48391741,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D303",
+      "start": 48391741,
+      "end": 49264821,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D304",
+      "start": 49264821,
+      "end": 49359955,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D305",
+      "start": 49359955,
+      "end": 49539701,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D306",
+      "start": 49539701,
+      "end": 49741425,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D307",
+      "start": 49741425,
+      "end": 49803280,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D308",
+      "start": 49803280,
+      "end": 49931392,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D309",
+      "start": 49931392,
+      "end": 50146122,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D310",
+      "start": 50146122,
+      "end": 50259240,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D311",
+      "start": 50259240,
+      "end": 50683498,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D702"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Sorcs1"
+      ]
+    },
+    {
+      "id": "chr19:D312",
+      "start": 50683498,
+      "end": 51201576,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D313",
+      "start": 51201576,
+      "end": 51660436,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D314",
+      "start": 51660436,
+      "end": 52623715,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr11:D17"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Ins1"
+      ]
+    },
+    {
+      "id": "chr19:D315",
+      "start": 52623715,
+      "end": 52976032,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D316",
+      "start": 52976032,
+      "end": 53047848,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D723"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Xpnpep1"
+      ]
+    },
+    {
+      "id": "chr19:D317",
+      "start": 53047848,
+      "end": 53579091,
+      "coding_genes": 5,
+      "mapped": 4,
+      "human_nodes": [
+        "chr10:D723",
+        "chr10:D724",
+        "chr10:D726"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Add3",
+        "Mxi1",
+        "Gm10197",
+        "Smndc1",
+        "Dusp5"
+      ]
+    },
+    {
+      "id": "chr19:D318",
+      "start": 53579091,
+      "end": 53638221,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D727"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Nutf2-ps1",
+        "Smc3"
+      ]
+    },
+    {
+      "id": "chr19:D319",
+      "start": 53638221,
+      "end": 53735026,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D727"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Rbm20"
+      ]
+    },
+    {
+      "id": "chr19:D320",
+      "start": 53735026,
+      "end": 53842122,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D321",
+      "start": 53842122,
+      "end": 53925548,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Pdcd4"
+      ]
+    },
+    {
+      "id": "chr19:D322",
+      "start": 53925548,
+      "end": 53983523,
+      "coding_genes": 2,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Bbip1",
+        "Shoc2"
+      ]
+    },
+    {
+      "id": "chr19:D323",
+      "start": 53983523,
+      "end": 54258093,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Adra2a"
+      ]
+    },
+    {
+      "id": "chr19:D324",
+      "start": 54258093,
+      "end": 54395938,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D325",
+      "start": 54395938,
+      "end": 54534046,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D326",
+      "start": 54534046,
+      "end": 54689919,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D327",
+      "start": 54689919,
+      "end": 55066409,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D328",
+      "start": 55066409,
+      "end": 55227312,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D739"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Gpam",
+        "Tectb"
+      ]
+    },
+    {
+      "id": "chr19:D329",
+      "start": 55227312,
+      "end": 55305205,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D740"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Gucy2g",
+        "Acsl5"
+      ]
+    },
+    {
+      "id": "chr19:D330",
+      "start": 55305205,
+      "end": 55414260,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D741"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Zdhhc6",
+        "Vti1a"
+      ]
+    },
+    {
+      "id": "chr19:D331",
+      "start": 55414260,
+      "end": 55537804,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D332",
+      "start": 55537804,
+      "end": 55695642,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D333",
+      "start": 55695642,
+      "end": 55833968,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D743"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Tcf7l2"
+      ]
+    },
+    {
+      "id": "chr19:D334",
+      "start": 55833968,
+      "end": 56089838,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D335",
+      "start": 56089838,
+      "end": 56255701,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D336",
+      "start": 56255701,
+      "end": 56350019,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D747"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Habp2"
+      ]
+    },
+    {
+      "id": "chr19:D337",
+      "start": 56350019,
+      "end": 56430578,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D747"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Nrap",
+        "Casp7"
+      ]
+    },
+    {
+      "id": "chr19:D338",
+      "start": 56430578,
+      "end": 56565880,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D748",
+        "chr10:D750"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Plekhs1",
+        "Dclre1a",
+        "Nhlrc2"
+      ]
+    },
+    {
+      "id": "chr19:D339",
+      "start": 56565880,
+      "end": 56809061,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D751"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Adrb1"
+      ]
+    },
+    {
+      "id": "chr19:D340",
+      "start": 56809061,
+      "end": 56908568,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D753",
+        "chr10:D754"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Ccdc186",
+        "Tdrd1",
+        "Vwa2"
+      ]
+    },
+    {
+      "id": "chr19:D341",
+      "start": 56908568,
+      "end": 57031750,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D755"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Afap1l2"
+      ]
+    },
+    {
+      "id": "chr19:D342",
+      "start": 57031750,
+      "end": 57138186,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D343",
+      "start": 57138186,
+      "end": 57325932,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D756"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Ablim1"
+      ]
+    },
+    {
+      "id": "chr19:D344",
+      "start": 57325932,
+      "end": 57414117,
+      "coding_genes": 1,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": [
+        "Fam160b1"
+      ]
+    },
+    {
+      "id": "chr19:D345",
+      "start": 57414117,
+      "end": 57483034,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D757"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Trub1"
+      ]
+    },
+    {
+      "id": "chr19:D346",
+      "start": 57483034,
+      "end": 57643166,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D757"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Atrnl1"
+      ]
+    },
+    {
+      "id": "chr19:D347",
+      "start": 57643166,
+      "end": 57725140,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D348",
+      "start": 57725140,
+      "end": 57816752,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D349",
+      "start": 57816752,
+      "end": 57876291,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D350",
+      "start": 57876291,
+      "end": 57998130,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D351",
+      "start": 57998130,
+      "end": 58072613,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D352",
+      "start": 58072613,
+      "end": 58558573,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D770",
+        "chr10:D771"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Gfra1",
+        "Ccdc172"
+      ]
+    },
+    {
+      "id": "chr19:D353",
+      "start": 58558573,
+      "end": 58662297,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D773"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pnlip"
+      ]
+    },
+    {
+      "id": "chr19:D354",
+      "start": 58662297,
+      "end": 58778961,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D773"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Pnliprp1",
+        "Pnliprp2"
+      ]
+    },
+    {
+      "id": "chr19:D355",
+      "start": 58778961,
+      "end": 59110146,
+      "coding_genes": 4,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D774",
+        "chr10:D777"
+      ],
+      "verdict": "split_scattered",
+      "genes": [
+        "1700019N19Rik",
+        "Hspa12a",
+        "Eno4",
+        "Shtn1"
+      ]
+    },
+    {
+      "id": "chr19:D356",
+      "start": 59110146,
+      "end": 59197445,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D777"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Vax1"
+      ]
+    },
+    {
+      "id": "chr19:D357",
+      "start": 59197445,
+      "end": 59316761,
+      "coding_genes": 2,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D778"
+      ],
+      "verdict": "conserved",
+      "genes": [
+        "Kcnk18",
+        "Slc18a2"
+      ]
+    },
+    {
+      "id": "chr19:D358",
+      "start": 59316761,
+      "end": 59378438,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D779"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Pdzd8"
+      ]
+    },
+    {
+      "id": "chr19:D359",
+      "start": 59378438,
+      "end": 59537620,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D781"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Emx2"
+      ]
+    },
+    {
+      "id": "chr19:D360",
+      "start": 59537620,
+      "end": 59743099,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D361",
+      "start": 59743099,
+      "end": 60113892,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D788"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Rab11fip2"
+      ]
+    },
+    {
+      "id": "chr19:D362",
+      "start": 60113892,
+      "end": 60252218,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D790"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Fam204a"
+      ]
+    },
+    {
+      "id": "chr19:D363",
+      "start": 60252218,
+      "end": 60310791,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D364",
+      "start": 60310791,
+      "end": 60417806,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D365",
+      "start": 60417806,
+      "end": 60553705,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D793"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Prlhr"
+      ]
+    },
+    {
+      "id": "chr19:D366",
+      "start": 60553705,
+      "end": 60608981,
+      "coding_genes": 1,
+      "mapped": 1,
+      "human_nodes": [
+        "chr10:D794"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Cacul1"
+      ]
+    },
+    {
+      "id": "chr19:D367",
+      "start": 60608981,
+      "end": 60730445,
+      "coding_genes": 0,
+      "mapped": 0,
+      "human_nodes": [],
+      "verdict": "unmapped",
+      "genes": []
+    },
+    {
+      "id": "chr19:D368",
+      "start": 60730445,
+      "end": 60837890,
+      "coding_genes": 3,
+      "mapped": 2,
+      "human_nodes": [
+        "chr10:D797",
+        "chr10:D798"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Nanos1",
+        "Eif3a",
+        "Fam45a"
+      ]
+    },
+    {
+      "id": "chr19:D369",
+      "start": 60837890,
+      "end": 61065187,
+      "coding_genes": 3,
+      "mapped": 3,
+      "human_nodes": [
+        "chr10:D798",
+        "chr10:D799"
+      ],
+      "verdict": "split_adjacent",
+      "genes": [
+        "Sfxn4",
+        "Prdx3",
+        "Grk5"
+      ]
+    },
+    {
+      "id": "chr19:D370",
+      "start": 61065187,
+      "end": 61224125,
+      "coding_genes": 3,
+      "mapped": 1,
+      "human_nodes": [
+        "chr19:D309"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Zfp950",
+        "Gm7102",
+        "Gm6020"
+      ]
+    },
+    {
+      "id": "chr19:D371",
+      "start": 61224125,
+      "end": 61431566,
+      "coding_genes": 2,
+      "mapped": 1,
+      "human_nodes": [
+        "chrX:D9"
+      ],
+      "verdict": "unmapped",
+      "genes": [
+        "Csf2ra",
+        "Gm21060"
+      ]
+    }
+  ],
+  "evidence": {
+    "sequence": "curated: UCSC mm10 (GRCm38)",
+    "genes": "curated: GENCODE vM25 (GRCm38)",
+    "elements": "curated: ENCODE SCREEN registry of mouse cCREs v3 (mm10)",
+    "domains": "inferred: CTCF-only elements as boundaries, the same code as for human",
+    "orthology": "curated: MGI mouse\u2013human homology classes (symbol identity kept as the fallback)"
+  }
+}

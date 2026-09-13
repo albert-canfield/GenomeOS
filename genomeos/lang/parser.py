@@ -1,6 +1,6 @@
-"""BioLang v0.2 parser: source text -> BioIR Module.
+"""BioLang v0.3 parser: source text -> BioIR Module.
 
-Grammar (see docs/BIOLANG-v0.2.md):
+Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
 
     module <dotted.name>
     import <dotted.name> | <relative/path.bio>
@@ -12,6 +12,15 @@ Grammar (see docs/BIOLANG-v0.2.md):
     event <Id> { rate: 0.5 /yr; when: cell_type = X; effect: telomere_bp -= 70 bp; ... }
     rule <Source> activates|inhibits|produces|binds|degrades|modifies <Target> { <props> }
     param <name> = <number> [unit] { evidence: ...; confidence: ... }
+    domain <Id> { locus: chr21:a-b; genes: A, B; boundaries: E1, E2 }
+    organism <Id> { species: ...; genome: ...; tempo: 1.0; cell_type: Zygote; factors: A, B; ... }
+    stage <Id> { from: 0 min; to: 100 min }
+    timer <Id> { duration: 20 min; sd: 2; lengthening: 1.1; when: lineage = AB }
+    signal <Id> { mode: contact; ligand: APX-1; receptor: GLP-1; from: cell = P2; to: cell = ABp; sets: N }
+    decision <Id> { action: divide|differentiate|migrate|quiesce|die; when: ...; daughters: A, B; to: T; ... }
+    field <Id> { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0 }
+    experiment <Id> { knockout: POP-1; until: 800 min; expect: "..."; assert: ... }
+    design <Id> { knockout_any_of: A, B; at_most: 1; until: 3 yr; target: type X at 3 yr = 0; keep: ... }
 
 Properties are `key: value`, one per line or `;`-separated; a block may sit on
 one line. Blocks may nest (transcript inside gene). `#` starts a comment.
@@ -20,30 +29,64 @@ Common keys on any block: evidence, confidence.
 
 from __future__ import annotations
 
+import math
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from genomeos.coords import Locus
 from genomeos.ir import (
+    DECISION_ACTIONS,
     UNKNOWN,
     Action,
     CellType,
+    Decision,
+    Design,
+    Domain,
     Effect,
     Event,
     Evidence,
     EvidenceKind,
+    Experiment,
+    Field,
     Gene,
     Module,
+    Organism,
     Parameter,
     Protein,
     Region,
+    RegulatoryElement,
     Rule,
+    Signal,
+    Stage,
+    Timer,
     Transcript,
+    to_minutes,
 )
 
 _ACTIONS = {a.value: a for a in Action}
-_KINDS = ("gene", "protein", "region", "rule", "param", "cell_type", "event", "transcript")
+_KINDS = (
+    "gene",
+    "protein",
+    "region",
+    "element",
+    "rule",
+    "param",
+    "cell_type",
+    "event",
+    "transcript",
+    "domain",
+    "organism",
+    "stage",
+    "timer",
+    "signal",
+    "decision",
+    "experiment",
+    "field",
+    "design",
+)
+_REPEATABLE = ("effect", "assert", "observe", "source", "target", "keep", "vary")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
 _PARAM = re.compile(r"^(\w[\w.]*)\s*=\s*([-+0-9.eE]+)\s*([^\s{]*)\s*$")
 _EFFECT = re.compile(r"^(\w+)\s*(\+=|-=|\*=|=)\s*([-+0-9.eE]+)\s*(.*)$")
@@ -102,8 +145,8 @@ def _parse_blocks(lines: list[str]) -> tuple[list[tuple[str, str]], list[Block]]
             if not sep:
                 raise BioLangError(f"line {line_no}: expected 'key: value', got {stmt!r}")
             key = k.strip()
-            if key == "effect" and key in block.props:
-                block.props[key] += " ; " + v.strip()  # several effects per event
+            if key in _REPEATABLE and key in block.props:
+                block.props[key] += " ; " + v.strip()  # several effect / assert / observe lines per block
             else:
                 block.props[key] = v.strip()
 
@@ -182,6 +225,22 @@ def _list(value: str) -> list[str]:
     return [x.strip() for x in value.split(",") if x.strip()]
 
 
+def _quantity(value: str, key: str, line_no: int, default_unit: str = "min") -> tuple[float, str]:
+    parts = value.split()
+    return _float(parts[0], key, line_no), (parts[1] if len(parts) > 1 else default_unit)
+
+
+def _arrows(value: str, line_no: int) -> dict[str, str]:
+    """`POP-1 -> MS, PIE-1 -> P2` -> {"POP-1": "MS", "PIE-1": "P2"}."""
+    out: dict[str, str] = {}
+    for clause in _list(value):
+        a, sep, b = clause.partition("->")
+        if not sep:
+            raise BioLangError(f"line {line_no}: expected 'factor -> daughter', got {clause!r}")
+        out[a.strip()] = b.strip()
+    return out
+
+
 def _common(b: Block) -> tuple[Evidence, float]:
     ev = _parse_evidence(b.props["evidence"]) if "evidence" in b.props else Evidence()
     conf = _float(b.props["confidence"], "confidence", b.line) if "confidence" in b.props else 0.0
@@ -245,6 +304,21 @@ def _compile_block(b: Block, module: Module) -> None:
             pr.half_life_h = _float(p["half_life"], "half_life", b.line)
         if "sequence" in p:
             pr.sequence = p["sequence"]
+        if "accession" in p:
+            pr.accession = p["accession"]
+        if "isoforms" in p:
+            pr.isoforms = _list(p["isoforms"])
+        if "domains" in p:
+            pr.domains = [{"name": d} for d in _list(p["domains"])]
+        if "pathways" in p:
+            pr.pathways = _list(p["pathways"])
+        if "interactions" in p:
+            pr.interactions = _list(p["interactions"])
+        if "structures" in p:
+            pr.structures = [
+                {"source": "PDB" if not x.startswith("AF-") else "AlphaFold", "id": x}
+                for x in _list(p["structures"])
+            ]
         module.add(pr)
     elif b.kind == "region":
         role = p.get("role", "unknown")
@@ -258,6 +332,24 @@ def _compile_block(b: Block, module: Module) -> None:
         if "locus" in p:
             r.locus = Locus.parse(p["locus"])
         module.add(r)
+    elif b.kind == "element":
+        el = RegulatoryElement(
+            id=b.header,
+            kind="regulatory_element",
+            evidence=ev,
+            confidence=conf,
+            cls=p.get("class", "unknown"),
+        )
+        if "locus" in p:
+            el.locus = Locus.parse(p["locus"])
+        if "domain" in p:
+            el.domain = p["domain"]
+        if "targets" in p:
+            el.targets = [
+                {"gene": t, "basis": p.get("basis", "stated"), "confidence": conf}
+                for t in _list(p["targets"])
+            ]
+        module.add(el)
     elif b.kind == "cell_type":
         module.add(
             CellType(
@@ -318,6 +410,170 @@ def _compile_block(b: Block, module: Module) -> None:
         module.parameters[pm.group(1)] = Parameter(
             name=pm.group(1), value=float(pm.group(2)), unit=pm.group(3), evidence=ev, confidence=conf
         )
+    elif b.kind == "domain":
+        dm = Domain(id=b.header, kind="domain", evidence=ev, confidence=conf)
+        if "locus" in p:
+            dm.locus = Locus.parse(p["locus"])
+        dm.genes = _list(p.get("genes", ""))
+        dm.boundaries = _list(p.get("boundaries", ""))
+        module.add(dm)
+    elif b.kind == "signal":
+        sg = Signal(id=b.header, kind="signal", evidence=ev, confidence=conf, mode=p.get("mode", "contact"))
+        if sg.mode not in ("contact", "gradient", "systemic"):
+            raise BioLangError(f"line {b.line}: signal mode must be contact, gradient or systemic")
+        sg.ligand, sg.receptor = p.get("ligand", ""), p.get("receptor", "")
+        sg.sender, sg.receiver = _parse_when(p.get("from", "")), _parse_when(p.get("to", ""))
+        sg.field_name = p.get("field", "")
+        if "threshold" in p:
+            sg.threshold = _float(p["threshold"], "threshold", b.line)
+        if sg.mode == "gradient" and not sg.field_name:
+            raise BioLangError(f"line {b.line}: a gradient signal names the field it reads")
+        factor, _, value = p.get("sets", "").partition("=")
+        sg.sets, sg.value = factor.strip(), value.strip() or "active"
+        module.add(sg)
+    elif b.kind == "organism":
+        if module.organism is not None:
+            raise BioLangError(
+                f"line {b.line}: a program may declare one organism ({module.organism.name!r} exists)"
+            )
+        org = Organism(name=b.header, evidence=ev, confidence=conf)
+        org.species, org.genome = p.get("species", ""), p.get("genome", "")
+        if "tempo" in p:
+            org.tempo = _float(p["tempo"], "tempo", b.line)
+        org.root = p.get("root", org.root)
+        if "space" in p:
+            dims = [x.strip() for x in p["space"].lower().replace("×", "x").split("x")]
+            if len(dims) != 2:
+                raise BioLangError(f"line {b.line}: space must be 'WIDTH x HEIGHT'")
+            org.width, org.height = (
+                int(_float(dims[0], "space", b.line)),
+                int(_float(dims[1], "space", b.line)),
+            )
+        if "origin" in p:
+            ox, oy = (int(_float(x, "origin", b.line)) for x in _list(p["origin"])[:2])
+            org.origin = (ox, oy)
+        if "sense" in p:
+            val, unit = _quantity(p["sense"], "sense", b.line)
+            org.sense = to_minutes(val, unit)
+        org.resolution = p.get("resolution", org.resolution)
+        if "seed" in p:
+            org.seed = int(_float(p["seed"], "seed", b.line))
+        if org.resolution not in ("cells", "populations"):
+            raise BioLangError(f"line {b.line}: resolution must be cells or populations")
+        org.cell_type = p.get("cell_type", "")
+        org.factors = _list(p.get("factors", ""))
+        org.environment = _parse_when(p.get("environment", ""))
+        org.observe = [x for part in p.get("observe", "").split(" ; ") for x in _list(part)]
+        org.asserts = [x.strip() for x in p.get("assert", "").split(" ; ") if x.strip()]
+        org.reference = p.get("reference", "")
+        module.organism = org
+    elif b.kind == "field":
+        fl = Field(name=b.header, evidence=ev, confidence=conf)
+        if "diffusion" in p:
+            fl.diffusion = _float(p["diffusion"], "diffusion", b.line)
+        if "decay" in p:
+            fl.decay = _float(p["decay"], "decay", b.line)
+        for src in p.get("source", "").split(" ; "):
+            src = src.strip()
+            if not src:
+                continue
+            pos, sep, rate = src.partition("=")
+            xy = _list(pos)
+            if not sep or len(xy) != 2:
+                raise BioLangError(f"line {b.line}: source must be 'x,y = rate', got {src!r}")
+            fl.sources.append((int(float(xy[0])), int(float(xy[1])), float(rate)))
+        module.fields.append(fl)
+    elif b.kind == "design":
+        dg = Design(name=b.header, evidence=ev, confidence=conf)
+        dg.knockout_any_of = _list(p.get("knockout_any_of", ""))
+        dg.add_any_of = _list(p.get("add_any_of", ""))
+        if "at_most" in p:
+            dg.at_most = max(1, int(_float(p["at_most"], "at_most", b.line)))
+        if "until" in p:
+            val, unit = _quantity(p["until"], "until", b.line)
+            dg.until = to_minutes(val, unit)
+        for key, target in (("target", dg.targets), ("keep", dg.keeps), ("vary", dg.vary)):
+            target.extend(x.strip() for x in p.get(key, "").split(" ; ") if x.strip())
+        for spec in dg.vary:
+            parts = spec.split()
+            if len(parts) != 4 or parts[0] not in ("timer", "decision") or ".." not in parts[3]:
+                raise BioLangError(
+                    f"line {b.line}: vary expects 'timer NAME duration LO..HI' or "
+                    "'decision ID fraction|after LO..HI'"
+                )
+        if not dg.targets and not dg.keeps:
+            raise BioLangError(f"line {b.line}: design {b.header!r} needs a target or a keep")
+        module.designs.append(dg)
+    elif b.kind == "experiment":
+        ex = Experiment(name=b.header, evidence=ev, confidence=conf)
+        ex.knockouts = _list(p.get("knockout", ""))
+        ex.adds = _list(p.get("add", ""))
+        ex.environment = _parse_when(p.get("environment", ""))
+        if "until" in p:
+            val, unit = _quantity(p["until"], "until", b.line)
+            ex.until = to_minutes(val, unit)
+        ex.asserts = [x.strip() for x in p.get("assert", "").split(" ; ") if x.strip()]
+        ex.expect = p.get("expect", "")
+        module.experiments.append(ex)
+    elif b.kind == "stage":
+        st = Stage(name=b.header, evidence=ev, confidence=conf)
+        if "from" in p:
+            st.start, st.unit = _quantity(p["from"], "from", b.line)
+        if "to" in p:
+            end, unit = _quantity(p["to"], "to", b.line)
+            st.end = to_minutes(end, unit) / to_minutes(1.0, st.unit)
+        module.stages.append(st)
+    elif b.kind == "timer":
+        if "duration" not in p:
+            raise BioLangError(f"line {b.line}: timer {b.header!r} needs a duration")
+        dur, unit = _quantity(p["duration"], "duration", b.line)
+        tm = Timer(name=b.header, duration=dur, unit=unit, evidence=ev, confidence=conf)
+        to_minutes(1.0, unit)  # validates the unit
+        if "sd" in p:
+            tm.sd = _float(p["sd"], "sd", b.line)
+        if "lengthening" in p:
+            tm.lengthening = _float(p["lengthening"], "lengthening", b.line)
+        if "when" in p:
+            tm.when = _parse_when(p["when"])
+        module.timers.append(tm)
+    elif b.kind == "decision":
+        action = p.get("action", "")
+        if action not in DECISION_ACTIONS:
+            raise BioLangError(
+                f"line {b.line}: decision action must be one of {DECISION_ACTIONS}; got {action!r}"
+            )
+        dc = Decision(id=b.header, action=action, evidence=ev, confidence=conf)
+        if "when" in p:
+            dc.when = _parse_when(p["when"])
+        dc.daughters = _list(p.get("daughters", ""))
+        dc.to, dc.name, dc.timer = p.get("to", ""), p.get("name", ""), p.get("timer", "")
+        if "asymmetric" in p:
+            dc.asymmetric = _arrows(p["asymmetric"], b.line)
+        if "lineages" in p:
+            dc.lineages = _parse_when(p["lineages"])
+        dc.sets = _list(p.get("sets", ""))
+        if action == "express" and not dc.sets:
+            raise BioLangError(f"line {b.line}: express needs 'sets: FACTOR, ...'")
+        dc.toward, dc.direction = p.get("toward", ""), p.get("direction", "")
+        if dc.direction and dc.direction not in ("+x", "-x", "+y", "-y"):
+            raise BioLangError(f"line {b.line}: direction must be +x, -x, +y or -y")
+        if "steps" in p:
+            dc.steps = int(_float(p["steps"], "steps", b.line))
+        if "after" in p:
+            val, unit = _quantity(p["after"], "after", b.line)
+            dc.after = to_minutes(val, unit)
+        if "fraction" in p:
+            dc.fraction = _float(p["fraction"], "fraction", b.line)
+            top = math.inf if action == "divide" else 1.0  # a population may more than double per step
+            if not 0.0 <= dc.fraction <= top:
+                raise BioLangError(
+                    f"line {b.line}: fraction must be within 0..{'1' if top == 1.0 else 'any'}"
+                )
+        if action == "divide" and len(dc.daughters) not in (0, 2):
+            raise BioLangError(f"line {b.line}: a division names two daughters or none")
+        if action == "differentiate" and not dc.to:
+            raise BioLangError(f"line {b.line}: differentiate needs 'to: <cell_type>'")
+        module.decisions.append(dc)
     elif b.kind == "transcript":
         raise BioLangError(f"line {b.line}: transcript blocks must be nested inside a gene")
 
@@ -330,6 +586,28 @@ def _check_references(module: Module) -> None:
     for c in module.cell_types():
         if c.parent and c.parent not in module.entities:
             raise BioLangError(f"cell_type {c.id!r} has undeclared parent {c.parent!r}")
+    cell_types = {c.id for c in module.cell_types()}
+    timers = {t.name for t in module.timers}
+    for d in module.decisions:
+        if d.to and d.to not in cell_types:
+            raise BioLangError(f"decision {d.id!r} differentiates to undeclared cell_type {d.to!r}")
+        if d.timer and d.timer not in timers:
+            raise BioLangError(f"decision {d.id!r} waits on undeclared timer {d.timer!r}")
+    fields = {f.name for f in module.fields}
+    for sg in module.signals():
+        if sg.field_name and sg.field_name not in fields:
+            raise BioLangError(f"signal {sg.id!r} reads undeclared field {sg.field_name!r}")
+    for d in module.decisions:
+        if d.toward and d.toward not in fields:
+            raise BioLangError(f"decision {d.id!r} migrates toward undeclared field {d.toward!r}")
+    org = module.organism
+    if org and org.cell_type and org.cell_type not in cell_types:
+        raise BioLangError(f"organism {org.name!r} starts as undeclared cell_type {org.cell_type!r}")
+
+
+# `import <scheme>:<name>` asks a registered resolver for BioLang text: the engine defines the hook,
+# the application registers sources (the packaged proteome as `protein:TP53`). The engine imports nothing.
+IMPORT_RESOLVERS: dict[str, Callable[[str], str]] = {}
 
 
 def resolve_import(name: str, base_dir: Path | None) -> Path:
@@ -348,23 +626,52 @@ def resolve_import(name: str, base_dir: Path | None) -> Path:
 
 
 def parse(
-    text: str, name_hint: str = "unnamed", base_dir: Path | None = None, _seen: frozenset[str] = frozenset()
+    text: str,
+    name_hint: str = "unnamed",
+    base_dir: Path | None = None,
+    _seen: frozenset[str] = frozenset(),
+    _done: set[str] | None = None,
 ) -> Module:
     directives, blocks = _parse_blocks(text.splitlines())
     name = next((v for k, v in directives if k == "module"), name_hint)
     imports = [v for k, v in directives if k == "import"]
     module = Module(name=name, imports=imports)
+    done = set() if _done is None else _done  # files already merged into this program (diamond imports)
     for imp in imports:
+        scheme, _, rest = imp.partition(":")
+        if rest and scheme in IMPORT_RESOLVERS:
+            key = imp
+            if key in done:
+                continue
+            done.add(key)
+            module.merge(
+                parse(
+                    IMPORT_RESOLVERS[scheme](rest), name_hint=imp, base_dir=base_dir, _seen=_seen, _done=done
+                )
+            )
+            continue
+        if rest and scheme.isalpha() and scheme.islower() and "/" not in scheme and not imp.endswith(".bio"):
+            raise BioLangError(
+                f"no resolver registered for import scheme {scheme!r} (have {sorted(IMPORT_RESOLVERS)})"
+            )
         path = resolve_import(imp, base_dir)
         key = str(path.resolve())
         if key in _seen:
             raise BioLangError(f"circular import of {imp!r}")
-        module.merge(parse(path.read_text(), name_hint=path.stem, base_dir=path.parent, _seen=_seen | {key}))
+        if key in done:
+            continue
+        done.add(key)
+        module.merge(
+            parse(
+                path.read_text(), name_hint=path.stem, base_dir=path.parent, _seen=_seen | {key}, _done=done
+            )
+        )
     for b in blocks:
         _compile_block(b, module)
     if not blocks and not imports:
         raise BioLangError("empty source: no module, entities or rules found")
-    _check_references(module)
+    if _done is None:  # references are checked once, over the whole program
+        _check_references(module)
     return module
 
 

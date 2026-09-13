@@ -1,0 +1,5 @@
+##fileformat=VCFv4.2
+##source=GenomeOS therapeutic benchmark: EGFR L858R, lung adenocarcinoma (osimertinib; EGFR is also the cetuximab antibody target)
+##reference=GRCh38
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	LUNG
+chr7	55191822	.	T	G	.	PASS	.	GT	0/1

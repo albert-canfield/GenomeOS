@@ -1,0 +1,6859 @@
+{
+  "result": "duplication_chr22",
+  "date": "2026-09-12",
+  "pairs": 2830,
+  "intra_chromosomal": 649,
+  "inter_chromosomal": 2181,
+  "bands": {
+    "young": 227,
+    "middle": 1353,
+    "old": 1250
+  },
+  "duplicated_bp": 5996678,
+  "duplicated_fraction": 0.118,
+  "blocks": [
+    {
+      "start": 0,
+      "end": 10524344,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.0014,
+      "pairs": 9,
+      "partners": [
+        "chr12:37450858-37466432",
+        "chr14_KI270725v1_random:89477-154026",
+        "chr15:47089377-47104719",
+        "chr20:25893874-25909176",
+        "chr20:29651333-29667301",
+        "chr20:30189143-30204513",
+        "chr21:8532927-8706715",
+        "chr7:57680579-57696007"
+      ]
+    },
+    {
+      "start": 10529164,
+      "end": 10736170,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.9984,
+      "pairs": 303,
+      "partners": [
+        "chr10:125885883-125903721",
+        "chr10:38595726-38597407",
+        "chr10:38595726-38597408",
+        "chr10:38597965-38600250",
+        "chr10:38597965-38600275",
+        "chr10:38734507-38783421",
+        "chr10:38920354-38941755",
+        "chr10:38933618-38941800"
+      ]
+    },
+    {
+      "start": 10736283,
+      "end": 10742049,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr10:125885883-125903721",
+        "chr14_GL000225v1_random:170222-199105",
+        "chrUn_GL000216v2:69421-106398"
+      ]
+    },
+    {
+      "start": 10754413,
+      "end": 10939387,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.4551,
+      "pairs": 39,
+      "partners": [
+        "chr13:35054881-35072696",
+        "chr14:18585025-18590801",
+        "chr14:19141705-19169849",
+        "chr14:19218716-19258288",
+        "chr14_GL000194v1_random:484-23589",
+        "chr15:20684981-20687692",
+        "chr15:21254050-21256765",
+        "chr18:14990391-14993074"
+      ]
+    },
+    {
+      "start": 10961693,
+      "end": 11066267,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.5219,
+      "pairs": 19,
+      "partners": [
+        "chr18:14860578-14868863",
+        "chr20:28565915-28608032",
+        "chr20:29075043-29117667",
+        "chr20:29493941-29502540",
+        "chr20:30371987-30416930",
+        "chr21:10363805-10414915",
+        "chr21:13370634-13378912",
+        "chr22:12597102-12641510"
+      ]
+    },
+    {
+      "start": 11068174,
+      "end": 11124336,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.1092,
+      "pairs": 12,
+      "partners": [
+        "chr10:38691060-38732523",
+        "chr16:32346693-32386048",
+        "chr16_KI270728v1_random:131712-171083",
+        "chr18:14860578-14868863",
+        "chr21:13370634-13378912",
+        "chr22:16481166-16522731",
+        "chr2:91935399-91976964",
+        "chr4:102960891-102976301"
+      ]
+    },
+    {
+      "start": 11125705,
+      "end": 11146118,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 12,
+      "partners": [
+        "chr10:38691060-38732523",
+        "chr15:20284720-20293372",
+        "chr16:32346693-32386048",
+        "chr16:33552734-33569737",
+        "chr16_KI270728v1_random:131712-171083",
+        "chr16_KI270728v1_random:1675402-1707489",
+        "chr16_KI270728v1_random:1853032-1870035",
+        "chr22:16481166-16522731"
+      ]
+    },
+    {
+      "start": 11147823,
+      "end": 11249808,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.2578,
+      "pairs": 27,
+      "partners": [
+        "chr10:38691060-38732523",
+        "chr10:42240192-42242910",
+        "chr14:16022637-16061677",
+        "chr15:20284720-20293372",
+        "chr15:20293173-20297239",
+        "chr16:32308295-32316862",
+        "chr16:32346693-32386048",
+        "chr16:33514575-33523144"
+      ]
+    },
+    {
+      "start": 11249959,
+      "end": 11474743,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.7668,
+      "pairs": 64,
+      "partners": [
+        "chr10:27236-35162",
+        "chr10:51879-60252",
+        "chr12:34157488-34159103",
+        "chr12:34166893-34184025",
+        "chr12:38183233-38201627",
+        "chr14:16022637-16061677",
+        "chr14_GL000009v2_random:91988-116600",
+        "chr14_GL000194v1_random:82000-106790"
+      ]
+    },
+    {
+      "start": 11479643,
+      "end": 11707144,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.546,
+      "pairs": 120,
+      "partners": [
+        "chr10:27227-35162",
+        "chr10:51908-55786",
+        "chr12:34142176-34159103",
+        "chr12:34166893-34177263",
+        "chr12:38193133-38201627",
+        "chr14:16022703-16056310",
+        "chr14_GL000009v2_random:83069-100469",
+        "chr14_GL000194v1_random:25054-32401"
+      ]
+    },
+    {
+      "start": 11974294,
+      "end": 12038111,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.209,
+      "pairs": 40,
+      "partners": [
+        "chr14_GL000009v2_random:0-128189",
+        "chr14_GL000009v2_random:173491-188663",
+        "chr14_GL000194v1_random:163759-179225",
+        "chr14_GL000194v1_random:75991-118421",
+        "chr14_KI270722v1_random:3857-18979",
+        "chr14_KI270722v1_random:64258-104431",
+        "chr1_KI270708v1_random:33360-71456",
+        "chr1_KI270710v1_random:13983-28978"
+      ]
+    },
+    {
+      "start": 12056544,
+      "end": 12097899,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 28,
+      "partners": [
+        "chr14_GL000009v2_random:101928-180571",
+        "chr14_GL000194v1_random:91992-171148",
+        "chr14_GL000225v1_random:200636-211173",
+        "chr14_KI270722v1_random:11884-97325",
+        "chr1:890933-898701",
+        "chr1_KI270708v1_random:4-64351",
+        "chr1_KI270710v1_random:0-21071",
+        "chr21:8756715-8788299"
+      ]
+    },
+    {
+      "start": 12219507,
+      "end": 12279847,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.1714,
+      "pairs": 26,
+      "partners": [
+        "chr14_GL000009v2_random:126074-172669",
+        "chr14_GL000194v1_random:116306-162938",
+        "chr14_GL000225v1_random:200636-211173",
+        "chr14_KI270722v1_random:19801-66377",
+        "chr1_KI270710v1_random:0-13161",
+        "chr20:28615983-28625493",
+        "chr20:29045065-29067121",
+        "chr20:29510473-29520092"
+      ]
+    },
+    {
+      "start": 12281130,
+      "end": 12298621,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 16,
+      "partners": [
+        "chr14:16400659-16404348",
+        "chr20:28615983-28625493",
+        "chr20:28632813-28643629",
+        "chr20:28646301-28648008",
+        "chr20:29045065-29067121",
+        "chr20:29510473-29520092",
+        "chr20:29532132-29536889",
+        "chr20:30346078-30364390"
+      ]
+    },
+    {
+      "start": 12309789,
+      "end": 12602040,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.6108,
+      "pairs": 38,
+      "partners": [
+        "chr14:16400660-16404348",
+        "chr20:28565695-28625493",
+        "chr20:28632814-28643629",
+        "chr20:28646301-28648008",
+        "chr20:28933138-29044808",
+        "chr20:29045065-29117887",
+        "chr20:29493958-29520092",
+        "chr20:29532132-29536870"
+      ]
+    },
+    {
+      "start": 12629211,
+      "end": 12694809,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.2292,
+      "pairs": 25,
+      "partners": [
+        "chr14_GL000009v2_random:155358-187131",
+        "chr14_GL000194v1_random:145599-177728",
+        "chr14_KI270722v1_random:5399-37124",
+        "chr18:110538-112542",
+        "chr1_KI270710v1_random:3-27438",
+        "chr20:28565695-28625493",
+        "chr20:29045065-29117887",
+        "chr20:29474416-29493279"
+      ]
+    },
+    {
+      "start": 12696637,
+      "end": 12800735,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.5197,
+      "pairs": 50,
+      "partners": [
+        "chr14_GL000009v2_random:155358-187131",
+        "chr14_GL000009v2_random:90422-127186",
+        "chr14_GL000194v1_random:145599-177728",
+        "chr14_GL000194v1_random:80552-117418",
+        "chr14_GL000225v1_random:200636-211173",
+        "chr14_KI270722v1_random:5399-37124",
+        "chr14_KI270722v1_random:65265-122690",
+        "chr1_KI270706v1_random:0-36951"
+      ]
+    },
+    {
+      "start": 12813586,
+      "end": 15273854,
+      "class": "centromere",
+      "tier": "structural",
+      "duplicated_fraction": 0.0468,
+      "pairs": 63,
+      "partners": [
+        "chr10:36727178-36737857",
+        "chr13:18408106-18501866",
+        "chr14:18269208-18656060",
+        "chr14_GL000009v2_random:152606-189252",
+        "chr14_GL000009v2_random:90422-127186",
+        "chr14_GL000194v1_random:142849-179814",
+        "chr14_GL000194v1_random:80552-117418",
+        "chr14_GL000225v1_random:200636-211173"
+      ]
+    },
+    {
+      "start": 15273961,
+      "end": 15282556,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr13:18408106-18501866",
+        "chr14:18269208-18656060",
+        "chr15:19832234-19894315",
+        "chr18:15242030-15391148",
+        "chr21:12997149-13129259",
+        "chr22:16079322-16231898",
+        "chr2:132075793-132214748",
+        "chr9:40682066-40825736"
+      ]
+    },
+    {
+      "start": 15288670,
+      "end": 15290717,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chr13:18408106-18501866",
+        "chr14:18269208-18656060",
+        "chr18:15242030-15391148",
+        "chr21:12997149-13129259",
+        "chr22:16079322-16231898",
+        "chr2:132075793-132214748",
+        "chr9:40682066-40825736",
+        "chr9:64805617-64941608"
+      ]
+    },
+    {
+      "start": 15297196,
+      "end": 15298377,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr10:37213986-37217970",
+        "chr13:18408106-18501866",
+        "chr14:18269208-18656060",
+        "chr18:15242030-15391148",
+        "chr21:12997149-13129259",
+        "chr22:16079322-16231898",
+        "chr2:132075793-132214748",
+        "chr9:40682066-40825736"
+      ]
+    },
+    {
+      "start": 15304556,
+      "end": 15326036,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr10:42322919-42361326",
+        "chr13:18408106-18501866",
+        "chr14:18269208-18656060",
+        "chr18:15242030-15391148",
+        "chr21:12997149-13129259",
+        "chr22:16079322-16231898",
+        "chr2:132075793-132214748",
+        "chr9:40682066-40825736"
+      ]
+    },
+    {
+      "start": 15343065,
+      "end": 15349466,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 10,
+      "partners": [
+        "chr10:42322919-42361326",
+        "chr13:18408106-18501866",
+        "chr14:18269208-18656060",
+        "chr18:15242030-15391148",
+        "chr21:12997149-13129259",
+        "chr22:16079322-16231898",
+        "chr2:132075793-132214748",
+        "chr9:40682066-40825736"
+      ]
+    },
+    {
+      "start": 15350043,
+      "end": 15489989,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 1.0,
+      "pairs": 11,
+      "partners": [
+        "chr10:27130406-27136223",
+        "chr10:28131064-28144925",
+        "chr13:18408106-18501866",
+        "chr14:18269208-18656060",
+        "chr18:15242030-15391148",
+        "chr21:12997149-13129259",
+        "chr22:16079322-16231898",
+        "chr2:132075793-132214748"
+      ]
+    },
+    {
+      "start": 15492564,
+      "end": 15509868,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 27,
+      "partners": [
+        "chr10:10430-12620",
+        "chr10:13508-22237",
+        "chr10:27130406-27136223",
+        "chr10:38611270-38615463",
+        "chr12:34111118-34117740",
+        "chr14:18269208-18656060",
+        "chr16:32461164-32463365",
+        "chr16:32462564-32468396"
+      ]
+    },
+    {
+      "start": 15632051,
+      "end": 15635179,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 5,
+      "partners": [
+        "chr14:18862644-19169849",
+        "chr17:31212016-31231713",
+        "chr2:130135521-130138211",
+        "chr2:131172121-131203274",
+        "chr2:131534742-131537326"
+      ]
+    },
+    {
+      "start": 15644330,
+      "end": 15690025,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 13,
+      "partners": [
+        "chr14:18862644-19169849",
+        "chr15:20835454-20867653",
+        "chr15:21409046-21441383",
+        "chr15:21846411-21878619",
+        "chr15_KI270727v1_random:136242-168572",
+        "chr18:14511818-14544528",
+        "chr21:13608831-13641511",
+        "chr2:130094815-130121625"
+      ]
+    },
+    {
+      "start": 15722608,
+      "end": 15741296,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 20,
+      "partners": [
+        "chr14:18862644-19169849",
+        "chr14:19188567-19392864",
+        "chr15:20783969-20828705",
+        "chr15:20828259-20835400",
+        "chr15:21353060-21402266",
+        "chr15_KI270727v1_random:80290-129486",
+        "chr18:14458685-14503737",
+        "chr20:30621390-30630584"
+      ]
+    },
+    {
+      "start": 15779680,
+      "end": 15784885,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 11,
+      "partners": [
+        "chr13:18613231-18620480",
+        "chr14:18862644-19169849",
+        "chr14:19188567-19392864",
+        "chr15:20764132-20769904",
+        "chr15:21333219-21338991",
+        "chr15_KI270727v1_random:60506-66263",
+        "chr18:14439418-14446696",
+        "chr21:13710296-13715454"
+      ]
+    },
+    {
+      "start": 15893942,
+      "end": 15901790,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 15,
+      "partners": [
+        "chr14:19188567-19392864",
+        "chr14_GL000194v1_random:0-23481",
+        "chr18:14988964-14993074",
+        "chr21:10125562-10159050",
+        "chr21:9004783-9034562",
+        "chr22:10834643-10874572",
+        "chr2:131703937-131791111",
+        "chr2:131791341-131800781"
+      ]
+    },
+    {
+      "start": 15901911,
+      "end": 15914720,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 13,
+      "partners": [
+        "chr14:19188567-19392864",
+        "chr14_GL000194v1_random:0-23481",
+        "chr18:14988964-14993074",
+        "chr21:10125562-10159050",
+        "chr21:9004783-9034562",
+        "chr22:10834643-10874572",
+        "chr2:131703937-131791111",
+        "chr2:131819321-131823419"
+      ]
+    },
+    {
+      "start": 15915800,
+      "end": 16141766,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.4946,
+      "pairs": 21,
+      "partners": [
+        "chr10:27313354-27316836",
+        "chr13:18408106-18529165",
+        "chr14:18274304-18422341",
+        "chr14:19188567-19392864",
+        "chr15:19830603-19890348",
+        "chr18:14985547-14988444",
+        "chr18:15206481-15410450",
+        "chr21:12997142-13157427"
+      ]
+    },
+    {
+      "start": 16141872,
+      "end": 16387693,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.5665,
+      "pairs": 175,
+      "partners": [
+        "chr10:27313354-27316836",
+        "chr10:37213986-37217970",
+        "chr10:38597965-38613698",
+        "chr10:38920345-38933594",
+        "chr10:38936934-38941784",
+        "chr10:42107973-42109426",
+        "chr10:42120063-42146137",
+        "chr10:42322922-42361326"
+      ]
+    },
+    {
+      "start": 16390887,
+      "end": 16405329,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 23,
+      "partners": [
+        "chr10:16776-19203",
+        "chr10:38597965-38613698",
+        "chr10:38611840-38755990",
+        "chr12:34114462-34116921",
+        "chr14:18576102-18578539",
+        "chr14:18581832-18583796",
+        "chr16:32316874-32481700",
+        "chr16_KI270728v1_random:347898-446171"
+      ]
+    },
+    {
+      "start": 16405417,
+      "end": 16423942,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chr10:38611840-38755990",
+        "chr10:42244264-42295125",
+        "chr16:32316874-32481700",
+        "chr16_KI270728v1_random:347898-446171",
+        "chr16_KI270728v1_random:621056-680465",
+        "chr2:91853009-92000663",
+        "chr4:102886542-102976301",
+        "chrY:11334432-11443536"
+      ]
+    },
+    {
+      "start": 16426031,
+      "end": 16428946,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chr10:38611840-38755990",
+        "chr10:42244264-42295125",
+        "chr16:32316874-32481700",
+        "chr16_KI270728v1_random:347898-446171",
+        "chr16_KI270728v1_random:621056-680465",
+        "chr2:91853009-92000663",
+        "chr4:102886542-102976301",
+        "chrY:11334432-11443536"
+      ]
+    },
+    {
+      "start": 16476870,
+      "end": 16486984,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr10:38611840-38755990",
+        "chr16:32316874-32481700",
+        "chr16_KI270728v1_random:347898-446171",
+        "chr16_KI270728v1_random:90861-200917",
+        "chr22:11118987-11160921",
+        "chr2:89663940-89685992",
+        "chr2:91853009-92000663",
+        "chr4:102886542-102976301"
+      ]
+    },
+    {
+      "start": 16488322,
+      "end": 16503303,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 12,
+      "partners": [
+        "chr10:38611840-38755990",
+        "chr15:20284720-20293372",
+        "chr16:32316874-32481700",
+        "chr16:33523156-33569737",
+        "chr16_KI270728v1_random:1675402-1748573",
+        "chr16_KI270728v1_random:1823443-1870035",
+        "chr16_KI270728v1_random:90861-200917",
+        "chr22:11118987-11160921"
+      ]
+    },
+    {
+      "start": 16509475,
+      "end": 16521058,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 17,
+      "partners": [
+        "chr10:38611840-38755990",
+        "chr10:42216456-42242910",
+        "chr15:20284720-20293372",
+        "chr15:20293173-20344102",
+        "chr16:32301027-32316862",
+        "chr16:32316874-32481700",
+        "chr16:33507297-33523144",
+        "chr16:33523156-33569737"
+      ]
+    },
+    {
+      "start": 16527237,
+      "end": 16572026,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.9991,
+      "pairs": 55,
+      "partners": [
+        "chr10:38611840-38755990",
+        "chr10:42216456-42242910",
+        "chr14_KI270725v1_random:24072-46280",
+        "chr15:20113289-20147166",
+        "chr15:20293173-20344102",
+        "chr15:21119829-21153706",
+        "chr16:32301027-32316862",
+        "chr16:32316874-32481700"
+      ]
+    },
+    {
+      "start": 16748645,
+      "end": 16783411,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.5095,
+      "pairs": 29,
+      "partners": [
+        "chr12:37422579-37441813",
+        "chr12:37594037-37596084",
+        "chr17:22356244-22375309",
+        "chr19:36803212-36804310",
+        "chr19:37033228-37035433",
+        "chr19:37035398-37037666",
+        "chr19:37043751-37044926",
+        "chr19:39662280-39667440"
+      ]
+    },
+    {
+      "start": 16851222,
+      "end": 16855803,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr2:109998609-110017543",
+        "chr2:110353848-110372780"
+      ]
+    },
+    {
+      "start": 16856162,
+      "end": 16857618,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 7,
+      "partners": [
+        "chr10:77731325-77736027",
+        "chr18:58983968-58985944",
+        "chr1:242375451-242377467",
+        "chr2:109998609-110017543",
+        "chr2:110353848-110372780",
+        "chr7:155104684-155106401",
+        "chr8:119479903-119481468"
+      ]
+    },
+    {
+      "start": 16860718,
+      "end": 16869432,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 33,
+      "partners": [
+        "chr10:38752540-38783421",
+        "chr10:42177993-42219904",
+        "chr14_KI270725v1_random:42821-93757",
+        "chr15:20126660-20130092",
+        "chr15:20323429-20326885",
+        "chr15:21133196-21136604",
+        "chr16:32321749-32325190",
+        "chr16:33528037-33531475"
+      ]
+    },
+    {
+      "start": 16871281,
+      "end": 16876217,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 17,
+      "partners": [
+        "chr10:38752540-38783421",
+        "chr10:42177993-42219904",
+        "chr12:27262833-27270132",
+        "chr14_KI270725v1_random:42821-93757",
+        "chr21:8670967-8706715",
+        "chr22:10648095-10690626",
+        "chr2:91997217-92042312",
+        "chr2:94227916-94272825"
+      ]
+    },
+    {
+      "start": 16876902,
+      "end": 16889494,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 18,
+      "partners": [
+        "chr10:38752540-38783421",
+        "chr10:42177993-42219904",
+        "chr11:90098138-90117839",
+        "chr14_KI270725v1_random:42821-93757",
+        "chr21:8670967-8706715",
+        "chr22:10648095-10690626",
+        "chr2:91810459-91839813",
+        "chr2:91997217-92042312"
+      ]
+    },
+    {
+      "start": 16890424,
+      "end": 16896848,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 19,
+      "partners": [
+        "chr10:38752540-38783421",
+        "chr10:42177993-42219904",
+        "chr11:90098138-90117839",
+        "chr11:90147651-90149723",
+        "chr14_KI270725v1_random:42821-93757",
+        "chr21:8670967-8706715",
+        "chr22:10648095-10690626",
+        "chr2:91810459-91839813"
+      ]
+    },
+    {
+      "start": 16897760,
+      "end": 16904218,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 25,
+      "partners": [
+        "chr10:38752540-38783421",
+        "chr10:42177993-42219904",
+        "chr11:90147651-90149723",
+        "chr14_KI270725v1_random:42821-93757",
+        "chr1:144078310-144086616",
+        "chr1:144874091-144882398",
+        "chr1_KI270712v1_random:31725-40020",
+        "chr21:8670967-8706715"
+      ]
+    },
+    {
+      "start": 16904696,
+      "end": 16914234,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.7724,
+      "pairs": 25,
+      "partners": [
+        "chr10:42177993-42219904",
+        "chr14_KI270725v1_random:42821-93757",
+        "chr1:144078310-144086616",
+        "chr1:144874091-144882398",
+        "chr1_KI270712v1_random:31725-40020",
+        "chr21:8595838-8600152",
+        "chr22:10572835-10577149",
+        "chr22:10648095-10690626"
+      ]
+    },
+    {
+      "start": 16914981,
+      "end": 16921442,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 16922173,
+      "end": 16925951,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.825,
+      "pairs": 1,
+      "partners": [
+        "chr2:113407615-113410311"
+      ]
+    },
+    {
+      "start": 16926444,
+      "end": 16933520,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.2422,
+      "pairs": 1,
+      "partners": [
+        "chr2:113407615-113410311"
+      ]
+    },
+    {
+      "start": 16934003,
+      "end": 16953894,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 16956808,
+      "end": 16961935,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17008222,
+      "end": 17012403,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17012932,
+      "end": 17014905,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.4141,
+      "pairs": 2,
+      "partners": [
+        "chr21:10341404-10365939",
+        "chr22:11016724-11018859"
+      ]
+    },
+    {
+      "start": 17016548,
+      "end": 17020573,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr21:10341404-10365939"
+      ]
+    },
+    {
+      "start": 17024506,
+      "end": 17035502,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr13:18180061-18196635",
+        "chr21:10341404-10365939"
+      ]
+    },
+    {
+      "start": 17071041,
+      "end": 17080700,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17081456,
+      "end": 17084933,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17165451,
+      "end": 17178789,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17266822,
+      "end": 17270096,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17349607,
+      "end": 17352880,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17353177,
+      "end": 17359948,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17730855,
+      "end": 17734137,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17774770,
+      "end": 17777316,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17780519,
+      "end": 17787648,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 18025689,
+      "end": 18029281,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 18146683,
+      "end": 18148398,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 18207914,
+      "end": 18233499,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 11,
+      "partners": [
+        "chr13:18200811-18204523",
+        "chr21:10333578-10337287",
+        "chr22:18385186-18433513",
+        "chr22:18638912-18659561",
+        "chr22:18709564-18725027",
+        "chr22:18725024-18761606",
+        "chr22:20324592-20354812",
+        "chr22:21151091-21195859"
+      ]
+    },
+    {
+      "start": 18512497,
+      "end": 18516337,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr13:18241964-18255739",
+        "chr20:23976749-23987428",
+        "chr22:18343699-18379178",
+        "chr22:18740879-18776021",
+        "chr22:21174795-21210351",
+        "chr22:22645528-22655108",
+        "chr22:24239361-24250283",
+        "chr22:24626626-24639140"
+      ]
+    },
+    {
+      "start": 18518161,
+      "end": 18524619,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9811,
+      "pairs": 11,
+      "partners": [
+        "chr13:18241964-18255739",
+        "chr20:23976749-23987428",
+        "chr22:18343699-18379178",
+        "chr22:18740879-18776021",
+        "chr22:21174795-21210351",
+        "chr22:21458187-21562827",
+        "chr22:22645528-22655108",
+        "chr22:24239361-24250283"
+      ]
+    },
+    {
+      "start": 18524935,
+      "end": 18527156,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:20700323-20720037",
+        "chr22:21458187-21562827"
+      ]
+    },
+    {
+      "start": 18530573,
+      "end": 18533645,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:20700323-20720037",
+        "chr22:21458187-21562827"
+      ]
+    },
+    {
+      "start": 18578894,
+      "end": 18605354,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:21335655-21443089",
+        "chr22:21458187-21562827"
+      ]
+    },
+    {
+      "start": 18611919,
+      "end": 18615580,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:21335655-21443089",
+        "chr22:21458187-21562827"
+      ]
+    },
+    {
+      "start": 18615900,
+      "end": 18623338,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:21335655-21443089",
+        "chr22:21458187-21562827"
+      ]
+    },
+    {
+      "start": 18625289,
+      "end": 18633983,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr22:19023255-19035499",
+        "chr22:21335655-21443089",
+        "chr22:24179310-24184938"
+      ]
+    },
+    {
+      "start": 18635386,
+      "end": 18636444,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:19023255-19035499",
+        "chr22:21335655-21443089"
+      ]
+    },
+    {
+      "start": 18638405,
+      "end": 18650022,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 7,
+      "partners": [
+        "chr22:18214615-18235265",
+        "chr22:18389297-18410016",
+        "chr22:18709869-18725027",
+        "chr22:19023255-19035499",
+        "chr22:21335655-21443089",
+        "chr22_KI270731v1_random:130288-150751",
+        "chr9:135484446-135488643"
+      ]
+    },
+    {
+      "start": 18653617,
+      "end": 18715814,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.1961,
+      "pairs": 13,
+      "partners": [
+        "chr22:18214310-18229226",
+        "chr22:18214615-18235265",
+        "chr22:18389297-18410016",
+        "chr22:18400000-18410321",
+        "chr22:18644951-18659561",
+        "chr22:18709869-18725027",
+        "chr22:21151091-21156967",
+        "chr22:21151091-21157272"
+      ]
+    },
+    {
+      "start": 18719341,
+      "end": 18727547,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 10,
+      "partners": [
+        "chr22:18174314-18210433",
+        "chr22:18214310-18229226",
+        "chr22:18400000-18410321",
+        "chr22:18414207-18433513",
+        "chr22:18644951-18659561",
+        "chr22:21161157-21166598",
+        "chr22:21299132-21331463",
+        "chr22:21335350-21350332"
+      ]
+    },
+    {
+      "start": 18730085,
+      "end": 18733723,
+      "class": "tandem_repeat",
+      "tier": "structural",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chr22:18174314-18210433",
+        "chr22:18414207-18433513",
+        "chr22:20336270-20354675",
+        "chr22:21161157-21166598",
+        "chr22:21162203-21325236",
+        "chr22:21299132-21331463",
+        "chr22:23480999-23487242",
+        "chr22_KI270731v1_random:2-130269"
+      ]
+    },
+    {
+      "start": 18769809,
+      "end": 18773658,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr13:18241964-18273227",
+        "chr20:23976749-23988029",
+        "chr22:18339129-18369146",
+        "chr22:18483513-18518714",
+        "chr22:21162203-21325236",
+        "chr22:22644961-22655108",
+        "chr22:24239361-24250846",
+        "chr22:24608676-24639140"
+      ]
+    },
+    {
+      "start": 18871095,
+      "end": 18873542,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 11,
+      "partners": [
+        "chr13:18207626-18233198",
+        "chr22:18176170-18206214",
+        "chr22:18359963-18387674",
+        "chr22:18483513-18502448",
+        "chr22:18735410-18759759",
+        "chr22:20337728-20355153",
+        "chr22:21162203-21325236",
+        "chr22:21165794-21194014"
+      ]
+    },
+    {
+      "start": 18896777,
+      "end": 18905676,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr13:18207626-18233198",
+        "chr21:10325509-10330481",
+        "chr22:20301634-20323554",
+        "chr22_KI270734v1_random:0-165049"
+      ]
+    },
+    {
+      "start": 18947741,
+      "end": 18951933,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.4039,
+      "pairs": 1,
+      "partners": [
+        "chr22:20262035-20290267"
+      ]
+    },
+    {
+      "start": 18959512,
+      "end": 18969691,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:20262035-20290267",
+        "chr22:23403012-23405250"
+      ]
+    },
+    {
+      "start": 19034564,
+      "end": 19036279,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.5452,
+      "pairs": 5,
+      "partners": [
+        "chr22:18234234-18235265",
+        "chr22:18389297-18390328",
+        "chr22:18627690-18639943",
+        "chr22:21355339-21367597",
+        "chr22_KI270731v1_random:130288-131319"
+      ]
+    },
+    {
+      "start": 19144684,
+      "end": 19146992,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19150292,
+      "end": 19170451,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19328901,
+      "end": 19330184,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19527545,
+      "end": 19551557,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19566839,
+      "end": 19579813,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19587025,
+      "end": 19597777,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19598642,
+      "end": 19630749,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19633574,
+      "end": 19666898,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19667735,
+      "end": 19687922,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19693581,
+      "end": 19708982,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19724781,
+      "end": 19727248,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19735909,
+      "end": 19748521,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19749106,
+      "end": 19750530,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19751330,
+      "end": 19756702,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19867420,
+      "end": 19875516,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20070965,
+      "end": 20080024,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20128037,
+      "end": 20129455,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20155468,
+      "end": 20198728,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.2623,
+      "pairs": 3,
+      "partners": [
+        "chr17:66798661-66799676",
+        "chr22:23378551-23380944",
+        "chr22:23381237-23402335"
+      ]
+    },
+    {
+      "start": 20235981,
+      "end": 20241414,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20283246,
+      "end": 20299759,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.4296,
+      "pairs": 3,
+      "partners": [
+        "chr22:18934750-18936360",
+        "chr22:18950240-18976730",
+        "chr22_KI270734v1_random:160049-161659"
+      ]
+    },
+    {
+      "start": 20321406,
+      "end": 20335731,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.9275,
+      "pairs": 10,
+      "partners": [
+        "chr13:18200811-18204523",
+        "chr21:10333578-10337287",
+        "chr22:18185960-18218744",
+        "chr22:18405885-18433513",
+        "chr22:18901997-18924717",
+        "chr22:21152819-21184361",
+        "chr22:21308784-21339778",
+        "chr22_KI270731v1_random:110662-130283"
+      ]
+    },
+    {
+      "start": 20377251,
+      "end": 20394114,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.128,
+      "pairs": 11,
+      "partners": [
+        "chr22:18159723-18174837",
+        "chr22:18178793-18180078",
+        "chr22:18362585-18363866",
+        "chr22:18498546-18499827",
+        "chr22:18755856-18757138",
+        "chr22:18865809-18867090",
+        "chr22:21190112-21191393",
+        "chr22:21301752-21303033"
+      ]
+    },
+    {
+      "start": 20409406,
+      "end": 20416796,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20416899,
+      "end": 20418309,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20420314,
+      "end": 20424583,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20592235,
+      "end": 20602594,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20656986,
+      "end": 20667835,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0235,
+      "pairs": 11,
+      "partners": [
+        "chr15:23225650-23226874",
+        "chr15:28454631-28457775",
+        "chr16:32199900-32203042",
+        "chr16:32726389-32729538",
+        "chr16:33140869-33144018",
+        "chr16_KI270728v1_random:986711-989852",
+        "chr17:20840686-20844496",
+        "chr19:1876977-1881802"
+      ]
+    },
+    {
+      "start": 20670984,
+      "end": 20689928,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.7333,
+      "pairs": 36,
+      "partners": [
+        "chr17:20840686-20844496",
+        "chr19:1876977-1881802",
+        "chr1:148146065-148149801",
+        "chr1:214605444-214609202",
+        "chr20:23987747-23995992",
+        "chr22:18845519-18855893",
+        "chr22:20679318-20680502",
+        "chr22:20683728-20684922"
+      ]
+    },
+    {
+      "start": 20704617,
+      "end": 20707690,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18526313-18546275",
+        "chr22:21465652-21485628"
+      ]
+    },
+    {
+      "start": 20891218,
+      "end": 20917352,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20953747,
+      "end": 20957091,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21064168,
+      "end": 21065461,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21081018,
+      "end": 21102860,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21204034,
+      "end": 21207971,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr13:18241964-18273227",
+        "chr20:23977083-23988029",
+        "chr22:18339129-18387721",
+        "chr22:18483513-18518714",
+        "chr22:18729875-18891257",
+        "chr22:22644962-22655108",
+        "chr22:24241283-24250846",
+        "chr22:24608676-24636921"
+      ]
+    },
+    {
+      "start": 21294616,
+      "end": 21300989,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 15,
+      "partners": [
+        "chr16:55843136-55844184",
+        "chr22:18176170-18235265",
+        "chr22:18359963-18387665",
+        "chr22:18483513-18502448",
+        "chr22:18725024-18759759",
+        "chr22:18729875-18891257",
+        "chr22:21111384-21151083",
+        "chr22:21151091-21194014"
+      ]
+    },
+    {
+      "start": 21332962,
+      "end": 21341594,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chr22:18176170-18235265",
+        "chr22:18389297-18433513",
+        "chr22:18552240-18659561",
+        "chr22:18709564-18725027",
+        "chr22:20324592-20355079",
+        "chr22:21151091-21194014",
+        "chr22_KI270731v1_random:130288-150751",
+        "chr9:135484446-135488643"
+      ]
+    },
+    {
+      "start": 21345258,
+      "end": 21354562,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chr22:18176170-18235265",
+        "chr22:18389297-18433513",
+        "chr22:18552240-18659561",
+        "chr22:18709564-18725027",
+        "chr22_KI270731v1_random:130288-150751",
+        "chr9:135484446-135488643"
+      ]
+    },
+    {
+      "start": 21358067,
+      "end": 21359581,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18552240-18659561",
+        "chr22:19023255-19035499"
+      ]
+    },
+    {
+      "start": 21368788,
+      "end": 21370063,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18552240-18659561",
+        "chr22:24179313-24184938"
+      ]
+    },
+    {
+      "start": 21371945,
+      "end": 21379381,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr22:18552240-18659561",
+        "chr22:21491761-21562827",
+        "chr22:24179313-24184938"
+      ]
+    },
+    {
+      "start": 21379701,
+      "end": 21383750,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18552240-18659561",
+        "chr22:21491761-21562827"
+      ]
+    },
+    {
+      "start": 21389938,
+      "end": 21396272,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18552240-18659561",
+        "chr22:21491761-21562827"
+      ]
+    },
+    {
+      "start": 21396590,
+      "end": 21416503,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18552240-18659561",
+        "chr22:21491761-21562827"
+      ]
+    },
+    {
+      "start": 21451463,
+      "end": 21463962,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.462,
+      "pairs": 1,
+      "partners": [
+        "chr22:18518836-18622467"
+      ]
+    },
+    {
+      "start": 21464279,
+      "end": 21466422,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18518836-18622467",
+        "chr22:20700323-20720038"
+      ]
+    },
+    {
+      "start": 21471269,
+      "end": 21472997,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18518836-18622467",
+        "chr22:20700323-20720038"
+      ]
+    },
+    {
+      "start": 21518463,
+      "end": 21544896,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:18518836-18622467",
+        "chr22:21372820-21443089"
+      ]
+    },
+    {
+      "start": 21624034,
+      "end": 21628088,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21630070,
+      "end": 21632136,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21637329,
+      "end": 21640843,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21644299,
+      "end": 21650378,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21744108,
+      "end": 21755536,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21886198,
+      "end": 21903643,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21982818,
+      "end": 21991098,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22043942,
+      "end": 22046429,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22046591,
+      "end": 22058432,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22058892,
+      "end": 22061076,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22061538,
+      "end": 22070224,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22070707,
+      "end": 22075365,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22075666,
+      "end": 22079769,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22080263,
+      "end": 22086560,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22088085,
+      "end": 22098699,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22099212,
+      "end": 22103218,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22104857,
+      "end": 22114843,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0228,
+      "pairs": 11,
+      "partners": [
+        "chr15:23225648-23226874",
+        "chr15:28454621-28457776",
+        "chr16:32199900-32203042",
+        "chr16:32726383-32729538",
+        "chr16:33140869-33144024",
+        "chr16_KI270728v1_random:986705-989852",
+        "chr17:20840686-20844479",
+        "chr19:1876976-1881805"
+      ]
+    },
+    {
+      "start": 22118005,
+      "end": 22155581,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0692,
+      "pairs": 6,
+      "partners": [
+        "chr17:20840686-20844479",
+        "chr19:1876976-1881805",
+        "chr1:148146065-148149788",
+        "chr1:214605456-214609202",
+        "chr22:20667586-20671339",
+        "chr22:20672650-20674606"
+      ]
+    },
+    {
+      "start": 22155942,
+      "end": 22157381,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22157631,
+      "end": 22162198,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22162681,
+      "end": 22168288,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22168634,
+      "end": 22170982,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22171556,
+      "end": 22179227,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22179477,
+      "end": 22182581,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22182885,
+      "end": 22185940,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22186619,
+      "end": 22195798,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22196276,
+      "end": 22198559,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22199011,
+      "end": 22201662,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22202161,
+      "end": 22214793,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22215270,
+      "end": 22219646,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22220133,
+      "end": 22223186,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.8575,
+      "pairs": 1,
+      "partners": [
+        "chr22:21954496-21958494"
+      ]
+    },
+    {
+      "start": 22224566,
+      "end": 22228718,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22230469,
+      "end": 22244779,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22245515,
+      "end": 22264600,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.7777,
+      "pairs": 18,
+      "partners": [
+        "chr15:20107042-20165547",
+        "chr15:20299168-20340070",
+        "chr15:21113564-21172081",
+        "chr16:32316874-32344731",
+        "chr16:33523156-33539580",
+        "chr16_KI270728v1_random:1709461-1745336",
+        "chr16_KI270728v1_random:1823443-1839877",
+        "chr16_KI270728v1_random:184205-200917"
+      ]
+    },
+    {
+      "start": 22273020,
+      "end": 22283927,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 32,
+      "partners": [
+        "chr10:38734502-38755990",
+        "chr10:42216456-42238269",
+        "chr14_KI270725v1_random:22583-46280",
+        "chr15:20107042-20165547",
+        "chr15:20299168-20340070",
+        "chr15:21113564-21172081",
+        "chr16:32316874-32344731",
+        "chr16:33523156-33539580"
+      ]
+    },
+    {
+      "start": 22287220,
+      "end": 22293732,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 32,
+      "partners": [
+        "chr10:38734502-38755990",
+        "chr10:42216456-42238269",
+        "chr14_KI270725v1_random:22583-46280",
+        "chr15:20107042-20165547",
+        "chr15:20299168-20340070",
+        "chr15:21113564-21172081",
+        "chr16:32316874-32344731",
+        "chr16:33539931-33550775"
+      ]
+    },
+    {
+      "start": 22294794,
+      "end": 22298123,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 34,
+      "partners": [
+        "chr10:38734502-38755990",
+        "chr10:42216456-42238269",
+        "chr14_KI270725v1_random:22583-46280",
+        "chr15:20107042-20165547",
+        "chr15:20299168-20340070",
+        "chr15:21113564-21172081",
+        "chr16:32316874-32344731",
+        "chr16:33539931-33550775"
+      ]
+    },
+    {
+      "start": 22329122,
+      "end": 22339572,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22341214,
+      "end": 22343186,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22343732,
+      "end": 22347806,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22348164,
+      "end": 22352939,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22353433,
+      "end": 22357738,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22358260,
+      "end": 22366209,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22367770,
+      "end": 22369613,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22371120,
+      "end": 22375985,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22376505,
+      "end": 22380765,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22381347,
+      "end": 22395017,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22395489,
+      "end": 22397031,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22397524,
+      "end": 22398848,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22398999,
+      "end": 22404206,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.3176,
+      "pairs": 1,
+      "partners": [
+        "chr22:22320797-22327981"
+      ]
+    },
+    {
+      "start": 22404721,
+      "end": 22409765,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22320797-22327981"
+      ]
+    },
+    {
+      "start": 22410282,
+      "end": 22420325,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0164,
+      "pairs": 1,
+      "partners": [
+        "chr22:22320797-22327981"
+      ]
+    },
+    {
+      "start": 22421310,
+      "end": 22425820,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22426314,
+      "end": 22427539,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22428035,
+      "end": 22431957,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22432465,
+      "end": 22446685,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22448336,
+      "end": 22450201,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22450652,
+      "end": 22465658,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22465986,
+      "end": 22484420,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22508815,
+      "end": 22513225,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22520273,
+      "end": 22547700,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22566602,
+      "end": 22580013,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22580296,
+      "end": 22588154,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22588688,
+      "end": 22594527,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22595056,
+      "end": 22604444,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22605165,
+      "end": 22618571,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22619163,
+      "end": 22630064,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.8674,
+      "pairs": 3,
+      "partners": [
+        "chr22:23306925-23321261",
+        "chr22:24237945-24241978",
+        "chr22:24636226-24660173"
+      ]
+    },
+    {
+      "start": 22647898,
+      "end": 22661298,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.5383,
+      "pairs": 9,
+      "partners": [
+        "chr13:18246083-18256308",
+        "chr20:23977805-23995992",
+        "chr22:18343135-18353250",
+        "chr22:18509154-18518714",
+        "chr22:18766471-18776585",
+        "chr22:21200722-21210914",
+        "chr22:24242003-24264717",
+        "chr22:24626062-24636201"
+      ]
+    },
+    {
+      "start": 22661542,
+      "end": 22664472,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22664907,
+      "end": 22668287,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.9908,
+      "pairs": 2,
+      "partners": [
+        "chr22:22700924-22703397",
+        "chr22:22744399-22747892"
+      ]
+    },
+    {
+      "start": 22668806,
+      "end": 22673151,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.5153,
+      "pairs": 1,
+      "partners": [
+        "chr22:22736500-22760270"
+      ]
+    },
+    {
+      "start": 22673602,
+      "end": 22679096,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:22699496-22701087",
+        "chr22:22736500-22760270"
+      ]
+    },
+    {
+      "start": 22679345,
+      "end": 22686725,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:22699496-22701087",
+        "chr22:22736500-22760270"
+      ]
+    },
+    {
+      "start": 22687271,
+      "end": 22689830,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22736500-22760270"
+      ]
+    },
+    {
+      "start": 22689978,
+      "end": 22692777,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22736500-22760270"
+      ]
+    },
+    {
+      "start": 22693312,
+      "end": 22694438,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22736500-22760270"
+      ]
+    },
+    {
+      "start": 22694952,
+      "end": 22697788,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:22736500-22760270",
+        "chr22:22790601-22794383"
+      ]
+    },
+    {
+      "start": 22698407,
+      "end": 22700759,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.9906,
+      "pairs": 4,
+      "partners": [
+        "chr22:22677847-22679443",
+        "chr22:22736500-22760270",
+        "chr22:22742811-22746550",
+        "chr22:22790601-22794383"
+      ]
+    },
+    {
+      "start": 22700970,
+      "end": 22704264,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.7763,
+      "pairs": 4,
+      "partners": [
+        "chr22:22664938-22667412",
+        "chr22:22677847-22679443",
+        "chr22:22742811-22746550",
+        "chr22:22761911-22776923"
+      ]
+    },
+    {
+      "start": 22704822,
+      "end": 22711688,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22761911-22776923"
+      ]
+    },
+    {
+      "start": 22713203,
+      "end": 22715289,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22761911-22776923"
+      ]
+    },
+    {
+      "start": 22715419,
+      "end": 22720622,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.433,
+      "pairs": 1,
+      "partners": [
+        "chr22:22761911-22776923"
+      ]
+    },
+    {
+      "start": 22721145,
+      "end": 22730724,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22731090,
+      "end": 22734606,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.5378,
+      "pairs": 3,
+      "partners": [
+        "chr22:22756991-22761861",
+        "chr22:22790638-22794414",
+        "chr22:22820904-22823374"
+      ]
+    },
+    {
+      "start": 22735089,
+      "end": 22738943,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr22:22670912-22699474",
+        "chr22:22756991-22761861",
+        "chr22:22790638-22794414",
+        "chr22:22820904-22823374"
+      ]
+    },
+    {
+      "start": 22739187,
+      "end": 22747382,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr22:22664938-22668785",
+        "chr22:22670912-22699474",
+        "chr22:22699508-22703424"
+      ]
+    },
+    {
+      "start": 22747921,
+      "end": 22755553,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22670912-22699474"
+      ]
+    },
+    {
+      "start": 22755797,
+      "end": 22757216,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr22:22670912-22699474",
+        "chr22:22732715-22737536",
+        "chr22:22789804-22794414"
+      ]
+    },
+    {
+      "start": 22759496,
+      "end": 22762293,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.9821,
+      "pairs": 4,
+      "partners": [
+        "chr22:22670912-22699474",
+        "chr22:22704161-22717672",
+        "chr22:22732715-22737536",
+        "chr22:22789804-22794414"
+      ]
+    },
+    {
+      "start": 22762516,
+      "end": 22771823,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22704161-22717672"
+      ]
+    },
+    {
+      "start": 22772582,
+      "end": 22774528,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22704161-22717672"
+      ]
+    },
+    {
+      "start": 22774691,
+      "end": 22785642,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.2038,
+      "pairs": 1,
+      "partners": [
+        "chr22:22704161-22717672"
+      ]
+    },
+    {
+      "start": 22787268,
+      "end": 22790852,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.3005,
+      "pairs": 4,
+      "partners": [
+        "chr22:22695657-22699474",
+        "chr22:22732715-22736183",
+        "chr22:22756169-22760301",
+        "chr22:22820054-22823467"
+      ]
+    },
+    {
+      "start": 22819756,
+      "end": 22822657,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.8973,
+      "pairs": 2,
+      "partners": [
+        "chr22:22732715-22735174",
+        "chr22:22789775-22793181"
+      ]
+    },
+    {
+      "start": 22823289,
+      "end": 22834864,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0154,
+      "pairs": 2,
+      "partners": [
+        "chr22:22732715-22735174",
+        "chr22:22789775-22793181"
+      ]
+    },
+    {
+      "start": 22835117,
+      "end": 22838601,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22838872,
+      "end": 22850374,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22850624,
+      "end": 22856761,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22858268,
+      "end": 22871506,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22872035,
+      "end": 22873211,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22873440,
+      "end": 22880705,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22881396,
+      "end": 22886266,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22886379,
+      "end": 22887779,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22896111,
+      "end": 22899480,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.6284,
+      "pairs": 1,
+      "partners": [
+        "chr22:22902711-22906902"
+      ]
+    },
+    {
+      "start": 22899655,
+      "end": 22900975,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22902711-22906902"
+      ]
+    },
+    {
+      "start": 22901437,
+      "end": 22904849,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.6556,
+      "pairs": 2,
+      "partners": [
+        "chr22:22897363-22901536",
+        "chr22:22902711-22906902"
+      ]
+    },
+    {
+      "start": 22905025,
+      "end": 22906341,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:22897363-22901536"
+      ]
+    },
+    {
+      "start": 22906803,
+      "end": 22910573,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0263,
+      "pairs": 1,
+      "partners": [
+        "chr22:22897363-22901536"
+      ]
+    },
+    {
+      "start": 22911075,
+      "end": 22914271,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22914309,
+      "end": 22915634,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22915927,
+      "end": 22918131,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22918201,
+      "end": 22919534,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22919851,
+      "end": 22921389,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22921435,
+      "end": 22922593,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22923034,
+      "end": 22988262,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 22988581,
+      "end": 22990689,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 23008356,
+      "end": 23053511,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 23055610,
+      "end": 23059414,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 23165663,
+      "end": 23179703,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 23318037,
+      "end": 23322542,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.8042,
+      "pairs": 17,
+      "partners": [
+        "chr13:18241964-18243452",
+        "chr20:23991336-23995992",
+        "chr22:18355909-18357845",
+        "chr22:18504566-18506502",
+        "chr22:18761875-18763810",
+        "chr22:18849096-18859596",
+        "chr22:20692200-20699044",
+        "chr22:21114972-21125472"
+      ]
+    },
+    {
+      "start": 23322927,
+      "end": 23326615,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chr22:18841030-18845821",
+        "chr22:21130214-21135018",
+        "chr22:21275526-21280312",
+        "chr22:24268948-24283958",
+        "chr22_KI270731v1_random:15164-19941",
+        "chr22_KI270734v1_random:66935-71732"
+      ]
+    },
+    {
+      "start": 23328493,
+      "end": 23358948,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9705,
+      "pairs": 12,
+      "partners": [
+        "chr16:55724378-55725695",
+        "chr16:55754123-55757411",
+        "chr16:55836199-55841529",
+        "chr16:55851427-55871007",
+        "chr22:18841030-18845821",
+        "chr22:21130214-21135018",
+        "chr22:21275526-21280312",
+        "chr22:24268948-24283958"
+      ]
+    },
+    {
+      "start": 23409537,
+      "end": 23433459,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.5451,
+      "pairs": 2,
+      "partners": [
+        "chr22:17984579-17998239",
+        "chr7:1875028-1876940"
+      ]
+    },
+    {
+      "start": 23513602,
+      "end": 23521253,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr9:129395315-129423850"
+      ]
+    },
+    {
+      "start": 23523711,
+      "end": 23536820,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr9:129395315-129423850"
+      ]
+    },
+    {
+      "start": 23547797,
+      "end": 23567063,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.928,
+      "pairs": 3,
+      "partners": [
+        "chr9:129386384-129395096",
+        "chr9:129395315-129423850",
+        "chr9:129565131-129574412"
+      ]
+    },
+    {
+      "start": 23583859,
+      "end": 23607040,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.359,
+      "pairs": 2,
+      "partners": [
+        "chr22:25344989-25348911",
+        "chr22:25428803-25435365"
+      ]
+    },
+    {
+      "start": 23717423,
+      "end": 23738681,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.1184,
+      "pairs": 1,
+      "partners": [
+        "chr7:66071347-66074345"
+      ]
+    },
+    {
+      "start": 23751730,
+      "end": 23752740,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 23754454,
+      "end": 23762989,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 23784322,
+      "end": 23786930,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 23842796,
+      "end": 23856415,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.1839,
+      "pairs": 7,
+      "partners": [
+        "chr10:31969091-31971621",
+        "chr14:64894152-64896690",
+        "chr1:156556930-156559129",
+        "chr1:24832287-24834830",
+        "chr1:8500394-8503103",
+        "chr6:56893577-56896026",
+        "chr9:134114794-134116426"
+      ]
+    },
+    {
+      "start": 23991421,
+      "end": 23998396,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:23939932-23969548"
+      ]
+    },
+    {
+      "start": 24008867,
+      "end": 24011191,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 24178634,
+      "end": 24181450,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.7599,
+      "pairs": 2,
+      "partners": [
+        "chr22:18623338-18627646",
+        "chr22:21367644-21371949"
+      ]
+    },
+    {
+      "start": 24191986,
+      "end": 24210981,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 24245763,
+      "end": 24247861,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr13:18243450-18256340",
+        "chr20:23976757-23995992",
+        "chr22:18343106-18355911",
+        "chr22:18506500-18518714",
+        "chr22:18763808-18776614",
+        "chr22:21200000-21210944",
+        "chr22:22631375-22655111",
+        "chr22:24626032-24643158"
+      ]
+    },
+    {
+      "start": 24265525,
+      "end": 24269345,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.962,
+      "pairs": 7,
+      "partners": [
+        "chr16:55843148-55844753",
+        "chr22:18845577-18860708",
+        "chr22:20684918-20687583",
+        "chr22:21113861-21129043",
+        "chr22:21281482-21296653",
+        "chr22:23322143-23337128",
+        "chr22_KI270734v1_random:71483-86613"
+      ]
+    },
+    {
+      "start": 24629011,
+      "end": 24632819,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr13:18243450-18278439",
+        "chr20:23976749-23988029",
+        "chr22:18339129-18355911",
+        "chr22:18506500-18518714",
+        "chr22:18763808-18793618",
+        "chr22:21200000-21227950",
+        "chr22:22644962-22655111",
+        "chr22:24236854-24250846"
+      ]
+    },
+    {
+      "start": 24653362,
+      "end": 24656770,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 16,
+      "partners": [
+        "chr13:18241964-18243452",
+        "chr20:23987750-23995992",
+        "chr22:18355909-18358170",
+        "chr22:18504238-18506502",
+        "chr22:18761548-18763810",
+        "chr22:18845519-18859596",
+        "chr22:20687026-20699044",
+        "chr22:21114972-21130513"
+      ]
+    },
+    {
+      "start": 24664646,
+      "end": 24686167,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9014,
+      "pairs": 3,
+      "partners": [
+        "chr22:23331262-23351708",
+        "chr22:24279652-24283958",
+        "chr22:24286747-24301118"
+      ]
+    },
+    {
+      "start": 24688087,
+      "end": 24690627,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.9976,
+      "pairs": 5,
+      "partners": [
+        "chr19:20257646-20262882",
+        "chr20:34013929-34014953",
+        "chr2:151801030-151803131",
+        "chr2:65268563-65271253",
+        "chrX:76030473-76031929"
+      ]
+    },
+    {
+      "start": 24696033,
+      "end": 24700915,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 24707809,
+      "end": 24712291,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 24712520,
+      "end": 24719033,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 24774720,
+      "end": 24806066,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 24932150,
+      "end": 24935097,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 24946695,
+      "end": 24952642,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 25197448,
+      "end": 25199857,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 25207359,
+      "end": 25212084,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 25231870,
+      "end": 25236126,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:25454748-25471797"
+      ]
+    },
+    {
+      "start": 25263815,
+      "end": 25267647,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:25515602-25532252"
+      ]
+    },
+    {
+      "start": 25320227,
+      "end": 25327195,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:23572293-23577255",
+        "chr22:23631491-23644932"
+      ]
+    },
+    {
+      "start": 25339975,
+      "end": 25349542,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.4201,
+      "pairs": 2,
+      "partners": [
+        "chr22:23600035-23602870",
+        "chr22:23621993-23631127"
+      ]
+    },
+    {
+      "start": 25350322,
+      "end": 25351417,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.4694,
+      "pairs": 1,
+      "partners": [
+        "chr11:68403076-68407506"
+      ]
+    },
+    {
+      "start": 25405377,
+      "end": 25412802,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr11:68303534-68332191"
+      ]
+    },
+    {
+      "start": 25729294,
+      "end": 25742141,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 26031045,
+      "end": 26056360,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 26057341,
+      "end": 26068863,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 26383597,
+      "end": 26390666,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 26390776,
+      "end": 26422070,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 26423193,
+      "end": 26428728,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 26516383,
+      "end": 26521995,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 26619630,
+      "end": 26621957,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 26630669,
+      "end": 26632008,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27004694,
+      "end": 27019368,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27024550,
+      "end": 27035886,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27035991,
+      "end": 27040196,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27041494,
+      "end": 27044000,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27045315,
+      "end": 27048143,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27061247,
+      "end": 27102765,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27125239,
+      "end": 27143477,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27225134,
+      "end": 27259046,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27259851,
+      "end": 27276211,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27286349,
+      "end": 27292306,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27318538,
+      "end": 27320504,
+      "class": "interspersed_repeat_LINE",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27329372,
+      "end": 27331615,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27420702,
+      "end": 27436284,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27441778,
+      "end": 27457124,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27460871,
+      "end": 27507182,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27573612,
+      "end": 27602656,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27604882,
+      "end": 27666515,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27669543,
+      "end": 27674031,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27744761,
+      "end": 27748276,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27802058,
+      "end": 27825474,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 27827927,
+      "end": 27851422,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 28679925,
+      "end": 28687737,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 17,
+      "partners": [
+        "chr10:38712672-38734500",
+        "chr10:42238271-42242909",
+        "chr15:20282966-20293372",
+        "chr15:20293173-20299169",
+        "chr16:32306370-32316847",
+        "chr16:32344733-32364219",
+        "chr16:33512634-33523129",
+        "chr16:33550777-33571456"
+      ]
+    },
+    {
+      "start": 28757525,
+      "end": 28760110,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 28769779,
+      "end": 28772673,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 28789301,
+      "end": 28793533,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 28850593,
+      "end": 28882597,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29057488,
+      "end": 29058671,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29069572,
+      "end": 29072936,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29168333,
+      "end": 29191696,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29191808,
+      "end": 29205808,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29319679,
+      "end": 29327679,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29478923,
+      "end": 29480208,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29491390,
+      "end": 29505878,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29581327,
+      "end": 29593784,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29597475,
+      "end": 29603519,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29698598,
+      "end": 29705255,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29782188,
+      "end": 29788043,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 29838304,
+      "end": 29883140,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.061,
+      "pairs": 8,
+      "partners": [
+        "chr13:18625792-18629653",
+        "chr15:20735848-20758833",
+        "chr15:21304895-21327906",
+        "chr15_KI270727v1_random:32035-55201",
+        "chr18:14430253-14434125",
+        "chr21:13720775-13724649",
+        "chr21:6855757-6859631",
+        "chrUn_GL000213v1:24907-28781"
+      ]
+    },
+    {
+      "start": 30211427,
+      "end": 30216406,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30216802,
+      "end": 30238783,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30246998,
+      "end": 30262828,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30267283,
+      "end": 30269688,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30326947,
+      "end": 30331987,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30429058,
+      "end": 30432685,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30436245,
+      "end": 30439836,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30440318,
+      "end": 30447958,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30472056,
+      "end": 30475232,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30514381,
+      "end": 30522798,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30546741,
+      "end": 30554631,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30630712,
+      "end": 30635672,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30674134,
+      "end": 30693781,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30979413,
+      "end": 30990424,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 30992650,
+      "end": 31051629,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31120069,
+      "end": 31122730,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31140513,
+      "end": 31142562,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31150286,
+      "end": 31155965,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31156647,
+      "end": 31160061,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31348719,
+      "end": 31388732,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31388837,
+      "end": 31399514,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31662251,
+      "end": 31676255,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31750207,
+      "end": 31753866,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 31957603,
+      "end": 31963356,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 32037995,
+      "end": 32039489,
+      "class": "interspersed_repeat_DNA",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 32039896,
+      "end": 32043049,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 32113029,
+      "end": 32114898,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 32143398,
+      "end": 32149005,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.1001,
+      "pairs": 1,
+      "partners": [
+        "chr2:175310420-175311464"
+      ]
+    },
+    {
+      "start": 32160392,
+      "end": 32188399,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.5338,
+      "pairs": 4,
+      "partners": [
+        "chr22:29399343-29403040",
+        "chr22:32357195-32363983",
+        "chr22:36127120-36129313",
+        "chr9:98709140-98720221"
+      ]
+    },
+    {
+      "start": 32188487,
+      "end": 32190432,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr22:29434688-29443954",
+        "chr22:32357195-32363983"
+      ]
+    },
+    {
+      "start": 32385631,
+      "end": 32386667,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 32464484,
+      "end": 32474675,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 32499787,
+      "end": 32507819,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 33058388,
+      "end": 33066662,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 33145897,
+      "end": 33162225,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 33923049,
+      "end": 34017401,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 34218796,
+      "end": 34262016,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 34288263,
+      "end": 34349632,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 34363204,
+      "end": 34589084,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 34591278,
+      "end": 34628999,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 34665933,
+      "end": 34703125,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 34704885,
+      "end": 34711568,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 34724919,
+      "end": 34756664,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35002862,
+      "end": 35066135,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35231064,
+      "end": 35232630,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35295807,
+      "end": 35298837,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35351740,
+      "end": 35372173,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35372621,
+      "end": 35376421,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35377261,
+      "end": 35380360,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35394214,
+      "end": 35400075,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35452656,
+      "end": 35501860,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35503586,
+      "end": 35526931,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35527415,
+      "end": 35539795,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35554003,
+      "end": 35563569,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35587706,
+      "end": 35591912,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35598380,
+      "end": 35603957,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35604880,
+      "end": 35606763,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35637951,
+      "end": 35648127,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35668409,
+      "end": 35685939,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35689373,
+      "end": 35703802,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35704176,
+      "end": 35717871,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 35729483,
+      "end": 35738735,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36028824,
+      "end": 36030588,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36038797,
+      "end": 36056390,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36085573,
+      "end": 36091147,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36093352,
+      "end": 36133016,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0553,
+      "pairs": 1,
+      "partners": [
+        "chr22:32170391-32172935"
+      ]
+    },
+    {
+      "start": 36135553,
+      "end": 36137429,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36166177,
+      "end": 36172421,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36176526,
+      "end": 36178553,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36179385,
+      "end": 36189123,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36204840,
+      "end": 36220306,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36239954,
+      "end": 36253070,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36267530,
+      "end": 36281276,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36424052,
+      "end": 36440879,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36440970,
+      "end": 36445066,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36462247,
+      "end": 36465700,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36482072,
+      "end": 36487189,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36507221,
+      "end": 36510846,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36529245,
+      "end": 36536655,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.2889,
+      "pairs": 1,
+      "partners": [
+        "chr10:98431842-98435774"
+      ]
+    },
+    {
+      "start": 36537604,
+      "end": 36552164,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36552700,
+      "end": 36560856,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36776309,
+      "end": 36800681,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36819736,
+      "end": 36847366,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36878067,
+      "end": 36888029,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36902025,
+      "end": 36911034,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36940454,
+      "end": 36950083,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36954665,
+      "end": 36957764,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36963497,
+      "end": 36965247,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 36968172,
+      "end": 36991118,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37007884,
+      "end": 37010858,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37029828,
+      "end": 37033081,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37035517,
+      "end": 37043857,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37063390,
+      "end": 37065004,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37110890,
+      "end": 37118665,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37199385,
+      "end": 37202651,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37212482,
+      "end": 37215737,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37215891,
+      "end": 37225269,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37259594,
+      "end": 37266175,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37274650,
+      "end": 37282026,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37459110,
+      "end": 37464543,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37486432,
+      "end": 37490361,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37519591,
+      "end": 37522751,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37546136,
+      "end": 37549971,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37551735,
+      "end": 37555111,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37582616,
+      "end": 37601939,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37602722,
+      "end": 37603924,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37633564,
+      "end": 37634653,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37666934,
+      "end": 37669463,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37669739,
+      "end": 37675586,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37776581,
+      "end": 37805228,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37817386,
+      "end": 37822197,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37825851,
+      "end": 37830852,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 37895563,
+      "end": 37905656,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38041932,
+      "end": 38043229,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38043920,
+      "end": 38056310,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38076050,
+      "end": 38078133,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38273805,
+      "end": 38281027,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38398929,
+      "end": 38408313,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.2686,
+      "pairs": 2,
+      "partners": [
+        "chr20:53583262-53596928",
+        "chr21:10521101-10522542"
+      ]
+    },
+    {
+      "start": 38455902,
+      "end": 38457321,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38461677,
+      "end": 38468020,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38571213,
+      "end": 38574930,
+      "class": "interspersed_repeat_SINE",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38575431,
+      "end": 38578117,
+      "class": "interspersed_repeat_DNA",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38701556,
+      "end": 38704847,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38794198,
+      "end": 38818451,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38844036,
+      "end": 38861421,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38925455,
+      "end": 38952740,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 38964043,
+      "end": 38982346,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0153,
+      "pairs": 2,
+      "partners": [
+        "chr22:38988116-38993669",
+        "chr22:39020868-39028865"
+      ]
+    },
+    {
+      "start": 38998209,
+      "end": 39014162,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39055972,
+      "end": 39066255,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.9842,
+      "pairs": 1,
+      "partners": [
+        "chr22:39020021-39037913"
+      ]
+    },
+    {
+      "start": 39070671,
+      "end": 39077053,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:39030534-39044949"
+      ]
+    },
+    {
+      "start": 39087744,
+      "end": 39091011,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39092859,
+      "end": 39096256,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39104071,
+      "end": 39119305,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39214609,
+      "end": 39221745,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39302104,
+      "end": 39304469,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39310611,
+      "end": 39312869,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39320389,
+      "end": 39349855,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39388843,
+      "end": 39399777,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39437128,
+      "end": 39447126,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39492194,
+      "end": 39499431,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39518132,
+      "end": 39519694,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39532826,
+      "end": 39556790,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39557610,
+      "end": 39570752,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39689735,
+      "end": 39722347,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39723942,
+      "end": 39743043,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39894167,
+      "end": 39901083,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 39973721,
+      "end": 39994916,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 40335808,
+      "end": 40346460,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 40637745,
+      "end": 40651356,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 40654777,
+      "end": 40660778,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 40708309,
+      "end": 40721456,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 40741265,
+      "end": 40769629,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 40819402,
+      "end": 40824444,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 40932815,
+      "end": 40951276,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 40973539,
+      "end": 40977055,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41021958,
+      "end": 41045496,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41045591,
+      "end": 41064051,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41065646,
+      "end": 41074179,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0711,
+      "pairs": 1,
+      "partners": [
+        "chr7:5527150-5529666"
+      ]
+    },
+    {
+      "start": 41075239,
+      "end": 41087018,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0008,
+      "pairs": 1,
+      "partners": [
+        "chr7:5527150-5529666"
+      ]
+    },
+    {
+      "start": 41197520,
+      "end": 41205281,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41241000,
+      "end": 41243473,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41360155,
+      "end": 41366134,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41399326,
+      "end": 41414041,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41423304,
+      "end": 41430933,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41431375,
+      "end": 41433488,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41544606,
+      "end": 41551698,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41595275,
+      "end": 41598027,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41664087,
+      "end": 41666626,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41698136,
+      "end": 41699493,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41916104,
+      "end": 41922031,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 41958942,
+      "end": 41969442,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 42071488,
+      "end": 42073788,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 42155001,
+      "end": 42160012,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0479,
+      "pairs": 2,
+      "partners": [
+        "chr22:42126572-42131028",
+        "chr22:42140276-42144701"
+      ]
+    },
+    {
+      "start": 42343616,
+      "end": 42363670,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 42369300,
+      "end": 42380406,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 42432425,
+      "end": 42436874,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 42450848,
+      "end": 42500253,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.1985,
+      "pairs": 2,
+      "partners": [
+        "chr22:42529035-42536680",
+        "chr22:42553733-42559454"
+      ]
+    },
+    {
+      "start": 42530333,
+      "end": 42553616,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.2726,
+      "pairs": 1,
+      "partners": [
+        "chr22:42479610-42489336"
+      ]
+    },
+    {
+      "start": 42721298,
+      "end": 42742801,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 42744787,
+      "end": 42762859,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 42762959,
+      "end": 42776405,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0372,
+      "pairs": 7,
+      "partners": [
+        "chr10:13057602-13058725",
+        "chr11:118560626-118561645",
+        "chr15:24908857-24909880",
+        "chr15:71063050-71064055",
+        "chr1:185226732-185227753",
+        "chr2:110967774-110968793",
+        "chr8:28299629-28300635"
+      ]
+    },
+    {
+      "start": 42777296,
+      "end": 42784461,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0088,
+      "pairs": 7,
+      "partners": [
+        "chr10:13057602-13058725",
+        "chr11:118560626-118561645",
+        "chr15:24908857-24909880",
+        "chr15:71063050-71064055",
+        "chr1:185226732-185227753",
+        "chr2:110967774-110968793",
+        "chr8:28299629-28300635"
+      ]
+    },
+    {
+      "start": 43089430,
+      "end": 43092166,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43092524,
+      "end": 43110741,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43143401,
+      "end": 43151076,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43163246,
+      "end": 43164365,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43187160,
+      "end": 43197279,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43343379,
+      "end": 43373102,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43393260,
+      "end": 43399603,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43409728,
+      "end": 43411195,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43513727,
+      "end": 43516106,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43817906,
+      "end": 43820704,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43862545,
+      "end": 43878567,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 43892494,
+      "end": 43922896,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44229512,
+      "end": 44243664,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr22:32279657-32329510"
+      ]
+    },
+    {
+      "start": 44332009,
+      "end": 44337459,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44340286,
+      "end": 44352887,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44354626,
+      "end": 44365550,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44366284,
+      "end": 44368977,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44411721,
+      "end": 44413484,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44414814,
+      "end": 44443289,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44444793,
+      "end": 44483494,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44483717,
+      "end": 44486294,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44486914,
+      "end": 44491941,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44498404,
+      "end": 44566964,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0004,
+      "pairs": 4,
+      "partners": [
+        "chr3:12787332-12788701",
+        "chr5:123636094-123637465",
+        "chrX:92459636-92461018",
+        "chrY:5573114-5574497"
+      ]
+    },
+    {
+      "start": 44568247,
+      "end": 44569284,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0665,
+      "pairs": 6,
+      "partners": [
+        "chr3:12787332-12788701",
+        "chr3:32259073-32260287",
+        "chr5:109588529-109589660",
+        "chr5:123636094-123637465",
+        "chrX:92459636-92461018",
+        "chrY:5573114-5574497"
+      ]
+    },
+    {
+      "start": 44572468,
+      "end": 44606288,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44625431,
+      "end": 44651834,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44652379,
+      "end": 44660879,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 44862801,
+      "end": 44881161,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.11,
+      "pairs": 1,
+      "partners": [
+        "chr22:44858020-44860015"
+      ]
+    },
+    {
+      "start": 45010022,
+      "end": 45024160,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45091185,
+      "end": 45133019,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45188017,
+      "end": 45192159,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45240944,
+      "end": 45246604,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45246945,
+      "end": 45254430,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45269169,
+      "end": 45273649,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45295874,
+      "end": 45308967,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45342828,
+      "end": 45344062,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45448743,
+      "end": 45502237,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45601981,
+      "end": 45604412,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45856028,
+      "end": 45864599,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45865179,
+      "end": 45875931,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45894416,
+      "end": 45909554,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45911792,
+      "end": 45920365,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 45977260,
+      "end": 46006615,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46015503,
+      "end": 46020768,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46028081,
+      "end": 46036103,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46116382,
+      "end": 46129588,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46263343,
+      "end": 46267960,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46357344,
+      "end": 46360833,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46561662,
+      "end": 46575635,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46682755,
+      "end": 46684408,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46738319,
+      "end": 46746104,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 46749412,
+      "end": 46761878,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 47175699,
+      "end": 47230626,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 47231962,
+      "end": 47259365,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 47261007,
+      "end": 47329226,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 47373702,
+      "end": 47402296,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 47488149,
+      "end": 47612230,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48023004,
+      "end": 48044709,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48048549,
+      "end": 48052645,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48058275,
+      "end": 48139457,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48143279,
+      "end": 48167170,
+      "class": "interspersed_repeat",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48210333,
+      "end": 48254902,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48259116,
+      "end": 48274363,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48274415,
+      "end": 48278173,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48279679,
+      "end": 48320411,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48333199,
+      "end": 48340000,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48343977,
+      "end": 48345335,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48350754,
+      "end": 48403461,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48415571,
+      "end": 48448889,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48468515,
+      "end": 48474134,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48850912,
+      "end": 48866769,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 48898386,
+      "end": 48958441,
+      "class": "mixed_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0694,
+      "pairs": 3,
+      "partners": [
+        "chr22:48901510-48903279",
+        "chr22:48910475-48911620",
+        "chr22:48911634-48912886"
+      ]
+    },
+    {
+      "start": 48974823,
+      "end": 49036842,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49052549,
+      "end": 49147459,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49156815,
+      "end": 49166420,
+      "class": "long_orf",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49188062,
+      "end": 49213910,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49214247,
+      "end": 49264200,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49266080,
+      "end": 49284866,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49304842,
+      "end": 49352494,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49354431,
+      "end": 49359023,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49364008,
+      "end": 49369371,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49377131,
+      "end": 49414522,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.1023,
+      "pairs": 2,
+      "partners": [
+        "chr22:49383944-49385910",
+        "chr22:49386637-49388496"
+      ]
+    },
+    {
+      "start": 49658432,
+      "end": 49660055,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49664968,
+      "end": 49668697,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49669409,
+      "end": 49718052,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49724506,
+      "end": 49738676,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49739003,
+      "end": 49757626,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49758980,
+      "end": 49773277,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49827946,
+      "end": 49832448,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49838901,
+      "end": 49845259,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49848697,
+      "end": 49851424,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49927544,
+      "end": 49933183,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49935331,
+      "end": 49947202,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49949105,
+      "end": 49951367,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 49955116,
+      "end": 49956490,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50012765,
+      "end": 50018574,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50058298,
+      "end": 50059390,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50085969,
+      "end": 50090001,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50161690,
+      "end": 50170457,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50180295,
+      "end": 50184716,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50261851,
+      "end": 50263702,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50270767,
+      "end": 50271904,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50307695,
+      "end": 50308988,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50327661,
+      "end": 50330658,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50490648,
+      "end": 50502946,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50539664,
+      "end": 50541107,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50562954,
+      "end": 50567623,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50613981,
+      "end": 50622753,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50636006,
+      "end": 50641977,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50653123,
+      "end": 50664425,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50733212,
+      "end": 50735812,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 50745441,
+      "end": 50754674,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr2:113653188-113672162"
+      ]
+    },
+    {
+      "start": 50755434,
+      "end": 50756830,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr2:113653188-113672162"
+      ]
+    },
+    {
+      "start": 50801309,
+      "end": 50818468,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.4172,
+      "pairs": 15,
+      "partners": [
+        "chr10:133765634-133787422",
+        "chr13:114347139-114354325",
+        "chr17:83231426-83247136",
+        "chr19:246021-253227",
+        "chr19:58600033-58607456",
+        "chr1:248937741-248946406",
+        "chr20:64282024-64286269",
+        "chr21:46691730-46699983"
+      ]
+    }
+  ],
+  "by_tier": {
+    "structural": {
+      "blocks": 19,
+      "bp": 15165423,
+      "duplicated_bp": 1282432,
+      "blocks_mostly_duplicated": 8,
+      "duplicated_fraction": 0.0846
+    },
+    "neutral": {
+      "blocks": 51,
+      "bp": 553985,
+      "duplicated_bp": 354868,
+      "blocks_mostly_duplicated": 25,
+      "duplicated_fraction": 0.6406
+    },
+    "regulatory": {
+      "blocks": 443,
+      "bp": 5396402,
+      "duplicated_bp": 369123,
+      "blocks_mostly_duplicated": 45,
+      "duplicated_fraction": 0.0684
+    },
+    "fossil": {
+      "blocks": 108,
+      "bp": 1691159,
+      "duplicated_bp": 628990,
+      "blocks_mostly_duplicated": 55,
+      "duplicated_fraction": 0.3719
+    },
+    "constrained_unknown": {
+      "blocks": 14,
+      "bp": 59276,
+      "duplicated_bp": 25123,
+      "blocks_mostly_duplicated": 4,
+      "duplicated_fraction": 0.4238
+    }
+  },
+  "similar_to_pairs": {
+    "pairs": 0,
+    "supported_by_curated_duplication": 0,
+    "share": null
+  },
+  "elements": {
+    "scored": 299,
+    "inside_a_duplication": 9,
+    "share": 0.03,
+    "ids": [
+      "EH38E2148249",
+      "EH38E3468153",
+      "EH38E3470206",
+      "EH38E3471207",
+      "EH38E3471336",
+      "EH38E2153682",
+      "EH38E3481057",
+      "EH38E3481588",
+      "EH38E2167237"
+    ]
+  },
+  "chrom": "chr22",
+  "rows_file": "data/results/superdups_chr22.bed.gz",
+  "row_fields": [
+    "start",
+    "end",
+    "other_chrom",
+    "other_start",
+    "other_end",
+    "frac_match",
+    "strand"
+  ],
+  "bands_definition": {
+    "young": ">= 0.98",
+    "middle": "0.95 to 0.98",
+    "old": "< 0.95"
+  },
+  "evidence": {
+    "pairs": "curated: UCSC hg38 genomicSuperDups (segmental duplications >= 1 kb, >= 90% identity)",
+    "blocks": "inferred: a block's duplicated fraction from the curated pairs; what the copy does is not said"
+  },
+  "cost": {
+    "seconds": 1.6
+  }
+}

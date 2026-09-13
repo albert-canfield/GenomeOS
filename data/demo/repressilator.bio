@@ -3,6 +3,10 @@
 # oscillator and the canonical "hello world" of genetic circuit design.
 #
 # Run:  genomeos run data/demo/repressilator.bio --hours 60 --init TetR=10
+#       bio test data/demo/repressilator.bio
+# test: rules >= 3
+# test: TetR peaks >= 1
+# test: confidence >= 0.6
 
 module synthetic.repressilator
 

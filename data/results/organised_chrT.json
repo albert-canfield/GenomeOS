@@ -1,0 +1,161 @@
+{
+  "result": "organised_chrT",
+  "date": "2026-09-12",
+  "chrom": "chrT",
+  "blocks": 4,
+  "with_human_axis": 3,
+  "with_copy_flag": 4,
+  "copies": 1,
+  "copies_bp": 1000,
+  "copy_min_fraction": 0.5,
+  "by_tier": {
+    "structural": {
+      "blocks": 0,
+      "bp": 0,
+      "copies": 0,
+      "copies_bp": 0,
+      "after_copies": 0,
+      "after_copies_bp": 0,
+      "cases_after_copies": {}
+    },
+    "fossil": {
+      "blocks": 0,
+      "bp": 0,
+      "copies": 0,
+      "copies_bp": 0,
+      "after_copies": 0,
+      "after_copies_bp": 0,
+      "cases_after_copies": {}
+    },
+    "regulatory": {
+      "blocks": 1,
+      "bp": 1000,
+      "copies": 0,
+      "copies_bp": 0,
+      "after_copies": 1,
+      "after_copies_bp": 1000,
+      "cases_after_copies": {
+        "recent": {
+          "blocks": 1,
+          "bp": 1000
+        }
+      }
+    },
+    "constrained_unknown": {
+      "blocks": 3,
+      "bp": 3000,
+      "copies": 1,
+      "copies_bp": 1000,
+      "after_copies": 2,
+      "after_copies_bp": 2000,
+      "cases_after_copies": {
+        "syntax": {
+          "blocks": 1,
+          "bp": 1000
+        },
+        "unmeasured": {
+          "blocks": 1,
+          "bp": 1000
+        }
+      }
+    },
+    "neutral": {
+      "blocks": 0,
+      "bp": 0,
+      "copies": 0,
+      "copies_bp": 0,
+      "after_copies": 0,
+      "after_copies_bp": 0,
+      "cases_after_copies": {}
+    }
+  },
+  "real_unknown": {
+    "blocks": 2,
+    "bp": 2000,
+    "by_case": {
+      "syntax": {
+        "blocks": 1,
+        "bp": 1000
+      },
+      "unmeasured": {
+        "blocks": 1,
+        "bp": 1000
+      }
+    }
+  },
+  "candidates": [
+    {
+      "start": 1000,
+      "end": 2000,
+      "length": 1000,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "confidence": 0.6,
+      "mammal_fraction": 0.08,
+      "conserved_elements": 2,
+      "human_fraction": 0.6,
+      "case": "syntax",
+      "duplicated_fraction": 0.0,
+      "partners": 0,
+      "copy": false,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "constrained across mammals and among people, unannotated: the sharpest candidate"
+    },
+    {
+      "start": 2000,
+      "end": 3000,
+      "length": 1000,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "confidence": 0.6,
+      "mammal_fraction": 0.08,
+      "conserved_elements": 2,
+      "human_fraction": null,
+      "case": "unmeasured",
+      "duplicated_fraction": 0.2,
+      "partners": 1,
+      "copy": false,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "no human-axis coverage (the block is under a kilobase or on chrY): mammals only"
+    }
+  ],
+  "largest_copies": [
+    {
+      "start": 0,
+      "end": 1000,
+      "length": 1000,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "confidence": 0.6,
+      "mammal_fraction": 0.08,
+      "conserved_elements": 2,
+      "human_fraction": 0.0,
+      "case": "relaxed",
+      "duplicated_fraction": 0.9,
+      "partners": 3,
+      "copy": true,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "copy: 90% of the block is a curated segmental duplication (3 partners); read the source first, attribute second"
+    }
+  ],
+  "inputs": {
+    "budget": "budget_chrT",
+    "variation": "variation_chrT",
+    "duplication": "duplication_chrT",
+    "elements": [
+      "constrained_targets_chrT",
+      "enhancer_targets_chrT"
+    ]
+  },
+  "evidence": {
+    "tier": "inferred: sequence class plus Zoonomia constraint (the budget)",
+    "case": "inferred: Zoonomia phyloP against gnomAD Gnocchi (area J), unmeasured where the track has no kilobase",
+    "copy": "curated: UCSC genomicSuperDups, >= 1 kb at >= 90% identity; copy at >= 50% of the block"
+  },
+  "cost": {
+    "seconds": 0.0
+  }
+}

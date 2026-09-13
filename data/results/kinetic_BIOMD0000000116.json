@@ -1,0 +1,64 @@
+{
+  "result": "kinetic_BIOMD0000000116",
+  "date": "2026-09-11",
+  "pathways": [
+    "R-HSA-5673001"
+  ],
+  "query": "RAF/MAP kinase cascade",
+  "baseline": {
+    "model": "Model_0",
+    "name": "McClean2007_CrossTalk",
+    "species": 6,
+    "reactions": 10,
+    "functions": 0,
+    "rate_rules": 0,
+    "duration": 100.0,
+    "dt": 0.01,
+    "knocked_out": [],
+    "levels": {
+      "species_0": {
+        "name": "X1p",
+        "initial": 1.023667,
+        "final": 1.023672,
+        "peak": 1.023672,
+        "peaks": 0
+      },
+      "species_1": {
+        "name": "X2p",
+        "initial": 2.154231,
+        "final": 2.154272,
+        "peak": 2.154272,
+        "peaks": 0
+      },
+      "species_2": {
+        "name": "X3p",
+        "initial": 6.271793,
+        "final": 6.27185,
+        "peak": 6.27185,
+        "peaks": 0
+      },
+      "species_3": {
+        "name": "Y1p",
+        "initial": 3.203692,
+        "final": 3.20363,
+        "peak": 3.203705,
+        "peaks": 1
+      },
+      "species_4": {
+        "name": "Y2p",
+        "initial": 8.232192,
+        "final": 8.232118,
+        "peak": 8.232192,
+        "peaks": 0
+      },
+      "species_5": {
+        "name": "Y3p",
+        "initial": 9.312021,
+        "final": 9.312007,
+        "peak": 9.312021,
+        "peaks": 0
+      }
+    },
+    "evidence": "curated: BioModels (manually curated, reproduces the cited paper); derived: in-house RK4 run"
+  }
+}

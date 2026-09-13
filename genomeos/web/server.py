@@ -45,10 +45,22 @@ class ApiError(Exception):
         self.status = status
 
 
+def _all_elements_card(r: dict) -> dict:
+    """The fields the Progress tab shows for one chromosome's all-elements summary."""
+    return {
+        k: v
+        for k, v in r.items()
+        if k in ("elements_total", "scored", "complete", "summary", "requests_this_run")
+    }
+
+
 class Api:
     """All endpoints as plain methods so they can be unit-tested without HTTP."""
 
     def __init__(self, root: Path) -> None:
+        from genomeos.lib.biolang import register as _register_imports
+
+        _register_imports()
         self.root = root.resolve()
         self.data_dir = self.root / "data"
 
@@ -266,6 +278,181 @@ class Api:
 
     # ---- twins ------------------------------------------------------------
 
+    def individuals(self) -> dict:
+        """The test human and every imported person (local files only)."""
+        from genomeos.genome.individuals import checks, list_individuals
+
+        root = self.root / "data" / "individuals"
+        people = list_individuals(root)
+        for p in people:
+            p["checks"] = checks(p["name"], root)
+        return {"individuals": people}
+
+    def individual_report(self, name: str) -> dict:
+        """The person's Markdown dossier from what is stored under their directory."""
+        from genomeos.genome.individuals import dossier
+
+        try:
+            return {"name": name, "markdown": dossier(name, self.root / "data" / "individuals")}
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+
+    def individual_pgs(self, name: str) -> dict:
+        """The polygenic scores computed for the person (saved files only; the stream is a CLI step)."""
+        import json as _json
+
+        from genomeos.genome.individuals import list_individuals
+        from genomeos.genome.polygenic import compare
+
+        root = self.root / "data" / "individuals"
+        d = root / name
+        if not d.exists():
+            raise ApiError(f"{name} is not a local individual")
+        scores = []
+        for p in sorted(d.glob("pgs_*.json")):
+            r = _json.loads(p.read_text())
+            pid = r["score"]["id"]
+            r["compare"] = compare([x["name"] for x in list_individuals(root)], pid, root)
+            scores.append({k: v for k, v in r.items() if k != "per_chromosome"})
+        return {"name": name, "scores": scores}
+
+    def individual_diff(self, name: str, against: str, regulatory: str = "", chrom: str = "") -> dict:
+        """Two people (or one against the reference) as a diff of protein-changing variants, from the lists
+        the coding inventory saved; a person not yet inventoried is told to run it (minutes, a CLI step).
+        With `regulatory` and a chromosome, the variants inside that chromosome's regulatory elements."""
+        from genomeos.genome.diff import REFERENCE, genome_diff, render
+
+        root = self.root / "data" / "individuals"
+        if regulatory:
+            from genomeos.genome.regdiff import regulatory_diff
+            from genomeos.genome.regdiff import render as render_reg
+
+            if not chrom:
+                raise ApiError("the regulatory diff reads one chromosome at a time: pick one")
+            try:
+                d = regulatory_diff(name, against, chrom, root, reference=self.root / "data" / "reference")
+            except FileNotFoundError as ex:
+                raise ApiError(str(ex)) from ex
+            summary = {k: v for k, v in d.items() if k != "genes"}
+            return {"name": name, "against": against, "markdown": render_reg(d, top=60), **summary}
+        for who in (name, against):
+            if who != REFERENCE and not (root / who / "coding_variants.json").exists():
+                raise ApiError(
+                    f"{who} has no coding inventory yet: run `genomeos individual coding --name {who}` once"
+                )
+        try:
+            d = genome_diff(name, against, root)
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+        summary = {k: v for k, v in d.items() if k != "genes"}
+        return {"name": name, "against": against, "markdown": render(d, top=60), **summary}
+
+    def individual_coding(self, name: str) -> dict:
+        """Genome-wide coding SNVs by consequence and by gene for one person."""
+        from genomeos.genome.individuals import coding_inventory
+        from genomeos.genome.missense import cache_path
+
+        root = self.root / "data" / "individuals"
+        try:
+            # the predicted scores are read only when the person already has them (the stream is a CLI step)
+            return coding_inventory(
+                name, None, root, self.root / "data" / "reference", predict=cache_path(name, root).exists()
+            )
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+
+    def individual_knockouts(self, name: str) -> dict:
+        """Genome-wide truncating SNVs on canonical transcripts for one person, homozygous first."""
+        from genomeos.genome.individuals import knockouts
+
+        try:
+            return knockouts(name, None, self.root / "data" / "individuals", self.root / "data" / "reference")
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+
+    def individual_screen(self, name: str) -> dict:
+        """ClinVar pathogenic alleles the person carries (ClinVar distilled once, locally)."""
+        from genomeos.genome import clinvar
+
+        knowledge = self.root / "data" / "knowledge" / "clinvar"
+        if not clinvar.pathogenic_path(knowledge).exists():
+            clinvar.distil(knowledge)
+        try:
+            return clinvar.screen(name, None, self.root / "data" / "individuals", knowledge)
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+
+    def individual_check(self, name: str, chrom: str) -> dict:
+        """The person's variants of one chromosome applied to the local reference: statistics and verdict."""
+        from genomeos.genome.individuals import check
+
+        try:
+            return check(name, chrom, self.root / "data" / "individuals", self.root / "data" / "reference")
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+
+    def individual_import(self, path: str, name: str, note: str = "", replace: bool = False) -> dict:
+        """Split a VCF on this machine into per-chromosome files under data/individuals/<name>."""
+        from genomeos.genome.individuals import import_vcf
+
+        try:
+            root = self.root / "data" / "individuals"
+            return {"ok": True, "manifest": import_vcf(path, name, note, root, replace)}
+        except (ValueError, FileNotFoundError, FileExistsError) as ex:
+            raise ApiError(str(ex)) from ex
+
+    def individual_genes(self, name: str, chrom: str, limit: int = 40) -> dict:
+        """One chromosome gene by gene for one person: variants and coding consequences."""
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome.individuals import gene_by_gene
+
+        gff = default_gencode({chrom})
+        fa = self.root / "data" / "reference" / f"{chrom}.fa"
+        if not gff or not fa.exists():
+            raise ApiError(f"{chrom} needs local models and sequence (genomeos data fetch --chrom {chrom})")
+        ann = Annotation.from_gff3(gff, {chrom})
+        genome = IndexedGenome(str(fa))
+        try:
+            return gene_by_gene(name, chrom, ann, genome, self.root / "data" / "individuals", limit)
+        except FileNotFoundError as ex:
+            raise ApiError(str(ex)) from ex
+        finally:
+            genome.close()
+
+    def individual_predict(self, name: str, gene: str, chrom: str, max_variants: int = 30) -> dict:
+        """Feature d: the person's regulatory variants on one gene, predicted per variant (cached)."""
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome.individuals import vcf_path
+        from genomeos.genome.regulation import regulation_of
+        from genomeos.genome.regulatory import load_ccres
+        from genomeos.predict import AlphaGenomeAdapter, status
+        from genomeos.predict.individual_effects import predict_gene
+
+        st = status()
+        if not st["enabled"]:
+            raise ApiError(f"AlphaGenome predictions are disabled: {st['reason']}")
+        vcf = vcf_path(name, chrom, self.root / "data" / "individuals")
+        if vcf is None:
+            raise ApiError(f"{name} has no rows on {chrom}")
+        gff = default_gencode({chrom})
+        fa = self.root / "data" / "reference" / f"{chrom}.fa"
+        ccres = load_ccres(chrom)
+        if not gff or not fa.exists() or not ccres:
+            raise ApiError(
+                f"{chrom} needs local models, sequence and elements (genomeos data fetch --chrom {chrom})"
+            )
+        ann = Annotation.from_gff3(gff, {chrom})
+        genome = IndexedGenome(str(fa))
+        try:
+            reg = regulation_of(gene.upper(), chrom, ccres, ann, genome.lengths[chrom])
+        except KeyError as ex:
+            raise ApiError(f"{gene} not on {chrom}") from ex
+        finally:
+            genome.close()
+        scorer = AlphaGenomeAdapter()._live_scorer(threshold=0.02)  # noqa: SLF001
+        r = predict_gene(name, reg["gene"], chrom, reg, scorer, vcf, max_variants=max_variants)
+        return {"model": st["model"], **r}
+
     def twins(self) -> dict:
         from genomeos.twin import Twin
 
@@ -361,6 +548,79 @@ class Api:
         out = {"runs": [r.to_dict() for r in runs]}
         if len(runs) == 2:
             out["diff"] = diff_runs(runs[0], runs[1])
+        return out
+
+    # ---- organism (grow) -------------------------------------------------
+
+    def grow(self, module: str, until: str = "800", depth: int = 3) -> dict:
+        """Grow a BioLang v0.3 organism program and score it against its reference when one exists."""
+        from genomeos.ir import to_minutes
+        from genomeos.lang import parse_file
+        from genomeos.organism import REFERENCES, ReferenceLineage
+        from genomeos.organism.diff import compare
+        from genomeos.runtime.body import Body
+
+        path = self._safe(module)
+        m = parse_file(path)
+        if m.organism is None:
+            raise ApiError(f"{module} has no organism block")
+        parts = str(until).split()
+        until_min = to_minutes(float(parts[0]), parts[1] if len(parts) > 1 else "min")
+        until_min = min(until_min, to_minutes(100, "yr"))
+        body = Body(m, max_cells=50_000).run(until=until_min)
+        marks = [0.5, 25, 50, 100, 150, 200, 250, 300, 350, 400, 500, 600, 800, 1500, 2000, 3000, 4000, 5700]
+        if until_min > 10_000:
+            days = (1, 3, 5, 14, 21, 56, 100, 180, 266, 365, 730, 1826, 3652, 6574, 7305, 10957, 14610, 29220)
+            marks = [to_minutes(d, "d") for d in days]
+        marks = [t for t in marks if t <= until_min] + [until_min]
+        ref = None
+        if m.organism.reference in REFERENCES and Path(REFERENCES[m.organism.reference]).exists():
+            ref = ReferenceLineage.load(REFERENCES[m.organism.reference])
+        out = {
+            "summary": body.summary(),
+            "organism": {
+                "name": m.organism.name,
+                "species": m.organism.species,
+                "resolution": m.organism.resolution,
+                "factors": m.organism.factors,
+                "decisions": len(m.decisions),
+                "timers": len(m.timers),
+                "signals": len(m.signals()),
+                "stages": [
+                    {"name": st.name, "start": st.start, "end": st.end, "unit": st.unit} for st in m.stages
+                ],
+            },
+            "curve": [
+                {
+                    "t": t,
+                    "cells": body.count_at(t),
+                    "deaths": body.deaths_by(t),
+                    "reference": ref.count_at(t) if ref else None,
+                }
+                for t in marks
+            ],
+            "fates": body.fates_at(until_min),
+            "tree": body.tree(depth=max(0, min(int(depth), 6))),
+            "space": {
+                "width": m.organism.width,
+                "height": m.organism.height,
+                "rows": body.type_map(),
+                "bands": body.bands_along_x(),
+                "blocked": body.blocked_divisions,
+            }
+            if body.spatial
+            else None,
+            "asserts": body.check_asserts(),
+            "uncertainty": body.uncertainty().to_dict(),
+            "unknown": dict(body.unknown),
+            "fired": [
+                {"id": k, "n": v}
+                for k, v in body.fired.most_common()
+                if not k.startswith(("div_", "fate_", "die_"))
+            ][:40],
+        }
+        if ref is not None:
+            out["diff"] = compare(body, ref, until=until_min).to_dict()
         return out
 
     # ---- development (space) --------------------------------------------
@@ -614,6 +874,223 @@ class Api:
             "done": sum(1 for r in rows if r["status"].startswith("done")),
         }
 
+    def roadmap(self) -> dict:
+        """docs/ROADMAP.md as areas with planned steps and finished items, milestones and data jobs."""
+        from genomeos import roadmap
+
+        return roadmap.load(self.root)
+
+    def work(self) -> dict:
+        """What is going on: the work board, running jobs, uncommitted files by area, the day's commits."""
+        from genomeos import jobs, roadmap, work
+
+        areas = roadmap.parse_areas((self.root / "docs" / "ROADMAP.md").read_text())
+        titles = {a["letter"]: a["title"] for a in areas}
+        board = work.board(self.root)
+        holder = {f: e["who"] for e in board if e.get("state") != "done" for f in e.get("files", [])}
+        files = []
+        for f in work.uncommitted(self.root):
+            who = holder.get(f["path"]) or next(
+                (w for held, w in holder.items() if held.endswith("/") and f["path"].startswith(held)), None
+            )
+            files.append({**f, "area": roadmap.area_of_path(f["path"], areas), "who": who})
+        running = [
+            j.to_dict() for j in jobs.all_status(self.root) if j.state in ("running", "stalled", "failed")
+        ]
+        return {
+            "board": board,
+            "jobs": running,
+            "uncommitted": files,
+            "commits": work.recent_commits(self.root),
+            "areas": titles,
+        }
+
+    def unknown_wide(self) -> dict:
+        """Genome-wide UNKNOWN classification: per-chromosome rows and class totals, as far as it has run."""
+        from genomeos.results import load_result
+
+        r = load_result("unknown_genome_wide", self.root / "data" / "results") or {"chromosomes": {}}
+        ch = r.get("chromosomes", {})
+        order = [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY"]
+        rows = []
+        for c in order:
+            v = ch.get(c) or (
+                load_result(f"unknown_{c}", self.root / "data" / "results") if c == "chr21" else None
+            )
+            if not v:
+                continue
+            by = {k: (x["bp"] if isinstance(x, dict) else x) for k, x in v["by_class"].items()}
+            top = max(
+                (kv for kv in by.items() if kv[0] != "unclassified"), key=lambda kv: kv[1], default=("-", 0)
+            )
+            if "curated_repeats" not in v:
+                per = load_result(f"unknown_{c}", self.root / "data" / "results") or {}
+                v = {**v, "curated_repeats": per.get("curated_repeats", False)}
+            rows.append(
+                {
+                    "chrom": c,
+                    "blocks": v["unknown_blocks"],
+                    "unknown_mb": round(v["unknown_bp"] / 1e6, 1),
+                    "classified": v["classified_fraction"],
+                    "top_class": top[0],
+                    "top_share": round(top[1] / v["unknown_bp"], 3) if v["unknown_bp"] else None,
+                    "curated_repeats": bool(v.get("curated_repeats")),
+                    "seconds": v.get("seconds"),
+                }
+            )
+        tot_bp = sum(v["unknown_bp"] for v in ch.values()) or 1
+        by_all: dict[str, int] = {}
+        for v in ch.values():
+            for k, x in v["by_class"].items():
+                by_all[k] = by_all.get(k, 0) + (x["bp"] if isinstance(x, dict) else x)
+        return {
+            "done": len(rows),
+            "total": 24,
+            "unknown_bp": tot_bp,
+            "classified": round(1 - by_all.get("unclassified", 0) / tot_bp, 4) if ch else None,
+            "by_class": dict(sorted(by_all.items(), key=lambda kv: -kv[1])[:12]),
+            "table": rows,
+        }
+
+    def individual_wide(self) -> dict:
+        """The test human on every autosome (statistics only) and the reader on every chromosome."""
+        from genomeos.results import load_result
+
+        rd = self.root / "data" / "results"
+        return {
+            "twin": load_result("hg002_twin_by_chromosome", rd),
+            "reader": load_result("reader_genome_wide", rd),
+            "enhancer_targets": {
+                p.stem.split("_")[-1]: load_result(p.stem, rd)
+                for p in sorted(rd.glob("enhancer_targets_chr*.json"))
+            },
+            "enhancer_targets_genome_wide": load_result("enhancer_targets_genome_wide", rd),
+            "constrained_targets_genome_wide": load_result("constrained_targets_genome_wide", rd),
+            "enhancer_targets_all": {
+                p.stem.split("_")[-1]: _all_elements_card(load_result(p.stem, rd) or {})
+                for p in sorted(rd.glob("enhancer_targets_all_chr*.json"))
+            },
+            "vista": {
+                p.stem.split("_")[-1]: load_result(p.stem, rd) for p in sorted(rd.glob("vista_chr*.json"))
+            },
+            "vista_genome_wide": load_result("vista_genome_wide", rd),
+            "eqtl_targets": load_result("eqtl_targets", rd),
+            "mpra_genome_wide": load_result("mpra_genome_wide", rd),
+            "consequence_targets": load_result("consequence_targets", rd),
+            "segments": [
+                {
+                    "name": p.stem,
+                    "chrom": p.stem.split("_")[1],
+                    "config": "_".join(p.stem.split("_")[2:]) or "grammar",
+                    **{
+                        k: v
+                        for k, v in (load_result(p.stem, rd) or {}).items()
+                        if k
+                        in (
+                            "predictions",
+                            "exon_sensitivity",
+                            "exon_precision",
+                            "canonical_exon_sensitivity",
+                            "gene_sensitivity",
+                            "gene_precision",
+                            "true_genes",
+                        )
+                    },
+                }
+                for p in sorted(rd.glob("segments_chr*.json"))
+            ],
+            "mouse": {
+                p.stem.split("_")[-1]: {
+                    k: v
+                    for k, v in (load_result(p.stem, rd) or {}).items()
+                    if k not in ("node_rows", "mouse_domains")
+                }
+                for p in sorted(rd.glob("mouse_mm10_chr*.json"))
+            },
+        }
+
+    def budget_wide(self) -> dict:
+        """The 98%: every chromosome's composition budget (tiers, constraint) and the job's state."""
+        from genomeos import jobs
+        from genomeos.attribution.budget import PHYLOP_THRESHOLD, TIERS
+
+        rd = self.root / "data" / "results"
+        cache = getattr(self, "_budget_cache", None)
+        if cache is None:
+            cache = self._budget_cache = {}
+        rows = []
+        tiers = dict.fromkeys(TIERS, 0)
+        unknown_bp = constrained = measured = genome = 0
+
+        def order(q: Path) -> tuple[int, str]:
+            c = q.stem.split("_chr")[-1]
+            return (int(c), "") if c.isdigit() else (100, c)
+
+        for path in sorted(rd.glob("budget_chr*.json"), key=order):
+            key = (str(path), path.stat().st_mtime)
+            row = cache.get(key)
+            if row is None:
+                try:
+                    r = json.loads(path.read_text())
+                except (OSError, json.JSONDecodeError):
+                    continue
+                if not r.get("by_tier"):
+                    continue
+                cost = r.get("cost") or {}
+                row = {
+                    "chrom": r["chrom"],
+                    "blocks": len(r.get("blocks", [])),
+                    "unknown_bp": r["unknown_bp"],
+                    "chromosome_length": r.get("chromosome_length") or 0,
+                    "constrained_fraction": r.get("constrained_fraction"),
+                    "constrained_bp": r.get("constrained_bp") or 0,
+                    "measured_bp": r.get("measured_bp") or 0,
+                    "tiers": {t: v["bp"] for t, v in r["by_tier"].items()},
+                    "constrained_unknown_blocks": r["by_tier"]
+                    .get("constrained_unknown", {})
+                    .get("blocks", 0),
+                    "mb_fetched": (cost.get("phylop") or {}).get("mb_fetched"),
+                    "seconds": cost.get("seconds"),
+                }
+                cache.clear() if len(cache) > 64 else None
+                cache[key] = row
+            rows.append(row)
+            for t, bp in row["tiers"].items():
+                tiers[t] = tiers.get(t, 0) + bp
+            unknown_bp += row["unknown_bp"]
+            constrained += row["constrained_bp"]
+            measured += row["measured_bp"]
+            genome += row["chromosome_length"]
+        try:
+            job = jobs.status("budget_genome_wide", self.root).to_dict()
+        except (KeyError, OSError, ValueError):
+            job = None
+        return {
+            "done": len(rows),
+            "total": 24,
+            "threshold": PHYLOP_THRESHOLD,
+            "unknown_bp": unknown_bp,
+            "genome_bp": genome,
+            "constrained_fraction": round(constrained / measured, 4) if measured else None,
+            "tiers": tiers,
+            "table": rows,
+            "job": job,
+        }
+
+    def proteome_summary(self) -> dict:
+        from genomeos.results import load_result
+
+        out = {}
+        for c in [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]:
+            r = load_result(f"proteome_{c}", self.root / "data" / "results")
+            if r:
+                out[c] = {
+                    "coding_genes": r["coding_genes"],
+                    "coverage": r["coverage_fraction"],
+                    "no_entry": len(r.get("no_reviewed_entry", [])),
+                }
+        return out
+
     def genome_wide(self) -> dict:
         from genomeos.results import load_result
 
@@ -734,6 +1211,60 @@ class Api:
             "evidence": k["evidence"],
         }
 
+    def cancer_tumour(self, vcf: str, deep: int = 5) -> dict:
+        """Tumour-only pipeline on a local VCF; the packet is included."""
+        from genomeos.cancer import analyse, tumour_packet
+
+        path = self._safe(vcf)
+        a = analyse(str(path), deep=deep)
+        a["packet"] = tumour_packet(a)
+        return a
+
+    def therapeutics(
+        self,
+        vcf: str,
+        hla: str = "",
+        rna: str = "",
+        normal: str = "",
+        top: int = 8,
+        offline: bool = False,
+        cohort: str = "",
+    ) -> dict:
+        """Therapeutic target and mechanism reasoning for one tumour VCF."""
+        from genomeos.therapeutics import analyse_vcf, machine_report, text_report
+        from genomeos.therapeutics.design import dataset, design_readiness, negative_targets
+
+        path = self._safe(vcf)
+        a = analyse_vcf(
+            str(path),
+            normal_vcf=str(self._safe(normal)) if normal else None,
+            hla=[x for x in hla.split(",") if x.strip()],
+            rna=str(self._safe(rna)) if rna else None,
+            top_genes=top,
+            cohort=cohort,
+            net=not offline,
+        )
+        out = machine_report(a)
+        out["report"] = text_report(a)
+        out["data_level_detail"] = a["data_level"]
+        out["design"] = {
+            c.gene: {
+                "readiness": design_readiness(c),
+                "negative_targets": negative_targets(c, a.get("provider_bundle")),
+                "class_reason": c.class_reason,
+                "localization": c.localization.to_dict(),
+                "trafficking": c.trafficking.to_dict(),
+                "normal_tissue": c.normal_tissue.to_dict(),
+                "structure": c.structure.to_dict(),
+                "neoantigen": c.neoantigen.to_dict() if c.neoantigen else None,
+                "scores": c.scores.to_dict(),
+                "mechanisms": [m.to_dict() for m in c.therapeutic_mechanisms],
+            }
+            for c in a["candidates"]
+        }
+        out["schema"] = dataset(a, None)["schema"]
+        return out
+
     def cancer_compare(self, normal: str, tumour: str, genome: str, chrom: str) -> dict:
         from genomeos.cancer import agent_packet, annotate, somatic, suggest_cancer_type, surface_targets
         from genomeos.genome import Annotation, IndexedGenome, default_gencode
@@ -786,7 +1317,323 @@ class Api:
             if genome:
                 genome.close()
 
+    def report(self, gene: str, chrom: str) -> dict:
+        """The gene dossier (Markdown and the dict behind it)."""
+        from genomeos.genome import IndexedGenome, default_gencode
+        from genomeos.report import gene_report, to_markdown
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+        if not default_gencode({chrom}) or not fa.exists():
+            raise ApiError(f"{chrom} is not local; fetch it first")
+        ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+        genome = IndexedGenome(fa)
+        try:
+            rep = gene_report(gene.upper(), chrom, ann, genome, self.root)
+        except KeyError as e:
+            raise ApiError(f"{gene} not on {chrom}") from e
+        finally:
+            genome.close()
+        rep["markdown"] = to_markdown(rep)
+        return rep
+
+    def features(self) -> list[dict]:
+        """Optional features (external keys or packages): always listed, disabled without them."""
+        from genomeos.predict import status
+
+        return [status()]
+
+    def predict(self, variant: str) -> dict:
+        """AlphaGenome predicted tissue effects for one variant, or the disabled status."""
+        import re
+
+        from genomeos.predict import AlphaGenomeAdapter, status
+
+        st = status()
+        if not st["enabled"]:
+            return {"enabled": False, "reason": st["reason"], "how": st["how"]}
+        m = re.match(r"^(chr\w+):(\d+)\s+([ACGTacgt]+)>([ACGTacgt]+)$", variant.strip())
+        if not m:
+            return {"enabled": True, "error": "expected chr21:25897620 C>T"}
+        chrom, pos, ref, alt = m.group(1), int(m.group(2)), m.group(3).upper(), m.group(4).upper()
+        adapter = AlphaGenomeAdapter()
+        effects = adapter.predict(chrom, pos, ref, alt)
+        effects.sort(key=lambda e: -abs(e.log2_fold_change))
+        return {
+            "enabled": True,
+            "variant": f"{chrom}:{pos} {ref}>{alt}",
+            "model": st["model"],
+            "evidence": "predicted",
+            "threshold_log2fc": 0.05,
+            "scanned": adapter.last_scan,
+            "effects": [
+                {
+                    "gene": e.gene,
+                    "tissue": e.tissue,
+                    "log2_fold_change": round(e.log2_fold_change, 4),
+                    "direction": getattr(e.direction, "value", str(e.direction)),
+                    "confidence": round(e.confidence, 3),
+                }
+                for e in effects
+            ],
+        }
+
+    def lookup(self, variant: str) -> dict:
+        """One variant through every layer: VEP anywhere, local trace when the chromosome is local."""
+        from genomeos.genome import IndexedGenome, default_gencode
+        from genomeos.genome.lookup import lookup, parse_variant
+
+        try:
+            chrom, pos, ref, alt = parse_variant(variant)
+        except ValueError as e:
+            raise ApiError(str(e)) from e
+        ann = genome = None
+        fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+        if default_gencode({chrom}) and fa.exists():
+            ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+            genome = IndexedGenome(fa)
+        try:
+            return lookup(chrom, pos, ref, alt, ann, genome)
+        finally:
+            if genome:
+                genome.close()
+
+    def graph(self, gene: str, max_nodes: int = 40) -> dict:
+        """One protein's neighbourhood in the local knowledge graph (cached definitions only)."""
+        from genomeos.molecules.graph import cached_build
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        g = cached_build()
+        n = g.neighbourhood(gene.upper(), max_nodes)
+        rels = ("associates", "member_of", "has_domain", "expressed_in")
+        n["degree"] = {k: g.degree(gene.upper(), k) for k in rels}
+        return n
+
+    def rna(self, gene: str, chrom: str | None) -> dict:
+        """Transcripts (local models) and GTEx expression per tissue for one gene."""
+        from genomeos.genome import IndexedGenome, default_gencode
+        from genomeos.molecules.rna import rna_report
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        ann = genome = None
+        if chrom and default_gencode({chrom}):
+            ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+            fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+            genome = IndexedGenome(fa) if fa.exists() else None
+        try:
+            return rna_report(gene.upper(), ann, genome)
+        finally:
+            if genome:
+                genome.close()
+
+    def protein_definition(self, gene: str, refresh: bool = False) -> dict:
+        """The federated protein definition (cached locally after the first compile)."""
+        from genomeos.molecules import compile_protein, states_from_definition
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        d = compile_protein(gene.upper(), refresh=refresh)
+        d = dict(d)
+        d["states"] = [st.to_dict() for st in states_from_definition(d)][:40]
+        return d
+
+    def pathway_kinetic(
+        self, query: str, model: str | None, knockout: str | None, hours: float = 100.0, top: int = 6
+    ) -> dict:
+        """A curated BioModels ODE model for a pathway (by name or id), run on the in-house engine, with an
+        optional knockout compared on final levels and peaks; the top species' time series for a chart."""
+        import re
+
+        from genomeos.molecules import biomodels
+
+        hits, used = [], query
+        if not model:
+            if not query:
+                raise ApiError("give a pathway name to search BioModels with, or a BIOMD… id")
+            hits, used = biomodels.search_pathway(query, limit=8)
+            if not hits:
+                raise ApiError(f"no curated BioModels entry matches {query!r}")
+            model = hits[0]["id"]
+        if not re.fullmatch(r"(BIOMD|MODEL)\d+", model):
+            raise ApiError("model id must look like BIOMD0000000010")
+        path = biomodels.fetch(model, self.root / "data" / "knowledge" / "biomodels")
+        dt = 0.01 if hours <= 500 else 0.05
+        base = biomodels.run(path, duration=hours, dt=dt)
+        out: dict = {
+            "hits": hits,
+            "query_used": used,
+            "model": {k: v for k, v in base.items() if k not in ("series", "times", "levels")},
+            "levels": base["levels"],
+            "times": base["times"],
+        }
+        shown = [s for s, _ in sorted(base["levels"].items(), key=lambda kv: -kv[1]["peak"])[:top]]
+        out["series"] = {s: base["series"][s] for s in shown}
+        if knockout:
+            acc = None
+            if not re.fullmatch(r"[A-NR-Z][0-9][A-Z0-9]{3}[0-9]([A-Z][A-Z0-9]{2}[0-9])?", knockout.upper()):
+                from genomeos.molecules import compile_protein
+
+                try:
+                    d = compile_protein(knockout.upper(), sources={"uniprot"})
+                    acc = ((d["sections"].get("identity") or {}).get("items") or {}).get("accession")
+                except Exception:  # noqa: BLE001 - match by name only
+                    acc = None
+            else:
+                acc = knockout.upper()
+            ko = biomodels.run(path, duration=hours, dt=dt, knockout=[knockout], accessions={knockout: acc})
+            changed = biomodels.compare(base, ko)
+            out["knockout"] = {
+                "term": knockout,
+                "accession": acc,
+                "held": ko["knocked_out"],
+                "changed": changed,
+                "series": {r["species"]: ko["series"][r["species"]] for r in changed[:top]},
+            }
+            for r in changed[:top]:
+                out["series"].setdefault(r["species"], base["series"][r["species"]])
+        return out
+
+    def pathway(self, pathway_id: str, knockout: str | None) -> dict:
+        """A Reactome pathway as a reachability graph, optionally with one protein removed."""
+        import re
+
+        from genomeos.molecules.reactome import PathwayModel, fetch_pathway
+
+        if not re.fullmatch(r"R-HSA-\d+", pathway_id or ""):
+            raise ApiError("pathway id must look like R-HSA-69541")
+        model = PathwayModel.from_sbml(fetch_pathway(pathway_id))
+        out = {
+            "summary": model.summary(),
+            "reactions": [
+                {
+                    "id": r.reactome_id or r.id,
+                    "name": r.name,
+                    "inputs": [model.species[x].name for x in r.inputs],
+                    "outputs": [model.species[x].name for x in r.outputs],
+                    "catalysts": [model.species[x].name for x in r.catalysts],
+                    "inhibitors": [model.species[x].name for x in r.inhibitors],
+                }
+                for r in model.reactions
+            ],
+        }
+        if knockout:
+            acc = knockout.upper()
+            if not re.fullmatch(r"[A-NR-Z][0-9][A-Z0-9]{3}[0-9]([A-Z][A-Z0-9]{2}[0-9])?", acc):
+                from genomeos.molecules import compile_protein
+
+                ident = compile_protein(acc, sources={"uniprot"})["sections"].get("identity", {}).get("items")
+                if not ident:
+                    raise ApiError(f"no reviewed UniProt entry for {knockout}")
+                acc = ident["accession"]
+            out["knockout"] = model.knockout(acc)
+            out["knockout"]["symbol"] = knockout.upper()
+        return out
+
+    def flow(self, gene: str, chrom: str, variant: str | None) -> dict:
+        """DNA → RNA → protein trace of a gene's canonical transcript, optionally with one base change."""
+        from genomeos.flow import trace_gene
+        from genomeos.genome import IndexedGenome, default_gencode
+
+        if not gene or not gene.replace("-", "").replace("_", "").isalnum():
+            raise ApiError("gene symbol required")
+        if not chrom or not default_gencode({chrom}):
+            raise ApiError(f"no local annotation for {chrom or '?'}; chr21 and chrM are local")
+        ann = self._annotation_for(f"data/reference/{chrom}.fa.gz", chrom)
+        fa = self.root / "data" / "reference" / f"{chrom}.fa.gz"
+        if not fa.exists():
+            raise ApiError(f"no local sequence for {chrom}")
+        try:
+            g = ann.gene(gene.upper())
+        except KeyError as e:
+            raise ApiError(f"{gene} not on {chrom}") from e
+        module = ann.to_module("flow")
+        genome = IndexedGenome(fa)
+        try:
+            tr = trace_gene(genome, g, module.entities[g.id].transcripts)
+        finally:
+            genome.close()
+        if tr is None:
+            raise ApiError(f"{gene} has no transcripts")
+        out = tr.to_dict()
+        out["gene_start"], out["gene_end"] = g.locus.start, g.locus.end
+        out["transcripts"] = len(g.transcripts)
+        from genomeos.genome.regulation import regulation_of
+        from genomeos.genome.regulatory import load_ccres
+
+        ccres = load_ccres(chrom)
+        if ccres:
+            fai = IndexedGenome(fa)
+            try:
+                length = fai.lengths[chrom]
+            finally:
+                fai.close()
+            out["regulation"] = regulation_of(g.symbol, chrom, ccres, ann, length)
+        # every local individual's variants inside the gene: the test human and imported genomes
+        from genomeos.genome.individuals import rows_in, sources
+
+        people = []
+        for name, vcf, evidence in sources(chrom, self.root / "data" / "individuals"):
+            inside, coding, positions = 0, [], []
+            for f in rows_in(vcf, g.locus.start + 1, g.locus.end):
+                inside += 1
+                pos = int(f[1])
+                gt = f[9].split(":")[0] if len(f) > 9 else ""
+                if len(positions) < 2000:
+                    positions.append([pos - 1, gt])
+                if tr is not None and len(f[3]) == 1 and len(f[4]) == 1 and len(coding) < 30:
+                    sub = tr.substitute(pos - 1, f[3], f[4])
+                    if sub.get("region") == "CDS":
+                        coding.append(
+                            {
+                                "pos": pos,
+                                "ref": f[3],
+                                "alt": f[4],
+                                "genotype": gt,
+                                "consequence": sub.get("consequence"),
+                                "hgvs_p": sub.get("hgvs_p"),
+                                "residue": sub.get("residue"),
+                            }
+                        )
+            people.append(
+                {
+                    "name": name,
+                    "variants_in_gene": inside,
+                    "positions": positions,
+                    "coding_snvs": coding,
+                    "evidence": evidence,
+                }
+            )
+        out["individuals"] = people
+        if variant:
+            try:
+                pos, change = (
+                    variant.replace(",", "").split(":")[-1].split(maxsplit=1)
+                    if " " in variant
+                    else (variant.split(":")[-1][:-3], variant[-3:])
+                )
+                ref, alt = change.upper().split(">")
+                out["variant"] = tr.substitute(int(pos) - 1, ref, alt)  # user gives 1-based
+            except (ValueError, IndexError) as e:
+                raise ApiError("variant format: POSITION REF>ALT, e.g. 25897620 G>A (1-based)") from e
+        return out
+
     # ---- libraries -------------------------------------------------------
+
+    def proteome_lib(self, gene: str | None = None) -> dict:
+        """The packaged proteome library: its summary, or one protein's record and BioLang block."""
+        from genomeos.lib.proteome import block, get, summary
+
+        out: dict = {"summary": summary()}
+        if gene:
+            if not gene.replace("-", "").replace("_", "").isalnum():
+                raise ApiError("gene symbol required")
+            r = get(gene)
+            out["protein"] = r
+            out["block"] = block(gene) if r else None
+        return out
 
     def libs(self) -> dict:
         return {
@@ -867,8 +1714,52 @@ class Handler(BaseHTTPRequestHandler):
                 )
             if u.path == "/api/libs":
                 return self._json(self.api.libs())
+            if u.path == "/api/proteome_lib":
+                return self._json(self.api.proteome_lib(self._q(qs, "gene")))
             if u.path == "/api/twins":
                 return self._json(self.api.twins())
+            if u.path == "/api/individuals":
+                return self._json(self.api.individuals())
+            if u.path == "/api/individual/pgs":
+                return self._json(self.api.individual_pgs(self._q(qs, "name") or "HG002"))
+            if u.path == "/api/individual/diff":
+                return self._json(
+                    self.api.individual_diff(
+                        self._q(qs, "name") or "HG002",
+                        self._q(qs, "against") or "reference",
+                        self._q(qs, "regulatory", ""),
+                        self._q(qs, "chrom", ""),
+                    )
+                )
+            if u.path == "/api/individual/report":
+                return self._json(self.api.individual_report(self._q(qs, "name") or "HG002"))
+            if u.path == "/api/individual/coding":
+                return self._json(self.api.individual_coding(self._q(qs, "name") or "HG002"))
+            if u.path == "/api/individual/knockouts":
+                return self._json(self.api.individual_knockouts(self._q(qs, "name") or "HG002"))
+            if u.path == "/api/individual/screen":
+                return self._json(self.api.individual_screen(self._q(qs, "name") or "HG002"))
+            if u.path == "/api/individual/check":
+                return self._json(
+                    self.api.individual_check(self._q(qs, "name") or "HG002", self._q(qs, "chrom") or "chr21")
+                )
+            if u.path == "/api/individual/predict":
+                return self._json(
+                    self.api.individual_predict(
+                        self._q(qs, "name") or "HG002",
+                        self._q(qs, "gene") or "",
+                        self._q(qs, "chrom") or "chr21",
+                        int(self._q(qs, "max") or 30),
+                    )
+                )
+            if u.path == "/api/individual/genes":
+                return self._json(
+                    self.api.individual_genes(
+                        self._q(qs, "name") or "HG002",
+                        self._q(qs, "chrom") or "chr21",
+                        int(self._q(qs, "top") or 40),
+                    )
+                )
             if u.path == "/api/results":
                 return self._json(self.api.results())
             if u.path == "/api/blocks":
@@ -880,18 +1771,71 @@ class Handler(BaseHTTPRequestHandler):
                         int(self._q(qs, "end", 0)),
                     )
                 )
+            if u.path == "/api/report":
+                return self._json(self.api.report(self._q(qs, "gene", ""), self._q(qs, "chrom", "chr21")))
+            if u.path == "/api/lookup":
+                return self._json(self.api.lookup(self._q(qs, "variant", "")))
+            if u.path == "/api/graph":
+                return self._json(self.api.graph(self._q(qs, "gene", ""), int(self._q(qs, "max", 40))))
+            if u.path == "/api/rna":
+                return self._json(self.api.rna(self._q(qs, "gene", ""), self._q(qs, "chrom")))
+            if u.path == "/api/protein_definition":
+                return self._json(
+                    self.api.protein_definition(self._q(qs, "gene", ""), self._q(qs, "refresh", "") == "1")
+                )
+            if u.path == "/api/pathway":
+                return self._json(self.api.pathway(self._q(qs, "id", ""), self._q(qs, "knockout")))
+            if u.path == "/api/pathway_kinetic":
+                return self._json(
+                    self.api.pathway_kinetic(
+                        self._q(qs, "query", ""),
+                        self._q(qs, "model"),
+                        self._q(qs, "knockout"),
+                        float(self._q(qs, "hours") or 100),
+                    )
+                )
+            if u.path == "/api/flow":
+                return self._json(
+                    self.api.flow(
+                        self._q(qs, "gene", ""), self._q(qs, "chrom", "chr21"), self._q(qs, "variant")
+                    )
+                )
             if u.path == "/api/protein":
                 return self._json(self.api.protein(self._q(qs, "gene", ""), self._q(qs, "chrom")))
             if u.path == "/api/cancer":
                 return self._json(self.api.cancer_knowledge(self._q(qs, "gene"), int(self._q(qs, "top", 30))))
             if u.path == "/api/jobs":
                 return self._json(self.api.jobs())
+            if u.path == "/api/budget":
+                return self._json(self.api.budget_wide())
             if u.path == "/api/progress":
                 return self._json(self.api.progress())
+            if u.path == "/api/roadmap":
+                return self._json(self.api.roadmap())
+            if u.path == "/api/work":
+                return self._json(self.api.work())
+            if u.path == "/api/features":
+                return self._json(self.api.features())
+            if u.path == "/api/predict":
+                return self._json(self.api.predict(self._q(qs, "variant", "")))
             if u.path == "/api/anatomy/genome":
                 return self._json(self.api.genome_wide())
+            if u.path == "/api/unknown/genome":
+                return self._json(self.api.unknown_wide())
+            if u.path == "/api/individual":
+                return self._json(self.api.individual_wide())
+            if u.path == "/api/proteome":
+                return self._json(self.api.proteome_summary())
             if u.path == "/api/anatomy":
                 return self._json(self.api.anatomy(self._q(qs, "path"), self._q(qs, "chrom")))
+            if u.path == "/api/grow":
+                return self._json(
+                    self.api.grow(
+                        self._q(qs, "module", "data/organisms/celegans/embryo.bio"),
+                        self._q(qs, "until", "800"),
+                        int(self._q(qs, "depth", 3)),
+                    )
+                )
             if u.path == "/api/develop":
                 return self._json(
                     self.api.develop(
@@ -916,6 +1860,20 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
             if u.path == "/api/compile":
                 return self._json(self.api.compile(body.get("source", "")))
+            if u.path == "/api/cancer/tumour":
+                return self._json(self.api.cancer_tumour(body.get("vcf", ""), int(body.get("deep", 5))))
+            if u.path == "/api/therapeutics":
+                return self._json(
+                    self.api.therapeutics(
+                        body.get("vcf", ""),
+                        body.get("hla", ""),
+                        body.get("rna", ""),
+                        body.get("normal", ""),
+                        int(body.get("top", 8)),
+                        bool(body.get("offline", False)),
+                        body.get("cohort", ""),
+                    )
+                )
             if u.path == "/api/cancer/compare":
                 return self._json(
                     self.api.cancer_compare(
@@ -934,6 +1892,12 @@ class Handler(BaseHTTPRequestHandler):
                         body.get("chrom_length"),
                     )
                 )
+            if u.path == "/api/jobs/heal":
+                from genomeos import jobs
+
+                return self._json(
+                    jobs.heal(body.get("name", ""), self.api.root, force=bool(body.get("force"))).to_dict()
+                )
             if u.path == "/api/jobs/start":
                 return self._json(self.api.job_start(body.get("name", "")))
             if u.path == "/api/debug":
@@ -949,6 +1913,15 @@ class Handler(BaseHTTPRequestHandler):
                 )
             if u.path == "/api/twin/measure":
                 return self._json(self.api.twin_measure(body.get("name", "")))
+            if u.path == "/api/individual/import":
+                return self._json(
+                    self.api.individual_import(
+                        body.get("path", ""),
+                        body.get("name", ""),
+                        body.get("note", ""),
+                        bool(body.get("replace")),
+                    )
+                )
             if u.path == "/api/twin/new":
                 return self._json(
                     self.api.twin_new(
@@ -1002,6 +1975,12 @@ def make_server(
     root: Path, host: str = "127.0.0.1", port: int = 8765, verbose: bool = False
 ) -> ThreadingHTTPServer:
     Handler.api = Api(root)
+    # the supervisor: every minute, restart an auto-heal job that is not complete and is dead or stalled
+    import threading
+
+    from genomeos import jobs
+
+    threading.Thread(target=jobs.supervise, args=(root, 60), daemon=True, name="job-supervisor").start()
     srv = ThreadingHTTPServer((host, port), Handler)
     srv.verbose = verbose  # type: ignore[attr-defined]
     return srv

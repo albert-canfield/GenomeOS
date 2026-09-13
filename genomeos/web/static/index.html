@@ -16,12 +16,27 @@
   --accent:#4c8dff;--c1:#4c8dff;--c2:#ff6b66;--c3:#3fb950;--c4:#b083ff;--c5:#e3b341;--c6:#39c5c5;}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{display:flex;align-items:center;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:2}
-header h1{font-size:16px;margin:0;letter-spacing:.3px}
+header{display:flex;align-items:center;gap:8px 16px;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:2}
+header h1{font-size:16px;margin:0;letter-spacing:.3px;white-space:nowrap}
 header h1 span{color:var(--muted);font-weight:400;margin-left:8px;font-size:12px}
-nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
-nav button{background:transparent;border:1px solid transparent;color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer;font:inherit}
+/* tab strip: one row that never wraps; when the window is too narrow it scrolls sideways, and faded edges say so */
+.tabs{position:relative;flex:1 1 auto;min-width:0}
+.tabs::before,.tabs::after{content:'';position:absolute;top:0;bottom:0;width:36px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:1}
+.tabs::before{left:0;background:linear-gradient(90deg,var(--panel),transparent)}
+.tabs::after{right:0;background:linear-gradient(270deg,var(--panel),transparent)}
+.tabs.l::before,.tabs.r::after{opacity:1}
+nav{display:flex;gap:2px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;white-space:nowrap;background:transparent;border:1px solid transparent;color:var(--muted);padding:6px 11px;border-radius:6px;cursor:pointer;font:inherit}
+nav>button:first-child{margin-left:auto}  /* right-aligned when there is room; the auto margin drops to 0 once the strip overflows, so nothing becomes unreachable */
+nav button:hover{color:var(--ink)}
 nav button.active{background:var(--bg);border-color:var(--line);color:var(--ink)}
+nav [data-tip]{cursor:pointer}
+nav [data-tip]::after{display:none}  /* the strip clips its overflow, so nav tips are drawn in #navtip instead */
+#navtip{position:fixed;z-index:20;max-width:340px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.4;box-shadow:0 6px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity .12s,transform .12s}
+#navtip.on{opacity:1;transform:translateY(0)}
+@media(max-width:1500px){header{flex-wrap:wrap;gap:6px 16px}.tabs{flex-basis:100%}nav>button:first-child{margin-left:0}}
+@media(max-width:600px){header{padding:8px 12px}nav button{padding:6px 9px}nav button .ic{margin-right:3px}}
 main{padding:16px 20px;max-width:1280px;margin:0 auto}
 section{display:none}section.active{display:block}
 .grid{display:grid;gap:16px}
@@ -47,6 +62,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .pill.experimental{color:var(--ok);border-color:var(--ok)}
 .pill.curated{color:var(--c6);border-color:var(--c6)}
 .pill.predicted{color:var(--c4);border-color:var(--c4)}
+.pill.derived{color:var(--c1);border-color:var(--c1)}
 .pill.inferred{color:var(--warn);border-color:var(--warn)}
 .pill.none{color:var(--bad);border-color:var(--bad)}
 .bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
@@ -76,6 +92,15 @@ svg.chart{width:100%;height:280px;display:block}
 .kpi div span{font-size:12px;color:var(--muted)}
 .scroll{max-height:420px;overflow:auto}
 .hint{font-size:12px;color:var(--muted);margin-top:6px}
+.tcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.thead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.tbar{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:3px 0}
+.tbar-l{flex:0 0 170px;color:var(--muted)}
+.tbar-t{flex:1;height:7px;background:var(--bg);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.tbar-t i{display:block;height:100%;background:var(--accent)}
+.tbar-v{flex:0 0 46px;text-align:right;font-variant-numeric:tabular-nums}
+.tcard details{margin-top:4px;font-size:12.5px}
+.tcard summary{cursor:pointer;color:var(--muted)}
 /* icons + hover explanations */
 .ic{display:inline-block;width:1.15em;text-align:center;margin-right:6px;font-style:normal}
 nav button .ic{margin-right:5px}
@@ -104,10 +129,41 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 .prog i{display:block;height:100%;background:var(--accent);transition:width .4s}
 .prog.running i{background:linear-gradient(90deg,var(--accent),var(--c6))}
 .state{font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--line)}
+.state.stalled{color:var(--warn);border-color:var(--warn)}
 .state.running{color:var(--warn);border-color:var(--warn)}.state.done{color:var(--ok);border-color:var(--ok)}.state.failed{color:var(--bad);border-color:var(--bad)}.state.idle{color:var(--muted)}
 .log{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:pre-wrap;max-height:90px;overflow:auto;margin-top:4px}
 .pstatus{font-size:11px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
 .pstatus.done{color:var(--ok);border-color:var(--ok)}.pstatus.progress{color:var(--warn);border-color:var(--warn)}
+.pp-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.pp-tabs button{background:transparent;border:1px solid transparent;border-bottom:0;border-radius:6px 6px 0 0;padding:6px 12px;color:var(--muted);cursor:pointer;font:inherit;margin-bottom:-1px}
+.pp-tabs button.on{background:var(--panel);border-color:var(--line);color:var(--ink)}
+.pp-h{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:14px 0 6px;font-weight:600}
+.pp-who{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.pp-entry{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);font-size:12.5px;min-width:0}
+.pp-entry.stale,.pp-entry.done{opacity:.65}
+.pp-entry b.task{display:block;font-size:13.5px;margin:4px 0}
+.pp-entry .files{font-family:var(--mono);font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.pp-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.pp-areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:10px}
+.pp-area{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px;min-width:0}
+.pp-area h4{margin:0 0 2px;font-size:13.5px;display:flex;gap:6px;align-items:baseline}
+.pp-area ol{margin:6px 0 0;padding-left:20px}
+.pp-area li{margin-bottom:5px;overflow-wrap:anywhere}
+.pp-letter{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:5px;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:600}
+.st{font-size:10.5px;padding:0 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;margin-right:4px}
+.st.done,.st.working{color:var(--ok);border-color:var(--ok)}
+.st.partial,.st.waiting,.st.running{color:var(--warn);border-color:var(--warn)}
+.st.blocked,.st.failed,.st.stalled{color:var(--bad);border-color:var(--bad)}
+.pp-sec{margin-top:10px;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.pp-sec>summary{cursor:pointer;font-weight:600}
+.pp-item{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px}
+.pp-item:first-of-type{border-top:0}
+.pp-item details summary{cursor:pointer;color:var(--muted);font-size:12px}
+.pp-md{overflow-x:auto;margin-top:6px;line-height:1.5}
+.pp-md table{font-size:12px;margin:6px 0}
+.pp-md code,.pp-area code,.pp-entry code{font-family:var(--mono);font-size:11.5px;background:var(--bg);padding:0 3px;border-radius:3px}
+.pp-commit{display:flex;gap:8px;font-size:12.5px;padding:3px 0;align-items:baseline}
+.pp-commit .mono{color:var(--muted);flex:0 0 auto}
 .unc{margin-top:10px;font-size:12px}
 .unc table{font-size:12px}
 .unc .lbl{display:inline-block;width:64px;text-align:right;padding-right:6px}
@@ -118,21 +174,24 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 <div id="busy"></div>
 <header>
   <h1>GenomeOS <span id="version"></span></h1>
-  <nav>
+  <div class="tabs"><nav>
     <button data-tab="start" class="active" data-tip="Start here: what GenomeOS is, what each area does, and a suggested first walk-through."><i class="ic">🧭</i>Start</button>
     <button data-tab="genome" data-tip="Load real DNA (FASTA), look at any region, translate it to protein and find open reading frames."><i class="ic">🧬</i>Genome</button>
     <button data-tab="anatomy" data-tip="Count the blocks and elements of a chromosome: what the bases are spent on, gene structure, layout, sequence elements. Compare genomes to see how DNA is organised."><i class="ic">🧱</i>Anatomy</button>
     <button data-tab="blocks" data-tip="A 2-D map of the blocks of a chromosome, to scale and nested: genes containing transcripts containing exons, the UNKNOWN space between genes, islands, repeats and gaps. Zoom, pan, search, filter, and propose moves in edit mode."><i class="ic">🧩</i>Blocks</button>
+    <button data-tab="flow" data-tip="How a gene becomes a protein: DNA locus with exons, the spliced mRNA (UTRs and coding sequence), and the translated residues, linked base to codon to residue. Drop a single-base change on the DNA and see what it does to the protein."><i class="ic">🔁</i>Flow</button>
     <button data-tab="program" data-tip="Write biology as code in BioLang, compile it to BioIR and run the regulatory network through time."><i class="ic">📝</i>Program</button>
     <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
     <button data-tab="space" data-tip="Development in space: morphogen gradients, the segmentation clock and germ-layer choice."><i class="ic">🌱</i>Space</button>
+    <button data-tab="organism" data-tip="An organism from one cell: a BioLang organism program grows cell by cell (C. elegans, every cell named and scored against Sulston's lineage) or as counted populations (a human body over 20 years)."><i class="ic">🪱</i>Organism</button>
     <button data-tab="debug" data-tip="Step a model with biological breakpoints and get an explanation, with evidence, of what drove each value."><i class="ic">🔍</i>Debugger</button>
     <button data-tab="molecules" data-tip="RNA and proteins: a gene's transcripts, our translated protein checked against UniProt, its domains and function, and the AlphaFold 3-D structure coloured by per-residue confidence."><i class="ic">🧫</i>Molecules</button>
     <button data-tab="cancer" data-tip="Healthy versus tumour: somatic differences graded against cBioPortal driver knowledge, suggested cancer types, cell-surface targets, and a task packet for an AI agent."><i class="ic">🎗️</i>Cancer</button>
+    <button data-tab="targets" data-tip="Therapeutic targets: for every alteration, where the protein sits, whether a binder can reach it, how the tumour differs from healthy tissue, what happens after binding, the peptide/HLA route, and which therapeutic mechanism the biology supports. Research hypotheses with evidence, never clinical advice."><i class="ic">🎯</i>Targets</button>
     <button data-tab="progress" data-tip="What is running now, what has been done, and every measurement obtained so far."><i class="ic">📊</i>Progress</button>
     <button data-tab="libs" data-tip="The reusable 'libraries' the genome contains, in five layers, with membership computed from Gene Ontology and Reactome."><i class="ic">📚</i>Libraries</button>
-  </nav>
+  </nav></div>
 </header>
 <main>
 
@@ -146,15 +205,16 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <div class="steps">
       <div class="step"><i class="ic">🧬</i><b>Genome</b> — raw DNA. Pick a file, fetch a region, translate it, find open reading frames. Real human chromosome 21 and the mitochondrial genome are included.</div>
       <div class="step"><i class="ic">🧱</i><b>Anatomy</b> — the inventory. Counts coding, UTR, intron and intergenic bases, exons and introns, gene density and layout, CpG islands and repeats; compares mitochondrion, human and worm.</div>
-      <div class="step"><i class="ic">🧩</i><b>Blocks</b> — the map. Every delimited block of a chromosome drawn to scale and nested; click for details, search a gene, mute everything but one type, and in edit mode drag blocks to propose a new layout with plausibility checks.</div>
+      <div class="step"><i class="ic">🧩</i><b>Blocks</b> — the map. Every delimited block of a chromosome drawn to scale and nested: domains (the genome's nodes between CTCF boundaries), genes with their transcripts and exons, curated repeats, ENCODE regulatory elements and the classified UNKNOWN space; click for details, search a gene, highlight one class, and in edit mode drag blocks to propose a new layout with plausibility checks.</div>
+      <div class="step"><i class="ic">🔁</i><b>Flow</b> — DNA to RNA to protein. One gene drawn as three linked lanes with its regulation above; hover to follow a base to its codon and residue; drop a single-base change and see what it does to the protein.</div>
       <div class="step"><i class="ic">📝</i><b>Program</b> — biology as code. Genes, proteins and rules in BioLang; compile checks references and evidence; run draws the trajectory.</div>
       <div class="step"><i class="ic">⏳</i><b>Ageing</b> — the timers. Telomere attrition, somatic mutations, epigenetic age and senescence for a chosen cell type and environment.</div>
       <div class="step"><i class="ic">👥</i><b>Twin</b> — one person. Measured state (streamed from real data), variants in timer genes, forks and side-by-side futures.</div>
       <div class="step"><i class="ic">🌱</i><b>Space</b> — development. A morphogen source patterns a field of cells; the segmentation clock lays down segments; germ layers form along a gradient.</div>
       <div class="step"><i class="ic">🔍</i><b>Debugger</b> — why. Stop when a condition is met and read the rules and evidence behind the value.</div>
-      <div class="step"><i class="ic">🧫</i><b>Molecules</b> — RNA and proteins. Transcripts of a gene, our translation checked against UniProt, domains and function, and the AlphaFold structure with confidence per residue.</div>
-      <div class="step"><i class="ic">🎗️</i><b>Cancer</b> — the same genome, changed. Compare a person's normal and tumour samples: somatic variants, consequences, driver frequencies and hotspots from 10,945 tumours, suggested cancer types, reachable surface targets, and a packet for a focused AI agent.</div>
-      <div class="step"><i class="ic">📊</i><b>Progress</b> — jobs running in the background with live progress, the project's task log, and the measurements obtained so far.</div>
+      <div class="step"><i class="ic">🧫</i><b>Molecules</b> — RNA and proteins. Every isoform of a gene and where it is expressed (GTEx); our translation checked against UniProt; the AlphaFold structure with confidence per residue; the protein's compiled definition from seven public databases with evidence per section; its neighbourhood in the local knowledge graph; and any of its Reactome pathways run as a reachability graph with the protein knocked out.</div>
+      <div class="step"><i class="ic">🎗️</i><b>Cancer</b> — the same genome, changed. Compare a person's normal and tumour samples, or analyse a tumour alone (VEP on any chromosome, likely-germline variants set aside, mutant peptides, pathway reactions lost): consequences, driver frequencies and hotspots from 10,945 tumours, suggested cancer types, reachable surface targets, and a packet for a focused AI agent.</div>
+      <div class="step"><i class="ic">📊</i><b>Progress</b> — who is working on what right now, the roadmap planned area by area and everything already done, jobs running in the background, and the measurements obtained so far.</div>
       <div class="step"><i class="ic">📚</i><b>Libraries</b> — the parts list. 45 reusable modules the genome contains, verified against curated databases.</div>
     </div>
     <h2 style="margin-top:16px">A first walk-through</h2>
@@ -165,7 +225,9 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <div class="step"><span class="n">4</span>Open <b>Twin</b>, fork HG002 with <code>TERT:nonsense</code> and <b>Run</b> A against B.</div>
       <div class="step"><span class="n">5</span>Open <b>Debugger</b> and press <b>Run to breakpoint</b>: it stops when LacI passes 30 and explains why, with sources.</div>
       <div class="step"><span class="n">6</span>Open <b>Anatomy</b>: the mitochondrion, human chromosome 21 and worm chromosome III appear side by side. Hover a measure for what it means.</div>
-      <div class="step"><span class="n">7</span>Open <b>Progress</b> to watch background jobs (the whole-genome inventory) fill in, and to read the task log.</div>
+      <div class="step"><span class="n">7</span>Open <b>Flow</b>, keep APP and type <code>25897620 C>T</code> in the variant box, press <b>Trace</b>: the base becomes codon 673 and p.Ala673Thr, the protective variant; press the residue button to see it on the structure.</div>
+      <div class="step"><span class="n">8</span>Open <b>Molecules</b> with TP53 and click a pathway chip: the pathway runs with p53 knocked out and the lost reactions turn red.</div>
+      <div class="step"><span class="n">9</span>Open <b>Progress</b> to watch background jobs fill in (whole-genome inventory, UNKNOWN classification, proteome coverage), and to read the task log.</div>
     </div>
     <div class="hint" style="margin-top:12px">Evidence pills: <span class="pill experimental">experimental</span> measured in the lab · <span class="pill curated">curated</span> from a curated database · <span class="pill predicted">predicted</span> from a model · <span class="pill inferred">inferred</span> an estimate · <span class="pill none">none</span> a placeholder. Confidence runs 0 to 1.</div>
   </div>
@@ -227,13 +289,17 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 <!-- ================= BLOCKS ================= -->
 <section id="blocks">
   <div class="card">
-    <h2><i class="ic">🧩</i>Block map<span class="help" data-tip="Rows: + strand genes, − strand genes, then sequence elements and UNKNOWN spans. A gene box contains its transcripts (canonical first) as lines with exons as bars: red = coding, purple = UTR. Widths are to scale. Wheel to zoom, drag to pan, click the minimap to jump.">?</span></h2>
+    <h2><i class="ic">🧩</i>Block map<span class="help" data-tip="Rows: + strand genes, − strand genes, then sequence elements and UNKNOWN spans. A gene box contains its transcripts (canonical first) as lines with exons as bars: red = coding, purple = UTR. Widths are to scale. Repeats are RepeatMasker's curated copies (amber LINE, yellow SINE, brown LTR/DNA, teal satellite) where the chromosome has been distilled with `genomeos repeats`. Open chromatin per cell type (reader v1, ENCODE DNase peaks) appears as 'open in K562' blocks once `genomeos reader --cell-type` has run for the chromosome; click a chip to highlight one cell type. Wheel to zoom, drag to pan, click the minimap to jump.">?</span></h2>
     <div class="row">
       <select id="b-file"></select>
       <label data-tip="Chromosome name inside the file.">chromosome <input id="b-chrom" placeholder="chr21" style="width:90px" class="mono"></label>
       <button class="primary" id="b-load" data-tip="Load the chromosome's blocks (genes for the whole chromosome; transcripts and exons appear when zoomed under 3 Mb)."><i class="ic">📂</i>Load</button>
       <button class="ghost" id="b-zoomout" data-tip="Show the whole chromosome."><i class="ic">🗺️</i>Whole</button>
+      <label data-tip="Bring another chromosome to full footing in the background: sequence, gene models, ENCODE elements and RepeatMasker (10-90 MB kept). It appears in the file list when done; the Progress tab shows the job.">fetch <select id="b-fetch-chrom" class="mono" style="width:90px"></select></label>
+      <button class="ghost" id="b-fetch" data-tip="Start the fetch job for the selected chromosome."><i class="ic">⬇️</i>Fetch</button>
+      <span class="muted" id="b-fetch-status"></span>
       <label data-tip="Type a gene name and press Enter to jump; while typing, everything else is muted.">search <input id="b-search" placeholder="APP" style="width:120px" class="mono"></label>
+      <label data-tip="Reader lane: colour each node by how open it is in one cell type (ENCODE DNase peaks over the node) and mark every coding gene as read (promoter open, filled dot) or silent (hollow dot) in that cell. Same text, different reader. Cell types appear once `genomeos reader --cell-type X --chrom C` has run.">reader <select id="b-reader"><option value="">off</option></select></label>
       <span class="muted" id="b-status"></span>
     </div>
     <div class="row" id="b-filters" data-tip="Show only these block types; everything else is muted.">
@@ -333,6 +399,34 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 
 <!-- ================= TWIN ================= -->
 <section id="twin">
+  <div class="card" style="margin-bottom:16px">
+    <h2><i class="ic">🧍</i>Your genome, as a local individual<span class="help" data-tip="Import one VCF against GRCh38 (plain or .gz, any caller) once: it is split into a small PASS file per chromosome under data/individuals/<name>, git-ignored, and nothing leaves this machine. From then on the variant lookup says whether that person carries a variant, the gene dossier lists their variants inside a gene, twin build makes their haplotypes, and the table below walks a chromosome gene by gene with the consequence of every coding change. HG002 is the built-in test human.">?</span></h2>
+    <div id="ind-list" class="scroll"></div>
+    <div class="row" style="margin-top:8px">
+      <label>VCF on this machine <input id="ind-path" placeholder="/path/to/genome.vcf.gz" style="width:300px" class="mono"></label>
+      <label>name <input id="ind-name" placeholder="ME" style="width:90px"></label>
+      <label>note <input id="ind-note" placeholder="caller, date, consent" style="width:180px"></label>
+      <button class="ghost" id="ind-import" data-tip="Stream the file once and keep one PASS file per chromosome locally."><i class="ic">📥</i>Import</button>
+      <span class="muted" id="ind-status"></span>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <label>person <select id="ind-who"></select></label>
+      <label>chromosome <select id="ind-chrom"></select></label>
+      <button class="ghost" id="ind-pgs" data-tip="Polygenic scores computed for this person from PGS Catalog weights (run `genomeos individual pgs --name N` once): a raw weighted sum with its coverage per score, placed against the other local people; not a percentile, and only within the score's own ancestries."><i class="ic">Σ</i> polygenic</button>
+      <label>compare with <select id="ind-against"><option>reference</option></select></label>
+      <label data-tip="Tick to diff the variants inside the chosen chromosome's regulatory elements (ENCODE cCREs) instead of the protein-changing variants: element class, the node's target, the cached deletion prediction."><input type="checkbox" id="ind-reg"> regulatory (one chromosome)</label>
+      <button class="ghost" id="ind-diff" data-tip="Genome diff as code review: this person against another local person, or against the reference. Protein-changing variants gene by gene, alleles normalised, + only this person, − only the other, with each variant's consequence, zygosity, AlphaMissense class where scored and ClinVar row where screened. Both people need their coding inventory run once."><i class="ic">⇄</i> diff</button>
+      <button class="ghost" id="ind-genes" data-tip="Every coding gene of the chromosome with this person's variants and the consequence of each coding SNV on the canonical transcript."><i class="ic">🧬</i>Genes</button>
+      <button class="ghost" id="ind-check" data-tip="Apply this person's variants of the chromosome to the local GRCh38 sequence and count the calls whose reference base disagrees: the assembly check. Statistics only, stored under the person's directory."><i class="ic">✅</i>Check vs reference</button>
+      <button class="ghost" id="ind-screen" data-tip="ClinVar carrier screen over every chromosome the person has: pathogenic and likely pathogenic alleles carried, with genotype, zygosity and ClinVar's review stars. ClinVar is streamed once and kept locally; the result stays under the person's directory. Research annotation, not a clinical report."><i class="ic">🩺</i>ClinVar screen</button>
+      <button class="ghost" id="ind-ko" data-tip="Genome-wide: this person's SNVs that end a canonical protein early (nonsense), remove its start or its stop, homozygous first. Derived by the local trace; SNVs only; a truncating variant is a list to look at, not a verdict."><i class="ic">✂️</i>Truncating variants</button>
+      <button class="ghost" id="ind-coding" data-tip="Genome-wide: every coding SNV on canonical transcripts counted by consequence (missense, synonymous, truncating) and by gene, homozygous protein-changing first. A count is not a measure of harm."><i class="ic">🔤</i>Coding variants</button>
+      <button class="ghost" id="ind-report" data-tip="One page from what has been computed for this person: the import, the reference checks, the ClinVar screen, the truncating variants. Nothing is recomputed; sections not run say so."><i class="ic">📄</i>Dossier</button>
+      <label>gene <input id="ind-gene" placeholder="APP" style="width:90px" class="mono"></label>
+      <button class="ghost" id="ind-predict" data-tip="AlphaGenome feature d: this person's variants inside the elements that reach the gene (promoters, enhancers in its node), each scored for its predicted effect on the gene's expression per tissue, summed per haplotype where phased. About 8 s per variant the first time, cached after; needs the key."><i class="ic">🔮</i>Predict on gene</button>
+    </div>
+    <div id="ind-out" class="scroll" style="margin-top:6px"></div>
+  </div>
   <div class="grid cols-2">
     <div class="card">
       <h2><i class="ic">👥</i>Twins<span class="help" data-tip="Saved twins under data/twins. HG002 is a real, openly consented genome; its telomere and epigenetic age were streamed from public sequencing data. A twin with a parent is a fork.">?</span></h2>
@@ -398,6 +492,36 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   </div>
 </section>
 
+<!-- ================= ORGANISM ================= -->
+<section id="organism">
+  <div class="card">
+    <h2><i class="ic">🪱</i>From one cell to an organism<span class="help" data-tip="A BioLang v0.3 organism block names the genome, the first cell, its maternal factors and the environment; decisions (divide, differentiate, migrate, quiesce, die), timers and signals do the rest. Cells: every division makes a named cell (C. elegans, compared with Sulston's lineage). Populations: counts grow in place and turn over (human).">?</span></h2>
+    <div class="row">
+      <select id="o-module">
+        <option value="data/organisms/celegans/embryo.bio">C. elegans: zygote to adult (2,183 cells, Sulston 1983)</option>
+        <option value="data/demo/celegans_lineage.bio">C. elegans: early lineage from cycle timers (demo)</option>
+        <option value="data/organisms/human/body.bio">Human: body as counted populations (Sender & Milo 2021)</option>
+        <option value="data/organisms/human/haematopoiesis.bio">Human: haematopoiesis from the stem cell (mechanism, Sender & Milo 2021)</option>
+        <option value="data/demo/flag_organism.bio">French flag grown from one cell (Wolpert 1969, space)</option>
+      </select>
+      <label data-tip="Organism time: minutes, or with a unit (800, 14 h, 20 yr).">until <input id="o-until" value="800" style="width:80px"></label>
+      <label data-tip="How many generations of the lineage tree to print.">depth <input id="o-depth" type="number" value="3" min="0" max="6" style="width:60px"></label>
+      <button class="primary" id="o-run" data-tip="Grow the organism and, when a reference lineage exists, score cells born, fates, deaths and timing against it."><i class="ic">▶️</i>Grow</button>
+      <span class="muted" id="o-status"></span>
+    </div>
+    <div id="o-summary" class="hint"></div>
+    <svg class="chart" id="o-chart" style="height:200px"></svg><div class="legend" id="o-legend"></div>
+    <div class="grid cols-2">
+      <div><h3>Fates</h3><div id="o-fates"></div><h3>Asserts</h3><div id="o-asserts" class="mono" style="font-size:12px"></div></div>
+      <div><h3>Against the reference</h3><div id="o-diff"></div><h3>Mechanism that fired</h3><div id="o-fired" class="mono" style="font-size:12px"></div></div>
+    </div>
+    <div id="o-space-card" hidden><h3>Space</h3><pre id="o-space" class="mono" style="font-size:13px;letter-spacing:2px"></pre><div id="o-bands" class="hint"></div></div>
+    <h3>Lineage tree</h3>
+    <pre id="o-tree" class="mono" style="max-height:320px;overflow:auto;font-size:12px"></pre>
+    <div id="o-unc" class="unc"></div>
+  </div>
+</section>
+
 <!-- ================= DEBUGGER ================= -->
 <section id="debug">
   <div class="grid cols-2">
@@ -440,15 +564,78 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
         <label data-tip="Chromosome for our own translation; chr21 and chrM are local.">chromosome <input id="m-chrom" value="chr21" style="width:80px" class="mono"></label>
         <label data-tip="Residue number to mark on the structure, e.g. 673 for APP A673T.">residue <input id="m-residue" type="number" placeholder="673" style="width:80px"></label>
         <button class="primary" id="m-load" data-tip="Fetch UniProt and AlphaFold for this gene."><i class="ic">🔎</i>Load</button>
+        <button class="ghost" id="m-report" data-tip="A dossier of every layer about this gene (origin, flow, regulation, expression, protein, pathways, the test human's variants) as Markdown you can copy."><i class="ic">📄</i>Dossier</button>
         <span class="muted" id="m-status"></span>
       </div>
       <div id="m-info"><span class="muted">Load a gene.</span></div>
+      <pre id="m-report-out" class="mono" style="display:none;font-size:11.5px;white-space:pre-wrap;max-height:360px;overflow:auto;margin-top:8px"></pre>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <h2><i class="ic">🧵</i>RNA<span class="help" data-tip="The RNA layer of the gene: every transcript from the gene models (canonical and MANE first) with biotype, exon count, spliced length and coding length; and where the gene is expressed, as GTEx median TPM per tissue (measured on bulk post-mortem tissue, 54 tissues).">?</span>
+        <span class="muted" id="m-rna-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+      <div id="m-rna"><span class="muted">Load a gene.</span></div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <h2><i class="ic">🔗</i>Neighbourhood in the knowledge graph<span class="help" data-tip="The compiled definitions form a local graph: proteins linked by STRING associations (solid = experimental channel, dashed = other channels), pathways they belong to (Reactome), InterPro domains and HPA tissues. This is the loaded gene's neighbourhood, laid out by a small force simulation; drag nodes, hover for names. Only proteins compiled locally are in the graph.">?</span>
+        <span class="muted" id="m-graph-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+      <canvas id="m-graph" style="width:100%;height:380px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)"></canvas>
+      <div id="m-graph-info" class="muted" style="font-size:12px;margin-top:4px"></div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <h2><i class="ic">🕸️</i>Protein definition<span class="help" data-tip="Everything the public databases know about this protein, compiled into one object keyed by its UniProt accession: genomic origin and transcripts (Ensembl), sequence, isoforms, domains, modifications and diseases (UniProt, InterPro), experimental structures with their method (PDB), the predicted structure (AlphaFold), pathways (Reactome), associations (STRING) and where it is expressed (Human Protein Atlas). Each section carries its source, evidence kind and confidence. Compiled once, then read from the local knowledge cache.">?</span>
+        <span class="muted" id="m-def-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+      <div id="m-def"><span class="muted">Load a gene to compile its definition.</span></div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <h2><i class="ic">▶️</i>Run a pathway<span class="help" data-tip="Reactome's pathway export has no rate laws, so it is executed as a reachability graph: a reaction fires when every input and catalyst is present, and its products become available. Knocking a protein out removes every entity that contains it and shows which reactions and products are lost. Click a pathway chip above to run it with the loaded gene knocked out.">?</span>
+        <span class="muted" id="m-pw-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+      <div class="row">
+        <label>pathway <input id="m-pw" placeholder="R-HSA-69541" style="width:140px" class="mono"></label>
+        <label data-tip="Gene symbol or UniProt accession to remove from the pathway.">knockout <input id="m-ko" placeholder="TP53" style="width:110px" class="mono"></label>
+        <button class="primary" id="m-pw-run" data-tip="Fetch the pathway (cached after the first time) and run the reachability with the knockout."><i class="ic">▶️</i>Run</button>
+      </div>
+      <div id="m-pw-out"><span class="muted">no pathway run yet</span></div>
+      <div class="row" style="margin-top:10px">
+        <label data-tip="Kinetics: a hand-curated ODE model from BioModels for this pathway, found by the pathway's name (fewer words until something matches) or given as a BIOMD id, run on the in-house SBML engine. Time units are the model's own.">kinetic model <input id="m-kin-model" placeholder="name or BIOMD0000000010" style="width:190px" class="mono"></label>
+        <label>knockout <input id="m-kin-ko" placeholder="MEK" style="width:90px" class="mono"></label>
+        <label>time <input id="m-kin-hours" type="number" value="100" style="width:70px"></label>
+        <button class="ghost" id="m-kin-run" data-tip="Run the curated model, then again with the knockout held at zero, and compare final levels and peaks."><i class="ic">📈</i>Run kinetic</button>
+        <span class="muted" id="m-kin-status"></span>
+      </div>
+      <div id="m-kin-out"></div>
+      <svg class="chart" id="m-kin-chart" style="display:none"></svg><div class="legend" id="m-kin-legend"></div>
     </div>
     <div class="card">
       <h2><i class="ic">🧊</i>Structure (AlphaFold)<span class="help" data-tip="C-alpha backbone of the predicted model, rotating. Colour is the model's own confidence per residue (pLDDT): blue high, teal confident, yellow low, red very low. Low-confidence stretches are usually disordered regions, not errors.">?</span></h2>
       <div id="m-struct" class="muted">no structure loaded</div>
       <canvas id="m-canvas" style="width:100%;height:420px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-top:8px"></canvas>
     </div>
+  </div>
+</section>
+
+<!-- ================= FLOW ================= -->
+<section id="flow">
+  <div class="card">
+    <h2><i class="ic">🔁</i>DNA → RNA → protein<span class="help" data-tip="Three lanes to scale. Regulation: promoter (green) and enhancer (amber) elements that reach this gene, above the DNA. DNA: the gene span with exons (purple) and coding parts (red). RNA: the mature mRNA after splicing, 5'UTR | CDS | 3'UTR with exon junctions as white ticks. Protein: one bar per residue coloured by chemistry (grey hydrophobic, green polar, red acidic, blue basic, yellow special). Hover any lane to see the same position in the other two.">?</span></h2>
+    <div class="row">
+      <label>gene <input id="f-gene" value="APP" style="width:110px" class="mono"></label>
+      <label data-tip="Chromosome with local sequence and annotation: chr21 and chrM.">chromosome <input id="f-chrom" value="chr21" style="width:80px" class="mono"></label>
+      <label data-tip="One base change on the plus strand of the reference, 1-based: POSITION REF>ALT. Example for APP A673T: 25897620 C>T on chr21 (minus-strand gene, so C>T on the chromosome reads G>A in the mRNA: GCA→ACA)."><span>variant</span> <input id="f-variant" placeholder="25897620 C>T" style="width:150px" class="mono"></label>
+      <button class="primary" id="f-load" data-tip="Trace the canonical transcript of this gene from the local sequence."><i class="ic">🔁</i>Trace</button>
+      <span class="muted" id="f-status"></span>
+    </div>
+    <canvas id="f-canvas" style="width:100%;height:290px;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg);margin-top:8px"></canvas>
+    <div id="f-hover" style="margin-top:6px;font-size:12.5px"><span class="muted">hover a lane</span></div>
+    <div id="f-summary" style="margin-top:8px;font-size:12.5px;line-height:1.6"><span class="muted">Trace a gene. Every step is derived from the reference sequence with the evidence shown; the protein is what GenomeOS translates, which the Molecules tab checks against UniProt.</span></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2><i class="ic">🔎</i>Look a variant up<span class="help" data-tip="Any chromosome, 1-based, plus strand. Ensembl VEP gives the consequence on the canonical transcript, SIFT and PolyPhen, and what is already known: ClinVar significance, dbSNP and COSMIC ids, gnomAD frequency, PubMed citations. When the chromosome is local the GenomeOS trace is checked against VEP. The protein's annotated features at the residue and, for a truncating change, the pathway reactions lost complete the picture.">?</span></h2>
+    <div class="row">
+      <label>variant <input id="l-variant" placeholder="chr17:7675088 C>T" style="width:200px" class="mono"></label>
+      <button class="primary" id="l-run" data-tip="Look it up through every layer."><i class="ic">🔎</i>Look up</button>
+      <span class="muted" id="l-status"></span>
+    </div>
+    <div id="l-out" style="font-size:12.5px;line-height:1.6;margin-top:6px"><span class="muted">Try TP53 R175H: chr17:7675088 C>T, or the APP variant above.</span></div>
   </div>
 </section>
 
@@ -465,6 +652,14 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
         <span class="muted" id="c-status"></span>
       </div>
       <div class="hint">The demo pair is synthetic (a RUNX1 truncation, an APP missense and a silent SOD1 change on chromosome 21), not a real patient.</div>
+      <h2 style="margin-top:12px"><i class="ic">🧪</i>Tumour alone<span class="help" data-tip="No normal sample: every variant is annotated through Ensembl VEP on any chromosome (consequence, gene, protein change, SIFT/PolyPhen, COSMIC, gnomAD frequency). Variants common in the population are set aside as likely inherited. The top coding hits are traced to the mutant peptide window and, for truncations, to the pathway reactions lost. Needs the internet; cached per variant afterwards.">?</span></h2>
+      <div class="row">
+        <label data-tip="Any VCF under data/. Chromosomes beyond chr21 work: VEP runs on Ensembl's servers.">tumour VCF <select id="c-tvcf"></select></label>
+        <label data-tip="How many top coding variants to trace to peptides and pathways.">trace top <input id="c-deep" type="number" value="5" style="width:60px"></label>
+        <button class="primary" id="c-trun" data-tip="Annotate, grade and trace the tumour's variants."><i class="ic">🧪</i>Analyse</button>
+        <span class="muted" id="c-tstatus"></span>
+      </div>
+      <div id="c-tout"></div>
       <h2 style="margin-top:12px"><i class="ic">🧬</i>Somatic variants, ranked<span class="help" data-tip="Score = consequence severity + driver frequency + hotspot bonus. Evidence lines cite the study and numbers.">?</span></h2>
       <div id="c-ranked" class="scroll"></div>
       <h2 style="margin-top:12px"><i class="ic">🏷️</i>Suggested cancer types<span class="help" data-tip="Enrichment of the sample's mutated drivers per cancer type in the study. A suggestion with inferred evidence, never a diagnosis.">?</span></h2>
@@ -483,8 +678,60 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
   </div>
 </section>
 
+<!-- ================= TARGETS ================= -->
+<section id="targets">
+  <div class="card">
+    <h2><i class="ic">🎯</i>Therapeutic targets<span class="help" data-tip="Runs the target reasoning pipeline: consequence, protein localisation and topology, tumour accessibility, healthy-tissue expression, trafficking after binding, the peptide/HLA route, structure, mechanism compatibility and ranking. Needs the internet the first time; every answer is cached.">?</span></h2>
+    <div class="row">
+      <label data-tip="Any VCF under data/.">tumour VCF <select id="th-vcf"></select></label>
+      <label data-tip="Patient class I alleles, comma separated. Without them no mutant peptide can be prioritised.">HLA <input id="th-hla" placeholder="HLA-A*02:01,HLA-B*07:02" style="width:210px" class="mono"></label>
+      <label data-tip="How many genes to analyse, by variant rank.">top genes <input id="th-top" type="number" value="8" style="width:60px"></label>
+      <label data-tip="cBioPortal study id of the same cancer type. Gives how often each gene is raised above normal tissue in that cancer, measured against the study's own normal samples.">cohort <input id="th-cohort" placeholder="brca_tcga_pan_can_atlas_2018" style="width:220px" class="mono"></label>
+      <button class="primary" id="th-run" data-tip="Run the therapeutic target analysis."><i class="ic">🧪</i>Analyse</button>
+      <button class="ghost" id="th-report" data-tip="The full text report, with every section and the evidence per claim."><i class="ic">📄</i>Report</button>
+      <button class="ghost" id="th-json" data-tip="The machine-readable output for a later autonomous agent."><i class="ic">📦</i>JSON</button>
+      <span class="muted" id="th-status"></span>
+    </div>
+    <div class="hint">GenomeOS generates computational research hypotheses. Target rankings and mechanism suggestions are not clinical recommendations and require experimental and clinical validation. No therapeutic sequence, construct or protocol is produced.</div>
+  </div>
+  <div id="th-out" style="margin-top:10px"></div>
+  <pre id="th-reportout" class="mono" style="font-size:11px;max-height:420px;overflow:auto;margin-top:10px"></pre>
+</section>
+
 <!-- ================= PROGRESS ================= -->
 <section id="progress">
+  <div class="card" id="pp" style="margin-bottom:16px">
+    <h2><i class="ic">🗺️</i>Project progress<span class="help" data-tip="What is going on, read from the project itself rather than asked: the work board (genomeos work start | update | done), running jobs, files changed but not committed, the day's commits, and docs/ROADMAP.md split into what is planned and what is done.">?</span>
+      <span class="muted" id="pp-stamp" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div class="pp-tabs" role="tablist">
+      <button class="on" data-pp="now" role="tab"><i class="ic">🛠️</i>Current work and plan</button>
+      <button data-pp="done" role="tab"><i class="ic">✅</i>Done <span class="muted" id="pp-done-n"></span></button>
+    </div>
+    <div id="pp-now">
+      <h3 class="pp-h">Working now</h3>
+      <div id="pp-board"></div>
+      <div class="grid cols-2" style="margin-top:12px">
+        <div><h3 class="pp-h">Jobs running</h3><div id="pp-jobs"></div></div>
+        <div><h3 class="pp-h">Changed, not committed yet</h3><div id="pp-files"></div></div>
+      </div>
+      <h3 class="pp-h">Landed in the last 24 hours</h3>
+      <div id="pp-commits"></div>
+      <h3 class="pp-h" style="margin-top:18px">Planned, by roadmap area</h3>
+      <div id="pp-milestones" class="pp-chips"></div>
+      <div id="pp-areas" class="pp-areas"></div>
+      <div id="pp-waiting"></div>
+    </div>
+    <div id="pp-done" hidden>
+      <div id="pp-done-kpi" class="kpi"></div>
+      <div class="row"><label>filter <input id="pp-filter" placeholder="Hi-C, telomere, VISTA…" style="width:240px"></label><span class="muted" id="pp-filter-n" style="font-size:12px"></span></div>
+      <div id="pp-done-areas"></div>
+      <details class="pp-sec"><summary>Data jobs finished (roadmap §4)</summary><div id="pp-done-jobs"></div></details>
+      <details class="pp-sec"><summary>Task log (docs/PROGRESS.md)</summary>
+        <div id="p-summary" class="kpi" style="margin-top:8px"></div>
+        <div id="p-rows" class="scroll" style="max-height:520px"></div>
+      </details>
+    </div>
+  </div>
   <div class="grid cols-2">
     <div class="card">
       <h2><i class="ic">⚙️</i>Jobs<span class="help" data-tip="Long computations run in the background as separate processes; this panel polls their progress every few seconds. Jobs write their outcome to data/results, never raw data.">?</span></h2>
@@ -494,16 +741,57 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <h2><i class="ic">🧬</i>Whole-genome inventory<span class="help" data-tip="The anatomy of every human chromosome, streamed one at a time: downloaded, counted, deleted. Rows appear as chromosomes finish.">?</span></h2>
       <div id="j-genome" class="scroll"></div>
     </div>
-  </div>
-  <div class="card" style="margin-top:16px">
-    <h2><i class="ic">🗺️</i>Project progress<span class="help" data-tip="The task log the project keeps in docs/PROGRESS.md: what was built, its status, and the evidence that it works.">?</span></h2>
-    <div id="p-summary" class="kpi"></div>
-    <div id="p-rows" class="scroll" style="max-height:520px"></div>
+    <div class="card">
+      <h2><i class="ic">🕵️</i>UNKNOWN space, genome-wide<span class="help" data-tip="Every UNKNOWN block of every chromosome classified: curated repeat annotation and ENCODE chromatin evidence first, then sequence rules. Rows appear as chromosomes finish; 'curated' says the RepeatMasker pass was used.">?</span></h2>
+      <div id="j-unknown" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">👥</i>The test human, every chromosome<span class="help" data-tip="HG002's benchmark variants applied to each local chromosome, statistics only (no haplotype files kept): variants applied per haplotype and reference mismatches, which must be zero if the sequence and the calls agree.">?</span></h2>
+      <div id="j-twin" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">📖</i>Reader, every chromosome<span class="help" data-tip="Reader v1 over every chromosome for the cell types run so far: coding genes with an open promoter (read), active enhancers and silent nodes per cell type, from ENCODE DNase peaks.">?</span></h2>
+      <div id="j-reader" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🐭</i>The second mammal<span class="help" data-tip="A mouse chromosome (mm10: UCSC sequence, GENCODE vM25 models, ENCODE mouse cCREs) analysed with the unchanged human code, its nodes compared with every human node by gene symbol (a lower bound on orthology). Conserved = all matched genes in one human node; adjacent = spread over neighbouring human nodes (same neighbourhood, boundary drawn differently); scattered = distant human nodes.">?</span></h2>
+      <div id="j-mouse" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🧩</i>The 98%: composition budget<span class="help" data-tip="Every UNKNOWN block of a chromosome with evolutionary constraint attached (Zoonomia phyloP over 241 mammals, read per base from UCSC and never stored, plus the 100-vertebrate conserved elements) and a best guess: structural, fossil, regulatory, constrained unknown, neutral. The house argument: quantities that do not fit rule an attribution out. Rows appear as chromosomes finish; the job runs smallest first.">?</span></h2>
+      <div id="j-budget" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">📐</i>The segment parser, by evidence<span class="help" data-tip="Reading genes from sequence alone and then adding evidence: the learned splice matrices (grammar), AlphaGenome's predicted splice sites, predicted RNA over the exons (eight tissues), measured RNA (ENCODE cell lines) and both. Sensitivity / precision against every GENCODE coding transcript; every configuration's result file is committed side by side, so the trade-offs stay checkable.">?</span></h2>
+      <div id="j-segments" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🎯</i>Enhancer targets, predicted<span class="help" data-tip="AlphaGenome feature b. Each sampled distal enhancer is deleted in its 1 Mb window and the predicted expression of every gene in the window is read across all RNA-seq tracks; the gene that moves most is the predicted target, the track is the tissue. Compared with the domain inference (nearest TSS inside the CTCF node): agreement is a test of the node model. Predicted evidence, confidence capped at 0.7.">?</span></h2>
+      <div id="j-enhancers" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🕸️</i>Proteome coverage<span class="help" data-tip="For every protein-coding gene of a compiled chromosome: which questions the public databases answer (sequence, function, domains, pathways, interactions, expression, structures, disease). Measured, not assumed.">?</span></h2>
+      <div id="j-proteome" class="scroll"></div>
+    </div>
+    <div class="card">
+      <h2><i class="ic">🔌</i>Optional features<span class="help" data-tip="Features that need an external key or package (AlphaGenome). Always listed; without the key they load disabled and say how to enable them. Nothing in the core depends on them, and their output is always labelled predicted.">?</span></h2>
+      <div id="j-features"></div>
+    </div>
   </div>
 </section>
 
 <!-- ================= LIBRARIES ================= -->
 <section id="libs">
+  <div class="card" style="margin-bottom:16px">
+    <h2><i class="ic">🧬</i>The proteome library<span class="help" data-tip="The whole human proteome distilled into a table that ships with GenomeOS (19,283 proteins, 2.3 MB): accession, function, location, domains, pathways, physically supported partners, tissue pattern, diseases, structures, with the evidence per field. Answers offline; the full compiled definitions stay in the local cache.">?</span>
+      <span class="muted" id="pl-status" style="font-weight:400;font-size:12px;margin-left:8px"></span></h2>
+    <div id="pl-summary"></div>
+    <div class="row" style="margin-top:8px">
+      <label>protein <input id="pl-gene" placeholder="BRCA1" value="TP53" style="width:120px" class="mono"></label>
+      <button class="ghost" id="pl-show" data-tip="Show the packaged record and its BioLang protein block."><i class="ic">🔎</i>Show</button>
+    </div>
+    <div id="pl-out" style="font-size:12.5px;margin-top:6px"></div>
+  </div>
   <div class="card">
     <h2><i class="ic">📚</i>The libraries in the genome<span class="help" data-tip="Five layers: core (what every cell needs), blueprint (body plan and organs), timer (construction and maintenance clocks), systems (how tissues talk), parts (the inventory). Click a library to see its representative genes, scale, source and notes; search by gene symbol.">?</span></h2>
     <div class="row">
@@ -577,16 +865,31 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('main section').forEach(s => s.classList.toggle('active', s.id === b.dataset.tab));
   location.hash = b.dataset.tab;
   document.querySelectorAll('nav button').forEach(x => x.blur());
-  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadProgress(); }
+  b.scrollIntoView({block: 'nearest', inline: 'nearest'});
+  if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadBudgetWide(); loadProjectProgress(); loadFeatures(); }
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
+  if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
   // first visit to a simulation tab runs its default example
   if (!autoRan.has(b.dataset.tab)) {
     autoRan.add(b.dataset.tab);
-    const first = {space: '#s-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run', molecules: '#m-load'}[b.dataset.tab];
+    const first = {space: '#s-run', organism: '#o-run', debug: '#d-run', anatomy: '#an-compare', cancer: '#c-run', molecules: '#m-load', flow: '#f-load'}[b.dataset.tab];
     if (first) setTimeout(async () => { await ready; if (b.dataset.tab === 'debug' && !$('#d-bp').value) { $('#d-bp').value = 'LacI > 30'; $('#d-init').value = 'TetR=10'; $('#d-explain').value = 'lacI.mRNA'; } $(first).click(); }, 300);
   }
 });
 if (location.hash) { const b = document.querySelector(`nav button[data-tab="${location.hash.slice(1).split('?')[0]}"]`); if (b) b.click(); }
+
+// ---- tab strip: fade the edges while it can scroll, turn the wheel sideways, and draw tips in a fixed layer (the strip clips its own overflow)
+(function tabStrip() {
+  const strip = document.querySelector('.tabs'), nav = strip.querySelector('nav');
+  const edges = () => { strip.classList.toggle('l', nav.scrollLeft > 2); strip.classList.toggle('r', nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2); };
+  nav.addEventListener('scroll', edges); window.addEventListener('resize', edges); edges();
+  nav.addEventListener('wheel', e => { if (nav.scrollWidth > nav.clientWidth && Math.abs(e.deltaY) > Math.abs(e.deltaX)) { nav.scrollLeft += e.deltaY; e.preventDefault(); } }, {passive: false});
+  const tip = document.createElement('div'); tip.id = 'navtip'; document.body.appendChild(tip);
+  const show = b => { tip.textContent = b.dataset.tip; const r = b.getBoundingClientRect(); tip.style.top = (r.bottom + 6) + 'px'; tip.style.left = Math.max(8, Math.min(r.left, innerWidth - tip.offsetWidth - 8)) + 'px'; tip.classList.add('on'); };
+  const hide = () => tip.classList.remove('on');
+  nav.querySelectorAll('button[data-tip]').forEach(b => { b.addEventListener('mouseenter', () => show(b)); b.addEventListener('focus', () => show(b)); for (const ev of ['mouseleave', 'blur', 'click']) b.addEventListener(ev, hide); });
+  nav.addEventListener('scroll', hide);
+})();
 
 // ---- SVG line chart
 function lineChart(svg, legendEl, times, series, opts = {}) {
@@ -626,15 +929,35 @@ const ready = (async () => {
   $('#g-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path} (${fmt(g.size)} B)</option>`).join('');
   $('#an-file').innerHTML = files.genomes.map(g => `<option value="${g.path}">${g.path}</option>`).join('');
   const vopts = (files.vcfs || []).map(v => `<option value="${v.path}">${v.path}</option>`).join('');
-  $('#c-normal').innerHTML = vopts; $('#c-tumour').innerHTML = vopts;
+  $('#c-normal').innerHTML = vopts; $('#c-tumour').innerHTML = vopts; $('#c-tvcf').innerHTML = vopts;
   const cn = (files.vcfs || []).find(v => v.path.includes('cancer_normal')), ct = (files.vcfs || []).find(v => v.path.includes('cancer_tumour'));
-  if (cn) $('#c-normal').value = cn.path; if (ct) $('#c-tumour').value = ct.path;
+  if (cn) $('#c-normal').value = cn.path; if (ct) { $('#c-tumour').value = ct.path; $('#c-tvcf').value = ct.path; }
+  $('#c-trun').onclick = async () => {
+    $('#c-tstatus').textContent = 'annotating through VEP, grading, tracing…'; $('#c-tout').innerHTML = '';
+    try {
+      const a = await api('/api/cancer/tumour', {vcf: $('#c-tvcf').value, deep: +$('#c-deep').value || 5});
+      $('#c-tstatus').textContent = `${a.variants_total} variants · ${a.annotated} annotated · ${a.likely_germline} likely germline · ${a.somatic_candidates} somatic candidates (${a.coding_somatic} coding)`;
+      const mb = a.mutation_burden;
+      const rows = a.ranked.slice(0, 20).map(r => `<tr><td><b>${r.gene || '-'}</b></td><td>${r.consequence}</td><td class="mono">${r.protein_change || '-'}</td><td class="num">${r.driver_frequency ? (r.driver_frequency * 100).toFixed(1) + '%' : '-'}</td><td>${r.hotspot ? '🔥' : ''}${r.cosmic.length ? ' COSMIC' : ''}</td><td class="muted">${r.sift || r.polyphen || ''}</td><td class="num">${r.score.toFixed(2)}</td></tr>`).join('');
+      $('#c-tout').innerHTML = `
+        <div class="muted" style="font-size:12px">mutation burden ${mb.per_megabase} coding/Mb <span class="pill inferred">inferred</span> <span data-tip="${mb.assumption}">(assumption: whole exome)</span> · ${mb.note}</div>
+        <table style="margin-top:6px"><tr><th>gene</th><th>consequence</th><th>change</th><th>driver</th><th></th><th>damage</th><th>score</th></tr>${rows}</table>
+        ${a.germline_set_aside.length ? `<div class="muted" style="font-size:12px;margin-top:6px">set aside as likely germline (population frequency): ${a.germline_set_aside.slice(0, 8).map(g => `${g.gene || g.chrom + ':' + g.pos} ${g.gnomad_af.toPrecision(2)}`).join(', ')}</div>` : ''}
+        ${a.mutant_peptides.map(p => p.error ? `<div class="muted">peptide: ${p.error}</div>` : `<div style="font-size:12.5px;margin-top:4px"><b>${p.gene} ${p.change}</b> peptide window ${p.window[0]}–${p.window[1]}: <span class="mono">${p.wild_type}</span> → <span class="mono">${p.mutant}</span> <span class="pill derived">derived</span> <span class="muted">${p.note}</span></div>`).join('')}
+        ${a.pathway_effects.map(e => e.error ? `<div class="muted">pathway ${e.gene}: ${e.error}</div>` : `<div style="font-size:12.5px;margin-top:4px"><b>${e.gene} ${e.change}</b> treated as absent: ${e.reactions_lost} reactions lost over ${e.pathways_checked} pathways${e.most_affected ? `; most affected ${e.most_affected.name} (${(e.most_affected.fraction_lost * 100).toFixed(0)}%)` : ''} <span class="pill inferred">inferred</span></div>`).join('')}
+        <div style="margin-top:6px"><b>suggested cancer types</b> <span class="pill inferred">inferred</span>: ${a.suggested_cancer_types.map(t => `${t.cancer_type} (${t.log_enrichment >= 0 ? '+' : ''}${t.log_enrichment.toFixed(2)})`).join(', ') || 'none'}</div>
+        <div><b>surface targets</b>: ${a.surface_targets.map(x => x.gene).join(', ') || 'none'}</div>
+        <div class="row" style="margin-top:8px"><button class="ghost" id="c-tpacket"><i class="ic">📦</i>Agent packet</button></div>
+        <pre id="c-tpacket-out" class="mono" style="font-size:11px;max-height:220px;overflow:auto"></pre>`;
+      $('#c-tpacket').onclick = () => { $('#c-tpacket-out').textContent = JSON.stringify(a.packet, null, 1); };
+    } catch (e) { $('#c-tstatus').textContent = e.message; }
+  };
   const anPref = files.genomes.find(g => g.path.includes('chrM')); if (anPref) { $('#an-file').value = anPref.path; $('#an-chrom').value = 'chrM'; }
   $('#p-file').innerHTML = files.modules.map(m => `<option value="${m.path}">${m.path}</option>`).join('');
   if (files.modules.length) { const d = defaultModule(); $('#p-file').value = d.path; await openModule(d.path); $('#p-init').value = 'TetR=10'; $('#p-run').click(); $('#p-compile').click(); }
   const pref = files.genomes.find(g => g.path.includes('chrM')) || files.genomes[0];
   if (pref) { $('#g-file').value = pref.path; await loadGenome(); if (pref.path.includes('chrM')) { $('#g-locus').value = 'chrM:5903-7445(+)'; $('#g-table').value = 'mito'; $('#g-translate').click(); } }
-  loadLibs(); initAge(); loadTwins(); loadResults(); window.api = api; if (window.blocksInit) window.blocksInit(files); loadCancer();
+  loadLibs(); initAge(); loadTwins(); loadResults(); window.api = api; if (window.blocksInit) window.blocksInit(files); if (window.therapeuticsInit) window.therapeuticsInit(files); loadCancer();
 })();
 
 // ---- genome
@@ -745,7 +1068,131 @@ function renderUnc(el, unc) {
 
 // ---- twins
 let twins = [];
+async function loadIndividuals() {
+  try {
+    const d = await api('/api/individuals'); const list = d.individuals || [];
+    const checkCell = p => { const ck = Object.values(p.checks || {}); if (!ck.length) return '<span class="muted">not checked</span>'; const bad = ck.filter(r => !r.verdict.startsWith('matches')); const mism = ck.reduce((a, r) => a + r.reference_mismatches, 0); return bad.length ? `<span class="pill inferred">assembly doubt</span> ${bad.map(r => r.chrom).join(', ')}` : `<span class="pill experimental">matches GRCh38</span> ${ck.length} chr, ${fmt(mism)} mismatches`; };
+    $('#ind-list').innerHTML = `<table><tr><th>person</th><th class="num">variants</th><th>chromosomes</th><th>source</th><th>reference check</th><th>evidence</th></tr>` +
+      list.map(p => `<tr><td class="mono">${p.name}</td><td class="num">${p.variants ? fmt(p.variants) : ''}</td><td>${p.chromosomes.length}${p.chromosomes.length && p.chromosomes.length < 25 ? ` (${p.chromosomes.slice(0, 6).join(', ')}${p.chromosomes.length > 6 ? '…' : ''})` : ''}</td><td>${p.builtin ? 'built-in test human' : (p.note || p.source_file || '')}</td><td>${checkCell(p)}</td><td><span class="pill experimental">${p.evidence.split(':')[0]}</span> <span class="muted">${p.evidence.split(':').slice(1).join(':').trim()}</span></td></tr>`).join('') + '</table>';
+    const who = $('#ind-who'); const cur = who.value; who.innerHTML = list.map(p => `<option>${p.name}</option>`).join(''); if (cur) who.value = cur;
+    const ag = $('#ind-against'); if (ag) { const curA = ag.value; ag.innerHTML = '<option>reference</option>' + list.map(p => `<option>${p.name}</option>`).join(''); if (curA) ag.value = curA; }
+    const chroms = [...new Set(list.flatMap(p => p.chromosomes))]; const order = c => { const k = c.slice(3); return k === 'X' ? 23 : k === 'Y' ? 24 : k === 'M' ? 25 : +k; };
+    const cs = $('#ind-chrom'); const cc = cs.value; cs.innerHTML = chroms.sort((a, b) => order(a) - order(b)).map(c => `<option>${c}</option>`).join(''); if (cc) cs.value = cc; else if (chroms.includes('chr21')) cs.value = 'chr21';
+  } catch (e) { $('#ind-list').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function importIndividual() {
+  $('#ind-status').textContent = 'importing (streams the file once)…';
+  try {
+    const r = await api('/api/individual/import', {path: $('#ind-path').value.trim(), name: $('#ind-name').value.trim(), note: $('#ind-note').value.trim()});
+    const m = r.manifest; $('#ind-status').textContent = `${m.name}: ${fmt(m.variants)} PASS variants on ${Object.keys(m.chromosomes).length} chromosomes; ${fmt(m.skipped_filtered)} filtered and ${fmt(m.skipped_other_contigs)} off-contig rows skipped`;
+    loadIndividuals();
+  } catch (e) { $('#ind-status').textContent = e.message; }
+}
+async function individualGenes() {
+  const name = $('#ind-who').value, chrom = $('#ind-chrom').value;
+  $('#ind-out').innerHTML = '<span class="muted">tracing every coding gene…</span>';
+  try {
+    const r = await api(`/api/individual/genes?name=${encodeURIComponent(name)}&chrom=${encodeURIComponent(chrom)}&top=40`);
+    const t = r.totals;
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(t.genes_with_variants)}</b><span>of ${fmt(t.genes)} coding genes carry variants</span></div><div><b>${fmt(t.variants_in_genes)}</b><span>variants inside genes</span></div><div><b>${fmt(t.coding_snvs)}</b><span>coding SNVs</span></div>${Object.entries(r.by_consequence).map(([k, n]) => `<div><b>${fmt(n)}</b><span>${k}</span></div>`).join('')}</div>
+      <table><tr><th>gene</th><th class="num">variants</th><th class="num">coding SNVs</th><th class="num">protein-changing</th><th>changes (genotype)</th></tr>` +
+      r.genes.map(g => `<tr><td class="mono"><a href="#flow?gene=${g.gene}&chrom=${chrom}" onclick="document.querySelector('nav button[data-tab=flow]').click(); $('#f-gene').value='${g.gene}'; if ($('#f-chrom')) $('#f-chrom').value='${chrom}'; if (window.loadFlow) loadFlow(); return false;">${g.gene}</a></td><td class="num">${fmt(g.variants)}</td><td class="num">${g.coding_snvs}</td><td class="num">${g.protein_changing}</td><td>${g.changes.filter(c => c.consequence !== 'synonymous').map(c => `${c.hgvs_p || c.consequence} <span class="muted">(${c.genotype})</span>`).join('; ')}</td></tr>`).join('') +
+      `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> consequence by the local trace on the canonical transcript</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualPgs() {
+  const name = $('#ind-who').value;
+  $('#ind-out').innerHTML = `<span class="muted">reading ${name}'s polygenic scores…</span>`;
+  try {
+    const r = await api(`/api/individual/pgs?name=${encodeURIComponent(name)}`);
+    if (!r.scores.length) { $('#ind-out').innerHTML = `<span class="muted">No polygenic scores yet for ${name}: run <span class="mono">genomeos individual pgs --name ${name}</span> once (weights streamed from the PGS Catalog, kept under the person).</span>`; return; }
+    $('#ind-out').innerHTML = `<table><tr><th>score</th><th>trait</th><th>publication</th><th class="num">variants used</th><th class="num">coverage</th><th class="num">raw score</th><th>against the local people</th></tr>${r.scores.map(s => `<tr><td class="mono">${s.score.id}</td><td>${s.score.trait || ''}</td><td>${(s.score.publication || {}).author || ''} ${(s.score.publication || {}).year || ''}</td><td class="num">${fmt(s.variants_used)} of ${fmt(s.variants_in_score)}</td><td class="num">${s.coverage == null ? '?' : (s.coverage * 100).toFixed(1) + '%'}</td><td class="num">${s.raw_score.toFixed(4)}</td><td>${(s.compare || []).map(c => `${c.individual} ${c.raw_score.toFixed(3)}${c.z_within_group == null ? '' : ' (z ' + c.z_within_group + ')'}`).join(', ')}</td></tr>`).join('')}</table>
+      <div class="muted" style="margin-top:6px"><span class="pill curated">curated</span> PGS Catalog weights · <span class="pill derived">derived</span> the sum over this person's genotypes, confidence ${r.scores[0].confidence} · ${r.scores[0].note}</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualDiff() {
+  const name = $('#ind-who').value, against = $('#ind-against').value, reg = $('#ind-reg').checked, chrom = $('#ind-chrom').value;
+  $('#ind-out').innerHTML = `<span class="muted">reading ${name} against ${against}${reg ? ' inside ' + chrom + "'s regulatory elements" : ' gene by gene'}…</span>`;
+  try {
+    const r = await api(`/api/individual/diff?name=${encodeURIComponent(name)}&against=${encodeURIComponent(against)}${reg ? '&regulatory=1&chrom=' + encodeURIComponent(chrom) : ''}`);
+    if (reg) {
+      $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.variants_in_elements_a)}</b><span>${name}'s variants in ${chrom}'s ${fmt(r.elements)} elements</span></div>${against === 'reference' ? '' : `<div><b>${fmt(r.variants_in_elements_b)}</b><span>${against}'s</span></div><div><b>${fmt(r.shared)}</b><span>shared</span></div>`}<div><b>${fmt(r.only_a)}${against === 'reference' ? '' : ' / ' + fmt(r.only_b)}</b><span>only one side</span></div><div><b>${r.with_predicted_target_only_a}${against === 'reference' ? '' : ' / ' + r.with_predicted_target_only_b}</b><span>in an element the deletion job scored</span></div></div>
+        <pre style="white-space:pre-wrap;font-size:12px;line-height:1.5">${r.markdown.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
+      return;
+    }
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.genes_differing)}</b><span>genes differ</span></div><div><b>${fmt(r.only_a)}</b><span>only ${name}</span></div>${against === 'reference' ? '' : `<div><b>${fmt(r.only_b)}</b><span>only ${against}</span></div><div><b>${fmt(r.shared)}</b><span>shared</span></div>`}<div><b>${r.truncating_only_a}${against === 'reference' ? '' : ' / ' + r.truncating_only_b}</b><span>truncating</span></div><div><b>${r.likely_pathogenic_only_a}${against === 'reference' ? '' : ' / ' + r.likely_pathogenic_only_b}</b><span>predicted likely pathogenic</span></div><div><b>${r.clinvar_only_a}${against === 'reference' ? '' : ' / ' + r.clinvar_only_b}</b><span>in ClinVar</span></div></div>
+      <pre style="white-space:pre-wrap;font-size:12px;line-height:1.5">${r.markdown.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualReport() {
+  const name = $('#ind-who').value;
+  try {
+    const r = await api(`/api/individual/report?name=${encodeURIComponent(name)}`);
+    $('#ind-out').innerHTML = `<pre style="white-space:pre-wrap;font-size:12px;line-height:1.5">${r.markdown.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualCoding() {
+  const name = $('#ind-who').value;
+  $('#ind-out').innerHTML = '<span class="muted">tracing every coding gene of every chromosome for ' + name + ' (a few minutes the first time)…</span>';
+  try {
+    const r = await api(`/api/individual/coding?name=${encodeURIComponent(name)}`);
+    const bc = r.by_consequence, total = Object.values(bc).reduce((a, b) => a + b, 0);
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(total)}</b><span>coding SNVs on ${r.chromosomes.length} chromosomes</span></div>${Object.entries(bc).map(([k, v]) => `<div><b>${fmt(v)}</b><span>${k.replace('_', ' ')}</span></div>`).join('')}<div><b>${fmt(r.genes_with_protein_changing)}</b><span>genes with a protein-changing variant</span></div><div><b>${fmt(r.genes_with_homozygous_changing)}</b><span>with a homozygous one</span></div></div>
+      <table><tr><th>gene</th><th>chr</th><th class="num">protein-changing</th><th class="num">homozygous</th><th class="num">coding SNVs</th><th class="num">aa</th><th>examples</th></tr>${r.top.slice(0, 30).map(x => `<tr><td><a href="#" onclick="document.querySelector('nav button[data-tab=flow]').click(); $('#f-gene').value='${x.gene}'; $('#f-chrom').value='${x.chrom}'; setTimeout(() => $('#f-load').click(), 200); return false;">${x.gene}</a></td><td class="mono">${x.chrom}</td><td class="num">${x.protein_changing}</td><td class="num">${x.homozygous_changing}</td><td class="num">${x.coding_snvs}</td><td class="num">${x.protein_length}</td><td class="muted">${x.examples.slice(0, 3).join('; ')}</td></tr>`).join('')}</table>
+      ${r.missense_by_effect ? `<div style="margin-top:10px"><b>Missense, predicted effect</b> <span class="muted">${fmt(r.missense_predicted.likely_pathogenic)} likely pathogenic (${fmt(r.missense_likely_pathogenic_homozygous)} homozygous), ${fmt(r.missense_predicted.ambiguous)} ambiguous, ${fmt(r.missense_predicted.likely_benign)} likely benign, ${fmt(r.missense_predicted.unscored)} unscored; strongest first</span></div>
+      <table><tr><th>gene</th><th>change</th><th>gt</th><th class="num">score</th><th>class</th><th>UniProt says</th></tr>${r.missense_by_effect.slice(0, 30).map(m => `<tr><td>${m.gene}</td><td class="mono">${m.hgvs_p || (m.predicted && m.predicted.protein_variant) || ''}</td><td class="mono">${m.genotype}</td><td class="num">${m.predicted ? m.predicted.score.toFixed(3) : ''}</td><td>${((m.predicted && m.predicted.class) || 'unscored').replace('_', ' ')}</td><td>${(m.features || []).slice(0, 2).join('; ')}</td></tr>`).join('')}</table>
+      <div class="muted" style="margin-top:4px"><span class="pill predicted">predicted</span> ${r.missense_evidence}; scored on the person's transcript where the table has it, else the highest across transcripts</div>` : `<div class="muted" style="margin-top:8px">Predicted missense effect: run <span class="mono">genomeos individual coding --name ${name} --predict</span> once (AlphaMissense, 643 MB streamed, kept under the person) and this view gains it.</div>`}
+      <div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> ${r.evidence} · ${r.note}</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualKnockouts() {
+  const name = $('#ind-who').value;
+  $('#ind-out').innerHTML = '<span class="muted">tracing every coding gene of every chromosome for ' + name + ' (a few minutes the first time)…</span>';
+  try {
+    const r = await api(`/api/individual/knockouts?name=${encodeURIComponent(name)}`);
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${r.hits.length}</b><span>truncating SNVs in ${r.genes.length} genes</span></div><div><b>${r.nonsense}</b><span>nonsense</span></div><div><b>${r.start_lost} / ${r.stop_lost}</b><span>start lost / stop lost</span></div><div><b>${r.homozygous}</b><span>homozygous</span></div><div><b>${r.chromosomes.length}</b><span>chromosomes</span></div></div>
+      <table><tr><th>gene</th><th>variant</th><th>gt</th><th>zygosity</th><th>consequence</th><th>protein</th><th class="num">lost</th></tr>${r.hits.slice(0, 40).map(h => `<tr><td><a href="#" onclick="document.querySelector('nav button[data-tab=flow]').click(); $('#f-gene').value='${h.gene}'; $('#f-chrom').value='${h.chrom}'; $('#f-variant').value='${h.chrom}:${h.pos} ${h.ref}>${h.alt}'; setTimeout(() => $('#f-load').click(), 200); return false;">${h.gene}</a></td><td class="mono">${h.chrom}:${fmt(h.pos)} ${h.ref}>${h.alt}</td><td class="mono">${h.genotype}</td><td>${h.zygosity}</td><td>${h.consequence.replace('_', ' ')}</td><td>${h.hgvs_p || ''} of ${h.protein_length} aa</td><td class="num">${h.fraction_lost != null ? (h.fraction_lost * 100).toFixed(0) + '%' : ''}</td></tr>`).join('')}</table>
+      <div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill derived">derived</span> ${r.evidence} · ${r.note}${r.skipped_after_reference_stop ? ` · ${r.skipped_after_reference_stop} calls past a stop the reference itself carries were left out` : ''}</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualScreen() {
+  const name = $('#ind-who').value;
+  $('#ind-out').innerHTML = '<span class="muted">screening ' + name + " against ClinVar's pathogenic rows (first time streams ClinVar, a few minutes)…</span>";
+  try {
+    const r = await api(`/api/individual/screen?name=${encodeURIComponent(name)}`);
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${r.hits.length}</b><span>ClinVar pathogenic alleles carried</span></div><div><b>${r.pathogenic} / ${r.likely_pathogenic}</b><span>pathogenic / likely</span></div><div><b>${r.homozygous}</b><span>homozygous</span></div><div><b>${r.two_stars_or_more}</b><span>with ≥ 2 review stars</span></div><div><b>${fmt(r.variants_scanned)}</b><span>variants scanned on ${r.chromosomes.length} chromosomes</span></div></div>
+      <table><tr><th>variant</th><th>gene</th><th>gt</th><th>zygosity</th><th>significance</th><th class="num">stars</th><th>condition</th></tr>${r.hits.slice(0, 40).map(h => `<tr><td class="mono">${h.chrom}:${fmt(h.pos)} ${h.ref.slice(0, 8)}>${h.alt.slice(0, 8)}</td><td><a href="#" onclick="document.querySelector('nav button[data-tab=flow]').click(); $('#f-gene').value='${h.gene}'; $('#f-chrom').value='${h.chrom}'; $('#f-variant').value='${h.chrom}:${h.pos} ${h.ref}>${h.alt}'; setTimeout(() => $('#f-load').click(), 200); return false;">${h.gene}</a></td><td class="mono">${h.genotype}</td><td>${h.zygosity}</td><td>${h.significance}</td><td class="num">${'★'.repeat(h.stars)}${'☆'.repeat(Math.max(0, 4 - h.stars))}</td><td>${h.conditions}</td></tr>`).join('')}</table>
+      <div class="muted" style="margin-top:6px"><span class="pill curated">curated</span> ${r.evidence} · ${r.note}</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualCheck() {
+  const name = $('#ind-who').value, chrom = $('#ind-chrom').value;
+  $('#ind-out').innerHTML = '<span class="muted">applying ' + name + "'s variants of " + chrom + ' to the reference…</span>';
+  try {
+    const r = await api(`/api/individual/check?name=${encodeURIComponent(name)}&chrom=${encodeURIComponent(chrom)}`);
+    const ok = r.verdict.startsWith('matches');
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.variants)}</b><span>PASS variants (${fmt(r.snv)} SNVs, ${fmt(r.phased)} phased)</span></div><div><b>${fmt(r.hap1.applied)} / ${fmt(r.hap2.applied)}</b><span>applied on hap1 / hap2</span></div><div><b>${fmt(r.reference_mismatches)}</b><span>reference mismatches</span></div></div>
+      <div><span class="pill ${ok ? 'experimental' : 'inferred'}">${ok ? 'matches GRCh38' : 'assembly doubt'}</span> ${r.verdict} <span class="muted">· hap1 length change ${r.hap1.length_delta > 0 ? '+' : ''}${fmt(r.hap1.length_delta)} bp, skipped overlaps ${r.hap1.skipped_overlap} · ${r.seconds} s</span></div>
+      <div class="muted" style="margin-top:4px">${r.evidence}</div>`;
+    loadIndividuals();
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function individualPredict() {
+  const name = $('#ind-who').value, chrom = $('#ind-chrom').value, gene = $('#ind-gene').value.trim();
+  if (!gene) { $('#ind-out').innerHTML = '<span class="muted">name a gene on the chosen chromosome</span>'; return; }
+  $('#ind-out').innerHTML = '<span class="muted">scoring this person\'s regulatory variants on ' + gene + ' (about 8 s per variant the first time)…</span>';
+  try {
+    const r = await api(`/api/individual/predict?name=${encodeURIComponent(name)}&gene=${encodeURIComponent(gene)}&chrom=${encodeURIComponent(chrom)}&max=30`);
+    const h = r.haplotypes;
+    $('#ind-out').innerHTML = `<div class="kpi"><div><b>${fmt(r.variants_in_elements)}</b><span>variants in ${r.elements_considered} elements that reach ${r.gene}</span></div><div><b>${r.variants_scored}</b><span>scored</span></div><div><b>${r.variants_moving_gene}</b><span>move ${r.gene} by ≥ ${r.min_effect_log2fc} log2</span></div><div><b>${h.hap1_log2_fold_change > 0 ? '+' : ''}${h.hap1_log2_fold_change} / ${h.hap2_log2_fold_change > 0 ? '+' : ''}${h.hap2_log2_fold_change}</b><span>haplotype sums (log2)</span></div></div>
+      <table><tr><th>variant</th><th>gt</th><th>element</th><th class="num">to TSS</th><th class="num">log2FC on ${r.gene}</th><th>tissue</th><th class="num">tracks moved</th></tr>` +
+      r.variants.slice(0, 20).map(v => `<tr><td class="mono">${r.chrom}:${fmt(v.pos)} ${v.ref}>${v.alt}</td><td class="mono">${v.genotype}</td><td>${v.element_class} <span class="mono muted">${v.element}</span></td><td class="num">${fmt(v.distance_to_tss)}</td><td class="num">${v.effect.log2_fold_change > 0 ? '+' : ''}${v.effect.log2_fold_change.toFixed(2)}</td><td>${v.effect.tissue || ''}</td><td class="num">${v.effect.tracks_moved}</td></tr>`).join('') +
+      `</table><div class="muted" style="margin-top:6px"><span class="pill experimental">measured</span> genotypes; <span class="pill predicted">predicted</span> ${(r.model || 'AlphaGenome').split(' (')[0]} · ${h.note}</div>`;
+  } catch (e) { $('#ind-out').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+document.addEventListener('DOMContentLoaded', () => { const b = $('#ind-import'); if (b) { b.onclick = importIndividual; $('#ind-genes').onclick = individualGenes; $('#ind-predict').onclick = individualPredict; $('#ind-check').onclick = individualCheck; $('#ind-screen').onclick = individualScreen; $('#ind-ko').onclick = individualKnockouts; $('#ind-coding').onclick = individualCoding; $('#ind-report').onclick = individualReport; $('#ind-diff').onclick = individualDiff; $('#ind-pgs').onclick = individualPgs; } });
 async function loadTwins() {
+  loadIndividuals();
   twins = (await api('/api/twins')).twins;
   $('#t-list').innerHTML = twins.length ? `<table><tr><th>name</th><th>parent</th><th class="num">age</th><th class="num">telomere</th><th class="num">epi. age</th><th>variants</th></tr>` +
     twins.map(t => `<tr><td class="mono">${t.name}</td><td class="mono">${t.parent || ''}</td><td class="num">${t.age}</td><td class="num">${t.telomere_bp ?? ''}</td><td class="num">${t.epigenetic_age ?? ''}</td><td class="mono">${t.variants.join(', ')}</td></tr>`).join('') + '</table>'
@@ -817,6 +1264,41 @@ $('#s-run').onclick = async () => {
       renderUnc($('#s-unc'), r.uncertainty);
     }
   } catch (e) { $('#s-status').textContent = e.message; }
+};
+
+// ---- organism
+$('#o-module').onchange = () => { const v = $('#o-module').value; $('#o-until').value = v.includes('haematopoiesis') ? '3 yr' : v.includes('human') ? '20 yr' : v.includes('flag') ? '200 h' : v.includes('demo') ? '150' : '800'; };
+$('#o-run').onclick = async () => {
+  $('#o-status').textContent = 'growing…';
+  try {
+    const r = await api(`/api/grow?module=${encodeURIComponent($('#o-module').value)}&until=${encodeURIComponent($('#o-until').value)}&depth=${$('#o-depth').value}`);
+    $('#o-status').textContent = '';
+    const s = r.summary, o = r.organism;
+    const fmt = v => v >= 1e6 ? v.toExponential(2) : (+v).toLocaleString();
+    $('#o-summary').innerHTML = `<b>${o.name}</b> (${o.species}) · resolution: ${o.resolution} · ${fmt(s.cells_born)} cells born, <b>${fmt(s.alive)}</b> alive, ${fmt(s.deaths)} deaths${s.culled ? `, ${fmt(s.culled)} lost to turnover, ${fmt(s.turnover_per_day)} replaced per day` : ''} · ${o.decisions} decisions, ${o.timers} timers, ${o.signals} signals · maternal factors: ${o.factors.join(', ') || 'none'}${Object.keys(r.unknown).length ? ` · <span class="err">UNKNOWN stops: ${Object.entries(r.unknown).map(([k, v]) => `${k} ×${v}`).join(', ')}</span>` : ''}`;
+    const long = r.curve[r.curve.length - 1].t > 10000;
+    const xs = r.curve.map(c => long ? c.t / 1440 : c.t);
+    const series = [{name: 'cells alive', values: r.curve.map(c => c.cells), color: '#1f6feb'}];
+    if (r.curve.some(c => c.reference != null)) series.push({name: 'reference (Sulston)', values: r.curve.map(c => c.reference), color: '#bf8700', dash: true});
+    lineChart($('#o-chart'), $('#o-legend'), xs, series, {xunit: long ? 'd' : 'min', ymin: 0, yfmt: v => v >= 1e6 ? v.toExponential(1) : v.toFixed(0)});
+    $('#o-fates').innerHTML = '<table>' + Object.entries(r.fates).map(([k, v]) => `<tr><td>${k}</td><td class="num">${fmt(v)}</td></tr>`).join('') + '</table>';
+    $('#o-asserts').innerHTML = r.asserts.map(a => `<div class="${a.ok ? 'ok' : 'err'}">${a.ok ? 'ok  ' : 'FAIL'} ${a.assert} <span class="muted">(got ${a.value != null ? fmt(a.value) : a.error})</span></div>`).join('') || '<span class="muted">no asserts in the program</span>';
+    const d = r.diff;
+    $('#o-diff').innerHTML = d ? `<table>
+      <tr><td>cells born by name</td><td class="num">${d.matched}/${d.reference_cells} (${(d.born_fraction * 100).toFixed(1)}%)</td></tr>
+      <tr><td>missing / extra / parent mismatches</td><td class="num">${d.missing} / ${d.extra} / ${d.parent_mismatch}</td></tr>
+      <tr><td>division timing (median / p90)</td><td class="num">${d.timing_median_min == null ? 'n/a' : d.timing_median_min.toFixed(0) + ' / ' + d.timing_p90_min.toFixed(0) + ' min'}</td></tr>
+      <tr><td>terminal fates correct</td><td class="num">${d.fates_correct}/${d.fates_checked}${d.fate_accuracy != null ? ' (' + (d.fate_accuracy * 100).toFixed(1) + '%)' : ''}; ${d.fates_unknown} UNKNOWN</td></tr>
+      <tr><td>programmed deaths</td><td class="num">${d.deaths_matched}/${d.deaths_expected}</td></tr></table>` : '<span class="muted">no reference lineage for this organism</span>';
+    $('#o-fired').innerHTML = r.fired.map(f => `<div>${f.id} <span class="muted">×${f.n}</span></div>`).join('') || '<span class="muted">only the lineage program fired</span>';
+    $('#o-tree').textContent = r.tree.join('\n');
+    $('#o-space-card').hidden = !r.space;
+    if (r.space) {
+      $('#o-space').textContent = r.space.rows.join('\n');
+      $('#o-bands').innerHTML = `grid ${r.space.width}×${r.space.height} · bands along x: ${r.space.bands.map(b => `${b[0] || 'empty'} ${b[1]}–${b[2]}`).join(', ')} · divisions that found no free site: ${r.space.blocked}`;
+    }
+    renderUnc($('#o-unc'), r.uncertainty);
+  } catch (e) { $('#o-status').textContent = e.message; }
 };
 
 // ---- debugger
@@ -894,17 +1376,33 @@ const when = ts => ts ? new Date(ts * 1000).toLocaleTimeString() : '';
 async function loadJobs() {
   try {
     const r = await api('/api/jobs');
-    $('#j-list').innerHTML = r.jobs.map(j => `<div style="margin-bottom:12px">
+    // one fetch job exists per chromosome; list only the running or failed ones and fold the rest into a line
+    const fetches = r.jobs.filter(j => j.name.startsWith('fetch_'));
+    const doneFetch = fetches.filter(j => j.state === 'done').map(j => j.name.slice(6));
+    // the same for the per-chromosome enhancer jobs (AlphaGenome feature b); the genome-wide job stays listed
+    const enh = r.jobs.filter(j => /^enhancer_targets_chr/.test(j.name));
+    const doneEnh = enh.filter(j => j.state === 'done').map(j => j.name.slice('enhancer_targets_'.length));
+    const listed = r.jobs.filter(j => (!j.name.startsWith('fetch_') && !/^enhancer_targets_chr/.test(j.name)) || j.state === 'running' || j.state === 'failed' || j.state === 'stalled');
+    // finished work leaves the list: one line names it, the cards on this tab show its results
+    const jobs = listed.filter(j => j.state !== 'done');
+    const doneJobs = listed.filter(j => j.state === 'done').map(j => j.name);
+    const fetchLine = doneFetch.length ? `<div class="muted" style="font-size:12px;margin-bottom:10px">fetched and analysed: ${doneFetch.length} chromosomes (${doneFetch.join(', ')})</div>` : '';
+    const enhLine = doneEnh.length ? `<div class="muted" style="font-size:12px;margin-bottom:10px">enhancer targets predicted: ${doneEnh.length} chromosomes (${doneEnh.join(', ')})</div>` : '';
+    const doneLine = doneJobs.length ? `<div class="muted" style="font-size:12px;margin-bottom:10px" data-tip="Complete jobs are not listed; their results are the cards on this tab.">complete: ${doneJobs.length} job${doneJobs.length === 1 ? '' : 's'} (${doneJobs.map(n => `<span class="mono">${n}</span>`).join(', ')})</div>` : '';
+    $('#j-list').innerHTML = fetchLine + enhLine + doneLine + (jobs.length ? '' : '<div class="muted" style="font-size:12px">nothing running or waiting</div>') + jobs.map(j => `<div style="margin-bottom:12px">
       <div class="row" style="margin-bottom:2px"><b class="mono">${j.name}</b> <span class="state ${j.state}">${j.state}</span>
-        ${j.state !== 'running' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
+        ${j.state !== 'running' && j.state !== 'stalled' ? `<button class="ghost" data-job="${j.name}" data-tip="Start this job in the background."><i class="ic">▶️</i>Start</button>` : `<span class="muted">started ${when(j.started)}</span>`}
+        ${(j.state === 'failed' || j.state === 'stalled' || j.state === 'unknown') && (j.fraction || 0) < 1 ? `<button class="ghost" data-heal="${j.name}" data-tip="Bring the job back on track: restart it from what is already saved. The server does this by itself every minute for long jobs; this is the manual nudge."><i class="ic">🩹</i>Heal</button>` : ''}
+        ${j.activity != null && (j.state === 'running' || j.state === 'stalled') ? `<span class="muted" data-tip="Seconds since the job last wrote a line or a heartbeat.">active ${j.activity < 90 ? j.activity + ' s' : Math.round(j.activity / 60) + ' min'} ago</span>` : ''}${j.heals ? `<span class="muted" data-tip="Times the supervisor or the Heal button restarted this job.">healed ×${j.heals}</span>` : ''}
         ${j.finished ? `<span class="muted">finished ${when(j.finished)}</span>` : ''}</div>
       <div class="muted" style="font-size:12px">${j.describe}</div>
-      ${j.total > 1 ? `<div class="prog ${j.state}"><i style="width:${(j.fraction || 0) * 100}%"></i></div><div class="muted" style="font-size:11px">${j.done} of ${j.total}</div>` : ''}
+      ${j.total > 1 ? `<div class="prog ${j.state}"><i style="width:${(j.fraction || 0) * 100}%"></i></div><div class="muted" style="font-size:11px">${j.done} of ${j.total}${j.detail ? ' · ' + j.detail : ''}</div>` : ''}
       ${j.last_lines.length ? `<div class="log">${j.last_lines.join('\n')}</div>` : ''}</div>`).join('');
     $('#j-list').querySelectorAll('button[data-job]').forEach(b => b.onclick = async () => { await api('/api/jobs/start', {name: b.dataset.job}); loadJobs(); });
-    const running = r.jobs.some(j => j.state === 'running');
+    $('#j-list').querySelectorAll('button[data-heal]').forEach(b => b.onclick = async () => { await api('/api/jobs/heal', {name: b.dataset.heal}); loadJobs(); });
+    const running = r.jobs.some(j => j.state === 'running' || j.state === 'stalled');
     clearTimeout(jobTimer);
-    if (running) jobTimer = setTimeout(() => { loadJobs(); loadGenomeWide(); }, 5000);
+    if (running) jobTimer = setTimeout(() => { loadJobs(); loadGenomeWide(); loadBudgetWide(); }, 5000);
   } catch (e) { $('#j-list').textContent = e.message; }
 }
 async function loadGenomeWide() {
@@ -917,6 +1415,277 @@ async function loadGenomeWide() {
       g.table.map(r => `<tr><td class="mono">${r.chrom}</td><td class="num">${r.length_mb}</td><td class="num">${fmt(r.coding_genes)}</td><td class="num">${r.genes_per_mb}</td><td class="num">${(r.cds * 100).toFixed(2)}%</td><td class="num">${(r.intron * 100).toFixed(0)}%</td><td class="num">${(r.intergenic * 100).toFixed(0)}%</td><td class="num">${r.exons ?? ''}</td><td class="num">${r.intron_median ?? ''}</td><td class="num">${fmt(r.cpg_islands)}</td><td class="num">${r.seconds ?? ''}</td></tr>`).join('') + '</table>';
   } catch (e) { $('#j-genome').innerHTML = `<span class="muted">${e.message}</span>`; }
 }
+async function loadUnknownWide() {
+  try {
+    const u = await api('/api/unknown/genome');
+    if (!u.table.length) { $('#j-unknown').innerHTML = '<span class="muted">not run yet</span>'; return; }
+    const by = Object.entries(u.by_class);
+    $('#j-unknown').innerHTML = `<div class="kpi"><div><b>${u.done}/${u.total}</b><span>chromosomes</span></div><div><b>${(u.unknown_bp / 1e9).toFixed(2)} Gb</b><span>UNKNOWN space</span></div><div><b>${u.classified != null ? (u.classified * 100).toFixed(1) + '%' : '-'}</b><span>classified</span></div></div>
+      <div class="prog"><i style="width:${u.done / u.total * 100}%"></i></div>
+      <div style="font-size:12px;margin:6px 0">${by.map(([k, v]) => `<span class="chip" data-tip="${k.replace(/_/g, ' ')}: ${(v / 1e6).toFixed(0)} Mb">${k.replace(/_/g, ' ')} ${(v / u.unknown_bp * 100).toFixed(1)}%</span>`).join(' ')}</div>
+      <table><tr><th>chr</th><th class="num">blocks</th><th class="num">Mb</th><th class="num">classified</th><th>largest class</th><th>curated</th><th class="num">s</th></tr>` +
+      u.table.map(r => `<tr><td class="mono">${r.chrom}</td><td class="num">${fmt(r.blocks)}</td><td class="num">${r.unknown_mb}</td><td class="num">${(r.classified * 100).toFixed(1)}%</td><td>${r.top_class.replace(/_/g, ' ')} <span class="muted">${r.top_share != null ? (r.top_share * 100).toFixed(0) + '%' : ''}</span></td><td>${r.curated_repeats ? '✓' : '·'}</td><td class="num">${r.seconds ?? ''}</td></tr>`).join('') + '</table>';
+  } catch (e) { $('#j-unknown').innerHTML = `<span class="muted">${e.message}</span>`; }
+  try {
+    const p = await api('/api/proteome');
+    const chroms = Object.keys(p).sort((a, b) => a.length - b.length || a.localeCompare(b));
+    if (!chroms.length) { $('#j-proteome').innerHTML = '<span class="muted">no chromosome compiled yet</span>'; return; }
+    const qs = ['sequence', 'function', 'domains', 'pathways', 'interactions', 'expression', 'structure_experimental', 'disease'];
+    const short = {sequence: 'seq', function: 'function', domains: 'domains', pathways: 'pathways', interactions: 'partners', expression: 'expressed', structure_experimental: 'PDB', disease: 'disease'};
+    const genes = chroms.reduce((s, c) => s + p[c].coding_genes, 0);
+    const tot = q => chroms.reduce((s, c) => s + (p[c].coverage[q] || 0) * p[c].coding_genes, 0) / genes;
+    const cell = v => `<td class="num" style="background:rgba(31,111,235,${(v || 0) * 0.35})">${v != null ? (v * 100).toFixed(0) + '%' : '-'}</td>`;
+    $('#j-proteome').innerHTML = `<div class="kpi"><div><b>${chroms.length}</b><span>chromosomes</span></div><div><b>${fmt(genes)}</b><span>coding genes compiled</span></div><div><b>${(tot('function') * 100).toFixed(0)}%</b><span>function known</span></div><div><b>${(tot('structure_experimental') * 100).toFixed(0)}%</b><span>experimental structure</span></div></div>
+      <table><tr><th>chr</th><th class="num">genes</th>${qs.map(q => `<th class="num" data-tip="${q.replace(/_/g, ' ')}">${short[q]}</th>`).join('')}</tr>
+      <tr style="font-weight:600"><td>all</td><td class="num">${fmt(genes)}</td>${qs.map(q => cell(tot(q))).join('')}</tr>` +
+      chroms.map(c => `<tr><td class="mono">${c}</td><td class="num">${p[c].coding_genes}</td>${qs.map(q => cell(p[c].coverage[q])).join('')}</tr>`).join('') + '</table>';
+  } catch (e) { $('#j-proteome').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function loadFeatures() {
+  try {
+    const fs = await api('/api/features');
+    $('#j-features').innerHTML = fs.map(f => `<div class="note"><b>${f.name}</b> <span class="pill ${f.enabled ? 'predicted' : 'none'}">${f.enabled ? 'enabled' : 'disabled'}</span>${f.enabled ? '' : `<div class="muted" style="font-size:12px">${f.reason}. To enable: ${f.how}</div>`}
+      <table>${f.features.map(x => `<tr><td>${x.id}</td><td><b>${x.name}</b></td><td class="muted" style="font-size:12px">${x.what}</td><td><span class="pstatus ${x.state === 'built' ? 'done' : 'progress'}">${x.state}</span></td></tr>`).join('')}</table>
+      <div class="muted" style="font-size:12px">${f.licence}</div></div>`).join('');
+  } catch (e) { $('#j-features').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function loadBudgetWide() {
+  try {
+    const b = await api('/api/budget');
+    const el = $('#j-budget');
+    const j = b.job || {};
+    const startBtn = `<button class="ghost" id="j-budget-start" data-tip="Budget every chromosome in the background, smallest first; about 2.5 GB of range requests over the genome, nothing stored."><i class="ic">▶️</i>Start the job</button>`;
+    if (!b.table.length) { el.innerHTML = `<span class="muted">not run yet (genomeos budget --chrom chr21, or start the budget_genome_wide job)</span> ${j.state === 'running' ? '' : startBtn}`; const s0 = $('#j-budget-start'); if (s0) s0.onclick = async () => { await api('/api/jobs/start', {name: 'budget_genome_wide'}); loadJobs(); loadBudgetWide(); }; return; }
+    const col = {structural: 'var(--muted)', fossil: 'var(--c5)', regulatory: 'var(--c1)', constrained_unknown: 'var(--c2)', neutral: 'var(--line)'};
+    const names = {structural: 'structural', fossil: 'fossil', regulatory: 'regulatory', constrained_unknown: 'constrained unknown', neutral: 'neutral'};
+    const pct = (x, d = 2) => x == null ? '-' : (x * 100).toFixed(d) + '%';
+    const bar = (tiers, total) => `<div class="bar" style="display:flex;width:220px">${Object.entries(tiers).map(([k, v]) => `<i style="width:${(v / total * 100).toFixed(2)}%;background:${col[k]}" data-tip="${names[k]} ${(v / total * 100).toFixed(1)}%"></i>`).join('')}</div>`;
+    const tot = Object.values(b.tiers).reduce((a, c) => a + c, 0) || 1;
+    const age = j.activity == null ? '' : j.activity < 90 ? `${j.activity} s ago` : `${Math.round(j.activity / 60)} min ago`;
+    const last = (j.last_lines || []).slice(-1)[0] || '';
+    el.innerHTML = `<div class="kpi"><div><b>${b.done}/${b.total}</b><span>chromosomes budgeted</span></div><div><b>${(b.unknown_bp / 1e6).toFixed(0)} Mb</b><span>UNKNOWN space tiered</span></div><div><b>${pct(b.constrained_fraction)}</b><span>bases constrained (phyloP ≥ ${b.threshold})</span></div><div><b>${(b.tiers.constrained_unknown / 1e6).toFixed(1)} Mb</b><span>constrained unknown: the real unknown</span></div></div>
+      <div class="prog ${j.state || ''}"><i style="width:${b.done / b.total * 100}%"></i></div>
+      <div class="muted" style="font-size:12px;margin-bottom:6px">job <b class="mono">budget_genome_wide</b> <span class="state ${j.state || 'unknown'}">${j.state || 'not started'}</span>${j.state === 'running' || j.state === 'stalled' ? ` · ${j.done} of ${j.total} · active ${age}<div class="log">${last}</div>` : ` ${b.done < b.total ? startBtn : '· every chromosome budgeted'}`}</div>
+      <div style="font-size:12px;margin:6px 0">${Object.entries(b.tiers).map(([k, v]) => `<span class="chip"><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col[k]};margin-right:4px;vertical-align:middle"></i>${names[k]} ${(v / tot * 100).toFixed(1)}%</span>`).join(' ')}</div>
+      <table><tr><th>chr</th><th class="num">blocks</th><th class="num">Mb</th><th>tiers</th><th class="num">constrained</th><th class="num" data-tip="blocks in the constrained-unknown tier">unknown blocks</th><th class="num" data-tip="MB of phyloP range requests">MB</th><th class="num">s</th></tr>` +
+      b.table.map(r => { const t = Object.values(r.tiers).reduce((a, c) => a + c, 0) || 1; return `<tr><td class="mono">${r.chrom}</td><td class="num">${fmt(r.blocks)}</td><td class="num">${(r.unknown_bp / 1e6).toFixed(1)}</td><td>${bar(r.tiers, t)}</td><td class="num">${pct(r.constrained_fraction)}</td><td class="num">${r.constrained_unknown_blocks}</td><td class="num">${r.mb_fetched ?? ''}</td><td class="num">${r.seconds != null ? Math.round(r.seconds) : ''}</td></tr>`; }).join('') + `</table>
+      <div class="muted" style="font-size:12px;margin-top:6px"><span class="pill curated">curated</span> Zoonomia phyloP over 241 mammals, UCSC 100-vertebrate conserved elements · a tier is a best guess with its confidence, not a verdict (docs/ATTRIBUTION.md)</div>`;
+    const s = $('#j-budget-start'); if (s) s.onclick = async () => { await api('/api/jobs/start', {name: 'budget_genome_wide'}); loadJobs(); loadBudgetWide(); };
+  } catch (e) { $('#j-budget').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+async function loadIndividualWide() {
+  try {
+    const d = await api('/api/individual');
+    const tw = d.twin;
+    if (tw && tw.chromosomes) {
+      const t = tw.totals || {}; const rows = Object.entries(tw.chromosomes);
+      $('#j-twin').innerHTML = `<div class="kpi"><div><b>${rows.length}</b><span>chromosomes</span></div><div><b>${fmt(t.variants || 0)}</b><span>PASS variants</span></div><div><b>${t.reference_mismatches ?? '-'}</b><span>reference mismatches</span></div></div>
+        <table><tr><th>chr</th><th class="num">variants</th><th class="num">SNVs</th><th class="num">hap1 applied</th><th class="num">hap2 applied</th><th class="num">mismatch</th></tr>` +
+        rows.map(([c, r]) => `<tr><td class="mono">${c}</td><td class="num">${fmt(r.variants)}</td><td class="num">${fmt(r.snv)}</td><td class="num">${fmt(r.hap1.applied)}</td><td class="num">${fmt(r.hap2.applied)}</td><td class="num">${(r.hap1.skipped_ref_mismatch || 0) + (r.hap2.skipped_ref_mismatch || 0)}</td></tr>`).join('') + '</table>';
+    } else $('#j-twin').innerHTML = '<span class="muted">not run yet (scripts/twin_genome_wide.py)</span>';
+    const rd = d.reader;
+    if (rd && rd.chromosomes) {
+      const cells = rd.cell_types || []; const t = rd.totals || {};
+      $('#j-reader').innerHTML = `<div class="kpi">${cells.map(c => `<div><b>${fmt((t[c] || {}).genes_read || 0)}</b><span>${c} reads of ${fmt((t[c] || {}).coding_genes || 0)} genes</span></div>`).join('')}</div>
+        <table><tr><th>chr</th>${cells.map(c => `<th class="num">${c} read</th><th class="num">${c} enhancers</th>`).join('')}<th class="num">both</th></tr>` +
+        Object.entries(rd.chromosomes).map(([c, r]) => `<tr><td class="mono">${c}</td>${cells.map(k => `<td class="num">${r[k] ? r[k].genes_read + '/' + r[k].coding_genes : '-'}</td><td class="num">${r[k] ? fmt(r[k].enhancers_active) : '-'}</td>`).join('')}<td class="num">${r.read_in_both ?? '-'}</td></tr>`).join('') + '</table>';
+    } else $('#j-reader').innerHTML = '<span class="muted">not run yet (scripts/reader_genome_wide.py)</span>';
+    const mm = d.mouse || {};
+    const mchroms = Object.keys(mm);
+    if (mchroms.length) {
+      $('#j-mouse').innerHTML = mchroms.map(c => { const r = mm[c], n = r.node_comparison || {}; const pct = x => x == null ? '?' : (x * 100).toFixed(0) + '%';
+        return `<div class="kpi"><div><b>mouse ${c}</b><span>${fmt(r.length)} bp · ${fmt(r.genes)} genes (${fmt(r.coding_genes)} coding)</span></div><div><b>${fmt(r.domains)}</b><span>nodes, median ${fmt(r.domain_length_median)} bp</span></div><div><b>${n.tested}</b><span>nodes with ≥ 2 symbol-matched genes</span></div><div><b>${pct(n.fraction_conserved)}</b><span>in one human node</span></div><div><b>${pct(n.fraction_same_neighbourhood)}</b><span>same human neighbourhood</span></div><div><b>${n.split_scattered}</b><span>scattered</span></div></div>
+          <div class="muted">${Object.entries(r.evidence || {}).map(([k, v]) => `<span class="pill ${v.startsWith('curated') ? 'curated' : 'inferred'}">${k}</span> ${v.split(': ').slice(1).join(': ')}`).join(' · ')}</div>`; }).join('');
+    } else $('#j-mouse').innerHTML = '<span class="muted">not run yet (genomeos mouse --chrom chr19)</span>';
+    const segs = d.segments || [];
+    if (segs.length) {
+      const pct = x => x == null ? '?' : (x * 100).toFixed(1) + '%';
+      const label = c => ({grammar: 'matrices alone', predicted_sites: '+ predicted splice sites', predicted_sites_rna: '+ predicted RNA (8 tissues)', predicted_sites_markov: '+ sites, Markov coding model', predicted_sites_anchored: '+ sites, starts at ENCODE promoters', predicted_sites_measured_K562: '+ sites, measured RNA (K562)', predicted_sites_measured_panel6: '+ sites, measured RNA (6 lines)', predicted_sites_measured_panel8: '+ sites, measured RNA (6 lines)', predicted_sites_rna_measured_panel6_union: '+ sites, predicted or measured RNA', predicted_sites_rna_measured_panel6_intersection: '+ sites, predicted and measured RNA'}[c] || c.replace(/_/g, ' '));
+      const byChrom = {}; segs.forEach(s => (byChrom[s.chrom] = byChrom[s.chrom] || []).push(s));
+      $('#j-segments').innerHTML = Object.entries(byChrom).map(([c, rows]) => `<div style="margin-bottom:8px"><b class="mono">${c}</b> <span class="muted">${rows[0].true_genes || '?'} coding genes</span>
+        <table><tr><th>configuration</th><th class="num">candidates</th><th class="num">exons sens / prec</th><th class="num">canonical exons</th><th class="num">genes sens / prec</th></tr>${rows.map(s => `<tr><td>${label(s.config)}</td><td class="num">${fmt(s.predictions || 0)}</td><td class="num">${pct(s.exon_sensitivity)} / ${pct(s.exon_precision)}</td><td class="num">${pct(s.canonical_exon_sensitivity)}</td><td class="num">${pct(s.gene_sensitivity)} / ${pct(s.gene_precision)}</td></tr>`).join('')}</table></div>`).join('') + '<div class="muted"><span class="pill predicted">predicted</span> every configuration; scored against GENCODE (curated); docs/SEQUENCE-GRAMMAR.md</div>';
+    } else $('#j-segments').innerHTML = '<span class="muted">not run yet (genomeos segments --chrom chr21)</span>';
+    const et = d.enhancer_targets || {};
+    const chroms = Object.keys(et);
+    if (chroms.length) {
+      const gw = d.enhancer_targets_genome_wide && d.enhancer_targets_genome_wide.genome;
+      const pctg = (x) => x == null ? '?' : (x * 100).toFixed(0) + '%';
+      const head = gw ? `<div class="kpi"><div><b>${gw.chromosomes}</b><span>chromosomes</span></div><div><b>${fmt(gw.elements_scored)}</b><span>distal enhancers deleted one by one</span></div><div><b>${pctg(gw.fraction_with_target)}</b><span>move some gene by ≥ 0.1 log2</span></div><div><b>${pctg(gw.coding_target_agrees_with_nearest)}</b><span>coding target = nearest TSS in node</span></div><div><b>${pctg(gw.coding_target_inside_domain)}</b><span>coding target inside the node</span></div><div><b>${fmt(gw.silencer_like)}</b><span>silencer-like</span></div></div>
+        <table><tr><th>chr</th><th class="num">scored</th><th class="num">name a gene</th><th class="num">= nearest TSS</th><th class="num">inside node</th><th class="num">silencer-like</th></tr>${Object.entries(gw && d.enhancer_targets_genome_wide.chromosomes || {}).map(([c, r]) => `<tr><td class="mono">${c}</td><td class="num">${r.elements_scored}</td><td class="num">${pctg(r.fraction_with_target)}</td><td class="num">${pctg(r.coding_target_agrees_with_nearest)}</td><td class="num">${pctg(r.fraction_inside_domain)}</td><td class="num">${r.silencer_like}</td></tr>`).join('')}</table><div class="muted" style="margin:6px 0 10px">genome-wide: <span class="pill predicted">predicted</span> per chromosome below</div>` : '';
+      const cg = d.constrained_targets_genome_wide, cgg = cg && cg.genome, cgu = cg && cg.uniform_samples;
+      const constrained = cgg ? `<div style="margin:10px 0 4px"><b>The constrained ones first</b> <span class="muted">the ${fmt(cgg.scored)} most phyloP-constrained distal enhancers (up to 100 per chromosome, ≥ 20% constrained bases) deleted one by one, against the uniform samples</span></div>
+        <table><tr><th>distal enhancers</th><th class="num">constrained (${fmt(cgg.scored)})</th><th class="num">uniform (${fmt(cgu.scored)})</th></tr>
+        <tr><td>some gene moves by ≥ 0.1 log2</td><td class="num">${pctg(cgg.fraction_with_target)}</td><td class="num">${pctg(cgu.fraction_with_target)}</td></tr>
+        <tr><td>strong effect (≥ 0.3) among those named</td><td class="num">${cgg.strong} of ${cgg.with_predicted_target}</td><td class="num">${cgu.strong} of ${Math.round(cgu.scored * cgu.fraction_with_target)}</td></tr>
+        <tr><td>coding target = nearest TSS in the node</td><td class="num">${pctg(cgg.coding_target_agrees_with_nearest)}</td><td class="num">${pctg(cgu.coding_target_agrees_with_nearest)}</td></tr>
+        <tr><td>coding target inside the node</td><td class="num">${pctg(cgg.coding_target_inside_domain)}</td><td class="num">${pctg(cgu.coding_target_inside_domain)}</td></tr></table>
+        <table style="margin-top:6px"><tr><th>chr</th><th class="num">qualify</th><th class="num">scored</th><th class="num">name a gene</th><th class="num">uniform</th><th class="num">inside node</th><th class="num">uniform</th></tr>${Object.entries(cg.chromosomes).map(([c, r]) => `<tr><td class="mono">${c}</td><td class="num">${fmt(r.constrained_available)}</td><td class="num">${r.scored}</td><td class="num">${pctg(r.fraction_with_target)}</td><td class="num">${pctg(r.uniform_fraction_with_target)}</td><td class="num">${pctg(r.fraction_inside_domain)}</td><td class="num">${pctg(r.uniform_fraction_inside_domain)}</td></tr>`).join('')}</table>
+        <div class="muted" style="margin:6px 0 10px"><span class="pill experimental">measured</span> Zoonomia phyloP · <span class="pill predicted">predicted</span> AlphaGenome deletion effect · <span class="pill inferred">inferred</span> CTCF-only nodes</div>` : '';
+      const vg = d.vista_genome_wide, vgen = vg && vg.genome, vrows = Object.entries(d.vista || {});
+      const vcell = (p, n, f) => `<td class="num">${f(p)}</td><td class="num">${f(n)}</td>`;
+      const vistaBlock = vgen ? `<div style="margin:10px 0 4px"><b>Against measured enhancers</b> <span class="muted">VISTA's ${fmt(vg.elements)} human elements tested in e11.5 mouse embryos (${vrows.length} chromosomes), read blind by the registry, the node model, constraint and the deletion model</span></div>
+        <table><tr><th>VISTA elements</th><th class="num">positive (${vgen.positive.elements})</th><th class="num">negative (${vgen.negative.elements})</th></tr>
+        <tr><td>an ENCODE enhancer-like element sits there</td>${vcell(vgen.positive.enhancer_like, vgen.negative.enhancer_like, pctg)}</tr>
+        <tr><td>constrained (≥ 20% phyloP bases)</td>${vcell(vgen.positive.constrained, vgen.negative.constrained, pctg)}</tr>
+        <tr><td>mean constrained fraction</td>${vcell(vgen.positive.mean_constrained_fraction, vgen.negative.mean_constrained_fraction, pctg)}</tr>
+        <tr><td>deletion moves some gene by ≥ 0.1 log2</td>${vcell(vgen.positive.fraction_with_target, vgen.negative.fraction_with_target, pctg)}</tr>
+        <tr><td>strong effect (≥ 0.3)</td>${vcell(vgen.positive.strong, vgen.negative.strong, fmt)}</tr>
+        <tr><td>predicted tissue falls in the measured one</td><td class="num">${pctg(vgen.positive.tissue_agrees)} of ${vgen.positive.tissue_judged} judged (chance ${pctg(vgen.positive.tissue_agrees_expected)})</td><td class="num muted">no tissue to judge</td></tr></table>
+        <table style="margin-top:6px"><tr><th>chr</th><th class="num">+ / −</th><th class="num">enhancer-like + / −</th><th class="num">constrained + / −</th><th class="num">named + / −</th><th class="num">tissue agrees</th></tr>${vrows.map(([c, r]) => { const s = r.summary, p = s.positive, n = s.negative; return `<tr><td class="mono">${c}</td><td class="num">${p.elements} / ${n.elements}</td><td class="num">${pctg(p.enhancer_like)} / ${pctg(n.enhancer_like)}</td><td class="num">${pctg(p.constrained)} / ${pctg(n.constrained)}</td><td class="num">${pctg(p.fraction_with_target)} / ${pctg(n.fraction_with_target)}</td><td class="num">${p.tissue_judged ? pctg(p.tissue_agrees) + ' of ' + p.tissue_judged : '-'}</td></tr>`; }).join('')}</table>
+        <div class="muted" style="margin:6px 0 10px"><span class="pill experimental">experimental</span> VISTA transgenic assay · <span class="pill experimental">measured</span> Zoonomia phyloP · <span class="pill curated">curated</span> ENCODE cCREs · <span class="pill inferred">inferred</span> CTCF-only nodes · <span class="pill predicted">predicted</span> AlphaGenome deletion</div>` : '';
+      const eq = d.eqtl_targets && d.eqtl_targets.sets;
+      const eqLabel = {uniform: 'uniform samples', constrained: 'most constrained', vista: 'VISTA elements'};
+      const eqtlBlock = eq ? `<div style="margin:10px 0 4px"><b>Against measured targets</b> <span class="muted">GTEx v8 cis-eQTLs (49 tissues, 71 million significant pairs streamed once) inside the elements, ± ${d.eqtl_targets.margin_bp} bp: is the gene each attribution names one the donors' expression actually moves with</span></div>
+        <table><tr><th>elements</th><th class="num">with an eQTL</th><th class="num">eGenes each</th><th class="num">deletion model's target is an eGene</th><th class="num">same, coding genes only</th><th class="num">nearest coding TSS is an eGene</th><th class="num">either</th><th class="num">coding model vs node when they disagree</th></tr>${Object.entries(eq).map(([k, v]) => { const s = v.summary, w = s.when_they_disagree; return `<tr><td>${eqLabel[k] || k}</td><td class="num">${fmt(s.with_eqtl)} of ${fmt(s.elements)}</td><td class="num">${s.mean_egenes_when_present}</td><td class="num">${pctg(s.predicted_target_is_an_egene)} <span class="muted">(${fmt(s.predicted_judged)})</span></td><td class="num">${pctg(s.predicted_coding_target_is_an_egene)} <span class="muted">(${fmt(s.predicted_coding_judged)})</span></td><td class="num">${pctg(s.inferred_target_is_an_egene)} <span class="muted">(${fmt(s.inferred_judged)})</span></td><td class="num">${pctg(s.either_target_is_an_egene)}</td><td class="num">${(s.when_coding_disagrees || w).predicted_right} / ${(s.when_coding_disagrees || w).inferred_right} <span class="muted">of ${(s.when_coding_disagrees || w).elements}</span></td></tr>`; }).join('')}</table>
+        <div class="muted" style="margin:6px 0 10px"><span class="pill experimental">experimental</span> GTEx eQTLs · <span class="pill predicted">predicted</span> AlphaGenome deletion target · <span class="pill inferred">inferred</span> nearest coding TSS in the CTCF node</div>` : '';
+      const mg = d.mpra_genome_wide, mgen = mg && mg.genome;
+      const mpraBlock = mgen ? (() => {
+        const cells = Object.entries(mgen.cells);
+        const sc = mgen.specific_elements || {};
+        const cellRow = (label, f) => `<tr><td>${label}</td>${cells.map(([c, s]) => `<td class="num">${f(c, s)}</td>`).join('')}</tr>`;
+        const same = (s, k) => ((s.predicted_dnase_vs_activity || {}).same_cell || {})[k];
+        const other = (s, k) => Object.entries((s.predicted_dnase_vs_activity || {}).other_cells || {}).map(([o, v]) => `${o}: ${v[k] == null ? '?' : (k === 'spearman' ? v[k] : pctg(v[k]))}`).join(', ') || '-';
+        const rd = (s, k) => ((s.reader_open_predicts_active || {}).same_cell || {})[k];
+        return `<div style="margin:10px 0 4px"><b>Against measured activity</b> <span class="muted">ENCODE4 lentiMPRA: the same ${fmt(mgen.elements)} elements (200 bp) assayed in K562, HepG2 and WTC11 over ${Object.keys(mg.chromosomes).length} chromosomes; active at log2(RNA/DNA) ≥ ${mgen.active_threshold_log2}; each layer held against the same cell's activity, then across cells</span></div>
+        <table><tr><th>per cell line</th>${cells.map(([c]) => `<th class="num">${c}</th>`).join('')}</tr>
+        ${cellRow('active elements', (c, s) => pctg(s.active))}
+        ${cellRow('active when on a distal enhancer-like cCRE / none', (c, s) => `${pctg((s.active_by_ccre_class.dELS || {}).active)} / ${pctg((s.active_by_ccre_class.none || {}).active)}`)}
+        ${cellRow('active when constrained / not', (c, s) => `${pctg(s.active_when_constrained)} / ${pctg(s.active_when_not_constrained)}`)}
+        ${cellRow('reader open in this cell: precision / recall', (c, s) => rd(s, 'precision') == null ? 'no track' : `${pctg(rd(s, 'precision'))} / ${pctg(rd(s, 'recall'))}`)}
+        ${cellRow('predicted DNase, same cell: rank correlation', (c, s) => same(s, 'spearman') == null ? 'no track' : same(s, 'spearman'))}
+        ${cellRow('active in top / bottom quartile of predicted DNase', (c, s) => same(s, 'spearman') == null ? '-' : `${pctg(same(s, 'active_in_top_quartile'))} / ${pctg(same(s, 'active_in_bottom_quartile'))}`)}
+        ${cellRow('predicted DNase of the other cell: rank correlation', (c, s) => other(s, 'spearman'))}</table>
+        ${sc.elements ? `<div class="muted" style="margin-top:6px">${fmt(sc.elements)} elements active in exactly one of K562 and HepG2: the model's predicted DNase is higher in the active cell for ${pctg(sc.predicted_dnase_higher_in_the_active_cell)} (${fmt(sc.predicted_judged)} judged); the measured reader is open in the active cell only for ${pctg(sc.reader_open_in_the_active_cell_only)}, in the inactive cell only for ${pctg(sc.reader_open_in_the_inactive_cell_only)}</div>` : ''}
+        <div class="muted" style="margin:6px 0 10px"><span class="pill experimental">experimental</span> lentiMPRA activity, ENCODE DNase · <span class="pill experimental">measured</span> Zoonomia phyloP · <span class="pill curated">curated</span> ENCODE cCREs · <span class="pill predicted">predicted</span> AlphaGenome DNase per cell line</div>`;
+      })() : '';
+      const cq = d.consequence_targets;
+      const cqLabel = {uniform: 'uniform samples', constrained: 'most constrained', vista: 'VISTA elements'};
+      const consequenceBlock = cq ? `<div style="margin:10px 0 4px"><b>Against consequence</b> <span class="muted">GWAS Catalog lead variants within ${cq.gwas.uniform.margin_bp} bp of an element, read against the same elements shifted 100 kb (chance), and ClinVar pathogenic variants with a non-coding consequence inside the elements</span></div>
+        <table><tr><th>elements</th><th class="num">hold a lead variant</th><th class="num">shifted control</th><th class="num">enrichment</th><th class="num">named target / none</th><th class="num">strong effect</th><th class="num">catalog gene = model / node</th></tr>${Object.entries(cq.gwas).map(([k, s]) => { const bp = s.by_partition; return `<tr><td>${cqLabel[k] || k}</td><td class="num">${pctg(s.fraction_with_lead_variant)} <span class="muted">(${fmt(s.with_lead_variant)} of ${fmt(s.elements)})</span></td><td class="num">${pctg(s.shifted_control_fraction)}</td><td class="num">${s.enrichment_over_shifted}×</td><td class="num">${pctg(bp.named_target.with_lead_variant)} / ${pctg(bp.no_target.with_lead_variant)}</td><td class="num">${pctg(bp.strong_effect.with_lead_variant)}</td><td class="num">${pctg(s.catalog_gene_is_the_predicted_target)} / ${pctg(s.catalog_gene_is_the_inferred_target)}</td></tr>`; }).join('')}</table>
+        <table style="margin-top:6px"><tr><th>ClinVar pathogenic, non-coding consequence</th><th class="num">elements</th><th class="num">variants</th><th class="num">ClinVar gene = model's target</th><th class="num">= node's target</th></tr>${Object.entries(cq.clinvar).map(([k, s]) => `<tr><td>${cqLabel[k] || k}</td><td class="num">${s.with_pathogenic_noncoding_variant} <span class="muted">of ${fmt(s.elements)}</span></td><td class="num">${s.variants}</td><td class="num">${s.clinvar_gene_is_the_predicted_target}</td><td class="num">${s.clinvar_gene_is_the_inferred_target}</td></tr>`).join('')}</table>
+        <div class="muted" style="margin:6px 0 10px"><span class="pill curated">curated</span> GWAS Catalog, ClinVar · <span class="pill predicted">predicted</span> AlphaGenome deletion target · <span class="pill inferred">inferred</span> nearest coding TSS in the node</div>` : '';
+      const allRows = Object.entries(d.enhancer_targets_all || {});
+      const allBlock = allRows.length ? `<div style="margin:10px 0 4px"><b>Every element in the node</b> <span class="muted">every enhancer inside a CTCF node deleted, effect per cell line (K562, HepG2, GM12878, IMR-90); one chromosome at a time as the quota allows; the element tables stay local</span></div>
+        <table><tr><th>chr</th><th class="num">scored</th><th>state</th><th class="num">name a gene</th><th class="num">= nearest TSS</th><th class="num">inside node</th><th class="num">strong</th><th class="num">requests</th></tr>${allRows.map(([c, r]) => { const s = r.summary || {}; return `<tr><td class="mono">${c}</td><td class="num">${fmt(r.scored)} of ${fmt(r.elements_total)}</td><td>${r.complete ? 'complete' : 'scoring'}</td><td class="num">${pctg(s.fraction_with_target)}</td><td class="num">${pctg(s.coding_target_agrees_with_nearest)}</td><td class="num">${pctg(s.fraction_inside_domain)}</td><td class="num">${fmt(s.strong || 0)}</td><td class="num">${fmt(r.requests_this_run || 0)}</td></tr>`; }).join('')}</table>
+        <div class="muted" style="margin:6px 0 10px"><span class="pill predicted">predicted</span> AlphaGenome deletion effect per element and cell line · <span class="pill inferred">inferred</span> CTCF-only nodes</div>` : '';
+      $('#j-enhancers').innerHTML = head + constrained + allBlock + vistaBlock + eqtlBlock + mpraBlock + consequenceBlock + chroms.map(c => {
+        const r = et[c], s = r.summary || {}, v = s.verdicts_coding || s.verdicts || {};
+        const pct = (x) => x == null ? '?' : (x * 100).toFixed(0) + '%';
+        const named = s.with_predicted_target || 0;
+        return `<div class="kpi"><div><b>${c}</b><span>${fmt(s.elements_scored || 0)} of ${fmt(r.distal_enhancers_with_domain_target || 0)} distal enhancers scored</span></div><div><b>${pct(s.fraction_with_target)}</b><span>name a gene (≥ ${r.min_effect_log2fc} log2)</span></div><div><b>${pct(s.coding_target_agrees_with_nearest)}</b><span>coding target = nearest TSS in node</span></div><div><b>${pct(s.fraction_inside_domain)}</b><span>target inside the node</span></div><div><b>${fmt(s.silencer_like || 0)}</b><span>silencer-like (expression rises)</span></div></div>
+          <table><tr><th>verdict (coding target vs node inference)</th><th class="num">elements</th><th class="num">share</th></tr>${Object.entries(v).map(([k, n]) => `<tr><td>${k}</td><td class="num">${fmt(n)}</td><td class="num">${pct(n / (s.elements_scored || 1))}</td></tr>`).join('')}</table>
+          <div class="muted" style="margin-top:6px">tissues where the strongest effect falls: ${Object.entries(s.top_tissues || {}).slice(0, 8).map(([k, n]) => `${k} (${n})`).join(', ') || '-'}${s.median_distance_when_agreeing ? ` · median distance when agreeing ${fmt(s.median_distance_when_agreeing)} bp` : ''} · ${named} named <span class="pill predicted">predicted: ${(r.model || 'AlphaGenome').split(' (')[0]}</span></div>`;
+      }).join('');
+    } else $('#j-enhancers').innerHTML = '<span class="muted">not run yet (job enhancer_targets_chr21 on this tab, needs ALPHAGENOME_API_KEY)</span>';
+  } catch (e) { $('#j-twin').innerHTML = `<span class="muted">${e.message}</span>`; }
+}
+// ---- project progress: current work and plan, done
+const escH = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const ago = s => s < 90 ? `${s} s ago` : s < 5400 ? `${Math.round(s / 60)} min ago` : s < 172800 ? `${Math.round(s / 3600)} h ago` : `${Math.round(s / 86400)} d ago`;
+// the roadmap's inline markdown: code, bold, italics, links as their text, pipe tables, paragraphs
+function mdInline(t) {
+  return escH(t).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, '$1<i>$2</i>').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+}
+function md(text) {
+  return String(text || '').split(/\n\n+/).map(block => {
+    const lines = block.split('\n');
+    if (lines.every(l => l.trim().startsWith('|'))) {
+      const rows = lines.filter(l => !/^\|[\s:|-]+\|?$/.test(l.trim())).map(l => l.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim()));
+      return '<table>' + rows.map((r, i) => '<tr>' + r.map(c => i ? `<td>${mdInline(c)}</td>` : `<th>${mdInline(c)}</th>`).join('') + '</tr>').join('') + '</table>';
+    }
+    return `<p style="margin:4px 0">${mdInline(block)}</p>`;
+  }).join('');
+}
+let ppRoadmap = null, ppTimer = null;
+document.querySelectorAll('.pp-tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.pp-tabs button').forEach(x => x.classList.toggle('on', x === b));
+  $('#pp-now').hidden = b.dataset.pp !== 'now';
+  $('#pp-done').hidden = b.dataset.pp !== 'done';
+});
+async function loadProjectProgress() {
+  await Promise.allSettled([loadWork(), loadRoadmap(), loadProgress()]);
+}
+async function loadWork() {
+  try {
+    const w = await api('/api/work');
+    const areaName = l => l ? `${l} · ${escH(w.areas[l] || '')}` : 'no area';
+    $('#pp-board').innerHTML = w.board.length ? '<div class="pp-who">' + w.board.map(e => `<div class="pp-entry ${e.state}">
+        <div class="row" style="margin:0;gap:6px"><b class="mono">${escH(e.who)}</b><span class="st ${e.state}">${e.state}</span>${e.area ? `<span class="pill">${areaName(e.area)}</span>` : ''}<span class="muted" style="margin-left:auto;font-size:11px">${ago(e.age)}</span></div>
+        <b class="task">${mdInline(e.task)}</b>
+        ${e.note ? `<div>${mdInline(e.note)}</div>` : ''}
+        ${e.next ? `<div class="muted">next: ${mdInline(e.next)}</div>` : ''}
+        ${e.files && e.files.length ? `<details><summary class="muted" style="cursor:pointer;font-size:11px">${e.files.length} file${e.files.length === 1 ? '' : 's'} held</summary><div class="files">${e.files.map(escH).join('<br>')}</div></details>` : ''}
+      </div>`).join('') + '</div>'
+      : '<div class="muted" style="font-size:12.5px">Nobody has an entry on the work board yet. Each contributor keeps one with <code>genomeos work start "task" --who NAME --area B --files … --next …</code>, then <code>genomeos work update --note …</code> and <code>genomeos work done</code>.</div>';
+    $('#pp-jobs').innerHTML = w.jobs.length ? w.jobs.map(j => `<div style="margin-bottom:8px;font-size:12.5px">
+        <b class="mono">${escH(j.name)}</b> <span class="st ${j.state}">${j.state}</span>${j.activity != null ? `<span class="muted" style="font-size:11px">active ${ago(j.activity)}</span>` : ''}
+        <div class="muted">${escH(j.describe)}</div>
+        ${j.total > 1 ? `<div class="prog ${j.state}"><i style="width:${(j.fraction || 0) * 100}%"></i></div><div class="muted" style="font-size:11px">${fmt(j.done)} of ${fmt(j.total)}${j.detail ? ' · ' + escH(j.detail) : ''}</div>` : ''}</div>`).join('')
+      : '<div class="muted" style="font-size:12.5px">no job running (the Jobs card below lists them all)</div>';
+    const groups = {};
+    w.uncommitted.forEach(f => { const k = f.who ? `${f.who}` : (f.area ? `area ${f.area}` : 'no area'); (groups[k] = groups[k] || []).push(f); });
+    $('#pp-files').innerHTML = w.uncommitted.length ? Object.entries(groups).map(([k, fs]) => `<details style="margin-bottom:4px;font-size:12.5px"${Object.keys(groups).length < 4 ? ' open' : ''}><summary style="cursor:pointer"><b>${escH(k)}</b>${fs[0].area && !k.startsWith('area') ? '' : fs[0].area ? ` <span class="muted">${escH(w.areas[fs[0].area] || '')}</span>` : ''} <span class="muted">(${fs.length})</span></summary>
+        <div class="files mono" style="font-size:11px">${fs.map(f => `<span class="muted">${f.change === 'new' ? '+' : f.change === 'deleted' ? '−' : '~'}</span> ${escH(f.path)}`).join('<br>')}</div></details>`).join('')
+      : '<div class="muted" style="font-size:12.5px">the checkout is clean</div>';
+    $('#pp-commits').innerHTML = w.commits.length ? w.commits.slice(0, 10).map(c => `<div class="pp-commit" title="${escH(c.subject)}"><span class="mono">${new Date(c.time * 1000).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} ${c.sha}</span><span>${mdInline(c.title)}</span></div>`).join('')
+      + (w.commits.length > 10 ? `<details><summary class="muted" style="cursor:pointer;font-size:12px">${w.commits.length - 10} more</summary>${w.commits.slice(10).map(c => `<div class="pp-commit" title="${escH(c.subject)}"><span class="mono">${new Date(c.time * 1000).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} ${c.sha}</span><span>${mdInline(c.title)}</span></div>`).join('')}</details>` : '')
+      : '<div class="muted" style="font-size:12.5px">no commits in the last day</div>';
+    // live contributors per area feed the planned cards
+    window.ppBoard = w.board;
+    if (ppRoadmap) renderPlanned(ppRoadmap);
+    $('#pp-stamp').textContent = `updated ${new Date().toLocaleTimeString()}`;
+  } catch (e) { $('#pp-board').innerHTML = `<span class="muted">${escH(e.message)}</span>`; }
+  clearTimeout(ppTimer);
+  if ($('#progress').classList.contains('active')) ppTimer = setTimeout(loadWork, 30000);
+}
+function renderPlanned(r) {
+  const board = (window.ppBoard || []).filter(e => e.state !== 'done');
+  $('#pp-milestones').innerHTML = r.milestones.map(m => `<span class="pill" data-tip="${escH(m.goal)} — ${escH(m.proof)}"><span class="st ${m.state}" style="border:0;padding:0">${m.state === 'done' ? '✓' : m.state === 'partial' ? '◐' : '○'}</span>${escH(m.milestone)}</span>`).join('');
+  $('#pp-areas').innerHTML = r.areas.map(a => {
+    const open = a.next.filter(s => s.state !== 'done');
+    const now = board.filter(e => e.area === a.letter);
+    return `<div class="pp-area">
+      <h4><span class="pp-letter">${a.letter}</span>${escH(a.title)}</h4>
+      <div class="muted" style="font-size:11.5px">${a.counts.done} done · ${open.length} planned${a.counts.blocked ? ` · ${a.counts.blocked} blocked` : ''}${a.owner ? ` · roadmap owner: ${mdInline(a.owner)}` : ''}</div>
+      ${now.length ? `<div style="margin-top:4px">${now.map(e => `<span class="st ${e.state}">now: ${escH(e.who)}</span> ${mdInline(e.task)}`).join('<br>')}</div>` : ''}
+      ${open.length ? `<ol>${open.map(s => `<li><span class="st ${s.state}">${s.state}</span>${mdInline(s.text)}</li>`).join('')}</ol>` : '<div class="muted" style="margin-top:6px">no open step in the roadmap</div>'}
+      ${a.missing ? `<details style="margin-top:4px"><summary class="muted" style="cursor:pointer;font-size:12px">missing for complete</summary><div class="pp-md">${md(a.missing)}</div></details>` : ''}
+    </div>`;
+  }).join('');
+  const waiting = r.data_jobs.filter(j => j.state !== 'done');
+  $('#pp-waiting').innerHTML = waiting.length ? `<h3 class="pp-h">Jobs waiting on a decision or a resource</h3><table>${waiting.map(j => `<tr><td>${mdInline(j.job)}</td><td class="muted" style="font-size:12px">${mdInline(j.detail)}</td><td class="mono">${escH(j.owner || '')}</td></tr>`).join('')}</table>` : '';
+}
+function renderDone(r) {
+  const q = ($('#pp-filter').value || '').trim().toLowerCase();
+  const match = it => !q || (it.title + ' ' + it.body).toLowerCase().includes(q);
+  let shown = 0;
+  $('#pp-done-areas').innerHTML = r.areas.map(a => {
+    const steps = a.next.filter(s => s.state === 'done').map(s => ({title: 'Step closed', date: null, summary: s.text, body: s.text}));
+    const items = [...a.done, ...steps].filter(match).sort((x, y) => (y.date || '').localeCompare(x.date || ''));
+    shown += items.length;
+    if (!items.length) return '';
+    return `<details class="pp-sec"${q ? ' open' : ''}><summary><span class="pp-letter">${a.letter}</span> ${escH(a.title)} <span class="muted" style="font-weight:400">(${items.length})</span></summary>
+      ${items.map(it => `<div class="pp-item"><div>${it.date ? `<span class="st done">${it.date}</span>` : '<span class="st done">done</span>'}<b>${mdInline(it.title)}</b></div>
+        <div style="margin-top:2px">${mdInline(it.summary)}</div>
+        ${it.body.length > it.summary.length + 20 ? `<details><summary>full entry</summary><div class="pp-md">${md(it.body)}</div></details>` : ''}</div>`).join('')}
+    </details>`;
+  }).join('') || '<div class="muted">nothing matches</div>';
+  $('#pp-filter-n').textContent = q ? `${shown} matching` : '';
+  const jobs = r.data_jobs.filter(j => j.state === 'done');
+  $('#pp-done-jobs').innerHTML = `<table>${jobs.map(j => `<tr><td>${mdInline(j.job)}</td><td class="muted" style="font-size:12px">${mdInline(j.detail)}</td></tr>`).join('')}</table>`;
+}
+async function loadRoadmap() {
+  try {
+    const r = ppRoadmap = await api('/api/roadmap');
+    renderPlanned(r);
+    renderDone(r);
+    const doneSteps = r.areas.reduce((n, a) => n + a.next.filter(s => s.state === 'done').length, 0);
+    const reached = r.milestones.filter(m => m.state === 'done').length;
+    $('#pp-done-n').textContent = `(${r.totals.done + doneSteps})`;
+    $('#pp-done-kpi').innerHTML = `<div><b>${r.totals.done + doneSteps}</b><span>roadmap items done</span></div><div><b>${reached} of ${r.milestones.length}</b><span>milestones reached</span></div><div><b>${r.data_jobs.filter(j => j.state === 'done').length}</b><span>data jobs finished</span></div><div><b>${r.totals.next - doneSteps}</b><span>steps still planned</span></div>`;
+  } catch (e) { $('#pp-areas').innerHTML = `<span class="muted">${escH(e.message)}</span>`; }
+}
+$('#pp-filter').oninput = () => { if (ppRoadmap) renderDone(ppRoadmap); };
 async function loadProgress() {
   const p = await api('/api/progress');
   $('#p-summary').innerHTML = `<div><b>${p.done}</b><span>tasks done</span></div><div><b>${p.count - p.done}</b><span>in progress / partial</span></div><div><b>${p.count}</b><span>tasks logged</span></div>`;
@@ -957,7 +1726,25 @@ $('#c-packet').onclick = () => { $('#c-packet-out').textContent = lastPacket ? J
 
 // ---- libraries
 let libs = [];
-async function loadLibs() { libs = (await api('/api/libs')).libraries; renderLibs(''); }
+async function loadLibs() { libs = (await api('/api/libs')).libraries; renderLibs(''); loadProteomeLib('TP53'); }
+async function loadProteomeLib(gene) {
+  try {
+    const r = await api('/api/proteome_lib' + (gene ? `?gene=${encodeURIComponent(gene)}` : ''));
+    const s = r.summary;
+    if (s.proteins) $('#pl-summary').innerHTML = `<div class="kpi"><div><b>${fmt(s.proteins)}</b><span>proteins</span></div><div><b>${(s.with_function / s.proteins * 100).toFixed(0)}%</b><span>function known</span></div><div><b>${(s.with_pathways / s.proteins * 100).toFixed(0)}%</b><span>in a pathway</span></div><div><b>${(s.with_partners / s.proteins * 100).toFixed(0)}%</b><span>physical partners</span></div><div><b>${(s.with_experimental_structure / s.proteins * 100).toFixed(0)}%</b><span>experimental structure</span></div></div>`;
+    else $('#pl-summary').innerHTML = '<span class="muted">packaged table missing</span>';
+    if (gene) {
+      const p = r.protein;
+      $('#pl-out').innerHTML = p ? `<div><b>${gene.toUpperCase()}</b> · UniProt ${p.accession} · ${p.name} · ${p.length} aa · ${p.chrom || ''} ${p.symbol_match ? '' : '<span class="pill inferred">entry names another gene</span>'}</div>
+        <div class="muted">${p.function || ''}</div>
+        <div>location: ${p.location.join('; ') || '?'} · tissue: ${p.tissue_pattern || '?'} · cell types: ${p.cell_type_pattern || '?'}</div>
+        <div>domains: ${p.domains.map(d => `<span class="chip">${d}</span>`).join(' ') || 'none'}</div>
+        <div>pathways: ${p.pathways.length} · partners: ${p.partners.join(', ') || 'none'} · structures: ${p.structures_experimental} experimental${p.alphafold ? ', AlphaFold' : ''} · diseases: ${p.diseases.join('; ') || 'none recorded'}</div>
+        <pre class="mono" style="font-size:11px;margin-top:6px;white-space:pre-wrap">${r.block}</pre>` : `<span class="muted">${gene} is not in the packaged proteome</span>`;
+    }
+  } catch (e) { $('#pl-status').textContent = e.message; }
+}
+document.addEventListener('DOMContentLoaded', () => { const b = $('#pl-show'); if (b) { b.onclick = () => loadProteomeLib($('#pl-gene').value.trim()); $('#pl-gene').onkeydown = e => { if (e.key === 'Enter') loadProteomeLib($('#pl-gene').value.trim()); }; } });
 function renderLibs(q) {
   q = q.toLowerCase();
   const hit = l => !q || l.id.includes(q) || l.purpose.toLowerCase().includes(q) || l.genes.some(g => g.toLowerCase().includes(q)) || (l.note || '').toLowerCase().includes(q);
@@ -977,7 +1764,16 @@ function renderLibs(q) {
 $('#l-search').oninput = e => renderLibs(e.target.value);
 window.addEventListener('resize', () => { /* charts are viewBox-scaled; nothing to do */ });
 </script>
+<footer style="padding:18px 20px;margin-top:8px;border-top:1px solid var(--line,#2a2f3a);font-size:12px;opacity:.75">
+  GenomeOS — research hypotheses with their evidence, not clinical advice.
+  BioLang engine under Apache 2.0, application under
+  <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPL-3.0-or-later</a>;
+  <a href="https://github.com/albert-canfield/GenomeOS" target="_blank" rel="noopener">source code</a>
+  (AGPL section 13: if you run a modified version, offer your users its source).
+</footer>
 <script src="/static/blocks.js"></script>
 <script src="/static/molecules.js"></script>
+<script src="/static/flow.js"></script>
+<script src="/static/therapeutics.js"></script>
 </body>
 </html>

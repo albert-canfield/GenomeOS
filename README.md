@@ -50,14 +50,19 @@ therefore always executes `Genome + Bootstrap State`, never DNA in isolation.
 
 ## Project family
 
-| Component | Role | Status |
+| Component | Role | Status (2026-09-11) |
 |---|---|---|
-| **BioLang** | biological programming language / DSL | designed, not built |
-| **BioLib** | reusable biological modules (`cell.core`, `animal.development`, `organs.heart`, ...) | designed, not built |
-| **BioIR** | common intermediate representation joining genomics, pathways, cells, physiology | v0.1 spec + Python types |
-| **BioVM** | runtime: discrete events, stochastic, continuous, spatial engines | v0.1: central dogma + cell ageing |
-| **BioTwin** | a specific genome + specific biological state | designed |
-| **BioForge** | in-silico design and experiment system | designed |
+| **BioLang** | biological programming language / DSL | v0.3: 18 block kinds from `gene` to `organism` and `experiment`; evidence on every block; programs test themselves |
+| **BioIR** | common intermediate representation joining genomics, pathways, cells, physiology | 0.3: 20 types with JSON round-trip, `UNKNOWN` as a value |
+| **BioVM** | runtime: discrete events, stochastic, continuous, spatial engines | eleven engines (central dogma, network, Boolean, SBML, ageing, spatial, segmentation, gastrulation, Body, debugger, uncertainty); process-bigraph composition |
+| **`bio`** | the toolchain on its own | `bio check | compile | run | test | repl` |
+| **BioLib** | reusable biological modules (`cell.core`, `animal.development`, `organs.heart`, ...) | 45 libraries with data-computed membership from GO and Reactome |
+| **BioTwin** | a specific genome + specific biological state | HG002 with measured state; fork, run, diff; genome-wide build in progress |
+| **BioForge** | in-silico design and experiment system | design search under constraints; experiments as input next |
+
+Where each stands in detail, what is missing and what comes next:
+[docs/ROADMAP.md](docs/ROADMAP.md) §2.1; the document index is
+[docs/README.md](docs/README.md).
 
 ## What runs today (v0.1)
 
@@ -76,25 +81,75 @@ therefore always executes `Genome + Bootstrap State`, never DNA in isolation.
   compile-time reference checks. The repressilator is the first program.
 - **BioLib catalogue.** 45 biological "libraries" found in the genome, in five
   layers: core, blueprint, timer, systems, parts. `genomeos libs -v`.
+- **Therapeutic target reasoning.** From a tumour VCF: protein localisation and
+  topology, whether a circulating binder can reach the altered protein, healthy
+  versus tumour expression, trafficking after binding, the mutant peptide/HLA
+  route for intracellular proteins, and mechanism compatibility across antibody,
+  engager, conjugate, radionuclide, TCR and experimental delivery mechanisms.
+  Every conclusion carries its evidence level; everything unestablished stays
+  unknown. See [docs/THERAPEUTICS.md](docs/THERAPEUTICS.md).
 
 Validated on real human DNA: the mitochondrial genome translates to the known
 proteins (MT-CO1 513 aa, MT-CO2 227 aa, MT-ATP6 226 aa) and chromosome 21
 loads in half a second.
 
-## Status (2026-09-10)
+## Status (0.9, 2026-09-11)
 
-The action plan in [docs/ACTION-PLAN.md](docs/ACTION-PLAN.md) has been executed
-through all five phases to a first working level; [docs/PROGRESS.md](docs/PROGRESS.md)
-records the evidence per task. Highlights:
+The whole genome is decoded end to end. Every human chromosome has been
+fetched and analysed, the proteome compiled and verified against the curators,
+and the structural model tested at genome scale. [docs/ROADMAP.md](docs/ROADMAP.md)
+holds the plan and the gaps; [docs/PROGRESS.md](docs/PROGRESS.md) records the
+evidence per task. What 0.9 means, measured:
+
+- **every chromosome**: 25 fetched and analysed, UNKNOWN space classified at 98.5% with curated repeats, CTCF nodes on 24, open chromatin read for eleven cell types
+- **the whole proteome**: 19,478 coding genes compiled from seven public databases, translation verified against UniProt on 19,249 of them (90.9% identical to the canonical entry, 97.8% exact for some isoform), and packaged as a 2.3 MB library that answers offline
+- **the structural model tested, not asserted**: 4,800 regulatory elements deleted one at a time, and the gene that moves sits inside the element's own CTCF node 90.2% of the time; in mouse, a node that splits across human nodes splits into adjacent ones 39 times out of 42
+- **a person's own genome**: any GRCh38 VCF imported locally, used by carrier lookup, the gene report, the twin and the gene-by-gene walk, and never leaving the machine
+- **pathways that run**: Reactome as reachability, and as kinetics where a curated ODE model exists (removing MEK from Kholodenko2000 stops the ERK oscillation)
 
 - a real person's genome (GIAB HG002) compiles to BioIR: 55,210 chromosome-21 variants applied to both haplotypes, every coding transcript translated, ClinVar consequences reproduced at >90%
 - 45 genome "libraries" verified against Gene Ontology and Reactome by data (95.5% agreement, the gap documented)
 - SBML models from BioModels and Boolean models run unchanged; the Fauré cell cycle gives its published attractors
 - epigenetic clocks validated on real blood methylation (Horvath r > 0.8); telomere estimator; digital twins that fork, run and diff
-- development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient, the C. elegans early lineage from a zygote
+- development: French flag, segmentation clock at the human 5-hour period, germ layers along a NODAL gradient
+- an organism from one cell: BioLang v0.3 `organism` programs run by the Body runtime (`genomeos grow`); C. elegans grows from the zygote to the 959-cell adult with every cell, fate and programmed death matching Sulston's lineage, founders decided by maternal factors, Wnt and Notch, timing within a median 12 minutes ([docs/BIOLANG-v0.3.md](docs/BIOLANG-v0.3.md), [docs/ORGANISM-FROM-ONE-CELL.md](docs/ORGANISM-FROM-ONE-CELL.md))
+- knockouts as experiments: `experiment` blocks remove a maternal factor or a signal and run against the wild type; the six classic C. elegans mutants (pop-1, skn-1, pie-1, apx-1, glp-1, pal-1) reproduce their published founder phenotypes from the cited rules (`genomeos grow data/organisms/celegans/mutants.bio --experiments`)
+- the grammar is generated from the parser (`docs/BIOLANG-GRAMMAR.md`), programs import cited proteins from the packaged proteome (`import protein:TP53`), and the standard library gained the Carnegie stages, 148 developmental signalling pairs from CellPhoneDB and the measured human cell lifespans
+- the reference clock measured: the lineage's minute against the Ma 2021 imaging frames and the Packer 2019 embryo times of the same cells runs slow by about 1.5, stated with the reference rather than hidden in it; the organism runtime runs 2.7 times faster (three years of haematopoiesis in 3.4 s)
+- the published knockout set: Digital Development's founder transformations per gene (Du et al. 2014) score the program's own knockouts, 7 of 11 modelled transformations reproduced and the misses named (the PAR polarity rules are not written)
+- the measured reader: the Ma 2021 atlas of 266 transcription factors in ~1,270 lineaged embryonic cells is distilled into an `express` decision per cell, so every cell of the worm program carries its measured factors; the atlas and Sulston's lineage check each other (ELT-2 predicts intestine at 96% precision and full recall, HLH-1 body-wall muscle at 94%)
+- design questions over organisms: a `design` block names the perturbations BioForge may try, the goal and the constraints; every candidate runs as an experiment and the answer comes back as a predicted `experiment` block (`genomeos grow data/organisms/human/haematopoiesis_designs.bio --design`: lose neutrophils and keep the rest → GFI1)
+- space in the organism runtime: cells hold sites on a grid, daughters take free sites, a division with no room waits (contact inhibition), morphogen fields diffuse between events and gradient signals set factors cells read; Wolpert's French flag grows from a single founder into its three bands (`genomeos grow data/demo/flag_organism.bio --until "200 h"`)
+- the organism runtime composes with the other engines: with the `compose` extra an organism program runs as a process-bigraph process beside a gene network and the ageing population on one clock, and a network's species can gate the organism's decisions through named factors
+- the first human mechanism module: haematopoiesis from the stem cell to the blood lineages, each step gated by the transcription factors the genetics established, flows fitted to the measured daily outputs (2.8e11 cells replaced per day), nine knockouts reproducing their published phenotypes (`genomeos grow data/organisms/human/haematopoiesis_mutants.bio --experiments`)
+- the same runtime at population resolution grows a human body: Carnegie-stage timers, germ layers by share, sixteen tissue populations that reach the adult counts of Sender & Milo 2021 and turn over at their measured rates (2.8e13 cells at 20 years, 3.2e11 replaced per day), every number cited and the whole labelled low confidence because it is counts, not mechanism (`genomeos grow data/organisms/human/body.bio --until "20 yr"`)
 - a debugger with biological breakpoints and evidence traces, and BioForge design search whose outputs are labelled predicted
-- RNA and proteins: transcripts per gene, our translation checked against UniProt, domains and function, AlphaFold structures with per-residue confidence
+- the DNA → RNA → protein relationship as one traceable object: every base mapped to its mRNA position, codon and residue and back, with the consequence of a single-base change (Flow tab, `genomeos flow`)
+- the whole human proteome compiled (19,478 coding genes; sequence 99%, function 86%, pathways 58%, experimental structure 45%) and its knowledge graph (41,982 nodes, 327,024 edges), every fact with its source and confidence (docs/PROTEIN.md)
+- a federated protein compiler: Ensembl, UniProt, InterPro, PDB, AlphaFold, Reactome, STRING and the Human Protein Atlas compiled into one definition per protein keyed by UniProt accession, evidence and confidence per section, predicted never treated as observed (`genomeos protein X --compile`, docs/PROTEIN.md)
+- nodes above genes: domains between CTCF boundaries with the genes and enhancers inside (`genomeos domains`)
+- therapeutic target reasoning: for every tumour alteration, where the protein sits and whether a binder can physically reach it, how the tumour differs from healthy tissue, what happens after binding, the peptide/HLA route, and which of 15 therapeutic mechanisms the biology supports, each with its evidence level and its missing data (`genomeos therapeutic`, docs/THERAPEUTICS.md)
 - a local web UI with a dozen views, including a Progress tab with live background jobs and the project's task log
+
+## Licence and credits
+
+Open source, and built to stay that way. Two licences, split along the line the
+architecture already draws ([LICENSING.md](LICENSING.md)):
+
+- the **BioLang engine** (language, IR, virtual machine, standard library,
+  `bio` toolchain) is **Apache 2.0**, so anyone can embed it in their own tool,
+  the way they would use Python or Node;
+- the **GenomeOS application** (genome decoding, molecules, twins, organisms,
+  cancer, therapeutics, the web interface) is **AGPL-3.0-or-later**: use it,
+  change it, publish research with it, and if you run a modified version as a
+  service, its users get the source. Improvements come back.
+
+A separate commercial licence can be granted by the author. Independently of
+the code, several data sources and optional models are non-commercial or
+academic only (AlphaGenome, NetMHCpan, COSMIC and some cBioPortal studies), so
+a commercial user must check every source they enable. Everything GenomeOS
+stands on is credited with its licence in
+[ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md).
 
 ## Quick start
 
@@ -104,20 +159,31 @@ uv run genomeos info data/demo/demo.fa
 uv run genomeos orfs data/demo/demo.fa --min-aa 30
 uv run genomeos age --cell-type fibroblast --years 90 --cells 500 --evidence
 uv run genomeos libs --layer timer -v
+uv run genomeos grow data/organisms/celegans/embryo.bio --until 6000 --compare   # one cell to the adult worm
+uv run genomeos grow data/organisms/human/body.bio --until "20 yr"               # a human body as populations
 uv run genomeos serve --open           # light web UI at http://127.0.0.1:8765
+uv run bio test data/demo              # the BioLang toolchain on its own: check, compile, run, test, repl
+uv run genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --report
 uv run pytest                          # ~80 tests; real-data tests skip until data is fetched
 uv run ruff check .
 ```
 
 More commands: `annotate`, `gene`, `index`, `variant`, `twin build|new|fork|run`,
-`clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`.
+`clock`, `telomere`, `cells`, `lr`, `debug`, `develop`, `forge`, `organism`, `grow`,
+`flow`, `regulation`, `domains`, `repeats`, `rna`, `protein --compile|--bio`, `proteome`,
+`graph`, `pathway`, `lookup`, `report`, `verify`, `unknown`, `cancer compare|tumour|expression`, `therapeutic`,
+`design`, `data fetch --chrom C [--individual]`; the `bio` toolchain: `bio check|compile|run|test|repl`.
 Optional extras: `uv sync --extra compose` (process-bigraph), `--extra predict`
-(AlphaGenome client, needs `ALPHAGENOME_API_KEY`), `--extra clocks` (biolearn, needs torch).
+(AlphaGenome client; the key goes in a git-ignored `.env`, see docs/DATA.md; without it
+the feature loads disabled and `genomeos predict --status` says how to enable it),
+`--extra clocks` (biolearn, needs torch).
 
-The web UI is a single HTML page served by the standard library: Genome
-(load, fetch a locus, translate, find ORFs), Program (BioLang editor with
-compile report and trajectory chart), Ageing (clocks, environment, evidence,
-compare with baseline) and Libraries (search the genome's libraries).
+The web UI is a single HTML page served by the standard library: Start,
+Genome, Anatomy, Blocks (2-D block map with domains, genes, UNKNOWN classes
+and ENCODE elements), Flow (DNA → RNA → protein, linked lanes), Program,
+Ageing, Twin, Space, Debugger, Molecules (protein definition and AlphaFold
+structure), Cancer, Targets (therapeutic candidates, mechanisms and the
+evidence behind each), Progress and Libraries.
 
 To work with a real human chromosome:
 
@@ -129,6 +195,25 @@ uv run genomeos info data/reference/chr21.fa.gz
 scripts/fetch_reference.sh hg002     # a real individual's diploid genome (open consent), ~1 GB
 ```
 See [docs/DATA.md](docs/DATA.md) for every open dataset and its verified URL.
+
+To read a person's own genome (a VCF against GRCh38; the Genome in a Bottle
+trio is the worked example, and everything about a person stays in a
+git-ignored directory, never in a committed result):
+
+```bash
+uv run genomeos individual import HG002.vcf.gz --name HG002        # a file or a URL, streamed once
+uv run genomeos individual check --name HG002 --chrom chr21        # is this file really GRCh38?
+uv run genomeos individual screen --name HG002                     # ClinVar carrier screen
+uv run genomeos individual knockouts --name HG002                  # truncating variants, homozygous first
+uv run genomeos individual coding --name HG002 --predict           # every coding SNV; AlphaMissense per missense
+uv run genomeos individual protein --name HG002 --gene APP --chrom chr21   # the protein each tissue makes
+uv run genomeos individual trio --name HG002 --father HG003 --mother HG004  # inheritance, de novo candidates
+uv run genomeos individual diff --name HG002 --against HG003 [--regulatory --chrom chr21]  # a code review
+uv run genomeos individual pgs --name HG002                        # polygenic scores from PGS Catalog weights
+uv run genomeos individual report --name HG002                     # the one-page dossier
+uv run genomeos telomere <bam-url> --bai <index> --save telomere_HG002   # telomere from a BAM read by ranges
+```
+The Twin card of the web UI runs the same steps with a click.
 
 ## Storage principle
 
@@ -146,11 +231,13 @@ Stream, distil, discard: raw data is streamed or downloaded once, every real-dat
 - [docs/STORAGE.md](docs/STORAGE.md) — stream, distil, discard: keeping the project small on disk
 - [docs/LESSONS.md](docs/LESSONS.md) — what the core has learned from data, and where it is embedded
 - [docs/SEQUENCE-GRAMMAR.md](docs/SEQUENCE-GRAMMAR.md) — the genome's own delimiters, measured, and how BioLang builds on them
+- [docs/GRAMMAR-BY-COMPARISON.md](docs/GRAMMAR-BY-COMPARISON.md) — the grammar inferred by comparing genomes across species and people: what is built, what is missing, the plan
 - [docs/GENOME-ANATOMY.md](docs/GENOME-ANATOMY.md) — counting the blocks of three genomes, and the budgets for building one from zero
 - [docs/FLOW.md](docs/FLOW.md) — the upward flow (DNA → regulation → RNA → protein → cell → tissue → organism) and the types that carry it
 - [docs/NODES-READER-WRITER.md](docs/NODES-READER-WRITER.md) — nodes, reader, writer, executor: the conceptual model against the biology
 - [docs/UNKNOWN.md](docs/UNKNOWN.md) — classifying the space between genes from sequence alone, with a pattern file you can extend
 - [docs/CANCER.md](docs/CANCER.md) — healthy versus tumour: somatic differences, drivers from cBioPortal, targets, agent packet
+- [docs/THERAPEUTICS.md](docs/THERAPEUTICS.md) — therapeutic targeting: accessibility, selectivity, trafficking, neoantigens, mechanism compatibility, and the design dataset
 - [docs/DESIGN-MINIMAL-CELL.md](docs/DESIGN-MINIMAL-CELL.md) — how much genome a neuron needs, and why it still is not a small extract
 - [docs/ROADMAP.md](docs/ROADMAP.md) — from a molecular cell to a digital twin
 

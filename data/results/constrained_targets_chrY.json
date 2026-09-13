@@ -1,0 +1,195 @@
+{
+  "result": "constrained_targets_chrY",
+  "date": "2026-09-12",
+  "chrom": "chrY",
+  "distal_enhancers": 279,
+  "min_constrained_fraction": 0.2,
+  "constrained_elements_available": 5,
+  "scored": 5,
+  "summary": {
+    "elements_scored": 5,
+    "with_predicted_target": 4,
+    "fraction_with_target": 0.8,
+    "strong": 2,
+    "weak": 2,
+    "silencer_like": 1,
+    "verdicts": {
+      "gene outside the domain": 3,
+      "no predicted effect": 1,
+      "another gene in the same domain": 1
+    },
+    "verdicts_coding": {
+      "agrees with nearest TSS in domain": 2,
+      "no predicted effect": 2,
+      "gene outside the domain": 1
+    },
+    "coding_target_agrees_with_nearest": 0.667,
+    "fraction_agreeing_with_nearest": 0.0,
+    "fraction_inside_domain": 0.25,
+    "top_tissues": {
+      "M059J": 1,
+      "naive thymus-derived CD8-positive, alpha-beta T cell": 1,
+      "vagina": 1,
+      "skeletal muscle myoblast": 1
+    },
+    "median_distance_when_agreeing": null
+  },
+  "mean_abs_log2fc_when_named": 0.457,
+  "uniform_sample": {
+    "elements_scored": 200,
+    "fraction_with_target": 0.575,
+    "coding_target_agrees_with_nearest": 0.5,
+    "fraction_inside_domain": 0.87,
+    "strong": 37,
+    "silencer_like": 33
+  },
+  "elements": [
+    {
+      "id": "EH38E3950664",
+      "start": 12859684,
+      "end": 12860005,
+      "constrained_fraction": 0.654,
+      "phylop_mean": 3.222,
+      "inferred": {
+        "gene": "DDX3Y",
+        "distance": 44263,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "USP9Y",
+        "action": "activates",
+        "log2_fold_change": -0.1021,
+        "tissue": "M059J",
+        "strength": "weak",
+        "confidence": 0.102,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "USP9Y",
+        "action": "activates",
+        "log2_fold_change": -0.1021,
+        "tissue": "M059J",
+        "strength": "weak",
+        "confidence": 0.102,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "gene outside the domain",
+      "domain": "chrY:D23"
+    },
+    {
+      "id": "EH38E2775663",
+      "start": 13305421,
+      "end": 13305597,
+      "constrained_fraction": 0.585,
+      "phylop_mean": 3.801,
+      "inferred": {
+        "gene": "UTY",
+        "distance": 175163,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000290852",
+        "action": "activates",
+        "log2_fold_change": -0.1228,
+        "tissue": "naive thymus-derived CD8-positive, alpha-beta T cell",
+        "strength": "weak",
+        "confidence": 0.123,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "UTY",
+        "action": "activates",
+        "log2_fold_change": -0.1008,
+        "tissue": "mammary microvascular endothelial cell",
+        "strength": "weak",
+        "confidence": 0.101,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chrY:D26"
+    },
+    {
+      "id": "EH38E3951063",
+      "start": 19706278,
+      "end": 19706617,
+      "constrained_fraction": 0.537,
+      "phylop_mean": 3.334,
+      "inferred": {
+        "gene": "KDM5D",
+        "distance": 38700,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ENSG00000260197",
+        "action": "represses",
+        "log2_fold_change": 1.3017,
+        "tissue": "vagina",
+        "strength": "strong",
+        "confidence": 0.7,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": {
+        "gene": "KDM5D",
+        "action": "activates",
+        "log2_fold_change": -0.1285,
+        "tissue": "PFSK-1",
+        "strength": "weak",
+        "confidence": 0.129,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "verdict_coding": "agrees with nearest TSS in domain",
+      "domain": "chrY:D40"
+    },
+    {
+      "id": "EH38E3951244",
+      "start": 22360309,
+      "end": 22360645,
+      "constrained_fraction": 0.321,
+      "phylop_mean": 1.798,
+      "inferred": {
+        "gene": "RBMY1J",
+        "distance": 42932,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": null,
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chrY:D47"
+    },
+    {
+      "id": "EH38E2775763",
+      "start": 13871544,
+      "end": 13871745,
+      "constrained_fraction": 0.209,
+      "phylop_mean": 0.248,
+      "inferred": {
+        "gene": "VCY",
+        "distance": 114828,
+        "basis": "nearest TSS in domain",
+        "confidence": 0.4
+      },
+      "predicted": {
+        "gene": "ANOS2P",
+        "action": "activates",
+        "log2_fold_change": -0.3019,
+        "tissue": "skeletal muscle myoblast",
+        "strength": "strong",
+        "confidence": 0.302,
+        "basis": "predicted: expression change on deleting the element (AlphaGenome RNA-seq gene scorer)"
+      },
+      "predicted_coding": null,
+      "verdict_coding": "no predicted effect",
+      "domain": "chrY:D27"
+    }
+  ],
+  "phylop_cost": {
+    "requests": 56,
+    "mb_fetched": 2.2,
+    "seconds": 33.5
+  },
+  "evidence": "measured: Zoonomia phyloP constraint; predicted: AlphaGenome deletion effect per element"
+}

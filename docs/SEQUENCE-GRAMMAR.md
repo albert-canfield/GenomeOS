@@ -98,13 +98,238 @@ tested against it.
 
 ## 5. What comes next
 
-1. A segment parser that chains signal hits into candidate transcripts and
-   scores them (Viterbi over the grammar), evaluated against GENCODE as
-   sensitivity/precision per signal, per chromosome.
+1. ✅ (v1, 2026-09-11) A segment parser that chains signal hits into
+   candidate genes and scores them: `genomeos segments --chrom chr21`
+   (`genomeos/genome/segments.py`). Coding potential is a codon log-odds
+   table learned from the chromosome's canonical CDS; the parser is a
+   Viterbi-style dynamic programme over candidate starts, donors, acceptors
+   and stops (prefix sums for exon scores, a next-in-frame-stop table, a
+   sliding-window maximum for introns; 46 Mb in about two minutes). Scored
+   against every coding transcript of GENCODE on chr21:
+
+   | level | sensitivity | precision |
+   |---|---|---|
+   | gene (any overlap, same strand) | 89.1% | 21.9% |
+   | splice site (exact position) | 7.5% | 6.9% |
+   | CDS segment (exact both ends) | 4.7% | 5.2% |
+
+   Tried and dropped the same day: banded exon and intron length models
+   learned from the annotation (a sliding-window maximum per intron band).
+   They moved nothing (exact exons 4.7% / 5.2% before and after). An in-frame
+   hexamer coding model instead of codon usage gained a little on a 2 Mb
+   slice (site precision 8% → 11%) and nothing over the whole chromosome
+   (4.9% / 5.2%, 186 more candidates), so it was dropped too. The bottleneck
+   is what three matrices and a codon table cannot see: the scores would need
+   a proper probabilistic model of the whole structure (emission and duration
+   models of a gene-finding HMM) or conservation, not tuning.
+
+   That is the honest state of "signals alone": the parser lands on nine in
+   ten coding genes but draws their exon boundaries right only rarely, and
+   it invents 556 candidates for 221 genes. The scoring is the limit,
+   not the search: three PWMs and codon usage carry no exon or intron
+   length model, no hexamer frame model, no promoter or polyA signal, no
+   conservation. Each of those is a measurable step up on this table. Every
+   prediction is saved as `predicted` evidence next to this measurement
+   (`data/results/segments_chr21.json`); none enters the block map.
+   **Second opinion on the splice sites (feature c, 2026-09-11).** The
+   bottleneck named above was tested directly. `genomeos segments --chrom
+   chr21 --predicted-sites` keeps the parser exactly as it is (Kozak matrix
+   for starts, codon log-odds, Viterbi, the same priors) and replaces only
+   the donor and acceptor candidates: instead of the two learned matrices it
+   takes AlphaGenome's splice-site tracks, four probabilities per base (donor
+   and acceptor on each strand), 45 requests of 1 Mb for the chromosome in
+   33 s, cached locally (`genomeos/predict/splice_sites.py`). Calibrated
+   against GENCODE first: the donor track peaks on the last exonic base and
+   the acceptor track on the first exonic base, on both strands, with mean
+   probability 0.91 to 1.00 at canonical exon boundaries. A probability
+   enters the Viterbi as log2(p/(1−p)) + 10 bits, so a confident site sits
+   where a perfect matrix hit would.
+
+   | level | matrices alone | AlphaGenome sites | + starts at ENCODE promoters |
+   |---|---|---|---|
+   | CDS segment (exact both ends) | 4.7% / 5.2% | **40.1% / 46.2%** | 30.2% / **61.9%** |
+   | canonical CDS segment found (1,907 segments) | 8.7% | **74.8%** | 56.3% |
+   | splice site (exact position) | 7.5% / 6.9% | **51.6% / 49.2%** | 38.9% / **66.0%** |
+   | gene (any overlap, same strand) | 89.1% / 21.9% | 84.2% / 20.0% | 59.3% / **53.8%** |
+   | candidates | 556 | 1,003 | 158 |
+
+   (`data/results/segments_chr21_predicted_sites.json` and
+   `segments_chr21_predicted_sites_anchored.json`; sensitivity / precision.)
+   The third column adds the one local, curated signal for where a gene may
+   begin: `--promoter-anchored` confines start codons to 5 kb downstream of
+   an ENCODE promoter-like element (4.2% of the chromosome; both strands,
+   since an element does not say which strand it serves). It is a trade, not
+   a free gain: candidates fall from 1,003 to 158 and precision doubles or
+   triples at every level, while sensitivity drops to the genes whose
+   promoter the registry has marked (59% of coding genes). Swept: 2 kb
+   confines harder (gene 53.8% / 57.1%), 20 kb looser (68.3% / 37.7%); with
+   the matrices alone the windows help precision just as much (gene 67.9% /
+   65.5% at 5 kb) but exons stay at 3.5% / 9.1%, because the windows say
+   where a gene starts and nothing about where its exons end. Nine times the exact exons from the same parser: the
+   delimiters were the limit, as section 1 said. What did not move is as
+   telling: gene precision stays at one in five because the start codons and
+   the coding model are unchanged, and the 1,003 candidates are mostly
+   single-exon open reading frames the Kozak matrix lets through. Thresholds
+   were swept on the cached tracks (p ≥ 0.05, 0.2, 0.5; 10 or 13.3 bits):
+   the lowest threshold with the 10-bit scale is best on every axis, so
+   discarding weak sites loses true exons faster than it removes false ones.
+   The remaining gap to the annotation is first and last exons (start and
+   stop, no splice signal) and alternative isoforms, since every transcript's
+   CDS segments count as truth: scored against the canonical transcript's
+   segments alone (second row), three in four are found exactly, so most of
+   the "missing" exons are isoform-specific ones the parser was never going
+   to produce from one structure per locus. The next measurable steps are therefore a
+   predicted start signal of the same quality, and scoring against canonical
+   transcripts separately. All of it stays `predicted` evidence; the grammar
+   runs unchanged without the key.
+   **The coding model, tested (2026-09-11, late).** Two experiments had named
+   the coding score as the remaining limit, so it was replaced: a 3-periodic
+   fifth-order Markov model of coding sequence (GENSCAN's kind: the
+   probability of each base given the five before it and its position in the
+   codon, learned from the chromosome's canonical CDS, against a homogeneous
+   fifth-order model of the chromosome itself; `--coding markov`,
+   `MarkovCoding` in `genomeos/genome/segments.py`) in place of the codon
+   usage table, everything else unchanged, on the same three configurations:
+
+   | configuration | codon table (exons, genes) | Markov model (exons, genes) |
+   |---|---|---|
+   | matrices alone | 4.6% / 5.2%, 89.1% / 21.9% | 5.6% / 6.7%, 88.2% / 23.3% |
+   | AlphaGenome sites | 40.1% / 46.2%, 84.2% / 20.0% | 39.7% / 47.2%, 84.6% / 21.4% |
+   | + starts at ENCODE promoters | 30.2% / 61.9%, 59.3% / 53.8% | 30.0% / 63.0%, 59.3% / 55.6% |
+
+   (sensitivity / precision; `segments_chr21_predicted_sites_markov.json`
+   next to the codon-table results.) One to two points of precision in every
+   configuration, no sensitivity, and the same 950 to 1,000 candidates with
+   predicted sites. So the coding model is not the limit either, at least not
+   at fifth order with this much training data (221 genes): what a stronger
+   frame model buys is the ability to tell a real reading frame from a
+   plausible one a little more often, and the candidates it cannot reject are
+   real open reading frames that are simply not genes, or genes annotated on
+   another isoform. The next lever is therefore not sequence at all but
+   evidence of transcription: RNA-seq or CAGE support for a candidate's exons,
+   which the reader layer and AlphaGenome's expression tracks can both supply.
+   Both models stay available; `codon` remains the default because it is
+   faster and the difference is within a point.
+
+   **Open chromatin as the start prior (the first transcription-evidence
+   test).** The reader's DNase peaks for eleven cell types (30,543 peaks on
+   chr21, union) used the way the ENCODE promoter elements were, as windows a
+   gene may begin in (peak − 500 bp to peak + 2 kb, both strands, 38% of the
+   chromosome): with predicted splice sites, candidates 1,003 → 614, exact
+   exons 40.1% / 46.2% → 37.7% / 52.7%, genes 84.2% / 20.0% → 75.6% / 24.6%.
+   A milder version of the promoter trade: openness in some cell is
+   necessary for a real promoter but far from sufficient, so it removes
+   fewer false candidates than the curated promoter class and keeps more
+   true genes. Extending to 5 kb or adding the promoter class changes
+   nothing that matters. The evidence that would separate an open reading
+   frame from a gene is RNA over its exons, not chromatin at its start;
+   that needs expression tracks (GTEx per gene exists in the RNA layer,
+   AlphaGenome's RNA-seq tracks per base), which is the next experiment.
+
+   **RNA over the exons (2026-09-12).** That experiment: AlphaGenome's
+   predicted RNA-seq coverage per base and strand for a panel of eight
+   tissues (liver, brain, lung, colon, kidney, heart, prostate, ovary; 45
+   requests of 1 Mb for chr21, runs of bases with coverage ≥ 0.5 kept sparse
+   under `data/knowledge/alphagenome/rna`, `genomeos/predict/rna_tracks.py`),
+   used as a filter after the parse: a candidate stays if its exons are
+   predicted transcribed on its strand (`--rna-filter FRACTION`, mean
+   covered fraction of the exons).
+
+   | predicted sites, then… | candidates | exons (sens / prec) | canonical exons | genes (sens / prec) |
+   |---|---|---|---|---|
+   | no filter | 1,003 | 40.1% / 46.2% | 74.8% | 84.2% / 20.0% |
+   | RNA over ≥ 30% of exon bases | 82 | 32.9% / **68.6%** | 61.0% | 57.9% / **92.7%** |
+   | RNA over ≥ 50% | 71 | 29.4% / 71.3% | 54.8% | 51.1% / 95.8% |
+   | RNA over ≥ 80% | 33 | 12.2% / 83.7% | 23.0% | 21.3% / 90.9% |
+   | + starts at ENCODE promoters, RNA ≥ 50% | 48 | 24.0% / 72.6% | 44.6% | 42.1% / 100% |
+
+   | measured: ENCODE K562 total RNA-seq over ≥ 30% of exon bases (signal ≥ 0.05) | 55 | 26.0% / 72.1% | 47.9% | 44.8% / 89.1% |
+   | measured, six-line panel (K562, HepG2, GM12878, IMR-90, A549, MCF-7; best line per exon; tracks oriented) | 127 | 36.6% / 66.3% | 68.1% | 63.8% / 72.4% |
+   | predicted panel **or** measured panel (union) | 137 | 37.2% / 64.4% | 69.3% | 67.0% / 72.3% |
+   | predicted panel **and** measured panel (intersection) | 72 | 32.3% / 71.2% | 59.9% | 54.3% / **95.8%** |
+
+   (`segments_chr21_predicted_sites_rna.json`, `…_measured_K562.json`.) The
+   measured row uses an experiment instead of a model: ENCODE's
+   strand-specific total RNA-seq bigWigs for K562, read over HTTP ranges
+   for the candidate exons only (0.7 MB moved for 3,248 exons,
+   `genomeos/genome/rna_measured.py`, `--rna-measured K562`; the bigWig
+   reader is `genomeos/attribution/bigwig.py`). It reaches the same precision
+   as the predicted panel with fewer genes, because one cell line expresses
+   fewer of chr21's genes than eight tissues do, and the threshold matters:
+   at signal ≥ 1.0 only 12 candidates survive, at 0.05 the 55 above, swept
+   and recorded. Model and measurement agree on the point, which is what
+   the measurement was for. A panel of six lines (`--rna-measured
+   "K562,HepG2,…"`, an exon counted where its best line covers it, 6.3 MB
+   moved; HeLa-S3 and SK-N-SH have no released strand-specific track) buys
+   sensitivity back, 45% → 64% of genes and 48% → 68% of canonical exons,
+   and pays in precision, 89% → 72%: the more lines are pooled, the more
+   candidates sit under transcription that is not a coding gene (a
+   pseudogene, a long non-coding RNA, an antisense read-through), and
+   measured RNA cannot tell those apart, whereas the model's gene-level
+   tracks were trained to. Measured transcription is evidence that a
+   region is made, not that it is a gene; the two together, a model that
+   knows genes and a measurement that knows this cell, are the honest
+   filter. Combined (`--rna-combine`): the union adds three genes to the
+   measured panel and keeps its noise (67.0% / 72.3%); the intersection is
+   the strictest call the series has, 72 candidates of which 69 are genes
+   (95.8% precision at 54.3% sensitivity), with exons right 71% of the time.
+
+   **Oriented (2026-09-12).** The panel rows above were re-run after a
+   finding from the closure work: ENCODE labels a strand track by the read,
+   and IMR-90's total RNA-seq reads antisense, so its "plus" file carries
+   the minus-strand genes. `MeasuredRna` now probes forty exons per strand
+   in both orientations and swaps a line's tracks when the swapped
+   orientation carries twice the signal (IMR-90 swapped; the other five as
+   labelled). The effect was not the missing line but false candidates:
+   with IMR-90 read backwards, an antisense candidate over a real gene
+   found signal on the wrong track and passed, so the measured panel's
+   gene precision was 63% on chr21 and 59% on chr22; oriented, it is 72%
+   and 74% at the same sensitivity, and the intersection's 97.2% becomes
+   95.8% (one candidate more, the same 69 genes). The ordering of the
+   series does not move; the measurement got more honest.
+   So the two filters are not redundant: the model supplies the gene-level
+   judgement, the measurement supplies the cell, and asking for both is how
+   a parser's call becomes something a geneticist would act on. This is
+   the lever.
+
+   **The second chromosome (chr22, 447 coding genes, 8,669 CDS segments).**
+   The same five configurations, nothing tuned:
+
+   | chr22 | candidates | exons (sens / prec) | canonical exons | genes (sens / prec) |
+   |---|---|---|---|---|
+   | matrices alone | 297 | 3.0% / 8.3% | 5.9% | 72.3% / 30.0% |
+   | AlphaGenome splice sites | 1,293 | 34.6% / 49.4% | 70.4% | 97.3% / 18.7% |
+   | + predicted RNA (eight tissues) | 151 | 30.9% / 63.1% | 62.8% | 81.2% / 92.7% |
+   | + measured RNA (six ENCODE lines, oriented) | 225 | 32.1% / 61.0% | 65.2% | 88.8% / 74.2% |
+   | + both (intersection) | 142 | 30.5% / 63.7% | 62.0% | 80.1% / 95.1% |
+
+   The shape is chr21's shape: sites take canonical exons from 6% to 70%,
+   the predicted panel turns one-in-five gene precision into nine-in-ten,
+   the measured lines are broader and noisier, and the intersection is the
+   strictest. Sensitivity is higher on chr22 across the board (81% of genes
+   after the predicted filter against 58% on chr21), which is the panel's
+   tissues covering chr22's genes better, not the parser; chr21 has more
+   of the tissue-restricted and keratin-associated genes that no panel of
+   eight expresses. Two chromosomes, ten runs, the same ordering: the
+   series holds. Nine in
+   ten candidates that survive the RNA filter are real genes, against one in
+   five before it, and the exons they draw are right two times in three. What
+   the filter costs is the genes the panel does not express: sensitivity
+   falls to 58% because eight tissues are not the body, not because the
+   parser lost them (the candidates are still there in the unfiltered run).
+   The honest summary of the whole parser series is therefore: sequence
+   signals find the gene bodies (89% of genes are hit by some candidate) and,
+   with predicted splice sites, most of their canonical exons (75%);
+   telling a gene from an open reading frame needs evidence that it is
+   transcribed, and with that evidence the parser's calls become believable.
+   Everything predicted stays `predicted`; the grammar-only run is the
+   fallback without the key.
 2. Promoter motif scanning with JASPAR matrices to derive `requires` lists
    with evidence, and to give `cell_type ... expresses:` a sequence-level
    justification.
 3. Deep-model signals (AlphaGenome, Evo 2) for the delimiters no PWM can
    capture (enhancers, chromatin accessibility), entering as `predicted`.
+   Splice sites: done above (feature c). Enhancer targets: docs/ALPHAGENOME.md
+   feature b.
 4. Grammar written in BioLang itself, so a bio-engineer can add a signal
    the way one adds a rule: with its examples and evidence.

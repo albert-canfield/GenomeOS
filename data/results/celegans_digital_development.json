@@ -1,0 +1,802 @@
+{
+  "result": "celegans_digital_development",
+  "date": "2026-09-11",
+  "source": "Du et al. 2014, Cell 156:359 (Digital Development, Fate_regulation.xlsx)",
+  "url": "http://www.digital-development.org/Batch-download/Fate_regulation.xlsx",
+  "genes_in_table": 76,
+  "genes_modelled": 9,
+  "observed_changes": 25,
+  "reproduced": 7,
+  "missed": 4,
+  "not_modelled": 14,
+  "rate_over_modelled": 0.636,
+  "genes": [
+    {
+      "gene": "apx-1",
+      "factor": "APX-1",
+      "observed": [
+        {
+          "cell": "ABp",
+          "adopts": "ABa",
+          "status": "reproduced"
+        }
+      ],
+      "predicted": [
+        {
+          "cell": "ABp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpl",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpr",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpla",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABplp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpra",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABprp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        }
+      ]
+    },
+    {
+      "gene": "glp-1",
+      "factor": "GLP-1",
+      "observed": [
+        {
+          "cell": "ABp",
+          "adopts": "ABa",
+          "status": "reproduced"
+        },
+        {
+          "cell": "ABalp",
+          "adopts": "ABarp",
+          "status": "not modelled"
+        },
+        {
+          "cell": "ABara",
+          "adopts": "ABala",
+          "status": "not modelled"
+        },
+        {
+          "cell": "ABpla",
+          "adopts": "ABpra",
+          "status": "not modelled"
+        }
+      ],
+      "predicted": [
+        {
+          "cell": "ABp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpl",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpr",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpla",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABplp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpra",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABprp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        }
+      ]
+    },
+    {
+      "gene": "mom-2",
+      "factor": "MOM-2",
+      "observed": [
+        {
+          "cell": "ABar",
+          "adopts": "ABal",
+          "status": "not modelled"
+        },
+        {
+          "cell": "ABpra",
+          "adopts": "ABpla",
+          "status": "not modelled"
+        },
+        {
+          "cell": "E",
+          "adopts": "MS",
+          "status": "reproduced"
+        }
+      ],
+      "predicted": [
+        {
+          "cell": "E",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        },
+        {
+          "cell": "Ea",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        },
+        {
+          "cell": "Ep",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        }
+      ]
+    },
+    {
+      "gene": "mom-5",
+      "factor": "MOM-5",
+      "observed": [
+        {
+          "cell": "ABar",
+          "adopts": "ABal",
+          "status": "not modelled"
+        },
+        {
+          "cell": "ABpra",
+          "adopts": "ABpla",
+          "status": "not modelled"
+        }
+      ],
+      "predicted": [
+        {
+          "cell": "E",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        },
+        {
+          "cell": "Ea",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        },
+        {
+          "cell": "Ep",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        }
+      ]
+    },
+    {
+      "gene": "par-2",
+      "factor": "PAR-2",
+      "observed": [
+        {
+          "cell": "ABp",
+          "adopts": "ABa",
+          "status": "missed"
+        },
+        {
+          "cell": "ABar",
+          "adopts": "ABal",
+          "status": "not modelled"
+        },
+        {
+          "cell": "P2",
+          "adopts": "EMS",
+          "status": "missed"
+        },
+        {
+          "cell": "E",
+          "adopts": "MS",
+          "status": "missed"
+        }
+      ],
+      "predicted": []
+    },
+    {
+      "gene": "par-3",
+      "factor": "PAR-3",
+      "observed": [
+        {
+          "cell": "AB",
+          "adopts": "EMS",
+          "status": "missed"
+        },
+        {
+          "cell": "ABar",
+          "adopts": "ABal",
+          "status": "not modelled"
+        },
+        {
+          "cell": "ABala",
+          "adopts": "ABalp;ABara",
+          "status": "not modelled"
+        }
+      ],
+      "predicted": []
+    },
+    {
+      "gene": "pie-1",
+      "factor": "PIE-1",
+      "observed": [
+        {
+          "cell": "ABp",
+          "adopts": "ABa",
+          "status": "reproduced"
+        },
+        {
+          "cell": "P2",
+          "adopts": "EMS",
+          "status": "reproduced"
+        }
+      ],
+      "predicted": [
+        {
+          "cell": "ABp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "P2",
+          "wild_type": "Blastomere",
+          "mutant": "EMSPrecursor"
+        },
+        {
+          "cell": "ABpl",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpr",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "P3",
+          "wild_type": "Blastomere",
+          "mutant": "EMSPrecursor"
+        },
+        {
+          "cell": "ABpla",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABplp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpra",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABprp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "P4",
+          "wild_type": "GermCell",
+          "mutant": "EMSPrecursor"
+        }
+      ]
+    },
+    {
+      "gene": "pop-1",
+      "factor": "POP-1",
+      "observed": [
+        {
+          "cell": "ABpla",
+          "adopts": "ABpra",
+          "status": "not modelled"
+        },
+        {
+          "cell": "MS",
+          "adopts": "E",
+          "status": "reproduced"
+        }
+      ],
+      "predicted": [
+        {
+          "cell": "MS",
+          "wild_type": "MSPrecursor",
+          "mutant": "EPrecursor"
+        },
+        {
+          "cell": "MSa",
+          "wild_type": "MSPrecursor",
+          "mutant": "EPrecursor"
+        },
+        {
+          "cell": "MSp",
+          "wild_type": "MSPrecursor",
+          "mutant": "EPrecursor"
+        }
+      ]
+    },
+    {
+      "gene": "skn-1",
+      "factor": "SKN-1",
+      "observed": [
+        {
+          "cell": "ABalp",
+          "adopts": "ABarp",
+          "status": "not modelled"
+        },
+        {
+          "cell": "ABara",
+          "adopts": "ABala",
+          "status": "not modelled"
+        },
+        {
+          "cell": "ABpra",
+          "adopts": "ABpla",
+          "status": "not modelled"
+        },
+        {
+          "cell": "EMS",
+          "adopts": "C",
+          "status": "reproduced"
+        }
+      ],
+      "predicted": [
+        {
+          "cell": "MS",
+          "wild_type": "MSPrecursor",
+          "mutant": "CPrecursor"
+        },
+        {
+          "cell": "E",
+          "wild_type": "EPrecursor",
+          "mutant": "CPrecursor"
+        },
+        {
+          "cell": "MSa",
+          "wild_type": "MSPrecursor",
+          "mutant": "CPrecursor"
+        },
+        {
+          "cell": "MSp",
+          "wild_type": "MSPrecursor",
+          "mutant": "CPrecursor"
+        },
+        {
+          "cell": "Ea",
+          "wild_type": "EPrecursor",
+          "mutant": "CPrecursor"
+        },
+        {
+          "cell": "Ep",
+          "wild_type": "EPrecursor",
+          "mutant": "CPrecursor"
+        }
+      ]
+    }
+  ],
+  "unmodelled_genes": [
+    "F23F1.5",
+    "F35F11.1",
+    "F44B9.8",
+    "T11G6.8",
+    "Y53F4B.22",
+    "arp-11",
+    "atx-2",
+    "camt-1",
+    "cdc-25.1",
+    "cdc-37",
+    "ceh-24",
+    "chaf-2",
+    "chk-1",
+    "cls-2",
+    "cpl-1",
+    "csn-4",
+    "cul-1",
+    "cul-2",
+    "cul-3",
+    "div-1",
+    "dlc-1",
+    "dli-1",
+    "drh-3",
+    "gei-17",
+    "gld-2",
+    "gpb-1",
+    "gsk-3",
+    "hda-1",
+    "hmp-2",
+    "lag-1",
+    "let-502",
+    "lin-23",
+    "mbk-2",
+    "mei-1",
+    "mex-3",
+    "mex-5",
+    "nmy-2",
+    "npp-4",
+    "nud-1",
+    "oma-1/2",
+    "pad-1",
+    "par-6",
+    "pkc-3",
+    "pos-1",
+    "ppfr-4",
+    "puf-3",
+    "rab-5",
+    "rab-7",
+    "rad-51",
+    "ran-4",
+    "rba-1",
+    "rfc-3",
+    "rga-3",
+    "ruvb-1",
+    "sel-8",
+    "skr-1/2",
+    "src-1",
+    "suf-1",
+    "tag-256",
+    "tat-5",
+    "tsr-1",
+    "uba-1",
+    "ubc-12",
+    "vps-4",
+    "wwp-1",
+    "zyg-11",
+    "zyg-12"
+  ],
+  "table": {
+    "apx-1": {
+      "ABp": "ABa"
+    },
+    "arp-11": {
+      "ABala": "ABara",
+      "P2": "EMS"
+    },
+    "atx-2": {
+      "ABp": "ABa",
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "ABara": "ABala",
+      "EMS": "C"
+    },
+    "camt-1": {
+      "ABar": "ABal",
+      "ABara": "ABala",
+      "ABpra": "ABpla"
+    },
+    "cdc-25.1": {
+      "AB": "ABp",
+      "P1": "P2"
+    },
+    "cdc-37": {
+      "ABala": "ABara",
+      "ABalp": "ABarp",
+      "EMS": "C",
+      "P3": "C"
+    },
+    "ceh-24": {
+      "ABa": "ABp",
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "ABarp": "ABalp",
+      "ABpla": "ABpra"
+    },
+    "chaf-2": {
+      "ABala": "ABara"
+    },
+    "chk-1": {
+      "ABala": "ABara"
+    },
+    "cls-2": {
+      "AB": "ABp"
+    },
+    "cpl-1": {
+      "ABar": "ABal",
+      "ABala": "ABara"
+    },
+    "csn-4": {
+      "ABa": "ABp"
+    },
+    "cul-1": {
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "MS": "EMS",
+      "C": "EMS",
+      "P4": "P3"
+    },
+    "cul-2": {
+      "ABa": "ABp"
+    },
+    "cul-3": {
+      "ABar": "ABal",
+      "ABala": "ABarp",
+      "ABpla": "ABpra",
+      "ABplp": "ABpra",
+      "ABpra": "ABpla",
+      "ABprp": "ABpra"
+    },
+    "div-1": {
+      "AB": "ABp",
+      "P1": "P2"
+    },
+    "dlc-1": {
+      "ABala": "ABara"
+    },
+    "dli-1": {
+      "ABala": "ABara"
+    },
+    "drh-3": {
+      "ABpla": "ABplp"
+    },
+    "F23F1.5": {
+      "ABa": "ABp"
+    },
+    "F35F11.1": {
+      "ABpla": "ABpra"
+    },
+    "F44B9.8": {
+      "EMS": "C"
+    },
+    "gei-17": {
+      "C": "MS"
+    },
+    "gld-2": {
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "ABpra": "ABpla",
+      "E": "MS",
+      "P4": "D"
+    },
+    "glp-1": {
+      "ABp": "ABa",
+      "ABalp": "ABarp",
+      "ABara": "ABala",
+      "ABpla": "ABpra"
+    },
+    "gpb-1": {
+      "ABarp": "ABalp;ABara"
+    },
+    "gsk-3": {
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "ABpla": "ABpra",
+      "E": "MS",
+      "C": "EMS"
+    },
+    "hda-1": {
+      "ABala": "ABara"
+    },
+    "hmp-2": {
+      "ABar": "ABal"
+    },
+    "lag-1": {
+      "ABp": "ABa",
+      "ABalp": "ABarp",
+      "ABara": "ABala",
+      "ABpla": "ABpra"
+    },
+    "let-502": {
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "ABpra": "ABpla"
+    },
+    "lin-23": {
+      "ABar": "ABal",
+      "ABpra": "ABpla",
+      "MS": "EMS",
+      "C": "EMS",
+      "P4": "P3"
+    },
+    "mbk-2": {
+      "AB": "EMS",
+      "EMS": "C"
+    },
+    "mei-1": {
+      "ABar": "ABal",
+      "ABpra": "ABpla"
+    },
+    "mex-3": {
+      "AB": "8C",
+      "D": "P4"
+    },
+    "mex-5": {
+      "AB": "2EMS",
+      "P4": "D"
+    },
+    "mom-2": {
+      "ABar": "ABal",
+      "ABpra": "ABpla",
+      "E": "MS"
+    },
+    "mom-5": {
+      "ABar": "ABal",
+      "ABpra": "ABpla"
+    },
+    "nmy-2": {
+      "ABpla": "ABpra"
+    },
+    "npp-4": {
+      "ABa": "ABp",
+      "ABpla": "ABpra"
+    },
+    "nud-1": {
+      "ABala": "ABara"
+    },
+    "oma-1/2": {
+      "ABar": "ABal",
+      "ABalp": "ABarp",
+      "ABpra": "ABpla",
+      "EMS": "C"
+    },
+    "pad-1": {
+      "ABpla": "ABpra"
+    },
+    "par-2": {
+      "ABp": "ABa",
+      "ABar": "ABal",
+      "P2": "EMS",
+      "E": "MS"
+    },
+    "par-3": {
+      "AB": "EMS",
+      "ABar": "ABal",
+      "ABala": "ABalp;ABara"
+    },
+    "par-6": {
+      "ABp": "ABa",
+      "ABalp": "ABarp",
+      "ABara": "ABala",
+      "P2": "EMS",
+      "E": "MS"
+    },
+    "pie-1": {
+      "ABp": "ABa",
+      "P2": "EMS"
+    },
+    "pkc-3": {
+      "ABp": "ABa",
+      "ABalp": "ABarp",
+      "P2": "EMS",
+      "E": "MS"
+    },
+    "pop-1": {
+      "ABpla": "ABpra",
+      "MS": "E"
+    },
+    "pos-1": {
+      "ABp": "ABa",
+      "ABar": "ABal"
+    },
+    "ppfr-4": {
+      "ABar": "ABal",
+      "ABpra": "ABpla"
+    },
+    "puf-3": {
+      "AB": "ABp",
+      "ABar": "ABal"
+    },
+    "rab-5": {
+      "ABpla": "ABpra"
+    },
+    "rab-7": {
+      "ABpra": "ABpla"
+    },
+    "rad-51": {
+      "ABalp": "ABara"
+    },
+    "ran-4": {
+      "ABa": "ABp",
+      "ABalp": "ABarp",
+      "ABpra": "ABpla"
+    },
+    "rba-1": {
+      "ABala": "ABara"
+    },
+    "rfc-3": {
+      "AB": "ABp"
+    },
+    "rga-3": {
+      "ABp": "ABa",
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "ABpla": "ABpra",
+      "ABpra": "ABpla"
+    },
+    "ruvb-1": {
+      "ABpla": "ABpra"
+    },
+    "sel-8": {
+      "ABp": "ABa",
+      "ABalp": "ABarp",
+      "ABara": "ABala"
+    },
+    "skn-1": {
+      "ABalp": "ABarp",
+      "ABara": "ABala",
+      "ABpra": "ABpla",
+      "EMS": "C"
+    },
+    "skr-1/2": {
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "ABpra": "ABpla",
+      "MS": "EMS",
+      "C": "EMS",
+      "P4": "P3"
+    },
+    "src-1": {
+      "P4": "D"
+    },
+    "suf-1": {
+      "ABpla": "ABpra"
+    },
+    "T11G6.8": {
+      "ABalp": "ABara"
+    },
+    "tag-256": {
+      "ABar": "ABal",
+      "ABpra": "ABpla"
+    },
+    "tat-5": {
+      "ABar": "ABal",
+      "ABala": "ABara",
+      "ABpra": "ABpla"
+    },
+    "tsr-1": {
+      "EMS": "C"
+    },
+    "uba-1": {
+      "ABar": "ABal"
+    },
+    "ubc-12": {
+      "ABala": "ABara",
+      "ABarp": "ABalp"
+    },
+    "vps-4": {
+      "ABala": "ABara"
+    },
+    "wwp-1": {
+      "ABa": "ABp",
+      "ABpla": "ABpra"
+    },
+    "Y53F4B.22": {
+      "EMS": "C"
+    },
+    "zyg-11": {
+      "AB": "ABp;EMS",
+      "MS": "EMS"
+    },
+    "zyg-12": {
+      "ABpla": "ABpra"
+    }
+  },
+  "inputs": [],
+  "describe": "Du 2014 founder fate changes per knockout (17 KB streamed) scored against the program's knockouts"
+}

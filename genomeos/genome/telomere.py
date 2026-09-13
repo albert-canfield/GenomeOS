@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import gzip
 import io
+import json
 import struct
 import urllib.request
 from collections.abc import Iterator
@@ -22,6 +23,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from genomeos.ir import Evidence, EvidenceKind, Parameter
+
+RANGE_EVIDENCE = Evidence(
+    EvidenceKind.INFERRED,
+    "TelSeq (Ding et al. 2014) over an indexed BAM read by ranges: the unmapped tail sampled, "
+    "the mapped ends read whole, totals from the index",
+)
+END_WINDOW = 10_000
 
 REPEAT = "TTAGGG"
 REPEAT_RC = "CCCTAA"
@@ -151,3 +159,148 @@ def estimate_file(path: str | Path, **kw) -> TelomereEstimate:
     else:
         reads = iter_bam(p) if p.endswith(".bam") else iter_fastq(p)
     return estimate(reads, **kw)
+
+
+def sequence_ends(chrom: str, reference: Path = Path("data/reference")) -> tuple[int, int] | None:
+    """(first, last) non-N positions of the chromosome: where its assembled sequence starts and ends."""
+    from genomeos.coords import Locus
+    from genomeos.genome import IndexedGenome
+
+    fa = reference / f"{chrom}.fa"
+    if not fa.exists():
+        return None
+    g = IndexedGenome(str(fa))
+    try:
+        length = g.lengths[chrom]
+        step = 100_000
+        first = last = None
+        for lo in range(0, length, step):
+            s = str(g.fetch(Locus(chrom, lo, min(length, lo + step)))).upper()
+            stripped = s.lstrip("N")
+            if stripped:
+                first = lo + (len(s) - len(stripped))
+                break
+        for hi in range(length, 0, -step):
+            s = str(g.fetch(Locus(chrom, max(0, hi - step), hi))).upper()
+            stripped = s.rstrip("N")
+            if stripped:
+                last = hi - (len(s) - len(stripped))
+                break
+    finally:
+        g.close()
+    return (first, last) if first is not None and last is not None else None
+
+
+def estimate_remote(
+    url: str,
+    index: str | Path,
+    chroms: list[str],
+    reference: Path = Path("data/reference"),
+    window: int = END_WINDOW,
+    sample_bytes: int = 100_000_000,
+    k: int = 7,
+    genome_bp: int = GENOME_BP,
+    ends: int = CHROMOSOME_ENDS,
+    progress=None,
+) -> dict:
+    """TelSeq over a 600 GB BAM without downloading it: the unmapped tail sampled by ranges (where the
+    pure-repeat reads are), each chromosome end read whole (where the boundary reads are), and the read
+    totals taken from the index's pseudo-bins. Everything is counted, nothing kept."""
+    from genomeos.genome.bam_range import RemoteBam
+
+    bam = RemoteBam(url, index)
+    idx = bam.index
+    end_rows = []
+    mapped_tel = 0
+    for chrom in chroms:
+        se = sequence_ends(chrom, reference)
+        if se is None or chrom not in idx.by_name:
+            continue
+        first, last = se
+        for side, (a, b) in (("p", (first, first + window)), ("q", (last - window, last))):
+            n = tel = bases = 0
+            for rd in bam.reads(chrom, a, b):
+                n += 1
+                bases += len(rd.seq)
+                if is_telomeric(rd.seq, k):
+                    tel += 1
+            mapped_tel += tel
+            end_rows.append(
+                {
+                    "chrom": chrom,
+                    "end": side,
+                    "window": [a, b],
+                    "reads": n,
+                    "telomeric_reads": tel,
+                    "coverage": round(bases / window, 1) if window else None,
+                    "telomeric_fraction": round(tel / n, 5) if n else None,
+                }
+            )
+            if progress:
+                progress(
+                    f"{chrom} {side} end: {n:,} reads, {tel:,} telomeric; {bam.bytes_fetched / 1e6:.0f} MB"
+                )
+    n_un = tel_un = bases_un = 0
+    for rd in bam.unmapped_sample(sample_bytes):
+        n_un += 1
+        bases_un += len(rd.seq)
+        if is_telomeric(rd.seq, k):
+            tel_un += 1
+    read_len = bases_un / n_un if n_un else 0.0
+    no_coor = idx.no_coor or 0
+    mapped_total = idx.mapped_total or 0
+    tel_unmapped_total = (tel_un / n_un) * no_coor if n_un else 0.0
+    total_reads = mapped_total + no_coor
+    fraction = (tel_unmapped_total + mapped_tel) / total_reads if total_reads else 0.0
+    telomere_bp = fraction * genome_bp / ends
+    covs = [r["coverage"] for r in end_rows if r["reads"]]
+    return {
+        "source": url,
+        "index": str(index),
+        "reads_total_from_index": total_reads,
+        "reads_mapped": mapped_total,
+        "reads_unmapped": no_coor,
+        "unmapped_sampled": n_un,
+        "unmapped_sample_telomeric": tel_un,
+        "unmapped_telomeric_fraction": round(tel_un / n_un, 6) if n_un else None,
+        "telomeric_reads_estimated": round(tel_unmapped_total + mapped_tel),
+        "mean_read_length": round(read_len, 1),
+        "mean_end_coverage": round(sum(covs) / len(covs), 1) if covs else None,
+        "ends": end_rows,
+        "telomere_bp": round(telomere_bp),
+        "fraction": fraction,
+        "k": k,
+        "window": window,
+        "bytes_fetched": bam.bytes_fetched,
+        "requests": bam.requests,
+        "parameter": Parameter(
+            "telomere_bp_measured", round(telomere_bp), "bp", RANGE_EVIDENCE, 0.3 if n_un >= 100_000 else 0.15
+        ),
+        "note": "TelSeq counts reads with at least k TTAGGG repeats among all reads; here the unmapped tail, "
+        "where the pure-repeat reads sit, is sampled and scaled by the index's unmapped count, the mapped "
+        "chromosome ends are read whole, and the mapped total comes from the index; no GC normalisation, "
+        "so the number is a first estimate to compare between people read the same way, not a length "
+        "to quote",
+    }
+
+
+def saved_estimate(
+    name: str, results: Path = Path("data/results"), individuals: Path = Path("data/individuals")
+):
+    """A telomere estimate already computed for this person: the range-read result under data/results (an
+    open-consent person) or a telomere.json under the person's own directory. None when there is none."""
+    for p in (results / f"telomere_range_{name}.json", individuals / name / "telomere.json"):
+        if p.exists():
+            try:
+                d = json.loads(p.read_text())
+            except (OSError, json.JSONDecodeError):
+                continue
+            if d.get("telomere_bp") is not None:
+                return {
+                    "telomere_bp": float(d["telomere_bp"]),
+                    "confidence": d.get("confidence"),
+                    "source": str(p),
+                    "note": "TelSeq-scale estimate from reads (k repeats per read), not a Southern-blot "
+                    "length; calibrate the twin's attrition against it with care",
+                }
+    return None

@@ -1,0 +1,262 @@
+{
+  "result": "organised_chr21",
+  "date": "2026-09-13",
+  "chrom": "chr21",
+  "blocks": 446,
+  "with_human_axis": 309,
+  "with_copy_flag": 446,
+  "copies": 131,
+  "copies_bp": 2999849,
+  "copy_min_fraction": 0.5,
+  "by_tier": {
+    "structural": {
+      "blocks": 27,
+      "bp": 9751995,
+      "copies": 9,
+      "copies_bp": 970256,
+      "after_copies": 18,
+      "after_copies_bp": 8781739,
+      "cases_after_copies": {
+        "unmeasured": {
+          "blocks": 17,
+          "bp": 8777401
+        },
+        "recent": {
+          "blocks": 1,
+          "bp": 4338
+        }
+      }
+    },
+    "fossil": {
+      "blocks": 104,
+      "bp": 3913108,
+      "copies": 39,
+      "copies_bp": 838068,
+      "after_copies": 65,
+      "after_copies_bp": 3075040,
+      "cases_after_copies": {
+        "tolerant": {
+          "blocks": 57,
+          "bp": 2990313
+        },
+        "recent": {
+          "blocks": 7,
+          "bp": 82832
+        },
+        "unmeasured": {
+          "blocks": 1,
+          "bp": 1895
+        }
+      }
+    },
+    "regulatory": {
+      "blocks": 194,
+      "bp": 3926601,
+      "copies": 24,
+      "copies_bp": 339035,
+      "after_copies": 170,
+      "after_copies_bp": 3587566,
+      "cases_after_copies": {
+        "tolerant": {
+          "blocks": 86,
+          "bp": 2416599
+        },
+        "relaxed": {
+          "blocks": 2,
+          "bp": 15871
+        },
+        "recent": {
+          "blocks": 74,
+          "bp": 1125471
+        },
+        "unmeasured": {
+          "blocks": 8,
+          "bp": 29625
+        }
+      }
+    },
+    "constrained_unknown": {
+      "blocks": 20,
+      "bp": 287292,
+      "copies": 15,
+      "copies_bp": 174202,
+      "after_copies": 5,
+      "after_copies_bp": 113090,
+      "cases_after_copies": {
+        "relaxed": {
+          "blocks": 2,
+          "bp": 80891
+        },
+        "tolerant": {
+          "blocks": 3,
+          "bp": 32199
+        }
+      }
+    },
+    "neutral": {
+      "blocks": 101,
+      "bp": 2934323,
+      "copies": 44,
+      "copies_bp": 678288,
+      "after_copies": 57,
+      "after_copies_bp": 2256035,
+      "cases_after_copies": {
+        "tolerant": {
+          "blocks": 49,
+          "bp": 2174289
+        },
+        "recent": {
+          "blocks": 7,
+          "bp": 80181
+        },
+        "unmeasured": {
+          "blocks": 1,
+          "bp": 1565
+        }
+      }
+    }
+  },
+  "real_unknown": {
+    "blocks": 5,
+    "bp": 113090,
+    "by_case": {
+      "relaxed": {
+        "blocks": 2,
+        "bp": 80891
+      },
+      "tolerant": {
+        "blocks": 3,
+        "bp": 32199
+      }
+    }
+  },
+  "candidates": [
+    {
+      "start": 15067837,
+      "end": 15101542,
+      "length": 33705,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "confidence": 0.6,
+      "mammal_fraction": 0.07,
+      "conserved_elements": 190,
+      "human_fraction": 0.0333,
+      "case": "relaxed",
+      "duplicated_fraction": 0.0,
+      "partners": 0,
+      "copy": false,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "held across mammals, variable among people: a frame whose value varies, or lost function"
+    },
+    {
+      "start": 16815688,
+      "end": 16862874,
+      "length": 47186,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "confidence": 0.6,
+      "mammal_fraction": 0.0643,
+      "conserved_elements": 179,
+      "human_fraction": 0.0,
+      "case": "relaxed",
+      "duplicated_fraction": 0.0,
+      "partners": 0,
+      "copy": false,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "held across mammals, variable among people: a frame whose value varies, or lost function"
+    },
+    {
+      "start": 25103670,
+      "end": 25127468,
+      "length": 23798,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "confidence": 0.6,
+      "mammal_fraction": 0.0456,
+      "conserved_elements": 49,
+      "human_fraction": 0.0435,
+      "case": "tolerant",
+      "duplicated_fraction": 0.0,
+      "partners": 0,
+      "copy": false,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "free on both scales at kilobase resolution: check the alignment before attributing"
+    }
+  ],
+  "largest_copies": [
+    {
+      "start": 5709737,
+      "end": 5972923,
+      "length": 263186,
+      "class": "satellite_array",
+      "tier": "structural",
+      "confidence": 0.5,
+      "mammal_fraction": 0.0009,
+      "conserved_elements": 23,
+      "human_fraction": null,
+      "case": "unmeasured",
+      "duplicated_fraction": 0.62,
+      "partners": 19,
+      "copy": true,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "copy: 62% of the block is a curated segmental duplication (19 partners); read the source first, attribute second"
+    },
+    {
+      "start": 7142308,
+      "end": 7385057,
+      "length": 242749,
+      "class": "satellite_array",
+      "tier": "structural",
+      "confidence": 0.5,
+      "mammal_fraction": 0.0077,
+      "conserved_elements": 9,
+      "human_fraction": null,
+      "case": "unmeasured",
+      "duplicated_fraction": 0.5707,
+      "partners": 21,
+      "copy": true,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "copy: 57% of the block is a curated segmental duplication (21 partners); read the source first, attribute second"
+    },
+    {
+      "start": 5243903,
+      "end": 5448586,
+      "length": 204683,
+      "class": "satellite_array",
+      "tier": "structural",
+      "confidence": 0.9,
+      "mammal_fraction": 0.0019,
+      "conserved_elements": 15,
+      "human_fraction": null,
+      "case": "unmeasured",
+      "duplicated_fraction": 0.7556,
+      "partners": 25,
+      "copy": true,
+      "attributed_elements": 0,
+      "targets": [],
+      "reading": "copy: 76% of the block is a curated segmental duplication (25 partners); read the source first, attribute second"
+    }
+  ],
+  "inputs": {
+    "budget": "budget_chr21",
+    "variation": "variation_chr21",
+    "duplication": "duplication_chr21",
+    "elements": [
+      "constrained_targets_chr21",
+      "enhancer_targets_chr21"
+    ]
+  },
+  "evidence": {
+    "tier": "inferred: sequence class plus Zoonomia constraint (the budget)",
+    "case": "inferred: Zoonomia phyloP against gnomAD Gnocchi (area J); unmeasured below a kilobase",
+    "copy": "curated: UCSC genomicSuperDups, >= 1 kb at >= 90% identity; copy at >= 50% of the block"
+  },
+  "cost": {
+    "seconds": 0.17
+  }
+}

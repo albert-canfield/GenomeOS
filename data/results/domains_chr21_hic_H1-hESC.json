@@ -1,0 +1,22 @@
+{
+  "result": "domains_chr21_hic_H1-hESC",
+  "date": "2026-09-12",
+  "chrom": "chr21",
+  "biosource": "H1-hESC",
+  "file": "4DNFIM86H1MI",
+  "comparison": {
+    "inferred": 227,
+    "predicted": 149,
+    "tolerance": 20000,
+    "inferred_on_a_predicted_boundary": 54,
+    "fraction_inferred_supported": 0.238,
+    "predicted_on_an_inferred_boundary": 54,
+    "fraction_predicted_matched": 0.362,
+    "median_distance_inferred_to_predicted": 48701,
+    "random_control": 0.132
+  },
+  "evidence": {
+    "inferred": "inferred: CTCF-only ENCODE elements as boundaries",
+    "measured": "experimental: 4D Nucleome boundary calls (insulation score) on released GRCh38 Hi-C and Micro-C"
+  }
+}

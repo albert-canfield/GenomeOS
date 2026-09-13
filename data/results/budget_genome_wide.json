@@ -1,0 +1,455 @@
+{
+  "result": "budget_genome_wide",
+  "date": "2026-09-12",
+  "chromosomes": 24,
+  "per_chromosome": {
+    "chr1": {
+      "unknown_bp": 77202925,
+      "constrained_fraction": 0.0211,
+      "guessed_fraction": 0.9996,
+      "by_tier_bp": {
+        "structural": 22004558,
+        "fossil": 18555914,
+        "regulatory": 32119363,
+        "constrained_unknown": 2074166,
+        "neutral": 2448924
+      }
+    },
+    "chr2": {
+      "unknown_bp": 64057848,
+      "constrained_fraction": 0.0222,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 3961008,
+        "fossil": 22940136,
+        "regulatory": 28905004,
+        "constrained_unknown": 3257850,
+        "neutral": 4993850
+      }
+    },
+    "chr3": {
+      "unknown_bp": 50435547,
+      "constrained_fraction": 0.0196,
+      "guessed_fraction": 0.9992,
+      "by_tier_bp": {
+        "structural": 3527427,
+        "fossil": 20804617,
+        "regulatory": 20212979,
+        "constrained_unknown": 1622992,
+        "neutral": 4267532
+      }
+    },
+    "chr4": {
+      "unknown_bp": 62222046,
+      "constrained_fraction": 0.0176,
+      "guessed_fraction": 0.9994,
+      "by_tier_bp": {
+        "structural": 2564399,
+        "fossil": 27740179,
+        "regulatory": 19646764,
+        "constrained_unknown": 1754883,
+        "neutral": 10515821
+      }
+    },
+    "chr5": {
+      "unknown_bp": 54693236,
+      "constrained_fraction": 0.0208,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 4607729,
+        "fossil": 20516077,
+        "regulatory": 21055327,
+        "constrained_unknown": 2379409,
+        "neutral": 6134694
+      }
+    },
+    "chr6": {
+      "unknown_bp": 48010332,
+      "constrained_fraction": 0.021,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 2839043,
+        "fossil": 18317084,
+        "regulatory": 21511537,
+        "constrained_unknown": 2535479,
+        "neutral": 2807189
+      }
+    },
+    "chr7": {
+      "unknown_bp": 45180049,
+      "constrained_fraction": 0.0191,
+      "guessed_fraction": 0.9999,
+      "by_tier_bp": {
+        "structural": 5150044,
+        "fossil": 16631678,
+        "regulatory": 19466160,
+        "constrained_unknown": 1100753,
+        "neutral": 2831414
+      }
+    },
+    "chr8": {
+      "unknown_bp": 40338003,
+      "constrained_fraction": 0.0187,
+      "guessed_fraction": 0.9992,
+      "by_tier_bp": {
+        "structural": 3338062,
+        "fossil": 15095097,
+        "regulatory": 17663270,
+        "constrained_unknown": 1835409,
+        "neutral": 2406165
+      }
+    },
+    "chr9": {
+      "unknown_bp": 49076798,
+      "constrained_fraction": 0.0237,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 19475294,
+        "fossil": 11026675,
+        "regulatory": 15456371,
+        "constrained_unknown": 1332506,
+        "neutral": 1785952
+      }
+    },
+    "chr10": {
+      "unknown_bp": 38684994,
+      "constrained_fraction": 0.0219,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 3584618,
+        "fossil": 10795676,
+        "regulatory": 20770207,
+        "constrained_unknown": 874251,
+        "neutral": 2660242
+      }
+    },
+    "chr11": {
+      "unknown_bp": 39033317,
+      "constrained_fraction": 0.0184,
+      "guessed_fraction": 0.9999,
+      "by_tier_bp": {
+        "structural": 5159406,
+        "fossil": 14704656,
+        "regulatory": 15778453,
+        "constrained_unknown": 984848,
+        "neutral": 2405954
+      }
+    },
+    "chr12": {
+      "unknown_bp": 35335065,
+      "constrained_fraction": 0.0192,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 3807255,
+        "fossil": 13664661,
+        "regulatory": 15773059,
+        "constrained_unknown": 281045,
+        "neutral": 1809045
+      }
+    },
+    "chr13": {
+      "unknown_bp": 52177945,
+      "constrained_fraction": 0.0202,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 18496301,
+        "fossil": 11984543,
+        "regulatory": 11579009,
+        "constrained_unknown": 2232346,
+        "neutral": 7885746
+      }
+    },
+    "chr14": {
+      "unknown_bp": 40660526,
+      "constrained_fraction": 0.0218,
+      "guessed_fraction": 0.9998,
+      "by_tier_bp": {
+        "structural": 18755879,
+        "fossil": 8003531,
+        "regulatory": 9849652,
+        "constrained_unknown": 1462183,
+        "neutral": 2589281
+      }
+    },
+    "chr15": {
+      "unknown_bp": 33817955,
+      "constrained_fraction": 0.0248,
+      "guessed_fraction": 0.9999,
+      "by_tier_bp": {
+        "structural": 20187210,
+        "fossil": 3683861,
+        "regulatory": 8330129,
+        "constrained_unknown": 998655,
+        "neutral": 618100
+      }
+    },
+    "chr16": {
+      "unknown_bp": 29431594,
+      "constrained_fraction": 0.0258,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 11725528,
+        "fossil": 5816522,
+        "regulatory": 8712175,
+        "constrained_unknown": 1879878,
+        "neutral": 1297491
+      }
+    },
+    "chr17": {
+      "unknown_bp": 20118383,
+      "constrained_fraction": 0.0245,
+      "guessed_fraction": 0.9976,
+      "by_tier_bp": {
+        "structural": 4745939,
+        "fossil": 3483294,
+        "regulatory": 10658126,
+        "constrained_unknown": 671101,
+        "neutral": 559923
+      }
+    },
+    "chr18": {
+      "unknown_bp": 29570872,
+      "constrained_fraction": 0.0228,
+      "guessed_fraction": 0.9984,
+      "by_tier_bp": {
+        "structural": 5750891,
+        "fossil": 6415585,
+        "regulatory": 9646716,
+        "constrained_unknown": 2873532,
+        "neutral": 4884148
+      }
+    },
+    "chr19": {
+      "unknown_bp": 14926665,
+      "constrained_fraction": 0.0128,
+      "guessed_fraction": 0.9998,
+      "by_tier_bp": {
+        "structural": 3621463,
+        "fossil": 2915092,
+        "regulatory": 7718621,
+        "constrained_unknown": 172805,
+        "neutral": 498684
+      }
+    },
+    "chr20": {
+      "unknown_bp": 21639991,
+      "constrained_fraction": 0.0234,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 4036322,
+        "fossil": 4905514,
+        "regulatory": 10891410,
+        "constrained_unknown": 807585,
+        "neutral": 999160
+      }
+    },
+    "chr21": {
+      "unknown_bp": 20813319,
+      "constrained_fraction": 0.0131,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 9751995,
+        "fossil": 3913108,
+        "regulatory": 3926601,
+        "constrained_unknown": 287292,
+        "neutral": 2934323
+      }
+    },
+    "chr22": {
+      "unknown_bp": 22866245,
+      "constrained_fraction": 0.0144,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 15165423,
+        "fossil": 1691159,
+        "regulatory": 5396402,
+        "constrained_unknown": 59276,
+        "neutral": 553985
+      }
+    },
+    "chrX": {
+      "unknown_bp": 71729458,
+      "constrained_fraction": 0.0088,
+      "guessed_fraction": 1.0,
+      "by_tier_bp": {
+        "structural": 5894044,
+        "fossil": 52353606,
+        "regulatory": 9461973,
+        "constrained_unknown": 246179,
+        "neutral": 3773656
+      }
+    },
+    "chrY": {
+      "unknown_bp": 46733158,
+      "constrained_fraction": 0.0066,
+      "guessed_fraction": 0.9999,
+      "by_tier_bp": {
+        "structural": 31558013,
+        "fossil": 12565564,
+        "regulatory": 641418,
+        "constrained_unknown": 301071,
+        "neutral": 1667092
+      }
+    }
+  },
+  "genome_bp": 3088269832,
+  "unknown_bp": 1008756271,
+  "measured_bp": 779691133,
+  "constrained_bp": 15014378,
+  "constrained_fraction": 0.0193,
+  "guessed_fraction": 0.9997,
+  "by_class": {
+    "regulatory": {
+      "blocks": 15252,
+      "bp": 338783109,
+      "constrained_bp": 7951609,
+      "measured_bp": 337693066,
+      "constrained_fraction": 0.0235
+    },
+    "interspersed_repeat_LINE": {
+      "blocks": 4802,
+      "bp": 287098754,
+      "constrained_bp": 3835013,
+      "measured_bp": 284452352,
+      "constrained_fraction": 0.0135
+    },
+    "gap": {
+      "blocks": 118,
+      "bp": 159652491,
+      "constrained_bp": 0,
+      "measured_bp": 0,
+      "constrained_fraction": null
+    },
+    "unique_intergenic": {
+      "blocks": 898,
+      "bp": 74830777,
+      "constrained_bp": 1847396,
+      "measured_bp": 74480794,
+      "constrained_fraction": 0.0248
+    },
+    "centromere": {
+      "blocks": 25,
+      "bp": 48211218,
+      "constrained_bp": 14837,
+      "measured_bp": 2420165,
+      "constrained_fraction": 0.0061
+    },
+    "interspersed_repeat_LTR": {
+      "blocks": 946,
+      "bp": 22509695,
+      "constrained_bp": 236997,
+      "measured_bp": 21810146,
+      "constrained_fraction": 0.0109
+    },
+    "satellite_array": {
+      "blocks": 88,
+      "bp": 21489503,
+      "constrained_bp": 30229,
+      "measured_bp": 4338343,
+      "constrained_fraction": 0.007
+    },
+    "interspersed_repeat_SINE": {
+      "blocks": 1504,
+      "bp": 17824701,
+      "constrained_bp": 232731,
+      "measured_bp": 17789507,
+      "constrained_fraction": 0.0131
+    },
+    "unclassified": {
+      "blocks": 2435,
+      "bp": 14841547,
+      "constrained_bp": 363832,
+      "measured_bp": 14800912,
+      "constrained_fraction": 0.0246
+    },
+    "mixed_intergenic": {
+      "blocks": 138,
+      "bp": 9963959,
+      "constrained_bp": 226185,
+      "measured_bp": 9896458,
+      "constrained_fraction": 0.0229
+    },
+    "promoter_like": {
+      "blocks": 284,
+      "bp": 6387617,
+      "constrained_bp": 153274,
+      "measured_bp": 6322967,
+      "constrained_fraction": 0.0242
+    },
+    "interspersed_repeat": {
+      "blocks": 113,
+      "bp": 4970775,
+      "constrained_bp": 90755,
+      "measured_bp": 3872317,
+      "constrained_fraction": 0.0234
+    },
+    "long_orf": {
+      "blocks": 89,
+      "bp": 1193534,
+      "constrained_bp": 21449,
+      "measured_bp": 1063240,
+      "constrained_fraction": 0.0202
+    },
+    "interspersed_repeat_DNA": {
+      "blocks": 86,
+      "bp": 554209,
+      "constrained_bp": 8232,
+      "measured_bp": 533209,
+      "constrained_fraction": 0.0154
+    },
+    "tandem_repeat": {
+      "blocks": 7,
+      "bp": 354639,
+      "constrained_bp": 981,
+      "measured_bp": 136932,
+      "constrained_fraction": 0.0072
+    },
+    "interspersed_repeat_Retroposon": {
+      "blocks": 21,
+      "bp": 89743,
+      "constrained_bp": 858,
+      "measured_bp": 80725,
+      "constrained_fraction": 0.0106
+    }
+  },
+  "by_tier": {
+    "structural": {
+      "blocks": 238,
+      "bp": 229707851,
+      "constrained_bp": 46047,
+      "fraction_of_unknown": 0.2277,
+      "fraction_of_genome": 0.0744
+    },
+    "fossil": {
+      "blocks": 7302,
+      "bp": 328523829,
+      "constrained_bp": 4131441,
+      "fraction_of_unknown": 0.3257,
+      "fraction_of_genome": 0.1064
+    },
+    "regulatory": {
+      "blocks": 15536,
+      "bp": 345170726,
+      "constrained_bp": 8104883,
+      "fraction_of_unknown": 0.3422,
+      "fraction_of_genome": 0.1118
+    },
+    "constrained_unknown": {
+      "blocks": 1098,
+      "bp": 32025494,
+      "constrained_bp": 1657068,
+      "fraction_of_unknown": 0.0317,
+      "fraction_of_genome": 0.0104
+    },
+    "neutral": {
+      "blocks": 2632,
+      "bp": 73328371,
+      "constrained_bp": 1074939,
+      "fraction_of_unknown": 0.0727,
+      "fraction_of_genome": 0.0237
+    }
+  },
+  "threshold": 2.27,
+  "phylop_mb_fetched": 2252.3,
+  "note": "Constraint is Zoonomia phyloP >= 2.27 over 241 mammals (5% FDR), read per base from UCSC and never stored; elements are the 100-vertebrate phastCons set. A tier is a best guess with its confidence, not a verdict; constrained_unknown is where attribution work remains."
+}

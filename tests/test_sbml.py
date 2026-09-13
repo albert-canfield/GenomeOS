@@ -40,3 +40,42 @@ def test_biomodels_repressilator_oscillates():
         assert max(xs) - min(xs) > 100  # sustained oscillation in protein copies
     m = model.to_module()
     assert len(m.entities) == 6 and m.rules and abs(m.confidence_report()["species"] - 0.8) < 1e-9
+
+
+def test_function_definitions_and_rate_rules(tmp_path):
+    """BioModels' curated models call their own functionDefinitions and use rateRules."""
+    xml = """<?xml version="1.0"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+<model id="fd">
+ <listOfFunctionDefinitions>
+  <functionDefinition id="mm"><math xmlns="http://www.w3.org/1998/Math/MathML">
+   <lambda><bvar><ci>v</ci></bvar><bvar><ci>k</ci></bvar><bvar><ci>s</ci></bvar>
+    <apply><divide/><apply><times/><ci>v</ci><ci>s</ci></apply><apply><plus/><ci>k</ci><ci>s</ci></apply></apply>
+   </lambda></math></functionDefinition>
+ </listOfFunctionDefinitions>
+ <listOfCompartments><compartment id="c" size="1"/></listOfCompartments>
+ <listOfSpecies>
+  <species id="S" compartment="c" initialConcentration="10"/>
+  <species id="P" compartment="c" initialConcentration="0"/>
+  <species id="T" compartment="c" initialConcentration="0"/>
+ </listOfSpecies>
+ <listOfParameters><parameter id="Vmax" value="1"/><parameter id="Km" value="2"/></listOfParameters>
+ <listOfRules>
+  <rateRule variable="T"><math xmlns="http://www.w3.org/1998/Math/MathML"><cn>1</cn></math></rateRule>
+ </listOfRules>
+ <listOfReactions>
+  <reaction id="r1" reversible="false">
+   <listOfReactants><speciesReference species="S"/></listOfReactants>
+   <listOfProducts><speciesReference species="P"/></listOfProducts>
+   <kineticLaw><math xmlns="http://www.w3.org/1998/Math/MathML">
+    <apply><ci>mm</ci><ci>Vmax</ci><ci>Km</ci><ci>S</ci></apply></math></kineticLaw>
+  </reaction>
+ </listOfReactions>
+</model></sbml>"""
+    f = tmp_path / "fd.xml"
+    f.write_text(xml)
+    m = SbmlModel.from_file(f)
+    assert "mm" in m.functions and len(m.rate_rules) == 1
+    traj = SbmlRuntime(m).run(duration=5, dt=0.01, record_every=100)
+    s, p, t = traj.levels["S"][-1], traj.levels["P"][-1], traj.levels["T"][-1]
+    assert abs(s + p - 10) < 1e-6 and p > 3 and abs(t - 5) < 1e-6  # mass conserved, clock runs at 1/unit

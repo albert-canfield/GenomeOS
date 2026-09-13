@@ -100,3 +100,195 @@ Layered evidence, each layer with its own kind and confidence:
 
 Each layer moves a block from UNKNOWN toward a named function with a
 confidence, and the interface should show which layer said so.
+
+## Do enhancers stay inside their node? A predicted test (2026-09-11)
+
+The node model makes one testable claim: an enhancer reaches genes inside
+its CTCF domain and not across the boundary. GenomeOS could not measure this
+(no Hi-C), so it asked a predictive model. For 200 distal enhancers of
+chromosome 21, spread along its length, AlphaGenome deleted the element in
+its 1 Mb window and reported the predicted expression change of every gene
+across 371 RNA-seq tracks (`scripts/enhancer_targets.py`, feature b in
+docs/ALPHAGENOME.md, `data/results/enhancer_targets_chr21.json`):
+
+- 90 elements move a coding gene by ≥ 0.1 log2; for 78 of them (86.7%) the
+  gene that moves most is inside the node the element sits in, and for 61
+  (67.8%) it is exactly the nearest TSS in the node, the target `genomeos
+  regulation` had inferred at 0.4.
+- 12 elements name a coding gene beyond the boundary. Some are the model's
+  known long-range weakness, some may be boundaries the CTCF-only inference
+  draws in the wrong place; each one is a candidate for a better node, which
+  is what the `regulation` rows now show as `predicted` next to `inferred`.
+- 110 elements move no coding gene by that threshold, and the share that
+  names a gene falls from 52% under 20 kb to 32% beyond 100 kb: the model
+  reads the near ones and is agnostic about the far ones, as it says of
+  itself.
+- 43 of the 127 named effects are rises, not drops: the registry's
+  "enhancer-like" class, defined by chromatin marks, includes elements that
+  behave as silencers for the gene they move.
+
+This is a prediction agreeing with an inference, and both are labelled as
+such; it is not a measurement. But it is the first evidence in the project,
+beyond the placement of CTCF sites, that the node is the right unit for
+regulation, and it gives every scored enhancer a named gene, a tissue and a
+magnitude instead of a distance.
+
+The same job then ran on every chromosome (4,800 elements, 200 per
+chromosome, `data/results/enhancer_targets_genome_wide.json`): 2,291 move a
+coding gene, and for 90.2% of them the gene is inside the element's node
+(79.8% to 91.8% per chromosome, median 86.4%); 71.2% are exactly the
+nearest TSS the inference had named; 1,157 of the 2,994 named effects are
+rises, silencer-like. Twenty-four chromosomes giving the same shape is what
+turns one chromosome's observation into a property of the genome as this
+model reads it: the node bounds regulation, and nearest-gene is right two
+times in three.
+
+## The second mammal: mouse chr19 through the same code (2026-09-11)
+
+If nodes are a property of mammalian genomes rather than of one annotation,
+a mouse chromosome fetched and analysed exactly like a human one should give
+nodes whose genes sit together in human too. `genomeos mouse --chrom chr19`
+does that with no mouse-specific code beyond the three URLs: UCSC mm10
+sequence (19 MB), GENCODE vM25 gene models (rows of chr19 kept), ENCODE
+SCREEN's mouse cCRE registry (11,597 elements on chr19), the same
+`infer_domains` (`genomeos/genome/mouse.py`,
+`data/results/mouse_mm10_chr19.json`). Orthology is gene-symbol identity
+(App ↔ APP), a cheap lower bound.
+
+| mouse chr19 (61.4 Mb) | MGI orthology (curated) | symbol identity |
+|---|---|---|
+| genes | 1,394 (718 coding) | |
+| nodes | 371 (256 with coding genes), median 109 kb; human chromosomes give 102–115 kb | |
+| mouse nodes with ≥ 2 genes matched to a human node | 109 | 91 |
+| all matched genes in one human node | 58 (53%) | 49 (54%) |
+| in adjacent human nodes (same neighbourhood, boundaries drawn differently) | 45 (41%) | 39 (43%) |
+| scattered over distant human nodes | 6 (6%) | 3 (3%) |
+| same human neighbourhood | 94% | 97% |
+
+The orthology is MGI's curated mouse–human homology report, streamed once
+and distilled to 24,584 symbol pairs (`data/results/mgi_mouse_human_orthology.tsv.gz`);
+symbol identity (App ↔ APP) stays as the fallback and is reported beside it.
+
+A second, larger chromosome gives the same answer. Mouse chr11 (122 Mb,
+1,622 coding genes, 27,432 elements, 836 nodes, median 102 kb; human 17 and
+parts of 5, 7 and 22): 270 mouse nodes with ≥ 2 matched genes, 159 in one
+human node (59%), 91 in adjacent nodes, 20 scattered, 93% in the same human
+neighbourhood (`data/results/mouse_mm10_chr11.json`). Two chromosomes, 379
+tested nodes, 93–94% same neighbourhood: the number is a property of the
+comparison, not of the chromosome picked first.
+
+Read two ways. Synteny is not the surprise: mouse chr19 is human 11q13 and
+10q23–26 and everyone knows it. The number that speaks to the model is the
+split: where a mouse node's genes fall into several human nodes, they fall
+into *adjacent* ones 45 times out of 51. The neighbourhood is conserved; the
+exact boundary is where the two CTCF registries (different depths, different
+cell types assayed) disagree. Which is to say: the node is a real unit of
+organisation in both genomes, and an inferred boundary from CTCF-only
+elements is a resolution limit, not the biology. Curated orthology raised
+the tested count from 91 to 109 and left the shape where it was, which is
+what the symbol-identity run had predicted. The 262 mouse nodes with fewer
+than two matches are mostly nodes with no or one coding gene (115 of 371
+have none).
+
+## The edges of the nodes, held against a predicted contact map (2026-09-12)
+
+The CTCF-only boundaries were never more than a proxy. AlphaGenome's
+predicted contact map gives an independent opinion: insulation minima at
+2 kb over 28 cell types. On chr21, 37% of the 227 inferred boundaries sit
+within 20 kb of a predicted minimum, against 28% for boundaries placed at
+random, and the median distance is 34 kb (docs/ALPHAGENOME.md, use 4). That
+is agreement a little above chance, not confirmation. The results that
+carry the node model are therefore about node *content*: the enhancer
+deletions landing inside the node on 24 chromosomes (90%) and the mouse
+nodes landing in one human neighbourhood (93 to 94%). Where the edges sit
+is a resolution question the project cannot settle without Hi-C or a
+better predictor of insulation, and the node confidence stays at 0.4.
+The measurement is one key away: 4DN publishes boundary calls for GM12878,
+H1, HFFc6, K562, HCT116, HepG2 and IMR-90 as BED files, `genomeos domains
+--hic GM12878` reads and compares them, and only the account key is
+missing (docs/DATA.md).
+
+## Reader v1 (built 2026-09-11)
+
+`genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first
+reader: ENCODE's DNase-seq peaks for a cell type (one 1-2 MB narrowPeak file
+from the portal, rows of the chromosome kept) laid over the nodes, the
+promoters and the enhancers. Per node: peaks and open fraction; per coding
+gene: read (promoter open, TSS ± 1 kb) or silent; per enhancer: active or
+not. Two cell types compared give the genes one reads and the other does
+not.
+
+| chr21 | K562 (blood) | HepG2 (liver) |
+|---|---|---|
+| peaks kept | 5,159 | 1,849 |
+| coding genes read | 135 of 221 (61%) | 118 of 221 (53%) |
+| enhancers active | 2,005 of 12,139 (17%) | 1,401 (12%) |
+| silent nodes | 23 of 228 | 34 of 228 |
+| read only here | RUNX1, ITGB2, S100B, GRIK1, KCNJ6 … | TFF1, TFF3, ABCG1, FTCD, MX2 … |
+
+RUNX1 and ITGB2 open in the blood line and TFF1/TFF3 and FTCD in the liver
+line is what the biology says; 106 genes are read in both. Evidence:
+experimental for the peaks, inferred for "read" (an open promoter is
+necessary for transcription, not proof of it). Results:
+`reader_<cell>_<chrom>.json`, `reader_K562_vs_HepG2_chr21.json`.
+
+### Eleven cell types, every chromosome (2026-09-11)
+
+`scripts/reader_genome_wide.py` now takes any list of ENCODE biosamples (the
+reader resolves the released GRCh38 DNase peak file by name) and resumes per
+cell type; the default list adds nine to K562 and HepG2. Genome-wide, coding
+genes whose promoter is open (read) out of 20,094:
+
+| cell type | read | share | active enhancers | silent nodes |
+|---|---|---|---|---|
+| hepatocyte | 15,489 | 77.1% | 197,561 | 382 |
+| cardiac muscle cell | 15,268 | 76.0% | 233,853 | 775 |
+| H1 (embryonic stem) | 15,129 | 75.3% | 133,114 | 1,351 |
+| SK-N-SH (neuroblastoma) | 14,883 | 74.1% | 143,197 | 850 |
+| K562 (erythroleukaemia) | 14,828 | 73.8% | 193,255 | 2,085 |
+| IMR-90 (lung fibroblast) | 14,057 | 70.0% | 213,753 | 1,411 |
+| astrocyte | 13,885 | 69.1% | 203,756 | 743 |
+| CD14-positive monocyte | 13,647 | 67.9% | 141,431 | 2,989 |
+| HepG2 (liver cancer) | 13,015 | 64.8% | 124,478 | 1,465 |
+| GM12878 (B lymphoblastoid) | 9,802 | 48.8% | 57,321 | 4,933 |
+| keratinocyte | 8,432 | 42.0% | 63,062 | 4,259 |
+
+Read with the caveat that peak counts differ by experiment depth as much as
+by biology: GM12878 and keratinocyte have the fewest peaks in their files,
+so their low shares are partly the assay. What holds across all eleven is
+the shape: two thirds to three quarters of coding genes have an open
+promoter in any one cell, the rest is the cell's identity, and the silent
+nodes (whole CTCF domains without a peak) are where the reader is not
+looking at all. Every cell type is a reader lane on the Blocks tab and a
+column on the Progress tab; chr21's per-cell results are committed, the
+other chromosomes stay local.
+
+### The reader lane in the block map (2026-09-11)
+
+The Blocks tab has a `reader` selector listing every cell type read on the
+loaded chromosome. With one selected, each node in the domain lane is filled
+in proportion to its open fraction in that cell (full at 5% of bases under a
+DNase peak) and a silent node gets a red edge; every coding gene carries a
+dot, filled when the reader calls it read (promoter open) and hollow when
+silent. Switching K562 to HepG2 on chr21 is the picture of the whole idea:
+the text does not change, the reading does. The node and gene attributes
+(`K562_open_fraction`, `K562_node`, `HepG2_read`, …) travel with the blocks
+(`/api/blocks`), so any view can ask which cell reads a gene. Inferred, as
+the reader itself: an open promoter is necessary for transcription, not
+proof of it.
+
+### Every chromosome (`scripts/reader_genome_wide.py`, 110 s after the peaks are fetched)
+
+| genome-wide | K562 (blood, female) | HepG2 (liver, male) |
+|---|---|---|
+| coding genes read | 14,828 of 20,094 (74%) | 13,015 of 20,094 (65%) |
+| enhancers active | 193,255 | 124,478 |
+| silent nodes | 2,085 | 1,465 |
+| read in both | 11,987 | |
+
+Two checks fall out of the numbers. K562 reads no gene on chrY (0 of 61)
+because the line is female; HepG2, male, reads 9. And the two cell types
+read three quarters and two thirds of the coding genes respectively, with
+11,987 in common: the housekeeping core plus what each lineage adds.
+Per-chromosome results stay local (`reader_<cell>_<chrom>.json`); the
+summary is `reader_genome_wide.json`.

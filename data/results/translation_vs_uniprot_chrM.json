@@ -1,0 +1,42 @@
+{
+  "result": "translation_vs_uniprot_chrM",
+  "date": "2026-09-11",
+  "chrom": "chrM",
+  "genes_checked": 13,
+  "exact_canonical": 13,
+  "exact_canonical_fraction": 1.0,
+  "exact_some_isoform": 13,
+  "exact_some_isoform_fraction": 1.0,
+  "canonical_differs_but_another_isoform_matches": 0,
+  "same_protein_different_boundaries": 0,
+  "disagreements": [],
+  "disagreement_count": 0,
+  "out_of_frame_canonical": [
+    {
+      "gene": "MT-ND1",
+      "exact_some_isoform": true
+    },
+    {
+      "gene": "MT-ND2",
+      "exact_some_isoform": true
+    },
+    {
+      "gene": "MT-CO3",
+      "exact_some_isoform": true
+    },
+    {
+      "gene": "MT-ND3",
+      "exact_some_isoform": true
+    },
+    {
+      "gene": "MT-ND4",
+      "exact_some_isoform": true
+    },
+    {
+      "gene": "MT-CYB",
+      "exact_some_isoform": true
+    }
+  ],
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

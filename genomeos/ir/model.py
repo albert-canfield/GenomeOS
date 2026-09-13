@@ -1,4 +1,4 @@
-"""BioIR v0.1 - the Biological Intermediate Representation.
+"""BioIR v0.3 - the Biological Intermediate Representation.
 
 Everything the compiler emits and the VM executes is one of these types.
 Three principles are enforced by the types themselves:
@@ -65,6 +65,34 @@ class Action(StrEnum):
     DEGRADE = "degrades"
 
 
+def matches(when: dict[str, str], context: dict[str, str]) -> bool:
+    """`when` clauses against a context. `any` matches anything present or absent;
+    `a|b` lists alternatives; `>=n` / `<=n` / `>n` / `<n` compare numerically."""
+    for key, wanted in when.items():
+        if wanted == "any":
+            continue
+        got = context.get(key)
+        if got == wanted:  # the common case: plain equality
+            continue
+        if wanted == "absent":
+            if got is not None:
+                return False
+            continue
+        if got is None:
+            return False
+        if wanted[:2] in (">=", "<=") or wanted[:1] in (">", "<"):
+            op = wanted[:2] if wanted[:2] in (">=", "<=") else wanted[:1]
+            try:
+                a, b = float(got), float(wanted[len(op) :])
+            except ValueError:
+                return False
+            if not {">=": a >= b, "<=": a <= b, ">": a > b, "<": a < b}[op]:
+                return False
+        elif got not in wanted.split("|"):
+            return False
+    return True
+
+
 @dataclass(slots=True)
 class Entity:
     """Base for anything the VM can hold state for."""
@@ -85,6 +113,25 @@ class Region(Entity):
 
     def __post_init__(self) -> None:
         self.kind = "region"
+
+
+@dataclass(slots=True)
+class RegulatoryElement(Entity):
+    """A promoter, enhancer or insulator and the genes it reaches.
+
+    `targets` are {gene, distance, basis}; an enhancer's reach is bounded by the
+    domain (CTCF boundaries) it sits in, and each target carries its own basis:
+    "promoter of" (curated), "nearest TSS in domain" or "same domain" (inferred).
+    """
+
+    locus: Locus | None = None
+    cls: str = "unknown"  # promoter | enhancer | insulator | open_chromatin | unknown
+    targets: list[dict] = field(default_factory=list)
+    domain: str = ""  # node id that bounds its reach
+    source: str = ""
+
+    def __post_init__(self) -> None:
+        self.kind = "regulatory_element"
 
 
 @dataclass(slots=True)
@@ -113,8 +160,18 @@ class Transcript(Entity):
 
 @dataclass(slots=True)
 class Protein(Entity):
+    """A protein definition: what the molecule is. One protein in one place at one
+    time is a ProteinState (genomeos.molecules.compiler), kept separate on purpose.
+    Gene → Transcript(s) → Protein isoform(s) → modified states; never Gene → Protein."""
+
     sequence: str = ""
     half_life_h: float | _Unknown = UNKNOWN
+    accession: str = ""  # UniProt accession, the primary external identifier
+    isoforms: list[str] = field(default_factory=list)  # UniProt isoform ids (P04637-1, ...)
+    domains: list[dict] = field(default_factory=list)  # {id, name} InterPro, or {type, start, end}
+    structures: list[dict] = field(default_factory=list)  # {source: PDB|AlphaFold, id, method, ...}
+    pathways: list[str] = field(default_factory=list)  # Reactome ids
+    interactions: list[str] = field(default_factory=list)  # partner symbols with evidence kept in the source
 
     def __post_init__(self) -> None:
         self.kind = "protein"
@@ -198,6 +255,215 @@ class Rule:
 
 
 @dataclass(slots=True)
+class Domain(Entity):
+    """A node of the genome: the genes and regulatory elements between two CTCF boundaries,
+    read and silenced as a unit (docs/NODES-READER-WRITER.md)."""
+
+    locus: Locus | None = None
+    genes: list[str] = field(default_factory=list)
+    boundaries: list[str] = field(default_factory=list)  # regulatory element ids (insulators)
+
+    def __post_init__(self) -> None:
+        self.kind = "domain"
+
+
+@dataclass(slots=True)
+class Signal(Entity):
+    """A cue one cell sends and another reads: contact (ligand on a neighbour), gradient
+    (a diffusing morphogen) or systemic (hormone). When a sender and a receiver coexist the
+    receiver's factor `sets` takes `value`."""
+
+    mode: str = "contact"  # contact | gradient | systemic
+    ligand: str = ""
+    receptor: str = ""
+    sender: dict[str, str] = field(default_factory=dict)
+    receiver: dict[str, str] = field(default_factory=dict)
+    sets: str = ""
+    value: str = "active"
+    field_name: str = ""  # gradient signals: the field read at the cell's position
+    threshold: float = 0.0  # the factor is set while the local value is at or above this
+
+    def __post_init__(self) -> None:
+        self.kind = "signal"
+
+
+_UNIT_MIN = {
+    "min": 1.0,
+    "minute": 1.0,
+    "minutes": 1.0,
+    "h": 60.0,
+    "hr": 60.0,
+    "hour": 60.0,
+    "hours": 60.0,
+    "d": 1440.0,
+    "day": 1440.0,
+    "days": 1440.0,
+    "wk": 10080.0,
+    "week": 10080.0,
+    "weeks": 10080.0,
+    "y": 525960.0,
+    "yr": 525960.0,
+    "year": 525960.0,
+    "years": 525960.0,
+    "": 1.0,
+}
+
+
+def to_minutes(value: float, unit: str) -> float:
+    try:
+        return value * _UNIT_MIN[unit]
+    except KeyError:
+        raise ValueError(f"unknown time unit {unit!r}") from None
+
+
+@dataclass(slots=True)
+class Field:
+    """A diffusing, decaying scalar field on the organism's grid, fed by point sources (amount per hour)."""
+
+    name: str
+    diffusion: float = 0.2  # grid^2 per hour
+    decay: float = 0.01  # per hour
+    sources: list[tuple[int, int, float]] = field(default_factory=list)  # (x, y, rate per hour)
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Timer:
+    """A delay: how long a cell waits before its next decision (cell-cycle length, moult, ...).
+    `lengthening` multiplies the duration per generation past the one the timer was measured at."""
+
+    name: str
+    duration: float
+    unit: str = "min"
+    sd: float = 0.0
+    lengthening: float = 1.0
+    when: dict[str, str] = field(default_factory=dict)
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+    def applies(self, context: dict[str, str]) -> bool:
+        return matches(self.when, context)
+
+    def minutes(self) -> float:
+        return to_minutes(self.duration, self.unit)
+
+
+@dataclass(slots=True)
+class Stage:
+    """A named developmental window on the organism clock; decisions can be gated on it."""
+
+    name: str
+    start: float = 0.0
+    end: float | None = None
+    unit: str = "min"
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+    def contains(self, t_min: float) -> bool:
+        s = to_minutes(self.start, self.unit)
+        e = float("inf") if self.end is None else to_minutes(self.end, self.unit)
+        return s <= t_min < e
+
+
+DECISION_ACTIONS = ("divide", "differentiate", "migrate", "quiesce", "die", "express")
+
+
+@dataclass(slots=True)
+class Decision:
+    """One of the five things a cell can do, under `when` conditions.
+
+    divide: two daughters (`daughters` names them; else a/p or l/r suffixes), waiting `timer`
+    (or the first matching Timer); `asymmetric` says which daughter keeps which factor.
+    differentiate: become cell type `to` (optionally taking terminal `name`).
+    die: after `after` minutes from birth (or at once). quiesce: stop dividing. migrate: move.
+    express: the cell carries the factors in `sets` (its measured or inferred reader state).
+    `fraction` applies to populations: the share of the population that takes the decision."""
+
+    id: str
+    action: str = "divide"
+    when: dict[str, str] = field(default_factory=dict)
+    daughters: list[str] = field(default_factory=list)
+    to: str = ""
+    name: str = ""
+    asymmetric: dict[str, str] = field(default_factory=dict)
+    lineages: dict[str, str] = field(default_factory=dict)  # daughter -> lineage it founds (generation 0)
+    sets: list[str] = field(default_factory=list)  # express: factors present in the cell
+    toward: str = ""  # migrate: climb this field's gradient
+    direction: str = ""  # migrate: +x, -x, +y or -y
+    steps: int = 1  # migrate: grid steps per move
+    timer: str = ""
+    after: float | None = None  # minutes
+    fraction: float = 1.0
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+    def applies(self, context: dict[str, str]) -> bool:
+        return matches(self.when, context)
+
+
+@dataclass(slots=True)
+class Experiment:
+    """A perturbation of the organism run against the wild type: factors or signals knocked out,
+    factors added, the environment changed; `asserts` are checked on the perturbed body."""
+
+    name: str
+    knockouts: list[str] = field(default_factory=list)  # factor names, signal ids or ligands
+    adds: list[str] = field(default_factory=list)  # factors present in the zygote in addition
+    environment: dict[str, str] = field(default_factory=dict)
+    until: float | None = None  # minutes; None = the organism's last stage or 800
+    asserts: list[str] = field(default_factory=list)
+    expect: str = ""  # the published phenotype, in words
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Design:
+    """A goal for BioForge over an organism: which perturbations it may try (factors to knock out or add,
+    continuous knobs), what to reach (`targets`, loss terms) and what must hold (`keeps`, constraints).
+    The result is an experiment, labelled predicted until the bench confirms it."""
+
+    name: str
+    knockout_any_of: list[str] = field(default_factory=list)
+    add_any_of: list[str] = field(default_factory=list)
+    at_most: int = 1  # perturbations combined per candidate
+    vary: list[str] = field(
+        default_factory=list
+    )  # "timer NAME duration LO..HI", "decision ID fraction LO..HI"
+    until: float | None = None  # minutes
+    targets: list[str] = field(default_factory=list)  # assert grammar; distance from holding is the loss
+    keeps: list[str] = field(default_factory=list)  # assert grammar; must hold
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Organism:
+    """The program root: one genome, one bootstrap cell state, one environment."""
+
+    name: str
+    species: str = ""
+    genome: str = ""
+    tempo: float = 1.0  # multiplies every timer (species pace; Rayon 2020, Matsuda 2020)
+    resolution: str = "cells"  # cells: every division makes a named cell; populations: counts grow in place
+    seed: int | None = None  # default seed for timer spread; None = deterministic means
+    width: int = 0  # space: grid size; 0 = no space, cells have no position
+    height: int = 0
+    origin: tuple[int, int] = (0, 0)  # where the first cell sits
+    sense: float = 30.0  # minutes between gradient readings
+    root: str = "Zygote"  # name of the first cell
+    cell_type: str = ""  # bootstrap cell type
+    factors: list[str] = field(default_factory=list)  # maternal factors present in the zygote
+    environment: dict[str, str] = field(default_factory=dict)
+    observe: list[str] = field(default_factory=list)
+    asserts: list[str] = field(default_factory=list)
+    reference: str = ""  # name of the ground truth to compare against
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
 class Module:
     """A compiled unit: entities plus rules plus parameters. This is what
     BioLang files compile to and what the VM loads."""
@@ -208,6 +474,13 @@ class Module:
     parameters: dict[str, Parameter] = field(default_factory=dict)
     imports: list[str] = field(default_factory=list)
     events: list[Event] = field(default_factory=list)
+    timers: list[Timer] = field(default_factory=list)
+    stages: list[Stage] = field(default_factory=list)
+    decisions: list[Decision] = field(default_factory=list)
+    experiments: list[Experiment] = field(default_factory=list)
+    fields: list[Field] = field(default_factory=list)
+    designs: list[Design] = field(default_factory=list)
+    organism: Organism | None = None
 
     def add(self, entity: Entity) -> None:
         if entity.id in self.entities:
@@ -223,12 +496,32 @@ class Module:
     def cell_types(self) -> list[CellType]:
         return [e for e in self.entities.values() if isinstance(e, CellType)]
 
+    def signals(self) -> list[Signal]:
+        return [e for e in self.entities.values() if isinstance(e, Signal)]
+
+    def domains(self) -> list[Domain]:
+        return [e for e in self.entities.values() if isinstance(e, Domain)]
+
+    def timer(self, name: str) -> Timer | None:
+        return next((t for t in self.timers if t.name == name), None)
+
+    def stage_at(self, t_min: float) -> str:
+        return next((s.name for s in self.stages if s.contains(t_min)), "")
+
     def merge(self, other: Module) -> None:
         """Import another module's content (ids must not collide)."""
         for e in other.entities.values():
             self.add(e)
         self.rules.extend(other.rules)
         self.events.extend(other.events)
+        self.timers.extend(other.timers)
+        self.stages.extend(other.stages)
+        self.decisions.extend(other.decisions)
+        self.experiments.extend(other.experiments)
+        self.fields.extend(other.fields)
+        self.designs.extend(other.designs)
+        if self.organism is None:
+            self.organism = other.organism
         for k, v in other.parameters.items():
             self.parameters.setdefault(k, v)
 
@@ -285,13 +578,20 @@ class Module:
             return obj
 
         return {
-            "bioir_version": "0.1",
+            "bioir_version": "0.3",
             "name": self.name,
             "imports": list(self.imports),
             "entities": [conv(e) for e in self.entities.values()],
             "rules": [conv(r) for r in self.rules],
             "events": [conv(e) for e in self.events],
             "parameters": [conv(p) for p in self.parameters.values()],
+            "timers": [conv(t) for t in self.timers],
+            "stages": [conv(st) for st in self.stages],
+            "decisions": [conv(d) for d in self.decisions],
+            "experiments": [conv(x) for x in self.experiments],
+            "fields": [conv(f) for f in self.fields],
+            "designs": [conv(d) for d in self.designs],
+            "organism": conv(self.organism) if self.organism else None,
         }
 
     @classmethod
@@ -303,6 +603,9 @@ class Module:
             "Transcript": Transcript,
             "Entity": Entity,
             "CellType": CellType,
+            "RegulatoryElement": RegulatoryElement,
+            "Domain": Domain,
+            "Signal": Signal,
         }
 
         def evid(d: dict) -> Evidence:
@@ -352,4 +655,25 @@ class Module:
             pd.pop("__type__", None)
             pd["evidence"] = evid(pd.get("evidence", {}))
             m.parameters[pd["name"]] = Parameter(**pd)
+        for fd in data.get("fields", []):
+            fd["sources"] = [tuple(x) for x in fd.get("sources", [])]
+        for key, typ, target in (
+            ("timers", Timer, m.timers),
+            ("stages", Stage, m.stages),
+            ("decisions", Decision, m.decisions),
+            ("experiments", Experiment, m.experiments),
+            ("fields", Field, m.fields),
+            ("designs", Design, m.designs),
+        ):
+            for d in data.get(key, []):
+                d.pop("__type__", None)
+                d["evidence"] = evid(d.get("evidence", {}))
+                target.append(typ(**d))
+        if data.get("organism"):
+            od = dict(data["organism"])
+            od.pop("__type__", None)
+            od["evidence"] = evid(od.get("evidence", {}))
+            if isinstance(od.get("origin"), list):
+                od["origin"] = tuple(od["origin"])
+            m.organism = Organism(**od)
         return m

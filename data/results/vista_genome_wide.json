@@ -1,0 +1,474 @@
+{
+  "result": "vista_genome_wide",
+  "date": "2026-09-12",
+  "chromosomes": {
+    "chr1": {
+      "positive": 102,
+      "negative": 96,
+      "enhancer_like": [
+        0.931,
+        0.635
+      ],
+      "constrained": [
+        0.598,
+        0.521
+      ],
+      "fraction_with_target": [
+        0.747,
+        0.638
+      ],
+      "tissue_agrees": 0.69,
+      "tissue_judged": 29
+    },
+    "chr10": {
+      "positive": 62,
+      "negative": 50,
+      "enhancer_like": [
+        0.855,
+        0.68
+      ],
+      "constrained": [
+        0.565,
+        0.7
+      ],
+      "fraction_with_target": [
+        0.783,
+        0.542
+      ],
+      "tissue_agrees": 0.538,
+      "tissue_judged": 13
+    },
+    "chr11": {
+      "positive": 43,
+      "negative": 46,
+      "enhancer_like": [
+        0.907,
+        0.783
+      ],
+      "constrained": [
+        0.512,
+        0.283
+      ],
+      "fraction_with_target": [
+        0.86,
+        0.795
+      ],
+      "tissue_agrees": 0.625,
+      "tissue_judged": 16
+    },
+    "chr12": {
+      "positive": 42,
+      "negative": 26,
+      "enhancer_like": [
+        0.786,
+        0.654
+      ],
+      "constrained": [
+        0.643,
+        0.346
+      ],
+      "fraction_with_target": [
+        0.975,
+        0.68
+      ],
+      "tissue_agrees": 0.429,
+      "tissue_judged": 14
+    },
+    "chr13": {
+      "positive": 33,
+      "negative": 22,
+      "enhancer_like": [
+        0.758,
+        0.545
+      ],
+      "constrained": [
+        0.818,
+        0.864
+      ],
+      "fraction_with_target": [
+        0.576,
+        0.286
+      ],
+      "tissue_agrees": 0.8,
+      "tissue_judged": 10
+    },
+    "chr14": {
+      "positive": 42,
+      "negative": 39,
+      "enhancer_like": [
+        0.905,
+        0.692
+      ],
+      "constrained": [
+        0.786,
+        0.667
+      ],
+      "fraction_with_target": [
+        0.786,
+        0.795
+      ],
+      "tissue_agrees": 0.867,
+      "tissue_judged": 15
+    },
+    "chr15": {
+      "positive": 28,
+      "negative": 34,
+      "enhancer_like": [
+        0.786,
+        0.676
+      ],
+      "constrained": [
+        0.536,
+        0.412
+      ],
+      "fraction_with_target": [
+        0.667,
+        0.824
+      ],
+      "tissue_agrees": 0.571,
+      "tissue_judged": 7
+    },
+    "chr16": {
+      "positive": 49,
+      "negative": 102,
+      "enhancer_like": [
+        0.735,
+        0.461
+      ],
+      "constrained": [
+        0.816,
+        0.804
+      ],
+      "fraction_with_target": [
+        0.653,
+        0.495
+      ],
+      "tissue_agrees": 0.667,
+      "tissue_judged": 18
+    },
+    "chr17": {
+      "positive": 27,
+      "negative": 41,
+      "enhancer_like": [
+        0.778,
+        0.927
+      ],
+      "constrained": [
+        0.481,
+        0.366
+      ],
+      "fraction_with_target": [
+        0.741,
+        0.85
+      ],
+      "tissue_agrees": 0.667,
+      "tissue_judged": 6
+    },
+    "chr18": {
+      "positive": 42,
+      "negative": 39,
+      "enhancer_like": [
+        0.833,
+        0.564
+      ],
+      "constrained": [
+        0.714,
+        0.795
+      ],
+      "fraction_with_target": [
+        0.548,
+        0.308
+      ],
+      "tissue_agrees": 0.833,
+      "tissue_judged": 6
+    },
+    "chr19": {
+      "positive": 14,
+      "negative": 11,
+      "enhancer_like": [
+        0.786,
+        0.636
+      ],
+      "constrained": [
+        0.786,
+        0.545
+      ],
+      "fraction_with_target": [
+        0.857,
+        0.636
+      ],
+      "tissue_agrees": 0.667,
+      "tissue_judged": 3
+    },
+    "chr2": {
+      "positive": 118,
+      "negative": 122,
+      "enhancer_like": [
+        0.839,
+        0.607
+      ],
+      "constrained": [
+        0.669,
+        0.697
+      ],
+      "fraction_with_target": [
+        0.681,
+        0.636
+      ],
+      "tissue_agrees": 0.742,
+      "tissue_judged": 31
+    },
+    "chr20": {
+      "positive": 23,
+      "negative": 28,
+      "enhancer_like": [
+        0.913,
+        0.679
+      ],
+      "constrained": [
+        0.522,
+        0.5
+      ],
+      "fraction_with_target": [
+        0.957,
+        0.75
+      ],
+      "tissue_agrees": 0.625,
+      "tissue_judged": 8
+    },
+    "chr21": {
+      "positive": 13,
+      "negative": 6,
+      "enhancer_like": [
+        1.0,
+        0.667
+      ],
+      "constrained": [
+        0.462,
+        0.0
+      ],
+      "fraction_with_target": [
+        0.846,
+        0.833
+      ],
+      "tissue_agrees": 0.8,
+      "tissue_judged": 5
+    },
+    "chr22": {
+      "positive": 15,
+      "negative": 16,
+      "enhancer_like": [
+        1.0,
+        0.938
+      ],
+      "constrained": [
+        0.4,
+        0.312
+      ],
+      "fraction_with_target": [
+        0.667,
+        0.938
+      ],
+      "tissue_agrees": 1.0,
+      "tissue_judged": 4
+    },
+    "chr3": {
+      "positive": 74,
+      "negative": 77,
+      "enhancer_like": [
+        0.784,
+        0.701
+      ],
+      "constrained": [
+        0.649,
+        0.506
+      ],
+      "fraction_with_target": [
+        0.657,
+        0.558
+      ],
+      "tissue_agrees": 0.615,
+      "tissue_judged": 13
+    },
+    "chr4": {
+      "positive": 47,
+      "negative": 48,
+      "enhancer_like": [
+        0.787,
+        0.688
+      ],
+      "constrained": [
+        0.532,
+        0.458
+      ],
+      "fraction_with_target": [
+        0.711,
+        0.848
+      ],
+      "tissue_agrees": 0.5,
+      "tissue_judged": 12
+    },
+    "chr5": {
+      "positive": 80,
+      "negative": 63,
+      "enhancer_like": [
+        0.875,
+        0.635
+      ],
+      "constrained": [
+        0.762,
+        0.556
+      ],
+      "fraction_with_target": [
+        0.637,
+        0.733
+      ],
+      "tissue_agrees": 0.76,
+      "tissue_judged": 25
+    },
+    "chr6": {
+      "positive": 58,
+      "negative": 64,
+      "enhancer_like": [
+        0.914,
+        0.688
+      ],
+      "constrained": [
+        0.586,
+        0.438
+      ],
+      "fraction_with_target": [
+        0.741,
+        0.635
+      ],
+      "tissue_agrees": 0.824,
+      "tissue_judged": 17
+    },
+    "chr7": {
+      "positive": 100,
+      "negative": 62,
+      "enhancer_like": [
+        0.8,
+        0.661
+      ],
+      "constrained": [
+        0.67,
+        0.661
+      ],
+      "fraction_with_target": [
+        0.711,
+        0.705
+      ],
+      "tissue_agrees": 0.625,
+      "tissue_judged": 16
+    },
+    "chr8": {
+      "positive": 50,
+      "negative": 32,
+      "enhancer_like": [
+        0.9,
+        0.844
+      ],
+      "constrained": [
+        0.56,
+        0.469
+      ],
+      "fraction_with_target": [
+        0.812,
+        0.71
+      ],
+      "tissue_agrees": 0.429,
+      "tissue_judged": 7
+    },
+    "chr9": {
+      "positive": 56,
+      "negative": 45,
+      "enhancer_like": [
+        0.857,
+        0.733
+      ],
+      "constrained": [
+        0.804,
+        0.6
+      ],
+      "fraction_with_target": [
+        0.782,
+        0.667
+      ],
+      "tissue_agrees": 0.857,
+      "tissue_judged": 7
+    },
+    "chrX": {
+      "positive": 15,
+      "negative": 21,
+      "enhancer_like": [
+        0.667,
+        0.571
+      ],
+      "constrained": [
+        0.733,
+        0.857
+      ],
+      "fraction_with_target": [
+        0.6,
+        0.476
+      ],
+      "tissue_agrees": 0.5,
+      "tissue_judged": 4
+    }
+  },
+  "elements": 2223,
+  "genome": {
+    "positive": {
+      "elements": 1133,
+      "enhancer_like": 0.845,
+      "any_ccre": 0.861,
+      "in_a_node": 1.0,
+      "mean_constrained_fraction": 0.363,
+      "constrained": 0.65,
+      "scored": 1108,
+      "with_predicted_target": 806,
+      "fraction_with_target": 0.727,
+      "strong": 422,
+      "coding_target_agrees_with_nearest": 0.4,
+      "tissue_judged": 286,
+      "tissue_agrees": 0.682,
+      "tissue_agrees_expected": 0.355
+    },
+    "negative": {
+      "elements": 1090,
+      "enhancer_like": 0.661,
+      "any_ccre": 0.7,
+      "in_a_node": 1.0,
+      "mean_constrained_fraction": 0.335,
+      "constrained": 0.577,
+      "scored": 1071,
+      "with_predicted_target": 695,
+      "fraction_with_target": 0.649,
+      "strong": 271,
+      "coding_target_agrees_with_nearest": 0.342,
+      "tissue_judged": 0,
+      "tissue_agrees": null,
+      "tissue_agrees_expected": null
+    },
+    "separation": {
+      "enhancer_like": 0.184,
+      "constrained": 0.073,
+      "fraction_with_target": 0.078,
+      "mean_constrained_fraction": 0.028
+    },
+    "positive_groups": {
+      "neural": 770,
+      "limb and mesenchyme": 318,
+      "heart": 174,
+      "pancreas": 12,
+      "liver": 6
+    },
+    "evidence": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates"
+  },
+  "phylop_cost": {
+    "requests": 3399,
+    "mb_fetched": 41.7
+  },
+  "evidence": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates; measured: Zoonomia phyloP; curated: ENCODE cCREs; inferred: CTCF-only nodes; predicted: AlphaGenome deletion effect"
+}

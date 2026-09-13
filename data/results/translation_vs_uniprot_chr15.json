@@ -1,0 +1,32 @@
+{
+  "result": "translation_vs_uniprot_chr15",
+  "date": "2026-09-11",
+  "chrom": "chr15",
+  "genes_checked": 569,
+  "exact_canonical": 516,
+  "exact_canonical_fraction": 0.9069,
+  "exact_some_isoform": 560,
+  "exact_some_isoform_fraction": 0.9842,
+  "canonical_differs_but_another_isoform_matches": 44,
+  "same_protein_different_boundaries": 6,
+  "disagreements": [
+    {
+      "similarity_best_isoform": 0.8768,
+      "cds_out_of_frame": false,
+      "translated_fraction_of_cds": 0.994,
+      "gene": "CALML4",
+      "accession": "Q96GE6",
+      "transcript": "CALML4-206",
+      "ours_aa": 153,
+      "uniprot_aa": 196,
+      "identity_canonical": 0.0561,
+      "identity_best_isoform": 0.0663,
+      "exact": false,
+      "same_length": false
+    }
+  ],
+  "disagreement_count": 1,
+  "out_of_frame_canonical": [],
+  "evidence": "derived: GenomeOS translation of GENCODE models on the reference vs UniProt/Swiss-Prot",
+  "note": "a length difference with a matching isoform is a canonical-choice difference; a high gapped similarity with low identity is the same protein with different start or exon boundaries"
+}

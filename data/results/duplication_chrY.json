@@ -1,0 +1,4782 @@
+{
+  "result": "duplication_chrY",
+  "date": "2026-09-12",
+  "pairs": 1305,
+  "intra_chromosomal": 497,
+  "inter_chromosomal": 808,
+  "bands": {
+    "young": 143,
+    "middle": 360,
+    "old": 802
+  },
+  "duplicated_bp": 13193784,
+  "duplicated_fraction": 0.2306,
+  "blocks": [
+    {
+      "start": 0,
+      "end": 253742,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 255091,
+      "end": 267676,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 318862,
+      "end": 320989,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 321851,
+      "end": 333932,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 511616,
+      "end": 523774,
+      "class": "interspersed_repeat",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 524102,
+      "end": 545235,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 545352,
+      "end": 600186,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 600999,
+      "end": 624343,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 659411,
+      "end": 964423,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 965367,
+      "end": 990100,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 994374,
+      "end": 1008502,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1010101,
+      "end": 1111321,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1112300,
+      "end": 1169150,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1179160,
+      "end": 1190489,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1212723,
+      "end": 1248658,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1263594,
+      "end": 1268778,
+      "class": "long_orf",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1325373,
+      "end": 1335024,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1453786,
+      "end": 1462571,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1537207,
+      "end": 1552739,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1565013,
+      "end": 1591591,
+      "class": "interspersed_repeat",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1602532,
+      "end": 1615058,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1643081,
+      "end": 1657734,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1763312,
+      "end": 1767346,
+      "class": "long_orf",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1768776,
+      "end": 1883824,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 1894966,
+      "end": 2217547,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 2503113,
+      "end": 2566021,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 2666596,
+      "end": 2690987,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 2741312,
+      "end": 2752082,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 2932000,
+      "end": 2934405,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 3200509,
+      "end": 3293807,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrX:89394404-89732547"
+      ]
+    },
+    {
+      "start": 3294826,
+      "end": 3549651,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr1:171591686-171592713",
+        "chrX:89394404-89732547",
+        "chrX:89742813-90000000"
+      ]
+    },
+    {
+      "start": 3549810,
+      "end": 3579066,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr1:171591686-171592713",
+        "chrX:89742813-90000000"
+      ]
+    },
+    {
+      "start": 3580041,
+      "end": 3682804,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9197,
+      "pairs": 3,
+      "partners": [
+        "chr5:171251651-171256419",
+        "chrX:89742813-90000000",
+        "chrX:90095777-90275030"
+      ]
+    },
+    {
+      "start": 3683868,
+      "end": 3776200,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr13:27066155-27069384",
+        "chr19:46121954-46123618",
+        "chr5:171251651-171256419",
+        "chrX:90095777-90275030"
+      ]
+    },
+    {
+      "start": 3864897,
+      "end": 3866305,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr20:3360492-3362330",
+        "chr20:50081378-50082915",
+        "chr8:99002019-99003849",
+        "chrX:90276317-90909509"
+      ]
+    },
+    {
+      "start": 3866722,
+      "end": 4036334,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr20:3360492-3362330",
+        "chr8:99002019-99003849",
+        "chrX:90276317-90909509"
+      ]
+    },
+    {
+      "start": 4100619,
+      "end": 4174984,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrX:90276317-90909509"
+      ]
+    },
+    {
+      "start": 4175090,
+      "end": 4801684,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9964,
+      "pairs": 9,
+      "partners": [
+        "chrX:90276317-90909509",
+        "chrX:90909509-90927209",
+        "chrX:90927207-91032371",
+        "chrX:90988994-90994456",
+        "chrX:91143608-91255742",
+        "chrX:91216531-91222993",
+        "chrX:91479250-91715634",
+        "chrY:4564440-4569891"
+      ]
+    },
+    {
+      "start": 4802848,
+      "end": 4993371,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.996,
+      "pairs": 3,
+      "partners": [
+        "chr6:120845781-120847098",
+        "chrX:91479250-91715634",
+        "chrX:91740846-92172868"
+      ]
+    },
+    {
+      "start": 5742224,
+      "end": 5793299,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrX:92352303-93120510"
+      ]
+    },
+    {
+      "start": 5793737,
+      "end": 5887503,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrX:92352303-93120510",
+        "chrY:5879134-5880998",
+        "chrY:5883277-5885132"
+      ]
+    },
+    {
+      "start": 5888740,
+      "end": 6158801,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrX:92352303-93120510"
+      ]
+    },
+    {
+      "start": 6159265,
+      "end": 6241263,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9971,
+      "pairs": 6,
+      "partners": [
+        "chrX:92352303-93120510",
+        "chrY:9351586-9380818",
+        "chrY:9460749-9490028",
+        "chrY:9501346-9530623",
+        "chrY:9542277-9562581",
+        "chrY:9895760-9919592"
+      ]
+    },
+    {
+      "start": 6249020,
+      "end": 6256266,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chrY:6269307-6278951",
+        "chrY:9351586-9380818",
+        "chrY:9460749-9490028",
+        "chrY:9501346-9530623",
+        "chrY:9542277-9562581",
+        "chrY:9895760-9919592"
+      ]
+    },
+    {
+      "start": 6275213,
+      "end": 6303956,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 7,
+      "partners": [
+        "chrY:21418167-21422480",
+        "chrY:6251208-6260333",
+        "chrY:6521019-6523577",
+        "chrY:9453782-9460743",
+        "chrY:9553025-9564149",
+        "chrY:9637602-9640154",
+        "chrY:9812674-9914616"
+      ]
+    },
+    {
+      "start": 6308202,
+      "end": 6316196,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:6496915-6514056",
+        "chrY:6514815-6519992",
+        "chrY:9641186-9665070",
+        "chrY:9812674-9914616"
+      ]
+    },
+    {
+      "start": 6343323,
+      "end": 6357218,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:9812674-9914616"
+      ]
+    },
+    {
+      "start": 6369921,
+      "end": 6374644,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:9628424-9802672"
+      ]
+    },
+    {
+      "start": 6381134,
+      "end": 6390389,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:9628424-9802672"
+      ]
+    },
+    {
+      "start": 6473691,
+      "end": 6492975,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:6339325-6341006",
+        "chrY:9628424-9802672",
+        "chrY:9833734-9835415"
+      ]
+    },
+    {
+      "start": 6496757,
+      "end": 6520462,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:6309791-6314155",
+        "chrY:6314893-6337006",
+        "chrY:9628424-9802672",
+        "chrY:9860589-9864954"
+      ]
+    },
+    {
+      "start": 6520929,
+      "end": 6718961,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9997,
+      "pairs": 7,
+      "partners": [
+        "chrX:89201802-89355307",
+        "chrX:89339579-89372628",
+        "chrY:6299516-6302096",
+        "chrY:6675331-6691107",
+        "chrY:6691107-6706882",
+        "chrY:9628424-9802672",
+        "chrY:9872641-9875221"
+      ]
+    },
+    {
+      "start": 6719180,
+      "end": 6789152,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.3677,
+      "pairs": 2,
+      "partners": [
+        "chrX:89339579-89372628",
+        "chrX:89373655-89394413"
+      ]
+    },
+    {
+      "start": 6789344,
+      "end": 6837706,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 6838252,
+      "end": 6865917,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7177816,
+      "end": 7273971,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.1578,
+      "pairs": 2,
+      "partners": [
+        "chrX:3699919-3716562",
+        "chrX:3760227-3771218"
+      ]
+    },
+    {
+      "start": 7381548,
+      "end": 7423053,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.2939,
+      "pairs": 3,
+      "partners": [
+        "chrX:3564258-3574971",
+        "chrX:3575322-3582761",
+        "chrX:3604119-3608147"
+      ]
+    },
+    {
+      "start": 7423158,
+      "end": 7434487,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrX:3564258-3574971"
+      ]
+    },
+    {
+      "start": 7520540,
+      "end": 7656967,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9171,
+      "pairs": 15,
+      "partners": [
+        "chrX:3428838-3451899",
+        "chrX:3452127-3473421",
+        "chrY:10000000-10001517",
+        "chrY:10002560-10013282",
+        "chrY:11856619-11863510",
+        "chrY:21327397-21340413",
+        "chrY:21373537-21377386",
+        "chrY:22221605-22226914"
+      ]
+    },
+    {
+      "start": 7657352,
+      "end": 7671742,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:22657692-22740657",
+        "chrY:23474026-23538494",
+        "chrY:26132121-26196584"
+      ]
+    },
+    {
+      "start": 7676024,
+      "end": 7678898,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7681028,
+      "end": 7687738,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7692678,
+      "end": 7694706,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7814684,
+      "end": 7845484,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7846454,
+      "end": 7853685,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7854876,
+      "end": 7905535,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7907303,
+      "end": 7913421,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7914090,
+      "end": 7932996,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7937640,
+      "end": 7990986,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 7991806,
+      "end": 8068444,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8151656,
+      "end": 8264448,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.1456,
+      "pairs": 3,
+      "partners": [
+        "chrY:10000004-10004507",
+        "chrY:22302057-22303606",
+        "chrY:7578489-7592140"
+      ]
+    },
+    {
+      "start": 8277188,
+      "end": 8280197,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8282209,
+      "end": 8350930,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8352143,
+      "end": 8363535,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8365150,
+      "end": 8371662,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8372710,
+      "end": 8395040,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8407400,
+      "end": 8413036,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.6269,
+      "pairs": 3,
+      "partners": [
+        "chrY:22847223-22850788",
+        "chrY:24480971-24484536",
+        "chrY:25185568-25189133"
+      ]
+    },
+    {
+      "start": 8414054,
+      "end": 8418790,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8419900,
+      "end": 8517363,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0229,
+      "pairs": 1,
+      "partners": [
+        "chrY:8912783-8915005"
+      ]
+    },
+    {
+      "start": 8517748,
+      "end": 8550493,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8713825,
+      "end": 8721763,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8739248,
+      "end": 8783309,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 8817463,
+      "end": 8901202,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.2321,
+      "pairs": 5,
+      "partners": [
+        "chrX:141701225-141702637",
+        "chrY:21924887-21967623",
+        "chrY:22618762-22697562",
+        "chrY:23498627-23576913",
+        "chrY:26093182-26171980"
+      ]
+    },
+    {
+      "start": 8903276,
+      "end": 8906223,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:21924887-21967623",
+        "chrY:22618762-22697562",
+        "chrY:23498627-23576913",
+        "chrY:26093182-26171980"
+      ]
+    },
+    {
+      "start": 8922703,
+      "end": 8931068,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:22618762-22697562",
+        "chrY:23498627-23576913",
+        "chrY:26093182-26171980"
+      ]
+    },
+    {
+      "start": 8931454,
+      "end": 8971750,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.8829,
+      "pairs": 3,
+      "partners": [
+        "chrY:22618762-22697562",
+        "chrY:23498627-23576913",
+        "chrY:26093182-26171980"
+      ]
+    },
+    {
+      "start": 8974095,
+      "end": 9030593,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.4351,
+      "pairs": 2,
+      "partners": [
+        "chrY:21805281-21841420",
+        "chrY:21839053-21840374"
+      ]
+    },
+    {
+      "start": 9039988,
+      "end": 9166084,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.4848,
+      "pairs": 6,
+      "partners": [
+        "chrY:21640200-21739542",
+        "chrY:21741441-21747736",
+        "chrY:21750314-21753233",
+        "chrY:21754363-21755937",
+        "chrY:21757903-21789281",
+        "chrY:21805281-21841420"
+      ]
+    },
+    {
+      "start": 9167702,
+      "end": 9183693,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:21640200-21739542"
+      ]
+    },
+    {
+      "start": 9185803,
+      "end": 9189628,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:21640200-21739542"
+      ]
+    },
+    {
+      "start": 9204611,
+      "end": 9230914,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9984,
+      "pairs": 2,
+      "partners": [
+        "chrY:21611064-21636605",
+        "chrY:21640200-21739542"
+      ]
+    },
+    {
+      "start": 9231247,
+      "end": 9292242,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.997,
+      "pairs": 4,
+      "partners": [
+        "chrY:21531268-21599549",
+        "chrY:21600590-21604445",
+        "chrY:21611064-21636605",
+        "chrY:21836226-21898135"
+      ]
+    },
+    {
+      "start": 9326047,
+      "end": 9329879,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 10,
+      "partners": [
+        "chrY:21411200-21415569",
+        "chrY:21488206-21492713",
+        "chrY:21507728-21529762",
+        "chrY:21531268-21599549",
+        "chrY:21836226-21898135",
+        "chrY:21899641-21921676",
+        "chrY:22164276-22190649",
+        "chrY:22302041-22304089"
+      ]
+    },
+    {
+      "start": 9334832,
+      "end": 9337463,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:9373806-9403713",
+        "chrY:9462690-9533161"
+      ]
+    },
+    {
+      "start": 9340286,
+      "end": 9347510,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:9373806-9403713",
+        "chrY:9462690-9533161"
+      ]
+    },
+    {
+      "start": 9360599,
+      "end": 9367802,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:6239790-6269275",
+        "chrY:9373806-9403713",
+        "chrY:9462690-9533161",
+        "chrY:9895760-9905332"
+      ]
+    },
+    {
+      "start": 9380883,
+      "end": 9388121,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:9333197-9363090",
+        "chrY:9462690-9533161"
+      ]
+    },
+    {
+      "start": 9401223,
+      "end": 9458612,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.1288,
+      "pairs": 5,
+      "partners": [
+        "chrY:6271984-6278951",
+        "chrY:9333197-9363090",
+        "chrY:9462690-9533161",
+        "chrY:9494325-9534943",
+        "chrY:9895760-9902740"
+      ]
+    },
+    {
+      "start": 9469749,
+      "end": 9479052,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:6239790-6269275",
+        "chrY:9333197-9403713",
+        "chrY:9494325-9534943",
+        "chrY:9895760-9905332"
+      ]
+    },
+    {
+      "start": 9490088,
+      "end": 9497286,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:9333197-9403713",
+        "chrY:9453713-9494325",
+        "chrY:9494325-9534943"
+      ]
+    },
+    {
+      "start": 9510375,
+      "end": 9517598,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:6239790-6269275",
+        "chrY:9333197-9403713",
+        "chrY:9453713-9494325",
+        "chrY:9895760-9905332"
+      ]
+    },
+    {
+      "start": 9530683,
+      "end": 9544916,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.4847,
+      "pairs": 3,
+      "partners": [
+        "chrY:6240480-6260339",
+        "chrY:9333197-9403713",
+        "chrY:9453713-9494325"
+      ]
+    },
+    {
+      "start": 9550880,
+      "end": 9609955,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.2246,
+      "pairs": 3,
+      "partners": [
+        "chrY:6240480-6260339",
+        "chrY:6269279-6280521",
+        "chrY:9894189-9905326"
+      ]
+    },
+    {
+      "start": 9632346,
+      "end": 9640248,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:6299516-6302092",
+        "chrY:6362051-6532742",
+        "chrY:9869193-9875221"
+      ]
+    },
+    {
+      "start": 9640716,
+      "end": 9665228,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:6309791-6337005",
+        "chrY:6362051-6532742",
+        "chrY:9869193-9875221"
+      ]
+    },
+    {
+      "start": 9669010,
+      "end": 9691038,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:6339325-6341006",
+        "chrY:6362051-6532742"
+      ]
+    },
+    {
+      "start": 9701695,
+      "end": 9706823,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:6362051-6532742"
+      ]
+    },
+    {
+      "start": 9774329,
+      "end": 9784371,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:6362051-6532742"
+      ]
+    },
+    {
+      "start": 9858547,
+      "end": 9868461,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:6260339-6362053",
+        "chrY:6514815-6519992"
+      ]
+    },
+    {
+      "start": 9870781,
+      "end": 9898785,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 10,
+      "partners": [
+        "chrY:21418167-21422480",
+        "chrY:6234811-6260333",
+        "chrY:6260339-6362053",
+        "chrY:6521019-6523577",
+        "chrY:9362889-9371856",
+        "chrY:9453782-9460743",
+        "chrY:9472042-9481054",
+        "chrY:9512651-9521666"
+      ]
+    },
+    {
+      "start": 9913142,
+      "end": 9951552,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.2554,
+      "pairs": 6,
+      "partners": [
+        "chrY:21309868-21311376",
+        "chrY:22191996-22200838",
+        "chrY:22208770-22216678",
+        "chrY:22385579-22394421",
+        "chrY:6234811-6260333",
+        "chrY:6260339-6362053"
+      ]
+    },
+    {
+      "start": 10038375,
+      "end": 10066553,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 10070409,
+      "end": 10090409,
+      "class": "centromere",
+      "tier": "structural",
+      "duplicated_fraction": 0.1202,
+      "pairs": 1,
+      "partners": [
+        "chr4:190004058-190020235"
+      ]
+    },
+    {
+      "start": 10090528,
+      "end": 10092874,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chr20:29865059-29876195",
+        "chr20:30814169-30856182",
+        "chr4:190004058-190020235",
+        "chr9:41235483-41255764",
+        "chr9:62800336-62820097",
+        "chrUn_KI270442v1:371684-382712"
+      ]
+    },
+    {
+      "start": 10092993,
+      "end": 10171589,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 31,
+      "partners": [
+        "chr10:27236-35162",
+        "chr10:51879-60227",
+        "chr12:34166893-34184025",
+        "chr14:16022703-16061677",
+        "chr16:34119192-34158613",
+        "chr16:90084887-90091366",
+        "chr18:27566-35492",
+        "chr18:52209-61719"
+      ]
+    },
+    {
+      "start": 10172725,
+      "end": 10173852,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 7,
+      "partners": [
+        "chr14:16022703-16061677",
+        "chr16:34119192-34158613",
+        "chr20:29319462-29340263",
+        "chr20:30856243-30924862",
+        "chr22:11242062-11360744",
+        "chr22:11550626-11631288",
+        "chrUn_KI270442v1:224015-321307"
+      ]
+    },
+    {
+      "start": 10174207,
+      "end": 10190376,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 14,
+      "partners": [
+        "chr14:16022703-16061677",
+        "chr16:34119192-34158613",
+        "chr17:47135478-47137362",
+        "chr20:29289665-29315075",
+        "chr20:29319462-29340263",
+        "chr20:29447404-29448633",
+        "chr20:29737064-29756281",
+        "chr20:29756380-29763638"
+      ]
+    },
+    {
+      "start": 10192298,
+      "end": 10197255,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chr14:16022703-16061677",
+        "chr20:29289665-29315075",
+        "chr20:29737064-29756281",
+        "chr20:30477246-30509236",
+        "chr20:30856243-30924862",
+        "chr22:11242062-11360744",
+        "chr22:11550626-11631288",
+        "chr2:132247632-132276166"
+      ]
+    },
+    {
+      "start": 10199103,
+      "end": 10200154,
+      "class": "long_orf",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 7,
+      "partners": [
+        "chr14:16022703-16061677",
+        "chr20:29289665-29315075",
+        "chr20:29737064-29756281",
+        "chr20:30477246-30509236",
+        "chr20:30856243-30924862",
+        "chr22:11242062-11360744",
+        "chr2:132247632-132276166"
+      ]
+    },
+    {
+      "start": 10200306,
+      "end": 11042721,
+      "class": "interspersed_repeat",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0414,
+      "pairs": 23,
+      "partners": [
+        "chr11:71116951-71165977",
+        "chr14:16022703-16061677",
+        "chr20:29289665-29315075",
+        "chr20:29737064-29756281",
+        "chr20:30477246-30509236",
+        "chr20:30856243-30924862",
+        "chr21:9641040-9642895",
+        "chr22:11242062-11360744"
+      ]
+    },
+    {
+      "start": 11042943,
+      "end": 11085475,
+      "class": "interspersed_repeat",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 14,
+      "partners": [
+        "chr11:71116951-71165977",
+        "chr14:19227045-19241858",
+        "chr14_GL000194v1_random:8892-32407",
+        "chr21:10123631-10138866",
+        "chr21:9024954-9047185",
+        "chr22:10851638-10866179",
+        "chr22:15881063-15895594",
+        "chr2:131755309-131769068"
+      ]
+    },
+    {
+      "start": 11086061,
+      "end": 11107064,
+      "class": "long_orf",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 32,
+      "partners": [
+        "chr14:18585038-18590801",
+        "chr14:19158010-19169849",
+        "chr14:19227045-19241858",
+        "chr14_GL000194v1_random:8892-32407",
+        "chr1_KI270706v1_random:120801-160637",
+        "chr20:30585502-30588835",
+        "chr21:10123631-10138866",
+        "chr21:8812071-8851848"
+      ]
+    },
+    {
+      "start": 11107887,
+      "end": 11116285,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 23,
+      "partners": [
+        "chr1_KI270706v1_random:120801-160637",
+        "chr20:30585502-30588835",
+        "chr21:8812071-8851848",
+        "chr22:11703628-11724629",
+        "chr22:11821960-11861653",
+        "chr22:12130698-12170443",
+        "chr2:132352710-132356059",
+        "chr2:94894862-94930413"
+      ]
+    },
+    {
+      "start": 11215207,
+      "end": 11306917,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.8945,
+      "pairs": 29,
+      "partners": [
+        "chr14_GL000009v2_random:85773-201709",
+        "chr14_GL000194v1_random:32406-189826",
+        "chr14_GL000225v1_random:200636-211173",
+        "chr14_KI270722v1_random:0-122684",
+        "chr1:890933-898701",
+        "chr1_KI270708v1_random:0-89385",
+        "chr1_KI270710v1_random:0-40176",
+        "chr21:8756715-8803762"
+      ]
+    },
+    {
+      "start": 11308181,
+      "end": 11314920,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.337,
+      "pairs": 1,
+      "partners": [
+        "chr18:109898-112522"
+      ]
+    },
+    {
+      "start": 11316187,
+      "end": 11321556,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 11322823,
+      "end": 11332328,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.062,
+      "pairs": 3,
+      "partners": [
+        "chr3:75668840-75669865",
+        "chr4:190021643-190022776",
+        "chr4:190173121-190175892"
+      ]
+    },
+    {
+      "start": 11333595,
+      "end": 11335626,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chr10:38634828-38745748",
+        "chr10:42244266-42282984",
+        "chr16:32333896-32442326",
+        "chr16_KI270728v1_random:387297-446171",
+        "chr16_KI270728v1_random:660455-680465",
+        "chr22:16422774-16534474",
+        "chr2:91876961-91990073",
+        "chr4:190173121-190175892"
+      ]
+    },
+    {
+      "start": 11337693,
+      "end": 11340578,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chr10:38634828-38745748",
+        "chr10:42244266-42282984",
+        "chr16:32333896-32442326",
+        "chr16_KI270728v1_random:387297-446171",
+        "chr16_KI270728v1_random:660455-680465",
+        "chr22:16422774-16534474",
+        "chr2:91876961-91990073",
+        "chr4:102896543-102957482"
+      ]
+    },
+    {
+      "start": 11385687,
+      "end": 11395698,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 10,
+      "partners": [
+        "chr10:38634828-38745748",
+        "chr16:32333896-32442326",
+        "chr16_KI270728v1_random:387297-446171",
+        "chr16_KI270728v1_random:90861-183894",
+        "chr22:11119187-11160921",
+        "chr22:16422774-16534474",
+        "chr2:89663936-89685992",
+        "chr2:91876961-91990073"
+      ]
+    },
+    {
+      "start": 11397076,
+      "end": 11412547,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 12,
+      "partners": [
+        "chr10:38634828-38745748",
+        "chr15:20284720-20293326",
+        "chr16:32333896-32442326",
+        "chr16:33539870-33569737",
+        "chr16_KI270728v1_random:1675402-1721447",
+        "chr16_KI270728v1_random:1840172-1870035",
+        "chr16_KI270728v1_random:90861-183894",
+        "chr22:11119187-11160921"
+      ]
+    },
+    {
+      "start": 11418716,
+      "end": 11445417,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 57,
+      "partners": [
+        "chr10:38634828-38745748",
+        "chr10:38761270-38783421",
+        "chr10:42168411-42211177",
+        "chr10:42227151-42242910",
+        "chr14_KI270725v1_random:24072-35338",
+        "chr14_KI270725v1_random:57627-99254",
+        "chr15:20136633-20147166",
+        "chr15:20284720-20293326"
+      ]
+    },
+    {
+      "start": 11446101,
+      "end": 11473726,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 26,
+      "partners": [
+        "chr10:38761270-38783421",
+        "chr10:42168411-42211177",
+        "chr11:90098138-90117834",
+        "chr11:90147651-90149723",
+        "chr14_KI270725v1_random:57627-99254",
+        "chr1:144078294-144086616",
+        "chr1:144874091-144882414",
+        "chr1_KI270712v1_random:31692-40020"
+      ]
+    },
+    {
+      "start": 11474237,
+      "end": 11781051,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 0.3096,
+      "pairs": 82,
+      "partners": [
+        "chr10:38597965-38600313",
+        "chr10:38936869-38941784",
+        "chr10:42168411-42211177",
+        "chr14_KI270725v1_random:57627-99254",
+        "chr15:19894383-19898883",
+        "chr15:19938510-19943505",
+        "chr16:32110662-32115640",
+        "chr16:32478736-32481699"
+      ]
+    },
+    {
+      "start": 11782527,
+      "end": 11922535,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9338,
+      "pairs": 3,
+      "partners": [
+        "chr1:242879126-242956979",
+        "chrX:3284519-3414205",
+        "chrY:7571556-7578460"
+      ]
+    },
+    {
+      "start": 11923769,
+      "end": 11957207,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrX:3284519-3414205"
+      ]
+    },
+    {
+      "start": 11987386,
+      "end": 12088009,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.5639,
+      "pairs": 2,
+      "partners": [
+        "chrX:3275344-3281530",
+        "chrX:3284519-3414205"
+      ]
+    },
+    {
+      "start": 12431745,
+      "end": 12440045,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrX:2780766-2818886"
+      ]
+    },
+    {
+      "start": 12507716,
+      "end": 12537649,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 0.2375,
+      "pairs": 2,
+      "partners": [
+        "chrX:2744338-2749696",
+        "chrX:2751600-2780392"
+      ]
+    },
+    {
+      "start": 12860852,
+      "end": 12904107,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 12920478,
+      "end": 12930164,
+      "class": "interspersed_repeat_LTR",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 12948182,
+      "end": 13083789,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 13095805,
+      "end": 13153930,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 13162214,
+      "end": 13230883,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 13231439,
+      "end": 13234576,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 13480673,
+      "end": 13565952,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 13626296,
+      "end": 13702891,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 13916244,
+      "end": 13985771,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.7284,
+      "pairs": 9,
+      "partners": [
+        "chrX:6527564-6537770",
+        "chrX:7840853-7852088",
+        "chrX:8165153-8181346",
+        "chrX:8460017-8470723",
+        "chrX:8470726-8477667",
+        "chrX:8486177-8504130",
+        "chrX:8506328-8544652",
+        "chrX:9007909-9012125"
+      ]
+    },
+    {
+      "start": 13986473,
+      "end": 14056226,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9511,
+      "pairs": 11,
+      "partners": [
+        "chrX:6527564-6537770",
+        "chrX:6530100-6537770",
+        "chrX:7840853-7848351",
+        "chrX:7840853-7852088",
+        "chrX:8000352-8004201",
+        "chrX:8000352-8006947",
+        "chrX:8165153-8181346",
+        "chrX:8166539-8181346"
+      ]
+    },
+    {
+      "start": 14056958,
+      "end": 14081074,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.1461,
+      "pairs": 6,
+      "partners": [
+        "chrX:6530100-6537770",
+        "chrX:7840853-7848351",
+        "chrX:8166539-8181346",
+        "chrX:8460017-8470723",
+        "chrX:9008979-9010741",
+        "chrY:13981651-14019657"
+      ]
+    },
+    {
+      "start": 14086600,
+      "end": 14101587,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 14101723,
+      "end": 14276211,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0073,
+      "pairs": 1,
+      "partners": [
+        "chrX:7598660-7599946"
+      ]
+    },
+    {
+      "start": 14277489,
+      "end": 14522572,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 14845654,
+      "end": 14907897,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 14908068,
+      "end": 14925696,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 14926849,
+      "end": 14941546,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0584,
+      "pairs": 10,
+      "partners": [
+        "chr11:31279258-31280872",
+        "chr16:25453472-25454540",
+        "chr1:150904009-150905036",
+        "chr2:78411914-78412944",
+        "chr3:11877614-11878995",
+        "chr6:34219556-34220935",
+        "chr7:25122835-25124003",
+        "chr8:33968695-33969762"
+      ]
+    },
+    {
+      "start": 14942715,
+      "end": 15348661,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0758,
+      "pairs": 4,
+      "partners": [
+        "chrX:6709739-6712094",
+        "chrX:7019699-7027463",
+        "chrY:14944801-14952088",
+        "chrY:15145879-15153252"
+      ]
+    },
+    {
+      "start": 15593331,
+      "end": 15690367,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 15698289,
+      "end": 16057914,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0704,
+      "pairs": 3,
+      "partners": [
+        "chrX:7752196-7761567",
+        "chrY:15874857-15883580",
+        "chrY:15896218-15904944"
+      ]
+    },
+    {
+      "start": 16124806,
+      "end": 16138247,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 16138379,
+      "end": 16186138,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.5567,
+      "pairs": 1,
+      "partners": [
+        "chrY:16315775-16425797"
+      ]
+    },
+    {
+      "start": 16191298,
+      "end": 16248934,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:16315775-16425797"
+      ]
+    },
+    {
+      "start": 16249041,
+      "end": 16336282,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.4701,
+      "pairs": 2,
+      "partners": [
+        "chrY:16159551-16269546",
+        "chrY:16315775-16425797"
+      ]
+    },
+    {
+      "start": 16336389,
+      "end": 16599729,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.3395,
+      "pairs": 1,
+      "partners": [
+        "chrY:16159551-16269546"
+      ]
+    },
+    {
+      "start": 16644539,
+      "end": 17192825,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 17193652,
+      "end": 17464878,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0335,
+      "pairs": 1,
+      "partners": [
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17465214,
+      "end": 17500957,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr12:34121759-34206357",
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17519038,
+      "end": 17552084,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 5,
+      "partners": [
+        "chr12:34121759-34206357",
+        "chr16:90084871-90091371",
+        "chr3:198114007-198119634",
+        "chr9:138169568-138172388",
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17579960,
+      "end": 17621258,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr12:38075671-38108737",
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17625832,
+      "end": 17628512,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr12:38075671-38108737",
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17629402,
+      "end": 17703060,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr12:38075671-38108737",
+        "chr5:69350986-69352228",
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17729756,
+      "end": 17757000,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr17:81509978-81512351",
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17758125,
+      "end": 17768979,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17777400,
+      "end": 17782209,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17784815,
+      "end": 17788314,
+      "class": "interspersed_repeat_LTR",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17789484,
+      "end": 17797982,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17800696,
+      "end": 17809806,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17954717-18450201"
+      ]
+    },
+    {
+      "start": 17825329,
+      "end": 17837200,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17954717-18450201",
+        "chrY:23983753-24103447",
+        "chrY:25566691-25686389"
+      ]
+    },
+    {
+      "start": 17837528,
+      "end": 17878259,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 7,
+      "partners": [
+        "chrY:17954717-18450201",
+        "chrY:23983753-24103447",
+        "chrY:24115739-24127375",
+        "chrY:24129816-24137382",
+        "chrY:25532756-25544392",
+        "chrY:25546835-25554401",
+        "chrY:25566691-25686389"
+      ]
+    },
+    {
+      "start": 17880220,
+      "end": 17882098,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17954717-18450201",
+        "chrY:23983753-24103447",
+        "chrY:25566691-25686389"
+      ]
+    },
+    {
+      "start": 17883708,
+      "end": 17908754,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17954717-18450201",
+        "chrY:23983753-24103447",
+        "chrY:25566691-25686389"
+      ]
+    },
+    {
+      "start": 17910806,
+      "end": 17912698,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17954717-18450201",
+        "chrY:23983753-24103447",
+        "chrY:25566691-25686389"
+      ]
+    },
+    {
+      "start": 17921630,
+      "end": 17951588,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9984,
+      "pairs": 9,
+      "partners": [
+        "chrY:17954717-18450201",
+        "chrY:18054322-18060749",
+        "chrY:18061351-18063739",
+        "chrY:23983753-24103447",
+        "chrY:24103826-24127380",
+        "chrY:24130327-24138461",
+        "chrY:25531677-25544397",
+        "chrY:25547346-25566313"
+      ]
+    },
+    {
+      "start": 17953500,
+      "end": 17984348,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chrY:17455803-17951260",
+        "chrY:18054322-18060749",
+        "chrY:18061351-18063739",
+        "chrY:23983753-24103447",
+        "chrY:24103826-24127380",
+        "chrY:24130327-24138461",
+        "chrY:25531677-25544397",
+        "chrY:25547346-25566313"
+      ]
+    },
+    {
+      "start": 17993260,
+      "end": 17995200,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17455803-17951260",
+        "chrY:23983753-24103447",
+        "chrY:25566691-25595067"
+      ]
+    },
+    {
+      "start": 17997252,
+      "end": 18022298,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:17455803-17951260",
+        "chrY:23983753-24103447",
+        "chrY:25566691-25595067",
+        "chrY:25600000-25686389"
+      ]
+    },
+    {
+      "start": 18023908,
+      "end": 18025786,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17455803-17951260",
+        "chrY:23983753-24103447",
+        "chrY:25600000-25686389"
+      ]
+    },
+    {
+      "start": 18027746,
+      "end": 18056764,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chrY:17455803-17951260",
+        "chrY:17937875-17944002",
+        "chrY:17961975-17968102",
+        "chrY:23983753-24103447",
+        "chrY:24115739-24127375",
+        "chrY:24129816-24137382",
+        "chrY:25532756-25544392",
+        "chrY:25546835-25554401"
+      ]
+    },
+    {
+      "start": 18096202,
+      "end": 18105313,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18108102,
+      "end": 18116526,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18117695,
+      "end": 18121194,
+      "class": "interspersed_repeat_LTR",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18123799,
+      "end": 18128609,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18137029,
+      "end": 18147883,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18149008,
+      "end": 18176255,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr17:81509978-81512351",
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18202953,
+      "end": 18276606,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr12:38075671-38108737",
+        "chr5:69350986-69352228",
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18277495,
+      "end": 18280177,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr12:38075671-38108737",
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18284761,
+      "end": 18326046,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr12:38075671-38108737",
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18353210,
+      "end": 18386973,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr16:90084871-90091371",
+        "chr3:198114007-198119634",
+        "chr9:138169568-138172388",
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18405046,
+      "end": 18440796,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chr12:34121759-34154944",
+        "chrY:17455803-17951260"
+      ]
+    },
+    {
+      "start": 18441125,
+      "end": 18453149,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9991,
+      "pairs": 2,
+      "partners": [
+        "chrY:17455803-17951260",
+        "chrY:18680026-18870184"
+      ]
+    },
+    {
+      "start": 18472137,
+      "end": 18480246,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:18680026-18870184"
+      ]
+    },
+    {
+      "start": 18487400,
+      "end": 18490914,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:18680026-18870184"
+      ]
+    },
+    {
+      "start": 18629093,
+      "end": 18649670,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.5476,
+      "pairs": 1,
+      "partners": [
+        "chrY:18680026-18870184"
+      ]
+    },
+    {
+      "start": 18650279,
+      "end": 18655519,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 18656190,
+      "end": 18673610,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19087061,
+      "end": 19253959,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19260875,
+      "end": 19327568,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19328573,
+      "end": 19455430,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19606274,
+      "end": 19691940,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19694606,
+      "end": 19702297,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19759978,
+      "end": 19868841,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19884157,
+      "end": 19932129,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19932500,
+      "end": 19986574,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 19987852,
+      "end": 20001184,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20012204,
+      "end": 20390050,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20396796,
+      "end": 20464915,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20593154,
+      "end": 20725330,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20742900,
+      "end": 20756107,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20781032,
+      "end": 20808775,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20811809,
+      "end": 20843255,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20843710,
+      "end": 20861336,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 20862337,
+      "end": 20907343,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0497,
+      "pairs": 3,
+      "partners": [
+        "chr11:83976815-83977871",
+        "chr5:83052845-83053901",
+        "chr5:83055899-83057155"
+      ]
+    },
+    {
+      "start": 20907562,
+      "end": 21038288,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.1206,
+      "pairs": 1,
+      "partners": [
+        "chrY:21047764-21063547"
+      ]
+    },
+    {
+      "start": 21044724,
+      "end": 21130869,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.1832,
+      "pairs": 1,
+      "partners": [
+        "chrY:21005926-21021692"
+      ]
+    },
+    {
+      "start": 21131181,
+      "end": 21135248,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21257832,
+      "end": 21311267,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0273,
+      "pairs": 6,
+      "partners": [
+        "chrY:22196969-22198545",
+        "chrY:22387872-22389448",
+        "chrY:22769665-22771270",
+        "chrY:24403408-24405013",
+        "chrY:25265100-25266705",
+        "chrY:9950132-9951661"
+      ]
+    },
+    {
+      "start": 21318895,
+      "end": 21382953,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.7767,
+      "pairs": 7,
+      "partners": [
+        "chrY:22275286-22285544",
+        "chrY:22302052-22333325",
+        "chrY:22336570-22339023",
+        "chrY:22346685-22365008",
+        "chrY:7578487-7592140",
+        "chrY:7643005-7646850",
+        "chrY:9995460-10013282"
+      ]
+    },
+    {
+      "start": 21386360,
+      "end": 21394636,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:22302052-22333325"
+      ]
+    },
+    {
+      "start": 21456216,
+      "end": 21468157,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 21470683,
+      "end": 21493518,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.8196,
+      "pairs": 9,
+      "partners": [
+        "chrY:21411372-21429850",
+        "chrY:21840375-21934516",
+        "chrY:22164569-22178020",
+        "chrY:22187907-22190649",
+        "chrY:22302041-22303898",
+        "chrY:22395768-22398510",
+        "chrY:22408402-22421853",
+        "chrY:9307616-9319912"
+      ]
+    },
+    {
+      "start": 21501968,
+      "end": 21508298,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chrY:21521803-21545344",
+        "chrY:21840375-21934516",
+        "chrY:22164569-22178020",
+        "chrY:22164569-22188172",
+        "chrY:22398245-22421853",
+        "chrY:22408402-22421853",
+        "chrY:9307616-9319912",
+        "chrY:9307616-9328481"
+      ]
+    },
+    {
+      "start": 21560066,
+      "end": 21565091,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:21840375-21934516",
+        "chrY:9260231-9328481"
+      ]
+    },
+    {
+      "start": 21605081,
+      "end": 21631682,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.7751,
+      "pairs": 1,
+      "partners": [
+        "chrY:9226308-9257684"
+      ]
+    },
+    {
+      "start": 21632015,
+      "end": 21637474,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.8408,
+      "pairs": 1,
+      "partners": [
+        "chrY:9226308-9257684"
+      ]
+    },
+    {
+      "start": 21639041,
+      "end": 21661925,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9494,
+      "pairs": 1,
+      "partners": [
+        "chrY:9122739-9226266"
+      ]
+    },
+    {
+      "start": 21674008,
+      "end": 21677245,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:9122739-9226266"
+      ]
+    },
+    {
+      "start": 21681118,
+      "end": 21696569,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:9122739-9226266"
+      ]
+    },
+    {
+      "start": 21698220,
+      "end": 21817578,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.8381,
+      "pairs": 10,
+      "partners": [
+        "chrY:21714537-21739542",
+        "chrY:21741441-21750013",
+        "chrY:21755823-21764198",
+        "chrY:21764281-21789281",
+        "chrY:9007310-9046914",
+        "chrY:9108946-9111868",
+        "chrY:9112716-9114283",
+        "chrY:9116371-9122656"
+      ]
+    },
+    {
+      "start": 21818218,
+      "end": 21825259,
+      "class": "regulatory",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:9007310-9046914"
+      ]
+    },
+    {
+      "start": 21846721,
+      "end": 21871330,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:21492775-21591097",
+        "chrY:9265421-9328481"
+      ]
+    },
+    {
+      "start": 21873550,
+      "end": 21880075,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 5,
+      "partners": [
+        "chrY:21492775-21591097",
+        "chrY:21900694-21924231",
+        "chrY:22164256-22188172",
+        "chrY:22398245-22422166",
+        "chrY:9265421-9328481"
+      ]
+    },
+    {
+      "start": 21897559,
+      "end": 21900655,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 8,
+      "partners": [
+        "chrY:21492775-21591097",
+        "chrY:21900694-21924231",
+        "chrY:22164256-22188172",
+        "chrY:22164569-22188172",
+        "chrY:22398245-22421853",
+        "chrY:22398245-22422166",
+        "chrY:9265421-9328481",
+        "chrY:9307616-9328481"
+      ]
+    },
+    {
+      "start": 21921106,
+      "end": 21927520,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 9,
+      "partners": [
+        "chrY:21492775-21591097",
+        "chrY:21877118-21900694",
+        "chrY:22164569-22188172",
+        "chrY:22377682-22661521",
+        "chrY:22398245-22421853",
+        "chrY:23534665-23702782",
+        "chrY:25967291-26135950",
+        "chrY:8883488-8920126"
+      ]
+    },
+    {
+      "start": 21941593,
+      "end": 21972312,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 5,
+      "partners": [
+        "chrX:141774793-141784277",
+        "chrY:22377682-22661521",
+        "chrY:23534665-23702782",
+        "chrY:25967291-26135950",
+        "chrY:8883488-8920126"
+      ]
+    },
+    {
+      "start": 22058113,
+      "end": 22064697,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:22377682-22661521",
+        "chrY:23534665-23702782",
+        "chrY:25967291-26135950"
+      ]
+    },
+    {
+      "start": 22065712,
+      "end": 22068819,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:22377682-22661521",
+        "chrY:23534665-23702782",
+        "chrY:25967291-26135950"
+      ]
+    },
+    {
+      "start": 22069151,
+      "end": 22071755,
+      "class": "interspersed_repeat_LTR",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:22377682-22661521",
+        "chrY:23534665-23702782",
+        "chrY:25967291-26135950"
+      ]
+    },
+    {
+      "start": 22147484,
+      "end": 22162881,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:22377682-22661521",
+        "chrY:6358098-6362053",
+        "chrY:9811154-9816629"
+      ]
+    },
+    {
+      "start": 22186021,
+      "end": 22198428,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 10,
+      "partners": [
+        "chrY:21309808-21311385",
+        "chrY:21489966-21492713",
+        "chrY:21506231-21529759",
+        "chrY:21529771-21553627",
+        "chrY:21875774-21899632",
+        "chrY:21899644-21923173",
+        "chrY:22208770-22211857",
+        "chrY:22377682-22661521"
+      ]
+    },
+    {
+      "start": 22203712,
+      "end": 22209330,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9938,
+      "pairs": 6,
+      "partners": [
+        "chrY:21314870-21317487",
+        "chrY:22197879-22200838",
+        "chrY:22377682-22661521",
+        "chrY:22385579-22388538",
+        "chrY:9950988-9957652",
+        "chrY:9955085-9961779"
+      ]
+    },
+    {
+      "start": 22216580,
+      "end": 22296797,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.2185,
+      "pairs": 11,
+      "partners": [
+        "chrY:21367288-21377323",
+        "chrY:22163039-22164141",
+        "chrY:22302052-22303590",
+        "chrY:22422281-22423383",
+        "chrY:22673893-22675724",
+        "chrY:23520455-23522286",
+        "chrY:26148328-26150159",
+        "chrY:6360237-6361326"
+      ]
+    },
+    {
+      "start": 22298876,
+      "end": 22305924,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.5509,
+      "pairs": 5,
+      "partners": [
+        "chrY:21380227-21413220",
+        "chrY:21490849-21492713",
+        "chrY:22280725-22282268",
+        "chrY:8231139-8233028",
+        "chrY:9328481-9330548"
+      ]
+    },
+    {
+      "start": 22321825,
+      "end": 22330451,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:21380227-21413220"
+      ]
+    },
+    {
+      "start": 22332500,
+      "end": 22400402,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 0.6951,
+      "pairs": 16,
+      "partners": [
+        "chrY:21309808-21311385",
+        "chrY:21314870-21317487",
+        "chrY:21352836-21377324",
+        "chrY:21377383-21379866",
+        "chrY:21380227-21413220",
+        "chrY:21489966-21492713",
+        "chrY:21506231-21529759",
+        "chrY:21529771-21553627"
+      ]
+    },
+    {
+      "start": 22417881,
+      "end": 22438923,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 10,
+      "partners": [
+        "chrY:21492775-21506219",
+        "chrY:21506231-21529759",
+        "chrY:21529771-21553627",
+        "chrY:21875774-21899632",
+        "chrY:21899644-21923173",
+        "chrY:21924887-22208735",
+        "chrY:22292503-22293603",
+        "chrY:6358098-6362053"
+      ]
+    },
+    {
+      "start": 22514637,
+      "end": 22517241,
+      "class": "interspersed_repeat_LINE",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22208735",
+        "chrY:23474026-23702782",
+        "chrY:25967291-26196584"
+      ]
+    },
+    {
+      "start": 22517573,
+      "end": 22520680,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22208735",
+        "chrY:23474026-23702782",
+        "chrY:25967291-26196584"
+      ]
+    },
+    {
+      "start": 22521695,
+      "end": 22528280,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22208735",
+        "chrY:23474026-23702782",
+        "chrY:25967291-26196584"
+      ]
+    },
+    {
+      "start": 22614081,
+      "end": 22646030,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 5,
+      "partners": [
+        "chrX:141774793-141784277",
+        "chrY:21924887-22208735",
+        "chrY:23474026-23702782",
+        "chrY:25967291-26196584",
+        "chrY:8883488-8967031"
+      ]
+    },
+    {
+      "start": 22658878,
+      "end": 22670615,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 5,
+      "partners": [
+        "chrY:21924887-22208735",
+        "chrY:23474026-23702782",
+        "chrY:25967291-26196584",
+        "chrY:7593393-7672921",
+        "chrY:8883488-8967031"
+      ]
+    },
+    {
+      "start": 22672859,
+      "end": 22693946,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 5,
+      "partners": [
+        "chrY:22292548-22294366",
+        "chrY:23474026-23702782",
+        "chrY:25967291-26196584",
+        "chrY:7593393-7672921",
+        "chrY:8883488-8967031"
+      ]
+    },
+    {
+      "start": 22772143,
+      "end": 22851583,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689",
+        "chrY:8407974-8411507"
+      ]
+    },
+    {
+      "start": 22852715,
+      "end": 22861111,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689"
+      ]
+    },
+    {
+      "start": 22861834,
+      "end": 22866543,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689"
+      ]
+    },
+    {
+      "start": 22867756,
+      "end": 22936454,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689"
+      ]
+    },
+    {
+      "start": 23005465,
+      "end": 23017062,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689"
+      ]
+    },
+    {
+      "start": 23017821,
+      "end": 23025593,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689"
+      ]
+    },
+    {
+      "start": 23026663,
+      "end": 23049246,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689"
+      ]
+    },
+    {
+      "start": 23051195,
+      "end": 23058029,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689"
+      ]
+    },
+    {
+      "start": 23059186,
+      "end": 23129354,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr3:16538524-16596408",
+        "chrY:23276049-23359290",
+        "chrY:24380449-24775999",
+        "chrY:24891724-25289689"
+      ]
+    },
+    {
+      "start": 23199010,
+      "end": 23219446,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chr3:16606435-16617076",
+        "chrY:23186746-23200000",
+        "chrY:23200000-23218540",
+        "chrY:23218540-23231785",
+        "chrY:24771239-24832926",
+        "chrY:24801139-24814385"
+      ]
+    },
+    {
+      "start": 23291356,
+      "end": 23364722,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chr1:202468012-202561295",
+        "chr3:16538524-16596408",
+        "chrY:23061402-23144660",
+        "chrY:24695148-24775999",
+        "chrY:24882185-24974959",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23614869,
+      "end": 23637622,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23640789,
+      "end": 23657838,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23667822,
+      "end": 23674378,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23675392,
+      "end": 23678503,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23678835,
+      "end": 23715921,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23726808,
+      "end": 23734192,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23736249,
+      "end": 23740257,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23746693,
+      "end": 23751187,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23751760,
+      "end": 23762837,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23765583,
+      "end": 23771231,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23798150,
+      "end": 23808820,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23809059,
+      "end": 23855521,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23857091,
+      "end": 23917240,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23917723,
+      "end": 23919904,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23921510,
+      "end": 23934952,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23941622,
+      "end": 23945926,
+      "class": "interspersed_repeat_LINE",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23952293,
+      "end": 23956568,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23960218,
+      "end": 23967563,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23970694,
+      "end": 23972779,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 23995081,
+      "end": 24006910,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17971049-18091362",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 24007237,
+      "end": 24045228,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17971049-18091362",
+        "chrY:24129816-24137382",
+        "chrY:25532756-25544392",
+        "chrY:25545548-26311622",
+        "chrY:25546835-25554401"
+      ]
+    },
+    {
+      "start": 24048019,
+      "end": 24049877,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17971049-18091362",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 24051487,
+      "end": 24077798,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17971049-18091362",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 24079812,
+      "end": 24081703,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17971049-18091362",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 24090346,
+      "end": 24104106,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17951308-17971011",
+        "chrY:17971049-18091362",
+        "chrY:25545548-26311622"
+      ]
+    },
+    {
+      "start": 24106018,
+      "end": 24137379,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9633,
+      "pairs": 14,
+      "partners": [
+        "chrY:17842271-17852564",
+        "chrY:17844735-17852564",
+        "chrY:17937873-17945254",
+        "chrY:17951308-17971011",
+        "chrY:17960723-17968104",
+        "chrY:18053446-18061275",
+        "chrY:18053446-18063739",
+        "chrY:24014380-24022179"
+      ]
+    },
+    {
+      "start": 24157843,
+      "end": 24168186,
+      "class": "promoter_like",
+      "tier": "regulatory",
+      "duplicated_fraction": 1.0,
+      "pairs": 19,
+      "partners": [
+        "chr15:28718987-28723176",
+        "chr15:30420825-30425018",
+        "chr15:30541219-30545412",
+        "chr15:32462209-32466398",
+        "chr15:32582682-32586870",
+        "chr15:34390505-34392395",
+        "chr15:34536726-34538616",
+        "chr15:82336694-82351763"
+      ]
+    },
+    {
+      "start": 24176433,
+      "end": 24179315,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 16,
+      "partners": [
+        "chr15:82336694-82351763",
+        "chr15:82400777-82443857",
+        "chr15:82441547-82476816",
+        "chr15:82517265-82532939",
+        "chr15:84165407-84171176",
+        "chr15:84168941-84204207",
+        "chr15:84233448-84248188",
+        "chr15:84348019-84362256"
+      ]
+    },
+    {
+      "start": 24206132,
+      "end": 24209566,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 17,
+      "partners": [
+        "chr15:75821687-75822911",
+        "chr15:77907211-77909532",
+        "chr15:82441547-82476816",
+        "chr15:82473990-82478250",
+        "chr15:84168941-84204207",
+        "chr15:84201385-84205646",
+        "chr15:84247863-84256618",
+        "chr15:84358393-84398144"
+      ]
+    },
+    {
+      "start": 24215581,
+      "end": 24232825,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 17,
+      "partners": [
+        "chr15:30076788-30081917",
+        "chr15:82343163-82351763",
+        "chr15:82382443-82396757",
+        "chr15:82426238-82436019",
+        "chr15:82517265-82526036",
+        "chr15:84233448-84242199",
+        "chr15:84244329-84270025",
+        "chr15:84348019-84356263"
+      ]
+    },
+    {
+      "start": 24238984,
+      "end": 24275422,
+      "class": "interspersed_repeat",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 23,
+      "partners": [
+        "chr15:77858910-77869333",
+        "chr15:82190662-82194294",
+        "chr15:82337151-82341036",
+        "chr15:82382443-82396757",
+        "chr15:82438095-82455279",
+        "chr15:82478252-82485134",
+        "chr15:84146886-84182669",
+        "chr15:84205648-84212524"
+      ]
+    },
+    {
+      "start": 24292590,
+      "end": 24312569,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 20,
+      "partners": [
+        "chr10:38450531-38483413",
+        "chr11:102820-128634",
+        "chr16:90170517-90214534",
+        "chr19:172443-198554",
+        "chr1:223888835-223951831",
+        "chr1:242957002-243054855",
+        "chr1:268963-297954",
+        "chr1:466590-492405"
+      ]
+    },
+    {
+      "start": 24321645,
+      "end": 24362334,
+      "class": "interspersed_repeat",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 20,
+      "partners": [
+        "chr16:90170517-90214534",
+        "chr1:223888835-223951831",
+        "chr1:242957002-243054855",
+        "chr1:268963-297954",
+        "chr1:382660-396902",
+        "chr1:396693-415287",
+        "chr1:612550-626782",
+        "chr1:626581-651035"
+      ]
+    },
+    {
+      "start": 24362409,
+      "end": 24396603,
+      "class": "interspersed_repeat_SINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chr1:242957002-243054855",
+        "chr4:118418032-118467375",
+        "chrY:10007135-10013282",
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603",
+        "chrY:7578487-7586092"
+      ]
+    },
+    {
+      "start": 24403526,
+      "end": 24450850,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21309808-21311385",
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24455941,
+      "end": 24485331,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603",
+        "chrY:8407974-8411507"
+      ]
+    },
+    {
+      "start": 24486463,
+      "end": 24494708,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24495583,
+      "end": 24500262,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24501505,
+      "end": 24570201,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24639207,
+      "end": 24650807,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24651534,
+      "end": 24659336,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24660406,
+      "end": 24683656,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24684935,
+      "end": 24691790,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23142275",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24692932,
+      "end": 24763068,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr3:16538524-16596408",
+        "chrY:22746680-23142275",
+        "chrY:23278434-23359290",
+        "chrY:24894109-25541603"
+      ]
+    },
+    {
+      "start": 24813492,
+      "end": 24833842,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:23186746-23200000",
+        "chrY:23200000-23268906",
+        "chrY:24801133-24846182",
+        "chrY:24801139-24846188"
+      ]
+    },
+    {
+      "start": 24907040,
+      "end": 24977175,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr3:16538524-16596408",
+        "chrY:22746680-23144660",
+        "chrY:23266512-23359290",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 24978317,
+      "end": 24985200,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23144660",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 24986476,
+      "end": 25009699,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23144660",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 25010769,
+      "end": 25018498,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23144660",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 25019303,
+      "end": 25030900,
+      "class": "satellite_array",
+      "tier": "structural",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23144660",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 25099892,
+      "end": 25168598,
+      "class": "unique_intergenic",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23144660",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 25169841,
+      "end": 25174519,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23144660",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 25175237,
+      "end": 25182266,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23144660",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 25219257,
+      "end": 25264243,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 2,
+      "partners": [
+        "chrY:22746680-23144660",
+        "chrY:24128531-24775999"
+      ]
+    },
+    {
+      "start": 25348847,
+      "end": 25377556,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 27,
+      "partners": [
+        "chr10:38450531-38483413",
+        "chr11:102820-128634",
+        "chr16:90170517-90214534",
+        "chr19:172443-198554",
+        "chr1:223888835-223951831",
+        "chr1:242957002-243054855",
+        "chr1:268963-297954",
+        "chr1:396693-415287"
+      ]
+    },
+    {
+      "start": 25394719,
+      "end": 25431155,
+      "class": "unique_intergenic",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 23,
+      "partners": [
+        "chr15:77858910-77869333",
+        "chr15:82190662-82194294",
+        "chr15:82337151-82341036",
+        "chr15:82382443-82396757",
+        "chr15:82438095-82455279",
+        "chr15:82478252-82485134",
+        "chr15:84146886-84182669",
+        "chr15:84205648-84212524"
+      ]
+    },
+    {
+      "start": 25437315,
+      "end": 25454560,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 17,
+      "partners": [
+        "chr15:30076788-30081917",
+        "chr15:82343163-82351763",
+        "chr15:82382443-82396757",
+        "chr15:82426235-82436019",
+        "chr15:82517265-82526036",
+        "chr15:84233448-84242199",
+        "chr15:84244329-84270025",
+        "chr15:84348019-84356263"
+      ]
+    },
+    {
+      "start": 25460572,
+      "end": 25464005,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 17,
+      "partners": [
+        "chr15:75821687-75822909",
+        "chr15:77907211-77909532",
+        "chr15:82441547-82476816",
+        "chr15:82473990-82478250",
+        "chr15:84168941-84204207",
+        "chr15:84201385-84205646",
+        "chr15:84247863-84256618",
+        "chr15:84358393-84398144"
+      ]
+    },
+    {
+      "start": 25473680,
+      "end": 25478268,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 11,
+      "partners": [
+        "chr15:75680616-75695830",
+        "chr15:82441547-82476816",
+        "chr15:84168941-84204207",
+        "chr15:84247863-84256618",
+        "chr15:84361931-84370671",
+        "chr15:84383590-84425946",
+        "chr15:84469356-84504623",
+        "chr15:84561423-84572504"
+      ]
+    },
+    {
+      "start": 25487662,
+      "end": 25492929,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 17,
+      "partners": [
+        "chr15:82336694-82351763",
+        "chr15:82400777-82443857",
+        "chr15:82441547-82476816",
+        "chr15:82517265-82532939",
+        "chr15:84165407-84171176",
+        "chr15:84168941-84204207",
+        "chr15:84233448-84248188",
+        "chr15:84348019-84362256"
+      ]
+    },
+    {
+      "start": 25501958,
+      "end": 25512300,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 19,
+      "partners": [
+        "chr15:28718987-28723176",
+        "chr15:30420825-30425018",
+        "chr15:30541219-30545412",
+        "chr15:32462209-32466398",
+        "chr15:32582682-32586870",
+        "chr15:34390505-34392395",
+        "chr15:34536726-34538616",
+        "chr15:82336694-82351763"
+      ]
+    },
+    {
+      "start": 25532760,
+      "end": 25564121,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.9633,
+      "pairs": 15,
+      "partners": [
+        "chrY:17842271-17852564",
+        "chrY:17844735-17852564",
+        "chrY:17934966-17945254",
+        "chrY:17951308-17968104",
+        "chrY:17960723-17971011",
+        "chrY:18053446-18061275",
+        "chrY:18053446-18063739",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25566033,
+      "end": 25579789,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17951308-17968104",
+        "chrY:17971049-17999998",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25588444,
+      "end": 25590322,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17971049-17999998",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25592345,
+      "end": 25618643,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:17971049-17999998",
+        "chrY:18004938-18091362",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25620253,
+      "end": 25622116,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:18004938-18091362",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25624902,
+      "end": 25662899,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 7,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:18004938-18091362",
+        "chrY:23358995-24124586",
+        "chrY:24115739-24127375",
+        "chrY:24129816-24137382",
+        "chrY:25532756-25544392",
+        "chrY:25546835-25554401"
+      ]
+    },
+    {
+      "start": 25663226,
+      "end": 25675059,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:17814647-17934928",
+        "chrY:18004938-18091362",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25697346,
+      "end": 25699450,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25702562,
+      "end": 25709907,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25713557,
+      "end": 25723015,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25724186,
+      "end": 25728489,
+      "class": "interspersed_repeat_LINE",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25735160,
+      "end": 25748595,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25750206,
+      "end": 25752387,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25752870,
+      "end": 25813012,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25814566,
+      "end": 25860942,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25861268,
+      "end": 25871930,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25898653,
+      "end": 25904517,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25907250,
+      "end": 25918322,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25918895,
+      "end": 25923387,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25929826,
+      "end": 25933832,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25935881,
+      "end": 25943267,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25954152,
+      "end": 25991240,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25991572,
+      "end": 25994683,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 25995697,
+      "end": 26002253,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 26008856,
+      "end": 26011434,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 26012237,
+      "end": 26047680,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chrY:21924887-22093095",
+        "chrY:22493309-22722163",
+        "chrY:23358995-24124586"
+      ]
+    },
+    {
+      "start": 26354418,
+      "end": 26360988,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 1.0,
+      "pairs": 1,
+      "partners": [
+        "chr1:202405753-202432108"
+      ]
+    },
+    {
+      "start": 26361092,
+      "end": 26400610,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 3,
+      "partners": [
+        "chr1:202368479-202402712",
+        "chr1:202402711-202405754",
+        "chr1:202405753-202432108"
+      ]
+    },
+    {
+      "start": 26401230,
+      "end": 26409157,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.9951,
+      "pairs": 42,
+      "partners": [
+        "chr10:38734500-38740106",
+        "chr10:42232660-42238270",
+        "chr14_KI270725v1_random:23371-29570",
+        "chr15:20141861-20147979",
+        "chr15:20299167-20304805",
+        "chr15:21148401-21154518",
+        "chr16:32300776-32306372",
+        "chr16:32339152-32344732"
+      ]
+    },
+    {
+      "start": 26579690,
+      "end": 26586641,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 6,
+      "partners": [
+        "chr13:19371709-19478374",
+        "chr13:24579567-24604465",
+        "chr13:24935285-24975050",
+        "chr13:40807984-40810159",
+        "chr21:10544671-10616660",
+        "chr22:16639065-16666505"
+      ]
+    },
+    {
+      "start": 26591601,
+      "end": 26594850,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 4,
+      "partners": [
+        "chr13:19371709-19478374",
+        "chr13:24418836-24451006",
+        "chr13:24935285-24975050",
+        "chr22:16639065-16666505"
+      ]
+    },
+    {
+      "start": 26634652,
+      "end": 56855243,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.0043,
+      "pairs": 44,
+      "partners": [
+        "chr13:19371709-19478374",
+        "chr13:24467626-24473378",
+        "chr14_GL000225v1_random:144683-176104",
+        "chr16:33746557-33750809",
+        "chr16_KI270728v1_random:1365338-1367511",
+        "chr16_KI270728v1_random:1592823-1597051",
+        "chr21:5697989-5700302",
+        "chr21:7130142-7132455"
+      ]
+    },
+    {
+      "start": 56855488,
+      "end": 56881848,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 1.0,
+      "pairs": 18,
+      "partners": [
+        "chr10:124988340-124989691",
+        "chr10:125897863-125928375",
+        "chr13:18316882-18322047",
+        "chr14_GL000225v1_random:144683-176104",
+        "chr1:143489364-143493443",
+        "chr1:144315013-144319093",
+        "chr1:144647288-144651368",
+        "chr21:5697989-5700302"
+      ]
+    },
+    {
+      "start": 56882115,
+      "end": 56919421,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.1342,
+      "pairs": 4,
+      "partners": [
+        "chr10:125897863-125928375",
+        "chr14_GL000225v1_random:144683-176104",
+        "chr22:10743395-10749238",
+        "chrUn_GL000216v2:100457-136484"
+      ]
+    },
+    {
+      "start": 56954169,
+      "end": 57015104,
+      "class": "interspersed_repeat_LINE",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 57016096,
+      "end": 57062155,
+      "class": "interspersed_repeat_LINE",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 57062405,
+      "end": 57067746,
+      "class": "unclassified",
+      "tier": "constrained_unknown",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 57130289,
+      "end": 57138637,
+      "class": "unclassified",
+      "tier": "neutral",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 57145842,
+      "end": 57165511,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 57165845,
+      "end": 57171889,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 57172769,
+      "end": 57184170,
+      "class": "interspersed_repeat_LTR",
+      "tier": "fossil",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    },
+    {
+      "start": 57215634,
+      "end": 57227415,
+      "class": "gap",
+      "tier": "structural",
+      "duplicated_fraction": 0.0,
+      "pairs": 0,
+      "partners": []
+    }
+  ],
+  "by_tier": {
+    "structural": {
+      "blocks": 19,
+      "bp": 31558013,
+      "duplicated_bp": 333968,
+      "blocks_mostly_duplicated": 3,
+      "duplicated_fraction": 0.0106
+    },
+    "fossil": {
+      "blocks": 217,
+      "bp": 12565564,
+      "duplicated_bp": 5970591,
+      "blocks_mostly_duplicated": 141,
+      "duplicated_fraction": 0.4752
+    },
+    "regulatory": {
+      "blocks": 20,
+      "bp": 641418,
+      "duplicated_bp": 95490,
+      "blocks_mostly_duplicated": 7,
+      "duplicated_fraction": 0.1489
+    },
+    "neutral": {
+      "blocks": 89,
+      "bp": 1667092,
+      "duplicated_bp": 1146755,
+      "blocks_mostly_duplicated": 70,
+      "duplicated_fraction": 0.6879
+    },
+    "constrained_unknown": {
+      "blocks": 30,
+      "bp": 301071,
+      "duplicated_bp": 215750,
+      "blocks_mostly_duplicated": 26,
+      "duplicated_fraction": 0.7166
+    }
+  },
+  "similar_to_pairs": {
+    "pairs": 0,
+    "supported_by_curated_duplication": 0,
+    "share": null
+  },
+  "elements": {
+    "scored": 200,
+    "inside_a_duplication": 22,
+    "share": 0.11,
+    "ids": [
+      "EH38E3951244",
+      "EH38E2774910",
+      "EH38E3950515",
+      "EH38E2775393",
+      "EH38E3950519",
+      "EH38E3950520",
+      "EH38E2775396",
+      "EH38E2775400",
+      "EH38E3950525",
+      "EH38E3950528",
+      "EH38E3950529",
+      "EH38E2775413",
+      "EH38E2775415",
+      "EH38E2775417",
+      "EH38E3950800",
+      "EH38E3951222",
+      "EH38E2776410",
+      "EH38E3951233",
+      "EH38E3951235",
+      "EH38E3951240",
+      "EH38E3951242",
+      "EH38E3951243"
+    ]
+  },
+  "chrom": "chrY",
+  "rows_file": "data/results/superdups_chrY.bed.gz",
+  "row_fields": [
+    "start",
+    "end",
+    "other_chrom",
+    "other_start",
+    "other_end",
+    "frac_match",
+    "strand"
+  ],
+  "bands_definition": {
+    "young": ">= 0.98",
+    "middle": "0.95 to 0.98",
+    "old": "< 0.95"
+  },
+  "evidence": {
+    "pairs": "curated: UCSC hg38 genomicSuperDups (segmental duplications >= 1 kb, >= 90% identity)",
+    "blocks": "inferred: a block's duplicated fraction from the curated pairs; what the copy does is not said"
+  },
+  "cost": {
+    "seconds": 1.5
+  }
+}

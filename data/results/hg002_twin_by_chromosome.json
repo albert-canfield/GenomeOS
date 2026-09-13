@@ -1,0 +1,502 @@
+{
+ "result": "hg002_twin_by_chromosome",
+ "date": "2026-09-11",
+ "sample": "HG002",
+ "chromosomes": {
+  "chr1": {
+   "variants": 319349,
+   "snv": 271525,
+   "phased": 0,
+   "hap1": {
+    "applied": 130067,
+    "snv": 108098,
+    "indel": 21969,
+    "skipped_overlap": 5,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -12340
+   },
+   "hap2": {
+    "applied": 318656,
+    "snv": 271008,
+    "indel": 47648,
+    "skipped_overlap": 21,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 2235
+   },
+   "seconds": 3
+  },
+  "chr2": {
+   "variants": 327461,
+   "snv": 279319,
+   "phased": 0,
+   "hap1": {
+    "applied": 138447,
+    "snv": 115719,
+    "indel": 22728,
+    "skipped_overlap": 2,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -10893
+   },
+   "hap2": {
+    "applied": 326737,
+    "snv": 278775,
+    "indel": 47962,
+    "skipped_overlap": 23,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 2442
+   },
+   "seconds": 3
+  },
+  "chr3": {
+   "variants": 285177,
+   "snv": 243635,
+   "phased": 0,
+   "hap1": {
+    "applied": 111955,
+    "snv": 93784,
+    "indel": 18171,
+    "skipped_overlap": 1,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -9434
+   },
+   "hap2": {
+    "applied": 284576,
+    "snv": 243160,
+    "indel": 41416,
+    "skipped_overlap": 11,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 3382
+   },
+   "seconds": 2
+  },
+  "chr4": {
+   "variants": 304062,
+   "snv": 261446,
+   "phased": 0,
+   "hap1": {
+    "applied": 126408,
+    "snv": 107148,
+    "indel": 19260,
+    "skipped_overlap": 0,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -8722
+   },
+   "hap2": {
+    "applied": 303392,
+    "snv": 260912,
+    "indel": 42480,
+    "skipped_overlap": 16,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 2564
+   },
+   "seconds": 2
+  },
+  "chr5": {
+   "variants": 261422,
+   "snv": 223580,
+   "phased": 0,
+   "hap1": {
+    "applied": 94094,
+    "snv": 78703,
+    "indel": 15391,
+    "skipped_overlap": 3,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -7343
+   },
+   "hap2": {
+    "applied": 260797,
+    "snv": 223103,
+    "indel": 37694,
+    "skipped_overlap": 23,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 3999
+   },
+   "seconds": 2
+  },
+  "chr6": {
+   "variants": 268327,
+   "snv": 229307,
+   "phased": 0,
+   "hap1": {
+    "applied": 111269,
+    "snv": 93695,
+    "indel": 17574,
+    "skipped_overlap": 136,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -13319
+   },
+   "hap2": {
+    "applied": 260898,
+    "snv": 222981,
+    "indel": 37917,
+    "skipped_overlap": 396,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -4540
+   },
+   "seconds": 2
+  },
+  "chr7": {
+   "variants": 231884,
+   "snv": 198160,
+   "phased": 0,
+   "hap1": {
+    "applied": 86466,
+    "snv": 71990,
+    "indel": 14476,
+    "skipped_overlap": 3,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -7928
+   },
+   "hap2": {
+    "applied": 231357,
+    "snv": 197755,
+    "indel": 33602,
+    "skipped_overlap": 14,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 1468
+   },
+   "seconds": 2
+  },
+  "chr8": {
+   "variants": 222780,
+   "snv": 192427,
+   "phased": 0,
+   "hap1": {
+    "applied": 83565,
+    "snv": 70869,
+    "indel": 12696,
+    "skipped_overlap": 0,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -6700
+   },
+   "hap2": {
+    "applied": 222272,
+    "snv": 192029,
+    "indel": 30243,
+    "skipped_overlap": 18,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 1505
+   },
+   "seconds": 2
+  },
+  "chr9": {
+   "variants": 174154,
+   "snv": 150413,
+   "phased": 0,
+   "hap1": {
+    "applied": 66570,
+    "snv": 56404,
+    "indel": 10166,
+    "skipped_overlap": 1,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -4773
+   },
+   "hap2": {
+    "applied": 173725,
+    "snv": 150070,
+    "indel": 23655,
+    "skipped_overlap": 11,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 3563
+   },
+   "seconds": 1
+  },
+  "chr10": {
+   "variants": 210970,
+   "snv": 180596,
+   "phased": 0,
+   "hap1": {
+    "applied": 85873,
+    "snv": 71902,
+    "indel": 13971,
+    "skipped_overlap": 1,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -6496
+   },
+   "hap2": {
+    "applied": 210443,
+    "snv": 180189,
+    "indel": 30254,
+    "skipped_overlap": 16,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 3031
+   },
+   "seconds": 2
+  },
+  "chr11": {
+   "variants": 204572,
+   "snv": 176153,
+   "phased": 0,
+   "hap1": {
+    "applied": 90138,
+    "snv": 76202,
+    "indel": 13936,
+    "skipped_overlap": 1,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -6725
+   },
+   "hap2": {
+    "applied": 204101,
+    "snv": 175790,
+    "indel": 28311,
+    "skipped_overlap": 11,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 351
+   },
+   "seconds": 1
+  },
+  "chr12": {
+   "variants": 195313,
+   "snv": 165862,
+   "phased": 0,
+   "hap1": {
+    "applied": 75961,
+    "snv": 63098,
+    "indel": 12863,
+    "skipped_overlap": 2,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -7713
+   },
+   "hap2": {
+    "applied": 194832,
+    "snv": 165499,
+    "indel": 29333,
+    "skipped_overlap": 14,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 1749
+   },
+   "seconds": 1
+  },
+  "chr13": {
+   "variants": 159541,
+   "snv": 136460,
+   "phased": 0,
+   "hap1": {
+    "applied": 68901,
+    "snv": 57842,
+    "indel": 11059,
+    "skipped_overlap": 3,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -4510
+   },
+   "hap2": {
+    "applied": 159161,
+    "snv": 136163,
+    "indel": 22998,
+    "skipped_overlap": 14,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 2493
+   },
+   "seconds": 1
+  },
+  "chr14": {
+   "variants": 131548,
+   "snv": 112053,
+   "phased": 0,
+   "hap1": {
+    "applied": 50656,
+    "snv": 42290,
+    "indel": 8366,
+    "skipped_overlap": 0,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -4438
+   },
+   "hap2": {
+    "applied": 131203,
+    "snv": 111798,
+    "indel": 19405,
+    "skipped_overlap": 16,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 1796
+   },
+   "seconds": 1
+  },
+  "chr15": {
+   "variants": 123705,
+   "snv": 105850,
+   "phased": 0,
+   "hap1": {
+    "applied": 51692,
+    "snv": 43336,
+    "indel": 8356,
+    "skipped_overlap": 3,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -4138
+   },
+   "hap2": {
+    "applied": 123437,
+    "snv": 105648,
+    "indel": 17789,
+    "skipped_overlap": 12,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 614
+   },
+   "seconds": 1
+  },
+  "chr16": {
+   "variants": 122021,
+   "snv": 105383,
+   "phased": 0,
+   "hap1": {
+    "applied": 48301,
+    "snv": 41141,
+    "indel": 7160,
+    "skipped_overlap": 0,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -3771
+   },
+   "hap2": {
+    "applied": 121737,
+    "snv": 105167,
+    "indel": 16570,
+    "skipped_overlap": 15,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 2052
+   },
+   "seconds": 1
+  },
+  "chr17": {
+   "variants": 106992,
+   "snv": 89581,
+   "phased": 0,
+   "hap1": {
+    "applied": 42797,
+    "snv": 34973,
+    "indel": 7824,
+    "skipped_overlap": 0,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -3785
+   },
+   "hap2": {
+    "applied": 106744,
+    "snv": 89391,
+    "indel": 17353,
+    "skipped_overlap": 11,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 1756
+   },
+   "seconds": 1
+  },
+  "chr18": {
+   "variants": 117972,
+   "snv": 100881,
+   "phased": 0,
+   "hap1": {
+    "applied": 51206,
+    "snv": 43031,
+    "indel": 8175,
+    "skipped_overlap": 1,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -4203
+   },
+   "hap2": {
+    "applied": 117691,
+    "snv": 100656,
+    "indel": 17035,
+    "skipped_overlap": 11,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 864
+   },
+   "seconds": 1
+  },
+  "chr19": {
+   "variants": 89647,
+   "snv": 75016,
+   "phased": 0,
+   "hap1": {
+    "applied": 30951,
+    "snv": 25314,
+    "indel": 5637,
+    "skipped_overlap": 0,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -3031
+   },
+   "hap2": {
+    "applied": 89444,
+    "snv": 74858,
+    "indel": 14586,
+    "skipped_overlap": 7,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 2032
+   },
+   "seconds": 1
+  },
+  "chr20": {
+   "variants": 85951,
+   "snv": 73340,
+   "phased": 0,
+   "hap1": {
+    "applied": 32689,
+    "snv": 27177,
+    "indel": 5512,
+    "skipped_overlap": 0,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -2464
+   },
+   "hap2": {
+    "applied": 85757,
+    "snv": 73196,
+    "indel": 12561,
+    "skipped_overlap": 8,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 1076
+   },
+   "seconds": 1
+  },
+  "chr21": {
+   "variants": 55210,
+   "snv": 46454,
+   "phased": 0,
+   "hap1": {
+    "applied": 23850,
+    "snv": 19321,
+    "indel": 4529,
+    "skipped_overlap": 1,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -1791
+   },
+   "hap2": {
+    "applied": 55086,
+    "snv": 46356,
+    "indel": 8730,
+    "skipped_overlap": 4,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 607
+   },
+   "seconds": 0
+  },
+  "chr22": {
+   "variants": 50284,
+   "snv": 42810,
+   "phased": 0,
+   "hap1": {
+    "applied": 18035,
+    "snv": 14913,
+    "indel": 3122,
+    "skipped_overlap": 0,
+    "skipped_ref_mismatch": 0,
+    "length_delta": -1142
+   },
+   "hap2": {
+    "applied": 50162,
+    "snv": 42717,
+    "indel": 7445,
+    "skipped_overlap": 5,
+    "skipped_ref_mismatch": 0,
+    "length_delta": 1370
+   },
+   "seconds": 0
+  }
+ },
+ "totals": {
+  "chromosomes": 22,
+  "variants": 4048342,
+  "snv": 3460251,
+  "reference_mismatches": 0,
+  "evidence": "measured: GIAB HG002 v4.2.1 benchmark applied to hg38; haplotype FASTA not kept",
+  "seconds": 31,
+  "skipped_overlaps": 840,
+  "applied_hap1": 1619891,
+  "applied_hap2": 4032208
+ }
+}

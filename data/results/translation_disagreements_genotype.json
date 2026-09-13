@@ -1,0 +1,4073 @@
+{
+  "result": "translation_disagreements_genotype",
+  "date": "2026-09-11",
+  "individuals": [
+    "HG002",
+    "HG003",
+    "HG004"
+  ],
+  "genes": 93,
+  "verdicts": {
+    "HG002": {
+      "no variant of this person inside the CDS": 40,
+      "this person's variants leave the disagreement as it is": 52,
+      "only indels inside the CDS (not applied): a frame change is possible": 1
+    },
+    "HG003": {
+      "no variant of this person inside the CDS": 46,
+      "this person's variants leave the disagreement as it is": 46,
+      "only indels inside the CDS (not applied): a frame change is possible": 1
+    },
+    "HG004": {
+      "no variant of this person inside the CDS": 38,
+      "this person's variants leave the disagreement as it is": 54,
+      "only indels inside the CDS (not applied): a frame change is possible": 1
+    }
+  },
+  "rows": [
+    {
+      "gene": "OR2T7",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0162,
+      "identity_with_alleles": 0.0162,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR2T7",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0162,
+      "identity_with_alleles": 0.0162,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR2T7",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0162,
+      "identity_with_alleles": 0.0162,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "VN1R5",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.1261,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "247256207T>C(1/1)",
+        "247256362C>T(1/1)",
+        "247257119C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "VN1R5",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.1261,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "247256207T>C(1/1)",
+        "247256362C>T(1/1)",
+        "247257119C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "VN1R5",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.1261,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "247256207T>C(0/1)",
+        "247256362C>T(0/1)",
+        "247257119C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FCGR2C",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.1734,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "161589597T>C(1/1)",
+        "161589617A>G(1/1)",
+        "161589676C>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FCGR2C",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.1734,
+      "identity_with_alleles": 0.1734,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "FCGR2C",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.1734,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "161581455C>T(0/1)",
+        "161589597T>C(0/1)",
+        "161589617A>G(0/1)",
+        "161589676C>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "AKR7L",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.3172,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "19268643C>T(0/1)",
+        "19269630C>T(0/1)",
+        "19269662G>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "AKR7L",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.3172,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "19268643C>T(1/1)",
+        "19269630C>T(1/1)",
+        "19269662G>T(1/1)",
+        "19273912C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "AKR7L",
+      "chrom": "chr1",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.3172,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "19268643C>T(0/1)",
+        "19269630C>T(0/1)",
+        "19269662G>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUC1",
+      "chrom": "chr1",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.1625,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "155192276C>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUC1",
+      "chrom": "chr1",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.1625,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "155192276C>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUC1",
+      "chrom": "chr1",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.1625,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "155192276C>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "DRC8",
+      "chrom": "chr1",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0409,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "245082100C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "DRC8",
+      "chrom": "chr1",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0409,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "245082100C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "DRC8",
+      "chrom": "chr1",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0409,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "245082100C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR10J4",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.6399,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "159432905A>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR10J4",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.6399,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "159432905A>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR10J4",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.6399,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "159432905A>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR9H1",
+      "chrom": "chr1",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.75,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "247775446T>C(1/1)",
+        "247775603C>T(1/1)",
+        "247775606T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR9H1",
+      "chrom": "chr1",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.75,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "247775446T>C(1/1)",
+        "247775603C>T(0/1)",
+        "247775606T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR9H1",
+      "chrom": "chr1",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.75,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "247775446T>C(1/1)",
+        "247775603C>T(1/1)",
+        "247775606T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PLA2G2F",
+      "chrom": "chr1",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0379,
+      "identity_with_alleles": 0.0379,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PLA2G2F",
+      "chrom": "chr1",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0379,
+      "identity_with_alleles": 0.0379,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PLA2G2F",
+      "chrom": "chr1",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0379,
+      "identity_with_alleles": 0.0379,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "GPATCH4",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.8004,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "156595130C>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "GPATCH4",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.8004,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "156595130C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "GPATCH4",
+      "chrom": "chr1",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.8004,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "156595130C>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "C10orf95",
+      "chrom": "chr10",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0856,
+      "identity_with_alleles": 0.0856,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "C10orf95",
+      "chrom": "chr10",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0856,
+      "identity_with_alleles": 0.0856,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "C10orf95",
+      "chrom": "chr10",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0856,
+      "identity_with_alleles": 0.0856,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "AGAP9",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.0413,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "47502991C>T(0/1)",
+        "47503470G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "AGAP9",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0413,
+      "identity_with_alleles": 0.0413,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "AGAP9",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.0413,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "47502991C>T(0/1)",
+        "47503470G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PNLIPRP2",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.7591,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "116627771A>G(1/1)",
+        "116638373A>G(0/1)",
+        "116638383A>G(0/1)",
+        "116638460A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PNLIPRP2",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.7591,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "116627771A>G(0/1)",
+        "116638373A>G(0/1)",
+        "116638383A>G(0/1)",
+        "116638460A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PNLIPRP2",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.7591,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "116627771A>G(0/1)",
+        "116638373A>G(1/1)",
+        "116638383A>G(1/1)",
+        "116638460A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PANK1",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0401,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "89584412G>A(0/1)",
+        "89593209G>A(0/1)",
+        "89644691C>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PANK1",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0401,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "89584412G>A(0/1)",
+        "89593209G>A(0/1)",
+        "89644691C>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PANK1",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0401,
+      "identity_with_alleles": 0.0401,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "DUSP13B",
+      "chrom": "chr10",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.0389,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "75094806C>T(0/1)",
+        "75095654G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "DUSP13B",
+      "chrom": "chr10",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.0389,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "75094806C>T(0/1)",
+        "75095654G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "DUSP13B",
+      "chrom": "chr10",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.0389,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "75094806C>T(1/1)",
+        "75095654G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PTCHD3",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 13,
+      "cds_indels": 0,
+      "identity_reference": 0.804,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "27397989A>G(0/1)",
+        "27398088A>G(0/1)",
+        "27398102A>G(0/1)",
+        "27398296A>G(0/1)",
+        "27398846T>C(1/1)",
+        "27399036A>G(0/1)",
+        "27399065A>G(0/1)",
+        "27399180T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PTCHD3",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 12,
+      "cds_indels": 1,
+      "identity_reference": 0.804,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "27397989A>G(0/1)",
+        "27398013A>G(0/1)",
+        "27398102A>G(0/1)",
+        "27398296A>G(0/1)",
+        "27398846T>C(1/1)",
+        "27399036A>G(0/1)",
+        "27399065A>G(0/1)",
+        "27399180T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PTCHD3",
+      "chrom": "chr10",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 12,
+      "cds_indels": 1,
+      "identity_reference": 0.804,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "27397989A>G(1/1)",
+        "27398013A>G(0/1)",
+        "27398088A>G(0/1)",
+        "27398102A>G(1/1)",
+        "27398296A>G(1/1)",
+        "27398846T>C(1/1)",
+        "27399036A>G(1/1)",
+        "27399065A>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR52P1",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 4,
+      "cds_indels": 2,
+      "identity_reference": 0.0498,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "5726514C>A(1/1)",
+        "5726992T>C(1/1)",
+        "5727124C>T(1/1)",
+        "5727166T>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR52P1",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 5,
+      "cds_indels": 2,
+      "identity_reference": 0.0498,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "5726514C>A(0/1)",
+        "5726716G>A(0/1)",
+        "5726992T>C(0/1)",
+        "5727124C>T(0/1)",
+        "5727166T>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR52P1",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 8,
+      "cds_indels": 2,
+      "identity_reference": 0.0498,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "5726514C>A(0/1)",
+        "5726808G>T(0/1)",
+        "5726992T>C(0/1)",
+        "5727124C>T(1/1)",
+        "5727166T>G(0/1)",
+        "5727402C>A(0/1)",
+        "5727412T>G(0/1)",
+        "5727439A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR4C45",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.1928,
+      "identity_with_alleles": 0.1928,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR4C45",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.1928,
+      "identity_with_alleles": 0.1928,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR4C45",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.1928,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "50033053G>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR8J2",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.2,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56211480G>A(0/1)",
+        "56211790C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR8J2",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.2,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56211480G>A(0/1)",
+        "56211790C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR8J2",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.2,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56211480G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUC2",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 14,
+      "cds_indels": 0,
+      "identity_reference": 0.2632,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "1075747C>T(1/1)",
+        "1082395G>A(0/1)",
+        "1082958G>A(0/1)",
+        "1083078T>C(0/1)",
+        "1083116G>C(0/1)",
+        "1083145C>T(0/1)",
+        "1083761C>G(0/1)",
+        "1084609G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUC2",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 5,
+      "cds_indels": 0,
+      "identity_reference": 0.2632,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "1075747C>T(1/1)",
+        "1083761C>G(0/1)",
+        "1084609G>A(0/1)",
+        "1085297C>T(1/1)",
+        "1090036T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUC2",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 14,
+      "cds_indels": 0,
+      "identity_reference": 0.2632,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "1075747C>T(1/1)",
+        "1082395G>A(0/1)",
+        "1082958G>A(0/1)",
+        "1083078T>C(1/1)",
+        "1083116G>C(0/1)",
+        "1083145C>T(0/1)",
+        "1083761C>G(0/1)",
+        "1084609G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "CASP12",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.3636,
+      "identity_with_alleles": 0.3636,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CASP12",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.3636,
+      "identity_with_alleles": 0.3636,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CASP12",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.3636,
+      "identity_with_alleles": 0.3636,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR5G3",
+      "chrom": "chr11",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 2,
+      "cds_indels": 2,
+      "identity_reference": 0.3662,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56819894T>C(0/1)",
+        "56820499C>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5G3",
+      "chrom": "chr11",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 2,
+      "identity_reference": 0.3662,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56819894T>C(0/1)",
+        "56820499C>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5G3",
+      "chrom": "chr11",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 2,
+      "identity_reference": 0.3662,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56820499C>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR4A8",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.4286,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "54683188G>A(0/1)",
+        "54683428C>A(1/1)",
+        "54683770T>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR4A8",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.4286,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "54683188G>A(0/1)",
+        "54683428C>A(1/1)",
+        "54683506C>A(0/1)",
+        "54683770T>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR4A8",
+      "chrom": "chr11",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.4286,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "54683428C>A(1/1)",
+        "54683770T>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5AL1",
+      "chrom": "chr11",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.4742,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56413277A>G(1/1)",
+        "56413307G>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5AL1",
+      "chrom": "chr11",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.4742,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56413277A>G(1/1)",
+        "56413307G>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5AL1",
+      "chrom": "chr11",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.4742,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56413277A>G(0/1)",
+        "56413307G>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OOSP1",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.6467,
+      "identity_with_alleles": 0.6467,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OOSP1",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.6467,
+      "identity_with_alleles": 0.6467,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OOSP1",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.6467,
+      "identity_with_alleles": 0.6467,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRR33",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0564,
+      "identity_with_alleles": 0.0564,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRR33",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0564,
+      "identity_with_alleles": 0.0564,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRR33",
+      "chrom": "chr11",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0564,
+      "identity_with_alleles": 0.0564,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "KRTAP5-4",
+      "chrom": "chr11",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5312,
+      "identity_with_alleles": 0.5312,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "KRTAP5-4",
+      "chrom": "chr11",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5312,
+      "identity_with_alleles": 0.5312,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "KRTAP5-4",
+      "chrom": "chr11",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5312,
+      "identity_with_alleles": 0.5312,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "C12orf76",
+      "chrom": "chr12",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.037,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "110048467T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "C12orf76",
+      "chrom": "chr12",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.037,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "110048467T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "C12orf76",
+      "chrom": "chr12",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.037,
+      "identity_with_alleles": 0.037,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "MUC19",
+      "chrom": "chr12",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 11,
+      "cds_indels": 0,
+      "identity_reference": 0.4956,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "40427374G>A(1/1)",
+        "40428037C>T(1/1)",
+        "40433777C>T(1/1)",
+        "40464141A>C(1/1)",
+        "40475650G>T(1/1)",
+        "40501162G>T(1/1)",
+        "40524543G>A(1/1)",
+        "40525100T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUC19",
+      "chrom": "chr12",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 24,
+      "cds_indels": 0,
+      "identity_reference": 0.4956,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "40406167C>T(0/1)",
+        "40406173G>C(0/1)",
+        "40408348G>A(0/1)",
+        "40412146G>C(0/1)",
+        "40427374G>A(1/1)",
+        "40428037C>T(0/1)",
+        "40428065G>A(0/1)",
+        "40433777C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUC19",
+      "chrom": "chr12",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 23,
+      "cds_indels": 0,
+      "identity_reference": 0.4956,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "40406167C>T(0/1)",
+        "40406173G>C(0/1)",
+        "40408348G>A(0/1)",
+        "40412146G>C(0/1)",
+        "40427374G>A(1/1)",
+        "40428037C>T(0/1)",
+        "40428065G>A(0/1)",
+        "40433777C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PRB1",
+      "chrom": "chr12",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.3291,
+      "identity_with_alleles": 0.3291,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRB1",
+      "chrom": "chr12",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.3291,
+      "identity_with_alleles": 0.3291,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRB1",
+      "chrom": "chr12",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.3291,
+      "identity_with_alleles": 0.3291,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRB4",
+      "chrom": "chr12",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5935,
+      "identity_with_alleles": 0.5935,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRB4",
+      "chrom": "chr12",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5935,
+      "identity_with_alleles": 0.5935,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRB4",
+      "chrom": "chr12",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5935,
+      "identity_with_alleles": 0.5935,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SFTA3",
+      "chrom": "chr14",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0221,
+      "identity_with_alleles": 0.0221,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SFTA3",
+      "chrom": "chr14",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0221,
+      "identity_with_alleles": 0.0221,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SFTA3",
+      "chrom": "chr14",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0221,
+      "identity_with_alleles": 0.0221,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR4Q2",
+      "chrom": "chr14",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 1,
+      "identity_reference": 0.5669,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "20002240G>A(0/1)",
+        "20002578G>A(0/1)",
+        "20002744T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR4Q2",
+      "chrom": "chr14",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.5669,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "20002578G>A(1/1)",
+        "20002744T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR4Q2",
+      "chrom": "chr14",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.5669,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "20002240G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR4K3",
+      "chrom": "chr14",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.6571,
+      "identity_with_alleles": 0.6571,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR4K3",
+      "chrom": "chr14",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.6571,
+      "identity_with_alleles": 0.6571,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR4K3",
+      "chrom": "chr14",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.6571,
+      "identity_with_alleles": 0.6571,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR11H7",
+      "chrom": "chr14",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.7197,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "20229909G>T(1/1)",
+        "20230080T>C(1/1)",
+        "20230139T>G(1/1)",
+        "20230345G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR11H7",
+      "chrom": "chr14",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.7197,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "20229909G>T(1/1)",
+        "20230080T>C(1/1)",
+        "20230139T>G(1/1)",
+        "20230345G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR11H7",
+      "chrom": "chr14",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 6,
+      "cds_indels": 0,
+      "identity_reference": 0.7197,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "20229441T>G(0/1)",
+        "20229551G>A(0/1)",
+        "20229909G>T(0/1)",
+        "20230080T>C(0/1)",
+        "20230139T>G(0/1)",
+        "20230345G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SERPINA2",
+      "chrom": "chr14",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.7268,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "94366696T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SERPINA2",
+      "chrom": "chr14",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.7268,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "94366696T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SERPINA2",
+      "chrom": "chr14",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.7268,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "94366696T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "CALML4",
+      "chrom": "chr15",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0561,
+      "identity_with_alleles": 0.0561,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CALML4",
+      "chrom": "chr15",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0561,
+      "identity_with_alleles": 0.0561,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CALML4",
+      "chrom": "chr15",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0561,
+      "identity_with_alleles": 0.0561,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "NPIPB3",
+      "chrom": "chr16",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0371,
+      "identity_with_alleles": 0.0371,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "NPIPB3",
+      "chrom": "chr16",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0371,
+      "identity_with_alleles": 0.0371,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "NPIPB3",
+      "chrom": "chr16",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0371,
+      "identity_with_alleles": 0.0371,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "C16orf82",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0553,
+      "identity_with_alleles": 0.0553,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "C16orf82",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0553,
+      "identity_with_alleles": 0.0553,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "C16orf82",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0553,
+      "identity_with_alleles": 0.0553,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "MSLNL",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0559,
+      "identity_with_alleles": 0.0559,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "MSLNL",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0559,
+      "identity_with_alleles": 0.0559,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "MSLNL",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0559,
+      "identity_with_alleles": 0.0559,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SLC22A31",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.0773,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "89198679A>G(0/1)",
+        "89198687C>T(1/0)",
+        "89198693C>A(1/2)",
+        "89199058A>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SLC22A31",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0773,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "89198679A>G(0/1)",
+        "89198693C>T(0/1)",
+        "89199058A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SLC22A31",
+      "chrom": "chr16",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0773,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "89198687C>T(0/1)",
+        "89198693C>A(0/1)",
+        "89199058A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR1P1",
+      "chrom": "chr17",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5576,
+      "identity_with_alleles": 0.5576,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR1P1",
+      "chrom": "chr17",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5576,
+      "identity_with_alleles": 0.5576,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR1P1",
+      "chrom": "chr17",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5576,
+      "identity_with_alleles": 0.5576,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RFLNB",
+      "chrom": "chr17",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0561,
+      "identity_with_alleles": 0.0561,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RFLNB",
+      "chrom": "chr17",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0561,
+      "identity_with_alleles": 0.0561,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RFLNB",
+      "chrom": "chr17",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0561,
+      "identity_with_alleles": 0.0561,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PTGES3L",
+      "chrom": "chr17",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0542,
+      "identity_with_alleles": 0.0542,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PTGES3L",
+      "chrom": "chr17",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0542,
+      "identity_with_alleles": 0.0542,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PTGES3L",
+      "chrom": "chr17",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0542,
+      "identity_with_alleles": 0.0542,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "TGIF1",
+      "chrom": "chr18",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0549,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "3457541A>G(0/1)",
+        "3457608C>T(0/1)",
+        "3457609C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "TGIF1",
+      "chrom": "chr18",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0549,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "3457608C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "TGIF1",
+      "chrom": "chr18",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.0549,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "3457541A>G(0/1)",
+        "3457609C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FAM174C",
+      "chrom": "chr19",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 1.0,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "1277276G>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FAM174C",
+      "chrom": "chr19",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 1.0,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "1277276G>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FAM174C",
+      "chrom": "chr19",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 1.0,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "1277276G>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "IFNL4",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.1341,
+      "identity_with_alleles": 0.1341,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "IFNL4",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.1341,
+      "identity_with_alleles": 0.1341,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "IFNL4",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.1341,
+      "identity_with_alleles": 0.1341,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SIGLEC16",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 24,
+      "cds_indels": 2,
+      "identity_reference": 0.2723,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "49969964T>C(0/1)",
+        "49970022A>C(0/1)",
+        "49970165G>C(0/1)",
+        "49970169A>G(0/1)",
+        "49970176G>T(0/1)",
+        "49971292G>C(0/1)",
+        "49971293T>C(0/1)",
+        "49971296G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SIGLEC16",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 17,
+      "cds_indels": 2,
+      "identity_reference": 0.2723,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "49969964T>C(1/1)",
+        "49970022A>C(1/1)",
+        "49970165G>C(1/1)",
+        "49970169A>G(1/1)",
+        "49970176G>T(1/1)",
+        "49971292G>C(1/1)",
+        "49971293T>C(1/1)",
+        "49971296G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SIGLEC16",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 15,
+      "cds_indels": 0,
+      "identity_reference": 0.2723,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "49970191G>C(0/1)",
+        "49971857G>C(0/1)",
+        "49971858A>G(0/1)",
+        "49971877G>C(0/1)",
+        "49971902T>C(0/1)",
+        "49971917A>C(0/1)",
+        "49971992T>C(0/1)",
+        "49972010T>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "KIR2DS4",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.5296,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "54842912A>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "KIR2DS4",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5296,
+      "identity_with_alleles": 0.5296,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "KIR2DS4",
+      "chrom": "chr19",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5296,
+      "identity_with_alleles": 0.5296,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RPL36",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0743,
+      "identity_with_alleles": 0.0743,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RPL36",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0743,
+      "identity_with_alleles": 0.0743,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RPL36",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0743,
+      "identity_with_alleles": 0.0743,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CAPS",
+      "chrom": "chr19",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0473,
+      "identity_with_alleles": 0.0473,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CAPS",
+      "chrom": "chr19",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0473,
+      "identity_with_alleles": 0.0473,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CAPS",
+      "chrom": "chr19",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0473,
+      "identity_with_alleles": 0.0473,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RAVER1",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.6576,
+      "identity_with_alleles": 0.6576,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RAVER1",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.6576,
+      "identity_with_alleles": 0.6576,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RAVER1",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.6576,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "10321123G>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FCGBP",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 42,
+      "cds_indels": 9,
+      "identity_reference": 0.6636,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "39873640G>A(1/1)",
+        "39875722G>C(1/1)",
+        "39876915C>T(1/1)",
+        "39877222T>C(1/1)",
+        "39877755C>T(1/1)",
+        "39899634C>T(0/1)",
+        "39899636A>C(0/1)",
+        "39905924T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FCGBP",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 44,
+      "cds_indels": 9,
+      "identity_reference": 0.6636,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "39873640G>A(0/1)",
+        "39875722G>C(0/1)",
+        "39876804C>T(0/1)",
+        "39876915C>T(0/1)",
+        "39877222T>C(0/1)",
+        "39877755C>T(0/1)",
+        "39877858A>C(1/1)",
+        "39877859A>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FCGBP",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 16,
+      "cds_indels": 0,
+      "identity_reference": 0.6636,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "39867043T>G(0/1)",
+        "39873640G>A(0/1)",
+        "39875722G>C(1/1)",
+        "39875734G>C(0/1)",
+        "39876804C>T(0/1)",
+        "39877222T>C(1/1)",
+        "39877755C>T(1/1)",
+        "39877838G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "ZNF302",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.1904,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "34684303A>G(0/1)",
+        "34684870C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "ZNF302",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.1904,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "34684687G>A(0/1)",
+        "34684844C>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "ZNF302",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.1904,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "34684303A>G(0/1)",
+        "34684687G>A(0/1)",
+        "34684844C>G(0/1)",
+        "34684870C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SAMD1",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.2546,
+      "identity_with_alleles": 0.2546,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SAMD1",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.2546,
+      "identity_with_alleles": 0.2546,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SAMD1",
+      "chrom": "chr19",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.2546,
+      "identity_with_alleles": 0.2546,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SPATA31H1",
+      "chrom": "chr2",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 11,
+      "cds_indels": 0,
+      "identity_reference": 0.0238,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "27568688C>G(0/1)",
+        "27571054G>T(0/1)",
+        "27571283C>G(0/1)",
+        "27571366C>T(0/1)",
+        "27573292G>T(0/1)",
+        "27573659C>T(0/1)",
+        "27578536C>G(0/1)",
+        "27578551C>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SPATA31H1",
+      "chrom": "chr2",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0238,
+      "identity_with_alleles": 0.0238,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SPATA31H1",
+      "chrom": "chr2",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 15,
+      "cds_indels": 0,
+      "identity_reference": 0.0238,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "27566994T>A(0/1)",
+        "27568688C>G(0/1)",
+        "27569456A>C(0/1)",
+        "27571054G>T(0/1)",
+        "27571283C>G(1/1)",
+        "27571366C>T(1/1)",
+        "27573292G>T(0/1)",
+        "27573659C>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SCYGR10",
+      "chrom": "chr2",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.4476,
+      "identity_with_alleles": 0.4476,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SCYGR10",
+      "chrom": "chr2",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.4476,
+      "identity_with_alleles": 0.4476,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SCYGR10",
+      "chrom": "chr2",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.4476,
+      "identity_with_alleles": 0.4476,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "ASPRV1",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0408,
+      "identity_with_alleles": 0.0408,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "ASPRV1",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0408,
+      "identity_with_alleles": 0.0408,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "ASPRV1",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0408,
+      "identity_with_alleles": 0.0408,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "KCNE4",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.0679,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "223052911C>T(0/1)",
+        "223053094T>C(1/1)",
+        "223053265T>G(0/1)",
+        "223053301G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "KCNE4",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.0679,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "223052911C>T(0/1)",
+        "223053094T>C(1/1)",
+        "223053265T>G(0/1)",
+        "223053301G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "KCNE4",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0679,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "223052911C>T(0/1)",
+        "223053094T>C(1/1)",
+        "223053265T>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "RESP18",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0263,
+      "identity_with_alleles": 0.0263,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RESP18",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0263,
+      "identity_with_alleles": 0.0263,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RESP18",
+      "chrom": "chr2",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0263,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "219332599C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "WFDC6",
+      "chrom": "chr20",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5649,
+      "identity_with_alleles": 0.5649,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "WFDC6",
+      "chrom": "chr20",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5649,
+      "identity_with_alleles": 0.5649,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "WFDC6",
+      "chrom": "chr20",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.5649,
+      "identity_with_alleles": 0.5649,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "GCNT7",
+      "chrom": "chr20",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0372,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56495212A>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "GCNT7",
+      "chrom": "chr20",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0372,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56495212A>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "GCNT7",
+      "chrom": "chr20",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0372,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56495212A>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SH3BGR",
+      "chrom": "chr21",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.046,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "39499884T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SH3BGR",
+      "chrom": "chr21",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.046,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "39499884T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SH3BGR",
+      "chrom": "chr21",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.046,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "39499884T>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "CYP2D7",
+      "chrom": "chr22",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 14,
+      "cds_indels": 1,
+      "identity_reference": 0.1049,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "42140302G>A(0/1)",
+        "42140642T>C(0/1)",
+        "42141186C>T(0/1)",
+        "42141208C>T(0/1)",
+        "42141217C>T(0/1)",
+        "42141231T>C(0/1)",
+        "42141242G>A(0/1)",
+        "42141261C>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "CYP2D7",
+      "chrom": "chr22",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 8,
+      "cds_indels": 1,
+      "identity_reference": 0.1049,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "42140302G>A(1/1)",
+        "42140642T>C(1/1)",
+        "42141242G>A(1/1)",
+        "42141261C>T(1/1)",
+        "42141587G>A(1/1)",
+        "42142507A>G(1/1)",
+        "42142508G>A(1/1)",
+        "42142617G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "CYP2D7",
+      "chrom": "chr22",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 9,
+      "cds_indels": 0,
+      "identity_reference": 0.1049,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "42141186C>T(1/1)",
+        "42141208C>T(1/1)",
+        "42141217C>T(1/1)",
+        "42141231T>C(1/1)",
+        "42141261C>T(1/1)",
+        "42141587G>A(1/1)",
+        "42142019G>A(1/1)",
+        "42142488G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "FAM246C",
+      "chrom": "chr22",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 2,
+      "identity_reference": 0.4792,
+      "identity_with_alleles": 0.4792,
+      "applied": [],
+      "verdict": "only indels inside the CDS (not applied): a frame change is possible"
+    },
+    {
+      "gene": "FAM246C",
+      "chrom": "chr22",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 2,
+      "identity_reference": 0.4792,
+      "identity_with_alleles": 0.4792,
+      "applied": [],
+      "verdict": "only indels inside the CDS (not applied): a frame change is possible"
+    },
+    {
+      "gene": "FAM246C",
+      "chrom": "chr22",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 2,
+      "identity_reference": 0.4792,
+      "identity_with_alleles": 0.4792,
+      "applied": [],
+      "verdict": "only indels inside the CDS (not applied): a frame change is possible"
+    },
+    {
+      "gene": "KLHDC7B",
+      "chrom": "chr22",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0405,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "50547274A>G(0/1)",
+        "50549633G>T(0/1)",
+        "50549764A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "KLHDC7B",
+      "chrom": "chr22",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0405,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "50547274A>G(1/1)",
+        "50549633G>T(1/1)",
+        "50549764A>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "KLHDC7B",
+      "chrom": "chr22",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.0405,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "50547274A>G(0/1)",
+        "50547443G>T(0/1)",
+        "50549633G>T(0/1)",
+        "50549764A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "GSTT2",
+      "chrom": "chr22",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.791,
+      "identity_with_alleles": 0.791,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "GSTT2",
+      "chrom": "chr22",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.791,
+      "identity_with_alleles": 0.791,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "GSTT2",
+      "chrom": "chr22",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.791,
+      "identity_with_alleles": 0.791,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR5AC1",
+      "chrom": "chr3",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 5,
+      "cds_indels": 1,
+      "identity_reference": 0.2801,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "98064491T>C(1/1)",
+        "98064702A>G(0/1)",
+        "98065007T>C(0/1)",
+        "98065008G>T(0/1)",
+        "98065331C>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5AC1",
+      "chrom": "chr3",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 5,
+      "cds_indels": 1,
+      "identity_reference": 0.2801,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "98064491T>C(1/1)",
+        "98064702A>G(1/1)",
+        "98065007T>C(1/1)",
+        "98065008G>T(1/1)",
+        "98065331C>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5AC1",
+      "chrom": "chr3",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 5,
+      "cds_indels": 1,
+      "identity_reference": 0.2801,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "98064491T>C(1/1)",
+        "98064702A>G(0/1)",
+        "98065007T>C(0/1)",
+        "98065008G>T(0/1)",
+        "98065331C>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5H8",
+      "chrom": "chr3",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 7,
+      "cds_indels": 1,
+      "identity_reference": 0.75,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "98312269A>G(0/1)",
+        "98312304T>A(0/1)",
+        "98312463T>A(0/1)",
+        "98312471A>G(0/1)",
+        "98312534G>T(0/1)",
+        "98312622G>A(0/1)",
+        "98312695A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR5H8",
+      "chrom": "chr3",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.75,
+      "identity_with_alleles": 0.75,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR5H8",
+      "chrom": "chr3",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 7,
+      "cds_indels": 1,
+      "identity_reference": 0.75,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "98312269A>G(0/1)",
+        "98312304T>A(0/1)",
+        "98312463T>A(0/1)",
+        "98312471A>G(0/1)",
+        "98312534G>T(0/1)",
+        "98312622G>A(0/1)",
+        "98312695A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "CXXC4",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0463,
+      "identity_with_alleles": 0.0463,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CXXC4",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0463,
+      "identity_with_alleles": 0.0463,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CXXC4",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0463,
+      "identity_with_alleles": 0.0463,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CPEB2",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0464,
+      "identity_with_alleles": 0.0464,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CPEB2",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.0464,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "15003031G>A(0/1)",
+        "15003980G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "CPEB2",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.0464,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "15002875C>T(0/1)",
+        "15003031G>A(0/1)",
+        "15003252G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SCOC",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0189,
+      "identity_with_alleles": 0.0189,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SCOC",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0189,
+      "identity_with_alleles": 0.0189,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SCOC",
+      "chrom": "chr4",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0189,
+      "identity_with_alleles": 0.0189,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "ARL9",
+      "chrom": "chr4",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0491,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56505911G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "ARL9",
+      "chrom": "chr4",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.0491,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56505911G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "ARL9",
+      "chrom": "chr4",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0491,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "56505911G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "NPFFR2",
+      "chrom": "chr4",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0383,
+      "identity_with_alleles": 0.0383,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "NPFFR2",
+      "chrom": "chr4",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0383,
+      "identity_with_alleles": 0.0383,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "NPFFR2",
+      "chrom": "chr4",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0383,
+      "identity_with_alleles": 0.0383,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR2B8",
+      "chrom": "chr6",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 1,
+      "identity_reference": 0.0962,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "28053491C>T(0/1)",
+        "28053811G>A(0/1)",
+        "28053997T>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR2B8",
+      "chrom": "chr6",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0962,
+      "identity_with_alleles": 0.0962,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR2B8",
+      "chrom": "chr6",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 1,
+      "identity_reference": 0.0962,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "28053491C>T(1/1)",
+        "28053811G>A(1/1)",
+        "28053997T>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "EPM2A",
+      "chrom": "chr6",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG002",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.0814,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "145686196C>T(0/1)",
+        "145735340G>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "EPM2A",
+      "chrom": "chr6",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.0814,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "145686196C>T(0/1)",
+        "145735340G>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "EPM2A",
+      "chrom": "chr6",
+      "triage": "different protein (UniProt entry or gene model does not describe the same product)",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0814,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "145735340G>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUCL3",
+      "chrom": "chr6",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 4,
+      "cds_indels": 0,
+      "identity_reference": 0.2347,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "30949435T>C(1/1)",
+        "30950623A>G(1/1)",
+        "30951924T>C(1/1)",
+        "30953113G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUCL3",
+      "chrom": "chr6",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 6,
+      "cds_indels": 0,
+      "identity_reference": 0.2347,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "30949435T>C(1/1)",
+        "30950623A>G(1/0)",
+        "30951614G>A(0/1)",
+        "30951924T>C(1/0)",
+        "30952347G>A(0/1)",
+        "30953113G>A(1/0)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MUCL3",
+      "chrom": "chr6",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 7,
+      "cds_indels": 0,
+      "identity_reference": 0.2347,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "30949435T>C(1/1)",
+        "30949705C>T(1/0)",
+        "30950623A>G(0/1)",
+        "30950664A>G(1/0)",
+        "30951924T>C(0/1)",
+        "30952309C>T(1/0)",
+        "30953113G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR12D1",
+      "chrom": "chr6",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.5844,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "29417460T>C(1/1)",
+        "29417995G>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR12D1",
+      "chrom": "chr6",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 3,
+      "cds_indels": 1,
+      "identity_reference": 0.5844,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "29417460T>C(1/1)",
+        "29417611T>C(0/1)",
+        "29417995G>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR12D1",
+      "chrom": "chr6",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.5844,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "29417460T>C(1/1)",
+        "29417995G>C(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "DEFB112",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0973,
+      "identity_with_alleles": 0.0973,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "DEFB112",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0973,
+      "identity_with_alleles": 0.0973,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "DEFB112",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0973,
+      "identity_with_alleles": 0.0973,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CCDC28A",
+      "chrom": "chr6",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0474,
+      "identity_with_alleles": 0.0474,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CCDC28A",
+      "chrom": "chr6",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0474,
+      "identity_with_alleles": 0.0474,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "CCDC28A",
+      "chrom": "chr6",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0474,
+      "identity_with_alleles": 0.0474,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RSPH3",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0411,
+      "identity_with_alleles": 0.0411,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RSPH3",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0411,
+      "identity_with_alleles": 0.0411,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "RSPH3",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0411,
+      "identity_with_alleles": 0.0411,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "MICA",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 17,
+      "cds_indels": 2,
+      "identity_reference": 0.8016,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "31403653T>C(1/1)",
+        "31410581T>G(0/1)",
+        "31410610T>C(0/1)",
+        "31410648A>G(0/1)",
+        "31411200G>A(0/1)",
+        "31411332G>A(0/1)",
+        "31411338G>A(1/0)",
+        "31411996C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MICA",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 15,
+      "cds_indels": 1,
+      "identity_reference": 0.8016,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "31403653T>C(1/1)",
+        "31410581T>G(1/0)",
+        "31410610T>C(1/0)",
+        "31410648A>G(1/0)",
+        "31411200G>A(1/0)",
+        "31411332G>A(1/0)",
+        "31411996C>T(1/0)",
+        "31412017C>T(1/0)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MICA",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 18,
+      "cds_indels": 2,
+      "identity_reference": 0.8016,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "31403653T>C(1/1)",
+        "31410581T>G(1/0)",
+        "31410610T>C(1/0)",
+        "31410648A>G(1/0)",
+        "31411200G>A(1/0)",
+        "31411266A>G(1/0)",
+        "31411332G>A(1/0)",
+        "31411338G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "HLA-DQA1",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 49,
+      "cds_indels": 0,
+      "identity_reference": 0.2902,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "32637480C>A(0/1)",
+        "32637497T>C(0/1)",
+        "32637507G>A(1/0)",
+        "32637518C>T(0/1)",
+        "32637532A>G(1/0)",
+        "32641317C>T(0/1)",
+        "32641328G>A(0/1)",
+        "32641329T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "HLA-DQA1",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 48,
+      "cds_indels": 1,
+      "identity_reference": 0.2902,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "32637480C>A(1/1)",
+        "32637497T>C(1/1)",
+        "32637518C>T(1/1)",
+        "32641317C>T(1/0)",
+        "32641328G>A(1/1)",
+        "32641329T>C(1/1)",
+        "32641349T>C(1/1)",
+        "32641353C>T(1/0)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "HLA-DQA1",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 50,
+      "cds_indels": 0,
+      "identity_reference": 0.2902,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "32637480C>A(1/0)",
+        "32637497T>C(1/0)",
+        "32637507G>A(0/1)",
+        "32637518C>T(1/0)",
+        "32637532A>G(0/1)",
+        "32641317C>T(1/0)",
+        "32641328G>A(1/0)",
+        "32641329T>C(1/0)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "ZFP57",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0728,
+      "identity_with_alleles": 0.0728,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "ZFP57",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0728,
+      "identity_with_alleles": 0.0728,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "ZFP57",
+      "chrom": "chr6",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0728,
+      "identity_with_alleles": 0.0728,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR10AC1",
+      "chrom": "chr7",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 1,
+      "identity_reference": 0.2831,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "143511042C>T(0/1)",
+        "143511485G>A(0/1)",
+        "143511875A>G(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR10AC1",
+      "chrom": "chr7",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 2,
+      "cds_indels": 1,
+      "identity_reference": 0.2831,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "143511042C>T(1/1)",
+        "143511875A>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR10AC1",
+      "chrom": "chr7",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 1,
+      "identity_reference": 0.2831,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "143511042C>T(0/1)",
+        "143511121C>A(0/1)",
+        "143511485G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "NOBOX",
+      "chrom": "chr7",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.042,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "144397520G>T(0/1)",
+        "144398507A>G(0/1)",
+        "144398975C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "NOBOX",
+      "chrom": "chr7",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.042,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "144397520G>T(0/1)",
+        "144398507A>G(0/1)",
+        "144398975C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "NOBOX",
+      "chrom": "chr7",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 3,
+      "cds_indels": 0,
+      "identity_reference": 0.042,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "144397520G>T(0/1)",
+        "144398507A>G(0/1)",
+        "144398975C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "DEFB109D",
+      "chrom": "chr8",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.1494,
+      "identity_with_alleles": 0.1494,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "DEFB109D",
+      "chrom": "chr8",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.1494,
+      "identity_with_alleles": 0.1494,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "DEFB109D",
+      "chrom": "chr8",
+      "triage": "nonsense allele in hg38: translation stops before 70% of the CDS and of the curated protein",
+      "individual": "HG004",
+      "cds_snvs": 2,
+      "cds_indels": 0,
+      "identity_reference": 0.1494,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "12150901G>T(0/1)",
+        "12150968C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PINX1",
+      "chrom": "chr8",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.3273,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "10834732G>A(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PINX1",
+      "chrom": "chr8",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.3273,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "10834732G>A(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PINX1",
+      "chrom": "chr8",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.3273,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "10726106C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MROH5",
+      "chrom": "chr8",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 18,
+      "cds_indels": 0,
+      "identity_reference": 0.7011,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "141434012G>A(0/1)",
+        "141447939C>T(0/1)",
+        "141449714C>T(1/1)",
+        "141466429G>A(0/1)",
+        "141466455A>G(0/1)",
+        "141466511G>A(0/1)",
+        "141467417G>A(0/1)",
+        "141467453T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MROH5",
+      "chrom": "chr8",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 16,
+      "cds_indels": 0,
+      "identity_reference": 0.7011,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "141447939C>T(0/1)",
+        "141449714C>T(1/1)",
+        "141466429G>A(0/1)",
+        "141466455A>G(0/1)",
+        "141466511G>A(0/1)",
+        "141467417G>A(0/1)",
+        "141467453T>C(0/1)",
+        "141467463C>T(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "MROH5",
+      "chrom": "chr8",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 17,
+      "cds_indels": 0,
+      "identity_reference": 0.7011,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "141434012G>A(0/1)",
+        "141447939C>T(1/1)",
+        "141449714C>T(1/1)",
+        "141466455A>G(1/1)",
+        "141466511G>A(1/1)",
+        "141467417G>A(1/1)",
+        "141467453T>C(1/1)",
+        "141467463C>T(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR13C7",
+      "chrom": "chr9",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG002",
+      "cds_snvs": 8,
+      "cds_indels": 1,
+      "identity_reference": 0.4528,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "36002931A>G(0/1)",
+        "36002932T>C(0/1)",
+        "36003040G>A(0/1)",
+        "36003309A>T(0/1)",
+        "36003338G>A(0/1)",
+        "36003426G>A(0/1)",
+        "36003638G>T(0/1)",
+        "36003723T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "OR13C7",
+      "chrom": "chr9",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.4528,
+      "identity_with_alleles": 0.4528,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "OR13C7",
+      "chrom": "chr9",
+      "triage": "frameshift allele in hg38: the canonical CDS is not a whole number of codons (untagged)",
+      "individual": "HG004",
+      "cds_snvs": 8,
+      "cds_indels": 1,
+      "identity_reference": 0.4528,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "36002931A>G(0/1)",
+        "36002932T>C(0/1)",
+        "36003040G>A(0/1)",
+        "36003309A>T(0/1)",
+        "36003338G>A(0/1)",
+        "36003426G>A(0/1)",
+        "36003638G>T(0/1)",
+        "36003723T>C(0/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "SWI5",
+      "chrom": "chr9",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0255,
+      "identity_with_alleles": 0.0255,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SWI5",
+      "chrom": "chr9",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0255,
+      "identity_with_alleles": 0.0255,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "SWI5",
+      "chrom": "chr9",
+      "triage": "different length, partial similarity: exon boundary or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.0255,
+      "identity_with_alleles": 0.0255,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "PRSS3",
+      "chrom": "chr9",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0428,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "33798019A>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PRSS3",
+      "chrom": "chr9",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 1,
+      "cds_indels": 1,
+      "identity_reference": 0.0428,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "33798019A>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "PRSS3",
+      "chrom": "chr9",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 1,
+      "cds_indels": 0,
+      "identity_reference": 0.0428,
+      "identity_with_alleles": 0.0,
+      "applied": [
+        "33798019A>G(1/1)"
+      ],
+      "verdict": "this person's variants leave the disagreement as it is"
+    },
+    {
+      "gene": "LCN9",
+      "chrom": "chr9",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG002",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.7898,
+      "identity_with_alleles": 0.7898,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "LCN9",
+      "chrom": "chr9",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG003",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.7898,
+      "identity_with_alleles": 0.7898,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    },
+    {
+      "gene": "LCN9",
+      "chrom": "chr9",
+      "triage": "same length, different sequence: frame or isoform choice",
+      "individual": "HG004",
+      "cds_snvs": 0,
+      "cds_indels": 0,
+      "identity_reference": 0.7898,
+      "identity_with_alleles": 0.7898,
+      "applied": [],
+      "verdict": "no variant of this person inside the CDS"
+    }
+  ],
+  "seconds": 85,
+  "evidence": "measured genotypes; derived: local translation of the canonical CDS with the person's SNVs applied, against UniProt"
+}
