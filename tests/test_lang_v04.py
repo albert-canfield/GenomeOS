@@ -242,23 +242,38 @@ def _grow(src: str):
 
 
 def test_legacy_fates_let_the_last_match_win_and_say_so():
-    b = _grow(WORM)
+    b = _grow(WORM + "regime r { fates: last }\n")
     assert b.cells["A"].cell_type == "Glia"  # lookup, then factor, then the chain: every match fired
     s = b.summary()
     assert s["fates_mode"] == "last" and s["ambiguous_fates"] == 1  # two rules disagreed about A
 
 
-def test_first_fates_take_one_fate_by_precedence_and_keep_real_chains():
-    first = WORM + "regime r { fates: first }\n"
-    assert (
-        _grow(first).cells["A"].cell_type == "Neuron"
-    )  # module order: the lookup wins, the factor cannot overwrite
-    ranked = first.replace("to: Muscle }", "to: Muscle; priority: 1 }")
+def test_first_fates_are_the_default_and_take_one_fate_by_precedence():
+    b = _grow(WORM)  # no regime: first, since area E migrated (spec §10 decision 8)
+    assert b.summary()["fates_mode"] == "first"
+    assert b.cells["A"].cell_type == "Neuron"  # module order: the lookup wins, the factor cannot overwrite
+    assert b.summary()["ambiguous_fates"] == 1  # and the program is told that two rules disagreed
+    ranked = WORM.replace("to: Muscle }", "to: Muscle; priority: 1 }")
     b = _grow(ranked)
     assert b.cells["A"].cell_type == "Glia"  # the factor wins, and the chain it enables still runs
     assert b.summary()["ambiguous_fates"] == 0
 
 
-def test_priority_without_first_fates_is_refused():
+def test_priority_under_legacy_fates_is_refused():
     with pytest.raises(ValueError, match="fates: first"):
-        _grow(WORM.replace("to: Muscle }", "to: Muscle; priority: 1 }"))
+        _grow(WORM.replace("to: Muscle }", "to: Muscle; priority: 1 }") + "regime r { fates: last }\n")
+
+
+def test_population_shares_are_not_counted_as_competing_fates():
+    """Two differentiate shares of one population split it; they do not disagree about a fate."""
+    src = (
+        "module toy.shares\nimport bio.std.development\n"
+        "organism O { root: Pool; cell_type: Progenitor; resolution: populations }\n"
+        "cell_type Neuron { parent: PostMitotic }\ncell_type Glia { parent: PostMitotic }\n"
+        "stage S { from: 0 min }\n"
+        "decision to_neuron { action: differentiate; when: cell = Pool; to: Neuron; fraction: 0.3 }\n"
+        "decision to_glia { action: differentiate; when: cell = Pool; to: Glia; fraction: 0.2 }\n"
+    )
+    b = _grow(src)
+    types = {c.cell_type for c in b.cells.values()}
+    assert b.summary()["ambiguous_fates"] == 0 and {"Neuron", "Glia"} <= types

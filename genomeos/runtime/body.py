@@ -7,7 +7,7 @@ other cells change what it reads. The loop per cell:
 
     read     context = name, lineage, generation, cell type, stage, factors, environment
     decide   die | differentiate | quiesce | divide     (by `priority`, then module order; for differentiate
-             see `regime fates`: first takes one fate per decision point, last is the legacy default)
+             see `regime fates`: first (default) takes one fate per decision point, last is the legacy mode)
     wait     the matching timer (tempo-scaled, lengthening per generation)
     write    daughters inherit the factors; `asymmetric` keeps a factor in one daughter
 
@@ -82,6 +82,7 @@ class Body:
         knockouts: set[str] | frozenset[str] = frozenset(),
         adds: set[str] | frozenset[str] = frozenset(),
         environment: dict[str, str] | None = None,
+        fates: str | None = None,
     ):
         """`seed` overrides the organism's declared seed; `means=True` runs every timer at its mean;
         `knockouts` are factors never present and signals (by id, ligand or receptor) never sent;
@@ -146,7 +147,10 @@ class Body:
         self._divide_ids = {d.id for d in module.decisions if d.action == "divide"}
         self._expressed_names = {f for d in module.decisions if d.action == "express" for f in d.sets}
         # how a decision point takes a fate, declared in the regime (docs/BIOLANG-v0.4-ECONOMY.md §7.3)
-        self.fates = module.regime.fates if module.regime is not None else "last"
+        # `fates` overrides the program; default first since 2026-09-14 (spec §10 decision 8)
+        self.fates = fates or (module.regime.fates if module.regime is not None else "first")
+        if self.fates not in ("first", "last"):
+            raise ValueError(f"fates must be first or last, not {self.fates!r}")
         if self.fates == "last" and any(d.priority for d in module.decisions):
             raise ValueError(
                 "decision `priority` needs `regime { fates: first }`: with fates: last the final match wins"
@@ -251,8 +255,9 @@ class Body:
             if chosen is None:
                 chosen = d
                 continue
-            if d.priority == chosen.priority and d.to != chosen.to:
-                self.ambiguous[chosen.id] += 1
+            share = self.population(c) and (d.fraction < 1.0 or chosen.fraction < 1.0)
+            if not share and d.priority == chosen.priority and d.to != chosen.to:
+                self.ambiguous[chosen.id] += 1  # a population's shares are meant to split, not compete
             break
         return chosen
 

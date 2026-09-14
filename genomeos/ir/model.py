@@ -357,9 +357,7 @@ class Regime:
     threshold: float = 50.0
     units: str = "au"  # au | copies
     update: str = "continuous"
-    fates: str = (
-        "last"  # per decision point: first (one fate, by precedence) | last (legacy: last match wins)
-    )
+    fates: str = "first"  # one fate per decision point by precedence | last (legacy: last match wins)
     allocation: str = "competitive"
     seed: int | None = None
     evidence: Evidence = field(default_factory=Evidence)

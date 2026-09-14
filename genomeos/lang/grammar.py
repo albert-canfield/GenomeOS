@@ -233,7 +233,7 @@ BLOCKS: dict[str, dict] = {
             "update": ("continuous | synchronous | asynchronous | event", "recorded in every result"),
             "fates": (
                 "first | last",
-                "Body: one fate per decision point by precedence, or the last match (legacy default)",
+                "Body: one fate per decision point by precedence (default), or the last match (legacy)",
             ),
             "allocation": ("competitive | proportional | priority | optimise", "shared capacities"),
             "seed": ("integer", ""),

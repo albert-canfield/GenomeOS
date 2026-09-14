@@ -483,20 +483,41 @@ decision factor_fate_00 { action: differentiate; priority: 24; ... }
   the chain continues only through a decision the new type *enables*; a
   decision that already applied before the change is a competitor, not a
   successor, so it cannot overwrite the fate.
-- `fates: last`: the legacy behaviour, kept as the default so that no committed
-  program changes under anyone; `priority` with `fates: last` is refused.
+- `fates: last`: the legacy behaviour, kept and documented rather than removed,
+  because it is now a stated mode and not an accident; `priority` with
+  `fates: last` is refused, so the two cannot be mixed by mistake.
+- **`first` is the default since 2026-09-14** (§10 decision 8, resolved below).
+  A program that declares no regime therefore takes one fate per decision point.
+  **What an unmigrated program sees:** where two rules matched the same cell, the
+  fate is now chosen by `priority` (all zero unless the program says otherwise,
+  so by module order) rather than by which rule sat lowest in the file, and
+  `ambiguous_fates` in the run's summary says at how many decision points that
+  choice was made. A program whose rules are written bottom-to-top for the old
+  behaviour should either add priorities or declare `regime { fates: last }`.
 - Both modes report `ambiguous_fates` (decision points where equal-precedence
   rules disagreed about the target) and `revised_fates` (a terminal fate changed
   again at a later decision point, which `commitment` will refuse).
 
 Measured on area E's `embryo_factors.bio` to 800 min (1,439 cells): as
-committed, nothing changes and the runtime now reports **45 ambiguous decision
+committed then, under the legacy default, nothing changed and the runtime reported **45 ambiguous decision
 points** — exactly the cells whose fate depended on line order; under
 `fates: first` without priorities 45 cells change (40 hypodermis and 5 muscle
 become neurons); with priorities emitted by the generator (the file's last rule
 highest) **all 1,439 fates are identical, 0 ambiguous, and 620 fewer decisions
-fire** (3,707 against 4,327), because the overwritten firings are gone. The
-default flips to `first` once area E's generator emits `priority`.
+fire** (3,707 against 4,327), because the overwritten firings are gone.
+
+Area E landed that migration (`0e93b5b`): the generator writes the rules in
+natural order with the first highest (24 down to 1), so every factor rule
+outranks the lineage lookup at 0, and `embryo_factors.bio` declares
+`regime worm { fates: first }`; their run reproduces the measurement exactly
+(1,439 cells, 0 fates differing, 45 ambiguous points to 0, 4,327 firings to
+3,707, terminal score unchanged at 496 of 555 and 902 of 961 to the adult).
+The default was then flipped, and **every other committed organism program
+gives identical results under both modes**: the worm embryo, its designs and
+mutants (2,183 cells each, every knockout experiment identical), the human
+body, haematopoiesis with its designs and mutants, the lineage demo and the
+French-flag demo — 0 cells differing, 0 ambiguous points anywhere. Population
+shares are not competitors, so a split is never counted as ambiguous.
 
 ### 7.4 Contacts, neighbours and noise (Body runtime, for emergent lateral inhibition) [engine]
 
@@ -575,7 +596,7 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | 4 | partitioning division, checkpoint | dilution vs protein turnover | not started |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
 | fate | commitment, competence, integrated reads | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | specified only; the atlas test was negative |
-| fate precedence | `regime fates`, decision `priority` | area E's worm fates identical under explicit priorities | **implemented**: 1,439 of 1,439 identical, 45 ambiguous points reported |
+| fate precedence | `regime fates`, decision `priority` | area E's worm fates identical under explicit priorities | **implemented and now the default**: 1,439 of 1,439 identical, 45 ambiguous points to 0 |
 | contacts | neighbours, contact amounts, per-cell networks, seeded noise, replicate diff | Collier 1996 equivalence group splits about evenly | specified only |
 
 ### 9.1 Stage 1 as measured (2026-09-14)
@@ -648,9 +669,12 @@ it there, and for an imported protein that link is the transport at 0.3.
    required or a mouse one (Schwanhäusser et al. 2011, Nature 473:337) is acceptable.
 7. **Which homeostats first.** The proposal is Na⁺/K⁺ and pH because their
    failure modes are the best documented.
-8. **When `fates: first` becomes the default.** Proposed: as soon as area E's
-   generator emits `priority`, which was verified above to reproduce every worm
-   fate; after that, `fates: last` stays only as an explicit legacy switch.
+8. **~~When `fates: first` becomes the default.~~ Resolved 2026-09-14:** area E
+   migrated (`0e93b5b`) and the default is now `first`. The measurement behind it:
+   the worm's 1,439 fates and its terminal score are unchanged, its 45 ambiguous
+   decision points fall to 0 and 620 fewer decisions fire, and every other
+   committed organism program is identical under both modes, experiments included.
+   `fates: last` remains available as the documented legacy mode.
 9. **Commitment and competence as refusals or as rates.** As specified, a
    locked cell refuses a fate outright; the published plasticity data could
    also be read as a declining probability. The perturbation series decides.
