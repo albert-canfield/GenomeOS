@@ -1673,6 +1673,88 @@ duplicated.
 - **Chromosomes.** chr21 and chr22 have acrocentric copies that dominate their tiers; chr18 alone
   carries the tier result.
 
+## The executor test: does a block execute the value stored beside it? (2026-09-14)
+
+Albert's third functional class is a program that reads a stored value: a unit whose read-out
+changes with the value held beside it. The human panel catalogued the storage — 200-bp windows where
+the 89 assemblies carry a few recurring values — and for some of those values a read-out has been
+measured, as a GTEx eQTL or an MPRA allele pair. The test swaps the stored allele in silico and asks
+whether the model's predicted read-out of the measured gene moves in the measured direction, more
+often than the same swap at a matched unit whose value nobody has measured.
+
+Code: `attribution/executor.py`, run by `scripts/executor_test.py`. Results:
+`executor_shortlist.json` (no model call), `executor_test.json` (E1 and E2) and
+`executor_holdout.json` (E3). The criterion, the alpha spent at each look, the order of the
+requests, the stopping rule, the power and the ENCODE caveat are in `CRITERION`, written before the
+first request; three amendments and the hold-out are in `AMENDMENTS` and `HOLD_OUT`, each dated and
+each written before the numbers it governs.
+
+**The design.** 15,927 storage units on chr21 and chr22 whose recurring value is a measured variant.
+Each unit is tested at one variant, with two controls from the same chromosome within 250 kb (median
+146 kb), the same GC stratum and, where the neighbourhood allows, the same replication-timing
+tertile and number of recurring values, panel r-squared under 0.2 with the tested variant, and no
+GTEx pair and no MPRA row anywhere in the control unit. A control borrows the unit's gene, tissue or
+cell and its measured sign, so it asks how often the model's allele effect on that gene has that
+sign when the variant is not a measured regulator. Both alleles go in one request over the 1 Mb
+window, the read-out is the log2 fold change on the named gene, and a predicted effect under 0.001
+is a no-call in either arm. Three endpoints, in the order they were run: E1 MPRA allele pairs, E2
+eQTL values DAP-G fine-maps (PIP at or above 0.5), E3 the significant eQTL values DAP-G does not
+fine-map.
+
+**E1, the cleaner test, is uninformative.** 12 pairs, 2 units answered. chr21 and chr22 hold only 20
+significant MPRA allele pairs in storage units, and the criterion said in advance that at that size
+only a difference of 0.5 could be detected. Negative, and not evidence of absence.
+
+**E2 is a success by the criterion.** 161 pairs: units agree 38 of 56 (0.679), matched controls 30
+of 73 (0.411), a difference of **+0.268**, one-sided Fisher p 0.0021, the same direction on both
+chromosomes (chr21 +0.149 at p 0.34, chr22 +0.301 at p 0.0024). It is driven by chr22.
+
+**Then the hold-out, and it is what the test was for.** E2 alone cannot separate two readings: the
+value is the cause of the read-out, or the model simply agrees with GTEx in eQTL-rich
+neighbourhoods. E3's variants are significant eQTLs (median p 5e-34) that DAP-G does not fine-map:
+572 of the 770 units carry a DAP-G row at the very variant with a median posterior of 0.044, so
+these are values linked to a cause rather than the cause. Written before any E3 row was read: if a
+unit executes its value, E3's difference should be clearly smaller than E2's; if E3 matches E2, the
+difference is a property of the neighbourhood and not of causality, which would have been the more
+important result. "Clearly smaller" was given a number before the rows were read: E2's difference
+minus E3's with a one-sided 95% bound (`compare_endpoints`, `HOLD_OUT['read']`).
+
+**E3 is diluted, as the executor claim predicts.** 1,415 pairs over 770 units, 2,000 requests: units
+agree 239 of 450 (0.531), controls 351 of 749 (0.469), a difference of **+0.062**, p 0.021, upper
+95% bound 0.111; chr21 +0.054 and chr22 +0.066, the same direction but neither alone significant. By
+the criterion that is a negative endpoint — it needs 0.10 — and against E2 the gap is **+0.206 with
+a one-sided 95% lower bound of +0.058**, so the gap clears zero. At the pre-registered budget of
+1,000 pairs, read separately, the same: E3 +0.057 at p 0.066, gap +0.211, lower bound +0.059.
+
+**The reading.** The hold-out went the way the executor claim predicts and not the way that would
+have destroyed it. The agreement difference is carried by the values fine-mapping calls causal and
+falls by three quarters at values that are only linked to a cause, in the same neighbourhoods, at
+the same distances, with the same matching — which a property of eQTL-rich neighbourhoods could not
+do. That is the strongest form this claim has had, and with the deletion target work it is one of
+the two attribution claims still standing. What it is not: E3's difference is small and positive
+rather than zero, so linked values agree a little too, as linkage alone would give; the whole test
+rests on one model's predictions; and the model learned from ENCODE RNA-seq while GTEx expression is
+the same kind of measurement, so agreement with an eQTL is partly the model reading back its inputs.
+The clean way to break that objection was E1, and E1 has no power on two chromosomes.
+
+**Caveats kept with the result.**
+- **Effect sizes are tiny.** The median absolute predicted log2 fold change is 0.0012 in units and
+  0.0011 in controls, so the no-call threshold of 0.001 decides which pairs are scored at all. The
+  grid is reported with every reading: at no-call 0, E2 is +0.131 and E3 +0.039; at 0.01 both
+  collapse to a few dozen pairs (E3 +0.448 on 30 units and 7 controls).
+- **A small contamination of E3.** 22 of its 770 units do carry a DAP-G posterior above 0.5
+  somewhere, for a gene whose sign disagrees across tissues or which is not the variant's top eQTL.
+  Dropping them: +0.052 at p 0.049, the same reading.
+- **Two of the three endpoints are eQTL endpoints**, and both carry the ENCODE caveat.
+- **The counting was corrected** after E1 and E2 were scored: a unit with two controls had been
+  counted once per pair. E2's difference barely moved (+0.269 to +0.268) but its p-value fell from
+  0.00036 to 0.0021, and the live E3 run's own file was rewritten from its cache under the corrected
+  tally, which is what `executor_holdout.json` holds.
+- **Requests.** 447 for E1 and E2 (a two-request smoke test, 308 before the control amendment, 118
+  after it, 19 for the last 23 pairs) and 2,000 for E3, all through the existing adapter path with a
+  1 Mb window and both alleles in one request. The rerun that produced the committed hold-out
+  numbers spent none: every variant was already in the cache.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
