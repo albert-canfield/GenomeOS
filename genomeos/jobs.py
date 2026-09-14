@@ -440,6 +440,24 @@ def _recorded_pid(name: str) -> int | None:
     return meta.get("pid") if meta.get("finished") is None else None
 
 
+# every all-elements job spends the same AlphaGenome key, so two of them only race: a stray started
+# from the Progress tab, a supervisor tick or a hand has been killed by the chain four times in a day,
+# and each one costs the requests it spends before it dies. The registry refuses the second one instead.
+SHARED_KEY_PREFIX = "enhancer_targets_all_"
+
+
+def _key_held_by(name: str) -> str | None:
+    """Another job that holds the shared model key right now, if this job would contend for it."""
+    if not name.startswith(SHARED_KEY_PREFIX):
+        return None
+    for other in CATALOG:
+        if other == name or not other.startswith(SHARED_KEY_PREFIX):
+            continue
+        if (other in _running and _running[other].poll() is None) or _alive(_recorded_pid(other)):
+            return other
+    return None
+
+
 def start(name: str, root: Path = Path(".")) -> JobStatus:
     if name not in CATALOG:
         raise KeyError(f"unknown job {name!r}; known: {sorted(CATALOG)}")
@@ -448,6 +466,13 @@ def start(name: str, root: Path = Path(".")) -> JobStatus:
     if _alive(_recorded_pid(name)):
         # started by an earlier server process (the server restarts; the job does not): do not start a twin
         return status(name, root)
+    held = _key_held_by(name)
+    if held:
+        raise RuntimeError(
+            f"{name} shares one AlphaGenome key with {held}, which is running: "
+            "the chain (scripts/enhancer_targets_all_chain.py) sequences these one at a time, "
+            "so start them through it rather than singly"
+        )
     JOBS_DIR.mkdir(parents=True, exist_ok=True)
     log = JOBS_DIR / f"{name}.log"
     log.write_text("")

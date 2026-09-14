@@ -60,3 +60,32 @@ def test_all_elements_job_reads_its_result_not_its_process(tmp_path, monkeypatch
     part = jobs.status("enhancer_targets_all_chr15", Path(tmp_path))
     assert part.state != "done" and part.done == 3400 and part.total == 31058  # total read per call
     assert jobs.CATALOG["enhancer_targets_all_chr15"]["auto_heal"] is False  # the chain sequences these
+
+
+def test_two_all_elements_jobs_cannot_hold_the_key_at_once(tmp_path, monkeypatch):
+    """One AlphaGenome key, one scorer: the registry refuses the second rather than racing.
+
+    A stray chr1 run was started from the Progress tab (or a supervisor tick) four times in one day
+    while the chain was on another chromosome; the chain killed each one, but not before it had spent
+    requests. Refusing at the registry costs nothing and names the chain as the way to run them.
+    """
+    import json
+    import os
+
+    import pytest
+
+    from genomeos import jobs
+
+    meta = tmp_path / "data" / "jobs"
+    meta.mkdir(parents=True)
+    monkeypatch.setattr(jobs, "JOBS_DIR", meta)
+    # chr13 is scoring: its recorded pid is this test process, which is certainly alive
+    (meta / "enhancer_targets_all_chr13.json").write_text(
+        json.dumps({"pid": os.getpid(), "started": 1.0, "finished": None, "code": None})
+    )
+    assert jobs._key_held_by("enhancer_targets_all_chr1") == "enhancer_targets_all_chr13"
+    with pytest.raises(RuntimeError, match="shares one AlphaGenome key"):
+        jobs.start("enhancer_targets_all_chr1", tmp_path)
+    assert not (meta / "enhancer_targets_all_chr1.json").exists()  # nothing was started
+    # a job that does not touch the key is unaffected
+    assert jobs._key_held_by("anatomy_genome_wide") is None
