@@ -40,7 +40,7 @@ def test_adaptive_counts_equal_sequential_counting(revcomp, monkeypatch):
     s = _codes(_seq(400, seed=3, alphabet="AACGTTT"))
     k = 3
     for parts in (1 << 25, 64):  # one part, and the hash space split into many
-        monkeypatch.setattr(cz, "PART_ELEMENTS", parts)
+        monkeypatch.setattr(cz, "COUNT_GROUP", parts)
         n_ca, n_c = cz.adaptive_counts(s, k, revcomp=revcomp)
         seen: dict = {}
         n = len(s)
@@ -255,3 +255,154 @@ def test_priming_counts_the_held_sequence_before_the_first_base():
     assert primed[312:].mean() < 0.5 < plain[312:].mean()
     plan = cz.plan_stacks(["duplications"], control=True)
     assert plan["control"][1] == ("naive", "adaptive_primed", "duplications")
+
+
+def _loop_contexts(s, k):
+    return [sum(int(s[i - j]) << (2 * (j - 1)) for j in range(1, k + 1) if i - j >= 0) for i in range(len(s))]
+
+
+def test_doubling_contexts_match_a_loop_at_high_orders():
+    s = _codes(_seq(120, seed=51))
+    for k in (7, 13, 24):
+        assert cz.contexts(s, k).tolist() == _loop_contexts(s, k)
+        rc = cz.rc_contexts(s, k)
+        for j in range(len(s) - k):
+            want = sum((3 - int(s[j + m])) << (2 * (m - 1)) for m in range(1, k + 1))
+            assert int(rc[j]) == want
+
+
+def test_a_segment_reads_the_same_counts_as_the_whole(monkeypatch, tmp_path):
+    s = _codes(_seq(3000, seed=52, alphabet="AACGTT"))
+    train = _codes(_seq(2000, seed=53))
+    k, tb = 5, cz._time_bits(len(s))
+    monkeypatch.setattr(cz, "DIRECT_BITS", 0)  # the sorted path
+    whole = cz._CountSink(len(s))
+    cz.count_spans(
+        cz.Span(s, 0, len(s), "query", k), cz._static_events(train, k, None, None), 0, tb, False, whole
+    )
+    part = cz._CountSink(1000)
+    cz.count_spans(
+        cz.Span(s, 1500, 2500, "query", k), cz._static_events(train, k, None, None), 0, tb, False, part
+    )
+    assert np.array_equal(part.n_ca, whole.n_ca[1500:2500]) and np.array_equal(part.n_c, whole.n_c[1500:2500])
+    # adaptive, with the count rows waiting in temporary files and many hash groups
+    monkeypatch.setattr(cz, "SPILL_BYTES", 1)
+    monkeypatch.setattr(cz, "COUNT_GROUP", 500)
+    a_ca, a_c = cz.adaptive_counts(s, 12)
+    out = np.zeros(len(s), dtype=np.uint16)
+    cz.adaptive_model(s, 12, out=out, spill=tmp_path)
+    assert np.array_equal(out, cz._codes(a_ca, a_c, cz.alpha_for(12)))
+    assert not any(tmp_path.iterdir())  # temporaries gone
+
+
+def test_view_models_equal_the_whole_chromosome_slice():
+    whole = cz.Chromosome.from_text("t", "NN" + _seq(4000, seed=54) + "NNNN" + _seq(2000, seed=55))
+    train = cz.Chromosome.from_text("r", _seq(3000, seed=56))
+    view = whole.view(2500, 4500)
+    assert view.owns(int(whole.gpos[2500])) and not view.owns(int(whole.gpos[4500]))
+    for k in (3, 10):
+        a = cz._state_models(whole, train, "m", (None, None, None), 0, (k,))[f"m{k}"]
+        b = cz._state_models(view, train, "m", (None, None, None), 0, (k,))[f"m{k}"]
+        assert np.array_equal(a[2500:4500], b)
+    assert np.array_equal(cz._gc_with_lead(view), cz.gc_state(whole.s)[2500:4500])
+    idx, ok = view.stream_index([int(whole.gpos[2600]), 0])
+    assert ok.tolist() == [True, False] and idx[0] == 100
+
+
+def test_one_pass_mixes_every_stack_as_separate_mixtures_would():
+    rng = np.random.default_rng(3)
+    n = 3000
+    models = [cz.quantise(rng.uniform(0.2, 3.5, n)) for _ in range(5)]
+    models[3][:1200] = cz.INACTIVE
+    groups = {"a": models[:2], "b": models[2:4], "c": models[4:]}
+    stacks = {"a": ("a",), "ab": ("a", "b"), "abc": ("a", "b", "c"), "bc": ("b", "c")}
+    got = {k: np.zeros(n) for k in stacks}
+    for lo, hi, bits in cz.mix_stacks(groups, stacks, 16, 0.5, chunk=700):
+        for k in stacks:
+            got[k][lo:hi] = bits[k]
+    for k, key in stacks.items():
+        want = cz.mix([m for g in key for m in groups[g]], 16, 0.5, chunk=700)
+        assert np.allclose(got[k], want, atol=1e-4)
+
+
+def test_disk_guard_refuses_to_cross_the_floor(tmp_path):
+    guard = cz.DiskGuard(tmp_path / "not" / "yet", floor_gb=0.0)
+    free = guard.check()
+    assert free > 0 and guard.min_free_gb == free
+    with pytest.raises(cz.DiskFloorError):
+        cz.DiskGuard(tmp_path, floor_gb=free + 1e6).check()
+    with pytest.raises(cz.DiskFloorError):
+        guard.check(need_bytes=(free + 1) * 1e9)
+
+
+def _fixture(tmp_path, monkeypatch):
+    import gzip
+    import json
+
+    ref, res, cache = tmp_path / "ref", tmp_path / "res", tmp_path / "cache"
+    for d in (ref, res, cache):
+        d.mkdir()
+    alu = _seq(300, seed=60)
+    parts = []
+    for i in range(20):
+        parts.append(_seq(1500, seed=61 + i))
+        parts.append(alu)
+    text = "N" * 500 + "".join(parts)
+    (ref / "chrA.fa").write_text(">chrA\n" + text + "\n")
+    (ref / "chrB.fa").write_text(">chrB\n" + "".join(_seq(1500, seed=90 + i) + alu for i in range(12)) + "\n")
+    for name, length, step in (("chrA", len(text), 1800), ("chrB", 12 * 1800, 1800)):
+        off = 500 if name == "chrA" else 0
+        rows = [
+            f"{off + i * step + 1500}\t{off + i * step + 1800}\tSINE\tAlu\tAluY\t0.1"
+            for i in range(length // step)
+        ]
+        with gzip.open(res / f"rmsk_{name}.bed.gz", "wt") as fh:
+            fh.write("\n".join(rows) + "\n")
+        with gzip.open(res / f"ccres_{name}.bed.gz", "wt") as fh:
+            fh.write(f"{name}\t{off + 100}\t{off + 400}\tE1\tdELS\t0\n")
+        with gzip.open(cache / f"cpgIslandExt_{name}.bed.gz", "wt") as fh:
+            fh.write(f"{name}\t{off + 3000}\t{off + 3400}\n")
+        blocks = [
+            {"start": off, "end": off + 9000, "guess": {"tier": "neutral"}, "class": "unique_intergenic"},
+            {
+                "start": off + 9000,
+                "end": off + 18000,
+                "guess": {"tier": "constrained_unknown"},
+                "class": "unique_intergenic",
+            },
+            {
+                "start": off + 18000,
+                "end": off + 30000,
+                "guess": {"tier": "fossil"},
+                "class": "interspersed_repeat_SINE",
+            },
+        ]
+        (res / f"budget_{name}.json").write_text(json.dumps({"blocks": blocks}))
+        unknown = [{"start": b["start"], "end": b["end"], "class": b["class"]} for b in blocks]
+        (res / f"unknown_{name}.json").write_text(json.dumps({"blocks": unknown}))
+    monkeypatch.setattr(cz, "CACHE", cache)
+    return ref, res
+
+
+def test_the_pass_does_not_depend_on_the_segment_size(tmp_path, monkeypatch):
+    ref, res = _fixture(tmp_path, monkeypatch)
+    kw = {"results_dir": res, "reference": ref, "spill": tmp_path / "spill", "floor_gb": 0.0}
+    whole = cz.run_pass("chrA", "chrB", segment=10**9, **kw)
+    split = cz.run_pass("chrA", "chrB", segment=14_000, **kw)
+    assert split["cost"]["segments"] == 3 and whole["cost"]["segments"] == 1
+    a = {r["stack"]: r["bits_per_base"] for r in whole["stacks"]}
+    b = {r["stack"]: r["bits_per_base"] for r in split["stacks"]}
+    assert a.keys() == b.keys() == cz.all_stacks(list(cz.LAYER_ORDER)).keys()
+    for k in a:
+        assert b[k] == pytest.approx(a[k], abs=0.01)  # only the mixing windows restart at a boundary
+    assert a["naive+adaptive"] < a["naive"]  # the repeated segment is found
+    full = whole["key_stacks"]["full"]
+    tiers = {r["region"]: r for r in whole["regions"]["rows"]}
+    chrom = tiers["chromosome"]
+    assert chrom["interspersed_bits_per_base"][full] < 1.0 < chrom["unique_bits_per_base"][full]
+    assert not (tmp_path / "spill").exists() or not any((tmp_path / "spill").iterdir())
+    for x in (whole, split):
+        (res / f"compress_pass_{x['chrom']}.json").write_text(__import__("json").dumps(x))
+    genome = cz.rollup(["chrA", "chrZ"], res)
+    assert genome["chromosomes"] == ["chrA"] and genome["missing"] == ["chrZ"]
+    assert genome["regions"]["unique_bootstrap"][full]["blocks"]["neutral"] == 1

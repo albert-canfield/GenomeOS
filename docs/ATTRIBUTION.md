@@ -1614,14 +1614,49 @@ duplicated.
 - **A genome-wide run.**
   - **As run here** (47 mixtures, the table and the control): about 29 s per Mb, so 2,900 Mb of
     bases is about 23 hours on one core.
-  - **A production pass** (generic, full and leave-one-out stacks only, no table): about 8 s per
-    Mb, 6 to 7 hours.
-  - **Memory.** It grows with the chromosome (7.5 GB at 40 Mb, 10 GB at 80 Mb with the models on
-    disk), so chr1 and chr2 extrapolate past this 19 GB machine. They need the context hashing
-    chunked, or a larger machine.
+  - **Memory, as run here.** It grows with the chromosome (7.5 GB at 40 Mb, 10 GB at 80 Mb with the
+    models on disk), so chr1 and chr2 extrapolate past this 19 GB machine. That is what the reduced
+    pass below is for.
   - **Disk and network.** Model spill is 2 bytes a base a model (17 GB for chr1, deleted after).
     Reading the earlier chromosomes for partners is about 3 GB per chromosome, 70 GB of local reads
     unless cached. Network is 24 requests, about 3 MB. Summaries are about 150 KB a chromosome.
+
+**The reduced pass: the same verdicts in bounded memory** (`scripts/compress.py --pass`,
+`compress_pass_<chrom>`; the chain is `scripts/compress_genome_wide.py`).
+
+- **What it produces.** Every stack of the full run, every layer's gain net of its annotation over
+  the naive, generic and repeat-aware stacks, cumulatively and left out of the full stack, the tier
+  tables and the per-block sums the bootstrap needs. **What it drops:** the order 0 to 16 table, xz
+  and bzip2, the mixing grid (the window and temperature chosen on chr21 and chr22 are fixed,
+  W = 8, beta 1) and the partner-primed control.
+- **One mixture, not forty-seven.** A model's weight in the windowed mixture depends only on its
+  own code lengths, so a stack's mixture is the sum of its layers' weighted probabilities over the
+  sum of their weights. All 33 stacks come out of one pass over the models, to within 1e-4 of
+  mixing each separately (`test_one_pass_mixes_every_stack_as_separate_mixtures_would`).
+- **Chunked context hashing.** Contexts are built by doubling rather than one base at a time, and a
+  count is routed into hash groups of at most 16 M rows, each sorted on its own, so memory is
+  bounded by a group whatever the chromosome; rows beyond 3 GB wait in temporary files. This is
+  what chr1 and chr2 needed.
+- **Segments.** The chromosome is mixed 32 Mb at a time. A segment reads the bases before it, so
+  its models and its composition state are the whole chromosome's; only the mixing window (8 bases)
+  restarts at a boundary, and each annotation item is charged to the segment holding its start, so
+  its coordinate code restarts too. Both are conservative and both are small: on chr21, two
+  segments, the annotation bill rises by 0.15% for repeats, 0.8% for coding and 1.2% for GC and
+  CpG.
+- **It reproduces the committed numbers.** `compress_pass_check_chr21` against the committed
+  `compress_chr21`: all 33 shared stacks agree to four decimals (1.6918 naive, 1.5903 generic,
+  1.4701 full), every layer's claimed bases and item counts are identical, and the tier bootstrap
+  agrees (+0.0071, -0.0023 to 0.0144, against +0.0071, -0.0031 to 0.0149). The net per claimed base
+  moves only where the segmented annotation bill moves it: repeats -0.0245 to -0.0247, coding
+  -0.1106 to -0.1118, motifs -1.1401 to -1.1446. No verdict changes.
+- **Cost, chr21 (40.1 Mb).** 641 s, 16.0 s per Mb, 4.6 GB peak memory, 0.32 GB of temporaries,
+  2.94 GB read, 0 requests (cached), 0 model calls. The 23-hour full run becomes about 13 hours on
+  an idle core. Stages: the four adaptive orders 111 s, the duplication layer 44 s, the per-segment
+  models 401 s, the mixing 84 s.
+- **The disk floor.** Temporaries are 26 bytes a base (the adaptive and copy code maps at 10, count
+  rows waiting at 16), 6.6 GB at chr1. Free space is checked before every step and every 30 s, and
+  the pass stops and deletes its temporaries rather than let free space fall below 15 GB, which the
+  other lanes need.
 
 **What is weak.**
 - **The mixer.** The windowed Bayesian mixer is simple, and a stronger one (logistic mixing, as in

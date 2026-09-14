@@ -64,7 +64,9 @@ import gzip
 import json
 import lzma
 import math
+import os
 import resource
+import shutil
 import sys
 import time
 import urllib.request
@@ -95,7 +97,11 @@ MIX_BETAS = (0.25, 0.5, 1.0)
 MIX_FLOOR = 1e-3  # share of the uniform distribution in every mixture: no base costs more than 12 bits
 MIX_CHUNK = 1 << 19
 DIRECT_BITS = 26  # contexts, state and base that fit this many bits are counted in a direct table
-PART_ELEMENTS = 1 << 25  # a count is taken in parts of the hash space, each at most this many rows
+COUNT_GROUP = 1 << 24  # rows of one hash group, sorted together: bounds a count's memory
+HASH_CHUNK = 1 << 23  # bases hashed at a time
+SPILL_BYTES = 3 << 30  # count rows kept in memory before they wait in temporary files
+SEGMENT_BASES = 32_000_000  # the reduced pass mixes a chromosome this many bases at a time
+DISK_FLOOR_GB = 15.0  # never let free space fall below this (the other lanes' caches and commits)
 GC_WINDOW = 1_000  # the causal composition window
 GC_EDGES = (0.35, 0.40, 0.45, 0.50, 0.55)
 OE_EDGES = (0.25, 0.60)  # CpG observed/expected: depleted, intermediate, island-like
@@ -189,8 +195,39 @@ class Chromosome:
     def __post_init__(self) -> None:
         keep = self.genome < 4
         self.s = self.genome[keep]
-        self.gpos = np.flatnonzero(keep)
+        pos = np.flatnonzero(keep)
+        self.gpos = pos.astype(np.int32) if len(self.genome) < 2**31 else pos
+        self._whole()
+
+    def _whole(self) -> None:
         self.parts = [self]
+        self.lo = 0  # where this stream starts in the whole chromosome's stream
+        self.full_s = self.s  # the whole chromosome's stream, which contexts are read from
+        self.tb = _time_bits(len(self.s))  # time bits of the whole chromosome: the hash width
+        self.g_lo, self.g_hi = 0, len(self.genome)  # genome coordinates this stream owns
+
+    def view(self, lo: int, hi: int) -> Chromosome:
+        """Stream positions [lo, hi) as a chromosome of their own that still reads its neighbours:
+        contexts before `lo`, the whole genome, the whole chromosome's hash width. Annotation items
+        are charged to the view that owns their start."""
+        v = Chromosome.__new__(Chromosome)
+        v.name, v.genome = self.name, self.genome
+        v.s, v.gpos = self.s[lo:hi], self.gpos[lo:hi]
+        v.parts, v.lo, v.full_s, v.tb = [v], lo, self.s, self.tb
+        v.g_lo = 0 if lo == 0 else int(self.gpos[lo])
+        v.g_hi = len(self.genome) if hi >= len(self.s) else int(self.gpos[hi])
+        return v
+
+    def owns(self, start: int) -> bool:
+        return self.g_lo <= start < self.g_hi
+
+    def stream_index(self, positions: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        """Stream indices of genome positions, and which of them are bases of this stream."""
+        positions = np.asarray(positions, dtype=np.int64)
+        idx = np.searchsorted(self.gpos, positions)
+        ok = idx < self.n
+        ok[ok] = self.gpos[idx[ok]] == positions[ok]
+        return idx, ok
 
     @classmethod
     def training_set(cls, chroms: list[Chromosome]) -> Chromosome:
@@ -202,6 +239,7 @@ class Chromosome:
         out.genome = np.zeros(0, dtype=np.uint8)
         out.s = np.concatenate([c.s for c in chroms])
         out.gpos = np.zeros(0, dtype=np.int64)
+        out._whole()
         out.parts = list(chroms)
         return out
 
@@ -241,24 +279,57 @@ class Chromosome:
 # ---- contexts and counts ---------------------------------------------------------------------
 
 
+def _later(x: np.ndarray, m: int) -> np.ndarray:
+    """y[i] = x[i - m], zeros before the start."""
+    y = np.zeros_like(x)
+    if m < len(x):
+        y[m:] = x[: len(x) - m]
+    return y
+
+
+def _earlier(x: np.ndarray, m: int) -> np.ndarray:
+    """y[i] = x[i + m], zeros past the end."""
+    y = np.zeros_like(x)
+    if m < len(x):
+        y[: len(x) - m] = x[m:]
+    return y
+
+
 def contexts(s: np.ndarray, k: int) -> np.ndarray:
-    """The k bases before each position, most recent in the lowest bits; zeros before the start."""
-    n = len(s)
-    x = np.zeros(n, dtype=np.uint64)
-    for j in range(1, min(k, n) + 1):
-        x[j:] |= s[:-j].astype(np.uint64) << np.uint64(2 * (j - 1))
-    return x
+    """The k bases before each position, most recent in the lowest bits; zeros before the start.
+    Built by doubling (contexts of length L joined into 2L), so order 24 costs a handful of passes."""
+    out = np.zeros(len(s), dtype=np.uint64)
+    if k == 0 or len(s) == 0:
+        return out
+    cur, length, have, rest = _later(s.astype(np.uint64), 1), 1, 0, k
+    while rest:
+        if rest & 1:
+            out |= _later(cur, have) << np.uint64(2 * have)
+            have += length
+        rest >>= 1
+        if rest:
+            cur = cur | (_later(cur, length) << np.uint64(2 * length))
+            length *= 2
+    return out
 
 
 def rc_contexts(s: np.ndarray, k: int) -> np.ndarray:
     """The context of the reverse strand at each position: the complements of the k bases after it,
     nearest in the lowest bits. Positions within k of the end are incomplete and never used."""
-    n = len(s)
-    x = np.zeros(n, dtype=np.uint64)
+    out = np.zeros(len(s), dtype=np.uint64)
+    if k == 0 or len(s) == 0:
+        return out
     comp = (3 - s.astype(np.int16)).astype(np.uint64)
-    for m in range(1, min(k, n - 1) + 1):
-        x[: n - m] |= comp[m:] << np.uint64(2 * (m - 1))
-    return x
+    cur, length, have, rest = _earlier(comp, 1), 1, 0, k
+    while rest:
+        if rest & 1:
+            out |= _earlier(cur, have) << np.uint64(2 * have)
+            have += length
+        rest >>= 1
+        if rest:
+            cur = cur | (_earlier(cur, length) << np.uint64(2 * length))
+            length *= 2
+    return out
 
 
 def _hash(ctx: np.ndarray, state: np.ndarray | None, k: int, state_bits: int, bits: int) -> np.ndarray:
@@ -282,73 +353,186 @@ def _group_offsets(g: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return idx, np.diff(np.append(idx, len(g)))
 
 
-def _count_part(q, events, tb: int, adaptive: bool):
-    tbu = np.uint64(tb)
-    tmask = np.uint64((1 << tb) - 1)
+@dataclass
+class Span:
+    """Positions [lo, hi) of a base stream, read as queries or as count events.
 
-    def composite(with_sym: bool) -> np.ndarray:
-        rows = []
-        for h, s, t in [q, *events]:
-            key = h << np.uint64(2)
-            if with_sym:
-                key = key | s.astype(np.uint64)
-            rows.append((key << tbu) | (np.uint64(1) if t is None else t))
-        c = np.concatenate(rows) if rows else np.zeros(0, dtype=np.uint64)
-        c.sort()
+    kind: "query" (time 2(i+1)), "event" (the base's own context once coded, 2(i+1)+1), "rc" (the
+    reverse strand's context at i once base i+k is coded, 2(i+k+1)+1), "static" and "static_rc"
+    (a fitted chromosome's two strands, before every query). Contexts are read from the whole
+    stream, so a span that starts mid-chromosome sees the bases before it."""
+
+    s: np.ndarray
+    lo: int
+    hi: int
+    kind: str
+    k: int
+    state: np.ndarray | None = None  # per position of [lo, hi)
+
+    def __len__(self) -> int:
+        return max(0, self.hi - self.lo)
+
+
+def _span_chunks(span: Span, state_bits: int, hb: int, chunk: int = HASH_CHUNK):
+    k = span.k
+    rc = span.kind in ("rc", "static_rc")
+    for a in range(span.lo, span.hi, chunk):
+        b = min(span.hi, a + chunk)
+        if rc:
+            ctx = rc_contexts(span.s[a : min(len(span.s), b + k)], k)[: b - a]
+            sym = (3 - span.s[a:b].astype(np.int16)).astype(np.uint64)
+        else:
+            a0 = max(0, a - k)
+            ctx = contexts(span.s[a0:b], k)[a - a0 :]
+            sym = span.s[a:b].astype(np.uint64)
+        state = None if span.state is None else span.state[a - span.lo : b - span.lo]
+        h = _hash(ctx, state, k, state_bits, hb)
+        del ctx
+        pos = np.arange(a, b, dtype=np.uint64)
+        if span.kind == "query":
+            t = (pos + np.uint64(1)) << np.uint64(1)
+        elif span.kind == "event":
+            t = ((pos + np.uint64(1)) << np.uint64(1)) | np.uint64(1)
+        elif span.kind == "rc":
+            t = ((pos + np.uint64(k + 1)) << np.uint64(1)) | np.uint64(1)
+        else:
+            t = np.uint64(1)
+        yield h, sym, t
+
+
+class _Buckets:
+    """Composites held by hash group: in memory, or in temporary files when they would not fit."""
+
+    def __init__(self, groups: int, files: Path | None) -> None:
+        self.groups = groups
+        self.files = files
+        self.mem: list[list[np.ndarray]] = [[] for _ in range(groups)]
+        if files is not None:
+            files.mkdir(parents=True, exist_ok=True)
+            self.handles = [open(files / f"group_{g}.u64", "wb") for g in range(groups)]  # noqa: SIM115
+
+    def add(self, g: int, c: np.ndarray) -> None:
+        if self.files is None:
+            self.mem[g].append(c)
+        else:
+            c.tofile(self.handles[g])
+
+    def take(self, g: int) -> np.ndarray:
+        if self.files is None:
+            parts, self.mem[g] = self.mem[g], []
+            return np.concatenate(parts) if parts else np.zeros(0, dtype=np.uint64)
+        self.handles[g].close()
+        path = self.files / f"group_{g}.u64"
+        c = np.fromfile(path, dtype=np.uint64)
+        path.unlink()
         return c
 
-    def prior(c: np.ndarray, shift: int) -> tuple[np.ndarray, np.ndarray]:
-        t = c & tmask
-        ev = (t & np.uint64(1)).astype(np.int64)
-        cum = np.cumsum(ev)
-        idx, lens = _group_offsets(c >> np.uint64(tb + shift))
-        within = cum - np.repeat(cum[idx] - ev[idx], lens)
-        isq = ev == 0
-        return ((t[isq] >> np.uint64(1)) - np.uint64(1)).astype(np.int64), within[isq]
+    def close(self) -> None:
+        if self.files is not None:
+            for h in self.handles:
+                if not h.closed:
+                    h.close()
+            for p in self.files.glob("group_*.u64"):
+                p.unlink()
 
-    c = composite(True)
-    qi, n_ca = prior(c, 0)
+
+def _count_group(c: np.ndarray, tb: int, adaptive: bool, lo: int, sink) -> None:
+    c.sort()
+    tmask = np.uint64((1 << tb) - 1)
+    t = c & tmask
+    ev = (t & np.uint64(1)).astype(np.int64)
+    isq = ev == 0
+    cum = np.cumsum(ev)
+    idx, lens = _group_offsets(c >> np.uint64(tb))
+    n_ca = (cum - np.repeat(cum[idx] - ev[idx], lens))[isq]
     if adaptive:
-        c = composite(False)
-        qi2, n_c = prior(c, 2)
+        # the base cleared: each context holds four runs already in time order, which a stable
+        # sort merges almost for free; the permutation carries the counts back to the first order
+        bare = c & ~np.uint64(3 << tb)
+        del c
+        perm = np.argsort(bare, kind="stable")
+        bare = bare[perm]
+        ev2 = ev[perm]
+        cum2 = np.cumsum(ev2)
+        idx2, lens2 = _group_offsets(bare >> np.uint64(tb + 2))
+        del bare
+        n_c = np.empty(len(ev2), dtype=np.int64)
+        n_c[perm] = cum2 - np.repeat(cum2[idx2] - ev2[idx2], lens2)
+        n_c = n_c[isq]
     else:
-        t = c & tmask
-        ev = (t & np.uint64(1)).astype(np.int64)
         idx, lens = _group_offsets(c >> np.uint64(tb + 2))
-        totals = np.repeat(np.add.reduceat(ev, idx), lens)
-        isq = ev == 0
-        qi2, n_c = ((t[isq] >> np.uint64(1)) - np.uint64(1)).astype(np.int64), totals[isq]
-    return qi, n_ca, qi2, n_c
+        n_c = np.repeat(np.add.reduceat(ev, idx), lens)[isq]
+    qi = ((t[isq] >> np.uint64(1)) - np.uint64(1)).astype(np.int64) - lo
+    sink(qi, n_ca, n_c)
 
 
-def _count(q_hash, q_sym, events, tb: int, adaptive: bool) -> tuple[np.ndarray, np.ndarray]:
-    """For every query position i, the events with its context and base (n_ca) and with its context
-    (n_c). Static events precede every query; adaptive events carry odd times and count only when
-    they precede the query's time 2(i+1)."""
-    n = len(q_hash)
-    total = n + sum(len(e[0]) for e in events)
-    pb = max(0, math.ceil(math.log2(max(1.0, total / PART_ELEMENTS))))
+def count_spans(
+    queries: Span,
+    events: list[Span],
+    state_bits: int,
+    tb: int,
+    adaptive: bool,
+    sink,
+    spill: Path | None = None,
+) -> None:
+    """Hand `sink(query index, n_ca, n_c)` the counts of every query: events with its context and
+    base, and with its context. Static events precede every query; adaptive events count only when
+    their time precedes the query's. Contexts are hashed chunk by chunk and routed to hash groups
+    of at most COUNT_GROUP rows, each sorted on its own, so memory is bounded by a group; the rows
+    wait in memory up to SPILL_BYTES and in temporary files under `spill` beyond it."""
     hb = 62 - tb
-    n_ca = np.zeros(n, dtype=np.int64)
-    n_c = np.zeros(n, dtype=np.int64)
-    q_time = np.arange(1, n + 1, dtype=np.uint64) << np.uint64(1)
-    shift = np.uint64(max(0, hb - pb))
-    for part in range(1 << pb):
-        if pb:
-            m = (q_hash >> shift) == np.uint64(part)
-            q = (q_hash[m], q_sym[m], q_time[m])
-            ev = []
-            for h, s, t in events:
-                em = (h >> shift) == np.uint64(part)
-                ev.append((h[em], s[em], None if t is None else t[em]))
-        else:
-            q, ev = (q_hash, q_sym, q_time), events
-        if len(q[0]) == 0:
-            continue
-        qi, ca, qi2, c = _count_part(q, ev, tb, adaptive)
-        n_ca[qi] = ca
-        n_c[qi2] = c
-    return n_ca, n_c
+    total = len(queries) + sum(len(e) for e in events)
+    if total == 0:
+        return
+    gb = max(0, math.ceil(math.log2(max(1.0, total / COUNT_GROUP))))
+    gb = min(gb, 16)
+    groups = 1 << gb
+    files = spill / f"counts_{os.getpid()}" if spill is not None and total * 8 > SPILL_BYTES else None
+    if files is None and total * 8 > SPILL_BYTES and spill is None and total > COUNT_GROUP * 64:
+        raise MemoryError("count_spans needs a spill directory for this many rows")
+    buckets = _Buckets(groups, files)
+    tbu = np.uint64(tb)
+    try:
+        for span in (queries, *events):
+            for h, sym, t in _span_chunks(span, state_bits, hb):
+                c = (((h << np.uint64(2)) | sym) << tbu) | t
+                if groups == 1:
+                    buckets.add(0, c)
+                    continue
+                g = (h >> np.uint64(hb - gb)).astype(np.uint16)  # a radix sort by group
+                order = np.argsort(g, kind="stable")
+                sizes = np.bincount(g, minlength=groups)
+                c = c[order]
+                offsets = np.concatenate([[0], np.cumsum(sizes)])
+                for gi in np.flatnonzero(sizes):
+                    buckets.add(int(gi), c[offsets[gi] : offsets[gi + 1]])
+        for gi in range(groups):
+            c = buckets.take(gi)
+            if len(c):
+                _count_group(c, tb, adaptive, queries.lo, sink)
+    finally:
+        buckets.close()
+        if files is not None and files.exists():
+            files.rmdir()
+
+
+class _CountSink:
+    def __init__(self, n: int) -> None:
+        self.n_ca = np.zeros(n, dtype=np.int64)
+        self.n_c = np.zeros(n, dtype=np.int64)
+
+    def __call__(self, qi, n_ca, n_c) -> None:
+        self.n_ca[qi] = n_ca
+        self.n_c[qi] = n_c
+
+
+class _CodeSink:
+    def __init__(self, out: np.ndarray, alpha: float) -> None:
+        self.out = out
+        self.alpha = alpha
+
+    def __call__(self, qi, n_ca, n_c) -> None:
+        self.out[qi] = quantise(-np.log2((n_ca + self.alpha) / (n_c + 4 * self.alpha)))
 
 
 def quantise(bits: np.ndarray) -> np.ndarray:
@@ -363,6 +547,68 @@ def alpha_for(k: int) -> float:
     return ALPHA_LOW if k <= HIGH_ORDER else ALPHA_HIGH
 
 
+def _static_events(train_s, k, train_state, train_rc_state) -> list[Span]:
+    m = len(train_s)
+    r = max(0, m - k)
+    rc_state = None if train_rc_state is None else train_rc_state[:r]
+    return [Span(train_s, 0, m, "static", k, train_state), Span(train_s, 0, r, "static_rc", k, rc_state)]
+
+
+def _direct(query: Span, train_s, train_state, train_rc_state, sink) -> None:
+    """Counts from a table indexed by context, state and base: no sort needed."""
+    k = query.k
+
+    def key(ctx, state):
+        x = ctx.astype(np.int64)
+        return x if state is None else x | (state.astype(np.int64) << (2 * k))
+
+    table = np.zeros(4, dtype=np.int64)
+    for span in _static_events(train_s, k, train_state, train_rc_state):
+        if not len(span):
+            continue
+        if span.kind == "static":
+            idx = key(contexts(train_s, k), train_state) * 4 + train_s
+        else:
+            idx = key(rc_contexts(train_s, k)[: span.hi], span.state) * 4 + (
+                3 - train_s[: span.hi].astype(np.int64)
+            )
+        add = np.bincount(idx)
+        size = max(len(table), len(add))
+        table = np.pad(table, (0, size - len(table))) + np.pad(add, (0, size - len(add)))
+        del idx, add
+    table = np.pad(table, (0, (-len(table)) % 4))
+    totals = table.reshape(-1, 4).sum(axis=1)
+    for a in range(query.lo, query.hi, HASH_CHUNK):
+        b = min(query.hi, a + HASH_CHUNK)
+        a0 = max(0, a - k)
+        state = None if query.state is None else query.state[a - query.lo : b - query.lo]
+        q = key(contexts(query.s[a0:b], k)[a - a0 :], state)
+        full = q * 4 + query.s[a:b]
+        inside = q < len(totals)
+        n_ca = np.where(inside, table[np.where(inside, full, 0)], 0)
+        n_c = np.where(inside, totals[np.where(inside, q, 0)], 0)
+        sink(np.arange(a - query.lo, b - query.lo), n_ca, n_c)
+
+
+def static_span(
+    query: Span,
+    train_s: np.ndarray,
+    tb: int,
+    sink,
+    train_state=None,
+    train_rc_state=None,
+    state_bits: int = 0,
+    spill: Path | None = None,
+) -> None:
+    """An order-k model (optionally conditioned on a per-base state) fitted on both strands of
+    another chromosome, read at the query span."""
+    if 2 * query.k + state_bits + 2 <= DIRECT_BITS:
+        _direct(query, train_s, train_state, train_rc_state, sink)
+    else:
+        events = _static_events(train_s, query.k, train_state, train_rc_state)
+        count_spans(query, events, state_bits, tb, False, sink, spill)
+
+
 def static_counts(
     test_s: np.ndarray,
     train_s: np.ndarray,
@@ -372,46 +618,25 @@ def static_counts(
     train_rc_state: np.ndarray | None = None,
     state_bits: int = 0,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Counts of an order-k model (optionally conditioned on a per-base state) fitted on both strands
-    of another chromosome, read at every base of the test chromosome."""
-    if 2 * k + state_bits + 2 <= DIRECT_BITS:  # a direct table: no sort needed
-        return _direct_counts(test_s, train_s, k, test_state, train_state, train_rc_state)
-    tb = _time_bits(len(test_s))
-    hb = 62 - tb
-    qh = _hash(contexts(test_s, k), test_state, k, state_bits, hb)
-    fh = _hash(contexts(train_s, k), train_state, k, state_bits, hb)
-    events = [(fh, train_s, None)]
-    m = len(train_s) - k
-    if m > 0:
-        rs = None if train_rc_state is None else train_rc_state[:m]
-        rh = _hash(rc_contexts(train_s, k)[:m], rs, k, state_bits, hb)
-        events.append((rh, (3 - train_s[:m].astype(np.int16)).astype(np.uint8), None))
-    return _count(qh, test_s, events, tb, adaptive=False)
-
-
-def _direct_counts(test_s, train_s, k, test_state, train_state, train_rc_state):
-    def key(ctx, state):
-        x = ctx.astype(np.int64)
-        return x if state is None else x | (state.astype(np.int64) << (2 * k))
-
-    fwd = key(contexts(train_s, k), train_state) * 4 + train_s
-    table = np.bincount(fwd, minlength=int(fwd.max()) + 1 if len(fwd) else 1)
-    m = len(train_s) - k
-    if m > 0:
-        rs = None if train_rc_state is None else train_rc_state[:m]
-        rc = key(rc_contexts(train_s, k)[:m], rs) * 4 + (3 - train_s[:m].astype(np.int64))
-        extra = np.bincount(rc)
-        size = max(len(table), len(extra))
-        table = np.pad(table, (0, size - len(table))) + np.pad(extra, (0, size - len(extra)))
-    q = key(contexts(test_s, k), test_state)
-    size = int(max(q.max() + 1, (len(table) + 3) // 4)) * 4
-    table = np.pad(table, (0, size - len(table)))
-    return table[q * 4 + test_s], table.reshape(-1, 4).sum(axis=1)[q]
+    sink = _CountSink(len(test_s))
+    query = Span(test_s, 0, len(test_s), "query", k, test_state)
+    static_span(query, train_s, _time_bits(len(test_s)), sink, train_state, train_rc_state, state_bits)
+    return sink.n_ca, sink.n_c
 
 
 def static_model(test_s, train_s, k, alpha=None, **state) -> np.ndarray:
     n_ca, n_c = static_counts(test_s, train_s, k, **state)
     return _codes(n_ca, n_c, alpha_for(k) if alpha is None else alpha)
+
+
+def _adaptive_events(s, k, revcomp, prime) -> list[Span]:
+    n = len(s)
+    events = [Span(s, 0, n, "event", k)]
+    if revcomp and n - k - 1 > 0:
+        events.append(Span(s, 0, n - k - 1, "rc", k))
+    if prime is not None and len(prime) > k:
+        events += _static_events(prime, k, None, None)
+    return events
 
 
 def adaptive_counts(
@@ -420,29 +645,21 @@ def adaptive_counts(
     """Counts of an order-k model that learns as it codes: a base's own context and base are added
     after it is coded, and the reverse strand's context at j once base j+k is known. `prime` is
     sequence the decoder already holds (both strands counted before the first base)."""
-    n = len(s)
-    tb = _time_bits(n)
-    hb = 62 - tb
-    qh = _hash(contexts(s, k), None, k, 0, hb)
-    t_fwd = (np.arange(1, n + 1, dtype=np.uint64) << np.uint64(1)) | np.uint64(1)
-    events = [(qh, s, t_fwd)]
-    m = n - k - 1
-    if revcomp and m > 0:
-        j = np.arange(m, dtype=np.uint64)
-        rh = _hash(rc_contexts(s, k)[:m], None, k, 0, hb)
-        rt = ((j + np.uint64(k + 1)) << np.uint64(1)) | np.uint64(1)
-        events.append((rh, (3 - s[:m].astype(np.int16)).astype(np.uint8), rt))
-    if prime is not None and len(prime) > k:
-        events.append((_hash(contexts(prime, k), None, k, 0, hb), prime, None))
-        pm = len(prime) - k
-        rp = (3 - prime[:pm].astype(np.int16)).astype(np.uint8)
-        events.append((_hash(rc_contexts(prime, k)[:pm], None, k, 0, hb), rp, None))
-    return _count(qh, s, events, tb, adaptive=True)
+    sink = _CountSink(len(s))
+    events = _adaptive_events(s, k, revcomp, prime)
+    count_spans(Span(s, 0, len(s), "query", k), events, 0, _time_bits(len(s)), True, sink)
+    return sink.n_ca, sink.n_c
 
 
-def adaptive_model(s, k, alpha=None, revcomp=True, prime=None) -> np.ndarray:
-    n_ca, n_c = adaptive_counts(s, k, revcomp, prime)
-    return _codes(n_ca, n_c, alpha_for(k) if alpha is None else alpha)
+def adaptive_model(
+    s, k, alpha=None, revcomp=True, prime=None, out: np.ndarray | None = None, spill: Path | None = None
+) -> np.ndarray:
+    """Code lengths of the adaptive order-k model, written into `out` (a memory map, say) if given."""
+    out = np.zeros(len(s), dtype=np.uint16) if out is None else out
+    sink = _CodeSink(out, alpha_for(k) if alpha is None else alpha)
+    events = _adaptive_events(s, k, revcomp, prime)
+    count_spans(Span(s, 0, len(s), "query", k), events, 0, _time_bits(len(s)), True, sink, spill)
+    return out
 
 
 # ---- the baselines ---------------------------------------------------------------------------
@@ -664,15 +881,10 @@ def _state_models(test, train, name, states, bits, orders, active=None) -> dict[
     t_state, r_state, r_rc_state = states
     out = {}
     for k in orders:
-        codes = static_model(
-            test.s,
-            train.s,
-            k,
-            test_state=t_state,
-            train_state=r_state,
-            train_rc_state=r_rc_state,
-            state_bits=bits,
-        )
+        codes = np.zeros(test.n, dtype=np.uint16)
+        query = Span(test.full_s, test.lo, test.lo + test.n, "query", k, t_state)
+        sink = _CodeSink(codes, alpha_for(k))
+        static_span(query, train.s, test.tb, sink, r_state, r_rc_state, bits)
         out[f"{name}{k}"] = codes if active is None else restrict(codes, active)
     return out
 
@@ -717,13 +929,13 @@ def repeats_layer(test: Chromosome, train: Chromosome, results_dir: Path, ledger
         (11,),
         claim,
     )
-    rr = rows[test.name]
+    rr = [r for r in rows[test.name] if test.owns(int(r[0]))]
     cost = (
         interval_bits([int(r[0]) for r in rr], [int(r[1]) for r in rr])
         + categorical_bits([sub_id[r[4]] for r in rr], len(subs))
         + categorical_bits([div_bin(r[5]) for r in rr], 5)
     )
-    tandem = [r for r in rr if r[2] in TANDEM_CLASSES]
+    tandem = [r for r in rows[test.name] if r[2] in TANDEM_CLASSES]
     return Layer(
         "repeats",
         "RepeatMasker subfamilies with divergence",
@@ -812,7 +1024,12 @@ def copy_codes(t: np.ndarray, p: np.ndarray, offsets: np.ndarray, usable: np.nda
 
 
 def segdup_layer(
-    test: Chromosome, results_dir: Path, reference: Path = REFERENCE, ledger=None, partners=None
+    test: Chromosome,
+    results_dir: Path,
+    reference: Path = REFERENCE,
+    ledger=None,
+    partners=None,
+    keep_primes: bool = True,
 ) -> Layer:
     """Segmental duplications as copies of a locus the decoder already holds: a partner on an
     earlier chromosome in karyotype order, or earlier on the same chromosome."""
@@ -864,7 +1081,7 @@ def segdup_layer(
             claim[a[0] : b[0]] = True
             if pc == test.name:
                 same[a[0] : b[0]] = True
-            else:
+            elif keep_primes:
                 primes.append(p[p < 4])
             predicted += len(x)
             hits += h
@@ -928,6 +1145,12 @@ def gc_state(s: np.ndarray, window: int = GC_WINDOW, causal: bool = True) -> np.
     return (gb * 3 + ob + 1).astype(np.uint8)
 
 
+def _gc_with_lead(c: Chromosome) -> np.ndarray:
+    """The causal composition state of a stream that may start mid-chromosome."""
+    a0 = max(0, c.lo - GC_WINDOW)
+    return gc_state(c.full_s[a0 : c.lo + c.n])[c.lo - a0 :]
+
+
 def cpg_islands(
     chrom: str, cache: Path = CACHE, ledger: Ledger | None = None
 ) -> list[tuple[int, int]] | None:
@@ -955,17 +1178,18 @@ def cpg_islands(
     return [(int(r[1]), int(r[2])) for r in _bed_rows(p, ledger)]
 
 
-def gc_layer(test: Chromosome, train: Chromosome, ledger=None, cache: Path = CACHE) -> Layer:
+def gc_layer(test: Chromosome, train: Chromosome, ledger=None, cache: Path | None = None) -> Layer:
     """GC and CpG structure: the composition of the kilobase just coded (no annotation, active
     everywhere), and the CpG islands (annotation, active inside them)."""
     models = _state_models(
         test,
         train,
         "gc_cpg",
-        _states(test, train, lambda c: (gc_state(c.s), gc_state(c.s, causal=False))),
+        _states(test, train, lambda c: (_gc_with_lead(c), gc_state(c.s, causal=False))),
         5,
         (3, 6, 10),
     )
+    cache = CACHE if cache is None else cache
     islands = {c.name: cpg_islands(c.name, cache, ledger) for c in (test, *train.parts)}
     cost = 0.0
     notes: dict[str, Any] = {"cpg_islands": None}
@@ -978,7 +1202,7 @@ def gc_layer(test: Chromosome, train: Chromosome, ledger=None, cache: Path = CAC
 
         st = _states(test, train, island_state)
         models |= _state_models(test, train, "cpg_island", st, 1, (4, 8), st[0] > 0)
-        iv = islands[test.name]
+        iv = [x for x in islands[test.name] if test.owns(x[0])]
         cost = interval_bits([a for a, _ in iv], [b for _, b in iv])
         notes = {"cpg_islands": len(iv), "island_mask": st[0] > 0}
     return Layer(
@@ -987,13 +1211,22 @@ def gc_layer(test: Chromosome, train: Chromosome, ledger=None, cache: Path = CAC
         models,
         np.ones(test.n, dtype=bool),
         cost,
-        len(islands[test.name] or []),
+        sum(1 for x in islands[test.name] or [] if test.owns(x[0])),
         notes,
     )
 
 
+_MEMO: dict[tuple, Any] = {}  # annotations parsed once per process, whatever the number of segments
+
+
 def canonical_cds(chrom: str, ledger=None) -> list[tuple[bool, list[tuple[int, int, int]]]]:
     """(minus strand, [(start, end, phase)]) of the canonical coding transcript of every coding gene."""
+    if ("cds", chrom) not in _MEMO:
+        _MEMO[("cds", chrom)] = _canonical_cds(chrom, ledger)
+    return _MEMO[("cds", chrom)]
+
+
+def _canonical_cds(chrom: str, ledger=None) -> list[tuple[bool, list[tuple[int, int, int]]]]:
     from genomeos.genome.annotation import Annotation, default_gencode
 
     gff = default_gencode({chrom})
@@ -1039,7 +1272,7 @@ def coding_layer(test: Chromosome, train: Chromosome, ledger=None) -> Layer:
     st = _states(test, train, lambda c: coding_states(c, txs[c.name]))
     claim = st[0] > 0
     models = _state_models(test, train, "codon", st, 3, (2, 5, 8), claim)
-    tt = txs[test.name]
+    tt = [x for x in txs[test.name] if test.owns(x[1][0][0])]
     cost = 0.0
     if tt:
         cost = integer_bits(np.diff([0] + [segs[0][0] for _, segs in tt]) + 1)  # transcript starts
@@ -1080,7 +1313,7 @@ def ccre_layer(test: Chromosome, train: Chromosome, results_dir: Path, ledger=No
     st = _states(test, train, state)
     claim = st[0] > 0
     models = _state_models(test, train, "ccre", st, (len(classes) + 1).bit_length(), (4, 8), claim)
-    rr = rows[test.name]
+    rr = [r for r in rows[test.name] if test.owns(int(r[1]))]
     cost = interval_bits([int(r[1]) for r in rr], [int(r[2]) for r in rr])
     cost += categorical_bits([cid[r[4]] - 1 for r in rr], len(classes))
     return Layer("registry", "ENCODE cCREs by class", models, claim, cost, len(rr), {"classes": len(classes)})
@@ -1093,19 +1326,22 @@ def motif_layer(test: Chromosome, results_dir: Path, ledger=None) -> Layer | Non
     d = load_result(f"motifs_{test.name}", results_dir)
     if not d or not JASPAR_PATH.exists():
         return None
-    if ledger:
-        ledger.disk_bytes += JASPAR_PATH.stat().st_size
-    by_name: dict[str, Any] = {}
-    for m in load_motifs():
-        by_name.setdefault(m.name, m)
-    loci = {sym: a for sym, a, _ in promoter_loci(test.name, d.get("flank", 1000)) or []}
+    if ("motifs", test.name) not in _MEMO:
+        if ledger:
+            ledger.disk_bytes += JASPAR_PATH.stat().st_size
+        by_name: dict[str, Any] = {}
+        for m in load_motifs():
+            by_name.setdefault(m.name, m)
+        loci = {sym: a for sym, a, _ in promoter_loci(test.name, d.get("flank", 1000)) or []}
+        _MEMO[("motifs", test.name)] = (by_name, loci)
+    by_name, loci = _MEMO[("motifs", test.name)]
     sites = []
     for sym, g in d.get("genes", {}).items():
         if sym in loci:
             sites += [(loci[sym] + r["position"], r["factor"], r["strand"]) for r in g.get("requires", [])]
     for e in d.get("elements", []):
         sites += [(e["start"] + r["position"], r["factor"], r["strand"]) for r in e.get("requires", [])]
-    sites = sorted({s for s in sites if s[1] in by_name})
+    sites = sorted({s for s in sites if s[1] in by_name and test.owns(s[0])})
     codes = np.full(test.n, INACTIVE, dtype=np.uint16)
     claim = np.zeros(test.n, dtype=bool)
     recorded_better = 0
@@ -1122,9 +1358,9 @@ def motif_layer(test: Chromosome, results_dir: Path, ledger=None) -> Layer | Non
         minus = prob[3 - bases[::-1], cols][::-1]
         recorded, other = (minus, plus) if strand in ("-", 1) else (plus, minus)
         recorded_better += int(np.log2(recorded).sum() >= np.log2(other).sum())
-        idx = np.searchsorted(test.gpos, f + cols)
-        codes[idx] = quantise(-np.log2(recorded))
-        claim[idx] = True
+        idx, ok = test.stream_index(f + cols)
+        codes[idx[ok]] = quantise(-np.log2(recorded[ok]))
+        claim[idx[ok]] = True
     factors = sorted({s[1] for s in sites})
     fid = {x: i for i, x in enumerate(factors)}
     cost = 0.0
@@ -1193,12 +1429,13 @@ def tiers_layer(test: Chromosome, train: Chromosome, results_dir: Path) -> Layer
     models = _state_models(test, train, "tier", tiers, 3, (4, 8, 12), claim)
     cbits = (len(classes) + 1).bit_length()
     models |= _state_models(test, train, "block_class", _states(test, train, class_state), cbits, (8,), claim)
-    bb = blocks[test.name]
+    every = blocks[test.name]
+    bb = [b for b in every if test.owns(b["start"])]
     cost = interval_bits([b["start"] for b in bb], [b["end"] for b in bb])
     cost += categorical_bits([TIERS.index(b["tier"]) for b in bb], len(TIERS))
     cost += categorical_bits([cid[b["class"]] - 1 for b in bb], len(classes))
     block_id = test.paint(
-        [b["start"] for b in bb], [b["end"] for b in bb], list(range(1, len(bb) + 1)), np.int32
+        [b["start"] for b in every], [b["end"] for b in every], list(range(1, len(every) + 1)), np.int32
     )
     return Layer(
         "tiers",
@@ -1207,7 +1444,7 @@ def tiers_layer(test: Chromosome, train: Chromosome, results_dir: Path) -> Layer
         claim,
         cost,
         len(bb),
-        {"blocks": bb, "tier_state": tiers[0], "block_id": block_id},
+        {"blocks": every, "tier_state": tiers[0], "block_id": block_id},
     )
 
 
@@ -1247,8 +1484,9 @@ def plan_stacks(layers: list[str], control: bool = False) -> dict[str, list[tupl
     return plan
 
 
-def summarise_regions(aggs, bases_combo, bases_block, blocks, n, rng) -> dict[str, Any]:
-    """Bits per base by tier, all bases and unique bases, GC-standardised, with the block bootstrap."""
+def summarise_regions(aggs, bases_combo, bases_block, blocks, n, rng, strata=None) -> dict[str, Any]:
+    """Bits per base by tier, all bases and unique bases, GC-standardised, with the block bootstrap.
+    `strata` (one label per block) resamples blocks within their stratum, a chromosome say."""
     tier, cds, rep, dup, gcb = np.unravel_index(np.arange(np.prod(COMBO_SHAPE)), COMBO_SHAPE)
     unique = (rep == 0) & (dup == 0)
 
@@ -1302,6 +1540,19 @@ def summarise_regions(aggs, bases_combo, bases_block, blocks, n, rng) -> dict[st
     # constrained_unknown against neutral, unique bases, resampling blocks
     boot = {}
     ids = {t: [i + 1 for i, b in enumerate(blocks) if b["tier"] == t] for t in TIERS}
+    # positions within each tier's arrays, grouped by stratum: a resample keeps every stratum's size
+    groups_of = {}
+    for t in TIERS:
+        labels = [strata[i - 1] for i in ids[t]] if strata is not None else [0] * len(ids[t])
+        by: dict[Any, list[int]] = {}
+        for j, lab in enumerate(labels):
+            by.setdefault(lab, []).append(j)
+        groups_of[t] = [np.asarray(v, dtype=np.int64) for v in by.values()]
+
+    def resample(t: str) -> np.ndarray:
+        parts = [g[rng.integers(0, len(g), len(g))] for g in groups_of[t]]
+        return np.concatenate(parts) if parts else np.zeros(0, dtype=np.int64)
+
     for key in keys:
         per = aggs[key]["block"]
 
@@ -1315,12 +1566,12 @@ def summarise_regions(aggs, bases_combo, bases_block, blocks, n, rng) -> dict[st
             continue
         diffs, fdiffs = [], []
         for _ in range(BOOTSTRAP):
-            a = rng.integers(0, len(cb), len(cb))
-            b = rng.integers(0, len(nb), len(nb))
+            a = resample("constrained_unknown")
+            b = resample("neutral")
             if cn[a].sum() and nn[b].sum():
                 diffs.append(cb[a].sum() / cn[a].sum() - nb[b].sum() / nn[b].sum())
             if len(fb) and fn.sum():
-                f = rng.integers(0, len(fb), len(fb))
+                f = resample("fossil")
                 if fn[f].sum() and nn[b].sum():
                     fdiffs.append(fb[f].sum() / fn[f].sum() - nb[b].sum() / nn[b].sum())
         boot[key] = {
@@ -1646,3 +1897,506 @@ def run_and_save(
 ) -> Path:
     """compress_<chrom>, or the given name for a sensitivity run."""
     return save_result(name or f"compress_{chrom}", run(chrom, train, results_dir, **kw), results_dir)
+
+
+# ---- the genome-wide pass --------------------------------------------------------------------
+
+PASS_WINDOW, PASS_BETA = 8, 1.0  # chosen by the grids of chr21 and chr22; within 0.0014 of chr18's
+STACK_CHUNK = 1 << 18
+KEY_STACK_LAYERS = ((), ("repeats",), ("repeats", "duplications"), None)  # None: every layer
+
+
+class DiskFloorError(RuntimeError):
+    """Free space would fall below the floor the other lanes need."""
+
+
+class DiskGuard:
+    """Checks free space where temporaries go; refuses to let it fall below `floor_gb`."""
+
+    def __init__(self, path: Path, floor_gb: float = DISK_FLOOR_GB) -> None:
+        self.path = path
+        self.floor_gb = floor_gb
+        self.min_free_gb = math.inf
+        self.checks = 0
+
+    def free_gb(self) -> float:
+        p = Path(self.path).resolve()
+        while not p.exists():
+            p = p.parent
+        return shutil.disk_usage(p).free / 1e9
+
+    def check(self, need_bytes: float = 0.0) -> float:
+        free = self.free_gb()
+        self.checks += 1
+        self.min_free_gb = min(self.min_free_gb, free)
+        if free - need_bytes / 1e9 < self.floor_gb:
+            raise DiskFloorError(
+                f"{free:.1f} GB free, {need_bytes / 1e9:.1f} GB more needed, floor {self.floor_gb:.0f} GB"
+            )
+        return free
+
+
+def mix_stacks(
+    groups: dict[str, list[np.ndarray]],
+    stacks: dict[str, tuple[str, ...]],
+    window: int,
+    beta: float,
+    floor: float = MIX_FLOOR,
+    chunk: int = STACK_CHUNK,
+):
+    """Every stack's per-base code lengths from one pass, chunk by chunk: yields (a, b, {stack: bits}).
+
+    A model's weight depends only on its own code lengths over the previous `window` bases, so a
+    stack's mixture is the sum of its groups' weighted probabilities over the sum of their weights.
+    The same mixture as `mix` on the stack's models, at the cost of one mixture for all stacks."""
+    names = list(groups)
+    models = [m for g in names for m in groups[g]]
+    bounds, i = {}, 0
+    for g in names:
+        bounds[g] = (i, i + len(groups[g]))
+        i += len(groups[g])
+    n = len(models[0])
+    for a in range(0, n, chunk):
+        b = min(n, a + chunk)
+        a0 = max(0, a - window)
+        raw = np.stack([x[a0:b] for x in models])
+        inactive = raw == INACTIVE
+        lengths = np.where(inactive, 2.0, raw / SCALE)
+        del raw
+        cum = np.zeros((len(models), b - a0 + 1), dtype=np.float64)
+        np.cumsum(lengths, axis=1, out=cum[:, 1:])
+        r = np.arange(a - a0, b - a0)
+        logw = cum[:, np.maximum(0, r - window)] - cum[:, r]
+        del cum
+        logw *= beta * LN2
+        now = inactive[:, a - a0 :]
+        logw[now] = -np.inf
+        top = logw.max(axis=0)
+        top[~np.isfinite(top)] = 0.0
+        logw -= top
+        np.maximum(logw, -700.0, out=logw, where=~now)  # no underflow to zero for an active model
+        w = np.exp(logw)
+        u = w * np.power(2.0, -lengths[:, a - a0 :])
+        del logw, lengths
+        wsum = {g: w[x:y].sum(axis=0) for g, (x, y) in bounds.items()}
+        usum = {g: u[x:y].sum(axis=0) for g, (x, y) in bounds.items()}
+        out = {}
+        for name, key in stacks.items():
+            tw = sum(wsum[g] for g in key)
+            tu = sum(usum[g] for g in key)
+            p = np.divide(tu, tw, out=np.full(b - a, 0.25), where=tw > 0)
+            out[name] = -np.log2((1 - floor) * p + floor / 4)
+        yield a, b, out
+
+
+def all_stacks(layers: list[str]) -> dict[str, tuple[str, ...]]:
+    canonical = ["naive", "adaptive", *layers]
+    out = {}
+    for keys in plan_stacks(layers).values():
+        for key in keys:
+            key = tuple(sorted(key, key=canonical.index))
+            out[stack_name(key)] = key
+    return out
+
+
+def key_stacks(layers: list[str]) -> dict[str, str]:
+    """The stacks the tier tables are read under, by label."""
+    generic = ("naive", "adaptive")
+    labels = {"naive": ("naive",), "generic": generic}
+    labels["repeat_aware"] = (*generic, "repeats")
+    labels["repeats_and_duplications"] = (*generic, "repeats", "duplications")
+    labels["full"] = (*generic, *layers)
+    return {lab: stack_name(k) for lab, k in labels.items()}
+
+
+def gains(totals, layers_meta, layers: list[str], n: int) -> list[dict[str, Any]]:
+    """Every layer's gain, net of its annotation, against every base stack the plan names."""
+    canonical = ["naive", "adaptive", *layers]
+    generic = ("naive", "adaptive")
+    full = (*generic, *layers)
+
+    def name(key):
+        return stack_name(tuple(sorted(key, key=canonical.index)))
+
+    def gain(base, with_, meta):
+        a, b = totals[name(base)], totals[name(with_)]
+        claimed = meta["claimed_bases"]
+        whole = a["total"] - b["total"]
+        inside = a["claims"][meta["layer"]] - b["claims"][meta["layer"]]
+        net = whole - meta["annotation_bits"]
+        return {
+            "gross_bits_saved": round(whole),
+            "saved_inside_claim_bits": round(inside),
+            "saved_outside_claim_bits": round(whole - inside),
+            "net_bits_saved": round(net),
+            "gross_bits_per_claimed_base": round(inside / claimed, 4) if claimed else None,
+            "net_bits_per_claimed_base": round(net / claimed, 4) if claimed else None,
+            "net_bits_per_mb_of_chromosome": round(net / (n / 1e6)),
+            "pays_for_itself": bool(net > 0),
+        }
+
+    rows = []
+    for i, meta in enumerate(layers_meta):
+        x = meta["layer"]
+        claimed = meta["claimed_bases"]
+        rows.append(
+            {
+                **{k: v for k, v in meta.items()},
+                "claimed_share": round(claimed / n, 4),
+                "annotation_bits": round(meta["annotation_bits"]),
+                "annotation_bits_per_claimed_base": round(meta["annotation_bits"] / claimed, 4)
+                if claimed
+                else None,
+                "over_naive": gain(("naive",), ("naive", x), meta),
+                "over_generic": gain(generic, (*generic, x), meta),
+                "over_repeat_aware": gain((*generic, "repeats"), (*generic, "repeats", x), meta)
+                if x != "repeats"
+                else None,
+                "cumulative_step": gain((*generic, *layers[:i]), (*generic, *layers[: i + 1]), meta),
+                "leave_one_out": gain(tuple(g for g in full if g != x), full, meta),
+                "claim_bits_per_base": {
+                    lab: round(totals[name(k)]["claims"][x] / claimed, 4)
+                    for lab, k in (
+                        ("naive", ("naive",)),
+                        ("generic", generic),
+                        ("generic_plus_layer", (*generic, x)),
+                        ("full", full),
+                    )
+                }
+                if claimed
+                else None,
+            }
+        )
+    return rows
+
+
+LAYER_ORDER = ("repeats", "duplications", "gc_cpg", "coding", "registry", "motifs", "tiers")
+
+
+def run_pass(
+    chrom: str,
+    train: str,
+    results_dir: Path = RESULTS_DIR,
+    reference: Path = REFERENCE,
+    progress=None,
+    segment: int = SEGMENT_BASES,
+    spill: Path = Path("data/cache/compress"),
+    floor_gb: float = DISK_FLOOR_GB,
+    heartbeat=None,
+) -> dict[str, Any]:
+    """The verdict pass: every stack of `run` from one mixture per segment, in bounded memory and disk.
+
+    What it produces: every stack's bits per base, every layer's gain net of annotation over the
+    naive, generic and repeat-aware stacks, cumulatively and left out of the full stack, the tier
+    tables and the per-block sums the genome-wide bootstrap needs. What it does not: the order 0 to
+    16 table, xz and bzip2, the mixing grid (window and temperature are fixed at PASS_WINDOW and
+    PASS_BETA) and the control that primes the generic models with the duplication partners.
+
+    Memory: the adaptive and duplication codes of the whole chromosome live in memory maps under
+    `spill` (10 bytes a base), counts are sorted by hash group, and the other models exist for one
+    segment at a time. Disk: the maps, plus count rows (16 bytes a base) while an adaptive model is
+    counted if they exceed SPILL_BYTES; free space is checked before each step and never allowed
+    below `floor_gb`. Temporaries are deleted when the chromosome ends, however it ends."""
+    ledger = Ledger(progress)
+    guard = DiskGuard(spill, floor_gb)
+    beat = heartbeat or (lambda: None)
+    test = Chromosome.load(chrom, reference, ledger)
+    trn = Chromosome.training_set([Chromosome.load(c, reference, ledger) for c in train.split(",")])
+    n = test.n
+    counting = 16 * n if 16 * n > SPILL_BYTES else 0
+    guard.check(10 * n + counting)
+    work = spill / f"{chrom}_{os.getpid()}"
+    work.mkdir(parents=True, exist_ok=True)
+    temp_peak = 0
+    gaps = np.flatnonzero(np.diff(np.concatenate([[0], (test.genome > 3).astype(np.int8), [0]])))
+    out: dict[str, Any] = {
+        "chrom": chrom,
+        "trained_on": train,
+        "pass": "verdict",
+        "bases_coded": n,
+        "other_letters": int(len(test.genome) - n),
+        "gap_description_bits": round(interval_bits(gaps[0::2], gaps[1::2]) if len(gaps) else 0.0, 1),
+        "evidence": EVIDENCE,
+    }
+    ledger.lap("sequence")
+    try:
+        adaptive = []
+        for k in ADAPTIVE_ORDERS:
+            guard.check(counting)
+            mm = np.lib.format.open_memmap(work / f"adaptive{k}.npy", mode="w+", dtype=np.uint16, shape=(n,))
+            adaptive_model(test.s, k, out=mm, spill=work)
+            mm.flush()
+            adaptive.append(mm)
+            temp_peak = max(temp_peak, sum(p.stat().st_size for p in work.glob("*")) + counting)
+            beat()
+            ledger.lap(f"adaptive order {k}")
+        dup = segdup_layer(test, results_dir, reference, ledger, keep_primes=False)
+        copy = np.lib.format.open_memmap(work / "copy.npy", mode="w+", dtype=np.uint16, shape=(n,))
+        copy[:] = dup.models.pop("copy")
+        copy.flush()
+        dup_claim, dup_any = dup.claim, dup.notes.pop("any").astype(bool)
+        dup.notes.pop("prime", None)
+        ledger.lap("layer duplications (whole chromosome)")
+
+        blocks = tier_blocks(chrom, results_dir)
+        size_combo, size_block = int(np.prod(COMBO_SHAPE)), 2 * (len(blocks) + 1)
+        bases_combo = np.zeros(size_combo, dtype=np.int64)
+        bases_block = np.zeros(size_block, dtype=np.int64)
+        names = list(LAYER_ORDER)
+        stacks = all_stacks(names)
+        keys = key_stacks(names)
+        claim_names = [*names, "cpg_islands"]
+        totals = {st: {"total": 0.0, "claims": dict.fromkeys(claim_names, 0.0)} for st in stacks}
+        combo_bits = {st: np.zeros(size_combo) for st in keys.values()}
+        block_bits = {st: np.zeros(size_block) for st in keys.values()}
+        meta = {
+            x: {"layer": x, "title": "", "items": 0, "claimed_bases": 0, "annotation_bits": 0.0}
+            for x in names
+        }
+        meta["duplications"] |= {
+            "title": dup.title,
+            "items": dup.items,
+            "claimed_bases": int(dup_claim.sum()),
+            "annotation_bits": dup.annotation_bits,
+            "notes": {k: v for k, v in dup.notes.items() if not isinstance(v, (np.ndarray, list))},
+        }
+        island_bases = 0
+        for lo in range(0, n, segment):
+            hi = min(n, lo + segment)
+            guard.check()
+            v = test.view(lo, hi)
+            groups: dict[str, list[np.ndarray]] = {
+                "naive": list(_state_models(v, trn, "static", (None, None, None), 0, NAIVE_ORDERS).values()),
+                "adaptive": [mm[lo:hi] for mm in adaptive],
+            }
+            built = {
+                "repeats": repeats_layer(v, trn, results_dir, ledger),
+                "gc_cpg": gc_layer(v, trn, ledger),
+                "coding": coding_layer(v, trn, ledger),
+                "registry": ccre_layer(v, trn, results_dir, ledger),
+                "motifs": motif_layer(v, results_dir, ledger),
+                "tiers": tiers_layer(v, trn, results_dir),
+            }
+            none = np.zeros(hi - lo, dtype=bool)
+            claims = {x: (built[x].claim if built[x] is not None else none) for x in built}
+            claims["duplications"] = dup_claim[lo:hi]
+            claims["cpg_islands"] = built["gc_cpg"].notes.get("island_mask", np.zeros(hi - lo, dtype=bool))
+            for x in names:
+                if x == "duplications":
+                    groups[x] = [copy[lo:hi]]
+                    continue
+                layer = built[x]
+                groups[x] = list(layer.models.values()) if layer is not None else []
+                if layer is not None:
+                    meta[x]["title"] = layer.title
+                    meta[x]["items"] += layer.items
+                    meta[x]["claimed_bases"] += int(layer.claim.sum())
+                    meta[x]["annotation_bits"] += layer.annotation_bits
+            island_bases += int(claims["cpg_islands"].sum())
+            tiers = built["tiers"].notes
+            rep = np.where(built["repeats"].notes["tandem"] > 0, 2, np.where(built["repeats"].claim, 1, 0))
+            dupl = dup_any[lo:hi].astype(np.int64)
+            cds = built["coding"].claim.astype(np.int64)
+            combo = np.ravel_multi_index(
+                (tiers["tier_state"].astype(np.int64), cds, rep.astype(np.int64), dupl, window_gc_bins(v)),
+                COMBO_SHAPE,
+            )
+            block = tiers["block_id"].astype(np.int64) * 2 + ((rep == 0) & (dupl == 0))
+            bases_combo += np.bincount(combo, minlength=size_combo)
+            bases_block += np.bincount(block, minlength=size_block)
+            del built, tiers, rep, dupl, cds
+            ledger.lap("segment models")
+            claim_mat = np.stack([claims[c] for c in claim_names]).astype(np.float64)
+            stack_names = list(stacks)
+            for a, b, bits in mix_stacks(groups, stacks, PASS_WINDOW, PASS_BETA):
+                mat = np.stack([bits[st] for st in stack_names])
+                tot = mat.sum(axis=1)
+                inside = mat @ claim_mat[:, a:b].T
+                for j, st in enumerate(stack_names):
+                    totals[st]["total"] += float(tot[j])
+                    for c_i, c in enumerate(claim_names):
+                        totals[st]["claims"][c] += float(inside[j, c_i])
+                for st in keys.values():
+                    combo_bits[st] += np.bincount(combo[a:b], weights=bits[st], minlength=size_combo)
+                    block_bits[st] += np.bincount(block[a:b], weights=bits[st], minlength=size_block)
+            del groups, claims, claim_mat, combo, block
+            beat()
+            ledger.lap(f"segment {lo / 1e6:.0f}-{hi / 1e6:.0f} Mb mixed")
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+
+    layers_meta = [meta[x] for x in names]
+    rows = gains(totals, layers_meta, names, n)
+    paid = {x: meta[x]["annotation_bits"] for x in names}
+    out["stacks"] = sorted(
+        (
+            {
+                "stack": st,
+                "bits_per_base": round(t["total"] / n, 4),
+                "annotation_bits_per_base": round(sum(paid.get(g, 0.0) for g in stacks[st]) / n, 5),
+                "bits_per_base_with_annotation": round(
+                    (t["total"] + sum(paid.get(g, 0.0) for g in stacks[st])) / n, 4
+                ),
+            }
+            for st, t in totals.items()
+        ),
+        key=lambda r: r["bits_per_base"],
+        reverse=True,
+    )
+    out["layers"] = rows
+    aggs = {st: {"combo": combo_bits[st], "block": block_bits[st]} for st in keys.values()}
+    out["key_stacks"] = keys
+    out["regions"] = summarise_regions(aggs, bases_combo, bases_block, blocks, n, np.random.default_rng(SEED))
+    if island_bases:
+        gen, full = keys["generic"], keys["full"]
+        without = stack_name(tuple(g for g in stacks[full] if g != "gc_cpg"))
+        with_gc = stack_name(("naive", "adaptive", "gc_cpg"))
+        out["cpg_island_bases"] = {
+            "bases": island_bases,
+            **{
+                f"{lab}_bits_per_base": round(totals[st]["claims"]["cpg_islands"] / island_bases, 4)
+                for lab, st in (
+                    ("generic", gen),
+                    ("generic_plus_gc_cpg", with_gc),
+                    ("full_without_gc_cpg", without),
+                    ("full", full),
+                )
+            },
+        }
+    out["raw"] = {
+        "note": "additive sums for the genome-wide rollup: bits are summed over bases",
+        "bases_combo": bases_combo.tolist(),
+        "bases_block": bases_block.tolist(),
+        "blocks": [[b["start"], b["end"], b["tier"], b["class"]] for b in blocks],
+        "combo_bits": {st: np.round(x, 1).tolist() for st, x in combo_bits.items()},
+        "block_bits": {st: np.round(x, 1).tolist() for st, x in block_bits.items()},
+        "totals": {
+            st: {"total": round(t["total"], 1), "claims": {c: round(v, 1) for c, v in t["claims"].items()}}
+            for st, t in totals.items()
+        },
+        "layers": [{k: v for k, v in m.items() if k != "notes"} for m in layers_meta],
+        "island_bases": island_bases,
+    }
+    cost = ledger.summary()
+    mb = n / 1e6
+    cost |= {
+        "megabases_coded": round(mb, 2),
+        "seconds_per_megabase": round(cost["seconds"] / mb, 2),
+        "segments": math.ceil(n / segment),
+        "segment_bases": segment,
+        "stacks_mixed": len(stacks),
+        "temporary_peak_gb": round(temp_peak / 1e9, 2),
+        "free_disk_min_gb": round(guard.min_free_gb, 1),
+        "disk_checks": guard.checks,
+        "disk_floor_gb": floor_gb,
+    }
+    out["method"] = {
+        "fitting": f"static models fitted on both strands of {train}; adaptive models fitted as they code; "
+        "annotation costs charged, each item to the segment holding its start; a layer inactive outside "
+        "its claim",
+        "naive_orders": NAIVE_ORDERS,
+        "adaptive_orders": ADAPTIVE_ORDERS,
+        "pseudocounts": {"order_up_to_8": ALPHA_LOW, "above": ALPHA_HIGH},
+        "mixing": {"window": PASS_WINDOW, "beta": PASS_BETA, "floor": MIX_FLOOR, "chosen_on": "chr21, chr22"},
+        "not_produced": ["order 0-16 table", "xz and bzip2", "mixing grid", "partner-primed control"],
+    }
+    out["cost"] = cost
+    return out
+
+
+def rollup(
+    chroms: list[str], results_dir: Path = RESULTS_DIR, prefix: str = "compress_pass"
+) -> dict[str, Any]:
+    """The genome from the per-chromosome verdict passes: sums, tier tables and a block bootstrap
+    over every block of every chromosome, resampled within chromosome and tier."""
+    found = {c: load_result(f"{prefix}_{c}", results_dir) for c in chroms}
+    done = [c for c in chroms if found[c] and "raw" in found[c]]
+    if not done:
+        return {"chromosomes": [], "missing": chroms}
+    first = found[done[0]]["raw"]
+    keys = found[done[0]]["key_stacks"]
+    stacks = list(first["totals"])
+    names = [m["layer"] for m in first["layers"]]
+    n = sum(found[c]["bases_coded"] for c in done)
+    totals = {st: {"total": 0.0, "claims": {}} for st in stacks}
+    meta = {
+        x: {"layer": x, "title": "", "items": 0, "claimed_bases": 0, "annotation_bits": 0.0} for x in names
+    }
+    bases_combo = np.zeros(len(first["bases_combo"]), dtype=np.int64)
+    combo = {st: np.zeros(len(first["bases_combo"])) for st in keys.values()}
+    blocks, strata = [], []
+    bases_block = [0, 0]
+    block_bits = {st: [0.0, 0.0] for st in keys.values()}
+    per_chrom = []
+    island_bases = 0
+    for c in done:
+        raw = found[c]["raw"]
+        for st in stacks:
+            totals[st]["total"] += raw["totals"][st]["total"]
+            for cl, val in raw["totals"][st]["claims"].items():
+                totals[st]["claims"][cl] = totals[st]["claims"].get(cl, 0.0) + val
+        for m in raw["layers"]:
+            meta[m["layer"]]["title"] = m["title"]
+            for f in ("items", "claimed_bases", "annotation_bits"):
+                meta[m["layer"]][f] += m[f]
+        bases_combo += np.asarray(raw["bases_combo"])
+        for st in keys.values():
+            combo[st] += np.asarray(raw["combo_bits"][st])
+        bb = raw["bases_block"]
+        bases_block[0] += bb[0]
+        bases_block[1] += bb[1]
+        bases_block += bb[2:]
+        for st in keys.values():
+            x = raw["block_bits"][st]
+            block_bits[st][0] += x[0]
+            block_bits[st][1] += x[1]
+            block_bits[st] += x[2:]
+        for start, end, tier, klass in raw["blocks"]:
+            blocks.append({"chrom": c, "start": start, "end": end, "tier": tier, "class": klass})
+            strata.append(c)
+        island_bases += raw.get("island_bases", 0)
+        boot = found[c]["regions"]["unique_bootstrap"].get(keys["full"], {})
+        per_chrom.append(
+            {
+                "chrom": c,
+                "bases": found[c]["bases_coded"],
+                "constrained_minus_neutral_full": boot.get("constrained_minus_neutral"),
+                "ci95": boot.get("ci95"),
+                "blocks": boot.get("blocks"),
+            }
+        )
+    aggs = {st: {"combo": combo[st], "block": np.asarray(block_bits[st])} for st in keys.values()}
+    regions = summarise_regions(
+        aggs,
+        bases_combo,
+        np.asarray(bases_block),
+        blocks,
+        n,
+        np.random.default_rng(SEED),
+        strata=strata,
+    )
+    rows = gains(totals, [meta[x] for x in names], names, n)
+    costs = [found[c]["cost"] for c in done]
+    return {
+        "chromosomes": done,
+        "missing": [c for c in chroms if c not in done],
+        "bases_coded": n,
+        "key_stacks": keys,
+        "stacks": sorted(
+            ({"stack": st, "bits_per_base": round(t["total"] / n, 4)} for st, t in totals.items()),
+            key=lambda r: r["bits_per_base"],
+            reverse=True,
+        ),
+        "layers": rows,
+        "regions": regions,
+        "per_chromosome": per_chrom,
+        "cost": {
+            "seconds": round(sum(x["seconds"] for x in costs)),
+            "peak_memory_gb": max(x["peak_memory_gb"] for x in costs),
+            "temporary_peak_gb": max(x.get("temporary_peak_gb", 0) for x in costs),
+            "free_disk_min_gb": min(x.get("free_disk_min_gb", math.inf) for x in costs),
+            "disk_bytes_read": sum(x["disk_bytes_read"] for x in costs),
+            "requests": sum(x["requests"] for x in costs),
+            "network_bytes": sum(x["network_bytes"] for x in costs),
+        },
+    }
