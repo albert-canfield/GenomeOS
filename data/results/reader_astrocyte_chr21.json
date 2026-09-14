@@ -1,13 +1,17 @@
 {
   "result": "reader_astrocyte_chr21",
-  "date": "2026-09-11",
+  "date": "2026-09-14",
   "cell_type": "astrocyte",
   "chrom": "chr21",
   "peaks": 3400,
   "coding_genes": 221,
-  "genes_read": 131,
-  "genes_silent": 90,
-  "read_fraction": 0.5928,
+  "genes_read": 120,
+  "genes_read_open": 131,
+  "genes_read_by_marks": 0,
+  "genes_poised": 11,
+  "genes_silent": 101,
+  "genes_closed": 90,
+  "read_fraction": 0.543,
   "top_read": [
     {
       "gene": "USP16",
@@ -200,8 +204,34 @@
     "KRTAP10-12",
     "ITGB2",
     "SLC19A1",
-    "FTCD"
+    "FTCD",
+    "ERG",
+    "GRIK1",
+    "HUNK",
+    "KCNE2",
+    "OLIG1",
+    "OLIG2",
+    "PCP4",
+    "PDE9A",
+    "RIPK4",
+    "RIPPLY3",
+    "SIM2"
   ],
+  "poised_genes": [
+    "ERG",
+    "GRIK1",
+    "HUNK",
+    "KCNE2",
+    "OLIG1",
+    "OLIG2",
+    "PCP4",
+    "PDE9A",
+    "RIPK4",
+    "RIPPLY3",
+    "SIM2"
+  ],
+  "read_by_marks": [],
+  "marks_used": true,
   "enhancers": 12139,
   "enhancers_active": 2423,
   "enhancers_active_fraction": 0.1996,
@@ -2283,7 +2313,7 @@
   ],
   "evidence": {
     "peaks": "experimental: ENCODE DNase-seq narrowPeak (GRCh38, released)",
-    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak; open is necessary for transcription, not proof of it",
+    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak and is not poised (an H3K27me3 peak without an H3K27ac peak), or carries H3K4me3 and H3K27ac peaks where the DNase file has none (ENCODE Histone ChIP-seq); open or marked is necessary for transcription, not proof of it",
     "nodes": "inferred: CTCF domains"
   }
 }

@@ -434,13 +434,50 @@ in order. "Owner" is the session that holds the files today (see §7).
     H3K9me3 excess. All 328.5 Mb were read, 85 to 93% of windows measured in
     six biosamples (IMR-90 8%, monocytes 24%). **Negative.** Alu remains keep
     15 to 18 points more methylation in hypomethylated lines.
-- **Next (epigenome).** 1. The Alu lead: SINE against LINE remains of matched
-  age and CpG content, in the four hypomethylated lines. 2. The epigenome
-  record in the Blocks tab's reader lane (state per node and gene). 3. A
-  neural, gonadal or embryonic biosample beyond SK-N-SH and H1 (Roadmap brain
-  and fetal tissues on the portal) before any cell-type claim leans on the
-  panel. 4. A measured perturbation set (CRISPRi screens in K562) to test the
-  direction finding without the model's circularity.
+- **CTCF orientation at the node edges (2026-09-14, genomeos-e1).** Every
+  CTCF-only element was scanned with JASPAR MA0139 and the 19,930 domain edges
+  held against 4DN boundaries within 20 kb (`scripts/ctcf_orientation.py`,
+  `domains_ctcf_orientation`).
+  - **Positive control.** Orientation is real at measured boundaries: sites
+    upstream are 65 to 67% reverse and downstream 65 to 66% forward in H1, K562
+    and HepG2.
+  - **Splitting our edges by orientation: negative.** Convergent pairs score at
+    their strand-shuffle medians (p 0.17 to 0.69), divergent pairs no worse; on
+    chr21 the 33 convergent edges score 55% and the 14 divergent 86% against
+    GM12878. GM12878's dense calls put a random position within 20 kb of a
+    boundary 54% of the time, so its 58% was mostly density.
+  - **What limits the edges.** Having a site at all separates edges (1.5 to 2
+    times the support), and 58% of edges have none. Used to place boundaries,
+    orientation works: reverse-to-forward strand flips beat random 1.4 to 1.6
+    times and forward-to-reverse flips fall below random.
+  - **Decision pending.** The orientation-aware caller would move every node,
+    so it waits for a decision.
+- **The reader uses the marks (2026-09-14, genomeos-e1).** Not read: an open
+  promoter with H3K27me3 and no H3K27ac (poised; H1 3,151, monocytes 2,434).
+  Read: a closed promoter with H3K4me3 and H3K27ac (keratinocyte 2,836,
+  GM12878 1,096). `silent_genes` is no longer cut at 200, which had shown every
+  later silent gene as read. Against measured RNA in four lines, poised genes
+  are expressed 6.5 to 16.5% of the time, like closed ones. Precision of "read"
+  rises 56 to 65% (K562), 55 to 62% (HepG2) and 47 to 52% (IMR-90), recall
+  falls under one point, and GM12878's recall rises 75 to 84%
+  (`reader_poised_check`).
+- **The Alu lead, closed (2026-09-14).** Alu minus L1 methylation in fossil
+  blocks falls from 15 to 19 points raw to 4.6 to 12.7 once GC, CpG density,
+  age and solo-WCGW share are matched. The matched L1s are atypical CpG-rich
+  outliers, and methylation falls with solo-WCGW share inside both families, so
+  the excess is context and region; a family programme is not shown
+  (`epigenome_fossil_alu`).
+- **Fold-change profiles.** chr2, chr7, chr12, chr17, chr21 and chr22 carry
+  them for every cell type and mark; every other chromosome carries peaks only,
+  and the record says so.
+- **Next (epigenome and nodes).** 1. An orientation-aware boundary caller
+  (reverse-to-forward flips among motif-bearing CTCF sites) as an alternative
+  node set, compared on the same measured boundaries and on the enhancer
+  deletions before any switch. 2. The poised and read-by-marks calls in the
+  Blocks lane, whose file belongs to area B: today it shows poised genes as
+  silent through `silent_genes` but has no poised colour. 3. A neural, gonadal
+  or embryonic biosample beyond SK-N-SH and H1. 4. Measured perturbations
+  (CRISPRi in K562) for the direction finding.
 - **Owner.** genomeos-e1 holds areas B, C and D since 2026-09-14, when the
   previous owner's session ended (genomeos-8e; genomeos-fe before the restart
   of 2026-09-12).

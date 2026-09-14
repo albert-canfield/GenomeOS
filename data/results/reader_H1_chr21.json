@@ -1,18 +1,18 @@
 {
   "result": "reader_H1_chr21",
-  "date": "2026-09-11",
+  "date": "2026-09-14",
   "cell_type": "H1",
   "chrom": "chr21",
   "peaks": 2778,
   "coding_genes": 221,
-  "genes_read": 148,
-  "genes_silent": 73,
-  "read_fraction": 0.6697,
+  "genes_read": 120,
+  "genes_read_open": 148,
+  "genes_read_by_marks": 1,
+  "genes_poised": 29,
+  "genes_silent": 101,
+  "genes_closed": 72,
+  "read_fraction": 0.543,
   "top_read": [
-    {
-      "gene": "DOP1B",
-      "signal": 4.58
-    },
     {
       "gene": "WDR4",
       "signal": 3.91
@@ -46,20 +46,12 @@
       "signal": 3.48
     },
     {
-      "gene": "PCBP3",
-      "signal": 3.35
-    },
-    {
       "gene": "RRP1",
       "signal": 3.3
     },
     {
       "gene": "HLCS",
       "signal": 3.24
-    },
-    {
-      "gene": "PTTG1IP",
-      "signal": 2.95
     },
     {
       "gene": "PKNOX1",
@@ -108,6 +100,18 @@
     {
       "gene": "LCA5L",
       "signal": 2.62
+    },
+    {
+      "gene": "SH3BGR",
+      "signal": 2.62
+    },
+    {
+      "gene": "MIS18A",
+      "signal": 2.61
+    },
+    {
+      "gene": "HMGN1",
+      "signal": 2.6
     }
   ],
   "silent_genes": [
@@ -116,7 +120,6 @@
     "LIPI",
     "SAMSN1",
     "TMPRSS15",
-    "RWDD2B",
     "MAP3K7CL",
     "BACH1",
     "CLDN17",
@@ -183,8 +186,72 @@
     "KRTAP10-1",
     "KRTAP12-4",
     "KRTAP12-3",
-    "KRTAP12-2"
+    "KRTAP12-2",
+    "ADAMTS1",
+    "ADAMTS5",
+    "BACE2",
+    "BTG3",
+    "C2CD2",
+    "CBR3",
+    "CLIC6",
+    "COL6A2",
+    "DOP1B",
+    "DSCAM",
+    "ENSG00000288711",
+    "ERG",
+    "EVA1C",
+    "GRIK1",
+    "ITGB2",
+    "MX1",
+    "NCAM2",
+    "OLIG1",
+    "OLIG2",
+    "PCBP3",
+    "PDXK",
+    "PTTG1IP",
+    "RCAN1",
+    "RIPK4",
+    "RIPPLY3",
+    "SIM2",
+    "SUMO3",
+    "TRPM2",
+    "TSPEAR"
   ],
+  "poised_genes": [
+    "ADAMTS1",
+    "ADAMTS5",
+    "BACE2",
+    "BTG3",
+    "C2CD2",
+    "CBR3",
+    "CLIC6",
+    "COL6A2",
+    "DOP1B",
+    "DSCAM",
+    "ENSG00000288711",
+    "ERG",
+    "EVA1C",
+    "GRIK1",
+    "ITGB2",
+    "MX1",
+    "NCAM2",
+    "OLIG1",
+    "OLIG2",
+    "PCBP3",
+    "PDXK",
+    "PTTG1IP",
+    "RCAN1",
+    "RIPK4",
+    "RIPPLY3",
+    "SIM2",
+    "SUMO3",
+    "TRPM2",
+    "TSPEAR"
+  ],
+  "read_by_marks": [
+    "RWDD2B"
+  ],
+  "marks_used": true,
   "enhancers": 12139,
   "enhancers_active": 1603,
   "enhancers_active_fraction": 0.1321,
@@ -2272,7 +2339,7 @@
   ],
   "evidence": {
     "peaks": "experimental: ENCODE DNase-seq narrowPeak (GRCh38, released)",
-    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak; open is necessary for transcription, not proof of it",
+    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak and is not poised (an H3K27me3 peak without an H3K27ac peak), or carries H3K4me3 and H3K27ac peaks where the DNase file has none (ENCODE Histone ChIP-seq); open or marked is necessary for transcription, not proof of it",
     "nodes": "inferred: CTCF domains"
   }
 }

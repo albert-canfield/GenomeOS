@@ -12,6 +12,20 @@ Data: one narrowPeak file per cell type from the ENCODE portal (1-2 MB),
 streamed, rows for the requested chromosomes kept under data/results.
 Evidence: experimental (DNase-seq) for the peaks; inferred for "read": an
 open promoter is necessary for transcription, not proof of it.
+
+Openness is not enough where the chromatin says otherwise. A bivalent or
+Polycomb promoter is open in a DNase assay and silent: H1 opens every HOXA
+promoter and carries H3K27me3 on ten of eleven. Where the epigenome layer
+(`genome/epigenome.py`) has H3K27me3 and H3K27ac peaks for the cell and the
+chromosome, an open promoter with an H3K27me3 peak and no H3K27ac peak is
+called poised and is not counted as read. A promoter the DNase file calls closed
+but that carries H3K4me3 and H3K27ac is called read by its marks
+(`read_by_marks`): a shallow DNase experiment misses active promoters.
+Measured RNA backs both rules (scripts/epigenome.py reader-check,
+`reader_poised_check`). Over the genome in K562, HepG2, GM12878 and IMR-90,
+poised genes are expressed as rarely as closed ones. Genes read by their marks
+are expressed about as often as genes read by openness, and GM12878's 1,095 of
+them more often.
 """
 
 from __future__ import annotations
@@ -124,21 +138,44 @@ class PeakIndex:
         return sum(min(e, end) - max(s, start) for s, e, _ in self.overlapping(start, end))
 
 
-def read_chromosome(cell_type: str, chrom: str, annotation, domains: list, ccres: list) -> dict[str, Any]:
+POISED_MARKS = ("H3K27me3", "H3K27ac", "H3K4me3")
+
+
+def _mark_index(cell_type: str, mark: str, chrom: str) -> PeakIndex | None:
+    """A histone mark's peaks from the epigenome layer's cache, or None when never read."""
+    from genomeos.genome import epigenome
+
+    pk = epigenome.load_mark_peaks(cell_type, mark, chrom)
+    return PeakIndex(pk) if pk is not None else None
+
+
+def read_chromosome(
+    cell_type: str, chrom: str, annotation, domains: list, ccres: list, marks: bool = True
+) -> dict[str, Any]:
     """What this cell type reads on one chromosome: open nodes, read genes, active enhancers."""
     idx = PeakIndex(load_peaks(cell_type, chrom))
     if not idx.peaks:
         raise FileNotFoundError(f"no peaks for {cell_type} on {chrom}; run fetch_peaks first")
     genes = [g for g in annotation.genes.values() if g.locus.chrom == chrom]
-    read, silent = [], []
+    k27me3, k27ac, k4me3 = (_mark_index(cell_type, m, chrom) if marks else None for m in POISED_MARKS)
+    use_marks = k27me3 is not None and k27ac is not None
+    read, silent, poised, by_marks = [], [], [], []
     for g in genes:
         if g.type != "protein_coding":
             continue
         tss = g.locus.end - 1 if g.locus.strand is Strand.MINUS else g.locus.start
-        hits = idx.overlapping(tss - PROMOTER_WINDOW, tss + PROMOTER_WINDOW)
-        (read if hits else silent).append(
-            {"gene": g.symbol, "signal": round(max((v for _, _, v in hits), default=0.0), 2)}
-        )
+        lo, hi = tss - PROMOTER_WINDOW, tss + PROMOTER_WINDOW
+        hits = idx.overlapping(lo, hi)
+        row = {"gene": g.symbol, "signal": round(max((v for _, _, v in hits), default=0.0), 2)}
+        if not hits:
+            if use_marks and k4me3 is not None and k4me3.overlapping(lo, hi) and k27ac.overlapping(lo, hi):
+                by_marks.append(row)
+            else:
+                silent.append(row)
+        elif use_marks and k27me3.overlapping(lo, hi) and not k27ac.overlapping(lo, hi):
+            poised.append(row)
+        else:
+            read.append(row)
     read.sort(key=lambda r: -r["signal"])
     nodes = []
     for d in domains:
@@ -160,17 +197,29 @@ def read_chromosome(cell_type: str, chrom: str, annotation, domains: list, ccres
     median_density = sorted(n["peaks_per_100kb"] for n in nodes)[len(nodes) // 2] if nodes else 0
     open_nodes = [n for n in nodes if n["peaks_per_100kb"] >= max(1.0, median_density)]
     silent_nodes = [n for n in nodes if n["peaks"] == 0]
+    read_open = len(read)
+    read.extend(by_marks)
+    coding = len(read) + len(silent) + len(poised)
     return {
         "cell_type": cell_type,
         "chrom": chrom,
         "peaks": len(idx.peaks),
-        "coding_genes": len(read) + len(silent),
+        "coding_genes": coding,
         "genes_read": len(read),
-        "genes_silent": len(silent),
-        "read_fraction": round(len(read) / max(1, len(read) + len(silent)), 4),
+        "genes_read_open": read_open + len(poised),
+        "genes_read_by_marks": len(by_marks) if use_marks else None,
+        "genes_poised": len(poised) if use_marks else None,
+        "genes_silent": len(silent) + len(poised),
+        "genes_closed": len(silent),
+        "read_fraction": round(len(read) / max(1, coding), 4),
         "top_read": read[:25],
         "_read_all": [r["gene"] for r in read],
-        "silent_genes": [s["gene"] for s in silent][:200],
+        # every gene not read, closed or poised: consumers (blocks, report, decompile) take "not in this
+        # list" as read, so a truncated list or a poised gene left out of it is a wrong answer
+        "silent_genes": [s["gene"] for s in silent] + sorted(p["gene"] for p in poised),
+        "poised_genes": sorted(p["gene"] for p in poised),
+        "read_by_marks": sorted(r["gene"] for r in by_marks),
+        "marks_used": use_marks,
         "enhancers": len(enh),
         "enhancers_active": active,
         "enhancers_active_fraction": round(active / max(1, len(enh)), 4),
@@ -181,8 +230,16 @@ def read_chromosome(cell_type: str, chrom: str, annotation, domains: list, ccres
         "node_table": nodes,
         "evidence": {
             "peaks": EVIDENCE,
-            "read": "inferred: promoter (TSS ± 1 kb) overlaps a DNase peak; "
-            "open is necessary for transcription, not proof of it",
+            "read": (
+                "inferred: promoter (TSS ± 1 kb) overlaps a DNase peak and is not poised (an H3K27me3 peak "
+                "without an H3K27ac peak), or carries H3K4me3 and H3K27ac peaks where the DNase file has "
+                "none (ENCODE Histone ChIP-seq); open or marked is necessary for transcription, not proof "
+                "of it"
+                if use_marks
+                else "inferred: promoter (TSS ± 1 kb) overlaps a DNase peak; open is necessary for "
+                "transcription, not proof of it (no H3K27me3/H3K27ac peaks read for this cell and "
+                "chromosome, so a poised promoter counts as read)"
+            ),
             "nodes": "inferred: CTCF domains",
         },
     }

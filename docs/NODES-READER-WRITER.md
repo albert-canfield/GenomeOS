@@ -208,6 +208,97 @@ H1, HFFc6, K562, HCT116, HepG2 and IMR-90 as BED files, `genomeos domains
 --hic GM12878` reads and compares them, and only the account key is
 missing (docs/DATA.md).
 
+## Does CTCF orientation say which node edges are real? (2026-09-14)
+
+The node edges are CTCF-only registry elements, placed without reading which way
+the CTCF motif points. The mechanism says the strand matters. Cohesin extrudes a
+loop until it meets CTCF in the right orientation, so loops close between
+convergent sites: a forward site upstream and a reverse site downstream (Rao et
+al. 2014).
+
+`scripts/ctcf_orientation.py` tests this. It scans every CTCF-only element with
+JASPAR MA0139 at the project's 0.85 threshold. MA0139's forward strand reads
+GCCACCAGGGGGCGC, the core Rao et al. call forward. That is 35,783 elements
+genome-wide, 14,221 of them with a site. Each domain edge takes the strands of
+the elements merged into it (`orient_boundaries` in `genome/domains.py`). A
+domain is convergent when its upstream edge carries a + site and its downstream
+edge a − site. It is divergent when the pair points away from it. The edges are
+held against 4DN's measured boundary calls within 20 kb, with two controls:
+
+- as many positions placed uniformly at random, the comparison's own control;
+- strands shuffled 500 times among the elements that have a site, which keeps
+  positions and which edges have a site and changes only orientation.
+
+(`domains_ctcf_orientation`)
+
+**The positive control: orientation is real at measured boundaries.**
+Single-strand sites within 20 kb upstream of a measured boundary are mostly −,
+and those downstream mostly +:
+
+| biosample | − share upstream | + share downstream |
+|---|---|---|
+| H1 | 66% | 66% |
+| K562 | 65% | 65% |
+| HepG2 | 67% | 66% |
+| IMR-90 | 57% | 56% |
+
+A boundary sits between sites pointing away from it, as extrusion predicts.
+GM12878's calls show no lean (50% and 51%). They are dense enough that a random
+position lies within 20 kb of one 54% of the time genome-wide, so every
+GM12878 comparison below is near saturation. The 58% on chr21 was mostly that
+density (random 42% there).
+
+**Our edges split by orientation: no information.**
+
+| class, genome-wide (19,930 edges) | edges | H1 | K562 | HepG2 | IMR-90 | GM12878 |
+|---|---|---|---|---|---|---|
+| all | 19,930 | 24.7% | 15.4% | 15.8% | 16.3% | 59.3% |
+| convergent pair | 2,360 | 31.0% | 21.7% | 20.0% | 18.7% | 58.6% |
+| divergent pair (wrongly oriented) | 1,056 | 33.6% | 19.8% | 19.9% | 19.1% | 58.8% |
+| a site, neither | 4,989 | 34.0% | 20.5% | 21.2% | 18.8% | 59.7% |
+| no site | 11,525 | 18.6% | 11.4% | 12.1% | 14.5% | 59.4% |
+| random positions | | 17.9% | 11.3% | 12.1% | 14.1% | 54.2% |
+
+Convergent edges sit at their strand-shuffle medians in every biosample:
+31.2%, 21.1%, 20.3%, 18.2% and 59.0%, with p from 0.17 to 0.69. Divergent
+edges are no worse than their shuffles. On chr21, as asked, the 33 convergent
+edges score 55% and the 14 divergent 86% against GM12878. Both counts are too
+small to say anything, and they point the wrong way.
+
+What does carry information is whether an edge has a site at all: edges with a
+site are supported one and a half to two times as often as edges without one
+in H1, K562 and HepG2. 58% of our edges (11,525) have no MA0139 site at the
+project's threshold.
+
+**Orientation used to place boundaries: it works.** Place a boundary between
+consecutive single-strand sites (at least 5 kb apart) where the strand flips
+from − to +, and take the + to − flips as the control:
+
+| biosample | − to + flips supported | + to − flips supported | random |
+|---|---|---|---|
+| H1 | 25.2% | 16.2% | 18.0% |
+| K562 | 17.5% | 10.2% | 11.1% |
+| HepG2 | 19.5% | 9.9% | 12.3% |
+| IMR-90 | 18.2% | 12.4% | 13.6% |
+| GM12878 | 58.5% | 57.5% | 54.1% |
+
+There are 3,093 and 3,109 of these flips genome-wide. The − to + flips beat
+random by 1.4 to 1.6 times in four biosamples. The + to − flips, sites pointing
+at each other inside a loop, fall below random, which is what the mechanism
+predicts. They also beat our current edges' enrichment over random in K562,
+HepG2 and IMR-90 (1.57, 1.59 and 1.33 against 1.36, 1.30 and 1.16), and match
+it in H1.
+
+**Reading.** Orientation carries information, but not as a label on the edges
+we already have. Those edges are limited by where the caller puts them. It takes
+whichever CTCF-only element comes first beyond a 50 kb minimum domain. More than
+half of those elements have no CTCF motif. And a single site cannot say which
+neighbour it bounds. An orientation-aware caller built on − to + transitions is
+the better edge, and it is the next step for the node model. Replacing the
+CTCF-only edges in `infer_domains` would change every node on every chromosome
+and every enhancer-target result built on them, so it waits for a decision
+rather than being slipped in.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first
@@ -292,6 +383,62 @@ read three quarters and two thirds of the coding genes respectively, with
 11,987 in common: the housekeeping core plus what each lineage adds.
 Per-chromosome results stay local (`reader_<cell>_<chrom>.json`); the
 summary is `reader_genome_wide.json`.
+
+### Openness is not reading: poised and marked promoters (2026-09-14)
+
+The epigenome layer caught the reader in two wrong answers. In H1 every HOXA
+promoter is open, and ten of eleven carry H3K4me3 with H3K27me3. Those genes
+are poised, not read. In keratinocytes and GM12878 the DNase files are shallow,
+so promoters that carry H3K4me3 and H3K27ac, the marks of an active promoter,
+come out closed. `read_chromosome` now uses the marks where the layer has
+them, which is every chromosome for all eleven cell types:
+
+- An open promoter with an H3K27me3 peak and no H3K27ac peak is **poised** and
+  is not read.
+- A closed promoter with H3K4me3 and H3K27ac peaks is **read by its marks**.
+- `silent_genes` lists every gene not read, closed or poised, in full. The
+  list used to be cut at 200 while the Blocks lane, the gene report and the
+  decompiler take "not in the list" as read, so every silent gene past the
+  200th on a large chromosome showed as read.
+
+| biosample | read by openness alone | poised | read by marks | read now |
+|---|---|---|---|---|
+| K562 | 14,828 | 2,135 | 82 | 12,775 |
+| HepG2 | 13,015 | 1,553 | 179 | 11,641 |
+| GM12878 | 9,802 | 200 | 1,096 | 10,698 |
+| H1 | 15,129 | 3,151 | 64 | 12,042 |
+| IMR-90 | 14,057 | 1,436 | 116 | 12,737 |
+| SK-N-SH | 14,883 | 1,467 | 140 | 13,556 |
+| cardiac muscle cell | 15,268 | 2,422 | 105 | 12,951 |
+| keratinocyte | 8,432 | 304 | 2,836 | 10,964 |
+| hepatocyte | 15,489 | 1,414 | 60 | 14,135 |
+| astrocyte | 13,885 | 1,348 | 102 | 12,639 |
+| CD14-positive monocyte | 13,647 | 2,434 | 138 | 11,351 |
+
+H1's 3,151 poised promoters are the size of the bivalent set reported for
+embryonic stem cells. Keratinocyte and GM12878, the two lowest read shares
+blamed on assay depth above, gain 2,836 and 1,096 genes from their marks.
+
+**Checked against measured RNA** (`reader_poised_check`, scripts/epigenome.py
+reader-check). A gene counts as expressed when ENCODE total RNA-seq covers 30%
+of its exons on its strand, the segment filter's threshold. This covers every
+chromosome in the four biosamples with such tracks:
+
+| | K562 | HepG2 | GM12878 | IMR-90 |
+|---|---|---|---|---|
+| read by openness, expressed | 64.8% | 61.8% | 87.4% | 51.6% |
+| read by marks, expressed | 58.5% (82) | 57.0% (179) | 91.2% (1,095) | 40.5% (116) |
+| poised, expressed | 6.5% | 7.9% | 16.5% | 6.8% |
+| closed, expressed | 8.0% | 7.8% | 19.5% | 7.5% |
+| precision of "read": openness only → now | 56.4 → 64.8% | 55.4 → 61.8% | 86.0 → 87.8% | 47.0 → 51.5% |
+| expressed genes called read: openness only → now | 94.8 → 93.8% | 91.9 → 91.7% | 75.2 → 83.8% | 93.1 → 92.4% |
+
+Poised genes are expressed as rarely as closed ones, and genes read by their
+marks about as often as genes read by openness. Removing the poised genes buys
+6 to 8 points of precision for under one point of recall, and the marks buy
+GM12878 8.6 points of recall. "Read" still means open or marked, which is
+necessary for transcription, not proof of it. Half of IMR-90's read genes show
+no RNA over their exons at this threshold.
 
 ## The epigenome layer: openness is not function (2026-09-14)
 
@@ -466,7 +613,8 @@ exceptions are the textbook ones:
 - H1: every HOXA and HOXD promoter is bivalent (H3K4me3 with H3K27me3 at 29
   to 34 times control). The DNase reader calls 11 of 11 HOXA promoters "read"
   there, because bivalent promoters are open. That is the openness-is-not-function
-  error the layer exists to catch.
+  error the layer exists to catch. Since the same day the reader calls them poised
+  ("Openness is not reading", above).
 
 So at HOX the answer is yes, with small numbers: 39 promoters, no formal test,
 a matched control two to eight times lower in every biosample.
@@ -514,13 +662,53 @@ measured in six of the eight WGBS biosamples. It is not a coverage artefact,
 but neither IMR-90 (8%) nor the monocyte WGBS (24%) can carry the conclusion
 alone.
 
-One family behaves differently. SINE remains (mostly old Alus, 14,000 to
-15,000 windows) sit 15 to 18 points above matched neutral sequence in K562,
-HepG2, GM12878 and SK-N-SH, and 0 to 3 points above it in H1, hepatocyte and
-monocytes. Where a cell has lost methylation genome-wide, Alu remains keep
-theirs. That is a property of a family under demethylation, not of the tier,
-and it is the one lead here worth a matched follow-up (Alu against LINE of the
-same age and CpG content).
+One family looked different. SINE remains (mostly old Alus, 14,000 to 15,000
+windows) sit 15 to 18 points above matched neutral sequence in K562, HepG2,
+GM12878 and SK-N-SH, and 0 to 3 points above it in H1, hepatocyte and
+monocytes.
+
+**The Alu lead, followed (`epigenome_fossil_alu`).** The comparison takes
+125,219 RepeatMasker records of 200 bp or more lying wholly inside fossil-tier
+blocks: 61,068 Alu and 64,151 L1. Each element's methylation is read from the
+200 bp bins at least half inside it, so a flank can pull the value toward its
+neighbourhood. The two families are not alike as sequence:
+
+| family | median GC | median CpG per 100 bp | median divergence | median solo-WCGW share of CpGs |
+|---|---|---|---|---|
+| Alu | 0.52 | 2.24 | 0.11 | 0.13 |
+| L1 | 0.35 | 0.53 | 0.18 | 0.43 |
+
+A solo-WCGW CpG has no other CpG nearby and an A or T on each side. It is the
+context hypomethylated genomes lose first (Zhou et al. 2018). Alu minus L1, in
+points of methylation, weighted by Alu elements:
+
+| design | K562 | HepG2 | GM12878 | SK-N-SH | H1 | hepatocyte | monocytes | IMR-90 |
+|---|---|---|---|---|---|---|---|---|
+| raw | +8.4 | +19.2 | +15.2 | +18.4 | +3.0 | +7.5 | +5.2 | +18.1 |
+| GC × CpG matched | +7.1 | +5.0 | +4.0 | +10.8 | +2.5 | +5.6 | +4.7 | +9.8 |
+| + divergence (age) | +8.8 | +6.6 | +4.6 | +12.6 | +1.5 | +4.1 | +1.7 | +8.0 |
+| + solo-WCGW share | +8.3 | +6.7 | +4.6 | +12.7 | +1.6 | +4.3 | +1.8 | +9.9 |
+| same 50 kb window, no sequence match | +2.1 | +11.0 | +8.5 | +9.4 | +3.4 | +6.1 | +4.2 | too few |
+
+Matching on sequence removes most of the raw excess in HepG2 and GM12878
+(19 to 7 points, 15 to 5). A residual of 4.6 to 12.7 points stays in the
+hypomethylated lines, against 1.6 to 4.3 in the intact ones. But the matched L1 set
+is a few thousand atypical, CpG-rich L1s (3,600 to 4,300 of 64,000), because
+the families barely overlap in sequence space.
+
+Inside each family, methylation falls steeply with the solo-WCGW share in the
+hypomethylated lines: HepG2 Alu from 0.40 to 0.11, HepG2 L1 from 0.22 to 0.10.
+It is nearly flat in H1 (0.90 to 0.86). At high solo-WCGW share Alu and L1 are
+alike (0.107 against 0.102 in HepG2). The design that holds the region and the
+sequence together leaves only 13 to 61 elements per line, too few to read.
+
+So most of the Alu excess is sequence context, the known way hypomethylated
+genomes lose CpG methylation, and some is region. A family effect beyond
+context is not shown, and this data cannot separate it, because Alu and L1 do
+not share enough sequence. **Not a family program. The lead is closed at this
+resolution.** A per-CpG reading (the bigBed, not 200 bp bins) comparing
+Alu-internal CpGs with L1-internal CpGs of the same flanking context would be
+the next resolution if anyone needs it.
 
 For the lexicon's negative (area I: the fossil tier is not a library for its
 node), this closes the obvious mechanism too. Methylation keeps the fossil

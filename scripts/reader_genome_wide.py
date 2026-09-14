@@ -31,11 +31,12 @@ DEFAULT_CELLS = [
     "astrocyte",
     "CD14-positive monocyte",
 ]
-CELLS = sys.argv[1:] or DEFAULT_CELLS
+RERUN = "--rerun" in sys.argv  # start the summary afresh (after a change to what "read" means)
+CELLS = [a for a in sys.argv[1:] if a != "--rerun"] or DEFAULT_CELLS
 
 
 def main() -> None:
-    out = load_result("reader_genome_wide") or {"cell_types": [], "chromosomes": {}}
+    out = (None if RERUN else load_result("reader_genome_wide")) or {"cell_types": [], "chromosomes": {}}
     out["cell_types"] = list(dict.fromkeys([*out.get("cell_types", []), *CELLS]))
     t0 = time.time()
     local = [c for c in ORDER if Path(f"data/reference/{c}.fa.gz").exists() and default_gencode({c})]
@@ -66,6 +67,9 @@ def main() -> None:
                     "peaks",
                     "coding_genes",
                     "genes_read",
+                    "genes_read_open",
+                    "genes_poised",
+                    "genes_read_by_marks",
                     "read_fraction",
                     "enhancers_active",
                     "enhancers_active_fraction",
@@ -96,13 +100,23 @@ def main() -> None:
         cell: {
             "coding_genes": sum(r[cell]["coding_genes"] for r in ch.values()),
             "genes_read": sum(r[cell]["genes_read"] for r in ch.values()),
+            "genes_read_open": sum(
+                r[cell].get("genes_read_open", r[cell]["genes_read"]) for r in ch.values()
+            ),
+            "genes_poised": sum(r[cell].get("genes_poised") or 0 for r in ch.values()),
+            "genes_read_by_marks": sum(r[cell].get("genes_read_by_marks") or 0 for r in ch.values()),
+            "marks_used_on": sum(1 for r in ch.values() if r[cell].get("genes_poised") is not None),
             "enhancers_active": sum(r[cell]["enhancers_active"] for r in ch.values()),
             "nodes_silent": sum(r[cell]["nodes_silent"] for r in ch.values()),
         }
         for cell in cells
     }
     out["totals"]["seconds"] = round(time.time() - t0)
-    out["evidence"] = "experimental: ENCODE DNase-seq peaks; inferred: read = promoter open"
+    out["evidence"] = (
+        "experimental: ENCODE DNase-seq peaks and Histone ChIP-seq peaks; inferred: read = promoter open "
+        "and not poised (H3K27me3 without H3K27ac), or closed with H3K4me3 and H3K27ac, where the marks "
+        "were read"
+    )
     save_result("reader_genome_wide", out)
     print(f"done: {out['totals']}", flush=True)
 

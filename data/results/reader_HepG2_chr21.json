@@ -1,13 +1,17 @@
 {
   "result": "reader_HepG2_chr21",
-  "date": "2026-09-11",
+  "date": "2026-09-14",
   "cell_type": "HepG2",
   "chrom": "chr21",
   "peaks": 1849,
   "coding_genes": 221,
-  "genes_read": 118,
-  "genes_silent": 103,
-  "read_fraction": 0.5339,
+  "genes_read": 109,
+  "genes_read_open": 118,
+  "genes_read_by_marks": 3,
+  "genes_poised": 12,
+  "genes_silent": 112,
+  "genes_closed": 100,
+  "read_fraction": 0.4932,
   "top_read": [
     {
       "gene": "HSPA13",
@@ -86,14 +90,6 @@
       "signal": 4.87
     },
     {
-      "gene": "RSPH1",
-      "signal": 4.86
-    },
-    {
-      "gene": "SLC37A1",
-      "signal": 4.86
-    },
-    {
       "gene": "WDR4",
       "signal": 4.75
     },
@@ -108,6 +104,14 @@
     {
       "gene": "PRMT2",
       "signal": 4.74
+    },
+    {
+      "gene": "IFNAR1",
+      "signal": 4.46
+    },
+    {
+      "gene": "C21orf58",
+      "signal": 4.42
     }
   ],
   "silent_genes": [
@@ -161,7 +165,6 @@
     "EPCIP",
     "OLIG2",
     "OLIG1",
-    "IFNAR2",
     "ENSG00000249209",
     "SMIM11",
     "C21orf140",
@@ -187,7 +190,6 @@
     "CRYAA",
     "SIK1",
     "H2BC12L",
-    "AGPAT3",
     "PWP2",
     "ICOSLG",
     "DNMT3L",
@@ -208,13 +210,44 @@
     "KRTAP12-3",
     "KRTAP12-2",
     "KRTAP12-1",
-    "KRTAP10-12",
     "ITGB2",
     "SLC19A1",
     "PCBP3",
     "COL6A2",
-    "S100B"
+    "S100B",
+    "ADAMTS1",
+    "BACE2",
+    "CBR3",
+    "COL6A1",
+    "JAM2",
+    "MX1",
+    "NCAM2",
+    "RCAN1",
+    "RSPH1",
+    "SIM2",
+    "SLC37A1",
+    "TFF1"
   ],
+  "poised_genes": [
+    "ADAMTS1",
+    "BACE2",
+    "CBR3",
+    "COL6A1",
+    "JAM2",
+    "MX1",
+    "NCAM2",
+    "RCAN1",
+    "RSPH1",
+    "SIM2",
+    "SLC37A1",
+    "TFF1"
+  ],
+  "read_by_marks": [
+    "AGPAT3",
+    "IFNAR2",
+    "KRTAP10-12"
+  ],
+  "marks_used": true,
   "enhancers": 12139,
   "enhancers_active": 1401,
   "enhancers_active_fraction": 0.1154,
@@ -2313,7 +2346,7 @@
   ],
   "evidence": {
     "peaks": "experimental: ENCODE DNase-seq narrowPeak (GRCh38, released)",
-    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak; open is necessary for transcription, not proof of it",
+    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak and is not poised (an H3K27me3 peak without an H3K27ac peak), or carries H3K4me3 and H3K27ac peaks where the DNase file has none (ENCODE Histone ChIP-seq); open or marked is necessary for transcription, not proof of it",
     "nodes": "inferred: CTCF domains"
   }
 }

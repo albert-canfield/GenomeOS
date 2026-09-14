@@ -1,13 +1,17 @@
 {
   "result": "reader_SK_N_SH_chr21",
-  "date": "2026-09-11",
+  "date": "2026-09-14",
   "cell_type": "SK-N-SH",
   "chrom": "chr21",
   "peaks": 2619,
   "coding_genes": 221,
-  "genes_read": 130,
-  "genes_silent": 91,
-  "read_fraction": 0.5882,
+  "genes_read": 118,
+  "genes_read_open": 130,
+  "genes_read_by_marks": 1,
+  "genes_poised": 13,
+  "genes_silent": 103,
+  "genes_closed": 90,
+  "read_fraction": 0.5339,
   "top_read": [
     {
       "gene": "PRMT2",
@@ -163,7 +167,6 @@
     "KCNE1",
     "SETD4",
     "CLDN14",
-    "DYRK1A",
     "KCNJ6",
     "KCNJ15",
     "BRWD1",
@@ -201,8 +204,40 @@
     "KRTAP12-3",
     "KRTAP12-2",
     "KRTAP12-1",
-    "FTCD"
+    "FTCD",
+    "CLIC6",
+    "CXADR",
+    "ERG",
+    "GRIK1",
+    "ITGB2",
+    "KRTAP10-12",
+    "KRTAP10-4",
+    "NRIP1",
+    "OLIG1",
+    "OLIG2",
+    "RBM11",
+    "SIM2",
+    "TSPEAR"
   ],
+  "poised_genes": [
+    "CLIC6",
+    "CXADR",
+    "ERG",
+    "GRIK1",
+    "ITGB2",
+    "KRTAP10-12",
+    "KRTAP10-4",
+    "NRIP1",
+    "OLIG1",
+    "OLIG2",
+    "RBM11",
+    "SIM2",
+    "TSPEAR"
+  ],
+  "read_by_marks": [
+    "DYRK1A"
+  ],
+  "marks_used": true,
   "enhancers": 12139,
   "enhancers_active": 1579,
   "enhancers_active_fraction": 0.1301,
@@ -2275,7 +2310,7 @@
   ],
   "evidence": {
     "peaks": "experimental: ENCODE DNase-seq narrowPeak (GRCh38, released)",
-    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak; open is necessary for transcription, not proof of it",
+    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak and is not poised (an H3K27me3 peak without an H3K27ac peak), or carries H3K4me3 and H3K27ac peaks where the DNase file has none (ENCODE Histone ChIP-seq); open or marked is necessary for transcription, not proof of it",
     "nodes": "inferred: CTCF domains"
   }
 }

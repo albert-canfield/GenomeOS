@@ -1095,7 +1095,7 @@ def _reader_check_chrom(chrom: str) -> tuple[str, dict, dict]:
         orientation[cell] = rna.orientation.get(cell)
         poised = set(r["poised_genes"])
         silent = set(r["silent_genes"]) - poised
-        marked = set(r.get("marked_active_closed", []))
+        marked = set(r.get("read_by_marks", []))
         for sym, (st, ex) in gene_exons.items():
             starts = [a for a, _ in merged[st]]
             fr = []
@@ -1105,10 +1105,16 @@ def _reader_check_chrom(chrom: str) -> tuple[str, dict, dict]:
                     m0, m1 = merged[st][i]
                     fr.append(rna.covered_fraction(st, m0, m1))
             score = sum(fr) / len(fr) if fr else 0.0
-            call = "poised" if sym in poised else "silent" if sym in silent else "read"
-            groups = [call] + (["marked_active_closed"] if sym in marked else [])
-            if call == "silent" and sym not in marked:
-                groups.append("silent_unmarked")
+            call = (
+                "poised"
+                if sym in poised
+                else "closed"
+                if sym in silent
+                else "read_by_marks"
+                if sym in marked
+                else "read_open"
+            )
+            groups = [call, *(["read"] if call.startswith("read") else [])]
             for grp in groups:
                 t = tallies[cell].setdefault(grp, {"genes": 0, "expressed": 0})
                 t["genes"] += 1
@@ -1136,9 +1142,9 @@ def reader_check(argv: list[str]) -> None:
     for t in tallies.values():
         for v in t.values():
             v["expressed_share"] = round(v["expressed"] / v["genes"], 4) if v["genes"] else None
-        if "read" in t and "poised" in t:
-            open_genes = t["read"]["genes"] + t["poised"]["genes"]
-            open_expr = t["read"]["expressed"] + t["poised"]["expressed"]
+        if "read_open" in t and "poised" in t:
+            open_genes = t["read_open"]["genes"] + t["poised"]["genes"]
+            open_expr = t["read_open"]["expressed"] + t["poised"]["expressed"]
             t["read_by_openness_only"] = {
                 "genes": open_genes,
                 "expressed": open_expr,

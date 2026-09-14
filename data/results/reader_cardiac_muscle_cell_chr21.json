@@ -1,13 +1,17 @@
 {
   "result": "reader_cardiac_muscle_cell_chr21",
-  "date": "2026-09-11",
+  "date": "2026-09-14",
   "cell_type": "cardiac muscle cell",
   "chrom": "chr21",
   "peaks": 3765,
   "coding_genes": 221,
-  "genes_read": 137,
-  "genes_silent": 84,
-  "read_fraction": 0.6199,
+  "genes_read": 116,
+  "genes_read_open": 137,
+  "genes_read_by_marks": 0,
+  "genes_poised": 21,
+  "genes_silent": 105,
+  "genes_closed": 84,
+  "read_fraction": 0.5249,
   "top_read": [
     {
       "gene": "HSPA13",
@@ -78,10 +82,6 @@
       "signal": 18.47
     },
     {
-      "gene": "PCBP3",
-      "signal": 16.43
-    },
-    {
       "gene": "RSPH1",
       "signal": 15.6
     },
@@ -108,6 +108,10 @@
     {
       "gene": "NDUFV3",
       "signal": 14.08
+    },
+    {
+      "gene": "ATP5PO",
+      "signal": 14.01
     }
   ],
   "silent_genes": [
@@ -194,8 +198,54 @@
     "KRTAP12-2",
     "KRTAP12-1",
     "KRTAP10-12",
-    "SLC19A1"
+    "SLC19A1",
+    "ADAMTS5",
+    "AIRE",
+    "BACE2",
+    "CBR3",
+    "CLIC6",
+    "ERG",
+    "EVA1C",
+    "GRIK1",
+    "HUNK",
+    "ITGB2",
+    "JAM2",
+    "MX1",
+    "NCAM2",
+    "OLIG1",
+    "OLIG2",
+    "PCBP3",
+    "PCP4",
+    "RBM11",
+    "RIPK4",
+    "RIPPLY3",
+    "SIM2"
   ],
+  "poised_genes": [
+    "ADAMTS5",
+    "AIRE",
+    "BACE2",
+    "CBR3",
+    "CLIC6",
+    "ERG",
+    "EVA1C",
+    "GRIK1",
+    "HUNK",
+    "ITGB2",
+    "JAM2",
+    "MX1",
+    "NCAM2",
+    "OLIG1",
+    "OLIG2",
+    "PCBP3",
+    "PCP4",
+    "RBM11",
+    "RIPK4",
+    "RIPPLY3",
+    "SIM2"
+  ],
+  "read_by_marks": [],
+  "marks_used": true,
   "enhancers": 12139,
   "enhancers_active": 2744,
   "enhancers_active_fraction": 0.226,
@@ -2270,7 +2320,7 @@
   ],
   "evidence": {
     "peaks": "experimental: ENCODE DNase-seq narrowPeak (GRCh38, released)",
-    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak; open is necessary for transcription, not proof of it",
+    "read": "inferred: promoter (TSS \u00b1 1 kb) overlaps a DNase peak and is not poised (an H3K27me3 peak without an H3K27ac peak), or carries H3K4me3 and H3K27ac peaks where the DNase file has none (ENCODE Histone ChIP-seq); open or marked is necessary for transcription, not proof of it",
     "nodes": "inferred: CTCF domains"
   }
 }

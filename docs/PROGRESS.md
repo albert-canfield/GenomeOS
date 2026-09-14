@@ -904,3 +904,30 @@ and a genome rollup.
 docs/NODES-READER-WRITER.md "The epigenome layer"; three LESSONS rows; the
 experiments credited in ACKNOWLEDGEMENTS.md.
 
+## 2026-09-14 — CTCF orientation, and a reader that uses the marks
+
+Loop extrusion is blocked by CTCF in an orientation-dependent way, and our node
+edges never read the strand. Scanned with JASPAR MA0139 and held against 4DN
+boundaries genome-wide, orientation is real at measured boundaries (two thirds
+of sites point away from them in H1, K562 and HepG2). It carries no information
+as a label on our 19,930 edges: convergent pairs score at their strand-shuffle
+medians, and so do divergent ones. It does carry information as a placement
+rule: reverse-to-forward strand flips beat random 1.4 to 1.6 times, and the
+opposite flips fall below random. The edges are limited by where the caller
+puts them, and 58% of them have no motif.
+
+The reader now calls an open promoter with H3K27me3 and no H3K27ac poised
+(H1 3,151), and a closed promoter with H3K4me3 and H3K27ac read (keratinocyte
+2,836). Its silent list is no longer cut at 200 genes, which had turned every
+later silent gene into "read" in the Blocks lane, the report and the
+decompiler. Measured RNA agrees: poised genes are expressed 6.5 to 16.5% of the
+time, like closed ones, and precision of "read" rises 5 to 8 points in K562,
+HepG2 and IMR-90 for under one point of recall.
+
+The Alu methylation lead closes as sequence context and region, not a family
+effect. The missing fold-change profiles for chr2, chr7, chr12 and chr17 are
+read, and the layer says plainly that every other chromosome carries peaks
+only.
+
+docs/NODES-READER-WRITER.md; `domains_ctcf_orientation`,
+`reader_poised_check`, `epigenome_fossil_alu`.
