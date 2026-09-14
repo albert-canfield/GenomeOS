@@ -147,6 +147,9 @@ CRITERION: dict[str, Any] = {
         "absolute predicted effect larger in units than in controls (Mann-Whitney, reported only)",
         "rank correlation of predicted log2FC with GTEx slope among units (reported only)",
         "agreement against 0.5 without controls (reported only; the controls decide)",
+        "a no-call grid of 0, 0.001 and 0.01 on |predicted log2FC|, added 2026-09-14 after a two-request "
+        "smoke test showed single-variant gene effects of about 0.001, before any endpoint was scored; "
+        "the primary keeps 0.001",
     ],
     "alpha_spending": {
         "look_1_pairs": 150,
@@ -711,6 +714,24 @@ def predict_side(
         "call": call,
         "agrees": None if call is None else call == borrowed["measured_sign"],
     }
+
+
+def recall(done: list[dict[str, Any]], endpoint: str, no_call: float) -> dict[str, Any]:
+    """The endpoint scored again at another no-call threshold, from the values already paid for."""
+    rows = []
+    for d in done:
+        if d["endpoint"] != endpoint:
+            continue
+        out = dict(d)
+        for side in ("test_result", "control_result"):
+            r = dict(d[side])
+            v = r.get("value")
+            call = None if v is None or abs(v) < no_call else (1 if v > 0 else -1)
+            r["call"] = call
+            r["agrees"] = None if call is None else call == d["borrowed"]["measured_sign"]
+            out[side] = r
+        rows.append(out)
+    return {"no_call": no_call, **tally(rows, endpoint)}
 
 
 def tally(done: list[dict[str, Any]], endpoint: str, chrom: str | None = None) -> dict[str, Any]:

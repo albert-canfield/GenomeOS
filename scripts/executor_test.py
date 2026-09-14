@@ -27,6 +27,9 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--run", action="store_true", help="spend model requests (part two)")
     ap.add_argument("--quota-handed", action="store_true", help="confirm the quota holder has handed it over")
     ap.add_argument("--max-requests", type=int, default=None)
+    ap.add_argument(
+        "--endpoints", default="E1_mpra,E2_eqtl", help="E3 runs only when the quota holder agrees"
+    )
     args = ap.parse_args(argv)
     t0 = time.time()
 
@@ -47,8 +50,11 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit("part two spends AlphaGenome requests: pass --quota-handed once the quota is yours")
     with gzip.open(table, "rt") as fh:
         pairs = json.load(fh)["matched"]["pairs"]
+    wanted = set(args.endpoints.split(","))
+    pairs = [p for p in pairs if p["endpoint"] in wanted]
     out = ex.run_pairs(pairs, ex.live_scorer(), max_requests=args.max_requests, progress=say)
     rows = out.pop("rows")
+    out["no_call_grid"] = {e: [ex.recall(rows, e, t) for t in (0.0, 0.001, 0.01)] for e in sorted(wanted)}
     with gzip.open(ex.LANE / "run_rows.json.gz", "wt") as fh:
         json.dump(rows, fh)
     out["criterion"] = ex.CRITERION
