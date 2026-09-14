@@ -48,3 +48,45 @@ def test_aggregate_counts_complete_chromosomes_only(tmp_path):
     assert g["fraction_with_target"] == 0.6 and g["coding_target_agrees_with_nearest"] == 0.6
     assert g["coding_target_inside_domain"] == 0.8 and out["requests_total"] == 20
     assert out["chromosomes"]["chr22"]["complete"] is False
+
+
+def test_spread_is_reported_per_chromosome_not_only_pooled(tmp_path):
+    (tmp_path / "enhancer_targets_all_chr21.json").write_text(
+        json.dumps(_res("chr21", 100, 100, True, 60, 30, 10, 10, 20))
+    )
+    (tmp_path / "enhancer_targets_all_chr1.json").write_text(
+        json.dumps(_res("chr1", 100, 100, True, 90, 10, 10, 30, 20))
+    )
+    s = agw.aggregate(tmp_path)["spread"]["fraction_with_target"]
+    assert s["n"] == 2 and s["min"] == 0.6 and s["max"] == 0.9 and s["range"] == 0.3
+    assert s["lowest"] == "chr21" and s["highest"] == "chr1"
+    assert s["per_chromosome"] == {"chr21": 0.6, "chr1": 0.9}
+
+
+def test_the_acrocentric_chromosomes_are_split_out_and_the_controls_travel(tmp_path):
+    (tmp_path / "enhancer_targets_all_chr21.json").write_text(
+        json.dumps(_res("chr21", 100, 100, True, 60, 30, 10, 10, 20))
+    )
+    (tmp_path / "enhancer_targets_all_chr1.json").write_text(
+        json.dumps(_res("chr1", 100, 100, True, 90, 10, 10, 30, 20))
+    )
+    out = agw.aggregate(tmp_path)
+    t = out["size_trend"]
+    assert t["acrocentric_and_chrY_only"]["chroms"] == ["chr21"]
+    assert t["acrocentric_and_chrY_only"]["pooled"]["fraction_with_target"] == 0.6
+    assert t["excluding_acrocentric_and_chrY"]["pooled"]["fraction_with_target"] == 0.9
+    assert t["fraction_with_target"] is None  # two chromosomes is not a trend
+    c = out["controls"]
+    assert c["fraction_with_target"]["control"] == 0.87
+    assert c["coding_target_inside_domain"]["control"] == 0.791
+    assert c["coding_target_inside_domain"]["excess"] == 0.026
+
+
+def test_the_length_trend_needs_four_chromosomes(tmp_path):
+    for chrom, named in (("chr1", 90), ("chr2", 80), ("chr21", 60), ("chr22", 62)):
+        (tmp_path / f"enhancer_targets_all_{chrom}.json").write_text(
+            json.dumps(_res(chrom, 100, 100, True, named, 30, 10, 10, 20))
+        )
+    t = agw.aggregate(tmp_path)["size_trend"]
+    assert t["chromosomes"] == 4
+    assert t["fraction_with_target"] == 1.0  # the rate rises with length, perfectly ranked

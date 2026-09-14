@@ -1,24 +1,158 @@
 {
   "result": "enhancer_targets_all_genome_wide",
-  "date": "2026-09-13",
+  "date": "2026-09-14",
   "chromosomes": {
+    "chr1": {
+      "elements": 88109,
+      "scored": 2400,
+      "complete": false,
+      "length": 248956422,
+      "fraction_with_target": 0.662,
+      "coding_target_agrees_with_nearest": 0.636,
+      "coding_target_inside_domain": 0.932,
+      "fraction_inside_domain": 0.918,
+      "strong": 412,
+      "silencer_like": 630,
+      "requests_this_run": 8
+    },
+    "chr11": {
+      "elements": 48380,
+      "scored": 14000,
+      "complete": false,
+      "length": 135086622,
+      "fraction_with_target": 0.698,
+      "coding_target_agrees_with_nearest": 0.682,
+      "coding_target_inside_domain": 0.905,
+      "fraction_inside_domain": 0.9,
+      "strong": 2415,
+      "silencer_like": 3743,
+      "requests_this_run": 13993
+    },
+    "chr12": {
+      "elements": 46582,
+      "scored": 46582,
+      "complete": true,
+      "length": 133275309,
+      "fraction_with_target": 0.679,
+      "coding_target_agrees_with_nearest": 0.594,
+      "coding_target_inside_domain": 0.756,
+      "fraction_inside_domain": 0.751,
+      "strong": 9050,
+      "silencer_like": 11805,
+      "requests_this_run": 7651
+    },
+    "chr13": {
+      "elements": 25634,
+      "scored": 25634,
+      "complete": true,
+      "length": 114364328,
+      "fraction_with_target": 0.581,
+      "coding_target_agrees_with_nearest": 0.559,
+      "coding_target_inside_domain": 0.684,
+      "fraction_inside_domain": 0.718,
+      "strong": 3457,
+      "silencer_like": 5724,
+      "requests_this_run": 25697
+    },
+    "chr14": {
+      "elements": 31794,
+      "scored": 31794,
+      "complete": true,
+      "length": 107043718,
+      "fraction_with_target": 0.623,
+      "coding_target_agrees_with_nearest": 0.604,
+      "coding_target_inside_domain": 0.772,
+      "fraction_inside_domain": 0.765,
+      "strong": 5554,
+      "silencer_like": 7543,
+      "requests_this_run": 17261
+    },
+    "chr15": {
+      "elements": 31058,
+      "scored": 31058,
+      "complete": true,
+      "length": 101991189,
+      "fraction_with_target": 0.671,
+      "coding_target_agrees_with_nearest": 0.584,
+      "coding_target_inside_domain": 0.737,
+      "fraction_inside_domain": 0.754,
+      "strong": 5763,
+      "silencer_like": 8061,
+      "requests_this_run": 31890
+    },
+    "chr16": {
+      "elements": 32314,
+      "scored": 32314,
+      "complete": true,
+      "length": 90338345,
+      "fraction_with_target": 0.644,
+      "coding_target_agrees_with_nearest": 0.613,
+      "coding_target_inside_domain": 0.817,
+      "fraction_inside_domain": 0.804,
+      "strong": 6461,
+      "silencer_like": 7720,
+      "requests_this_run": 33210
+    },
+    "chr17": {
+      "elements": 41396,
+      "scored": 41396,
+      "complete": true,
+      "length": 83257441,
+      "fraction_with_target": 0.684,
+      "coding_target_agrees_with_nearest": 0.643,
+      "coding_target_inside_domain": 0.86,
+      "fraction_inside_domain": 0.848,
+      "strong": 9570,
+      "silencer_like": 10463,
+      "requests_this_run": 22215
+    },
+    "chr18": {
+      "elements": 21973,
+      "scored": 21973,
+      "complete": true,
+      "length": 80373285,
+      "fraction_with_target": 0.621,
+      "coding_target_agrees_with_nearest": 0.638,
+      "coding_target_inside_domain": 0.691,
+      "fraction_inside_domain": 0.701,
+      "strong": 3389,
+      "silencer_like": 5194,
+      "requests_this_run": 22549
+    },
     "chr19": {
       "elements": 29374,
-      "scored": 1600,
-      "complete": false,
-      "fraction_with_target": 0.655,
-      "coding_target_agrees_with_nearest": 0.658,
-      "fraction_inside_domain": 0.932,
-      "strong": 279,
-      "silencer_like": 370,
-      "requests_this_run": 1600
+      "scored": 29374,
+      "complete": true,
+      "length": 58617616,
+      "fraction_with_target": 0.708,
+      "coding_target_agrees_with_nearest": 0.65,
+      "coding_target_inside_domain": 0.912,
+      "fraction_inside_domain": 0.891,
+      "strong": 8217,
+      "silencer_like": 7280,
+      "requests_this_run": 21590
+    },
+    "chr20": {
+      "elements": 26954,
+      "scored": 26954,
+      "complete": true,
+      "length": 64444167,
+      "fraction_with_target": 0.63,
+      "coding_target_agrees_with_nearest": 0.61,
+      "coding_target_inside_domain": 0.752,
+      "fraction_inside_domain": 0.756,
+      "strong": 4906,
+      "silencer_like": 6513,
+      "requests_this_run": 27356
     },
     "chr21": {
       "elements": 12139,
       "scored": 12139,
       "complete": true,
+      "length": 46709983,
       "fraction_with_target": 0.646,
       "coding_target_agrees_with_nearest": 0.609,
+      "coding_target_inside_domain": 0.726,
       "fraction_inside_domain": 0.765,
       "strong": 2182,
       "silencer_like": 3055,
@@ -28,8 +162,10 @@
       "elements": 19708,
       "scored": 19708,
       "complete": true,
+      "length": 50818468,
       "fraction_with_target": 0.665,
       "coding_target_agrees_with_nearest": 0.653,
+      "coding_target_inside_domain": 0.841,
       "fraction_inside_domain": 0.838,
       "strong": 4115,
       "silencer_like": 4952,
@@ -39,33 +175,191 @@
       "elements": 907,
       "scored": 907,
       "complete": true,
+      "length": 57227415,
       "fraction_with_target": 0.611,
       "coding_target_agrees_with_nearest": 0.488,
+      "coding_target_inside_domain": 0.712,
       "fraction_inside_domain": 0.852,
       "strong": 215,
       "silencer_like": 182,
       "requests_this_run": 0
     }
   },
-  "complete_chromosomes": 3,
+  "complete_chromosomes": 12,
+  "chromosomes_complete": [
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrY"
+  ],
   "genome": {
-    "elements": 32754,
-    "scored": 32754,
-    "named": 21508,
-    "coding_named": 14911,
-    "strong": 6512,
-    "silencer_like": 8189,
-    "fraction_with_target": 0.657,
-    "coding_target_agrees_with_nearest": 0.637,
-    "coding_target_inside_domain": 0.8,
+    "elements": 319833,
+    "scored": 319833,
+    "named": 209228,
+    "coding_named": 150919,
+    "strong": 62879,
+    "silencer_like": 78492,
+    "fraction_with_target": 0.654,
+    "coding_target_agrees_with_nearest": 0.615,
+    "coding_target_inside_domain": 0.79,
     "verdicts_coding": {
-      "no predicted effect": 17843,
-      "agrees with nearest TSS in domain": 9494,
-      "gene outside the domain": 2983,
-      "another gene in the same domain": 2434
+      "no predicted effect": 168914,
+      "agrees with nearest TSS in domain": 92866,
+      "gene outside the domain": 31747,
+      "another gene in the same domain": 26306
     }
   },
-  "requests_total": 26717,
+  "spread": {
+    "fraction_with_target": {
+      "n": 12,
+      "min": 0.581,
+      "lowest": "chr13",
+      "median": 0.645,
+      "max": 0.708,
+      "highest": "chr19",
+      "range": 0.127,
+      "per_chromosome": {
+        "chr13": 0.581,
+        "chrY": 0.611,
+        "chr18": 0.621,
+        "chr14": 0.623,
+        "chr20": 0.63,
+        "chr16": 0.644,
+        "chr21": 0.646,
+        "chr22": 0.665,
+        "chr15": 0.671,
+        "chr12": 0.679,
+        "chr17": 0.684,
+        "chr19": 0.708
+      }
+    },
+    "coding_target_agrees_with_nearest": {
+      "n": 12,
+      "min": 0.488,
+      "lowest": "chrY",
+      "median": 0.609,
+      "max": 0.653,
+      "highest": "chr22",
+      "range": 0.165,
+      "per_chromosome": {
+        "chrY": 0.488,
+        "chr13": 0.559,
+        "chr15": 0.584,
+        "chr12": 0.594,
+        "chr14": 0.604,
+        "chr21": 0.609,
+        "chr20": 0.61,
+        "chr16": 0.613,
+        "chr18": 0.638,
+        "chr17": 0.643,
+        "chr19": 0.65,
+        "chr22": 0.653
+      }
+    },
+    "coding_target_inside_domain": {
+      "n": 12,
+      "min": 0.684,
+      "lowest": "chr13",
+      "median": 0.754,
+      "max": 0.912,
+      "highest": "chr19",
+      "range": 0.228,
+      "per_chromosome": {
+        "chr13": 0.684,
+        "chr18": 0.691,
+        "chrY": 0.712,
+        "chr21": 0.726,
+        "chr15": 0.737,
+        "chr20": 0.752,
+        "chr12": 0.756,
+        "chr14": 0.772,
+        "chr16": 0.817,
+        "chr22": 0.841,
+        "chr17": 0.86,
+        "chr19": 0.912
+      }
+    }
+  },
+  "controls": {
+    "fraction_with_target": {
+      "control": 0.87,
+      "what": "a derived layer names some target at 52 of 60 matched random windows (87%), against 11 of 12 published loci",
+      "source": "docs/LOCI-BENCHMARK.md, data/results/loci_benchmark.json (commits 303d0b0, ef80075)",
+      "reading": "a naming rate is not evidence by itself; what separates a real element from a matched window is a direction and a variable position on constrained sequence"
+    },
+    "coding_target_inside_domain": {
+      "control": 0.791,
+      "measured": 0.817,
+      "excess": 0.026,
+      "what": "over the whole deletion archive of 113,399 elements the same caller keeps a coding target inside the element's own CTCF node for 81.7% of elements, against 79.1% for the same number of boundaries placed at random: 2.6 points, not nine times out of ten",
+      "source": "data/results/domains_oriented_comparison.json (commit dbad593)",
+      "reading": "the node's advantage over a random partition at the same resolution is small, and it is measured on a model's reading rather than on observed enhancer-gene pairs"
+    },
+    "coding_target_agrees_with_nearest": {
+      "control": null,
+      "what": "no matched-window control has been measured for nearest-TSS agreement; the nearest TSS heuristic names the published target at 8 of 12 loci, the same count the derived layers reach on a different 8",
+      "source": "docs/LOCI-BENCHMARK.md (commit 303d0b0)",
+      "reading": "quote it as agreement between two readings of the same element, not as accuracy"
+    }
+  },
+  "size_trend": {
+    "axis": "hg38 chromosome length against the chromosome's own rate, over the complete chromosomes",
+    "chromosomes": 12,
+    "fraction_with_target": -0.07,
+    "coding_target_agrees_with_nearest": -0.42,
+    "coding_target_inside_domain": -0.105,
+    "against_element_density": {
+      "axis": "registry elements per Mb, the stand-in for gene density this run already holds",
+      "fraction_with_target": 0.762,
+      "coding_target_agrees_with_nearest": 0.748,
+      "coding_target_inside_domain": 0.867,
+      "per_chromosome": {
+        "chr19": 501.1,
+        "chr17": 497.2,
+        "chr20": 418.3,
+        "chr22": 387.8,
+        "chr16": 357.7,
+        "chr12": 349.5,
+        "chr15": 304.5,
+        "chr14": 297.0,
+        "chr18": 273.4,
+        "chr21": 259.9,
+        "chr13": 224.1,
+        "chrY": 15.8
+      }
+    },
+    "excluding_acrocentric_and_chrY": {
+      "chromosomes": 9,
+      "pooled": {
+        "fraction_with_target": 0.654,
+        "coding_target_agrees_with_nearest": 0.613,
+        "coding_target_inside_domain": 0.789
+      }
+    },
+    "acrocentric_and_chrY_only": {
+      "chromosomes": 3,
+      "chroms": [
+        "chr21",
+        "chr22",
+        "chrY"
+      ],
+      "pooled": {
+        "fraction_with_target": 0.657,
+        "coding_target_agrees_with_nearest": 0.637,
+        "coding_target_inside_domain": 0.8
+      }
+    },
+    "reading": "a rate that moves with chromosome size is a rate the small chromosomes bought; chr21 and chr22 are acrocentric and chrY is nearly gene-free, and the compression lane's per-chromosome layers already looked positive there and went negative genome-wide"
+  },
+  "requests_total": 248537,
   "cells": [
     "K562",
     "HepG2",

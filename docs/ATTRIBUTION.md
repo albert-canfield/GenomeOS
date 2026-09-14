@@ -1976,6 +1976,56 @@ and neither of them the model, showing the same two numbers: 0.670 against 0.679
 It is nonetheless the first result in this area whose evidence does not pass through a model, and it
 supports the reading the executor test reached by a different route.
 
+## The all-elements sweep folded: what 319,833 deleted elements say, and what they do not (2026-09-14)
+
+The chain (`scripts/enhancer_targets_all_chain.py`) is deleting every registry element of every
+chromosome in AlphaGenome, one chromosome at a time, and each finished chromosome commits its own
+summary. `scripts/enhancer_targets_all_genome_wide.py` folds the complete ones into one reading and is
+re-run as each lands. Twelve are complete (chr12 to chr22 and chrY), 319,833 elements, 248,339 requests.
+
+| reading | genome-wide, 12 chromosomes | across chromosomes | the control it has to be read against |
+|---|---|---|---|
+| names a gene at all | 65.4% | 58.1% (chr13) to 70.8% (chr19), median 64.5% | 87% of matched random windows in the locus benchmark |
+| the named coding gene is the nearest TSS | 61.5% | 48.8% (chrY) to 65.3% (chr22), median 60.9% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
+| the named coding gene is inside the element's own CTCF node | 79.0% | 68.4% (chr13) to 91.2% (chr19), median 75.4% | 79.1% for the same number of boundaries placed at random |
+
+**The pooled numbers are the least interesting row in the table.** Node containment spans 22.8 points
+between chromosomes and the node's whole measured advantage over a random partition is 2.6 points
+(dbad593: 81.7% against 79.1% over the 113,399-element archive). At twelve chromosomes the containment
+rate is 79.0%, which is the random-boundary level, so the node's excess that the archive measured does
+not survive the wider sweep as a pooled number. That is not yet a refutation — the 79.1% control was
+placed against the archive's own element set and no matched random-boundary control has been run on
+these 319,833 — but it is the opposite of a confirmation, and the honest statement is that at this size
+a CTCF node predicts which gene an element moves about as well as a random partition of the same
+chromosome at the same resolution.
+
+The naming rate is the same kind of number. 65.4% of elements name some gene, and "some derived layer
+names a target" already fires at 52 of 60 matched random windows in the locus benchmark (303d0b0,
+ef80075). The two instruments are not the same — the benchmark pools every layer over a whole window,
+this is one element's own deletion — but the direction is unambiguous: naming a target is what this
+kind of reading does almost everywhere, and a naming rate quoted without that baseline says nothing.
+
+**What does vary, and it is not chromosome size.** Against hg38 chromosome length the three rates have
+Spearman −0.07, −0.42 and −0.11 over the twelve. Against registry elements per Mb — the element
+density this run already holds, standing in for gene density — they are +0.76, +0.75 and +0.87. Every
+rate rises on the dense chromosomes and falls on the sparse ones: chr19 at 501 elements per Mb is
+highest on all three, chr13 at 224 is lowest on two, chrY at 16 is lowest on the third. Length
+correlates weakly *negatively* only because the dense chromosomes are the short ones. The reading is
+that these rates measure how much gene there is to name near an element, not how well the genome is
+being understood, and a target within a node is easier to find where targets are dense.
+
+**The acrocentric trap did not spring here.** chr21, chr22 and chrY pooled give 65.7% / 63.7% / 80.0%
+against 65.4% / 61.3% / 78.9% for the other nine, so unlike the compression lane's per-chromosome
+layers, this reading was not bought by the small chromosomes. The prediction to hold the fold to is the
+density one: chrX, chr4 and chr5 are sparse, and if the density relation is real the pooled rates
+should fall as they land rather than stay flat. The fold records the per-chromosome rate, the spread
+and both trends every time it runs, so that check is automatic.
+
+`data/results/enhancer_targets_all_genome_wide.json`; the per-element tables stay local under
+`data/knowledge/alphagenome/all_elements/<chrom>.json`. Cells K562, HepG2, GM12878 and IMR-90.
+Evidence: predicted (AlphaGenome deletion effect per element, per gene, per cell line) over inferred
+(CTCF-only nodes).
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
