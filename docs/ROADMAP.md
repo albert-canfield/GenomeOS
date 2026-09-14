@@ -403,7 +403,47 @@ in order. "Owner" is the session that holds the files today (see §7).
   command away (`domains_chr21_hic_<biosource>`). The L1 ORF2
   and Alu sequence signatures are superseded by the RepeatMasker pass and
   stay as the fallback for chromosomes not yet distilled.
-- **Owner.** genomeos-8e (genomeos-fe before the restart of 2026-09-12).
+- **The epigenome layer (2026-09-14, genomeos-e1).** Openness said a node is
+  open, not what it carries. `genome/epigenome.py` reads the chromatin itself
+  from ENCODE for the reader's eleven biosamples: H3K4me3, H3K27ac, H3K4me1,
+  H3K27me3 and H3K9me3 in all eleven, from one biosample each; GRCh38 WGBS in
+  eight (cardiac muscle cell, keratinocyte and astrocyte have none: RRBS on
+  hg19 only, or none). One record per locus per cell type carries openness,
+  each mark (peak, fold change), methylation with coverage and an inferred
+  state, with evidence and confidence per field and UNKNOWN with the reason
+  (`epigenome_at`, `genomeos epigenome coverage|at|summary`,
+  `epigenome_chr*` for all 24 chromosomes, `epigenome_genome_wide`). It is a
+  data layer; no BioIR construct reads it. Three measured answers
+  (docs/NODES-READER-WRITER.md):
+  - **Mark identity beats registry class.** On 83,814 element-cell pairs of
+    chr21 and chr22 scored per line, deletion direction goes from AUC 0.53
+    (class) to 0.59 (with DNase) to 0.62 (with the line's marks), and
+    magnitude from Spearman 0.18 to 0.22 to 0.33. Another line's marks and
+    shuffled marks both fall short. Polycomb, bivalent and poised elements
+    rise on deletion 44 to 46% of the time, active ones 24 to 25%.
+    Caveat: the outcome is AlphaGenome, trained on these tracks.
+  - **H3K27me3 explains the HOX clusters.** It sits on 56 to 100% of HOX
+    promoters against 12 to 31% of GC- and CpG-matched promoters, and the
+    exceptions are the expressed clusters. In H1 the DNase reader calls every
+    HOXA promoter read and the marks call ten of eleven bivalent. It does not
+    explain silent promoters in general: methylation covers 88 to 90% of them
+    where the methylome is intact.
+  - **Methylation does not explain the fossil tier.** Matched for GC and CpG
+    density, it is methylated like unique unconstrained sequence: −1.5 to +0.8
+    points in H1, hepatocyte and monocytes, split in hypomethylated lines, no
+    H3K9me3 excess. All 328.5 Mb were read, 85 to 93% of windows measured in
+    six biosamples (IMR-90 8%, monocytes 24%). **Negative.** Alu remains keep
+    15 to 18 points more methylation in hypomethylated lines.
+- **Next (epigenome).** 1. The Alu lead: SINE against LINE remains of matched
+  age and CpG content, in the four hypomethylated lines. 2. The epigenome
+  record in the Blocks tab's reader lane (state per node and gene). 3. A
+  neural, gonadal or embryonic biosample beyond SK-N-SH and H1 (Roadmap brain
+  and fetal tissues on the portal) before any cell-type claim leans on the
+  panel. 4. A measured perturbation set (CRISPRi screens in K562) to test the
+  direction finding without the model's circularity.
+- **Owner.** genomeos-e1 holds areas B, C and D since 2026-09-14, when the
+  previous owner's session ended (genomeos-8e; genomeos-fe before the restart
+  of 2026-09-12).
 
 ### C. Molecules (RNA, proteins, pathways, the knowledge graph)
 
@@ -783,9 +823,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   sister divergence below the two-reporter measurement floor; all negative,
   recorded in ORGANISM-FROM-ONE-CELL.md with the construct proposal
   (`commitment`, `competence`, exposure reads, contacts) sent to genomeos-c1.
-- **Next.** 1. When genomeos-c1 lands `commitment` and exposure reads,
-  rewrite `fates.bio` with them (first established fate wins, not the last
-  line) and score again. 2. PAR polarity rules for the first divisions.
+  Fate precedence explicit since genomeos-c1's `regime { fates: first }`:
+  `fates.bio` carries a `priority` per rule, all 1,439 fates to 800 min are
+  unchanged, 45 order-dependent decision points become 0 and 620 fewer
+  decisions fire.
+- **Next.** 1. When genomeos-c1 lands `commitment` and the exposure and
+  mean reads (v0.4 §7.2a), rewrite `fates.bio` and `exposure.bio` with them
+  in place of the generated `_integrated` factors, and score again. 2. PAR polarity rules for the first divisions.
   3. The worm's founders in space with the real contacts replacing named
   senders (needs the contact runtime requested from genomeos-c1), with the
   AC/VU pair scored as an equivalence group. 4. Glia from factors: sheath

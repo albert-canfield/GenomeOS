@@ -868,3 +868,39 @@ spread through the hand-written biology; it is concentrated in area I's
 attributions, where a predicted regulatory element is capped at 0.1 to 0.4 by
 policy. The honest reading is that the model is half measurement and half
 prediction, and that the predictions are labelled as such.
+
+## 2026-09-14 — the epigenome layer, and three questions it answers
+
+Reader v1 said whether a locus is open; nothing in the project said what the
+chromatin there carries. `genomeos/genome/epigenome.py` reads it from ENCODE
+for the reader's eleven biosamples: H3K4me3, H3K27ac, H3K4me1, H3K27me3 and
+H3K9me3 for all eleven, whole-genome bisulfite for eight (cardiac muscle cell,
+keratinocyte and astrocyte have none on GRCh38). Peaks are streamed once,
+fold change is read by range into 200 bp bins, and CpG calls are read by range
+from the bedMethyl bigBed with a bigBed reader on the bigWig reader's tree.
+733 MB of distilled caches sit under data/knowledge. There is one record per
+locus per cell type with evidence and confidence per field, UNKNOWN with a
+reason, and a state inferred from the marks. `genomeos epigenome
+coverage|at|summary` exposes it; there are summaries for all 24 chromosomes
+and a genome rollup.
+
+1. Marks beat the registry class on the chain's 83,814 element-cell pairs of
+   chr21 and chr22. Direction among acting pairs: AUC 0.53 from class, 0.59
+   with DNase, 0.62 with the line's marks. Magnitude: Spearman 0.18, 0.22,
+   0.33. Another line's marks and shuffled marks both fall short. The outcome
+   is a model trained on these tracks.
+2. H3K27me3 marks the HOX promoters in 56 to 100% of cases against 12 to 31%
+   for GC- and CpG-matched promoters, with the expressed clusters as the
+   exceptions (K562 HOXB, keratinocyte HOXA and HOXC). It is not the general
+   account of silent promoters: methylation covers 88 to 90% of them where the
+   methylome is intact.
+3. The fossil tier is no more methylated than matched unique sequence:
+   −1.5 to +0.8 points in H1, hepatocyte and monocytes, split in the
+   hypomethylated lines, and no H3K9me3 excess. All 328.5 Mb were read, with
+   85 to 93% of windows measured in six biosamples. The exception is Alu
+   remains, which keep 15 to 18 points more methylation in hypomethylated
+   lines.
+
+docs/NODES-READER-WRITER.md "The epigenome layer"; three LESSONS rows; the
+experiments credited in ACKNOWLEDGEMENTS.md.
+

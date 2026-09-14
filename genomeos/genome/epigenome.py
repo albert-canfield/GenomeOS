@@ -996,11 +996,11 @@ def summarise_chromosome(
                 mm = methylation_over(cols, lo, hi)
                 if mm["cpg_calls_covered"] >= 4:
                     meth_by[group].append(mm["fraction"])
+        prom = {k: v for k, v in prom.items() if v.get("n")}
         for bucket in prom.values():
-            n = bucket.get("n", 0)
             for m in measured:
-                bucket[m] = {"n": bucket.get(m, 0), "share": _share(bucket.get(m, 0), n)}
-        row["promoters"] = {k: v for k, v in prom.items() if v}
+                bucket[m] = {"n": bucket.get(m, 0), "share": _share(bucket.get(m, 0), bucket["n"])}
+        row["promoters"] = prom
         if layer.meth.get(cell) is not None:
             row["promoter_methylation_median"] = {k: _median(v) for k, v in meth_by.items()}
             row["promoter_methylation_n"] = {k: len(v) for k, v in meth_by.items()}

@@ -1,8 +1,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """The epigenome layer on real data: fetch, per-chromosome summaries, and three questions.
 
-    uv run python scripts/epigenome.py fetch [--signal chr21,chr22] [--methylation all] [--workers 6]
+    uv run python scripts/epigenome.py fetch [--signal chr21,chr22] [--marks H3K27me3,...]
+        [--methylation all] [--workers 6]
     uv run python scripts/epigenome.py summary chr21 chr22 ...
+    uv run python scripts/epigenome.py genome         # the summaries rolled up
     uv run python scripts/epigenome.py direction      # marks against registry class, chr21 and chr22
     uv run python scripts/epigenome.py hox            # H3K27me3 over the HOX clusters, matched promoters
     uv run python scripts/epigenome.py fossil         # methylation of the fossil tier, GC and CpG matched
@@ -66,10 +68,11 @@ def fetch(argv: list[str]) -> None:
         for mark, e in row["marks"].items():
             if e.get("peaks"):
                 tasks.append(("peaks", cell, mark, None))
+    marks = opts.get("--marks", ",".join(ep.MARKS)).split(",")
     for chrom in sig_chroms:
         for cell, row in m["cell_types"].items():
             for mark, e in row["marks"].items():
-                if e.get("signal"):
+                if e.get("signal") and mark in marks:
                     tasks.append(("signal", cell, mark, chrom))
     for chrom in meth_chroms:
         for cell, row in m["cell_types"].items():
@@ -749,6 +752,79 @@ def summary(argv: list[str]) -> None:
         print(f"{chrom}: {p} {p.stat().st_size / 1e3:.0f} KB", flush=True)
 
 
+def genome(argv: list[str]) -> None:
+    """Roll the per-chromosome summaries up into one genome-wide table per cell type."""
+    from genomeos.results import load_result, save_result
+
+    chroms = [c for c in ep.CHROMS if load_result(f"epigenome_{c}")]
+    cells: dict = {}
+    for chrom in chroms:
+        s = load_result(f"epigenome_{chrom}")
+        for cell, row in s["cell_types"].items():
+            out = cells.setdefault(
+                cell,
+                {
+                    "marks_measured": row["marks_measured"],
+                    "methylation": row["methylation"],
+                    "promoters": {},
+                    "registry_classes": {},
+                    "methylation_by_tier": {},
+                    "peaks": {},
+                },
+            )
+            for m, pk in row.get("peaks", {}).items():
+                o = out["peaks"].setdefault(m, {"n": 0, "bp": 0})
+                o["n"] += pk["n"]
+                o["bp"] += pk["bp"]
+            for group, b in row["promoters"].items():
+                o = out["promoters"].setdefault(group, {"n": 0, "states": {}})
+                o["n"] += b["n"]
+                for m in ep.MARKS:
+                    if isinstance(b.get(m), dict):
+                        o[m] = o.get(m, 0) + b[m]["n"]
+                for st, k in b.get("states", {}).items():
+                    o["states"][st] = o["states"].get(st, 0) + k
+            for cls, b in row["registry_classes"].items():
+                o = out["registry_classes"].setdefault(cls, {"n": 0, "open": 0, "states": {}})
+                o["n"] += b["n"]
+                o["open"] += b["open"]
+                for m in ep.MARKS:
+                    if isinstance(b.get(m), dict):
+                        o[m] = o.get(m, 0) + b[m]["n"]
+                for st, k in b["states"].items():
+                    o["states"][st] = o["states"].get(st, 0) + k
+            for tier, t in (row.get("methylation_by_tier") or {}).items():
+                o = out["methylation_by_tier"].setdefault(
+                    tier, {"bp": 0, "calls": 0, "covered": 0, "_f": 0.0}
+                )
+                o["bp"] += t["bp"]
+                o["calls"] += t["calls"]
+                o["covered"] += t["covered"]
+                o["_f"] += (t["fraction"] or 0.0) * t["covered"]
+    for out in cells.values():
+        for group in (*out["promoters"].values(), *out["registry_classes"].values()):
+            for m in ep.MARKS:
+                if m in group:
+                    group[m] = {
+                        "n": group[m],
+                        "share": round(group[m] / group["n"], 4) if group["n"] else None,
+                    }
+        for t in out["methylation_by_tier"].values():
+            f = t.pop("_f")
+            t["fraction"] = round(f / t["covered"], 4) if t["covered"] else None
+            t["covered_share_of_calls"] = round(t["covered"] / t["calls"], 4) if t["calls"] else None
+    save_result("epigenome_genome_wide", {"chromosomes": chroms, "cell_types": cells})
+    for cell, out in cells.items():
+        rd, sl = out["promoters"].get("read", {}), out["promoters"].get("silent", {})
+        k4 = (rd.get("H3K4me3") or {}).get("share")
+        k27 = (sl.get("H3K27me3") or {}).get("share")
+        fos = (out["methylation_by_tier"].get("fossil") or {}).get("fraction")
+        print(
+            f"{cell:24s} read {rd.get('n')} H3K4me3 {k4}; silent {sl.get('n')} H3K27me3 {k27}; "
+            f"fossil methylation {fos}"
+        )
+
+
 def main() -> None:
     if len(sys.argv) < 2:
         print(__doc__)
@@ -764,6 +840,8 @@ def main() -> None:
         fossil(rest)
     elif action == "summary":
         summary(rest)
+    elif action == "genome":
+        genome(rest)
     else:
         raise SystemExit(f"unknown action {action}")
 

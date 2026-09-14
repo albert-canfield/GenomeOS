@@ -223,6 +223,7 @@ def test_record_fields_evidence_and_unknown(tmp_path, monkeypatch):
     assert row["promoters"]["read"]["n"] == 1 and row["promoters"]["silent"]["n"] == 1
     assert row["promoters"]["read"]["H3K4me3"] == {"n": 1, "share": 1.0}
     assert row["promoters"]["silent"]["H3K4me3"] == {"n": 0, "share": 0.0}  # measured zero, not missing
+    assert set(row["promoters"]) == {"read", "silent"}  # no empty "unread" bucket
     assert "H3K27me3" in row["marks_unknown"] and row["methylation"] is False
     assert row["registry_classes"]["PLS"]["open_share"] == 1.0
 
