@@ -60,6 +60,8 @@ class Cell:
     move_at: float | None = None  # next step of a recurring migration
     divide_seq: int = -1  # event token of the pending division: a rescheduled division runs exactly once
     committed: str = ""  # the programme this cell is committed to, once a `commitment` established (§7.2a)
+    fate_priority: int | None = None  # precedence of the decision that settled this cell's fate (§7.3)
+    fate_ctx: dict[str, str] | None = None  # what the cell read then, so a loser cannot try again on it
     refused: set[str] = field(default_factory=set)  # fate decisions refused for this cell, counted once
     measured: set[str] = field(default_factory=set)  # factors set by express decisions (the reader)
     stated: set[str] = field(default_factory=set)  # factors stated by mechanism: maternal load, asymmetry
@@ -132,6 +134,8 @@ class Body:
         # fate changes the program refused rather than applied (v0.4 §7.2a), by decision id
         self.outside_competence: Counter[str] = Counter()
         self.refused_committed: Counter[str] = Counter()
+        # fate changes refused because a higher-precedence decision had already settled the fate (§7.3)
+        self.overruled: Counter[str] = Counter()
         self.windows = {c.name: c for c in module.competences}
         self.committed_cells: Counter[str] = Counter()  # cells committed, by programme
         self.timers_used: Counter[str] = Counter()
@@ -144,8 +148,14 @@ class Body:
         for d in module.decisions:
             if "cell" in d.when and "|" not in d.when["cell"] and d.when["cell"] != "any":
                 self._by_cell.setdefault(d.when["cell"], []).append(d)
-        named = {x.id for v in self._by_cell.values() for x in v}
-        self._general = [d for d in module.decisions if d.id not in named]
+        # by identity, never by id: two decisions may share an id (mechanism stated before the generated
+        # lookup, as the worm's founders do), and indexing by id dropped the one without a `cell` clause
+        # out of every candidate list, so it never fired and nothing said so.
+        named = {id(x) for v in self._by_cell.values() for x in v}
+        self._general = [d for d in module.decisions if id(d) not in named]
+        # a shared id is legal but not free: a cell's `fired` list records ids, so two decisions with one
+        # name cannot be told apart there. Counted here and reported, like ambiguous_fates.
+        self.duplicate_ids = {did: n for did, n in Counter(d.id for d in module.decisions).items() if n > 1}
         # decisions on one cell type are indexed by it; the rest apply to any type. Candidate lists are
         # rebuilt in module order per (cell name, cell type) so precedence is unchanged, and cached.
         self._order = {id(d): i for i, d in enumerate(module.decisions)}
@@ -298,6 +308,22 @@ class Body:
             if d.competence and not self._competent(c, d, ctx):
                 self._refuse(c, d, self.outside_competence)  # the program said no, which is not UNKNOWN
                 continue
+            if (
+                self.fates == "first"
+                and c.fate_priority is not None
+                and d.priority < c.fate_priority
+                and d.to != c.cell_type
+                and c.fate_ctx is not None
+                and d.applies(c.fate_ctx)
+                and not (self.population(c) and d.fraction < 1.0)
+            ):
+                # the same rule as inside a decision point, carried across them: a decision that could
+                # already have applied when the fate was settled, and lost on precedence, is a competitor
+                # and not a successor, so it cannot take the fate back when the cell decides again (a
+                # `cell_network` step, a signal, a stage). A decision whose guard was false then is a new
+                # reading and still applies. Populations' shares are splits, not competitors.
+                self._refuse(c, d, self.overruled)
+                continue
             if c.committed and d.to != c.committed:
                 self._refuse(c, d, self.refused_committed)
                 continue
@@ -390,6 +416,8 @@ class Body:
                     self.revised[d.id] += 1  # visible until `commitment` can refuse it (v0.4 §7.2)
                 before, changed = ctx, True
                 c.cell_type = d.to
+                # what a later decision point must beat, and what the losers of this one read
+                c.fate_priority, c.fate_ctx = d.priority, ctx
                 if d.name or revision:
                     c.terminal_name = d.name  # a revised cell no longer answers to its old terminal name
             c.fired.append(d.id)
@@ -727,8 +755,9 @@ class Body:
                 keep = (
                     keeper == name or (name.endswith(keeper) and len(keeper) == 1) or keeper == ("a", "p")[i]
                 )
-                if keep and factor not in self.knockouts:
-                    factors[factor] = factors.get(factor, "present")
+                if keep and factor in factors and factor not in self.knockouts:
+                    # a keeper keeps what the mother had; a mother without the factor passes nothing on,
+                    # so `asymmetric` segregates a factor and never creates one out of nothing
                     stated.add(factor)
                 else:
                     factors.pop(factor, None)
@@ -918,9 +947,16 @@ class Body:
                 self._flow(c, kind[5:])
             elif kind.startswith("move:"):
                 self._step_move(c, kind[5:])
-            elif kind == "die" and c.dies_at == t and c.x is not None:
-                self.occupied.pop((c.x, c.y), None)  # the site is free again
-            # deaths need no action: dies_at already ends the cell
+            elif kind == "die" and c.dies_at == t:
+                # a death changes what its neighbours touch, exactly as a birth does (`_add`), so they
+                # read their contacts again; the worm kills 110 cells, so a stale reading is not a corner
+                around = list(self.neighbours(c)) if self._amount_signals and self.network is None else []
+                if c.x is not None:
+                    self.occupied.pop((c.x, c.y), None)  # the site is free again
+                for other in around:
+                    n = self.cells[other]
+                    if n.born <= t < n.end:
+                        self._resolve(n, born=False)
         self.time = until if until != math.inf else self.time
         self._advance_fields(self.time)
         return self
@@ -1062,6 +1098,8 @@ class Body:
             "neighbours_from": "table" if self.contacts else ("grid" if self.spatial else "none"),
             "ambiguous_fates": sum(self.ambiguous.values()),
             "revised_fates": sum(self.revised.values()),
+            "overruled_fates": sum(self.overruled.values()),
+            "duplicate_decision_ids": dict(sorted(self.duplicate_ids.items())),
             "forced": {f: self.forced_cells[f] for f in sorted(self.forced)},
             "outside_competence": sum(self.outside_competence.values()),
             "refused_committed": sum(self.refused_committed.values()),

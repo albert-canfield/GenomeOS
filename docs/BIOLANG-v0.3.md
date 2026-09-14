@@ -102,11 +102,15 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   an optional `priority` per decision, and it is the default since 2026-09-14.
   See BIOLANG-v0.4-ECONOMY.md §7.3. Write mechanism before
   lookup: `founders.bio` (maternal factors, Wnt, Notch) before the generated
-  lineage program, and the mechanistic rule decides the cells it names.
+  lineage program, and the mechanistic rule decides the cells it names. Two
+  decisions may share an id for exactly that reason (`div_EMS` is stated twice),
+  but a cell's `fired` list records ids and cannot tell them apart, so every run
+  reports `duplicate_decision_ids`; give a genuinely new rule a new name.
 - **Division.** The cell waits its timer (`duration × lengthening^(generation-1)
   × tempo`, plus `sd` noise when a seed is given), then two daughters are
   born with the parent's cell type and factors; `asymmetric` keeps a factor
-  in one daughter and removes it from the other; `lineages` starts a new
+  in one daughter and removes it from the other — it segregates what the mother
+  had and never creates a factor she lacked; `lineages` starts a new
   lineage at generation 0.
 - **Signals** are applied when a receiver or a sender is born and both are
   alive; the receiver gains the factor and re-decides, which can replace a

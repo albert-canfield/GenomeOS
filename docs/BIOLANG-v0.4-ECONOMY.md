@@ -582,6 +582,34 @@ decision factor_fate_00 { action: differentiate; priority: 24; ... }
   rules disagreed about the target) and `revised_fates` (a terminal fate changed
   again at a later decision point, which `commitment` will refuse).
 
+**A later decision point is not an appeal (2026-09-15).** Area E found the hole
+by giving the worm a `cell_network` cadence: every step re-decides every cell,
+and a rule that had lost the precedence contest simply won it later, so the
+Sulston fate score fell with the cadence and for no other reason. Reproduced on
+`embryo_factors.bio` to 800 min: **484 of 555 with a 6-minute network against
+501 without it**, and the 17 cells are exactly rules taking a fate back. The
+rule the code already applied inside one decision point — *a decision that
+already applied before the change is a competitor, not a successor* — now
+carries across decision points: a decision of **lower** precedence that **could
+already have applied when the fate was settled** is refused and counted as
+`overruled_fates`. A decision whose guard was false then is a new reading and
+still applies, which is how a contact signal changes a cell's mind; equal
+precedence still applies, so nothing is frozen. With the fix the score is 501
+of 555 with the cadence and without it, every committed organism program and
+every experiment arm is byte-identical, and 68 attempts are counted instead of
+being taken silently.
+
+**Two decisions may share an id, but not silently (2026-09-15).** Candidate
+lists were indexed by decision id, so a decision *without* a `cell` clause that
+shared an id with one that had it was dropped from every candidate list and
+never fired — nothing said so, and it cost area E an hour. Indexing is by
+identity now. Shared ids stay legal, because the worm states mechanism before
+the generated lookup and both are called `div_EMS`, but they are not free: a
+cell's `fired` list records ids, so two decisions with one name cannot be told
+apart in it. Every run therefore reports `duplicate_decision_ids` beside
+`ambiguous_fates` (the worm's five founder divisions show up there), and a new
+rule should be given a new name.
+
 Measured on area E's `embryo_factors.bio` to 800 min (1,439 cells): as
 committed then, under the legacy default, nothing changed and the runtime reported **45 ambiguous decision
 points** — exactly the cells whose fate depended on line order; under
@@ -672,6 +700,17 @@ param noise = 0.05
   lo..hi%`) are scored across `replicates` seeds by `bio test`.
 - **A revised fate** now drops its old terminal name as well as being counted,
   so a cell that stopped being the anchor cell is not still called AC.
+- **A death re-reads contacts, as a birth does (2026-09-15).** `_add` makes a
+  newborn's neighbours decide again; a death only freed the grid site, so a
+  receiver went on reading a ligand from a cell that was no longer there. The
+  worm kills 110 cells, so this is not a corner case. The neighbours are taken
+  before the site is freed and each re-decides, which is the same path a birth
+  takes; with per-cell networks the next step already re-read everyone, and that
+  is still the condition under which this is skipped.
+- **`asymmetric` segregates a factor and never creates one (2026-09-15).**
+  `asymmetric: X -> D` used to write X into the keeper even when the mother had
+  none, which is a fate appearing from nothing — the failure the whole evidence
+  discipline exists to prevent. A keeper now keeps only what its mother had.
 
 The gate (`scripts/body_contacts_gate.py`, `data/results/body_contacts_gate.json`,
 200 seeds, `data/demo/lateral_inhibition.bio`):
