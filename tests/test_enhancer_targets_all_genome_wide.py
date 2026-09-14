@@ -82,6 +82,28 @@ def test_the_acrocentric_chromosomes_are_split_out_and_the_controls_travel(tmp_p
     assert c["coding_target_inside_domain"]["excess"] == 0.026
 
 
+def test_history_keeps_one_entry_per_chromosome_set(tmp_path):
+    (tmp_path / "enhancer_targets_all_chr21.json").write_text(
+        json.dumps(_res("chr21", 100, 100, True, 60, 30, 10, 10, 20))
+    )
+    first = agw.with_history(agw.aggregate(tmp_path), None)
+    assert [h["chromosomes"] for h in first["history"]] == [1]
+    assert first["history"][0]["fraction_with_target"] == 0.6
+
+    # the same set re-folded replaces its entry rather than adding one
+    again = agw.with_history(agw.aggregate(tmp_path), first)
+    assert len(again["history"]) == 1
+
+    # a chromosome lands and the earlier reading is kept beside it
+    (tmp_path / "enhancer_targets_all_chr1.json").write_text(
+        json.dumps(_res("chr1", 100, 100, True, 90, 10, 10, 30, 20))
+    )
+    third = agw.with_history(agw.aggregate(tmp_path), again)
+    assert [h["chromosomes"] for h in third["history"]] == [1, 2]
+    assert third["history"][0]["fraction_with_target"] == 0.6
+    assert third["history"][1]["fraction_with_target"] == 0.75
+
+
 def test_the_length_trend_needs_four_chromosomes(tmp_path):
     for chrom, named in (("chr1", 90), ("chr2", 80), ("chr21", 60), ("chr22", 62)):
         (tmp_path / f"enhancer_targets_all_{chrom}.json").write_text(

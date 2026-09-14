@@ -8,7 +8,8 @@ writes enhancer_targets_all_genome_wide.json: per chromosome the counts and rate
 chromosomes complete so far with the requests spent, the spread of each rate across chromosomes rather
 than one pooled number, the controls each rate has to be read against, and whether the rates drift with
 chromosome size (chr21, chr22 and chrY are acrocentric or nearly gene-free, and a reading taken on them
-alone has already misled one lane).
+alone has already misled one lane). Every earlier reading is kept in `history`, one entry per distinct
+set of complete chromosomes, so the pooled rates can be watched moving as the sweep widens.
 """
 
 from __future__ import annotations
@@ -219,8 +220,28 @@ def aggregate(results_dir: Path = Path("data/results")) -> dict:
     }
 
 
+def with_history(out: dict, previous: dict | None) -> dict:
+    """Keep every earlier reading beside the current one, so the pooled rates can be watched moving as
+    chromosomes land instead of being recomputed and forgotten. One entry per distinct chromosome set."""
+    history = list((previous or {}).get("history") or [])
+    entry = {
+        "chromosomes": out["complete_chromosomes"],
+        "chromosomes_complete": out["chromosomes_complete"],
+        "scored": out["genome"]["scored"],
+        **{k: out["genome"][k] for k in out["spread"]},
+    }
+    if not history or history[-1]["chromosomes_complete"] != entry["chromosomes_complete"]:
+        history.append(entry)
+    else:
+        history[-1] = entry
+    return {**out, "history": history}
+
+
 def main() -> int:
     out = aggregate()
+    path = Path("data/results/enhancer_targets_all_genome_wide.json")
+    previous = json.loads(path.read_text()) if path.exists() else None
+    out = with_history(out, previous)
     save_result("enhancer_targets_all_genome_wide", out)
     g, sp = out["genome"], out["spread"]
     print(
@@ -235,6 +256,10 @@ def main() -> int:
             print(f"  {k}: {s['min']} ({s['lowest']}) to {s['max']} ({s['highest']}), median {s['median']}")
     t = out["size_trend"]
     dens = t["against_element_density"]
+    if len(out["history"]) > 1:
+        a, b = out["history"][-2], out["history"][-1]
+        moved = ", ".join(f"{k} {a[k]} -> {b[k]}" for k in sp)
+        print(f"  since {a['chromosomes']} chromosomes: {moved}")
     print(f"  over {t['chromosomes']} chromosomes, rho with length / with elements per Mb:")
     for k in sp:
         print(f"    {k}: {t[k]} / {dens[k]}")

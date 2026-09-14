@@ -17,16 +17,16 @@
     },
     "chr11": {
       "elements": 48380,
-      "scored": 14000,
+      "scored": 16400,
       "complete": false,
       "length": 135086622,
-      "fraction_with_target": 0.698,
-      "coding_target_agrees_with_nearest": 0.682,
-      "coding_target_inside_domain": 0.905,
-      "fraction_inside_domain": 0.9,
-      "strong": 2415,
-      "silencer_like": 3743,
-      "requests_this_run": 13993
+      "fraction_with_target": 0.692,
+      "coding_target_agrees_with_nearest": 0.699,
+      "coding_target_inside_domain": 0.91,
+      "fraction_inside_domain": 0.898,
+      "strong": 2817,
+      "silencer_like": 4342,
+      "requests_this_run": 16393
     },
     "chr12": {
       "elements": 46582,
@@ -359,7 +359,7 @@
     },
     "reading": "a rate that moves with chromosome size is a rate the small chromosomes bought; chr21 and chr22 are acrocentric and chrY is nearly gene-free, and the compression lane's per-chromosome layers already looked positive there and went negative genome-wide"
   },
-  "requests_total": 248537,
+  "requests_total": 250937,
   "cells": [
     "K562",
     "HepG2",
@@ -367,5 +367,28 @@
     "IMR-90"
   ],
   "elements_where": "data/knowledge/alphagenome/all_elements/<chrom>.json (local)",
-  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line; inferred: CTCF-only nodes"
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line; inferred: CTCF-only nodes",
+  "history": [
+    {
+      "chromosomes": 12,
+      "chromosomes_complete": [
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrY"
+      ],
+      "scored": 319833,
+      "fraction_with_target": 0.654,
+      "coding_target_agrees_with_nearest": 0.615,
+      "coding_target_inside_domain": 0.79
+    }
+  ]
 }
