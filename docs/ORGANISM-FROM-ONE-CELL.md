@@ -687,3 +687,60 @@ already in `c.fired`. With `regime { fates: first }` that overwrites the intende
 here as 496 → 482 of 555 terminal fates with a 2-minute cadence and no other change, with
 Hypodermis → Neuron replacing Neuron → Hypodermis in the confusions. A cadence should not be able to
 change a fate the program already settled.
+
+## AC/VU as an equivalence group: 48% Z1.ppp, and the ways an order gets smuggled in (2026-09-14, genomeos-d2)
+
+`data/organisms/celegans/acvu.bio` is the one decision in the worm the invariant lineage cannot
+predict. Z1.ppp and Z4.aaa are interchangeable: in any one animal exactly one becomes the anchor
+cell, and across animals it is about half and half (Kimble & Hirsh 1979, Dev Biol 70:396; Kimble
+1981, Dev Biol 87:286; Seydoux & Greenwald 1989, Cell 57:1237). The two cells in the program are
+identical — same rules, same initial levels, same circuit (Collier et al. 1996 on LIN-12/LAG-2);
+they touch (`contacts_acvu.tsv`), each reads the other's Delta as an amount at the contact, and only
+the seed differs. Nothing names the winner. 200 seeds, `scripts/celegans_acvu.py`,
+`data/results/celegans_acvu.json`:
+
+| condition | result |
+|---|---|
+| the program as written | **199 of 200** runs give exactly one anchor cell; **Z1.ppp 96 (48.2%)**, Z4.aaa 103 |
+| noise set to zero | **0 of 200** diverge; the two cells' Delta identical to the last digit (max gap 0.0) |
+| each division's daughters created in the opposite order | the **same winner in 200 of 200 seeds** |
+| against the reference lineage, which records Z1.ppp as `gon herm anch` | **96 of 200 = 48%**, and that is the ceiling for an honest program |
+
+The engine's own two-cell gate gives 104/96 on the same circuit; this is the same result inside the
+worm's lineage, at its measured division times, with the four cells of the group present.
+
+**The last row is the point.** The worm program (`lineage_larva.bio`) names Z1.ppp the anchor cell
+and scores 100% on that cell, because the reference recorded one animal. A program that reproduces
+the biology scores 48%. The AC/VU cell is the one place among the 1,092 terminal cells where the
+lineage score is not the right instrument, and a fate rule deterministic in position and signal is
+wrong exactly there.
+
+**Two ways the coin flip was silently loaded, both found by running the arms rather than by
+reading the code.**
+
+1. **A daughter inherits its mother's whole network state.** Z1.pp divides 56 minutes before Z4.aa.
+   List Z1.ppp as touching Z4.aa — which is true geometry — and Z4.aa spends those 56 minutes
+   receiving Delta, so Z4.aaa is born with LIN-12 already active and loses: **Z1.ppp wins 100 of 100
+   seeds**. The contact table therefore lists the surface between the two members of the group only
+   from the moment both exist, and says so. The general problem is that there is no way in the
+   language to say a species resets at division, and no warning when a signal received by a mother
+   decides a contest between her daughter and someone else's.
+2. **An instantaneous level read at an arbitrary time is not a fate.** Before they touch, both cells
+   sit at maximum Delta, so `Dp >= 0.6` fires for both at birth; during the symmetric transient both
+   sit at maximum Notch, so `Np >= 0.6` fires for both. The fate reads are gated on the L3 stage and
+   the run goes to 4,200 min because the circuit takes 10 to 17 hours of model time to resolve.
+   What is missing is the sustained read of §7.2a (`Dp.exposure`, `Dp.mean`), which did not land:
+   with it the rule would say "high Delta for long enough", which is what the cell does.
+
+A third arm is a control on the group: the equivalence group is two cells, not four. Z1.ppa and
+Z4.aap flank the pair and are ventral uterine precursors in every animal (Kimble 1981), so only
+Z1.ppp and Z4.aaa present LAG-2 here. Let all four present it and the four-cell chain settles into
+the alternating pattern lateral inhibition gives on a line — the two outer cells keep Delta, both
+central cells lose — and **0 of 100 runs produce an anchor cell**. The restriction is load-bearing
+and is stated, with its ablation citation, rather than assumed.
+
+One more language note: which two cells are in the group is written as `cell = Z1ppp|Z4aaa` on the
+anchor decision. `competence` cannot say it. A window governs the cells its `when` matches and
+leaves every other cell competent, so "only these two may take this fate" has to be written inside
+out, as a window closed at time zero for everyone else. A `competence` with an `only:` sense, or a
+`restricts:` clause, would say it directly.

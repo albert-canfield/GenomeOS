@@ -947,6 +947,20 @@ in order. "Owner" is the session that holds the files today (see §7).
   fates, which is the blastomere rearrangement of Priess & Thomson 1987 and
   cannot be written with named senders. The table is curated geometry, not
   measured contact areas; no measured table is held locally.
+  **AC/VU as an equivalence group** (`acvu.bio`, `contacts_acvu.tsv`,
+  `celegans_acvu`): Z1.ppp and Z4.aaa identical, touching, and told apart only
+  by seeded noise. Over 200 seeds, 199 give exactly one anchor cell and
+  **Z1.ppp wins 96 of them, 48.2%**; with noise off 0 of 200 diverge and the two
+  cells' Delta is identical to the last digit; creating each division's
+  daughters in the opposite order gives the same winner in 200 of 200 seeds.
+  Against the reference, which records one animal's outcome, the program is
+  right 96 of 200 times, and **48% is the ceiling for an honest program**: the
+  worm program names Z1.ppp and takes 100%, so this is the one terminal cell
+  where the lineage score is the wrong instrument. Two ways the flip was
+  silently loaded, both measured: a daughter inherits its mother's network
+  state (list Z1.ppp as touching Z4.aa and Z1.ppp wins 100 of 100), and an
+  instantaneous level read at an arbitrary time is not a fate (§7.2a's
+  sustained reads are what is missing).
 - **Next.** 1. `commitment` and `competence` landed on 2026-09-14
   (genomeos-c2, 126e65b) and earn their place by ablation: strip competence and
   both late arms of the published plasticity series fail, strip commitment and the

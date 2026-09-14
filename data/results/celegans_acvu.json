@@ -1,0 +1,81 @@
+{
+  "result": "celegans_acvu",
+  "date": "2026-09-14",
+  "program": "data/organisms/celegans/acvu.bio",
+  "table": "data/organisms/celegans/contacts_acvu.tsv",
+  "until_min": 4200.0,
+  "seeds": 200,
+  "noise_on": {
+    "condition": "the program as written",
+    "runs": 200,
+    "exactly_one_anchor": 199,
+    "no_anchor": 1,
+    "more_than_one": 0,
+    "winners": {
+      "Z4aaa": 103,
+      "Z1ppp": 96
+    },
+    "Z1ppp_share": 0.482,
+    "max_delta_gap": 1.05688,
+    "median_delta_gap": 0.975589
+  },
+  "noise_off": {
+    "condition": "noise = 0",
+    "runs": 200,
+    "exactly_one_anchor": 0,
+    "no_anchor": 200,
+    "more_than_one": 0,
+    "winners": {},
+    "Z1ppp_share": null,
+    "max_delta_gap": 0.0,
+    "median_delta_gap": 0.0
+  },
+  "daughters_swapped": {
+    "condition": "each division's daughters created in the opposite order",
+    "runs": 200,
+    "exactly_one_anchor": 199,
+    "no_anchor": 1,
+    "more_than_one": 0,
+    "winners": {
+      "Z4aaa": 103,
+      "Z1ppp": 96
+    },
+    "Z1ppp_share": 0.482,
+    "max_delta_gap": 1.05688,
+    "median_delta_gap": 0.975589,
+    "same_winner_per_seed": 200
+  },
+  "mother_inherits": {
+    "condition": "Z1.ppp touching Z4.aa, the group member's mother, from 2742 min",
+    "runs": 100,
+    "exactly_one_anchor": 100,
+    "no_anchor": 0,
+    "more_than_one": 0,
+    "winners": {
+      "Z1ppp": 100
+    },
+    "Z1ppp_share": 1.0,
+    "max_delta_gap": 1.056921,
+    "median_delta_gap": 0.975365
+  },
+  "whole_group": {
+    "condition": "all four cells presenting LAG-2",
+    "runs": 100,
+    "exactly_one_anchor": 0,
+    "no_anchor": 100,
+    "more_than_one": 0,
+    "winners": {},
+    "Z1ppp_share": null,
+    "max_delta_gap": 0.012886,
+    "median_delta_gap": 0.003059
+  },
+  "reference": {
+    "reference_anchor": "Z1ppp",
+    "source": "Sulston & Horvitz 1977 via WormWeb: Z1.pp's posterior daughter is `gon herm anch`",
+    "runs_matching_the_reference": 96,
+    "share": 0.48,
+    "note": "the reference records one animal's outcome, so this is the ceiling for an honest program and 100% is the score of a program that has named the winner. The worm program (lineage_larva.bio) does name it, and takes that 100%: the AC/VU cell is the one place in the 1,092 terminal cells where the lineage score is not the right instrument"
+  },
+  "seconds": 88.5,
+  "pass": true
+}

@@ -1,0 +1,25 @@
+# Who touches whom in the somatic gonad primordium, around the AC/VU decision.
+# Rows are `time cell cell [area]`; a cell's neighbours at t are the latest snapshot at or before t,
+# filtered to the cells alive then. Times are the WormWeb axis (Sulston & Horvitz 1977 via
+# data/results/celegans_lineage_cells.json), the same axis every other C. elegans program here uses.
+#
+# Geometry (Kimble & Hirsh 1979, Dev Biol 70:396; Kimble 1981, Dev Biol 87:286): the four central
+# granddaughters of the somatic gonad precursors lie in a row, Z1.ppa - Z1.ppp - Z4.aaa - Z4.aap,
+# and the two in the middle touch each other. Exactly one of those two becomes the anchor cell and
+# the other three become ventral uterine precursors; which of the two it is differs between animals.
+# Curated from the published description, not measured contact areas.
+#
+# time	cell	cell	area
+
+# Z1.pp divides first, 56 min before Z4.aa. Its daughters touch each other; the surface between the
+# two members of the group is listed only from 2798, when both members exist. That is a statement
+# about the interaction, not only about geometry: Z4.aa is not in the equivalence group (Kimble
+# 1981), and if it is listed as touching Z1.ppp it receives Delta for 56 min and hands the resulting
+# LIN-12 activity to Z4.aaa at division, which decides the contest before it starts. Measured: with
+# that row present Z1.ppp wins 100 of 100 seeds (scripts/celegans_acvu.py, `mother_inherits` arm).
+2742	Z1ppa	Z1ppp	1.0
+
+# the row, once Z4.aa has divided too
+2798	Z1ppa	Z1ppp	1.0
+2798	Z1ppp	Z4aaa	1.0
+2798	Z4aaa	Z4aap	1.0
