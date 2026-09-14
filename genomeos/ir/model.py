@@ -357,6 +357,9 @@ class Regime:
     threshold: float = 50.0
     units: str = "au"  # au | copies
     update: str = "continuous"
+    fates: str = (
+        "last"  # per decision point: first (one fate, by precedence) | last (legacy: last match wins)
+    )
     allocation: str = "competitive"
     seed: int | None = None
     evidence: Evidence = field(default_factory=Evidence)
@@ -366,6 +369,7 @@ class Regime:
 REGIME_TREATMENTS = ("continuous", "stochastic", "auto")
 REGIME_UPDATES = ("continuous", "synchronous", "asynchronous", "event")
 REGIME_ALLOCATIONS = ("competitive", "proportional", "priority", "optimise")
+REGIME_FATES = ("first", "last")
 
 
 _UNIT_MIN = {
@@ -476,6 +480,7 @@ class Decision:
     timer: str = ""
     after: float | None = None  # minutes
     fraction: float = 1.0
+    priority: int = 0  # among matching decisions of one action the highest wins; ties: first in module order
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
 
@@ -785,6 +790,7 @@ class Module:
 __all__ = [
     "DECISION_ACTIONS",
     "REGIME_ALLOCATIONS",
+    "REGIME_FATES",
     "REGIME_TREATMENTS",
     "REGIME_UPDATES",
     "UNKNOWN",

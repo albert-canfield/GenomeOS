@@ -94,7 +94,11 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   worm program carries its measured factors, and a rule such as
   `when: ELT-2 = present` reads a measurement rather than a lineage name.
 - **Precedence.** For each action the first matching decision in module order
-  wins; imported modules come first in import order. Write mechanism before
+  wins; imported modules come first in import order. **Correction
+  (2026-09-14):** for `differentiate` the Body actually fired every match in
+  order, so the last one won. That behaviour is kept as `regime { fates: last }`
+  (the default for now) and the documented one is `regime { fates: first }`
+  with an explicit `priority` per decision; see BIOLANG-v0.4-ECONOMY.md §7.3. Write mechanism before
   lookup: `founders.bio` (maternal factors, Wnt, Notch) before the generated
   lineage program, and the mechanistic rule decides the cells it names.
 - **Division.** The cell waits its timer (`duration × lengthening^(generation-1)

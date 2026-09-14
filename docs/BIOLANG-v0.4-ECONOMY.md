@@ -366,13 +366,87 @@ report, whatever evidence is written, and its confidence is capped at 0.3, so
 the Evidence explorer shows exactly how much of a cell's specialised behaviour
 is stated rather than derived.
 
-**Fate and commitment (open, to be folded in).** Fate is a function of
-position, signals, state, genome, epigenome and developmental time, with
-commitment as a ratchet that makes identity progressively harder to reverse.
-genomeos-d1 (area E) is sending the semantics it needs for `commitment` and
-`competence` blocks and the runtime support for real cell-to-cell contacts, so
-that lateral inhibition emerges rather than being stated. They will be
-specified in this section, not in a second document.
+### 7.2a Fate: commitment, competence and how a factor is read [engine]
+
+Fate is a function of position, signals, state, genome, epigenome and
+developmental time. Two constructs make the *irreversibility* of that function
+expressible, proposed by area E (genomeos-d1) after testing it against the
+worm's factor atlas:
+
+```
+commitment intestine {
+  programme: Intestine                 # what the cell is committing to
+  establish: ELT-2.exposure(lineage) >= 0.8   # a level, or a time-integrated read
+  locks: cell_type                     # what can no longer change
+  maintain: ELT-2 >= 0.2               # what must hold for the lock to stand
+  excludes: HLH-1, ELT-1               # factors masked in a committed cell
+  hysteresis: enter 0.8, leave 0.3     # different thresholds in and out
+  release: never                       # never | after 60 min below leave | experiment
+  inherit: daughters                    # the state is inherited as mechanism
+  evidence: inferred "Fukushige & Krause 2005; Yuzyuk et al. 2009"; confidence: 0.3
+}
+
+competence early_muscle {
+  when: stage = Cleavage
+  allows: Muscle, Intestine, Hypodermis
+  closes: on commitment                # at 350 min | on commitment | after generation 8
+  evidence: inferred "Fukushige & Krause 2005 (HLH-1 makes muscle only in early embryos)"; confidence: 0.3
+}
+```
+
+**Semantics.** A commitment is checked before `differentiate`: once established,
+a fate outside the locked programme is refused (and counted, never silently
+applied), signals can no longer change `cell_type`, and excluded factors are
+masked in that cell's context. A fate outside an open `competence` is refused
+and reported as **"outside competence"**, which is a different answer from
+UNKNOWN: the program said no, rather than saying nothing. Commitment state is
+inherited by daughters when `inherit: daughters`, so it is mechanism rather
+than bookkeeping.
+
+**The evidence, stated plainly, because it does not support the picture.** Area
+E tested the ratchet on the Ma et al. 2021 atlas and it came out **negative,
+and in the wrong direction**: factor states get *less* clustered with
+developmental time rather than more (p 0.005), competing programmes are
+mutually exclusive from the start rather than becoming so, and mother-to-
+daughter persistence does not change with time. The atlas is the wrong
+instrument — no perturbation, and reporter protein carries across divisions —
+so the justification for these constructs is published perturbation work, not
+our own measurement:
+
+- Fukushige & Krause 2005: ectopic HLH-1 makes muscle only in early embryos.
+- Yuzyuk et al. 2009: MES-2 ends that plasticity around gastrulation.
+
+**Falsifying measurement (a perturbation, not an atlas).** A program with
+`commitment` and `competence` must reproduce a published perturbation series:
+forcing a master factor early changes fate, forcing the same factor after the
+competence window closes does not, and removing the closing machinery
+(MES-2) restores the late response. Until such a series is reproduced, every
+number in a `commitment` or `competence` block is `inferred` at 0.3 or below,
+and anything derived from one is reported the same way. **Nothing in this
+specification claims our own data show a ratchet.**
+
+**How a factor is read is itself a measurement, and it has one.** Area E
+measured three readings of the same rules on 555 terminal cells: the
+instantaneous peak makes 62 errors at threshold 0.2, exposure summed along the
+lineage 38, and the mean over the cell's own life 29 — and the instantaneous
+read is the worst at every threshold from 0.1 to 0.5. So the language gets
+numeric factor levels and both integrated forms, with the window **declared
+rather than assumed**, because the data do not settle which window a cell
+integrates over:
+
+```
+when: ELT-2 >= 0.3                     # the level now
+when: ELT-2.exposure(lineage) >= 0.8   # summed along the lineage path
+when: ELT-2.mean(cell) >= 0.25         # mean over this cell's own life
+when: ELT-2.mean(lineage) >= 0.25      # the same two reads over the other window
+when: ratio(HLH-1, ELT-1) >= 2
+noise: 0.05                            # on a threshold, so a decision is not a knife edge
+```
+
+An `exposure` or `mean` read that does not name its window is a compile
+error, not a default: the three readings give different answers, and
+the difference is the finding. Presence tests (`F = present`) keep their v0.3
+meaning.
 
 ### 7.3 No central loop
 
@@ -392,6 +466,70 @@ cell cycle (Bioinformatics 22:e124). So the engine bakes in no loop order.
   confidence. Fitting behaviour to an assumed purpose is forbidden by the
   project's evidence rules.
 
+**Fate precedence is declared, not implied by line order (implemented 2026-09-14).**
+Until now the Body fired every matching `differentiate` at a decision point in
+module order, so the *last* match won, while BIOLANG-v0.3.md said the first
+did. Rule order in a file was semantically load-bearing and undocumented, and
+area E's `fates.bio` had to list its rules bottom to top to work. The fix is a
+regime property plus an explicit precedence:
+
+```
+regime worm { fates: first }            # first | last (legacy, still the default)
+decision factor_fate_00 { action: differentiate; priority: 24; ... }
+```
+
+- `fates: first`: one fate per decision point — the matching decision with the
+  highest `priority`, ties to the first in module order. After a change of type
+  the chain continues only through a decision the new type *enables*; a
+  decision that already applied before the change is a competitor, not a
+  successor, so it cannot overwrite the fate.
+- `fates: last`: the legacy behaviour, kept as the default so that no committed
+  program changes under anyone; `priority` with `fates: last` is refused.
+- Both modes report `ambiguous_fates` (decision points where equal-precedence
+  rules disagreed about the target) and `revised_fates` (a terminal fate changed
+  again at a later decision point, which `commitment` will refuse).
+
+Measured on area E's `embryo_factors.bio` to 800 min (1,439 cells): as
+committed, nothing changes and the runtime now reports **45 ambiguous decision
+points** — exactly the cells whose fate depended on line order; under
+`fates: first` without priorities 45 cells change (40 hypodermis and 5 muscle
+become neurons); with priorities emitted by the generator (the file's last rule
+highest) **all 1,439 fates are identical, 0 ambiguous, and 620 fewer decisions
+fire** (3,707 against 4,327), because the overwritten firings are gone. The
+default flips to `first` once area E's generator emits `priority`.
+
+### 7.4 Contacts, neighbours and noise (Body runtime, for emergent lateral inhibition) [engine]
+
+Today a contact `signal` names its sender (`from: cell = P2`), so lateral
+inhibition can only be stated. For it to emerge, area E needs the Body to
+provide, in this order:
+
+1. **Neighbours per cell**, from grid adjacency when the organism has a space,
+   or from an imported time-resolved contact table
+   (`contacts: celegans_contacts.tsv`, rows of time, cell, cell, area).
+2. **Contact signals against current neighbours**, not named senders: a
+   receiver reads the *amount* of ligand summed over its neighbours at that
+   moment (`mode: contact; reads: amount`), so the same rule works for every
+   pair that happens to touch.
+3. **A per-cell network stepped in sync across neighbours between events**
+   (the network runtime, one instance per cell, coupled through the contact
+   amounts), under the declared `regime` update scheme.
+4. **Seeded noise**, recorded in the result. Not a convenience: the anchor-cell
+   choice between Z1.ppp and Z4.aaa is close to 50:50, and area E's
+   implementation of Collier et al. 1996 shows two equal cells never diverge
+   without noise, while with noise 198 of 200 pairs diverge and the first cell
+   wins 51% of the time. The noise is the mechanism.
+5. **Daughters placed along the division axis their names imply** (a/p, l/r,
+   d/v), so neighbour relations follow the lineage.
+6. **Replicate runs with a diff that scores alternatives**: an assert form such
+   as `exactly one of Z1.ppp, Z4.aaa is AnchorCell` evaluated across seeds, with
+   the split reported (for the anchor cell, near 50:50 is the pass).
+
+**Falsifying measurement.** Two equivalent cells with the Collier circuit and no
+stated winner must (a) not diverge with noise off, (b) diverge in nearly every
+replicate with noise on, and (c) split about evenly across replicates; a
+runtime that picks the same winner every time has smuggled in an order.
+
 ## 8. Execution regime (declared per run)
 
 ```
@@ -401,6 +539,7 @@ regime default {
   units: copies            # stochastic treatment is refused for arbitrary units
   update: continuous       # continuous (ODE) | synchronous | asynchronous | event
   allocation: competitive  # default policy for pools and transports with none named
+  fates: first            # Body: one fate per decision point by precedence (last = legacy)
   seed: 0
 }
 ```
@@ -435,6 +574,9 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | 3 | core metabolism, mitochondrial copies, heteroplasmy | ATP budget; oxygen and glucose dependence; red blood cell glycolysis | not started |
 | 4 | partitioning division, checkpoint | dilution vs protein turnover | not started |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
+| fate | commitment, competence, integrated reads | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | specified only; the atlas test was negative |
+| fate precedence | `regime fates`, decision `priority` | area E's worm fates identical under explicit priorities | **implemented**: 1,439 of 1,439 identical, 45 ambiguous points reported |
+| contacts | neighbours, contact amounts, per-cell networks, seeded noise, replicate diff | Collier 1996 equivalence group splits about evenly | specified only |
 
 ### 9.1 Stage 1 as measured (2026-09-14)
 
@@ -492,7 +634,7 @@ it there, and for an imported protein that link is the transport at 0.3.
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a
    compartment. Should v0.5 make locations mandatory everywhere?
-2. **Amounts or concentrations.** Stage 1 keeps amounts per compartment, so
+2. **Amounts or concentrations** (stage 2 is held on this one: pools and costs would bake it in). Stage 1 keeps amounts per compartment, so
    Hill thresholds are amounts. Concentration needs volumes, which vary per cell
    type; the choice changes what every threshold in the project means.
 3. **Membranes as compartments.** A membrane is a node of the tree facing both
@@ -506,3 +648,9 @@ it there, and for an imported protein that link is the transport at 0.3.
    required or a mouse one (Schwanhäusser et al. 2011, Nature 473:337) is acceptable.
 7. **Which homeostats first.** The proposal is Na⁺/K⁺ and pH because their
    failure modes are the best documented.
+8. **When `fates: first` becomes the default.** Proposed: as soon as area E's
+   generator emits `priority`, which was verified above to reproduce every worm
+   fate; after that, `fates: last` stays only as an explicit legacy switch.
+9. **Commitment and competence as refusals or as rates.** As specified, a
+   locked cell refuses a fate outright; the published plasticity data could
+   also be read as a declining probability. The perturbation series decides.

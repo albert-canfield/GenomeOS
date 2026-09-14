@@ -39,6 +39,7 @@ from genomeos.coords import Locus
 from genomeos.ir import (
     DECISION_ACTIONS,
     REGIME_ALLOCATIONS,
+    REGIME_FATES,
     REGIME_TREATMENTS,
     REGIME_UPDATES,
     UNKNOWN,
@@ -591,6 +592,8 @@ def _compile_block(b: Block, module: Module) -> None:
                 raise BioLangError(
                     f"line {b.line}: fraction must be within 0..{'1' if top == 1.0 else 'any'}"
                 )
+        if "priority" in p:
+            dc.priority = int(_float(p["priority"], "priority", b.line))
         if action == "divide" and len(dc.daughters) not in (0, 2):
             raise BioLangError(f"line {b.line}: a division names two daughters or none")
         if action == "differentiate" and not dc.to:
@@ -636,6 +639,7 @@ def _compile_block(b: Block, module: Module) -> None:
             ("treatment", REGIME_TREATMENTS),
             ("update", REGIME_UPDATES),
             ("allocation", REGIME_ALLOCATIONS),
+            ("fates", REGIME_FATES),
             ("units", ("au", "copies")),
         ):
             if key in p:

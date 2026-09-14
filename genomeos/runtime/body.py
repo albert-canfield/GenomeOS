@@ -6,7 +6,8 @@ program's decisions say what it does, timers say when, and signals from
 other cells change what it reads. The loop per cell:
 
     read     context = name, lineage, generation, cell type, stage, factors, environment
-    decide   die | differentiate | quiesce | divide     (first matching decision per action)
+    decide   die | differentiate | quiesce | divide     (by `priority`, then module order; for differentiate
+             see `regime fates`: first takes one fate per decision point, last is the legacy default)
     wait     the matching timer (tempo-scaled, lengthening per generation)
     write    daughters inherit the factors; `asymmetric` keeps a factor in one daughter
 
@@ -115,6 +116,8 @@ class Body:
         self.culled: float = 0.0  # population cells removed by fractional deaths
         self.history: list[tuple[float, float]] = []  # (time, total count) whenever a population changes
         self.unknown: Counter[str] = Counter()
+        self.ambiguous: Counter[str] = Counter()  # decision points where equal-precedence fates disagreed
+        self.revised: Counter[str] = Counter()  # terminal fates changed again at a later decision point
         self.timers_used: Counter[str] = Counter()
         self._queue: list[tuple[float, int, str, str]] = []
         self._seq = 0
@@ -142,6 +145,12 @@ class Body:
         self._stage_cache: tuple[float, str] = (-1.0, "")
         self._divide_ids = {d.id for d in module.decisions if d.action == "divide"}
         self._expressed_names = {f for d in module.decisions if d.action == "express" for f in d.sets}
+        # how a decision point takes a fate, declared in the regime (docs/BIOLANG-v0.4-ECONOMY.md §7.3)
+        self.fates = module.regime.fates if module.regime is not None else "last"
+        if self.fates == "last" and any(d.priority for d in module.decisions):
+            raise ValueError(
+                "decision `priority` needs `regime { fates: first }`: with fates: last the final match wins"
+            )
         self._bootstrap()
 
     # ---- setup ---------------------------------------------------------
@@ -215,7 +224,9 @@ class Body:
         lst = self._cand_cache.get(key)
         if lst is None:
             lst = self._by_cell.get(key[0], []) + self._by_type.get(c.cell_type, []) + self._untyped
-            lst.sort(key=lambda d: self._order[id(d)])
+            lst.sort(
+                key=lambda d: (-d.priority, self._order[id(d)])
+            )  # explicit precedence, then module order
             self._cand_cache[key] = lst
         return lst
 
@@ -224,6 +235,26 @@ class Body:
             if d.action == action and d.applies(ctx) and not (unfired and d.id in c.fired):
                 return d
         return None
+
+    def _pick_fate(self, c: Cell, ctx: dict[str, str], before: dict[str, str] | None) -> Decision | None:
+        """The one `differentiate` a decision point takes: the first matching decision by precedence
+        (`priority`, then module order). After a change of type the chain continues only through a decision
+        the new type enables; one that already applied before the change is a competitor, not a successor,
+        so a later rule can no longer silently overwrite an earlier one. Equal-precedence matches that
+        disagree on the target are counted as ambiguous."""
+        chosen: Decision | None = None
+        for d in self._candidates(c):
+            if d.action != "differentiate" or d.id in c.fired or not d.applies(ctx):
+                continue
+            if before is not None and d.applies(before):
+                continue
+            if chosen is None:
+                chosen = d
+                continue
+            if d.priority == chosen.priority and d.to != chosen.to:
+                self.ambiguous[chosen.id] += 1
+            break
+        return chosen
 
     def _timer_for(self, c: Cell, d: Decision, ctx: dict[str, str]) -> Timer | None:
         if d.timer:
@@ -253,8 +284,10 @@ class Body:
                 self._push(c.dies_at, c.name, "die")
         self._express(c, ctx)
         ctx = self.context(c)
+        before: dict[str, str] | None = None  # the context before the last change of type
+        had_fate, changed = c.terminal_name, False
         for _ in range(32):  # differentiation chains and sequential population splits
-            d = self._first(c, "differentiate", ctx, unfired=True)
+            d = self._pick_fate(c, ctx, before if self.fates == "first" else None)
             if d is None:
                 break
             if d.fraction < 1.0 and self.population(c) and d.after is not None:
@@ -265,6 +298,9 @@ class Body:
             elif d.fraction < 1.0 and self.population(c):
                 self._split(c, d)
             else:
+                if had_fate and not changed:
+                    self.revised[d.id] += 1  # visible until `commitment` can refuse it (v0.4 §7.2)
+                before, changed = ctx, True
                 c.cell_type = d.to
                 if d.name:
                     c.terminal_name = d.name
@@ -797,6 +833,9 @@ class Body:
             "fates": self.fates_at(t),
             "decisions_fired": sum(self.fired.values()),
             "unknown": dict(self.unknown),
+            "fates_mode": self.fates,
+            "ambiguous_fates": sum(self.ambiguous.values()),
+            "revised_fates": sum(self.revised.values()),
         }
 
 

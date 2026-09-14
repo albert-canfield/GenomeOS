@@ -209,6 +209,7 @@ May contain `transcript` blocks.
 | `timer` | `Id` | divide: explicit timer; omitted = first matching |
 | `after` | `time` | delay from birth (cells) or from now (populations); recurring for flows |
 | `fraction` | `number` | populations: share (divide may exceed 1) |
+| `priority` | `integer` | highest wins among matching decisions of one action; ties: first in module order |
 
 ### `experiment`
 
@@ -284,6 +285,7 @@ May contain `transcript` blocks.
 | `threshold` | `copies` | auto: stochastic below this |
 | `units` | `au | copies` | stochastic treatment needs copies |
 | `update` | `continuous | synchronous | asynchronous | event` | recorded in every result |
+| `fates` | `first | last` | Body: one fate per decision point by precedence, or the last match (legacy default) |
 | `allocation` | `competitive | proportional | priority | optimise` | shared capacities |
 | `seed` | `integer` |  |
 
@@ -296,7 +298,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Entity**: `id`, `kind`, `attrs`, `evidence`, `confidence`
 - **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`
 - **Transport**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `from_compartment`, `to_compartment`, `cargo`, `capacity`, `affinity`, `via`, `via_threshold`
-- **Regime**: `name`, `treatment`, `threshold`, `units`, `update`, `allocation`, `seed`, `evidence`, `confidence`
+- **Regime**: `name`, `treatment`, `threshold`, `units`, `update`, `fates`, `allocation`, `seed`, `evidence`, `confidence`
 - **Region**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `role`
 - **RegulatoryElement**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `cls`, `targets`, `domain`, `source`
 - **Domain**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `genes`, `boundaries`
@@ -312,7 +314,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`
 - **Timer**: `name`, `duration`, `unit`, `sd`, `lengthening`, `when`, `evidence`, `confidence`
 - **Stage**: `name`, `start`, `end`, `unit`, `evidence`, `confidence`
-- **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `evidence`, `confidence`
+- **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `priority`, `evidence`, `confidence`
 - **Experiment**: `name`, `knockouts`, `adds`, `environment`, `until`, `asserts`, `expect`, `evidence`, `confidence`
 - **Design**: `name`, `knockout_any_of`, `add_any_of`, `at_most`, `vary`, `until`, `targets`, `keeps`, `evidence`, `confidence`
 - **Organism**: `name`, `species`, `genome`, `tempo`, `resolution`, `seed`, `width`, `height`, `origin`, `sense`, `root`, `cell_type`, `factors`, `environment`, `observe`, `asserts`, `reference`, `evidence`, `confidence`

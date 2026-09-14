@@ -172,6 +172,10 @@ BLOCKS: dict[str, dict] = {
             "timer": ("Id", "divide: explicit timer; omitted = first matching"),
             "after": ("time", "delay from birth (cells) or from now (populations); recurring for flows"),
             "fraction": ("number", "populations: share (divide may exceed 1)"),
+            "priority": (
+                "integer",
+                "highest wins among matching decisions of one action; ties: first in module order",
+            ),
         },
     },
     "experiment": {
@@ -227,6 +231,10 @@ BLOCKS: dict[str, dict] = {
             "threshold": ("copies", "auto: stochastic below this"),
             "units": ("au | copies", "stochastic treatment needs copies"),
             "update": ("continuous | synchronous | asynchronous | event", "recorded in every result"),
+            "fates": (
+                "first | last",
+                "Body: one fate per decision point by precedence, or the last match (legacy default)",
+            ),
             "allocation": ("competitive | proportional | priority | optimise", "shared capacities"),
             "seed": ("integer", ""),
         },

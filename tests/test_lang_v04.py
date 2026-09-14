@@ -217,3 +217,48 @@ def test_confidence_follows_the_whole_chain_to_the_weakest_link():
     inside = res.confidence["SDHBp@Mitochondrion"]
     assert inside["weakest"] == "transport TOM" and inside["score"] == pytest.approx(0.3 * 0.4, abs=1e-6)
     assert res.confidence["SDHBp@Cytosol"]["score"] > inside["score"]  # the precursor is better grounded
+
+
+# ---- the Body's fate precedence, declared (v0.4 §7.3) ---------------------------------------------
+
+WORM = """
+module toy.precedence
+import bio.std.development
+organism O { root: Z; cell_type: Zygote }
+cell_type Neuron { parent: PostMitotic }
+cell_type Muscle { parent: PostMitotic }
+cell_type Glia { parent: PostMitotic }
+decision div { action: divide; when: cell = Z; daughters: A, B; after: 1 min }
+decision lookup_A { action: differentiate; when: cell = A; to: Neuron }
+decision factor_A { action: differentiate; when: cell = A; to: Muscle }
+decision chain { action: differentiate; when: cell_type = Muscle; to: Glia }
+"""
+
+
+def _grow(src: str):
+    from genomeos.runtime.body import Body
+
+    return Body(parse(src)).run(until=5)
+
+
+def test_legacy_fates_let_the_last_match_win_and_say_so():
+    b = _grow(WORM)
+    assert b.cells["A"].cell_type == "Glia"  # lookup, then factor, then the chain: every match fired
+    s = b.summary()
+    assert s["fates_mode"] == "last" and s["ambiguous_fates"] == 1  # two rules disagreed about A
+
+
+def test_first_fates_take_one_fate_by_precedence_and_keep_real_chains():
+    first = WORM + "regime r { fates: first }\n"
+    assert (
+        _grow(first).cells["A"].cell_type == "Neuron"
+    )  # module order: the lookup wins, the factor cannot overwrite
+    ranked = first.replace("to: Muscle }", "to: Muscle; priority: 1 }")
+    b = _grow(ranked)
+    assert b.cells["A"].cell_type == "Glia"  # the factor wins, and the chain it enables still runs
+    assert b.summary()["ambiguous_fates"] == 0
+
+
+def test_priority_without_first_fates_is_refused():
+    with pytest.raises(ValueError, match="fates: first"):
+        _grow(WORM.replace("to: Muscle }", "to: Muscle; priority: 1 }"))
