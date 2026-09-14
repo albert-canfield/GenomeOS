@@ -959,3 +959,27 @@ chromosome.
 
 docs/ATTRIBUTION.md "Compression"; `compress_chr21`, `compress_chr22`,
 `compress_chr18`.
+
+## 2026-09-14 — an orientation-aware node caller, and why it is not the default
+
+The CTCF orientation measurement suggested a better boundary: where consecutive
+CTCF motifs flip from reverse to forward. It is now a named option of
+`infer_domains`, and the default output is byte-identical. Four measurements
+on the same chromosomes decide whether it replaces the CTCF-only caller:
+
+- **Hi-C.** It wins clearly (enrichment 1.74 to 1.99 against 1.30 to 1.38 in
+  H1, K562 and HepG2).
+- **Node content.** It loses: 63.2% of scored elements keep their gene inside
+  the node, against 81.7%, and below randomly placed boundaries.
+- **Mouse synteny.** It loses (88 to 91% against 92 to 96% in the same
+  neighbourhood).
+- **HOXD.** Neither caller recovers the published boundary. The flip rule finds
+  one inside the interval, and the inherited 50 kb node floor removes it.
+
+Both callers stay, and the default does not change. Where insulation maps put
+boundaries and where the deletion model's enhancer reach stops are different
+places. Also recorded: on the full deletion archive the old nodes keep only 2.6
+points more element-gene pairs together than random boundaries do, a weaker
+node-content claim than the 4,800-element sample suggested.
+
+docs/NODES-READER-WRITER.md; `domains_oriented_comparison`.

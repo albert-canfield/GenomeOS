@@ -299,6 +299,101 @@ CTCF-only edges in `infer_domains` would change every node on every chromosome
 and every enhancer-target result built on them, so it waits for a decision
 rather than being slipped in.
 
+## The orientation-aware caller, beside the CTCF-only one (2026-09-14)
+
+The orientation measurement above showed that − to + flips of CTCF motifs mark
+boundaries better than the CTCF-only edges do. The next step was a caller built
+on that rule. It is `infer_domains(..., orientation=strands)` in
+`genome/domains.py`, a named option. Without it the output is byte-identical to
+before (checked on chr21, chr2 and chr19), and every committed node still comes
+from the CTCF-only caller.
+
+**The rule, fixed before any of the four tests was run.**
+
+- **Sites.** Registry elements with CTCF ChIP support: the CTCF-only class plus
+  any class flagged CTCF-bound. CTCF-only alone leaves out every CTCF site that
+  overlaps a promoter or an enhancer, including all of those inside HOXD.
+- **Strand.** A site needs MA0139 hits, at 0.85, on one strand only. An element
+  with hits on both strands is skipped, as in the orientation measurement.
+- **Boundaries.** One boundary midway between each reverse site and the forward
+  site after it, merged within 5 kb, with the old caller's 50 kb minimum node.
+- **Variant.** `oriented_ctcf_only` applies the same rule to CTCF-only sites,
+  to show what the site set does.
+
+`scripts/oriented_domains.py` runs all four measurements on the same
+chromosomes (`domains_oriented_comparison`).
+
+| measurement | CTCF-only (current) | oriented (new) | oriented, CTCF-only sites |
+|---|---|---|---|
+| nodes, genome | 20,002 | 17,995 | 3,273 |
+| **1. Hi-C: edges within 20 kb of a measured boundary (enrichment over random)** | | | |
+| H1 | 24.7% (1.38) | **31.0% (1.74)** | 26.1% (1.46) |
+| K562 | 15.4% (1.36) | **22.5% (1.96)** | 18.1% (1.63) |
+| HepG2 | 15.8% (1.30) | **24.3% (1.99)** | 20.0% (1.65) |
+| IMR-90 | 16.3% (1.16) | **20.2% (1.45)** | 18.3% (1.35) |
+| GM12878 (saturated) | 59.3% (1.10) | 59.8% (1.11) | 58.8% (1.09) |
+| measured boundaries reached, H1 / K562 / HepG2 / IMR-90 / GM12878 | 36.6 / 36.0 / 34.5 / 31.1 / 29.0% | **41.2 / 47.5 / 47.9 / 34.8** / 26.3% | 6 to 7% |
+| **2. Node content: scored elements whose most-moved coding gene is in their node** | | | |
+| share of 113,399 | **81.7%** | 63.2% | 93.8% |
+| as many boundaries placed at random | 79.1% | 77.7% | 94.5% |
+| excess over random | **+2.6 points** | −14.5 points | −0.7 points |
+| both callers cut to the same 5,542 boundaries | **82.2%** | 67.4% | not applicable |
+| **3. Mouse synteny: mouse nodes in one human neighbourhood (MGI)** | | | |
+| chr19 | **95.9%** of 122 (55.7% in one node) | 91.3% of 138 (31.2%) | 96.5% of 85 (60.0%) |
+| chr11 | **92.4%** of 331 (58.3%) | 88.0% of 343 (27.1%) | 86.7% of 210 (59.0%) |
+| **4. HOXD: the published HOXD11 to HOXD13 boundary** | | | |
+| edge in 176,096,240 to 176,109,754 | no (nearest 106 kb away) | no (nearest 16 kb away) | no |
+| nodes over the nine genes | 1 | 2, split HOXD8 / HOXD4 | 1 |
+
+**Reading, measurement by measurement.**
+
+1. **Hi-C.** The new caller wins in every biosample with resolving power, by a
+   wide margin: enrichment 1.74 to 1.99 against 1.30 to 1.38 in H1, K562 and
+   HepG2. It also reaches more measured boundaries (47.5% against 36.0% in
+   K562). GM12878 is saturated, as before.
+2. **Node content.** The new caller loses outright. Its nodes separate an
+   element from the gene its deletion moves more often than randomly placed
+   boundaries would: 63.2% inside against 77.7% at random. At the same
+   resolution it keeps 67.4% against the old caller's 82.2%. So it is not
+   finer nodes but where the boundaries go. Flips among CTCF sites at promoters
+   and enhancers fall between an element and its gene.
+   - The old caller's own excess over random is only 2.6 points, on all
+     scored elements rather than the 4,800 sampled distal enhancers behind
+     the 90.2%. The node-content claim is weaker on the full archive than it
+     read on the sample.
+   - The archive covers chr15 to chr22 and chrY completely, and chr1 and chr14
+     in part.
+3. **Mouse.** The new caller loses. The same neighbourhood holds at 88 to 91%
+   against 92 to 96%, and "one node" halves (27 to 31% against 56 to 58%).
+   These numbers use each caller's human nodes with full gene lists, so the old
+   caller's chr19 and chr11 figures differ slightly from the committed 94.5% and
+   92.6%, which came from a 12-gene-per-node index.
+4. **HOXD.** Neither caller recovers the boundary. The new one does split the
+   cluster into two landscapes, but between HOXD8 and HOXD4 rather than between
+   HOXD11 and HOXD13. The rule itself places a flip at 176,103,509, inside the
+   published interval between HOXD12 and HOXD11. The 50 kb minimum node
+   inherited from the old caller then removes it, because the flip at
+   176,080,249 came first. Lowering that floor after seeing HOXD would be
+   fitting the test, and more boundaries would cost node content further.
+
+**Verdict: keep both, and the default stays CTCF-only.** The new caller wins on
+Hi-C, loses on node content and mouse synteny, and does not recover HOXD. The
+disagreement is informative in itself. The boundaries insulation maps see
+(convergent-loop anchors at CTCF sites in gene-dense regions) are not the
+boundaries that bound the deletion model's enhancer reach, which stays within
+larger, gene-sparse-edged nodes. A node set for Hi-C-like questions and a node
+set for enhancer-to-gene questions may need to be different objects.
+
+Two open points:
+
+- Node content is the model's reading, not a measured enhancer-gene set, so
+  the second test inherits AlphaGenome's window and training.
+- Whether a stricter site call would move the verdict is not tested here. The
+  scan counts an element as both-strand when a weak off-by-two hit sits on the
+  other strand. Taking the best hit's strand instead, or requiring stronger
+  motifs, is the refinement to try, judged on all four measurements at once
+  rather than tuned on one.
+
 ## Reader v1 (built 2026-09-11)
 
 `genomeos reader --cell-type K562 --versus HepG2 --chrom chr21` is the first

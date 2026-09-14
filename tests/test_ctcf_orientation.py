@@ -42,3 +42,43 @@ def test_convergent_divergent_and_unmarked_edges():
     both = {**strands, "B400": {"+", "-"}}
     rows = {r["position"]: r for r in orient_boundaries(1_000_000, ccres, both)}
     assert rows[400_000]["sites"] == "both" and rows[400_000]["class"] == "convergent"
+
+
+def test_oriented_boundaries_place_reverse_to_forward_flips():
+    from genomeos.genome.domains import ORIENTED_EVIDENCE, oriented_boundaries
+
+    sites = [(100_000, "-"), (104_000, "+"), (300_000, "+"), (320_000, "-"), (500_000, "-"), (560_000, "+")]
+    ccres = [CCRE("chrT", p - 100, p + 100, f"S{p // 1000}", "dELS", True) for p, _ in sites]
+    ccres.append(CCRE("chrT", 700_000, 700_200, "N700", "dELS", False))  # no CTCF support: never a site
+    strands = {f"S{p // 1000}": {s} for p, s in sites}
+    strands["N700"] = {"+"}
+    assert oriented_boundaries(ccres, strands) == [102_000, 530_000]
+    strands["S104"] = {"+", "-"}  # both strands: cannot say which way it points, skipped
+    assert oriented_boundaries(ccres, strands) == [
+        200_000,
+        530_000,
+    ]  # 100 kb reverse now meets 300 kb forward
+    single = {f"S{p // 1000}": {s} for p, s in sites}
+    doms = infer_domains("chrT", 1_000_000, ccres, orientation=single)
+    assert [d.start for d in doms] == [0, 102_000, 530_000]  # the original strands, both flips
+    assert all(d.to_dict()["evidence"] == ORIENTED_EVIDENCE for d in doms)
+    assert infer_domains("chrT", 1_000_000, ccres)[0].to_dict()["evidence"] != ORIENTED_EVIDENCE
+
+
+def test_motif_strands_scan_and_cache(tmp_path):
+    from genomeos.genome import motifs as mo
+    from genomeos.genome.domains import ctcf_motif_strands
+
+    if not mo.JASPAR_PATH.exists():
+        import pytest
+
+        pytest.skip("JASPAR profiles not cached locally")
+    forward = "AAAAAGCCACCAGGGGGCGCAAAAA"
+    reverse = "TTTTTGCGCCCCCTGGTGGCTTTTT"
+    seqs = {0: forward, 1000: reverse, 2000: "A" * 25}
+    ccres = [CCRE("chrT", s, s + 25, f"E{s}", "CTCF-only", True) for s in seqs]
+    fetch = lambda s, e: seqs[s]  # noqa: E731
+    got = ctcf_motif_strands("chrT", ccres, fetch, cache=tmp_path)
+    assert got == {"E0": {"+"}, "E1000": {"-"}, "E2000": set()}
+    again = ctcf_motif_strands("chrT", ccres, lambda s, e: "", cache=tmp_path)  # read from the cache
+    assert again == got

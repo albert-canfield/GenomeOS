@@ -470,10 +470,30 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Fold-change profiles.** chr2, chr7, chr12, chr17, chr21 and chr22 carry
   them for every cell type and mark; every other chromosome carries peaks only,
   and the record says so.
-- **Next (epigenome and nodes).** 1. An orientation-aware boundary caller
-  (reverse-to-forward flips among motif-bearing CTCF sites) as an alternative
-  node set, compared on the same measured boundaries and on the enhancer
-  deletions before any switch. 2. The poised and read-by-marks calls in the
+- **The orientation-aware caller, as an alternative (2026-09-14, genomeos-e1).**
+  `infer_domains(..., orientation=strands)` places boundaries at reverse-to-forward
+  CTCF motif flips among elements with CTCF ChIP support. The default output is
+  byte-identical, and every committed node is unchanged. Four measurements on
+  the same chromosomes, CTCF-only against oriented (`domains_oriented_comparison`,
+  NODES-READER-WRITER.md):
+  - **Hi-C.** Oriented wins. Enrichment over random is 1.74, 1.96, 1.99 and
+    1.45 in H1, K562, HepG2 and IMR-90, against 1.38, 1.36, 1.30 and 1.16.
+  - **Node content.** Oriented loses. Over 113,399 archive elements naming a
+    coding gene, 63.2% keep the gene inside the node, against 81.7%. Random
+    boundaries give 77.7% and 79.1%, and at matched resolution the shares are
+    67.4% against 82.2%. The old caller's own excess over random is only 2.6
+    points on the full archive.
+  - **Mouse synteny.** Oriented loses. The same human neighbourhood holds for
+    91.3% and 88.0% of mouse nodes (chr19, chr11), against 95.9% and 92.4%.
+  - **HOXD.** Neither caller recovers the boundary. Oriented splits the cluster
+    between HOXD8 and HOXD4. Its rule does place a flip inside the published
+    interval, which the inherited 50 kb node floor then removes.
+  - **Verdict.** Keep both; the default stays CTCF-only. Insulation boundaries
+    and the model's enhancer reach disagree about where regulation is bounded.
+- **Next (epigenome and nodes).** 1. Done as an alternative; the next test is a
+  stricter site call (best-hit strand, stronger motifs) judged on all four
+  measurements at once, and whether Hi-C questions and enhancer-to-gene
+  questions need two node sets. 2. The poised and read-by-marks calls in the
   Blocks lane, whose file belongs to area B: today it shows poised genes as
   silent through `silent_genes` but has no poised colour. 3. A neural, gonadal
   or embryonic biosample beyond SK-N-SH and H1. 4. Measured perturbations

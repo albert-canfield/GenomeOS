@@ -1,0 +1,419 @@
+{
+  "result": "domains_oriented_comparison",
+  "date": "2026-09-14",
+  "callers": {
+    "ctcf_only": {
+      "nodes": 20002,
+      "edges": 19978,
+      "hic": {
+        "GM12878": {
+          "edges": 19930,
+          "supported": 11827,
+          "measured": 45951,
+          "reached": 13305,
+          "supported_share": 0.5934,
+          "random_control": 0.5415,
+          "enrichment": 1.096,
+          "measured_reached_share": 0.2895
+        },
+        "H1-hESC": {
+          "edges": 19978,
+          "supported": 4939,
+          "measured": 13515,
+          "reached": 4941,
+          "supported_share": 0.2472,
+          "random_control": 0.179,
+          "enrichment": 1.381,
+          "measured_reached_share": 0.3656
+        },
+        "K562": {
+          "edges": 19930,
+          "supported": 3059,
+          "measured": 8509,
+          "reached": 3059,
+          "supported_share": 0.1535,
+          "random_control": 0.113,
+          "enrichment": 1.358,
+          "measured_reached_share": 0.3595
+        },
+        "HepG2": {
+          "edges": 19978,
+          "supported": 3149,
+          "measured": 9135,
+          "reached": 3149,
+          "supported_share": 0.1576,
+          "random_control": 0.1212,
+          "enrichment": 1.3,
+          "measured_reached_share": 0.3447
+        },
+        "IMR-90": {
+          "edges": 19930,
+          "supported": 3251,
+          "measured": 10439,
+          "reached": 3251,
+          "supported_share": 0.1631,
+          "random_control": 0.1411,
+          "enrichment": 1.156,
+          "measured_reached_share": 0.3114
+        }
+      },
+      "content": {
+        "coding_named": 113399,
+        "coding_inside": 92639,
+        "coding_inside_random_mean": 89653.6,
+        "any_named": 148403,
+        "any_inside": 123044,
+        "matched_boundaries": 5542,
+        "matched_inside": 93233.5,
+        "matched_named": 113399,
+        "chromosomes": [
+          "chr1",
+          "chr14",
+          "chr15",
+          "chr16",
+          "chr17",
+          "chr18",
+          "chr19",
+          "chr20",
+          "chr21",
+          "chr22",
+          "chrY"
+        ],
+        "coding_inside_share": 0.8169,
+        "coding_inside_random_share": 0.7906,
+        "coding_excess_over_random": 0.0263,
+        "coding_inside_share_at_matched_resolution": 0.8222,
+        "any_inside_share": 0.8291
+      },
+      "mouse": {
+        "chr19": {
+          "tested": 122,
+          "conserved": 68,
+          "split_adjacent": 49,
+          "split_scattered": 5,
+          "fraction_conserved": 0.557,
+          "fraction_same_neighbourhood": 0.959,
+          "mouse_nodes": 371,
+          "mouse_median_length": 109287
+        },
+        "chr11": {
+          "tested": 331,
+          "conserved": 193,
+          "split_adjacent": 113,
+          "split_scattered": 25,
+          "fraction_conserved": 0.583,
+          "fraction_same_neighbourhood": 0.924,
+          "mouse_nodes": 836,
+          "mouse_median_length": 102124
+        }
+      },
+      "median_of_chromosome_median_lengths": 106668,
+      "hoxd": {
+        "edge_in_published_interval": false,
+        "nearest_edge": 176216182,
+        "nearest_edge_distance": 106428,
+        "nodes": 1,
+        "groups": [
+          [
+            "HOXD1",
+            "HOXD3",
+            "HOXD4",
+            "HOXD8",
+            "HOXD9",
+            "HOXD10",
+            "HOXD11",
+            "HOXD12",
+            "HOXD13"
+          ]
+        ]
+      }
+    },
+    "oriented": {
+      "nodes": 17995,
+      "edges": 17971,
+      "hic": {
+        "GM12878": {
+          "edges": 17949,
+          "supported": 10732,
+          "measured": 45951,
+          "reached": 12076,
+          "supported_share": 0.5979,
+          "random_control": 0.5371,
+          "enrichment": 1.113,
+          "measured_reached_share": 0.2628
+        },
+        "H1-hESC": {
+          "edges": 17971,
+          "supported": 5566,
+          "measured": 13515,
+          "reached": 5569,
+          "supported_share": 0.3097,
+          "random_control": 0.178,
+          "enrichment": 1.74,
+          "measured_reached_share": 0.4121
+        },
+        "K562": {
+          "edges": 17949,
+          "supported": 4038,
+          "measured": 8509,
+          "reached": 4038,
+          "supported_share": 0.225,
+          "random_control": 0.115,
+          "enrichment": 1.957,
+          "measured_reached_share": 0.4746
+        },
+        "HepG2": {
+          "edges": 17971,
+          "supported": 4371,
+          "measured": 9135,
+          "reached": 4371,
+          "supported_share": 0.2432,
+          "random_control": 0.1221,
+          "enrichment": 1.992,
+          "measured_reached_share": 0.4785
+        },
+        "IMR-90": {
+          "edges": 17949,
+          "supported": 3633,
+          "measured": 10439,
+          "reached": 3635,
+          "supported_share": 0.2024,
+          "random_control": 0.1392,
+          "enrichment": 1.454,
+          "measured_reached_share": 0.3482
+        }
+      },
+      "content": {
+        "coding_named": 113399,
+        "coding_inside": 71646,
+        "coding_inside_random_mean": 88060.3,
+        "any_named": 148403,
+        "any_inside": 104506,
+        "matched_boundaries": 5542,
+        "matched_inside": 76386.7,
+        "matched_named": 113399,
+        "chromosomes": [
+          "chr1",
+          "chr14",
+          "chr15",
+          "chr16",
+          "chr17",
+          "chr18",
+          "chr19",
+          "chr20",
+          "chr21",
+          "chr22",
+          "chrY"
+        ],
+        "coding_inside_share": 0.6318,
+        "coding_inside_random_share": 0.7766,
+        "coding_excess_over_random": -0.1448,
+        "coding_inside_share_at_matched_resolution": 0.6736,
+        "any_inside_share": 0.7042
+      },
+      "mouse": {
+        "chr19": {
+          "tested": 138,
+          "conserved": 43,
+          "split_adjacent": 83,
+          "split_scattered": 12,
+          "fraction_conserved": 0.312,
+          "fraction_same_neighbourhood": 0.913,
+          "mouse_nodes": 271,
+          "mouse_median_length": 119856
+        },
+        "chr11": {
+          "tested": 343,
+          "conserved": 93,
+          "split_adjacent": 209,
+          "split_scattered": 41,
+          "fraction_conserved": 0.271,
+          "fraction_same_neighbourhood": 0.88,
+          "mouse_nodes": 633,
+          "mouse_median_length": 111646
+        }
+      },
+      "median_of_chromosome_median_lengths": 111011,
+      "hoxd": {
+        "edge_in_published_interval": false,
+        "nearest_edge": 176080249,
+        "nearest_edge_distance": 15991,
+        "nodes": 2,
+        "groups": [
+          [
+            "HOXD8",
+            "HOXD9",
+            "HOXD10",
+            "HOXD11",
+            "HOXD12",
+            "HOXD13"
+          ],
+          [
+            "HOXD1",
+            "HOXD3",
+            "HOXD4"
+          ]
+        ]
+      }
+    },
+    "oriented_ctcf_only": {
+      "nodes": 3273,
+      "edges": 3249,
+      "hic": {
+        "GM12878": {
+          "edges": 3239,
+          "supported": 1903,
+          "measured": 45951,
+          "reached": 2134,
+          "supported_share": 0.5875,
+          "random_control": 0.5412,
+          "enrichment": 1.086,
+          "measured_reached_share": 0.0464
+        },
+        "H1-hESC": {
+          "edges": 3249,
+          "supported": 847,
+          "measured": 13515,
+          "reached": 849,
+          "supported_share": 0.2607,
+          "random_control": 0.1781,
+          "enrichment": 1.464,
+          "measured_reached_share": 0.0628
+        },
+        "K562": {
+          "edges": 3239,
+          "supported": 585,
+          "measured": 8509,
+          "reached": 585,
+          "supported_share": 0.1806,
+          "random_control": 0.1111,
+          "enrichment": 1.626,
+          "measured_reached_share": 0.0688
+        },
+        "HepG2": {
+          "edges": 3249,
+          "supported": 651,
+          "measured": 9135,
+          "reached": 651,
+          "supported_share": 0.2004,
+          "random_control": 0.1216,
+          "enrichment": 1.648,
+          "measured_reached_share": 0.0713
+        },
+        "IMR-90": {
+          "edges": 3239,
+          "supported": 594,
+          "measured": 10439,
+          "reached": 595,
+          "supported_share": 0.1834,
+          "random_control": 0.1357,
+          "enrichment": 1.352,
+          "measured_reached_share": 0.057
+        }
+      },
+      "content": {
+        "coding_named": 113399,
+        "coding_inside": 106348,
+        "coding_inside_random_mean": 107165.5,
+        "any_named": 148403,
+        "any_inside": 139945,
+        "chromosomes": [
+          "chr1",
+          "chr14",
+          "chr15",
+          "chr16",
+          "chr17",
+          "chr18",
+          "chr19",
+          "chr20",
+          "chr21",
+          "chr22",
+          "chrY"
+        ],
+        "coding_inside_share": 0.9378,
+        "coding_inside_random_share": 0.945,
+        "coding_excess_over_random": -0.0072,
+        "any_inside_share": 0.943
+      },
+      "mouse": {
+        "chr19": {
+          "tested": 85,
+          "conserved": 51,
+          "split_adjacent": 31,
+          "split_scattered": 3,
+          "fraction_conserved": 0.6,
+          "fraction_same_neighbourhood": 0.965,
+          "mouse_nodes": 114,
+          "mouse_median_length": 443604
+        },
+        "chr11": {
+          "tested": 210,
+          "conserved": 124,
+          "split_adjacent": 58,
+          "split_scattered": 28,
+          "fraction_conserved": 0.59,
+          "fraction_same_neighbourhood": 0.867,
+          "mouse_nodes": 277,
+          "mouse_median_length": 295191
+        }
+      },
+      "median_of_chromosome_median_lengths": 704066,
+      "hoxd": {
+        "edge_in_published_interval": false,
+        "nearest_edge": 175824514,
+        "nearest_edge_distance": 271726,
+        "nodes": 1,
+        "groups": [
+          [
+            "HOXD1",
+            "HOXD3",
+            "HOXD4",
+            "HOXD8",
+            "HOXD9",
+            "HOXD10",
+            "HOXD11",
+            "HOXD12",
+            "HOXD13"
+          ]
+        ]
+      }
+    }
+  },
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "evidence": {
+    "ctcf_only": "inferred: CTCF-only ENCODE elements as boundaries (the committed nodes)",
+    "oriented": "inferred: reverse-to-forward CTCF motif flips (genome/domains.py oriented_boundaries)",
+    "hic": "experimental: 4D Nucleome boundary calls (insulation score) on released GRCh38 Hi-C and Micro-C",
+    "content": "predicted: AlphaGenome deletion archive, most-moved coding gene; no new model call",
+    "mouse": "curated: MGI mouse-human homology; mouse nodes on mm10 by the same caller"
+  },
+  "controls": {
+    "hic": "as many uniformly random positions (contact_maps.random_control)",
+    "content": "as many boundaries placed uniformly at random, 20 draws; and the callers cut to the smaller boundary count of ctcf_only and oriented (20 draws), placement against resolution"
+  }
+}
