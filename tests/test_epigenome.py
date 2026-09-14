@@ -201,6 +201,31 @@ def test_record_fields_evidence_and_unknown(tmp_path, monkeypatch):
     assert rec_kera["openness"]["value"] == ep.UNKNOWN
     assert all(v["value"] == ep.UNKNOWN for v in rec_kera["marks"].values())
 
+    # the chromosome summary over the same cache: one read promoter, one silent, two elements
+    from types import SimpleNamespace
+
+    from genomeos.coords import Locus, Strand
+    from genomeos.genome.regulatory import CCRE
+
+    genes = {
+        "A": SimpleNamespace(
+            symbol="A", type="protein_coding", locus=Locus("chr21", 1000, 5000, Strand.PLUS)
+        ),
+        "B": SimpleNamespace(
+            symbol="B", type="protein_coding", locus=Locus("chr21", 7000, 9000, Strand.MINUS)
+        ),
+    }
+    ccres = [CCRE("chr21", 960, 1040, "E1", "PLS", False), CCRE("chr21", 5000, 5100, "E2", "dELS", True)]
+    s = ep.summarise_chromosome(
+        "chr21", SimpleNamespace(genes=genes), ccres, cell_types=["K562"], manifest=manifest
+    )
+    row = s["cell_types"]["K562"]
+    assert row["promoters"]["read"]["n"] == 1 and row["promoters"]["silent"]["n"] == 1
+    assert row["promoters"]["read"]["H3K4me3"] == {"n": 1, "share": 1.0}
+    assert row["promoters"]["silent"]["H3K4me3"] == {"n": 0, "share": 0.0}  # measured zero, not missing
+    assert "H3K27me3" in row["marks_unknown"] and row["methylation"] is False
+    assert row["registry_classes"]["PLS"]["open_share"] == 1.0
+
 
 def test_coverage_table_names_what_is_missing():
     cells = {

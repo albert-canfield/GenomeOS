@@ -2840,6 +2840,104 @@ def cmd_reader(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_epigenome(args: argparse.Namespace) -> int:
+    """The epigenome layer: measured histone marks and methylation per locus per cell type (ENCODE)."""
+    from genomeos.genome import epigenome as ep
+    from genomeos.results import save_result
+
+    if args.action == "coverage":
+        m = ep.load_manifest() if not args.refresh else None
+        m = m or ep.build_manifest()
+        cov = m["coverage"]
+        cols = ["dnase", *ep.MARKS, "methylation"]
+        print(f"{'cell type':24s} " + " ".join(f"{c[:8]:>8s}" for c in cols))
+        for cell, row in cov["rows"].items():
+            print(f"{cell:24s} " + " ".join(f"{'yes' if row[c] else '--':>8s}" for c in cols))
+        print(
+            f"{cov['with_all_five_marks']} of {cov['biosamples']} with all five marks, "
+            f"{cov['with_methylation']} with GRCh38 WGBS; missing: {cov['missing']}"
+        )
+        for cell, row in m["cell_types"].items():
+            if "value" in row["methylation"]:
+                print(f"  {cell}: {row['methylation']['reason']}")
+        return 0
+    cells = args.cell_type or list(ep.CELL_TYPES)
+    if args.action == "summary":
+        from genomeos.genome import Annotation, default_gencode
+        from genomeos.genome.regulatory import load_ccres
+        from genomeos.results import load_result
+
+        gff = default_gencode({args.chrom})
+        if not gff:
+            print(f"{args.chrom}: needs local models (genomeos data fetch --chrom {args.chrom})")
+            return 1
+        if args.fetch:
+            ep.ensure(args.chrom, cells, signal=False)
+        ann = Annotation.from_gff3(gff, {args.chrom})
+        s = ep.summarise_chromosome(
+            args.chrom,
+            ann,
+            load_ccres(args.chrom),
+            budget=load_result(f"budget_{args.chrom}"),
+            cell_types=cells,
+        )
+        p = save_result(f"epigenome_{args.chrom}", s)
+        for cell, row in s["cell_types"].items():
+            pr = row["promoters"]
+            k4 = ((pr.get("read") or {}).get("H3K4me3") or {}).get("share")
+            k27 = ((pr.get("silent") or {}).get("H3K27me3") or {}).get("share")
+            print(
+                f"{cell:24s} marks {len(row['marks_measured'])}/5; read promoters with H3K4me3 {k4}; "
+                f"silent with H3K27me3 {k27}; methylation {'yes' if row['methylation'] else 'UNKNOWN'}"
+            )
+        print(f"  saved {p}")
+        return 0
+    chrom, start, end, name = args.chrom, args.start, args.end, ""
+    if args.gene:
+        from genomeos.genome import Annotation, default_gencode
+
+        gff = default_gencode({chrom}) if chrom else None
+        if not gff:
+            print("--gene needs --chrom with local models (genomeos data fetch --chrom C)")
+            return 1
+        g = Annotation.from_gff3(gff, {chrom}).gene(args.gene)
+        t = ep._tss(g)
+        start, end, name = max(0, t - ep.PROMOTER_WINDOW), t + ep.PROMOTER_WINDOW, f"{g.symbol} promoter"
+    if chrom is None or start is None or end is None:
+        print("give --chrom with --start/--end or --gene")
+        return 1
+    if args.fetch:
+        ep.ensure(chrom, cells)
+    records = ep.epigenome_at(chrom, start, end, cells, name=name)
+    if args.json:
+        print(json.dumps(records, indent=2))
+        return 0
+    print(f"{chrom}:{start:,}-{end:,} {name}")
+    for r in records:
+        marks = []
+        for m, f in r["marks"].items():
+            if f.get("value") == ep.UNKNOWN:
+                marks.append(f"{m}=UNKNOWN")
+            else:
+                fc = f.get("fold_change")
+                marks.append(
+                    f"{m}={'peak' if f.get('peak') is True else '-'}"
+                    + (f"({fc})" if fc != ep.UNKNOWN else "")
+                )
+        me = r["methylation"]
+        meth = (
+            "UNKNOWN"
+            if me.get("value") == ep.UNKNOWN
+            else f"{me['fraction']} ({me['cpg_calls_covered']} calls)"
+        )
+        print(
+            f"  {r['cell_type']:24s} {r['openness']['value']:7s} {r['state']['value']:30s} "
+            f"{' '.join(marks)}  methylation {meth}"
+        )
+    print(f"  [{ep.EVIDENCE_MARK}; {ep.EVIDENCE_METHYLATION}; state {ep.EVIDENCE_STATE.split(':')[0]}]")
+    return 0
+
+
 def cmd_report(args: argparse.Namespace) -> int:
     """Every layer about one gene, as one Markdown dossier."""
     from genomeos.genome import Annotation, IndexedGenome, default_gencode
@@ -4887,6 +4985,21 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--chrom", default="chr21")
     p.add_argument("--genome", default="data/reference/chr21.fa.gz")
     p.set_defaults(fn=cmd_reader)
+
+    p = sub.add_parser(
+        "epigenome",
+        help="epigenome layer: measured histone marks and CpG methylation per locus per cell type (ENCODE)",
+    )
+    p.add_argument("action", choices=["coverage", "at", "summary"])
+    p.add_argument("--chrom")
+    p.add_argument("--start", type=int)
+    p.add_argument("--end", type=int)
+    p.add_argument("--gene", help="the promoter (TSS +/- 1 kb) of this gene; needs --chrom")
+    p.add_argument("--cell-type", nargs="*", help="default: the reader's eleven biosamples")
+    p.add_argument("--fetch", action="store_true", help="read what is missing for the chromosome first")
+    p.add_argument("--refresh", action="store_true", help="coverage: resolve the manifest again")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(fn=cmd_epigenome)
 
     p = sub.add_parser("individual", help="a person's genome as a local individual: import a VCF once")
     isub = p.add_subparsers(dest="action")

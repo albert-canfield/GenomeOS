@@ -1,0 +1,2018 @@
+{
+  "result": "epigenome_manifest",
+  "date": "2026-09-14",
+  "source": "https://www.encodeproject.org",
+  "rule": {
+    "experiment": "released, GRCh38, no drug treatment; per cell type the biosample covering the most marks, then complete files (peaks and signal), then the largest peak file",
+    "peaks": "default analysis, replicated narrowPeak before pseudoreplicated",
+    "signal": "default analysis, fold change over control, most pooled replicates",
+    "methylation": "WGBS 'methylation state at CpG' bigBed, the largest over the biosample's experiments"
+  },
+  "cell_types": {
+    "K562": {
+      "dnase": "ENCFF218UJY",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "K562",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR000AKU",
+          "biosample": "Homo sapiens K562",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN221DTY/",
+          "peaks": {
+            "accession": "ENCFF937XKN",
+            "output_type": "replicated peaks",
+            "size": 1059713,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/f033c9a9-6705-4371-aa70-db29438eaf7a/ENCFF937XKN.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF660WUG",
+            "output_type": "fold change over control",
+            "size": 533757939,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/127536f7-16c3-4f65-b621-134645ea90d3/ENCFF660WUG.bigWig"
+          },
+          "candidates": 4
+        },
+        "H3K27ac": {
+          "cell_type": "K562",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR000AKP",
+          "biosample": "Homo sapiens K562",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN866TOS/",
+          "peaks": {
+            "accession": "ENCFF532MMV",
+            "output_type": "replicated peaks",
+            "size": 1180783,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2022/06/14/2b4826f0-39f0-4ffd-91be-520cf780a424/ENCFF532MMV.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF381NDD",
+            "output_type": "fold change over control",
+            "size": 1511112441,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2022/06/14/a3a5887a-bfe4-4c51-856e-986d8d40cfe2/ENCFF381NDD.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "K562",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR000EWC",
+          "biosample": "Homo sapiens K562",
+          "project": "ENCODE",
+          "released": "2011-10-07",
+          "analysis": "/analyses/ENCAN073PNA/",
+          "peaks": {
+            "accession": "ENCFF965TUI",
+            "output_type": "replicated peaks",
+            "size": 2358501,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/33418ef6-dc0a-47ae-a1a2-38ee3f96ff6c/ENCFF965TUI.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF399SGM",
+            "output_type": "fold change over control",
+            "size": 454641656,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/44683bed-69ce-4ca2-bd7f-883d821c1b23/ENCFF399SGM.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K27me3": {
+          "cell_type": "K562",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR000EWB",
+          "biosample": "Homo sapiens K562",
+          "project": "ENCODE",
+          "released": "2011-05-19",
+          "analysis": "/analyses/ENCAN563KAP/",
+          "peaks": {
+            "accession": "ENCFF795ZOS",
+            "output_type": "replicated peaks",
+            "size": 2946013,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/9547261d-2320-4c63-9f89-011fe2933476/ENCFF795ZOS.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF139KZL",
+            "output_type": "fold change over control",
+            "size": 639391582,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/99131277-9e48-46c4-9c42-18cfd4efd28c/ENCFF139KZL.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K9me3": {
+          "cell_type": "K562",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR000APE",
+          "biosample": "Homo sapiens K562",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN967RGD/",
+          "peaks": {
+            "accession": "ENCFF963GZJ",
+            "output_type": "replicated peaks",
+            "size": 514136,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/adbf24b0-dd0e-4247-bed5-b91c2aa68f92/ENCFF963GZJ.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF601JGK",
+            "output_type": "fold change over control",
+            "size": 1017107689,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/c38d5ac9-2cb8-4d12-b0d9-843fadfafe92/ENCFF601JGK.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "K562",
+        "experiment": "ENCSR765JPC",
+        "biosample": "Homo sapiens K562",
+        "project": "ENCODE",
+        "released": "2016-03-22",
+        "cpg": {
+          "accession": "ENCFF750NZN",
+          "output_type": "methylation state at CpG",
+          "size": 1140822721,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/07/17/50c5fcc8-bd91-4b6f-8b2d-0f14bb23609f/ENCFF750NZN.bigBed"
+        },
+        "candidates": 1
+      }
+    },
+    "HepG2": {
+      "dnase": "ENCFF422EDI",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "HepG2",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR000AMP",
+          "biosample": "Homo sapiens HepG2",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN334UFJ/",
+          "peaks": {
+            "accession": "ENCFF040IFA",
+            "output_type": "replicated peaks",
+            "size": 1023331,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/5f1c4ef8-0a1d-48fd-b407-67c2f4b69f31/ENCFF040IFA.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF284FVP",
+            "output_type": "fold change over control",
+            "size": 566923566,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/2ca06a67-3a26-48f4-8354-fc4613c73b67/ENCFF284FVP.bigWig"
+          },
+          "candidates": 3
+        },
+        "H3K27ac": {
+          "cell_type": "HepG2",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR000AMO",
+          "biosample": "Homo sapiens HepG2",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN450NET/",
+          "peaks": {
+            "accession": "ENCFF976VOX",
+            "output_type": "replicated peaks",
+            "size": 1207979,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2022/06/14/b1679391-000c-47ed-8dfb-f81c0adce928/ENCFF976VOX.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF022TZG",
+            "output_type": "fold change over control",
+            "size": 1588663229,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2022/06/14/973e71d1-e7cd-4007-a650-5d40f929185a/ENCFF022TZG.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "HepG2",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR000APV",
+          "biosample": "Homo sapiens HepG2",
+          "project": "ENCODE",
+          "released": "2012-03-06",
+          "analysis": "/analyses/ENCAN243QKR/",
+          "peaks": {
+            "accession": "ENCFF424GUI",
+            "output_type": "replicated peaks",
+            "size": 3444663,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/d9831565-a967-4319-a1dc-cdc1478d71ad/ENCFF424GUI.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF576YVM",
+            "output_type": "fold change over control",
+            "size": 1457128285,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/5fd301ed-a894-4699-933f-cfb49261888c/ENCFF576YVM.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "HepG2",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR000AOL",
+          "biosample": "Homo sapiens HepG2",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN224WTN/",
+          "peaks": {
+            "accession": "ENCFF823EHL",
+            "output_type": "replicated peaks",
+            "size": 2502012,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2022/06/16/ff144fd6-6334-4923-b0ce-5e29033d561e/ENCFF823EHL.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF529HLC",
+            "output_type": "fold change over control",
+            "size": 2000741957,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2022/06/16/0226ebc3-4646-4042-a823-853ac0c30b58/ENCFF529HLC.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K9me3": {
+          "cell_type": "HepG2",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR000ATD",
+          "biosample": "Homo sapiens HepG2",
+          "project": "ENCODE",
+          "released": "2012-08-06",
+          "analysis": "/analyses/ENCAN305JUK/",
+          "peaks": {
+            "accession": "ENCFF745LNA",
+            "output_type": "replicated peaks",
+            "size": 3089346,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/5b0db7b1-7461-471a-a2d5-af4ba7a050f8/ENCFF745LNA.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF754ROM",
+            "output_type": "fold change over control",
+            "size": 1855259470,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/b59fa41f-b150-4d19-98b4-a365fde70d66/ENCFF754ROM.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "HepG2",
+        "experiment": "ENCSR786DCL",
+        "biosample": "Homo sapiens HepG2",
+        "project": "ENCODE",
+        "released": "2017-12-01",
+        "cpg": {
+          "accession": "ENCFF549SNG",
+          "output_type": "methylation state at CpG",
+          "size": 1204045128,
+          "replicates": [
+            2
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/07/17/6aff99be-3685-4aed-9cf6-76a993eec75f/ENCFF549SNG.bigBed"
+        },
+        "candidates": 2
+      }
+    },
+    "GM12878": {
+      "dnase": "ENCFF762CRQ",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "GM12878",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR000AKA",
+          "biosample": "Homo sapiens GM12878",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN643GLS/",
+          "peaks": {
+            "accession": "ENCFF115YTM",
+            "output_type": "replicated peaks",
+            "size": 1219928,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/01/ae5b9909-ff17-4751-a969-ad2ff0022787/ENCFF115YTM.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF927KAJ",
+            "output_type": "fold change over control",
+            "size": 705791872,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/01/5ecd88e5-934f-4df8-8940-bbaba0e92b1d/ENCFF927KAJ.bigWig"
+          },
+          "candidates": 3
+        },
+        "H3K27ac": {
+          "cell_type": "GM12878",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR000AKC",
+          "biosample": "Homo sapiens GM12878",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN294OHP/",
+          "peaks": {
+            "accession": "ENCFF361XMX",
+            "output_type": "replicated peaks",
+            "size": 1258331,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/ccbfa188-6389-4466-9323-3b0803b972f6/ENCFF361XMX.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF469WVA",
+            "output_type": "fold change over control",
+            "size": 189946414,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/7ae35df2-f211-4f5a-90e2-1bce9a864622/ENCFF469WVA.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "GM12878",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR000AKF",
+          "biosample": "Homo sapiens GM12878",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN820YRG/",
+          "peaks": {
+            "accession": "ENCFF767DMH",
+            "output_type": "replicated peaks",
+            "size": 1703018,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/12/d4eb9204-4794-4cf4-9567-c3566e949e1e/ENCFF767DMH.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF564KBE",
+            "output_type": "fold change over control",
+            "size": 534534735,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/12/12dee285-78ba-4167-94db-ec5fdb70cd6f/ENCFF564KBE.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "GM12878",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR000DRX",
+          "biosample": "Homo sapiens GM12878",
+          "project": "ENCODE",
+          "released": "2011-02-11",
+          "analysis": "/analyses/ENCAN452ZJA/",
+          "peaks": {
+            "accession": "ENCFF695ETB",
+            "output_type": "replicated peaks",
+            "size": 445790,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/b869ddf2-017d-41c8-a3d0-9058ecb2a503/ENCFF695ETB.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF486WAD",
+            "output_type": "fold change over control",
+            "size": 402839447,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/d270be02-f1ae-4e35-a0a8-c739c14e3b26/ENCFF486WAD.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K9me3": {
+          "cell_type": "GM12878",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR000AOX",
+          "biosample": "Homo sapiens GM12878",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN347OKT/",
+          "peaks": {
+            "accession": "ENCFF725UFY",
+            "output_type": "replicated peaks",
+            "size": 564026,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/270cf839-067f-4375-bb96-fa98a05d307e/ENCFF725UFY.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF683HCZ",
+            "output_type": "fold change over control",
+            "size": 469236372,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/775e5ee5-15e2-4b76-86c4-5040d55424f9/ENCFF683HCZ.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "GM12878",
+        "experiment": "ENCSR890UQO",
+        "biosample": "Homo sapiens GM12878",
+        "project": "ENCODE",
+        "released": "2016-02-23",
+        "cpg": {
+          "accession": "ENCFF866WCV",
+          "output_type": "methylation state at CpG",
+          "size": 1207771763,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/07/17/32b7e8cd-8e88-4a36-baf6-2c1599737b89/ENCFF866WCV.bigBed"
+        },
+        "candidates": 1
+      }
+    },
+    "H1": {
+      "dnase": "ENCFF806EBV",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "H1",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR814XPE",
+          "biosample": "Homo sapiens H1",
+          "project": "ENCODE",
+          "released": "2016-11-08",
+          "analysis": "/analyses/ENCAN172AKT/",
+          "peaks": {
+            "accession": "ENCFF458FVI",
+            "output_type": "replicated peaks",
+            "size": 1002212,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2021/02/01/f8201882-3b80-45ce-9275-914841b9395f/ENCFF458FVI.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF760NUN",
+            "output_type": "fold change over control",
+            "size": 2573397048,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2021/02/01/f2a3925c-104f-4215-a740-b41a3f7d3a3b/ENCFF760NUN.bigWig"
+          },
+          "candidates": 5
+        },
+        "H3K27ac": {
+          "cell_type": "H1",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR880SUY",
+          "biosample": "Homo sapiens H1",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN111BYB/",
+          "peaks": {
+            "accession": "ENCFF897KUI",
+            "output_type": "replicated peaks",
+            "size": 1240798,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/26/fedc9cb7-d11e-424a-824c-9243a62b7253/ENCFF897KUI.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF314KQD",
+            "output_type": "fold change over control",
+            "size": 411592775,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/26/63eb75b9-c48a-494a-b636-6f7ba1080a4d/ENCFF314KQD.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K4me1": {
+          "cell_type": "H1",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR000ANA",
+          "biosample": "Homo sapiens H1",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN955HZV/",
+          "peaks": {
+            "accession": "ENCFF480QNT",
+            "output_type": "replicated peaks",
+            "size": 2283577,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/15/211db4a2-7f1f-44e7-bbd0-cb02e0087dd0/ENCFF480QNT.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF396RXV",
+            "output_type": "fold change over control",
+            "size": 1351608002,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/15/5d2eef5e-9d65-4455-81eb-c5366d96a3f5/ENCFF396RXV.bigWig"
+          },
+          "candidates": 4
+        },
+        "H3K27me3": {
+          "cell_type": "H1",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR186OBR",
+          "biosample": "Homo sapiens H1",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN903FRX/",
+          "peaks": {
+            "accession": "ENCFF760MIC",
+            "output_type": "replicated peaks",
+            "size": 866629,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/25/d3e8e7c5-1108-4759-9407-23387167fe5d/ENCFF760MIC.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF671NVD",
+            "output_type": "fold change over control",
+            "size": 305763902,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/25/5cffe962-681b-4cca-873b-1e47376c72e3/ENCFF671NVD.bigWig"
+          },
+          "candidates": 5
+        },
+        "H3K9me3": {
+          "cell_type": "H1",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR000APZ",
+          "biosample": "Homo sapiens H1",
+          "project": "ENCODE",
+          "released": "2012-03-06",
+          "analysis": "/analyses/ENCAN585ARU/",
+          "peaks": {
+            "accession": "ENCFF684WMA",
+            "output_type": "replicated peaks",
+            "size": 1553356,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/15/82a57650-9364-4c6e-9c8c-39be99807b1c/ENCFF684WMA.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF350QBK",
+            "output_type": "fold change over control",
+            "size": 1917243489,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/15/44b6a40a-f7ea-451d-a446-b7518e228993/ENCFF350QBK.bigWig"
+          },
+          "candidates": 3
+        }
+      },
+      "methylation": {
+        "cell_type": "H1",
+        "experiment": "ENCSR617FKV",
+        "biosample": "Homo sapiens H1",
+        "project": "ENCODE",
+        "released": "2015-10-13",
+        "cpg": {
+          "accession": "ENCFF275KED",
+          "output_type": "methylation state at CpG",
+          "size": 1193030984,
+          "replicates": [
+            2
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/07/17/4ba23659-09c7-4ec7-8548-4c1f592a9849/ENCFF275KED.bigBed"
+        },
+        "candidates": 2
+      }
+    },
+    "IMR-90": {
+      "dnase": "ENCFF417EEA",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "IMR-90",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR087PFU",
+          "biosample": "Homo sapiens IMR-90",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN223EHF/",
+          "peaks": {
+            "accession": "ENCFF195RRR",
+            "output_type": "replicated peaks",
+            "size": 743845,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/19/e56ab84a-24c5-4169-9c54-a86a429ad613/ENCFF195RRR.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF376ZIM",
+            "output_type": "fold change over control",
+            "size": 259902064,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/19/afa00ae0-3f92-4fee-ac7b-1852e6adb6fc/ENCFF376ZIM.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27ac": {
+          "cell_type": "IMR-90",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR002YRE",
+          "biosample": "Homo sapiens IMR-90",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN347PDL/",
+          "peaks": {
+            "accession": "ENCFF125DFL",
+            "output_type": "replicated peaks",
+            "size": 1999855,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/19/25cb1050-26ff-48e4-904d-fe9165279a22/ENCFF125DFL.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF699OAR",
+            "output_type": "fold change over control",
+            "size": 486562496,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/19/ab186975-338d-4193-a807-8da0e76869a9/ENCFF699OAR.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "IMR-90",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR831JSP",
+          "biosample": "Homo sapiens IMR-90",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN420BRR/",
+          "peaks": {
+            "accession": "ENCFF328EMO",
+            "output_type": "replicated peaks",
+            "size": 3431676,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/19/98780374-3b1d-4137-a344-ff3cb48e1870/ENCFF328EMO.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF221MJG",
+            "output_type": "fold change over control",
+            "size": 714138384,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/19/19375c04-b2a1-49dd-bac1-86aa10972eb7/ENCFF221MJG.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "IMR-90",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR431UUY",
+          "biosample": "Homo sapiens IMR-90",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN965OSV/",
+          "peaks": {
+            "accession": "ENCFF704DVN",
+            "output_type": "replicated peaks",
+            "size": 2444358,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/19/7ddd96a8-63c3-47a6-8561-577f9ba86b53/ENCFF704DVN.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF366BVS",
+            "output_type": "fold change over control",
+            "size": 694535871,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/19/d104dac3-edfe-4abf-9b10-e7a9576f6749/ENCFF366BVS.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K9me3": {
+          "cell_type": "IMR-90",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR055ZZY",
+          "biosample": "Homo sapiens IMR-90",
+          "project": "Roadmap",
+          "released": "2013-07-31",
+          "analysis": "/analyses/ENCAN022VPP/",
+          "peaks": {
+            "accession": "ENCFF179YRO",
+            "output_type": "replicated peaks",
+            "size": 2548670,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/20/2a658b15-9548-4216-a547-57aca563b4d3/ENCFF179YRO.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF066MEE",
+            "output_type": "fold change over control",
+            "size": 618357161,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/20/9b504e43-1c1a-417d-96f5-45c69bb3ee25/ENCFF066MEE.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "IMR-90",
+        "experiment": "ENCSR888FON",
+        "biosample": "Homo sapiens IMR-90",
+        "project": "Roadmap",
+        "released": "2013-07-31",
+        "cpg": {
+          "accession": "ENCFF591PKF",
+          "output_type": "methylation state at CpG",
+          "size": 679058964,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/03/09/0d77cbdc-b980-43c0-b78f-cfcba00669aa/ENCFF591PKF.bigBed"
+        },
+        "candidates": 2
+      }
+    },
+    "SK-N-SH": {
+      "dnase": "ENCFF774KKB",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "SK-N-SH",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR975GZA",
+          "biosample": "Homo sapiens SK-N-SH",
+          "project": "ENCODE",
+          "released": "2016-10-19",
+          "analysis": "/analyses/ENCAN665LPK/",
+          "peaks": {
+            "accession": "ENCFF719NAI",
+            "output_type": "replicated peaks",
+            "size": 858161,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/21/18679518-3343-4afb-aaa4-2a0b0db75297/ENCFF719NAI.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF755FHH",
+            "output_type": "fold change over control",
+            "size": 2256473973,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/21/8925ff0b-7233-45dc-8886-772033154655/ENCFF755FHH.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K27ac": {
+          "cell_type": "SK-N-SH",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR000FCU",
+          "biosample": "Homo sapiens SK-N-SH",
+          "project": "ENCODE",
+          "released": "2014-07-07",
+          "analysis": "/analyses/ENCAN615AXV/",
+          "peaks": {
+            "accession": "ENCFF704MQR",
+            "output_type": "replicated peaks",
+            "size": 1942824,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/29/a9e6692a-deb6-4766-a6a6-7ac41c56f2d6/ENCFF704MQR.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF513XLZ",
+            "output_type": "fold change over control",
+            "size": 771217440,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/29/72e83642-23b9-4fba-b1fe-2c34b43d2604/ENCFF513XLZ.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K4me1": {
+          "cell_type": "SK-N-SH",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR661BMA",
+          "biosample": "Homo sapiens SK-N-SH",
+          "project": "ENCODE",
+          "released": "2016-11-25",
+          "analysis": "/analyses/ENCAN691JDA/",
+          "peaks": {
+            "accession": "ENCFF262IOG",
+            "output_type": "replicated peaks",
+            "size": 1380132,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/12/11/cb7d0e7d-7186-4048-8564-1f878187ad4d/ENCFF262IOG.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF004KXX",
+            "output_type": "fold change over control",
+            "size": 1872504752,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/12/11/9d70ee5c-c80b-4118-b1d4-40593768f57a/ENCFF004KXX.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K27me3": {
+          "cell_type": "SK-N-SH",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR914QOK",
+          "biosample": "Homo sapiens SK-N-SH",
+          "project": "ENCODE",
+          "released": "2016-07-19",
+          "analysis": "/analyses/ENCAN844THV/",
+          "peaks": {
+            "accession": "ENCFF900MPC",
+            "output_type": "replicated peaks",
+            "size": 711235,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/12/11/30c3899f-9961-434e-b165-d438645b28e4/ENCFF900MPC.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF817CBR",
+            "output_type": "fold change over control",
+            "size": 1411236536,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/12/11/2ac87a58-8b83-41eb-9884-4c6bafb31864/ENCFF817CBR.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K9me3": {
+          "cell_type": "SK-N-SH",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR657OGA",
+          "biosample": "Homo sapiens SK-N-SH",
+          "project": "ENCODE",
+          "released": "2017-01-12",
+          "analysis": "/analyses/ENCAN065JMX/",
+          "peaks": {
+            "accession": "ENCFF074HWY",
+            "output_type": "replicated peaks",
+            "size": 442693,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/12/11/2bef45a1-bfcf-46f2-bdc1-1b34cdf71d3f/ENCFF074HWY.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF365KPJ",
+            "output_type": "fold change over control",
+            "size": 1994048508,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/12/11/5f2a7ca9-1d9b-457c-b864-a15a3a651f06/ENCFF365KPJ.bigWig"
+          },
+          "candidates": 2
+        }
+      },
+      "methylation": {
+        "cell_type": "SK-N-SH",
+        "experiment": "ENCSR145HNT",
+        "biosample": "Homo sapiens SK-N-SH",
+        "project": "ENCODE",
+        "released": "2017-12-13",
+        "cpg": {
+          "accession": "ENCFF130SMI",
+          "output_type": "methylation state at CpG",
+          "size": 1226407451,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/07/18/74a69c4b-c128-44d1-a6a1-f1eb1797ff90/ENCFF130SMI.bigBed"
+        },
+        "candidates": 1
+      }
+    },
+    "cardiac muscle cell": {
+      "dnase": "ENCFF870EKF",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "cardiac muscle cell",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR652QNW",
+          "biosample": "Homo sapiens cardiac muscle cell originated from RUES2",
+          "project": "ENCODE",
+          "released": "2016-11-03",
+          "analysis": "/analyses/ENCAN141KHN/",
+          "peaks": {
+            "accession": "ENCFF106PCS",
+            "output_type": "replicated peaks",
+            "size": 516491,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/09/a7d0ef6d-edf0-41db-81ee-7dfbb0b56833/ENCFF106PCS.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF207MNM",
+            "output_type": "fold change over control",
+            "size": 1809217985,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/09/1a2e25c0-fd22-483d-9b3e-4055739b1e78/ENCFF207MNM.bigWig"
+          },
+          "candidates": 3
+        },
+        "H3K27ac": {
+          "cell_type": "cardiac muscle cell",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR000NPF",
+          "biosample": "Homo sapiens cardiac muscle cell originated from RUES2",
+          "project": "ENCODE",
+          "released": "2016-11-12",
+          "analysis": "/analyses/ENCAN264KNU/",
+          "peaks": {
+            "accession": "ENCFF622FFM",
+            "output_type": "replicated peaks",
+            "size": 1892829,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/17/62250f38-55f6-4e25-b74c-96f98f5cdabd/ENCFF622FFM.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF485DKZ",
+            "output_type": "fold change over control",
+            "size": 1852549735,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/17/8a788a19-56de-443d-acff-a2b971f96700/ENCFF485DKZ.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "cardiac muscle cell",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR276OLB",
+          "biosample": "Homo sapiens cardiac muscle cell originated from RUES2",
+          "project": "ENCODE",
+          "released": "2017-01-05",
+          "analysis": "/analyses/ENCAN778AHN/",
+          "peaks": {
+            "accession": "ENCFF732SRA",
+            "output_type": "replicated peaks",
+            "size": 2175602,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/12/441e3cdf-d3ec-467f-8844-4a31f92259bc/ENCFF732SRA.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF858TAC",
+            "output_type": "fold change over control",
+            "size": 2158959373,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2023/01/12/6b4628a6-d9b3-4ece-ba72-d11d9e90f2e4/ENCFF858TAC.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "cardiac muscle cell",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR864LRY",
+          "biosample": "Homo sapiens cardiac muscle cell originated from RUES2",
+          "project": "ENCODE",
+          "released": "2016-11-03",
+          "analysis": "/analyses/ENCAN762LMS/",
+          "peaks": {
+            "accession": "ENCFF177WLH",
+            "output_type": "replicated peaks",
+            "size": 870322,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/02/ac95cfe5-5d41-4997-9cd2-3f32fb123db7/ENCFF177WLH.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF663QED",
+            "output_type": "fold change over control",
+            "size": 2050709327,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/02/113aca8b-7bd3-410f-891d-60d05f2fc1c5/ENCFF663QED.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K9me3": {
+          "cell_type": "cardiac muscle cell",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR269ULZ",
+          "biosample": "Homo sapiens cardiac muscle cell originated from RUES2",
+          "project": "ENCODE",
+          "released": "2017-01-05",
+          "analysis": "/analyses/ENCAN765UBX/",
+          "peaks": {
+            "accession": "ENCFF570DMW",
+            "output_type": "replicated peaks",
+            "size": 35419,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/32b867ec-921e-433e-b1f6-378570ede677/ENCFF570DMW.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF525UVG",
+            "output_type": "fold change over control",
+            "size": 2083284081,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/ca3fe250-3cd1-41aa-9561-3d649b67c406/ENCFF525UVG.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "cardiac muscle cell",
+        "value": "UNKNOWN",
+        "reason": "no released GRCh38 WGBS; RRBS exists only on ['hg19']",
+        "rrbs": [
+          "ENCSR000DGD"
+        ]
+      }
+    },
+    "keratinocyte": {
+      "dnase": "ENCFF358VOS",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "keratinocyte",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR000ALO",
+          "biosample": "Homo sapiens keratinocyte female",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN840KNO/",
+          "peaks": {
+            "accession": "ENCFF547PJT",
+            "output_type": "replicated peaks",
+            "size": 970326,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/b3346e95-3fb5-40c7-8eae-e98abef3e0ff/ENCFF547PJT.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF079YXO",
+            "output_type": "fold change over control",
+            "size": 277097741,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/dce11500-d4b4-4201-a82a-9e4f61d5f406/ENCFF079YXO.bigWig"
+          },
+          "candidates": 3
+        },
+        "H3K27ac": {
+          "cell_type": "keratinocyte",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR000ALK",
+          "biosample": "Homo sapiens keratinocyte female",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN153QHY/",
+          "peaks": {
+            "accession": "ENCFF578GNF",
+            "output_type": "replicated peaks",
+            "size": 1441254,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/8681f4dc-ea0e-4c7e-8370-23e5e9cb88ab/ENCFF578GNF.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF443TJZ",
+            "output_type": "fold change over control",
+            "size": 234034276,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/4341dbab-7192-4402-974c-44ab070844fa/ENCFF443TJZ.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "keratinocyte",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR000ALI",
+          "biosample": "Homo sapiens keratinocyte female",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN871DRT/",
+          "peaks": {
+            "accession": "ENCFF777MBD",
+            "output_type": "replicated peaks",
+            "size": 2463957,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/370f9a03-af47-4af3-8c24-51f9eefdd53d/ENCFF777MBD.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF681NRI",
+            "output_type": "fold change over control",
+            "size": 315486562,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/1734eddb-01e1-4ff2-8a89-4433fd380a95/ENCFF681NRI.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "keratinocyte",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR000ALL",
+          "biosample": "Homo sapiens keratinocyte female",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN524KCW/",
+          "peaks": {
+            "accession": "ENCFF660YCE",
+            "output_type": "replicated peaks",
+            "size": 929915,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/4d4a4136-7058-4f8b-a4ce-4ffa42818ee2/ENCFF660YCE.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF698NBK",
+            "output_type": "fold change over control",
+            "size": 275154945,
+            "replicates": [
+              1,
+              2,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/3fe04493-63f7-441a-9d5d-04a9e333fb4d/ENCFF698NBK.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K9me3": {
+          "cell_type": "keratinocyte",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR000ARN",
+          "biosample": "Homo sapiens keratinocyte female",
+          "project": "ENCODE",
+          "released": "2012-03-06",
+          "analysis": "/analyses/ENCAN688YHT/",
+          "peaks": {
+            "accession": "ENCFF359QDV",
+            "output_type": "replicated peaks",
+            "size": 401446,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/d109f1a9-213c-4051-99f5-3ae09295dbf2/ENCFF359QDV.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF568EAV",
+            "output_type": "fold change over control",
+            "size": 767803604,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/193f6e5b-b9b2-4e04-8c5c-8542625e7163/ENCFF568EAV.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "keratinocyte",
+        "value": "UNKNOWN",
+        "reason": "no released GRCh38 WGBS; no RRBS either",
+        "rrbs": []
+      }
+    },
+    "hepatocyte": {
+      "dnase": "ENCFF419TRY",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "hepatocyte",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR442ZOI",
+          "biosample": "Homo sapiens hepatocyte originated from H9",
+          "project": "ENCODE",
+          "released": "2016-04-27",
+          "analysis": "/analyses/ENCAN806UNJ/",
+          "peaks": {
+            "accession": "ENCFF646JEB",
+            "output_type": "replicated peaks",
+            "size": 629701,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/10/68272097-6ffb-4ee3-bef6-21359d77f82a/ENCFF646JEB.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF137IUT",
+            "output_type": "fold change over control",
+            "size": 2058914259,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/10/d7b8316d-02f1-444f-a1f1-e13d1fd92d52/ENCFF137IUT.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27ac": {
+          "cell_type": "hepatocyte",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR507UDH",
+          "biosample": "Homo sapiens hepatocyte originated from H9",
+          "project": "ENCODE",
+          "released": "2016-05-20",
+          "analysis": "/analyses/ENCAN074IZG/",
+          "peaks": {
+            "accession": "ENCFF198IPN",
+            "output_type": "replicated peaks",
+            "size": 3032107,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/10/5aad0fc2-ce00-4ed8-b194-e11348bde0c3/ENCFF198IPN.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF347LDC",
+            "output_type": "fold change over control",
+            "size": 2444720222,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/10/90e81fca-00f5-4f6c-89f9-58f06c9782b1/ENCFF347LDC.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "hepatocyte",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR689QUB",
+          "biosample": "Homo sapiens hepatocyte originated from H9",
+          "project": "ENCODE",
+          "released": "2016-04-27",
+          "analysis": "/analyses/ENCAN751FDX/",
+          "peaks": {
+            "accession": "ENCFF280MMK",
+            "output_type": "replicated peaks",
+            "size": 1526341,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/e29ccfa3-921a-421a-8a72-1545a75a8d43/ENCFF280MMK.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF996MIA",
+            "output_type": "fold change over control",
+            "size": 2122637268,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/05977e00-232a-4dad-9f92-d8f9ab3a75cf/ENCFF996MIA.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "hepatocyte",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR637RLN",
+          "biosample": "Homo sapiens hepatocyte originated from H9",
+          "project": "ENCODE",
+          "released": "2016-05-20",
+          "analysis": "/analyses/ENCAN855DLA/",
+          "peaks": {
+            "accession": "ENCFF374HIV",
+            "output_type": "replicated peaks",
+            "size": 192558,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/13/628eee77-cc85-4104-a445-6cb875ad3f0c/ENCFF374HIV.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF463JYK",
+            "output_type": "fold change over control",
+            "size": 2707202483,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/13/c82545e0-ed5b-4518-b7f8-384aacd2f261/ENCFF463JYK.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K9me3": {
+          "cell_type": "hepatocyte",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR758GMX",
+          "biosample": "Homo sapiens hepatocyte originated from H9",
+          "project": "ENCODE",
+          "released": "2016-04-27",
+          "analysis": "/analyses/ENCAN470SIY/",
+          "peaks": {
+            "accession": "ENCFF503GSL",
+            "output_type": "replicated peaks",
+            "size": 293253,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/2a9231b2-e86e-46a0-a487-f93f0023a7df/ENCFF503GSL.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF509OEW",
+            "output_type": "fold change over control",
+            "size": 2205285796,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/059580cb-45c0-4195-a964-43bfc5caef97/ENCFF509OEW.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "hepatocyte",
+        "experiment": "ENCSR351IPU",
+        "biosample": "Homo sapiens hepatocyte originated from H9",
+        "project": "ENCODE",
+        "released": "2016-03-22",
+        "cpg": {
+          "accession": "ENCFF789HII",
+          "output_type": "methylation state at CpG",
+          "size": 1243214456,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/07/20/12eeed56-6be8-4950-b1f5-d19b7f15afb3/ENCFF789HII.bigBed"
+        },
+        "candidates": 1
+      }
+    },
+    "astrocyte": {
+      "dnase": "ENCFF874OPW",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "astrocyte",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR000AOU",
+          "biosample": "Homo sapiens astrocyte",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN923UQN/",
+          "peaks": {
+            "accession": "ENCFF278TPT",
+            "output_type": "replicated peaks",
+            "size": 929875,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/a3ac3723-9e63-4a97-869c-6b3bd44049c5/ENCFF278TPT.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF577BWJ",
+            "output_type": "fold change over control",
+            "size": 1006806133,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/dee04c6c-f681-4940-a9c9-1d65a5e3ec81/ENCFF577BWJ.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27ac": {
+          "cell_type": "astrocyte",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR000AOQ",
+          "biosample": "Homo sapiens astrocyte",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN749XVU/",
+          "peaks": {
+            "accession": "ENCFF970DKF",
+            "output_type": "replicated peaks",
+            "size": 1639983,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/05cecf17-49d4-4252-8c2d-f43b29365273/ENCFF970DKF.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF643ZMC",
+            "output_type": "fold change over control",
+            "size": 825911067,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/f31ec0e2-4bb3-43c5-af19-9a288bfae6c9/ENCFF643ZMC.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K4me1": {
+          "cell_type": "astrocyte",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR000AOT",
+          "biosample": "Homo sapiens astrocyte",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN064RNT/",
+          "peaks": {
+            "accession": "ENCFF346BTW",
+            "output_type": "replicated peaks",
+            "size": 2470682,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/7490e7b7-183b-48b3-b4b5-bdd6b0d2dfb5/ENCFF346BTW.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF713TLU",
+            "output_type": "fold change over control",
+            "size": 1005506944,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/30/d4010a8d-34b8-4412-b275-048c68c7485c/ENCFF713TLU.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K27me3": {
+          "cell_type": "astrocyte",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR000AOR",
+          "biosample": "Homo sapiens astrocyte",
+          "project": "ENCODE",
+          "released": "2011-02-10",
+          "analysis": "/analyses/ENCAN712UJX/",
+          "peaks": {
+            "accession": "ENCFF623OGE",
+            "output_type": "replicated peaks",
+            "size": 849739,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/b6dfc24f-5c85-4e66-8733-d5b15eb9dfc5/ENCFF623OGE.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF665DLZ",
+            "output_type": "fold change over control",
+            "size": 1040725690,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/817ba0a6-1cb1-4b55-b341-ccd115e4caa9/ENCFF665DLZ.bigWig"
+          },
+          "candidates": 1
+        },
+        "H3K9me3": {
+          "cell_type": "astrocyte",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR000AQR",
+          "biosample": "Homo sapiens astrocyte",
+          "project": "ENCODE",
+          "released": "2012-03-06",
+          "analysis": "/analyses/ENCAN544UHA/",
+          "peaks": {
+            "accession": "ENCFF597DFS",
+            "output_type": "replicated peaks",
+            "size": 622665,
+            "replicates": [
+              1,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/0a8b073e-8bfc-48d5-9c2d-feacf23f5f77/ENCFF597DFS.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF085PDI",
+            "output_type": "fold change over control",
+            "size": 1380933507,
+            "replicates": [
+              1,
+              3
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/cb02b8ae-9d95-4936-8dbc-6db9abfb42b0/ENCFF085PDI.bigWig"
+          },
+          "candidates": 1
+        }
+      },
+      "methylation": {
+        "cell_type": "astrocyte",
+        "value": "UNKNOWN",
+        "reason": "no released GRCh38 WGBS; RRBS exists only on ['hg19']",
+        "rrbs": [
+          "ENCSR472ORV",
+          "ENCSR530QCN"
+        ]
+      }
+    },
+    "CD14-positive monocyte": {
+      "dnase": "ENCFF934ZVP",
+      "marks": {
+        "H3K4me3": {
+          "cell_type": "CD14-positive monocyte",
+          "mark": "H3K4me3",
+          "experiment": "ENCSR000ASN",
+          "biosample": "Homo sapiens CD14-positive monocyte female",
+          "project": "ENCODE",
+          "released": "2012-08-06",
+          "analysis": "/analyses/ENCAN128IQH/",
+          "peaks": {
+            "accession": "ENCFF247CME",
+            "output_type": "replicated peaks",
+            "size": 1444645,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/af4fd3aa-a411-4a73-9b53-2649bb2878b4/ENCFF247CME.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF587XGD",
+            "output_type": "fold change over control",
+            "size": 1195542570,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/9a771454-5734-4dda-93a3-c4ca5ccaa9a0/ENCFF587XGD.bigWig"
+          },
+          "candidates": 3
+        },
+        "H3K27ac": {
+          "cell_type": "CD14-positive monocyte",
+          "mark": "H3K27ac",
+          "experiment": "ENCSR000ASJ",
+          "biosample": "Homo sapiens CD14-positive monocyte female",
+          "project": "ENCODE",
+          "released": "2012-08-06",
+          "analysis": "/analyses/ENCAN976LOF/",
+          "peaks": {
+            "accession": "ENCFF840NSV",
+            "output_type": "replicated peaks",
+            "size": 2130842,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/3d0ab44f-3620-4401-805c-4ed91836d02b/ENCFF840NSV.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF184NWF",
+            "output_type": "fold change over control",
+            "size": 937676936,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/09/30/f297a004-a70e-470e-9fa4-bb3409f794f6/ENCFF184NWF.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K4me1": {
+          "cell_type": "CD14-positive monocyte",
+          "mark": "H3K4me1",
+          "experiment": "ENCSR000ASM",
+          "biosample": "Homo sapiens CD14-positive monocyte female",
+          "project": "ENCODE",
+          "released": "2012-08-06",
+          "analysis": "/analyses/ENCAN071FJM/",
+          "peaks": {
+            "accession": "ENCFF719NSJ",
+            "output_type": "replicated peaks",
+            "size": 2448357,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/782f45a8-e7b3-4f46-9bcd-63da1ed5f2b4/ENCFF719NSJ.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF070MLY",
+            "output_type": "fold change over control",
+            "size": 542579250,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/8940f837-6a6b-4f17-9e20-7342642a935c/ENCFF070MLY.bigWig"
+          },
+          "candidates": 2
+        },
+        "H3K27me3": {
+          "cell_type": "CD14-positive monocyte",
+          "mark": "H3K27me3",
+          "experiment": "ENCSR000ASK",
+          "biosample": "Homo sapiens CD14-positive monocyte female",
+          "project": "ENCODE",
+          "released": "2012-08-06",
+          "analysis": "/analyses/ENCAN121PZF/",
+          "peaks": {
+            "accession": "ENCFF356KUC",
+            "output_type": "replicated peaks",
+            "size": 1275842,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/441b017f-2b60-4929-8a7f-10b27b3b2adc/ENCFF356KUC.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF759NGN",
+            "output_type": "fold change over control",
+            "size": 823308787,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/11/01/073252bc-0661-4c7c-99d1-42d5b94cfa0a/ENCFF759NGN.bigWig"
+          },
+          "candidates": 3
+        },
+        "H3K9me3": {
+          "cell_type": "CD14-positive monocyte",
+          "mark": "H3K9me3",
+          "experiment": "ENCSR000ASP",
+          "biosample": "Homo sapiens CD14-positive monocyte female",
+          "project": "ENCODE",
+          "released": "2012-08-06",
+          "analysis": "/analyses/ENCAN009LWZ/",
+          "peaks": {
+            "accession": "ENCFF880MAU",
+            "output_type": "replicated peaks",
+            "size": 1700894,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/2675037b-1a56-410c-8fd7-fc6fcb4573fb/ENCFF880MAU.bed.gz"
+          },
+          "signal": {
+            "accession": "ENCFF392COD",
+            "output_type": "fold change over control",
+            "size": 795057390,
+            "replicates": [
+              1,
+              2
+            ],
+            "url": "https://encode-public.s3.amazonaws.com/2020/10/29/3c3809b1-0e07-4d81-bdc8-9ff02669a9db/ENCFF392COD.bigWig"
+          },
+          "candidates": 2
+        }
+      },
+      "methylation": {
+        "cell_type": "CD14-positive monocyte",
+        "experiment": "ENCSR017BUL",
+        "biosample": "Homo sapiens CD14-positive monocyte male adult (37 years)",
+        "project": "Roadmap",
+        "released": "2013-07-31",
+        "cpg": {
+          "accession": "ENCFF135OYB",
+          "output_type": "methylation state at CpG",
+          "size": 802394217,
+          "replicates": [
+            1
+          ],
+          "url": "https://encode-public.s3.amazonaws.com/2021/03/09/a9222ce7-706e-439c-9d1f-21e5959357ae/ENCFF135OYB.bigBed"
+        },
+        "candidates": 1
+      }
+    }
+  },
+  "coverage": {
+    "rows": {
+      "K562": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      },
+      "HepG2": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      },
+      "GM12878": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      },
+      "H1": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      },
+      "IMR-90": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      },
+      "SK-N-SH": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      },
+      "cardiac muscle cell": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": false
+      },
+      "keratinocyte": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": false
+      },
+      "hepatocyte": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      },
+      "astrocyte": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": false
+      },
+      "CD14-positive monocyte": {
+        "dnase": true,
+        "H3K4me3": true,
+        "H3K27ac": true,
+        "H3K4me1": true,
+        "H3K27me3": true,
+        "H3K9me3": true,
+        "methylation": true
+      }
+    },
+    "biosamples": 11,
+    "with_all_five_marks": 11,
+    "with_methylation": 8,
+    "complete": [
+      "K562",
+      "HepG2",
+      "GM12878",
+      "H1",
+      "IMR-90",
+      "SK-N-SH",
+      "hepatocyte",
+      "CD14-positive monocyte"
+    ],
+    "missing": {
+      "cardiac muscle cell": [
+        "methylation"
+      ],
+      "keratinocyte": [
+        "methylation"
+      ],
+      "astrocyte": [
+        "methylation"
+      ]
+    }
+  }
+}

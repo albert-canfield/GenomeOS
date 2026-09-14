@@ -450,12 +450,14 @@ def fetch_mark_peaks(entry: dict, chroms: Iterable[str] = CHROMS, timeout: int =
         rows.sort()
         p = peaks_path(cell, mark, c)
         p.parent.mkdir(parents=True, exist_ok=True)
-        with gzip.open(p, "wt") as out:
+        part = p.with_name(p.name + ".part")
+        with gzip.open(part, "wt") as out:
             out.write(
                 f"# {info['accession']} ({entry['experiment']}) {cell} {mark} {info['output_type']}, {c}\n"
             )
             for s, e, v in rows:
                 out.write(f"{s}\t{e}\t{v:.3f}\n")
+        part.replace(p)  # atomic: an interrupted run never leaves a half file that reads as cached
     return {c: len(v) for c, v in kept.items()}
 
 
@@ -500,8 +502,10 @@ def fetch_signal_profile(entry: dict, chrom: str) -> dict:
         bw.close()
     p = signal_path(entry["cell_type"], entry["mark"], chrom)
     p.parent.mkdir(parents=True, exist_ok=True)
-    with gzip.open(p, "wb") as fh:
+    part = p.with_name(p.name + ".part")
+    with gzip.open(part, "wb") as fh:
         fh.write(prof.tobytes())
+    part.replace(p)
     return {**cost, "seconds": round(time.time() - t0, 1), "bins": len(prof)}
 
 
@@ -635,10 +639,12 @@ def fetch_methylation_profile(entry: dict, chrom: str) -> dict:
         bb.close()
     p = methylation_path(entry["cell_type"], chrom)
     p.parent.mkdir(parents=True, exist_ok=True)
-    with gzip.open(p, "wb") as fh:
+    part = p.with_name(p.name + ".part")
+    with gzip.open(part, "wb") as fh:
         fh.write(struct.pack("<I", len(cols[0])))
         for c in cols:
             fh.write(c.tobytes())
+    part.replace(p)
     return {**cost, "seconds": round(time.time() - t0, 1), "calls": n}
 
 
@@ -992,9 +998,8 @@ def summarise_chromosome(
                     meth_by[group].append(mm["fraction"])
         for bucket in prom.values():
             n = bucket.get("n", 0)
-            for m in MARKS:
-                if m in bucket:
-                    bucket[m] = {"n": bucket[m], "share": _share(bucket[m], n)}
+            for m in measured:
+                bucket[m] = {"n": bucket.get(m, 0), "share": _share(bucket.get(m, 0), n)}
         row["promoters"] = {k: v for k, v in prom.items() if v}
         if layer.meth.get(cell) is not None:
             row["promoter_methylation_median"] = {k: _median(v) for k, v in meth_by.items()}
@@ -1013,9 +1018,8 @@ def summarise_chromosome(
             st = chromatin_state(called)
             b["states"][st] = b["states"].get(st, 0) + 1
         for b in by_cls.values():
-            for m in MARKS:
-                if m in b:
-                    b[m] = {"n": b[m], "share": _share(b[m], b["n"])}
+            for m in measured:
+                b[m] = {"n": b.get(m, 0), "share": _share(b.get(m, 0), b["n"])}
             b["open_share"] = _share(b["open"], b["n"]) if dn is not None else None
         row["registry_classes"] = by_cls
         # methylation per budget tier
