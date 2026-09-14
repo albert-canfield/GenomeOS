@@ -1109,6 +1109,47 @@ def cmd_cancer(args: argparse.Namespace) -> int:
             print(f"  not measured: {', '.join(d['missing'][:12])}")
         print(f"  saved {save_result(f'expression_{args.study}', d)}")
         return 0
+    if args.cancer_cmd == "alterations":
+        from genomeos.cancer import CBioPortal
+        from genomeos.cancer.cbioportal import DRIVER_PANEL
+        from genomeos.results import save_result
+
+        genes = args.genes or list(DRIVER_PANEL)
+        d = CBioPortal(timeout=300).distil_alterations(
+            args.study,
+            genes,
+            event_type=args.events,
+            progress=lambda i, n: print(f"  {i}/{n} genes", flush=True),
+        )
+        print(
+            f"{d['study']}: {d['samples']:,} tumours, copy number {d['cna_profile'] or 'none'}, "
+            f"structural variants {d['sv_profile'] or 'none'}"
+        )
+
+        def _freq(entry: dict, kind: str) -> float:
+            return (entry.get(kind) or {}).get("frequency", 0.0)
+
+        rows = sorted(
+            d["genes"].items(),
+            key=lambda kv: -max(_freq(kv[1], k_) for k_ in ("amplification", "deep_deletion", "fusion")),
+        )[: args.top]
+        print(
+            _table(
+                [
+                    {
+                        "gene": g,
+                        "amplified": f"{_freq(v, 'amplification'):.2%}",
+                        "deep deletion": f"{_freq(v, 'deep_deletion'):.2%}",
+                        "fusion": f"{_freq(v, 'fusion'):.2%}",
+                        "top partner": (v.get("fusion_partners") or [["-", 0]])[0][0],
+                    }
+                    for g, v in rows
+                ],
+                ["gene", "amplified", "deep deletion", "fusion", "top partner"],
+            )
+        )
+        print(f"  saved {save_result(f'cancer_alterations_{args.study}', d)}")
+        return 0
     if not k:
         print("no distilled cancer knowledge yet: run `genomeos cancer distil` (cBioPortal, ~30 s)")
         return 1
@@ -4728,6 +4769,20 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--study", required=True, help="cBioPortal study id")
     p.add_argument("--genes", nargs="*", help="gene symbols; the driver panel by default")
+    p.add_argument("--top", type=int, default=20, help="rows to print")
+    p = can.add_parser(
+        "alterations",
+        help="distil a study's copy-number and structural-variant frequencies (amplification, "
+        "deep deletion, fusion)",
+    )
+    p.add_argument("--study", default="msk_impact_2017")
+    p.add_argument("--genes", nargs="*", help="gene symbols; the driver panel by default")
+    p.add_argument(
+        "--events",
+        default="ALL",
+        choices=("ALL", "HOMDEL_AND_AMP"),
+        help="copy-number calls to count; ALL adds shallow gains and losses where a study makes them",
+    )
     p.add_argument("--top", type=int, default=20, help="rows to print")
     p = can.add_parser("genes", help="most frequently mutated driver genes")
     p.add_argument("--top", type=int, default=25)

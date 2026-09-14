@@ -1,0 +1,5621 @@
+{
+  "result": "cancer_alterations_msk_impact_2017",
+  "date": "2026-09-14",
+  "study": "msk_impact_2017",
+  "samples": 10945,
+  "cna_profile": "msk_impact_2017_cna",
+  "sv_profile": "msk_impact_2017_structural_variants",
+  "cna_event_type": "ALL",
+  "cancer_types": {
+    "Non-Small Cell Lung Cancer": 1668,
+    "Breast Cancer": 1337,
+    "Colorectal Cancer": 1007,
+    "Prostate Cancer": 717,
+    "Glioma": 553,
+    "Pancreatic Cancer": 502,
+    "Soft Tissue Sarcoma": 443,
+    "Bladder Cancer": 423,
+    "Melanoma": 365,
+    "Renal Cell Carcinoma": 361,
+    "Hepatobiliary Cancer": 355,
+    "Esophagogastric Cancer": 341,
+    "Germ Cell Tumor": 288,
+    "Thyroid Cancer": 231,
+    "Ovarian Cancer": 224,
+    "Endometrial Cancer": 218,
+    "Head and Neck Cancer": 186,
+    "Cancer of Unknown Primary": 186,
+    "Skin Cancer, Non-Melanoma": 148,
+    "Gastrointestinal Stromal Tumor": 137,
+    "Bone Cancer": 134,
+    "Mature B-Cell Neoplasms": 134,
+    "Salivary Gland Cancer": 114,
+    "Mesothelioma": 107,
+    "Uterine Sarcoma": 93,
+    "Small Cell Lung Cancer": 82,
+    "Peripheral Nervous System": 80,
+    "Appendiceal Cancer": 79,
+    "Cervical Cancer": 50,
+    "CNS Cancer": 48,
+    "Gastrointestinal Neuroendocrine Tumor": 46,
+    "Small Bowel Cancer": 35,
+    "Anal Cancer": 32,
+    "Mature T and NK Neoplasms": 29,
+    "Adrenocortical Carcinoma": 25,
+    "Histiocytosis": 22,
+    "Sex Cord Stromal Tumor": 19,
+    "Thymic Tumor": 18,
+    "Nerve Sheath Tumor": 16,
+    "Ampullary Cancer": 16,
+    "Ampullary Carcinoma": 9,
+    "Miscellaneous Neuroepithelial Tumor": 9,
+    "Penile Cancer": 7,
+    "Miscellaneous Brain Tumor": 6,
+    "Embryonal Tumor": 6,
+    "Sellar Tumor": 5,
+    "Non-Hodgkin Lymphoma": 5,
+    "Hodgkin Lymphoma": 5,
+    "Vaginal Cancer": 4,
+    "Pheochromocytoma": 4,
+    "Retinoblastoma": 4,
+    "Pineal Tumor": 3,
+    "Gestational Trophoblastic Disease": 3,
+    "Wilms Tumor": 2,
+    "Mastocytosis": 1,
+    "Adrenocortical Adenoma": 1,
+    "T-Lymphoblastic Leukemia/Lymphoma": 1,
+    "Leukemia": 1
+  },
+  "panel": [
+    "AKT1",
+    "ALK",
+    "APC",
+    "AR",
+    "ARID1A",
+    "ARID2",
+    "ASXL1",
+    "ATM",
+    "ATR",
+    "ATRX",
+    "AXIN1",
+    "AXIN2",
+    "BAP1",
+    "BRAF",
+    "BRCA1",
+    "BRCA2",
+    "CCND1",
+    "CDH1",
+    "CDK4",
+    "CDKN2A",
+    "CEBPA",
+    "CHEK2",
+    "CIC",
+    "CREBBP",
+    "CTNNB1",
+    "DAXX",
+    "DNMT3A",
+    "EGFR",
+    "EP300",
+    "ERBB2",
+    "ERBB3",
+    "ESR1",
+    "EZH2",
+    "FBXW7",
+    "FGFR1",
+    "FGFR2",
+    "FGFR3",
+    "FLT3",
+    "FOXA1",
+    "FUBP1",
+    "GATA3",
+    "GLI1",
+    "GNA11",
+    "GNAQ",
+    "GNAS",
+    "H3-3A",
+    "HRAS",
+    "IDH1",
+    "IDH2",
+    "JAK2",
+    "KDM5C",
+    "KDM6A",
+    "KEAP1",
+    "KIT",
+    "KMT2C",
+    "KMT2D",
+    "KRAS",
+    "MAP2K1",
+    "MEN1",
+    "MET",
+    "MLH1",
+    "MSH2",
+    "MSH6",
+    "MTOR",
+    "MYC",
+    "MYCN",
+    "NF1",
+    "NF2",
+    "NFE2L2",
+    "NKX2-1",
+    "NOTCH1",
+    "NOTCH2",
+    "NPM1",
+    "NRAS",
+    "PALB2",
+    "PBRM1",
+    "PDGFRA",
+    "PIK3CA",
+    "PMS2",
+    "POLE",
+    "PTCH1",
+    "PTEN",
+    "RB1",
+    "RBM10",
+    "RET",
+    "RNF43",
+    "ROS1",
+    "RUNX1",
+    "SETD2",
+    "SF3B1",
+    "SMAD4",
+    "SMARCA4",
+    "SMO",
+    "SOX2",
+    "SPOP",
+    "SRSF2",
+    "STAT3",
+    "STK11",
+    "SUFU",
+    "TERT",
+    "TET2",
+    "TGFBR2",
+    "TP53",
+    "TP63",
+    "TSC1",
+    "TSC2",
+    "U2AF1",
+    "VHL",
+    "WT1",
+    "ZNRF3"
+  ],
+  "genes": {
+    "AKT1": {
+      "amplification": {
+        "samples": 30,
+        "frequency": 0.00274,
+        "by_cancer_type": {
+          "Endometrial Cancer": 0.0183,
+          "Small Cell Lung Cancer": 0.0122,
+          "Head and Neck Cancer": 0.0108,
+          "Bone Cancer": 0.0075,
+          "Non-Small Cell Lung Cancer": 0.006,
+          "Cancer of Unknown Primary": 0.0054,
+          "Breast Cancer": 0.0045,
+          "Germ Cell Tumor": 0.0035,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Glioma": 0.0018,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "deep_deletion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Hepatobiliary Cancer": 0.0028
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054
+        }
+      }
+    },
+    "ALK": {
+      "amplification": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0375,
+          "Thyroid Cancer": 0.0043,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Thyroid Cancer": 0.0043,
+          "Prostate Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Glioma": 0.0018,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 52,
+        "frequency": 0.00475,
+        "by_cancer_type": {
+          "Non-Small Cell Lung Cancer": 0.0276,
+          "Salivary Gland Cancer": 0.0088,
+          "Renal Cell Carcinoma": 0.0055,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "EML4",
+          42
+        ],
+        [
+          "(intergenic)",
+          1
+        ],
+        [
+          "DDX11L2",
+          1
+        ],
+        [
+          "DYSF",
+          1
+        ],
+        [
+          "GCC2",
+          1
+        ],
+        [
+          "RANBP2",
+          1
+        ],
+        [
+          "ASAP2",
+          1
+        ],
+        [
+          "CLIP4",
+          1
+        ]
+      ]
+    },
+    "APC": {
+      "amplification": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Melanoma": 0.0082,
+          "Bone Cancer": 0.0075,
+          "Ovarian Cancer": 0.0045,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 31,
+        "frequency": 0.00283,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0244,
+          "Prostate Cancer": 0.0209,
+          "Peripheral Nervous System": 0.0125,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Colorectal Cancer": 0.006,
+          "Germ Cell Tumor": 0.0035,
+          "Esophagogastric Cancer": 0.0029,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 21,
+        "frequency": 0.00192,
+        "by_cancer_type": {
+          "Appendiceal Cancer": 0.0127,
+          "Renal Cell Carcinoma": 0.0083,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Colorectal Cancer": 0.006,
+          "Prostate Cancer": 0.0056,
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion_partners": [
+        [
+          "ADH5",
+          1
+        ],
+        [
+          "DTWD2",
+          1
+        ],
+        [
+          "GLRA1",
+          1
+        ],
+        [
+          "MCC",
+          1
+        ],
+        [
+          "PRELID2",
+          1
+        ],
+        [
+          "REEP5",
+          1
+        ],
+        [
+          "SRP19",
+          1
+        ],
+        [
+          "CELF2",
+          1
+        ]
+      ]
+    },
+    "AR": {
+      "amplification": {
+        "samples": 108,
+        "frequency": 0.00987,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.1395,
+          "Salivary Gland Cancer": 0.0088,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Breast Cancer": 0.003,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0312,
+          "Mesothelioma": 0.0093,
+          "Head and Neck Cancer": 0.0054,
+          "Cancer of Unknown Primary": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0042,
+          "Hepatobiliary Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0012,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.0042,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "OPHN1",
+          1
+        ]
+      ]
+    },
+    "ARID1A": {
+      "deep_deletion": {
+        "samples": 26,
+        "frequency": 0.00238,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Endometrial Cancer": 0.0092,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Germ Cell Tumor": 0.0069,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Hepatobiliary Cancer": 0.0056,
+          "Cancer of Unknown Primary": 0.0054,
+          "Breast Cancer": 0.0045,
+          "Esophagogastric Cancer": 0.0029,
+          "Melanoma": 0.0027,
+          "Non-Small Cell Lung Cancer": 0.0024,
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "fusion": {
+        "samples": 14,
+        "frequency": 0.00128,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Ovarian Cancer": 0.0045,
+          "Pancreatic Cancer": 0.004,
+          "Esophagogastric Cancer": 0.0029,
+          "Non-Small Cell Lung Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion_partners": [
+        [
+          "EPB41",
+          1
+        ],
+        [
+          "FAF1",
+          1
+        ],
+        [
+          "WDTC1",
+          1
+        ],
+        [
+          "DNAJC11",
+          1
+        ],
+        [
+          "KANSL1L",
+          1
+        ],
+        [
+          "MIR1976",
+          1
+        ]
+      ]
+    },
+    "ARID2": {
+      "amplification": {
+        "samples": 25,
+        "frequency": 0.00228,
+        "by_cancer_type": {
+          "Germ Cell Tumor": 0.0208,
+          "Bone Cancer": 0.0149,
+          "Ovarian Cancer": 0.0089,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Breast Cancer": 0.0052,
+          "Endometrial Cancer": 0.0046,
+          "Glioma": 0.0018,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Head and Neck Cancer": 0.0054,
+          "Hepatobiliary Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Cancer of Unknown Primary": 0.0054,
+          "Head and Neck Cancer": 0.0054,
+          "Breast Cancer": 0.003,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Non-Small Cell Lung Cancer": 0.0012,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "MRPS30",
+          1
+        ],
+        [
+          "NUP107",
+          1
+        ],
+        [
+          "MAFB",
+          1
+        ]
+      ]
+    },
+    "ASXL1": {
+      "amplification": {
+        "samples": 69,
+        "frequency": 0.0063,
+        "by_cancer_type": {
+          "Colorectal Cancer": 0.0348,
+          "Head and Neck Cancer": 0.0269,
+          "Bladder Cancer": 0.0142,
+          "Small Cell Lung Cancer": 0.0122,
+          "Esophagogastric Cancer": 0.0117,
+          "Hepatobiliary Cancer": 0.0113,
+          "Cancer of Unknown Primary": 0.0108,
+          "Germ Cell Tumor": 0.0035,
+          "Non-Small Cell Lung Cancer": 0.003,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "deep_deletion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Germ Cell Tumor": 0.0035,
+          "Bladder Cancer": 0.0024,
+          "Colorectal Cancer": 0.002,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "CDH26",
+          1
+        ],
+        [
+          "DNMT3B",
+          1
+        ]
+      ]
+    },
+    "ATM": {
+      "amplification": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Germ Cell Tumor": 0.0035,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 21,
+        "frequency": 0.00192,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.025,
+          "Mature B-Cell Neoplasms": 0.0149,
+          "Prostate Cancer": 0.0098,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Bladder Cancer": 0.0047,
+          "Ovarian Cancer": 0.0045,
+          "Esophagogastric Cancer": 0.0029,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Glioma": 0.0018
+        }
+      },
+      "fusion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Germ Cell Tumor": 0.0035,
+          "Pancreatic Cancer": 0.002,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "C11ORF65",
+          1
+        ],
+        [
+          "ELOVL4",
+          1
+        ],
+        [
+          "CDKL5",
+          1
+        ],
+        [
+          "NPAT",
+          1
+        ]
+      ]
+    },
+    "ATR": {
+      "amplification": {
+        "samples": 23,
+        "frequency": 0.0021,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0108,
+          "Ovarian Cancer": 0.0089,
+          "Bone Cancer": 0.0075,
+          "Prostate Cancer": 0.007,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Endometrial Cancer": 0.0046,
+          "Breast Cancer": 0.003,
+          "Hepatobiliary Cancer": 0.0028,
+          "Non-Small Cell Lung Cancer": 0.0024
+        }
+      },
+      "deep_deletion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Glioma": 0.0018
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Cancer of Unknown Primary": 0.0054,
+          "Bladder Cancer": 0.0024,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "SPSB4",
+          1
+        ]
+      ]
+    },
+    "ATRX": {
+      "amplification": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0056,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Germ Cell Tumor": 0.0035,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "deep_deletion": {
+        "samples": 36,
+        "frequency": 0.00329,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0538,
+          "Peripheral Nervous System": 0.0375,
+          "Bone Cancer": 0.0299,
+          "Soft Tissue Sarcoma": 0.0203,
+          "Mesothelioma": 0.0093,
+          "Salivary Gland Cancer": 0.0088,
+          "Head and Neck Cancer": 0.0054,
+          "Cancer of Unknown Primary": 0.0054,
+          "Glioma": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0028,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Head and Neck Cancer": 0.0054,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Melanoma": 0.0027,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0007,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "TMEM253",
+          1
+        ],
+        [
+          "NAP1L2",
+          1
+        ]
+      ]
+    },
+    "AXIN1": {
+      "amplification": {
+        "samples": 17,
+        "frequency": 0.00155,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.08,
+          "Breast Cancer": 0.006,
+          "Prostate Cancer": 0.0042,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Non-Small Cell Lung Cancer": 0.0018
+        }
+      },
+      "deep_deletion": {
+        "samples": 12,
+        "frequency": 0.0011,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0113,
+          "Ovarian Cancer": 0.0089,
+          "Cancer of Unknown Primary": 0.0054,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Pancreatic Cancer": 0.002,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0028
+        }
+      }
+    },
+    "AXIN2": {
+      "amplification": {
+        "samples": 67,
+        "frequency": 0.00612,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.075,
+          "Breast Cancer": 0.0254,
+          "Gastrointestinal Stromal Tumor": 0.0219,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Appendiceal Cancer": 0.0127,
+          "Melanoma": 0.011,
+          "Mesothelioma": 0.0093,
+          "Bone Cancer": 0.0075,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Head and Neck Cancer": 0.0054,
+          "Endometrial Cancer": 0.0046
+        }
+      },
+      "deep_deletion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Colorectal Cancer": 0.002,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054
+        }
+      }
+    },
+    "BAP1": {
+      "deep_deletion": {
+        "samples": 34,
+        "frequency": 0.00311,
+        "by_cancer_type": {
+          "Mesothelioma": 0.0935,
+          "Small Cell Lung Cancer": 0.0366,
+          "CNS Cancer": 0.0208,
+          "Peripheral Nervous System": 0.0125,
+          "Hepatobiliary Cancer": 0.0113,
+          "Uterine Sarcoma": 0.0108,
+          "Melanoma": 0.0055,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Esophagogastric Cancer": 0.0029,
+          "Renal Cell Carcinoma": 0.0028,
+          "Breast Cancer": 0.0022,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Mesothelioma": 0.0187,
+          "Cancer of Unknown Primary": 0.0054,
+          "Head and Neck Cancer": 0.0054,
+          "Renal Cell Carcinoma": 0.0028,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "PBRM1",
+          4
+        ],
+        [
+          "PHF7",
+          2
+        ],
+        [
+          "LIMD1",
+          2
+        ]
+      ]
+    },
+    "BRAF": {
+      "amplification": {
+        "samples": 19,
+        "frequency": 0.00174,
+        "by_cancer_type": {
+          "Melanoma": 0.0137,
+          "Peripheral Nervous System": 0.0125,
+          "Cancer of Unknown Primary": 0.0054,
+          "Glioma": 0.0036,
+          "Non-Small Cell Lung Cancer": 0.0024,
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0022,
+          "Colorectal Cancer": 0.002
+        }
+      },
+      "deep_deletion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 48,
+        "frequency": 0.00439,
+        "by_cancer_type": {
+          "Melanoma": 0.0219,
+          "Pancreatic Cancer": 0.0159,
+          "Thyroid Cancer": 0.013,
+          "Prostate Cancer": 0.0098,
+          "Glioma": 0.0072,
+          "Cancer of Unknown Primary": 0.0054,
+          "Non-Small Cell Lung Cancer": 0.0048,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Germ Cell Tumor": 0.0035,
+          "Colorectal Cancer": 0.003,
+          "Hepatobiliary Cancer": 0.0028,
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "fusion_partners": [
+        [
+          "SND1",
+          8
+        ],
+        [
+          "KIAA1549",
+          4
+        ],
+        [
+          "AGK",
+          3
+        ],
+        [
+          "MKRN1",
+          3
+        ],
+        [
+          "AGAP3",
+          2
+        ],
+        [
+          "CDK5RAP2",
+          2
+        ],
+        [
+          "CUL1",
+          1
+        ],
+        [
+          "FAM131B",
+          1
+        ]
+      ]
+    },
+    "BRCA1": {
+      "amplification": {
+        "samples": 17,
+        "frequency": 0.00155,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.05,
+          "Small Bowel Cancer": 0.0286,
+          "Uterine Sarcoma": 0.0108,
+          "Mesothelioma": 0.0093,
+          "Thyroid Cancer": 0.0043,
+          "Breast Cancer": 0.003,
+          "Hepatobiliary Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Glioma": 0.0018,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045,
+          "Breast Cancer": 0.003,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Esophagogastric Cancer": 0.0029,
+          "Hepatobiliary Cancer": 0.0028,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "SMAD3",
+          1
+        ],
+        [
+          "CASC3",
+          1
+        ],
+        [
+          "ELAC2",
+          1
+        ],
+        [
+          "PROCA1",
+          1
+        ]
+      ]
+    },
+    "BRCA2": {
+      "amplification": {
+        "samples": 28,
+        "frequency": 0.00256,
+        "by_cancer_type": {
+          "Colorectal Cancer": 0.0169,
+          "Esophagogastric Cancer": 0.0059,
+          "Bladder Cancer": 0.0047,
+          "Breast Cancer": 0.0045,
+          "Glioma": 0.0018
+        }
+      },
+      "deep_deletion": {
+        "samples": 49,
+        "frequency": 0.00448,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.086,
+          "Prostate Cancer": 0.0293,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Bone Cancer": 0.0075,
+          "Glioma": 0.0072,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Ovarian Cancer": 0.0045,
+          "Germ Cell Tumor": 0.0035,
+          "Melanoma": 0.0027
+        }
+      },
+      "fusion": {
+        "samples": 12,
+        "frequency": 0.0011,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Prostate Cancer": 0.0028,
+          "Hepatobiliary Cancer": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0015,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "CLYBL",
+          1
+        ],
+        [
+          "INSC",
+          1
+        ],
+        [
+          "CRYL1",
+          1
+        ],
+        [
+          "TUBGCP3",
+          1
+        ]
+      ]
+    },
+    "CCND1": {
+      "amplification": {
+        "samples": 472,
+        "frequency": 0.04312,
+        "by_cancer_type": {
+          "Breast Cancer": 0.19,
+          "Head and Neck Cancer": 0.1129,
+          "Bladder Cancer": 0.0969,
+          "Esophagogastric Cancer": 0.0645,
+          "Melanoma": 0.0521,
+          "Peripheral Nervous System": 0.05,
+          "Hepatobiliary Cancer": 0.0338,
+          "Bone Cancer": 0.0299,
+          "Appendiceal Cancer": 0.0253,
+          "Non-Small Cell Lung Cancer": 0.0246,
+          "Small Cell Lung Cancer": 0.0244,
+          "Cancer of Unknown Primary": 0.0215
+        }
+      },
+      "deep_deletion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Germ Cell Tumor": 0.0035,
+          "Hepatobiliary Cancer": 0.0028
+        }
+      }
+    },
+    "CDH1": {
+      "amplification": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.04,
+          "Bone Cancer": 0.0075,
+          "Head and Neck Cancer": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0015,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Cancer of Unknown Primary": 0.0054,
+          "Breast Cancer": 0.0045,
+          "Ovarian Cancer": 0.0045,
+          "Esophagogastric Cancer": 0.0029,
+          "Prostate Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Glioma": 0.0018
+        }
+      },
+      "fusion": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.0059,
+          "Renal Cell Carcinoma": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0015,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "CMIP",
+          1
+        ],
+        [
+          "CDH3",
+          1
+        ],
+        [
+          "VPS35",
+          1
+        ],
+        [
+          "ZFP90",
+          1
+        ]
+      ]
+    },
+    "CDK4": {
+      "amplification": {
+        "samples": 284,
+        "frequency": 0.02595,
+        "by_cancer_type": {
+          "Soft Tissue Sarcoma": 0.1716,
+          "Glioma": 0.1103,
+          "Uterine Sarcoma": 0.0645,
+          "Non-Small Cell Lung Cancer": 0.0396,
+          "Melanoma": 0.0329,
+          "Bone Cancer": 0.0299,
+          "Peripheral Nervous System": 0.025,
+          "Salivary Gland Cancer": 0.0175,
+          "Cancer of Unknown Primary": 0.0161,
+          "Bladder Cancer": 0.0142,
+          "Breast Cancer": 0.0142,
+          "Appendiceal Cancer": 0.0127
+        }
+      }
+    },
+    "CDKN2A": {
+      "amplification": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0244,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 834,
+        "frequency": 0.0762,
+        "by_cancer_type": {
+          "Glioma": 0.3255,
+          "Gastrointestinal Stromal Tumor": 0.2117,
+          "Melanoma": 0.1836,
+          "Bladder Cancer": 0.1655,
+          "Adrenocortical Carcinoma": 0.16,
+          "Bone Cancer": 0.1418,
+          "Mature B-Cell Neoplasms": 0.1418,
+          "Mesothelioma": 0.1308,
+          "Head and Neck Cancer": 0.129,
+          "Uterine Sarcoma": 0.129,
+          "Cancer of Unknown Primary": 0.1022,
+          "Non-Small Cell Lung Cancer": 0.0815
+        }
+      },
+      "fusion": {
+        "samples": 25,
+        "frequency": 0.00228,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0161,
+          "Cancer of Unknown Primary": 0.0108,
+          "Pancreatic Cancer": 0.008,
+          "Bone Cancer": 0.0075,
+          "Non-Small Cell Lung Cancer": 0.0048,
+          "Glioma": 0.0036,
+          "Esophagogastric Cancer": 0.0029,
+          "Bladder Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "CDKN2B-AS1",
+          8
+        ],
+        [
+          "MIR548H2",
+          2
+        ],
+        [
+          "MTAP",
+          2
+        ],
+        [
+          "RB1",
+          2
+        ],
+        [
+          "TEK",
+          1
+        ],
+        [
+          "EEA1",
+          1
+        ],
+        [
+          "GFRA1",
+          1
+        ],
+        [
+          "MIR31",
+          1
+        ]
+      ]
+    },
+    "CEBPA": {
+      "amplification": {
+        "samples": 54,
+        "frequency": 0.00493,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0268,
+          "Small Cell Lung Cancer": 0.0244,
+          "Uterine Sarcoma": 0.0215,
+          "Cervical Cancer": 0.02,
+          "Endometrial Cancer": 0.0138,
+          "Skin Cancer, Non-Melanoma": 0.0135,
+          "Cancer of Unknown Primary": 0.0108,
+          "Non-Small Cell Lung Cancer": 0.0102,
+          "Mesothelioma": 0.0093,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Pancreatic Cancer": 0.006,
+          "Esophagogastric Cancer": 0.0059
+        }
+      },
+      "deep_deletion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108
+        }
+      },
+      "fusion_partners": [
+        [
+          "NELL1",
+          1
+        ]
+      ]
+    },
+    "CHEK2": {
+      "amplification": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0089,
+          "Thyroid Cancer": 0.0043,
+          "Germ Cell Tumor": 0.0035,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Colorectal Cancer": 0.001,
+          "Breast Cancer": 0.0007,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 14,
+        "frequency": 0.00128,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.04,
+          "Ovarian Cancer": 0.0134,
+          "Uterine Sarcoma": 0.0108,
+          "Glioma": 0.0054,
+          "Prostate Cancer": 0.0042,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "CCDC183",
+          1
+        ]
+      ]
+    },
+    "CIC": {
+      "amplification": {
+        "samples": 13,
+        "frequency": 0.00119,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Uterine Sarcoma": 0.0108,
+          "Ovarian Cancer": 0.0089,
+          "Salivary Gland Cancer": 0.0088,
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Germ Cell Tumor": 0.0035,
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0007,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 16,
+        "frequency": 0.00146,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0215,
+          "Ovarian Cancer": 0.0134,
+          "Peripheral Nervous System": 0.0125,
+          "Prostate Cancer": 0.0056,
+          "Cancer of Unknown Primary": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Glioma": 0.0018,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Esophagogastric Cancer": 0.0029,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "CSMD1",
+          1
+        ],
+        [
+          "PAFAH1B3",
+          1
+        ],
+        [
+          "POLD1",
+          1
+        ],
+        [
+          "LEUTX",
+          1
+        ],
+        [
+          "POU2F2",
+          1
+        ]
+      ]
+    },
+    "CREBBP": {
+      "amplification": {
+        "samples": 16,
+        "frequency": 0.00146,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.0056,
+          "Head and Neck Cancer": 0.0054,
+          "Breast Cancer": 0.0052,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Non-Small Cell Lung Cancer": 0.0018
+        }
+      },
+      "deep_deletion": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Mesothelioma": 0.0093,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Bladder Cancer": 0.0071,
+          "Endometrial Cancer": 0.0046,
+          "Ovarian Cancer": 0.0045,
+          "Breast Cancer": 0.003,
+          "Esophagogastric Cancer": 0.0029,
+          "Hepatobiliary Cancer": 0.0028,
+          "Glioma": 0.0018
+        }
+      },
+      "fusion": {
+        "samples": 13,
+        "frequency": 0.00119,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0244,
+          "Mesothelioma": 0.0093,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Cancer of Unknown Primary": 0.0054,
+          "Prostate Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0012,
+          "Colorectal Cancer": 0.001,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "(intergenic)",
+          1
+        ],
+        [
+          "DNASE1",
+          1
+        ],
+        [
+          "SRRM2",
+          1
+        ],
+        [
+          "TBL3",
+          1
+        ],
+        [
+          "TIGD7",
+          1
+        ],
+        [
+          "TRAP1",
+          1
+        ]
+      ]
+    },
+    "CTNNB1": {
+      "amplification": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Melanoma": 0.0055,
+          "Pancreatic Cancer": 0.004,
+          "Esophagogastric Cancer": 0.0029,
+          "Colorectal Cancer": 0.002
+        }
+      },
+      "deep_deletion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0312,
+          "Uterine Sarcoma": 0.0108,
+          "Colorectal Cancer": 0.006,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.0088,
+          "Colorectal Cancer": 0.004,
+          "Hepatobiliary Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion_partners": [
+        [
+          "VEGFC",
+          1
+        ]
+      ]
+    },
+    "DAXX": {
+      "amplification": {
+        "samples": 24,
+        "frequency": 0.00219,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.04,
+          "Melanoma": 0.0192,
+          "Small Cell Lung Cancer": 0.0122,
+          "Mesothelioma": 0.0093,
+          "Endometrial Cancer": 0.0092,
+          "Salivary Gland Cancer": 0.0088,
+          "Cancer of Unknown Primary": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Thyroid Cancer": 0.0043,
+          "Germ Cell Tumor": 0.0035,
+          "Hepatobiliary Cancer": 0.0028,
+          "Breast Cancer": 0.0022
+        }
+      },
+      "deep_deletion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Bone Cancer": 0.0075
+        }
+      }
+    },
+    "DNMT3A": {
+      "amplification": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Endometrial Cancer": 0.0046,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "CNS Cancer": 0.0208,
+          "Uterine Sarcoma": 0.0108,
+          "Bone Cancer": 0.0075,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Melanoma": 0.0027,
+          "Glioma": 0.0018,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054,
+          "Melanoma": 0.0027,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion_partners": [
+        [
+          "ASXL2",
+          1
+        ]
+      ]
+    },
+    "EGFR": {
+      "amplification": {
+        "samples": 356,
+        "frequency": 0.03253,
+        "by_cancer_type": {
+          "Glioma": 0.2333,
+          "Non-Small Cell Lung Cancer": 0.0761,
+          "Head and Neck Cancer": 0.0699,
+          "Esophagogastric Cancer": 0.0587,
+          "Small Bowel Cancer": 0.0286,
+          "Cancer of Unknown Primary": 0.0269,
+          "Bladder Cancer": 0.0165,
+          "Breast Cancer": 0.0157,
+          "Colorectal Cancer": 0.0149,
+          "Hepatobiliary Cancer": 0.0141,
+          "Skin Cancer, Non-Melanoma": 0.0135,
+          "Peripheral Nervous System": 0.0125
+        }
+      },
+      "deep_deletion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Esophagogastric Cancer": 0.0029,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 87,
+        "frequency": 0.00795,
+        "by_cancer_type": {
+          "Glioma": 0.1338,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Non-Small Cell Lung Cancer": 0.0042,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "SEPTIN14",
+          2
+        ],
+        [
+          "SEC61G",
+          1
+        ],
+        [
+          "TNS3",
+          1
+        ],
+        [
+          "TUT7",
+          1
+        ]
+      ]
+    },
+    "EP300": {
+      "amplification": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Melanoma": 0.0247,
+          "Bladder Cancer": 0.0047,
+          "Pancreatic Cancer": 0.004,
+          "Esophagogastric Cancer": 0.0029,
+          "Hepatobiliary Cancer": 0.0028
+        }
+      },
+      "deep_deletion": {
+        "samples": 14,
+        "frequency": 0.00128,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.04,
+          "Uterine Sarcoma": 0.0108,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Glioma": 0.0054,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Ovarian Cancer": 0.0045,
+          "Hepatobiliary Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 13,
+        "frequency": 0.00119,
+        "by_cancer_type": {
+          "Endometrial Cancer": 0.0092,
+          "Head and Neck Cancer": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Germ Cell Tumor": 0.0035,
+          "Esophagogastric Cancer": 0.0029,
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0022,
+          "Colorectal Cancer": 0.002,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion_partners": [
+        [
+          "LRRC20",
+          1
+        ],
+        [
+          "MEI1",
+          1
+        ],
+        [
+          "PTPRN2",
+          1
+        ],
+        [
+          "TOP2A",
+          1
+        ],
+        [
+          "ZC3H7B",
+          1
+        ],
+        [
+          "MIR1281",
+          1
+        ]
+      ]
+    },
+    "ERBB2": {
+      "amplification": {
+        "samples": 434,
+        "frequency": 0.03965,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.2258,
+          "Breast Cancer": 0.1406,
+          "Endometrial Cancer": 0.078,
+          "Bladder Cancer": 0.0615,
+          "Salivary Gland Cancer": 0.0614,
+          "Cervical Cancer": 0.06,
+          "Cancer of Unknown Primary": 0.043,
+          "Ovarian Cancer": 0.0402,
+          "Colorectal Cancer": 0.0288,
+          "Hepatobiliary Cancer": 0.0282,
+          "Head and Neck Cancer": 0.0269,
+          "Peripheral Nervous System": 0.025
+        }
+      },
+      "deep_deletion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0312
+        }
+      },
+      "fusion": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0022,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "GRB7",
+          2
+        ],
+        [
+          "MIEN1",
+          2
+        ],
+        [
+          "C1ORF87",
+          1
+        ],
+        [
+          "RARA",
+          1
+        ],
+        [
+          "SHC1",
+          1
+        ],
+        [
+          "GPATCH8",
+          1
+        ]
+      ]
+    },
+    "ERBB3": {
+      "amplification": {
+        "samples": 46,
+        "frequency": 0.0042,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0323,
+          "Hepatobiliary Cancer": 0.0169,
+          "Esophagogastric Cancer": 0.0147,
+          "Endometrial Cancer": 0.0138,
+          "Ovarian Cancer": 0.0134,
+          "Melanoma": 0.0082,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Glioma": 0.0054,
+          "Cancer of Unknown Primary": 0.0054,
+          "Non-Small Cell Lung Cancer": 0.0042,
+          "Germ Cell Tumor": 0.0035,
+          "Breast Cancer": 0.003
+        }
+      },
+      "deep_deletion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125
+        }
+      },
+      "fusion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Cancer of Unknown Primary": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Bladder Cancer": 0.0024,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "DAZAP2",
+          1
+        ],
+        [
+          "CREG1",
+          1
+        ],
+        [
+          "ESYT1",
+          1
+        ],
+        [
+          "SEMA3A",
+          1
+        ]
+      ]
+    },
+    "ESR1": {
+      "amplification": {
+        "samples": 32,
+        "frequency": 0.00292,
+        "by_cancer_type": {
+          "Breast Cancer": 0.0157,
+          "Soft Tissue Sarcoma": 0.0135,
+          "Ovarian Cancer": 0.0089,
+          "Hepatobiliary Cancer": 0.0028,
+          "Colorectal Cancer": 0.002
+        }
+      },
+      "deep_deletion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Cervical Cancer": 0.02,
+          "Salivary Gland Cancer": 0.0088,
+          "Bone Cancer": 0.0075,
+          "Hepatobiliary Cancer": 0.0056,
+          "Melanoma": 0.0055,
+          "Thyroid Cancer": 0.0043,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Ovarian Cancer": 0.0045,
+          "Hepatobiliary Cancer": 0.0028
+        }
+      },
+      "fusion_partners": [
+        [
+          "CCDC170",
+          1
+        ],
+        [
+          "TACR1",
+          1
+        ],
+        [
+          "NCOA3",
+          1
+        ]
+      ]
+    },
+    "EZH2": {
+      "amplification": {
+        "samples": 18,
+        "frequency": 0.00164,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Bone Cancer": 0.0075,
+          "Melanoma": 0.0055,
+          "Cancer of Unknown Primary": 0.0054,
+          "Non-Small Cell Lung Cancer": 0.003,
+          "Breast Cancer": 0.003,
+          "Hepatobiliary Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Glioma": 0.0018,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "deep_deletion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Soft Tissue Sarcoma": 0.0045,
+          "Melanoma": 0.0027,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Colorectal Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "CUL1",
+          3
+        ]
+      ]
+    },
+    "FBXW7": {
+      "amplification": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0075,
+          "Cancer of Unknown Primary": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 20,
+        "frequency": 0.00183,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Hepatobiliary Cancer": 0.0056,
+          "Glioma": 0.0054,
+          "Head and Neck Cancer": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Colorectal Cancer": 0.004,
+          "Esophagogastric Cancer": 0.0029,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054
+        }
+      },
+      "fusion_partners": [
+        [
+          "TTC28",
+          1
+        ]
+      ]
+    },
+    "FGFR1": {
+      "amplification": {
+        "samples": 284,
+        "frequency": 0.02595,
+        "by_cancer_type": {
+          "Breast Cancer": 0.1234,
+          "Endometrial Cancer": 0.0459,
+          "Salivary Gland Cancer": 0.0263,
+          "Small Cell Lung Cancer": 0.0244,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Head and Neck Cancer": 0.0215,
+          "Non-Small Cell Lung Cancer": 0.0192,
+          "Soft Tissue Sarcoma": 0.0181,
+          "Esophagogastric Cancer": 0.0176,
+          "Colorectal Cancer": 0.0169,
+          "Bladder Cancer": 0.0165,
+          "Pancreatic Cancer": 0.0159
+        }
+      },
+      "deep_deletion": {
+        "samples": 39,
+        "frequency": 0.00356,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0141,
+          "Small Cell Lung Cancer": 0.0122,
+          "Uterine Sarcoma": 0.0108,
+          "Colorectal Cancer": 0.0099,
+          "Bone Cancer": 0.0075,
+          "Bladder Cancer": 0.0071,
+          "Melanoma": 0.0055,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0042,
+          "Breast Cancer": 0.0037,
+          "Non-Small Cell Lung Cancer": 0.0036
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.0028,
+          "Colorectal Cancer": 0.002,
+          "Breast Cancer": 0.0007,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "ACP3",
+          2
+        ],
+        [
+          "CLVS1",
+          1
+        ],
+        [
+          "TACC1",
+          1
+        ],
+        [
+          "RAB11FIP1",
+          1
+        ]
+      ]
+    },
+    "FGFR2": {
+      "amplification": {
+        "samples": 41,
+        "frequency": 0.00375,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.0323,
+          "Cervical Cancer": 0.02,
+          "Breast Cancer": 0.0165,
+          "Ovarian Cancer": 0.0089,
+          "Endometrial Cancer": 0.0046,
+          "Hepatobiliary Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 12,
+        "frequency": 0.0011,
+        "by_cancer_type": {
+          "Glioma": 0.0108,
+          "Uterine Sarcoma": 0.0108,
+          "Prostate Cancer": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 35,
+        "frequency": 0.0032,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.062,
+          "Small Bowel Cancer": 0.0286,
+          "Cancer of Unknown Primary": 0.0108,
+          "Pancreatic Cancer": 0.004,
+          "Esophagogastric Cancer": 0.0029,
+          "Bladder Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0015,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion_partners": [
+        [
+          "BICC1",
+          7
+        ],
+        [
+          "KIAA1217",
+          3
+        ],
+        [
+          "TACC2",
+          2
+        ],
+        [
+          "CEP112",
+          1
+        ],
+        [
+          "CTNNA3",
+          1
+        ],
+        [
+          "FAM13C",
+          1
+        ],
+        [
+          "(intergenic)",
+          1
+        ],
+        [
+          "AHCYL1",
+          1
+        ]
+      ]
+    },
+    "FGFR3": {
+      "amplification": {
+        "samples": 42,
+        "frequency": 0.00384,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0197,
+          "Small Cell Lung Cancer": 0.0122,
+          "Bladder Cancer": 0.0118,
+          "Endometrial Cancer": 0.0092,
+          "Ovarian Cancer": 0.0089,
+          "Breast Cancer": 0.0075,
+          "Glioma": 0.0054,
+          "Head and Neck Cancer": 0.0054,
+          "Prostate Cancer": 0.0042,
+          "Non-Small Cell Lung Cancer": 0.003,
+          "Esophagogastric Cancer": 0.0029,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Cancer of Unknown Primary": 0.0054,
+          "Breast Cancer": 0.0022,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 31,
+        "frequency": 0.00283,
+        "by_cancer_type": {
+          "Glioma": 0.0235,
+          "Bladder Cancer": 0.0142,
+          "Head and Neck Cancer": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Non-Small Cell Lung Cancer": 0.0036,
+          "Germ Cell Tumor": 0.0035,
+          "Hepatobiliary Cancer": 0.0028,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "TACC3",
+          23
+        ],
+        [
+          "JAKMIP1",
+          1
+        ],
+        [
+          "NICOL1",
+          1
+        ],
+        [
+          "NSD2",
+          1
+        ],
+        [
+          "ST7L",
+          1
+        ],
+        [
+          "TNIP2",
+          1
+        ],
+        [
+          "PBDC1",
+          1
+        ]
+      ]
+    },
+    "FLT3": {
+      "amplification": {
+        "samples": 57,
+        "frequency": 0.00521,
+        "by_cancer_type": {
+          "Colorectal Cancer": 0.0467,
+          "Head and Neck Cancer": 0.0054,
+          "Bladder Cancer": 0.0047,
+          "Breast Cancer": 0.003,
+          "Non-Small Cell Lung Cancer": 0.0018
+        }
+      },
+      "deep_deletion": {
+        "samples": 16,
+        "frequency": 0.00146,
+        "by_cancer_type": {
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Cervical Cancer": 0.02,
+          "Glioma": 0.0127,
+          "Bone Cancer": 0.0075,
+          "Cancer of Unknown Primary": 0.0054,
+          "Thyroid Cancer": 0.0043,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Non-Small Cell Lung Cancer": 0.0018
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Pancreatic Cancer": 0.002
+        }
+      }
+    },
+    "FOXA1": {
+      "amplification": {
+        "samples": 177,
+        "frequency": 0.01617,
+        "by_cancer_type": {
+          "Non-Small Cell Lung Cancer": 0.0414,
+          "Breast Cancer": 0.0396,
+          "Prostate Cancer": 0.0377,
+          "Head and Neck Cancer": 0.0323,
+          "Small Cell Lung Cancer": 0.0244,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Cervical Cancer": 0.02,
+          "Cancer of Unknown Primary": 0.0108,
+          "Esophagogastric Cancer": 0.0088,
+          "Germ Cell Tumor": 0.0069,
+          "Hepatobiliary Cancer": 0.0056,
+          "Bladder Cancer": 0.0047
+        }
+      },
+      "deep_deletion": {
+        "samples": 13,
+        "frequency": 0.00119,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Mesothelioma": 0.0093,
+          "Bladder Cancer": 0.0071,
+          "Glioma": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Thyroid Cancer": 0.0043,
+          "Germ Cell Tumor": 0.0035,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Salivary Gland Cancer": 0.0088,
+          "Prostate Cancer": 0.0028,
+          "Breast Cancer": 0.0007,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "MIPOL1",
+          2
+        ],
+        [
+          "CASZ1",
+          1
+        ],
+        [
+          "NRG1",
+          1
+        ]
+      ]
+    },
+    "FUBP1": {
+      "amplification": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Soft Tissue Sarcoma": 0.0045,
+          "Hepatobiliary Cancer": 0.0028,
+          "Breast Cancer": 0.0015,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Prostate Cancer": 0.0056,
+          "Head and Neck Cancer": 0.0054,
+          "Glioma": 0.0036,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Endometrial Cancer": 0.0046,
+          "Renal Cell Carcinoma": 0.0028,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "MYEOV",
+          1
+        ],
+        [
+          "ST6GALNAC5",
+          1
+        ],
+        [
+          "TFE3",
+          1
+        ]
+      ]
+    },
+    "GATA3": {
+      "amplification": {
+        "samples": 40,
+        "frequency": 0.00365,
+        "by_cancer_type": {
+          "Bladder Cancer": 0.026,
+          "Breast Cancer": 0.0194,
+          "Ovarian Cancer": 0.0045,
+          "Hepatobiliary Cancer": 0.0028,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "deep_deletion": {
+        "samples": 48,
+        "frequency": 0.00439,
+        "by_cancer_type": {
+          "Glioma": 0.038,
+          "Small Cell Lung Cancer": 0.0366,
+          "Melanoma": 0.0192,
+          "Uterine Sarcoma": 0.0108,
+          "Cancer of Unknown Primary": 0.0108,
+          "Bone Cancer": 0.0075,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Head and Neck Cancer": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Prostate Cancer": 0.0028,
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "fusion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Thyroid Cancer": 0.0043,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "(intergenic)",
+          1
+        ]
+      ]
+    },
+    "GLI1": {
+      "amplification": {
+        "samples": 74,
+        "frequency": 0.00676,
+        "by_cancer_type": {
+          "Soft Tissue Sarcoma": 0.0361,
+          "Glioma": 0.0307,
+          "Uterine Sarcoma": 0.0215,
+          "Bone Cancer": 0.0149,
+          "Peripheral Nervous System": 0.0125,
+          "Non-Small Cell Lung Cancer": 0.012,
+          "Melanoma": 0.011,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Esophagogastric Cancer": 0.0059,
+          "Cancer of Unknown Primary": 0.0054,
+          "Head and Neck Cancer": 0.0054,
+          "Bladder Cancer": 0.0047
+        }
+      },
+      "deep_deletion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0028,
+          "Pancreatic Cancer": 0.002,
+          "Glioma": 0.0018
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Glioma": 0.0072,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "ARHGAP9",
+          1
+        ],
+        [
+          "ATXN7L3B",
+          1
+        ],
+        [
+          "CPSF6",
+          1
+        ],
+        [
+          "KCNMB4",
+          1
+        ],
+        [
+          "LGR5",
+          1
+        ],
+        [
+          "TSPAN8",
+          1
+        ]
+      ]
+    },
+    "GNA11": {
+      "amplification": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0625,
+          "Adrenocortical Carcinoma": 0.04,
+          "Head and Neck Cancer": 0.0054,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "deep_deletion": {
+        "samples": 19,
+        "frequency": 0.00174,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0179,
+          "Uterine Sarcoma": 0.0108,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Prostate Cancer": 0.0056,
+          "Cancer of Unknown Primary": 0.0054,
+          "Germ Cell Tumor": 0.0035,
+          "Renal Cell Carcinoma": 0.0028,
+          "Non-Small Cell Lung Cancer": 0.0012,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045,
+          "Esophagogastric Cancer": 0.0029,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "TYK2",
+          1
+        ]
+      ]
+    },
+    "GNAQ": {
+      "amplification": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Glioma": 0.0036,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045
+        }
+      }
+    },
+    "GNAS": {
+      "amplification": {
+        "samples": 170,
+        "frequency": 0.01553,
+        "by_cancer_type": {
+          "Breast Cancer": 0.0509,
+          "Adrenocortical Carcinoma": 0.04,
+          "Colorectal Cancer": 0.0318,
+          "Small Bowel Cancer": 0.0286,
+          "Esophagogastric Cancer": 0.0235,
+          "Hepatobiliary Cancer": 0.0225,
+          "Thyroid Cancer": 0.0216,
+          "Cervical Cancer": 0.02,
+          "Endometrial Cancer": 0.0183,
+          "Cancer of Unknown Primary": 0.0161,
+          "Pancreatic Cancer": 0.0139,
+          "Appendiceal Cancer": 0.0127
+        }
+      },
+      "deep_deletion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Mature T and NK Neoplasms": 0.0345,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "ZNF335",
+          1
+        ]
+      ]
+    },
+    "H3-3A": {
+      "amplification": {
+        "samples": 24,
+        "frequency": 0.00219,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0312,
+          "Endometrial Cancer": 0.0138,
+          "Uterine Sarcoma": 0.0108,
+          "Salivary Gland Cancer": 0.0088,
+          "Melanoma": 0.0082,
+          "Breast Cancer": 0.006,
+          "Cancer of Unknown Primary": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Renal Cell Carcinoma": 0.0028,
+          "Hepatobiliary Cancer": 0.0028,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      }
+    },
+    "HRAS": {
+      "amplification": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Head and Neck Cancer": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Esophagogastric Cancer": 0.0029,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "deep_deletion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Ovarian Cancer": 0.0045,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0007
+        }
+      }
+    },
+    "IDH1": {
+      "amplification": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.0059,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "deep_deletion": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Bone Cancer": 0.0075,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Breast Cancer": 0.0007
+        }
+      }
+    },
+    "IDH2": {
+      "amplification": {
+        "samples": 22,
+        "frequency": 0.00201,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0215,
+          "CNS Cancer": 0.0208,
+          "Breast Cancer": 0.0097,
+          "Bone Cancer": 0.0075,
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Esophagogastric Cancer": 0.0029,
+          "Glioma": 0.0018,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Ovarian Cancer": 0.0089,
+          "Germ Cell Tumor": 0.0035,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Glioma": 0.0018
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Breast Cancer": 0.0015,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "CHN1",
+          1
+        ],
+        [
+          "SEMA4B",
+          1
+        ],
+        [
+          "MINAR1",
+          1
+        ]
+      ]
+    },
+    "JAK2": {
+      "amplification": {
+        "samples": 45,
+        "frequency": 0.00411,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.04,
+          "Anal Cancer": 0.0312,
+          "Small Bowel Cancer": 0.0286,
+          "Head and Neck Cancer": 0.0269,
+          "Small Cell Lung Cancer": 0.0244,
+          "Ovarian Cancer": 0.0134,
+          "Cancer of Unknown Primary": 0.0108,
+          "Soft Tissue Sarcoma": 0.009,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Bone Cancer": 0.0075,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Breast Cancer": 0.006
+        }
+      },
+      "deep_deletion": {
+        "samples": 50,
+        "frequency": 0.00457,
+        "by_cancer_type": {
+          "Germ Cell Tumor": 0.0174,
+          "Glioma": 0.0108,
+          "Salivary Gland Cancer": 0.0088,
+          "Prostate Cancer": 0.0084,
+          "Melanoma": 0.0082,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Bladder Cancer": 0.0071,
+          "Non-Small Cell Lung Cancer": 0.0054,
+          "Cancer of Unknown Primary": 0.0054,
+          "Head and Neck Cancer": 0.0054,
+          "Breast Cancer": 0.0052,
+          "Soft Tissue Sarcoma": 0.0045
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion_partners": [
+        [
+          "LRP8",
+          1
+        ]
+      ]
+    },
+    "KDM5C": {
+      "amplification": {
+        "samples": 18,
+        "frequency": 0.00164,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Soft Tissue Sarcoma": 0.009,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Prostate Cancer": 0.007,
+          "Esophagogastric Cancer": 0.0059,
+          "Cancer of Unknown Primary": 0.0054,
+          "Pancreatic Cancer": 0.002,
+          "Glioma": 0.0018,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 12,
+        "frequency": 0.0011,
+        "by_cancer_type": {
+          "CNS Cancer": 0.0208,
+          "Uterine Sarcoma": 0.0108,
+          "Mesothelioma": 0.0093,
+          "Cancer of Unknown Primary": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Hepatobiliary Cancer": 0.0028,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0075,
+          "Renal Cell Carcinoma": 0.0028,
+          "Melanoma": 0.0027,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "AKAP4",
+          1
+        ],
+        [
+          "GLRA2",
+          1
+        ],
+        [
+          "GPA33",
+          1
+        ],
+        [
+          "HUWE1",
+          1
+        ],
+        [
+          "PPP1R2C",
+          1
+        ]
+      ]
+    },
+    "KDM6A": {
+      "amplification": {
+        "samples": 21,
+        "frequency": 0.00192,
+        "by_cancer_type": {
+          "Cervical Cancer": 0.02,
+          "Salivary Gland Cancer": 0.0088,
+          "Prostate Cancer": 0.0084,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Melanoma": 0.0055,
+          "Non-Small Cell Lung Cancer": 0.0036,
+          "Colorectal Cancer": 0.001,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 16,
+        "frequency": 0.00146,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0312,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Cervical Cancer": 0.02,
+          "Cancer of Unknown Primary": 0.0108,
+          "Uterine Sarcoma": 0.0108,
+          "Ovarian Cancer": 0.0089,
+          "Head and Neck Cancer": 0.0054,
+          "Bladder Cancer": 0.0047,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0012,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0028,
+          "Breast Cancer": 0.0022,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "fusion_partners": [
+        [
+          "HHIP",
+          1
+        ]
+      ]
+    },
+    "KEAP1": {
+      "amplification": {
+        "samples": 25,
+        "frequency": 0.00228,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0299,
+          "Ovarian Cancer": 0.0223,
+          "Cancer of Unknown Primary": 0.0161,
+          "Endometrial Cancer": 0.0092,
+          "Soft Tissue Sarcoma": 0.009,
+          "Head and Neck Cancer": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "deep_deletion": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0161,
+          "Endometrial Cancer": 0.0046,
+          "Non-Small Cell Lung Cancer": 0.003,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045,
+          "Non-Small Cell Lung Cancer": 0.0012,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "DNAH1",
+          1
+        ],
+        [
+          "ZNF599",
+          1
+        ]
+      ]
+    },
+    "KIT": {
+      "amplification": {
+        "samples": 93,
+        "frequency": 0.0085,
+        "by_cancer_type": {
+          "Glioma": 0.0633,
+          "Salivary Gland Cancer": 0.0614,
+          "Melanoma": 0.0384,
+          "Bone Cancer": 0.0299,
+          "Gastrointestinal Stromal Tumor": 0.0292,
+          "Small Cell Lung Cancer": 0.0244,
+          "Soft Tissue Sarcoma": 0.0203,
+          "Germ Cell Tumor": 0.0139,
+          "Appendiceal Cancer": 0.0127,
+          "Head and Neck Cancer": 0.0054,
+          "Thyroid Cancer": 0.0043,
+          "Breast Cancer": 0.0037
+        }
+      },
+      "deep_deletion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0149,
+          "Gastrointestinal Stromal Tumor": 0.0146,
+          "Head and Neck Cancer": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Melanoma": 0.0027
+        }
+      },
+      "fusion_partners": [
+        [
+          "KDR",
+          1
+        ]
+      ]
+    },
+    "KMT2C": {
+      "amplification": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Melanoma": 0.0082,
+          "Bone Cancer": 0.0075,
+          "Glioma": 0.0036,
+          "Germ Cell Tumor": 0.0035,
+          "Bladder Cancer": 0.0024,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Bone Cancer": 0.0075,
+          "Prostate Cancer": 0.0042,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Melanoma": 0.0055,
+          "Ovarian Cancer": 0.0045,
+          "Breast Cancer": 0.0037,
+          "Germ Cell Tumor": 0.0035,
+          "Prostate Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion_partners": [
+        [
+          "GALNT11",
+          2
+        ],
+        [
+          "DPP6",
+          2
+        ],
+        [
+          "(intergenic)",
+          1
+        ],
+        [
+          "PAXIP1",
+          1
+        ],
+        [
+          "MCPH1",
+          1
+        ],
+        [
+          "NUB1",
+          1
+        ],
+        [
+          "RPS29",
+          1
+        ]
+      ]
+    },
+    "KMT2D": {
+      "amplification": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0075,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Germ Cell Tumor": 0.0069,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Breast Cancer": 0.003,
+          "Glioma": 0.0018
+        }
+      },
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Cancer of Unknown Primary": 0.0054,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 19,
+        "frequency": 0.00174,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Salivary Gland Cancer": 0.0088,
+          "Bone Cancer": 0.0075,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Esophagogastric Cancer": 0.0059,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Glioma": 0.0036,
+          "Germ Cell Tumor": 0.0035,
+          "Prostate Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion_partners": [
+        [
+          "ABCD2",
+          1
+        ],
+        [
+          "ARF3",
+          1
+        ],
+        [
+          "BCOR",
+          1
+        ],
+        [
+          "CNTN1",
+          1
+        ],
+        [
+          "HDAC7",
+          1
+        ],
+        [
+          "KCNC2",
+          1
+        ],
+        [
+          "MON2",
+          1
+        ],
+        [
+          "NEUROD4",
+          1
+        ]
+      ]
+    },
+    "KRAS": {
+      "amplification": {
+        "samples": 195,
+        "frequency": 0.01782,
+        "by_cancer_type": {
+          "Germ Cell Tumor": 0.1979,
+          "Esophagogastric Cancer": 0.0762,
+          "Ovarian Cancer": 0.0536,
+          "Cervical Cancer": 0.04,
+          "Small Bowel Cancer": 0.0286,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Glioma": 0.0163,
+          "Non-Small Cell Lung Cancer": 0.0162,
+          "Pancreatic Cancer": 0.0159,
+          "Bone Cancer": 0.0149,
+          "Endometrial Cancer": 0.0138,
+          "Colorectal Cancer": 0.0119
+        }
+      },
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Bladder Cancer": 0.0024,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054
+        }
+      },
+      "fusion_partners": [
+        [
+          "SOX5",
+          1
+        ]
+      ]
+    },
+    "MAP2K1": {
+      "amplification": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Esophagogastric Cancer": 0.0059,
+          "Renal Cell Carcinoma": 0.0028,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0244,
+          "Glioma": 0.0036,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "SMAD3",
+          1
+        ],
+        [
+          "PLEKHO2",
+          1
+        ]
+      ]
+    },
+    "MEN1": {
+      "amplification": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Endometrial Cancer": 0.0046,
+          "Breast Cancer": 0.003,
+          "Bladder Cancer": 0.0024,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Hepatobiliary Cancer": 0.0056,
+          "Cancer of Unknown Primary": 0.0054,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "fusion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Pancreatic Cancer": 0.002,
+          "Prostate Cancer": 0.0014
+        }
+      }
+    },
+    "MET": {
+      "amplification": {
+        "samples": 102,
+        "frequency": 0.00932,
+        "by_cancer_type": {
+          "Mature T and NK Neoplasms": 0.0345,
+          "Esophagogastric Cancer": 0.0264,
+          "Non-Small Cell Lung Cancer": 0.024,
+          "Renal Cell Carcinoma": 0.0194,
+          "Melanoma": 0.0164,
+          "Glioma": 0.0163,
+          "Soft Tissue Sarcoma": 0.0135,
+          "Colorectal Cancer": 0.0119,
+          "Ovarian Cancer": 0.0089,
+          "Hepatobiliary Cancer": 0.0056,
+          "Cancer of Unknown Primary": 0.0054,
+          "Bladder Cancer": 0.0047
+        }
+      },
+      "deep_deletion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0215,
+          "Small Cell Lung Cancer": 0.0122,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Glioma": 0.0018,
+          "Non-Small Cell Lung Cancer": 0.0012,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "ST7",
+          2
+        ],
+        [
+          "PTPRZ1",
+          1
+        ],
+        [
+          "SLC1A2",
+          1
+        ]
+      ]
+    },
+    "MLH1": {
+      "amplification": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0075,
+          "Prostate Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Colorectal Cancer": 0.001,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      }
+    },
+    "MSH2": {
+      "amplification": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Bladder Cancer": 0.0024,
+          "Colorectal Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "deep_deletion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Prostate Cancer": 0.0056,
+          "Thyroid Cancer": 0.0043,
+          "Glioma": 0.0036,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "fusion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.0029,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      }
+    },
+    "MSH6": {
+      "amplification": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Esophagogastric Cancer": 0.0029,
+          "Bladder Cancer": 0.0024,
+          "Colorectal Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "deep_deletion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Glioma": 0.0036,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Endometrial Cancer": 0.0092,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "(intergenic)",
+          1
+        ],
+        [
+          "FBXO11",
+          1
+        ],
+        [
+          "TRIB2",
+          1
+        ]
+      ]
+    },
+    "MTOR": {
+      "amplification": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0149,
+          "Bone Cancer": 0.0075,
+          "Germ Cell Tumor": 0.0035,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 14,
+        "frequency": 0.00128,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Uterine Sarcoma": 0.0108,
+          "Germ Cell Tumor": 0.0069,
+          "Glioma": 0.0054,
+          "Thyroid Cancer": 0.0043,
+          "Prostate Cancer": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0015,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion_partners": [
+        [
+          "(intergenic)",
+          1
+        ],
+        [
+          "RGL1",
+          1
+        ]
+      ]
+    },
+    "MYC": {
+      "amplification": {
+        "samples": 440,
+        "frequency": 0.0402,
+        "by_cancer_type": {
+          "Breast Cancer": 0.0972,
+          "Appendiceal Cancer": 0.0759,
+          "Ovarian Cancer": 0.067,
+          "Melanoma": 0.0575,
+          "Small Bowel Cancer": 0.0571,
+          "Endometrial Cancer": 0.055,
+          "Non-Small Cell Lung Cancer": 0.0546,
+          "Prostate Cancer": 0.0474,
+          "Esophagogastric Cancer": 0.044,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0435,
+          "Cervical Cancer": 0.04,
+          "Colorectal Cancer": 0.0387
+        }
+      },
+      "deep_deletion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "fusion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Cervical Cancer": 0.02,
+          "Mature B-Cell Neoplasms": 0.0149,
+          "Germ Cell Tumor": 0.0035,
+          "Breast Cancer": 0.0022
+        }
+      },
+      "fusion_partners": [
+        [
+          "(intergenic)",
+          1
+        ],
+        [
+          "ADCY8",
+          1
+        ],
+        [
+          "PVT1",
+          1
+        ],
+        [
+          "XCR1",
+          1
+        ],
+        [
+          "TMEM121",
+          1
+        ]
+      ]
+    },
+    "MYCN": {
+      "amplification": {
+        "samples": 58,
+        "frequency": 0.0053,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.2875,
+          "CNS Cancer": 0.0417,
+          "Cervical Cancer": 0.04,
+          "Glioma": 0.0181,
+          "Salivary Gland Cancer": 0.0175,
+          "Germ Cell Tumor": 0.0174,
+          "Skin Cancer, Non-Melanoma": 0.0135,
+          "Bladder Cancer": 0.0095,
+          "Endometrial Cancer": 0.0046,
+          "Hepatobiliary Cancer": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022
+        }
+      }
+    },
+    "NF1": {
+      "amplification": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Hepatobiliary Cancer": 0.0056,
+          "Breast Cancer": 0.003,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "deep_deletion": {
+        "samples": 58,
+        "frequency": 0.0053,
+        "by_cancer_type": {
+          "CNS Cancer": 0.0417,
+          "Melanoma": 0.0301,
+          "Gastrointestinal Stromal Tumor": 0.0292,
+          "Glioma": 0.0163,
+          "Bone Cancer": 0.0149,
+          "Ovarian Cancer": 0.0134,
+          "Peripheral Nervous System": 0.0125,
+          "Soft Tissue Sarcoma": 0.0113,
+          "Uterine Sarcoma": 0.0108,
+          "Salivary Gland Cancer": 0.0088,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Breast Cancer": 0.0067
+        }
+      },
+      "fusion": {
+        "samples": 32,
+        "frequency": 0.00292,
+        "by_cancer_type": {
+          "Salivary Gland Cancer": 0.0175,
+          "Glioma": 0.0127,
+          "Uterine Sarcoma": 0.0108,
+          "Cancer of Unknown Primary": 0.0054,
+          "Endometrial Cancer": 0.0046,
+          "Breast Cancer": 0.0045,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Ovarian Cancer": 0.0045,
+          "Non-Small Cell Lung Cancer": 0.0042,
+          "Esophagogastric Cancer": 0.0029,
+          "Renal Cell Carcinoma": 0.0028,
+          "Melanoma": 0.0027
+        }
+      },
+      "fusion_partners": [
+        [
+          "GOSR1",
+          1
+        ],
+        [
+          "MYO18A",
+          1
+        ],
+        [
+          "CREB5",
+          1
+        ],
+        [
+          "HDAC5",
+          1
+        ],
+        [
+          "MIR365B",
+          1
+        ],
+        [
+          "PPM1D",
+          1
+        ],
+        [
+          "SHISA9",
+          1
+        ],
+        [
+          "SP2",
+          1
+        ]
+      ]
+    },
+    "NF2": {
+      "amplification": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Small Cell Lung Cancer": 0.0122,
+          "Cancer of Unknown Primary": 0.0054,
+          "Head and Neck Cancer": 0.0054,
+          "Bladder Cancer": 0.0047,
+          "Ovarian Cancer": 0.0045,
+          "Germ Cell Tumor": 0.0035,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 21,
+        "frequency": 0.00192,
+        "by_cancer_type": {
+          "Mesothelioma": 0.0374,
+          "Uterine Sarcoma": 0.0108,
+          "Bone Cancer": 0.0075,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Glioma": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Thyroid Cancer": 0.0043,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "CNS Cancer": 0.0208,
+          "Appendiceal Cancer": 0.0127,
+          "Endometrial Cancer": 0.0046,
+          "Glioma": 0.0036
+        }
+      },
+      "fusion_partners": [
+        [
+          "MIAT",
+          1
+        ],
+        [
+          "GRM4",
+          1
+        ],
+        [
+          "HORMAD2",
+          1
+        ],
+        [
+          "MIR3667HG",
+          1
+        ],
+        [
+          "TNFRSF1B",
+          1
+        ]
+      ]
+    },
+    "NFE2L2": {
+      "amplification": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0108,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Non-Small Cell Lung Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "deep_deletion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Cancer of Unknown Primary": 0.0108,
+          "Salivary Gland Cancer": 0.0088,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion_partners": [
+        [
+          "ZNF385B",
+          1
+        ]
+      ]
+    },
+    "NKX2-1": {
+      "amplification": {
+        "samples": 141,
+        "frequency": 0.01288,
+        "by_cancer_type": {
+          "Non-Small Cell Lung Cancer": 0.0618,
+          "Thyroid Cancer": 0.0563,
+          "Small Cell Lung Cancer": 0.0366,
+          "Head and Neck Cancer": 0.0269,
+          "Cancer of Unknown Primary": 0.0108,
+          "Breast Cancer": 0.006,
+          "Prostate Cancer": 0.0056,
+          "Germ Cell Tumor": 0.0035,
+          "Hepatobiliary Cancer": 0.0028,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "deep_deletion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045,
+          "Germ Cell Tumor": 0.0035,
+          "Bladder Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Glioma": 0.0018,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      }
+    },
+    "NOTCH1": {
+      "amplification": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Salivary Gland Cancer": 0.0088,
+          "Glioma": 0.0054,
+          "Cancer of Unknown Primary": 0.0054,
+          "Esophagogastric Cancer": 0.0029
+        }
+      },
+      "deep_deletion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Hepatobiliary Cancer": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045,
+          "Esophagogastric Cancer": 0.0029,
+          "Pancreatic Cancer": 0.002,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "CUL5",
+          1
+        ],
+        [
+          "TRAF2",
+          1
+        ],
+        [
+          "SNAPC4",
+          1
+        ],
+        [
+          "UBAC1",
+          1
+        ]
+      ]
+    },
+    "NOTCH2": {
+      "amplification": {
+        "samples": 61,
+        "frequency": 0.00557,
+        "by_cancer_type": {
+          "Small Bowel Cancer": 0.0286,
+          "Melanoma": 0.0192,
+          "Breast Cancer": 0.015,
+          "Skin Cancer, Non-Melanoma": 0.0135,
+          "Peripheral Nervous System": 0.0125,
+          "Small Cell Lung Cancer": 0.0122,
+          "Hepatobiliary Cancer": 0.0113,
+          "Head and Neck Cancer": 0.0108,
+          "Pancreatic Cancer": 0.01,
+          "Bladder Cancer": 0.0095,
+          "Soft Tissue Sarcoma": 0.009,
+          "Bone Cancer": 0.0075
+        }
+      },
+      "deep_deletion": {
+        "samples": 14,
+        "frequency": 0.00128,
+        "by_cancer_type": {
+          "Gastrointestinal Stromal Tumor": 0.0146,
+          "Skin Cancer, Non-Melanoma": 0.0135,
+          "Cancer of Unknown Primary": 0.0054,
+          "Non-Small Cell Lung Cancer": 0.0036,
+          "Glioma": 0.0018,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0075,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Breast Cancer": 0.003,
+          "Hepatobiliary Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "DIRAS3",
+          1
+        ],
+        [
+          "PDE4DIP",
+          1
+        ],
+        [
+          "PIP5K1A",
+          1
+        ],
+        [
+          "ZNF697",
+          1
+        ]
+      ]
+    },
+    "NPM1": {
+      "amplification": {
+        "samples": 13,
+        "frequency": 0.00119,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0075,
+          "Renal Cell Carcinoma": 0.0055,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Non-Small Cell Lung Cancer": 0.0036,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0366,
+          "Glioma": 0.0072,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Germ Cell Tumor": 0.0035,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion_partners": [
+        [
+          "FGF18",
+          1
+        ]
+      ]
+    },
+    "NRAS": {
+      "amplification": {
+        "samples": 17,
+        "frequency": 0.00155,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Melanoma": 0.011,
+          "Ovarian Cancer": 0.0089,
+          "Bone Cancer": 0.0075,
+          "Cancer of Unknown Primary": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Cancer of Unknown Primary": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Melanoma": 0.0027,
+          "Non-Small Cell Lung Cancer": 0.0012,
+          "Colorectal Cancer": 0.001,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Glioma": 0.0018
+        }
+      },
+      "fusion_partners": [
+        [
+          "CSDE1",
+          1
+        ]
+      ]
+    },
+    "PALB2": {
+      "amplification": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Breast Cancer": 0.003,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0042,
+          "Glioma": 0.0036,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "DCTN5",
+          1
+        ],
+        [
+          "SLC1A2",
+          1
+        ]
+      ]
+    },
+    "PBRM1": {
+      "deep_deletion": {
+        "samples": 18,
+        "frequency": 0.00164,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0244,
+          "Mesothelioma": 0.0187,
+          "Uterine Sarcoma": 0.0108,
+          "Hepatobiliary Cancer": 0.0085,
+          "Melanoma": 0.0082,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Mesothelioma": 0.0187,
+          "Cancer of Unknown Primary": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Hepatobiliary Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Colorectal Cancer": 0.002,
+          "Pancreatic Cancer": 0.002,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "BAP1",
+          4
+        ],
+        [
+          "DNAH1",
+          1
+        ],
+        [
+          "CACNA1D",
+          1
+        ],
+        [
+          "SLC38A3",
+          1
+        ]
+      ]
+    },
+    "PDGFRA": {
+      "amplification": {
+        "samples": 95,
+        "frequency": 0.00868,
+        "by_cancer_type": {
+          "Glioma": 0.0778,
+          "Salivary Gland Cancer": 0.0614,
+          "Bone Cancer": 0.0373,
+          "Melanoma": 0.0274,
+          "Soft Tissue Sarcoma": 0.0271,
+          "Small Cell Lung Cancer": 0.0244,
+          "Head and Neck Cancer": 0.0161,
+          "Gastrointestinal Stromal Tumor": 0.0146,
+          "Appendiceal Cancer": 0.0127,
+          "Germ Cell Tumor": 0.0069,
+          "Thyroid Cancer": 0.0043,
+          "Breast Cancer": 0.0037
+        }
+      },
+      "deep_deletion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Head and Neck Cancer": 0.0054,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Soft Tissue Sarcoma": 0.0023,
+          "Glioma": 0.0018
+        }
+      },
+      "fusion_partners": [
+        [
+          "EXOC1",
+          1
+        ]
+      ]
+    },
+    "PIK3CA": {
+      "amplification": {
+        "samples": 75,
+        "frequency": 0.00685,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0625,
+          "Head and Neck Cancer": 0.0484,
+          "Small Cell Lung Cancer": 0.0366,
+          "Ovarian Cancer": 0.0312,
+          "Non-Small Cell Lung Cancer": 0.0156,
+          "Endometrial Cancer": 0.0138,
+          "Breast Cancer": 0.0127,
+          "Hepatobiliary Cancer": 0.0085,
+          "Germ Cell Tumor": 0.0035,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024,
+          "Glioma": 0.0018
+        }
+      },
+      "deep_deletion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Mesothelioma": 0.0093,
+          "Thyroid Cancer": 0.0043,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "fusion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "NAALADL2",
+          1
+        ]
+      ]
+    },
+    "PMS2": {
+      "amplification": {
+        "samples": 55,
+        "frequency": 0.00503,
+        "by_cancer_type": {
+          "Melanoma": 0.0164,
+          "Germ Cell Tumor": 0.0139,
+          "Soft Tissue Sarcoma": 0.0135,
+          "Non-Small Cell Lung Cancer": 0.0114,
+          "Uterine Sarcoma": 0.0108,
+          "Bone Cancer": 0.0075,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Hepatobiliary Cancer": 0.0056,
+          "Head and Neck Cancer": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0042,
+          "Colorectal Cancer": 0.003
+        }
+      },
+      "deep_deletion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      }
+    },
+    "POLE": {
+      "amplification": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Thyroid Cancer": 0.0043,
+          "Germ Cell Tumor": 0.0035,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022
+        }
+      },
+      "deep_deletion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Endometrial Cancer": 0.0046,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "fusion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Glioma": 0.0036,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "TLL1",
+          2
+        ],
+        [
+          "LEMD3",
+          1
+        ],
+        [
+          "LYG2",
+          1
+        ],
+        [
+          "RAB11FIP4",
+          1
+        ],
+        [
+          "SLC16A7",
+          1
+        ]
+      ]
+    },
+    "PTCH1": {
+      "amplification": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Glioma": 0.0018,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "deep_deletion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Bone Cancer": 0.0149,
+          "Skin Cancer, Non-Melanoma": 0.0135,
+          "Mesothelioma": 0.0093,
+          "Head and Neck Cancer": 0.0054,
+          "Bladder Cancer": 0.0047,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0075,
+          "Melanoma": 0.0027,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "ERCC6L2-AS1",
+          1
+        ],
+        [
+          "GULP1",
+          1
+        ],
+        [
+          "PPP3R2",
+          1
+        ],
+        [
+          "STRN",
+          1
+        ]
+      ]
+    },
+    "PTEN": {
+      "amplification": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 270,
+        "frequency": 0.02467,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.129,
+          "Prostate Cancer": 0.1158,
+          "Glioma": 0.0832,
+          "Small Cell Lung Cancer": 0.061,
+          "Melanoma": 0.0356,
+          "Anal Cancer": 0.0312,
+          "Soft Tissue Sarcoma": 0.0271,
+          "Ovarian Cancer": 0.0268,
+          "Breast Cancer": 0.0247,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Cancer of Unknown Primary": 0.0215,
+          "Cervical Cancer": 0.02
+        }
+      },
+      "fusion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.0042,
+          "Renal Cell Carcinoma": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion_partners": [
+        [
+          "ATAD1",
+          1
+        ],
+        [
+          "RNLS",
+          1
+        ]
+      ]
+    },
+    "RB1": {
+      "amplification": {
+        "samples": 12,
+        "frequency": 0.0011,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Colorectal Cancer": 0.0099,
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "deep_deletion": {
+        "samples": 210,
+        "frequency": 0.01919,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.3011,
+          "Small Cell Lung Cancer": 0.1707,
+          "Gastrointestinal Neuroendocrine Tumor": 0.087,
+          "Soft Tissue Sarcoma": 0.0519,
+          "Prostate Cancer": 0.0474,
+          "Adrenocortical Carcinoma": 0.04,
+          "Gastrointestinal Stromal Tumor": 0.0365,
+          "Skin Cancer, Non-Melanoma": 0.0338,
+          "Bone Cancer": 0.0299,
+          "Glioma": 0.0271,
+          "Ovarian Cancer": 0.0268,
+          "Mesothelioma": 0.0187
+        }
+      },
+      "fusion": {
+        "samples": 22,
+        "frequency": 0.00201,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0244,
+          "Esophagogastric Cancer": 0.0088,
+          "Breast Cancer": 0.0045,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Pancreatic Cancer": 0.004,
+          "Hepatobiliary Cancer": 0.0028,
+          "Prostate Cancer": 0.0028,
+          "Glioma": 0.0018,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion_partners": [
+        [
+          "CDKN2A",
+          2
+        ],
+        [
+          "BRMS1L",
+          2
+        ],
+        [
+          "KLHL13",
+          1
+        ],
+        [
+          "LRCH1",
+          1
+        ],
+        [
+          "MSL3",
+          1
+        ],
+        [
+          "OR3A2",
+          1
+        ],
+        [
+          "PTPRG",
+          1
+        ],
+        [
+          "TGFB2",
+          1
+        ]
+      ]
+    },
+    "RBM10": {
+      "amplification": {
+        "samples": 40,
+        "frequency": 0.00365,
+        "by_cancer_type": {
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Salivary Gland Cancer": 0.0175,
+          "Prostate Cancer": 0.0126,
+          "Soft Tissue Sarcoma": 0.009,
+          "Germ Cell Tumor": 0.0069,
+          "Esophagogastric Cancer": 0.0059,
+          "Non-Small Cell Lung Cancer": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Colorectal Cancer": 0.004,
+          "Breast Cancer": 0.003,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "deep_deletion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Cancer of Unknown Primary": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Hepatobiliary Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Breast Cancer": 0.0007,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Bladder Cancer": 0.0047,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "CLCN5",
+          1
+        ],
+        [
+          "PHIP",
+          1
+        ],
+        [
+          "ZNF157",
+          1
+        ]
+      ]
+    },
+    "RET": {
+      "amplification": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Cancer of Unknown Primary": 0.0054,
+          "Melanoma": 0.0027,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 25,
+        "frequency": 0.00228,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0366,
+          "Melanoma": 0.0137,
+          "Glioma": 0.0127,
+          "Uterine Sarcoma": 0.0108,
+          "Salivary Gland Cancer": 0.0088,
+          "Prostate Cancer": 0.0056,
+          "Germ Cell Tumor": 0.0035,
+          "Breast Cancer": 0.0015,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion": {
+        "samples": 31,
+        "frequency": 0.00283,
+        "by_cancer_type": {
+          "Thyroid Cancer": 0.0346,
+          "Non-Small Cell Lung Cancer": 0.012,
+          "Esophagogastric Cancer": 0.0029,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "KIF5B",
+          15
+        ],
+        [
+          "CCDC6",
+          10
+        ],
+        [
+          "NCOA4",
+          5
+        ],
+        [
+          "CUBN",
+          1
+        ],
+        [
+          "PDCD10",
+          1
+        ],
+        [
+          "RASSF4",
+          1
+        ],
+        [
+          "TFG",
+          1
+        ]
+      ]
+    },
+    "RNF43": {
+      "amplification": {
+        "samples": 69,
+        "frequency": 0.0063,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.075,
+          "Breast Cancer": 0.0322,
+          "Bone Cancer": 0.0149,
+          "Gastrointestinal Stromal Tumor": 0.0146,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Prostate Cancer": 0.0056,
+          "Melanoma": 0.0055,
+          "Ovarian Cancer": 0.0045,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Glioma": 0.0036,
+          "Esophagogastric Cancer": 0.0029,
+          "Colorectal Cancer": 0.002
+        }
+      },
+      "deep_deletion": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045,
+          "Hepatobiliary Cancer": 0.0028,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014,
+          "Colorectal Cancer": 0.001,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.0088,
+          "Colorectal Cancer": 0.003,
+          "Prostate Cancer": 0.0028,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "ALDH4A1",
+          1
+        ],
+        [
+          "BCAS3",
+          1
+        ],
+        [
+          "MTMR4",
+          1
+        ],
+        [
+          "SUPT4H1",
+          1
+        ]
+      ]
+    },
+    "ROS1": {
+      "amplification": {
+        "samples": 12,
+        "frequency": 0.0011,
+        "by_cancer_type": {
+          "Salivary Gland Cancer": 0.0088,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Breast Cancer": 0.006
+        }
+      },
+      "deep_deletion": {
+        "samples": 16,
+        "frequency": 0.00146,
+        "by_cancer_type": {
+          "Melanoma": 0.0082,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Cancer of Unknown Primary": 0.0054,
+          "Thyroid Cancer": 0.0043,
+          "Breast Cancer": 0.0037,
+          "Bladder Cancer": 0.0024,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 43,
+        "frequency": 0.00393,
+        "by_cancer_type": {
+          "Non-Small Cell Lung Cancer": 0.0186,
+          "Salivary Gland Cancer": 0.0175,
+          "Mesothelioma": 0.0093,
+          "Ovarian Cancer": 0.0089,
+          "Cancer of Unknown Primary": 0.0054,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Esophagogastric Cancer": 0.0029,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Glioma": 0.0018
+        }
+      },
+      "fusion_partners": [
+        [
+          "CD74",
+          16
+        ],
+        [
+          "EZR",
+          6
+        ],
+        [
+          "SDC4",
+          4
+        ],
+        [
+          "GOPC",
+          2
+        ],
+        [
+          "SLC34A2",
+          2
+        ],
+        [
+          "FAM135B",
+          1
+        ],
+        [
+          "HS3ST5",
+          1
+        ],
+        [
+          "NETO1",
+          1
+        ]
+      ]
+    },
+    "RUNX1": {
+      "amplification": {
+        "samples": 10,
+        "frequency": 0.00091,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Head and Neck Cancer": 0.0054,
+          "Glioma": 0.0036,
+          "Renal Cell Carcinoma": 0.0028,
+          "Melanoma": 0.0027,
+          "Breast Cancer": 0.0022,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.0029,
+          "Melanoma": 0.0027,
+          "Colorectal Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Bladder Cancer": 0.0047,
+          "Breast Cancer": 0.0015
+        }
+      }
+    },
+    "SETD2": {
+      "amplification": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Melanoma": 0.0027
+        }
+      },
+      "deep_deletion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Mesothelioma": 0.028,
+          "Uterine Sarcoma": 0.0108,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Renal Cell Carcinoma": 0.0028,
+          "Breast Cancer": 0.0015,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Melanoma": 0.0027,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "CNTRL",
+          1
+        ],
+        [
+          "IP6K1",
+          1
+        ],
+        [
+          "MAP4",
+          1
+        ]
+      ]
+    },
+    "SF3B1": {
+      "amplification": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0089,
+          "Cancer of Unknown Primary": 0.0054,
+          "Prostate Cancer": 0.0028,
+          "Non-Small Cell Lung Cancer": 0.0024,
+          "Bladder Cancer": 0.0024,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Hepatobiliary Cancer": 0.0028
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "PDE1A",
+          1
+        ]
+      ]
+    },
+    "SMAD4": {
+      "amplification": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Head and Neck Cancer": 0.0054,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "deep_deletion": {
+        "samples": 92,
+        "frequency": 0.00841,
+        "by_cancer_type": {
+          "Gastrointestinal Neuroendocrine Tumor": 0.087,
+          "Small Bowel Cancer": 0.0857,
+          "Cervical Cancer": 0.04,
+          "Colorectal Cancer": 0.0318,
+          "Esophagogastric Cancer": 0.0264,
+          "Cancer of Unknown Primary": 0.0215,
+          "Pancreatic Cancer": 0.0159,
+          "Hepatobiliary Cancer": 0.0141,
+          "Ovarian Cancer": 0.0134,
+          "Appendiceal Cancer": 0.0127,
+          "Head and Neck Cancer": 0.0108,
+          "Breast Cancer": 0.0052
+        }
+      },
+      "fusion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Appendiceal Cancer": 0.0127,
+          "Cancer of Unknown Primary": 0.0054,
+          "Pancreatic Cancer": 0.004,
+          "Colorectal Cancer": 0.002
+        }
+      },
+      "fusion_partners": [
+        [
+          "MAPK4",
+          1
+        ],
+        [
+          "SKA1",
+          1
+        ],
+        [
+          "RGS17",
+          1
+        ]
+      ]
+    },
+    "SMARCA4": {
+      "amplification": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.04,
+          "Bone Cancer": 0.0224,
+          "Ovarian Cancer": 0.0179,
+          "Esophagogastric Cancer": 0.0059,
+          "Cancer of Unknown Primary": 0.0054,
+          "Head and Neck Cancer": 0.0054,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "deep_deletion": {
+        "samples": 12,
+        "frequency": 0.0011,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0161,
+          "Non-Small Cell Lung Cancer": 0.0048,
+          "Soft Tissue Sarcoma": 0.0023
+        }
+      },
+      "fusion": {
+        "samples": 17,
+        "frequency": 0.00155,
+        "by_cancer_type": {
+          "Cervical Cancer": 0.02,
+          "Cancer of Unknown Primary": 0.0108,
+          "Uterine Sarcoma": 0.0108,
+          "Salivary Gland Cancer": 0.0088,
+          "Non-Small Cell Lung Cancer": 0.0036,
+          "Germ Cell Tumor": 0.0035,
+          "Hepatobiliary Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "LDLR",
+          5
+        ],
+        [
+          "KREMEN1",
+          1
+        ],
+        [
+          "GALNTL6",
+          1
+        ],
+        [
+          "LPAR2",
+          1
+        ],
+        [
+          "SLITRK5",
+          1
+        ]
+      ]
+    },
+    "SMO": {
+      "amplification": {
+        "samples": 16,
+        "frequency": 0.00146,
+        "by_cancer_type": {
+          "Melanoma": 0.011,
+          "Ovarian Cancer": 0.0045,
+          "Glioma": 0.0036,
+          "Hepatobiliary Cancer": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0022,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0075,
+          "Glioma": 0.0018,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "SEMA3D",
+          1
+        ],
+        [
+          "AHCYL2",
+          1
+        ],
+        [
+          "MKRN1",
+          1
+        ]
+      ]
+    },
+    "SOX2": {
+      "amplification": {
+        "samples": 116,
+        "frequency": 0.0106,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0938,
+          "Glioma": 0.0778,
+          "Head and Neck Cancer": 0.0538,
+          "Small Cell Lung Cancer": 0.0488,
+          "Histiocytosis": 0.0455,
+          "Ovarian Cancer": 0.0223,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Cervical Cancer": 0.02,
+          "Non-Small Cell Lung Cancer": 0.018,
+          "Breast Cancer": 0.0067,
+          "Prostate Cancer": 0.0056,
+          "Hepatobiliary Cancer": 0.0028
+        }
+      },
+      "fusion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "fusion_partners": [
+        [
+          "SOX2-OT",
+          2
+        ]
+      ]
+    },
+    "SPOP": {
+      "amplification": {
+        "samples": 81,
+        "frequency": 0.0074,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.075,
+          "Breast Cancer": 0.0441,
+          "Gastrointestinal Stromal Tumor": 0.0219,
+          "Appendiceal Cancer": 0.0127,
+          "Pancreatic Cancer": 0.006,
+          "Melanoma": 0.0055,
+          "Endometrial Cancer": 0.0046,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0042,
+          "Glioma": 0.0018,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0108,
+          "Pancreatic Cancer": 0.002
+        }
+      }
+    },
+    "SRSF2": {
+      "amplification": {
+        "samples": 16,
+        "frequency": 0.00146,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.075,
+          "Gastrointestinal Stromal Tumor": 0.0073,
+          "Breast Cancer": 0.0052,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Endometrial Cancer": 0.0046,
+          "Melanoma": 0.0027,
+          "Colorectal Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      }
+    },
+    "STAT3": {
+      "amplification": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0375,
+          "Appendiceal Cancer": 0.0127,
+          "Endometrial Cancer": 0.0046,
+          "Pancreatic Cancer": 0.004,
+          "Breast Cancer": 0.003,
+          "Hepatobiliary Cancer": 0.0028,
+          "Colorectal Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Esophagogastric Cancer": 0.0029,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion_partners": [
+        [
+          "ASIC2",
+          1
+        ],
+        [
+          "ALOX5AP",
+          1
+        ],
+        [
+          "RGS9",
+          1
+        ]
+      ]
+    },
+    "STK11": {
+      "amplification": {
+        "samples": 7,
+        "frequency": 0.00064,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.08,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Cancer of Unknown Primary": 0.0054,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 24,
+        "frequency": 0.00219,
+        "by_cancer_type": {
+          "Cancer of Unknown Primary": 0.0215,
+          "Ovarian Cancer": 0.0179,
+          "Soft Tissue Sarcoma": 0.0068,
+          "Melanoma": 0.0055,
+          "Non-Small Cell Lung Cancer": 0.0036,
+          "Renal Cell Carcinoma": 0.0028,
+          "Breast Cancer": 0.0022,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 18,
+        "frequency": 0.00164,
+        "by_cancer_type": {
+          "Anal Cancer": 0.0312,
+          "Uterine Sarcoma": 0.0108,
+          "Non-Small Cell Lung Cancer": 0.006,
+          "Cancer of Unknown Primary": 0.0054,
+          "Pancreatic Cancer": 0.004,
+          "Hepatobiliary Cancer": 0.0028,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion_partners": [
+        [
+          "CBARP",
+          2
+        ],
+        [
+          "MIDN",
+          2
+        ],
+        [
+          "ARHGAP45",
+          1
+        ],
+        [
+          "SBNO2",
+          1
+        ],
+        [
+          "CACNA1A",
+          1
+        ],
+        [
+          "REEP6",
+          1
+        ]
+      ]
+    },
+    "SUFU": {
+      "amplification": {
+        "samples": 3,
+        "frequency": 0.00027,
+        "by_cancer_type": {
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0014,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "deep_deletion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0323,
+          "Salivary Gland Cancer": 0.0088,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Endometrial Cancer": 0.0046,
+          "Prostate Cancer": 0.0028,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "TRIM8",
+          1
+        ]
+      ]
+    },
+    "TERT": {
+      "amplification": {
+        "samples": 192,
+        "frequency": 0.01754,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.12,
+          "Soft Tissue Sarcoma": 0.0497,
+          "Small Cell Lung Cancer": 0.0488,
+          "Non-Small Cell Lung Cancer": 0.0438,
+          "Gastrointestinal Stromal Tumor": 0.0438,
+          "Peripheral Nervous System": 0.0375,
+          "Small Bowel Cancer": 0.0286,
+          "Melanoma": 0.0274,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Head and Neck Cancer": 0.0215,
+          "Cancer of Unknown Primary": 0.0215,
+          "Uterine Sarcoma": 0.0215
+        }
+      },
+      "deep_deletion": {
+        "samples": 9,
+        "frequency": 0.00082,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Uterine Sarcoma": 0.0108,
+          "Germ Cell Tumor": 0.0069,
+          "Endometrial Cancer": 0.0046,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Breast Cancer": 0.0015
+        }
+      },
+      "fusion": {
+        "samples": 15,
+        "frequency": 0.00137,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Melanoma": 0.0082,
+          "Renal Cell Carcinoma": 0.0055,
+          "Cancer of Unknown Primary": 0.0054,
+          "Esophagogastric Cancer": 0.0029,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Non-Small Cell Lung Cancer": 0.0018,
+          "Glioma": 0.0018,
+          "Prostate Cancer": 0.0014,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "CDH6",
+          2
+        ],
+        [
+          "SLC6A3",
+          2
+        ],
+        [
+          "SUB1",
+          2
+        ],
+        [
+          "PLEKHG4B",
+          1
+        ],
+        [
+          "SLC12A7",
+          1
+        ],
+        [
+          "CDH18",
+          1
+        ],
+        [
+          "PDZD2",
+          1
+        ],
+        [
+          "SDHAP3",
+          1
+        ]
+      ]
+    },
+    "TET2": {
+      "amplification": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0122,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "deep_deletion": {
+        "samples": 12,
+        "frequency": 0.0011,
+        "by_cancer_type": {
+          "Salivary Gland Cancer": 0.0088,
+          "Mature B-Cell Neoplasms": 0.0075,
+          "Hepatobiliary Cancer": 0.0056,
+          "Ovarian Cancer": 0.0045,
+          "Prostate Cancer": 0.0042,
+          "Colorectal Cancer": 0.003,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.0042,
+          "Colorectal Cancer": 0.001,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "TACR3",
+          3
+        ],
+        [
+          "BMPR1B",
+          1
+        ],
+        [
+          "NR3C2",
+          1
+        ],
+        [
+          "PAPSS1",
+          1
+        ],
+        [
+          "SEC24B",
+          1
+        ]
+      ]
+    },
+    "TGFBR2": {
+      "amplification": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "deep_deletion": {
+        "samples": 44,
+        "frequency": 0.00402,
+        "by_cancer_type": {
+          "Small Cell Lung Cancer": 0.0976,
+          "Anal Cancer": 0.0625,
+          "Head and Neck Cancer": 0.0269,
+          "Skin Cancer, Non-Melanoma": 0.0135,
+          "Peripheral Nervous System": 0.0125,
+          "Hepatobiliary Cancer": 0.0085,
+          "Renal Cell Carcinoma": 0.0083,
+          "Pancreatic Cancer": 0.006,
+          "Soft Tissue Sarcoma": 0.0045,
+          "Thyroid Cancer": 0.0043,
+          "Non-Small Cell Lung Cancer": 0.0042,
+          "Glioma": 0.0036
+        }
+      },
+      "fusion": {
+        "samples": 2,
+        "frequency": 0.00018,
+        "by_cancer_type": {
+          "Bladder Cancer": 0.0024,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion_partners": [
+        [
+          "GADL1",
+          1
+        ],
+        [
+          "THRB",
+          1
+        ]
+      ]
+    },
+    "TP53": {
+      "amplification": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Peripheral Nervous System": 0.0125,
+          "Cancer of Unknown Primary": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Renal Cell Carcinoma": 0.0028,
+          "Glioma": 0.0018
+        }
+      },
+      "deep_deletion": {
+        "samples": 96,
+        "frequency": 0.00877,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.1075,
+          "Bone Cancer": 0.0522,
+          "Small Cell Lung Cancer": 0.0488,
+          "Soft Tissue Sarcoma": 0.0451,
+          "Mature B-Cell Neoplasms": 0.0224,
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Thyroid Cancer": 0.0216,
+          "Prostate Cancer": 0.0181,
+          "Glioma": 0.0108,
+          "Head and Neck Cancer": 0.0108,
+          "Germ Cell Tumor": 0.0069,
+          "Skin Cancer, Non-Melanoma": 0.0068
+        }
+      },
+      "fusion": {
+        "samples": 29,
+        "frequency": 0.00265,
+        "by_cancer_type": {
+          "Bone Cancer": 0.0224,
+          "Uterine Sarcoma": 0.0108,
+          "Salivary Gland Cancer": 0.0088,
+          "Prostate Cancer": 0.0084,
+          "Colorectal Cancer": 0.007,
+          "Cancer of Unknown Primary": 0.0054,
+          "Thyroid Cancer": 0.0043,
+          "Esophagogastric Cancer": 0.0029,
+          "Hepatobiliary Cancer": 0.0028,
+          "Renal Cell Carcinoma": 0.0028,
+          "Non-Small Cell Lung Cancer": 0.0024,
+          "Bladder Cancer": 0.0024
+        }
+      },
+      "fusion_partners": [
+        [
+          "ATP1B2",
+          2
+        ],
+        [
+          "SHBG",
+          2
+        ],
+        [
+          "ACAP1",
+          1
+        ],
+        [
+          "DLG4",
+          1
+        ],
+        [
+          "GPS2",
+          1
+        ],
+        [
+          "ANTXR2",
+          1
+        ],
+        [
+          "DLEU7",
+          1
+        ],
+        [
+          "EIF5",
+          1
+        ]
+      ]
+    },
+    "TP63": {
+      "amplification": {
+        "samples": 42,
+        "frequency": 0.00384,
+        "by_cancer_type": {
+          "Anal Cancer": 0.125,
+          "Cervical Cancer": 0.04,
+          "Head and Neck Cancer": 0.0323,
+          "Small Cell Lung Cancer": 0.0244,
+          "Skin Cancer, Non-Melanoma": 0.0135,
+          "Ovarian Cancer": 0.0134,
+          "Non-Small Cell Lung Cancer": 0.0102,
+          "Bone Cancer": 0.0075,
+          "Cancer of Unknown Primary": 0.0054,
+          "Hepatobiliary Cancer": 0.0028,
+          "Breast Cancer": 0.0022
+        }
+      },
+      "deep_deletion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0108,
+          "Glioma": 0.0072,
+          "Prostate Cancer": 0.0028,
+          "Melanoma": 0.0027,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion": {
+        "samples": 5,
+        "frequency": 0.00046,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Melanoma": 0.0027,
+          "Bladder Cancer": 0.0024,
+          "Pancreatic Cancer": 0.002,
+          "Non-Small Cell Lung Cancer": 0.0006
+        }
+      },
+      "fusion_partners": [
+        [
+          "MCF2L2",
+          1
+        ],
+        [
+          "P3H2",
+          1
+        ],
+        [
+          "SPEN",
+          1
+        ]
+      ]
+    },
+    "TSC1": {
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Glioma": 0.0054,
+          "Germ Cell Tumor": 0.0035,
+          "Melanoma": 0.0027,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "fusion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion_partners": [
+        [
+          "MIR548H3",
+          1
+        ]
+      ]
+    },
+    "TSC2": {
+      "amplification": {
+        "samples": 17,
+        "frequency": 0.00155,
+        "by_cancer_type": {
+          "Adrenocortical Carcinoma": 0.08,
+          "Prostate Cancer": 0.007,
+          "Breast Cancer": 0.0052,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 11,
+        "frequency": 0.00101,
+        "by_cancer_type": {
+          "Uterine Sarcoma": 0.0215,
+          "Ovarian Cancer": 0.0134,
+          "Salivary Gland Cancer": 0.0088,
+          "Hepatobiliary Cancer": 0.0085,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Pancreatic Cancer": 0.002
+        }
+      },
+      "fusion": {
+        "samples": 8,
+        "frequency": 0.00073,
+        "by_cancer_type": {
+          "Gastrointestinal Neuroendocrine Tumor": 0.0217,
+          "Uterine Sarcoma": 0.0108,
+          "Skin Cancer, Non-Melanoma": 0.0068,
+          "Endometrial Cancer": 0.0046,
+          "Ovarian Cancer": 0.0045,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Colorectal Cancer": 0.002
+        }
+      },
+      "fusion_partners": [
+        [
+          "ILRUN",
+          2
+        ],
+        [
+          "BCL2L1",
+          1
+        ],
+        [
+          "NHERF2",
+          1
+        ],
+        [
+          "TBL3",
+          1
+        ],
+        [
+          "MLST8",
+          1
+        ],
+        [
+          "PKD1",
+          1
+        ]
+      ]
+    },
+    "U2AF1": {
+      "amplification": {
+        "samples": 13,
+        "frequency": 0.00119,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Ovarian Cancer": 0.0045,
+          "Breast Cancer": 0.0037,
+          "Non-Small Cell Lung Cancer": 0.003,
+          "Glioma": 0.0018
+        }
+      },
+      "deep_deletion": {
+        "samples": 6,
+        "frequency": 0.00055,
+        "by_cancer_type": {
+          "Head and Neck Cancer": 0.0054,
+          "Cancer of Unknown Primary": 0.0054,
+          "Germ Cell Tumor": 0.0035,
+          "Bladder Cancer": 0.0024,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Prostate Cancer": 0.0014
+        }
+      }
+    },
+    "VHL": {
+      "amplification": {
+        "samples": 17,
+        "frequency": 0.00155,
+        "by_cancer_type": {
+          "Bladder Cancer": 0.0095,
+          "Melanoma": 0.0055,
+          "Cancer of Unknown Primary": 0.0054,
+          "Breast Cancer": 0.0037,
+          "Prostate Cancer": 0.0028,
+          "Soft Tissue Sarcoma": 0.0023,
+          "Colorectal Cancer": 0.001
+        }
+      },
+      "deep_deletion": {
+        "samples": 1,
+        "frequency": 9e-05,
+        "by_cancer_type": {
+          "Glioma": 0.0018
+        }
+      }
+    },
+    "WT1": {
+      "amplification": {
+        "samples": 30,
+        "frequency": 0.00274,
+        "by_cancer_type": {
+          "Mesothelioma": 0.0561,
+          "Ovarian Cancer": 0.0134,
+          "Esophagogastric Cancer": 0.0088,
+          "Breast Cancer": 0.0075,
+          "Bladder Cancer": 0.0071,
+          "Cancer of Unknown Primary": 0.0054,
+          "Melanoma": 0.0027,
+          "Glioma": 0.0018,
+          "Non-Small Cell Lung Cancer": 0.0012
+        }
+      },
+      "deep_deletion": {
+        "samples": 4,
+        "frequency": 0.00037,
+        "by_cancer_type": {
+          "Thyroid Cancer": 0.0043,
+          "Breast Cancer": 0.0015,
+          "Prostate Cancer": 0.0014
+        }
+      },
+      "fusion": {
+        "samples": 21,
+        "frequency": 0.00192,
+        "by_cancer_type": {
+          "Soft Tissue Sarcoma": 0.0429,
+          "Ovarian Cancer": 0.0045,
+          "Breast Cancer": 0.0007
+        }
+      },
+      "fusion_partners": [
+        [
+          "EWSR1",
+          19
+        ],
+        [
+          "ELP4",
+          1
+        ],
+        [
+          "WT1-AS",
+          1
+        ]
+      ]
+    }
+  },
+  "evidence": {
+    "kind": "experimental",
+    "source": "cBioPortal msk_impact_2017 (copy number and structural variants), via public REST API"
+  },
+  "note": "Frequencies are over every sample in the study, so a gene amplified in one cancer type reads low overall and high in by_cancer_type. A panel study only calls the genes on its panel: absence here is absence of a call, not absence of the event.",
+  "confidence": 0.8
+}

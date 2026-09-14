@@ -1,11 +1,20 @@
 """cBioPortal client (public REST API, no key, standard library only).
 
-https://www.cbioportal.org/api — studies, cancer types, clinical attributes
-and mutations. Used to distil cancer knowledge (which genes are mutated in
-which cancers, how often, at which residues) into small committed results,
-following the project's stream-distil-discard rule. The MCP server at
-mcp.cbioportal.org needs authentication and an MCP client; the REST API is
-open, reproducible and dependency-free, so GenomeOS uses REST.
+https://www.cbioportal.org/api — studies, cancer types, clinical attributes,
+mutations, copy-number alterations and structural variants. Used to distil
+cancer knowledge (which genes are broken in which cancers, how often, and in
+which way) into small committed results, following the project's
+stream-distil-discard rule. The MCP server at mcp.cbioportal.org needs
+authentication and an MCP client; the REST API is open, reproducible and
+dependency-free, so GenomeOS uses REST.
+
+A gene breaks in three ways that a study records separately, and all three
+belong in the same table: a point mutation, a change in the number of copies
+(a deep deletion removing a tumour suppressor, an amplification multiplying
+an oncogene), and a structural rearrangement (a fusion). Mutation frequency
+alone under-counts the genes that matter: ERBB2 is mutated in a few percent
+of tumours and amplified in far more, and the amplification is the one with
+an approved antibody against it.
 """
 
 from __future__ import annotations
@@ -201,6 +210,229 @@ class CBioPortal:
             pageSize=10_000_000,
         )
 
+    # ---- copy number and structural variants ------------------------------------
+
+    #: Discrete copy-number profiles, most informative first. A discrete profile
+    #: carries GISTIC-style calls (-2 deep deletion .. 2 amplification), which is
+    #: what an event query needs; a continuous log-ratio profile does not, and is
+    #: not used here rather than being thresholded into a call we did not make.
+    CNA_PROFILES: tuple[str, ...] = ("cna", "gistic")
+    SV_PROFILES: tuple[str, ...] = ("structural_variants", "fusion")
+
+    #: GISTIC discrete calls. -1 and 1 are whole-arm-level shallow events present
+    #: in some studies and absent from panel studies such as MSK-IMPACT.
+    GISTIC: dict[int, str] = {  # noqa: RUF012 - a constant lookup, not instance state
+        2: "amplification",
+        1: "gain",
+        -1: "shallow_deletion",
+        -2: "deep_deletion",
+    }
+
+    def profile_of(self, study: str, suffixes: Iterable[str]) -> str | None:
+        """The first of these profile suffixes that the study actually has."""
+        available = {p["molecularProfileId"] for p in self.molecular_profiles(study)}
+        for suffix in suffixes:
+            if f"{study}_{suffix}" in available:
+                return f"{study}_{suffix}"
+        return None
+
+    def discrete_cna(
+        self,
+        profile: str,
+        sample_list: str,
+        entrez_ids: list[int],
+        event_type: str = "HOMDEL_AND_AMP",
+    ) -> list[dict]:
+        """Copy-number *events* for these genes, not one row per gene per sample.
+
+        The molecular-data endpoint returns the diploid majority as well, which
+        is 95% of the payload and none of the information; the discrete endpoint
+        returns only the calls. `event_type` may be HOMDEL_AND_AMP (the default,
+        the two events that are actually actionable) or ALL, which adds the
+        shallow gains and losses where a study calls them.
+        """
+        return self._post(
+            f"/molecular-profiles/{profile}/discrete-copy-number/fetch",
+            {"sampleListId": sample_list, "entrezGeneIds": entrez_ids},
+            discreteCopyNumberEventType=event_type,
+            projection="SUMMARY",
+        )
+
+    def structural_variants(self, profile: str, entrez_ids: list[int]) -> list[dict]:
+        """Structural variants with either breakpoint in one of these genes."""
+        return self._post(
+            "/structural-variant/fetch",
+            {"entrezGeneIds": entrez_ids, "molecularProfileIds": [profile]},
+            projection="SUMMARY",
+        )
+
+    def sample_alterations(
+        self, study: str, sample_id: str, panel: Iterable[str] = DRIVER_PANEL
+    ) -> dict[str, Any]:
+        """One tumour's copy-number events and structural variants, by gene.
+
+        The same reader that distils a cohort answers for a single sample, so a
+        real tumour can be run through the pipeline without a second client.
+        """
+        ids = self.genes(panel)
+        symbols = {v: k for k, v in ids.items()}
+        entrez = list(ids.values())
+        cna_profile = self.profile_of(study, self.CNA_PROFILES)
+        sv_profile = self.profile_of(study, self.SV_PROFILES)
+        events: list[dict[str, Any]] = []
+        if cna_profile:
+            for row in self.discrete_cna(cna_profile, f"{study}_all", entrez, "ALL"):
+                if row.get("sampleId") != sample_id:
+                    continue
+                kind = self.GISTIC.get(int(row["alteration"]))
+                if not kind:
+                    continue
+                events.append(
+                    {
+                        "gene": symbols.get(row["entrezGeneId"], ""),
+                        "kind": kind,
+                        "gistic": int(row["alteration"]),
+                        "source": f"cBioPortal {cna_profile}",
+                    }
+                )
+        fusions: list[dict[str, Any]] = []
+        if sv_profile:
+            for row in self.structural_variants(sv_profile, entrez):
+                if row.get("sampleId") != sample_id:
+                    continue
+                for side, other in (("site1", "site2"), ("site2", "site1")):
+                    gene = row.get(f"{side}HugoSymbol") or ""
+                    if gene not in ids:
+                        continue
+                    fusions.append(
+                        {
+                            "gene": gene,
+                            "kind": "fusion",
+                            "partner": row.get(f"{other}HugoSymbol") or "",
+                            "detail": row.get("variantClass") or "",
+                            "in_frame": row.get("site2EffectOnFrame") or "",
+                            "source": f"cBioPortal {sv_profile}",
+                        }
+                    )
+        return {
+            "study": study,
+            "sample": sample_id,
+            "cna_profile": cna_profile,
+            "sv_profile": sv_profile,
+            "alterations": events + fusions,
+            "panel": list(ids),
+            "evidence": {
+                "kind": "experimental",
+                "source": f"cBioPortal {study} ({sample_id}), via public REST API",
+            },
+            "confidence": 0.85,
+        }
+
+    def distil_alterations(
+        self,
+        study: str,
+        panel: Iterable[str] = DRIVER_PANEL,
+        batch: int = 20,
+        event_type: str = "ALL",
+        progress=None,
+    ) -> dict[str, Any]:
+        """Per gene: how often it is amplified, deep-deleted or rearranged.
+
+        The mutation table's companion. A gene with a 1% mutation frequency and
+        a 20% amplification frequency reads as a passenger in one table and as a
+        driver in the other, so the two are distilled the same way and kept
+        side by side.
+        """
+        cna_profile = self.profile_of(study, self.CNA_PROFILES)
+        sv_profile = self.profile_of(study, self.SV_PROFILES)
+        if cna_profile is None and sv_profile is None:
+            raise ValueError(f"{study} has neither a copy-number nor a structural-variant profile")
+        types = self.sample_attribute(study, "CANCER_TYPE")
+        n_by_type: dict[str, int] = {}
+        for t in types.values():
+            n_by_type[t] = n_by_type.get(t, 0) + 1
+        ids = self.genes(panel)
+        symbols = {v: k for k, v in ids.items()}
+        entrez = list(ids.values())
+        per_gene: dict[str, dict[str, Any]] = {}
+
+        def bucket(sym: str) -> dict[str, Any]:
+            return per_gene.setdefault(
+                sym,
+                {
+                    "by_kind": {},  # kind -> set of sampleId
+                    "by_kind_type": {},  # kind -> cancer type -> set of sampleId
+                    "partners": {},  # partner symbol -> count
+                },
+            )
+
+        def record(sym: str, kind: str, sample: str) -> None:
+            g = bucket(sym)
+            g["by_kind"].setdefault(kind, set()).add(sample)
+            ct = types.get(sample, "Unknown")
+            g["by_kind_type"].setdefault(kind, {}).setdefault(ct, set()).add(sample)
+
+        if cna_profile:
+            for i in range(0, len(entrez), batch):
+                chunk = entrez[i : i + batch]
+                for row in self.discrete_cna(cna_profile, f"{study}_all", chunk, event_type):
+                    kind = self.GISTIC.get(int(row["alteration"]))
+                    sym = symbols.get(row["entrezGeneId"])
+                    if kind and sym:
+                        record(sym, kind, row["sampleId"])
+                if progress:
+                    progress(min(i + batch, len(entrez)), len(entrez))
+                time.sleep(self.sleep)
+        if sv_profile:
+            for i in range(0, len(entrez), batch):
+                chunk = entrez[i : i + batch]
+                for row in self.structural_variants(sv_profile, chunk):
+                    sample = row.get("sampleId") or ""
+                    for side, other in (("site1", "site2"), ("site2", "site1")):
+                        sym = row.get(f"{side}HugoSymbol") or ""
+                        if sym not in ids:
+                            continue
+                        record(sym, "fusion", sample)
+                        partner = row.get(f"{other}HugoSymbol") or "(intergenic)"
+                        if partner != sym:
+                            g = bucket(sym)
+                            g["partners"][partner] = g["partners"].get(partner, 0) + 1
+                time.sleep(self.sleep)
+
+        n = len(types)
+        out_genes: dict[str, Any] = {}
+        for sym, g in sorted(per_gene.items()):
+            entry: dict[str, Any] = {}
+            for kind, samples in sorted(g["by_kind"].items()):
+                entry[kind] = {
+                    "samples": len(samples),
+                    "frequency": round(len(samples) / n, 5),
+                    "by_cancer_type": _top_types(g["by_kind_type"].get(kind, {}), n_by_type),
+                }
+            if g["partners"]:
+                entry["fusion_partners"] = sorted(g["partners"].items(), key=lambda kv: -kv[1])[:8]
+            out_genes[sym] = entry
+        return {
+            "study": study,
+            "samples": n,
+            "cna_profile": cna_profile,
+            "sv_profile": sv_profile,
+            "cna_event_type": event_type if cna_profile else None,
+            "cancer_types": {k: v for k, v in sorted(n_by_type.items(), key=lambda kv: -kv[1])},
+            "panel": list(ids),
+            "genes": out_genes,
+            "evidence": {
+                "kind": "experimental",
+                "source": f"cBioPortal {study} (copy number and structural variants), via public REST API",
+            },
+            "note": (
+                "Frequencies are over every sample in the study, so a gene amplified in one cancer type "
+                "reads low overall and high in by_cancer_type. A panel study only calls the genes on its "
+                "panel: absence here is absence of a call, not absence of the event."
+            ),
+            "confidence": 0.8,
+        }
+
     # ---- expression -----------------------------------------------------------
 
     #: Expression profiles, most informative first. The reference-normal z-score
@@ -341,6 +573,23 @@ class CBioPortal:
             },
             "confidence": 0.8,
         }
+
+
+def _top_types(
+    by_type: dict[str, set], n_by_type: dict[str, int], minimum: int = 20, top: int = 12
+) -> dict[str, float]:
+    """Per-cancer-type frequency, kept to the types where it means anything.
+
+    A type with fewer than `minimum` samples in the study gives a frequency
+    with no precision, and carrying every one of 58 types per gene per event
+    kind would make the committed table large for no gain, so the strongest
+    `top` are kept.
+    """
+    rows = [
+        (ct, round(len(s) / n_by_type[ct], 4)) for ct, s in by_type.items() if n_by_type.get(ct, 0) >= minimum
+    ]
+    rows.sort(key=lambda kv: -kv[1])
+    return dict(rows[:top])
 
 
 def summarise(values: list[float], kind: str, raised: float = 2.0) -> dict[str, Any]:
