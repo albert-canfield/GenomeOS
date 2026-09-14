@@ -1777,9 +1777,17 @@ in order. "Owner" is the session that holds the files today (see §7).
   gene level ran once (above) and returns after step 1. 6. Simpler genomes as
   the comparison, C. elegans first, then Drosophila enhancers, fugu as the
   compact vertebrate, mouse for transfer. 7. The human panel's next step
-  (genomeos-h1): the regional stage is fixed and chr22 replicates (above); next either the executor test on the 1,053
-  early-replicating storage units with an eQTL or an MPRA allele pair (allele-dependent
-  read-out, which needs GTEx by allele or in-silico swaps and so waits on quota), or the
+  (genomeos-h1): the regional stage is fixed and chr22 replicates (above); the executor test is done
+  (2026-09-14, genomeos-x1 after genomeos-h1): swapping a stored value that fine-mapping
+  calls causal moves the model's read-out of the measured gene in the measured direction
+  0.679 of the time, against 0.411 at matched units storing a value nobody has measured
+  (+0.268, p 0.0021); a value that is only linked to a cause moves it +0.062, and the
+  pre-registered hold-out gap of +0.206 (one-sided lower bound +0.058) says the agreement
+  follows causality rather than the neighbourhood, which is the reading the pre-registration
+  named as the one that would have mattered more. Weak points stated: E3's own difference is
+  small and positive rather than zero, everything rests on one model whose ENCODE training is
+  kin to GTEx, and E1, the MPRA endpoint that would answer that objection, has 20 allele pairs
+  on chr21 and chr22 and needs more chromosomes. Next: E1 widened as chromosomes land, and the
   882 non-copy constrained-unknown blocks and their flanks read across the panel on the
   chromosomes that carry them. A repeat-aware reading of long VNTRs is the instrument's
   one known failure.
