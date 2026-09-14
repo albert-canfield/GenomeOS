@@ -482,11 +482,49 @@ class Decision:
     after: float | None = None  # minutes
     fraction: float = 1.0
     priority: int = 0  # among matching decisions of one action the highest wins; ties: first in module order
+    competence: str = ""  # differentiate: the window this fate change needs open (v0.4 §7.2a)
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
 
     def applies(self, context: dict[str, str]) -> bool:
         return matches(self.when, context)
+
+
+@dataclass(slots=True)
+class Competence:
+    """A window during which the fate changes it governs may be taken (BioLang v0.4 §7.2a).
+
+    A `differentiate` decision names the window it needs (`competence: early_muscle`); outside the
+    window that decision is refused and counted as *outside competence*, which is a different answer
+    from UNKNOWN: the program said no rather than saying nothing. The window closes at a time or a
+    generation, and `closed_by` names the machinery that closes it, so removing that machinery keeps
+    the window open — the third arm of the perturbation series (Yuzyuk et al. 2009)."""
+
+    name: str
+    when: dict[str, str] = field(default_factory=dict)  # cells the window governs (empty = every cell)
+    allows: list[str] = field(default_factory=list)  # the fates it permits; the decisions it governs agree
+    closes_at: float | None = None  # minutes
+    closes_generation: int | None = None
+    closes_on_commitment: bool = False
+    closed_by: str = ""  # factor whose presence in the cell is needed for the window to close
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+@dataclass(slots=True)
+class Commitment:
+    """An irreversible fate: once `establish` matches, the cell is committed to its programme and a
+    later fate change is refused and counted (BioLang v0.4 §7.2a). `inherit` makes the state pass to
+    the daughters, so it is mechanism rather than bookkeeping."""
+
+    name: str
+    programme: str = ""  # what the cell commits to; empty = the cell_type it holds when it commits
+    establish: dict[str, str] = field(default_factory=dict)  # a when clause on the cell's context
+    locks: str = "cell_type"
+    inherit: bool = False  # `inherit: daughters`
+    release: str = "never"
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
 
 
 @dataclass(slots=True)
@@ -577,6 +615,8 @@ class Module:
     experiments: list[Experiment] = field(default_factory=list)
     fields: list[Field] = field(default_factory=list)
     designs: list[Design] = field(default_factory=list)
+    competences: list[Competence] = field(default_factory=list)
+    commitments: list[Commitment] = field(default_factory=list)
     organism: Organism | None = None
     regime: Regime | None = None
 
@@ -629,6 +669,8 @@ class Module:
         self.experiments.extend(other.experiments)
         self.fields.extend(other.fields)
         self.designs.extend(other.designs)
+        self.competences.extend(other.competences)
+        self.commitments.extend(other.commitments)
         if self.organism is None:
             self.organism = other.organism
         if self.regime is None:
@@ -702,6 +744,8 @@ class Module:
             "experiments": [conv(x) for x in self.experiments],
             "fields": [conv(f) for f in self.fields],
             "designs": [conv(d) for d in self.designs],
+            "competences": [conv(c) for c in self.competences],
+            "commitments": [conv(c) for c in self.commitments],
             "organism": conv(self.organism) if self.organism else None,
             "regime": conv(self.regime) if self.regime else None,
         }
@@ -778,6 +822,8 @@ class Module:
             ("experiments", Experiment, m.experiments),
             ("fields", Field, m.fields),
             ("designs", Design, m.designs),
+            ("competences", Competence, m.competences),
+            ("commitments", Commitment, m.commitments),
         ):
             for d in data.get(key, []):
                 d.pop("__type__", None)
@@ -807,7 +853,9 @@ __all__ = [
     "UNKNOWN",
     "Action",
     "CellType",
+    "Commitment",
     "Compartment",
+    "Competence",
     "Confidence",
     "Decision",
     "Design",

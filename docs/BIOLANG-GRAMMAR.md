@@ -215,6 +215,7 @@ May contain `transcript` blocks.
 | `after` | `time` | delay from birth (cells) or from now (populations); recurring for flows |
 | `fraction` | `number` | populations: share (divide may exceed 1) |
 | `priority` | `integer` | highest wins among matching decisions of one action; ties: first in module order |
+| `competence` | `Id` | differentiate: the window this fate change needs open |
 
 ### `experiment`
 
@@ -223,7 +224,7 @@ May contain `transcript` blocks.
 | property | form | meaning |
 |---|---|---|
 | `knockout` | `F, F` | factors never present; signals by id, ligand or receptor never sent |
-| `add` | `F, F` | factors added to the first cell |
+| `add` | `F[, F] [at T]` | factors added to the first cell, or forced at a stated time |
 | `environment` | `k = v, ...` | overrides |
 | `until` | `time` | horizon; omitted = the last stage |
 | `expect` | `"text"` | the published phenotype |
@@ -252,6 +253,29 @@ May contain `transcript` blocks.
 | `until` | `time` |  |
 | `target` | `assert grammar` | repeatable; loss = distance from holding |
 | `keep` | `assert grammar` | repeatable; must hold |
+
+### `competence`
+
+`competence <Id> { ... }`
+
+| property | form | meaning |
+|---|---|---|
+| `allows` | `T, T` | required; the fates the window permits |
+| `closes` | `at T | after generation N | on commitment` | required; a window always closes |
+| `closed_by` | `F` | factor whose presence is needed to close it |
+| `when` | `k = v, ...` | the cells the window governs; omitted = every cell |
+
+### `commitment`
+
+`commitment <Id> { ... }`
+
+| property | form | meaning |
+|---|---|---|
+| `establish` | `k = v, ...` | required; when the cell is committed |
+| `programme` | `T` | what it commits to; omitted = the cell_type it holds then |
+| `locks` | `cell_type` | what can no longer change |
+| `inherit` | `daughters | no` | the lock passes to the daughters |
+| `release` | `never` | only never is implemented |
 
 ### `compartment`
 
@@ -319,8 +343,8 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`
 - **Timer**: `name`, `duration`, `unit`, `sd`, `lengthening`, `when`, `evidence`, `confidence`
 - **Stage**: `name`, `start`, `end`, `unit`, `evidence`, `confidence`
-- **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `priority`, `evidence`, `confidence`
+- **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `priority`, `competence`, `evidence`, `confidence`
 - **Experiment**: `name`, `knockouts`, `adds`, `add_at`, `environment`, `until`, `asserts`, `expect`, `evidence`, `confidence`
 - **Design**: `name`, `knockout_any_of`, `add_any_of`, `at_most`, `vary`, `until`, `targets`, `keeps`, `evidence`, `confidence`
 - **Organism**: `name`, `species`, `genome`, `tempo`, `resolution`, `seed`, `width`, `height`, `origin`, `sense`, `root`, `cell_type`, `factors`, `environment`, `observe`, `asserts`, `reference`, `contacts`, `cell_network`, `replicates`, `placement`, `evidence`, `confidence`
-- **Module**: `name`, `entities`, `rules`, `parameters`, `imports`, `events`, `timers`, `stages`, `decisions`, `experiments`, `fields`, `designs`, `organism`, `regime`
+- **Module**: `name`, `entities`, `rules`, `parameters`, `imports`, `events`, `timers`, `stages`, `decisions`, `experiments`, `fields`, `designs`, `competences`, `commitments`, `organism`, `regime`

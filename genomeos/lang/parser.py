@@ -21,6 +21,8 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     field <Id> { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0 }
     experiment <Id> { knockout: POP-1; add: HLH-1 at 350 min; until: 800 min; expect: "..."; assert: ... }
     design <Id> { knockout_any_of: A, B; at_most: 1; until: 3 yr; target: type X at 3 yr = 0; keep: ... }
+    competence <Id> { allows: Muscle; closes: at 180 min; closed_by: MES-2; when: ... }
+    commitment <Id> { establish: cell_type = Muscle; locks: cell_type; inherit: daughters; release: never }
 
 Properties are `key: value`, one per line or `;`-separated; a block may sit on
 one line. Blocks may nest (transcript inside gene). `#` starts a comment.
@@ -45,7 +47,9 @@ from genomeos.ir import (
     UNKNOWN,
     Action,
     CellType,
+    Commitment,
     Compartment,
+    Competence,
     Decision,
     Design,
     Domain,
@@ -93,6 +97,8 @@ _KINDS = (
     "experiment",
     "field",
     "design",
+    "competence",
+    "commitment",
     "compartment",
     "transport",
     "regime",
@@ -557,6 +563,68 @@ def _compile_block(b: Block, module: Module) -> None:
         ex.asserts = [x.strip() for x in p.get("assert", "").split(" ; ") if x.strip()]
         ex.expect = p.get("expect", "")
         module.experiments.append(ex)
+    elif b.kind == "competence":
+        cm = Competence(name=b.header, evidence=ev, confidence=conf)
+        if "when" in p:
+            cm.when = _parse_when(p["when"])
+        cm.allows = _list(p.get("allows", ""))
+        if not cm.allows:
+            raise BioLangError(f"line {b.line}: competence {b.header!r} needs 'allows: <fate>, ...'")
+        closes = p.get("closes", "").strip()
+        if not closes:
+            raise BioLangError(
+                f"line {b.line}: competence {b.header!r} needs 'closes: at T | after generation N | "
+                "on commitment' — a window that never closes is not a window"
+            )
+        if closes.startswith("at "):
+            val, unit = _quantity(closes[3:], "closes", b.line)
+            cm.closes_at = to_minutes(val, unit)
+        elif closes.startswith("after generation "):
+            cm.closes_generation = int(_float(closes[17:], "closes", b.line))
+        elif closes == "on commitment":
+            cm.closes_on_commitment = True
+        else:
+            raise BioLangError(
+                f"line {b.line}: closes must be 'at T', 'after generation N' or 'on commitment', "
+                f"got {closes!r}"
+            )
+        cm.closed_by = p.get("closed_by", "")
+        module.competences.append(cm)
+    elif b.kind == "commitment":
+        ct = Commitment(name=b.header, evidence=ev, confidence=conf)
+        ct.programme = p.get("programme", "")
+        ct.establish = _parse_when(p.get("establish", ""))
+        if not ct.establish:
+            raise BioLangError(
+                f"line {b.line}: commitment {b.header!r} needs 'establish: <when clause>' saying when "
+                "the cell is committed"
+            )
+        for key in ct.establish:
+            if "." in key:  # ELT-2.exposure(lineage) >= 0.8
+                raise BioLangError(
+                    f"line {b.line}: the integrated read {key!r} is specified in BIOLANG-v0.4-ECONOMY.md "
+                    "§7.2a but not implemented; establish reads the cell's context"
+                )
+        ct.locks = p.get("locks", "cell_type")
+        if ct.locks != "cell_type":
+            raise BioLangError(f"line {b.line}: commitment locks cell_type; got {ct.locks!r}")
+        inherit = p.get("inherit", "no")
+        if inherit not in ("daughters", "no"):
+            raise BioLangError(f"line {b.line}: inherit must be daughters or no, got {inherit!r}")
+        ct.inherit = inherit == "daughters"
+        ct.release = p.get("release", "never")
+        if ct.release != "never":
+            raise BioLangError(
+                f"line {b.line}: only 'release: never' is implemented; {ct.release!r} is specified in "
+                "BIOLANG-v0.4-ECONOMY.md §7.2a and has no gate"
+            )
+        for unimplemented in ("maintain", "excludes", "hysteresis"):
+            if unimplemented in p:
+                raise BioLangError(
+                    f"line {b.line}: {unimplemented!r} is specified in BIOLANG-v0.4-ECONOMY.md §7.2a but "
+                    "not implemented; a clause the runtime ignores would be a silent no-op"
+                )
+        module.commitments.append(ct)
     elif b.kind == "stage":
         st = Stage(name=b.header, evidence=ev, confidence=conf)
         if "from" in p:
@@ -613,6 +681,9 @@ def _compile_block(b: Block, module: Module) -> None:
                 )
         if "priority" in p:
             dc.priority = int(_float(p["priority"], "priority", b.line))
+        dc.competence = p.get("competence", "")
+        if dc.competence and action != "differentiate":
+            raise BioLangError(f"line {b.line}: only a differentiate decision needs a competence window")
         if action == "divide" and len(dc.daughters) not in (0, 2):
             raise BioLangError(f"line {b.line}: a division names two daughters or none")
         if action == "differentiate" and not dc.to:
@@ -689,6 +760,30 @@ def _check_references(module: Module) -> None:
             raise BioLangError(f"decision {d.id!r} differentiates to undeclared cell_type {d.to!r}")
         if d.timer and d.timer not in timers:
             raise BioLangError(f"decision {d.id!r} waits on undeclared timer {d.timer!r}")
+    windows = {c.name: c for c in module.competences}
+    for d in module.decisions:
+        if not d.competence:
+            continue
+        window = windows.get(d.competence)
+        if window is None:
+            raise BioLangError(f"decision {d.id!r} needs undeclared competence {d.competence!r}")
+        if d.to not in window.allows:
+            raise BioLangError(
+                f"decision {d.id!r} differentiates to {d.to!r}, which competence {window.name!r} does "
+                f"not allow ({', '.join(window.allows)})"
+            )
+    for cm in module.competences:
+        for fate in cm.allows:
+            if fate not in cell_types:
+                raise BioLangError(f"competence {cm.name!r} allows undeclared cell_type {fate!r}")
+        if not any(d.competence == cm.name for d in module.decisions):
+            raise BioLangError(
+                f"competence {cm.name!r} governs no decision: a window that gates nothing would be a "
+                "claim the runtime never checks"
+            )
+    for ct in module.commitments:
+        if ct.programme and ct.programme not in cell_types:
+            raise BioLangError(f"commitment {ct.name!r} commits to undeclared cell_type {ct.programme!r}")
     fields = {f.name for f in module.fields}
     for sg in module.signals():
         if sg.field_name and sg.field_name not in fields:

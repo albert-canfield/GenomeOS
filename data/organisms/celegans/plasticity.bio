@@ -1,0 +1,109 @@
+# The published perturbation series that decides whether `commitment` and `competence` are real
+# (BIOLANG-v0.4-ECONOMY.md §7.2a, §10 decision 9), written as a program so `bio test` runs it.
+#
+#   Fukushige & Krause 2005, Development 132:1795: ectopic HLH-1 (CeMyoD) converts almost every cell
+#   to muscle, whatever its lineage, when it is supplied within the first 3 hours of development; the
+#   response declines rapidly afterwards and is lost completely in terminally differentiated cells.
+#   Yuzyuk, Fakhouri, Kiefer & Mango 2009, Dev Cell 16:699: the Polycomb protein MES-2/E(z) is what
+#   ends that plasticity; mes-2 mutants keep responding to heterologous regulators late.
+#
+# Written as mechanism, that is one rule and two claims: HLH-1 is sufficient for a muscle fate
+# (the rule); it is sufficient only while a window is open (the `competence`); and it is never
+# sufficient in a cell that has already differentiated (the `commitment`). The four experiments are
+# the four published outcomes, and each is an assert, so the claims are falsifiable by running them.
+#
+# The transgene is its own factor, hsHLH-1, exactly as the published heat-shock construct is its own
+# copy of the gene: the wild type carries none of it, so the worm's own development is untouched, and
+# every arm below differs from the wild type only in when hsHLH-1 arrives and whether MES-2 is there.
+# MES-2 is added rather than derived because this program does not model its supply; the mutant arms
+# knock it out on top, which is what mes-2(bn11) does.
+#
+# Added by area A (the engine) beside area E's worm programs; their files are unchanged.
+# Run: genomeos grow data/organisms/celegans/plasticity.bio --experiments
+module organism.celegans.plasticity
+# test: cells >= 2150
+# test: deaths == 131
+import embryo_factors.bio
+
+competence early_plasticity {
+  allows: Muscle
+  closes: at 180 min
+  closed_by: MES-2
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (the window spans the first 3 hours of development); Yuzyuk et al. 2009, Dev Cell 16:699 (mes-2/E(z) closes it, and mes-2 mutants stay plastic)"
+  confidence: 0.6
+}
+
+commitment differentiated {
+  establish: cell_type = Coelomocyte|Epithelium|Excretory|Gland|GliaSheath|GliaSocket|Hypodermis|Intestine|Muscle|Neuron|PharyngealMarginal|Rectal|TailSpike|Valve
+  locks: cell_type
+  inherit: daughters
+  release: never
+  evidence: experimental "Fukushige & Krause 2005 (the myogenic response is lost completely in terminally differentiated cells, and mes-2 does not restore it)"
+  confidence: 0.6
+}
+
+decision ectopic_muscle {
+  action: differentiate
+  when: hsHLH-1 = present
+  to: Muscle
+  priority: 30
+  competence: early_plasticity
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (ectopic HLH-1 converts almost all cells to a muscle-like fate, regardless of their lineage of origin)"
+  confidence: 0.8
+}
+
+experiment hlh1_early {
+  add: MES-2, hsHLH-1 at 60 min
+  until: 800 min
+  expect: "HLH-1 supplied inside the window converts almost every cell to muscle, whatever its lineage (Fukushige & Krause 2005)"
+  assert: type Muscle at 800 min >= 550
+  assert: type Neuron at 800 min = 0
+  assert: type Intestine at 800 min = 0
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795"
+  confidence: 0.8
+}
+
+experiment hlh1_late {
+  add: MES-2, hsHLH-1 at 350 min
+  until: 800 min
+  expect: "the same factor supplied after the window does nothing: the embryo keeps its own fates (Fukushige & Krause 2005)"
+  assert: type Muscle at 800 min in 110..130
+  assert: type Neuron at 800 min >= 200
+  assert: type Intestine at 800 min >= 30
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795"
+  confidence: 0.8
+}
+
+experiment hlh1_late_mes2 {
+  knockout: MES-2
+  add: MES-2, hsHLH-1 at 350 min
+  until: 800 min
+  expect: "without MES-2 the window never closes, so the late factor converts cells again (Yuzyuk et al. 2009)"
+  assert: type Muscle at 800 min >= 400
+  assert: type Neuron at 800 min <= 60
+  evidence: experimental "Yuzyuk et al. 2009, Dev Cell 16:699"
+  confidence: 0.7
+}
+
+experiment hlh1_late_pha4 {
+  knockout: PHA-4
+  add: MES-2, hsHLH-1 at 350 min
+  until: 800 min
+  expect: "the control that makes the third arm mean something: losing a developmental regulator that is not the closing machinery does not prolong plasticity, so the late factor still does nothing (Yuzyuk et al. 2009)"
+  assert: type Muscle at 800 min in 110..130
+  assert: type Neuron at 800 min >= 200
+  evidence: experimental "Yuzyuk et al. 2009, Dev Cell 16:699 (loss of pha-4/FoxA or end-1/GATA does not prolong plasticity)"
+  confidence: 0.7
+}
+
+experiment hlh1_terminal_mes2 {
+  knockout: MES-2
+  add: MES-2, hsHLH-1 at 700 min
+  until: 800 min
+  expect: "cells that have already differentiated do not respond even with the window held open, so plasticity and commitment are two different claims (Fukushige & Krause 2005; Yuzyuk et al. 2009). Each bound below is the number of cells of that type already differentiated at 700 min, when the factor arrives: none of them may be lost"
+  assert: type Neuron at 800 min >= 233
+  assert: type Intestine at 800 min >= 26
+  assert: type Hypodermis at 800 min >= 99
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (lost completely in terminally differentiated cells)"
+  confidence: 0.6
+}

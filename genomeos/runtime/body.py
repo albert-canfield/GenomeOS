@@ -59,6 +59,8 @@ class Cell:
     y: int | None = None
     move_at: float | None = None  # next step of a recurring migration
     divide_seq: int = -1  # event token of the pending division: a rescheduled division runs exactly once
+    committed: str = ""  # the programme this cell is committed to, once a `commitment` established (§7.2a)
+    refused: set[str] = field(default_factory=set)  # fate decisions refused for this cell, counted once
     measured: set[str] = field(default_factory=set)  # factors set by express decisions (the reader)
     stated: set[str] = field(default_factory=set)  # factors stated by mechanism: maternal load, asymmetry
     levels: dict[str, float] = field(default_factory=dict)  # v0.4: this cell's own network state
@@ -127,6 +129,11 @@ class Body:
         self.unknown: Counter[str] = Counter()
         self.ambiguous: Counter[str] = Counter()  # decision points where equal-precedence fates disagreed
         self.revised: Counter[str] = Counter()  # terminal fates changed again at a later decision point
+        # fate changes the program refused rather than applied (v0.4 §7.2a), by decision id
+        self.outside_competence: Counter[str] = Counter()
+        self.refused_committed: Counter[str] = Counter()
+        self.windows = {c.name: c for c in module.competences}
+        self.committed_cells: Counter[str] = Counter()  # cells committed, by programme
         self.timers_used: Counter[str] = Counter()
         self._queue: list[tuple[float, int, str, str]] = []
         self._seq = 0
@@ -288,6 +295,12 @@ class Body:
                 continue
             if before is not None and d.applies(before):
                 continue
+            if d.competence and not self._competent(c, d, ctx):
+                self._refuse(c, d, self.outside_competence)  # the program said no, which is not UNKNOWN
+                continue
+            if c.committed and d.to != c.committed:
+                self._refuse(c, d, self.refused_committed)
+                continue
             if chosen is None:
                 chosen = d
                 continue
@@ -296,6 +309,39 @@ class Body:
                 self.ambiguous[chosen.id] += 1  # a population's shares are meant to split, not compete
             break
         return chosen
+
+    def _refuse(self, c: Cell, d: Decision, counter: Counter[str]) -> None:
+        """A fate the program refused, counted once per cell and decision so a cell that decides again
+        is not counted again. Never silently applied and never silently dropped (v0.4 §7.2a)."""
+        if d.id not in c.refused:
+            c.refused.add(d.id)
+            counter[d.id] += 1
+
+    def _competent(self, c: Cell, d: Decision, ctx: dict[str, str]) -> bool:
+        """Is the window this fate change needs still open for this cell? A window governs the cells its
+        `when` matches; it closes at a time, after a generation or on commitment, and `closed_by` names
+        the machinery that closes it, so a cell without that machinery stays competent."""
+        w = self.windows.get(d.competence)
+        if w is None or (w.when and not matches(w.when, ctx)):
+            return True
+        if w.closed_by and ctx.get(w.closed_by) != "present":
+            return True  # the closing machinery is not there, so the window does not close
+        if w.closes_at is not None and self.time >= w.closes_at:
+            return False
+        if w.closes_generation is not None and c.generation > w.closes_generation:
+            return False
+        return not (w.closes_on_commitment and c.committed)
+
+    def _commit(self, c: Cell, ctx: dict[str, str]) -> None:
+        """A cell whose `establish` clause matches is committed to its programme; from then on a fate
+        outside it is refused. The state is inherited by the daughters when `inherit: daughters`."""
+        if c.committed:
+            return
+        for ct in self.module.commitments:
+            if matches(ct.establish, ctx):
+                c.committed = ct.programme or c.cell_type
+                self.committed_cells[c.committed] += 1
+                return
 
     def _timer_for(self, c: Cell, d: Decision, ctx: dict[str, str]) -> Timer | None:
         if d.timer:
@@ -349,6 +395,8 @@ class Body:
             c.fired.append(d.id)
             self.fired[d.id] += 1
             ctx = self.context(c)
+        if self.module.commitments:
+            self._commit(c, ctx)
         d = self._first(c, "quiesce", ctx)
         c.quiescent = d is not None  # re-evaluated at every decision point
         if d is not None and d.id not in c.fired:
@@ -691,6 +739,8 @@ class Body:
                 name, lineage, generation, self.time, c.cell_type, factors, parent=c.name, count=c.count
             )
             child.population = c.population
+            if c.committed and any(ct.inherit for ct in self.module.commitments):
+                child.committed = c.committed  # `inherit: daughters`: the lock is mechanism, not bookkeeping
             child.measured = {f for f in c.measured if f in factors}
             child.stated = {f for f in stated if f in factors}
             if sites[i] is not None:
@@ -1013,6 +1063,9 @@ class Body:
             "ambiguous_fates": sum(self.ambiguous.values()),
             "revised_fates": sum(self.revised.values()),
             "forced": {f: self.forced_cells[f] for f in sorted(self.forced)},
+            "outside_competence": sum(self.outside_competence.values()),
+            "refused_committed": sum(self.refused_committed.values()),
+            "committed": dict(sorted(self.committed_cells.items())),
         }
 
 

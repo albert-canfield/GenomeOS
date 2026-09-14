@@ -189,17 +189,37 @@ BLOCKS: dict[str, dict] = {
                 "integer",
                 "highest wins among matching decisions of one action; ties: first in module order",
             ),
+            "competence": ("Id", "differentiate: the window this fate change needs open"),
         },
     },
     "experiment": {
         "header": "experiment <Id> { ... }",
         "props": {
             "knockout": ("F, F", "factors never present; signals by id, ligand or receptor never sent"),
-            "add": ("F, F", "factors added to the first cell"),
+            "add": ("F[, F] [at T]", "factors added to the first cell, or forced at a stated time"),
             "environment": ("k = v, ...", "overrides"),
             "until": ("time", "horizon; omitted = the last stage"),
             "expect": ('"text"', "the published phenotype"),
             "assert": ("assert grammar", "repeatable; checked on the mutant"),
+        },
+    },
+    "competence": {
+        "header": "competence <Id> { ... }",
+        "props": {
+            "allows": ("T, T", "required; the fates the window permits"),
+            "closes": ("at T | after generation N | on commitment", "required; a window always closes"),
+            "closed_by": ("F", "factor whose presence is needed to close it"),
+            "when": ("k = v, ...", "the cells the window governs; omitted = every cell"),
+        },
+    },
+    "commitment": {
+        "header": "commitment <Id> { ... }",
+        "props": {
+            "establish": ("k = v, ...", "required; when the cell is committed"),
+            "programme": ("T", "what it commits to; omitted = the cell_type it holds then"),
+            "locks": ("cell_type", "what can no longer change"),
+            "inherit": ("daughters | no", "the lock passes to the daughters"),
+            "release": ("never", "only never is implemented"),
         },
     },
     "design": {
