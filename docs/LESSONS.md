@@ -169,6 +169,27 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   the time against 21.1% outside. Significance alone is depth-dependent (1%
   of FOXE1's bases, 77% of IRF4's), so report an effect-size definition
   beside it.
+- Held across mammals and invariant among people does not sort genome units
+  into syntax and value slots, even at base resolution (2026-09-14,
+  `lexicon_axes_chr21`, `lexicon_axes_chr22`).
+  - Per-base phyloP sees JASPAR 0.95 sites beyond their letters in every
+    context: sites beat column-permuted decoys of the same letters in 549 of
+    743 and 571 of 749 factors.
+  - Per-base diversity in 89 HPRC assemblies sees at most a 2 to 3%
+    depletion.
+  - Among sites held across mammals, the share also depleted among people is
+    the same for motifs and decoys (9.0% against 9.2%, 4.5% against 7.9%).
+  - The panel resolves coding constraint (CDS at 0.46 to 0.49 of expected)
+    and not motif constraint.
+  - Every motif claim needs a decoy with the same letters, because AT-rich
+    homeobox sites looked like syntax until their decoys did too.
+  - A value slot cannot be told from a mutation-rate hotspot with diversity
+    alone: the dELS class replicates as "more conserved than its flanks, more
+    variable among people", and open chromatin's mutation rate reads the
+    same.
+  - The fossil tier failed a fourth time. Matched on replication timing, its
+    copies are as variable as the same subfamily's intronic copies (0.994 and
+    1.086), and the unmatched excess was timing.
 
 ## The reference is one haplotype
 

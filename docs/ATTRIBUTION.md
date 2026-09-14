@@ -741,6 +741,159 @@ at the top 2,000 per chromosome. JASPAR sites that are a sample of selected elem
 Poisson tails that remain optimistic wherever occurrences cluster, which is why the library
 link carries its random-gene-set calibration.
 
+## The lexicon at base resolution: Question 2 re-asked, chr21 and chr22 (2026-09-14)
+
+The first lexicon named why its negatives might be soft. The sharper instrument is
+`attribution/lexicon_axes.py`, run by `scripts/lexicon_axes.py chr21 chr22` with no model
+call. It writes `lexicon_axes_chr21` and `lexicon_axes_chr22`. The byte tracks and the full
+unit rows go under `data/knowledge/lexicon`. Each soft axis was replaced.
+
+- **Mammals.** Zoonomia phyloP over 241 mammals, every base.
+  - The track is streamed once through `attribution/bigwig.py`, the reader the budget uses:
+    97 and 95 MB in coalesced ranges, 4 minutes per chromosome. It is kept as one signed byte
+    per base, with 2.27 exactly on a bin edge (23 MB gzipped).
+  - 80% and 72% of bases are measured, and 2.4% and 3.7% of the measured bases are
+    constrained.
+- **People.** Which measure to trust was part of the question.
+  - genomeos-h1 showed that Gnocchi and the 89-assembly panel disagree (-0.08 per kilobase)
+    and that per-kilobase panel counts are 15.6 times overdispersed.
+  - A unit a few bases long can only be read by a per-base measure. The axis is therefore
+    the panel's recurring substitutions: a column where at least two assemblies carry
+    something other than the commonest state and one of them is a base. Only bases inside
+    blocks with at least 80 of 89 assemblies present count (34 million informative bases
+    per chromosome, 0.57% and 0.60% variable). These are read from h1's stores through
+    h1's `Panel`.
+  - The expectation is the base's strand-collapsed trinucleotide by context by GC bin, so
+    CpG mutability is inside it, and again with the base's phyloP bin added.
+  - The overdispersion is met where it arises. Every test's variance is built from the
+    unit's own occurrences (a sandwich estimate, floored at Poisson). Every family is also
+    read on the same units shifted as one piece around the chromosome.
+  - Gnocchi is joined per base for comparison only.
+- **Motifs.** Every JASPAR 2026 CORE vertebrate profile was scanned over the whole
+  chromosome at 0.95, both strands.
+  - The scan is indexed: one sort of the 8-mers, then feasible cores as ranges. It checks
+    identical to `motifs.all_hits` and takes 20 s.
+  - It gives 13.5 and 11.6 million merged sites in 895 and 894 distinct site sets, 21
+    names being aliases of another's sites.
+  - Every profile's columns were also permuted and scanned the same way. A decoy keeps its
+    motif's letters and information and loses its order, so an effect a decoy shares
+    belongs to the letters.
+
+**The tests.** A row is a unit in one context with at least 20 occurrences. Units are 1,125
+curated units (the first lexicon's, minus its 0.85 sites), about 890 motif site sets, about
+880 decoy sets and 2,000 seeds. That gives 10,831 and 10,587 real rows.
+
+1. Mammals against the same context in the same GC by repeat stratum: 9,268 and 9,427
+   tests, 1,152 and 1,267 passing.
+2. People against trinucleotide by context by GC: 5,445 and 6,597 tests, 343 and 267
+   passing.
+3. People against that expectation with phyloP added: 5,445 and 6,597 tests, 421 and 529
+   passing.
+4. Each axis against the occurrences' own flanks (as long as the occurrence, 10 bases
+   away):
+   - mammals: 7,490 and 7,771 tests, 649 and 555 passing;
+   - people: 5,567 and 6,370 tests, 263 and 302 passing.
+
+The shifted copies read with the real thresholds pass mammals 94 and 160 times and people
+52 and 34 times, but the flank tests only 67 and 109 times (mammals) and 35 and 37 (people).
+The flank tests are the ones to read.
+
+**Motif against its own decoy.** Each factor is compared with its decoy in the same context,
+both as site over flank.
+
+- **Mammals.** Motifs win in every context on both chromosomes: 549 of 743 and 571 of 749
+  factors, median difference +0.145 and +0.153, largest in enhancer-like elements (+0.275
+  and +0.252).
+- **Against the rest of their own cCRE.** Motif sites pass for 334 of 690 and 405 of 723
+  factors; decoys for 37 of 679 and 69 of 711. At 0.95 and at base resolution, mammals do
+  see motif sites, beyond their letters, their flanks and their element.
+- **People.** The same comparison gives a median difference of -0.018 (315 of 577, sign
+  p 0.03) and -0.024 (318 of 572, p 0.008), with no context consistent across the two
+  chromosomes.
+  - Enhancer-like: -0.041 then -0.021 (n.s.).
+  - Fossil: -0.050 then +0.038.
+  - Unknown-regulatory: -0.013 (n.s.) then -0.041.
+  - Against their own cCRE, motif sites carry 0.986 and 0.975 of the variation the rest of
+    the element predicts; decoys 0.999 and 1.006. Factors passing: 0 of 555 on chr21 and
+    17 of 599 on chr22, against 5 and 1 decoys.
+  - Factors with similar matrices share sites, so every sign-test p here is optimistic.
+
+**Question 2, re-asked.** Syntax needs a row held across mammals and among people in the same
+context.
+
+- Rows held against both flank nulls: 57 and 24 motif rows against 23 and 11 decoy rows, a
+  surplus that comes from the mammal side.
+- Among rows held across mammals against flanks, the share also held among people is 9.0%
+  for motifs against 9.2% for decoys on chr21, and 4.5% against 7.9% on chr22.
+- Against the strata, decoys pass the people test 192 times where motifs pass 233 (chr21),
+  and 189 where motifs pass 193 (chr22).
+- The rows that look like syntax are AT-rich homeobox, NFAT and STAT sites in introns. Their
+  people depletion is shared by decoys of the same letters.
+- Value slots (held across mammals, more variable among people than their flanks): 3 motif
+  rows against 7 decoys on chr21, 0 against 1 on chr22.
+- The only row that replicates is the dELS class. It is more conserved than its flanks
+  (0.043 against 0.029, z 12.5; 0.052 against 0.040, z 12.7) and more variable among people
+  than its flanks (O/E 1.01 against 0.93, z 6.7; 1.00 against 0.91, z 7.9). That is what a
+  value slot would look like. It is also what open chromatin's mutation rate would look
+  like, and diversity alone cannot tell the two apart.
+- **Verdict. Negative, and stronger than the first.** At base resolution the mammal axis
+  separates motif sites from their letters in every context. The people axis at 89
+  assemblies sees at most a 2 to 3% depletion and adds nothing the mammal axis does not
+  already carry, so units do not separate into syntax and value slots. The panel is not
+  blind: canonical CDS reads 0.49 and 0.46 of expected variation. It is that motif-site
+  constraint among people, if present, is an order of magnitude weaker than coding
+  constraint, below what 89 haplotypes resolve per unit.
+
+**Which human measure.** The panel, for the reason above. Gnocchi does not agree with it at
+unit scale either: rank correlation with panel depletion is -0.067 on chr21 and 0.013 on
+chr22, and with phyloP -0.128 and 0.100. Nothing in the re-ask depends on Gnocchi.
+
+**The fossil tier on the sharper axes.**
+
+- **Tier-wide.** The fossil tier is 0.97% and 1.03% constrained, against 1.5% and 1.7% for
+  intron. The tier was selected for low block phyloP, so that comparison is circular.
+- **People, tier-wide.** Observed over the trinucleotide by GC expectation is 1.145 and
+  1.160, against intron 1.019 and 0.945 and CDS 0.491 and 0.458.
+- **People, matched.** Matched subfamily by subfamily and within replication-timing
+  terciles (h1's Repli-seq per kilobase), the tier's copies against the same subfamily's
+  copies elsewhere:
+  - against intronic copies: 0.994 (38 of 62 subfamilies more variable, z -0.22) and 1.086
+    (27 of 34, z 3.0);
+  - against unknown-regulatory copies: 0.946 and 1.001;
+  - against neutral-tier copies: 1.111 on chr21 (chr22 has only 2 subfamilies to pair).
+- The unmatched comparison (fossil copies more variable in 54 of 67 subfamilies) was
+  replication timing, and matching removes it.
+- **Motif sites inside fossils.** The chr21 hint (people -0.05, p 0.0008) reverses on chr22
+  (+0.038).
+- **Negative.** The fossil tier is no less variable among people than its own subfamilies
+  elsewhere. This is the fourth independent failure on that tier: the node libraries, the
+  methylation (genomeos-e1), h1's block variability, and now per-base diversity with timing
+  matched. The tier is what its name says.
+
+**The syntax candidate on these chromosomes.** chr22:38,571,213-38,574,930 is 5.5%
+constrained per base and carries 4 recurring substitutions against 19.0 expected (23.2 with
+phyloP). That is one block, against h1's 59 of 69 candidates variable.
+
+**Cost, and why the other chromosomes are not built.**
+- **Run time.** Both chromosomes took 400 s in one process, and memory peaked at 6.9 GB.
+  Most of the memory is per-base arrays, which scale with length, so chr1 would need about
+  18 GB without chunking.
+- **Streaming.** phyloP costs 97 MB and 4 minutes per chromosome to stream, and 23 MB to
+  keep: about 1.5 GB kept for the genome. The panel stores are h1's to build (5.3 hours of
+  streaming for the genome).
+- **Decision.** Nothing separates, so none of that is spent.
+
+**What is weak.**
+- **Human depth.** 89 haplotypes, recurring substitutions only (indels and structural
+  alleles left out).
+- **Motif calls.** Sites are 0.95 predictions, not bound sites.
+- **Flanks.** The flank null assumes the flanks share the site's mutation environment.
+- **Sign tests.** Motif-against-decoy sign tests count factors that share sites.
+- **Replication timing.** It is matched for the fossil comparison only.
+- **Next.** Measurement is what could still sort a site into syntax or slot: saturation
+  mutagenesis and MPRA allele effects at motif sites, or per-base gnomAD frequencies for
+  population depth.
+
 ## Many human genomes: fixed, storage and cannot place, chr21 (2026-09-14)
 
 Albert's question: compare as many human genomes as can be read, and catalogue what is common

@@ -1575,10 +1575,53 @@ in order. "Owner" is the session that holds the files today (see §7).
     regional calibration and candidate stage, which is what to fix before a genome run.
     ATTRIBUTION.md "Many human genomes"; the source row in GRAMMAR-BY-COMPARISON.md is now
     read rather than pending.
-- **Next.** 0. The lexicon's axes before its genome-wide build: per-base Zoonomia phyloP
-  and per-kilobase Gnocchi joined to every unit occurrence, and a genome-wide JASPAR scan
-  at 0.95, then Question 2 asked again on chr21 and chr22. The build of the other
-  chromosomes follows only if a unit separates. 1. What remains of the candidate reading: measured RNA (ENCODE
+- **The lexicon re-asked at base resolution, chr21 and chr22 (2026-09-14, genomeos-i1).**
+  - **What changed.** `attribution/lexicon_axes.py` (`scripts/lexicon_axes.py`,
+    `lexicon_axes_chr21`, `lexicon_axes_chr22`, no model call) replaces all three soft
+    axes:
+    - Zoonomia phyloP per base, streamed once (97 MB and 4 minutes per chromosome) into a
+      23 MB byte track;
+    - the HPRC panel's recurring substitutions per base, read from genomeos-h1's stores
+      with a trinucleotide by context by GC expectation (Gnocchi is joined but not
+      trusted);
+    - JASPAR at 0.95 over the whole chromosome (13.5 and 11.6 million merged sites), with
+      column-permuted decoys scanned the same way.
+  - **Nulls and calibration.** Every (unit, context) row is tested against its strata,
+    against the phyloP bin and against its own flanks. Variances are built from the
+    unit's own occurrences, BH is applied per family, and each family is calibrated on
+    shifted copies (0 of 7,088 and 2 of 7,183 pass the flank tests among people).
+  - **Mammals see motifs.** Sites beat their own decoys in every context: 549 of 743 and
+    571 of 749 factors, median site-over-flank difference +0.15. Against the rest of
+    their own cCRE, 334 of 690 and 405 of 723 factors pass, against 37 and 69 decoys.
+  - **People barely do.** The paired median difference is -0.018 and -0.024. Pooled
+    against their own element, sites give 0.986 and 0.975 of expected variation, against
+    0.999 and 1.006 for decoys. Among rows held across mammals against flanks, the
+    people-depleted share is 9.0% for motifs against 9.2% for decoys, and 4.5% against
+    7.9%.
+  - **Question 2.** No syntax class separates.
+    - Decoys pass the people test nearly as often as motifs (192 against 233, 189 against
+      193).
+    - The one value-slot row that replicates is the dELS class (more conserved than its
+      flanks, z 12.5 and 12.7; more variable among people, z 6.7 and 7.9). Open chromatin's
+      mutation rate is not excluded.
+    - **Negative, and stronger than the first.**
+  - **The fossil tier.** Matched on replication timing, fossil copies of a subfamily are
+    as variable as the same subfamily's intronic copies (0.994 on chr21, 1.086 on chr22)
+    and no less variable than regulatory-tier copies (0.946 and 1.001). The chr21 hint of
+    motif sites less variable inside fossils (-0.05) reverses on chr22 (+0.038).
+    **Negative:** a fourth independent failure on that tier, after node libraries,
+    methylation and h1's variability.
+  - **The two human measures do not agree at unit scale.** Rank correlation of Gnocchi
+    with panel depletion is -0.067 on chr21 and 0.013 on chr22.
+  - **Candidate.** chr22's one candidate carries 4 recurring substitutions against 19
+    expected.
+  - **Decision.** The other chromosomes are not built. ATTRIBUTION.md "The lexicon at base
+    resolution"; LESSONS.md "The UNKNOWN space".
+- **Next.** 0. Done 2026-09-14 (the bullet above): the lexicon's axes at base resolution
+  answered Question 2 negatively, so the genome-wide lexicon stays unbuilt. What could still
+  sort sites into syntax and slots is measurement, not diversity: saturation mutagenesis and
+  MPRA allele effects at motif sites (the satmut and MPRAVarDB layers), and per-base gnomAD
+  frequencies for population depth. 1. What remains of the candidate reading: measured RNA (ENCODE
   total RNA-seq, as the closure reads it) over the 69 blocks and their
   controls, to test the 5 coding and 9 3'-extension readings; then, with the
   next quota (the recommendation above), the deletion of the 882 non-copy
