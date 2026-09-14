@@ -365,11 +365,17 @@ scoring is recorded as pending.
 | section 6 | ef80075 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 8/60 (13%) |
 | rerun 1 | 02a1b98 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 8/60 (13%) |
 | rerun 2 | b7092da | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **9/60 (15%)** |
-| rerun 3 | this section | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **11/60 (18%)** |
+| rerun 3 | 88ae1d2 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **11/60 (18%)** |
+| rerun 4 | this section | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 11/60 (18%) |
 
-Control windows holding an element-level deletion: 10, then 11, then 13 of 60.
-Every one of the three the sweep reached produced a direction on its first
-reading. Nothing at the panel moved across any of the three runs.
+Control windows holding an element-level deletion: 10, then 11, then 13, then 13
+of 60. Every one of the three the sweep reached produced a direction on its first
+reading. Nothing at the panel moved across any of the four runs.
+
+Rerun 4 was taken when chr11 finished - the first panel chromosome to complete
+since the quota was reallocated to the windows. Its last 16,000 elements put
+eight more scored deletions inside the benchmark's 523 windows and changed no
+verdict anywhere. The chromosome is saturated.
 
 Rerun 1 reproduced every verdict of the committed run exactly: the same sixty
 negative windows were redrawn from the same candidates, so the panel is
@@ -426,9 +432,36 @@ little to them; nearly everything it can still move is on the control side,
 where 47 of 60 windows have no element-level deletion. The controls sit on the
 panel's own chromosomes, so the sweep's remaining order matters to the benchmark
 only where it reaches chr11 (5 controls), chr9, chr8, chr7 and chr6 (5 each) and
-chr2 (15). The prediction from the table above is precise, and the three windows
-chr11 has supplied so far all met it: each control window the sweep reaches has
-about a 5-in-6 chance of producing a direction and about a 1-in-7 chance of
-producing a value on syntax. If the sweep finishes the panel's ten chromosomes,
-the control direction rate should land near 80% - the same place as the panel -
-and the claim will have been shown to carry no information at all.
+chr2 (15). Each control window the sweep reaches has about a 5-in-6 chance of
+producing a direction and about a 1-in-7 chance of producing a value on syntax.
+
+### How far the controls can actually go, measured rather than extrapolated
+
+The first extrapolation here said the control direction rate would converge on
+the panel's 80%. Finishing chr11 shows that it will not, and the reason is worth
+more than the guess was. **Half of the matched windows contain no registry
+element at all**, so no amount of sweeping can give them a deletion: two of the
+five beta-globin controls hold nothing even on a finished chromosome.
+
+Restricting to the controls whose chromosome the sweep has completed - chr11,
+chr15, chr16, chr17, chr21, twenty-five of the sixty windows, where coverage is
+no longer the variable:
+
+| claim | panel | controls on finished chromosomes |
+|---|---|---|
+| an element inside the window has been deleted | 10/12 (83%) | 12/25 (48%) |
+| a derived layer names *some* target | 11/12 (92%) | 20/25 (80%) |
+| the reader has it open in some cell | 10/12 (83%) | 9/25 (36%) |
+| a direction is produced | 8/12 (67%) | 10/25 (40%) |
+| a value sits on constrained sequence | 6/12 (50%) | 2/25 (8%) |
+
+So the honest projected end state, once the sweep reaches chr2, chr6, chr7, chr8
+and chr9, is a control direction rate near 40% against the panel's 67% - not the
+13% the first run reported, and not the 80% the last extrapolation predicted.
+What is left of that gap is mostly the first row: a published functional element
+coincides with an ENCODE cCRE more often than a window matched only on length,
+GC, TSS distance and constraint does. That is a property of the registry, not of
+the model, and it should be read as one.
+
+The value-on-syntax claim is the exception again, and by a wider margin on this
+subset than on the whole: 50% against 8%.

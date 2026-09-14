@@ -1889,7 +1889,19 @@ def aggregate(loci: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def negative_summary(positives: list[dict[str, Any]], negatives: list[Window]) -> dict[str, Any]:
+def swept_chromosomes(results_dir: Path = RESULTS_DIR) -> list[str]:
+    """The chromosomes the all-element sweep has finished, so their windows are fully observed."""
+    done = []
+    for p in sorted(results_dir.glob("enhancer_targets_all_chr*.json")):
+        r = load_result(p.stem, results_dir) or {}
+        if r.get("complete") and r.get("chrom"):
+            done.append(r["chrom"])
+    return sorted(done)
+
+
+def negative_summary(
+    positives: list[dict[str, Any]], negatives: list[Window], results_dir: Path = RESULTS_DIR
+) -> dict[str, Any]:
     pos = [claims(r["readings"]) for r in positives]
     neg = [claims(w.readings) for w in negatives]
     keys = ("target", "cell", "direction", "storage", "deletion_scored", "eqtl_present")
@@ -1914,7 +1926,28 @@ def negative_summary(positives: list[dict[str, Any]], negatives: list[Window]) -
         "positives": {k: rate(pos, k) for k in keys},
         "negatives": {k: rate(neg, k) for k in keys},
         "given_deletion_data": conditioned_on_deletion_data(pos, neg),
+        "on_swept_chromosomes": on_swept_chromosomes(negatives, results_dir),
         "by_locus": by_locus,
+    }
+
+
+def on_swept_chromosomes(negatives: list[Window], results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
+    """The controls whose chromosome the all-element sweep has finished: coverage is not the variable.
+
+    A control window on an unfinished chromosome can only be under-read, so the rates over the whole
+    sixty move as the sweep advances and cannot be compared with the panel. On a finished chromosome
+    the window has been seen in full, and about half of them turn out to hold no registry element at
+    all - which is the ceiling on every claim only a deletion can make.
+    """
+    done = set(swept_chromosomes(results_dir))
+    rows = [claims(w.readings) for w in negatives if w.chrom in done]
+    keys = ("target", "cell", "direction", "storage", "deletion_scored", "eqtl_present")
+    return {
+        "chromosomes": sorted(done & {w.chrom for w in negatives}),
+        "windows": len(rows),
+        "rates": {k: rate(rows, k) for k in keys},
+        "reading": "matched negatives whose chromosome the sweep has finished: the only controls that"
+        " can be compared with the panel on any claim a deletion makes",
     }
 
 
@@ -2068,7 +2101,7 @@ def build(
         "classes": list(CLASSES),
         "provenance": list(PROVENANCE),
         "aggregate": aggregate(loci),
-        "negative_controls": negative_summary(loci, chosen),
+        "negative_controls": negative_summary(loci, chosen, results_dir),
         "loci": [trim_locus(r) for r in loci],
         "negatives": [negative_row(w) for w in chosen],
         "variant_positions": checked,

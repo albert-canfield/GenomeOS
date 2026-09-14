@@ -1,6 +1,6 @@
 {
   "result": "loci_benchmark",
-  "date": "2026-09-14",
+  "date": "2026-09-15",
   "panel": 12,
   "classes": [
     "syntax",
@@ -351,6 +351,49 @@
           }
         }
       }
+    },
+    "on_swept_chromosomes": {
+      "chromosomes": [
+        "chr11",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr21"
+      ],
+      "windows": 25,
+      "rates": {
+        "target": {
+          "k": 20,
+          "n": 25,
+          "rate": 0.8
+        },
+        "cell": {
+          "k": 9,
+          "n": 25,
+          "rate": 0.36
+        },
+        "direction": {
+          "k": 10,
+          "n": 25,
+          "rate": 0.4
+        },
+        "storage": {
+          "k": 2,
+          "n": 25,
+          "rate": 0.08
+        },
+        "deletion_scored": {
+          "k": 12,
+          "n": 25,
+          "rate": 0.48
+        },
+        "eqtl_present": {
+          "k": 19,
+          "n": 25,
+          "rate": 0.76
+        }
+      },
+      "reading": "matched negatives whose chromosome the sweep has finished: the only controls that can be compared with the panel on any claim a deletion makes"
     },
     "by_locus": {
       "SHH_ZRS": {
@@ -9001,7 +9044,7 @@
         "eqtl_present": true
       },
       "node_target": "OR10D3",
-      "deletion_target": "OR8G2P",
+      "deletion_target": "OR10D3",
       "eqtl_target": "VWA5A",
       "cells_open": [
         "CD14-positive monocyte",
@@ -10386,38 +10429,38 @@
   "variant_positions": {
     "rs12913832": {
       "panel": 28120472,
-      "ensembl": 28120472,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs4988235": {
       "panel": 135851076,
-      "ensembl": 135851076,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1421085": {
       "panel": 53767042,
-      "ensembl": 53767042,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1558902": {
       "panel": 53769662,
-      "ensembl": 53769662,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1427407": {
       "panel": 60490908,
-      "ensembl": 60490908,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs6983267": {
       "panel": 127401060,
-      "ensembl": 127401060,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs11986220": {
       "panel": 127519444,
-      "ensembl": 127519444,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs8176719": {
       "panel": 133257521,
@@ -10426,13 +10469,13 @@
     },
     "rs8176746": {
       "panel": 133255935,
-      "ensembl": 133255935,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs63750847": {
       "panel": 25897620,
-      "ensembl": 25897620,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1042522": {
       "panel": 7676154,
@@ -10462,6 +10505,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 354.4
+    "seconds": 499.1
   }
 }

@@ -273,3 +273,19 @@ def test_every_claim_a_deletion_makes_is_reported_with_its_coverage():
     assert g["negatives"]["with_deletion_data"]["direction"]["n"] >= 1, (
         "no matched negative has element-level deletion data, so the direction claim has no control"
     )
+
+
+@needs_result
+def test_the_controls_on_finished_chromosomes_are_reported_separately():
+    """A control on an unfinished chromosome can only be under-read, so it cannot be compared.
+
+    The subset whose chromosome the sweep has completed is the only fair control for any claim a
+    deletion makes, and it must travel with the run: on it, about half the matched windows hold no
+    registry element at all, which caps every such claim well below the panel's rate.
+    """
+    s = RESULT["negative_controls"]["on_swept_chromosomes"]
+    assert s["windows"] >= 5 and s["chromosomes"], "no control sits on a finished chromosome"
+    assert s["windows"] <= RESULT["negative_controls"]["windows"]
+    for claim in ("target", "cell", "direction", "storage", "deletion_scored"):
+        assert s["rates"][claim]["n"] == s["windows"], claim
+    assert s["rates"]["deletion_scored"]["k"] <= s["windows"]
