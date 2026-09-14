@@ -13,15 +13,19 @@ Format reference: Kent et al. 2010, "BigWig and BigBed", and the UCSC kent sourc
 
 from __future__ import annotations
 
+import http.client
 import struct
 import sys
+import threading
 import time
+import urllib.parse
 import urllib.request
 import zlib
 from array import array
 from bisect import bisect_right
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 BIGWIG_MAGIC = 0x888FFC26
 CHROM_TREE_MAGIC = 0x78CA8C91
@@ -32,17 +36,167 @@ USER_AGENT = "GenomeOS/0.9 (bigwig range reader; one chromosome's blocks at a ti
 BEDGRAPH, VARIABLE_STEP, FIXED_STEP = 1, 2, 3
 
 
-class _Source:
-    """Random access to a local file or a URL, by (offset, size)."""
+# UCSC serves the same files from a second download host; a request that fails on one is retried on
+# the other (genomeos-h1 checked the sizes on 2026-09-14, and every response's total size must agree).
+MIRRORS = {
+    "hgdownload.soe.ucsc.edu": "hgdownload2.soe.ucsc.edu",
+    "hgdownload2.soe.ucsc.edu": "hgdownload.soe.ucsc.edu",
+}
+MAX_REDIRECTS = 5
+MAX_DELAY = 30.0
+_POOL = threading.local()  # (scheme, host) -> an open connection, one set per thread
+_DROPPED = (
+    http.client.RemoteDisconnected,
+    ConnectionResetError,
+    BrokenPipeError,
+    http.client.CannotSendRequest,
+)
 
-    def __init__(self, source: str | Path, timeout: int = 180, retries: int = 4):
+
+_PROXIES: dict[str, str] | None = None
+
+
+def _proxied(scheme: str) -> bool:
+    """A proxy in the environment: requests are left to urllib, which knows how to use one."""
+    global _PROXIES
+    if _PROXIES is None:
+        _PROXIES = urllib.request.getproxies()
+    return bool(_PROXIES.get(scheme))
+
+
+class _Source:
+    """Random access to a local file or a URL, by (offset, size).
+
+    Over HTTP every range used to open a new TLS connection. genomeos-h1 profiled their panel run
+    (2026-09-14): the handshake costs 0.5 s when UCSC is quiet and 4 to 17 s when it is loaded, and
+    one connection kept open per host took a run from 31,099 s to 1,392 s with identical numbers.
+    The same approach is used here (their `KeepAliveSource` in attribution/human_panel.py): one
+    persistent connection per host and thread, reused for every range; a dropped keep-alive
+    connection is reopened at once without counting as a failure; any other failure is retried
+    with backoff, alternating with UCSC's second download host, and the file's total size must be
+    the same on every response. Redirects (ENCODE's download links) are followed and the final
+    address remembered. Interface and results are unchanged: `read`, `close`, `requests`,
+    `bytes_fetched`, and the same bytes for the same (offset, size).
+    """
+
+    def __init__(self, source: str | Path, timeout: int = 180, retries: int = 6):
         self.remote = isinstance(source, str) and source.startswith(("http://", "https://"))
         self.source = str(source)
         self.timeout = timeout
         self.retries = retries
         self.bytes_fetched = 0
         self.requests = 0
+        self.connections = 0  # connections this source opened (a pooled one reused costs none)
+        self.mirror_requests = 0
+        self.total: int | None = None
+        self._resolved: str | None = None  # where a redirect led, reused until it fails
         self._fh = None if self.remote else open(self.source, "rb")  # noqa: SIM115
+
+    # -- connections ----------------------------------------------------------------------------
+    def _conn(self, scheme: str, host: str, fresh: bool = False) -> tuple[http.client.HTTPConnection, bool]:
+        """The pooled connection to a host, and whether it was reused rather than opened now."""
+        pool = getattr(_POOL, "conns", None)
+        if pool is None:
+            pool = _POOL.conns = {}
+        key = (scheme, host)
+        conn = pool.get(key)
+        if conn is not None and not fresh:
+            return conn, True
+        if conn is not None:
+            conn.close()
+        cls = http.client.HTTPSConnection if scheme == "https" else http.client.HTTPConnection
+        conn = pool[key] = cls(host, timeout=self.timeout)
+        self.connections += 1
+        return conn, False
+
+    def _drop(self, scheme: str, host: str) -> None:
+        pool = getattr(_POOL, "conns", None) or {}
+        conn = pool.pop((scheme, host), None)
+        if conn is not None:
+            conn.close()
+
+    def _once(self, url: str, headers: dict[str, str]) -> tuple[int, bytes, Any, str]:
+        """One request, following redirects. A kept-alive connection the server closed while idle
+        is reopened once on the spot; a connection that fails in any other way is discarded, never
+        reused half-read. Returns the status, the body, the response and the final URL."""
+        for _ in range(MAX_REDIRECTS + 1):
+            u = urllib.parse.urlsplit(url)
+            path = (u.path or "/") + (f"?{u.query}" if u.query else "")
+            for again in (False, True):
+                conn, reused = self._conn(u.scheme, u.netloc, fresh=again)
+                try:
+                    conn.request("GET", path, headers={"User-Agent": USER_AGENT, **headers})
+                    r = conn.getresponse()
+                    data = r.read()
+                    break
+                except _DROPPED:
+                    self._drop(u.scheme, u.netloc)
+                    if again or not reused:
+                        raise
+                except BaseException:
+                    self._drop(u.scheme, u.netloc)
+                    raise
+            if r.will_close:
+                self._drop(u.scheme, u.netloc)
+            location = r.getheader("Location")
+            if r.status in (301, 302, 303, 307, 308) and location:
+                url = urllib.parse.urljoin(url, location)
+                continue
+            return r.status, data, r, url
+        raise OSError(f"{self.source}: more than {MAX_REDIRECTS} redirects")
+
+    def _read_urllib(self, offset: int, size: int) -> bytes:  # pragma: no cover - proxied networks
+        req = urllib.request.Request(
+            self.source,
+            headers={"Range": f"bytes={offset}-{offset + size - 1}", "User-Agent": USER_AGENT},
+        )
+        with urllib.request.urlopen(req, timeout=self.timeout) as r:  # noqa: S310
+            data = r.read()
+        if len(data) < size and r.status != 206:
+            raise OSError(f"server ignored the range request ({r.status})")
+        return data
+
+    def _read_remote(self, offset: int, size: int) -> bytes:
+        headers = {"Range": f"bytes={offset}-{offset + size - 1}"}
+        scheme = urllib.parse.urlsplit(self.source).scheme
+        delay = 2.0
+        for attempt in range(self.retries):
+            try:
+                if _proxied(scheme):  # pragma: no cover - proxied networks
+                    return self._read_urllib(offset, size)
+                url = self._resolved or self.source
+                host = urllib.parse.urlsplit(url).netloc
+                mirrored = attempt % 2 == 1 and host in MIRRORS
+                if mirrored:
+                    url = url.replace(f"//{host}/", f"//{MIRRORS[host]}/", 1)
+                status, data, r, final = self._once(url, headers)
+                if status >= 500:
+                    raise OSError(f"server error {status}")
+                if status in (401, 403, 404, 410) and self._resolved:
+                    self._resolved = None  # a remembered redirect target expired: resolve again
+                    raise OSError(f"redirect target refused ({status})")
+                if status not in (200, 206):
+                    raise OSError(f"range request failed ({status})")
+                if status == 200 and (offset != 0 or len(data) != size):
+                    raise OSError(f"server ignored the range request ({status})")
+                total = (r.getheader("Content-Range") or "").rpartition("/")[2]
+                if total.isdigit():
+                    if self.total is None:
+                        self.total = int(total)
+                    elif int(total) != self.total:
+                        raise ValueError(
+                            f"{self.source}: hosts disagree on the file size ({total} against {self.total})"
+                        )
+                if final != url and not mirrored:
+                    self._resolved = final
+                self.mirror_requests += mirrored
+                return data
+            except (OSError, http.client.HTTPException):
+                if attempt == self.retries - 1:
+                    raise
+                time.sleep(delay)
+                delay = min(delay * 2, MAX_DELAY)
+        raise OSError("unreachable")  # pragma: no cover
 
     def read(self, offset: int, size: int) -> bytes:
         self.requests += 1
@@ -50,25 +204,7 @@ class _Source:
         if not self.remote:
             self._fh.seek(offset)
             return self._fh.read(size)
-        req = urllib.request.Request(
-            self.source,
-            headers={"Range": f"bytes={offset}-{offset + size - 1}", "User-Agent": USER_AGENT},
-        )
-        delay = 2.0
-        for attempt in range(self.retries):
-            try:
-                with urllib.request.urlopen(req, timeout=self.timeout) as r:  # noqa: S310
-                    data = r.read()
-                if len(data) < size and r.status != 206:
-                    raise OSError(f"server ignored the range request ({r.status})")
-                return data
-            except (OSError, urllib.error.URLError) as e:  # pragma: no cover - network
-                if attempt == self.retries - 1:
-                    raise
-                time.sleep(delay)
-                delay *= 2
-                last = e
-        raise last  # pragma: no cover
+        return self._read_remote(offset, size)
 
     def close(self) -> None:
         if self._fh:
