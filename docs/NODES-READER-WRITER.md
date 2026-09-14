@@ -561,6 +561,27 @@ bigWigs ENCODE also releases carry every cytosine rather than CpGs, so a mean
 over them would dilute the fraction. The bigBed is the clean source, read with
 a bigBed reader built on the bigWig reader's R-tree.
 
+**What the profiles cost, and why the broad job ran this time.** One mark's
+fold change, for one cell type, on one chromosome, is 25 to 27 range requests
+over **two** connections: chr21 is 233,550 bins, 18.5 MB and 22.0 s; chr20 is
+322,221 bins, 21.8 MB and 34.3 s. The broad job was deferred once as too slow,
+and the handshake was the reason: before the shared range reader kept its
+connections open (46cb5d2) each of those 25 requests opened its own TLS
+connection, at 0.5 s on a quiet server and 4 to 17 s under load, which is 12 to
+425 s of handshake per profile on top of the transfer. Reusing the connection
+leaves the bytes, and the bytes are what dominates now, at 0.6 to 0.8 MB/s a
+stream and six to ten profiles a minute across eight workers. Nothing about the
+job got cleverer; the reader stopped paying for the same connection 25 times.
+
+Run to completion, that is all 1,320 profiles — eleven biosamples × five marks
+× 24 chromosomes — for 2.2 GB of 200 bp bin means kept from roughly 55 GB
+streamed. The last 593 took 59 minutes. **Every chromosome now carries fold
+change as well as peaks, in every biosample and every mark**, so the layer no
+longer answers UNKNOWN with "fold-change profile not read for this chromosome";
+`genomeos epigenome coverage` says so. Methylation is complete on all 24
+chromosomes for the eight biosamples that have GRCh38 WGBS; the other three
+have none at all, which no amount of fetching fixes.
+
 | biosample | DNase | H3K4me3 | H3K27ac | H3K4me1 | H3K27me3 | H3K9me3 | WGBS |
 |---|---|---|---|---|---|---|---|
 | K562 | yes | yes | yes | yes | yes | yes | yes |
@@ -688,53 +709,55 @@ over the other three lines; the line being predicted never enters its own
 features (`scripts/epigenome.py direction-transfer`,
 `epigenome_direction_transfer`).
 
-Held out: chr15, chr16, chr17, chr18, chr19 and chr20, 485,604 element-line
-units over 121,404 elements, of which 100,507 act. chr1 (the sweep has scored
-1.6% of it), chr14 (being written while this ran) and chrY (no profile in one
-of the four lines) were left out, and the reason is recorded per chromosome: a
-sweep in progress is not a held-out chromosome.
+Held out: chr14 to chr20, 564,824 element-line units over 141,209 elements, of
+which 115,096 act. Three chromosomes were refused, each with its reason on the
+record: chr1 (the sweep has scored 1.6% of it), chr13 (being written while this
+ran) and chrY (two of the four lines are female, so their chrY marks and
+predicted effects are not about a chromosome the cell has). A sweep in progress
+is not a held-out chromosome; it is the first per cent of one.
 
 | features, fitted on chr21 and chr22 | acts (AUC) | rise among acting (AUC) | magnitude (Spearman) |
 |---|---|---|---|
-| registry class + DNase in that line | 0.661 | 0.599 | 0.238 |
-| + the line's five marks and methylation | 0.688 | 0.624 | 0.331 |
-| control: marks from another of the four lines | 0.668 | 0.612 | 0.277 |
-| control: marks shuffled within chromosome × line × class × DNase | 0.661 | 0.598 | 0.238 |
-| **the model's own effect in the other three lines** | 0.792 | **0.910** | 0.483 |
-| + registry and DNase | 0.795 | 0.915 | 0.477 |
-| + the line's marks as well | 0.796 | **0.918** | 0.493 |
-| control: + another line's marks instead | 0.792 | 0.916 | 0.478 |
+| registry class + DNase in that line | 0.660 | 0.601 | 0.234 |
+| + the line's five marks and methylation | 0.687 | 0.626 | 0.328 |
+| control: marks from another of the four lines | 0.667 | 0.614 | 0.274 |
+| control: marks shuffled within chromosome × line × class × DNase | 0.660 | 0.601 | 0.234 |
+| **the model's own effect in the other three lines** | 0.787 | **0.907** | 0.475 |
+| + registry and DNase | 0.791 | 0.912 | 0.470 |
+| + the line's marks as well | 0.792 | **0.915** | 0.487 |
+| control: + another line's marks instead | 0.788 | 0.913 | 0.471 |
 
 95% intervals of each difference over 200 resamples of the held-out elements:
 
 | difference | acts | direction | magnitude |
 |---|---|---|---|
-| marks over registry + DNase | +0.025 to +0.028 | +0.022 to +0.028 | +0.090 to +0.095 |
-| marks over another line's marks | +0.019 to +0.021 | +0.010 to +0.014 | +0.051 to +0.055 |
-| marks over shuffled marks | +0.025 to +0.028 | +0.022 to +0.029 | +0.089 to +0.095 |
-| marks over the sibling model | +0.0003 to +0.0021 | +0.0024 to +0.0032 | +0.013 to +0.018 |
-| the sibling model over the marks model | +0.104 to +0.109 | **+0.287 to +0.296** | +0.143 to +0.150 |
+| marks over registry + DNase | +0.026 to +0.028 | +0.022 to +0.027 | +0.091 to +0.097 |
+| marks over another line's marks | +0.019 to +0.021 | +0.010 to +0.014 | +0.052 to +0.056 |
+| marks over shuffled marks | +0.025 to +0.028 | +0.022 to +0.029 | +0.091 to +0.096 |
+| marks over the sibling model | +0.0003 to +0.0022 | +0.0027 to +0.0035 | +0.015 to +0.018 |
+| the sibling model over the marks model | +0.102 to +0.106 | **+0.282 to +0.291** | +0.139 to +0.145 |
 
 **The gain transfers, at the size it had in sample.** Direction rises from
-0.599 to 0.624 on chromosomes the fit never saw, against 0.594 to 0.616 in
-sample, and it is positive on all six held-out chromosomes separately (+0.018
-on chr20 to +0.038 on chr19). Shuffled marks score exactly the fit without
-them, which is the control working.
+0.601 to 0.626 on chromosomes the fit never saw, against 0.594 to 0.616 in
+sample, and it is positive on all seven held-out chromosomes separately (+0.019
+on chr20 to +0.038 on chr19). Shuffled marks score the fit without them, which
+is the control working.
 
 **Half of it is not the cell's own chromatin.** Another line's marks carry
-0.612 of the 0.624, so the part that is the line's own marks rather than marks
+0.614 of the 0.626, so the part that is the line's own marks rather than marks
 at all is +0.010 to +0.014 AUC. The same pattern holds for acts and magnitude.
 
 **And all of it is small beside the model reading its own lines.** Direction
-from the other three lines alone scores 0.910; the entire marks model scores
-0.624. Adding the line's marks on top of the sibling model moves direction by
-+0.0024 to +0.0032 AUC and acts by +0.0003 to +0.0021, which at this sample
+from the other three lines alone scores 0.907; the entire marks model scores
+0.626. Adding the line's marks on top of the sibling model moves direction by
++0.0027 to +0.0035 AUC and acts by +0.0003 to +0.0022, which at this sample
 size is measurable and, as a claim about chromatin, is three thousandths.
 Pooled AUCs hide two reversals worth stating: the marks made the sibling model
 *worse* for acts on chr15 (0.7675 against 0.7680) and chr19 (0.8121 against
-0.8165), and worse for magnitude on chr15 (0.4321 against 0.4386) and chr19
-(0.5471 against 0.5667). The marks are not uniformly additive once the
-model's own behaviour is in the comparison.
+0.8165), and worse for magnitude on chr15 (0.4321 against 0.4322) and chr19
+(0.5471 against 0.5494); against the sibling columns alone the chr19 losses are
+larger (0.8121 against 0.8249, 0.5471 against 0.5667). The marks are not
+uniformly additive once the model's own behaviour is in the comparison.
 
 The honest reading is that mark identity does carry information about this
 outcome, that it survives two controls and transfers off the training

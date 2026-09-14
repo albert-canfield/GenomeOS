@@ -302,20 +302,21 @@ def test_weighted_auc_and_spearman_match_the_plain_ones_and_the_expanded_sample(
 
 
 def test_a_sweep_in_progress_is_not_a_held_out_chromosome(tmp_path, monkeypatch):
-    """chr1 was 1.6% scored and chr14 was being written while the comparison ran: both must be
-    refused as held-out chromosomes, with the reason recorded."""
+    """chr1 was 1.6% scored and chr13 was being written while the comparison ran; chrY is refused
+    on purpose. Each must be kept out of the held-out set with its own reason on the record."""
     m = _script()
-    monkeypatch.setattr(m, "_profiles_complete", lambda c: c != "chrY")
+    monkeypatch.setattr(m, "_profiles_complete", lambda c: c != "chrX")
     arch = tmp_path / "data/knowledge/alphagenome/all_elements"
     arch.mkdir(parents=True)
-    for c in ("chr1", "chr14", "chr20", "chrY"):
+    for c in ("chr1", "chr13", "chr20", "chrX", "chrY"):
         (arch / f"{c}.json").write_text("[]")
     monkeypatch.chdir(tmp_path)
-    (arch / "chr14.json").touch()  # written just now
+    (arch / "chr13.json").touch()  # written just now
     old = time.time() - 2 * m.ARCHIVE_QUIET_SECONDS
-    for c in ("chr1", "chr20", "chrY"):
+    for c in ("chr1", "chr20", "chrX", "chrY"):
         os.utime(arch / f"{c}.json", (old, old))
-    assert "no fold-change profile" in m._held_out_reason("chrY", 0.9)
-    assert "being written right now" in m._held_out_reason("chr14", 0.9)
+    assert "female" in m._held_out_reason("chrY", 0.9)  # deliberate, not an accident of the cache
+    assert "no fold-change profile" in m._held_out_reason("chrX", 0.9)
+    assert "being written right now" in m._held_out_reason("chr13", 0.9)
     assert "the sweep is partway" in m._held_out_reason("chr1", 0.016)
     assert m._held_out_reason("chr20", 0.573) is None

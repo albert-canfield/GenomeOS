@@ -473,25 +473,35 @@ in order. "Owner" is the session that holds the files today (see §7).
   outliers, and methylation falls with solo-WCGW share inside both families, so
   the excess is context and region; a family programme is not shown
   (`epigenome_fossil_alu`).
-- **Fold-change profiles.** chr2, chr7, chr12, chr17, chr21 and chr22 carry
-  them for every cell type and mark; every other chromosome carries peaks only,
-  and the record says so.
+- **Fold-change profiles, all 24 chromosomes (2026-09-14, genomeos-e2).** The
+  broad job was deferred once as too slow; the handshake was the reason. One
+  profile is 25 to 27 range requests over **two** connections (chr21: 233,550
+  bins, 18.5 MB, 22.0 s; chr20: 322,221 bins, 21.8 MB, 34.3 s), and before the
+  range reader kept connections open (46cb5d2) each of those requests paid 0.5
+  to 17 s of TLS, 12 to 425 s a profile. Retried through that reader it is the
+  bytes that dominate, at 0.6 to 0.8 MB/s a stream and six to ten profiles a
+  minute across eight workers. All 1,320 profiles (eleven biosamples × five
+  marks × 24 chromosomes) are now read: 2.2 GB kept from roughly 55 GB
+  streamed, the last 593 in 59 minutes. Methylation is complete on all 24 for
+  the eight biosamples with GRCh38 WGBS; three have none at all. `genomeos
+  epigenome coverage` reports it, and the layer no longer answers UNKNOWN with
+  "this chromosome not read".
 - **The marks' gain transfers, and is a rounding error beside the model's own
   lines (2026-09-14, genomeos-e2).** The chr21/chr22 comparison was refitted on
-  chr21 and chr22 alone and scored on chr15, chr16, chr17, chr18, chr19 and
-  chr20: 485,604 element-line units over 121,404 elements, 100,507 acting
+  chr21 and chr22 alone and scored on chr14 to chr20: 564,824 element-line
+  units over 141,209 elements, 115,096 acting
   (`scripts/epigenome.py direction-transfer`, `epigenome_direction_transfer`).
-  chr1 (1.6% swept), chr14 (being written) and chrY (no profile in one line)
-  were refused as held out, with the reason recorded.
-  - **It transfers.** Direction goes 0.599 to 0.624 AUC off the training
-    chromosomes, against 0.594 to 0.616 in sample, positive on all six
-    separately (+0.018 to +0.038). Shuffled marks score the fit without them.
+  chr1 (1.6% swept), chr13 (being written) and chrY (two of the four lines are
+  female) were refused as held out, with the reason recorded.
+  - **It transfers.** Direction goes 0.601 to 0.626 AUC off the training
+    chromosomes, against 0.594 to 0.616 in sample, positive on all seven
+    separately (+0.019 to +0.038). Shuffled marks score the fit without them.
   - **Half of it is not the cell's own chromatin.** Another line's marks reach
-    0.612 of the 0.624; the line-specific part is +0.010 to +0.014 AUC.
-  - **The model's own direction in the other three lines scores 0.910 alone**,
-    against 0.624 for the whole marks model (+0.287 to +0.296). Adding the
-    line's marks to it moves direction by +0.0024 to +0.0032 and acts by
-    +0.0003 to +0.0021, and makes it *worse* for acts on chr15 and chr19 and
+    0.614 of the 0.626; the line-specific part is +0.010 to +0.014 AUC.
+  - **The model's own direction in the other three lines scores 0.907 alone**,
+    against 0.626 for the whole marks model (+0.282 to +0.291). Adding the
+    line's marks to it moves direction by +0.0027 to +0.0035 and acts by
+    +0.0003 to +0.0022, and makes it *worse* for acts on chr15 and chr19 and
     for magnitude on chr15 and chr19. **Report the marks at that size.**
   - **Nothing here is measured.** Outcome and competing feature are both
     AlphaGenome, trained on these lines' ENCODE tracks.

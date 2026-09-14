@@ -62,7 +62,9 @@ def _task(kind: str, cell: str, mark: str | None, chrom: str | None) -> str:
 def fetch(argv: list[str]) -> None:
     opts = dict(zip(argv[::2], argv[1::2], strict=False))
     workers = int(opts.get("--workers", 6))
-    sig = opts.get("--signal", "chr21,chr22," + ",".join(HOX_CHROMS))
+    # all 24 by default: a cached profile costs nothing to skip, and the connection-reusing range
+    # reader took the whole genome from "too slow to attempt" to a couple of hours at eight workers
+    sig = opts.get("--signal", "all")
     sig_chroms = list(ep.CHROMS) if sig == "all" else [c for c in sig.split(",") if c]
     meth = opts.get("--methylation", "all")
     meth_chroms = list(ep.CHROMS) if meth == "all" else [c for c in meth.split(",") if c]
@@ -1195,6 +1197,11 @@ ALL_COLS = BASE_COLS + SIB_COLS + MARK_COLS + OTHER_COLS + PERM_COLS
 #: held-out chromosome, it is the first per cent of one.
 MIN_ARCHIVE_SHARE = 0.5
 ARCHIVE_QUIET_SECONDS = 600
+#: chromosomes kept out on purpose, with the reason, rather than by whether a file happens to exist
+EXCLUDE = {
+    "chrY": "two of the four lines (GM12878, IMR-90) are female, so their chrY marks and predicted "
+    "effects are not about a chromosome the cell has"
+}
 
 
 def _profiles_complete(chrom: str) -> bool:
@@ -1214,6 +1221,8 @@ def _archive_share(chrom: str) -> float:
 
 def _held_out_reason(chrom: str, share: float) -> str | None:
     """Why a chromosome cannot serve as held out, or None when it can."""
+    if chrom in EXCLUDE:
+        return EXCLUDE[chrom]
     if not _profiles_complete(chrom):
         return "no fold-change profile for one of the four lines"
     p = Path(f"data/knowledge/alphagenome/all_elements/{chrom}.json")

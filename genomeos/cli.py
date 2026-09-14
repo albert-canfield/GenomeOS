@@ -2864,10 +2864,13 @@ def cmd_epigenome(args: argparse.Namespace) -> int:
         full = [
             c for c in ep.CHROMS if all(c in chroms for marks in sig.values() for chroms in marks.values())
         ]
-        print(
-            f"fold-change profiles read for every cell type and mark on: {', '.join(full) or 'none'}; "
-            "other chromosomes carry peaks only"
-        )
+        if len(full) == len(ep.CHROMS):
+            print("fold-change profiles read for every cell type and mark on all 24 chromosomes")
+        else:
+            print(
+                f"fold-change profiles read for every cell type and mark on: {', '.join(full) or 'none'}; "
+                "other chromosomes carry peaks only"
+            )
         return 0
     cells = args.cell_type or list(ep.CELL_TYPES)
     if args.action == "summary":
