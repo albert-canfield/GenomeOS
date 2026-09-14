@@ -961,7 +961,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   silently loaded, both measured: a daughter inherits its mother's network
   state (list Z1.ppp as touching Z4.aa and Z1.ppp wins 100 of 100), and an
   instantaneous level read at an arbitrary time is not a fate (§7.2a's
-  sustained reads are what is missing).
+  sustained reads are what is missing). Kimble 1981's ablations are run too:
+  remove either cell and the survivor is the anchor cell in **100 of 100**
+  seeds, remove both and there is **no anchor cell in any** of 100, remove a
+  flanking cell and the split is untouched.
   **Glia from factors** (`celegans_glia`, `CITED_GLIA_RULES`): sheath glia
   partly, socket glia not at all. All 40 glia and all 40 sisters are in the
   atlas and no glial cell shares a factor set with a non-glial one, so the

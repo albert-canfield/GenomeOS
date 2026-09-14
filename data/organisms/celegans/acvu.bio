@@ -89,3 +89,17 @@ decision resting { action: quiesce; when: cell = Z1pa|Z4ap|Z1ppa|Z1ppp|Z4aaa|Z4a
 decision anchor { action: differentiate; when: cell = Z1ppp|Z4aaa, stage = L3, Dp = >=0.6; to: AnchorCell; name: gon herm anch; priority: 3; evidence: experimental "Kimble 1981, Dev Biol 87:286 (only Z1.ppp and Z4.aaa can become the anchor cell); Seydoux & Greenwald 1989 (the one with more LAG-2 keeps the anchor fate)"; confidence: 0.75 }
 decision uterine { action: differentiate; when: cell = Z1ppp|Z4aaa, stage = L3, Np = >=0.6; to: VentralUterine; priority: 2; evidence: experimental "Seydoux & Greenwald 1989, Cell 57:1237 (the cell with more LIN-12 activity takes the uterine fate)"; confidence: 0.75 }
 decision uterine_flanking { action: differentiate; when: cell = Z1ppa|Z4aap; to: VentralUterine; priority: 1; evidence: experimental "Kimble 1981 (Z1.ppa and Z4.aap are ventral uterine precursors in every animal)"; confidence: 0.8 }
+
+# --- the experiment that defines the group (Kimble 1981) ----------------------------------------
+# Ablate either cell and the survivor becomes the anchor cell every time; ablate both and there is
+# no anchor cell; ablate a flanking cell and nothing changes. That is what makes this an equivalence
+# group rather than a coin flip between two cells that were going to be different anyway. `ablate`
+# is an environment value the experiments below set, so the wild-type program never reads it.
+decision ablate_Z1ppp { action: die; when: cell = Z1ppp, ablate = Z1ppp|both; after: 0 min; evidence: experimental "Kimble 1981, Dev Biol 87:286 (laser ablation of Z1.ppp)"; confidence: 0.9 }
+decision ablate_Z4aaa { action: die; when: cell = Z4aaa, ablate = Z4aaa|both; after: 0 min; evidence: experimental "Kimble 1981, Dev Biol 87:286 (laser ablation of Z4.aaa)"; confidence: 0.9 }
+decision ablate_Z1ppa { action: die; when: cell = Z1ppa, ablate = Z1ppa; after: 0 min; evidence: experimental "Kimble 1981 (the control: a flanking ventral uterine precursor)"; confidence: 0.9 }
+
+experiment ablate_z1ppp { environment: ablate = Z1ppp; until: 4200 min; expect: "Z4.aaa becomes the anchor cell every time: with its partner gone it hears no Delta, keeps its own, and takes the fate (Kimble 1981)"; assert: type AnchorCell at 4200 min = 1; evidence: experimental "Kimble 1981, Dev Biol 87:286"; confidence: 0.85 }
+experiment ablate_z4aaa { environment: ablate = Z4aaa; until: 4200 min; expect: "Z1.ppp becomes the anchor cell every time, for the same reason (Kimble 1981)"; assert: type AnchorCell at 4200 min = 1; evidence: experimental "Kimble 1981, Dev Biol 87:286"; confidence: 0.85 }
+experiment ablate_both { environment: ablate = both; until: 4200 min; expect: "no anchor cell: the two flanking cells are ventral uterine precursors and cannot take the fate (Kimble 1981; Seydoux & Greenwald 1989)"; assert: type AnchorCell at 4200 min = 0; assert: type VentralUterine at 4200 min = 2; evidence: experimental "Kimble 1981, Dev Biol 87:286"; confidence: 0.8 }
+experiment ablate_flanking { environment: ablate = Z1ppa; until: 4200 min; expect: "the control: removing a flanking ventral uterine precursor leaves the decision where it was, so there is still exactly one anchor cell among the two that compete"; assert: type AnchorCell at 4200 min = 1; evidence: experimental "Kimble 1981, Dev Biol 87:286"; confidence: 0.8 }

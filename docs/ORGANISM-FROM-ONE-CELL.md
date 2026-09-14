@@ -746,7 +746,24 @@ reading the code.**
    What is missing is the sustained read of §7.2a (`Dp.exposure`, `Dp.mean`), which did not land:
    with it the rule would say "high Delta for long enough", which is what the cell does.
 
-A third arm is a control on the group: the equivalence group is two cells, not four. Z1.ppa and
+**The experiment that defines the group, run.** Kimble 1981's ablations are what make this an
+equivalence group rather than a coin flip between two cells that were going to differ anyway, and
+they are now four `experiment` blocks in the program and four arms in the script, scored over 100
+seeds each because "every time" is a claim about every run:
+
+| ablation | result |
+|---|---|
+| Z1.ppp | Z4.aaa is the anchor cell in **100 of 100** runs |
+| Z4.aaa | Z1.ppp is the anchor cell in **100 of 100** runs |
+| both | **no anchor cell in any of 100** runs; the two flanking cells stay ventral uterine |
+| Z1.ppa (a flanking cell: the control) | the decision is untouched — 99 of 100 with one anchor, split 43 to 56 |
+
+Nothing about the ablations is stated in the fate rules: the survivor wins because there is no
+longer a neighbour presenting Delta at its contact, which is the same mechanism that makes the
+wild-type decision a coin flip. `ablate` is an environment value the experiments set, so the
+wild-type program never reads it.
+
+One more control, on the membership: the equivalence group is two cells, not four. Z1.ppa and
 Z4.aap flank the pair and are ventral uterine precursors in every animal (Kimble 1981), so only
 Z1.ppp and Z4.aaa present LAG-2 here. Let all four present it and the four-cell chain settles into
 the alternating pattern lateral inhibition gives on a line — the two outer cells keep Delta, both

@@ -17,6 +17,9 @@ run:
                   daughter, and the contest is over before it starts
   whole_group     LAG-2 presented by all four cells rather than the two of the equivalence group:
                   a four-cell chain alternates, so both central cells lose
+  ablations       the experiment that defines the group (Kimble 1981): ablate either cell and the
+                  survivor is the anchor cell in every run, ablate both and there is none, ablate a
+                  flanking cell and nothing changes
   reference       what the run is worth against a reference lineage that records one outcome
 
     uv run python scripts/celegans_acvu.py [SEEDS]
@@ -41,12 +44,13 @@ PAIR = ("Z1ppp", "Z4aaa")
 REFERENCE_ANCHOR = "Z1ppp"  # WormWeb names Z1.ppp `gon herm anch`; the animal does not always agree
 
 
-def outcomes(module, seeds=SEEDS):
+def outcomes(module, seeds=SEEDS, environment=None):
     """One run per seed; who ended up the anchor cell, and how far apart the two cells' Delta got."""
     out = []
     for seed in range(seeds):
-        b = Body(module, seed=seed).run(until=UNTIL)
-        anchors = [n for n in GROUP if b.cells[n].cell_type == "AnchorCell"]
+        b = Body(module, seed=seed, environment=environment).run(until=UNTIL)
+        alive = {n for n in GROUP if n in b.cells and b.cells[n].dies_at is None}
+        anchors = [n for n in alive if b.cells[n].cell_type == "AnchorCell"]
         d = [b.cells[n].levels.get("Dp", 0.0) for n in PAIR]
         out.append(
             {
@@ -119,6 +123,18 @@ for d in whole.decisions:
 wg = outcomes(whole, seeds=min(SEEDS, 100))
 result["whole_group"] = summarise(wg, "all four cells presenting LAG-2")
 
+# the ablations that define the group (Kimble 1981), scored over seeds rather than in one run:
+# "every time" is the claim, and a claim about every time needs every seed
+result["ablations"] = {}
+for who, expect in (
+    ("Z1ppp", "Z4aaa becomes the anchor cell in every run"),
+    ("Z4aaa", "Z1ppp becomes the anchor cell in every run"),
+    ("both", "no anchor cell in any run"),
+    ("Z1ppa", "the control: a flanking cell removed changes nothing, so the split holds"),
+):
+    runs = outcomes(parse_file(PROGRAM), seeds=min(SEEDS, 100), environment={"ablate": who})
+    result["ablations"][who] = summarise(runs, f"ablate {who}: {expect}") | {"expect": expect}
+
 # what this is worth against a lineage that records one outcome
 hits = sum(1 for r in on if r["anchor"] == REFERENCE_ANCHOR)
 result["reference"] = {
@@ -141,9 +157,17 @@ result["pass"] = bool(
     and result["noise_off"]["exactly_one_anchor"] == 0
     and result["noise_off"]["max_delta_gap"] < 1e-9
     and result["daughters_swapped"]["same_winner_per_seed"] == SEEDS
+    # the ablations: the survivor takes the fate in every run, and with both gone nobody does
+    and set(result["ablations"]["Z1ppp"]["winners"]) == {"Z4aaa"}
+    and result["ablations"]["Z1ppp"]["exactly_one_anchor"] == result["ablations"]["Z1ppp"]["runs"]
+    and set(result["ablations"]["Z4aaa"]["winners"]) == {"Z1ppp"}
+    and result["ablations"]["Z4aaa"]["exactly_one_anchor"] == result["ablations"]["Z4aaa"]["runs"]
+    and result["ablations"]["both"]["no_anchor"] == result["ablations"]["both"]["runs"]
 )
 print(save_result("celegans_acvu", result))
 for key in ("noise_on", "noise_off", "daughters_swapped", "mother_inherits", "whole_group"):
     print(key, result[key])
+for who, r in result["ablations"].items():
+    print("ablate", who, r["exactly_one_anchor"], "of", r["runs"], "with one anchor;", r["winners"])
 print("reference", result["reference"]["runs_matching_the_reference"], "/", SEEDS)
 print("pass", result["pass"])

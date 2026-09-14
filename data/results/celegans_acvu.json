@@ -69,6 +69,63 @@
     "max_delta_gap": 0.012886,
     "median_delta_gap": 0.003059
   },
+  "ablations": {
+    "Z1ppp": {
+      "condition": "ablate Z1ppp: Z4aaa becomes the anchor cell in every run",
+      "runs": 100,
+      "exactly_one_anchor": 100,
+      "no_anchor": 0,
+      "more_than_one": 0,
+      "winners": {
+        "Z4aaa": 100
+      },
+      "Z1ppp_share": 0.0,
+      "max_delta_gap": 0.127076,
+      "median_delta_gap": 0.03541,
+      "expect": "Z4aaa becomes the anchor cell in every run"
+    },
+    "Z4aaa": {
+      "condition": "ablate Z4aaa: Z1ppp becomes the anchor cell in every run",
+      "runs": 100,
+      "exactly_one_anchor": 100,
+      "no_anchor": 0,
+      "more_than_one": 0,
+      "winners": {
+        "Z1ppp": 100
+      },
+      "Z1ppp_share": 1.0,
+      "max_delta_gap": 0.130891,
+      "median_delta_gap": 0.029198,
+      "expect": "Z1ppp becomes the anchor cell in every run"
+    },
+    "both": {
+      "condition": "ablate both: no anchor cell in any run",
+      "runs": 100,
+      "exactly_one_anchor": 0,
+      "no_anchor": 100,
+      "more_than_one": 0,
+      "winners": {},
+      "Z1ppp_share": null,
+      "max_delta_gap": 0.142478,
+      "median_delta_gap": 0.034612,
+      "expect": "no anchor cell in any run"
+    },
+    "Z1ppa": {
+      "condition": "ablate Z1ppa: the control: a flanking cell removed changes nothing, so the split holds",
+      "runs": 100,
+      "exactly_one_anchor": 99,
+      "no_anchor": 1,
+      "more_than_one": 0,
+      "winners": {
+        "Z4aaa": 56,
+        "Z1ppp": 43
+      },
+      "Z1ppp_share": 0.434,
+      "max_delta_gap": 1.05688,
+      "median_delta_gap": 0.984925,
+      "expect": "the control: a flanking cell removed changes nothing, so the split holds"
+    }
+  },
   "reference": {
     "reference_anchor": "Z1ppp",
     "source": "Sulston & Horvitz 1977 via WormWeb: Z1.pp's posterior daughter is `gon herm anch`",
@@ -76,6 +133,6 @@
     "share": 0.48,
     "note": "the reference records one animal's outcome, so this is the ceiling for an honest program and 100% is the score of a program that has named the winner. The worm program (lineage_larva.bio) does name it, and takes that 100%: the AC/VU cell is the one place in the 1,092 terminal cells where the lineage score is not the right instrument"
   },
-  "seconds": 88.5,
+  "seconds": 132.2,
   "pass": true
 }
