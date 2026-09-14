@@ -191,6 +191,77 @@ def test_hold_out_comparison_reads_the_gap_the_way_it_was_written():
     assert ex.compare_endpoints(strong, [])["gap"] is None
 
 
+def _mpra_row(pos, alt, cell, log2fc, fdr, study="A study", chrom="chr1"):
+    return {
+        "chrom": chrom,
+        "chromStart": pos - 1,
+        "ref": "A",
+        "alt": alt,
+        "rsid": f"rs{pos}",
+        "cellLine": cell,
+        "log2FC": str(log2fc),
+        "fdr": str(fdr),
+        "pvalue": str(fdr),
+        "mpraStudy": study,
+    }
+
+
+def test_wide_population_and_nulls():
+    rows = [
+        _mpra_row(1000, "G", "GM12878", 1.2, 0.01),  # significant
+        _mpra_row(1000, "G", "HepG2", 0.4, 0.2),  # the same variant, not significant: never a control
+        _mpra_row(1400, "C", "GM12878", 0.02, 0.9),  # a measured null, far enough away
+        _mpra_row(1050, "T", "GM12878", 0.03, 0.9),  # a null inside the tested 200-bp window
+        _mpra_row(2000, "GG", "GM12878", 2.0, 0.001),  # not a single-base swap
+        _mpra_row(3000, "G", "HEK293T", 2.0, 0.001),  # no track for the cell
+        _mpra_row(4000, "G", "GM12878", 2.0, 0.001, study="Saturation mutagenesis of twenty"),
+        _mpra_row(4500, "C", "GM12878", 0.01, 0.8, study="Saturation mutagenesis of twenty"),
+    ]
+    tests, nulls = ex.wide_split(rows)
+    assert {t["pos"] for t in tests} == {1000, 4000}
+    assert {t["endpoint"] for t in tests} == {"E1W_mpra_wide", "E1S_mpra_saturation"}
+    assert {n["pos"] for n in nulls} == {1400, 1050, 4500}  # the significant variant is never a null
+    assert [t["measured_sign"] for t in tests if t["pos"] == 1000] == [1]
+
+
+def test_wide_readout_never_lets_the_model_choose_the_gene():
+    effects = [["FAR", "GM12878", 0.5], ["MINE", "GM12878", 0.002]]
+    strict = ex.readout(effects, "ABSENT", None, "GM12878", fallback=False)
+    assert strict["value"] is None and "gene not in the window" in strict["how"]
+    assert ex.readout(effects, "ABSENT", None, "GM12878")["value"] == 0.5  # the old E1 rule
+    assert ex.readout(effects, "MINE", None, "GM12878", fallback=False)["value"] == 0.002
+
+
+def test_decide_can_split_on_the_cell_line():
+    done = [dict(_pair("E1W_mpra_wide", True, False), borrowed={"measured_sign": 1, "cell": "GM12878"})]
+    done += [dict(_pair("E1W_mpra_wide", True, False), borrowed={"measured_sign": 1, "cell": "Jurkat"})]
+    done += [
+        dict(_pair("E1W_mpra_wide", True, False, "chr9"), borrowed={"measured_sign": 1, "cell": "Jurkat"})
+    ]
+    assert set(ex.by_group(done, "E1W_mpra_wide", "cell")) == {"GM12878", "Jurkat"}
+    assert ex.decide(done, "E1W_mpra_wide", 0.5, split="cell") == "success"
+
+
+def test_pre_registration_of_the_widened_e1_is_complete():
+    for key in (
+        "claim_tested",
+        "population",
+        "strata",
+        "readout",
+        "controls",
+        "order",
+        "budget",
+        "success",
+        "confirms_e2_e3",
+        "contradicts_e2_e3",
+        "fails_to_resolve",
+        "convention",
+        "caveat",
+    ):
+        assert ex.E1_WIDE[key]
+    assert "before any model request" in ex.E1_WIDE["written"]
+
+
 def test_criterion_is_complete_and_pre_registered():
     for key in ("claim_tested", "prediction", "success", "stopping", "order", "alpha_spending", "caveat"):
         assert ex.CRITERION[key]

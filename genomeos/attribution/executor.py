@@ -32,6 +32,14 @@ correlation into a test that can fail:
 The model was trained on ENCODE tracks, and GTEx expression is close kin to them, so agreement with
 an eQTL is partly the model reading back what it learned; the MPRA allele pairs are the cleaner
 test and are scored and reported apart.
+
+5. **The widened E1** (`E1_WIDE`, `wide_pairs`, `--wide`), pre-registered 2026-09-14 after E2 and E3:
+   the storage-unit framing is dropped and every significant MPRAVarDB allele pair genome-wide is
+   tested, in the cell lines the model has RNA-seq tracks for, against a control the same study
+   measured in the same cell and found not significant. The read-out gene is chosen without the
+   model (DAP-G at the variant, else the nearest protein-coding TSS), because this is the endpoint
+   whose outcome is an external measurement rather than expression data of the kind the model was
+   trained on.
 """
 
 from __future__ import annotations
@@ -41,7 +49,9 @@ import gzip
 import json
 import math
 import random
+import re
 import time
+from bisect import bisect_left
 from collections import Counter
 from collections.abc import Callable
 from pathlib import Path
@@ -77,6 +87,16 @@ EQTL_P = 1e-5
 DAPG_PIP = 0.5  # fine-mapped: the primary eQTL endpoint, where the value is probably the cause
 ENDPOINTS = ("E1_mpra", "E2_eqtl", "E3_eqtl_linked")
 SEED = 20260914
+
+# -- the widened E1: every significant MPRAVarDB allele pair, genome-wide ------------------------
+MPRA_URL_KEY = "mpravardb"  # human_panel.BIGBEDS: gbdb/hg38/mpra/mpravardb/mpravardb.bb
+MPRA_CELLS = ("GM12878", "HepG2", "K562", "Jurkat", "HeLa")  # MPRA lines the model has tracks for
+MPRA_NULL_P = 0.2  # a control's own measurement must be this far from significant
+WIDE_MIN_DISTANCE = 200  # a control outside the tested variant's own 200-bp window
+WIDE_MAX_DISTANCE = 250_000  # and inside the 1 Mb prediction window, as in E2 and E3
+SATURATION = "Saturation mutagenesis"  # the one study that mutates whole elements: a stratum apart
+WIDE_ENDPOINTS = ("E1W_mpra_wide", "E1S_mpra_saturation")
+MAIN_CHROMS = tuple(f"chr{c}" for c in [*range(1, 23), "X", "Y"])
 
 AMENDMENTS: tuple[dict[str, str], ...] = (
     {
@@ -234,6 +254,121 @@ CRITERION: dict[str, Any] = {
         "AlphaGenome learned from ENCODE RNA-seq, DNase and histone tracks, and GTEx expression is the same "
         "kind of measurement; agreement with an eQTL is partly the model reading back its inputs. MPRA "
         "reporter activity is not a training track in that way, so E1 is the cleaner test"
+    ),
+}
+
+E1_WIDE: dict[str, Any] = {
+    "written": "2026-09-14, before any model request of the widened endpoint and before any pair was scored",
+    "why": (
+        "E1 was the endpoint that answers the standing objection to E2 and E3 — that the model's agreement "
+        "with a GTEx eQTL is partly the model reading back training data of the same kind — and it had 12 "
+        "pairs, because the shortlist was built from the human panel's storage units and the panel has run "
+        "only on chr21 and chr22. The measurement is not so limited: MPRAVarDB is genome-wide. This "
+        "endpoint drops the storage-unit framing and tests every significant allele pair the database "
+        "holds, in the cell lines the model has RNA-seq tracks for"
+    ),
+    "claim_tested": (
+        "swapping an allele that a reporter assay measured as changing activity moves the model's predicted "
+        "read-out of the local gene in the measured direction more often than swapping an allele the same "
+        "assay measured in the same cell and found not to change activity"
+    ),
+    "population": (
+        "MPRAVarDB rows on the main assembly with an FDR at or below 0.05, or a nominal p at or below 0.01 "
+        "where the study reports no FDR; 3'UTR stability libraries excluded; single-base ref and alt; the "
+        "cell line one of GM12878, HepG2, K562, Jurkat or HeLa, the MPRA lines the model has RNA-seq tracks "
+        "for. One test per variant: the significant row with the largest absolute log2FC"
+    ),
+    "strata": (
+        "E1W_mpra_wide, the headline, is every such variant outside the saturation-mutagenesis study; "
+        "E1S_mpra_saturation is that study alone, which mutates a handful of whole elements and so is a "
+        "within-element test at five loci, reported apart and never the headline. Both are declared here, "
+        "before either was assembled or scored"
+    ),
+    "readout": (
+        "the model's RNA-seq gene tracks in the MPRA's own cell line, both alleles in one request over the "
+        "1 Mb window; the gene is chosen without the model: the gene DAP-G names at this very variant "
+        "(highest PIP) if there is one, else the nearest protein-coding TSS in GENCODE. The control is read "
+        "on the same gene in the same cell, so the no-call threshold cannot filter the two arms differently"
+    ),
+    "readout_changed_from_e1": (
+        "the original E1 chose the read-out gene as the one with the largest absolute predicted effect in "
+        "the cell when no eQTL named a gene, which is the model choosing its own read-out and favours the "
+        "unit arm at the no-call threshold. The widened endpoint chooses the gene from DAP-G or the "
+        "annotation alone, and refuses the pair rather than falling back on a model-chosen gene"
+    ),
+    "measured_sign": (
+        "sign of MPRAVarDB log2FC, which UCSC's track description defines as log2(alt RNA/DNA) - "
+        "log2(ref RNA/DNA): alternative over reference. The sign convention is checked once against GTEx "
+        "lymphocyte eQTLs before the run and reported with the result"
+    ),
+    "controls": (
+        "one per unit, never reused: a variant the same study measured in the same cell line and found not "
+        "significant (FDR above 0.2, or nominal p above 0.2 where no FDR is given), with no significant row "
+        "in any study or cell anywhere, single-base ref and alt, between 200 bp and 250 kb from the tested "
+        "variant so that it is outside the tested variant's own 200-bp window and inside the prediction "
+        "window; the nearest such variant is taken. It borrows the unit's gene, cell and measured sign. "
+        "This is a measured null from the same library rather than the unmeasured storage unit E2 and E3 "
+        "used, because off chr21 and chr22 there is no human panel to draw one from and because the "
+        "same-library null is the stronger match: same assay, same cell, same neighbourhood"
+    ),
+    "no_call": "a predicted |log2FC| below 0.001 is a no-call in either arm, with the 0, 0.001 and 0.01 grid",
+    "order": "strongest measured |log2FC| first, which is the subset where the measurement is most certain",
+    "budget": (
+        "1,000 pairs and at most 2,000 requests for E1W_mpra_wide; if the quota holder grants it, a further "
+        "300 pairs and 600 requests for E1S_mpra_saturation, reported apart"
+    ),
+    "alpha_spending": {"look_1_pairs": 150, "alpha_1": 0.0005, "look_2_pairs": 400, "alpha_2": 0.002},
+    "final_alpha": 0.01,
+    "stopping": (
+        "pairs in the pre-registered order; at 150 and 400 pairs an endpoint stops for success at its alpha "
+        "or for futility if the upper 95% bound of the difference is below 0.05; otherwise the run ends at "
+        "the budget and is read at alpha 0.01"
+    ),
+    "success": (
+        "agreement in units minus agreement in matched nulls at or above 0.10, one-sided Fisher exact p at "
+        "or below the alpha of the look, and the same direction of difference in GM12878 and in Jurkat "
+        "separately (the two cells that carry the headline stratum)"
+    ),
+    "confirms_e2_e3": (
+        "a success here is the external answer to the ENCODE objection: the model tracks a measured "
+        "direction that is not one of its training tracks, and E2's +0.268 with E3's dilution then reads as "
+        "a property of the sequence and not of the model's memory of GTEx"
+    ),
+    "contradicts_e2_e3": (
+        "a difference at or below 0 with the budget spent, or a futility stop, says the model does not "
+        "track an external measurement of direction at all, and E2 and E3 are then best explained by the "
+        "model reproducing expression data of the kind it was trained on. The executor claim would be "
+        "confined to eQTL-shaped read-outs and would not be a statement about sequence"
+    ),
+    "fails_to_resolve": (
+        "a difference between 0 and 0.10, or p above 0.01 with the upper 95% bound above 0.05, decides "
+        "nothing: the reporter measures an episomal fragment and the model predicts a chromosomal gene, so "
+        "a small positive difference is what a weak but real correspondence would also look like"
+    ),
+    "secondary_fine_mapped_split": (
+        "declared 2026-09-14 before any request, after the convention check and from it: among the tested "
+        "GM12878 variants that also have a significant eQTL in EBV-transformed lymphocytes, the reporter's "
+        "direction and the eQTL's direction agree 120 of 179 times (0.670) where DAP-G fine-maps the "
+        "variant and 946 of 1,826 (0.518) over all of them. Two independent measurements therefore show "
+        "the same split E2 and E3 found in the model. E1W is read again inside those strata: if the model "
+        "is tracking the measurement rather than its own training data, its agreement should be higher on "
+        "the fine-mapped variants than on the rest, by about the same margin. This is a prediction, not a "
+        "criterion: the endpoint's success or failure is decided by the difference against the matched "
+        "nulls as stated above"
+    ),
+    "convention": (
+        "the control borrows the unit's measured sign, so mirroring the log2FC convention would flip both "
+        "arms and change the sign of the difference: this endpoint stands or falls with the convention. It "
+        "is therefore checked before any request, genome-wide, against GTEx slopes in EBV-transformed "
+        "lymphocytes for the GM12878 variants (wide_sign_check), and the check is committed with the plan. "
+        "A strongly negative difference at the end would be read first as evidence about the convention and "
+        "only then as evidence about the claim"
+    ),
+    "caveat": (
+        "an MPRA measures a short fragment on a plasmid, not the gene in its chromosome; the assay's own "
+        "reproducibility across studies is modest; and the read-out gene is the nearest TSS for most "
+        "variants, which is wrong for a third of distal elements by this project's own deletion work. All "
+        "three blunt the endpoint rather than bias it towards success"
     ),
 }
 
@@ -485,6 +620,229 @@ def tested_variant(unit: dict[str, Any]) -> dict[str, Any] | None:
 
 
 # ------------------------------------------------------------------------------------------------
+# The widened E1: MPRAVarDB read genome-wide, its nulls as controls
+# ------------------------------------------------------------------------------------------------
+def mpra_genome_wide(cache: Path | None = None, progress=None) -> list[dict[str, Any]]:
+    """Every MPRAVarDB row on the main assembly, through the panel's own bigBed reader, cached once."""
+    from genomeos.attribution.human_panel import open_bigbed
+
+    path = cache or LANE / "mpravardb_rows.json.gz"
+    if path.exists():
+        with gzip.open(path, "rt") as fh:
+            return json.load(fh)
+    bb = open_bigbed(MPRA_URL_KEY)
+    rows: list[dict[str, Any]] = []
+    for chrom in MAIN_CHROMS:
+        if chrom not in bb.chroms:
+            continue
+        got = bb.query(chrom, [(0, bb.chroms[chrom][1])])
+        rows.extend(got)
+        if progress:
+            progress(f"{chrom}: {len(got)} MPRA rows, {len(rows)} in all")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(path, "wt") as fh:
+        json.dump(rows, fh)
+    return rows
+
+
+def mpra_call(row: dict[str, Any]) -> dict[str, Any]:
+    """A raw MPRAVarDB row as the fields this test reads."""
+    return {
+        "chrom": row["chrom"],
+        "pos": int(row["chromStart"]) + 1,
+        "ref": (row.get("ref") or "").strip(),
+        "alt": (row.get("alt") or "").strip(),
+        "rsid": row.get("rsid") or None,
+        "cell": row.get("cellLine"),
+        "log2fc": _float(row.get("log2FC")),
+        "fdr": _float(row.get("fdr")),
+        "pvalue": _float(row.get("pvalue")),
+        "study": (row.get("mpraStudy") or "")[:90],
+    }
+
+
+def wide_usable(call: dict[str, Any]) -> bool:
+    """A row this endpoint can use at all: a single-base swap, in a cell the model has tracks for."""
+    return (
+        call["cell"] in MPRA_CELLS
+        and len(call["ref"]) == 1
+        and len(call["alt"]) == 1
+        and call["ref"] in "ACGT"
+        and call["alt"] in "ACGT"
+        and MPRA_EXCLUDE not in (call["study"] or "")
+    )
+
+
+def wide_split(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """(tests, nulls): one significant row per variant, and the measured-null rows, by the population rule."""
+    calls = [c for c in (mpra_call(r) for r in rows) if wide_usable(c)]
+    significant: dict[tuple[str, int, str], dict[str, Any]] = {}
+    ever_significant: set[tuple[str, int, str]] = set()
+    for c in calls:
+        key = (c["chrom"], c["pos"], c["alt"])
+        if not mpra_significant([c]):
+            continue
+        ever_significant.add(key)
+        cur = significant.get(key)
+        if cur is None or abs(c["log2fc"]) > abs(cur["log2fc"]):
+            significant[key] = c
+    nulls = [
+        c
+        for c in calls
+        if (c["chrom"], c["pos"], c["alt"]) not in ever_significant
+        and (c["fdr"] if c["fdr"] is not None else c["pvalue"] or 1) > MPRA_NULL_P
+    ]
+    tests = []
+    for c in significant.values():
+        tests.append(
+            {
+                **c,
+                "endpoint": "E1S_mpra_saturation" if c["study"].startswith(SATURATION) else "E1W_mpra_wide",
+                "measured_sign": 1 if c["log2fc"] > 0 else -1,
+                "rank_key": -abs(c["log2fc"]),
+            }
+        )
+    return tests, nulls
+
+
+def protein_coding_tss(chrom: str) -> tuple[list[int], list[str]]:
+    """The chromosome's protein-coding transcription starts, sorted, with their symbols."""
+    from genomeos.genome.annotation import Annotation, Strand, default_gencode
+
+    gff = default_gencode({chrom})
+    if gff is None:
+        return [], []
+    out = []
+    for g in Annotation.from_gff3(gff, {chrom}).genes.values():
+        if g.type != "protein_coding":
+            continue
+        loc = g.locus
+        out.append(((loc.start + 1) if loc.strand is Strand.PLUS else loc.end, g.symbol))
+    out.sort()
+    return [p for p, _ in out], [s for _, s in out]
+
+
+def nearest_gene(tss: tuple[list[int], list[str]], pos: int) -> tuple[str | None, int | None]:
+    """The nearest protein-coding TSS and its distance; the model has no say in this choice."""
+    starts, symbols = tss
+    if not starts:
+        return None, None
+    i = bisect_left(starts, pos)
+    best = min(
+        (j for j in (i - 1, i) if 0 <= j < len(starts)), key=lambda j: abs(starts[j] - pos), default=None
+    )
+    return (symbols[best], abs(starts[best] - pos)) if best is not None else (None, None)
+
+
+def dapg_at(chrom: str, positions: list[int]) -> dict[int, dict[str, Any]]:
+    """The DAP-G gene with the highest PIP at each 1-based position, from the genome-wide track."""
+    from genomeos.attribution.human_panel import _eqtl_pos, track_rows
+
+    if not positions:
+        return {}
+    ivs = [(p - 1, p) for p in sorted(set(positions))]
+    rows, _ = track_rows("gtex_dapg", chrom, ivs)
+    best: dict[int, dict[str, Any]] = {}
+    for r in rows:
+        p = _eqtl_pos(r)
+        if p is None:
+            continue
+        pip = _float(r.get("pip")) or 0.0
+        pos1 = p + 1
+        cur = best.get(pos1)
+        if cur is None or pip > cur["pip"]:
+            best[pos1] = {"gene": r.get("geneName"), "tissue": r.get("tissue"), "pip": pip}
+    return best
+
+
+def wide_pairs(rows: list[dict[str, Any]], progress=None) -> dict[str, Any]:
+    """Tests, their read-out genes and their matched measured-null controls, chromosome by chromosome."""
+    tests, nulls = wide_split(rows)
+    by_chrom_null: dict[str, list[dict[str, Any]]] = {}
+    for n in nulls:
+        by_chrom_null.setdefault(n["chrom"], []).append(n)
+    for v in by_chrom_null.values():
+        v.sort(key=lambda c: c["pos"])
+    pairs: list[dict[str, Any]] = []
+    unmatched: Counter = Counter()
+    gene_source: Counter = Counter()
+    for chrom in sorted({t["chrom"] for t in tests}, key=lambda c: MAIN_CHROMS.index(c)):
+        mine = [t for t in tests if t["chrom"] == chrom]
+        tss = protein_coding_tss(chrom)
+        dapg = dapg_at(chrom, [t["pos"] for t in mine])
+        pool = by_chrom_null.get(chrom, [])
+        positions = [c["pos"] for c in pool]
+        used: set[tuple[int, str]] = set()
+        for t in sorted(mine, key=lambda t: t["rank_key"]):
+            d = dapg.get(t["pos"])
+            if d and d["gene"]:
+                gene, how = d["gene"], f"DAP-G at the variant (PIP {d['pip']:.3f})"
+            else:
+                gene, dist = nearest_gene(tss, t["pos"])
+                how = f"nearest protein-coding TSS ({dist} bp)" if gene else "no gene"
+            if not gene:
+                unmatched[t["endpoint"] + ":no_gene"] += 1
+                continue
+            gene_source["dapg" if d and d["gene"] else "nearest_tss"] += 1
+            i = bisect_left(positions, t["pos"])
+            best = None
+            for j in range(max(0, i - 400), min(len(pool), i + 400)):
+                c = pool[j]
+                if (c["pos"], c["alt"]) in used or c["study"] != t["study"] or c["cell"] != t["cell"]:
+                    continue
+                dist = abs(c["pos"] - t["pos"])
+                if dist < WIDE_MIN_DISTANCE or dist > WIDE_MAX_DISTANCE:
+                    continue
+                if best is None or dist < best[1]:
+                    best = (c, dist)
+            if best is None:
+                unmatched[t["endpoint"] + ":no_null"] += 1
+                continue
+            c, dist = best
+            used.add((c["pos"], c["alt"]))
+            pairs.append(
+                {
+                    "endpoint": t["endpoint"],
+                    "unit": f"{chrom}:{t['pos']}",
+                    "test": {
+                        k: t[k] for k in ("pos", "ref", "alt", "rsid", "log2fc", "fdr", "pvalue", "study")
+                    },
+                    "control": {
+                        "unit": f"{chrom}:{c['pos']}",
+                        "pos": c["pos"],
+                        "ref": c["ref"],
+                        "alt": c["alt"],
+                        "rsid": c["rsid"],
+                        "log2fc": c["log2fc"],
+                        "fdr": c["fdr"],
+                        "pvalue": c["pvalue"],
+                        "distance": c["pos"] - t["pos"],
+                    },
+                    "borrowed": {
+                        "gene": gene,
+                        "tissue": None,
+                        "cell": t["cell"],
+                        "measured_sign": t["measured_sign"],
+                        "strict": True,
+                    },
+                    "gene_how": how,
+                    "rank_key": t["rank_key"],
+                }
+            )
+        if progress:
+            progress(f"{chrom}: {len(mine)} tests, {len(pairs)} pairs so far")
+    pairs.sort(key=lambda p: (WIDE_ENDPOINTS.index(p["endpoint"]), p["rank_key"]))
+    for i, p in enumerate(pairs, 1):
+        p["order"] = i
+    return {
+        "pairs": pairs,
+        "unmatched": dict(unmatched),
+        "gene_source": dict(gene_source),
+        "tests": len(tests),
+    }
+
+
+# ------------------------------------------------------------------------------------------------
 # Matched controls
 # ------------------------------------------------------------------------------------------------
 def r2(a: list[Any], b: list[Any]) -> float | None:
@@ -653,7 +1011,13 @@ def sign_convention_check(shortlist: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+BINOM_EXACT_MAX = 1000  # above this the exact sum overflows a float; the normal approximation is used
+
+
 def binom_two_sided(k: int, n: int, p: float = 0.5) -> float:
+    if n > BINOM_EXACT_MAX:
+        z = abs(k - n * p) / math.sqrt(n * p * (1 - p))
+        return round(math.erfc(z / math.sqrt(2)), 8)
     probs = [math.comb(n, i) * p**i * (1 - p) ** (n - i) for i in range(n + 1)]
     obs = probs[k]
     return round(min(1.0, sum(q for q in probs if q <= obs * (1 + 1e-9))), 6)
@@ -699,17 +1063,27 @@ def _pick_gene(tracks: list[tuple[str, str, float]]) -> str | None:
 
 
 def readout(
-    effects: list[list[Any]], gene: str | None, tissue: str | None, cell: str | None
+    effects: list[list[Any]],
+    gene: str | None,
+    tissue: str | None,
+    cell: str | None,
+    fallback: bool = True,
 ) -> dict[str, Any]:
-    """The predicted log2FC for the read-out the criterion names, and how it was chosen."""
+    """The predicted log2FC for the read-out the criterion names, and how it was chosen.
+
+    With fallback off (the widened E1) the named gene is the only read-out: the model never chooses
+    its own, so the no-call threshold cannot filter the two arms differently.
+    """
     rows = [(g, t, float(v)) for g, t, v in effects]
     if cell:
         rows = [r for r in rows if _norm(cell) in _norm(r[1])]
         if not rows:
             return {"value": None, "gene": gene, "how": "no track for the cell"}
-        gene = gene or _pick_gene(rows)
+        gene = gene or (_pick_gene(rows) if fallback else None)
+        if gene is None:
+            return {"value": None, "gene": None, "how": "no gene named for a strict read-out"}
     mine = [r for r in rows if r[0] == gene]
-    if not mine and cell:
+    if not mine and cell and fallback:
         gene = _pick_gene(rows)
         mine = [r for r in rows if r[0] == gene]
         if mine:
@@ -791,7 +1165,13 @@ def predict_side(
     effects = score_variant(
         kept(scorer, borrowed.get("gene"), cell), chrom, side["pos"], side["ref"], side["alt"], folder
     )
-    r = readout(effects, borrowed.get("gene"), borrowed.get("tissue"), borrowed.get("cell"))
+    r = readout(
+        effects,
+        borrowed.get("gene"),
+        borrowed.get("tissue"),
+        borrowed.get("cell"),
+        fallback=not borrowed.get("strict"),
+    )
     v = r["value"]
     call = None if v is None or abs(v) < NO_CALL else (1 if v > 0 else -1)
     return {
@@ -888,14 +1268,30 @@ def compare_endpoints(
     }
 
 
-def decide(done: list[dict[str, Any]], endpoint: str, alpha: float, final: bool = False) -> str | None:
+def group_of(row: dict[str, Any], key: str) -> Any:
+    """The value a split names: a column of the pair, or one the control borrowed (the cell line)."""
+    return row["borrowed"].get(key) if key in row.get("borrowed", {}) else row.get(key)
+
+
+def by_group(done: list[dict[str, Any]], endpoint: str, key: str) -> dict[str, dict[str, Any]]:
+    """The endpoint tallied inside each value of a split (chromosome, or the MPRA's cell line)."""
+    rows = [d for d in done if d["endpoint"] == endpoint]
+    out = {}
+    for v in sorted({str(group_of(d, key)) for d in rows}):
+        out[v] = tally([d for d in rows if str(group_of(d, key)) == v], endpoint)
+    return out
+
+
+def decide(
+    done: list[dict[str, Any]], endpoint: str, alpha: float, final: bool = False, split: str = "chrom"
+) -> str | None:
     """'success', 'futility', 'negative' (at the final look) or None (carry on), by the criterion."""
     t = tally(done, endpoint)
     if not t["units_called"] or not t["controls_called"]:
         return "negative" if final else None
-    per_chrom = [tally(done, endpoint, c) for c in sorted({d["chrom"] for d in done})]
+    per_group = list(by_group(done, endpoint, split).values())
     same_way = all(
-        (x["difference"] or 0) > 0 for x in per_chrom if x["units_called"] and x["controls_called"]
+        (x["difference"] or 0) > 0 for x in per_group if x["units_called"] and x["controls_called"]
     )
     if t["difference"] >= 0.10 and t["p_one_sided"] <= alpha and same_way:
         return "success"
@@ -911,6 +1307,9 @@ def run_pairs(
     max_requests: int | None = None,
     progress=None,
     max_pairs: int | None = None,
+    looks_at: tuple[str, ...] = ("E1_mpra", "E2_eqtl"),
+    endpoints: tuple[str, ...] = ENDPOINTS,
+    split: str = "chrom",
 ) -> dict[str, Any]:
     """Spend requests in the pre-registered order, look at the pre-registered points, stop by the rule.
 
@@ -922,7 +1321,7 @@ def run_pairs(
     requests = 0
     stopped: dict[str, str] = {}
     for p in pairs:
-        if len(stopped) >= 2 or (max_requests is not None and requests >= max_requests):
+        if len(stopped) >= len(looks_at) or (max_requests is not None and requests >= max_requests):
             break
         if max_pairs is not None and len(done) >= max_pairs:
             break
@@ -941,21 +1340,166 @@ def run_pairs(
         n = len(done)
         for key, alpha in (("look_1_pairs", looks["alpha_1"]), ("look_2_pairs", looks["alpha_2"])):
             if n == looks[key]:
-                for e in ("E1_mpra", "E2_eqtl"):  # E3 is exploratory and never stops the run
-                    call = decide(done, e, alpha)
+                for e in looks_at:  # an exploratory endpoint is not looked at and never stops the run
+                    call = decide(done, e, alpha, split=split)
                     if call and e not in stopped:
                         stopped[e] = f"{call} at {n} pairs"
         if progress and n % 25 == 0:
             progress(f"{n} pairs, {requests} requests, {stopped or 'running'}")
     out = {"pairs_done": len(done), "requests_spent": requests, "stopped": stopped}
-    for e in ENDPOINTS:
+    for e in endpoints:
         out[e] = tally(done, e)
         out[e]["by_chromosome"] = {c: tally(done, e, c) for c in sorted({d["chrom"] for d in done})}
+        if split != "chrom":
+            out[e][f"by_{split}"] = by_group(done, e, split)
         out[e]["verdict"] = stopped.get(e) or (
-            decide(done, e, looks["final_alpha"], final=True) or "negative"
+            decide(done, e, looks["final_alpha"], final=True, split=split) or "negative"
         )
     out["rows"] = done
     return out
+
+
+def wide_sign_check(pairs: list[dict[str, Any]], progress=None) -> dict[str, Any]:
+    """The direction convention, checked genome-wide before any request and without one.
+
+    MPRAVarDB's log2FC is read as alternative over reference. GTEx's slope is signed the same way,
+    so among the tested GM12878 variants that also have a significant eQTL in EBV-transformed
+    lymphocytes the two signs should agree more often than not. This settles nothing about the
+    executor claim; it settles whether the endpoint's measured sign is the right way up.
+    """
+    from genomeos.attribution.eqtl import Intervals, distil, hits_path
+
+    tested = [p for p in pairs if p["borrowed"]["cell"] == "GM12878"]
+    directory = LANE / "gtex_lcl"
+    if not hits_path(LCL_TISSUE, directory).exists():
+        iv = Intervals()
+        for p in tested:
+            chrom, pos = p["unit"].split(":")[0], int(p["unit"].split(":")[1])
+            iv.add(chrom, pos - 1, pos, p["unit"])
+        distil(iv.freeze(), knowledge=directory, tissues=[LCL_TISSUE], progress=progress)
+    slopes: dict[tuple[str, int], float] = {}
+    with hits_path(LCL_TISSUE, directory).open() as fh:
+        next(fh, None)
+        for line in fh:
+            f = line.rstrip("\n").split("\t")
+            slopes[(f[1], int(f[2]))] = float(f[6])
+    agree = n = 0
+    fine_agree = fine_n = 0
+    for p in tested:
+        chrom, pos = p["unit"].split(":")[0], int(p["unit"].split(":")[1])
+        s = slopes.get((chrom, pos))
+        if s is None:
+            continue
+        same = (s > 0) == (p["test"]["log2fc"] > 0)
+        n += 1
+        agree += same
+        m = re.search(r"PIP ([0-9.]+)", p.get("gene_how") or "")
+        if m and float(m.group(1)) >= DAPG_PIP:
+            fine_n += 1
+            fine_agree += same
+    share = round(agree / n, 3) if n else None
+    return {
+        "tissue": LCL_TISSUE,
+        "variants": n,
+        "signs_agree": agree,
+        "share": share,
+        "binomial_p_two_sided": binom_two_sided(agree, n) if n else None,
+        "fine_mapped_only": {
+            "variants": fine_n,
+            "signs_agree": fine_agree,
+            "share": round(fine_agree / fine_n, 3) if fine_n else None,
+            "binomial_p_two_sided": binom_two_sided(fine_agree, fine_n) if fine_n else None,
+            "note": (
+                "the variants DAP-G fine-maps at this very position: the population E2 tested, where "
+                "linkage does not stand between the allele and the eQTL's direction"
+            ),
+        },
+        "reading": (
+            "log2FC read as alternative over reference, as the endpoint assumes"
+            if share and share > 0.5
+            else "the convention may be mirrored; read the endpoint's sign with that in mind"
+            if share
+            else "no overlap: the convention is not checked by these variants"
+        ),
+    }
+
+
+def wide_summary(
+    built: dict[str, Any],
+    rows: list[dict[str, Any]],
+    sign_check: dict[str, Any] | None = None,
+    examples: int = 10,
+) -> dict[str, Any]:
+    """The committed plan of the widened E1: what the database holds, what is testable, and the budget."""
+    calls = [mpra_call(r) for r in rows]
+    usable = [c for c in calls if wide_usable(c)]
+    sig = [c for c in usable if mpra_significant([c])]
+    pairs = built["pairs"]
+    per = {e: [p for p in pairs if p["endpoint"] == e] for e in WIDE_ENDPOINTS}
+    return {
+        "database": {
+            "rows_on_the_main_assembly": len(calls),
+            "distinct_variants": len({(c["chrom"], c["pos"], c["alt"]) for c in calls}),
+            "significant_rows_any_cell": sum(
+                bool(mpra_significant([c])) for c in calls if MPRA_EXCLUDE not in (c["study"] or "")
+            ),
+            "rows_in_a_cell_the_model_has": len(usable),
+            "significant_rows_in_those_cells": len(sig),
+            "significant_variants_in_those_cells": len({(c["chrom"], c["pos"], c["alt"]) for c in sig}),
+            "cells": dict(Counter(c["cell"] for c in sig)),
+            "studies": dict(Counter(c["study"][:60] for c in sig).most_common()),
+            "chromosomes": dict(Counter(c["chrom"] for c in sig).most_common()),
+        },
+        "tests_built": built["tests"],
+        "pairs": {e: len(v) for e, v in per.items()},
+        "unmatched": built["unmatched"],
+        "gene_source": built["gene_source"],
+        "by_cell": {e: dict(Counter(p["borrowed"]["cell"] for p in v)) for e, v in per.items()},
+        "by_chromosome": {
+            e: dict(Counter(p["unit"].split(":")[0] for p in v).most_common()) for e, v in per.items()
+        },
+        "loci_20kb": {e: _loci(v) for e, v in per.items()},
+        "control_distance_median_bp": {
+            e: _median_abs([p["control"]["distance"] for p in v], 1) for e, v in per.items()
+        },
+        "control_distance_bands": {
+            e: dict(Counter(_band(abs(p["control"]["distance"])) for p in v)) for e, v in per.items()
+        },
+        "measured_positive_share": {
+            e: _share([p["borrowed"]["measured_sign"] > 0 for p in v]) for e, v in per.items()
+        },
+        "sign_convention": sign_check,
+        "pre_registration": E1_WIDE,
+        "budget": {
+            "requests_per_pair": 2,
+            "headline_pairs": min(1000, len(per["E1W_mpra_wide"])),
+            "headline_requests": 2 * min(1000, len(per["E1W_mpra_wide"])),
+            "saturation_pairs": min(300, len(per["E1S_mpra_saturation"])),
+            "saturation_requests": 2 * min(300, len(per["E1S_mpra_saturation"])),
+            "seconds_per_request_measured_elsewhere": 3.9,
+        },
+        "first_pairs": [
+            {k: p[k] for k in ("order", "endpoint", "unit", "test", "control", "borrowed", "gene_how")}
+            for p in pairs[:examples]
+        ],
+        "model_requests_spent": 0,
+    }
+
+
+def _band(d: int) -> str:
+    return "under 5 kb" if d < 5_000 else "5 to 50 kb" if d < 50_000 else "50 to 250 kb"
+
+
+def _loci(pairs: list[dict[str, Any]], window: int = 20_000) -> int:
+    """How many separate neighbourhoods the pairs sit in: tested variants merged within 20 kb."""
+    pos = sorted((p["unit"].split(":")[0], int(p["unit"].split(":")[1])) for p in pairs)
+    n = 0
+    last: tuple[str, int] | None = None
+    for c, x in pos:
+        if last is None or last[0] != c or x - last[1] > window:
+            n += 1
+        last = (c, x)
+    return n
 
 
 def plan(pairs: list[dict[str, Any]]) -> dict[str, Any]:

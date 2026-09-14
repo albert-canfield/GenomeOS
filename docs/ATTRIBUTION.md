@@ -1737,6 +1737,44 @@ rests on one model's predictions; and the model learned from ENCODE RNA-seq whil
 the same kind of measurement, so agreement with an eQTL is partly the model reading back its inputs.
 The clean way to break that objection was E1, and E1 has no power on two chromosomes.
 
+**The widened E1, pre-registered and waiting on quota (2026-09-14).** E1 was the endpoint that
+answers the objection to E2 and E3, and it had 12 pairs — because the shortlist was built from the
+human panel's storage units and the panel has run on chr21 and chr22 only. The measurement is not so
+limited. MPRAVarDB read genome-wide through the panel's own bigBed reader (`mpra_genome_wide`, 8
+seconds, no model request) holds **231,336 rows over 129,442 variants; 18,038 rows are significant**
+by the pre-registered rule, and **7,178 of those are in a cell line the model has RNA-seq tracks for**
+(GM12878 3,169, HepG2 2,799, K562 739, Jurkat 386, HeLa 85), covering 6,196 distinct variants on 23
+chromosomes. That is the widening: 20 rows became 7,178.
+
+The plan is in `E1_WIDE` and `executor_mpra_wide.json`, written before any request.
+- **Two strata, the headline named first.** **E1W_mpra_wide**, 3,260 pairs over 1,515 separate
+  neighbourhoods in GM12878 and Jurkat, is the headline. **E1S_mpra_saturation**, 847 pairs, is the
+  saturation-mutagenesis study alone: it mutates whole elements and its usable pairs sit at three
+  loci in HepG2, so it is a within-element test, reported apart and never the headline.
+- **The control is a measured null**, not an unmeasured unit: a variant the same study measured in
+  the same cell line and found not significant (FDR above 0.2), no significant row anywhere, 200 bp
+  to 250 kb away, nearest taken, borrowing the unit's gene, cell and measured sign. Median distance
+  909 bp. Off chr21 and chr22 there is no panel to draw an unmeasured control from, and the
+  same-library null is the better match anyway: same assay, same cell, same neighbourhood.
+- **The read-out gene is chosen without the model**: DAP-G's gene at the variant where there is one
+  (2,629 tests), else the nearest protein-coding TSS (3,567). The original E1 let the model pick the
+  gene with the largest predicted effect when no eQTL named one, which favours the unit arm at the
+  no-call threshold; the widened endpoint refuses the pair instead.
+- **What each outcome means** is written down: a difference of 0.10 or more at p 0.01 with GM12878
+  and Jurkat agreeing is the external answer to the ENCODE objection; a difference at or below zero,
+  or a futility stop, says the model does not track an external measurement of direction and confines
+  E2 and E3 to eQTL-shaped read-outs; anything between decides nothing.
+
+**And one result that needed no model at all.** The direction convention was checked genome-wide
+against GTEx before any request: among the tested GM12878 variants that also carry a significant
+eQTL in EBV-transformed lymphocytes, the reporter's direction and the eQTL's direction agree **946 of
+1,826 times (0.518, p 0.12) over all of them, and 120 of 179 (0.670, p 6e-6) where DAP-G fine-maps
+the variant**. Two independent measurements, no model involved, show the same split the model showed
+in E2 and E3: agreement at causal values, near-chance at linked ones — 0.670 against the model's
+0.679 in E2, 0.518 against its 0.531 in E3. That is the strongest external support the executor
+reading has, and it also sets the ceiling the widened E1 can reach, since a model can only agree with
+a measurement as far as the measurements agree with each other.
+
 **Caveats kept with the result.**
 - **Effect sizes are tiny.** The median absolute predicted log2 fold change is 0.0012 in units and
   0.0011 in controls, so the no-call threshold of 0.001 decides which pairs are scored at all. The
