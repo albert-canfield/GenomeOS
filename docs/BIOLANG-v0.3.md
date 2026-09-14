@@ -81,7 +81,10 @@ carried), which is how a mechanistic rule states what happens without a
 factor, and what a knockout then triggers.
 
 `when` clauses accept `any`, `absent`, alternatives `a|b`, and comparisons
-`>=n`, `<=n`, `>n`, `<n` (`generation = >=3`). Repeated `assert` and `observe`
+`>=n`, `<=n`, `>n`, `<n` (`generation = >=3`, or written `generation >= 3`).
+They also accept the integrated reads of BIOLANG-v0.4-ECONOMY.md §7.2a
+(`ELT-2.exposure(lineage) >= 30`, `ELT-2.mean(cell) >= 0.25`), which must name
+their window. Repeated `assert` and `observe`
 lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
 
 ## Semantics

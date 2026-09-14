@@ -219,6 +219,10 @@ def _parse_evidence(value: str) -> Evidence:
         ) from None
 
 
+# an integrated read of a factor over a named window (BIOLANG-v0.4-ECONOMY.md §7.2a)
+_READ = re.compile(r"^(.+)\.(exposure|mean)\((cell|lineage)\)$")
+
+
 def _parse_when(value: str) -> dict[str, str]:
     out: dict[str, str] = {}
     for clause in value.split(","):
@@ -227,7 +231,16 @@ def _parse_when(value: str) -> dict[str, str]:
         k, _, v = clause.partition("=")
         if not v:
             raise BioLangError(f"bad when clause: {clause!r}")
-        out[k.strip()] = v.strip()
+        key, val = k.strip(), v.strip()
+        if key[-1:] in (">", "<", "!"):  # `X >= 3` is the same clause as `X = >=3`, not a key called "X >"
+            key, val = key[:-1].strip(), key[-1] + "=" + val
+        if (".exposure" in key or ".mean" in key) and not _READ.match(key):
+            raise BioLangError(
+                f"integrated read {key!r} must name its window: F.exposure(cell), F.exposure(lineage), "
+                "F.mean(cell) or F.mean(lineage). The three readings give different answers, so there is "
+                "no default (BIOLANG-v0.4-ECONOMY.md §7.2a)"
+            )
+        out[key] = val
     return out
 
 
@@ -599,12 +612,6 @@ def _compile_block(b: Block, module: Module) -> None:
                 f"line {b.line}: commitment {b.header!r} needs 'establish: <when clause>' saying when "
                 "the cell is committed"
             )
-        for key in ct.establish:
-            if "." in key:  # ELT-2.exposure(lineage) >= 0.8
-                raise BioLangError(
-                    f"line {b.line}: the integrated read {key!r} is specified in BIOLANG-v0.4-ECONOMY.md "
-                    "§7.2a but not implemented; establish reads the cell's context"
-                )
         ct.locks = p.get("locks", "cell_type")
         if ct.locks != "cell_type":
             raise BioLangError(f"line {b.line}: commitment locks cell_type; got {ct.locks!r}")

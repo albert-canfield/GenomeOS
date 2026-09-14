@@ -103,6 +103,40 @@ def test_a_network_cadence_does_not_change_which_fates_are_taken(worm):
     assert stepped[2]["overruled_fates"] > 0  # and losing rules really tried
 
 
+READS = """
+module toy
+import bio.std.development
+cell_type Deep { parent: PostMitotic }
+cell_type Shallow { parent: PostMitotic }
+organism T { root: P0; cell_type: Blastomere; factors: M; observe: fates }
+stage S { from: 0 min }
+timer cycle { duration: 10 min }
+decision d0 { action: divide; when: cell = P0; daughters: Pa, Pp; asymmetric: M -> a }
+decision d1 { action: divide; when: generation = 1 }
+decision deep { action: differentiate; when: generation = 2, M.exposure(lineage) >= 15; to: Deep }
+decision shallow { action: differentiate; when: generation = 2, M.exposure(lineage) = <15, M.mean(lineage) = <1, M.mean(cell) = <1; to: Shallow }
+"""  # noqa: E501
+
+
+def test_exposure_and_mean_are_read_over_the_window_the_program_names():
+    """v0.4 §7.2a: the three readings of a factor give different answers, so each names its window.
+    M segregates to Pa at the first division, so the two halves of the lineage differ by construction:
+    the Pa side carries it for the whole path, the Pp side only for the 10 minutes P0 held it."""
+    body = Body(parse(READS), seed=None).run(until=40)
+    kinds = {c.name: c.cell_type for c in body.alive_at(40)}
+    assert kinds == {"Pal": "Deep", "Par": "Deep", "Ppl": "Shallow", "Ppr": "Shallow"}
+    read = {n: body.context(body.cells[n], 40) for n in ("P0", "Pa", "Pal", "Ppl")}
+    assert read["Pal"]["M.exposure(lineage)"] == "40"  # 10 in P0, 10 in Pa, 20 of its own
+    assert read["Ppl"]["M.exposure(lineage)"] == "10"  # only what P0 carried before the division
+    assert read["P0"]["M.exposure(lineage)"] == "10"  # a cell stops accumulating when it divides
+    assert float(read["Pal"]["M.mean(lineage)"]) == 1.0
+    assert float(read["Ppl"]["M.mean(lineage)"]) == 0.25
+
+
+def test_a_program_that_asks_for_no_integrated_read_computes_none(worm):
+    assert Body(worm, seed=None)._reads == []
+
+
 def test_an_equal_or_higher_precedence_reading_may_still_change_a_fate():
     """The refusal is precedence, not a freeze: a new reading by a rule that outranks the one that
     settled the fate still applies, which is how a contact signal changes a cell's mind."""

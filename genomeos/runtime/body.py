@@ -33,6 +33,8 @@ from .uncertainty import UncertaintyReport
 
 SUFFIXES = (("a", "p"), ("l", "r"))
 FORCE_LAST = 1 << 62  # event tie-break: a forced factor arrives after everything else at its instant
+# an integrated read of a factor over a named window (v0.4 §7.2a): `ELT-2.exposure(lineage)`
+READ = re.compile(r"^(.+)\.(exposure|mean)\((cell|lineage)\)$")
 
 
 @dataclass(slots=True)
@@ -63,6 +65,12 @@ class Cell:
     fate_priority: int | None = None  # precedence of the decision that settled this cell's fate (§7.3)
     fate_ctx: dict[str, str] | None = None  # what the cell read then, so a loser cannot try again on it
     refused: set[str] = field(default_factory=set)  # fate decisions refused for this cell, counted once
+    # integrated reads (v0.4 §7.2a): exposure banked in this cell's own life, what the path to it carried
+    # before it was born, and the values in force since `exp_t`
+    own: dict[str, float] = field(default_factory=dict)
+    inherited: dict[str, float] = field(default_factory=dict)
+    exp_t: float = 0.0
+    exp_val: dict[str, float] = field(default_factory=dict)
     measured: set[str] = field(default_factory=set)  # factors set by express decisions (the reader)
     stated: set[str] = field(default_factory=set)  # factors stated by mechanism: maternal load, asymmetry
     levels: dict[str, float] = field(default_factory=dict)  # v0.4: this cell's own network state
@@ -137,6 +145,17 @@ class Body:
         # fate changes refused because a higher-precedence decision had already settled the fate (§7.3)
         self.overruled: Counter[str] = Counter()
         self.windows = {c.name: c for c in module.competences}
+        # every integrated read the program asks for, collected once: (key, factor, kind, window)
+        guards = [d.when for d in module.decisions] + [ct.establish for ct in module.commitments]
+        guards += [sg.receiver for sg in module.signals()] + [sg.sender for sg in module.signals()]
+        self._reads = sorted(
+            {
+                (key, m.group(1), m.group(2), m.group(3))
+                for when in guards
+                for key in when
+                if (m := READ.match(key))
+            }
+        )
         self.committed_cells: Counter[str] = Counter()  # cells committed, by programme
         self.timers_used: Counter[str] = Counter()
         self._queue: list[tuple[float, int, str, str]] = []
@@ -250,6 +269,40 @@ class Body:
     def population(self, c: Cell) -> bool:
         return c.population
 
+    # ---- integrated reads (v0.4 §7.2a) -----------------------------------
+
+    def _sync(self, c: Cell, t: float) -> None:
+        """Bank the exposure a cell has accumulated since it was last read, then take the values now in
+        force. Called before every read and at the end of every decision point, which is where factors
+        change, so an interval is banked with the values that were actually in force during it."""
+        t = min(t, c.end)  # a cell stops accumulating when it divides or dies, whenever it is read
+        dt = t - c.exp_t
+        if dt > 0:
+            for f, v in c.exp_val.items():
+                if v:
+                    c.own[f] = c.own.get(f, 0.0) + v * dt
+        c.exp_t = t
+        vals: dict[str, float] = dict.fromkeys(c.factors, 1.0)  # a factor the cell carries counts as 1
+        vals.update(c.levels)  # a species with a numeric level is integrated at that level instead
+        c.exp_val = vals
+
+    def _read(self, c: Cell, factor: str, kind: str, window: str, t: float) -> float:
+        """`F.exposure(cell)` minutes carrying F in this cell's own life; `F.exposure(lineage)` the same
+        summed along the path from the first cell; `F.mean(...)` that divided by the window's length, so
+        a plain factor reads as the fraction of the window it was carried and a species reads as its
+        mean level. Area E measured that the instantaneous read is the worst of the three on 555 terminal
+        cells (62 errors against 38 and 29), which is why the language has all of them and none is a
+        default: the window is declared, because the three do not agree."""
+        t = min(t, c.end)
+        total = c.own.get(factor, 0.0)
+        span = max(t - c.born, 0.0)
+        if window == "lineage":
+            total += c.inherited.get(factor, 0.0)
+            span = max(t, 0.0)  # the path starts with the first cell, at time zero
+        if kind == "exposure":
+            return total
+        return total / span if span > 0 else 0.0
+
     # ---- context and decisions ------------------------------------------
 
     def context(self, c: Cell, t: float | None = None, amounts: bool = True) -> dict[str, str]:
@@ -268,6 +321,10 @@ class Body:
         if c.levels:
             ctx.update({k: f"{v:.6g}" for k, v in c.levels.items()})
         ctx.update(c.factors)
+        if self._reads:  # only programs that ask for an integrated read pay for one
+            self._sync(c, t)
+            for key, factor, kind, window in self._reads:
+                ctx[key] = f"{self._read(c, factor, kind, window, t):.6g}"
         if amounts and self._amount_signals and self.network is None:
             for sg in self._amount_signals:  # without networks an amount is the count of touching senders
                 if not {sg.id, sg.ligand, sg.receptor, sg.sets} & self.knockouts:
@@ -748,6 +805,12 @@ class Body:
                 return
             sites = [(c.x, c.y), second]
             del self.occupied[(c.x, c.y)]
+        path: dict[str, float] = {}
+        if self._reads:  # what the path to these daughters carried, banked up to this division
+            self._sync(c, self.time)
+            path = dict(c.inherited)
+            for f, v in c.own.items():
+                path[f] = path.get(f, 0.0) + v
         for i, name in enumerate(names):
             factors = dict(c.factors)
             stated = set(c.stated)
@@ -768,6 +831,9 @@ class Body:
                 name, lineage, generation, self.time, c.cell_type, factors, parent=c.name, count=c.count
             )
             child.population = c.population
+            child.exp_t = self.time
+            if path:
+                child.inherited = dict(path)
             if c.committed and any(ct.inherit for ct in self.module.commitments):
                 child.committed = c.committed  # `inherit: daughters`: the lock is mechanism, not bookkeeping
             child.measured = {f for f in c.measured if f in factors}

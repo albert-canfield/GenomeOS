@@ -68,8 +68,13 @@ def test_clauses_specified_but_not_implemented_are_compile_errors():
     for clause in ("maintain: X >= 0.2", "excludes: Y", "hysteresis: enter 0.8, leave 0.3"):
         with pytest.raises(BioLangError, match="not implemented"):
             parse(TOY + f"\ncommitment c {{ establish: cell_type = Muscle; {clause} }}\n")
-    with pytest.raises(BioLangError, match="not implemented"):
-        parse(TOY + "\ncommitment c { establish: ELT-2.exposure(lineage) = >=0.8 }\n")
+
+
+def test_an_integrated_read_must_name_its_window():
+    parse(TOY + "\ncommitment c { establish: ELT-2.exposure(lineage) >= 0.8 }\n")  # compiles
+    for bad in ("ELT-2.exposure >= 0.8", "ELT-2.mean(path) >= 0.8", "ELT-2.exposure(both) >= 0.8"):
+        with pytest.raises(BioLangError, match="must name its window"):
+            parse(TOY + f"\ncommitment c {{ establish: {bad} }}\n")
 
 
 # ---- what the runtime does with them ------------------------------------------------

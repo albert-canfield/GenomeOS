@@ -496,13 +496,11 @@ every run's summary beside `ambiguous_fates` and `revised_fates`.
    descend from a committed precursor. Stating it would need a `commitment` on
    the founder lineages, which the atlas-driven program does not have.
 4. **Clauses specified here but not gated are compile errors, not no-ops:**
-   `maintain`, `excludes`, `hysteresis`, any `release` other than `never`, and
-   the `.exposure(window)` / `.mean(window)` reads in an `establish` clause.
-   The integrated reads in particular are **not implemented**: area E's
-   `_integrated` factors are a per-cell lookup generated from the atlas, not a
-   quantity the runtime integrates, so a program cannot yet ask for a window it
-   did not precompute. §7.2a's example `establish: ELT-2.exposure(lineage) >= 0.8`
-   therefore does not compile today.
+   `maintain`, `excludes`, `hysteresis` and any `release` other than `never`.
+   The `.exposure(window)` / `.mean(window)` reads were in that list when the
+   series was written and were implemented on 2026-09-15 (above), so
+   `establish: ELT-2.exposure(lineage) >= 0.8` compiles and runs; a read that
+   does not name its window is still a compile error.
 5. **The confidence cap lifts for these two constructs** (§2), because the gate
    above passed: the program declares 0.6 for the window and the lock and 0.8
    for the rule and the arms, each with its citation. What is *not* earned by
@@ -531,6 +529,27 @@ An `exposure` or `mean` read that does not name its window is a compile
 error, not a default: the three readings give different answers, and
 the difference is the finding. Presence tests (`F = present`) keep their v0.3
 meaning.
+
+**Implemented 2026-09-15.** The Body integrates what a cell actually carried:
+a factor counts 1 while the cell carries it, a species with a per-cell network
+level counts its level, and the integral is banked at every decision point (which
+is where factors change) and clamped when the cell divides or dies. `exposure` is
+in minutes; `mean` divides by the window, so a plain factor reads as the fraction
+of the window it was carried (0 to 1) and a network species as its mean level.
+`cell` is the cell's own life, `lineage` the path from the first cell, carried to
+the daughters at each division. A program that asks for no integrated read pays
+nothing: the reads a program names are collected once at start-up, and every
+committed organism program and every experiment arm is identical before and after
+this change.
+
+Two things it deliberately does not do. **It is absolute, not normalised:** area
+E's generated `_integrated` factors call a factor present at "20% of its largest
+path exposure over the terminal cells", and that maximum is a statistic of the
+finished run, which no cell can read while it is deciding. A program states a
+threshold in minutes (or a fraction, with `mean`). **It integrates carriage, not
+concentration:** without a `cell_network` there is no level to integrate, so
+`exposure` counts time carried; with one, the level is used and the answer changes
+meaning. A program should say which it means in its evidence.
 
 ### 7.3 No central loop
 
@@ -775,7 +794,7 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | 4 | partitioning division, checkpoint | dilution vs protein turnover | not started |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
 | fate | commitment, competence | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | **passed 2026-09-14** (§7.2a): five arms reproduced, and each construct fails an arm when removed |
-| fate | integrated reads (`.exposure(window)`, `.mean(window)`) | area E's three readings on 555 terminal cells | specified only, **not implemented**: the `_integrated` factors are a precomputed lookup |
+| fate | integrated reads (`.exposure(window)`, `.mean(window)`) | area E's three readings on 555 terminal cells | **implemented 2026-09-15**, in absolute units; the gate is area E's to run, by writing their fate rules as declared reads instead of a precomputed lookup |
 | fate precedence | `regime fates`, decision `priority` | area E's worm fates identical under explicit priorities | **implemented and now the default**: 1,439 of 1,439 identical, 45 ambiguous points to 0 |
 | contacts | neighbours, contact amounts, per-cell networks, seeded noise, replicate asserts | Collier 1996 equivalence group splits about evenly | **passed 2026-09-14**: 0 of 200 diverge without noise, 200 of 200 with it, first cell 48%, same winner per seed in either creation order |
 
@@ -898,7 +917,8 @@ it there, and for an imported protein that link is the transport at 0.3.
 Decision 9's instrument is built and run (§7.2a, 2026-09-14): the series is
 `data/organisms/celegans/plasticity.bio`, `bio test` runs it, and removing
 either construct breaks an arm. The next engine work that needs no preference
-from Albert is therefore decision 10's construct sketch and the two pieces
-§7.2a leaves missing — the integrated reads as a language read rather than a
-precomputed lookup, and a `commitment` that a precursor can hold before it
-differentiates; 4, 5 and 6 need stage 2 or 4 first, and 2 holds stage 2.
+from Albert is therefore decision 10's construct sketch and the piece §7.2a
+still leaves missing — a `commitment` that a precursor can hold before it
+differentiates, so a cell born after a perturbation is protected as its
+ancestors are. The integrated reads landed on 2026-09-15 and are area E's to
+gate. 4, 5 and 6 need stage 2 or 4 first, and 2 holds stage 2.
