@@ -36,10 +36,12 @@ test and are scored and reported apart.
 
 from __future__ import annotations
 
+import functools
 import gzip
 import json
 import math
 import random
+import time
 from collections import Counter
 from collections.abc import Callable
 from pathlib import Path
@@ -95,6 +97,19 @@ AMENDMENTS: tuple[dict[str, str], ...] = (
             "added. Both readings are reported, before and after"
         ),
     },
+    {
+        "when": "2026-09-14, after E1 and E2 were scored and before any E3 row was read",
+        "what": (
+            "a unit with two controls is counted once in the unit arm and its controls once each, "
+            "instead of once per pair"
+        ),
+        "why": (
+            "the second amendment gave each unit two controls, and the first tally counted the unit's own "
+            "answer twice: E2's unit arm read 68 of 100 where 56 units were answered. The difference barely "
+            "moves (+0.269 to +0.268) but the p-value it deserves does, from 0.00036 to 0.0021, still a "
+            "success by the criterion; every number from here counts each unit once and each control once"
+        ),
+    },
 )
 
 HOLD_OUT = {
@@ -110,6 +125,14 @@ HOLD_OUT = {
         "is a property of the neighbourhood, which would be the more important result"
     ),
     "budget": "2,000 requests, 1,000 pairs in the pre-registered order, stopping rule unchanged",
+    "read": (
+        "written 2026-09-14 by the session that ran E3, before any E3 row was read, because 'clearly "
+        "smaller' needed a number: compare_endpoints takes E2's agreement difference minus E3's with a "
+        "normal-approximation one-sided 95% bound. 'diluted by linkage' if that bound puts the gap above "
+        "zero; 'E3 matches E2' if the gap does not clear zero while E3 on its own meets the success "
+        "criterion (difference at or above 0.10 at p 0.01), which is the reading that says the effect is "
+        "the neighbourhood and not the value; 'neither separated' otherwise"
+    ),
 }
 
 CRITERION: dict[str, Any] = {
@@ -738,6 +761,24 @@ def kept(scorer: Scorer, gene: str | None, cell: str | None = None, keep_min: fl
     return score
 
 
+QUOTA_WAIT = 30.0  # seconds to wait when the service reports its per-minute token quota exhausted
+QUOTA_TRIES = 8
+
+
+def with_quota_waits(fn, tries: int = QUOTA_TRIES, wait: float = QUOTA_WAIT, progress=None):
+    """Call fn, waiting out the service's per-minute quota; anything else is raised at once."""
+    for attempt in range(tries):
+        try:
+            return fn()
+        except Exception as e:  # noqa: BLE001 - the client raises its own error types
+            if "RESOURCE_EXHAUSTED" not in str(e) or attempt == tries - 1:
+                raise
+            if progress:
+                progress(f"quota exhausted, waiting {wait:.0f} s ({attempt + 1}/{tries})")
+            time.sleep(wait)
+    raise RuntimeError("unreachable")  # pragma: no cover
+
+
 def predict_side(
     scorer: Scorer, chrom: str, side: dict[str, Any], borrowed: dict[str, Any], cache: Path
 ) -> dict[str, Any]:
@@ -782,8 +823,11 @@ def recall(done: list[dict[str, Any]], endpoint: str, no_call: float) -> dict[st
 def tally(done: list[dict[str, Any]], endpoint: str, chrom: str | None = None) -> dict[str, Any]:
     """Sign agreement in units and in their matched controls, with the one-sided test."""
     rows = [d for d in done if d["endpoint"] == endpoint and (chrom is None or d["chrom"] == chrom)]
-    u = [d["test_result"]["agrees"] for d in rows if d["test_result"]["agrees"] is not None]
-    c = [d["control_result"]["agrees"] for d in rows if d["control_result"]["agrees"] is not None]
+    # a unit with two controls appears in two pairs: it is counted once, each control once
+    units = {d["unit"]: d["test_result"]["agrees"] for d in rows}
+    controls = {(d["unit"], d["control"]["unit"]): d["control_result"]["agrees"] for d in rows}
+    u = [x for x in units.values() if x is not None]
+    c = [x for x in controls.values() if x is not None]
     a, n1, k, n2 = sum(u), len(u), sum(c), len(c)
     d = (a / n1 - k / n2) if n1 and n2 else None
     return {
@@ -795,6 +839,52 @@ def tally(done: list[dict[str, Any]], endpoint: str, chrom: str | None = None) -
         "difference": round(d, 3) if d is not None else None,
         "p_one_sided": fisher_greater(a, n1, k, n2) if n1 and n2 else None,
         "difference_upper_95": round(difference_upper(a, n1, k, n2) or 0.0, 3) if n1 and n2 else None,
+    }
+
+
+def compare_endpoints(
+    rows_a: list[dict[str, Any]],
+    rows_b: list[dict[str, Any]],
+    a: str = "E2_eqtl",
+    b: str = "E3_eqtl_linked",
+    z: float = 1.645,
+) -> dict[str, Any]:
+    """The hold-out read: one endpoint's agreement difference minus the other's, with a one-sided bound.
+
+    The rule is HOLD_OUT['read'], fixed before any row of the second endpoint was read. A gap whose
+    lower bound clears zero is the dilution the executor claim predicts; no gap, with the second
+    endpoint meeting the success criterion on its own, says the difference belongs to the
+    neighbourhood and not to the value being the cause.
+    """
+    ta, tb = tally(rows_a, a), tally(rows_b, b)
+    if ta["difference"] is None or tb["difference"] is None:
+        return {a: ta, b: tb, "gap": None, "reading": "one endpoint has no answered pair"}
+    var = 0.0
+    for t in (ta, tb):
+        for agree, n in (
+            (t["units_agree"], t["units_called"]),
+            (t["controls_agree"], t["controls_called"]),
+        ):
+            p = agree / n
+            var += p * (1 - p) / n
+    gap = ta["difference"] - tb["difference"]
+    lower = gap - z * math.sqrt(var)
+    holds = tb["difference"] >= 0.10 and (tb["p_one_sided"] or 1) <= 0.01
+    return {
+        a: ta,
+        b: tb,
+        "gap": round(gap, 3),
+        "gap_lower_95": round(lower, 3),
+        "second_endpoint_meets_success": holds,
+        "reading": (
+            f"{b} is diluted against {a} as the executor claim predicts"
+            if lower > 0
+            else f"{b} matches {a}: the difference is a property of the neighbourhood, not of the value "
+            "being the cause"
+            if holds
+            else "neither separated: the two endpoints are not distinguished and the second does not "
+            "stand on its own"
+        ),
     }
 
 
@@ -820,8 +910,13 @@ def run_pairs(
     cache: Path = PREDICTIONS,
     max_requests: int | None = None,
     progress=None,
+    max_pairs: int | None = None,
 ) -> dict[str, Any]:
-    """Spend requests in the pre-registered order, look at the pre-registered points, stop by the rule."""
+    """Spend requests in the pre-registered order, look at the pre-registered points, stop by the rule.
+
+    max_pairs stops at a pair count as well as at a request count: the budget is written in both, and a
+    rerun over the cache answers the same pairs again for nothing.
+    """
     looks = CRITERION["alpha_spending"]
     done: list[dict[str, Any]] = []
     requests = 0
@@ -829,11 +924,18 @@ def run_pairs(
     for p in pairs:
         if len(stopped) >= 2 or (max_requests is not None and requests >= max_requests):
             break
+        if max_pairs is not None and len(done) >= max_pairs:
+            break
         if p["endpoint"] in stopped:
             continue
         chrom = p["unit"].split(":")[0]
-        t = predict_side(scorer, chrom, p["test"], p["borrowed"], cache)
-        c = predict_side(scorer, chrom, p["control"], p["borrowed"], cache)
+        t = with_quota_waits(
+            functools.partial(predict_side, scorer, chrom, p["test"], p["borrowed"], cache), progress=progress
+        )
+        c = with_quota_waits(
+            functools.partial(predict_side, scorer, chrom, p["control"], p["borrowed"], cache),
+            progress=progress,
+        )
         requests += int(t["request"]) + int(c["request"])
         done.append({**p, "chrom": chrom, "test_result": t, "control_result": c})
         n = len(done)

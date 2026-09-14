@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """The executor test: the read-out, the matching, the statistics and the stopping rule."""
 
+import itertools
+
 import pytest
 
 from genomeos.attribution import executor as ex
@@ -96,12 +98,16 @@ def test_statistics():
     assert ex.binom_two_sided(5, 10) == 1.0
 
 
+_ids = itertools.count()
+
+
 def _pair(endpoint, agree_unit, agree_control, chrom="chr21"):
     sign = 1
     return {
         "endpoint": endpoint,
         "chrom": chrom,
-        "unit": f"{chrom}:1-2",
+        "unit": f"{chrom}:{next(_ids)}",
+        "control": {"unit": f"{chrom}:c{next(_ids)}"},
         "borrowed": {"measured_sign": sign},
         "test_result": {"agrees": agree_unit},
         "control_result": {"agrees": agree_control},
@@ -132,7 +138,7 @@ def test_run_pairs_spends_one_request_a_side_and_stops(tmp_path, monkeypatch):
             "endpoint": "E2_eqtl",
             "unit": f"chr21:{i}-{i + 200}",
             "test": {"pos": 1001 + 2 * i, "ref": "A", "alt": "G"},
-            "control": {"pos": 2000 + 2 * i, "ref": "C", "alt": "T"},
+            "control": {"unit": f"chr21:c{i}", "pos": 2000 + 2 * i, "ref": "C", "alt": "T"},
             "borrowed": {"gene": "GENE1", "tissue": "Liver", "cell": None, "measured_sign": 1},
             "order": i,
         }
@@ -145,6 +151,44 @@ def test_run_pairs_spends_one_request_a_side_and_stops(tmp_path, monkeypatch):
     again = ex.run_pairs(pairs[:1], scorer, cache=tmp_path)
     assert again["requests_spent"] == 0  # the cache answers both sides
     _ = monkeypatch
+
+
+def test_a_unit_with_two_controls_counts_once():
+    a = _pair("E2_eqtl", True, False)
+    b = dict(a, control={"unit": "chr21:other"}, control_result={"agrees": True})
+    t = ex.tally([a, b], "E2_eqtl")
+    assert (t["units_called"], t["controls_called"], t["controls_agree"]) == (1, 2, 1)
+
+
+def test_run_pairs_stops_at_a_pair_count(tmp_path):
+    def scorer(chrom, pos, ref, alt):
+        return [("GENE1", "Liver", 0.5)]
+
+    pairs = [
+        {
+            "endpoint": "E3_eqtl_linked",
+            "unit": f"chr21:{i}-{i + 200}",
+            "test": {"pos": 1001 + 2 * i, "ref": "A", "alt": "G"},
+            "control": {"unit": f"chr21:c{i}", "pos": 2000 + 2 * i, "ref": "C", "alt": "T"},
+            "borrowed": {"gene": "GENE1", "tissue": "Liver", "cell": None, "measured_sign": 1},
+            "order": i,
+        }
+        for i in range(6)
+    ]
+    assert ex.run_pairs(pairs, scorer, cache=tmp_path, max_pairs=3)["pairs_done"] == 3
+
+
+def test_hold_out_comparison_reads_the_gap_the_way_it_was_written():
+    strong = [_pair("E2_eqtl", i < 34, i < 14) for i in range(40)]  # 0.85 against 0.35
+    diluted = [_pair("E3_eqtl_linked", i < 17, i < 15) for i in range(40)]  # 0.425 against 0.375
+    out = ex.compare_endpoints(strong, diluted)
+    assert out["gap_lower_95"] > 0 and "diluted" in out["reading"]
+    same = [_pair("E3_eqtl_linked", i < 34, i < 14) for i in range(40)]
+    out = ex.compare_endpoints(strong, same)
+    assert out["gap"] == 0 and out["second_endpoint_meets_success"] and "neighbourhood" in out["reading"]
+    thin = [_pair("E3_eqtl_linked", i < 4, i < 2) for i in range(6)]  # the same way, too few to say
+    assert "neither separated" in ex.compare_endpoints(strong, thin)["reading"]
+    assert ex.compare_endpoints(strong, [])["gap"] is None
 
 
 def test_criterion_is_complete_and_pre_registered():

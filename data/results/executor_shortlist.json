@@ -14,9 +14,9 @@
         "E1_mpra": 6
       },
       "pairs": {
-        "E1_mpra": 6,
-        "E2_eqtl": 35,
-        "E3_eqtl_linked": 3039
+        "E1_mpra": 4,
+        "E2_eqtl": 41,
+        "E3_eqtl_linked": 4551
       }
     },
     "chr22": {
@@ -27,9 +27,9 @@
         "E1_mpra": 14
       },
       "pairs": {
-        "E1_mpra": 14,
-        "E2_eqtl": 100,
-        "E3_eqtl_linked": 4723
+        "E1_mpra": 8,
+        "E2_eqtl": 120,
+        "E3_eqtl_linked": 6486
       }
     }
   },
@@ -44,36 +44,38 @@
     "E1_mpra": 20
   },
   "pairs": {
-    "E1_mpra": 20,
-    "E2_eqtl": 135,
-    "E3_eqtl_linked": 7762
+    "E1_mpra": 12,
+    "E2_eqtl": 161,
+    "E3_eqtl_linked": 11037
   },
   "unmatched": {
-    "E3_eqtl_linked": 4525,
-    "E2_eqtl": 128
+    "E3_eqtl_linked": 6470,
+    "E2_eqtl": 173,
+    "E1_mpra": 14
   },
   "control_pool": 31230,
   "match_levels": {
     "E1_mpra": {
-      "0": 20
+      "0": 8,
+      "1": 4
     },
     "E2_eqtl": {
-      "1": 36,
-      "0": 87,
-      "2": 12
+      "1": 74,
+      "0": 62,
+      "2": 25
     },
     "E3_eqtl_linked": {
-      "0": 5827,
-      "2": 685,
-      "1": 1250
+      "0": 7219,
+      "2": 1175,
+      "1": 2643
     }
   },
   "measured_positive_share": {
-    "E1_mpra": 0.65,
-    "E2_eqtl": 0.63,
-    "E3_eqtl_linked": 0.491
+    "E1_mpra": 0.833,
+    "E2_eqtl": 0.609,
+    "E3_eqtl_linked": 0.496
   },
-  "control_distance_median_kb": 102.6,
+  "control_distance_median_kb": 112.9,
   "control_r2_max": 0.2,
   "criterion": {
     "written": "2026-09-14, before any model request for this test",
@@ -96,7 +98,8 @@
     "secondary": [
       "absolute predicted effect larger in units than in controls (Mann-Whitney, reported only)",
       "rank correlation of predicted log2FC with GTEx slope among units (reported only)",
-      "agreement against 0.5 without controls (reported only; the controls decide)"
+      "agreement against 0.5 without controls (reported only; the controls decide)",
+      "a no-call grid of 0, 0.001 and 0.01 on |predicted log2FC|, added 2026-09-14 after a two-request smoke test showed single-variant gene effects of about 0.001, before any endpoint was scored; the primary keeps 0.001"
     ],
     "alpha_spending": {
       "look_1_pairs": 150,
@@ -114,14 +117,26 @@
     ],
     "caveat": "AlphaGenome learned from ENCODE RNA-seq, DNase and histone tracks, and GTEx expression is the same kind of measurement; agreement with an eQTL is partly the model reading back its inputs. MPRA reporter activity is not a training track in that way, so E1 is the cleaner test"
   },
+  "amendments": [
+    {
+      "when": "2026-09-14, after a two-request smoke test and before any endpoint was scored",
+      "what": "a no-call grid of 0, 0.001 and 0.01 reported beside the primary 0.001",
+      "why": "single-variant gene effects came out near 0.001 log2, so the threshold choice is shown"
+    },
+    {
+      "when": "2026-09-14, after the first 308 requests (155 pairs, E1 and E2)",
+      "what": "E1's controls are drawn within 250 kb like E2's rather than chromosome-wide; the cache filter keeps every gene's tracks in the read-out cell; two controls per unit instead of one",
+      "why": "19 of E1's 20 controls returned no value at all: a chromosome-wide control's borrowed gene was outside its window and the cache filter had dropped the cell's other genes, so the arm could not be scored. The unit arm is unchanged and its answers come from cache; only controls are added. Both readings are reported, before and after"
+    }
+  ],
   "plan": {
     "requests_per_pair": 2,
-    "pairs": 7917,
-    "requests_if_all_run": 15834,
+    "pairs": 11210,
+    "requests_if_all_run": 22420,
     "pairs_by_endpoint": {
-      "E1_mpra": 20,
-      "E2_eqtl": 135,
-      "E3_eqtl_linked": 7762
+      "E1_mpra": 12,
+      "E2_eqtl": 161,
+      "E3_eqtl_linked": 11037
     },
     "first_look_after_requests": 300,
     "second_look_after_requests": 800,
@@ -132,83 +147,13 @@
       "4: E3 linked eQTL units, only on request"
     ],
     "seconds_per_request_measured_elsewhere": 3.9,
-    "hours_if_all_run_sequentially": 17.2,
+    "hours_if_all_run_sequentially": 24.3,
     "cache": "data/knowledge/human_panel/executor/predictions",
     "note": "a cached variant costs no request; the run reports requests spent against units answered"
   },
   "first_pairs": [
     {
       "order": 1,
-      "endpoint": "E1_mpra",
-      "unit": "chr22:20914418-20914618",
-      "test": {
-        "pos": 20914445,
-        "ref": "C",
-        "alt": "T",
-        "rsid": "rs5761335",
-        "endpoint": "E1_mpra",
-        "cell": "GM12878",
-        "gene": "SNAP29",
-        "measured_sign": -1,
-        "measured_effect": -4.39214708640023,
-        "measured_fdr": 0.00367747669347186,
-        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
-      },
-      "control": {
-        "unit": "chr22:20414806-20415006",
-        "pos": 20414896,
-        "ref": "C",
-        "alt": "T",
-        "rsid": "rs1011645462",
-        "panel_minor": 18,
-        "gnomad_af": 0.000106508,
-        "distance": -499549,
-        "r2_with_test": 0.001
-      },
-      "borrowed": {
-        "gene": "SNAP29",
-        "tissue": null,
-        "cell": "GM12878",
-        "measured_sign": -1
-      }
-    },
-    {
-      "order": 2,
-      "endpoint": "E1_mpra",
-      "unit": "chr21:42827180-42827380",
-      "test": {
-        "pos": 42827205,
-        "ref": "G",
-        "alt": "C",
-        "rsid": "rs113074265",
-        "endpoint": "E1_mpra",
-        "cell": "GM12878",
-        "gene": "WDR4",
-        "measured_sign": -1,
-        "measured_effect": -2.95311823178454,
-        "measured_fdr": 0.0235662151377527,
-        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
-      },
-      "control": {
-        "unit": "chr21:43840700-43840900",
-        "pos": 43840875,
-        "ref": "T",
-        "alt": "A",
-        "rsid": "rs188195656",
-        "panel_minor": 3,
-        "gnomad_af": 0.00514154,
-        "distance": 1013670,
-        "r2_with_test": 0.004
-      },
-      "borrowed": {
-        "gene": "WDR4",
-        "tissue": null,
-        "cell": "GM12878",
-        "measured_sign": -1
-      }
-    },
-    {
-      "order": 3,
       "endpoint": "E1_mpra",
       "unit": "chr21:42841277-42841477",
       "test": {
@@ -225,335 +170,405 @@
         "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
       },
       "control": {
-        "unit": "chr21:44272216-44272416",
-        "pos": 44272319,
+        "unit": "chr21:43046694-43046894",
+        "pos": 43046777,
         "ref": "G",
-        "alt": "C",
-        "rsid": "rs72613646",
-        "panel_minor": 7,
-        "gnomad_af": 0.03735,
-        "distance": 1430857,
-        "r2_with_test": 0.001
+        "alt": "A",
+        "rsid": "rs2401195",
+        "panel_minor": 25,
+        "gnomad_af": 0.18331,
+        "distance": 205315,
+        "r2_with_test": 0.009
       },
       "borrowed": {
         "gene": "WDR4",
         "tissue": null,
         "cell": "GM12878",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 2,
+      "endpoint": "E1_mpra",
+      "unit": "chr21:42841277-42841477",
+      "test": {
+        "pos": 42841462,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs2401140",
+        "endpoint": "E1_mpra",
+        "cell": "GM12878",
+        "gene": "WDR4",
+        "measured_sign": 1,
+        "measured_effect": 2.00676370613041,
+        "measured_fdr": 8.16611514176634e-09,
+        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+      },
+      "control": {
+        "unit": "chr21:43038494-43038694",
+        "pos": 43038616,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs928876",
+        "panel_minor": 27,
+        "gnomad_af": 0.435492,
+        "distance": 197154,
+        "r2_with_test": 0.006
+      },
+      "borrowed": {
+        "gene": "WDR4",
+        "tissue": null,
+        "cell": "GM12878",
+        "measured_sign": 1
+      }
+    },
+    {
+      "order": 3,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:21626234-21626434",
+      "test": {
+        "pos": 21626349,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs5754426",
+        "endpoint": "E1_mpra",
+        "cell": "Jurkat",
+        "gene": "CCDC116",
+        "measured_sign": 1,
+        "measured_effect": 0.286630155,
+        "measured_fdr": null,
+        "study": "Prioritization of autoimmune disease-associated genetic variants that perturb regulatory e"
+      },
+      "control": {
+        "unit": "chr22:21522863-21523063",
+        "pos": 21522947,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs527862257",
+        "panel_minor": 3,
+        "gnomad_af": 0.0,
+        "distance": -103402,
+        "r2_with_test": 0.009
+      },
+      "borrowed": {
+        "gene": "CCDC116",
+        "tissue": null,
+        "cell": "Jurkat",
         "measured_sign": 1
       }
     },
     {
       "order": 4,
       "endpoint": "E1_mpra",
-      "unit": "chr21:42819180-42819380",
+      "unit": "chr22:21626234-21626434",
       "test": {
-        "pos": 42819200,
-        "ref": "C",
-        "alt": "T",
-        "rsid": "rs79911170",
+        "pos": 21626349,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs5754426",
         "endpoint": "E1_mpra",
-        "cell": "GM12878",
-        "gene": "WDR4",
-        "measured_sign": -1,
-        "measured_effect": -1.77771863999336,
-        "measured_fdr": 0.0188254171180311,
-        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+        "cell": "Jurkat",
+        "gene": "CCDC116",
+        "measured_sign": 1,
+        "measured_effect": 0.286630155,
+        "measured_fdr": null,
+        "study": "Prioritization of autoimmune disease-associated genetic variants that perturb regulatory e"
       },
       "control": {
-        "unit": "chr21:41707136-41707336",
-        "pos": 41707156,
-        "ref": "C",
-        "alt": "A",
-        "rsid": "rs9984948",
-        "panel_minor": 16,
-        "gnomad_af": 0.145995,
-        "distance": -1112044,
-        "r2_with_test": 0.01
+        "unit": "chr22:21539263-21539463",
+        "pos": 21539435,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs574172940",
+        "panel_minor": 6,
+        "gnomad_af": 0.00730282,
+        "distance": -86914,
+        "r2_with_test": 0.039
       },
       "borrowed": {
-        "gene": "WDR4",
+        "gene": "CCDC116",
         "tissue": null,
-        "cell": "GM12878",
-        "measured_sign": -1
+        "cell": "Jurkat",
+        "measured_sign": 1
       }
     },
     {
       "order": 5,
       "endpoint": "E1_mpra",
-      "unit": "chr22:43188560-43188760",
+      "unit": "chr22:39567010-39567210",
       "test": {
-        "pos": 43188625,
-        "ref": "A",
-        "alt": "G",
-        "rsid": "rs138959",
+        "pos": 39567168,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs5757727",
         "endpoint": "E1_mpra",
-        "cell": "GM12878",
-        "gene": "TTLL12",
-        "measured_sign": 1,
-        "measured_effect": 1.55566958944807,
-        "measured_fdr": 0.0229612402025253,
-        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+        "cell": "HNPS",
+        "gene": "MGAT3",
+        "measured_sign": -1,
+        "measured_effect": -0.262935853,
+        "measured_fdr": 0.048029555,
+        "study": "Systematic investigation of allelic regulatory activity of schizophrenia-associated common"
       },
       "control": {
-        "unit": "chr22:50088569-50088769",
-        "pos": 50088618,
-        "ref": "A",
+        "unit": "chr22:39724142-39724342",
+        "pos": 39724281,
+        "ref": "C",
         "alt": "G",
-        "rsid": "rs9617064",
-        "panel_minor": 23,
-        "gnomad_af": 0.145574,
-        "distance": 6899993,
-        "r2_with_test": 0.014
+        "rsid": "rs11702927",
+        "panel_minor": 13,
+        "gnomad_af": 0.10054,
+        "distance": 157113,
+        "r2_with_test": 0.002
       },
       "borrowed": {
-        "gene": "TTLL12",
+        "gene": "MGAT3",
         "tissue": null,
-        "cell": "GM12878",
-        "measured_sign": 1
+        "cell": "HNPS",
+        "measured_sign": -1
       }
     },
     {
       "order": 6,
       "endpoint": "E1_mpra",
-      "unit": "chr21:25636930-25637130",
+      "unit": "chr22:39567010-39567210",
       "test": {
-        "pos": 25637012,
-        "ref": "T",
-        "alt": "C",
-        "rsid": "rs763331",
+        "pos": 39567168,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs5757727",
         "endpoint": "E1_mpra",
-        "cell": "GM12878",
-        "gene": "MRPL39",
-        "measured_sign": 1,
-        "measured_effect": 1.31925595613665,
-        "measured_fdr": 0.000652531540711918,
-        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+        "cell": "HNPS",
+        "gene": "MGAT3",
+        "measured_sign": -1,
+        "measured_effect": -0.262935853,
+        "measured_fdr": 0.048029555,
+        "study": "Systematic investigation of allelic regulatory activity of schizophrenia-associated common"
       },
       "control": {
-        "unit": "chr21:26701376-26701576",
-        "pos": 26701475,
-        "ref": "T",
-        "alt": "G",
-        "rsid": "rs3017534",
-        "panel_minor": 19,
-        "gnomad_af": 0.699246,
-        "distance": 1064463,
-        "r2_with_test": 0.039
+        "unit": "chr22:39691335-39691535",
+        "pos": 39691384,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs5757773",
+        "panel_minor": 22,
+        "gnomad_af": 0.557251,
+        "distance": 124216,
+        "r2_with_test": 0.014
       },
       "borrowed": {
-        "gene": "MRPL39",
+        "gene": "MGAT3",
+        "tissue": null,
+        "cell": "HNPS",
+        "measured_sign": -1
+      }
+    },
+    {
+      "order": 7,
+      "endpoint": "E1_mpra",
+      "unit": "chr22:21454863-21455063",
+      "test": {
+        "pos": 21454896,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs463426",
+        "endpoint": "E1_mpra",
+        "cell": "GM12878",
+        "gene": "CCDC116",
+        "measured_sign": 1,
+        "measured_effect": 0.19,
+        "measured_fdr": 0.016,
+        "study": "Global discovery of lupus genetic risk variant allelic enhancer activity (Lu et al., 2021)"
+      },
+      "control": {
+        "unit": "chr22:21543663-21543863",
+        "pos": 21543697,
+        "ref": "A",
+        "alt": "G",
+        "rsid": "rs532672559",
+        "panel_minor": 11,
+        "gnomad_af": 0.0,
+        "distance": 88801,
+        "r2_with_test": 0.0
+      },
+      "borrowed": {
+        "gene": "CCDC116",
         "tissue": null,
         "cell": "GM12878",
         "measured_sign": 1
       }
     },
     {
-      "order": 7,
-      "endpoint": "E1_mpra",
-      "unit": "chr22:42738698-42738898",
-      "test": {
-        "pos": 42738795,
-        "ref": "C",
-        "alt": "T",
-        "rsid": "rs5751357",
-        "endpoint": "E1_mpra",
-        "cell": "GM12878",
-        "gene": "A4GALT",
-        "measured_sign": -1,
-        "measured_effect": -1.21313109514837,
-        "measured_fdr": 0.0352831475419977,
-        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
-      },
-      "control": {
-        "unit": "chr22:50567354-50567623",
-        "pos": 50567391,
-        "ref": "G",
-        "alt": "A",
-        "rsid": "rs139312315",
-        "panel_minor": 3,
-        "gnomad_af": 0.00832465,
-        "distance": 7828596,
-        "r2_with_test": 0.016
-      },
-      "borrowed": {
-        "gene": "A4GALT",
-        "tissue": null,
-        "cell": "GM12878",
-        "measured_sign": -1
-      }
-    },
-    {
       "order": 8,
       "endpoint": "E1_mpra",
-      "unit": "chr22:41965142-41965342",
+      "unit": "chr22:21454863-21455063",
       "test": {
-        "pos": 41965332,
-        "ref": "G",
-        "alt": "A",
-        "rsid": "rs5996096",
+        "pos": 21454896,
+        "ref": "T",
+        "alt": "C",
+        "rsid": "rs463426",
         "endpoint": "E1_mpra",
         "cell": "GM12878",
-        "gene": "SMDT1",
-        "measured_sign": -1,
-        "measured_effect": -1.01493121374689,
-        "measured_fdr": 0.0441558775751948,
-        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
+        "gene": "CCDC116",
+        "measured_sign": 1,
+        "measured_effect": 0.19,
+        "measured_fdr": 0.016,
+        "study": "Global discovery of lupus genetic risk variant allelic enhancer activity (Lu et al., 2021)"
       },
       "control": {
-        "unit": "chr22:42781696-42781896",
-        "pos": 42781778,
-        "ref": "A",
-        "alt": "T",
-        "rsid": "rs112094336",
-        "panel_minor": 4,
-        "gnomad_af": 0.011583,
-        "distance": 816446,
-        "r2_with_test": 0.012
+        "unit": "chr22:21462063-21462263",
+        "pos": 21462105,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs977276393",
+        "panel_minor": 5,
+        "gnomad_af": 0.0,
+        "distance": 7209,
+        "r2_with_test": 0.053
       },
       "borrowed": {
-        "gene": "SMDT1",
+        "gene": "CCDC116",
         "tissue": null,
         "cell": "GM12878",
-        "measured_sign": -1
+        "measured_sign": 1
       }
     },
     {
       "order": 9,
       "endpoint": "E1_mpra",
-      "unit": "chr22:45451143-45451343",
+      "unit": "chr21:26775798-26775998",
       "test": {
-        "pos": 45451315,
-        "ref": "G",
-        "alt": "T",
-        "rsid": "rs17560248",
-        "endpoint": "E1_mpra",
-        "cell": "GM12878",
-        "gene": "FBLN1",
-        "measured_sign": -1,
-        "measured_effect": -1.01182351850533,
-        "measured_fdr": 0.0403997192712983,
-        "study": "Multiple causal variants underlie genetic associations in humans (Abell et al., 2022)"
-      },
-      "control": {
-        "unit": "chr22:36800509-36800681",
-        "pos": 36800636,
+        "pos": 26775872,
         "ref": "C",
         "alt": "T",
-        "rsid": "rs5756349",
-        "panel_minor": 35,
-        "gnomad_af": 0.463696,
-        "distance": -8650679,
-        "r2_with_test": 0.003
+        "rsid": "rs2830489",
+        "endpoint": "E1_mpra",
+        "cell": "HEK293T",
+        "gene": null,
+        "measured_sign": 1,
+        "measured_effect": 0.154535361,
+        "measured_fdr": 0.007998489,
+        "study": "Functional regulatory variants implicate distinct transcriptional networks in dementia (Co"
+      },
+      "control": {
+        "unit": "chr21:26735598-26735798",
+        "pos": 26735659,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs3017524",
+        "panel_minor": 43,
+        "gnomad_af": 0.601928,
+        "distance": -40213,
+        "r2_with_test": 0.028
       },
       "borrowed": {
-        "gene": "FBLN1",
+        "gene": null,
         "tissue": null,
-        "cell": "GM12878",
-        "measured_sign": -1
+        "cell": "HEK293T",
+        "measured_sign": 1
       }
     },
     {
       "order": 10,
       "endpoint": "E1_mpra",
-      "unit": "chr21:31778207-31778407",
+      "unit": "chr21:26775798-26775998",
       "test": {
-        "pos": 31778236,
-        "ref": "A",
-        "alt": "G",
-        "rsid": "rs13047930",
+        "pos": 26775872,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs2830489",
         "endpoint": "E1_mpra",
-        "cell": "GM12878",
-        "gene": "HUNK",
+        "cell": "HEK293T",
+        "gene": null,
         "measured_sign": 1,
-        "measured_effect": 0.569765654,
-        "measured_fdr": 0.00231331014263973,
-        "study": "Direct Identification of Hundreds of Expression- Modulating Variants using a Multiplexed R"
+        "measured_effect": 0.154535361,
+        "measured_fdr": 0.007998489,
+        "study": "Functional regulatory variants implicate distinct transcriptional networks in dementia (Co"
       },
       "control": {
-        "unit": "chr21:17296996-17297196",
-        "pos": 17297119,
+        "unit": "chr21:26799398-26799598",
+        "pos": 26799430,
         "ref": "T",
         "alt": "C",
-        "rsid": "rs762292",
-        "panel_minor": 30,
-        "gnomad_af": 0.34035,
-        "distance": -14481117,
-        "r2_with_test": 0.014
+        "rsid": "rs457752",
+        "panel_minor": 44,
+        "gnomad_af": 0.745198,
+        "distance": 23558,
+        "r2_with_test": 0.054
       },
       "borrowed": {
-        "gene": "HUNK",
+        "gene": null,
         "tissue": null,
-        "cell": "GM12878",
+        "cell": "HEK293T",
         "measured_sign": 1
       }
     },
     {
       "order": 11,
       "endpoint": "E1_mpra",
-      "unit": "chr22:41022158-41022358",
+      "unit": "chr22:45242744-45242944",
       "test": {
-        "pos": 41022225,
-        "ref": "T",
-        "alt": "G",
-        "rsid": "rs71327107",
+        "pos": 45242915,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs5765229",
         "endpoint": "E1_mpra",
-        "cell": "HEK293s",
-        "gene": "POLR3H",
+        "cell": "C283T",
+        "gene": "KIAA0930",
         "measured_sign": 1,
-        "measured_effect": 0.522765809,
-        "measured_fdr": 0.027208839,
-        "study": "Systematic investigation of allelic regulatory activity of schizophrenia-associated common"
+        "measured_effect": 0.05,
+        "measured_fdr": 0.033799319,
+        "study": "Massively parallel reporter assays and variant scoring identified functional variants and "
       },
       "control": {
-        "unit": "chr22:46128982-46129182",
-        "pos": 46129129,
-        "ref": "G",
-        "alt": "A",
-        "rsid": "rs77623192",
-        "panel_minor": 6,
-        "gnomad_af": 0.0312783,
-        "distance": 5106904,
-        "r2_with_test": 0.013
+        "unit": "chr22:45465143-45465343",
+        "pos": 45465272,
+        "ref": "C",
+        "alt": "T",
+        "rsid": "rs111930858",
+        "panel_minor": 15,
+        "gnomad_af": 0.142091,
+        "distance": 222357,
+        "r2_with_test": 0.001
       },
       "borrowed": {
-        "gene": "POLR3H",
+        "gene": "KIAA0930",
         "tissue": null,
-        "cell": "HEK293s",
+        "cell": "C283T",
         "measured_sign": 1
       }
     },
     {
       "order": 12,
       "endpoint": "E1_mpra",
-      "unit": "chr22:41082439-41082639",
+      "unit": "chr22:45242744-45242944",
       "test": {
-        "pos": 41082478,
-        "ref": "G",
-        "alt": "A",
-        "rsid": "rs9623320",
-        "endpoint": "E1_mpra",
-        "cell": "HEK293s",
-        "gene": "MEI1",
-        "measured_sign": 1,
-        "measured_effect": 0.439493747,
-        "measured_fdr": 0.000746437,
-        "study": "Systematic investigation of allelic regulatory activity of schizophrenia-associated common"
-      },
-      "control": {
-        "unit": "chr22:43098924-43099124",
-        "pos": 43098947,
+        "pos": 45242915,
         "ref": "C",
         "alt": "T",
-        "rsid": "rs78466438",
-        "panel_minor": 11,
-        "gnomad_af": 0.0325554,
-        "distance": 2016469,
-        "r2_with_test": 0.008
+        "rsid": "rs5765229",
+        "endpoint": "E1_mpra",
+        "cell": "C283T",
+        "gene": "KIAA0930",
+        "measured_sign": 1,
+        "measured_effect": 0.05,
+        "measured_fdr": 0.033799319,
+        "study": "Massively parallel reporter assays and variant scoring identified functional variants and "
+      },
+      "control": {
+        "unit": "chr22:45462143-45462343",
+        "pos": 45462216,
+        "ref": "G",
+        "alt": "A",
+        "rsid": "rs73441275",
+        "panel_minor": 14,
+        "gnomad_af": 0.137579,
+        "distance": 219301,
+        "r2_with_test": 0.0
       },
       "borrowed": {
-        "gene": "MEI1",
+        "gene": "KIAA0930",
         "tissue": null,
-        "cell": "HEK293s",
+        "cell": "C283T",
         "measured_sign": 1
       }
     }
@@ -565,5 +580,5 @@
     "mpra": "MPRAVarDB as reported per study and cell line"
   },
   "model_requests_spent": 0,
-  "seconds": 58.8
+  "seconds": 53.9
 }
