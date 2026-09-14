@@ -364,7 +364,12 @@ scoring is recorded as pending.
 |---|---|---|---|---|---|---|---|
 | section 6 | ef80075 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 8/60 (13%) |
 | rerun 1 | 02a1b98 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 8/60 (13%) |
-| rerun 2 | this section | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **9/60 (15%)** |
+| rerun 2 | b7092da | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **9/60 (15%)** |
+| rerun 3 | this section | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **11/60 (18%)** |
+
+Control windows holding an element-level deletion: 10, then 11, then 13 of 60.
+Every one of the three the sweep reached produced a direction on its first
+reading. Nothing at the panel moved across any of the three runs.
 
 Rerun 1 reproduced every verdict of the committed run exactly: the same sixty
 negative windows were redrawn from the same candidates, so the panel is
@@ -388,10 +393,10 @@ its denominator:
 
 | claim | panel, with deletion data | matched negatives, with deletion data | negatives, without |
 |---|---|---|---|
-| a derived layer names *some* target | 10/10 | 10/11 (91%) | 42/49 (86%) |
-| the reader has it open in some cell | 9/10 (90%) | 7/11 (64%) | 25/49 (51%) |
-| **a direction is produced** | **8/10 (80%)** | **9/11 (82%)** | **0/49** |
-| **a value sits on constrained sequence** | **5/10 (50%)** | **1/11 (9%)** | **8/49 (16%)** |
+| a derived layer names *some* target | 10/10 | 12/13 (92%) | 40/47 (85%) |
+| the reader has it open in some cell | 9/10 (90%) | 9/13 (69%) | 23/47 (49%) |
+| **a direction is produced** | **8/10 (80%)** | **11/13 (85%)** | **0/47** |
+| **a value sits on constrained sequence** | **5/10 (50%)** | **2/13 (15%)** | **7/47 (15%)** |
 
 The direction separation is gone. No window without a scored element can produce
 a direction at all, and among windows that have one the matched negatives produce
@@ -408,16 +413,22 @@ place the gate requires the run to carry the coverage-conditioned counts, and
 requires that no window without a scored element ever produces a direction.
 
 **What survives conditioning is the one claim that survived the controls: a value
-on syntax, 50% at the panel against 9% at the matched windows that hold the same
-kind of data.** Separating it from the rest is what the benchmark is for.
+on syntax, 50% at the panel against 15% at the matched windows that hold the same
+kind of data.** Separating it from the rest is what the benchmark is for. Note
+that the value-on-syntax rate at the controls is the same whether or not they
+carry a deletion (15% against 15%), which is what a claim independent of model
+coverage looks like, and the opposite of what the direction row shows.
 
 ### What the sweep can still change
 
 The twelve locus windows were scored end to end in section 6, so the sweep adds
 little to them; nearly everything it can still move is on the control side,
-where 49 of 60 windows have no element-level deletion. The controls sit on the
+where 47 of 60 windows have no element-level deletion. The controls sit on the
 panel's own chromosomes, so the sweep's remaining order matters to the benchmark
 only where it reaches chr11 (5 controls), chr9, chr8, chr7 and chr6 (5 each) and
-chr2 (15). The prediction from the table above is precise: each control window
-the sweep reaches has about a 4-in-5 chance of producing a direction and about a
-1-in-11 chance of producing a value on syntax.
+chr2 (15). The prediction from the table above is precise, and the three windows
+chr11 has supplied so far all met it: each control window the sweep reaches has
+about a 5-in-6 chance of producing a direction and about a 1-in-7 chance of
+producing a value on syntax. If the sweep finishes the panel's ten chromosomes,
+the control direction rate should land near 80% - the same place as the panel -
+and the claim will have been shown to carry no information at all.

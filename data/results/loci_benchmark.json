@@ -237,9 +237,9 @@
         "rate": 0.533
       },
       "direction": {
-        "k": 9,
+        "k": 11,
         "n": 60,
-        "rate": 0.15
+        "rate": 0.183
       },
       "storage": {
         "k": 9,
@@ -247,9 +247,9 @@
         "rate": 0.15
       },
       "deletion_scored": {
-        "k": 11,
+        "k": 13,
         "n": 60,
-        "rate": 0.183
+        "rate": 0.217
       },
       "eqtl_present": {
         "k": 51,
@@ -308,46 +308,46 @@
       "negatives": {
         "with_deletion_data": {
           "target": {
-            "k": 10,
-            "n": 11,
-            "rate": 0.909
+            "k": 12,
+            "n": 13,
+            "rate": 0.923
           },
           "cell": {
-            "k": 7,
-            "n": 11,
-            "rate": 0.636
+            "k": 9,
+            "n": 13,
+            "rate": 0.692
           },
           "direction": {
-            "k": 9,
-            "n": 11,
-            "rate": 0.818
+            "k": 11,
+            "n": 13,
+            "rate": 0.846
           },
           "storage": {
-            "k": 1,
-            "n": 11,
-            "rate": 0.091
+            "k": 2,
+            "n": 13,
+            "rate": 0.154
           }
         },
         "without_deletion_data": {
           "target": {
-            "k": 42,
-            "n": 49,
-            "rate": 0.857
+            "k": 40,
+            "n": 47,
+            "rate": 0.851
           },
           "cell": {
-            "k": 25,
-            "n": 49,
-            "rate": 0.51
+            "k": 23,
+            "n": 47,
+            "rate": 0.489
           },
           "direction": {
             "k": 0,
-            "n": 49,
+            "n": 47,
             "rate": 0.0
           },
           "storage": {
-            "k": 8,
-            "n": 49,
-            "rate": 0.163
+            "k": 7,
+            "n": 47,
+            "rate": 0.149
           }
         }
       }
@@ -416,9 +416,9 @@
         "negatives": 5,
         "target": 5,
         "cell": 4,
-        "direction": 1,
+        "direction": 3,
         "storage": 2,
-        "deletion_scored": 1,
+        "deletion_scored": 3,
         "eqtl_present": 5
       },
       "FTO_IRX3": {
@@ -8995,13 +8995,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": true,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "OR10D3",
-      "deletion_target": null,
+      "deletion_target": "OR8G2P",
       "eqtl_target": "VWA5A",
       "cells_open": [
         "CD14-positive monocyte",
@@ -9034,13 +9034,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "MRGPRX1",
-      "deletion_target": null,
+      "deletion_target": "MRGPRX1",
       "eqtl_target": "PTPN5",
       "cells_open": [
         "hepatocyte"
@@ -10462,6 +10462,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 350.1
+    "seconds": 354.4
   }
 }
