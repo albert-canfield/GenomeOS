@@ -89,3 +89,38 @@ def test_two_all_elements_jobs_cannot_hold_the_key_at_once(tmp_path, monkeypatch
     assert not (meta / "enhancer_targets_all_chr1.json").exists()  # nothing was started
     # a job that does not touch the key is unaffected
     assert jobs._key_held_by("anatomy_genome_wide") is None
+
+
+def test_a_job_outside_the_registry_can_hold_the_key(tmp_path, monkeypatch):
+    """The lock covers any spender, not only registry jobs.
+
+    A Start from the Progress tab during an executor run shared the quota silently for six minutes,
+    because the registry could only see its own jobs. Now the executor takes the lock and the
+    registry refuses; a holder whose process has died releases it by itself.
+    """
+    import json
+    import os
+
+    import pytest
+
+    from genomeos import jobs
+
+    meta = tmp_path / "data" / "jobs"
+    meta.mkdir(parents=True)
+    monkeypatch.setattr(jobs, "JOBS_DIR", meta)
+
+    jobs.take_key("executor E1W", "1,000 pairs")
+    held = jobs.key_holder()
+    assert held["holder"] == "executor E1W" and held["pid"] == os.getpid()
+    with pytest.raises(RuntimeError, match=r"shares one AlphaGenome key with executor E1W.*wait for it"):
+        jobs.start("enhancer_targets_all_chr1", tmp_path)
+
+    jobs.drop_key("executor E1W")
+    assert jobs.key_holder() is None
+    assert jobs._key_held_by("enhancer_targets_all_chr1") is None
+
+    # a lock left behind by a process that died is stale, and nobody waits on a corpse
+    (meta / f"{jobs.KEY_LOCK}.lock").write_text(
+        json.dumps({"holder": "gone", "what": "killed session", "pid": 2**22, "started": 1.0})
+    )
+    assert jobs.key_holder() is None

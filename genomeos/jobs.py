@@ -15,6 +15,7 @@ import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 JOBS_DIR = Path("data/jobs")
 
@@ -446,10 +447,62 @@ def _recorded_pid(name: str) -> int | None:
 SHARED_KEY_PREFIX = "enhancer_targets_all_"
 
 
+KEY_LOCK = "alphagenome.key"
+
+
+def _lock_path() -> Path:
+    return JOBS_DIR / f"{KEY_LOCK}.lock"
+
+
+def key_holder() -> dict[str, Any] | None:
+    """Whoever holds the shared model key, or None. A lock whose process is gone is stale and ignored."""
+    try:
+        held = json.loads(_lock_path().read_text())
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not _alive(held.get("pid")):
+        return None
+    return held
+
+
+def take_key(holder: str, what: str = "", pid: int | None = None) -> dict[str, Any]:
+    """Claim the shared model key for a job that is not in the registry (a scoring script, a test run).
+
+    Raises if someone else holds it. Release it with `drop_key(holder)`; a holder whose process dies
+    releases it by itself, since a lock is only honoured while its pid is alive.
+    """
+    current = key_holder()
+    if current and current.get("holder") != holder:
+        raise RuntimeError(
+            f"the AlphaGenome key is held by {current.get('holder')} ({current.get('what', '')}), "
+            f"started {time.strftime('%H:%M', time.localtime(current.get('started', 0)))}: "
+            "one scorer per key, so wait for it or ask whoever is coordinating"
+        )
+    JOBS_DIR.mkdir(parents=True, exist_ok=True)
+    held = {"holder": holder, "what": what, "pid": pid or os.getpid(), "started": time.time()}
+    _lock_path().write_text(json.dumps(held))
+    return held
+
+
+def drop_key(holder: str) -> None:
+    """Release the shared model key if this holder has it; silent if it does not."""
+    current = key_holder()
+    if current is None or current.get("holder") == holder:
+        _lock_path().unlink(missing_ok=True)
+
+
 def _key_held_by(name: str) -> str | None:
-    """Another job that holds the shared model key right now, if this job would contend for it."""
+    """Whoever holds the shared model key right now, if this job would contend for it.
+
+    Two things can hold it: another all-elements job in the registry, or a job outside the registry
+    that took the lock (the executor runs, a panel scoring pass). Before the lock, a Start from the
+    Progress tab during an executor run shared the quota silently for six minutes.
+    """
     if not name.startswith(SHARED_KEY_PREFIX):
         return None
+    held = key_holder()
+    if held and held.get("holder") != name:
+        return f"{held.get('holder')} ({held.get('what', '')})"
     for other in CATALOG:
         if other == name or not other.startswith(SHARED_KEY_PREFIX):
             continue
@@ -468,11 +521,13 @@ def start(name: str, root: Path = Path(".")) -> JobStatus:
         return status(name, root)
     held = _key_held_by(name)
     if held:
-        raise RuntimeError(
-            f"{name} shares one AlphaGenome key with {held}, which is running: "
-            "the chain (scripts/enhancer_targets_all_chain.py) sequences these one at a time, "
-            "so start them through it rather than singly"
+        how = (
+            "the chain (scripts/enhancer_targets_all_chain.py) sequences the chromosomes one at a "
+            "time, so start them through it rather than singly"
+            if held.startswith(SHARED_KEY_PREFIX)
+            else "wait for it to finish, or ask whoever is coordinating to hand the key over"
         )
+        raise RuntimeError(f"{name} shares one AlphaGenome key with {held}, which is running: {how}")
     JOBS_DIR.mkdir(parents=True, exist_ok=True)
     log = JOBS_DIR / f"{name}.log"
     log.write_text("")
@@ -481,6 +536,8 @@ def start(name: str, root: Path = Path(".")) -> JobStatus:
     fh = open(log, "a")  # noqa: SIM115  (the subprocess owns the handle)
     proc = subprocess.Popen(CATALOG[name]["argv"], cwd=root, stdout=fh, stderr=subprocess.STDOUT)  # noqa: S603
     _running[name] = proc
+    if name.startswith(SHARED_KEY_PREFIX):
+        take_key(name, f"registry job, pid {proc.pid}", pid=proc.pid)
     _meta_path(name).write_text(
         json.dumps({"pid": proc.pid, "started": time.time(), "finished": None, "code": None})
     )
