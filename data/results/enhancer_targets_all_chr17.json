@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr17",
+  "date": "2026-09-14",
+  "chrom": "chr17",
+  "elements_total": 41396,
+  "scored": 41396,
+  "requests_this_run": 22215,
+  "workers": 16,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 41396,
+    "with_predicted_target": 28330,
+    "fraction_with_target": 0.684,
+    "strong": 9570,
+    "weak": 18760,
+    "silencer_like": 10463,
+    "verdicts": {
+      "another gene in the same domain": 13781,
+      "no predicted effect": 13066,
+      "agrees with nearest TSS in domain": 10254,
+      "gene outside the domain": 4295
+    },
+    "verdicts_coding": {
+      "no predicted effect": 19788,
+      "agrees with nearest TSS in domain": 13896,
+      "another gene in the same domain": 4677,
+      "gene outside the domain": 3035
+    },
+    "coding_target_agrees_with_nearest": 0.643,
+    "fraction_agreeing_with_nearest": 0.362,
+    "fraction_inside_domain": 0.848,
+    "top_tissues": {
+      "K562": 1133,
+      "placenta": 963,
+      "CD14-positive monocyte": 897,
+      "HepG2": 673,
+      "Purkinje cell": 606,
+      "psoas muscle": 574,
+      "Whole_Blood": 540,
+      "neural cell": 535,
+      "GM23338": 506,
+      "testis": 503,
+      "small intestine": 502,
+      "CD8-positive, alpha-beta T cell": 459
+    },
+    "median_distance_when_agreeing": 7644
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr17.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}
