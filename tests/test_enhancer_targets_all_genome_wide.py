@@ -98,6 +98,21 @@ def test_the_node_control_skips_a_chromosome_with_no_local_table(tmp_path, monke
     assert out["skipped"]["chrNotAChromosome"] == "no length"
 
 
+def test_the_sign_rule_is_frozen_so_a_failure_cannot_be_refitted_away():
+    """The rule was fixed on 2026-09-15 from twelve chromosomes and every later one is a held-out test
+    of it. Moving the threshold or widening the refusal band after a chromosome lands would turn a
+    falsifiable claim into a description of whatever arrived, so it has to break a test to do it."""
+    assert agw.SIGN_RULE["threshold_per_mb"] == 5.8
+    assert agw.SIGN_RULE["too_close_per_mb"] == 0.3
+    assert agw.SIGN_RULE["fixed_at"] == "2026-09-15"
+    assert agw.SIGN_RULE["fixed_on"] == [
+        "chr12", "chr13", "chr14", "chr15", "chr16", "chr17",
+        "chr18", "chr19", "chr20", "chr21", "chr22", "chrY",
+    ]  # fmt: skip
+    assert "chr11" not in agw.SIGN_RULE["fixed_on"]  # the first held-out test, and it held
+    assert "chrX" not in agw.SIGN_RULE["fixed_on"]  # the one the rule can lose on
+
+
 def test_the_sign_rule_refuses_the_chromosomes_too_near_its_line():
     assert agw.sign_call(7.0) == "positive"
     assert agw.sign_call(4.8) == "negative"
