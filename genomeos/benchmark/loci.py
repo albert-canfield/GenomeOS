@@ -85,6 +85,12 @@ MATCH_GC = 0.04  # matched window: GC within this of the positive's
 MATCH_DISTANCE = 0.35  # and distance to the nearest coding TSS within this fraction
 NEGATIVE_KEEP_OUT = 200_000  # a negative window stays this far from any panel locus
 K562_STRONG_PEAK = 100.0  # DNase signalValue of an unambiguous erythroid hypersensitive site
+COMMON_AF = 0.05  # a common value: gnomAD allele frequency at or above this
+#: value-domain size from common variable positions per kb, on a decade scale. Set AFTER reading
+#: two background windows (1 to 2 per kb) and the storage loci, so the value-domain agreement is
+#: descriptive, not a test; the matched negatives are what test it.
+DOMAIN_FEW_PER_KB = 10.0
+DOMAIN_MANY_PER_KB = 50.0
 EVIDENCE = {
     "expectation": "curated: the published answer per locus, with citations, written down before the run",
     "derived": (
@@ -956,8 +962,7 @@ def read_values(ch: Chromosome, expect: Expect, frequencies: dict[str, Any] | No
 
     The imported genomes are three (the GIAB trio), which is enough to say a position is variable and
     nothing about frequency; the frequency comes from 1000 Genomes through Ensembl, cached by the
-    script. `common_variable_positions` is the derived value-domain size: variable positions per
-    kilobase of the locus's own window at a minor allele frequency of 5% or more.
+    script (`read_frequencies`, gnomAD v4.1.1 genomes).
     """
     from genomeos.genome.individuals import rows_in, sources
 
@@ -984,7 +989,7 @@ def read_values(ch: Chromosome, expect: Expect, frequencies: dict[str, Any] | No
             "pos": v["pos"],
             "carried_by": carriers.get(v["pos"], {}),
             "variable_in_the_trio": v["pos"] in carriers,
-            "frequency": (frequencies or {}).get(key),
+            "frequency": ((frequencies or {}).get("named") or {}).get(key),
         }
     return {
         "layer": "values",
@@ -992,7 +997,6 @@ def read_values(ch: Chromosome, expect: Expect, frequencies: dict[str, Any] | No
         "people": people,
         "variable_positions_in_element": len(carriers),
         "named_variants": named,
-        "common_variable_positions": (frequencies or {}).get("_common_in_window"),
         "evidence": (
             "measured: each person's own variant calls (GIAB HG002/HG003/HG004);"
             " curated: 1000 Genomes allele frequencies through Ensembl"
@@ -1027,16 +1031,8 @@ def read_constraint(chrom: str, windows: list[tuple[int, int]], progress=None) -
     return [out[iv] for iv in windows]
 
 
-def read_syntax_values(ch: Chromosome, start: int, end: int, expect: Expect | None = None) -> dict[str, Any]:
-    """Syntax against values over the window, the reading of attribution/syntax.py applied to a locus.
-
-    Every position where one of the people we hold differs from the reference gets its phyloP; a
-    value on constrained sequence is a "value in syntax". The question the benchmark asks is whether
-    the published causal base comes out near the top of that ranking without being named, which is
-    how `genomeos syntax --gene HERC2` found rs12913832.
-    """
-    from genomeos.attribution.bigwig import BigWig
-    from genomeos.attribution.constraint import PHYLOP_241_URL, PHYLOP_THRESHOLD
+def variable_positions(ch: Chromosome, start: int, end: int) -> dict[int, set[str]]:
+    """Positions in the window where one of the people we hold carries a non-reference SNV."""
     from genomeos.genome.individuals import rows_in, sources
 
     positions: dict[int, set[str]] = {}
@@ -1046,42 +1042,119 @@ def read_syntax_values(ch: Chromosome, start: int, end: int, expect: Expect | No
         for f in rows_in(Path(path), start + 1, end):
             ref, alt = f[3], f[4].split(",")[0]
             gt = f[9].split(":")[0] if len(f) > 9 else "./."
-            if (
-                len(ref) == 1
-                and len(alt) == 1
-                and any(a not in ("0", ".", "") for a in gt.replace("|", "/").split("/"))
-            ):
+            called = any(a not in ("0", ".", "") for a in gt.replace("|", "/").split("/"))
+            if len(ref) == 1 and len(alt) == 1 and called:
                 positions.setdefault(int(f[1]), set()).add(name)
-    pos = sorted(positions)
-    if not pos:
-        return {"layer": "syntax_values", "provenance": "derived", "values": 0, "values_in_syntax": 0}
-    bw = BigWig(PHYLOP_241_URL)
-    try:
-        stats = bw.summarise(ch.chrom, [(p - 1, p) for p in pos], PHYLOP_THRESHOLD)
-    finally:
-        bw.close()
-    rows = sorted(
-        ((p, round(s.maximum, 2)) for p, s in zip(pos, stats, strict=True) if s.bases),
-        key=lambda x: -x[1],
-    )
-    ranks = {p: i + 1 for i, (p, _v) in enumerate(rows)}
-    published = {}
-    for v in expect.variants if expect else ():
-        if v.get("pos"):
-            published[v.get("rsid") or str(v["pos"])] = {
-                "variable_in_the_trio": v["pos"] in positions,
-                "phylop": next((x for p, x in rows if p == v["pos"]), None),
-                "rank": ranks.get(v["pos"]),
-                "of": len(rows),
+    return positions
+
+
+def read_syntax_values_many(
+    ch: Chromosome, windows: list[tuple[int, int]], expects: list[Expect | None] | None = None
+) -> list[dict[str, Any]]:
+    """Syntax against values over many windows of one chromosome, in one bigWig session.
+
+    Every position where one of the people we hold differs from the reference gets its phyloP; a
+    value on constrained sequence is a "value in syntax" (attribution/syntax.py's reading). The
+    benchmark asks whether the published causal base comes out near the top of that ranking without
+    being named, which is how `genomeos syntax --gene HERC2` found rs12913832. One session for the
+    whole chromosome, because opening one per window cost six hours on the first run.
+    """
+    from genomeos.attribution.bigwig import BigWig
+    from genomeos.attribution.constraint import PHYLOP_241_URL, PHYLOP_THRESHOLD
+
+    per_window = [variable_positions(ch, s, e) for s, e in windows]
+    every = sorted({p for d in per_window for p in d})
+    phylop: dict[int, float] = {}
+    if every:
+        bw = BigWig(PHYLOP_241_URL)
+        try:
+            stats = bw.summarise(ch.chrom, [(p - 1, p) for p in every], PHYLOP_THRESHOLD)
+        finally:
+            bw.close()
+        phylop = {p: round(s.maximum, 2) for p, s in zip(every, stats, strict=True) if s.bases}
+    out = []
+    for i, positions in enumerate(per_window):
+        expect = (expects or [None] * len(windows))[i]
+        rows = sorted(((p, phylop[p]) for p in positions if p in phylop), key=lambda x: -x[1])
+        ranks = {p: n + 1 for n, (p, _v) in enumerate(rows)}
+        published = {}
+        for v in expect.variants if expect else ():
+            if v.get("pos"):
+                published[v.get("rsid") or str(v["pos"])] = {
+                    "variable_in_the_trio": v["pos"] in positions,
+                    "phylop": phylop.get(v["pos"]),
+                    "rank": ranks.get(v["pos"]),
+                    "of": len(rows),
+                }
+        out.append(
+            {
+                "layer": "syntax_values",
+                "provenance": "derived",
+                "values": len(rows),
+                "values_in_syntax": sum(1 for _p, x in rows if x >= PHYLOP_THRESHOLD),
+                "top": [{"pos": p, "phylop": x, "carriers": sorted(positions[p])} for p, x in rows[:5]],
+                "published": published,
+                "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs",
             }
+        )
+    return out
+
+
+def read_syntax_values(ch: Chromosome, start: int, end: int, expect: Expect | None = None) -> dict[str, Any]:
+    return read_syntax_values_many(ch, [(start, end)], [expect])[0]
+
+
+def _number(text: Any) -> float:
+    """A bigBed field as a number; gnomAD writes N/A where a group has no call."""
+    try:
+        return float(text)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def read_frequencies(ch: Chromosome, start: int, end: int, expect: Expect | None = None) -> dict[str, Any]:
+    """How common the values are, from gnomAD v4.1.1 genomes read by range as a bigBed.
+
+    Two readings: the density of common variable positions in the window, which is the derived
+    size of the value domain, and each named variant's own frequency with the population carrying
+    it most often. Read through the bigBed reader of `attribution/human_panel.py` (genomeos-h1's,
+    imported and not copied); Ensembl's overlap endpoint carries no frequencies and its variation
+    endpoint is used only to check the hard-coded positions.
+    """
+    from genomeos.attribution.human_panel import open_bigbed
+
+    try:
+        bb = open_bigbed("gnomad_snv")
+        rows = bb.query(ch.chrom, [(start, end)])
+    except (OSError, ValueError, KeyError) as ex:
+        return {"layer": "frequencies", "provenance": "derived", "pending": str(ex)[:160]}
+    common = {r["chromStart"] for r in rows if _number(r.get("AF")) >= COMMON_AF}
+    kb = (end - start) / 1000
+    named: dict[str, Any] = {}
+    for v in expect.variants if expect else ():
+        if not v.get("pos"):
+            continue
+        hit = next((r for r in rows if r["chromStart"] == v["pos"] - 1), None)
+        named[v.get("rsid") or str(v["pos"])] = (
+            {
+                "af": _number(hit.get("AF")),
+                "rsid_in_gnomad": hit.get("rsId"),
+                "commonest_in": hit.get("grpmax"),
+                "af_there": _number(hit.get("AF_grpmax")),
+                "allele": f"{hit.get('ref')}>{hit.get('alt')}",
+            }
+            if hit
+            else {"pending": "not in the gnomAD genomes track at this position"}
+        )
     return {
-        "layer": "syntax_values",
+        "layer": "frequencies",
         "provenance": "derived",
-        "values": len(rows),
-        "values_in_syntax": sum(1 for _p, x in rows if x >= PHYLOP_THRESHOLD),
-        "top": [{"pos": p, "phylop": x, "carriers": sorted(positions[p])} for p, x in rows[:5]],
-        "published": published,
-        "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs",
+        "variants_in_window": len(rows),
+        "common": len(common),
+        "per_kb": round(len(common) / kb, 2) if kb else None,
+        "named": named,
+        "threshold": COMMON_AF,
+        "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)",
     }
 
 
@@ -1309,7 +1382,7 @@ def gtex_intervals(windows: list[tuple[str, int, int]], chunk: int = 8_000):
     return ivs.freeze()
 
 
-def ensembl_variant(rsid: str, timeout: int = 30) -> dict[str, Any] | None:
+def ensembl_variant(rsid: str, timeout: int = 15) -> dict[str, Any] | None:
     """One variant through Ensembl: its GRCh38 position and 1000 Genomes population frequencies."""
     import urllib.request
 
@@ -1334,32 +1407,6 @@ def ensembl_variant(rsid: str, timeout: int = 30) -> dict[str, Any] | None:
             if len(code) == 3 and code.isupper():
                 pops.setdefault(code, {})[p["allele"]] = round(p["frequency"], 4)
     return {"position": pos, "populations": pops, "maf": d.get("MAF"), "minor_allele": d.get("minor_allele")}
-
-
-def ensembl_common_positions(chrom: str, start: int, end: int, maf: float = 0.05, timeout: int = 60):
-    """How many positions in a window carry a variant at `maf` or more: the value-domain size, derived."""
-    import urllib.request
-
-    region = f"{chrom.removeprefix('chr')}:{start}-{end}"
-    url = (
-        f"https://rest.ensembl.org/overlap/region/human/{region}"
-        "?feature=variation;content-type=application/json"
-    )
-    req = urllib.request.Request(url, headers={"User-Agent": "GenomeOS/0.9 (loci benchmark)"})
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:  # noqa: S310
-            rows = json.load(r)
-    except OSError:
-        return None
-    common = [v for v in rows if (v.get("minor_allele_freq") or 0) >= maf]
-    kb = (end - start) / 1000
-    return {
-        "variants": len(rows),
-        "common": len(common),
-        "per_kb": round(len(common) / kb, 3) if kb else None,
-        "maf": maf,
-        "evidence": "curated: Ensembl variation with 1000 Genomes minor allele frequency",
-    }
 
 
 # --------------------------------------------------------------------------- negative controls
@@ -1627,7 +1674,7 @@ def score_variant(expect: Expect, readings: dict[str, Any]) -> dict[str, Any]:
         "field": "variant",
         "expected": [v.get("rsid") for v in expect.variants if v.get("rsid")],
         "variable_in_the_trio": {k: v["variable_in_the_trio"] for k, v in named.items()},
-        "frequencies": {k: (v.get("frequency") or {}).get("populations") for k, v in named.items()},
+        "frequencies": {k: v.get("frequency") for k, v in named.items()},
         "constraint_rank": ranks or None,
         "in_the_top_decile_by_constraint": top_decile or None,
         "satmut_functional": pub or None,
@@ -1663,8 +1710,7 @@ def score_class(expect: Expect, readings: dict[str, Any]) -> dict[str, Any]:
     mammals = ((c.get("mammals") or {}).get("fraction_above")) or 0.0
     humans = (c.get("humans") or {}).get("fraction_above")
     sv = readings.get("syntax_values") or {}
-    common = (readings.get("values") or {}).get("common_variable_positions") or {}
-    per_kb = common.get("per_kb")
+    per_kb = (readings.get("frequencies") or {}).get("per_kb")
     node = readings.get("node") or {}
     order = readings.get("order") or {}
     in_node = [g for g in expect.targets if g in (node.get("genes_in_node") or [])]
@@ -1679,7 +1725,7 @@ def score_class(expect: Expect, readings: dict[str, Any]) -> dict[str, Any]:
         got.append("order")
     domain = None
     if per_kb is not None:
-        domain = "many" if per_kb >= 8.0 else "few"
+        domain = "many" if per_kb >= DOMAIN_MANY_PER_KB else ("few" if per_kb >= DOMAIN_FEW_PER_KB else "two")
     return {
         "field": "class",
         "expected": list(expect.classes),
@@ -1801,9 +1847,22 @@ def aggregate(loci: list[dict[str, Any]]) -> dict[str, Any]:
     judged_cells = [r for r in loci if r["expected"]["cells"] or r["expected"]["gtex_tissues"]]
     judged_dir = [r for r in enhancers if r["score"]["scored"]["direction"]["judged"]]
     traps = [r for r in loci if r["expected"]["nearest_gene_trap"]]
+    chance = [
+        min(1.0, len(r["expected"]["targets"]) / r["coding_genes_in_window"])
+        for r in loci
+        if r.get("coding_genes_in_window")
+    ]
     return {
         "loci": len(loci),
         "target_derived": hits("target_hit_derived"),
+        "target_by_chance": {
+            "expected": round(sum(chance), 2),
+            "of": len(chance),
+            "reading": (
+                "naming one of the published targets by drawing a coding gene at random from the locus"
+                " window: the floor any target rate has to clear"
+            ),
+        },
         "target_derived_where_reachable": hits("target_hit_derived", reachable),
         "target_heuristic": hits("target_hit_heuristic"),
         "target_looked_up": hits("target_hit_looked_up"),
@@ -1887,6 +1946,7 @@ def build(
             near = ch.nearest_coding((s + en) // 2)
             row = {"locus": e.locus, "expected": e.as_dict(), "readings": readings, "gc": gc}
             row["distance_to_coding_tss"] = near[1] if near else None
+            row["coding_genes_in_window"] = sum(1 for t, _g in ch.coding if e.window[0] <= t < e.window[1])
             loci.append(row)
             if negatives and gc is not None and near is not None:
                 n = CANDIDATES_PER_LOCUS if en - s <= 20_000 else CANDIDATES_PER_LOCUS // 2
@@ -1901,11 +1961,10 @@ def build(
                 ivs = non_overlapping(
                     [tuple(r["expected"]["element"]) for r in pos] + [(w.start, w.end) for w in cand]
                 )
-                try:
-                    got = dict(zip(ivs, read_constraint(chrom, ivs), strict=True))
-                except OSError as ex:
-                    say(f"{chrom}: constraint unavailable ({ex})")
-                    got = {}
+                read = _retry(read_constraint, chrom, ivs, say=say)
+                got = dict(zip(ivs, read, strict=True)) if read is not None else {}
+                if read is None:
+                    say(f"{chrom}: constraint unavailable after {RETRIES} tries")
                 for r in pos:
                     r["readings"]["constraint"] = got.get(tuple(r["expected"]["element"])) or {
                         "layer": "constraint",
@@ -1945,22 +2004,31 @@ def build(
             if network:
                 for v in e.variants:
                     if v.get("rsid"):
-                        got_v = ensembl_variant(v["rsid"])
-                        if got_v:
-                            freqs[v["rsid"]] = got_v
-                        checked[v["rsid"]] = position_check(v, got_v)
-                if e.value_domain:
-                    s, en = e.element
-                    freqs["_common_in_window"] = ensembl_common_positions(e.chrom, s, min(en, s + 10_000))
+                        checked[v["rsid"]] = position_check(v, ensembl_variant(v["rsid"]))
+                freqs = _guarded(read_frequencies, chroms[e.chrom], *e.element, e)
+                r["readings"]["frequencies"] = freqs
             r["readings"]["values"] = read_values(chroms[e.chrom], e, freqs)
-            if network:
-                r["readings"]["syntax_values"] = _guarded(read_syntax_values, chroms[e.chrom], *e.element, e)
+        if network:  # syntax against values, one bigWig session per chromosome, positives and negatives
+            for chrom, ch in chroms.items():
+                mine = [r for r in loci if r["expected"]["chrom"] == chrom]
+                negs = [w for w in chosen if w.chrom == chrom]
+                wins = [tuple(r["expected"]["element"]) for r in mine] + [(w.start, w.end) for w in negs]
+                exps = [panel_by_name()[r["locus"]] for r in mine] + [None] * len(negs)
+                got_sv = _retry(read_syntax_values_many, ch, wins, exps, say=say)
+                if got_sv is None:
+                    say(f"{chrom}: syntax against values unavailable after {RETRIES} tries")
+                    continue
+                for r, sv in zip(mine, got_sv[: len(mine)], strict=True):
+                    r["readings"]["syntax_values"] = sv
+                for w, sv in zip(negs, got_sv[len(mine) :], strict=True):
+                    w.readings["syntax_values"] = sv
+                say(f"{chrom}: syntax against values over {len(wins)} windows")
+                negs_f = [(w, _guarded(read_frequencies, ch, w.start, w.end)) for w in negs]
+                for w, fr in negs_f:
+                    w.readings["frequencies"] = fr
+        for r, e in zip(loci, panel, strict=True):
             r["score"] = score_locus(e, chroms[e.chrom], r["readings"])
             say(f"{e.locus}: scored")
-        if network:
-            for w in chosen:
-                w.readings["syntax_values"] = _guarded(read_syntax_values, chroms[w.chrom], w.start, w.end)
-            say(f"syntax against values read over {len(chosen)} negatives")
     finally:
         for ch in chroms.values():
             ch.close()
@@ -1992,11 +2060,26 @@ NOTE = (
 )
 
 
+RETRIES = 3  # a range read over a public track times out now and then; the gate catches a silent gap
+
+
+def _retry(fn, *args, say=None):
+    """Try a range read up to RETRIES times; None when every try failed."""
+    for n in range(RETRIES):
+        try:
+            return fn(*args)
+        except OSError as ex:
+            if say:
+                say(f"try {n + 1} of {RETRIES} failed ({str(ex)[:60]})")
+            time.sleep(5 * (n + 1))
+    return None
+
+
 def _guarded(fn, *args) -> dict[str, Any]:
     """A network reading that fails is recorded as pending, never allowed to stop the benchmark."""
     try:
         return fn(*args)
-    except OSError as ex:
+    except (OSError, ValueError, KeyError) as ex:
         return {"layer": fn.__name__.removeprefix("read_"), "provenance": "derived", "pending": str(ex)[:160]}
 
 
@@ -2061,6 +2144,9 @@ def negative_row(w: Window) -> dict[str, Any]:
         "eqtl_target": (rd.get("eqtl") or {}).get("target"),
         "cells_open": (rd.get("reader") or {}).get("cells_open"),
         "registry_classes": (rd.get("registry") or {}).get("classes"),
+        "common_variants_per_kb": (rd.get("frequencies") or {}).get("per_kb"),
+        "values_in_syntax": (rd.get("syntax_values") or {}).get("values_in_syntax"),
+        "mammal_fraction": ((rd.get("constraint") or {}).get("mammals") or {}).get("fraction_above"),
     }
 
 

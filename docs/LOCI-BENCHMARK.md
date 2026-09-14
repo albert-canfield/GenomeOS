@@ -56,7 +56,7 @@ labelled by where it came from, and the rates are reported apart.
 
 | provenance | layers | what a hit proves |
 |---|---|---|
-| derived | AlphaGenome deletion (already computed), GTEx v8 eQTLs, ENCODE DNase in 11 cell types (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the GIAB trio's variants, 1000 Genomes frequencies, the translation engine | the approach works |
+| derived | AlphaGenome deletion (already computed), GTEx v8 eQTLs, ENCODE DNase in 11 cell types (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the GIAB trio's variants, gnomAD frequencies, the translation engine | the approach works |
 | targeted | Kircher et al. 2019 saturation mutagenesis | a measurement made at the locus because it was known: confirms, cannot discover |
 | heuristic | nearest coding TSS in the CTCF node | the baseline the rest has to beat |
 | looked_up | VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, cCRE class | nothing about the approach |
@@ -88,15 +88,24 @@ derived layer, a cell open in the reader, a direction, a value on syntax.
   between two of them.
 
 The value-domain size is read as common variable positions per kilobase
-(1000 Genomes MAF of 5% or more through Ensembl).
+(gnomAD v4.1.1 genomes, allele frequency 5% or more, read by range as a bigBed
+through `attribution/human_panel.py`'s reader): **many** at 50 per kb or more,
+**few** at 10 or more, **two** below. The two boundaries were set after reading
+the storage loci and two background windows,
+so the agreement with the published domain sizes is descriptive; the matched
+negatives are what test the reading.
 
-## 5. The first run (2026-09-14)
+## 5. The run (2026-09-14)
 
-12 loci, 60 matched negatives, no AlphaGenome request. GTEx's archive streamed
-once (71.5 million pairs scanned, 123,520 kept inside the windows, 132 s),
-Zoonomia and Gnocchi read by range over 463 windows, Ensembl asked for the
-eleven named variants. Ten of the eleven hard-coded positions agreed with
-Ensembl exactly; the eleventh (rs8176746) did not, which is the check working.
+12 loci, 60 matched negatives, no AlphaGenome request, 21 to 48 minutes
+depending on the network. GTEx's
+archive streamed once (71.5 million pairs scanned, 123,520 kept inside the
+windows, 132 s), Zoonomia phyloP and gnomAD Gnocchi read by range over 463
+windows plus one base per variable position, gnomAD frequencies read as a
+bigBed, Ensembl asked for the named variants' positions. The position check
+earned its place on the first pass: ten of eleven agreed and rs8176746 was
+seven bases out in the panel, now corrected; on the second pass Ensembl timed
+out for most of them, which is recorded as unverified rather than agreed.
 
 | field | derived | heuristic (nearest TSS in node) | looked up |
 |---|---|---|---|
@@ -125,7 +134,7 @@ names LMBR1, the textbook wrong answer.
 |---|---|---|
 | a derived layer names *some* target | 11/12 (92%) | 52/60 (87%) |
 | the reader has it open in some cell | 10/12 (83%) | 32/60 (53%) |
-| a direction is produced | 2/12 (17%) | 2/60 (3%) |
+| a direction is produced | 2/12 (17%) | 6/60 (10%) |
 | a value sits on constrained sequence | 6/12 (50%) | 9/60 (15%) |
 
 **Naming a target is not evidence of anything.** At windows matched for length,
@@ -147,8 +156,8 @@ it, and whether a variable position sits on syntax. Any genome-wide count of
 | FTO_IRX3 | strict miss: the eQTLs rank FTO first and IRX3 second, and IRX3 sits at 519.7 kb against the published 520 kb | **FTO, the trap** | unreachable in the reader; the only GTEx tissue for IRX3 here is pancreas | - | the lenient reading is right and the strict one is wrong: the answer is in the layer, one rank down |
 | BCL11A_enhancer | BCL11A (window input) | BCL11A | K562 not open over the +62 DHS | rs1427407 rank 1 of 12, phyloP 7.01 | the sharpest causal-variant result of the panel |
 | MYC_8q24 | miss: no element on chr8 is scored, and the eQTLs name CASC8 and POU5F1B | none in node | miss | rs6983267 rank 1 of 2, phyloP 4.97 | saturation mutagenesis calls rs6983267 **not** functional in its element (effect 0.0, 41st by effect), a measured disagreement with the published colorectal result |
-| ABO | ABO (eQTL, 43 tissues) | ABO | miss: the eQTL tissues are 43 of 49, not blood | rs8176746 16th of 20 by constraint (phyloP -2.27) | the O frameshift is not derivable: the local trace substitutes single bases only |
-| HLA_DRB1 | HLA-DRB1 (window input) | HLA-DRB1 | GM12878 and monocyte open | - | no value-domain reading came back, so the many-valued slot is unmeasured |
+| ABO | ABO (eQTL, 43 tissues) | ABO | miss: the eQTL tissues are 43 of 49, not blood | rs8176746 19th of 20 by constraint (phyloP -2.6), at the corrected position | the O frameshift is not derivable: the local trace substitutes single bases only |
+| HLA_DRB1 | HLA-DRB1 (window input) | HLA-DRB1 | GM12878 and monocyte open | - | 112.8 common variable positions per kb against a median 2.5 at the controls: the many-valued slot, derived |
 | APP | APP (window input, 100 of 197 scored elements; and p.Ala673Thr from the translation engine) | none (the variant is 273 kb inside a minus-strand gene) | promoter open in SK-N-SH and astrocyte | - | the coding calibration passes exactly |
 | TP53 | TP53 (p.Pro72Arg derived from the reference sequence) | TP53 | K562 | rs1042522 rank 1 of 1, phyloP 3.40 | 23% mammal-constrained, read as syntax |
 | HOXD | HOXD10 (element deletion, 2 sampled elements) | HOXD4 | unreachable (no limb cell) | - | see below |
@@ -184,22 +193,54 @@ the honest answer to the question the locus was added for.
 | HERC2_OCA2, MCM6_LCT, FTO_IRX3, MYC_8q24, BCL11A, ABO, HLA_DRB1, HBB_LCR | no AlphaGenome deletion has been scored on chr15, chr2, chr16, chr8, chr9, chr6 or chr11 | the sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1; about 0.76 requests per element |
 | SHH_ZRS, MCM6_LCT, FTO_IRX3, HOXD | the published cell type (limb bud, intestinal epithelium, adipocyte precursor) is not among the eleven reader cell types | ENCODE DNase for the tissue, or an embryonic panel |
 | HBB_LCR | developmental stage: the fetal-to-adult switch | no layer carries time |
-| ABO | the O allele is an indel; the local trace substitutes single bases | an indel path in the trace |
-| HLA_DRB1, all storage loci | the value-domain size: the Ensembl query returned no allele frequencies, so "a handful against thousands" is unmeasured | the 1000 Genomes common-variant set, or the HPRC panel's value domains (genomeos-h1) |
+| every storage locus | two values against a few: the density of common positions cannot separate them | haplotype value domains (the HPRC panel, genomeos-h1) |
+| ABO | the O allele is a deletion: neither the frequency reader nor the trace handles an indel | an indel path in both |
 | every locus | the direction of effect is only judged where a deletion names the target: one locus of twelve | the same sweep |
 
-### The one result that is both derived and sharp
+### The chance floor, and why 8 of 12 is not a result on its own
 
-Constraint across mammals, read per base over the positions where the three
-people we hold differ, puts the published causal variant **first** at four of
-the five loci that have one: rs12913832 (phyloP 3.41, first of 4 variable
-positions), rs1427407 (7.01, first of 12), rs6983267 (4.97, first of 2),
-rs1042522 (3.40, the only one), and rs4988235 first of 2 at phyloP 0.22, which
-is not constrained at all. Read honestly, only BCL11A's rs1427407 is a result
-(first of twelve on strongly constrained sequence); where a window holds one or
-two variable positions, being first means nothing. The claim that does survive
-the controls is the class: a value sitting on constrained sequence at 6 of 12
-panel loci against 9 of 60 matched windows.
+A locus window holds few coding genes: 1 at APP, 2 at MYC, BCL11A and ABO, 3 at FTO,
+4 at the ZRS, HERC2 and MCM6, 8 at the globin cluster, HLA and TP53, 12 at HOXD.
+Drawing a coding gene at random from each window and asking whether it is one of
+the published targets gives an expectation of **5.5 hits of 12**. The derived
+layers score 8 and the nearest-TSS heuristic 8, so neither is far above the
+floor, and the panel is too small for that difference to mean anything. The
+result to carry away is not the rate; it is which loci fail and how.
+
+### The storage side: values, frequencies and domains
+
+For every named common value, gnomAD v4.1.1 gives back the published population
+structure without being told it: rs12913832 G at 0.76 in non-Finnish Europeans,
+rs4988235 A at 0.64 there, rs1421085 C at 0.42, rs1042522 C (R72) at 0.75,
+rs6983267 T at 0.60 in East Asians, rs1427407 as the minor allele at 0.19, and
+APP's rs63750847 at 0.0003 - rare everywhere, as published for a variant found
+in Iceland. That is 6 of 6 common values with the right frequency and the right
+commonest population, derived. The seventh, ABO's O allele, is a single-base
+deletion, and neither the frequency reader nor the local trace handles an indel:
+recorded as pending.
+
+The value-domain size separates the extremes and nothing finer. On the decade
+scale, HLA-DRB1 reads 112.8 common positions per kb (many), ABO 17.0 (few),
+HERC2 4.2 and APP 0.0 (two) - four of six as published - while TP53 reads 10.0
+(few, expected two) and the lactase enhancer 5.0 (two, where the published
+domain is a handful of alleles across continents, of which only rs4988235 is
+inside this window). The 60 matched negative windows read a median of 2.5 per kb,
+90% of them below 8.2 and the highest 25. So the reading
+tells a hypervariable slot from an ordinary one, and cannot tell two values from
+a few; separating those needs haplotypes, not positions, which is what the HPRC
+panel (`attribution/human_panel.py`) is for.
+
+One class result is worth more than the domain sizes. The "value on syntax"
+reading - a position where our three people differ that sits on mammal-constrained
+sequence - fires at 6 of 12 panel loci and at 9 of 60 matched windows, the only
+claim in the benchmark that the controls do not erase. It puts rs1427407 first of
+the twelve variable positions in the BCL11A enhancer at phyloP 7.01 and
+rs12913832 first of four at 3.41. And it fails in an informative way at the
+lactase enhancer: rs4988235 sits at phyloP 0.22, on sequence mammals never held
+still, because it is a recent human adaptation. Its kilobase is 50%
+human-constrained on the Gnocchi axis. A value slot can be old syntax with a
+variable base or a recent change on free sequence, and only reading both axes
+tells them apart.
 
 ## 6. Lessons the run produced
 
@@ -218,6 +259,13 @@ panel loci against 9 of 60 matched windows.
 - **A hard-coded coordinate is a bug waiting.** Ten of eleven positions checked
   out against Ensembl and one did not; the translation engine then confirmed two
   of them a second way by deriving p.Ala673Thr and p.Pro72Arg.
-- **Cost.** The run is 20 minutes of layers and constraint plus 2 minutes of
-  GTEx; the first version spent six hours opening one bigWig session per
-  negative window for the per-base constraint reading. Batch the windows.
+- **Cost.** The run is 21 to 48 minutes: local layers and two constraint axes over
+  523 windows, one GTEx pass of 2 minutes, one bigBed query per window. The
+  first version took six hours because it opened a bigWig session per negative
+  window for the per-base reading; batching a chromosome's windows into one
+  session is the whole difference. Public range reads time out now and then;
+  one chr2 timeout silently emptied three loci's syntax reading, the gate test
+  caught it, and the reads now retry three times.
+- **A named target needs a floor.** Against a chance expectation of 5.5 of 12,
+  8 of 12 is not a result. Any rate quoted for a target-naming layer should come
+  with the number of genes it could have chosen from.

@@ -175,3 +175,31 @@ def test_every_unreachable_reading_says_why():
                 )
     order = loci()["HOXD"]["readings"]["order"]
     assert "order" in order["pending"], "the untestable order of HOXD must stay recorded as pending"
+
+
+@needs_result
+def test_the_value_domain_tells_the_many_valued_slot_from_the_two_valued_ones():
+    read = {n: r["score"]["scored"]["class"]["value_domain_read"] for n, r in loci().items()}
+    assert read["HLA_DRB1"] == "many"
+    assert read["HERC2_OCA2"] == "two" and read["APP"] == "two"
+    assert read["ABO"] == "few"
+
+
+@needs_result
+def test_the_named_common_values_come_back_with_their_population():
+    expected = {
+        "HERC2_OCA2": ("rs12913832", "European"),
+        "MCM6_LCT": ("rs4988235", "European"),
+        "FTO_IRX3": ("rs1421085", "European"),
+        "TP53": ("rs1042522", "European"),
+    }
+    for name, (rsid, population) in expected.items():
+        f = loci()[name]["readings"]["frequencies"]["named"][rsid]
+        assert f["af"] >= 0.05 and population in (f["commonest_in"] or ""), f"{name}: {f}"
+
+
+@needs_result
+def test_the_target_rate_is_reported_against_its_chance_floor():
+    a = RESULT["aggregate"]
+    chance = a["target_by_chance"]
+    assert chance["of"] == len(PANEL) and 0 < chance["expected"] < len(PANEL)

@@ -37,6 +37,11 @@
         "MYC_8q24"
       ]
     },
+    "target_by_chance": {
+      "expected": 5.54,
+      "of": 12,
+      "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
+    },
     "target_derived_where_reachable": {
       "k": 7,
       "n": 11,
@@ -210,9 +215,9 @@
         "rate": 0.5
       },
       "deletion_scored": {
-        "k": 2,
+        "k": 3,
         "n": 12,
-        "rate": 0.167
+        "rate": 0.25
       },
       "eqtl_present": {
         "k": 11,
@@ -232,9 +237,9 @@
         "rate": 0.533
       },
       "direction": {
-        "k": 2,
+        "k": 6,
         "n": 60,
-        "rate": 0.033
+        "rate": 0.1
       },
       "storage": {
         "k": 9,
@@ -242,9 +247,9 @@
         "rate": 0.15
       },
       "deletion_scored": {
-        "k": 4,
+        "k": 8,
         "n": 60,
-        "rate": 0.067
+        "rate": 0.133
       },
       "eqtl_present": {
         "k": 51,
@@ -327,15 +332,15 @@
           "cell": true,
           "direction": false,
           "storage": false,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": true
         },
         "negatives": 5,
         "target": 3,
         "cell": 0,
-        "direction": 0,
+        "direction": 1,
         "storage": 0,
-        "deletion_scored": 0,
+        "deletion_scored": 1,
         "eqtl_present": 3
       },
       "BCL11A_enhancer": {
@@ -435,9 +440,9 @@
         "negatives": 5,
         "target": 5,
         "cell": 4,
-        "direction": 1,
+        "direction": 4,
         "storage": 0,
-        "deletion_scored": 1,
+        "deletion_scored": 4,
         "eqtl_present": 4
       },
       "HOXD": {
@@ -854,6 +859,16 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 153,
+          "common": 1,
+          "per_kb": 1.27,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -864,7 +879,6 @@
           ],
           "variable_positions_in_element": 1,
           "named_variants": {},
-          "common_variable_positions": null,
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
         "syntax_values": {
@@ -887,6 +901,7 @@
       },
       "gc": 0.3929,
       "distance_to_coding_tss": 101702,
+      "coding_genes_in_window": 4,
       "constrained_fraction": 0.5463,
       "score": {
         "scored": {
@@ -1028,8 +1043,8 @@
             "values_in_syntax": 1,
             "published_targets_in_one_node": [],
             "value_domain_expected": null,
-            "value_domain_read": null,
-            "common_variable_positions_per_kb": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 1.27,
             "value_domain_hit": null,
             "hit_derived": true,
             "hit_derived_all": true
@@ -1270,6 +1285,24 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 196,
+          "common": 4,
+          "per_kb": 4.18,
+          "named": {
+            "rs12913832": {
+              "af": 0.486506,
+              "rsid_in_gnomad": "rs12913832",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.76357,
+              "allele": "A>G"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -1289,140 +1322,13 @@
               },
               "variable_in_the_trio": true,
               "frequency": {
-                "position": 28120472,
-                "populations": {
-                  "ACB": {
-                    "A": 0.9219,
-                    "G": 0.0781
-                  },
-                  "AFR": {
-                    "A": 0.972,
-                    "G": 0.028
-                  },
-                  "ALL": {
-                    "A": 0.8227,
-                    "G": 0.1773
-                  },
-                  "AMR": {
-                    "G": 0.2017,
-                    "A": 0.7983
-                  },
-                  "ASW": {
-                    "A": 0.8607,
-                    "G": 0.1393
-                  },
-                  "BEB": {
-                    "A": 0.9012,
-                    "G": 0.0988
-                  },
-                  "CDX": {
-                    "A": 1
-                  },
-                  "CEU": {
-                    "A": 0.2323,
-                    "G": 0.7677
-                  },
-                  "CHB": {
-                    "A": 1
-                  },
-                  "CHS": {
-                    "G": 0.0095,
-                    "A": 0.9905
-                  },
-                  "CLM": {
-                    "A": 0.734,
-                    "G": 0.266
-                  },
-                  "EAS": {
-                    "G": 0.002,
-                    "A": 0.998
-                  },
-                  "ESN": {
-                    "A": 1
-                  },
-                  "EUR": {
-                    "G": 0.6362,
-                    "A": 0.3638
-                  },
-                  "FIN": {
-                    "A": 0.0909,
-                    "G": 0.9091
-                  },
-                  "GBR": {
-                    "G": 0.8187,
-                    "A": 0.1813
-                  },
-                  "GIH": {
-                    "G": 0.0825,
-                    "A": 0.9175
-                  },
-                  "GWD": {
-                    "A": 0.9779,
-                    "G": 0.0221
-                  },
-                  "IBS": {
-                    "A": 0.6776,
-                    "G": 0.3224
-                  },
-                  "ITU": {
-                    "A": 0.951,
-                    "G": 0.049
-                  },
-                  "JPT": {
-                    "A": 1
-                  },
-                  "KHV": {
-                    "A": 1
-                  },
-                  "LWK": {
-                    "A": 1
-                  },
-                  "MSL": {
-                    "A": 1
-                  },
-                  "MXL": {
-                    "A": 0.8203,
-                    "G": 0.1797
-                  },
-                  "PEL": {
-                    "G": 0.1118,
-                    "A": 0.8882
-                  },
-                  "PJL": {
-                    "G": 0.099,
-                    "A": 0.901
-                  },
-                  "PUR": {
-                    "G": 0.2308,
-                    "A": 0.7692
-                  },
-                  "SAS": {
-                    "G": 0.0706,
-                    "A": 0.9294
-                  },
-                  "STU": {
-                    "A": 0.9706,
-                    "G": 0.0294
-                  },
-                  "TSI": {
-                    "A": 0.5794,
-                    "G": 0.4206
-                  },
-                  "YRI": {
-                    "A": 1
-                  }
-                },
-                "maf": null,
-                "minor_allele": null
+                "af": 0.486506,
+                "rsid_in_gnomad": "rs12913832",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.76357,
+                "allele": "A>G"
               }
             }
-          },
-          "common_variable_positions": {
-            "variants": 338,
-            "common": 0,
-            "per_kb": 0.0,
-            "maf": 0.05,
-            "evidence": "curated: Ensembl variation with 1000 Genomes minor allele frequency"
           },
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
@@ -1480,6 +1386,7 @@
       },
       "gc": 0.4389,
       "distance_to_coding_tss": 21270,
+      "coding_genes_in_window": 4,
       "constrained_fraction": 0.0773,
       "score": {
         "scored": {
@@ -1589,126 +1496,11 @@
             },
             "frequencies": {
               "rs12913832": {
-                "ACB": {
-                  "A": 0.9219,
-                  "G": 0.0781
-                },
-                "AFR": {
-                  "A": 0.972,
-                  "G": 0.028
-                },
-                "ALL": {
-                  "A": 0.8227,
-                  "G": 0.1773
-                },
-                "AMR": {
-                  "G": 0.2017,
-                  "A": 0.7983
-                },
-                "ASW": {
-                  "A": 0.8607,
-                  "G": 0.1393
-                },
-                "BEB": {
-                  "A": 0.9012,
-                  "G": 0.0988
-                },
-                "CDX": {
-                  "A": 1
-                },
-                "CEU": {
-                  "A": 0.2323,
-                  "G": 0.7677
-                },
-                "CHB": {
-                  "A": 1
-                },
-                "CHS": {
-                  "G": 0.0095,
-                  "A": 0.9905
-                },
-                "CLM": {
-                  "A": 0.734,
-                  "G": 0.266
-                },
-                "EAS": {
-                  "G": 0.002,
-                  "A": 0.998
-                },
-                "ESN": {
-                  "A": 1
-                },
-                "EUR": {
-                  "G": 0.6362,
-                  "A": 0.3638
-                },
-                "FIN": {
-                  "A": 0.0909,
-                  "G": 0.9091
-                },
-                "GBR": {
-                  "G": 0.8187,
-                  "A": 0.1813
-                },
-                "GIH": {
-                  "G": 0.0825,
-                  "A": 0.9175
-                },
-                "GWD": {
-                  "A": 0.9779,
-                  "G": 0.0221
-                },
-                "IBS": {
-                  "A": 0.6776,
-                  "G": 0.3224
-                },
-                "ITU": {
-                  "A": 0.951,
-                  "G": 0.049
-                },
-                "JPT": {
-                  "A": 1
-                },
-                "KHV": {
-                  "A": 1
-                },
-                "LWK": {
-                  "A": 1
-                },
-                "MSL": {
-                  "A": 1
-                },
-                "MXL": {
-                  "A": 0.8203,
-                  "G": 0.1797
-                },
-                "PEL": {
-                  "G": 0.1118,
-                  "A": 0.8882
-                },
-                "PJL": {
-                  "G": 0.099,
-                  "A": 0.901
-                },
-                "PUR": {
-                  "G": 0.2308,
-                  "A": 0.7692
-                },
-                "SAS": {
-                  "G": 0.0706,
-                  "A": 0.9294
-                },
-                "STU": {
-                  "A": 0.9706,
-                  "G": 0.0294
-                },
-                "TSI": {
-                  "A": 0.5794,
-                  "G": 0.4206
-                },
-                "YRI": {
-                  "A": 1
-                }
+                "af": 0.486506,
+                "rsid_in_gnomad": "rs12913832",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.76357,
+                "allele": "A>G"
               }
             },
             "constraint_rank": {
@@ -1756,9 +1548,9 @@
               "OCA2"
             ],
             "value_domain_expected": "two",
-            "value_domain_read": "few",
-            "common_variable_positions_per_kb": 0.0,
-            "value_domain_hit": false,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 4.18,
+            "value_domain_hit": true,
             "hit_derived": true,
             "hit_derived_all": true
           }
@@ -2056,6 +1848,24 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 83,
+          "common": 2,
+          "per_kb": 5.0,
+          "named": {
+            "rs4988235": {
+              "af": 0.396813,
+              "rsid_in_gnomad": "rs4988235",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.635283,
+              "allele": "G>A"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -2073,138 +1883,13 @@
               },
               "variable_in_the_trio": true,
               "frequency": {
-                "position": 135851076,
-                "populations": {
-                  "ACB": {
-                    "G": 0.9323,
-                    "A": 0.0677
-                  },
-                  "AFR": {
-                    "G": 0.9728,
-                    "A": 0.0272
-                  },
-                  "ALL": {
-                    "G": 0.8387,
-                    "A": 0.1613
-                  },
-                  "AMR": {
-                    "A": 0.2161,
-                    "G": 0.7839
-                  },
-                  "ASW": {
-                    "A": 0.1721,
-                    "G": 0.8279
-                  },
-                  "BEB": {
-                    "G": 0.9419,
-                    "A": 0.0581
-                  },
-                  "CDX": {
-                    "G": 1
-                  },
-                  "CEU": {
-                    "G": 0.2626,
-                    "A": 0.7374
-                  },
-                  "CHB": {
-                    "G": 1
-                  },
-                  "CHS": {
-                    "G": 1
-                  },
-                  "CLM": {
-                    "G": 0.6915,
-                    "A": 0.3085
-                  },
-                  "EAS": {
-                    "G": 1
-                  },
-                  "ESN": {
-                    "G": 1
-                  },
-                  "EUR": {
-                    "G": 0.492,
-                    "A": 0.508
-                  },
-                  "FIN": {
-                    "G": 0.4091,
-                    "A": 0.5909
-                  },
-                  "GBR": {
-                    "A": 0.7198,
-                    "G": 0.2802
-                  },
-                  "GIH": {
-                    "G": 0.8592,
-                    "A": 0.1408
-                  },
-                  "GWD": {
-                    "A": 0.0088,
-                    "G": 0.9912
-                  },
-                  "IBS": {
-                    "A": 0.4579,
-                    "G": 0.5421
-                  },
-                  "ITU": {
-                    "A": 0.0588,
-                    "G": 0.9412
-                  },
-                  "JPT": {
-                    "G": 1
-                  },
-                  "KHV": {
-                    "G": 1
-                  },
-                  "LWK": {
-                    "G": 1
-                  },
-                  "MSL": {
-                    "G": 1
-                  },
-                  "MXL": {
-                    "A": 0.2422,
-                    "G": 0.7578
-                  },
-                  "PEL": {
-                    "A": 0.1059,
-                    "G": 0.8941
-                  },
-                  "PJL": {
-                    "G": 0.7396,
-                    "A": 0.2604
-                  },
-                  "PUR": {
-                    "A": 0.2067,
-                    "G": 0.7933
-                  },
-                  "SAS": {
-                    "G": 0.8865,
-                    "A": 0.1135
-                  },
-                  "STU": {
-                    "A": 0.049,
-                    "G": 0.951
-                  },
-                  "TSI": {
-                    "A": 0.0888,
-                    "G": 0.9112
-                  },
-                  "YRI": {
-                    "G": 1
-                  }
-                },
-                "maf": null,
-                "minor_allele": null
+                "af": 0.396813,
+                "rsid_in_gnomad": "rs4988235",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.635283,
+                "allele": "G>A"
               }
             }
-          },
-          "common_variable_positions": {
-            "variants": 152,
-            "common": 0,
-            "per_kb": 0.0,
-            "maf": 0.05,
-            "evidence": "curated: Ensembl variation with 1000 Genomes minor allele frequency"
           },
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
@@ -2244,6 +1929,7 @@
       },
       "gc": 0.415,
       "distance_to_coding_tss": 13893,
+      "coding_genes_in_window": 4,
       "constrained_fraction": 0.0225,
       "score": {
         "scored": {
@@ -2355,124 +2041,11 @@
             },
             "frequencies": {
               "rs4988235": {
-                "ACB": {
-                  "G": 0.9323,
-                  "A": 0.0677
-                },
-                "AFR": {
-                  "G": 0.9728,
-                  "A": 0.0272
-                },
-                "ALL": {
-                  "G": 0.8387,
-                  "A": 0.1613
-                },
-                "AMR": {
-                  "A": 0.2161,
-                  "G": 0.7839
-                },
-                "ASW": {
-                  "A": 0.1721,
-                  "G": 0.8279
-                },
-                "BEB": {
-                  "G": 0.9419,
-                  "A": 0.0581
-                },
-                "CDX": {
-                  "G": 1
-                },
-                "CEU": {
-                  "G": 0.2626,
-                  "A": 0.7374
-                },
-                "CHB": {
-                  "G": 1
-                },
-                "CHS": {
-                  "G": 1
-                },
-                "CLM": {
-                  "G": 0.6915,
-                  "A": 0.3085
-                },
-                "EAS": {
-                  "G": 1
-                },
-                "ESN": {
-                  "G": 1
-                },
-                "EUR": {
-                  "G": 0.492,
-                  "A": 0.508
-                },
-                "FIN": {
-                  "G": 0.4091,
-                  "A": 0.5909
-                },
-                "GBR": {
-                  "A": 0.7198,
-                  "G": 0.2802
-                },
-                "GIH": {
-                  "G": 0.8592,
-                  "A": 0.1408
-                },
-                "GWD": {
-                  "A": 0.0088,
-                  "G": 0.9912
-                },
-                "IBS": {
-                  "A": 0.4579,
-                  "G": 0.5421
-                },
-                "ITU": {
-                  "A": 0.0588,
-                  "G": 0.9412
-                },
-                "JPT": {
-                  "G": 1
-                },
-                "KHV": {
-                  "G": 1
-                },
-                "LWK": {
-                  "G": 1
-                },
-                "MSL": {
-                  "G": 1
-                },
-                "MXL": {
-                  "A": 0.2422,
-                  "G": 0.7578
-                },
-                "PEL": {
-                  "A": 0.1059,
-                  "G": 0.8941
-                },
-                "PJL": {
-                  "G": 0.7396,
-                  "A": 0.2604
-                },
-                "PUR": {
-                  "A": 0.2067,
-                  "G": 0.7933
-                },
-                "SAS": {
-                  "G": 0.8865,
-                  "A": 0.1135
-                },
-                "STU": {
-                  "A": 0.049,
-                  "G": 0.951
-                },
-                "TSI": {
-                  "A": 0.0888,
-                  "G": 0.9112
-                },
-                "YRI": {
-                  "G": 1
-                }
+                "af": 0.396813,
+                "rsid_in_gnomad": "rs4988235",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.635283,
+                "allele": "G>A"
               }
             },
             "constraint_rank": {
@@ -2520,9 +2093,9 @@
               "LCT"
             ],
             "value_domain_expected": "few",
-            "value_domain_read": "few",
-            "common_variable_positions_per_kb": 0.0,
-            "value_domain_hit": true,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 5.0,
+            "value_domain_hit": false,
             "hit_derived": true,
             "hit_derived_all": false
           }
@@ -2975,6 +2548,16 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 6808,
+          "common": 74,
+          "per_kb": 2.85,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -2985,7 +2568,6 @@
           ],
           "variable_positions_in_element": 48,
           "named_variants": {},
-          "common_variable_positions": null,
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
         "syntax_values": {
@@ -3044,6 +2626,7 @@
       },
       "gc": 0.4094,
       "distance_to_coding_tss": 12056,
+      "coding_genes_in_window": 8,
       "constrained_fraction": 0.025,
       "score": {
         "scored": {
@@ -3214,8 +2797,8 @@
               "HBG1"
             ],
             "value_domain_expected": null,
-            "value_domain_read": null,
-            "common_variable_positions_per_kb": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 2.85,
             "value_domain_hit": null,
             "hit_derived": true,
             "hit_derived_all": false
@@ -3340,14 +2923,16 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
+          "elements_scored": 1,
+          "runs": [
+            "enhancer_targets_all"
+          ],
           "targets": [],
           "target": null,
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -3430,25 +3015,38 @@
             53600000,
             54400000
           ],
-          "elements_scored": 22,
-          "naming_a_coding_gene": 5,
+          "elements_scored": 218,
+          "naming_a_coding_gene": 72,
           "genes": [
             {
-              "gene": "RPGRIP1L",
-              "elements": 4,
-              "activating": 2,
-              "summed": 0.657
+              "gene": "FTO",
+              "elements": 44,
+              "activating": 18,
+              "summed": 5.965
             },
             {
-              "gene": "FTO",
-              "elements": 1,
-              "activating": 0,
-              "summed": 0.153
+              "gene": "IRX3",
+              "elements": 19,
+              "activating": 9,
+              "summed": 4.665
+            },
+            {
+              "gene": "RPGRIP1L",
+              "elements": 9,
+              "activating": 5,
+              "summed": 1.461
             }
           ],
-          "published_targets": [],
-          "target": "RPGRIP1L",
-          "rank_of_first_published_target": null,
+          "published_targets": [
+            {
+              "gene": "IRX3",
+              "elements": 19,
+              "activating": 9,
+              "summed": 4.665
+            }
+          ],
+          "target": "IRX3",
+          "rank_of_first_published_target": 2,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
@@ -3504,6 +3102,27 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 80,
+          "common": 1,
+          "per_kb": 2.5,
+          "named": {
+            "rs1421085": {
+              "af": 0.30825,
+              "rsid_in_gnomad": "rs1421085",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.416809,
+              "allele": "T>C"
+            },
+            "rs1558902": {
+              "pending": "not in the gnomAD genomes track at this position"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -3519,139 +3138,11 @@
               "carried_by": {},
               "variable_in_the_trio": false,
               "frequency": {
-                "position": 53767042,
-                "populations": {
-                  "ACB": {
-                    "C": 0.1042,
-                    "T": 0.8958
-                  },
-                  "AFR": {
-                    "T": 0.944,
-                    "C": 0.056
-                  },
-                  "ALL": {
-                    "T": 0.7714,
-                    "C": 0.2286
-                  },
-                  "AMR": {
-                    "C": 0.2392,
-                    "T": 0.7608
-                  },
-                  "ASW": {
-                    "T": 0.9098,
-                    "C": 0.0902
-                  },
-                  "BEB": {
-                    "T": 0.6977,
-                    "C": 0.3023
-                  },
-                  "CDX": {
-                    "C": 0.1613,
-                    "T": 0.8387
-                  },
-                  "CEU": {
-                    "C": 0.4545,
-                    "T": 0.5455
-                  },
-                  "CHB": {
-                    "C": 0.1505,
-                    "T": 0.8495
-                  },
-                  "CHS": {
-                    "T": 0.8619,
-                    "C": 0.1381
-                  },
-                  "CLM": {
-                    "C": 0.3298,
-                    "T": 0.6702
-                  },
-                  "EAS": {
-                    "T": 0.8313,
-                    "C": 0.1687
-                  },
-                  "ESN": {
-                    "C": 0.0606,
-                    "T": 0.9394
-                  },
-                  "EUR": {
-                    "C": 0.4324,
-                    "T": 0.5676
-                  },
-                  "FIN": {
-                    "C": 0.4141,
-                    "T": 0.5859
-                  },
-                  "GBR": {
-                    "C": 0.4066,
-                    "T": 0.5934
-                  },
-                  "GIH": {
-                    "T": 0.733,
-                    "C": 0.267
-                  },
-                  "GWD": {
-                    "T": 0.9646,
-                    "C": 0.0354
-                  },
-                  "IBS": {
-                    "T": 0.6075,
-                    "C": 0.3925
-                  },
-                  "ITU": {
-                    "T": 0.6814,
-                    "C": 0.3186
-                  },
-                  "JPT": {
-                    "T": 0.8221,
-                    "C": 0.1779
-                  },
-                  "KHV": {
-                    "C": 0.2172,
-                    "T": 0.7828
-                  },
-                  "LWK": {
-                    "C": 0.0202,
-                    "T": 0.9798
-                  },
-                  "MSL": {
-                    "C": 0.0294,
-                    "T": 0.9706
-                  },
-                  "MXL": {
-                    "C": 0.2031,
-                    "T": 0.7969
-                  },
-                  "PEL": {
-                    "T": 0.9294,
-                    "C": 0.0706
-                  },
-                  "PJL": {
-                    "C": 0.2917,
-                    "T": 0.7083
-                  },
-                  "PUR": {
-                    "T": 0.6827,
-                    "C": 0.3173
-                  },
-                  "SAS": {
-                    "T": 0.6933,
-                    "C": 0.3067
-                  },
-                  "STU": {
-                    "T": 0.6471,
-                    "C": 0.3529
-                  },
-                  "TSI": {
-                    "C": 0.4907,
-                    "T": 0.5093
-                  },
-                  "YRI": {
-                    "C": 0.0648,
-                    "T": 0.9352
-                  }
-                },
-                "maf": null,
-                "minor_allele": null
+                "af": 0.30825,
+                "rsid_in_gnomad": "rs1421085",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.416809,
+                "allele": "T>C"
               }
             },
             "rs1558902": {
@@ -3659,154 +3150,38 @@
               "carried_by": {},
               "variable_in_the_trio": false,
               "frequency": {
-                "position": 53769662,
-                "populations": {
-                  "ACB": {
-                    "A": 0.1042,
-                    "T": 0.8958
-                  },
-                  "AFR": {
-                    "T": 0.944,
-                    "A": 0.056
-                  },
-                  "ALL": {
-                    "T": 0.772,
-                    "A": 0.228
-                  },
-                  "AMR": {
-                    "T": 0.7608,
-                    "A": 0.2392
-                  },
-                  "ASW": {
-                    "T": 0.9098,
-                    "A": 0.0902
-                  },
-                  "BEB": {
-                    "T": 0.6977,
-                    "A": 0.3023
-                  },
-                  "CDX": {
-                    "A": 0.1505,
-                    "T": 0.8495
-                  },
-                  "CEU": {
-                    "A": 0.4545,
-                    "T": 0.5455
-                  },
-                  "CHB": {
-                    "T": 0.8495,
-                    "A": 0.1505
-                  },
-                  "CHS": {
-                    "T": 0.8619,
-                    "A": 0.1381
-                  },
-                  "CLM": {
-                    "A": 0.3298,
-                    "T": 0.6702
-                  },
-                  "EAS": {
-                    "A": 0.1657,
-                    "T": 0.8343
-                  },
-                  "ESN": {
-                    "A": 0.0606,
-                    "T": 0.9394
-                  },
-                  "EUR": {
-                    "T": 0.5676,
-                    "A": 0.4324
-                  },
-                  "FIN": {
-                    "T": 0.5859,
-                    "A": 0.4141
-                  },
-                  "GBR": {
-                    "A": 0.4066,
-                    "T": 0.5934
-                  },
-                  "GIH": {
-                    "T": 0.733,
-                    "A": 0.267
-                  },
-                  "GWD": {
-                    "A": 0.0354,
-                    "T": 0.9646
-                  },
-                  "IBS": {
-                    "A": 0.3925,
-                    "T": 0.6075
-                  },
-                  "ITU": {
-                    "T": 0.6814,
-                    "A": 0.3186
-                  },
-                  "JPT": {
-                    "T": 0.8269,
-                    "A": 0.1731
-                  },
-                  "KHV": {
-                    "T": 0.7828,
-                    "A": 0.2172
-                  },
-                  "LWK": {
-                    "T": 0.9798,
-                    "A": 0.0202
-                  },
-                  "MSL": {
-                    "A": 0.0294,
-                    "T": 0.9706
-                  },
-                  "MXL": {
-                    "A": 0.2031,
-                    "T": 0.7969
-                  },
-                  "PEL": {
-                    "T": 0.9294,
-                    "A": 0.0706
-                  },
-                  "PJL": {
-                    "A": 0.2917,
-                    "T": 0.7083
-                  },
-                  "PUR": {
-                    "T": 0.6827,
-                    "A": 0.3173
-                  },
-                  "SAS": {
-                    "T": 0.6933,
-                    "A": 0.3067
-                  },
-                  "STU": {
-                    "T": 0.6471,
-                    "A": 0.3529
-                  },
-                  "TSI": {
-                    "A": 0.4907,
-                    "T": 0.5093
-                  },
-                  "YRI": {
-                    "A": 0.0648,
-                    "T": 0.9352
-                  }
-                },
-                "maf": null,
-                "minor_allele": null
+                "pending": "not in the gnomAD genomes track at this position"
               }
             }
           },
-          "common_variable_positions": null,
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
         "syntax_values": {
           "layer": "syntax_values",
           "provenance": "derived",
           "values": 0,
-          "values_in_syntax": 0
+          "values_in_syntax": 0,
+          "top": [],
+          "published": {
+            "rs1421085": {
+              "variable_in_the_trio": false,
+              "phylop": null,
+              "rank": null,
+              "of": 0
+            },
+            "rs1558902": {
+              "variable_in_the_trio": false,
+              "phylop": null,
+              "rank": null,
+              "of": 0
+            }
+          },
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
         }
       },
       "gc": 0.455,
       "distance_to_coding_tss": 62887,
+      "coding_genes_in_window": 3,
       "constrained_fraction": 0.525,
       "score": {
         "scored": {
@@ -3823,7 +3198,7 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -3839,12 +3214,13 @@
               "gene_input": {
                 "provenance": "derived",
                 "named": [
-                  "RPGRIP1L",
-                  "FTO"
+                  "FTO",
+                  "IRX3",
+                  "RPGRIP1L"
                 ],
                 "hit": false,
-                "among": false,
-                "first_hit": null,
+                "among": true,
+                "first_hit": "IRX3",
                 "pending": null
               },
               "node": {
@@ -3928,268 +3304,34 @@
             },
             "frequencies": {
               "rs1421085": {
-                "ACB": {
-                  "C": 0.1042,
-                  "T": 0.8958
-                },
-                "AFR": {
-                  "T": 0.944,
-                  "C": 0.056
-                },
-                "ALL": {
-                  "T": 0.7714,
-                  "C": 0.2286
-                },
-                "AMR": {
-                  "C": 0.2392,
-                  "T": 0.7608
-                },
-                "ASW": {
-                  "T": 0.9098,
-                  "C": 0.0902
-                },
-                "BEB": {
-                  "T": 0.6977,
-                  "C": 0.3023
-                },
-                "CDX": {
-                  "C": 0.1613,
-                  "T": 0.8387
-                },
-                "CEU": {
-                  "C": 0.4545,
-                  "T": 0.5455
-                },
-                "CHB": {
-                  "C": 0.1505,
-                  "T": 0.8495
-                },
-                "CHS": {
-                  "T": 0.8619,
-                  "C": 0.1381
-                },
-                "CLM": {
-                  "C": 0.3298,
-                  "T": 0.6702
-                },
-                "EAS": {
-                  "T": 0.8313,
-                  "C": 0.1687
-                },
-                "ESN": {
-                  "C": 0.0606,
-                  "T": 0.9394
-                },
-                "EUR": {
-                  "C": 0.4324,
-                  "T": 0.5676
-                },
-                "FIN": {
-                  "C": 0.4141,
-                  "T": 0.5859
-                },
-                "GBR": {
-                  "C": 0.4066,
-                  "T": 0.5934
-                },
-                "GIH": {
-                  "T": 0.733,
-                  "C": 0.267
-                },
-                "GWD": {
-                  "T": 0.9646,
-                  "C": 0.0354
-                },
-                "IBS": {
-                  "T": 0.6075,
-                  "C": 0.3925
-                },
-                "ITU": {
-                  "T": 0.6814,
-                  "C": 0.3186
-                },
-                "JPT": {
-                  "T": 0.8221,
-                  "C": 0.1779
-                },
-                "KHV": {
-                  "C": 0.2172,
-                  "T": 0.7828
-                },
-                "LWK": {
-                  "C": 0.0202,
-                  "T": 0.9798
-                },
-                "MSL": {
-                  "C": 0.0294,
-                  "T": 0.9706
-                },
-                "MXL": {
-                  "C": 0.2031,
-                  "T": 0.7969
-                },
-                "PEL": {
-                  "T": 0.9294,
-                  "C": 0.0706
-                },
-                "PJL": {
-                  "C": 0.2917,
-                  "T": 0.7083
-                },
-                "PUR": {
-                  "T": 0.6827,
-                  "C": 0.3173
-                },
-                "SAS": {
-                  "T": 0.6933,
-                  "C": 0.3067
-                },
-                "STU": {
-                  "T": 0.6471,
-                  "C": 0.3529
-                },
-                "TSI": {
-                  "C": 0.4907,
-                  "T": 0.5093
-                },
-                "YRI": {
-                  "C": 0.0648,
-                  "T": 0.9352
-                }
+                "af": 0.30825,
+                "rsid_in_gnomad": "rs1421085",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.416809,
+                "allele": "T>C"
               },
               "rs1558902": {
-                "ACB": {
-                  "A": 0.1042,
-                  "T": 0.8958
-                },
-                "AFR": {
-                  "T": 0.944,
-                  "A": 0.056
-                },
-                "ALL": {
-                  "T": 0.772,
-                  "A": 0.228
-                },
-                "AMR": {
-                  "T": 0.7608,
-                  "A": 0.2392
-                },
-                "ASW": {
-                  "T": 0.9098,
-                  "A": 0.0902
-                },
-                "BEB": {
-                  "T": 0.6977,
-                  "A": 0.3023
-                },
-                "CDX": {
-                  "A": 0.1505,
-                  "T": 0.8495
-                },
-                "CEU": {
-                  "A": 0.4545,
-                  "T": 0.5455
-                },
-                "CHB": {
-                  "T": 0.8495,
-                  "A": 0.1505
-                },
-                "CHS": {
-                  "T": 0.8619,
-                  "A": 0.1381
-                },
-                "CLM": {
-                  "A": 0.3298,
-                  "T": 0.6702
-                },
-                "EAS": {
-                  "A": 0.1657,
-                  "T": 0.8343
-                },
-                "ESN": {
-                  "A": 0.0606,
-                  "T": 0.9394
-                },
-                "EUR": {
-                  "T": 0.5676,
-                  "A": 0.4324
-                },
-                "FIN": {
-                  "T": 0.5859,
-                  "A": 0.4141
-                },
-                "GBR": {
-                  "A": 0.4066,
-                  "T": 0.5934
-                },
-                "GIH": {
-                  "T": 0.733,
-                  "A": 0.267
-                },
-                "GWD": {
-                  "A": 0.0354,
-                  "T": 0.9646
-                },
-                "IBS": {
-                  "A": 0.3925,
-                  "T": 0.6075
-                },
-                "ITU": {
-                  "T": 0.6814,
-                  "A": 0.3186
-                },
-                "JPT": {
-                  "T": 0.8269,
-                  "A": 0.1731
-                },
-                "KHV": {
-                  "T": 0.7828,
-                  "A": 0.2172
-                },
-                "LWK": {
-                  "T": 0.9798,
-                  "A": 0.0202
-                },
-                "MSL": {
-                  "A": 0.0294,
-                  "T": 0.9706
-                },
-                "MXL": {
-                  "A": 0.2031,
-                  "T": 0.7969
-                },
-                "PEL": {
-                  "T": 0.9294,
-                  "A": 0.0706
-                },
-                "PJL": {
-                  "A": 0.2917,
-                  "T": 0.7083
-                },
-                "PUR": {
-                  "T": 0.6827,
-                  "A": 0.3173
-                },
-                "SAS": {
-                  "T": 0.6933,
-                  "A": 0.3067
-                },
-                "STU": {
-                  "T": 0.6471,
-                  "A": 0.3529
-                },
-                "TSI": {
-                  "A": 0.4907,
-                  "T": 0.5093
-                },
-                "YRI": {
-                  "A": 0.0648,
-                  "T": 0.9352
-                }
+                "pending": "not in the gnomAD genomes track at this position"
               }
             },
-            "constraint_rank": null,
-            "in_the_top_decile_by_constraint": null,
+            "constraint_rank": {
+              "rs1421085": {
+                "variable_in_the_trio": false,
+                "phylop": null,
+                "rank": null,
+                "of": 0
+              },
+              "rs1558902": {
+                "variable_in_the_trio": false,
+                "phylop": null,
+                "rank": null,
+                "of": 0
+              }
+            },
+            "in_the_top_decile_by_constraint": {
+              "rs1421085": false,
+              "rs1558902": false
+            },
             "satmut_functional": null,
             "protein_change": null,
             "hit_derived": false,
@@ -4220,8 +3362,8 @@
             "values_in_syntax": 0,
             "published_targets_in_one_node": [],
             "value_domain_expected": null,
-            "value_domain_read": null,
-            "common_variable_positions_per_kb": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 2.5,
             "value_domain_hit": null,
             "hit_derived": true,
             "hit_derived_all": true
@@ -4237,7 +3379,6 @@
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -4554,6 +3695,24 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 1490,
+          "common": 21,
+          "per_kb": 3.5,
+          "named": {
+            "rs1427407": {
+              "af": 0.808952,
+              "rsid_in_gnomad": "rs1427407",
+              "commonest_in": "South Asian",
+              "af_there": 0.859466,
+              "allele": "T>G"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -4573,143 +3732,14 @@
               },
               "variable_in_the_trio": true,
               "frequency": {
-                "position": 60490908,
-                "populations": {
-                  "ACB": {
-                    "T": 0.2135,
-                    "G": 0.7865
-                  },
-                  "AFR": {
-                    "G": 0.7625,
-                    "T": 0.2375
-                  },
-                  "ALL": {
-                    "T": 0.1993,
-                    "G": 0.8007
-                  },
-                  "AMR": {
-                    "T": 0.2262,
-                    "G": 0.7738
-                  },
-                  "ASW": {
-                    "G": 0.7705,
-                    "T": 0.2295
-                  },
-                  "BEB": {
-                    "G": 0.8721,
-                    "T": 0.1279
-                  },
-                  "CDX": {
-                    "G": 0.7312,
-                    "T": 0.2688
-                  },
-                  "CEU": {
-                    "T": 0.1717,
-                    "G": 0.8283
-                  },
-                  "CHB": {
-                    "T": 0.2816,
-                    "G": 0.7184
-                  },
-                  "CHS": {
-                    "T": 0.2571,
-                    "G": 0.7429
-                  },
-                  "CLM": {
-                    "G": 0.8085,
-                    "T": 0.1915
-                  },
-                  "EAS": {
-                    "G": 0.744,
-                    "T": 0.256
-                  },
-                  "ESN": {
-                    "T": 0.197,
-                    "G": 0.803
-                  },
-                  "EUR": {
-                    "G": 0.8489,
-                    "T": 0.1511
-                  },
-                  "FIN": {
-                    "G": 0.899,
-                    "T": 0.101
-                  },
-                  "GBR": {
-                    "G": 0.8791,
-                    "T": 0.1209
-                  },
-                  "GIH": {
-                    "T": 0.1262,
-                    "G": 0.8738
-                  },
-                  "GWD": {
-                    "T": 0.3009,
-                    "G": 0.6991
-                  },
-                  "IBS": {
-                    "G": 0.8364,
-                    "T": 0.1636
-                  },
-                  "ITU": {
-                    "G": 0.8873,
-                    "T": 0.1127
-                  },
-                  "JPT": {
-                    "G": 0.8125,
-                    "T": 0.1875
-                  },
-                  "KHV": {
-                    "G": 0.7121,
-                    "T": 0.2879
-                  },
-                  "LWK": {
-                    "T": 0.202,
-                    "G": 0.798
-                  },
-                  "MSL": {
-                    "G": 0.6647,
-                    "T": 0.3353
-                  },
-                  "MXL": {
-                    "T": 0.2344,
-                    "G": 0.7656
-                  },
-                  "PEL": {
-                    "G": 0.6529,
-                    "T": 0.3471
-                  },
-                  "PJL": {
-                    "G": 0.8854,
-                    "T": 0.1146
-                  },
-                  "PUR": {
-                    "G": 0.8462,
-                    "T": 0.1538
-                  },
-                  "SAS": {
-                    "T": 0.1196,
-                    "G": 0.8804
-                  },
-                  "STU": {
-                    "G": 0.8824,
-                    "T": 0.1176
-                  },
-                  "TSI": {
-                    "G": 0.8084,
-                    "T": 0.1916
-                  },
-                  "YRI": {
-                    "T": 0.1898,
-                    "G": 0.8102
-                  }
-                },
-                "maf": null,
-                "minor_allele": null
+                "af": 0.808952,
+                "rsid_in_gnomad": "rs1427407",
+                "commonest_in": "South Asian",
+                "af_there": 0.859466,
+                "allele": "T>G"
               }
             }
           },
-          "common_variable_positions": null,
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
         "syntax_values": {
@@ -4774,6 +3804,7 @@
       },
       "gc": 0.4545,
       "distance_to_coding_tss": 60653,
+      "coding_genes_in_window": 2,
       "constrained_fraction": 0.0578,
       "score": {
         "scored": {
@@ -4887,134 +3918,11 @@
             },
             "frequencies": {
               "rs1427407": {
-                "ACB": {
-                  "T": 0.2135,
-                  "G": 0.7865
-                },
-                "AFR": {
-                  "G": 0.7625,
-                  "T": 0.2375
-                },
-                "ALL": {
-                  "T": 0.1993,
-                  "G": 0.8007
-                },
-                "AMR": {
-                  "T": 0.2262,
-                  "G": 0.7738
-                },
-                "ASW": {
-                  "G": 0.7705,
-                  "T": 0.2295
-                },
-                "BEB": {
-                  "G": 0.8721,
-                  "T": 0.1279
-                },
-                "CDX": {
-                  "G": 0.7312,
-                  "T": 0.2688
-                },
-                "CEU": {
-                  "T": 0.1717,
-                  "G": 0.8283
-                },
-                "CHB": {
-                  "T": 0.2816,
-                  "G": 0.7184
-                },
-                "CHS": {
-                  "T": 0.2571,
-                  "G": 0.7429
-                },
-                "CLM": {
-                  "G": 0.8085,
-                  "T": 0.1915
-                },
-                "EAS": {
-                  "G": 0.744,
-                  "T": 0.256
-                },
-                "ESN": {
-                  "T": 0.197,
-                  "G": 0.803
-                },
-                "EUR": {
-                  "G": 0.8489,
-                  "T": 0.1511
-                },
-                "FIN": {
-                  "G": 0.899,
-                  "T": 0.101
-                },
-                "GBR": {
-                  "G": 0.8791,
-                  "T": 0.1209
-                },
-                "GIH": {
-                  "T": 0.1262,
-                  "G": 0.8738
-                },
-                "GWD": {
-                  "T": 0.3009,
-                  "G": 0.6991
-                },
-                "IBS": {
-                  "G": 0.8364,
-                  "T": 0.1636
-                },
-                "ITU": {
-                  "G": 0.8873,
-                  "T": 0.1127
-                },
-                "JPT": {
-                  "G": 0.8125,
-                  "T": 0.1875
-                },
-                "KHV": {
-                  "G": 0.7121,
-                  "T": 0.2879
-                },
-                "LWK": {
-                  "T": 0.202,
-                  "G": 0.798
-                },
-                "MSL": {
-                  "G": 0.6647,
-                  "T": 0.3353
-                },
-                "MXL": {
-                  "T": 0.2344,
-                  "G": 0.7656
-                },
-                "PEL": {
-                  "G": 0.6529,
-                  "T": 0.3471
-                },
-                "PJL": {
-                  "G": 0.8854,
-                  "T": 0.1146
-                },
-                "PUR": {
-                  "G": 0.8462,
-                  "T": 0.1538
-                },
-                "SAS": {
-                  "T": 0.1196,
-                  "G": 0.8804
-                },
-                "STU": {
-                  "G": 0.8824,
-                  "T": 0.1176
-                },
-                "TSI": {
-                  "G": 0.8084,
-                  "T": 0.1916
-                },
-                "YRI": {
-                  "T": 0.1898,
-                  "G": 0.8102
-                }
+                "af": 0.808952,
+                "rsid_in_gnomad": "rs1427407",
+                "commonest_in": "South Asian",
+                "af_there": 0.859466,
+                "allele": "T>G"
               }
             },
             "constraint_rank": {
@@ -5062,8 +3970,8 @@
               "BCL11A"
             ],
             "value_domain_expected": null,
-            "value_domain_read": null,
-            "common_variable_positions_per_kb": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 3.5,
             "value_domain_hit": null,
             "hit_derived": true,
             "hit_derived_all": true
@@ -5381,6 +4289,27 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 89,
+          "common": 2,
+          "per_kb": 5.0,
+          "named": {
+            "rs6983267": {
+              "af": 0.381504,
+              "rsid_in_gnomad": "rs6983267",
+              "commonest_in": "East Asian",
+              "af_there": 0.601432,
+              "allele": "G>T"
+            },
+            "rs11986220": {
+              "pending": "not in the gnomAD genomes track at this position"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -5399,138 +4328,11 @@
               },
               "variable_in_the_trio": true,
               "frequency": {
-                "position": 127401060,
-                "populations": {
-                  "ACB": {
-                    "G": 0.9115,
-                    "T": 0.0885
-                  },
-                  "AFR": {
-                    "G": 0.9523,
-                    "T": 0.0477
-                  },
-                  "ALL": {
-                    "G": 0.6098,
-                    "T": 0.3902
-                  },
-                  "AMR": {
-                    "T": 0.4496,
-                    "G": 0.5504
-                  },
-                  "ASW": {
-                    "G": 0.8279,
-                    "T": 0.1721
-                  },
-                  "BEB": {
-                    "G": 0.4767,
-                    "T": 0.5233
-                  },
-                  "CDX": {
-                    "G": 0.4194,
-                    "T": 0.5806
-                  },
-                  "CEU": {
-                    "G": 0.4848,
-                    "T": 0.5152
-                  },
-                  "CHB": {
-                    "T": 0.6117,
-                    "G": 0.3883
-                  },
-                  "CHS": {
-                    "T": 0.5857,
-                    "G": 0.4143
-                  },
-                  "CLM": {
-                    "G": 0.484,
-                    "T": 0.516
-                  },
-                  "EAS": {
-                    "T": 0.6121,
-                    "G": 0.3879
-                  },
-                  "ESN": {
-                    "G": 1
-                  },
-                  "EUR": {
-                    "T": 0.501,
-                    "G": 0.499
-                  },
-                  "FIN": {
-                    "T": 0.4798,
-                    "G": 0.5202
-                  },
-                  "GBR": {
-                    "G": 0.544,
-                    "T": 0.456
-                  },
-                  "GIH": {
-                    "T": 0.4612,
-                    "G": 0.5388
-                  },
-                  "GWD": {
-                    "G": 0.9558,
-                    "T": 0.0442
-                  },
-                  "IBS": {
-                    "G": 0.5467,
-                    "T": 0.4533
-                  },
-                  "ITU": {
-                    "G": 0.5392,
-                    "T": 0.4608
-                  },
-                  "JPT": {
-                    "T": 0.7115,
-                    "G": 0.2885
-                  },
-                  "KHV": {
-                    "G": 0.4343,
-                    "T": 0.5657
-                  },
-                  "LWK": {
-                    "G": 0.9747,
-                    "T": 0.0253
-                  },
-                  "MSL": {
-                    "T": 0.0235,
-                    "G": 0.9765
-                  },
-                  "MXL": {
-                    "T": 0.3828,
-                    "G": 0.6172
-                  },
-                  "PEL": {
-                    "T": 0.5471,
-                    "G": 0.4529
-                  },
-                  "PJL": {
-                    "T": 0.4583,
-                    "G": 0.5417
-                  },
-                  "PUR": {
-                    "G": 0.649,
-                    "T": 0.351
-                  },
-                  "SAS": {
-                    "G": 0.5317,
-                    "T": 0.4683
-                  },
-                  "STU": {
-                    "G": 0.5539,
-                    "T": 0.4461
-                  },
-                  "TSI": {
-                    "G": 0.4065,
-                    "T": 0.5935
-                  },
-                  "YRI": {
-                    "G": 0.9722,
-                    "T": 0.0278
-                  }
-                },
-                "maf": null,
-                "minor_allele": null
+                "af": 0.381504,
+                "rsid_in_gnomad": "rs6983267",
+                "commonest_in": "East Asian",
+                "af_there": 0.601432,
+                "allele": "G>T"
               }
             },
             "rs11986220": {
@@ -5538,143 +4340,10 @@
               "carried_by": {},
               "variable_in_the_trio": false,
               "frequency": {
-                "position": 127519444,
-                "populations": {
-                  "ACB": {
-                    "A": 0.0365,
-                    "T": 0.9635
-                  },
-                  "AFR": {
-                    "T": 0.9448,
-                    "A": 0.0552
-                  },
-                  "ALL": {
-                    "A": 0.099,
-                    "T": 0.901
-                  },
-                  "AMR": {
-                    "A": 0.0764,
-                    "T": 0.9236
-                  },
-                  "ASW": {
-                    "A": 0.0328,
-                    "T": 0.9672
-                  },
-                  "BEB": {
-                    "T": 0.8663,
-                    "A": 0.1337
-                  },
-                  "CDX": {
-                    "T": 0.8925,
-                    "A": 0.1075
-                  },
-                  "CEU": {
-                    "A": 0.0808,
-                    "T": 0.9192
-                  },
-                  "CHB": {
-                    "T": 0.8544,
-                    "A": 0.1456
-                  },
-                  "CHS": {
-                    "A": 0.1476,
-                    "T": 0.8524
-                  },
-                  "CLM": {
-                    "A": 0.1064,
-                    "T": 0.8936
-                  },
-                  "EAS": {
-                    "T": 0.8621,
-                    "A": 0.1379
-                  },
-                  "ESN": {
-                    "T": 0.9444,
-                    "A": 0.0556
-                  },
-                  "EUR": {
-                    "T": 0.8986,
-                    "A": 0.1014
-                  },
-                  "FIN": {
-                    "A": 0.1515,
-                    "T": 0.8485
-                  },
-                  "GBR": {
-                    "T": 0.8681,
-                    "A": 0.1319
-                  },
-                  "GIH": {
-                    "T": 0.8738,
-                    "A": 0.1262
-                  },
-                  "GWD": {
-                    "T": 0.9336,
-                    "A": 0.0664
-                  },
-                  "IBS": {
-                    "A": 0.0701,
-                    "T": 0.9299
-                  },
-                  "ITU": {
-                    "T": 0.8725,
-                    "A": 0.1275
-                  },
-                  "JPT": {
-                    "A": 0.1683,
-                    "T": 0.8317
-                  },
-                  "KHV": {
-                    "T": 0.8838,
-                    "A": 0.1162
-                  },
-                  "LWK": {
-                    "A": 0.0606,
-                    "T": 0.9394
-                  },
-                  "MSL": {
-                    "T": 0.9294,
-                    "A": 0.0706
-                  },
-                  "MXL": {
-                    "A": 0.0547,
-                    "T": 0.9453
-                  },
-                  "PEL": {
-                    "A": 0.0882,
-                    "T": 0.9118
-                  },
-                  "PJL": {
-                    "T": 0.8594,
-                    "A": 0.1406
-                  },
-                  "PUR": {
-                    "A": 0.0529,
-                    "T": 0.9471
-                  },
-                  "SAS": {
-                    "A": 0.1319,
-                    "T": 0.8681
-                  },
-                  "STU": {
-                    "A": 0.1324,
-                    "T": 0.8676
-                  },
-                  "TSI": {
-                    "T": 0.9206,
-                    "A": 0.0794
-                  },
-                  "YRI": {
-                    "T": 0.9444,
-                    "A": 0.0556
-                  }
-                },
-                "maf": null,
-                "minor_allele": null
+                "pending": "not in the gnomAD genomes track at this position"
               }
             }
           },
-          "common_variable_positions": null,
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
         "syntax_values": {
@@ -5719,6 +4388,7 @@
       },
       "gc": 0.465,
       "distance_to_coding_tss": 14806,
+      "coding_genes_in_window": 2,
       "constrained_fraction": 0.5975,
       "score": {
         "scored": {
@@ -5825,263 +4495,14 @@
             },
             "frequencies": {
               "rs6983267": {
-                "ACB": {
-                  "G": 0.9115,
-                  "T": 0.0885
-                },
-                "AFR": {
-                  "G": 0.9523,
-                  "T": 0.0477
-                },
-                "ALL": {
-                  "G": 0.6098,
-                  "T": 0.3902
-                },
-                "AMR": {
-                  "T": 0.4496,
-                  "G": 0.5504
-                },
-                "ASW": {
-                  "G": 0.8279,
-                  "T": 0.1721
-                },
-                "BEB": {
-                  "G": 0.4767,
-                  "T": 0.5233
-                },
-                "CDX": {
-                  "G": 0.4194,
-                  "T": 0.5806
-                },
-                "CEU": {
-                  "G": 0.4848,
-                  "T": 0.5152
-                },
-                "CHB": {
-                  "T": 0.6117,
-                  "G": 0.3883
-                },
-                "CHS": {
-                  "T": 0.5857,
-                  "G": 0.4143
-                },
-                "CLM": {
-                  "G": 0.484,
-                  "T": 0.516
-                },
-                "EAS": {
-                  "T": 0.6121,
-                  "G": 0.3879
-                },
-                "ESN": {
-                  "G": 1
-                },
-                "EUR": {
-                  "T": 0.501,
-                  "G": 0.499
-                },
-                "FIN": {
-                  "T": 0.4798,
-                  "G": 0.5202
-                },
-                "GBR": {
-                  "G": 0.544,
-                  "T": 0.456
-                },
-                "GIH": {
-                  "T": 0.4612,
-                  "G": 0.5388
-                },
-                "GWD": {
-                  "G": 0.9558,
-                  "T": 0.0442
-                },
-                "IBS": {
-                  "G": 0.5467,
-                  "T": 0.4533
-                },
-                "ITU": {
-                  "G": 0.5392,
-                  "T": 0.4608
-                },
-                "JPT": {
-                  "T": 0.7115,
-                  "G": 0.2885
-                },
-                "KHV": {
-                  "G": 0.4343,
-                  "T": 0.5657
-                },
-                "LWK": {
-                  "G": 0.9747,
-                  "T": 0.0253
-                },
-                "MSL": {
-                  "T": 0.0235,
-                  "G": 0.9765
-                },
-                "MXL": {
-                  "T": 0.3828,
-                  "G": 0.6172
-                },
-                "PEL": {
-                  "T": 0.5471,
-                  "G": 0.4529
-                },
-                "PJL": {
-                  "T": 0.4583,
-                  "G": 0.5417
-                },
-                "PUR": {
-                  "G": 0.649,
-                  "T": 0.351
-                },
-                "SAS": {
-                  "G": 0.5317,
-                  "T": 0.4683
-                },
-                "STU": {
-                  "G": 0.5539,
-                  "T": 0.4461
-                },
-                "TSI": {
-                  "G": 0.4065,
-                  "T": 0.5935
-                },
-                "YRI": {
-                  "G": 0.9722,
-                  "T": 0.0278
-                }
+                "af": 0.381504,
+                "rsid_in_gnomad": "rs6983267",
+                "commonest_in": "East Asian",
+                "af_there": 0.601432,
+                "allele": "G>T"
               },
               "rs11986220": {
-                "ACB": {
-                  "A": 0.0365,
-                  "T": 0.9635
-                },
-                "AFR": {
-                  "T": 0.9448,
-                  "A": 0.0552
-                },
-                "ALL": {
-                  "A": 0.099,
-                  "T": 0.901
-                },
-                "AMR": {
-                  "A": 0.0764,
-                  "T": 0.9236
-                },
-                "ASW": {
-                  "A": 0.0328,
-                  "T": 0.9672
-                },
-                "BEB": {
-                  "T": 0.8663,
-                  "A": 0.1337
-                },
-                "CDX": {
-                  "T": 0.8925,
-                  "A": 0.1075
-                },
-                "CEU": {
-                  "A": 0.0808,
-                  "T": 0.9192
-                },
-                "CHB": {
-                  "T": 0.8544,
-                  "A": 0.1456
-                },
-                "CHS": {
-                  "A": 0.1476,
-                  "T": 0.8524
-                },
-                "CLM": {
-                  "A": 0.1064,
-                  "T": 0.8936
-                },
-                "EAS": {
-                  "T": 0.8621,
-                  "A": 0.1379
-                },
-                "ESN": {
-                  "T": 0.9444,
-                  "A": 0.0556
-                },
-                "EUR": {
-                  "T": 0.8986,
-                  "A": 0.1014
-                },
-                "FIN": {
-                  "A": 0.1515,
-                  "T": 0.8485
-                },
-                "GBR": {
-                  "T": 0.8681,
-                  "A": 0.1319
-                },
-                "GIH": {
-                  "T": 0.8738,
-                  "A": 0.1262
-                },
-                "GWD": {
-                  "T": 0.9336,
-                  "A": 0.0664
-                },
-                "IBS": {
-                  "A": 0.0701,
-                  "T": 0.9299
-                },
-                "ITU": {
-                  "T": 0.8725,
-                  "A": 0.1275
-                },
-                "JPT": {
-                  "A": 0.1683,
-                  "T": 0.8317
-                },
-                "KHV": {
-                  "T": 0.8838,
-                  "A": 0.1162
-                },
-                "LWK": {
-                  "A": 0.0606,
-                  "T": 0.9394
-                },
-                "MSL": {
-                  "T": 0.9294,
-                  "A": 0.0706
-                },
-                "MXL": {
-                  "A": 0.0547,
-                  "T": 0.9453
-                },
-                "PEL": {
-                  "A": 0.0882,
-                  "T": 0.9118
-                },
-                "PJL": {
-                  "T": 0.8594,
-                  "A": 0.1406
-                },
-                "PUR": {
-                  "A": 0.0529,
-                  "T": 0.9471
-                },
-                "SAS": {
-                  "A": 0.1319,
-                  "T": 0.8681
-                },
-                "STU": {
-                  "A": 0.1324,
-                  "T": 0.8676
-                },
-                "TSI": {
-                  "T": 0.9206,
-                  "A": 0.0794
-                },
-                "YRI": {
-                  "T": 0.9444,
-                  "A": 0.0556
-                }
+                "pending": "not in the gnomAD genomes track at this position"
               }
             },
             "constraint_rank": {
@@ -6140,8 +4561,8 @@
             "values_in_syntax": 1,
             "published_targets_in_one_node": [],
             "value_domain_expected": null,
-            "value_domain_read": null,
-            "common_variable_positions_per_kb": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 5.0,
             "value_domain_hit": null,
             "hit_derived": true,
             "hit_derived_all": true
@@ -6200,7 +4621,7 @@
           },
           {
             "rsid": "rs8176746",
-            "pos": 133255928,
+            "pos": 133255935,
             "protein_change": "p.Leu266Met",
             "effect": "one of the substitutions separating the B transferase from A"
           }
@@ -6490,6 +4911,31 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 1221,
+          "common": 51,
+          "per_kb": 17.0,
+          "named": {
+            "rs8176719": {
+              "af": 0.0,
+              "rsid_in_gnomad": "rs77641731",
+              "commonest_in": "N/A",
+              "af_there": 0.0,
+              "allele": "T>C"
+            },
+            "rs8176746": {
+              "af": 0.114883,
+              "rsid_in_gnomad": "rs8176746",
+              "commonest_in": "South Asian",
+              "af_there": 0.256037,
+              "allele": "G>T"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -6507,290 +4953,27 @@
               },
               "variable_in_the_trio": true,
               "frequency": {
-                "position": 133257522,
-                "populations": {
-                  "ACB": {
-                    "-": 0.6667,
-                    "C": 0.3333
-                  },
-                  "AFR": {
-                    "-": 0.7057,
-                    "C": 0.2943
-                  },
-                  "ALL": {
-                    "-": 0.6562,
-                    "C": 0.3438
-                  },
-                  "AMR": {
-                    "-": 0.768,
-                    "C": 0.232
-                  },
-                  "ASW": {
-                    "C": 0.3033,
-                    "-": 0.6967
-                  },
-                  "BEB": {
-                    "C": 0.4709,
-                    "-": 0.5291
-                  },
-                  "CDX": {
-                    "-": 0.7151,
-                    "C": 0.2849
-                  },
-                  "CEU": {
-                    "C": 0.3788,
-                    "-": 0.6212
-                  },
-                  "CHB": {
-                    "-": 0.6068,
-                    "C": 0.3932
-                  },
-                  "CHS": {
-                    "-": 0.5762,
-                    "C": 0.4238
-                  },
-                  "CLM": {
-                    "-": 0.8032,
-                    "C": 0.1968
-                  },
-                  "EAS": {
-                    "-": 0.62,
-                    "C": 0.38
-                  },
-                  "ESN": {
-                    "C": 0.2424,
-                    "-": 0.7576
-                  },
-                  "EUR": {
-                    "C": 0.3946,
-                    "-": 0.6054
-                  },
-                  "FIN": {
-                    "-": 0.5152,
-                    "C": 0.4848
-                  },
-                  "GBR": {
-                    "-": 0.6593,
-                    "C": 0.3407
-                  },
-                  "GIH": {
-                    "C": 0.4223,
-                    "-": 0.5777
-                  },
-                  "GWD": {
-                    "C": 0.3451,
-                    "-": 0.6549
-                  },
-                  "IBS": {
-                    "C": 0.3645,
-                    "-": 0.6355
-                  },
-                  "ITU": {
-                    "-": 0.6324,
-                    "C": 0.3676
-                  },
-                  "JPT": {
-                    "-": 0.5721,
-                    "C": 0.4279
-                  },
-                  "KHV": {
-                    "C": 0.3586,
-                    "-": 0.6414
-                  },
-                  "LWK": {
-                    "C": 0.2879,
-                    "-": 0.7121
-                  },
-                  "MSL": {
-                    "-": 0.6765,
-                    "C": 0.3235
-                  },
-                  "MXL": {
-                    "C": 0.25,
-                    "-": 0.75
-                  },
-                  "PEL": {
-                    "-": 0.8235,
-                    "C": 0.1765
-                  },
-                  "PJL": {
-                    "-": 0.5885,
-                    "C": 0.4115
-                  },
-                  "PUR": {
-                    "-": 0.7019,
-                    "C": 0.2981
-                  },
-                  "SAS": {
-                    "C": 0.4008,
-                    "-": 0.5992
-                  },
-                  "STU": {
-                    "-": 0.6569,
-                    "C": 0.3431
-                  },
-                  "TSI": {
-                    "C": 0.4019,
-                    "-": 0.5981
-                  },
-                  "YRI": {
-                    "C": 0.2315,
-                    "-": 0.7685
-                  }
-                },
-                "maf": 0.343799,
-                "minor_allele": "C"
+                "af": 0.0,
+                "rsid_in_gnomad": "rs77641731",
+                "commonest_in": "N/A",
+                "af_there": 0.0,
+                "allele": "T>C"
               }
             },
             "rs8176746": {
-              "pos": 133255928,
+              "pos": 133255935,
               "carried_by": {
-                "HG004": "C>G het"
+                "HG004": "G>T het"
               },
               "variable_in_the_trio": true,
               "frequency": {
-                "position": 133255935,
-                "populations": {
-                  "ACB": {
-                    "G": 0.8125,
-                    "T": 0.1875
-                  },
-                  "AFR": {
-                    "G": 0.8306,
-                    "T": 0.1694
-                  },
-                  "ALL": {
-                    "T": 0.1528,
-                    "G": 0.8472
-                  },
-                  "AMR": {
-                    "G": 0.9524,
-                    "T": 0.0476
-                  },
-                  "ASW": {
-                    "T": 0.0984,
-                    "G": 0.9016
-                  },
-                  "BEB": {
-                    "T": 0.2442,
-                    "G": 0.7558
-                  },
-                  "CDX": {
-                    "G": 0.8495,
-                    "T": 0.1505
-                  },
-                  "CEU": {
-                    "G": 0.9293,
-                    "T": 0.0707
-                  },
-                  "CHB": {
-                    "T": 0.2282,
-                    "G": 0.7718
-                  },
-                  "CHS": {
-                    "G": 0.819,
-                    "T": 0.181
-                  },
-                  "CLM": {
-                    "G": 0.9894,
-                    "T": 0.0106
-                  },
-                  "EAS": {
-                    "T": 0.1935,
-                    "G": 0.8065
-                  },
-                  "ESN": {
-                    "T": 0.1414,
-                    "G": 0.8586
-                  },
-                  "EUR": {
-                    "T": 0.0845,
-                    "G": 0.9155
-                  },
-                  "FIN": {
-                    "T": 0.1566,
-                    "G": 0.8434
-                  },
-                  "GBR": {
-                    "G": 0.9505,
-                    "T": 0.0495
-                  },
-                  "GIH": {
-                    "T": 0.2379,
-                    "G": 0.7621
-                  },
-                  "GWD": {
-                    "G": 0.8097,
-                    "T": 0.1903
-                  },
-                  "IBS": {
-                    "G": 0.9346,
-                    "T": 0.0654
-                  },
-                  "ITU": {
-                    "T": 0.2353,
-                    "G": 0.7647
-                  },
-                  "JPT": {
-                    "T": 0.1827,
-                    "G": 0.8173
-                  },
-                  "KHV": {
-                    "T": 0.2222,
-                    "G": 0.7778
-                  },
-                  "LWK": {
-                    "T": 0.1616,
-                    "G": 0.8384
-                  },
-                  "MSL": {
-                    "T": 0.2118,
-                    "G": 0.7882
-                  },
-                  "MXL": {
-                    "G": 0.9219,
-                    "T": 0.0781
-                  },
-                  "PEL": {
-                    "G": 0.9588,
-                    "T": 0.0412
-                  },
-                  "PJL": {
-                    "G": 0.7448,
-                    "T": 0.2552
-                  },
-                  "PUR": {
-                    "T": 0.0673,
-                    "G": 0.9327
-                  },
-                  "SAS": {
-                    "G": 0.7669,
-                    "T": 0.2331
-                  },
-                  "STU": {
-                    "T": 0.1961,
-                    "G": 0.8039
-                  },
-                  "TSI": {
-                    "T": 0.0794,
-                    "G": 0.9206
-                  },
-                  "YRI": {
-                    "T": 0.1713,
-                    "G": 0.8287
-                  }
-                },
-                "maf": 0.153061,
-                "minor_allele": "T"
+                "af": 0.114883,
+                "rsid_in_gnomad": "rs8176746",
+                "commonest_in": "South Asian",
+                "af_there": 0.256037,
+                "allele": "G>T"
               }
             }
-          },
-          "common_variable_positions": {
-            "variants": 1617,
-            "common": 0,
-            "per_kb": 0.0,
-            "maf": 0.05,
-            "evidence": "curated: Ensembl variation with 1000 Genomes minor allele frequency"
           },
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
@@ -6845,8 +5028,8 @@
             },
             "rs8176746": {
               "variable_in_the_trio": true,
-              "phylop": -2.27,
-              "rank": 16,
+              "phylop": -2.6,
+              "rank": 19,
               "of": 20
             }
           },
@@ -6855,6 +5038,7 @@
       },
       "gc": 0.6013,
       "distance_to_coding_tss": 18718,
+      "coding_genes_in_window": 2,
       "constrained_fraction": 0.0737,
       "score": {
         "scored": {
@@ -6991,264 +5175,18 @@
             },
             "frequencies": {
               "rs8176719": {
-                "ACB": {
-                  "-": 0.6667,
-                  "C": 0.3333
-                },
-                "AFR": {
-                  "-": 0.7057,
-                  "C": 0.2943
-                },
-                "ALL": {
-                  "-": 0.6562,
-                  "C": 0.3438
-                },
-                "AMR": {
-                  "-": 0.768,
-                  "C": 0.232
-                },
-                "ASW": {
-                  "C": 0.3033,
-                  "-": 0.6967
-                },
-                "BEB": {
-                  "C": 0.4709,
-                  "-": 0.5291
-                },
-                "CDX": {
-                  "-": 0.7151,
-                  "C": 0.2849
-                },
-                "CEU": {
-                  "C": 0.3788,
-                  "-": 0.6212
-                },
-                "CHB": {
-                  "-": 0.6068,
-                  "C": 0.3932
-                },
-                "CHS": {
-                  "-": 0.5762,
-                  "C": 0.4238
-                },
-                "CLM": {
-                  "-": 0.8032,
-                  "C": 0.1968
-                },
-                "EAS": {
-                  "-": 0.62,
-                  "C": 0.38
-                },
-                "ESN": {
-                  "C": 0.2424,
-                  "-": 0.7576
-                },
-                "EUR": {
-                  "C": 0.3946,
-                  "-": 0.6054
-                },
-                "FIN": {
-                  "-": 0.5152,
-                  "C": 0.4848
-                },
-                "GBR": {
-                  "-": 0.6593,
-                  "C": 0.3407
-                },
-                "GIH": {
-                  "C": 0.4223,
-                  "-": 0.5777
-                },
-                "GWD": {
-                  "C": 0.3451,
-                  "-": 0.6549
-                },
-                "IBS": {
-                  "C": 0.3645,
-                  "-": 0.6355
-                },
-                "ITU": {
-                  "-": 0.6324,
-                  "C": 0.3676
-                },
-                "JPT": {
-                  "-": 0.5721,
-                  "C": 0.4279
-                },
-                "KHV": {
-                  "C": 0.3586,
-                  "-": 0.6414
-                },
-                "LWK": {
-                  "C": 0.2879,
-                  "-": 0.7121
-                },
-                "MSL": {
-                  "-": 0.6765,
-                  "C": 0.3235
-                },
-                "MXL": {
-                  "C": 0.25,
-                  "-": 0.75
-                },
-                "PEL": {
-                  "-": 0.8235,
-                  "C": 0.1765
-                },
-                "PJL": {
-                  "-": 0.5885,
-                  "C": 0.4115
-                },
-                "PUR": {
-                  "-": 0.7019,
-                  "C": 0.2981
-                },
-                "SAS": {
-                  "C": 0.4008,
-                  "-": 0.5992
-                },
-                "STU": {
-                  "-": 0.6569,
-                  "C": 0.3431
-                },
-                "TSI": {
-                  "C": 0.4019,
-                  "-": 0.5981
-                },
-                "YRI": {
-                  "C": 0.2315,
-                  "-": 0.7685
-                }
+                "af": 0.0,
+                "rsid_in_gnomad": "rs77641731",
+                "commonest_in": "N/A",
+                "af_there": 0.0,
+                "allele": "T>C"
               },
               "rs8176746": {
-                "ACB": {
-                  "G": 0.8125,
-                  "T": 0.1875
-                },
-                "AFR": {
-                  "G": 0.8306,
-                  "T": 0.1694
-                },
-                "ALL": {
-                  "T": 0.1528,
-                  "G": 0.8472
-                },
-                "AMR": {
-                  "G": 0.9524,
-                  "T": 0.0476
-                },
-                "ASW": {
-                  "T": 0.0984,
-                  "G": 0.9016
-                },
-                "BEB": {
-                  "T": 0.2442,
-                  "G": 0.7558
-                },
-                "CDX": {
-                  "G": 0.8495,
-                  "T": 0.1505
-                },
-                "CEU": {
-                  "G": 0.9293,
-                  "T": 0.0707
-                },
-                "CHB": {
-                  "T": 0.2282,
-                  "G": 0.7718
-                },
-                "CHS": {
-                  "G": 0.819,
-                  "T": 0.181
-                },
-                "CLM": {
-                  "G": 0.9894,
-                  "T": 0.0106
-                },
-                "EAS": {
-                  "T": 0.1935,
-                  "G": 0.8065
-                },
-                "ESN": {
-                  "T": 0.1414,
-                  "G": 0.8586
-                },
-                "EUR": {
-                  "T": 0.0845,
-                  "G": 0.9155
-                },
-                "FIN": {
-                  "T": 0.1566,
-                  "G": 0.8434
-                },
-                "GBR": {
-                  "G": 0.9505,
-                  "T": 0.0495
-                },
-                "GIH": {
-                  "T": 0.2379,
-                  "G": 0.7621
-                },
-                "GWD": {
-                  "G": 0.8097,
-                  "T": 0.1903
-                },
-                "IBS": {
-                  "G": 0.9346,
-                  "T": 0.0654
-                },
-                "ITU": {
-                  "T": 0.2353,
-                  "G": 0.7647
-                },
-                "JPT": {
-                  "T": 0.1827,
-                  "G": 0.8173
-                },
-                "KHV": {
-                  "T": 0.2222,
-                  "G": 0.7778
-                },
-                "LWK": {
-                  "T": 0.1616,
-                  "G": 0.8384
-                },
-                "MSL": {
-                  "T": 0.2118,
-                  "G": 0.7882
-                },
-                "MXL": {
-                  "G": 0.9219,
-                  "T": 0.0781
-                },
-                "PEL": {
-                  "G": 0.9588,
-                  "T": 0.0412
-                },
-                "PJL": {
-                  "G": 0.7448,
-                  "T": 0.2552
-                },
-                "PUR": {
-                  "T": 0.0673,
-                  "G": 0.9327
-                },
-                "SAS": {
-                  "G": 0.7669,
-                  "T": 0.2331
-                },
-                "STU": {
-                  "T": 0.1961,
-                  "G": 0.8039
-                },
-                "TSI": {
-                  "T": 0.0794,
-                  "G": 0.9206
-                },
-                "YRI": {
-                  "T": 0.1713,
-                  "G": 0.8287
-                }
+                "af": 0.114883,
+                "rsid_in_gnomad": "rs8176746",
+                "commonest_in": "South Asian",
+                "af_there": 0.256037,
+                "allele": "G>T"
               }
             },
             "constraint_rank": {
@@ -7260,8 +5198,8 @@
               },
               "rs8176746": {
                 "variable_in_the_trio": true,
-                "phylop": -2.27,
-                "rank": 16,
+                "phylop": -2.6,
+                "rank": 19,
                 "of": 20
               }
             },
@@ -7299,7 +5237,7 @@
             ],
             "value_domain_expected": "few",
             "value_domain_read": "few",
-            "common_variable_positions_per_kb": 0.0,
+            "common_variable_positions_per_kb": 17.0,
             "value_domain_hit": true,
             "hit_derived": false,
             "hit_derived_all": false
@@ -7698,6 +5636,16 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 17738,
+          "common": 1347,
+          "per_kb": 112.75,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -7708,24 +5656,21 @@
           ],
           "variable_positions_in_element": 0,
           "named_variants": {},
-          "common_variable_positions": {
-            "variants": 7569,
-            "common": 0,
-            "per_kb": 0.0,
-            "maf": 0.05,
-            "evidence": "curated: Ensembl variation with 1000 Genomes minor allele frequency"
-          },
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
         "syntax_values": {
           "layer": "syntax_values",
           "provenance": "derived",
           "values": 0,
-          "values_in_syntax": 0
+          "values_in_syntax": 0,
+          "top": [],
+          "published": {},
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
         }
       },
       "gc": 0.434,
       "distance_to_coding_tss": 5973,
+      "coding_genes_in_window": 8,
       "constrained_fraction": 0.0688,
       "score": {
         "scored": {
@@ -7896,9 +5841,9 @@
               "HLA-DRB1"
             ],
             "value_domain_expected": "many",
-            "value_domain_read": "few",
-            "common_variable_positions_per_kb": 0.0,
-            "value_domain_hit": false,
+            "value_domain_read": "many",
+            "common_variable_positions_per_kb": 112.75,
+            "value_domain_hit": true,
             "hit_derived": false,
             "hit_derived_all": false
           }
@@ -8178,6 +6123,24 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 101,
+          "common": 0,
+          "per_kb": 0.0,
+          "named": {
+            "rs63750847": {
+              "af": 0.000282549,
+              "rsid_in_gnomad": "rs63750847",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.000235183,
+              "allele": "C>T"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -8193,19 +6156,13 @@
               "carried_by": {},
               "variable_in_the_trio": false,
               "frequency": {
-                "position": 25897620,
-                "populations": {},
-                "maf": null,
-                "minor_allele": null
+                "af": 0.000282549,
+                "rsid_in_gnomad": "rs63750847",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.000235183,
+                "allele": "C>T"
               }
             }
-          },
-          "common_variable_positions": {
-            "variants": 217,
-            "common": 0,
-            "per_kb": 0.0,
-            "maf": 0.05,
-            "evidence": "curated: Ensembl variation with 1000 Genomes minor allele frequency"
           },
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
@@ -8213,11 +6170,22 @@
           "layer": "syntax_values",
           "provenance": "derived",
           "values": 0,
-          "values_in_syntax": 0
+          "values_in_syntax": 0,
+          "top": [],
+          "published": {
+            "rs63750847": {
+              "variable_in_the_trio": false,
+              "phylop": null,
+              "rank": null,
+              "of": 0
+            }
+          },
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
         }
       },
       "gc": 0.33,
       "distance_to_coding_tss": 162649,
+      "coding_genes_in_window": 1,
       "constrained_fraction": 0.21,
       "score": {
         "scored": {
@@ -8341,10 +6309,25 @@
               "rs63750847": false
             },
             "frequencies": {
-              "rs63750847": {}
+              "rs63750847": {
+                "af": 0.000282549,
+                "rsid_in_gnomad": "rs63750847",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.000235183,
+                "allele": "C>T"
+              }
             },
-            "constraint_rank": null,
-            "in_the_top_decile_by_constraint": null,
+            "constraint_rank": {
+              "rs63750847": {
+                "variable_in_the_trio": false,
+                "phylop": null,
+                "rank": null,
+                "of": 0
+              }
+            },
+            "in_the_top_decile_by_constraint": {
+              "rs63750847": false
+            },
             "satmut_functional": null,
             "protein_change": {
               "rs63750847": "p.Ala673Thr"
@@ -8379,9 +6362,9 @@
             "values_in_syntax": 0,
             "published_targets_in_one_node": [],
             "value_domain_expected": "two",
-            "value_domain_read": "few",
+            "value_domain_read": "two",
             "common_variable_positions_per_kb": 0.0,
-            "value_domain_hit": false,
+            "value_domain_hit": true,
             "hit_derived": true,
             "hit_derived_all": false
           }
@@ -8568,37 +6551,68 @@
             7600000,
             7760000
           ],
-          "elements_scored": 18,
-          "naming_a_coding_gene": 13,
+          "elements_scored": 75,
+          "naming_a_coding_gene": 62,
           "genes": [
             {
+              "gene": "EFNB3",
+              "elements": 12,
+              "activating": 4,
+              "summed": 7.199
+            },
+            {
               "gene": "ATP1B2",
-              "elements": 6,
-              "activating": 2,
-              "summed": 2.85
+              "elements": 14,
+              "activating": 5,
+              "summed": 7.069
             },
             {
               "gene": "SHBG",
-              "elements": 3,
-              "activating": 3,
-              "summed": 2.627
+              "elements": 10,
+              "activating": 7,
+              "summed": 6.616
             },
             {
-              "gene": "EFNB3",
-              "elements": 2,
-              "activating": 1,
-              "summed": 0.604
+              "gene": "DNAH2",
+              "elements": 10,
+              "activating": 6,
+              "summed": 2.233
+            },
+            {
+              "gene": "SAT2",
+              "elements": 3,
+              "activating": 3,
+              "summed": 1.957
+            },
+            {
+              "gene": "TP53",
+              "elements": 5,
+              "activating": 4,
+              "summed": 1.063
             },
             {
               "gene": "FXR2",
-              "elements": 2,
+              "elements": 5,
+              "activating": 4,
+              "summed": 1.043
+            },
+            {
+              "gene": "WRAP53",
+              "elements": 3,
               "activating": 2,
-              "summed": 0.432
+              "summed": 0.941
             }
           ],
-          "published_targets": [],
-          "target": "ATP1B2",
-          "rank_of_first_published_target": null,
+          "published_targets": [
+            {
+              "gene": "TP53",
+              "elements": 5,
+              "activating": 4,
+              "summed": 1.063
+            }
+          ],
+          "target": "TP53",
+          "rank_of_first_published_target": 6,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
@@ -8760,6 +6774,24 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 100,
+          "common": 4,
+          "per_kb": 10.0,
+          "named": {
+            "rs1042522": {
+              "af": 0.626776,
+              "rsid_in_gnomad": "rs1042522",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.745005,
+              "allele": "G>C"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -8779,148 +6811,13 @@
               },
               "variable_in_the_trio": true,
               "frequency": {
-                "position": 7676154,
-                "populations": {
-                  "ACB": {
-                    "G": 0.6562,
-                    "C": 0.3438
-                  },
-                  "AFR": {
-                    "C": 0.3313,
-                    "G": 0.6687
-                  },
-                  "ALL": {
-                    "C": 0.5429,
-                    "G": 0.4571
-                  },
-                  "AMR": {
-                    "C": 0.683,
-                    "G": 0.317
-                  },
-                  "ASW": {
-                    "C": 0.4016,
-                    "G": 0.5984
-                  },
-                  "BEB": {
-                    "G": 0.4244,
-                    "C": 0.5756
-                  },
-                  "CDX": {
-                    "C": 0.5269,
-                    "G": 0.4731
-                  },
-                  "CEU": {
-                    "G": 0.2424,
-                    "C": 0.7576
-                  },
-                  "CHB": {
-                    "G": 0.4515,
-                    "C": 0.5485
-                  },
-                  "CHS": {
-                    "G": 0.4,
-                    "C": 0.6
-                  },
-                  "CLM": {
-                    "C": 0.7181,
-                    "G": 0.2819
-                  },
-                  "EAS": {
-                    "C": 0.5863,
-                    "G": 0.4137
-                  },
-                  "ESN": {
-                    "G": 0.6818,
-                    "C": 0.3182
-                  },
-                  "EUR": {
-                    "G": 0.2853,
-                    "C": 0.7147
-                  },
-                  "FIN": {
-                    "C": 0.697,
-                    "G": 0.303
-                  },
-                  "GBR": {
-                    "G": 0.3077,
-                    "C": 0.6923
-                  },
-                  "GIH": {
-                    "G": 0.4223,
-                    "C": 0.5777
-                  },
-                  "GWD": {
-                    "C": 0.292,
-                    "G": 0.708
-                  },
-                  "IBS": {
-                    "C": 0.7009,
-                    "G": 0.2991
-                  },
-                  "ITU": {
-                    "G": 0.5392,
-                    "C": 0.4608
-                  },
-                  "JPT": {
-                    "C": 0.6827,
-                    "G": 0.3173
-                  },
-                  "KHV": {
-                    "G": 0.4343,
-                    "C": 0.5657
-                  },
-                  "LWK": {
-                    "G": 0.7475,
-                    "C": 0.2525
-                  },
-                  "MSL": {
-                    "C": 0.3882,
-                    "G": 0.6118
-                  },
-                  "MXL": {
-                    "G": 0.3125,
-                    "C": 0.6875
-                  },
-                  "PEL": {
-                    "G": 0.3647,
-                    "C": 0.6353
-                  },
-                  "PJL": {
-                    "G": 0.5208,
-                    "C": 0.4792
-                  },
-                  "PUR": {
-                    "G": 0.3125,
-                    "C": 0.6875
-                  },
-                  "SAS": {
-                    "G": 0.4918,
-                    "C": 0.5082
-                  },
-                  "STU": {
-                    "C": 0.4559,
-                    "G": 0.5441
-                  },
-                  "TSI": {
-                    "C": 0.7243,
-                    "G": 0.2757
-                  },
-                  "YRI": {
-                    "C": 0.3611,
-                    "G": 0.6389
-                  }
-                },
-                "maf": null,
-                "minor_allele": null
+                "af": 0.626776,
+                "rsid_in_gnomad": "rs1042522",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.745005,
+                "allele": "G>C"
               }
             }
-          },
-          "common_variable_positions": {
-            "variants": 592,
-            "common": 0,
-            "per_kb": 0.0,
-            "maf": 0.05,
-            "evidence": "curated: Ensembl variation with 1000 Genomes minor allele frequency"
           },
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
@@ -8953,6 +6850,7 @@
       },
       "gc": 0.6075,
       "distance_to_coding_tss": 11335,
+      "coding_genes_in_window": 8,
       "constrained_fraction": 0.23,
       "score": {
         "scored": {
@@ -8988,14 +6886,16 @@
               "gene_input": {
                 "provenance": "derived",
                 "named": [
+                  "EFNB3",
                   "ATP1B2",
                   "SHBG",
-                  "EFNB3",
-                  "FXR2"
+                  "DNAH2",
+                  "SAT2",
+                  "TP53"
                 ],
                 "hit": false,
-                "among": false,
-                "first_hit": null,
+                "among": true,
+                "first_hit": "TP53",
                 "pending": null
               },
               "coding": {
@@ -9095,134 +6995,11 @@
             },
             "frequencies": {
               "rs1042522": {
-                "ACB": {
-                  "G": 0.6562,
-                  "C": 0.3438
-                },
-                "AFR": {
-                  "C": 0.3313,
-                  "G": 0.6687
-                },
-                "ALL": {
-                  "C": 0.5429,
-                  "G": 0.4571
-                },
-                "AMR": {
-                  "C": 0.683,
-                  "G": 0.317
-                },
-                "ASW": {
-                  "C": 0.4016,
-                  "G": 0.5984
-                },
-                "BEB": {
-                  "G": 0.4244,
-                  "C": 0.5756
-                },
-                "CDX": {
-                  "C": 0.5269,
-                  "G": 0.4731
-                },
-                "CEU": {
-                  "G": 0.2424,
-                  "C": 0.7576
-                },
-                "CHB": {
-                  "G": 0.4515,
-                  "C": 0.5485
-                },
-                "CHS": {
-                  "G": 0.4,
-                  "C": 0.6
-                },
-                "CLM": {
-                  "C": 0.7181,
-                  "G": 0.2819
-                },
-                "EAS": {
-                  "C": 0.5863,
-                  "G": 0.4137
-                },
-                "ESN": {
-                  "G": 0.6818,
-                  "C": 0.3182
-                },
-                "EUR": {
-                  "G": 0.2853,
-                  "C": 0.7147
-                },
-                "FIN": {
-                  "C": 0.697,
-                  "G": 0.303
-                },
-                "GBR": {
-                  "G": 0.3077,
-                  "C": 0.6923
-                },
-                "GIH": {
-                  "G": 0.4223,
-                  "C": 0.5777
-                },
-                "GWD": {
-                  "C": 0.292,
-                  "G": 0.708
-                },
-                "IBS": {
-                  "C": 0.7009,
-                  "G": 0.2991
-                },
-                "ITU": {
-                  "G": 0.5392,
-                  "C": 0.4608
-                },
-                "JPT": {
-                  "C": 0.6827,
-                  "G": 0.3173
-                },
-                "KHV": {
-                  "G": 0.4343,
-                  "C": 0.5657
-                },
-                "LWK": {
-                  "G": 0.7475,
-                  "C": 0.2525
-                },
-                "MSL": {
-                  "C": 0.3882,
-                  "G": 0.6118
-                },
-                "MXL": {
-                  "G": 0.3125,
-                  "C": 0.6875
-                },
-                "PEL": {
-                  "G": 0.3647,
-                  "C": 0.6353
-                },
-                "PJL": {
-                  "G": 0.5208,
-                  "C": 0.4792
-                },
-                "PUR": {
-                  "G": 0.3125,
-                  "C": 0.6875
-                },
-                "SAS": {
-                  "G": 0.4918,
-                  "C": 0.5082
-                },
-                "STU": {
-                  "C": 0.4559,
-                  "G": 0.5441
-                },
-                "TSI": {
-                  "C": 0.7243,
-                  "G": 0.2757
-                },
-                "YRI": {
-                  "C": 0.3611,
-                  "G": 0.6389
-                }
+                "af": 0.626776,
+                "rsid_in_gnomad": "rs1042522",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.745005,
+                "allele": "G>C"
               }
             },
             "constraint_rank": {
@@ -9269,7 +7046,7 @@
             ],
             "value_domain_expected": "two",
             "value_domain_read": "few",
-            "common_variable_positions_per_kb": 0.0,
+            "common_variable_positions_per_kb": 10.0,
             "value_domain_hit": false,
             "hit_derived": true,
             "hit_derived_all": true
@@ -9834,6 +7611,16 @@
           "pending": null,
           "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
         },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 26137,
+          "common": 225,
+          "per_kb": 2.29,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
         "values": {
           "layer": "values",
           "provenance": "derived",
@@ -9844,7 +7631,6 @@
           ],
           "variable_positions_in_element": 159,
           "named_variants": {},
-          "common_variable_positions": null,
           "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
         },
         "syntax_values": {
@@ -9898,6 +7684,7 @@
       },
       "gc": 0.5095,
       "distance_to_coding_tss": 9742,
+      "coding_genes_in_window": 12,
       "constrained_fraction": 0.3107,
       "score": {
         "scored": {
@@ -10086,8 +7873,8 @@
               "HOXD1"
             ],
             "value_domain_expected": null,
-            "value_domain_read": null,
-            "common_variable_positions_per_kb": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 2.29,
             "value_domain_hit": null,
             "hit_derived": true,
             "hit_derived_all": true
@@ -10132,7 +7919,10 @@
       "cells_open": [],
       "registry_classes": [
         "DNase-H3K4me3"
-      ]
+      ],
+      "common_variants_per_kb": 1.27,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.3067
     },
     {
       "chrom": "chr7",
@@ -10158,7 +7948,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 3.8,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.2129
     },
     {
       "chrom": "chr7",
@@ -10180,7 +7973,10 @@
       "deletion_target": null,
       "eqtl_target": "DYNC1I1",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 3.8,
+      "values_in_syntax": 1,
+      "mammal_fraction": 0.1876
     },
     {
       "chrom": "chr7",
@@ -10202,7 +7998,10 @@
       "deletion_target": null,
       "eqtl_target": null,
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 1.27,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0887
     },
     {
       "chrom": "chr7",
@@ -10232,7 +8031,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 5.07,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0849
     },
     {
       "chrom": "chr15",
@@ -10258,7 +8060,10 @@
       ],
       "registry_classes": [
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 1.04,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0387
     },
     {
       "chrom": "chr15",
@@ -10280,7 +8085,10 @@
       "deletion_target": null,
       "eqtl_target": "MYO5C",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 2.09,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1181
     },
     {
       "chrom": "chr15",
@@ -10304,7 +8112,10 @@
       "cells_open": [],
       "registry_classes": [
         "DNase-H3K4me3"
-      ]
+      ],
+      "common_variants_per_kb": 7.31,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0261
     },
     {
       "chrom": "chr15",
@@ -10328,7 +8139,10 @@
       "cells_open": [],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 11.49,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0251
     },
     {
       "chrom": "chr15",
@@ -10350,7 +8164,10 @@
       "deletion_target": null,
       "eqtl_target": "ENTREP2",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 4.18,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0251
     },
     {
       "chrom": "chr2",
@@ -10372,7 +8189,10 @@
       "deletion_target": null,
       "eqtl_target": "EVA1A",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 2.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0225
     },
     {
       "chrom": "chr2",
@@ -10394,7 +8214,10 @@
       "deletion_target": null,
       "eqtl_target": "DNAH7",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 2.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.02
     },
     {
       "chrom": "chr2",
@@ -10416,7 +8239,10 @@
       "deletion_target": null,
       "eqtl_target": "LCLAT1",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 2.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.025
     },
     {
       "chrom": "chr2",
@@ -10440,7 +8266,10 @@
       "cells_open": [],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0175
     },
     {
       "chrom": "chr2",
@@ -10462,7 +8291,10 @@
       "deletion_target": null,
       "eqtl_target": "ENSG00000284052",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 10.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0175
     },
     {
       "chrom": "chr11",
@@ -10496,7 +8328,10 @@
         "hepatocyte",
         "keratinocyte"
       ],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 3.65,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0287
     },
     {
       "chrom": "chr11",
@@ -10532,7 +8367,10 @@
       ],
       "registry_classes": [
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 5.35,
+      "values_in_syntax": 2,
+      "mammal_fraction": 0.0298
     },
     {
       "chrom": "chr11",
@@ -10558,7 +8396,10 @@
       ],
       "registry_classes": [
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 6.92,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0183
     },
     {
       "chrom": "chr11",
@@ -10583,7 +8424,10 @@
         "IMR-90",
         "cardiac muscle cell"
       ],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 6.92,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0138
     },
     {
       "chrom": "chr11",
@@ -10605,7 +8449,10 @@
       "deletion_target": null,
       "eqtl_target": "FOLH1",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 1.69,
+      "values_in_syntax": 2,
+      "mammal_fraction": 0.0367
     },
     {
       "chrom": "chr16",
@@ -10627,7 +8474,10 @@
       "deletion_target": null,
       "eqtl_target": null,
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.2075
     },
     {
       "chrom": "chr16",
@@ -10640,18 +8490,21 @@
       "claims": {
         "target": true,
         "cell": false,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "ADCY7",
-      "deletion_target": null,
+      "deletion_target": "ADCY7",
       "eqtl_target": "BRD7",
       "cells_open": [],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.165
     },
     {
       "chrom": "chr16",
@@ -10673,7 +8526,10 @@
       "deletion_target": null,
       "eqtl_target": "CASC16",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 5.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1325
     },
     {
       "chrom": "chr16",
@@ -10695,7 +8551,10 @@
       "deletion_target": null,
       "eqtl_target": "WDR59",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 12.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1
     },
     {
       "chrom": "chr16",
@@ -10717,7 +8576,10 @@
       "deletion_target": null,
       "eqtl_target": null,
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.08
     },
     {
       "chrom": "chr2",
@@ -10742,7 +8604,10 @@
         "HepG2",
         "SK-N-SH"
       ],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 2.83,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0535
     },
     {
       "chrom": "chr2",
@@ -10779,7 +8644,10 @@
       "registry_classes": [
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 1.83,
+      "values_in_syntax": 1,
+      "mammal_fraction": 0.0653
     },
     {
       "chrom": "chr2",
@@ -10811,7 +8679,10 @@
         "cardiac muscle cell",
         "hepatocyte"
       ],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 1.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.043
     },
     {
       "chrom": "chr2",
@@ -10835,7 +8706,10 @@
       "cells_open": [],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.83,
+      "values_in_syntax": 2,
+      "mammal_fraction": 0.042
     },
     {
       "chrom": "chr2",
@@ -10859,7 +8733,10 @@
       "cells_open": [],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 0.83,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0867
     },
     {
       "chrom": "chr8",
@@ -10885,7 +8762,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.4175
     },
     {
       "chrom": "chr8",
@@ -10909,7 +8789,10 @@
       "cells_open": [
         "GM12878"
       ],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.2
     },
     {
       "chrom": "chr8",
@@ -10933,7 +8816,10 @@
       "cells_open": [],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.185
     },
     {
       "chrom": "chr8",
@@ -10960,7 +8846,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 5.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1075
     },
     {
       "chrom": "chr8",
@@ -10992,7 +8881,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.07
     },
     {
       "chrom": "chr9",
@@ -11014,7 +8906,10 @@
       "deletion_target": null,
       "eqtl_target": "ADAMTSL2",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 15.33,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0697
     },
     {
       "chrom": "chr9",
@@ -11047,7 +8942,10 @@
       ],
       "registry_classes": [
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0643
     },
     {
       "chrom": "chr9",
@@ -11077,7 +8975,10 @@
         "cardiac muscle cell",
         "hepatocyte"
       ],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 2.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0517
     },
     {
       "chrom": "chr9",
@@ -11113,7 +9014,10 @@
         "DNase-H3K4me3",
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 3.33,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0497
     },
     {
       "chrom": "chr9",
@@ -11142,7 +9046,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0467
     },
     {
       "chrom": "chr6",
@@ -11180,7 +9087,10 @@
         "PLS",
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 1.84,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0675
     },
     {
       "chrom": "chr6",
@@ -11216,7 +9126,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.43,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0637
     },
     {
       "chrom": "chr6",
@@ -11251,7 +9164,10 @@
       "registry_classes": [
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 4.27,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0767
     },
     {
       "chrom": "chr6",
@@ -11279,7 +9195,10 @@
       "registry_classes": [
         "CTCF-only",
         "DNase-H3K4me3"
-      ]
+      ],
+      "common_variants_per_kb": 3.6,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.055
     },
     {
       "chrom": "chr6",
@@ -11316,7 +9235,10 @@
         "PLS",
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 0.84,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0548
     },
     {
       "chrom": "chr21",
@@ -11338,7 +9260,10 @@
       "deletion_target": null,
       "eqtl_target": null,
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 2.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1775
     },
     {
       "chrom": "chr21",
@@ -11360,7 +9285,10 @@
       "deletion_target": null,
       "eqtl_target": null,
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1075
     },
     {
       "chrom": "chr21",
@@ -11384,7 +9312,10 @@
       "cells_open": [],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0825
     },
     {
       "chrom": "chr21",
@@ -11408,7 +9339,10 @@
       "cells_open": [],
       "registry_classes": [
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.08
     },
     {
       "chrom": "chr21",
@@ -11430,7 +9364,10 @@
       "deletion_target": null,
       "eqtl_target": "CYYR1",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 5.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0775
     },
     {
       "chrom": "chr17",
@@ -11452,7 +9389,10 @@
       "deletion_target": null,
       "eqtl_target": "FMNL1-AS1",
       "cells_open": [],
-      "registry_classes": []
+      "registry_classes": [],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.24
     },
     {
       "chrom": "chr17",
@@ -11465,13 +9405,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "CBX8",
-      "deletion_target": null,
+      "deletion_target": "LINC01977",
       "eqtl_target": "CBX8",
       "cells_open": [
         "CD14-positive monocyte",
@@ -11483,7 +9423,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 25.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.24
     },
     {
       "chrom": "chr17",
@@ -11510,7 +9453,10 @@
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 0.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.2425
     },
     {
       "chrom": "chr17",
@@ -11523,20 +9469,23 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "CD79B",
-      "deletion_target": null,
+      "deletion_target": "GH1",
       "eqtl_target": "FTSJ3",
       "cells_open": [
         "astrocyte"
       ],
       "registry_classes": [
         "dELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.245
     },
     {
       "chrom": "chr17",
@@ -11549,13 +9498,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "SPATA32",
-      "deletion_target": null,
+      "deletion_target": "FMNL1",
       "eqtl_target": "EFCAB15P",
       "cells_open": [
         "H1",
@@ -11567,7 +9516,10 @@
       ],
       "registry_classes": [
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.2625
     },
     {
       "chrom": "chr2",
@@ -11605,7 +9557,10 @@
         "DNase-H3K4me3",
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.37,
+      "values_in_syntax": 10,
+      "mammal_fraction": 0.1536
     },
     {
       "chrom": "chr2",
@@ -11645,7 +9600,10 @@
         "PLS",
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 1.5,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1044
     },
     {
       "chrom": "chr2",
@@ -11684,7 +9642,10 @@
         "DNase-H3K4me3",
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 2.44,
+      "values_in_syntax": 1,
+      "mammal_fraction": 0.1001
     },
     {
       "chrom": "chr2",
@@ -11723,7 +9684,10 @@
         "PLS",
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 1.32,
+      "values_in_syntax": 7,
+      "mammal_fraction": 0.097
     },
     {
       "chrom": "chr2",
@@ -11762,54 +9726,57 @@
         "PLS",
         "dELS",
         "pELS"
-      ]
+      ],
+      "common_variants_per_kb": 8.24,
+      "values_in_syntax": 38,
+      "mammal_fraction": 0.0883
     }
   ],
   "variant_positions": {
     "rs12913832": {
       "panel": 28120472,
-      "ensembl": 28120472,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs4988235": {
       "panel": 135851076,
-      "ensembl": 135851076,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1421085": {
       "panel": 53767042,
-      "ensembl": 53767042,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1558902": {
       "panel": 53769662,
-      "ensembl": 53769662,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1427407": {
       "panel": 60490908,
-      "ensembl": 60490908,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs6983267": {
       "panel": 127401060,
-      "ensembl": 127401060,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs11986220": {
       "panel": 127519444,
-      "ensembl": 127519444,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs8176719": {
       "panel": 133257521,
-      "ensembl": 133257522,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs8176746": {
-      "panel": 133255928,
-      "ensembl": 133255935,
-      "agrees": false
+      "panel": 133255935,
+      "ensembl": null,
+      "agrees": null
     },
     "rs63750847": {
       "panel": 25897620,
@@ -11830,9 +9797,9 @@
   },
   "gtex": {
     "tissues": 49,
-    "pairs_scanned_this_run": 71478479,
-    "hits_this_run": 123520,
-    "seconds": 132
+    "pairs_scanned_this_run": 0,
+    "hits_this_run": 0,
+    "seconds": 0
   },
   "evidence": {
     "expectation": "curated: the published answer per locus, with citations, written down before the run",
@@ -11844,6 +9811,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 22425.4
+    "seconds": 2868.2
   }
 }
