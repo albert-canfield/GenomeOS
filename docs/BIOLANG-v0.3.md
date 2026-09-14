@@ -68,6 +68,7 @@ field Morphogen { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0 }
 
 experiment pop1 {
   knockout: POP-1                    # factors never present; signals by id, ligand or receptor never sent
+  add: HLH-1 at 350 min              # a factor forced then (omit the time and it is a zygote load)
   until: 800 min                     # omitted = the organism's last stage
   expect: "MS adopts the E fate (Lin, Thorpe & Priess 1995)"
   assert: type EPrecursor at 100 min = 2
@@ -140,6 +141,13 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   UNKNOWN stop counts against the organism level with confidence 0.
 
 ## Experiments
+
+An `experiment` is a claim about a perturbation, so the program tests itself
+with it: `bio test` grows each one with its knockouts, its forced factors and
+its environment, and checks its `assert:` lines. `add: F at T` forces a factor
+at a stated time — every cell alive then gains it as stated mechanism, which
+the reader cannot drop, and every cell born afterwards inherits it — which is
+what a competence window is measured with (BIOLANG-v0.4-ECONOMY.md §7.2a).
 
 `genomeos grow FILE --experiments [names]` grows the wild type and each
 perturbed organism with the same program, seed and horizon, and reports

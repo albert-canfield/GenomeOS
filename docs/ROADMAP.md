@@ -171,11 +171,29 @@ in order. "Owner" is the session that holds the files today (see §7).
   `data/organisms/human/erythrocyte.bio`; gate result
   `data/results/located_mitochondrion.json` from
   `scripts/located_mitochondrion.py`.
-- **Next.** 1. `bio` packaged as an extra entry point with its own test set.
-  2. A `population` type in BioIR (today a counted `Cell`). 3. PAR polarity
-  rules for the worm's first divisions, so par-2 and par-3 knockouts are
-  predicted rather than stated.
-- **Owner.** genomeos-c1 (the engine: language, IR, runtime, toolchain, v0.4).
+- **Fate: commitment and competence, gated by a published series (2026-09-14).**
+  §7.2a of the v0.4 specification had both constructs inferred at 0.3, with our
+  own atlas test negative and in the wrong direction. The falsifier it names is
+  a perturbation, and it is now a program: `data/organisms/celegans/plasticity.bio`
+  runs Fukushige & Krause 2005 and Yuzyuk et al. 2009 under `bio test` — forced
+  at 60 min, 610 of 610 cells become muscle; forced at 350 min the embryo keeps
+  every fate it had; without MES-2 the window never closes and 594 convert;
+  without PHA-4 (their own control) nothing changes; and with the window held
+  open, no cell that had already differentiated converts. Removing either
+  construct breaks an arm (`scripts/plasticity_gate.py`,
+  `data/results/plasticity_gate.json`), so neither is decoration. The runtime
+  gained a perturbation that arrives at a time (`add: F at T`), and `bio test`
+  now runs every organism program's `experiment` blocks — the eight worm and
+  nine haematopoietic knockouts included.
+- **Next.** 1. The integrated reads of §7.2a (`F.exposure(lineage)`,
+  `F.mean(cell)`) as a language read rather than area E's precomputed lookup;
+  today they are a compile error. 2. A `commitment` a precursor can hold before
+  it differentiates, so a cell born after a perturbation is protected as its
+  ancestors are (12 of 610 are not, today). 3. `bio` packaged as an extra entry
+  point with its own test set. 4. A `population` type in BioIR (today a counted
+  `Cell`). 5. PAR polarity rules for the worm's first divisions, so par-2 and
+  par-3 knockouts are predicted rather than stated.
+- **Owner.** genomeos-c2 (the engine: language, IR, runtime, toolchain, v0.4).
 
 ### B. Genome decoding (reverse-engineering the sequence)
 

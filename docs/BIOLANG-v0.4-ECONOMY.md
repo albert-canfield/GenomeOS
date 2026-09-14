@@ -425,6 +425,90 @@ number in a `commitment` or `competence` block is `inferred` at 0.3 or below,
 and anything derived from one is reported the same way. **Nothing in this
 specification claims our own data show a ratchet.**
 
+**The series, run (2026-09-14), and the gate passed.**
+`data/organisms/celegans/plasticity.bio` is that series as a program, beside
+area E's worm and importing it unchanged. It says three things and nothing
+else: HLH-1 is sufficient for a muscle fate (one `decision`); it is sufficient
+only while a window is open, and the window is closed by MES-2 (one
+`competence`); and it is never sufficient in a cell that has already
+differentiated (one `commitment`). The transgene is its own factor, `hsHLH-1`,
+as the published heat-shock construct is its own copy of the gene, so the wild
+type carries none of it and the worm's own development is untouched — checked:
+the 610 cells at 800 min are identical to `embryo_factors.bio`'s, type by type.
+Each experiment forces the factor at a stated time, which is new
+(`add: hsHLH-1 at 350 min`; before this, `add:` was a zygote load and the late
+arm had no form at all). `bio test` runs all five.
+
+| Arm | Published outcome | What the program does |
+|---|---|---|
+| forced at 60 min | almost every cell becomes muscle, whatever its lineage (F&K 2005) | **610 of 610** are muscle; no neurons, no intestine; 1,340 endogenous fate assignments refused because the cell is already committed to muscle |
+| forced at 350 min | after the window the same factor does nothing (F&K 2005) | the embryo keeps its own fates exactly: 117 muscle, 233 neurons, 34 intestine, every type unchanged; 1,180 refusals counted as *outside competence* |
+| forced at 350 min, no MES-2 | plasticity is prolonged (Yuzyuk et al. 2009) | the window never closes and **594 of 610** become muscle |
+| forced at 350 min, no PHA-4 | losing a regulator that is not the closing machinery does **not** prolong plasticity (their own control) | unchanged from the wild type (117 muscle), so the closing is attributed to MES-2 and not to any knockout |
+| forced at 700 min, no MES-2 | lost completely in terminally differentiated cells (F&K 2005) | of the 84 cells that convert, **not one had differentiated**: all are precursors or untyped cells. Every cell already differentiated at 700 min is still itself at 800 (233 neurons, 26 intestine, 99 hypodermis) |
+
+**What each construct is worth**, measured by removing it
+(`scripts/plasticity_gate.py`, `data/results/plasticity_gate.json`); this is
+the part that matters, because a program that passes with the construct and
+also without it has not tested the construct:
+
+| Arm | as written | `competence` removed | `commitment` removed |
+|---|---|---|---|
+| forced at 60 min | 610 muscle, passes | 610 muscle, passes | **174 muscle, fails** |
+| forced at 350 min | 117 muscle, passes | **594 muscle, fails** | 117 muscle, passes |
+| 350 min, no MES-2 | 594 muscle, passes | 594 muscle, passes | 610 muscle, passes |
+| 350 min, no PHA-4 | 117 muscle, passes | **594 muscle, fails** | 117 muscle, passes |
+| 700 min, no MES-2 | 201 muscle, passes | 201 muscle, passes | **610 muscle, fails** |
+
+Both are load-bearing, and in different arms: the window is what makes a late
+factor inert, and the lock is what makes a cell that has already differentiated
+refuse — and also what keeps a *converted* cell converted, which is why the
+early arm collapses to 174 without it (the endogenous fate rules simply
+overwrite the ectopic fate later). So the two constructs are not one
+construct wearing two names, and the series separates them.
+
+**What the runtime does.** A `differentiate` decision may name the window it
+needs (`competence: early_plasticity`); outside the window that decision is
+refused and counted as **outside competence**, never silently applied and never
+silently dropped. A `commitment` locks `cell_type` when its `establish` clause
+matches, refuses any later fate outside the programme (counted separately), and
+passes the lock to the daughters with `inherit: daughters`. Both counts are in
+every run's summary beside `ambiguous_fates` and `revised_fates`.
+
+**Decided while implementing, for Albert to confirm or overturn.**
+
+1. **A competence governs the decisions that name it**, not every decision that
+   happens to target a fate it allows. The alternative (a window that refuses
+   any fate in `allows` after it closes) would refuse the worm's own terminal
+   fates, which are assigned from 200 min onwards: the window would abolish the
+   embryo it was meant to describe. `allows` is still checked — a decision whose
+   target the window does not allow is a compile error — and a window that
+   governs no decision is a compile error too, since it would be a claim the
+   runtime never checks.
+2. **`closed_by` names the machinery, so removing it keeps the window open.**
+   This is the only way the third arm of the series can exist; it is an addition
+   to §7.2a as first written, where a window closed unconditionally.
+3. **Commitment is established at differentiation**, so a cell *born after* the
+   perturbation is not protected: 12 of 610 cells in the last arm (8 of them in
+   the E lineage) take the forced fate at birth, because the program has no
+   determination before differentiation — a precursor is committed to nothing.
+   That is a real limitation, not a rounding error: in the embryo those cells
+   descend from a committed precursor. Stating it would need a `commitment` on
+   the founder lineages, which the atlas-driven program does not have.
+4. **Clauses specified here but not gated are compile errors, not no-ops:**
+   `maintain`, `excludes`, `hysteresis`, any `release` other than `never`, and
+   the `.exposure(window)` / `.mean(window)` reads in an `establish` clause.
+   The integrated reads in particular are **not implemented**: area E's
+   `_integrated` factors are a per-cell lookup generated from the atlas, not a
+   quantity the runtime integrates, so a program cannot yet ask for a window it
+   did not precompute. §7.2a's example `establish: ELT-2.exposure(lineage) >= 0.8`
+   therefore does not compile today.
+5. **The confidence cap lifts for these two constructs** (§2), because the gate
+   above passed: the program declares 0.6 for the window and the lock and 0.8
+   for the rule and the arms, each with its citation. What is *not* earned by
+   this run: the window's 180 min is F&K's "first 3 hours" read onto our
+   timeline, and the cell counts are our worm program's, not theirs.
+
 **How a factor is read is itself a measurement, and it has one.** Area E
 measured three readings of the same rules on 555 terminal cells: the
 instantaneous peak makes 62 errors at threshold 0.2, exposure summed along the
@@ -651,7 +735,8 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | 3 | core metabolism, mitochondrial copies, heteroplasmy | ATP budget; oxygen and glucose dependence; red blood cell glycolysis | not started |
 | 4 | partitioning division, checkpoint | dilution vs protein turnover | not started |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
-| fate | commitment, competence, integrated reads | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | specified only; the atlas test was negative |
+| fate | commitment, competence | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | **passed 2026-09-14** (§7.2a): five arms reproduced, and each construct fails an arm when removed |
+| fate | integrated reads (`.exposure(window)`, `.mean(window)`) | area E's three readings on 555 terminal cells | specified only, **not implemented**: the `_integrated` factors are a precomputed lookup |
 | fate precedence | `regime fates`, decision `priority` | area E's worm fates identical under explicit priorities | **implemented and now the default**: 1,439 of 1,439 identical, 45 ambiguous points to 0 |
 | contacts | neighbours, contact amounts, per-cell networks, seeded noise, replicate asserts | Collier 1996 equivalence group splits about evenly | **passed 2026-09-14**: 0 of 200 diverge without noise, 200 of 200 with it, first cell 48%, same winner per seed in either creation order |
 
@@ -733,7 +818,17 @@ it there, and for an imported protein that link is the transport at 0.3.
    `fates: last` remains available as the documented legacy mode.
 9. **Commitment and competence as refusals or as rates.** As specified, a
    locked cell refuses a fate outright; the published plasticity data could
-   also be read as a declining probability. The perturbation series decides.
+   also be read as a declining probability. The perturbation series decides —
+   **and it has now been run (§7.2a), without settling this one.** A refusal
+   reproduces all five arms at the resolution we score them (fates at 800 min),
+   so nothing in the series demands a rate. But Fukushige & Krause describe the
+   response as *declining rapidly over the subsequent hour* rather than stopping
+   at an edge, and a step function cannot be that. What would decide it is their
+   per-stage conversion frequencies, scored against the same program with the
+   window as a probability instead of a gate; that is a run, not an opinion, and
+   it needs the paper's own tables rather than its abstract. Until then the
+   implementation is a refusal and this document says the edge is sharper than
+   the biology.
 
 10. **Order as a construct: position, direction and time.** The language can
     say that a gene is read, not in which order a cluster is read. The
@@ -758,10 +853,13 @@ it there, and for an imported protein that link is the transport at 0.3.
 | 6. protein turnover set | **measurable** | the dilution gate run with the human and the mouse sets; if they disagree beyond their own spread, the human set is required |
 | 7. which homeostats first | data availability, not preference | the pair whose failure direction is best documented; Na⁺/K⁺ and pH stand |
 | 8. `fates: first` default | **settled by measurement** (resolved above) | |
-| 9. commitment as refusal or rate | **measurable** | the perturbation series: a sharp window says refusal, a graded decline says rate |
+| 9. commitment as refusal or rate | **measured, and still open** | the series ran and passed as a refusal (§7.2a); the published decline over the fourth hour is what a rate would fit, and separating them needs the per-stage frequencies |
 | 10. order as a construct | measurable once built | a published activation series |
 
-The next engine work that needs no preference from Albert is therefore
-decision 9's instrument (the perturbation series as a program, which area E
-can run) and decision 10's construct sketch; 4, 5 and 6 need stage 2 or 4
-first, and 2 holds stage 2.
+Decision 9's instrument is built and run (§7.2a, 2026-09-14): the series is
+`data/organisms/celegans/plasticity.bio`, `bio test` runs it, and removing
+either construct breaks an arm. The next engine work that needs no preference
+from Albert is therefore decision 10's construct sketch and the two pieces
+§7.2a leaves missing — the integrated reads as a language read rather than a
+precomputed lookup, and a `commitment` that a precursor can hold before it
+differentiates; 4, 5 and 6 need stage 2 or 4 first, and 2 holds stage 2.
