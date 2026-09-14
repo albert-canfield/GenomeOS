@@ -1,0 +1,1433 @@
+{
+  "result": "compress_genome_wide",
+  "date": "2026-09-14",
+  "chromosomes": [
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "missing": [
+    "chr1",
+    "chr2"
+  ],
+  "bases_coded": 2466609873,
+  "key_stacks": {
+    "naive": "naive",
+    "generic": "naive+adaptive",
+    "repeat_aware": "naive+adaptive+repeats",
+    "repeats_and_duplications": "naive+adaptive+repeats+duplications",
+    "full": "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers"
+  },
+  "stacks": [
+    {
+      "stack": "naive",
+      "bits_per_base": 1.7374
+    },
+    {
+      "stack": "naive+motifs",
+      "bits_per_base": 1.7371
+    },
+    {
+      "stack": "naive+coding",
+      "bits_per_base": 1.7369
+    },
+    {
+      "stack": "naive+registry",
+      "bits_per_base": 1.7369
+    },
+    {
+      "stack": "naive+tiers",
+      "bits_per_base": 1.7338
+    },
+    {
+      "stack": "naive+gc_cpg",
+      "bits_per_base": 1.7317
+    },
+    {
+      "stack": "naive+repeats",
+      "bits_per_base": 1.69
+    },
+    {
+      "stack": "naive+duplications",
+      "bits_per_base": 1.6872
+    },
+    {
+      "stack": "naive+adaptive",
+      "bits_per_base": 1.6494
+    },
+    {
+      "stack": "naive+adaptive+motifs",
+      "bits_per_base": 1.6491
+    },
+    {
+      "stack": "naive+adaptive+tiers",
+      "bits_per_base": 1.6491
+    },
+    {
+      "stack": "naive+adaptive+coding",
+      "bits_per_base": 1.649
+    },
+    {
+      "stack": "naive+adaptive+registry",
+      "bits_per_base": 1.6488
+    },
+    {
+      "stack": "naive+adaptive+gc_cpg",
+      "bits_per_base": 1.6447
+    },
+    {
+      "stack": "naive+adaptive+repeats+tiers",
+      "bits_per_base": 1.6276
+    },
+    {
+      "stack": "naive+adaptive+repeats",
+      "bits_per_base": 1.6273
+    },
+    {
+      "stack": "naive+adaptive+duplications",
+      "bits_per_base": 1.627
+    },
+    {
+      "stack": "naive+adaptive+repeats+motifs",
+      "bits_per_base": 1.627
+    },
+    {
+      "stack": "naive+adaptive+repeats+coding",
+      "bits_per_base": 1.6269
+    },
+    {
+      "stack": "naive+adaptive+repeats+registry",
+      "bits_per_base": 1.6267
+    },
+    {
+      "stack": "naive+adaptive+repeats+gc_cpg",
+      "bits_per_base": 1.6231
+    },
+    {
+      "stack": "naive+adaptive+repeats+gc_cpg+coding+registry+motifs+tiers",
+      "bits_per_base": 1.6229
+    },
+    {
+      "stack": "naive+adaptive+duplications+gc_cpg+coding+registry+motifs+tiers",
+      "bits_per_base": 1.622
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications",
+      "bits_per_base": 1.6061
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+coding+registry+motifs+tiers",
+      "bits_per_base": 1.6055
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+gc_cpg+registry+motifs+tiers",
+      "bits_per_base": 1.6024
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+gc_cpg+coding+motifs+tiers",
+      "bits_per_base": 1.6023
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+tiers",
+      "bits_per_base": 1.6023
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+gc_cpg",
+      "bits_per_base": 1.6021
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers",
+      "bits_per_base": 1.6021
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+gc_cpg+coding",
+      "bits_per_base": 1.6018
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+gc_cpg+coding+registry",
+      "bits_per_base": 1.6015
+    },
+    {
+      "stack": "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs",
+      "bits_per_base": 1.6013
+    }
+  ],
+  "layers": [
+    {
+      "layer": "repeats",
+      "title": "RepeatMasker subfamilies with divergence",
+      "items": 4452471,
+      "claimed_bases": 1291782866,
+      "annotation_bits": 135169502,
+      "claimed_share": 0.5237,
+      "annotation_bits_per_claimed_base": 0.1046,
+      "over_naive": {
+        "gross_bits_saved": 116969441,
+        "saved_inside_claim_bits": 116969441,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -18200061,
+        "gross_bits_per_claimed_base": 0.0905,
+        "net_bits_per_claimed_base": -0.0141,
+        "net_bits_per_mb_of_chromosome": -7379,
+        "pays_for_itself": false
+      },
+      "over_generic": {
+        "gross_bits_saved": 54494794,
+        "saved_inside_claim_bits": 54494794,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -80674708,
+        "gross_bits_per_claimed_base": 0.0422,
+        "net_bits_per_claimed_base": -0.0625,
+        "net_bits_per_mb_of_chromosome": -32707,
+        "pays_for_itself": false
+      },
+      "over_repeat_aware": null,
+      "cumulative_step": {
+        "gross_bits_saved": 54494794,
+        "saved_inside_claim_bits": 54494794,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -80674708,
+        "gross_bits_per_claimed_base": 0.0422,
+        "net_bits_per_claimed_base": -0.0625,
+        "net_bits_per_mb_of_chromosome": -32707,
+        "pays_for_itself": false
+      },
+      "leave_one_out": {
+        "gross_bits_saved": 49236817,
+        "saved_inside_claim_bits": 49236817,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -85932685,
+        "gross_bits_per_claimed_base": 0.0381,
+        "net_bits_per_claimed_base": -0.0665,
+        "net_bits_per_mb_of_chromosome": -34838,
+        "pays_for_itself": false
+      },
+      "claim_bits_per_base": {
+        "naive": 1.5609,
+        "generic": 1.4236,
+        "generic_plus_layer": 1.3814,
+        "full": 1.3651
+      }
+    },
+    {
+      "layer": "duplications",
+      "title": "segmental duplications as copies of a decoded locus",
+      "items": 27250,
+      "claimed_bases": 98476956,
+      "annotation_bits": 1962884,
+      "claimed_share": 0.0399,
+      "annotation_bits_per_claimed_base": 0.0199,
+      "over_naive": {
+        "gross_bits_saved": 123924709,
+        "saved_inside_claim_bits": 123924709,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 121961825,
+        "gross_bits_per_claimed_base": 1.2584,
+        "net_bits_per_claimed_base": 1.2385,
+        "net_bits_per_mb_of_chromosome": 49445,
+        "pays_for_itself": true
+      },
+      "over_generic": {
+        "gross_bits_saved": 55235838,
+        "saved_inside_claim_bits": 55235838,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 53272954,
+        "gross_bits_per_claimed_base": 0.5609,
+        "net_bits_per_claimed_base": 0.541,
+        "net_bits_per_mb_of_chromosome": 21598,
+        "pays_for_itself": true
+      },
+      "over_repeat_aware": {
+        "gross_bits_saved": 52267954,
+        "saved_inside_claim_bits": 52267954,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 50305070,
+        "gross_bits_per_claimed_base": 0.5308,
+        "net_bits_per_claimed_base": 0.5108,
+        "net_bits_per_mb_of_chromosome": 20394,
+        "pays_for_itself": true
+      },
+      "cumulative_step": {
+        "gross_bits_saved": 52267954,
+        "saved_inside_claim_bits": 52267954,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 50305070,
+        "gross_bits_per_claimed_base": 0.5308,
+        "net_bits_per_claimed_base": 0.5108,
+        "net_bits_per_mb_of_chromosome": 20394,
+        "pays_for_itself": true
+      },
+      "leave_one_out": {
+        "gross_bits_saved": 51486887,
+        "saved_inside_claim_bits": 51486887,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 49524003,
+        "gross_bits_per_claimed_base": 0.5228,
+        "net_bits_per_claimed_base": 0.5029,
+        "net_bits_per_mb_of_chromosome": 20078,
+        "pays_for_itself": true
+      },
+      "claim_bits_per_base": {
+        "naive": 1.7149,
+        "generic": 1.0182,
+        "generic_plus_layer": 0.4573,
+        "full": 0.4547
+      }
+    },
+    {
+      "layer": "gc_cpg",
+      "title": "GC and CpG composition, CpG islands",
+      "items": 23732,
+      "claimed_bases": 2466609873,
+      "annotation_bits": 689460,
+      "claimed_share": 1.0,
+      "annotation_bits_per_claimed_base": 0.0003,
+      "over_naive": {
+        "gross_bits_saved": 14103521,
+        "saved_inside_claim_bits": 14103521,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 13414060,
+        "gross_bits_per_claimed_base": 0.0057,
+        "net_bits_per_claimed_base": 0.0054,
+        "net_bits_per_mb_of_chromosome": 5438,
+        "pays_for_itself": true
+      },
+      "over_generic": {
+        "gross_bits_saved": 11575285,
+        "saved_inside_claim_bits": 11575285,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 10885824,
+        "gross_bits_per_claimed_base": 0.0047,
+        "net_bits_per_claimed_base": 0.0044,
+        "net_bits_per_mb_of_chromosome": 4413,
+        "pays_for_itself": true
+      },
+      "over_repeat_aware": {
+        "gross_bits_saved": 10217784,
+        "saved_inside_claim_bits": 10217784,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 9528324,
+        "gross_bits_per_claimed_base": 0.0041,
+        "net_bits_per_claimed_base": 0.0039,
+        "net_bits_per_mb_of_chromosome": 3863,
+        "pays_for_itself": true
+      },
+      "cumulative_step": {
+        "gross_bits_saved": 9838557,
+        "saved_inside_claim_bits": 9838557,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 9149097,
+        "gross_bits_per_claimed_base": 0.004,
+        "net_bits_per_claimed_base": 0.0037,
+        "net_bits_per_mb_of_chromosome": 3709,
+        "pays_for_itself": true
+      },
+      "leave_one_out": {
+        "gross_bits_saved": 8406239,
+        "saved_inside_claim_bits": 8406239,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 7716778,
+        "gross_bits_per_claimed_base": 0.0034,
+        "net_bits_per_claimed_base": 0.0031,
+        "net_bits_per_mb_of_chromosome": 3128,
+        "pays_for_itself": true
+      },
+      "claim_bits_per_base": {
+        "naive": 1.7374,
+        "generic": 1.6494,
+        "generic_plus_layer": 1.6447,
+        "full": 1.6021
+      }
+    },
+    {
+      "layer": "coding",
+      "title": "GENCODE canonical CDS with codon phase",
+      "items": 16776,
+      "claimed_bases": 27853646,
+      "annotation_bits": 3765097,
+      "claimed_share": 0.0113,
+      "annotation_bits_per_claimed_base": 0.1352,
+      "over_naive": {
+        "gross_bits_saved": 1345957,
+        "saved_inside_claim_bits": 1345957,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -2419140,
+        "gross_bits_per_claimed_base": 0.0483,
+        "net_bits_per_claimed_base": -0.0869,
+        "net_bits_per_mb_of_chromosome": -981,
+        "pays_for_itself": false
+      },
+      "over_generic": {
+        "gross_bits_saved": 1017925,
+        "saved_inside_claim_bits": 1017925,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -2747172,
+        "gross_bits_per_claimed_base": 0.0365,
+        "net_bits_per_claimed_base": -0.0986,
+        "net_bits_per_mb_of_chromosome": -1114,
+        "pays_for_itself": false
+      },
+      "over_repeat_aware": {
+        "gross_bits_saved": 1012986,
+        "saved_inside_claim_bits": 1012986,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -2752111,
+        "gross_bits_per_claimed_base": 0.0364,
+        "net_bits_per_claimed_base": -0.0988,
+        "net_bits_per_mb_of_chromosome": -1116,
+        "pays_for_itself": false
+      },
+      "cumulative_step": {
+        "gross_bits_saved": 773986,
+        "saved_inside_claim_bits": 773986,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -2991111,
+        "gross_bits_per_claimed_base": 0.0278,
+        "net_bits_per_claimed_base": -0.1074,
+        "net_bits_per_mb_of_chromosome": -1213,
+        "pays_for_itself": false
+      },
+      "leave_one_out": {
+        "gross_bits_saved": 747594,
+        "saved_inside_claim_bits": 747594,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -3017503,
+        "gross_bits_per_claimed_base": 0.0268,
+        "net_bits_per_claimed_base": -0.1083,
+        "net_bits_per_mb_of_chromosome": -1223,
+        "pays_for_itself": false
+      },
+      "claim_bits_per_base": {
+        "naive": 1.9681,
+        "generic": 1.8999,
+        "generic_plus_layer": 1.8634,
+        "full": 1.8355
+      }
+    },
+    {
+      "layer": "registry",
+      "title": "ENCODE cCREs by class",
+      "items": 879400,
+      "claimed_bases": 239829816,
+      "annotation_bits": 19395277,
+      "claimed_share": 0.0972,
+      "annotation_bits_per_claimed_base": 0.0809,
+      "over_naive": {
+        "gross_bits_saved": 1259175,
+        "saved_inside_claim_bits": 1259175,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -18136102,
+        "gross_bits_per_claimed_base": 0.0053,
+        "net_bits_per_claimed_base": -0.0756,
+        "net_bits_per_mb_of_chromosome": -7353,
+        "pays_for_itself": false
+      },
+      "over_generic": {
+        "gross_bits_saved": 1328016,
+        "saved_inside_claim_bits": 1328016,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -18067261,
+        "gross_bits_per_claimed_base": 0.0055,
+        "net_bits_per_claimed_base": -0.0753,
+        "net_bits_per_mb_of_chromosome": -7325,
+        "pays_for_itself": false
+      },
+      "over_repeat_aware": {
+        "gross_bits_saved": 1306803,
+        "saved_inside_claim_bits": 1306802,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -18088475,
+        "gross_bits_per_claimed_base": 0.0054,
+        "net_bits_per_claimed_base": -0.0754,
+        "net_bits_per_mb_of_chromosome": -7333,
+        "pays_for_itself": false
+      },
+      "cumulative_step": {
+        "gross_bits_saved": 635314,
+        "saved_inside_claim_bits": 635315,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -18759963,
+        "gross_bits_per_claimed_base": 0.0026,
+        "net_bits_per_claimed_base": -0.0782,
+        "net_bits_per_mb_of_chromosome": -7606,
+        "pays_for_itself": false
+      },
+      "leave_one_out": {
+        "gross_bits_saved": 602690,
+        "saved_inside_claim_bits": 602689,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -18792588,
+        "gross_bits_per_claimed_base": 0.0025,
+        "net_bits_per_claimed_base": -0.0784,
+        "net_bits_per_mb_of_chromosome": -7619,
+        "pays_for_itself": false
+      },
+      "claim_bits_per_base": {
+        "naive": 1.8812,
+        "generic": 1.8641,
+        "generic_plus_layer": 1.8585,
+        "full": 1.8293
+      }
+    },
+    {
+      "layer": "motifs",
+      "title": "JASPAR sites recorded by the motif runs",
+      "items": 123426,
+      "claimed_bases": 1309168,
+      "annotation_bits": 2104933,
+      "claimed_share": 0.0005,
+      "annotation_bits_per_claimed_base": 1.6078,
+      "over_naive": {
+        "gross_bits_saved": 764876,
+        "saved_inside_claim_bits": 764876,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -1340056,
+        "gross_bits_per_claimed_base": 0.5842,
+        "net_bits_per_claimed_base": -1.0236,
+        "net_bits_per_mb_of_chromosome": -543,
+        "pays_for_itself": false
+      },
+      "over_generic": {
+        "gross_bits_saved": 700373,
+        "saved_inside_claim_bits": 700373,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -1404560,
+        "gross_bits_per_claimed_base": 0.535,
+        "net_bits_per_claimed_base": -1.0729,
+        "net_bits_per_mb_of_chromosome": -569,
+        "pays_for_itself": false
+      },
+      "over_repeat_aware": {
+        "gross_bits_saved": 677344,
+        "saved_inside_claim_bits": 677344,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -1427588,
+        "gross_bits_per_claimed_base": 0.5174,
+        "net_bits_per_claimed_base": -1.0905,
+        "net_bits_per_mb_of_chromosome": -579,
+        "pays_for_itself": false
+      },
+      "cumulative_step": {
+        "gross_bits_saved": 576025,
+        "saved_inside_claim_bits": 576025,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -1528908,
+        "gross_bits_per_claimed_base": 0.44,
+        "net_bits_per_claimed_base": -1.1678,
+        "net_bits_per_mb_of_chromosome": -620,
+        "pays_for_itself": false
+      },
+      "leave_one_out": {
+        "gross_bits_saved": 572876,
+        "saved_inside_claim_bits": 572876,
+        "saved_outside_claim_bits": -1,
+        "net_bits_saved": -1532057,
+        "gross_bits_per_claimed_base": 0.4376,
+        "net_bits_per_claimed_base": -1.1703,
+        "net_bits_per_mb_of_chromosome": -621,
+        "pays_for_itself": false
+      },
+      "claim_bits_per_base": {
+        "naive": 1.6507,
+        "generic": 1.6092,
+        "generic_plus_layer": 1.0743,
+        "full": 1.0948
+      }
+    },
+    {
+      "layer": "tiers",
+      "title": "UNKNOWN blocks by budget tier and class",
+      "items": 22438,
+      "claimed_bases": 738116569,
+      "annotation_bits": 867392,
+      "claimed_share": 0.2992,
+      "annotation_bits_per_claimed_base": 0.0012,
+      "over_naive": {
+        "gross_bits_saved": 8897799,
+        "saved_inside_claim_bits": 8897799,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": 8030407,
+        "gross_bits_per_claimed_base": 0.0121,
+        "net_bits_per_claimed_base": 0.0109,
+        "net_bits_per_mb_of_chromosome": 3256,
+        "pays_for_itself": true
+      },
+      "over_generic": {
+        "gross_bits_saved": 657013,
+        "saved_inside_claim_bits": 657013,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -210379,
+        "gross_bits_per_claimed_base": 0.0009,
+        "net_bits_per_claimed_base": -0.0003,
+        "net_bits_per_mb_of_chromosome": -85,
+        "pays_for_itself": false
+      },
+      "over_repeat_aware": {
+        "gross_bits_saved": -899004,
+        "saved_inside_claim_bits": -899004,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -1766396,
+        "gross_bits_per_claimed_base": -0.0012,
+        "net_bits_per_claimed_base": -0.0024,
+        "net_bits_per_mb_of_chromosome": -716,
+        "pays_for_itself": false
+      },
+      "cumulative_step": {
+        "gross_bits_saved": -1924390,
+        "saved_inside_claim_bits": -1924390,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -2791782,
+        "gross_bits_per_claimed_base": -0.0026,
+        "net_bits_per_claimed_base": -0.0038,
+        "net_bits_per_mb_of_chromosome": -1132,
+        "pays_for_itself": false
+      },
+      "leave_one_out": {
+        "gross_bits_saved": -1924390,
+        "saved_inside_claim_bits": -1924390,
+        "saved_outside_claim_bits": 0,
+        "net_bits_saved": -2791782,
+        "gross_bits_per_claimed_base": -0.0026,
+        "net_bits_per_claimed_base": -0.0038,
+        "net_bits_per_mb_of_chromosome": -1132,
+        "pays_for_itself": false
+      },
+      "claim_bits_per_base": {
+        "naive": 1.6944,
+        "generic": 1.5398,
+        "generic_plus_layer": 1.5389,
+        "full": 1.4904
+      }
+    }
+  ],
+  "regions": {
+    "rows": [
+      {
+        "region": "chromosome",
+        "bases": 2466609873,
+        "interspersed_share": 0.4807,
+        "tandem_share": 0.043,
+        "duplicated_share": 0.0574,
+        "unique_bases": 1106873240,
+        "bits_per_base": {
+          "naive": 1.7374,
+          "naive+adaptive": 1.6494,
+          "naive+adaptive+repeats": 1.6273,
+          "naive+adaptive+repeats+duplications": 1.6061,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.6021
+        },
+        "unique_bits_per_base": {
+          "naive": 1.9329,
+          "naive+adaptive": 1.9324,
+          "naive+adaptive+repeats": 1.9324,
+          "naive+adaptive+repeats+duplications": 1.9324,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9229
+        },
+        "interspersed_bits_per_base": {
+          "naive": 1.581,
+          "naive+adaptive": 1.4864,
+          "naive+adaptive+repeats": 1.4432,
+          "naive+adaptive+repeats+duplications": 1.4257,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.4259
+        },
+        "tandem_bits_per_base": {
+          "naive": 1.3364,
+          "naive+adaptive": 0.7222,
+          "naive+adaptive+repeats": 0.6913,
+          "naive+adaptive+repeats+duplications": 0.6809,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.6863
+        },
+        "duplicated_bits_per_base": {
+          "naive": 1.7176,
+          "naive+adaptive": 1.2088,
+          "naive+adaptive+repeats": 1.1743,
+          "naive+adaptive+repeats+duplications": 0.8054,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.8058
+        },
+        "unique_bits_per_base_gc_standardised": {
+          "naive": 1.9306,
+          "naive+adaptive": 1.9324,
+          "naive+adaptive+repeats": 1.9324,
+          "naive+adaptive+repeats+duplications": 1.9324,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9224
+        }
+      },
+      {
+        "region": "coding_cds",
+        "bases": 27853646,
+        "interspersed_share": 0.0037,
+        "tandem_share": 0.0111,
+        "duplicated_share": 0.0691,
+        "unique_bases": 25549299,
+        "bits_per_base": {
+          "naive": 1.9681,
+          "naive+adaptive": 1.8999,
+          "naive+adaptive+repeats": 1.8994,
+          "naive+adaptive+repeats+duplications": 1.8751,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.8355
+        },
+        "unique_bits_per_base": {
+          "naive": 1.9718,
+          "naive+adaptive": 1.9521,
+          "naive+adaptive+repeats": 1.9521,
+          "naive+adaptive+repeats+duplications": 1.9521,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9107
+        },
+        "interspersed_bits_per_base": {
+          "naive": 1.879,
+          "naive+adaptive": 1.7256,
+          "naive+adaptive+repeats": 1.6945,
+          "naive+adaptive+repeats+duplications": 1.6668,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.6539
+        },
+        "tandem_bits_per_base": {
+          "naive": 1.7852,
+          "naive+adaptive": 1.7285,
+          "naive+adaptive+repeats": 1.6888,
+          "naive+adaptive+repeats+duplications": 1.6722,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.5862
+        },
+        "duplicated_bits_per_base": {
+          "naive": 1.9495,
+          "naive+adaptive": 1.2308,
+          "naive+adaptive+repeats": 1.2304,
+          "naive+adaptive+repeats+duplications": 0.8784,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.8694
+        },
+        "unique_bits_per_base_gc_standardised": {
+          "naive": 1.9601,
+          "naive+adaptive": 1.9482,
+          "naive+adaptive+repeats": 1.9482,
+          "naive+adaptive+repeats+duplications": 1.9482,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9372
+        }
+      },
+      {
+        "region": "outside_unknown_non_coding",
+        "bases": 1700639658,
+        "interspersed_share": 0.4747,
+        "tandem_share": 0.0157,
+        "duplicated_share": 0.0537,
+        "unique_bases": 819864230,
+        "bits_per_base": {
+          "naive": 1.7524,
+          "naive+adaptive": 1.6928,
+          "naive+adaptive+repeats": 1.671,
+          "naive+adaptive+repeats+duplications": 1.6515,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.6467
+        },
+        "unique_bits_per_base": {
+          "naive": 1.9328,
+          "naive+adaptive": 1.933,
+          "naive+adaptive+repeats": 1.933,
+          "naive+adaptive+repeats+duplications": 1.933,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9241
+        },
+        "interspersed_bits_per_base": {
+          "naive": 1.5693,
+          "naive+adaptive": 1.4817,
+          "naive+adaptive+repeats": 1.4382,
+          "naive+adaptive+repeats+duplications": 1.4232,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.4226
+        },
+        "tandem_bits_per_base": {
+          "naive": 1.4553,
+          "naive+adaptive": 1.3482,
+          "naive+adaptive+repeats": 1.2737,
+          "naive+adaptive+repeats+duplications": 1.2529,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.2493
+        },
+        "duplicated_bits_per_base": {
+          "naive": 1.7283,
+          "naive+adaptive": 1.201,
+          "naive+adaptive+repeats": 1.172,
+          "naive+adaptive+repeats+duplications": 0.8075,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.8074
+        },
+        "unique_bits_per_base_gc_standardised": {
+          "naive": 1.9309,
+          "naive+adaptive": 1.9333,
+          "naive+adaptive+repeats": 1.9333,
+          "naive+adaptive+repeats+duplications": 1.9333,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9235
+        }
+      },
+      {
+        "region": "structural",
+        "bases": 75037478,
+        "interspersed_share": 0.0638,
+        "tandem_share": 0.8901,
+        "duplicated_share": 0.096,
+        "unique_bases": 1131407,
+        "bits_per_base": {
+          "naive": 1.2966,
+          "naive+adaptive": 0.4452,
+          "naive+adaptive+repeats": 0.4331,
+          "naive+adaptive+repeats+duplications": 0.4022,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.4102
+        },
+        "unique_bits_per_base": {
+          "naive": 1.7305,
+          "naive+adaptive": 1.4812,
+          "naive+adaptive+repeats": 1.4812,
+          "naive+adaptive+repeats+duplications": 1.4812,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.4432
+        },
+        "interspersed_bits_per_base": {
+          "naive": 1.4017,
+          "naive+adaptive": 1.0555,
+          "naive+adaptive+repeats": 0.9432,
+          "naive+adaptive+repeats+duplications": 0.7631,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.7683
+        },
+        "tandem_bits_per_base": {
+          "naive": 1.2659,
+          "naive+adaptive": 0.3604,
+          "naive+adaptive+repeats": 0.3549,
+          "naive+adaptive+repeats+duplications": 0.3511,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.3609
+        },
+        "duplicated_bits_per_base": {
+          "naive": 1.5288,
+          "naive+adaptive": 1.0168,
+          "naive+adaptive+repeats": 0.9287,
+          "naive+adaptive+repeats+duplications": 0.606,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.6046
+        },
+        "unique_bits_per_base_gc_standardised": {
+          "naive": 1.7369,
+          "naive+adaptive": 1.5817,
+          "naive+adaptive+repeats": 1.5817,
+          "naive+adaptive+repeats+duplications": 1.5817,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.5448
+        }
+      },
+      {
+        "region": "fossil",
+        "bases": 286479266,
+        "interspersed_share": 0.6266,
+        "tandem_share": 0.0172,
+        "duplicated_share": 0.088,
+        "unique_bases": 93741219,
+        "bits_per_base": {
+          "naive": 1.7339,
+          "naive+adaptive": 1.631,
+          "naive+adaptive+repeats": 1.6061,
+          "naive+adaptive+repeats+duplications": 1.5708,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.5673
+        },
+        "unique_bits_per_base": {
+          "naive": 1.9292,
+          "naive+adaptive": 1.9306,
+          "naive+adaptive+repeats": 1.9306,
+          "naive+adaptive+repeats+duplications": 1.9306,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9195
+        },
+        "interspersed_bits_per_base": {
+          "naive": 1.6323,
+          "naive+adaptive": 1.4945,
+          "naive+adaptive+repeats": 1.4567,
+          "naive+adaptive+repeats+duplications": 1.4241,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.4243
+        },
+        "tandem_bits_per_base": {
+          "naive": 1.4213,
+          "naive+adaptive": 1.2522,
+          "naive+adaptive+repeats": 1.184,
+          "naive+adaptive+repeats+duplications": 1.1627,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.1659
+        },
+        "duplicated_bits_per_base": {
+          "naive": 1.6964,
+          "naive+adaptive": 1.2564,
+          "naive+adaptive+repeats": 1.2154,
+          "naive+adaptive+repeats+duplications": 0.8138,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.8163
+        },
+        "unique_bits_per_base_gc_standardised": {
+          "naive": 1.9286,
+          "naive+adaptive": 1.9288,
+          "naive+adaptive+repeats": 1.9288,
+          "naive+adaptive+repeats+duplications": 1.9288,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9172
+        }
+      },
+      {
+        "region": "regulatory",
+        "bases": 284095492,
+        "interspersed_share": 0.5423,
+        "tandem_share": 0.0181,
+        "duplicated_share": 0.0286,
+        "unique_bases": 120896180,
+        "bits_per_base": {
+          "naive": 1.7218,
+          "naive+adaptive": 1.6747,
+          "naive+adaptive+repeats": 1.6483,
+          "naive+adaptive+repeats+duplications": 1.6384,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.6388
+        },
+        "unique_bits_per_base": {
+          "naive": 1.931,
+          "naive+adaptive": 1.93,
+          "naive+adaptive+repeats": 1.93,
+          "naive+adaptive+repeats+duplications": 1.93,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9252
+        },
+        "interspersed_bits_per_base": {
+          "naive": 1.5621,
+          "naive+adaptive": 1.4903,
+          "naive+adaptive+repeats": 1.4443,
+          "naive+adaptive+repeats+duplications": 1.4377,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.4419
+        },
+        "tandem_bits_per_base": {
+          "naive": 1.4354,
+          "naive+adaptive": 1.3377,
+          "naive+adaptive+repeats": 1.2584,
+          "naive+adaptive+repeats+duplications": 1.2386,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.2436
+        },
+        "duplicated_bits_per_base": {
+          "naive": 1.7213,
+          "naive+adaptive": 1.3628,
+          "naive+adaptive+repeats": 1.3311,
+          "naive+adaptive+repeats+duplications": 0.9843,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.9881
+        },
+        "unique_bits_per_base_gc_standardised": {
+          "naive": 1.9286,
+          "naive+adaptive": 1.9295,
+          "naive+adaptive+repeats": 1.9295,
+          "naive+adaptive+repeats+duplications": 1.9295,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9241
+        }
+      },
+      {
+        "region": "constrained_unknown",
+        "bases": 26692123,
+        "interspersed_share": 0.4349,
+        "tandem_share": 0.016,
+        "duplicated_share": 0.0468,
+        "unique_bases": 13867380,
+        "bits_per_base": {
+          "naive": 1.8072,
+          "naive+adaptive": 1.7568,
+          "naive+adaptive+repeats": 1.7385,
+          "naive+adaptive+repeats+duplications": 1.7165,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.7125
+        },
+        "unique_bits_per_base": {
+          "naive": 1.9326,
+          "naive+adaptive": 1.9381,
+          "naive+adaptive+repeats": 1.9381,
+          "naive+adaptive+repeats+duplications": 1.9381,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9299
+        },
+        "interspersed_bits_per_base": {
+          "naive": 1.6648,
+          "naive+adaptive": 1.5844,
+          "naive+adaptive+repeats": 1.545,
+          "naive+adaptive+repeats+duplications": 1.533,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.5331
+        },
+        "tandem_bits_per_base": {
+          "naive": 1.4188,
+          "naive+adaptive": 1.3622,
+          "naive+adaptive+repeats": 1.2861,
+          "naive+adaptive+repeats+duplications": 1.2728,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.2779
+        },
+        "duplicated_bits_per_base": {
+          "naive": 1.7848,
+          "naive+adaptive": 1.2333,
+          "naive+adaptive+repeats": 1.2068,
+          "naive+adaptive+repeats+duplications": 0.7381,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.7404
+        },
+        "unique_bits_per_base_gc_standardised": {
+          "naive": 1.9311,
+          "naive+adaptive": 1.936,
+          "naive+adaptive+repeats": 1.936,
+          "naive+adaptive+repeats+duplications": 1.936,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9265
+        }
+      },
+      {
+        "region": "neutral",
+        "bases": 65812210,
+        "interspersed_share": 0.4307,
+        "tandem_share": 0.0287,
+        "duplicated_share": 0.1022,
+        "unique_bases": 31823525,
+        "bits_per_base": {
+          "naive": 1.8115,
+          "naive+adaptive": 1.72,
+          "naive+adaptive+repeats": 1.6993,
+          "naive+adaptive+repeats+duplications": 1.6617,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.6566
+        },
+        "unique_bits_per_base": {
+          "naive": 1.9296,
+          "naive+adaptive": 1.9285,
+          "naive+adaptive+repeats": 1.9285,
+          "naive+adaptive+repeats+duplications": 1.9285,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9182
+        },
+        "interspersed_bits_per_base": {
+          "naive": 1.6855,
+          "naive+adaptive": 1.579,
+          "naive+adaptive+repeats": 1.5356,
+          "naive+adaptive+repeats+duplications": 1.5095,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.5099
+        },
+        "tandem_bits_per_base": {
+          "naive": 1.5685,
+          "naive+adaptive": 1.3225,
+          "naive+adaptive+repeats": 1.2511,
+          "naive+adaptive+repeats+duplications": 1.2042,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.2065
+        },
+        "duplicated_bits_per_base": {
+          "naive": 1.7694,
+          "naive+adaptive": 1.1455,
+          "naive+adaptive+repeats": 1.1019,
+          "naive+adaptive+repeats+duplications": 0.7341,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 0.7333
+        },
+        "unique_bits_per_base_gc_standardised": {
+          "naive": 1.9296,
+          "naive+adaptive": 1.9285,
+          "naive+adaptive+repeats": 1.9285,
+          "naive+adaptive+repeats+duplications": 1.9285,
+          "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": 1.9182
+        }
+      }
+    ],
+    "unique_bootstrap": {
+      "naive": {
+        "constrained_minus_neutral": 0.003,
+        "ci95": [
+          0.0017,
+          0.0047
+        ],
+        "fossil_minus_neutral": -0.0004,
+        "fossil_ci95": [
+          -0.0019,
+          0.0013
+        ],
+        "blocks": {
+          "constrained_unknown": 736,
+          "neutral": 1765,
+          "fossil": 5350
+        }
+      },
+      "naive+adaptive": {
+        "constrained_minus_neutral": 0.0096,
+        "ci95": [
+          0.0074,
+          0.0122
+        ],
+        "fossil_minus_neutral": 0.0021,
+        "fossil_ci95": [
+          -0.0004,
+          0.0047
+        ],
+        "blocks": {
+          "constrained_unknown": 736,
+          "neutral": 1765,
+          "fossil": 5350
+        }
+      },
+      "naive+adaptive+repeats": {
+        "constrained_minus_neutral": 0.0096,
+        "ci95": [
+          0.0074,
+          0.012
+        ],
+        "fossil_minus_neutral": 0.0021,
+        "fossil_ci95": [
+          -0.0004,
+          0.0048
+        ],
+        "blocks": {
+          "constrained_unknown": 736,
+          "neutral": 1765,
+          "fossil": 5350
+        }
+      },
+      "naive+adaptive+repeats+duplications": {
+        "constrained_minus_neutral": 0.0096,
+        "ci95": [
+          0.0075,
+          0.012
+        ],
+        "fossil_minus_neutral": 0.0021,
+        "fossil_ci95": [
+          -0.0004,
+          0.0048
+        ],
+        "blocks": {
+          "constrained_unknown": 736,
+          "neutral": 1765,
+          "fossil": 5350
+        }
+      },
+      "naive+adaptive+repeats+duplications+gc_cpg+coding+registry+motifs+tiers": {
+        "constrained_minus_neutral": 0.0117,
+        "ci95": [
+          0.0095,
+          0.0145
+        ],
+        "fossil_minus_neutral": 0.0013,
+        "fossil_ci95": [
+          -0.0013,
+          0.0044
+        ],
+        "blocks": {
+          "constrained_unknown": 736,
+          "neutral": 1765,
+          "fossil": 5350
+        }
+      }
+    }
+  },
+  "per_chromosome": [
+    {
+      "chrom": "chr3",
+      "bases": 198100135,
+      "constrained_minus_neutral_full": 0.0091,
+      "ci95": [
+        0.0043,
+        0.0142
+      ],
+      "blocks": {
+        "constrained_unknown": 48,
+        "neutral": 86,
+        "fossil": 321
+      }
+    },
+    {
+      "chrom": "chr4",
+      "bases": 189752667,
+      "constrained_minus_neutral_full": 0.0129,
+      "ci95": [
+        0.009,
+        0.0164
+      ],
+      "blocks": {
+        "constrained_unknown": 52,
+        "neutral": 183,
+        "fossil": 412
+      }
+    },
+    {
+      "chrom": "chr5",
+      "bases": 181265378,
+      "constrained_minus_neutral_full": 0.0054,
+      "ci95": [
+        0.0019,
+        0.0088
+      ],
+      "blocks": {
+        "constrained_unknown": 48,
+        "neutral": 144,
+        "fossil": 357
+      }
+    },
+    {
+      "chrom": "chr6",
+      "bases": 170078522,
+      "constrained_minus_neutral_full": 0.0076,
+      "ci95": [
+        0.0009,
+        0.0172
+      ],
+      "blocks": {
+        "constrained_unknown": 58,
+        "neutral": 110,
+        "fossil": 319
+      }
+    },
+    {
+      "chrom": "chr7",
+      "bases": 158970131,
+      "constrained_minus_neutral_full": 0.0166,
+      "ci95": [
+        0.0044,
+        0.0342
+      ],
+      "blocks": {
+        "constrained_unknown": 41,
+        "neutral": 97,
+        "fossil": 314
+      }
+    },
+    {
+      "chrom": "chr8",
+      "bases": 144768136,
+      "constrained_minus_neutral_full": 0.005,
+      "ci95": [
+        -0.0043,
+        0.0194
+      ],
+      "blocks": {
+        "constrained_unknown": 52,
+        "neutral": 92,
+        "fossil": 284
+      }
+    },
+    {
+      "chrom": "chr9",
+      "bases": 121790550,
+      "constrained_minus_neutral_full": 0.0084,
+      "ci95": [
+        -0.0011,
+        0.0165
+      ],
+      "blocks": {
+        "constrained_unknown": 41,
+        "neutral": 52,
+        "fossil": 192
+      }
+    },
+    {
+      "chrom": "chr10",
+      "bases": 133262962,
+      "constrained_minus_neutral_full": 0.0125,
+      "ci95": [
+        0.0067,
+        0.0192
+      ],
+      "blocks": {
+        "constrained_unknown": 39,
+        "neutral": 89,
+        "fossil": 226
+      }
+    },
+    {
+      "chrom": "chr11",
+      "bases": 134533742,
+      "constrained_minus_neutral_full": 0.017,
+      "ci95": [
+        0.0103,
+        0.0245
+      ],
+      "blocks": {
+        "constrained_unknown": 39,
+        "neutral": 141,
+        "fossil": 368
+      }
+    },
+    {
+      "chrom": "chr12",
+      "bases": 133137816,
+      "constrained_minus_neutral_full": 0.0168,
+      "ci95": [
+        0.0033,
+        0.0319
+      ],
+      "blocks": {
+        "constrained_unknown": 32,
+        "neutral": 79,
+        "fossil": 314
+      }
+    },
+    {
+      "chrom": "chr13",
+      "bases": 97983125,
+      "constrained_minus_neutral_full": 0.0078,
+      "ci95": [
+        0.0042,
+        0.0124
+      ],
+      "blocks": {
+        "constrained_unknown": 41,
+        "neutral": 109,
+        "fossil": 184
+      }
+    },
+    {
+      "chrom": "chr14",
+      "bases": 90568149,
+      "constrained_minus_neutral_full": 0.0094,
+      "ci95": [
+        0.0016,
+        0.018
+      ],
+      "blocks": {
+        "constrained_unknown": 37,
+        "neutral": 81,
+        "fossil": 194
+      }
+    },
+    {
+      "chrom": "chr15",
+      "bases": 84641325,
+      "constrained_minus_neutral_full": -0.0002,
+      "ci95": [
+        -0.0069,
+        0.0053
+      ],
+      "blocks": {
+        "constrained_unknown": 23,
+        "neutral": 28,
+        "fossil": 98
+      }
+    },
+    {
+      "chrom": "chr16",
+      "bases": 81805943,
+      "constrained_minus_neutral_full": 0.0562,
+      "ci95": [
+        0.0036,
+        0.2178
+      ],
+      "blocks": {
+        "constrained_unknown": 40,
+        "neutral": 38,
+        "fossil": 148
+      }
+    },
+    {
+      "chrom": "chr17",
+      "bases": 82920204,
+      "constrained_minus_neutral_full": 0.0075,
+      "ci95": [
+        -0.0247,
+        0.06
+      ],
+      "blocks": {
+        "constrained_unknown": 25,
+        "neutral": 31,
+        "fossil": 156
+      }
+    },
+    {
+      "chrom": "chr18",
+      "bases": 80089605,
+      "constrained_minus_neutral_full": 0.0099,
+      "ci95": [
+        0.0064,
+        0.0136
+      ],
+      "blocks": {
+        "constrained_unknown": 38,
+        "neutral": 82,
+        "fossil": 126
+      }
+    },
+    {
+      "chrom": "chr19",
+      "bases": 58440758,
+      "constrained_minus_neutral_full": 0.0281,
+      "ci95": [
+        -0.0134,
+        0.0623
+      ],
+      "blocks": {
+        "constrained_unknown": 15,
+        "neutral": 44,
+        "fossil": 268
+      }
+    },
+    {
+      "chrom": "chr20",
+      "bases": 63944257,
+      "constrained_minus_neutral_full": 0.0117,
+      "ci95": [
+        0.0019,
+        0.02
+      ],
+      "blocks": {
+        "constrained_unknown": 21,
+        "neutral": 48,
+        "fossil": 137
+      }
+    },
+    {
+      "chrom": "chr21",
+      "bases": 40088619,
+      "constrained_minus_neutral_full": 0.0071,
+      "ci95": [
+        -0.0023,
+        0.0144
+      ],
+      "blocks": {
+        "constrained_unknown": 5,
+        "neutral": 58,
+        "fossil": 68
+      }
+    },
+    {
+      "chrom": "chr22",
+      "bases": 39159777,
+      "constrained_minus_neutral_full": 0.03,
+      "ci95": [
+        -0.0207,
+        0.0703
+      ],
+      "blocks": {
+        "constrained_unknown": 11,
+        "neutral": 33,
+        "fossil": 59
+      }
+    },
+    {
+      "chrom": "chrX",
+      "bases": 154893029,
+      "constrained_minus_neutral_full": 0.0043,
+      "ci95": [
+        -0.0085,
+        0.0117
+      ],
+      "blocks": {
+        "constrained_unknown": 25,
+        "neutral": 115,
+        "fossil": 707
+      }
+    },
+    {
+      "chrom": "chrY",
+      "bases": 26415043,
+      "constrained_minus_neutral_full": 0.1783,
+      "ci95": [
+        0.0222,
+        0.2835
+      ],
+      "blocks": {
+        "constrained_unknown": 5,
+        "neutral": 25,
+        "fossil": 98
+      }
+    }
+  ],
+  "cost": {
+    "seconds": 16863,
+    "peak_memory_gb": 10.22,
+    "temporary_peak_gb": 1.58,
+    "free_disk_min_gb": 18.8,
+    "disk_bytes_read": 48875666736,
+    "requests": 18,
+    "network_bytes": 4019760
+  },
+  "stopped": "chr2: stopped at the disk floor"
+}

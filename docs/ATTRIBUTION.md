@@ -1653,10 +1653,111 @@ duplicated.
   2.94 GB read, 0 requests (cached), 0 model calls. The 23-hour full run becomes about 13 hours on
   an idle core. Stages: the four adaptive orders 111 s, the duplication layer 44 s, the per-segment
   models 401 s, the mixing 84 s.
-- **The disk floor.** Temporaries are 26 bytes a base (the adaptive and copy code maps at 10, count
-  rows waiting at 16), 6.6 GB at chr1. Free space is checked before every step and every 30 s, and
-  the pass stops and deletes its temporaries rather than let free space fall below 15 GB, which the
-  other lanes need.
+- **The disk floor.** Temporaries are 34 bytes a base (the adaptive and copy code maps at 10, an
+  adaptive model's count rows at 24), 8.5 GB at chr1. Free space is checked before every step and
+  every 30 s, and the pass stops and deletes its temporaries rather than let free space fall below
+  15 GB, which the other lanes need.
+
+## Compression genome-wide: the tier gap holds over 901 blocks, and everything else gets worse (2026-09-14)
+
+`scripts/compress_genome_wide.py` runs the reduced pass one chromosome to a process, then sums the
+genome: `compress_pass_<chrom>` per chromosome, `compress_genome_wide` for the rollup. **Twenty-two
+of twenty-four chromosomes, 2,467 Mb of the 2,875.** chr1 and chr2 are missing, as a negative: see
+the disk paragraph below. Every stack, every layer's gain and the tier tables are summed over
+bases; the bootstrap resamples blocks within their own chromosome.
+
+**The question this was run to answer.** chr18's 43 constrained-unknown blocks carried the claim
+that the tier holds no more information per base than neutral sequence. The genome holds 1,098 such
+blocks over 32 Mb, and 901 of them (26.7 Mb, 13.9 Mb of it unique) are in these 22 chromosomes.
+
+**The tier gap holds.** Constrained_unknown minus neutral, unique bases, bits per base, resampling
+blocks within chromosome:
+
+| stack | chr18 alone (43 blocks) | genome, 22 chromosomes (736 blocks with unique bases) |
+|---|---|---|
+| naive | +0.0009 (-0.0006 to 0.0024) | **+0.0030 (0.0017 to 0.0047)** |
+| generic | +0.0084 (0.0055 to 0.0123) | **+0.0096 (0.0074 to 0.0122)** |
+| repeat-aware | — | **+0.0096 (0.0074 to 0.0120)** |
+| full | +0.0099 (0.0064 to 0.0136) | **+0.0117 (0.0095 to 0.0145)** |
+
+- **It neither grows nor vanishes.** With seventeen times the blocks the estimate moves from
+  +0.0099 to +0.0117 and the interval narrows from ±0.0037 to ±0.0025. chr18 was not a fluke and
+  was not the whole story either.
+- **It is still half a percent of the alphabet. Negative, and this is the finding.** 1.9299 against
+  1.9182 bits per base on unique sequence; GC-standardised, 1.9265 against 1.9182. The 32 Mb the
+  project calls its most interesting holds about one part in 170 more information per base than
+  unconstrained unique sequence. Deep constraint across mammals is visible to this instrument only
+  as a rounding error.
+- **Per chromosome it is positive nearly everywhere and clear of zero in two thirds.** Twenty-one
+  of the 22 chromosomes give a positive point estimate; chr15 alone is negative (-0.0002, -0.0069
+  to 0.0053). Fourteen exclude zero. The two largest estimates, chrY (+0.178) and chr16 (+0.056),
+  have the widest intervals and the fewest blocks, which is why the pooled figure is the one to
+  quote.
+- **Fossils are level with neutral. Negative for the prediction, now genome-wide.** +0.0013
+  (-0.0013 to 0.0044) over 5,350 blocks. On chr18 it read as fossils sitting below neutral; over
+  the genome there is no difference at all.
+
+**Which layers pay, over 2,467 Mb.** Net of annotation, against the generic stack, and left out of
+the full stack.
+
+| layer | claims | annotation, bits per claimed base | net per claimed base | net kb per Mb | net kb per Mb, left out | pays? |
+|---|---|---|---|---|---|---|
+| duplications | 4.0% | 0.020 | **+0.541** | **+21.6** | +20.1 | yes |
+| GC and CpG | all bases | 0.0003 | +0.0044 | +4.4 | +3.1 | yes |
+| tiers and blocks | 29.9% | 0.0012 | **-0.0003** | **-0.1** | -1.1 | **no, and this is new** |
+| repeats | 52.4% | 0.105 | -0.0625 | -32.7 | -34.8 | no |
+| cCREs | 9.7% | 0.081 | -0.0753 | -7.3 | -7.6 | no |
+| coding (codon phase) | 1.1% | 0.135 | -0.0986 | -1.1 | -1.2 | no |
+| motif sites | 0.1% | 1.608 | -1.073 | -0.6 | -0.6 | no |
+
+- **The tiers stop paying once the genome is looked at. Negative.** On chr21 and chr22 they were
+  +0.019 and +0.018 bits per claimed base over generic, and the honest reading then was "repeat
+  content by another name". Genome-wide they are -0.0003 over generic, -0.0024 over the
+  repeat-aware stack and -0.0038 left out of the full stack. The chromosomes that made them look
+  positive are the acrocentrics, whose tiers are mostly copies.
+- **Duplications still pay and still pay most, but a third of what chr21 suggested.** +21.6 kb per
+  Mb against +85 on chr21, because chr21's 12.6% duplicated share is an acrocentric short arm and
+  the genome's is 5.7%. Per claimed base the layer is as strong as ever, +0.541.
+- **GC and CpG still pay everywhere,** +4.4 kb per Mb for an annotation of three ten-thousandths of
+  a bit per base.
+- **Repeats lose more, not less, with scale.** -32.7 kb per Mb against -13 to -27 on the three
+  chromosomes. 31 bits per labelled copy is not recovered when blind copy finding already has the
+  sequence.
+- **Nothing moves unique sequence, on any tier or chromosome.** 1.91 to 1.93 bits per base
+  everywhere, coding exons included (1.9107). The whole compressible part of the genome is copies,
+  tandem arrays (structural 0.41 bits per base) and old repeats.
+
+**Stacks, bits per base, 2,467 Mb:** naive 1.7374, generic 1.6494, repeat-aware 1.6273, repeats
+plus duplications 1.6061, full 1.6021.
+
+**Efficiency, measured.**
+
+| | genome pass, 22 chromosomes |
+|---|---|
+| wall clock | 16,863 s of coding, 4 h 50 m elapsed |
+| seconds per Mb | 6.8 (chr18 7.0, chr21 14.0 where the duplication layer is heavy) |
+| peak memory | 10.2 GB, on one chromosome at a time |
+| temporary disk, peak | 1.58 GB at once for a finished chromosome |
+| free disk, minimum reached | 18.8 GB against a 15 GB floor |
+| read from local disk | 48.9 GB, almost all earlier chromosomes' FASTA for duplication partners |
+| network | 18 requests, 4.0 MB (CpG islands) |
+| model calls | 0 |
+
+- **What each layer cost.** Unchanged in shape from chr21: duplications buy the most for the least,
+  GC and CpG buy a little for 20 s a chromosome, and repeats are the most expensive layer and the
+  most negative.
+
+**chr1 and chr2 did not run. Negative, and the reason is the machine, not the method.** The pass
+was interrupted at the disk floor three times. Measured on chr2: from 28.8 GB free the pass reached
+15.6 GB in three and a half minutes and the guard refused the next step (3.8 GB more needed, floor
+15). A run instrumented afterwards showed the pass itself holding about 10 GB at that point — 5.8
+GB of count rows for one adaptive order plus its own paging — of which `du` attributes under 1 GB
+to the spill directory. Killing it returned 10 GB. With five other lanes writing, this 19 GB, 460 GB
+machine at 94% full cannot hold chr1 or chr2 under a 15 GB floor. `--rows-memory-gb` exists to spend
+memory instead of disk, and does not help here: the memory is as scarce as the disk. Both
+chromosomes are skipped, the chain resumes on them when there is room, and the rollup names them as
+missing. Between them they hold 197 of the 1,098 blocks and 5.3 of the 32 Mb, which cannot overturn
++0.0117 with an interval of 0.0095 to 0.0145.
 
 **What is weak.**
 - **The mixer.** The windowed Bayesian mixer is simple, and a stronger one (logistic mixing, as in
@@ -1670,8 +1771,9 @@ duplicated.
 - **One annotation code per layer.** The codes are universal rather than tuned. A better code for
   the coordinates could make repeats level over generic, but not the motif sites, whose address
   costs three times what they save.
-- **Chromosomes.** chr21 and chr22 have acrocentric copies that dominate their tiers; chr18 alone
-  carries the tier result.
+- **Chromosomes.** chr21 and chr22 have acrocentric copies that dominate their tiers. chr18 alone
+  carried the tier result until the genome-wide pass above; it now rests on 901 blocks over 22
+  chromosomes, with chr1 and chr2 still missing.
 
 ## The executor test: does a block execute the value stored beside it? (2026-09-14)
 

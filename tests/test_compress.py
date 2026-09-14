@@ -293,6 +293,11 @@ def test_a_segment_reads_the_same_counts_as_the_whole(monkeypatch, tmp_path):
     cz.adaptive_model(s, 12, out=out, spill=tmp_path)
     assert np.array_equal(out, cz._codes(a_ca, a_c, cz.alpha_for(12)))
     assert not any(tmp_path.iterdir())  # temporaries gone
+    # the same codes with the rows held in memory instead: no temporary file is opened at all
+    held = np.zeros(len(s), dtype=np.uint16)
+    spill = tmp_path / "unused"
+    cz.adaptive_model(s, 12, out=held, spill=spill, spill_bytes=1 << 30)
+    assert np.array_equal(held, out) and not spill.exists()
 
 
 def test_view_models_equal_the_whole_chromosome_slice():

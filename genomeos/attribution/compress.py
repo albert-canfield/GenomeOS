@@ -474,21 +474,25 @@ def count_spans(
     adaptive: bool,
     sink,
     spill: Path | None = None,
+    spill_bytes: int | None = None,
 ) -> None:
     """Hand `sink(query index, n_ca, n_c)` the counts of every query: events with its context and
     base, and with its context. Static events precede every query; adaptive events count only when
     their time precedes the query's. Contexts are hashed chunk by chunk and routed to hash groups
     of at most COUNT_GROUP rows, each sorted on its own, so memory is bounded by a group; the rows
-    wait in memory up to SPILL_BYTES and in temporary files under `spill` beyond it."""
+    wait in memory up to `spill_bytes` (SPILL_BYTES by default) and in temporary files under
+    `spill` beyond it. Raising the limit spends memory instead of disk, which is the trade when
+    free disk is the scarcer of the two."""
     hb = 62 - tb
+    limit = SPILL_BYTES if spill_bytes is None else spill_bytes
     total = len(queries) + sum(len(e) for e in events)
     if total == 0:
         return
     gb = max(0, math.ceil(math.log2(max(1.0, total / COUNT_GROUP))))
     gb = min(gb, 16)
     groups = 1 << gb
-    files = spill / f"counts_{os.getpid()}" if spill is not None and total * 8 > SPILL_BYTES else None
-    if files is None and total * 8 > SPILL_BYTES and spill is None and total > COUNT_GROUP * 64:
+    files = spill / f"counts_{os.getpid()}" if spill is not None and total * 8 > limit else None
+    if files is None and total * 8 > limit and spill is None and total > COUNT_GROUP * 64:
         raise MemoryError("count_spans needs a spill directory for this many rows")
     buckets = _Buckets(groups, files)
     tbu = np.uint64(tb)
@@ -652,13 +656,20 @@ def adaptive_counts(
 
 
 def adaptive_model(
-    s, k, alpha=None, revcomp=True, prime=None, out: np.ndarray | None = None, spill: Path | None = None
+    s,
+    k,
+    alpha=None,
+    revcomp=True,
+    prime=None,
+    out: np.ndarray | None = None,
+    spill: Path | None = None,
+    spill_bytes: int | None = None,
 ) -> np.ndarray:
     """Code lengths of the adaptive order-k model, written into `out` (a memory map, say) if given."""
     out = np.zeros(len(s), dtype=np.uint16) if out is None else out
     sink = _CodeSink(out, alpha_for(k) if alpha is None else alpha)
     events = _adaptive_events(s, k, revcomp, prime)
-    count_spans(Span(s, 0, len(s), "query", k), events, 0, _time_bits(len(s)), True, sink, spill)
+    count_spans(Span(s, 0, len(s), "query", k), events, 0, _time_bits(len(s)), True, sink, spill, spill_bytes)
     return out
 
 
@@ -2083,6 +2094,7 @@ def run_pass(
     spill: Path = Path("data/cache/compress"),
     floor_gb: float = DISK_FLOOR_GB,
     heartbeat=None,
+    rows_memory_gb: float | None = None,
 ) -> dict[str, Any]:
     """The verdict pass: every stack of `run` from one mixture per segment, in bounded memory and disk.
 
@@ -2094,16 +2106,20 @@ def run_pass(
 
     Memory: the adaptive and duplication codes of the whole chromosome live in memory maps under
     `spill` (10 bytes a base), counts are sorted by hash group, and the other models exist for one
-    segment at a time. Disk: the maps, plus count rows (16 bytes a base) while an adaptive model is
-    counted if they exceed SPILL_BYTES; free space is checked before each step and never allowed
-    below `floor_gb`. Temporaries are deleted when the chromosome ends, however it ends."""
+    segment at a time. Disk: the maps, plus an adaptive model's count rows (24 bytes a base: the
+    queries, the forward events and the reverse-strand events) while it is counted, if they exceed
+    SPILL_BYTES. `rows_memory_gb` raises that limit so the rows stay in memory instead, which is
+    the trade to make when free disk is scarcer than memory. Free space is checked before each step
+    and never allowed below `floor_gb`; temporaries are deleted when the chromosome ends, however
+    it ends."""
     ledger = Ledger(progress)
     guard = DiskGuard(spill, floor_gb)
     beat = heartbeat or (lambda: None)
     test = Chromosome.load(chrom, reference, ledger)
     trn = Chromosome.training_set([Chromosome.load(c, reference, ledger) for c in train.split(",")])
     n = test.n
-    counting = 16 * n if 16 * n > SPILL_BYTES else 0
+    rows_limit = None if rows_memory_gb is None else int(rows_memory_gb * 1e9)
+    counting = 24 * n if 24 * n > (rows_limit or SPILL_BYTES) else 0
     guard.check(10 * n + counting)
     work = spill / f"{chrom}_{os.getpid()}"
     work.mkdir(parents=True, exist_ok=True)
@@ -2124,7 +2140,7 @@ def run_pass(
         for k in ADAPTIVE_ORDERS:
             guard.check(counting)
             mm = np.lib.format.open_memmap(work / f"adaptive{k}.npy", mode="w+", dtype=np.uint16, shape=(n,))
-            adaptive_model(test.s, k, out=mm, spill=work)
+            adaptive_model(test.s, k, out=mm, spill=work, spill_bytes=rows_limit)
             mm.flush()
             adaptive.append(mm)
             temp_peak = max(temp_peak, sum(p.stat().st_size for p in work.glob("*")) + counting)
@@ -2289,6 +2305,7 @@ def run_pass(
         "free_disk_min_gb": round(guard.min_free_gb, 1),
         "disk_checks": guard.checks,
         "disk_floor_gb": floor_gb,
+        "count_rows_in_memory_gb": rows_memory_gb,
     }
     out["method"] = {
         "fitting": f"static models fitted on both strands of {train}; adaptive models fitted as they code; "

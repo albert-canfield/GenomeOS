@@ -1760,6 +1760,34 @@ in order. "Owner" is the session that holds the files today (see §7).
   - **Cost.** 28 to 29 s per Mb and 7.5 to 10 GB peak. A genome run is about 23 h as run, or
     6 to 7 h for a production pass, with chr1 and chr2 needing chunked hashing on this machine.
     ATTRIBUTION.md "Compression".
+- **Compression genome-wide, 22 of 24 chromosomes (2026-09-14, genomeos-m2).** The probe's blocker
+  was memory, and the fix is committed (a097bc3): context hashing by doubling and counting in hash
+  groups, one mixture for all 33 stacks instead of 47, and the chromosome mixed 32 Mb at a time.
+  chr21 and chr22 reproduce their committed runs to four decimals; chr18 moves by at most 0.0028
+  bits per base because the pass fixes the mixing window at W = 8 where chr18's grid had chosen 16,
+  and no verdict changes. Then the reduced pass over the genome (`scripts/compress_genome_wide.py`,
+  `compress_pass_<chrom>`, `compress_genome_wide`): 2,467 Mb, 6.8 s per Mb, 10.2 GB peak, 4 h 50 m,
+  no model call.
+  - **The tier gap holds, and is still tiny. The result the run was for.** Constrained_unknown
+    against neutral on unique bases, over 901 blocks on 22 chromosomes instead of chr18's 43:
+    +0.0117 bits per base (0.0095 to 0.0145) under the full stack, against chr18's +0.0099 (0.0064
+    to 0.0136). Seventeen times the blocks moved the estimate by 0.002 and halved the interval.
+    1.9299 against 1.9182 bits per base is one part in 170, half a percent of a two-bit alphabet.
+    The 32 Mb the project calls most interesting is not information-rich; the sign is right and the
+    size is a rounding error.
+  - **The tiers stop paying at genome scale. Negative, and new.** +0.019 bits per claimed base over
+    generic on chr21 became -0.0003 genome-wide, -0.0024 over the repeat-aware stack and -0.0038
+    left out of the full stack. What made them look positive was the acrocentrics.
+  - **Fossils are level with neutral genome-wide. Negative.** +0.0013 (-0.0013 to 0.0044) over
+    5,350 blocks.
+  - **Still paying:** duplications +0.541 bits per claimed base (+21.6 kb per Mb, a third of
+    chr21's +85 because the genome is 5.7% duplicated, not 12.6%), GC and CpG +4.4 kb per Mb.
+    **Still not:** repeats -32.7 kb per Mb (worse at scale), cCREs -7.3, coding -1.1, motifs -0.6.
+  - **chr1 and chr2 did not run. Negative, and the machine's fault.** The disk floor stopped them
+    three times: the pass holds about 10 GB while counting one adaptive order, and a 460 GB disk at
+    94% with five other lanes writing cannot spare it under a 15 GB floor. They hold 197 of the
+    1,098 blocks and 5.3 of the 32 Mb, which cannot overturn the interval. The chain resumes on
+    them when there is room. ATTRIBUTION.md "Compression genome-wide".
 - **Next.** 0. Done 2026-09-14 (the bullet above): the lexicon's axes at base resolution
   answered Question 2 negatively, so the genome-wide lexicon stays unbuilt. What could still
   sort sites into syntax and slots is measurement, not diversity: saturation mutagenesis and

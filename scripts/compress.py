@@ -41,6 +41,11 @@ def main() -> None:
     ap.add_argument("--spill", help="directory for temporary files (default data/cache/compress)")
     ap.add_argument("--segment", type=int, default=SEGMENT_BASES, help="bases mixed at a time (pass)")
     ap.add_argument("--floor-gb", type=float, default=DISK_FLOOR_GB, help="free disk never to cross")
+    ap.add_argument(
+        "--rows-memory-gb",
+        type=float,
+        help="keep this many GB of count rows in memory instead of temporary files (pass)",
+    )
     ap.add_argument("--name", help="result name for a sensitivity run")
     ap.add_argument("--heartbeat", help="job name to beat for (pass)")
     args = ap.parse_args()
@@ -76,6 +81,7 @@ def main() -> None:
                     spill=Path(args.spill) if args.spill else Path("data/cache/compress"),
                     floor_gb=args.floor_gb,
                     heartbeat=beat,
+                    rows_memory_gb=args.rows_memory_gb,
                 )
             except DiskFloorError as e:
                 say(f"{time.strftime('%H:%M:%S')} {chrom}: stopped: {e}")
