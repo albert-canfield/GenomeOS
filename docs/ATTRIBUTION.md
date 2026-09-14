@@ -4,7 +4,8 @@ Area I of ROADMAP.md. Code: `genomeos/attribution/` (`bigwig.py`, `constraint.py
 `budget.py`, `organise.py`, `candidates.py`, `unknown_scoring.py`, `lexicon.py`, `human_panel.py`),
 `scripts/budget_genome_wide.py`, `scripts/syntax_candidates.py`, `scripts/lexicon.py`, `scripts/human_panel.py`,
 `genomeos budget`. Results: `data/results/budget_<chrom>.json`, `budget_genome_wide.json`,
-`syntax_candidates_genome_wide.json`, `unknown_scoring_chr21.json`, `lexicon_<chrom>.json`, `human_panel_chr21.json`.
+`syntax_candidates_genome_wide.json`, `unknown_scoring_chr21.json`, `lexicon_<chrom>.json`, `human_panel_chr21.json`,
+`element_types.json` (`element_types.py`, `scripts/element_types.py`).
 
 ## The question, and the house
 
@@ -1151,6 +1152,151 @@ resolution: the candidates are not invariant among people. By reading: regulator
 - **The structural tracks.** gnomAD SVs include rare megabase calls (any gnomAD SV item covers
   93% of the regulatory tier, common ones 3.7%); HPRC insertion items are points.
 - **One chromosome**, small, with no Gnocchi syntax block.
+
+## Element types from deletion behaviour, against the registry's classes (2026-09-14)
+
+Code: `genomeos/attribution/element_types.py`, `scripts/element_types.py`. Result:
+`element_types.json`. No model call.
+
+**The question.** The registry's classes are a weak guide to what an element does. The class
+predicts whether a deletion lowers or raises the gene at AUC 0.532 (the epigenome layer's table
+in NODES-READER-WRITER.md). Do categories read off measured behaviour do better than the labels
+we inherited?
+
+**The vector.** Each element gets eleven numbers, taken only from the deletion archive: every gene
+in the 1 Mb window, on the RNA-seq tracks of K562, HepG2, GM12878 and IMR-90. They record:
+
+- how strong the largest effect is, and its sign;
+- the net direction over all genes and lines;
+- how many genes move by 0.1 log2 or more, and what share of the window that is;
+- how many lines act, and whether acting lines disagree in sign;
+- the spread between the lines' strongest effects;
+- whether the most-moved gene is the nearest TSS, and how far its start is;
+- the mean effect over the window.
+
+No class, mark, DNase, sequence or constraint value enters. The data are the 20,954
+enhancer-like elements of chr21 and chr22 (the fit set). The transfer set is the 37,790 of chr19
+and chr20, and chr17, chr18 and chrY are assigned for shares only: 101,278 elements in all.
+
+**The choice of k, fixed before any result.** k-means with k from 2 to 10. The rule: take the
+highest mean silhouette on a fixed 5,000-element subsample, among the k whose smallest cluster
+holds at least 2% of the elements. It picks k = 4, at silhouette 0.277. The rule is weak: k = 2
+scores 0.273, and on chr19 and chr20 the same rule picks 2.
+
+**The four types (chr21 and chr22).**
+
+| type | share | what the deletion does | registry mix (dELS / pELS) | CTCF-bound | open (DNase, per line) | with conserved bases |
+|---|---|---|---|---|---|---|
+| 0 inert | 51.5% | nothing reaches 0.1 in any line (strongest effect about 0.05) | 80 / 20 | 41% | 15% | 35% |
+| 1 silencer-like | 16.5% | expression rises; about 40% of lines act; all agree | 67 / 33 | 48% | 15% | 37% |
+| 2 activator-like | 26.2% | expression drops; about 47% of lines act; all agree | 65 / 35 | 49% | 23% | 47% |
+| 3 line-discordant | 5.7% | rises in some lines and drops in others; 68% of lines act, most genes moving | 57 / 43 | 58% | 28% | 55% |
+
+The types are behavioural. They are not the registry renamed: Cramér's V between type and class
+is 0.17, against 0.39 between class and measured chromatin state. They are not geometry either.
+Length, GC and distance to the nearest gene predict membership at AUC 0.55 to 0.63. A k-means
+on those three features agrees with the types at adjusted Rand 0.017. Of the eleven features,
+only the distance to the most-moved gene is much explained by geometry (out-of-fold r² 0.41);
+the rest reach at most 0.09. The budget tier says little. 83 to 89% of every type sits in
+annotated sequence outside the UNKNOWN blocks, and type against tier gives V = 0.04.
+
+Type 3 is the interesting one. The registry cannot see it, and it stands out on every axis the
+vector was blind to. It is the most CTCF-bound, most open and most conserved type, with the
+nearest genes (median 3.5 kb). Beyond what its class mix predicts, its chromatin state carries
+7.7 points less "no mark" and 3.6 points more active promoter. It is also what one would expect of
+promoter-proximal elements with several genes within reach, which is what makes the model's
+direction differ from line to line: a cluster to read as an observation about the model's window,
+not yet as a kind of element.
+
+**Controls.**
+
+1. *Features permuted one by one*, keeping every marginal and destroying the dependence between
+   features: silhouette falls from 0.277 to 0.090 at k = 4, inertia rises from 122,118 to 188,755,
+   and the criterion picks k = 8 on the permuted cloud. The joint structure is real.
+2. *Whole vectors shuffled between elements of the same class, CTCF flag and number of open lines*
+   (20 strata: two classes by the CTCF flag by nought to four open lines). This cannot change the cloud, so the silhouette is untouched by construction;
+   what it destroys is which element carries which behaviour. Type against measured state falls
+   from V = 0.098 to 0.063, type against conserved bases from 0.126 to 0.029, type against tier
+   from 0.040 to 0.016, and type against class stays at 0.174 (it is held fixed by the strata).
+   So the associations with chromatin and with constraint are carried by the element, not by its
+   class and openness; they are also small in absolute terms.
+3. *Transfer.* Scale and centroids fitted on chr21 and chr22, applied unchanged to chr19 and
+   chr20: adjusted Rand 0.996 against a refit on those chromosomes, 99.9% of elements in the
+   matched cluster, silhouette 0.275. Shares are stable over all seven chromosomes: inert 46 to
+   55%, silencer-like 15 to 17%, activator-like 24 to 30%, discordant 4.9 to 9.4%. The partition
+   transfers; the *number* of types does not, since the criterion picks 2 on the transfer set.
+4. *Geometry alone*: above.
+
+**Does a discovered type beat a curated one?** The same three questions, the same units (element
+by cell line), the same metric as the epigenome layer. A type is assigned to an element for a
+given line from the other three lines' behaviour only, so the outcome never enters its own
+feature. Held out two ways: five folds grouped by element within chr21 and chr22 (which
+reproduces the layer's published numbers exactly), and fitted on chr21 and chr22 then scored on
+chr19 and chr20.
+
+| features | acts (AUC) | rise among acting (AUC) | magnitude (Spearman) |
+|---|---|---|---|
+| registry class | 0.626 / 0.639 | 0.532 / 0.523 | 0.183 / 0.220 |
+| + DNase in the line | 0.645 / 0.658 | 0.594 / 0.584 | 0.217 / 0.251 |
+| + the line's marks and methylation | **0.676** / — | **0.616** / — | **0.333** / — |
+| + the line's mark peaks and methylation | 0.668 / 0.678 | 0.610 / 0.604 | 0.307 / 0.326 |
+| discovered type (from the other three lines) | 0.644 / 0.659 | 0.669 / **0.686** | 0.195 / 0.206 |
+| discovered type on top of the curated features | 0.702 / 0.717 | 0.698 / 0.705 | 0.342 / 0.368 |
+| control: type of another element of the same class and openness | 0.551 / 0.534 | 0.521 / 0.514 | 0.105 / 0.094 |
+| the same behaviour vector uncompressed | 0.772 / 0.809 | 0.842 / 0.870 | 0.433 / 0.506 |
+| two of its columns: the direction in the other three lines | 0.575 / 0.578 | 0.838 / 0.865 | 0.122 / 0.130 |
+
+Each cell is the within-chromosome cross-validation and the transfer to chr19 and chr20. The
+marks-with-fold-change row has no transfer figure: no signal profile is cached beyond chr21 and
+chr22, so that model meets constant columns there and its transfer score (0.08 for magnitude) is
+an artefact. Mark peaks plus methylation is the curated comparison on held-out chromosomes.
+
+95% intervals over 200 element resamples of the transfer set, with the share of resamples showing
+no gain:
+
+| comparison | acts | rise among acting | magnitude |
+|---|---|---|---|
+| type - curated (peaks) | -0.024 to -0.015 (1.00) | **+0.072 to +0.092 (0.00)** | -0.127 to -0.113 (1.00) |
+| type + curated - curated | +0.037 to +0.041 (0.00) | +0.095 to +0.107 (0.00) | +0.040 to +0.044 (0.00) |
+| type - shuffled type | +0.121 to +0.129 (0.00) | +0.165 to +0.180 (0.00) | +0.107 to +0.117 (0.00) |
+| type - the two direction columns | +0.076 to +0.086 (0.00) | **-0.184 to -0.173 (1.00)** | +0.070 to +0.082 (0.00) |
+
+**The answer, and why it is not the win it looks like.** On direction, the one question the
+registry answers at chance, discovered types beat the curated features by 0.07 to 0.09 AUC
+(0.686 against 0.604 on held-out chromosomes, 0.669 against 0.616 in the layer's own
+cross-validation). On the other two questions they lose: 0.02 worse on whether an element acts
+and 0.12 worse on how large the effect is. The gain survives the shuffle control, so it belongs
+to the element and not to its stratum. But it is not a discovered *category* doing the work. Two
+columns of the same vector — the sign and the net direction of the deletion in the other three
+lines — score 0.865, 0.18 above the four types, and the whole vector 0.870. Compressing
+behaviour into four names throws away most of what makes it predictive, and the k the criterion
+picks is not even the best k for the task: types alone on the transfer set score 0.515 at k = 2,
+0.686 at k = 4 and 0.831 at k = 6, without a rule that would have chosen 6 in advance.
+
+So the honest reading is that measured behaviour predicts measured behaviour: what "beats" the
+registry class is the model's own direction in three sibling cell lines, and the types are a
+lossy summary of it. As labels for the attribution the four types are worth having (they are
+stable, they transfer, and they name the discordant 5.7% the registry cannot see); as a
+classifier they are neither the cheapest nor the best use of the same data.
+
+**The caveat that limits all of it.** Every number in the vector is AlphaGenome's prediction, and
+AlphaGenome was trained on ENCODE histone ChIP-seq, DNase and RNA-seq of these same four lines.
+Where a type agrees with ENCODE-derived marks, part of that agreement is the model reading its
+own inputs back. And the direction result is a statement about the model's consistency across its
+own tracks, not about an element measured in a cell: "rise on deletion" is the model's silencer
+call, and nothing here is a deletion experiment.
+
+**Cost.** 765 s wall clock, 3.1 GB peak, 353 MB read over 49 files, 101,278 elements and 234,970
+element-cell units. Building the vectors and the clusters — the classification itself — is 33 s
+of that, 0.32 s per thousand elements; the rest is the epigenome reading (9 s) and the scoring
+with its bootstrap (709 s). Genome-wide, scaling linearly by sequence: about 709,000 elements,
+2.5 GB read, under 4 minutes of clustering, and peak memory set by the largest chromosome's
+archive rather than by the genome, since chromosomes are read one at a time. That is the cheap
+half. The deletion scoring these vectors are made of cost 395,510 s of AlphaGenome time for these
+101,278 elements (3.9 s each), which extrapolates to about 770 hours for the genome — one
+request per element, already spent on these ten chromosomes by the chain. A curated class needs
+no model call at all, which is the real cost difference between the two ways of naming an
+element.
 
 ## What comes next, in order
 
