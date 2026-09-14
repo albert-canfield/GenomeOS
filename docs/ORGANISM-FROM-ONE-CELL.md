@@ -622,3 +622,68 @@ Sent for docs/BIOLANG-v0.4 (the IR and runtime are genomeos-c1's):
   contact); a per-cell network stepped synchronously across coupled neighbours between events with seeded
   noise; daughters placed along the division axis their names say; replicate runs and a diff that scores an
   equivalence group ("exactly one of Z1.ppp, Z4.aaa is the anchor cell") rather than one fixed outcome.
+
+---
+
+## The founders decided by contact, not by name (2026-09-14, genomeos-d2)
+
+The constructs above landed in the engine on 2026-09-14 (contacts 21d3dbc; `commitment` and
+`competence` 126e65b), so the worm's founder program was rewritten to use them.
+`data/organisms/celegans/founders_contacts.bio` replaces founders.bio's three named signals
+(`from: cell = P2; to: cell = ABp`) with contact signals that name no cell: each receiver reads the
+ligand summed over the cells touching it (`mode: contact; reads: amount`), who touches whom comes
+from `contacts_embryo.tsv`, which cells present a ligand is an `express` decision carrying its
+measurement, and which cells can hear a Delta is the maternal GLP-1 inherited by AB.
+`embryo_contacts.bio` is `embryo_factors.bio` with that layer swapped in and nothing else changed.
+Measured by `scripts/celegans_contacts.py` into `data/results/celegans_contacts.json`:
+
+| test | result |
+|---|---|
+| the eight founder identities (ABa, ABp, EMS, MS, E, C, D, P4) | **8 of 8**, from contact and inheritance alone |
+| **the rearrangement**: ABa put where ABp is, in the contact table only | the fates **swap**: ABa becomes ABpPrecursor and ABp ABaPrecursor |
+| control: the same program with no contact table, so nothing touches anything | nothing is induced: ABp is ABa-like, E takes the MS fate |
+| the eight published knockouts (apx-1, glp-1, mom-2, mom-5, pie-1, skn-1, pop-1, pal-1) | **8 of 8** reproduced, as with named senders |
+| **the whole embryo against Sulston to 800 min** | **496 of 555 terminal fates, 89.4% — exactly the number before**; 1,439/1,439 cells born, 0 parent mismatches, deaths 110/110, timing median 14 min, the same five confusions |
+| cells differing between the two programs, by fate, terminal name and birth time | **1 of 1,439**: EMS itself, which is now typed EMSPolarised rather than EMSPrecursor |
+
+So the answer to "what do contacts change about the lineage score" is **nothing, and that is the
+result**: 1,438 of 1,439 cells are identical to the last digit, and the founder layer that produces
+them no longer contains a statement of the embryo's geometry. What changes is what the program can
+now be wrong about. Named senders make ABp's fate unfalsifiable — the rule says ABp, so ABp gets it.
+Read from contact, the same rule predicts the blastomere rearrangement of Priess & Thomson 1987
+(Cell 48:241) and Hutter & Schnabel 1994 (Development 120:2051): move ABa into ABp's place and it
+takes ABp's fate. That experiment is a three-line edit of a data file here and cannot be written at
+all in founders.bio.
+
+**What the table is, honestly.** `contacts_embryo.tsv` is curated from the published geometry of the
+cleavage-stage embryo (the 4-cell rhomboid in which ABp touches P2 and ABa does not; MS reaching
+ABalp and ABara at the 12-cell stage), not measured contact areas. No time-resolved contact table for
+C. elegans is held locally and the Ma 2021 atlas carries expression per cell per minute, not
+positions, so every area in it is 1.0 or 0.5 and means "touching" or "a minor face". A measured table
+would replace the file without a line changing in any program that reads it. That is the next
+measurement area E should fetch.
+
+**Two runtime changes area E would like (reported, not made; the engine is another lane's).**
+
+1. **A contact amount is read only when the receiving cell itself decides again.** A neighbour being
+   born, dividing or dying does not make its neighbours read again, so a receiver born before its
+   sender (ABp at 28 min, P2 at 42 min) never hears it. The program works around this with two
+   presence signals (`wake_at_new_delta`, `wake_at_new_wnt`) whose sender and receiver conditions are
+   states rather than names and which carry no geometry; they exist only to make receivers decide
+   again. Requested: in `Body._apply_signals(newborn)`, and where a cell divides or is culled, when
+   `self._amount_signals` is non-empty, re-resolve the cells `neighbours(...)` names. One resolve per
+   touching cell per division.
+2. **Two decisions may share an id, and the second becomes unreachable.** `Body.__init__` builds
+   `named = {x.id for v in self._by_cell.values() for x in v}` and then `_general = [d for d in
+   module.decisions if d.id not in named]`, so a decision keyed on `cell_type` is dropped from every
+   candidate list when *another* decision somewhere in the program happens to have the same id and a
+   `cell` clause. This cost an hour: `div_EMS` here collided with `div_EMS` in the generated
+   `lineage_embryo.bio` and never fired, silently and with no warning. Requested: key that set on
+   object identity, and warn (or refuse) when two decisions share an id.
+
+A third, smaller one: `cell_network` re-resolves every live cell on its cadence, and re-resolving a
+cell lets the next-highest-precedence `differentiate` fire, because `_pick_fate` skips decisions
+already in `c.fired`. With `regime { fates: first }` that overwrites the intended winner — measured
+here as 496 → 482 of 555 terminal fates with a 2-minute cadence and no other change, with
+Hypodermis → Neuron replacing Neuron → Hypodermis in the confusions. A cadence should not be able to
+change a fate the program already settled.

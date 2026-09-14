@@ -936,7 +936,17 @@ in order. "Owner" is the session that holds the files today (see §7).
   Fate precedence explicit since genomeos-c1's `regime { fates: first }`:
   `fates.bio` carries a `priority` per rule, all 1,439 fates to 800 min are
   unchanged, 45 order-dependent decision points become 0 and 620 fewer
-  decisions fire.
+  decisions fire. **The founders decided by contact** (`founders_contacts.bio`,
+  `contacts_embryo.tsv`, `embryo_contacts.bio`, `celegans_contacts`): the three
+  founder signals name no sender and no receiver, each receiver reading the
+  ligand summed over the cells touching it. 8 of 8 founder identities, 8 of 8
+  published knockouts, and against Sulston **496 of 555 terminal fates, exactly
+  the number before** — 1,438 of 1,439 cells identical in fate, terminal name and
+  birth time, the odd one being EMS's own type. What contacts buy is not score
+  but falsifiability: swapping ABa and ABp in the contact table alone swaps their
+  fates, which is the blastomere rearrangement of Priess & Thomson 1987 and
+  cannot be written with named senders. The table is curated geometry, not
+  measured contact areas; no measured table is held locally.
 - **Next.** 1. `commitment` and `competence` landed on 2026-09-14
   (genomeos-c2, 126e65b) and earn their place by ablation: strip competence and
   both late arms of the published plasticity series fail, strip commitment and the

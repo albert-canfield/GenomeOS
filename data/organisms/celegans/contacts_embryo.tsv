@@ -1,0 +1,112 @@
+# Which cells touch which, in the early C. elegans embryo: a time-resolved contact table for
+# BioLang v0.4 §7.4 (`contacts:` on the organism block). Rows are `time cell cell [area]`;
+# the neighbours of a cell at time t are the latest snapshot at or before t, filtered to cells
+# alive then, so a snapshot may name cells that are not yet born or already divided.
+#
+# WHAT THIS IS, HONESTLY. It is curated from the published geometry of the cleavage-stage embryo,
+# not measured contact areas: no time-resolved contact-area table for C. elegans is held locally,
+# and the Ma et al. 2021 atlas carries expression per cell per minute, not positions. Every area
+# below is 1.0 (touching) or 0.5 (a minor face), which is a statement about topology only. A
+# measured table would replace this file without changing a line of any program that reads it.
+#
+# Geometry and sources:
+#   2-cell   AB anterior, P1 posterior; one interface.                    Sulston et al. 1983, Dev Biol 100:64
+#   3-cell   AB divides ~2 min before P1; ABp lies between ABa and P1,
+#            so ABa's contact with the P lineage is minor.                Sulston 1983; Priess 2005, WormBook
+#   4-cell   the rhomboid: ABa-ABp, ABa-EMS, ABp-EMS, ABp-P2, EMS-P2.
+#            ABa does NOT touch P2. This single fact is what makes ABp
+#            different from ABa, and it is the fact the program now reads
+#            from here instead of naming ABp in the signal.               Priess & Thomson 1987, Cell 48:241;
+#                                                                         Mello et al. 1994, Cell 77:95;
+#                                                                         Hutter & Schnabel 1994, Development 120:2051
+#   6-cell   AB daughters over EMS and P2; only the posterior pair
+#            (ABpl, ABpr) reaches P2.                                     Priess 2005, WormBook
+#   8-cell   P2 divides into C (dorsal) and P3 (ventral).                 Sulston 1983
+#  10-cell   EMS divides into MS (anterior) and E (posterior).            Sulston 1983
+#  12-cell   MS reaches ABalp and ABara: the second Notch interaction,
+#            which makes anterior pharynx from the ABa lineage.           Priess 2005, WormBook;
+#                                                                         Hutter & Schnabel 1994
+#
+# Times are the division times of the program's own timers (distilled from Sulston 1983 via
+# WormWeb, timers.bio), so each snapshot starts when the configuration it describes first exists.
+#
+# time	cell	cell	area
+
+# --- 2-cell (0-28 min) ---
+0	AB	P1	1.0
+
+# --- 3-cell: AB has divided, P1 has not (28-42 min) ---
+28	ABa	ABp	1.0
+28	ABp	P1	1.0
+28	ABa	P1	0.5
+
+# --- 4-cell rhomboid (42-60 min) ---
+42	ABa	ABp	1.0
+42	ABa	EMS	1.0
+42	ABp	EMS	1.0
+42	ABp	P2	1.0
+42	EMS	P2	1.0
+
+# --- 6-cell: the AB daughters (60-68 min) ---
+60	ABal	ABar	1.0
+60	ABpl	ABpr	1.0
+60	ABal	ABpl	1.0
+60	ABar	ABpr	1.0
+60	ABal	EMS	1.0
+60	ABar	EMS	1.0
+60	ABpl	EMS	1.0
+60	ABpr	EMS	1.0
+60	ABpl	P2	1.0
+60	ABpr	P2	1.0
+60	EMS	P2	1.0
+
+# --- 8-cell: P2 has divided into C and P3 (68-76 min) ---
+68	ABal	ABar	1.0
+68	ABpl	ABpr	1.0
+68	ABal	ABpl	1.0
+68	ABar	ABpr	1.0
+68	ABal	EMS	1.0
+68	ABar	EMS	1.0
+68	ABpl	EMS	1.0
+68	ABpr	EMS	1.0
+68	ABpl	C	1.0
+68	ABpr	C	1.0
+68	EMS	C	1.0
+68	EMS	P3	1.0
+68	C	P3	1.0
+
+# --- 10-cell: EMS has divided into MS (anterior) and E (posterior) (76-94 min) ---
+76	ABal	ABar	1.0
+76	ABpl	ABpr	1.0
+76	ABal	ABpl	1.0
+76	ABar	ABpr	1.0
+76	ABal	MS	1.0
+76	ABar	MS	1.0
+76	ABpl	MS	1.0
+76	ABpr	MS	1.0
+76	ABpl	C	1.0
+76	ABpr	C	1.0
+76	MS	E	1.0
+76	E	C	1.0
+76	E	P3	1.0
+76	C	P3	1.0
+
+# --- 12-cell: the AB granddaughters; MS reaches ABalp and ABara (94 min on) ---
+94	ABala	ABalp	1.0
+94	ABara	ABarp	1.0
+94	ABalp	ABara	1.0
+94	ABala	ABara	0.5
+94	ABpla	ABplp	1.0
+94	ABpra	ABprp	1.0
+94	ABalp	MS	1.0
+94	ABara	MS	1.0
+94	ABala	MS	0.5
+94	ABarp	MS	0.5
+94	ABpla	MS	0.5
+94	ABpra	MS	0.5
+94	ABplp	C	1.0
+94	ABprp	C	1.0
+94	MS	E	1.0
+94	E	C	1.0
+94	E	P3	1.0
+94	C	P3	1.0
