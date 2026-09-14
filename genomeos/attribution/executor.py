@@ -1424,6 +1424,27 @@ def wide_sign_check(pairs: list[dict[str, Any]], progress=None) -> dict[str, Any
     }
 
 
+def fine_mapped_split(rows: list[dict[str, Any]], endpoint: str) -> dict[str, Any]:
+    """E1_WIDE's declared secondary: the endpoint inside the fine-mapped variants and outside them.
+
+    The two measurements agree 0.670 where DAP-G fine-maps the variant and 0.518 elsewhere; if the
+    model tracks the measurement rather than its own training data, its agreement should split the
+    same way. The read-out gene records the posterior it was chosen with, which is the split here.
+    """
+
+    def pip(row: dict[str, Any]) -> float:
+        m = re.search(r"PIP ([0-9.]+)", row.get("gene_how") or "")
+        return float(m.group(1)) if m else 0.0
+
+    fine = [r for r in rows if pip(r) >= DAPG_PIP]
+    rest = [r for r in rows if pip(r) < DAPG_PIP]
+    return {
+        "fine_mapped": tally(fine, endpoint),
+        "the_rest": tally(rest, endpoint),
+        "prediction": E1_WIDE["secondary_fine_mapped_split"],
+    }
+
+
 def wide_summary(
     built: dict[str, Any],
     rows: list[dict[str, Any]],

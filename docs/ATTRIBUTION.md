@@ -1867,15 +1867,47 @@ The plan is in `E1_WIDE` and `executor_mpra_wide.json`, written before any reque
   or a futility stop, says the model does not track an external measurement of direction and confines
   E2 and E3 to eQTL-shaped read-outs; anything between decides nothing.
 
-**And one result that needed no model at all.** The direction convention was checked genome-wide
-against GTEx before any request: among the tested GM12878 variants that also carry a significant
-eQTL in EBV-transformed lymphocytes, the reporter's direction and the eQTL's direction agree **946 of
-1,826 times (0.518, p 0.12) over all of them, and 120 of 179 (0.670, p 6e-6) where DAP-G fine-maps
-the variant**. Two independent measurements, no model involved, show the same split the model showed
-in E2 and E3: agreement at causal values, near-chance at linked ones — 0.670 against the model's
-0.679 in E2, 0.518 against its 0.531 in E3. That is the strongest external support the executor
-reading has, and it also sets the ceiling the widened E1 can reach, since a model can only agree with
-a measurement as far as the measurements agree with each other.
+**The direction convention, checked without the model.** The reporter's direction and the GTEx
+eQTL's direction agree 0.518 of the time over the tested GM12878 variants and 0.670 where DAP-G
+fine-maps them: the convention is the right way up, and the split between causal and linked values
+appears in two measurements with no model between them. It is read on its own below, "Two
+measurements agree without the model".
+
+**The widened E1 ran, and by its own pre-registration it resolves nothing.** 1,000 pairs, **1,999
+requests**, 33 minutes, the headline stratum in the pre-registered order (strongest measured effect
+first, so every pair tested has |log2FC| at or above 1: the subset where the measurement is most
+certain). Units agree **205 of 398 (0.515)**, matched nulls **191 of 381 (0.501)**, a difference of
+**+0.014**, one-sided p 0.38, upper 95% bound **0.073**. No look fired: neither success at 150 or 400
+pairs nor futility, and the run ended at the budget. The pre-registration named three outcomes and
+this is the third: a difference between 0 and 0.10 decides nothing. It is not a confirmation, and it
+is not the contradiction either — but the bound is worth stating, because it does exclude what the
+endpoint was built to find: **a difference of 0.10 or more is outside the 95% bound, and E2's +0.268
+is far outside it.** Whatever the model is doing when it agrees with a fine-mapped eQTL, it is not
+doing it against a reporter assay's direction at this size.
+
+- **The declared secondary failed.** If the model tracked the measurement rather than its own
+  training data, its agreement should have split like the two measurements do, higher on fine-mapped
+  variants. It does not: fine-mapped 17 of 33 against 12 of 18 controls (**-0.152**), the rest 188 of
+  365 against 179 of 363 (**+0.022**). Only 57 of the 1,000 pairs are fine-mapped, so this is a
+  failed prediction at low power rather than a measured absence, and it is recorded as a failure
+  either way.
+- **The arms are balanced, which the old E1's were not.** Choosing the read-out gene without the
+  model left 398 units and 381 controls answered of 1,000 each, with the same median absolute
+  predicted effect (0.00085 in both). The endpoint's null result is not an artefact of one arm being
+  filtered harder than the other. 135 test sides returned no value at all: no track for the cell, or
+  the named gene outside the window.
+- **One cell line carried it.** The order by measured strength filled the budget with GM12878 (995 of
+  1,000 pairs) and left Jurkat 5, so the pre-registered requirement of the same direction in both
+  cells could not be tested. The saturation-mutagenesis stratum was not granted quota and has not run.
+- **The comparison against E2 in the result file is descriptive only.** `compare_endpoints` was
+  written for E2 against E3, two readings of the same kind of measurement, where a gap means dilution
+  by linkage. E2 and this endpoint measure different outcomes, so the gap of +0.254 between them is
+  not that dilution and is not read as one.
+- **What it does not settle.** The reporter measures a plasmid fragment; the model predicts a
+  chromosomal gene; and the two measurements agree with each other only 0.670 of the time at best
+  (below). A null here is consistent with the model being wrong about direction, and equally with the
+  two assays being too far apart for the question. The honest summary is that the external endpoint
+  is now built, genome-wide, at 3,260 available pairs — and the first 1,000 of them did not answer.
 
 **Caveats kept with the result.**
 - **Effect sizes are tiny.** The median absolute predicted log2 fold change is 0.0012 in units and
@@ -1894,6 +1926,52 @@ a measurement as far as the measurements agree with each other.
   after it, 19 for the last 23 pairs) and 2,000 for E3, all through the existing adapter path with a
   1 Mb window and both alleles in one request. The rerun that produced the committed hold-out
   numbers spent none: every variant was already in the cache.
+
+## Two measurements agree without the model, and they split the same way (2026-09-14)
+
+Every claim in this area rests on one model's predictions, and the model learned from ENCODE tracks
+that are kin to the outcomes it is asked about. This reading does not. It compares two measurements
+of the same alleles, made by different laboratories with different instruments, with nothing between
+them.
+
+- **A reporter assay.** MPRAVarDB's log2 fold change for the alternative allele over the reference
+  in GM12878, a lymphoblastoid line: a few hundred bases of human sequence on a plasmid, the two
+  alleles side by side, transcripts counted.
+- **An expression quantitative trait locus.** GTEx v8's slope for the same alternative allele in
+  EBV-transformed lymphocytes: the gene's expression in hundreds of donors, against the allele they
+  carry in their own chromosomes.
+- **Fine-mapping to separate cause from company.** DAP-G's posterior at that very variant, the same
+  instrument E2 and E3 used: at or above 0.5 the allele is probably the cause; below it the allele is
+  usually a passenger of one.
+
+Over the 1,826 variants this project's widened E1 tests that carry both measurements, **the two
+directions agree 946 times, 0.518, which is chance (p 0.12)**. Among the 179 that DAP-G fine-maps,
+**they agree 120 times, 0.670, p 6e-6**. Code: `attribution/executor.py`'s `wide_sign_check`, run by
+`scripts/executor_test.py --wide`, one GTEx tissue streamed through `attribution/eqtl.py`. No model
+request.
+
+**Why it matters.** The executor test found the model agreeing with the measured direction 0.679 of
+the time at fine-mapped values and 0.531 at linked ones, and the hold-out read that fall as the
+dilution a real executor predicts. The obvious objection was that both numbers describe the model:
+its training data is expression of the GTEx kind, so it may simply be reproducing what it learned,
+split by how clean the eQTL is. Here are two measurements, neither of them the model's training data,
+and neither of them the model, showing the same two numbers: 0.670 against 0.679, 0.518 against
+0.531. The split between causal and linked values is a property of the alleles, not of AlphaGenome.
+
+**What it does not establish.**
+- **The two assays measure different things.** A plasmid fragment in a dish is not a gene in its
+  chromosome, and a 0.670 ceiling is exactly what that mismatch predicts: even where both call the
+  allele causal, a third of the time they disagree about which way it pushes.
+- **The eQTL's gene need not be the element's gene.** The reporter has no target; the eQTL names one.
+  The comparison is of signs, not of targets.
+- **The variants are not a random sample.** MPRA libraries are built from eQTL and GWAS variants, so
+  the overlap is enriched for exactly the sequence both instruments were pointed at.
+- **One cell type.** Lymphoblastoid lines are where both assays exist in bulk; nothing here shows the
+  same holds in liver or in neurons.
+- **179 variants** carry the fine-mapped reading. It is a clear result at that size, and a small one.
+
+It is nonetheless the first result in this area whose evidence does not pass through a model, and it
+supports the reading the executor test reached by a different route.
 
 ## What comes next, in order
 

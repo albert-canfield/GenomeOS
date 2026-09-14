@@ -62,10 +62,18 @@ def wide(args, say, t0: float) -> None:
     out["no_call_grid"] = {e: [ex.recall(rows, e, t) for t in (0.0, 0.001, 0.01)] for e in sorted(wanted)}
     with gzip.open(ex.LANE / f"wide_rows_{'-'.join(sorted(wanted))}.json.gz", "wt") as fh:
         json.dump(rows, fh)
+    out["fine_mapped_split"] = {e: ex.fine_mapped_split(rows, e) for e in sorted(wanted)}
     primary = ex.LANE / "run_rows_E1_mpra-E2_eqtl.json.gz"
     if primary.exists():
         with gzip.open(primary, "rt") as fh:
             out["against_e2"] = ex.compare_endpoints(json.load(fh), rows, b=sorted(wanted)[0])
+        out["against_e2"]["note"] = (
+            "descriptive only. compare_endpoints was written for E2 against E3, two readings of the same "
+            "kind of measurement, and its 'diluted' wording means dilution by linkage there. E2 and this "
+            "endpoint measure different outcomes - a gene's expression across donors against a reporter "
+            "fragment's activity - so a gap between them is not the hold-out's dilution and must not be "
+            "read as one"
+        )
     out["pre_registration"] = ex.E1_WIDE
     out["seconds"] = round(time.time() - t0, 1)
     say(f"saved {save_result('executor_mpra_wide_run', out)}")
