@@ -1128,6 +1128,24 @@ in order. "Owner" is the session that holds the files today (see §7).
   `LIBRARIES` catalogue on import, since `genomeos/lib` is area C's file;
   `register(LIBRARIES, LAYERS)` wires it in one call whenever that area wants
   it, and a test asserts that importing `genomeos.cancer` mutates nothing.
+- **Healthy tissue shipped rather than fetched (2026-09-15).** The Human
+  Protein Atlas answers a whole protein class in one request, so its 5,573
+  predicted membrane proteins and 384 CD markers are fetched once, kept to
+  the twenty tissues GenomeOS weighs, and shipped gzipped in the package
+  (5,588 genes, 396 KB, two requests, 7 s; `scripts/normal_tissue.py`, record
+  in `normal_tissue_atlas`). Normal-tissue safety is now answered offline for
+  every surface gene instead of being unknown and capping the score, and a
+  scan over the membrane universe becomes possible, which is the missing
+  input for expression-driven targets. **Two of the twenty tissues had never
+  been read**: the Atlas returns `t_RNA_skin_1` and `t_RNA_stomach_1` under
+  the titles "skin 1" and "stomach 1", the lookup asked for "skin" and
+  "stomach", and both were silently recorded as absent on every gene ever
+  scored. Skin is where an EGFR antibody's classic toxicity shows, and EGFR
+  carries 48.4 nTPM there. Column titles are derived from the field ids now
+  and a test asserts all twenty are read. The benchmark does not move: both
+  surface cases already sit on the poor-safety cap (EGFR raw 0.572, held at
+  0.5), which is the reason a benchmark is not the only control a change
+  needs.
 - **Missing.** Expression-driven targets such as CD19 and BCMA, which need patient
   RNA rather than a variant; the demo runs at data level 1 only; what a deep
   deletion is actually worth (the dependency it creates) is not modelled.

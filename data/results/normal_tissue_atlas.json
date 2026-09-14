@@ -1,0 +1,95 @@
+{
+  "result": "normal_tissue_atlas",
+  "date": "2026-09-15",
+  "source": "Human Protein Atlas consensus tissue RNA (proteinatlas.org), CC BY-SA 4.0",
+  "queries": [
+    "protein_class:Predicted membrane proteins",
+    "protein_class:CD markers"
+  ],
+  "genes_per_query": {
+    "protein_class:Predicted membrane proteins": 5573,
+    "protein_class:CD markers": 384
+  },
+  "tissues": [
+    "heart muscle",
+    "cerebral cortex",
+    "cerebellum",
+    "hypothalamus",
+    "bone marrow",
+    "lung",
+    "liver",
+    "kidney",
+    "adrenal gland",
+    "pancreas",
+    "skeletal muscle",
+    "spleen",
+    "thyroid gland",
+    "colon",
+    "stomach",
+    "esophagus",
+    "skin",
+    "retina",
+    "testis",
+    "placenta"
+  ],
+  "genes": 5588,
+  "genes_with_tissue_values": 5588,
+  "level": "population-level healthy tissue; never a patient's tumour",
+  "limits": [
+    "20 tissues, not the body: a tissue not queried is not a tissue where the gene is absent",
+    "a gene outside the membrane and CD-marker classes is absent from this table, which is not evidence that it is absent from healthy tissue",
+    "RNA is not protein, and nTPM across tissues is not receptors per cell"
+  ],
+  "protein_class_flags": {
+    "approved_drug_target": 497,
+    "cancer_related": 386,
+    "cd_marker": 384,
+    "membrane": 5571
+  },
+  "genes_with_specificity_class": 5588,
+  "examples": {
+    "ERBB2": {
+      "specificity": "Low tissue specificity",
+      "highest_queried_tissue": {
+        "tissue": "esophagus",
+        "nTPM": 98.3
+      }
+    },
+    "EGFR": {
+      "specificity": "Tissue enhanced",
+      "highest_queried_tissue": {
+        "tissue": "placenta",
+        "nTPM": 61.8
+      }
+    },
+    "CD19": {
+      "specificity": "Group enriched",
+      "highest_queried_tissue": {
+        "tissue": "spleen",
+        "nTPM": 70.8
+      }
+    },
+    "TNFRSF17": {
+      "specificity": "Tissue enhanced",
+      "highest_queried_tissue": {
+        "tissue": "colon",
+        "nTPM": 27.0
+      }
+    },
+    "MSLN": {
+      "specificity": "Tissue enhanced",
+      "highest_queried_tissue": {
+        "tissue": "lung",
+        "nTPM": 67.6
+      }
+    },
+    "FOLH1": {
+      "specificity": "Tissue enhanced",
+      "highest_queried_tissue": {
+        "tissue": "liver",
+        "nTPM": 31.2
+      }
+    }
+  },
+  "note": "The table itself ships gzipped inside the package (genomeos/therapeutics/data/normal_tissue.json.gz); the raw download is discarded."
+}

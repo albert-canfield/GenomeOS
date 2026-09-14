@@ -68,6 +68,19 @@ CRITICAL_TISSUES: dict[str, tuple[str, float]] = {
 
 HPA_EXTRA_COLUMNS = ("g", "eg", "scl", "scml", "rnats", "rnatd", "rnatsm", "pc", "secretome_location")
 
+
+def hpa_column(field: str) -> str:
+    """The column title the Atlas returns for one of its tissue field ids.
+
+    Derived rather than written down, because writing it down lost two of the
+    twenty weighed tissues in silence: the fields `t_RNA_skin_1` and
+    `t_RNA_stomach_1` come back as "skin 1" and "stomach 1", the lookup asked
+    for "skin" and "stomach", and skin is where an EGFR antibody's classic
+    toxicity shows.
+    """
+    return f"Tissue RNA - {field.removeprefix('t_RNA_').replace('_', ' ')} [nTPM]"
+
+
 HPA_LICENCE = "Human Protein Atlas, CC BY-SA 4.0 (proteinatlas.org)"
 OT_LICENCE = "Open Targets Platform, CC0 1.0 (platform.opentargets.org)"
 
@@ -294,6 +307,13 @@ class HpaExpressionProvider:
     def normal_expression(self, gene: str) -> Answer:
         gene = gene.upper()
         row = self.cache.get(gene)
+        if row is None:
+            # The packaged atlas holds the same Atlas columns for the whole
+            # membrane and CD-marker universe, so a surface gene is answered
+            # offline and only an intracellular one still needs the network.
+            from .atlas import row as atlas_row
+
+            row = atlas_row(gene)
         if row is None:
             if not self.net:
                 return Answer.none(f"no cached HPA record for {gene} and network disabled")

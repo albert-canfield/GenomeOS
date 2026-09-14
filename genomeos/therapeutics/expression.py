@@ -22,7 +22,7 @@ from typing import Any
 
 from .evidence import Evidence, database, derived
 from .model import Measure, NormalTissueProfile, TissueExpression, TumourState
-from .providers import CRITICAL_TISSUES, Answer
+from .providers import CRITICAL_TISSUES, Answer, hpa_column
 
 #: nTPM above which a healthy tissue counts as expressing the gene at all.
 DETECTION_NTPM = 1.0
@@ -47,9 +47,8 @@ SPECIFICITY_HINT = {
 
 def _tissue_rows(row: dict[str, Any]) -> list[TissueExpression]:
     out: list[TissueExpression] = []
-    for tissue, weight in CRITICAL_TISSUES.values():
-        key = f"Tissue RNA - {tissue} [nTPM]"
-        raw = row.get(key)
+    for field, (tissue, weight) in CRITICAL_TISSUES.items():
+        raw = row.get(hpa_column(field))
         if raw is None:
             # HPA drops null columns; keep the tissue with an explicit absence
             out.append(TissueExpression(tissue, None, "nTPM", None, weight >= 0.8, weight))

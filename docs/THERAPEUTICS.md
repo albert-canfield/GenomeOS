@@ -119,6 +119,38 @@ Copy number, supplied with `--cnv`, is treated as a third thing again: it bounds
 how much protein a cell could display and never shows that it does, so it scores
 at most 0.5 and the basis line says why.
 
+### Healthy tissue, shipped rather than fetched
+
+Every candidate needs the same question answered — how much of this protein a
+healthy person already carries, and where — and it used to cost one Human
+Protein Atlas request per gene. Offline that returned "no cached HPA record",
+normal-tissue safety was unknown, and every candidate was capped for missing
+safety data; and scanning the membrane universe for a target was impossible,
+because five thousand requests is not a scan.
+
+The Atlas answers a whole protein class in one request, so
+`scripts/normal_tissue.py` fetches the two that matter — its 5,573 predicted
+membrane proteins and its 384 CD markers, which is where the antigens of the
+approved cell therapies live — keeps the twenty tissues GenomeOS weighs, and
+ships the result gzipped inside the package
+(`genomeos/therapeutics/data/normal_tissue.json.gz`, 5,588 genes, 396 KB, two
+requests, seven seconds). The raw download is discarded and the record of the
+run is committed as `normal_tissue_atlas`. Rows keep the Atlas's own column
+names, so a local row and a freshly fetched one go through `normal_profile`
+unchanged.
+
+**Two of the twenty tissues had never been read.** The Atlas returns the
+`t_RNA_skin_1` and `t_RNA_stomach_1` fields under the titles "skin 1" and
+"stomach 1"; the lookup asked for "skin" and "stomach" and silently got
+nothing, so both were recorded as an explicit absence on every gene ever
+scored. Skin is where an EGFR antibody's classic toxicity shows: EGFR carries
+48.4 nTPM there and it now appears among EGFR's tissues at risk, where it
+belongs. Column titles are derived from the field ids now rather than written
+down, and a test asserts all twenty are read. The benchmark does not move,
+because both surface cases already sit on the poor-safety cap — EGFR's raw
+score is 0.572 and the cap holds it at 0.5 — which is why a benchmark is not
+the only control a change needs.
+
 ## Accessibility is not a membrane word
 
 The single most important correction in this module: UniProt annotates SRC as
