@@ -120,7 +120,7 @@
       "ok": true
     },
     "MOM-5": {
-      "expect": "E takes the MS fate: the Frizzled receptor is gone",
+      "expect": "E takes the MS fate: the receptor is gone",
       "founders": {
         "ABa": "ABaPrecursor",
         "ABp": "ABpPrecursor",
@@ -210,13 +210,13 @@
       "timing_median_min": 14.292007832764654,
       "timing_p90_min": 41.97130230703772,
       "fates_checked": 555,
-      "fates_correct": 496,
+      "fates_correct": 501,
       "fates_unknown": 0,
-      "fate_accuracy": 0.8937,
+      "fate_accuracy": 0.9027,
       "fate_confusion": {
         "Neuron->Hypodermis": 14,
-        "GliaSheath->Hypodermis": 13,
         "Muscle->Neuron": 9,
+        "GliaSheath->Hypodermis": 8,
         "GliaSocket->Neuron": 5,
         "GliaSocket->Hypodermis": 4,
         "Coelomocyte->Muscle": 4,
@@ -278,13 +278,13 @@
       "timing_median_min": 14.292007832764654,
       "timing_p90_min": 41.97130230703772,
       "fates_checked": 555,
-      "fates_correct": 496,
+      "fates_correct": 501,
       "fates_unknown": 0,
-      "fate_accuracy": 0.8937,
+      "fate_accuracy": 0.9027,
       "fate_confusion": {
         "Neuron->Hypodermis": 14,
-        "GliaSheath->Hypodermis": 13,
         "Muscle->Neuron": 9,
+        "GliaSheath->Hypodermis": 8,
         "GliaSocket->Neuron": 5,
         "GliaSocket->Hypodermis": 4,
         "Coelomocyte->Muscle": 4,
@@ -352,6 +352,6 @@
       }
     }
   },
-  "seconds": 5.3,
+  "seconds": 5.0,
   "pass": true
 }

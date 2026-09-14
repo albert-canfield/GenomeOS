@@ -744,3 +744,78 @@ anchor decision. `competence` cannot say it. A window governs the cells its `whe
 leaves every other cell competent, so "only these two may take this fate" has to be written inside
 out, as a window closed at time zero for everyone else. A `competence` with an `only:` sense, or a
 `restricts:` clause, would say it directly.
+
+## Glia from factors: sheath partly, socket not at all (2026-09-14, genomeos-d2)
+
+Glia were the clearest failure of the factor rules: of 555 embryonic terminal cells, 22 are sheath
+glia and 18 socket glia, and the rules called 6 and 9 of them. The rest went to the hypodermis and
+neuron rules, because a glial cell is the sister of a sensory neuron, carries that neuron's factors,
+and carries the ectodermal factors (ELT-1, LIN-26, NHR-25) the hypodermis rules read.
+`scripts/celegans_glia.py` asks whether anything in the Ma 2021 atlas separates them;
+`data/results/celegans_glia.json` holds the answer.
+
+**The question is answerable.** All 40 glia are tracked in the atlas and so are all 40 sisters, and
+under every read of the atlas **no glial cell has the same factor set as a non-glial cell**. Nothing
+rules separability out in principle, so a negative here is about the factors, not about coverage.
+
+**Sheath glia: yes, partly, and by the gene the literature names.** PROS-1/Prospero is the published
+sheath-glia regulator (Wallace et al. 2016, Development 143:3016). Alone it is worth nothing
+(precision 0.27: it claims 22 cells, 8 of them neurons and 4 coelomocytes). Conjoined with the
+factors that say which class the cell is in, it sharpens:
+
+| rule, on the read the program's reader gives a cell | claims | sheath | precision |
+|---|---|---|---|
+| PROS-1 | 22 | 6 | 0.27 |
+| PROS-1 ∧ NHR-25 (the non-neuronal ectodermal class) | 10 | 6 | 0.60 |
+| PROS-1 ∧ SOX-2 (the neural class) | 6 | 5 | 0.83 |
+| **PROS-1 ∧ NHR-25 ∧ SOX-2** | **5** | **5** | **1.00** |
+
+The third rule is now in the program (`fate_rules.CITED_GLIA_RULES` → `fates.bio`, priority between
+the muscle and hypodermis rules, read instantaneously because the lineage-integrated read carries no
+sheath signal at all). Measured through the Body and LineageDiff: **sheath glia 6/22 → 11/22**, with
+hypodermis still 69/69, neuron 212/226 and muscle 113/122 — nothing is lost elsewhere — and the
+program as a whole **496 → 501 of 555 (89.4% → 90.3%)**, 902 → 907 of 961 to the adult. The two
+other published sheath factors in the atlas do worse: MLS-2 (Yoshimura et al. 2008) precision 0.27,
+HLH-17 (McMiller & Johnson 2005) precision 0.045 — it is present in 264 of 555 cells.
+
+**Socket glia: no. These cells are not separable by the factors we have.** EGL-13/SoxD, the
+published socket factor (Feng et al. 2013), claims 34 cells and gets 1 right. The best socket rule
+that exists at all, SOX-2 ∧ PAG-3, claims 22 cells and gets 9 — it takes 12 neurons to win 9 socket
+glia, and putting it in the program **costs 4 terminal fates net**. So socket glia have no rule, and
+that is measured rather than forgotten.
+
+**The ceiling, exhaustively.** Over all 250 factors with support, all 25,867 pairs and every triple
+— the whole hypothesis class a BioLang `when:` clause can express on measured factor presence —
+scored by what the rule would be worth to the program:
+
+| target | best single | best pair | best triple |
+|---|---|---|---|
+| sheath | 0 fates | +4 (PROS-1 ∧ SOX-2) | **+6** (ALY-1 ∧ EOR-1 ∧ PROS-1) |
+| socket | 0 fates | +2 (MLS-2 ∧ MML-1) | **+3** (CEH-32 ∧ HAM-2 ∧ HLH-4) |
+
+Every one of those is chosen on the same 555 cells it is scored on, so they are upper bounds, and
+the best sheath rules all contain PROS-1 while the best socket rules contain nothing anyone has
+named. The rule adopted is worth +5 of the +6 ceiling and is cited rather than fitted to the maximum.
+
+**And the fitted rules do not generalise.** Rules fitted on seven founder sublineages at a median
+in-sample precision of 1.0 score, on the eighth: glia precision **0.345** (peak read, 10 right of 29
+claimed), 0.30 on the mean read, 0.25 on the integrated read; sheath 0.214, socket 0.286. Against a
+base rate of 7.2% that is four to nine times chance — the signal is real — and it is nowhere near
+the 0.8 precision the program requires of a rule.
+
+**Why, as far as the data can say.** A glial cell differs from its sister by a median of **39
+factors**, two sisters of the same tissue by **35**, and two sisters of different tissues by **40**:
+the sister difference is almost all measurement and lineage, and carries little about the fate. The
+atlas's own floor is in the same place — the 23 factors followed by two reporter strains disagree on
+presence in the same cell 20.7% of the time (median per factor). A rule that has to separate two
+cells born from one mother a few minutes apart is working below that floor. What would separate them
+is not another transcription factor at this resolution: it is the two things this atlas does not
+have — the ligand a glial cell receives from its neighbours, and the terminal genes (the glial
+secretome PROS-1 drives) that come after the bean stage where the atlas stops.
+
+One consequence in another lane's file, recorded here. `plasticity.bio`'s terminal arm asserts that
+no cell already differentiated at 700 min is lost when HLH-1 arrives, with the bound for each type
+being the number of such cells — and the hypodermis bound was 99 because five sheath glia were
+counted as hypodermis. With the sheath rule the number is 94, so the bound is 94 and a fourth
+assert (`type GliaSheath at 800 min >= 11`) now carries the five cells that moved. The arm is
+stronger, not weaker: it protects the same cells under their right names.

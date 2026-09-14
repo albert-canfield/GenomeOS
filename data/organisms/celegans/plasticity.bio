@@ -103,7 +103,10 @@ experiment hlh1_terminal_mes2 {
   expect: "cells that have already differentiated do not respond even with the window held open, so plasticity and commitment are two different claims (Fukushige & Krause 2005; Yuzyuk et al. 2009). Each bound below is the number of cells of that type already differentiated at 700 min, when the factor arrives: none of them may be lost"
   assert: type Neuron at 800 min >= 233
   assert: type Intestine at 800 min >= 26
-  assert: type Hypodermis at 800 min >= 99
+  # 94, not 99: the sheath-glia rule in fates.bio (PROS-1, NHR-25, SOX-2) now takes five cells the
+  # hypodermis rules used to claim, so they are counted on the line below instead (genomeos-d2)
+  assert: type Hypodermis at 800 min >= 94
+  assert: type GliaSheath at 800 min >= 11
   evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (lost completely in terminally differentiated cells)"
   confidence: 0.6
 }

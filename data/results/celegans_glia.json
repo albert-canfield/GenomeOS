@@ -1,0 +1,1267 @@
+{
+  "result": "celegans_glia",
+  "date": "2026-09-14",
+  "question": "does anything in the Ma 2021 atlas separate sheath and socket glia from their sister neurons and from the hypodermis?",
+  "cells": {
+    "embryonic_terminal": 555,
+    "sheath": 22,
+    "socket": 18
+  },
+  "coverage": {
+    "glia_tracked_in_the_atlas": 40,
+    "glia_whose_sister_is_tracked": 40,
+    "of": 40,
+    "glia_sharing_a_feature_vector_with_a_non_glial_cell": {
+      "peak_in_own_life": 0,
+      "mean_over_own_life": 0,
+      "integrated_along_lineage": 0,
+      "reader": 0
+    },
+    "note": "every glial cell and every sister is measured, and no glial cell has the same factor set as a non-glial one, so nothing rules separability out in principle"
+  },
+  "best_single_factors": {
+    "peak_in_own_life": {
+      "sheath": [
+        {
+          "factor": "PROS-1",
+          "f1": 0.273,
+          "precision": 0.273,
+          "recall": 0.273,
+          "claimed": 22
+        },
+        {
+          "factor": "MED-2",
+          "f1": 0.27,
+          "precision": 0.333,
+          "recall": 0.227,
+          "claimed": 15
+        },
+        {
+          "factor": "SEM-2",
+          "f1": 0.261,
+          "precision": 0.25,
+          "recall": 0.273,
+          "claimed": 24
+        },
+        {
+          "factor": "NHR-25",
+          "f1": 0.254,
+          "precision": 0.154,
+          "recall": 0.727,
+          "claimed": 104
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.248,
+          "precision": 0.15,
+          "recall": 0.727,
+          "claimed": 107
+        },
+        {
+          "factor": "ALR-1",
+          "f1": 0.226,
+          "precision": 0.194,
+          "recall": 0.273,
+          "claimed": 31
+        }
+      ],
+      "socket": [
+        {
+          "factor": "PAG-3",
+          "f1": 0.392,
+          "precision": 0.303,
+          "recall": 0.556,
+          "claimed": 33
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.288,
+          "precision": 0.168,
+          "recall": 1.0,
+          "claimed": 107
+        },
+        {
+          "factor": "HAM-2",
+          "f1": 0.205,
+          "precision": 0.121,
+          "recall": 0.667,
+          "claimed": 99
+        },
+        {
+          "factor": "UNC-39",
+          "f1": 0.194,
+          "precision": 0.136,
+          "recall": 0.333,
+          "claimed": 44
+        },
+        {
+          "factor": "HLH-30",
+          "f1": 0.187,
+          "precision": 0.112,
+          "recall": 0.556,
+          "claimed": 89
+        },
+        {
+          "factor": "CEH-43",
+          "f1": 0.185,
+          "precision": 0.104,
+          "recall": 0.833,
+          "claimed": 144
+        }
+      ],
+      "glia": [
+        {
+          "factor": "SOX-2",
+          "f1": 0.463,
+          "precision": 0.318,
+          "recall": 0.85,
+          "claimed": 107
+        },
+        {
+          "factor": "CEH-43",
+          "f1": 0.348,
+          "precision": 0.222,
+          "recall": 0.8,
+          "claimed": 144
+        },
+        {
+          "factor": "NHR-25",
+          "f1": 0.306,
+          "precision": 0.212,
+          "recall": 0.55,
+          "claimed": 104
+        },
+        {
+          "factor": "PAG-3",
+          "f1": 0.301,
+          "precision": 0.333,
+          "recall": 0.275,
+          "claimed": 33
+        },
+        {
+          "factor": "ALR-1",
+          "f1": 0.282,
+          "precision": 0.323,
+          "recall": 0.25,
+          "claimed": 31
+        },
+        {
+          "factor": "HLH-30",
+          "f1": 0.279,
+          "precision": 0.202,
+          "recall": 0.45,
+          "claimed": 89
+        }
+      ]
+    },
+    "mean_over_own_life": {
+      "sheath": [
+        {
+          "factor": "PROS-1",
+          "f1": 0.294,
+          "precision": 0.417,
+          "recall": 0.227,
+          "claimed": 12
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.277,
+          "precision": 0.181,
+          "recall": 0.591,
+          "claimed": 72
+        },
+        {
+          "factor": "SEM-2",
+          "f1": 0.263,
+          "precision": 0.312,
+          "recall": 0.227,
+          "claimed": 16
+        },
+        {
+          "factor": "F54F2.9",
+          "f1": 0.245,
+          "precision": 0.144,
+          "recall": 0.818,
+          "claimed": 125
+        },
+        {
+          "factor": "NHR-25",
+          "f1": 0.234,
+          "precision": 0.153,
+          "recall": 0.5,
+          "claimed": 72
+        },
+        {
+          "factor": "SMA-2",
+          "f1": 0.23,
+          "precision": 0.137,
+          "recall": 0.727,
+          "claimed": 117
+        }
+      ],
+      "socket": [
+        {
+          "factor": "PAG-3",
+          "f1": 0.438,
+          "precision": 0.5,
+          "recall": 0.389,
+          "claimed": 14
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.356,
+          "precision": 0.222,
+          "recall": 0.889,
+          "claimed": 72
+        },
+        {
+          "factor": "HLH-30",
+          "f1": 0.28,
+          "precision": 0.219,
+          "recall": 0.389,
+          "claimed": 32
+        },
+        {
+          "factor": "HLH-11",
+          "f1": 0.271,
+          "precision": 0.195,
+          "recall": 0.444,
+          "claimed": 41
+        },
+        {
+          "factor": "FKH-4",
+          "f1": 0.229,
+          "precision": 0.235,
+          "recall": 0.222,
+          "claimed": 17
+        },
+        {
+          "factor": "HAM-2",
+          "f1": 0.224,
+          "precision": 0.135,
+          "recall": 0.667,
+          "claimed": 89
+        }
+      ],
+      "glia": [
+        {
+          "factor": "SOX-2",
+          "f1": 0.518,
+          "precision": 0.403,
+          "recall": 0.725,
+          "claimed": 72
+        },
+        {
+          "factor": "F54F2.9",
+          "f1": 0.4,
+          "precision": 0.264,
+          "recall": 0.825,
+          "claimed": 125
+        },
+        {
+          "factor": "HLH-30",
+          "f1": 0.361,
+          "precision": 0.406,
+          "recall": 0.325,
+          "claimed": 32
+        },
+        {
+          "factor": "CEH-44",
+          "f1": 0.352,
+          "precision": 0.228,
+          "recall": 0.775,
+          "claimed": 136
+        },
+        {
+          "factor": "CEH-43",
+          "f1": 0.351,
+          "precision": 0.237,
+          "recall": 0.675,
+          "claimed": 114
+        },
+        {
+          "factor": "SMA-2",
+          "f1": 0.344,
+          "precision": 0.231,
+          "recall": 0.675,
+          "claimed": 117
+        }
+      ]
+    },
+    "integrated_along_lineage": {
+      "sheath": [
+        {
+          "factor": "CEH-8",
+          "f1": 0.286,
+          "precision": 0.667,
+          "recall": 0.182,
+          "claimed": 6
+        },
+        {
+          "factor": "REF-2",
+          "f1": 0.283,
+          "precision": 0.182,
+          "recall": 0.636,
+          "claimed": 77
+        },
+        {
+          "factor": "SEM-2",
+          "f1": 0.241,
+          "precision": 0.164,
+          "recall": 0.455,
+          "claimed": 61
+        },
+        {
+          "factor": "CEH-32",
+          "f1": 0.238,
+          "precision": 0.161,
+          "recall": 0.455,
+          "claimed": 62
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.222,
+          "precision": 0.14,
+          "recall": 0.545,
+          "claimed": 86
+        },
+        {
+          "factor": "NHR-25",
+          "f1": 0.215,
+          "precision": 0.131,
+          "recall": 0.591,
+          "claimed": 99
+        }
+      ],
+      "socket": [
+        {
+          "factor": "PAG-3",
+          "f1": 0.438,
+          "precision": 0.5,
+          "recall": 0.389,
+          "claimed": 14
+        },
+        {
+          "factor": "HLH-30",
+          "f1": 0.375,
+          "precision": 0.242,
+          "recall": 0.833,
+          "claimed": 62
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.308,
+          "precision": 0.186,
+          "recall": 0.889,
+          "claimed": 86
+        },
+        {
+          "factor": "UNC-39",
+          "f1": 0.215,
+          "precision": 0.149,
+          "recall": 0.389,
+          "claimed": 47
+        },
+        {
+          "factor": "BED-3",
+          "f1": 0.207,
+          "precision": 0.273,
+          "recall": 0.167,
+          "claimed": 11
+        },
+        {
+          "factor": "HAM-2",
+          "f1": 0.196,
+          "precision": 0.122,
+          "recall": 0.5,
+          "claimed": 74
+        }
+      ],
+      "glia": [
+        {
+          "factor": "HLH-30",
+          "f1": 0.451,
+          "precision": 0.371,
+          "recall": 0.575,
+          "claimed": 62
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.444,
+          "precision": 0.326,
+          "recall": 0.7,
+          "claimed": 86
+        },
+        {
+          "factor": "REF-2",
+          "f1": 0.359,
+          "precision": 0.273,
+          "recall": 0.525,
+          "claimed": 77
+        },
+        {
+          "factor": "CEH-43",
+          "f1": 0.355,
+          "precision": 0.218,
+          "recall": 0.95,
+          "claimed": 174
+        },
+        {
+          "factor": "SEM-2",
+          "f1": 0.317,
+          "precision": 0.262,
+          "recall": 0.4,
+          "claimed": 61
+        },
+        {
+          "factor": "CEH-32",
+          "f1": 0.314,
+          "precision": 0.258,
+          "recall": 0.4,
+          "claimed": 62
+        }
+      ]
+    },
+    "reader": {
+      "sheath": [
+        {
+          "factor": "PROS-1",
+          "f1": 0.273,
+          "precision": 0.273,
+          "recall": 0.273,
+          "claimed": 22
+        },
+        {
+          "factor": "MED-2",
+          "f1": 0.27,
+          "precision": 0.333,
+          "recall": 0.227,
+          "claimed": 15
+        },
+        {
+          "factor": "SEM-2",
+          "f1": 0.261,
+          "precision": 0.25,
+          "recall": 0.273,
+          "claimed": 24
+        },
+        {
+          "factor": "NHR-25",
+          "f1": 0.254,
+          "precision": 0.154,
+          "recall": 0.727,
+          "claimed": 104
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.248,
+          "precision": 0.15,
+          "recall": 0.727,
+          "claimed": 107
+        },
+        {
+          "factor": "ALR-1",
+          "f1": 0.226,
+          "precision": 0.194,
+          "recall": 0.273,
+          "claimed": 31
+        }
+      ],
+      "socket": [
+        {
+          "factor": "PAG-3",
+          "f1": 0.36,
+          "precision": 0.281,
+          "recall": 0.5,
+          "claimed": 32
+        },
+        {
+          "factor": "SOX-2",
+          "f1": 0.288,
+          "precision": 0.168,
+          "recall": 1.0,
+          "claimed": 107
+        },
+        {
+          "factor": "HAM-2",
+          "f1": 0.205,
+          "precision": 0.121,
+          "recall": 0.667,
+          "claimed": 99
+        },
+        {
+          "factor": "UNC-39",
+          "f1": 0.194,
+          "precision": 0.136,
+          "recall": 0.333,
+          "claimed": 44
+        },
+        {
+          "factor": "HLH-30",
+          "f1": 0.187,
+          "precision": 0.112,
+          "recall": 0.556,
+          "claimed": 89
+        },
+        {
+          "factor": "CEH-43",
+          "f1": 0.185,
+          "precision": 0.104,
+          "recall": 0.833,
+          "claimed": 144
+        }
+      ],
+      "glia": [
+        {
+          "factor": "SOX-2",
+          "f1": 0.463,
+          "precision": 0.318,
+          "recall": 0.85,
+          "claimed": 107
+        },
+        {
+          "factor": "CEH-43",
+          "f1": 0.348,
+          "precision": 0.222,
+          "recall": 0.8,
+          "claimed": 144
+        },
+        {
+          "factor": "NHR-25",
+          "f1": 0.306,
+          "precision": 0.212,
+          "recall": 0.55,
+          "claimed": 104
+        },
+        {
+          "factor": "ALR-1",
+          "f1": 0.282,
+          "precision": 0.323,
+          "recall": 0.25,
+          "claimed": 31
+        },
+        {
+          "factor": "HLH-30",
+          "f1": 0.279,
+          "precision": 0.202,
+          "recall": 0.45,
+          "claimed": 89
+        },
+        {
+          "factor": "PAG-3",
+          "f1": 0.278,
+          "precision": 0.312,
+          "recall": 0.25,
+          "claimed": 32
+        }
+      ]
+    }
+  },
+  "cited_factors": [
+    {
+      "factors": [
+        "PROS-1"
+      ],
+      "for": "sheath",
+      "source": "Wallace et al. 2016, Development 143:3016 (PROS-1/Prospero, sheath glia)",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 22,
+          "correct": 6,
+          "precision": 0.273,
+          "recall": 0.273,
+          "what_it_claims": {
+            "neuron": 8,
+            "sheath": 6,
+            "coelomocyte": 4,
+            "hypoderm": 2,
+            "excretory": 1
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 12,
+          "correct": 5,
+          "precision": 0.417,
+          "recall": 0.227,
+          "what_it_claims": {
+            "sheath": 5,
+            "coelomocyte": 4,
+            "neuron": 2,
+            "excretory": 1
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 7,
+          "correct": 1,
+          "precision": 0.143,
+          "recall": 0.045,
+          "what_it_claims": {
+            "coelomocyte": 4,
+            "sheath": 1,
+            "neuron": 1,
+            "excretory": 1
+          }
+        },
+        "reader": {
+          "claimed": 22,
+          "correct": 6,
+          "precision": 0.273,
+          "recall": 0.273,
+          "what_it_claims": {
+            "neuron": 8,
+            "sheath": 6,
+            "coelomocyte": 4,
+            "hypoderm": 2,
+            "excretory": 1
+          }
+        }
+      }
+    },
+    {
+      "factors": [
+        "MLS-2"
+      ],
+      "for": "sheath",
+      "source": "Yoshimura et al. 2008, Development 135:2263 (MLS-2/HMX, CEPsh glia)",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 15,
+          "correct": 4,
+          "precision": 0.267,
+          "recall": 0.182,
+          "what_it_claims": {
+            "neuron": 9,
+            "sheath": 4,
+            "socket": 2
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 36,
+          "correct": 3,
+          "precision": 0.083,
+          "recall": 0.136,
+          "what_it_claims": {
+            "neuron": 24,
+            "socket": 3,
+            "sheath": 3,
+            "marginal": 2,
+            "muscle": 2
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 64,
+          "correct": 4,
+          "precision": 0.062,
+          "recall": 0.182,
+          "what_it_claims": {
+            "neuron": 35,
+            "muscle": 9,
+            "epithelium": 5,
+            "sheath": 4,
+            "socket": 3
+          }
+        },
+        "reader": {
+          "claimed": 15,
+          "correct": 4,
+          "precision": 0.267,
+          "recall": 0.182,
+          "what_it_claims": {
+            "neuron": 9,
+            "sheath": 4,
+            "socket": 2
+          }
+        }
+      }
+    },
+    {
+      "factors": [
+        "HLH-17"
+      ],
+      "for": "sheath",
+      "source": "McMiller & Johnson 2005, Gene 356:1 (hlh-17 in CEPsh glia)",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 265,
+          "correct": 12,
+          "precision": 0.045,
+          "recall": 0.545,
+          "what_it_claims": {
+            "neuron": 88,
+            "muscle": 71,
+            "hypoderm": 51,
+            "sheath": 12,
+            "socket": 11
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 244,
+          "correct": 19,
+          "precision": 0.078,
+          "recall": 0.864,
+          "what_it_claims": {
+            "neuron": 112,
+            "muscle": 39,
+            "hypoderm": 32,
+            "sheath": 19,
+            "socket": 18
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 387,
+          "correct": 22,
+          "precision": 0.057,
+          "recall": 1.0,
+          "what_it_claims": {
+            "neuron": 180,
+            "hypoderm": 66,
+            "muscle": 59,
+            "sheath": 22,
+            "socket": 18
+          }
+        },
+        "reader": {
+          "claimed": 264,
+          "correct": 12,
+          "precision": 0.045,
+          "recall": 0.545,
+          "what_it_claims": {
+            "neuron": 88,
+            "muscle": 71,
+            "hypoderm": 50,
+            "sheath": 12,
+            "socket": 11
+          }
+        }
+      }
+    },
+    {
+      "factors": [
+        "EGL-13"
+      ],
+      "for": "socket",
+      "source": "Feng et al. 2013, Development 140:4433 (EGL-13/SoxD in socket cells)",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 34,
+          "correct": 1,
+          "precision": 0.029,
+          "recall": 0.056,
+          "what_it_claims": {
+            "neuron": 18,
+            "hypoderm": 8,
+            "muscle": 4,
+            "marginal": 2,
+            "socket": 1
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 37,
+          "correct": 2,
+          "precision": 0.054,
+          "recall": 0.111,
+          "what_it_claims": {
+            "neuron": 22,
+            "muscle": 7,
+            "sheath": 3,
+            "marginal": 2,
+            "socket": 2
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 60,
+          "correct": 5,
+          "precision": 0.083,
+          "recall": 0.278,
+          "what_it_claims": {
+            "neuron": 33,
+            "hypoderm": 10,
+            "sheath": 6,
+            "socket": 5,
+            "muscle": 5
+          }
+        },
+        "reader": {
+          "claimed": 34,
+          "correct": 1,
+          "precision": 0.029,
+          "recall": 0.056,
+          "what_it_claims": {
+            "neuron": 18,
+            "hypoderm": 8,
+            "muscle": 4,
+            "marginal": 2,
+            "socket": 1
+          }
+        }
+      }
+    },
+    {
+      "factors": [
+        "PROS-1",
+        "NHR-25"
+      ],
+      "for": "sheath",
+      "source": "PROS-1 in the non-neuronal ectodermal class",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 10,
+          "correct": 6,
+          "precision": 0.6,
+          "recall": 0.273,
+          "what_it_claims": {
+            "sheath": 6,
+            "hypoderm": 2,
+            "neuron": 2
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 4,
+          "correct": 4,
+          "precision": 1.0,
+          "recall": 0.182,
+          "what_it_claims": {
+            "sheath": 4
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 1,
+          "correct": 1,
+          "precision": 1.0,
+          "recall": 0.045,
+          "what_it_claims": {
+            "sheath": 1
+          }
+        },
+        "reader": {
+          "claimed": 10,
+          "correct": 6,
+          "precision": 0.6,
+          "recall": 0.273,
+          "what_it_claims": {
+            "sheath": 6,
+            "hypoderm": 2,
+            "neuron": 2
+          }
+        }
+      }
+    },
+    {
+      "factors": [
+        "PROS-1",
+        "SOX-2"
+      ],
+      "for": "sheath",
+      "source": "PROS-1 in the neural class",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 6,
+          "correct": 5,
+          "precision": 0.833,
+          "recall": 0.227,
+          "what_it_claims": {
+            "sheath": 5,
+            "neuron": 1
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 4,
+          "correct": 4,
+          "precision": 1.0,
+          "recall": 0.182,
+          "what_it_claims": {
+            "sheath": 4
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 1,
+          "correct": 1,
+          "precision": 1.0,
+          "recall": 0.045,
+          "what_it_claims": {
+            "sheath": 1
+          }
+        },
+        "reader": {
+          "claimed": 6,
+          "correct": 5,
+          "precision": 0.833,
+          "recall": 0.227,
+          "what_it_claims": {
+            "sheath": 5,
+            "neuron": 1
+          }
+        }
+      }
+    },
+    {
+      "factors": [
+        "PROS-1",
+        "NHR-25",
+        "SOX-2"
+      ],
+      "for": "sheath",
+      "source": "the rule the program adopts",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 5,
+          "correct": 5,
+          "precision": 1.0,
+          "recall": 0.227,
+          "what_it_claims": {
+            "sheath": 5
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 4,
+          "correct": 4,
+          "precision": 1.0,
+          "recall": 0.182,
+          "what_it_claims": {
+            "sheath": 4
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 1,
+          "correct": 1,
+          "precision": 1.0,
+          "recall": 0.045,
+          "what_it_claims": {
+            "sheath": 1
+          }
+        },
+        "reader": {
+          "claimed": 5,
+          "correct": 5,
+          "precision": 1.0,
+          "recall": 0.227,
+          "what_it_claims": {
+            "sheath": 5
+          }
+        }
+      }
+    },
+    {
+      "factors": [
+        "SOX-2",
+        "PAG-3"
+      ],
+      "for": "socket",
+      "source": "the best cited-looking socket pair",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 23,
+          "correct": 10,
+          "precision": 0.435,
+          "recall": 0.556,
+          "what_it_claims": {
+            "neuron": 12,
+            "socket": 10,
+            "hypoderm": 1
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 12,
+          "correct": 6,
+          "precision": 0.5,
+          "recall": 0.333,
+          "what_it_claims": {
+            "socket": 6,
+            "neuron": 6
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 13,
+          "correct": 6,
+          "precision": 0.462,
+          "recall": 0.333,
+          "what_it_claims": {
+            "neuron": 7,
+            "socket": 6
+          }
+        },
+        "reader": {
+          "claimed": 22,
+          "correct": 9,
+          "precision": 0.409,
+          "recall": 0.5,
+          "what_it_claims": {
+            "neuron": 12,
+            "socket": 9,
+            "hypoderm": 1
+          }
+        }
+      }
+    },
+    {
+      "factors": [
+        "SOX-2"
+      ],
+      "for": "glia",
+      "source": "SOX-2 marks the neural and glial class, not glia alone",
+      "reads": {
+        "peak_in_own_life": {
+          "claimed": 107,
+          "correct": 34,
+          "precision": 0.318,
+          "recall": 0.85,
+          "what_it_claims": {
+            "neuron": 54,
+            "socket": 18,
+            "sheath": 16,
+            "hypoderm": 8,
+            "other": 6
+          }
+        },
+        "mean_over_own_life": {
+          "claimed": 72,
+          "correct": 29,
+          "precision": 0.403,
+          "recall": 0.725,
+          "what_it_claims": {
+            "neuron": 29,
+            "socket": 16,
+            "sheath": 13,
+            "hypoderm": 7,
+            "other": 6
+          }
+        },
+        "integrated_along_lineage": {
+          "claimed": 86,
+          "correct": 28,
+          "precision": 0.326,
+          "recall": 0.7,
+          "what_it_claims": {
+            "neuron": 44,
+            "socket": 16,
+            "sheath": 12,
+            "hypoderm": 7,
+            "other": 6
+          }
+        },
+        "reader": {
+          "claimed": 107,
+          "correct": 34,
+          "precision": 0.318,
+          "recall": 0.85,
+          "what_it_claims": {
+            "neuron": 54,
+            "socket": 18,
+            "sheath": 16,
+            "hypoderm": 8,
+            "other": 6
+          }
+        }
+      }
+    }
+  ],
+  "ceiling": {
+    "sheath": {
+      "factors_searched": 250,
+      "pairs_searched": 25867,
+      "best_one_factor": {
+        "net_fates": 0,
+        "factors": [
+          "ELT-7"
+        ],
+        "claimed": 23
+      },
+      "best_two_factors": {
+        "net_fates": 4,
+        "factors": [
+          "PROS-1",
+          "SOX-2"
+        ],
+        "claimed": 6
+      },
+      "best_three_factors": {
+        "net_fates": 6,
+        "factors": [
+          "ALY-1",
+          "EOR-1",
+          "PROS-1"
+        ],
+        "claimed": 8
+      }
+    },
+    "socket": {
+      "factors_searched": 250,
+      "pairs_searched": 25867,
+      "best_one_factor": {
+        "net_fates": 0,
+        "factors": [
+          "ELT-7"
+        ],
+        "claimed": 23
+      },
+      "best_two_factors": {
+        "net_fates": 2,
+        "factors": [
+          "MLS-2",
+          "MML-1"
+        ],
+        "claimed": 3
+      },
+      "best_three_factors": {
+        "net_fates": 3,
+        "factors": [
+          "CEH-32",
+          "HAM-2",
+          "HLH-4"
+        ],
+        "claimed": 5
+      }
+    }
+  },
+  "held_out": {
+    "peak_in_own_life": {
+      "sheath": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 0.833,
+        "held_out_true_positives": 3,
+        "held_out_false_positives": 11,
+        "held_out_missed": 19,
+        "held_out_precision": 0.214,
+        "held_out_recall": 0.136,
+        "base_rate": 0.04
+      },
+      "socket": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 0.667,
+        "held_out_true_positives": 9,
+        "held_out_false_positives": 20,
+        "held_out_missed": 9,
+        "held_out_precision": 0.31,
+        "held_out_recall": 0.5,
+        "base_rate": 0.032
+      },
+      "glia": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 1.0,
+        "held_out_true_positives": 10,
+        "held_out_false_positives": 19,
+        "held_out_missed": 30,
+        "held_out_precision": 0.345,
+        "held_out_recall": 0.25,
+        "base_rate": 0.072
+      }
+    },
+    "mean_over_own_life": {
+      "sheath": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 1.0,
+        "held_out_true_positives": 2,
+        "held_out_false_positives": 4,
+        "held_out_missed": 20,
+        "held_out_precision": 0.333,
+        "held_out_recall": 0.091,
+        "base_rate": 0.04
+      },
+      "socket": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 1.0,
+        "held_out_true_positives": 6,
+        "held_out_false_positives": 12,
+        "held_out_missed": 12,
+        "held_out_precision": 0.333,
+        "held_out_recall": 0.333,
+        "base_rate": 0.032
+      },
+      "glia": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 1.0,
+        "held_out_true_positives": 3,
+        "held_out_false_positives": 7,
+        "held_out_missed": 37,
+        "held_out_precision": 0.3,
+        "held_out_recall": 0.075,
+        "base_rate": 0.072
+      }
+    },
+    "integrated_along_lineage": {
+      "sheath": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 1.0,
+        "held_out_true_positives": 0,
+        "held_out_false_positives": 0,
+        "held_out_missed": 22,
+        "held_out_precision": 0.0,
+        "held_out_recall": 0.0,
+        "base_rate": 0.04
+      },
+      "socket": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 1.0,
+        "held_out_true_positives": 9,
+        "held_out_false_positives": 30,
+        "held_out_missed": 9,
+        "held_out_precision": 0.231,
+        "held_out_recall": 0.5,
+        "base_rate": 0.032
+      },
+      "glia": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 1.0,
+        "held_out_true_positives": 1,
+        "held_out_false_positives": 3,
+        "held_out_missed": 39,
+        "held_out_precision": 0.25,
+        "held_out_recall": 0.025,
+        "base_rate": 0.072
+      }
+    },
+    "reader": {
+      "sheath": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 0.833,
+        "held_out_true_positives": 3,
+        "held_out_false_positives": 11,
+        "held_out_missed": 19,
+        "held_out_precision": 0.214,
+        "held_out_recall": 0.136,
+        "base_rate": 0.04
+      },
+      "socket": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 0.667,
+        "held_out_true_positives": 8,
+        "held_out_false_positives": 20,
+        "held_out_missed": 10,
+        "held_out_precision": 0.286,
+        "held_out_recall": 0.444,
+        "base_rate": 0.032
+      },
+      "glia": {
+        "rules_per_fold": 3,
+        "in_sample_precision_median": 1.0,
+        "held_out_true_positives": 10,
+        "held_out_false_positives": 19,
+        "held_out_missed": 30,
+        "held_out_precision": 0.345,
+        "held_out_recall": 0.25,
+        "base_rate": 0.072
+      }
+    }
+  },
+  "sisters": {
+    "glia_and_a_sister_of_another_tissue": {
+      "pairs": 22,
+      "median_factors_differing": 39.0
+    },
+    "sisters_of_the_same_tissue": {
+      "pairs": 147,
+      "median_factors_differing": 35
+    },
+    "sisters_of_different_tissues": {
+      "pairs": 58,
+      "median_factors_differing": 40.0
+    },
+    "note": "a glial cell differs from its sister by no more factors than two sisters of the same tissue do, so the sister difference carries little about the fate"
+  },
+  "measurement_floor": {
+    "factors_with_two_reporter_strains": 23,
+    "median_disagreement_on_presence_in_the_same_cell": 0.207,
+    "note": "two reporters for the same factor disagree on presence in the same cell more often than sisters disagree on the same factors, which is the floor any sister-level rule sits on"
+  },
+  "seconds": 6.4
+}

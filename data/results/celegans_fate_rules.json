@@ -1993,6 +1993,7 @@
       "factors": [
         "ELT-2"
       ],
+      "read": "integrated",
       "source": "Fukushige et al. 1998, Dev Biol 198:286; Sommermann et al. 2010, Dev Biol 347:154",
       "precision": 0.0,
       "support": 0
@@ -2002,6 +2003,7 @@
       "factors": [
         "ELT-7"
       ],
+      "read": "integrated",
       "source": "Fukushige et al. 1998, Dev Biol 198:286; Sommermann et al. 2010, Dev Biol 347:154",
       "precision": 0.0,
       "support": 0
@@ -2011,6 +2013,7 @@
       "factors": [
         "HLH-1"
       ],
+      "read": "integrated",
       "source": "Krause et al. 1990, Cell 63:907; Fukushige et al. 2006, Genes Dev 20:3395",
       "precision": 0.0,
       "support": 0
@@ -2020,7 +2023,20 @@
       "factors": [
         "UNC-120"
       ],
+      "read": "integrated",
       "source": "Krause et al. 1990, Cell 63:907; Fukushige et al. 2006, Genes Dev 20:3395",
+      "precision": 0.0,
+      "support": 0
+    },
+    {
+      "tissue": "sheath",
+      "factors": [
+        "PROS-1",
+        "NHR-25",
+        "SOX-2"
+      ],
+      "read": "instantaneous",
+      "source": "Wallace et al. 2016, Development 143:3016 (PROS-1/Prospero drives the sheath-glia programme); Gissendanner & Sluder 2000, Dev Biol 221:259 (NHR-25 in the non-neuronal ectoderm); read as instantaneous presence, because the lineage-integrated read carries no sheath signal",
       "precision": 0.0,
       "support": 0
     },
@@ -2029,6 +2045,7 @@
       "factors": [
         "ELT-1"
       ],
+      "read": "integrated",
       "source": "Page et al. 1997, Genes Dev 11:1651; Labouesse et al. 1994, Development 120:2359; Gissendanner & Sluder 2000, Dev Biol 221:259",
       "precision": 0.0,
       "support": 0
@@ -2038,6 +2055,7 @@
       "factors": [
         "LIN-26"
       ],
+      "read": "integrated",
       "source": "Page et al. 1997, Genes Dev 11:1651; Labouesse et al. 1994, Development 120:2359; Gissendanner & Sluder 2000, Dev Biol 221:259",
       "precision": 0.0,
       "support": 0
@@ -2047,6 +2065,7 @@
       "factors": [
         "NHR-25"
       ],
+      "read": "integrated",
       "source": "Page et al. 1997, Genes Dev 11:1651; Labouesse et al. 1994, Development 120:2359; Gissendanner & Sluder 2000, Dev Biol 221:259",
       "precision": 0.0,
       "support": 0
@@ -2056,6 +2075,7 @@
       "factors": [
         "LIN-32"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 54
@@ -2066,6 +2086,7 @@
         "FKH-6",
         "NGN-1"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 40
@@ -2076,6 +2097,7 @@
         "CEH-48",
         "EGL-44"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 27
@@ -2086,6 +2108,7 @@
         "EFL-3",
         "UNC-62"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 20
@@ -2095,6 +2118,7 @@
       "factors": [
         "HLH-14"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 14
@@ -2105,6 +2129,7 @@
         "CRH-2",
         "EGL-44"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 7
@@ -2115,6 +2140,7 @@
         "CEH-48",
         "CEH-6"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 6
@@ -2125,6 +2151,7 @@
         "CES-2",
         "TAB-1"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 5
@@ -2135,6 +2162,7 @@
         "CEH-48",
         "FKH-2"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 0.9,
       "support": 9
@@ -2145,6 +2173,7 @@
         "CEH-19",
         "ZTF-30"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 4
@@ -2155,6 +2184,7 @@
         "CEH-32",
         "CND-1"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 4
@@ -2165,6 +2195,7 @@
         "CEH-12",
         "EGL-44"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 4
@@ -2175,6 +2206,7 @@
         "NHR-67",
         "ZAG-1"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 4
@@ -2185,6 +2217,7 @@
         "CEH-31",
         "SYD-9"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 3
@@ -2195,6 +2228,7 @@
         "CEH-48",
         "CEH-9"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 4
@@ -2205,6 +2239,7 @@
         "CEH-32",
         "K09A11.1"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 3
@@ -2215,6 +2250,7 @@
         "CEH-27",
         "EFL-3"
       ],
+      "read": "integrated",
       "source": "learned from Ma 2021 x WormWeb",
       "precision": 1.0,
       "support": 3
@@ -2223,12 +2259,12 @@
   "program_rules_in_sample": {
     "cells": 555,
     "decided_by_factors": 437,
-    "factor_correct": 378,
-    "wrong": 59,
+    "factor_correct": 383,
+    "wrong": 54,
     "before": 1.0,
-    "after": 0.8937,
-    "factor_only": 0.6811,
-    "precision": 0.865,
+    "after": 0.9027,
+    "factor_only": 0.6901,
+    "precision": 0.8764,
     "tissues": {
       "neuron": {
         "cells": 226,
@@ -2250,9 +2286,9 @@
         "cells": 69,
         "factor_correct": 66,
         "lost": 0,
-        "claimed": 100,
+        "claimed": 95,
         "after": 1.0,
-        "precision": 0.66
+        "precision": 0.695
       },
       "intestine": {
         "cells": 34,
@@ -2264,11 +2300,11 @@
       },
       "sheath": {
         "cells": 22,
-        "factor_correct": 0,
-        "lost": 16,
-        "claimed": 0,
-        "after": 0.273,
-        "precision": null
+        "factor_correct": 5,
+        "lost": 11,
+        "claimed": 5,
+        "after": 0.5,
+        "precision": 1.0
       },
       "socket": {
         "cells": 18,
@@ -2361,8 +2397,8 @@
     },
     "confusion": {
       "neuron->hypoderm": 14,
-      "sheath->hypoderm": 13,
       "muscle->neuron": 9,
+      "sheath->hypoderm": 8,
       "socket->neuron": 5,
       "socket->hypoderm": 4,
       "coelomocyte->muscle": 4,
@@ -2469,12 +2505,12 @@
       "program": "data/organisms/celegans/embryo_factors.bio",
       "until_min": 800.0,
       "fates_checked": 555,
-      "fates_correct": 496,
-      "fate_accuracy": 0.8936936936936937,
+      "fates_correct": 501,
+      "fate_accuracy": 0.9027027027027027,
       "fate_confusion": {
         "Neuron->Hypodermis": 14,
-        "GliaSheath->Hypodermis": 13,
         "Muscle->Neuron": 9,
+        "GliaSheath->Hypodermis": 8,
         "GliaSocket->Neuron": 5,
         "GliaSocket->Hypodermis": 4,
         "Coelomocyte->Muscle": 4,
@@ -2492,9 +2528,9 @@
           "accuracy": 0.938
         },
         "sheath": {
-          "correct": 6,
+          "correct": 11,
           "cells": 22,
-          "accuracy": 0.273
+          "accuracy": 0.5
         },
         "socket": {
           "correct": 9,
@@ -2572,12 +2608,12 @@
       "program": "data/organisms/celegans/embryo_factors.bio",
       "until_min": 6000.0,
       "fates_checked": 961,
-      "fates_correct": 902,
-      "fate_accuracy": 0.9386056191467221,
+      "fates_correct": 907,
+      "fate_accuracy": 0.9438085327783559,
       "fate_confusion": {
         "Neuron->Hypodermis": 14,
-        "GliaSheath->Hypodermis": 13,
         "Muscle->Neuron": 9,
+        "GliaSheath->Hypodermis": 8,
         "GliaSocket->Neuron": 5,
         "GliaSocket->Hypodermis": 4,
         "Coelomocyte->Muscle": 4,
@@ -2595,9 +2631,9 @@
           "accuracy": 0.954
         },
         "sheath": {
-          "correct": 8,
+          "correct": 13,
           "cells": 24,
-          "accuracy": 0.333
+          "accuracy": 0.542
         },
         "socket": {
           "correct": 17,

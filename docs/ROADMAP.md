@@ -961,6 +961,25 @@ in order. "Owner" is the session that holds the files today (see §7).
   state (list Z1.ppp as touching Z4.aa and Z1.ppp wins 100 of 100), and an
   instantaneous level read at an arbitrary time is not a fate (§7.2a's
   sustained reads are what is missing).
+  **Glia from factors** (`celegans_glia`, `CITED_GLIA_RULES`): sheath glia
+  partly, socket glia not at all. All 40 glia and all 40 sisters are in the
+  atlas and no glial cell shares a factor set with a non-glial one, so the
+  question is answerable. PROS-1/Prospero (Wallace et al. 2016) alone has
+  precision 0.27; with the class factors NHR-25 and SOX-2 it claims 5 cells and
+  all 5 are sheath glia, and the rule is now in `fates.bio`: **sheath 6/22 →
+  11/22** with nothing lost elsewhere, **496 → 501 of 555** and 902 → 907 of
+  961 to the adult. Socket glia get no rule and that is the measurement: the
+  best socket rule that exists (SOX-2 ∧ PAG-3) takes 12 neurons to win 9 glia
+  and costs 4 fates net. Exhaustively, over all 250 factors, 25,867 pairs and
+  every triple, the in-sample ceiling is **+6 fates for sheath and +3 for
+  socket**, the best sheath rules all contain PROS-1 and the best socket rules
+  contain nothing anyone has named; rules fitted at in-sample precision 1.0
+  score 0.21 (sheath) and 0.29 (socket) on a held-out sublineage against a 7%
+  base rate. A glial cell differs from its sister by 39 factors, two sisters of
+  the same tissue by 35, and the atlas's own two-reporter floor is 20.7%
+  disagreement: the separation is below the measurement. What is missing is not
+  another transcription factor but the ligand a glial cell receives and the
+  terminal genes after the bean stage where the atlas stops.
 - **Next.** 1. `commitment` and `competence` landed on 2026-09-14
   (genomeos-c2, 126e65b) and earn their place by ablation: strip competence and
   both late arms of the published plasticity series fail, strip commitment and the
@@ -968,14 +987,19 @@ in order. "Owner" is the session that holds the files today (see §7).
   exposure and mean reads did NOT land: `_integrated` is still a precomputed
   lookup, so `establish: ELT-2.exposure(lineage) >= 0.8` does not compile, and
   rewriting `fates.bio` and `exposure.bio` waits on that. 2. PAR polarity rules for
-  the first divisions. 3. The worm's founders in space with the real contacts
-  replacing named senders: the contact runtime landed (21d3dbc, neighbours,
-  amounts, per-cell networks and seeded noise, the Collier gate passed 0 of 200
-  without noise and 200 of 200 with it), so this is unblocked, with the AC/VU pair
-  scored as an equivalence group. 4. Glia from factors: sheath
-  and socket against their sister neurons. 5. libRoadRunner and MaBoSS
-  adapters tested in CI on 3.12.
-- **Owner.** genomeos-d1 (from 2026-09-14; genomeos-73 before).
+  the first divisions, still the two misses against Digital Development.
+  3. Contacts and AC/VU: **done 2026-09-14** (above). 4. Glia from factors:
+  **done 2026-09-14** (above); what would move socket glia is a measurement the
+  atlas does not contain, so this stays closed until there is one. 5. Three
+  runtime changes area E asked for and did not make, written up with their
+  measurements in ORGANISM-FROM-ONE-CELL.md: a contact amount is read only when
+  the receiver itself decides again; two decisions sharing an id make the one
+  without a `cell` clause silently unreachable; and a `cell_network` cadence lets
+  a lower-precedence `differentiate` overwrite a fate the program already settled
+  (496 → 482 with a 2-minute cadence and no other change). 6. A measured
+  time-resolved contact table for the embryo, to replace the curated one.
+  7. libRoadRunner and MaBoSS adapters tested in CI on 3.12.
+- **Owner.** genomeos-d2 (from 2026-09-14; genomeos-d1 and genomeos-73 before).
 
 ### F. Cancer and therapeutics
 

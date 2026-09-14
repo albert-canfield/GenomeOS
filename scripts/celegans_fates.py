@@ -166,21 +166,24 @@ def main() -> None:
         }
         print(name, "learned CV", {k: cv[k] for k in KEYS}, flush=True)
     neuron = [r for r in fr.learn(reads["integrated"], labels) if r.tissue == "neuron"]
-    program_rules = textbook + neuron
+    # the sheath-glia rule sits between the muscle and the hypodermis rules: it is the hypodermis rules
+    # that take those cells, and it is read instantaneously because the integrated read has no sheath
+    # signal at all (scripts/celegans_glia.py). Socket glia get no rule; that is measured, not forgotten.
+    glia = fr.glia_rules()
+    program_rules = textbook[:4] + glia + textbook[4:] + neuron
     out["program_rules"] = [
         {
             "tissue": r.tissue,
             "factors": list(r.factors),
+            "read": r.read,
             "source": r.source,
             "precision": r.precision,
             "support": r.support,
         }
         for r in program_rules
     ]
-    out["program_rules_in_sample"] = _brief(
-        fr.score(fr.apply_rules(program_rules, reads["integrated"]), labels)
-    )
-    rule_factors = {f for r in program_rules for f in r.factors}
+    out["program_rules_in_sample"] = _brief(fr.score(fr.apply_mixed(program_rules, reads), labels))
+    rule_factors = {f for r in program_rules if r.read == "integrated" for f in r.factors}
     (ORG / "fates.bio").write_text(fr.to_bio_fates(program_rules, integrated_read=True))
     (ORG / "exposure.bio").write_text(
         fr.to_bio_exposure(reads["integrated"], reads["instantaneous"], atlas, rule_factors)

@@ -66,6 +66,24 @@ TEXTBOOK_RULES = [
 ]
 
 
+# Glia, which the rules above lose to the hypodermis and the neurons because glia carry both their
+# sisters' neuronal factors and the ectodermal factors of the hypodermis. Only sheath glia are
+# separable at all: PROS-1/Prospero is the published sheath-glia regulator, and the sheath cells are
+# the PROS-1-positive members of the non-neuronal ectodermal (NHR-25) and neural (SOX-2) class.
+# Socket glia have no rule here, and that is a measured result, not an omission: over every
+# conjunction of up to three of the atlas's 250 factors, the best possible socket rule is worth +3
+# terminal fates of 555 in sample and has no published basis (scripts/celegans_glia.py).
+CITED_GLIA_RULES = [
+    (
+        "sheath",
+        ("PROS-1", "NHR-25", "SOX-2"),
+        "Wallace et al. 2016, Development 143:3016 (PROS-1/Prospero drives the sheath-glia programme); "
+        "Gissendanner & Sluder 2000, Dev Biol 221:259 (NHR-25 in the non-neuronal ectoderm); "
+        "read as instantaneous presence, because the lineage-integrated read carries no sheath signal",
+    ),
+]
+
+
 @dataclass(frozen=True, slots=True)
 class Rule:
     tissue: str
@@ -73,6 +91,7 @@ class Rule:
     source: str = ""
     precision: float = 0.0  # on the data it was learned from
     support: int = 0
+    read: str = "integrated"  # which read of the atlas the rule is written against
 
     def applies(self, present: set[str]) -> bool:
         return all(f in present for f in self.factors)
@@ -80,6 +99,22 @@ class Rule:
 
 def textbook_rules() -> list[Rule]:
     return [Rule(t, (f,), src) for t, fs, src in TEXTBOOK_RULES for f in fs]
+
+
+def glia_rules() -> list[Rule]:
+    return [Rule(t, fs, src, read="instantaneous") for t, fs, src in CITED_GLIA_RULES]
+
+
+def apply_mixed(rules: list[Rule], reads: dict[str, dict[str, set[str]]]) -> dict[str, str]:
+    """`apply_rules` where each rule is evaluated against the read it is written for."""
+    cells = next(iter(reads.values()))
+    pred = {}
+    for cid in cells:
+        for r in rules:
+            if r.applies(reads[r.read][cid]):
+                pred[cid] = r.tissue
+                break
+    return pred
 
 
 # ---- what a terminal cell reads --------------------------------------------
@@ -322,8 +357,10 @@ def to_bio_fates(rules: list[Rule], integrated_read: bool, module: str = "organi
         "import cell_types.bio",
         "",
     ]
-    suffix = INTEGRATED_SUFFIX if integrated_read else ""
     for i, r in enumerate(rules):
+        # a rule written against the instantaneous read names the factor the reader gives the cell;
+        # one written against the integrated read names its exposure along the lineage path
+        suffix = INTEGRATED_SUFFIX if integrated_read and r.read == "integrated" else ""
         cond = ", ".join(f"{f}{suffix} = present" for f in r.factors)
         kind = "experimental" if r.source and "learned" not in r.source else "inferred"
         src = r.source or "learned from Ma 2021 x WormWeb"
