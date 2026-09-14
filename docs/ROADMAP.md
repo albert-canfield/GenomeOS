@@ -210,9 +210,15 @@ in order. "Owner" is the session that holds the files today (see §7).
   Across all 24 chromosomes, 4,800 distal enhancers deleted one at a time:
   2,994 move a gene, 2,291 name a coding gene, **90.2% of those inside the
   element's CTCF node** (79.8% to 91.8% per chromosome) and 71.2% exactly the
-  nearest TSS. The node model has now been tested on the whole genome rather
-  than argued for: the boundary predicts where an element acts nine times out
-  of ten. Two findings worth as much as the headline: the nearest-gene
+  nearest TSS. **Qualified on 2026-09-14**, and the qualification matters more
+  than the headline: those 4,800 were a sample of distal enhancers, and over
+  the whole deletion archive (113,399 elements, chr15 to chr22 and chrY
+  complete) the same caller keeps a coding target inside the element's node for
+  81.7% of elements against 79.1% for the same number of boundaries placed at
+  random. The node's advantage over a random partition of the same resolution
+  is 2.6 points, so "the boundary predicts where an element acts" is a weak
+  effect measured on a model's reading, not the nine-times-out-of-ten the
+  sample suggested (NODES-READER-WRITER.md, "The orientation-aware caller"). Two findings worth as much as the headline: the nearest-gene
   heuristic names the wrong gene almost a third of the time, and 1,157
   elements the registry calls enhancer-like behave as silencers, rising when
   deleted. The registry names a class of element, not a direction.
@@ -1981,7 +1987,7 @@ or the CLI; results land in `data/results` and are committed.
 | Translation verified against UniProt | 25 of 25 (2026-09-11) | done | 19,249 genes: 90.9% canonical identical, 97.8% exact for some isoform; the remaining disagreements are triaged by mechanism, including hg38 frameshift and nonsense alleles detected automatically |
 | Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 330,018 edges after the 2,985 `modifies` edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
 | Modifiable sites (post-translational state) | genome-wide (2026-09-11) | done | 96,362 sites on 13,083 proteins, 352 named writers; `ptm_genome_wide` |
-| Enhancer targets, predicted (AlphaGenome) | 24 of 24 chromosomes (4,800 elements) | done | 2,994 elements move a gene, 2,291 name a coding gene; **90.2% of those sit inside the element's CTCF node** (79.8% to 91.8% per chromosome) and 71.2% are exactly the nearest TSS; 1,157 behave as silencers. Needs a key; the daily quota ran out mid-run and the job waited and resumed rather than failing |
+| Enhancer targets, predicted (AlphaGenome) | 24 of 24 chromosomes (4,800 elements) | done | 2,994 elements move a gene, 2,291 name a coding gene; 90.2% of those sit inside the element's CTCF node, against 79.1% for random boundaries on the full archive (qualified 2026-09-14) (79.8% to 91.8% per chromosome) and 71.2% are exactly the nearest TSS; 1,157 behave as silencers. Needs a key; the daily quota ran out mid-run and the job waited and resumed rather than failing |
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
 | Composition budget: constraint per UNKNOWN block, a tier per block | 24 of 24 (2026-09-12) | done | Zoonomia phyloP read per base over HTTP ranges, never stored, 2,252 MB for the genome in eight hours; 1,009 Mb tiered, constrained 1.93%, constrained-unknown 32 Mb; see area I |
