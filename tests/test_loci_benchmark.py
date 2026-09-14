@@ -251,4 +251,25 @@ def test_naming_a_target_is_still_reported_against_the_control_rate():
     assert n["negatives"]["target"]["rate"] > 0.5, (
         "if matched windows stop getting a target, the control has changed and the headline must be redone"
     )
-    assert n["positives"]["direction"]["rate"] >= 3 * n["negatives"]["direction"]["rate"]
+
+
+@needs_result
+def test_every_claim_a_deletion_makes_is_reported_with_its_coverage():
+    """A direction can only be produced where an element has been deleted.
+
+    The panel's windows were deliberately scored and the matched negatives were not, so the
+    unconditional direction rate (panel 67%, controls 13% when it was first measured) is a statement
+    about where the requests were spent. The run must carry the coverage-conditioned counts beside
+    it, so the number cannot be quoted without its denominator.
+    """
+    g = RESULT["negative_controls"]["given_deletion_data"]
+    for side in ("positives", "negatives"):
+        for group in ("with_deletion_data", "without_deletion_data"):
+            for claim in ("target", "cell", "direction", "storage"):
+                assert "k" in g[side][group][claim], f"{side} {group} {claim}"
+    assert g["negatives"]["without_deletion_data"]["direction"]["k"] == 0, (
+        "a window with no scored element produced a direction: the direction layer is not the deletion"
+    )
+    assert g["negatives"]["with_deletion_data"]["direction"]["n"] >= 1, (
+        "no matched negative has element-level deletion data, so the direction claim has no control"
+    )

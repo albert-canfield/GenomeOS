@@ -237,9 +237,9 @@
         "rate": 0.533
       },
       "direction": {
-        "k": 8,
+        "k": 9,
         "n": 60,
-        "rate": 0.133
+        "rate": 0.15
       },
       "storage": {
         "k": 9,
@@ -247,14 +247,109 @@
         "rate": 0.15
       },
       "deletion_scored": {
-        "k": 10,
+        "k": 11,
         "n": 60,
-        "rate": 0.167
+        "rate": 0.183
       },
       "eqtl_present": {
         "k": 51,
         "n": 60,
         "rate": 0.85
+      }
+    },
+    "given_deletion_data": {
+      "reading": "the same claims at the windows where an element-level deletion exists, and at the windows where none does: a claim that only a deletion can make is worth nothing until both sides have been asked",
+      "positives": {
+        "with_deletion_data": {
+          "target": {
+            "k": 10,
+            "n": 10,
+            "rate": 1.0
+          },
+          "cell": {
+            "k": 9,
+            "n": 10,
+            "rate": 0.9
+          },
+          "direction": {
+            "k": 8,
+            "n": 10,
+            "rate": 0.8
+          },
+          "storage": {
+            "k": 5,
+            "n": 10,
+            "rate": 0.5
+          }
+        },
+        "without_deletion_data": {
+          "target": {
+            "k": 1,
+            "n": 2,
+            "rate": 0.5
+          },
+          "cell": {
+            "k": 1,
+            "n": 2,
+            "rate": 0.5
+          },
+          "direction": {
+            "k": 0,
+            "n": 2,
+            "rate": 0.0
+          },
+          "storage": {
+            "k": 1,
+            "n": 2,
+            "rate": 0.5
+          }
+        }
+      },
+      "negatives": {
+        "with_deletion_data": {
+          "target": {
+            "k": 10,
+            "n": 11,
+            "rate": 0.909
+          },
+          "cell": {
+            "k": 7,
+            "n": 11,
+            "rate": 0.636
+          },
+          "direction": {
+            "k": 9,
+            "n": 11,
+            "rate": 0.818
+          },
+          "storage": {
+            "k": 1,
+            "n": 11,
+            "rate": 0.091
+          }
+        },
+        "without_deletion_data": {
+          "target": {
+            "k": 42,
+            "n": 49,
+            "rate": 0.857
+          },
+          "cell": {
+            "k": 25,
+            "n": 49,
+            "rate": 0.51
+          },
+          "direction": {
+            "k": 0,
+            "n": 49,
+            "rate": 0.0
+          },
+          "storage": {
+            "k": 8,
+            "n": 49,
+            "rate": 0.163
+          }
+        }
       }
     },
     "by_locus": {
@@ -321,9 +416,9 @@
         "negatives": 5,
         "target": 5,
         "cell": 4,
-        "direction": 0,
+        "direction": 1,
         "storage": 2,
-        "deletion_scored": 0,
+        "deletion_scored": 1,
         "eqtl_present": 5
       },
       "FTO_IRX3": {
@@ -8863,13 +8958,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "ARHGAP42",
-      "deletion_target": null,
+      "deletion_target": "ARHGAP42",
       "eqtl_target": "ENSG00000170647",
       "cells_open": [
         "CD14-positive monocyte",
@@ -10306,23 +10401,23 @@
     },
     "rs1558902": {
       "panel": 53769662,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 53769662,
+      "agrees": true
     },
     "rs1427407": {
       "panel": 60490908,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 60490908,
+      "agrees": true
     },
     "rs6983267": {
       "panel": 127401060,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 127401060,
+      "agrees": true
     },
     "rs11986220": {
       "panel": 127519444,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 127519444,
+      "agrees": true
     },
     "rs8176719": {
       "panel": 133257521,
@@ -10336,8 +10431,8 @@
     },
     "rs63750847": {
       "panel": 25897620,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 25897620,
+      "agrees": true
     },
     "rs1042522": {
       "panel": 7676154,
@@ -10367,6 +10462,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 624.7
+    "seconds": 350.1
   }
 }

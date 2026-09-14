@@ -1913,8 +1913,33 @@ def negative_summary(positives: list[dict[str, Any]], negatives: list[Window]) -
         "excluded": "every panel locus with 200 kb of flank, VISTA elements and GWAS Catalog hits (5 kb)",
         "positives": {k: rate(pos, k) for k in keys},
         "negatives": {k: rate(neg, k) for k in keys},
+        "given_deletion_data": conditioned_on_deletion_data(pos, neg),
         "by_locus": by_locus,
     }
+
+
+def conditioned_on_deletion_data(pos: list[dict[str, bool]], neg: list[dict[str, bool]]) -> dict[str, Any]:
+    """The same claims counted only where an element inside the window has actually been deleted.
+
+    The panel's windows were scored on purpose (`scripts/loci_score.py`) and the matched negatives
+    were not, so an unconditional rate for any claim a deletion produces - a direction above all -
+    measures which windows we chose to spend requests on rather than anything about the sequence.
+    Reported beside the unconditional rates so the denominator travels with the number.
+    """
+    keys = ("target", "cell", "direction", "storage")
+    out: dict[str, Any] = {
+        "reading": "the same claims at the windows where an element-level deletion exists, and at"
+        " the windows where none does: a claim that only a deletion can make is worth nothing until"
+        " both sides have been asked",
+    }
+    for name, rows in (("positives", pos), ("negatives", neg)):
+        have = [r for r in rows if r["deletion_scored"]]
+        lack = [r for r in rows if not r["deletion_scored"]]
+        out[name] = {
+            "with_deletion_data": {k: rate(have, k) for k in keys},
+            "without_deletion_data": {k: rate(lack, k) for k in keys},
+        }
+    return out
 
 
 def build(

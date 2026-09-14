@@ -348,3 +348,76 @@ at FTO is escaped by the model and not by the heuristic, which still answers FTO
 - **A named target needs a floor.** Against a chance expectation of 5.5 of 12,
   8 of 12 is not a result. Any rate quoted for a target-naming layer should come
   with the number of genes it could have chosen from.
+- **A claim needs a coverage denominator too.** "A direction is produced" looked
+  like the panel's second real discriminator at 8 of 12 against 8 of 60. It was
+  a statement about where the requests had been spent; see section 8.
+
+## 8. The reruns as the chromosome sweep lands (2026-09-14, overnight)
+
+The benchmark is rerun whenever the all-element sweep puts a scored deletion
+inside one of the 523 windows. The run costs 6 to 11 minutes when GTEx's
+distilled hits are already cached (the 21 to 48 minutes of section 5 included
+the archive pass) and makes no AlphaGenome request: a locus that still needs
+scoring is recorded as pending.
+
+| run | commit | derived | heuristic | looked up | direction (panel) | control target | control direction |
+|---|---|---|---|---|---|---|---|
+| section 6 | ef80075 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 8/60 (13%) |
+| rerun 1 | 02a1b98 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 8/60 (13%) |
+| rerun 2 | this section | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **9/60 (15%)** |
+
+Rerun 1 reproduced every verdict of the committed run exactly: the same sixty
+negative windows were redrawn from the same candidates, so the panel is
+deterministic and any later movement is new data rather than run-to-run noise.
+Its one change was the position check, which had timed out at Ensembl on the
+previous pass and this time answered for six of the eleven named variants: all
+six agree (rs8176719 within the anchor base its deletion is written on), none
+disagree, five remain unverified.
+
+Between the reruns the sweep reached one of the five matched negatives of the
+beta-globin locus control region (chr11:100,686,471-100,712,471) and scored six
+elements in it. That window immediately produced a direction, and the control
+direction rate rose from 8 of 60 to 9 of 60.
+
+### The direction claim is a coverage artefact, and this is the finding
+
+Counting the same claims only where an element inside the window has actually
+been deleted - the result now carries this as
+`negative_controls.given_deletion_data`, so the number cannot be quoted without
+its denominator:
+
+| claim | panel, with deletion data | matched negatives, with deletion data | negatives, without |
+|---|---|---|---|
+| a derived layer names *some* target | 10/10 | 10/11 (91%) | 42/49 (86%) |
+| the reader has it open in some cell | 9/10 (90%) | 7/11 (64%) | 25/49 (51%) |
+| **a direction is produced** | **8/10 (80%)** | **9/11 (82%)** | **0/49** |
+| **a value sits on constrained sequence** | **5/10 (50%)** | **1/11 (9%)** | **8/49 (16%)** |
+
+The direction separation is gone. No window without a scored element can produce
+a direction at all, and among windows that have one the matched negatives produce
+a direction slightly *more* often than the panel. The panel looked better only
+because `scripts/loci_score.py` deliberately spent 2,283 requests on the twelve
+locus windows and nothing on the sixty controls. **Producing a direction is
+evidence of having been scored, not of the element doing anything**, and it joins
+"names a target" as a claim that must never be quoted on its own.
+
+The `positives.direction >= 3 x negatives.direction` assertion has been removed
+from the gate for that reason: it was pinning an artefact, and it would have
+broken by arithmetic once about 14 of the 60 controls had deletion data. In its
+place the gate requires the run to carry the coverage-conditioned counts, and
+requires that no window without a scored element ever produces a direction.
+
+**What survives conditioning is the one claim that survived the controls: a value
+on syntax, 50% at the panel against 9% at the matched windows that hold the same
+kind of data.** Separating it from the rest is what the benchmark is for.
+
+### What the sweep can still change
+
+The twelve locus windows were scored end to end in section 6, so the sweep adds
+little to them; nearly everything it can still move is on the control side,
+where 49 of 60 windows have no element-level deletion. The controls sit on the
+panel's own chromosomes, so the sweep's remaining order matters to the benchmark
+only where it reaches chr11 (5 controls), chr9, chr8, chr7 and chr6 (5 each) and
+chr2 (15). The prediction from the table above is precise: each control window
+the sweep reaches has about a 4-in-5 chance of producing a direction and about a
+1-in-11 chance of producing a value on syntax.
