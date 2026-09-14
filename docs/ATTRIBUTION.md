@@ -1747,17 +1747,20 @@ plus duplications 1.6061, full 1.6021.
   GC and CpG buy a little for 20 s a chromosome, and repeats are the most expensive layer and the
   most negative.
 
-**chr1 and chr2 did not run. Negative, and the reason is the machine, not the method.** The pass
-was interrupted at the disk floor three times. Measured on chr2: from 28.8 GB free the pass reached
-15.6 GB in three and a half minutes and the guard refused the next step (3.8 GB more needed, floor
-15). A run instrumented afterwards showed the pass itself holding about 10 GB at that point — 5.8
-GB of count rows for one adaptive order plus its own paging — of which `du` attributes under 1 GB
-to the spill directory. Killing it returned 10 GB. With five other lanes writing, this 19 GB, 460 GB
-machine at 94% full cannot hold chr1 or chr2 under a 15 GB floor. `--rows-memory-gb` exists to spend
-memory instead of disk, and does not help here: the memory is as scarce as the disk. Both
-chromosomes are skipped, the chain resumes on them when there is room, and the rollup names them as
-missing. Between them they hold 197 of the 1,098 blocks and 5.3 of the 32 Mb, which cannot overturn
-+0.0117 with an interval of 0.0095 to 0.0145.
+**chr1 and chr2 did not run. Negative, and the reason is the machine, not the method.** The pass was
+interrupted at the disk floor four times, and the cost is now measured rather than estimated. chr2
+is 242 Mb; counting **one** adaptive order over it consumed **17.5 GB of free space** (35.1 GB
+free at 21:14, 17.6 GB when order 12 finished at 21:18), and the guard then refused order 16, which
+reserves another 5.8 GB. Only 5.8 GB of that 17.5 is the count rows themselves — three rows a base,
+the queries, the forward events and the reverse-strand events, at 8 bytes each; `du` attributes
+under 1 GB to the spill directory and killing the process returns the rest, so the remainder is the
+process's own paging onto the same volume. **chr2 would need about 38 GB free to start**, and this
+460 GB machine at 94% full, with five other lanes writing, offers 30 to 35. `--rows-memory-gb`,
+added for exactly this, does not help: it moves the 5.8 GB from disk into 19 GB of RAM that is
+already 11 GB spoken for. Both chromosomes are skipped, the chain skips finished chromosomes so it
+resumes on them when there is room, and the rollup names them as missing. Between them they hold
+197 of the 1,098 blocks and 5.3 of the 32 Mb, which cannot overturn +0.0117 with an interval of
+0.0095 to 0.0145.
 
 **What is weak.**
 - **The mixer.** The windowed Bayesian mixer is simple, and a stronger one (logistic mixing, as in

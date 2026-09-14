@@ -1784,10 +1784,12 @@ in order. "Owner" is the session that holds the files today (see §7).
     chr21's +85 because the genome is 5.7% duplicated, not 12.6%), GC and CpG +4.4 kb per Mb.
     **Still not:** repeats -32.7 kb per Mb (worse at scale), cCREs -7.3, coding -1.1, motifs -0.6.
   - **chr1 and chr2 did not run. Negative, and the machine's fault.** The disk floor stopped them
-    three times: the pass holds about 10 GB while counting one adaptive order, and a 460 GB disk at
-    94% with five other lanes writing cannot spare it under a 15 GB floor. They hold 197 of the
-    1,098 blocks and 5.3 of the 32 Mb, which cannot overturn the interval. The chain resumes on
-    them when there is room. ATTRIBUTION.md "Compression genome-wide".
+    four times, and the cost is measured: counting one adaptive order over chr2 consumed 17.5 GB of
+    free space (35.1 down to 17.6), of which only 5.8 GB is the count rows, so chr2 needs about
+    38 GB free to start and this 460 GB disk at 94% offers 30 to 35. Spending memory instead
+    (--rows-memory-gb) does not help, because 19 GB of RAM is already 11 GB spoken for. They hold
+    197 of the 1,098 blocks and 5.3 of the 32 Mb, which cannot overturn the interval. The chain
+    resumes on them when there is room. ATTRIBUTION.md "Compression genome-wide".
 - **Next.** 0. Done 2026-09-14 (the bullet above): the lexicon's axes at base resolution
   answered Question 2 negatively, so the genome-wide lexicon stays unbuilt. What could still
   sort sites into syntax and slots is measurement, not diversity: saturation mutagenesis and
