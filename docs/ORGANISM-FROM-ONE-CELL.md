@@ -475,3 +475,148 @@ Human (`genomeos grow data/organisms/human/body.bio --until "20 yr"`): 2-cell at
 published 3.3e11; erythrocytes 2.5e13, neurons 1.2e11, cardiomyocytes 3.2e9. The uncertainty report reads
 "low" at every level, which is the point: the human program is counts and shares with citations, and the
 language now has a place to put mechanism when it is known.
+
+---
+
+## Fate as context, tested (2026-09-14, genomeos-d1)
+
+The working model: a cell's fate is a function of position, signals, current state, genome, epigenome and
+developmental time, read by a regulatory network that then reinforces itself until the identity is hard to
+reverse. Four parts of that model were tested against the worm, where every cell is named; the results are
+in `data/results/celegans_fate_rules.json` and `data/results/celegans_commitment.json`
+(`scripts/celegans_fates.py`, `scripts/celegans_commitment.py`; modules `organism/atlas_levels.py`,
+`fate_rules.py`, `commitment.py`, `lateral.py`). The Ma 2021 archive was streamed again and kept as levels
+over time (peak, mean over the cell's life, exposure in minutes at the factor's maximum, onset frame), a
+9.5 MB local table under `data/knowledge/celegans`.
+
+### 1. Terminal fates from measured factors
+
+Scored on the 555 embryonic terminal cells (the atlas ends at the bean stage; the 406 larval cells keep the
+lookup). Before: the observed lookup, 555/555 by construction. The rules take precedence over it in
+`embryo_factors.bio` (`fates.bio` imported after the lineage, gated on a terminal cell type and the
+embryonic stages, so the lineage still says which cells stop dividing and when, and the factors say what
+they become).
+
+| rule set, read | decided by factors | right | wrong | score with lookup fallback | lookup-free (factors, else sublineage majority) |
+|---|---|---|---|---|---|
+| sublineage majority, no factors | 555 | 364 | 191 | 65.6% | 364 |
+| textbook, instantaneous threshold | 225 | 164 | 61 | 89.0% | |
+| textbook, integrated along the lineage | 216 | 178 | 38 | 93.2% | 405 |
+| learned, instantaneous, sublineage held out | 378 | 280 | 98 | 82.3% | |
+| learned, integrated, sublineage held out | 488 | 345 | 143 | 74.2% | |
+| textbook then learned neuron rules, integrated, held out | 449 | 365 | 84 | 84.9% | 408 |
+| the program (`embryo_factors.bio`, neuron rules fitted on all cells), through the Body and LineageDiff | 437 | 378 | 59 | 496/555 = 89.4% | |
+
+To the adult the program scores 902/961 (the larval cells are the lookup's). Per tissue, in the program:
+intestine 34/34 and hypodermis 69/69 kept, and every intestinal cell is called by ELT-2 or ELT-7 exposure
+alone; neuron 212/226 (200 called by factors), body muscle 113/122 (78 called; HLH-1 and UNC-120 are
+body-wall muscle, pharyngeal muscle is not called and 9 muscle cells go to neuron rules); the factors do
+worse than the lookup for sheath glia 6/22 and socket glia 9/18 (lost to hypodermis and neuron: glia are
+sisters of sensory neurons and carry ELT-1, LIN-26 and NHR-25 and the neuronal factors of their
+lineage), coelomocytes 0/4 (HLH-1-positive MS cells, called muscle), valve 6/8, rectal 1/2, excretory 4/5.
+Pharyngeal marginal (8/9), epithelium (12/13), gland (5/5) and the rest have no rule of their own and lose
+at most a cell to another tissue's rule.
+
+Where factors decide, they beat the lineage alone: on the 216 cells the textbook rules decide, the rules are
+right 178 times and the sublineage majority 137; on the 449 the held-out hybrid decides, 365 against 321.
+The factors carry per-cell information beyond composition: with tissues shuffled within each sublineage the
+held-out learned rules reach 18 to 29% of cells, against 50% (instantaneous) and 62% (integrated) on the
+real labels. Learned rules fail completely for a tissue only one founder makes: holding E out leaves no
+intestine to learn from, and the integrated list calls all 34 intestinal cells coelomocytes.
+
+Time integration, tested at every threshold (textbook rules; fraction of the factor's maximum):
+
+| fraction | peak in own life: right / wrong | mean over own life | exposure integrated along the lineage |
+|---|---|---|---|
+| 0.1 | 152 / 191 | 167 / 41 | 179 / 80 |
+| 0.2 | 163 / 62 | 159 / 29 | 178 / 38 |
+| 0.3 | 147 / 35 | 142 / 16 | 161 / 20 |
+| 0.5 | 118 / 9 | 119 / 4 | 136 / 8 |
+
+The instantaneous peak is the worst read at every threshold. The two time-averaged reads beat it; the
+lineage-integrated read makes the most correct calls at every threshold and the mean over the cell's own
+life makes the fewest errors. Cells behave as if they read sustained exposure, not a moment above a line;
+which window is integrated is not settled by these data.
+
+### 2. Commitment as a ratchet: not visible in the atlas (negative)
+
+Over 755 cells with complete lifetimes, in five birth-time bins (50 min each), against 200 shuffled-time
+permutations:
+
+- **States do not become fewer and more separated.** Factors per cell rise from 10 to 79. Nearest-neighbour
+  distance relative to the spread (discreteness) rises, 0.38 to 0.71 (p 0.005 in the direction opposite to
+  commitment). Discreteness in excess of a curveball randomisation that keeps every cell's count and every
+  factor's frequency is flat, -0.14 to -0.12 (p 0.49 and 0.52): cells are more clustered than their margins
+  imply at every time, and no more so later. Grouped by the tissue their descendants mostly make, the
+  silhouette is negative throughout (-0.15 to -0.12, p 0.25): until the bean stage the factor state tracks
+  lineage history more than eventual fate.
+- **Competing programmes are exclusive from the start, and do not become more so.** Among cells with an
+  intestine, body-muscle, hypodermis or neuron programme factor on, the share with two programmes goes 0, 0,
+  2.5%, 11% (relative to the curveball expectation 0, 0.10, 0.37); a declining trend has p 0.995.
+  Programme factors switch on in cells already restricted (Cole 2024: most cells single-fated by the
+  102-cell stage), so the data cannot see a programme suppressing its competitors.
+- **The ratchet on mother to daughter pairs is not measurable.** 88 pairs with a programme in the mother:
+  persistence 0.71 (reporter perdurance makes this an upper bound), switching 9%, neither trends with time
+  (p 0.27, 0.48).
+
+The atlas is the wrong instrument for hysteresis: it has no perturbation, and reporter protein perdures.
+The published evidence for commitment in the worm is perturbational (below), and that is what the construct
+proposal cites.
+
+### 3. Competence windows: not separable from lineage in an invariant lineage (negative as a test)
+
+For every de novo onset of a factor (present in a cell, absent in its tracked mother), does the onset time
+bin say something about the fate beyond the factor and the founder sublineage? Over all factors, 15,353
+onsets in 931 strata: 0.078 bits beyond the within-stratum permutation null (p 0.005); with the generation
+also fixed, 1,081 onsets: 0.041 bits (p 0.005) on descendant composition and nothing on the dominant tissue
+(p 0.14); for the textbook programme factors only, 124 onsets: 0.02 bits (p 0.16). Time carries a little
+information at fixed factor, sublineage and depth, but in the worm the time at fixed depth is branch
+identity (branches cycle at different speeds), so this does not separate competence from lineage history.
+The evidence for competence windows in the worm is experimental and not in these data: ectopic HLH-1
+converts blastomeres to muscle only in early embryos (Fukushige & Krause 2005, Development 132:1795), and
+MES-2 (Polycomb) ends that plasticity around the start of gastrulation (Yuzyuk et al. 2009, Dev Cell
+16:699). That is enough to justify a construct; it is not a result of this analysis.
+
+### 4. Lateral inhibition and noise
+
+Of 327 sister pairs with complete lives, 314 are anterior/posterior: the anterior sister carries more POP-1
+in 255 of 271 measurable pairs (median 1.4-fold, sign test z 14.5; Lin et al. 1998), which is instruction,
+not noise; the asymmetry is no larger in the 124 pairs whose descendants' tissues differ (p 0.20). Nine
+left/right sister pairs and 107 ABpl/ABpr bilateral homologues are the equivalent case: 5 and 18 of them
+differ in dominant tissue, with a larger factor distance than the concordant ones (0.32 against 0.17; 0.59
+against 0.51). But the measurement floor swamps it: the 24 factors followed by two reporter strains
+disagree on presence in the same cell 68% of the time, more than sisters disagree on the same factors
+(45%) or homologues (53%). The Notch target REF-1 (Neves & Priess 2005) is present in 21 cells; sisters
+discordant on it are no more often fate-discordant than for factors of the same frequency (rank 17 of 43).
+Negative: no lateral-inhibition signature is detectable at this resolution, and the embryonic Notch
+decisions of the worm are inductions by named neighbours, which the program already writes.
+
+Where equivalent cells do diverge in the worm, it is noise plus selection: Z1.ppp and Z4.aaa each become the
+anchor cell about half the time (Kimble & Hirsh 1979; Seydoux & Greenwald 1989), while the reference names
+Z1.ppp and scores only that. `organism/lateral.py` holds the reference behaviour a contact runtime must meet
+(Collier et al. 1996): two equal cells with a deterministic rule never diverge; with noise 198 of 200 pairs
+diverge and the first cell wins 51%. A fate rule deterministic in position and signal is wrong exactly
+there.
+
+### Constructs proposed to the engine (genomeos-c1)
+
+Sent for docs/BIOLANG-v0.4 (the IR and runtime are genomeos-c1's):
+
+- `commitment NAME { programme: factors; establish: condition (level or integrated exposure); locks:
+  cell_type; maintain: condition; excludes: factors or programmes; hysteresis: enter X, leave Y; release:
+  never | after N min below leave | experiment; inherit: daughters | none }`. Semantics: evaluated before
+  `differentiate`; once established, a differentiate decision to a type outside the locked type's
+  descendants is refused (today the last applying decision wins, which is why `fates.bio` lists its rules
+  bottom to top); signal-driven re-decisions no longer change the fate; excluded factors are masked in the
+  cell; the state is inherited as stated mechanism.
+- `competence NAME { when: context; allows: cell types; closes: at time | on commitment | after generation
+  }`. A differentiate decision whose target is outside the cell's open competence is refused and reported as
+  outside competence, not UNKNOWN.
+- Numeric factor levels and time reads in `when:`: `ELT-2.exposure >= 30` (minutes at the maximum level,
+  accumulated along the lineage between events), `ELT-2.mean >= 0.2`, and `ratio(A, B)`; `noise:` on a
+  threshold, drawn per cell from the seeded generator.
+- For contacts: neighbours per cell from grid adjacency or an imported time-resolved contact table; contact
+  signals evaluated against current neighbours (not named senders) with an amount (ligand level times
+  contact); a per-cell network stepped synchronously across coupled neighbours between events with seeded
+  noise; daughters placed along the division axis their names say; replicate runs and a diff that scores an
+  equivalence group ("exactly one of Z1.ppp, Z4.aaa is the anchor cell") rather than one fixed outcome.

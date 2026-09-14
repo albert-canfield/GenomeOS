@@ -755,9 +755,11 @@ in order. "Owner" is the session that holds the files today (see §7).
   exact; timers with their measured spread; the human body reproduced by
   growth and turnover, not asserted; organism-level uncertainty populated.
 - **Missing.** The human program is counts, not mechanism, except
-  haematopoiesis; the worm's terminal fates below the founders are the
-  observed lineage program, although every cell now carries its measured
-  transcription factors (Ma 2021 atlas, `express`); the PAR polarity rules
+  haematopoiesis; the worm's terminal fates below the founders were the
+  observed lineage program, although every cell carries its measured
+  transcription factors (Ma 2021 atlas, `express`) and factor rules now
+  decide the embryonic fates they can (below); nothing in the language
+  models commitment, competence or hysteresis; the PAR polarity rules
   are not written (par-2 and par-3 are the misses against Digital
   Development); the external engines (libRoadRunner, MaBoSS, CompuCell3D)
   are deferred for lack of Python 3.14 wheels, although CI runs 3.12 and
@@ -767,12 +769,29 @@ in order. "Owner" is the session that holds the files today (see §7).
   grown from one cell), the measured reader, Packer 2019 at 84% on
   single-tissue ids (the rest is labelling depth), Digital Development as
   the published knockout set (7 of 11 modelled transformations).
-- **Next.** 1. Terminal fates from measured factors: rules on the atlas
-  (ELT-2, HLH-1, PHA-4 and the rest) with precedence over the lineage
-  lookup, scored by the diff. 2. PAR polarity rules for the first divisions.
+- **Done 2026-09-14.** Terminal fates from measured factors
+  (`embryo_factors.bio`, `celegans_fate_rules`): with factor rules taking
+  precedence over the lookup, 496 of 555 embryonic terminal fates (lookup
+  555); textbook rules read as exposure integrated along the lineage 93.2%
+  with the lookup as fallback, the instantaneous threshold 89.0% and worst
+  at every threshold; held out by sublineage, factors decide 449 cells and
+  are right 365 times where the sublineage majority is right 321; glia and
+  coelomocytes are where factors do worse. Commitment, competence and
+  lateral inhibition tested in the atlas (`celegans_commitment`): no
+  sharpening of states or programme exclusion with time against shuffled
+  time and curveball nulls, competence not separable from lineage history,
+  sister divergence below the two-reporter measurement floor; all negative,
+  recorded in ORGANISM-FROM-ONE-CELL.md with the construct proposal
+  (`commitment`, `competence`, exposure reads, contacts) sent to genomeos-c1.
+- **Next.** 1. When genomeos-c1 lands `commitment` and exposure reads,
+  rewrite `fates.bio` with them (first established fate wins, not the last
+  line) and score again. 2. PAR polarity rules for the first divisions.
   3. The worm's founders in space with the real contacts replacing named
-  senders. 4. libRoadRunner and MaBoSS adapters tested in CI on 3.12.
-- **Owner.** genomeos-73.
+  senders (needs the contact runtime requested from genomeos-c1), with the
+  AC/VU pair scored as an equivalence group. 4. Glia from factors: sheath
+  and socket against their sister neurons. 5. libRoadRunner and MaBoSS
+  adapters tested in CI on 3.12.
+- **Owner.** genomeos-d1 (from 2026-09-14; genomeos-73 before).
 
 ### F. Cancer and therapeutics
 

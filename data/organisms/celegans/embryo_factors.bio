@@ -1,0 +1,13 @@
+# C. elegans from one cell with terminal fates decided by measured factors.
+# The same program as embryo.bio (founder mechanism, the Ma 2021 reader, the observed lineage), plus
+# exposure.bio (each rule factor integrated along the cell's lineage path) and fates.bio (factor rules for
+# intestine, body-wall muscle and hypodermis). fates.bio comes after the lineage, so where a factor rule
+# applies to an embryonic terminal cell it decides the fate and the observed lookup is only the fallback.
+# Generated rules and scores: scripts/celegans_fates.py, data/results/celegans_fate_rules.json.
+# Run: genomeos grow data/organisms/celegans/embryo_factors.bio --until 800 --compare
+module organism.celegans.embryo_factors
+# test: cells >= 2150
+# test: deaths == 131
+import embryo.bio
+import exposure.bio
+import fates.bio
