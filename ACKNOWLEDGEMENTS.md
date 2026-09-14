@@ -53,6 +53,8 @@ these; raw files are never redistributed (docs/DECISIONS.md D7).
 | Gene Ontology, Cell Ontology, Uberon | library membership, cell types, anatomy | CC BY 4.0 |
 | ENCODE | candidate cis-regulatory elements, DNase per biosample | free to use, ENCODE data-use policy |
 | GTEx | tissue expression | open access summary statistics |
+| 1000 Genomes Project phase 3 (through the Ensembl REST API) | population allele frequencies of the known-locus benchmark's named variants | open access; Ensembl EMBL-EBI terms |
+| NHGRI-EBI GWAS Catalog | lead variants and mapped genes, read as looked-up evidence in the known-locus benchmark | EMBL-EBI terms, free to use |
 | Human Protein Atlas | healthy-tissue RNA levels, localisation | CC BY-SA 4.0 |
 | Open Targets Platform | tractability, approved drugs, safety liabilities | CC0 1.0 |
 | cBioPortal | tumour alterations, cohort expression, driver frequencies | ODbL portal, per-study terms |
