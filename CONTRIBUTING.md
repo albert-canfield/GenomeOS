@@ -75,6 +75,22 @@ For a shared file (`cli.py`, `server.py`, `index.html`, `README.md`,
 hunk, `git hash-object -w` it and `git update-index --cacheinfo`; announce
 the hunk to the other sessions first.
 
+For a shared **markdown** file this is done for you, by heading:
+
+```
+uv run python scripts/stage_section.py docs/ATTRIBUTION.md "## My section" ["## the next heading"]
+```
+
+It takes the file as your private index already holds it, replaces only the
+section whose heading you name with the working copy's, and writes the result
+into that index. Nothing outside your section can reach the commit, because
+everything outside it is the base verbatim; run it once per section you own and
+the runs compose. It refuses, staging nothing, when your heading is missing from
+the working copy or when a new section has no named heading to go before, rather
+than appending to the end of a file another lane is also writing. This exists
+because `git add docs/ROADMAP.md` has twice published a lane's half-written text
+under another lane's commit.
+
 ## Every change
 
 1. Tests for the change (`tests/`); real-data tests skip when the data is
