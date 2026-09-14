@@ -5,6 +5,8 @@
 from __future__ import annotations
 
 import json
+import operator
+import re
 from pathlib import Path
 from typing import Any
 
@@ -58,6 +60,17 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
     if weak:
         lines.append(f"  rules with confidence < 0.5: {len(weak)}")
         lines += [f"    {r.id}  ({r.evidence.kind.value}: {r.evidence.source or 'no source'})" for r in weak]
+    if module.located:
+        from genomeos.lang.located import layout
+
+        lay = layout(module)
+        tree = ", ".join(f"{c.id}<{c.parent}" if c.parent else c.id for c in module.compartments())
+        lines.append(f"  located: {tree}")
+        lines.append(f"    transports: {', '.join(t.id for t in module.transports()) or 'none'}")
+        crossing = sum(1 for p, born in lay.synthesis.items() if set(born) != lay.reach.get(p, set()))
+        lines.append(f"    proteins born away from where they end: {crossing} of {len(lay.synthesis)}")
+        lines.append(f"    routes that do not reach a declared place: {len(lay.notes)}")
+        lines += [f"      {n}" for n in lay.notes[:20]]
     return "\n".join(lines)
 
 
@@ -132,3 +145,66 @@ def run_boolean(path: str, init: dict[str, bool] | None = None, seed: int = 0) -
             on = sorted(n for n, v in att[0].items() if v)
             lines.append(f"    length {len(att)}: first state on={on}")
     return "\n".join(lines)
+
+
+LOCATED_ASSERT = re.compile(r"^(\S+)\s+(?:(final|min|max)\s+)?(>=|<=|==|!=|>|<)\s*(-?[\d.eE+]+)$")
+
+
+def located_measure(result: Any, subject: str, measure: str = "final") -> float | None:
+    """A located run's value for a test or assert subject: `P@Compartment`, `stranded` or `ectopic`."""
+    if subject in ("stranded", "ectopic", "transit"):
+        return float(len(getattr(result, subject)))
+    xs = result.levels.get(subject)
+    if xs is None:
+        return None
+    return {"final": xs[-1], "min": min(xs), "max": max(xs)}.get(measure)
+
+
+_OPS = {">": operator.gt, ">=": operator.ge, "<": operator.lt, "<=": operator.le, "==": operator.eq}
+_OPS["!="] = operator.ne
+
+
+def located_asserts(result: Any, asserts: list[str]) -> list[dict[str, Any]]:
+    """Judge `SPECIES@COMPARTMENT [final|min|max] OP value` and `stranded OP n` lines on a located run."""
+    out = []
+    for line in asserts:
+        m = LOCATED_ASSERT.match(line.strip())
+        if not m:
+            out.append({"test": f"assert: {line}", "got": "not a located assert", "ok": False})
+            continue
+        got = located_measure(result, m.group(1), m.group(2) or "final")
+        ok = got is not None and _OPS[m.group(3)](got, float(m.group(4)))
+        out.append({"test": f"assert: {line}", "got": got, "ok": ok})
+    return out
+
+
+def run_located(
+    module: Module,
+    hours: float = 48.0,
+    dt: float = 0.05,
+    context: dict[str, str] | None = None,
+    initial: dict[str, float] | None = None,
+    knockouts: set[str] | None = None,
+) -> tuple[str, Any]:
+    """A located program on the located runtime: levels per compartment, mislocalisations, confidence."""
+    from genomeos.runtime.located import LocatedRuntime
+
+    vm = LocatedRuntime(module, context=context or {}, knockouts=knockouts or set())
+    res = vm.run(hours=hours, dt=dt, initial=initial or {}, record_every=max(1, int(hours / dt / 600)))
+    rg = res.regime
+    lines = [
+        f"module {module.name} (located): {len(module.compartments())} compartments, "
+        f"{len(module.transports())} transports, {len(vm.species)} species; {hours} h simulated",
+        f"  regime: {rg['treatment']} ({rg['integrator']}, dt {dt} h), update {rg['update']}, "
+        f"allocation {rg['allocation']}, seed {rg['seed']}" + ("" if rg["declared"] else "  [not declared]"),
+    ]
+    for s in vm.species:
+        xs = res.levels[s]
+        conf = res.confidence.get(s)
+        tail = f"  conf={conf['score']:.2f} (weakest: {conf['weakest']})" if conf else ""
+        lines.append(f"  {s:<32} {spark(xs, 30)}  final={xs[-1]:10.3f}{tail}")
+    for label, rows in (("stranded", res.stranded), ("ectopic", res.ectopic)):
+        lines.append(f"  {label}: {len(rows)}")
+        lines += [f"    {r}" for r in rows[:20]]
+    lines.append(f"  moved per transport: {res.transports_used}")
+    return "\n".join(lines), res

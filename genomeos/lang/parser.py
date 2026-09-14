@@ -38,9 +38,13 @@ from pathlib import Path
 from genomeos.coords import Locus
 from genomeos.ir import (
     DECISION_ACTIONS,
+    REGIME_ALLOCATIONS,
+    REGIME_TREATMENTS,
+    REGIME_UPDATES,
     UNKNOWN,
     Action,
     CellType,
+    Compartment,
     Decision,
     Design,
     Domain,
@@ -55,6 +59,7 @@ from genomeos.ir import (
     Organism,
     Parameter,
     Protein,
+    Regime,
     Region,
     RegulatoryElement,
     Rule,
@@ -62,8 +67,10 @@ from genomeos.ir import (
     Stage,
     Timer,
     Transcript,
+    Transport,
     to_minutes,
 )
+from genomeos.lang.located import check_locations
 
 _ACTIONS = {a.value: a for a in Action}
 _KINDS = (
@@ -85,6 +92,9 @@ _KINDS = (
     "experiment",
     "field",
     "design",
+    "compartment",
+    "transport",
+    "regime",
 )
 _REPEATABLE = ("effect", "assert", "observe", "source", "target", "keep", "vary")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
@@ -221,6 +231,13 @@ def _float(value: str, key: str, line_no: int) -> float:
         raise BioLangError(f"line {line_no}: {key} expects a number, got {value!r}") from None
 
 
+def _yes(value: str, key: str, line_no: int) -> bool:
+    v = value.strip().lower()
+    if v not in ("yes", "no", "true", "false"):
+        raise BioLangError(f"line {line_no}: {key} expects yes or no, got {value!r}")
+    return v in ("yes", "true")
+
+
 def _list(value: str) -> list[str]:
     return [x.strip() for x in value.split(",") if x.strip()]
 
@@ -263,6 +280,7 @@ def _compile_block(b: Block, module: Module) -> None:
             g.basal_rate = _float(p["basal"], "basal", b.line)
         if "max" in p:
             g.attrs["max_rate"] = _float(p["max"], "max", b.line)
+        g.location = _list(p.get("location", ""))
         module.add(g)
         if "produces" in p:
             for target in _list(p["produces"]):
@@ -319,6 +337,10 @@ def _compile_block(b: Block, module: Module) -> None:
                 {"source": "PDB" if not x.startswith("AF-") else "AlphaFold", "id": x}
                 for x in _list(p["structures"])
             ]
+        pr.location = _list(p.get("location", ""))
+        pr.signals = _list(p.get("signals", ""))
+        if "initial" in p:
+            pr.initial = _float(p["initial"], "initial", b.line)
         module.add(pr)
     elif b.kind == "region":
         role = p.get("role", "unknown")
@@ -574,6 +596,57 @@ def _compile_block(b: Block, module: Module) -> None:
         if action == "differentiate" and not dc.to:
             raise BioLangError(f"line {b.line}: differentiate needs 'to: <cell_type>'")
         module.decisions.append(dc)
+    elif b.kind == "compartment":
+        cp = Compartment(id=b.header, kind="compartment", evidence=ev, confidence=conf)
+        cp.parent = p.get("parent", "")
+        cp.membrane = _yes(p.get("membrane", "no"), "membrane", b.line)
+        cp.translation = _yes(p.get("translation", "no"), "translation", b.line)
+        if "volume" in p:
+            cp.volume = _float(p["volume"], "volume", b.line)
+            if not 0.0 < cp.volume <= 1.0:
+                raise BioLangError(f"line {b.line}: volume is a fraction of the cell, within 0..1")
+        cp.genome = _list(p.get("genome", ""))
+        if "copies" in p:
+            cp.copies = int(_float(p["copies"], "copies", b.line))
+        module.add(cp)
+    elif b.kind == "transport":
+        tr = Transport(id=b.header, kind="transport", evidence=ev, confidence=conf)
+        tr.from_compartment, tr.to_compartment = p.get("from", ""), p.get("to", "")
+        if not tr.from_compartment or not tr.to_compartment:
+            raise BioLangError(f"line {b.line}: transport {b.header!r} needs 'from' and 'to'")
+        tr.cargo = [c.replace(" ", "") for c in _list(p.get("cargo", ""))]
+        if not tr.cargo:
+            raise BioLangError(f"line {b.line}: transport {b.header!r} needs a cargo")
+        if "capacity" not in p:
+            raise BioLangError(f"line {b.line}: transport {b.header!r} needs a capacity (amount per hour)")
+        tr.capacity = _float(p["capacity"], "capacity", b.line)
+        if "affinity" in p:
+            tr.affinity = _float(p["affinity"], "affinity", b.line)
+        if tr.capacity < 0 or tr.affinity <= 0:
+            raise BioLangError(f"line {b.line}: capacity must be >= 0 and affinity > 0")
+        tr.via = p.get("via", "")
+        if "via_threshold" in p:
+            tr.via_threshold = _float(p["via_threshold"], "via_threshold", b.line)
+        module.add(tr)
+    elif b.kind == "regime":
+        if module.regime is not None:
+            raise BioLangError(f"line {b.line}: a program may declare one regime")
+        rg = Regime(name=b.header, evidence=ev, confidence=conf)
+        for key, allowed in (
+            ("treatment", REGIME_TREATMENTS),
+            ("update", REGIME_UPDATES),
+            ("allocation", REGIME_ALLOCATIONS),
+            ("units", ("au", "copies")),
+        ):
+            if key in p:
+                if p[key] not in allowed:
+                    raise BioLangError(f"line {b.line}: regime {key} must be one of {allowed}")
+                setattr(rg, key, p[key])
+        if "threshold" in p:
+            rg.threshold = _float(p["threshold"], "threshold", b.line)
+        if "seed" in p:
+            rg.seed = int(_float(p["seed"], "seed", b.line))
+        module.regime = rg
     elif b.kind == "transcript":
         raise BioLangError(f"line {b.line}: transcript blocks must be nested inside a gene")
 
@@ -603,6 +676,16 @@ def _check_references(module: Module) -> None:
     org = module.organism
     if org and org.cell_type and org.cell_type not in cell_types:
         raise BioLangError(f"organism {org.name!r} starts as undeclared cell_type {org.cell_type!r}")
+    if not module.located:
+        stray = [e.id for e in module.transports()] + [
+            e.id for e in [*module.genes(), *module.proteins()] if getattr(e, "location", None)
+        ]
+        if stray:
+            raise BioLangError(f"locations and transports need declared compartments: {stray[:5]}")
+    errors = check_locations(module)
+    if errors:
+        more = f" (and {len(errors) - 1} more)" if len(errors) > 1 else ""
+        raise BioLangError(f"located program: {errors[0]}{more}")
 
 
 # `import <scheme>:<name>` asks a registered resolver for BioLang text: the engine defines the hook,

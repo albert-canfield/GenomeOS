@@ -147,12 +147,35 @@ in order. "Owner" is the session that holds the files today (see §7).
   (Carnegie), `bio.std.signalling` (148 pairs from CellPhoneDB) and
   `bio.std.human_turnover` (Sender & Milo lifespans); `express` (reader
   state), `field`, `design`, space and populations in the language.
+- **BioLang v0.4: structure, economy and control (2026-09-14).** The
+  specification is [BIOLANG-v0.4-ECONOMY.md](BIOLANG-v0.4-ECONOMY.md): a cell's
+  economy and structure belong in the language, not outside it. Stage 1 is
+  built and has passed its gates — `compartment` (a containment tree with
+  volumes, genomes and ribosomes), a location and targeting `signals` on every
+  gene and protein, `transport` between adjacent compartments with one shared
+  saturable capacity, and a `regime` block that declares and records how a run
+  was executed (continuous or stochastic per species, update scheme, allocation
+  policy, seed). `runtime/located.py` runs it: 13 of 13 chrM proteins are made
+  and kept inside the mitochondrion with no transport, all 1,123 nuclear-encoded
+  MitoCarta3.0 proteins reach it only through a transport (0 with the routes
+  closed), the rho0 phenotype comes out right (complexes I, III, IV, V dead,
+  complex II intact: King & Attardi 1989), removing one subunit's presequence
+  strands it and kills its complex alone, and a red blood cell with no genome at
+  all still runs. Six modelling errors are compile errors instead of silent
+  answers. Stages 2 to 4 (pools, costs and a named allocation policy; core
+  metabolism and heteroplasmy; partitioning division) and the control layer
+  (`homeostat` with set points and gains, `role` for phenomenological
+  behaviour, specialisation as state rather than inheritance) are specified with
+  their falsifying measurements and wait for Albert's steer. Programs:
+  `data/organisms/human/oxphos.bio` (generated, self-testing) and
+  `data/organisms/human/erythrocyte.bio`; gate result
+  `data/results/located_mitochondrion.json` from
+  `scripts/located_mitochondrion.py`.
 - **Next.** 1. `bio` packaged as an extra entry point with its own test set.
   2. A `population` type in BioIR (today a counted `Cell`). 3. PAR polarity
   rules for the worm's first divisions, so par-2 and par-3 knockouts are
   predicted rather than stated.
-- **Owner.** genomeos-73 (parser, IR, body runtime, std); genomeos-fe
-  (`bio.py`, central dogma).
+- **Owner.** genomeos-c1 (the engine: language, IR, runtime, toolchain, v0.4).
 
 ### B. Genome decoding (reverse-engineering the sequence)
 

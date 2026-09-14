@@ -1,0 +1,213 @@
+{
+  "result": "located_mitochondrion",
+  "date": "2026-09-14",
+  "stage": "BioLang v0.4 stage 1: compartments, locations, transports",
+  "full_mitocarta": {
+    "gate_1_mtDNA_proteins": {
+      "proteins": 13,
+      "born_and_kept_in_mitochondrion_without_transport": 13,
+      "pass": true
+    },
+    "gate_2_nuclear_encoded_import": {
+      "proteins": 1123,
+      "reach_mitochondrion": {
+        "wild_type": 1123,
+        "import_closed": 0,
+        "presequence_route_closed": 418,
+        "internal_route_closed": 705
+      },
+      "by_signal_when_one_route_closed": {
+        "presequence_route_closed": {
+          "presequence": 0,
+          "internal": 418
+        },
+        "internal_route_closed": {
+          "presequence": 705,
+          "internal": 0
+        }
+      },
+      "stranded_when_import_closed": 1123,
+      "pass": true
+    },
+    "signals": {
+      "presequence (curated)": 549,
+      "presequence (predicted)": 156,
+      "internal (inferred)": 418,
+      "mtDNA": 13
+    },
+    "seconds": {
+      "wild_type": 5.2,
+      "import_closed": 3.9,
+      "presequence_route_closed": 4.2,
+      "internal_route_closed": 4.6
+    },
+    "regime": {
+      "name": "default",
+      "declared": false,
+      "treatment": "continuous",
+      "threshold": 50.0,
+      "units": "au",
+      "update": "continuous",
+      "integrator": "RK4",
+      "dt_hours": 0.1,
+      "allocation": "competitive",
+      "seed": null,
+      "species_stochastic_at_end": [],
+      "reaction_firings": {}
+    }
+  },
+  "evidence_full_program": {
+    "facts": 3419,
+    "by_evidence": {
+      "curated": 2836,
+      "experimental": 4,
+      "inferred": 423,
+      "predicted": 156
+    },
+    "measured_or_curated_share": 0.831,
+    "structure_constructs": {
+      "curated": 2,
+      "experimental": 4,
+      "inferred": 3
+    }
+  },
+  "gate_3_rho0_and_mislocalisation": {
+    "wild_type": {
+      "complexes": {
+        "CI": 0.101566,
+        "CII": 0.101566,
+        "CIII": 0.101566,
+        "CIV": 0.101566,
+        "CV": 0.101566
+      },
+      "stranded": [],
+      "stranded_count": 0
+    },
+    "rho0": {
+      "complexes": {
+        "CI": 0.0,
+        "CII": 0.101566,
+        "CIII": 0.0,
+        "CIV": 0.0,
+        "CV": 0.0
+      },
+      "stranded": [],
+      "stranded_count": 0
+    },
+    "import_closed": {
+      "complexes": {
+        "CI": 0.0,
+        "CII": 0.0,
+        "CIII": 0.0,
+        "CIV": 0.0,
+        "CV": 0.0
+      },
+      "stranded": [
+        "CYC1p (declared Mitochondrion, found in ['Cytosol'])",
+        "SDHBp (declared Mitochondrion, found in ['Cytosol'])",
+        "SDHAp (declared Mitochondrion, found in ['Cytosol'])",
+        "UQCRC1p (declared Mitochondrion, found in ['Cytosol'])",
+        "ATP5F1Dp (declared Mitochondrion, found in ['Cytosol'])"
+      ],
+      "stranded_count": 87
+    },
+    "sdhb_without_presequence": {
+      "complexes": {
+        "CI": 0.101566,
+        "CII": 0.0,
+        "CIII": 0.101566,
+        "CIV": 0.101566,
+        "CV": 0.101566
+      },
+      "stranded": [
+        "SDHBp (declared Mitochondrion, found in ['Cytosol'])"
+      ],
+      "stranded_count": 1
+    },
+    "pass": true,
+    "subunits": {
+      "CI": 44,
+      "CII": 4,
+      "CIII": 10,
+      "CIV": 21,
+      "CV": 21
+    }
+  },
+  "gate_4_no_genome": {
+    "genes": 0,
+    "checks": [
+      {
+        "test": "entities >= 7",
+        "got": 7,
+        "ok": true
+      },
+      {
+        "test": "stranded final == 0",
+        "got": 0.0,
+        "ok": true
+      },
+      {
+        "test": "HbA@Cytosol final > 5e+08",
+        "got": 556747612.2885281,
+        "ok": true
+      },
+      {
+        "test": "HbA@Cytosol final <= 5.6e+08",
+        "got": 556747612.2885281,
+        "ok": true
+      },
+      {
+        "test": "SLC4A1@PlasmaMembrane final > 1e+06",
+        "got": 1193030.5978061717,
+        "ok": true
+      }
+    ],
+    "pass": true
+  },
+  "refusals": {
+    "gene without a location": "refused: located program: gene 'X' has no location (and no compartment reads its locus)",
+    "protein without a location": "refused: located program: protein 'Xp' has no location (and 1 more)",
+    "chrM gene declared nuclear": "refused: located program: gene 'MT-ND1' on chrM is declared in 'Nucleus', which does not read chrM; chrM is read in ['Mitochondrion']",
+    "nuclear gene with no mRNA export": "refused: located program: 'X' produces 'Xp' but its mRNA reaches no compartment with translation (from 'Nucleus'; is an mRNA transport missing?)",
+    "rule across compartments": "refused: located program: rule 'TF activates X' acts across compartments: 'TF' is in ['Mitochondrion'], 'X' in ['Nucleus']; they share no compartment and no membrane faces one",
+    "transport between non-adjacent places": "refused: located program: transport 'T' joins 'Nucleus' and 'Mitochondrion', which are not adjacent"
+  },
+  "evidence_oxphos_program": {
+    "facts": 416,
+    "by_evidence": {
+      "curated": 373,
+      "experimental": 4,
+      "inferred": 35,
+      "predicted": 4
+    },
+    "measured_or_curated_share": 0.906,
+    "structure_constructs": {
+      "curated": 2,
+      "experimental": 4,
+      "inferred": 3
+    }
+  },
+  "evidence_erythrocyte_program": {
+    "facts": 10,
+    "by_evidence": {
+      "curated": 5,
+      "experimental": 3,
+      "inferred": 2
+    },
+    "measured_or_curated_share": 0.8,
+    "structure_constructs": {
+      "curated": 2,
+      "experimental": 1
+    }
+  },
+  "seconds": 21.3,
+  "sources": [
+    "MitoCarta3.0, Rath et al. 2021, Nucleic Acids Res 49:D1541 (human inventory, sub-compartments, OXPHOS subunits, TargetP)",
+    "UniProtKB/Swiss-Prot keywords (transit peptide), local cache",
+    "GENCODE v50 chrM gene models",
+    "King & Attardi 1989, Science 246:500 (rho0 cells)",
+    "Wiedemann & Pfanner 2017, Annu Rev Biochem 86:685 (import routes)",
+    "Alberts et al., Molecular Biology of the Cell 6e, Table 12-1 (compartment volumes)"
+  ],
+  "note": "stage 1 claims places, not amounts: levels are arbitrary units, capacities are set far above demand and every OXPHOS subunit is required (tissue paralogues included); mitochondrial translation does not yet depend on imported ribosomal proteins, which is a resource dependence for stage 2"
+}

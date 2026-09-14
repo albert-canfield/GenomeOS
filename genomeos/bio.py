@@ -3,13 +3,14 @@
 
     bio check   FILE [--context k=v]     compile, resolve references, report evidence and confidence
     bio compile FILE [-o out.json]       BioLang → BioIR JSON
-    bio run     FILE [--hours H] ...     run the module on the network runtime (or SBML / .bnet)
+    bio run     FILE [--hours H] ...     run the module on the network runtime (or SBML / .bnet); a located
+                                         (v0.4) program runs on the located runtime, `--knockout` perturbs it
     bio test    PATH...                  run every .bio file, evaluate its `# test:` lines
     bio repl                             type BioLang, run it, inspect it
 
 `test` lines live in comments so a module stays a plain program:
 
-    # test: TetR final > 5          the last value of a species
+    # test: TetR final > 5          the last value of a species (`P@Compartment` in a located program)
     # test: TetR peaks >= 2         number of peaks over the run
     # test: rules >= 3              module facts: rules, entities, unknowns
     # test: confidence >= 0.6       mean confidence over all rules
@@ -35,7 +36,17 @@ from typing import Any
 from genomeos.ir import Module
 from genomeos.lang import parse, parse_file
 from genomeos.lang.parser import BioLangError
-from genomeos.lang.tools import check_module, compile_module, load_module, run_boolean, run_module, run_sbml
+from genomeos.lang.tools import (
+    check_module,
+    compile_module,
+    load_module,
+    located_asserts,
+    located_measure,
+    run_boolean,
+    run_located,
+    run_module,
+    run_sbml,
+)
 from genomeos.version import __version__
 
 OPS = {
@@ -46,7 +57,9 @@ OPS = {
     "==": operator.eq,
     "!=": operator.ne,
 }
-TEST_LINE = re.compile(r"^\s*#\s*test:\s*(\S+)\s+(final|peaks|min|max)?\s*(>=|<=|==|!=|>|<)\s*(-?[\d.]+)\s*$")
+TEST_LINE = re.compile(
+    r"^\s*#\s*test:\s*(\S+)\s+(final|peaks|min|max)?\s*(>=|<=|==|!=|>|<)\s*(-?[\d.]+(?:[eE][-+]?\d+)?)\s*$"
+)
 
 
 # ---- test --------------------------------------------------------------------------
@@ -72,10 +85,19 @@ def evaluate(
     body_subjects = ("cells", "alive", "deaths")
     needs_run = any(s not in facts and s not in body_subjects for s, *_ in tests)
     traj = None
-    if needs_run and module.rules:
+    results: list[dict[str, Any]] = []
+    located = None
+    if getattr(module, "located", False):  # v0.4: the wild type, then each experiment's knockouts
+        from genomeos.runtime.located import LocatedRuntime
+
+        located = LocatedRuntime(module).run(hours=hours, dt=0.05)
+        for ex in module.experiments:
+            mutant = LocatedRuntime(module, knockouts=set(ex.knockouts)).run(hours=hours, dt=0.05)
+            for r in located_asserts(mutant, ex.asserts):
+                results.append({**r, "test": f"experiment {ex.name}: {r['test']}"})
+    if needs_run and module.rules and located is None:
         vm = NetworkRuntime(module, context={}, seed=0)
         traj = vm.run(hours=hours, dt=0.05, initial={})
-    results = []
     # an organism program (stages declared): grow it to the last stage; its own `assert:` lines are claims
     body = None
     stages = getattr(module, "stages", None) or []
@@ -114,6 +136,8 @@ def evaluate(
         elif subject in body_subjects and body is not None:
             summ = body.summary()
             got = {"cells": summ["cells_born"], "alive": summ["alive"], "deaths": summ["deaths"]}[subject]
+        elif located is not None and located_measure(located, subject, measure) is not None:
+            got = located_measure(located, subject, measure)
         elif traj is not None and subject in traj.levels:
             xs = traj.levels[subject]
             got = {"final": xs[-1], "peaks": traj.peaks(subject), "min": min(xs), "max": max(xs)}[measure]
@@ -334,6 +358,10 @@ def cmd_run(args: argparse.Namespace) -> int:
     module = load_module(args.module)
     context = dict(kv.split("=", 1) for kv in args.context) if args.context else {}
     initial = {k: float(v) for k, v in (kv.split("=", 1) for kv in (args.init or []))}
+    if module.located:  # places, transports and mislocalisation (v0.4)
+        text, _ = run_located(module, args.hours, args.dt, context, initial, set(args.knockout or []))
+        print(text)
+        return 0
     text, _ = run_module(module, args.hours, args.dt, context, initial, args.seed, args.csv)
     print(text)
     return 0
@@ -363,6 +391,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--context", nargs="*")
     p.add_argument("--init", nargs="*")
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument(
+        "--knockout", nargs="*", help="located programs: genes, proteins, transports, chrM, P:signal"
+    )
     p.add_argument("--csv")
     p.set_defaults(fn=cmd_run)
     p = sub.add_parser("test", help="run every .bio file and its `# test:` lines")

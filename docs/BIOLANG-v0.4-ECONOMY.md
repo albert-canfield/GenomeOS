@@ -2,8 +2,8 @@
 
 **Status: DRAFT for Albert's review, 2026-09-14.** Nothing past stage 1 is to
 be implemented until he has steered the constructs below. Stage 1
-(compartments and transport) is being built against its gate; its result is
-recorded in §9 when it lands, pass or fail. Sections marked *open* are
+(compartments and transport) is implemented and passed its four gates; the
+numbers are in §9.1. Sections marked *open* are
 decisions this document deliberately leaves to him.
 
 Adds to v0.3 (see [BIOLANG-v0.3.md](BIOLANG-v0.3.md)). Every v0.1 to v0.3
@@ -77,7 +77,7 @@ compartment Cytosol       { parent: PlasmaMembrane; volume: 0.54; translation: y
                             evidence: experimental "Alberts MBoC 6e Table 12-1 (hepatocyte)"; confidence: 0.7 }
 compartment Nucleus       { parent: Cytosol; volume: 0.06; genome: nuclear }
 compartment Mitochondrion { parent: Cytosol; volume: 0.22; genome: chrM; translation: yes; copies: 1 }
-compartment ER            { parent: Cytosol; volume: 0.12 }
+compartment ER            { parent: Cytosol; volume: 0.09 }
 ```
 
 | property | form | meaning |
@@ -90,7 +90,8 @@ compartment ER            { parent: Cytosol; volume: 0.12 }
 | `copies` | `integer` | copies per cell (recorded in stage 1; heteroplasmy in stage 3) |
 
 **Semantics.** Compartments form a containment tree. Two compartments are
-*adjacent* when one is the other's parent. This is the same shape as a
+*adjacent* when one is the other's parent, or when both sit either side of one
+membrane compartment, which a transport then crosses. This is the same shape as a
 process-bigraph place graph, so a located program maps onto a Composite whose
 stores nest the same way (`runtime/compose.py`).
 
@@ -112,7 +113,8 @@ protein SDHBp { location: Mitochondrion; signals: presequence
   chromosome; a stated `location` that disagrees is a compile error (a chrM
   gene declared nuclear is a mislocalised gene).
 - A protein's `location` is the set of compartments it occupies when it
-  works (`location: Nucleus, Cytosol`). `signals` names the targeting signals
+  works (`location: Nucleus, Cytosol`); `initial` gives the amount it holds in
+  each of them at time zero, which is how a cell with no genome is written. `signals` names the targeting signals
   it carries (presequence, signal_peptide, NLS, ...), which is what transport
   machinery recognises. A protein is never moved because of where it is
   declared to be; it is moved because a transport recognises it.
@@ -156,7 +158,7 @@ transport TOM_TIM23   { from: Cytosol; to: Mitochondrion; cargo: signal = preseq
 
 | property | form | meaning |
 |---|---|---|
-| `from`, `to` | `Id` | adjacent compartments (anything else is a compile error) |
+| `from`, `to` | `Id` | adjacent compartments, or the two sides of one membrane (anything else is a compile error) |
 | `cargo` | `Id, Id \| mRNA \| signal = S` | what it carries: named species, every mRNA, or proteins carrying signal S |
 | `capacity` | `amount per hour` | maximal total flux |
 | `affinity` | `amount` | cargo level giving half-maximal flux |
@@ -428,11 +430,63 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 
 | Stage | Constructs | Gate | Status |
 |---|---|---|---|
-| 1 | compartment, location, signals, transport, regime record | chrM, MitoCarta import, rho0, red blood cell | in progress |
+| 1 | compartment, location, signals, transport, regime record | chrM, MitoCarta import, rho0, red blood cell | **passed 2026-09-14** (below) |
 | 2 | pool, cost, allocation | burden; absolute abundance vs PaxDb | not started (waits for Albert) |
 | 3 | core metabolism, mitochondrial copies, heteroplasmy | ATP budget; oxygen and glucose dependence; red blood cell glycolysis | not started |
 | 4 | partitioning division, checkpoint | dilution vs protein turnover | not started |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
+
+### 9.1 Stage 1 as measured (2026-09-14)
+
+`scripts/located_mitochondrion.py` generates a located program for all 1,136
+MitoCarta3.0 genes and runs it on `runtime/located.py`; the result is
+`data/results/located_mitochondrion.json`, and the committed programs
+`data/organisms/human/oxphos.bio` (generated) and
+`data/organisms/human/erythrocyte.bio` test themselves under `bio test`.
+
+| Gate | Result |
+|---|---|
+| 1. the 13 chrM proteins | 13 of 13 are made inside the mitochondrion, stay there, use no transport, and are unaffected when import is closed |
+| 2. nuclear-encoded import | 1,123 of 1,123 reach the mitochondrion with the routes open, **0** with them closed, and all 1,123 are then listed as stranded; closing only the presequence route leaves 418 (the internal-signal proteins), closing only the internal route leaves 705 |
+| 3. rho0 (King & Attardi 1989) | without mtDNA complexes I, III, IV and V fall to zero activity and complex II, entirely nuclear-encoded, keeps it; closing import removes all five; removing SDHB's presequence removes complex II alone and names SDHB as the one stranded protein |
+| 4. no genome (red blood cell) | a program with 0 genes, no nucleus and no mitochondrion compiles and runs; haemoglobin assembles from the chains the cell was born with and mass balance holds |
+
+Six modelling errors are refused at compile time rather than run: a gene or a
+protein with no location, a chrM gene declared nuclear, a nuclear gene whose
+mRNA reaches no ribosome, a rule across compartments, a transport between
+compartments that are not adjacent, and a transport gated by an undeclared
+protein.
+
+**How much of the layer is guesswork.** In the OXPHOS program, 419 facts:
+90.2% curated or experimental, 8.8% inferred, 1.0% predicted. Of the 12
+structure constructs in the two committed programs, 5 are experimental
+(compartment volumes), 4 curated and **3 inferred — the three transport
+capacities, which are not measured**; two time-scale parameters are inferred
+as well. Over the whole MitoCarta program the import signal is curated from
+UniProt for 549 proteins, predicted by TargetP for 156, and **inferred for
+418** ("no presequence annotated, so an internal signal"), which is the
+honest cost of covering the whole inventory. The runtime carries this to the
+output: every located species reports the weakest link on the chain that put
+it there, and for an imported protein that link is the transport at 0.3.
+
+**Decided while implementing, for Albert to confirm or overturn.**
+
+1. **A transport may cross one membrane.** Band 3 moves bicarbonate from
+   outside to the cytosol, and the plasma membrane is a compartment between
+   them, so "adjacent" means parent-child *or* both neighbours of one membrane.
+2. **Assembly consumes its subunits, one of each.** Without it the red cell
+   made forty times more haemoglobin than it had chains — an economy layer
+   that produces matter from nothing is exactly the failure this stage exists
+   to prevent. Real stoichiometry (α2β2) waits for stage 2's costs, so a
+   complex count is currently the chain count.
+3. **`initial` on a protein** is the bootstrap state S0 the architecture
+   already requires; the red blood cell cannot be written without it.
+4. **Amounts, not concentrations** (open decision 2 stands): volumes are
+   declared and recorded but no rate reads them yet.
+5. **What stage 1 deliberately does not model:** mitochondrial translation
+   still works with import closed, because ribosomes are not yet a resource;
+   in a cell the mitoribosome is imported. That dependence is stage 2's, and
+   the program says so in its own evidence field.
 
 ## 10. Open decisions for Albert
 

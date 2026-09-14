@@ -65,6 +65,7 @@ these; raw files are never redistributed (docs/DECISIONS.md D7).
 | Packer et al. 2019 (GEO GSE126954) | worm single-cell lineage annotation | public GEO record |
 | Ma et al. 2021 (Zenodo 4737593) | protein levels of 266 transcription factors per lineaged C. elegans embryonic cell over time: the worm's reader, terminal-fate rules and the commitment tests | CC BY 4.0 |
 | Sender & Milo 2021 | human cell counts, lifespans, turnover | publication cited |
+| MitoCarta3.0 (Rath et al. 2021, Nucleic Acids Res 49:D1541), with King & Attardi 1989, Wiedemann & Pfanner 2017 and Alberts et al., *Molecular Biology of the Cell* Table 12-1 | the mitochondrial inventory, sub-compartments, OXPHOS subunits and TargetP signals behind the located OXPHOS program and the BioLang v0.4 stage 1 gate; the rho0 phenotype, import routes and compartment volumes it is checked against | freely available from the Broad Institute; publications cited |
 | Horvath 2013, Hannum 2013 | epigenetic clock coefficients | publications cited |
 | Hart et al. 2017 (CEGv2) | core-essential gene set | publication cited |
 | BioModels | SBML reference models | CC0 |

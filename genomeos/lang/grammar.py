@@ -15,7 +15,7 @@ import sys
 from genomeos.ir import model as ir
 from genomeos.lang import parser as _parser
 
-VERSION = "0.3"
+VERSION = "0.4"
 
 # property -> (form, meaning), per block kind; header form per kind
 BLOCKS: dict[str, dict] = {
@@ -27,6 +27,7 @@ BLOCKS: dict[str, dict] = {
             "max": ("number", "maximal transcription rate for the network engine"),
             "basal": ("number", "basal transcription rate"),
             "produces": ("Id, Id", "proteins this gene produces (one `produces` rule each)"),
+            "location": ("Id", "v0.4: the compartment where it is read"),
         },
         "nested": "transcript",
     },
@@ -37,6 +38,9 @@ BLOCKS: dict[str, dict] = {
     "protein": {
         "header": "protein <Id> { ... }",
         "props": {
+            "location": ("Id, Id", "v0.4: compartments it occupies when it works"),
+            "signals": ("name, name", "v0.4: targeting signals a transport recognises"),
+            "initial": ("number", "v0.4: amount in each declared location at time 0"),
             "half_life": ("hours", "protein half-life"),
             "sequence": ("residues", "amino-acid sequence"),
             "accession": ("text", "UniProt accession"),
@@ -193,6 +197,40 @@ BLOCKS: dict[str, dict] = {
             "keep": ("assert grammar", "repeatable; must hold"),
         },
     },
+    "compartment": {
+        "header": "compartment <Id> { ... }",
+        "props": {
+            "parent": ("Id", "the compartment that contains this one; one root"),
+            "membrane": ("yes | no", "a membrane faces its parent and its children"),
+            "volume": ("number", "fraction of the cell's volume"),
+            "genome": ("chrM, ... | nuclear", "chromosomes read here"),
+            "translation": ("yes | no", "ribosomes are present"),
+            "copies": ("integer", "copies per cell"),
+        },
+    },
+    "transport": {
+        "header": "transport <Id> { ... }",
+        "props": {
+            "from": ("Id", "required; adjacent to `to`, or across one membrane"),
+            "to": ("Id", "required"),
+            "cargo": ("Id, Id | mRNA | signal = S", "required; what it carries"),
+            "capacity": ("amount per hour", "required; maximal total flux"),
+            "affinity": ("amount", "cargo level giving half-maximal flux"),
+            "via": ("Id", "protein whose presence gates the capacity"),
+            "via_threshold": ("number", "via level giving half capacity"),
+        },
+    },
+    "regime": {
+        "header": "regime <Id> { ... }   (one per program)",
+        "props": {
+            "treatment": ("continuous | stochastic | auto", "per species; auto uses the threshold"),
+            "threshold": ("copies", "auto: stochastic below this"),
+            "units": ("au | copies", "stochastic treatment needs copies"),
+            "update": ("continuous | synchronous | asynchronous | event", "recorded in every result"),
+            "allocation": ("competitive | proportional | priority | optimise", "shared capacities"),
+            "seed": ("integer", ""),
+        },
+    },
 }
 COMMON = {
     "evidence": ('kind "source" [note]', "kind in experimental, curated, predicted, inferred, none"),
@@ -205,6 +243,9 @@ DIRECTIVES = {
 IR_TYPES = [
     "Evidence",
     "Entity",
+    "Compartment",
+    "Transport",
+    "Regime",
     "Region",
     "RegulatoryElement",
     "Domain",

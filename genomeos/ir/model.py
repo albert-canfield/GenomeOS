@@ -1,4 +1,4 @@
-"""BioIR v0.3 - the Biological Intermediate Representation.
+"""BioIR v0.4 - the Biological Intermediate Representation (v0.4 adds places: docs/BIOLANG-v0.4-ECONOMY.md).
 
 Everything the compiler emits and the VM executes is one of these types.
 Three principles are enforced by the types themselves:
@@ -140,6 +140,7 @@ class Gene(Entity):
     locus: Locus | None = None
     transcripts: list[Transcript] = field(default_factory=list)
     basal_rate: float = 0.0  # transcription with no regulators (a.u./h)
+    location: list[str] = field(default_factory=list)  # v0.4: the compartment where it is read
 
     def __post_init__(self) -> None:
         self.kind = "gene"
@@ -172,6 +173,9 @@ class Protein(Entity):
     structures: list[dict] = field(default_factory=list)  # {source: PDB|AlphaFold, id, method, ...}
     pathways: list[str] = field(default_factory=list)  # Reactome ids
     interactions: list[str] = field(default_factory=list)  # partner symbols with evidence kept in the source
+    location: list[str] = field(default_factory=list)  # v0.4: compartments it occupies when it works
+    signals: list[str] = field(default_factory=list)  # v0.4: targeting signals a transport recognises
+    initial: float = 0.0  # v0.4: amount in each declared location at time 0 (the bootstrap state)
 
     def __post_init__(self) -> None:
         self.kind = "protein"
@@ -285,6 +289,83 @@ class Signal(Entity):
 
     def __post_init__(self) -> None:
         self.kind = "signal"
+
+
+@dataclass(slots=True)
+class Compartment(Entity):
+    """A place in the cell (BioLang v0.4, docs/BIOLANG-v0.4-ECONOMY.md §4.1).
+
+    Compartments form a containment tree through `parent`; two are adjacent when one contains the
+    other. A membrane faces its parent and its children at once. `genome` lists the chromosomes read
+    here ("nuclear" stands for every chromosome except chrM/MT); `translation` says ribosomes are
+    present. `volume` (fraction of the cell) and `copies` are recorded for the economy stages."""
+
+    parent: str = ""
+    membrane: bool = False
+    volume: float | _Unknown = UNKNOWN
+    genome: list[str] = field(default_factory=list)
+    translation: bool = False
+    copies: int = 1
+
+    def __post_init__(self) -> None:
+        self.kind = "compartment"
+
+    def reads(self, chrom: str) -> bool:
+        """Whether a gene on `chrom` is read in this compartment."""
+        mito = chrom in ("chrM", "MT", "M")
+        return chrom in self.genome or ("nuclear" in self.genome and not mito)
+
+
+@dataclass(slots=True)
+class Transport(Entity):
+    """A route between two adjacent compartments with a finite, shared capacity (v0.4 §4.3).
+
+    `cargo` entries are species ids, `mRNA` (every mRNA) or `signal=S` (proteins carrying signal S).
+    Flux of cargo i is capacity * (x_i/K) / (1 + sum_j x_j/K), x read in the `from` compartment, so
+    one flooding cargo slows every other; `via` names a protein whose presence gates the capacity."""
+
+    from_compartment: str = ""
+    to_compartment: str = ""
+    cargo: list[str] = field(default_factory=list)
+    capacity: float = 0.0  # amount per hour
+    affinity: float = 1.0  # cargo amount giving half-maximal flux
+    via: str = ""
+    via_threshold: float = 1.0
+
+    def __post_init__(self) -> None:
+        self.kind = "transport"
+
+    def carries(self, species: str, signals: list[str] | tuple[str, ...] = (), mrna: bool = False) -> bool:
+        for c in self.cargo:
+            if c == species or (mrna and c == "mRNA"):
+                return True
+            if not mrna and c.startswith("signal=") and c[len("signal=") :] in signals:
+                return True
+        return False
+
+
+@dataclass(slots=True)
+class Regime:
+    """How a run is executed, declared rather than assumed (v0.4 §8), and recorded in every result.
+
+    treatment: continuous | stochastic | auto (species under `threshold` copies run stochastically);
+    update: continuous | synchronous | asynchronous | event; allocation: the default policy for shared
+    capacities with none named. Stochastic treatment needs `units: copies`."""
+
+    name: str = "default"
+    treatment: str = "continuous"
+    threshold: float = 50.0
+    units: str = "au"  # au | copies
+    update: str = "continuous"
+    allocation: str = "competitive"
+    seed: int | None = None
+    evidence: Evidence = field(default_factory=Evidence)
+    confidence: Confidence = 0.0
+
+
+REGIME_TREATMENTS = ("continuous", "stochastic", "auto")
+REGIME_UPDATES = ("continuous", "synchronous", "asynchronous", "event")
+REGIME_ALLOCATIONS = ("competitive", "proportional", "priority", "optimise")
 
 
 _UNIT_MIN = {
@@ -481,6 +562,7 @@ class Module:
     fields: list[Field] = field(default_factory=list)
     designs: list[Design] = field(default_factory=list)
     organism: Organism | None = None
+    regime: Regime | None = None
 
     def add(self, entity: Entity) -> None:
         if entity.id in self.entities:
@@ -502,6 +584,17 @@ class Module:
     def domains(self) -> list[Domain]:
         return [e for e in self.entities.values() if isinstance(e, Domain)]
 
+    def compartments(self) -> list[Compartment]:
+        return [e for e in self.entities.values() if isinstance(e, Compartment)]
+
+    def transports(self) -> list[Transport]:
+        return [e for e in self.entities.values() if isinstance(e, Transport)]
+
+    @property
+    def located(self) -> bool:
+        """A program that declares a compartment is located: every gene and protein then has a place."""
+        return any(isinstance(e, Compartment) for e in self.entities.values())
+
     def timer(self, name: str) -> Timer | None:
         return next((t for t in self.timers if t.name == name), None)
 
@@ -522,6 +615,8 @@ class Module:
         self.designs.extend(other.designs)
         if self.organism is None:
             self.organism = other.organism
+        if self.regime is None:
+            self.regime = other.regime
         for k, v in other.parameters.items():
             self.parameters.setdefault(k, v)
 
@@ -578,7 +673,7 @@ class Module:
             return obj
 
         return {
-            "bioir_version": "0.3",
+            "bioir_version": "0.4",
             "name": self.name,
             "imports": list(self.imports),
             "entities": [conv(e) for e in self.entities.values()],
@@ -592,6 +687,7 @@ class Module:
             "fields": [conv(f) for f in self.fields],
             "designs": [conv(d) for d in self.designs],
             "organism": conv(self.organism) if self.organism else None,
+            "regime": conv(self.regime) if self.regime else None,
         }
 
     @classmethod
@@ -606,6 +702,8 @@ class Module:
             "RegulatoryElement": RegulatoryElement,
             "Domain": Domain,
             "Signal": Signal,
+            "Compartment": Compartment,
+            "Transport": Transport,
         }
 
         def evid(d: dict) -> Evidence:
@@ -635,7 +733,7 @@ class Module:
                 ed["cds_segments"] = [Locus.parse(x) for x in ed["cds_segments"]]
             if "transcripts" in ed:
                 ed["transcripts"] = []  # transcripts are top-level entities too
-            for key in ("role", "half_life_h"):
+            for key in ("role", "half_life_h", "volume"):
                 if key in ed:
                     ed[key] = unk(ed[key])
             m.add(t(**ed))
@@ -676,4 +774,49 @@ class Module:
             if isinstance(od.get("origin"), list):
                 od["origin"] = tuple(od["origin"])
             m.organism = Organism(**od)
+        if data.get("regime"):
+            rd = dict(data["regime"])
+            rd.pop("__type__", None)
+            rd["evidence"] = evid(rd.get("evidence", {}))
+            m.regime = Regime(**rd)
         return m
+
+
+__all__ = [
+    "DECISION_ACTIONS",
+    "REGIME_ALLOCATIONS",
+    "REGIME_TREATMENTS",
+    "REGIME_UPDATES",
+    "UNKNOWN",
+    "Action",
+    "CellType",
+    "Compartment",
+    "Confidence",
+    "Decision",
+    "Design",
+    "Domain",
+    "Effect",
+    "Entity",
+    "Event",
+    "Evidence",
+    "EvidenceKind",
+    "Experiment",
+    "Field",
+    "Gene",
+    "Locus",
+    "Module",
+    "Organism",
+    "Parameter",
+    "Protein",
+    "Regime",
+    "Region",
+    "RegulatoryElement",
+    "Rule",
+    "Signal",
+    "Stage",
+    "Timer",
+    "Transcript",
+    "Transport",
+    "matches",
+    "to_minutes",
+]

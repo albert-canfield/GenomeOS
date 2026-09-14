@@ -16,6 +16,7 @@ from .central_dogma import (
     translate_transcript,
 )
 from .grn import NetworkRuntime, Trajectory
+from .located import LocatedResult, LocatedRuntime
 from .variant_effect import Effect, classify, classify_all, severity
 
 __all__ = [
@@ -32,6 +33,8 @@ __all__ = [
     "splice",
     "Orf",
     "NetworkRuntime",
+    "LocatedRuntime",
+    "LocatedResult",
     "Effect",
     "classify",
     "classify_all",
