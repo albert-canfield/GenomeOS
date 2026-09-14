@@ -10291,18 +10291,18 @@
   "variant_positions": {
     "rs12913832": {
       "panel": 28120472,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 28120472,
+      "agrees": true
     },
     "rs4988235": {
       "panel": 135851076,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 135851076,
+      "agrees": true
     },
     "rs1421085": {
       "panel": 53767042,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 53767042,
+      "agrees": true
     },
     "rs1558902": {
       "panel": 53769662,
@@ -10326,13 +10326,13 @@
     },
     "rs8176719": {
       "panel": 133257521,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 133257522,
+      "agrees": true
     },
     "rs8176746": {
       "panel": 133255935,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 133255935,
+      "agrees": true
     },
     "rs63750847": {
       "panel": 25897620,
@@ -10341,8 +10341,8 @@
     },
     "rs1042522": {
       "panel": 7676154,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 7676154,
+      "agrees": true
     }
   },
   "not_in_panel": {
@@ -10367,6 +10367,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 349.7
+    "seconds": 624.7
   }
 }
