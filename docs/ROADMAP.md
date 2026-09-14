@@ -476,6 +476,25 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Fold-change profiles.** chr2, chr7, chr12, chr17, chr21 and chr22 carry
   them for every cell type and mark; every other chromosome carries peaks only,
   and the record says so.
+- **The marks' gain transfers, and is a rounding error beside the model's own
+  lines (2026-09-14, genomeos-e2).** The chr21/chr22 comparison was refitted on
+  chr21 and chr22 alone and scored on chr15, chr16, chr17, chr18, chr19 and
+  chr20: 485,604 element-line units over 121,404 elements, 100,507 acting
+  (`scripts/epigenome.py direction-transfer`, `epigenome_direction_transfer`).
+  chr1 (1.6% swept), chr14 (being written) and chrY (no profile in one line)
+  were refused as held out, with the reason recorded.
+  - **It transfers.** Direction goes 0.599 to 0.624 AUC off the training
+    chromosomes, against 0.594 to 0.616 in sample, positive on all six
+    separately (+0.018 to +0.038). Shuffled marks score the fit without them.
+  - **Half of it is not the cell's own chromatin.** Another line's marks reach
+    0.612 of the 0.624; the line-specific part is +0.010 to +0.014 AUC.
+  - **The model's own direction in the other three lines scores 0.910 alone**,
+    against 0.624 for the whole marks model (+0.287 to +0.296). Adding the
+    line's marks to it moves direction by +0.0024 to +0.0032 and acts by
+    +0.0003 to +0.0021, and makes it *worse* for acts on chr15 and chr19 and
+    for magnitude on chr15 and chr19. **Report the marks at that size.**
+  - **Nothing here is measured.** Outcome and competing feature are both
+    AlphaGenome, trained on these lines' ENCODE tracks.
 - **The orientation-aware caller, as an alternative (2026-09-14, genomeos-e1).**
   `infer_domains(..., orientation=strands)` places boundaries at reverse-to-forward
   CTCF motif flips among elements with CTCF ChIP support. The default output is

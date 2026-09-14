@@ -3,10 +3,15 @@
 from __future__ import annotations
 
 import gzip
+import importlib.util
 import math
+import os
+import random
 import struct
+import time
 import zlib
 from array import array
+from pathlib import Path
 
 import pytest
 
@@ -258,3 +263,59 @@ def test_small_statistics():
     gc, cpg = ep.gc_cpg("ACGTNNCG")
     assert gc == pytest.approx(4 / 6) and cpg == pytest.approx(200 / 6)
     assert ep.stratum(0.42, 1.5) == "gc8_cpg2"
+
+
+def _script():
+    """scripts/epigenome.py as a module: the transfer comparison's statistics live there."""
+    spec = importlib.util.spec_from_file_location("epigenome_script", Path("scripts/epigenome.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_weighted_auc_and_spearman_match_the_plain_ones_and_the_expanded_sample():
+    """The held-out comparison bootstraps half a million rows by reweighting instead of resampling,
+    so a weight of 1 everywhere must give the project's own AUC and Spearman (ties averaged), and
+    integer weights must give what repeating those rows would give."""
+    np = pytest.importorskip("numpy")
+    m = _script()
+    rng = random.Random(11)
+    n = 200
+    # many exact ties: the registry-only model scores thousands of rows identically
+    s = np.array([float(rng.choice([0, 1, 2])) for _ in range(n)])
+    y = np.array([float(rng.random() < 0.4) for _ in range(n)])
+    t = np.array([s[i] + rng.gauss(0, 1) for i in range(n)])
+    ones = np.ones(n)
+    assert m._auc_w(np, m._ties(np, s), y, ones) == pytest.approx(ep.auc(list(s), [int(v) for v in y]))
+    assert m._spearman_w(np, m._ties(np, s), m._ties(np, t), ones) == pytest.approx(
+        ep.spearman(list(s), list(t))
+    )
+    w = np.array([float(rng.randint(0, 3)) for _ in range(n)])
+    idx = np.repeat(np.arange(n), w.astype(int))
+    assert m._auc_w(np, m._ties(np, s), y, w) == pytest.approx(ep.auc(list(s[idx]), [int(v) for v in y[idx]]))
+    assert m._spearman_w(np, m._ties(np, s), m._ties(np, t), w) == pytest.approx(
+        ep.spearman(list(s[idx]), list(t[idx]))
+    )
+    # one class only, and nothing at all
+    assert m._auc_w(np, m._ties(np, s), np.ones(n), ones) is None
+    assert m._auc_w(np, m._ties(np, np.zeros(0)), np.zeros(0), np.zeros(0)) is None
+
+
+def test_a_sweep_in_progress_is_not_a_held_out_chromosome(tmp_path, monkeypatch):
+    """chr1 was 1.6% scored and chr14 was being written while the comparison ran: both must be
+    refused as held-out chromosomes, with the reason recorded."""
+    m = _script()
+    monkeypatch.setattr(m, "_profiles_complete", lambda c: c != "chrY")
+    arch = tmp_path / "data/knowledge/alphagenome/all_elements"
+    arch.mkdir(parents=True)
+    for c in ("chr1", "chr14", "chr20", "chrY"):
+        (arch / f"{c}.json").write_text("[]")
+    monkeypatch.chdir(tmp_path)
+    (arch / "chr14.json").touch()  # written just now
+    old = time.time() - 2 * m.ARCHIVE_QUIET_SECONDS
+    for c in ("chr1", "chr20", "chrY"):
+        os.utime(arch / f"{c}.json", (old, old))
+    assert "no fold-change profile" in m._held_out_reason("chrY", 0.9)
+    assert "being written right now" in m._held_out_reason("chr14", 0.9)
+    assert "the sweep is partway" in m._held_out_reason("chr1", 0.016)
+    assert m._held_out_reason("chr20", 0.573) is None

@@ -675,6 +675,76 @@ these same lines, so marks predicting its direction partly measure what the
 model learned from those tracks. And "rise on deletion" is the model's
 silencer call, not a measured one.
 
+### Does the gain transfer, and does it survive the model's own sibling lines?
+
+The comparison above was fitted and scored on the same two chromosomes. With
+the fold-change profiles now genome-wide it can be fitted on chr21 and chr22
+and scored on chromosomes it never saw, and the marks can be made to compete
+with the thing that actually predicts the outcome: the same element's predicted
+effect in the *other three* lines. A separate lane measured that at 0.865 AUC
+for direction, against 0.616 for the marks and 0.686 for behaviour type. The
+sibling features are the signed mean, the net sign and the mean absolute effect
+over the other three lines; the line being predicted never enters its own
+features (`scripts/epigenome.py direction-transfer`,
+`epigenome_direction_transfer`).
+
+Held out: chr15, chr16, chr17, chr18, chr19 and chr20, 485,604 element-line
+units over 121,404 elements, of which 100,507 act. chr1 (the sweep has scored
+1.6% of it), chr14 (being written while this ran) and chrY (no profile in one
+of the four lines) were left out, and the reason is recorded per chromosome: a
+sweep in progress is not a held-out chromosome.
+
+| features, fitted on chr21 and chr22 | acts (AUC) | rise among acting (AUC) | magnitude (Spearman) |
+|---|---|---|---|
+| registry class + DNase in that line | 0.661 | 0.599 | 0.238 |
+| + the line's five marks and methylation | 0.688 | 0.624 | 0.331 |
+| control: marks from another of the four lines | 0.668 | 0.612 | 0.277 |
+| control: marks shuffled within chromosome × line × class × DNase | 0.661 | 0.598 | 0.238 |
+| **the model's own effect in the other three lines** | 0.792 | **0.910** | 0.483 |
+| + registry and DNase | 0.795 | 0.915 | 0.477 |
+| + the line's marks as well | 0.796 | **0.918** | 0.493 |
+| control: + another line's marks instead | 0.792 | 0.916 | 0.478 |
+
+95% intervals of each difference over 200 resamples of the held-out elements:
+
+| difference | acts | direction | magnitude |
+|---|---|---|---|
+| marks over registry + DNase | +0.025 to +0.028 | +0.022 to +0.028 | +0.090 to +0.095 |
+| marks over another line's marks | +0.019 to +0.021 | +0.010 to +0.014 | +0.051 to +0.055 |
+| marks over shuffled marks | +0.025 to +0.028 | +0.022 to +0.029 | +0.089 to +0.095 |
+| marks over the sibling model | +0.0003 to +0.0021 | +0.0024 to +0.0032 | +0.013 to +0.018 |
+| the sibling model over the marks model | +0.104 to +0.109 | **+0.287 to +0.296** | +0.143 to +0.150 |
+
+**The gain transfers, at the size it had in sample.** Direction rises from
+0.599 to 0.624 on chromosomes the fit never saw, against 0.594 to 0.616 in
+sample, and it is positive on all six held-out chromosomes separately (+0.018
+on chr20 to +0.038 on chr19). Shuffled marks score exactly the fit without
+them, which is the control working.
+
+**Half of it is not the cell's own chromatin.** Another line's marks carry
+0.612 of the 0.624, so the part that is the line's own marks rather than marks
+at all is +0.010 to +0.014 AUC. The same pattern holds for acts and magnitude.
+
+**And all of it is small beside the model reading its own lines.** Direction
+from the other three lines alone scores 0.910; the entire marks model scores
+0.624. Adding the line's marks on top of the sibling model moves direction by
++0.0024 to +0.0032 AUC and acts by +0.0003 to +0.0021, which at this sample
+size is measurable and, as a claim about chromatin, is three thousandths.
+Pooled AUCs hide two reversals worth stating: the marks made the sibling model
+*worse* for acts on chr15 (0.7675 against 0.7680) and chr19 (0.8121 against
+0.8165), and worse for magnitude on chr15 (0.4321 against 0.4386) and chr19
+(0.5471 against 0.5667). The marks are not uniformly additive once the
+model's own behaviour is in the comparison.
+
+The honest reading is that mark identity does carry information about this
+outcome, that it survives two controls and transfers off the training
+chromosomes, and that it is nonetheless a rounding error against a feature that
+is unambiguously the model reading back its own training tracks. What the first
+comparison measured as "marks beat the registry class" is true and small; what
+it could not see is that both are far behind the model's agreement with itself.
+No measured outcome has been used anywhere in this comparison, so nothing here
+is yet a claim about biology.
+
 ### Does H3K27me3 explain the loci that behave as repressed? The HOX clusters
 
 The four HOX clusters were read in all eleven biosamples

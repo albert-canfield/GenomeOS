@@ -6,6 +6,7 @@
     uv run python scripts/epigenome.py summary chr21 chr22 ...
     uv run python scripts/epigenome.py genome         # the summaries rolled up
     uv run python scripts/epigenome.py direction      # marks against registry class, chr21 and chr22
+    uv run python scripts/epigenome.py direction-transfer  # fit on chr21+chr22, score held-out chromosomes
     uv run python scripts/epigenome.py hox            # H3K27me3 over the HOX clusters, matched promoters
     uv run python scripts/epigenome.py fossil         # methylation of the fossil tier, GC and CpG matched
     uv run python scripts/epigenome.py reader-check   # read, poised and silent genes against measured RNA
@@ -24,6 +25,7 @@ import math
 import random
 import re
 import sys
+import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
@@ -1168,6 +1170,341 @@ def reader_check(argv: list[str]) -> None:
         print(c, {k: (v["genes"], v["expressed_share"]) for k, v in t.items()}, flush=True)
 
 
+# ------------------------------------------------------------------------------------------
+# Question 1 again, on held-out chromosomes: does the marks' gain transfer off chr21 and chr22,
+# and does any of it survive beside the model's own predicted direction in the other three lines?
+#
+# The chr21/chr22 comparison was fitted and scored on the same two chromosomes by cross-validation.
+# Here the model is fitted on chr21 and chr22 only and scored on chromosomes it never saw, and the
+# marks compete with two things at once: their own controls (the same twelve columns taken from
+# another of the four lines, and shuffled within chromosome x cell x class x DNase call) and the
+# outcome's sibling lines, which a separate lane measured at 0.865 AUC for direction.
+# ------------------------------------------------------------------------------------------
+
+TRAIN = ("chr21", "chr22")  # the two chromosomes the first comparison was fitted and scored on
+MARK_COLS = (
+    [f"{m}_peak" for m in ep.MARKS] + [f"{m}_fc" for m in ep.MARKS] + ["methylation", "methylation_missing"]
+)
+BASE_COLS = ["pels", "ctcf", "dnase_peak", "dnase_signal"] + [f"cell_{c}" for c in DIRECTION_CELLS[1:]]
+SIB_COLS = ["sib_mean", "sib_net_sign", "sib_abs_mean"]
+OTHER_COLS = [f"other_{c}" for c in MARK_COLS]  # control: the marks of another of the four lines
+PERM_COLS = [f"shuffled_{c}" for c in MARK_COLS]  # control: marks shuffled within a stratum
+ALL_COLS = BASE_COLS + SIB_COLS + MARK_COLS + OTHER_COLS + PERM_COLS
+#: an all-element archive counts as held out only when the chain has scored at least this share of
+#: the chromosome's cCREs and nothing has written to it lately: a sweep in progress is not a
+#: held-out chromosome, it is the first per cent of one.
+MIN_ARCHIVE_SHARE = 0.5
+ARCHIVE_QUIET_SECONDS = 600
+
+
+def _profiles_complete(chrom: str) -> bool:
+    return all(ep.signal_path(c, m, chrom).exists() for c in DIRECTION_CELLS for m in ep.MARKS) and all(
+        ep.methylation_path(c, chrom).exists() for c in DIRECTION_CELLS
+    )
+
+
+def _archive_share(chrom: str) -> float:
+    """How much of the chromosome's cCRE set the all-enhancer chain has scored per cell line."""
+    p = Path(f"data/knowledge/alphagenome/all_elements/{chrom}.json")
+    with gzip.open(f"data/results/ccres_{chrom}.bed.gz", "rt") as fh:
+        total = sum(1 for line in fh if line[0] != "#")
+    scored = sum(1 for e in json.loads(p.read_text()) if e.get("predicted_by_cell"))
+    return scored / total if total else 0.0
+
+
+def _held_out_reason(chrom: str, share: float) -> str | None:
+    """Why a chromosome cannot serve as held out, or None when it can."""
+    if not _profiles_complete(chrom):
+        return "no fold-change profile for one of the four lines"
+    p = Path(f"data/knowledge/alphagenome/all_elements/{chrom}.json")
+    if time.time() - p.stat().st_mtime < ARCHIVE_QUIET_SECONDS:
+        return "the all-element archive is being written right now by the chromosome sweep"
+    if share < MIN_ARCHIVE_SHARE:
+        return f"the all-element archive covers {share:.1%} of the chromosome's cCREs, the sweep is partway"
+    return None
+
+
+def _chrom_units(np, chrom: str) -> tuple:
+    """One chromosome's element-line units as a float32 matrix over ALL_COLS, with the outcome and
+    an element id per row (the rows of one element resample together). A missing mark stays NaN and
+    is filled from the training median later, so nothing on a held-out chromosome informs its own
+    imputation."""
+    layer = ep.Layer(chrom, DIRECTION_CELLS)
+    rot = dict(zip(DIRECTION_CELLS, DIRECTION_CELLS[1:] + DIRECTION_CELLS[:1], strict=True))
+    rows: list[list[float]] = []
+    lfcs: list[float] = []
+    groups: list[int] = []
+    strata: list[tuple] = []
+    blank = [math.nan] * len(MARK_COLS)
+    for e in _element_rows(chrom):
+        by = e["by"]
+        cells = [c for c in DIRECTION_CELLS if c in by]
+        if len(cells) < 2:
+            continue  # no sibling line, so no fair comparison to make
+        feats = {c: _features(layer, c, e["start"], e["end"]) for c in cells}
+        marks = {}
+        for c, f in feats.items():
+            f["methylation_missing"] = 1.0 if f["methylation"] is None else 0.0
+            marks[c] = [math.nan if f[k] is None else float(f[k]) for k in MARK_COLS]
+        gid = int(hashlib.md5(e["id"].encode()).hexdigest()[:8], 16)  # noqa: S324 - resample key only
+        pels = 1.0 if e["cls"] == "pELS" else 0.0
+        ctcf = 1.0 if e["ctcf"] else 0.0
+        for cell in cells:
+            f = feats[cell]
+            others = [by[c] for c in cells if c != cell]
+            rows.append(
+                [pels, ctcf, f["dnase_peak"], f["dnase_signal"]]
+                + [1.0 if cell == c else 0.0 for c in DIRECTION_CELLS[1:]]
+                # the model's own behaviour in the sibling lines: the signed mean, the net sign
+                # (genomeos-t1's two direction columns) and how large the effect is there
+                + [
+                    sum(others) / len(others),
+                    sum((o > 0) - (o < 0) for o in others) / len(others),
+                    sum(abs(o) for o in others) / len(others),
+                ]
+                + marks[cell]
+                + marks.get(rot[cell], blank)
+                + blank  # filled by the shuffle below
+            )
+            lfcs.append(by[cell])
+            groups.append(gid)
+            strata.append((cell, e["cls"], f["dnase_peak"]))
+    if not rows:
+        return np.zeros((0, len(ALL_COLS)), np.float32), np.zeros(0, np.float32), np.zeros(0, np.int64)
+    x = np.array(rows, dtype=np.float32)
+    own = len(BASE_COLS) + len(SIB_COLS)
+    perm = len(ALL_COLS) - len(PERM_COLS)
+    rng = random.Random(21)
+    by_stratum: dict[tuple, list[int]] = {}
+    for i, k in enumerate(strata):
+        by_stratum.setdefault(k, []).append(i)
+    for idx in by_stratum.values():
+        donors = idx[:]
+        rng.shuffle(donors)
+        x[idx, perm:] = x[donors, own : own + len(MARK_COLS)]
+    return x, np.array(lfcs, dtype=np.float32), np.array(groups, dtype=np.int64)
+
+
+def _ties(np, v):
+    """The sort order of `v` and a tie-group number per sorted position. The rank machinery below
+    is weighted, so ties are grouped once rather than broken by position: the registry-only model
+    gives thousands of rows exactly the same score, and breaking those by position inflates it."""
+    order = np.argsort(v, kind="mergesort")
+    s = v[order]
+    new = np.empty(len(s), dtype=bool)
+    if len(s):
+        new[0] = True
+        np.not_equal(s[1:], s[:-1], out=new[1:])
+    return order, np.cumsum(new) - 1
+
+
+def _auc_w(np, prep, y, w) -> float | None:
+    """AUC with a weight per row, ties averaged. All weights 1 is the plain AUC; a bootstrap over
+    elements is the multiplicity of each row's element, which then costs one pass, not a new sort."""
+    order, gid = prep
+    if not len(order):
+        return None
+    ys, ws = y[order].astype(bool), w[order]
+    negw = np.where(~ys, ws, 0.0)
+    posw = np.where(ys, ws, 0.0)
+    p, n = posw.sum(), negw.sum()
+    if not p or not n:
+        return None
+    grp = np.bincount(gid, weights=negw, minlength=int(gid[-1]) + 1)
+    before = np.concatenate(([0.0], np.cumsum(grp)[:-1]))
+    return float((posw * (before[gid] + 0.5 * grp[gid])).sum() / (p * n))
+
+
+def _ranks_w(np, prep, w):
+    """Weighted average ranks, in the original row order."""
+    order, gid = prep
+    grp = np.bincount(gid, weights=w[order], minlength=int(gid[-1]) + 1)
+    before = np.concatenate(([0.0], np.cumsum(grp)[:-1]))
+    r = np.empty(len(order), dtype=np.float64)
+    r[order] = before[gid] + (grp[gid] + 1.0) / 2.0
+    return r
+
+
+def _spearman_w(np, prep_x, prep_y, w) -> float | None:
+    if not len(w):
+        return None
+    rx, ry = _ranks_w(np, prep_x, w), _ranks_w(np, prep_y, w)
+    tw = w.sum()
+    mx, my = (w * rx).sum() / tw, (w * ry).sum() / tw
+    sx = math.sqrt(float((w * (rx - mx) ** 2).sum() / tw))
+    sy = math.sqrt(float((w * (ry - my) ** 2).sum() / tw))
+    if not sx or not sy:
+        return None
+    return float((w * (rx - mx) * (ry - my)).sum() / tw / (sx * sy))
+
+
+def _score(np, metric: str, prep_x, prep_y, y, w) -> float | None:
+    return _auc_w(np, prep_x, y, w) if metric == "auc" else _spearman_w(np, prep_x, prep_y, w)
+
+
+def direction_transfer(argv: list[str]) -> None:
+    import numpy as np
+
+    from genomeos.results import save_result
+
+    candidates = argv or [
+        c for c in ep.CHROMS if Path(f"data/knowledge/alphagenome/all_elements/{c}.json").exists()
+    ]
+    shares, left_out = {}, {}
+    for c in candidates:
+        shares[c] = round(_archive_share(c), 3)
+        why = _held_out_reason(c, shares[c])
+        if why:
+            left_out[c] = why
+    usable = [c for c in candidates if c not in left_out]
+    test_chroms = [c for c in usable if c not in TRAIN]
+    if not all(c in usable for c in TRAIN) or not test_chroms:
+        raise SystemExit(f"need {TRAIN} and one held-out chromosome; usable {usable}, left out {left_out}")
+    print(f"train {list(TRAIN)}, held out {test_chroms}", flush=True)
+    for c, why in left_out.items():
+        print(f"left out {c}: {why}", flush=True)
+    parts = {}
+    for c in TRAIN + tuple(test_chroms):
+        parts[c] = _chrom_units(np, c)
+        print(f"{c}: {len(parts[c][1]):,} element-line units", flush=True)
+    xtr = np.vstack([parts[c][0] for c in TRAIN])
+    ltr = np.concatenate([parts[c][1] for c in TRAIN])
+    xte = np.vstack([parts[c][0] for c in test_chroms])
+    lte = np.concatenate([parts[c][1] for c in test_chroms])
+    gte = np.concatenate([parts[c][2] for c in test_chroms])
+    cte = np.concatenate([np.full(len(parts[c][1]), i) for i, c in enumerate(test_chroms)])
+    parts.clear()
+
+    models = {
+        "registry+dnase": BASE_COLS,
+        "registry+dnase+marks": BASE_COLS + MARK_COLS,
+        "registry+dnase+marks_other_line": BASE_COLS + OTHER_COLS,
+        "registry+dnase+marks_shuffled": BASE_COLS + PERM_COLS,
+        "sibling_direction": SIB_COLS + [f"cell_{c}" for c in DIRECTION_CELLS[1:]],
+        "sibling+registry+dnase": SIB_COLS + BASE_COLS,
+        "sibling+registry+dnase+marks": SIB_COLS + BASE_COLS + MARK_COLS,
+        "sibling+registry+dnase+marks_other_line": SIB_COLS + BASE_COLS + OTHER_COLS,
+    }
+    comparisons = {
+        "marks_over_registry_dnase": ("registry+dnase+marks", "registry+dnase"),
+        "marks_over_other_line_marks": ("registry+dnase+marks", "registry+dnase+marks_other_line"),
+        "marks_over_shuffled_marks": ("registry+dnase+marks", "registry+dnase+marks_shuffled"),
+        "marks_over_sibling": ("sibling+registry+dnase+marks", "sibling+registry+dnase"),
+        "marks_over_sibling_with_other_line_marks": (
+            "sibling+registry+dnase+marks",
+            "sibling+registry+dnase+marks_other_line",
+        ),
+        "sibling_over_the_marks_model": ("sibling+registry+dnase", "registry+dnase+marks"),
+    }
+    at = {c: i for i, c in enumerate(ALL_COLS)}
+
+    def fit_predict(cols: list[str], keep_tr, keep_te, ytr):
+        j = [at[c] for c in cols]
+        a = xtr[np.ix_(keep_tr, j)].astype(np.float64)
+        b = xte[np.ix_(keep_te, j)].astype(np.float64)
+        med = np.nanmedian(a, axis=0)
+        med = np.where(np.isnan(med), 0.0, med)
+        a = np.where(np.isnan(a), med, a)
+        b = np.where(np.isnan(b), med, b)
+        mu, sd = a.mean(axis=0), a.std(axis=0)
+        sd = np.where(sd > 0, sd, 1.0)
+        a, b = (a - mu) / sd, (b - mu) / sd
+        a = np.hstack([np.ones((len(a), 1)), a])
+        b = np.hstack([np.ones((len(b), 1)), b])
+        lam = np.eye(a.shape[1])
+        lam[0, 0] = 0.0  # the intercept is not shrunk
+        return b @ np.linalg.solve(a.T @ a + lam, a.T @ ytr)
+
+    tasks = {
+        "acts": ("auc", None, lambda lfc: (np.abs(lfc) >= ACTS).astype(np.float64)),
+        "silencer_among_acting": ("auc", ACTS, lambda lfc: (lfc > 0).astype(np.float64)),
+        "magnitude": ("spearman", None, lambda lfc: np.log10(np.abs(lfc) + 1e-3)),
+    }
+    wanted = sorted({m for pair in comparisons.values() for m in pair})
+    results: dict = {}
+    for task, (metric, floor, y_of) in tasks.items():
+        keep_tr = np.ones(len(ltr), bool) if floor is None else np.abs(ltr) >= floor
+        keep_te = np.ones(len(lte), bool) if floor is None else np.abs(lte) >= floor
+        ytr, yte = y_of(ltr[keep_tr]).astype(np.float64), y_of(lte[keep_te]).astype(np.float64)
+        chrom_of, groups = cte[keep_te], gte[keep_te]
+        preds = {name: fit_predict(cols, keep_tr, keep_te, ytr) for name, cols in models.items()}
+        prep = {name: _ties(np, p) for name, p in preds.items()}
+        prep_y = _ties(np, yte) if metric == "spearman" else None
+        ones = np.ones(len(yte))
+        per_chrom = {}
+        for i, c in enumerate(test_chroms):
+            mask = chrom_of == i
+            ys = yte[mask]
+            py = _ties(np, ys) if metric == "spearman" else None
+            row: dict = {"units": int(mask.sum())}
+            for name in models:
+                s = _score(np, metric, _ties(np, preds[name][mask]), py, ys, np.ones(len(ys)))
+                row[name] = round(s, 4) if s is not None else None
+            per_chrom[c] = row
+            print(task, c, row, flush=True)
+        pooled = {}
+        for name in models:
+            s = _score(np, metric, prep[name], prep_y, yte, ones)
+            pooled[name] = round(s, 4) if s is not None else None
+        # element bootstrap on the pooled held-out units: a resampled element carries all its rows
+        uniq, inv = np.unique(groups, return_inverse=True)
+        rng = np.random.default_rng(int(hashlib.md5(task.encode()).hexdigest()[:8], 16))  # noqa: S324
+        diffs: dict[str, list[float]] = {k: [] for k in comparisons}
+        for _ in range(200):
+            counts = np.bincount(rng.integers(0, len(uniq), len(uniq)), minlength=len(uniq))
+            w = counts.astype(np.float64)[inv]
+            cache = {n: _score(np, metric, prep[n], prep_y, yte, w) for n in wanted}
+            for k, (a, b) in comparisons.items():
+                diffs[k].append(cache[a] - cache[b])
+        results[task] = {
+            "train_units": int(keep_tr.sum()),
+            "held_out_units": int(keep_te.sum()),
+            "per_chromosome": per_chrom,
+            "pooled": pooled,
+            "bootstrap_95_and_share_with_no_gain": {
+                k: [
+                    round(float(np.percentile(v, 2.5)), 4),
+                    round(float(np.percentile(v, 97.5)), 4),
+                    round(float(np.mean(np.array(v) <= 0)), 3),
+                ]
+                for k, v in diffs.items()
+            },
+        }
+        print(task, "pooled", pooled, results[task]["bootstrap_95_and_share_with_no_gain"], flush=True)
+    save_result(
+        "epigenome_direction_transfer",
+        {
+            "train": list(TRAIN),
+            "held_out": test_chroms,
+            "left_out": left_out,
+            "archive_share_of_ccres": shares,
+            "cell_types": list(DIRECTION_CELLS),
+            "models": models,
+            "results": results,
+            "sibling": "the same element's predicted signed log2 fold change averaged over the other "
+            "three lines, the net sign over them (genomeos-t1's two direction columns) and the mean "
+            "absolute change there; the line being predicted never enters its own features",
+            "controls": "marks_other_line takes the same twelve columns from another of the four lines "
+            "(the rotation K562 -> HepG2 -> GM12878 -> IMR-90), marks_shuffled shuffles them among units "
+            "of the same chromosome, cell, registry class and DNase call; both keep every marginal, so a "
+            "gain that survives neither is not the cell's own chromatin",
+            "method": "ridge (lambda 1) on standardised features, fitted on chr21 and chr22 only and "
+            "scored on chromosomes it never saw; the training median fills a missing mark on both sides; "
+            "acts and direction by AUC with ties averaged, magnitude by Spearman with log10 |lfc|; 200 "
+            "resamples of the held-out elements",
+            "caveat": "every outcome and the sibling feature are AlphaGenome predictions, and AlphaGenome "
+            "was trained on ENCODE histone ChIP-seq, DNase and RNA-seq of these four lines: a mark "
+            "predicting its direction can be the model reading back a track it was trained on",
+            "evidence": {
+                "marks": ep.EVIDENCE_MARK,
+                "methylation": ep.EVIDENCE_METHYLATION,
+                "outcome": "predicted: AlphaGenome deletion scoring, chain tables, no new model call",
+            },
+        },
+    )
+    print("saved", flush=True)
+
+
 def main() -> None:
     if len(sys.argv) < 2:
         print(__doc__)
@@ -1189,6 +1526,8 @@ def main() -> None:
         alu(rest)
     elif action == "reader-check":
         reader_check(rest)
+    elif action == "direction-transfer":
+        direction_transfer(rest)
     else:
         raise SystemExit(f"unknown action {action}")
 

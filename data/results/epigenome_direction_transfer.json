@@ -1,0 +1,535 @@
+{
+  "result": "epigenome_direction_transfer",
+  "date": "2026-09-14",
+  "train": [
+    "chr21",
+    "chr22"
+  ],
+  "held_out": [
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20"
+  ],
+  "left_out": {
+    "chr1": "the all-element archive covers 1.6% of the chromosome's cCREs, the sweep is partway",
+    "chr14": "the all-element archive is being written right now by the chromosome sweep",
+    "chrY": "no fold-change profile for one of the four lines"
+  },
+  "archive_share_of_ccres": {
+    "chr1": 0.016,
+    "chr14": 0.424,
+    "chr15": 0.611,
+    "chr16": 0.579,
+    "chr17": 0.622,
+    "chr18": 0.557,
+    "chr19": 0.621,
+    "chr20": 0.573,
+    "chr21": 0.587,
+    "chr22": 0.607,
+    "chrY": 0.536
+  },
+  "cell_types": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "models": {
+    "registry+dnase": [
+      "pels",
+      "ctcf",
+      "dnase_peak",
+      "dnase_signal",
+      "cell_HepG2",
+      "cell_GM12878",
+      "cell_IMR-90"
+    ],
+    "registry+dnase+marks": [
+      "pels",
+      "ctcf",
+      "dnase_peak",
+      "dnase_signal",
+      "cell_HepG2",
+      "cell_GM12878",
+      "cell_IMR-90",
+      "H3K4me3_peak",
+      "H3K27ac_peak",
+      "H3K4me1_peak",
+      "H3K27me3_peak",
+      "H3K9me3_peak",
+      "H3K4me3_fc",
+      "H3K27ac_fc",
+      "H3K4me1_fc",
+      "H3K27me3_fc",
+      "H3K9me3_fc",
+      "methylation",
+      "methylation_missing"
+    ],
+    "registry+dnase+marks_other_line": [
+      "pels",
+      "ctcf",
+      "dnase_peak",
+      "dnase_signal",
+      "cell_HepG2",
+      "cell_GM12878",
+      "cell_IMR-90",
+      "other_H3K4me3_peak",
+      "other_H3K27ac_peak",
+      "other_H3K4me1_peak",
+      "other_H3K27me3_peak",
+      "other_H3K9me3_peak",
+      "other_H3K4me3_fc",
+      "other_H3K27ac_fc",
+      "other_H3K4me1_fc",
+      "other_H3K27me3_fc",
+      "other_H3K9me3_fc",
+      "other_methylation",
+      "other_methylation_missing"
+    ],
+    "registry+dnase+marks_shuffled": [
+      "pels",
+      "ctcf",
+      "dnase_peak",
+      "dnase_signal",
+      "cell_HepG2",
+      "cell_GM12878",
+      "cell_IMR-90",
+      "shuffled_H3K4me3_peak",
+      "shuffled_H3K27ac_peak",
+      "shuffled_H3K4me1_peak",
+      "shuffled_H3K27me3_peak",
+      "shuffled_H3K9me3_peak",
+      "shuffled_H3K4me3_fc",
+      "shuffled_H3K27ac_fc",
+      "shuffled_H3K4me1_fc",
+      "shuffled_H3K27me3_fc",
+      "shuffled_H3K9me3_fc",
+      "shuffled_methylation",
+      "shuffled_methylation_missing"
+    ],
+    "sibling_direction": [
+      "sib_mean",
+      "sib_net_sign",
+      "sib_abs_mean",
+      "cell_HepG2",
+      "cell_GM12878",
+      "cell_IMR-90"
+    ],
+    "sibling+registry+dnase": [
+      "sib_mean",
+      "sib_net_sign",
+      "sib_abs_mean",
+      "pels",
+      "ctcf",
+      "dnase_peak",
+      "dnase_signal",
+      "cell_HepG2",
+      "cell_GM12878",
+      "cell_IMR-90"
+    ],
+    "sibling+registry+dnase+marks": [
+      "sib_mean",
+      "sib_net_sign",
+      "sib_abs_mean",
+      "pels",
+      "ctcf",
+      "dnase_peak",
+      "dnase_signal",
+      "cell_HepG2",
+      "cell_GM12878",
+      "cell_IMR-90",
+      "H3K4me3_peak",
+      "H3K27ac_peak",
+      "H3K4me1_peak",
+      "H3K27me3_peak",
+      "H3K9me3_peak",
+      "H3K4me3_fc",
+      "H3K27ac_fc",
+      "H3K4me1_fc",
+      "H3K27me3_fc",
+      "H3K9me3_fc",
+      "methylation",
+      "methylation_missing"
+    ],
+    "sibling+registry+dnase+marks_other_line": [
+      "sib_mean",
+      "sib_net_sign",
+      "sib_abs_mean",
+      "pels",
+      "ctcf",
+      "dnase_peak",
+      "dnase_signal",
+      "cell_HepG2",
+      "cell_GM12878",
+      "cell_IMR-90",
+      "other_H3K4me3_peak",
+      "other_H3K27ac_peak",
+      "other_H3K4me1_peak",
+      "other_H3K27me3_peak",
+      "other_H3K9me3_peak",
+      "other_H3K4me3_fc",
+      "other_H3K27ac_fc",
+      "other_H3K4me1_fc",
+      "other_H3K27me3_fc",
+      "other_H3K9me3_fc",
+      "other_methylation",
+      "other_methylation_missing"
+    ]
+  },
+  "results": {
+    "acts": {
+      "train_units": 83815,
+      "held_out_units": 485604,
+      "per_chromosome": {
+        "chr15": {
+          "units": 83324,
+          "registry+dnase": 0.6478,
+          "registry+dnase+marks": 0.6658,
+          "registry+dnase+marks_other_line": 0.6514,
+          "registry+dnase+marks_shuffled": 0.6476,
+          "sibling_direction": 0.7667,
+          "sibling+registry+dnase": 0.768,
+          "sibling+registry+dnase+marks": 0.7675,
+          "sibling+registry+dnase+marks_other_line": 0.7659
+        },
+        "chr16": {
+          "units": 83206,
+          "registry+dnase": 0.676,
+          "registry+dnase+marks": 0.7024,
+          "registry+dnase+marks_other_line": 0.6835,
+          "registry+dnase+marks_shuffled": 0.6759,
+          "sibling_direction": 0.8075,
+          "sibling+registry+dnase": 0.8115,
+          "sibling+registry+dnase+marks": 0.8119,
+          "sibling+registry+dnase+marks_other_line": 0.8096
+        },
+        "chr17": {
+          "units": 113319,
+          "registry+dnase": 0.6567,
+          "registry+dnase+marks": 0.6839,
+          "registry+dnase+marks_other_line": 0.6632,
+          "registry+dnase+marks_shuffled": 0.6565,
+          "sibling_direction": 0.7993,
+          "sibling+registry+dnase": 0.7989,
+          "sibling+registry+dnase+marks": 0.8012,
+          "sibling+registry+dnase+marks_other_line": 0.7964
+        },
+        "chr18": {
+          "units": 54600,
+          "registry+dnase": 0.6456,
+          "registry+dnase+marks": 0.6693,
+          "registry+dnase+marks_other_line": 0.6479,
+          "registry+dnase+marks_shuffled": 0.6459,
+          "sibling_direction": 0.7163,
+          "sibling+registry+dnase": 0.7384,
+          "sibling+registry+dnase+marks": 0.7445,
+          "sibling+registry+dnase+marks_other_line": 0.733
+        },
+        "chr19": {
+          "units": 83196,
+          "registry+dnase": 0.6501,
+          "registry+dnase+marks": 0.6752,
+          "registry+dnase+marks_other_line": 0.659,
+          "registry+dnase+marks_shuffled": 0.6502,
+          "sibling_direction": 0.8249,
+          "sibling+registry+dnase": 0.8165,
+          "sibling+registry+dnase+marks": 0.8121,
+          "sibling+registry+dnase+marks_other_line": 0.8124
+        },
+        "chr20": {
+          "units": 67959,
+          "registry+dnase": 0.6486,
+          "registry+dnase+marks": 0.6807,
+          "registry+dnase+marks_other_line": 0.6547,
+          "registry+dnase+marks_shuffled": 0.6476,
+          "sibling_direction": 0.7722,
+          "sibling+registry+dnase": 0.7769,
+          "sibling+registry+dnase+marks": 0.7825,
+          "sibling+registry+dnase+marks_other_line": 0.7746
+        }
+      },
+      "pooled": {
+        "registry+dnase": 0.6613,
+        "registry+dnase+marks": 0.6879,
+        "registry+dnase+marks_other_line": 0.6681,
+        "registry+dnase+marks_shuffled": 0.6613,
+        "sibling_direction": 0.7923,
+        "sibling+registry+dnase": 0.7945,
+        "sibling+registry+dnase+marks": 0.7957,
+        "sibling+registry+dnase+marks_other_line": 0.7917
+      },
+      "bootstrap_95_and_share_with_no_gain": {
+        "marks_over_registry_dnase": [
+          0.0253,
+          0.0281,
+          0.0
+        ],
+        "marks_over_other_line_marks": [
+          0.0187,
+          0.0211,
+          0.0
+        ],
+        "marks_over_shuffled_marks": [
+          0.0253,
+          0.0281,
+          0.0
+        ],
+        "marks_over_sibling": [
+          0.0003,
+          0.0021,
+          0.005
+        ],
+        "marks_over_sibling_with_other_line_marks": [
+          0.0032,
+          0.0048,
+          0.0
+        ],
+        "sibling_over_the_marks_model": [
+          0.104,
+          0.1089,
+          0.0
+        ]
+      }
+    },
+    "silencer_among_acting": {
+      "train_units": 16613,
+      "held_out_units": 100507,
+      "per_chromosome": {
+        "chr15": {
+          "units": 15276,
+          "registry+dnase": 0.6051,
+          "registry+dnase+marks": 0.6248,
+          "registry+dnase+marks_other_line": 0.613,
+          "registry+dnase+marks_shuffled": 0.6038,
+          "sibling_direction": 0.886,
+          "sibling+registry+dnase": 0.8927,
+          "sibling+registry+dnase+marks": 0.8956,
+          "sibling+registry+dnase+marks_other_line": 0.8937
+        },
+        "chr16": {
+          "units": 17469,
+          "registry+dnase": 0.5926,
+          "registry+dnase+marks": 0.6173,
+          "registry+dnase+marks_other_line": 0.6049,
+          "registry+dnase+marks_shuffled": 0.5899,
+          "sibling_direction": 0.9272,
+          "sibling+registry+dnase": 0.9306,
+          "sibling+registry+dnase+marks": 0.9334,
+          "sibling+registry+dnase+marks_other_line": 0.9319
+        },
+        "chr17": {
+          "units": 24880,
+          "registry+dnase": 0.6042,
+          "registry+dnase+marks": 0.6275,
+          "registry+dnase+marks_other_line": 0.6183,
+          "registry+dnase+marks_shuffled": 0.6035,
+          "sibling_direction": 0.9109,
+          "sibling+registry+dnase": 0.9168,
+          "sibling+registry+dnase+marks": 0.9196,
+          "sibling+registry+dnase+marks_other_line": 0.9175
+        },
+        "chr18": {
+          "units": 8344,
+          "registry+dnase": 0.6271,
+          "registry+dnase+marks": 0.6512,
+          "registry+dnase+marks_other_line": 0.6328,
+          "registry+dnase+marks_shuffled": 0.6252,
+          "sibling_direction": 0.8468,
+          "sibling+registry+dnase": 0.8569,
+          "sibling+registry+dnase+marks": 0.8625,
+          "sibling+registry+dnase+marks_other_line": 0.858
+        },
+        "chr19": {
+          "units": 22105,
+          "registry+dnase": 0.5698,
+          "registry+dnase+marks": 0.6075,
+          "registry+dnase+marks_other_line": 0.5927,
+          "registry+dnase+marks_shuffled": 0.5722,
+          "sibling_direction": 0.9363,
+          "sibling+registry+dnase": 0.9404,
+          "sibling+registry+dnase+marks": 0.9428,
+          "sibling+registry+dnase+marks_other_line": 0.9411
+        },
+        "chr20": {
+          "units": 12433,
+          "registry+dnase": 0.6007,
+          "registry+dnase+marks": 0.6192,
+          "registry+dnase+marks_other_line": 0.6113,
+          "registry+dnase+marks_shuffled": 0.5989,
+          "sibling_direction": 0.8911,
+          "sibling+registry+dnase": 0.8973,
+          "sibling+registry+dnase+marks": 0.8998,
+          "sibling+registry+dnase+marks_other_line": 0.898
+        }
+      },
+      "pooled": {
+        "registry+dnase": 0.5989,
+        "registry+dnase+marks": 0.6238,
+        "registry+dnase+marks_other_line": 0.6118,
+        "registry+dnase+marks_shuffled": 0.5981,
+        "sibling_direction": 0.9095,
+        "sibling+registry+dnase": 0.915,
+        "sibling+registry+dnase+marks": 0.9178,
+        "sibling+registry+dnase+marks_other_line": 0.9158
+      },
+      "bootstrap_95_and_share_with_no_gain": {
+        "marks_over_registry_dnase": [
+          0.0216,
+          0.0279,
+          0.0
+        ],
+        "marks_over_other_line_marks": [
+          0.0099,
+          0.0143,
+          0.0
+        ],
+        "marks_over_shuffled_marks": [
+          0.0223,
+          0.0289,
+          0.0
+        ],
+        "marks_over_sibling": [
+          0.0024,
+          0.0032,
+          0.0
+        ],
+        "marks_over_sibling_with_other_line_marks": [
+          0.0015,
+          0.0025,
+          0.0
+        ],
+        "sibling_over_the_marks_model": [
+          0.2873,
+          0.2963,
+          0.0
+        ]
+      }
+    },
+    "magnitude": {
+      "train_units": 83815,
+      "held_out_units": 485604,
+      "per_chromosome": {
+        "chr15": {
+          "units": 83324,
+          "registry+dnase": 0.2076,
+          "registry+dnase+marks": 0.2765,
+          "registry+dnase+marks_other_line": 0.2325,
+          "registry+dnase+marks_shuffled": 0.207,
+          "sibling_direction": 0.4386,
+          "sibling+registry+dnase": 0.4322,
+          "sibling+registry+dnase+marks": 0.4321,
+          "sibling+registry+dnase+marks_other_line": 0.4246
+        },
+        "chr16": {
+          "units": 83206,
+          "registry+dnase": 0.2588,
+          "registry+dnase+marks": 0.3552,
+          "registry+dnase+marks_other_line": 0.3013,
+          "registry+dnase+marks_shuffled": 0.2586,
+          "sibling_direction": 0.4945,
+          "sibling+registry+dnase": 0.4938,
+          "sibling+registry+dnase+marks": 0.5125,
+          "sibling+registry+dnase+marks_other_line": 0.4979
+        },
+        "chr17": {
+          "units": 113319,
+          "registry+dnase": 0.2326,
+          "registry+dnase+marks": 0.3213,
+          "registry+dnase+marks_other_line": 0.2661,
+          "registry+dnase+marks_shuffled": 0.2328,
+          "sibling_direction": 0.5038,
+          "sibling+registry+dnase": 0.491,
+          "sibling+registry+dnase+marks": 0.5039,
+          "sibling+registry+dnase+marks_other_line": 0.4919
+        },
+        "chr18": {
+          "units": 54600,
+          "registry+dnase": 0.1825,
+          "registry+dnase+marks": 0.2772,
+          "registry+dnase+marks_other_line": 0.2103,
+          "registry+dnase+marks_shuffled": 0.1821,
+          "sibling_direction": 0.3674,
+          "sibling+registry+dnase": 0.381,
+          "sibling+registry+dnase+marks": 0.4124,
+          "sibling+registry+dnase+marks_other_line": 0.3711
+        },
+        "chr19": {
+          "units": 83196,
+          "registry+dnase": 0.2646,
+          "registry+dnase+marks": 0.3364,
+          "registry+dnase+marks_other_line": 0.2982,
+          "registry+dnase+marks_shuffled": 0.2646,
+          "sibling_direction": 0.5667,
+          "sibling+registry+dnase": 0.5494,
+          "sibling+registry+dnase+marks": 0.5471,
+          "sibling+registry+dnase+marks_other_line": 0.5491
+        },
+        "chr20": {
+          "units": 67959,
+          "registry+dnase": 0.1986,
+          "registry+dnase+marks": 0.3263,
+          "registry+dnase+marks_other_line": 0.2571,
+          "registry+dnase+marks_shuffled": 0.1986,
+          "sibling_direction": 0.4435,
+          "sibling+registry+dnase": 0.4368,
+          "sibling+registry+dnase+marks": 0.4761,
+          "sibling+registry+dnase+marks_other_line": 0.4483
+        }
+      },
+      "pooled": {
+        "registry+dnase": 0.2381,
+        "registry+dnase+marks": 0.3305,
+        "registry+dnase+marks_other_line": 0.2773,
+        "registry+dnase+marks_shuffled": 0.2382,
+        "sibling_direction": 0.4826,
+        "sibling+registry+dnase": 0.477,
+        "sibling+registry+dnase+marks": 0.4926,
+        "sibling+registry+dnase+marks_other_line": 0.4781
+      },
+      "bootstrap_95_and_share_with_no_gain": {
+        "marks_over_registry_dnase": [
+          0.0895,
+          0.0953,
+          0.0
+        ],
+        "marks_over_other_line_marks": [
+          0.0512,
+          0.055,
+          0.0
+        ],
+        "marks_over_shuffled_marks": [
+          0.0893,
+          0.0952,
+          0.0
+        ],
+        "marks_over_sibling": [
+          0.0132,
+          0.0179,
+          0.0
+        ],
+        "marks_over_sibling_with_other_line_marks": [
+          0.0126,
+          0.0162,
+          0.0
+        ],
+        "sibling_over_the_marks_model": [
+          0.1429,
+          0.15,
+          0.0
+        ]
+      }
+    }
+  },
+  "sibling": "the same element's predicted signed log2 fold change averaged over the other three lines, the net sign over them (genomeos-t1's two direction columns) and the mean absolute change there; the line being predicted never enters its own features",
+  "controls": "marks_other_line takes the same twelve columns from another of the four lines (the rotation K562 -> HepG2 -> GM12878 -> IMR-90), marks_shuffled shuffles them among units of the same chromosome, cell, registry class and DNase call; both keep every marginal, so a gain that survives neither is not the cell's own chromatin",
+  "method": "ridge (lambda 1) on standardised features, fitted on chr21 and chr22 only and scored on chromosomes it never saw; the training median fills a missing mark on both sides; acts and direction by AUC with ties averaged, magnitude by Spearman with log10 |lfc|; 200 resamples of the held-out elements",
+  "caveat": "every outcome and the sibling feature are AlphaGenome predictions, and AlphaGenome was trained on ENCODE histone ChIP-seq, DNase and RNA-seq of these four lines: a mark predicting its direction can be the model reading back a track it was trained on",
+  "evidence": {
+    "marks": "experimental: ENCODE Histone ChIP-seq (GRCh38, default analysis)",
+    "methylation": "experimental: ENCODE WGBS, methylation state at CpG (GRCh38 bedMethyl)",
+    "outcome": "predicted: AlphaGenome deletion scoring, chain tables, no new model call"
+  }
+}
