@@ -17,16 +17,16 @@
     },
     "chr11": {
       "elements": 48380,
-      "scored": 16400,
+      "scored": 18200,
       "complete": false,
       "length": 135086622,
-      "fraction_with_target": 0.692,
-      "coding_target_agrees_with_nearest": 0.699,
-      "coding_target_inside_domain": 0.91,
-      "fraction_inside_domain": 0.898,
-      "strong": 2817,
-      "silencer_like": 4342,
-      "requests_this_run": 16393
+      "fraction_with_target": 0.691,
+      "coding_target_agrees_with_nearest": 0.706,
+      "coding_target_inside_domain": 0.907,
+      "fraction_inside_domain": 0.888,
+      "strong": 3124,
+      "silencer_like": 4832,
+      "requests_this_run": 18195
     },
     "chr12": {
       "elements": 46582,
@@ -301,7 +301,104 @@
       "excess": 0.026,
       "what": "over the whole deletion archive of 113,399 elements the same caller keeps a coding target inside the element's own CTCF node for 81.7% of elements, against 79.1% for the same number of boundaries placed at random: 2.6 points, not nine times out of ten",
       "source": "data/results/domains_oriented_comparison.json (commit dbad593)",
-      "reading": "the node's advantage over a random partition at the same resolution is small, and it is measured on a model's reading rather than on observed enhancer-gene pairs"
+      "reading": "the node's advantage over a random partition at the same resolution is small, and it is measured on a model's reading rather than on observed enhancer-gene pairs",
+      "measured_on_this_set": {
+        "what": "the same elements and the same most-moved coding gene, against as many boundaries placed uniformly at random (20 draws, seed 7), on the CTCF-only caller the scorer used",
+        "chromosomes": 12,
+        "coding_named": 150919,
+        "inside": 0.7896,
+        "inside_random": 0.7712,
+        "excess": 0.0185,
+        "chromosomes_where_the_node_beats_random": 7,
+        "per_chromosome": {
+          "chr18": {
+            "coding_named": 9250,
+            "boundaries": 559,
+            "inside": 0.6911,
+            "inside_random": 0.6158,
+            "excess": 0.0753
+          },
+          "chr17": {
+            "coding_named": 21608,
+            "boundaries": 545,
+            "inside": 0.8595,
+            "inside_random": 0.8132,
+            "excess": 0.0463
+          },
+          "chr12": {
+            "coding_named": 22814,
+            "boundaries": 921,
+            "inside": 0.7557,
+            "inside_random": 0.7189,
+            "excess": 0.0368
+          },
+          "chr16": {
+            "coding_named": 14799,
+            "boundaries": 562,
+            "inside": 0.8169,
+            "inside_random": 0.799,
+            "excess": 0.018
+          },
+          "chr14": {
+            "coding_named": 13385,
+            "boundaries": 633,
+            "inside": 0.7721,
+            "inside_random": 0.7591,
+            "excess": 0.0129
+          },
+          "chr20": {
+            "coding_named": 12702,
+            "boundaries": 477,
+            "inside": 0.7523,
+            "inside_random": 0.7417,
+            "excess": 0.0106
+          },
+          "chr19": {
+            "coding_named": 17265,
+            "boundaries": 338,
+            "inside": 0.9122,
+            "inside_random": 0.9049,
+            "excess": 0.0072
+          },
+          "chr22": {
+            "coding_named": 9612,
+            "boundaries": 246,
+            "inside": 0.8408,
+            "inside_random": 0.8466,
+            "excess": -0.0058
+          },
+          "chr15": {
+            "coding_named": 14474,
+            "boundaries": 542,
+            "inside": 0.737,
+            "inside_random": 0.7463,
+            "excess": -0.0093
+          },
+          "chr13": {
+            "coding_named": 9711,
+            "boundaries": 661,
+            "inside": 0.6839,
+            "inside_random": 0.6965,
+            "excess": -0.0126
+          },
+          "chr21": {
+            "coding_named": 5174,
+            "boundaries": 227,
+            "inside": 0.7261,
+            "inside_random": 0.7469,
+            "excess": -0.0208
+          },
+          "chrY": {
+            "coding_named": 125,
+            "boundaries": 48,
+            "inside": 0.712,
+            "inside_random": 0.9312,
+            "excess": -0.2192
+          }
+        },
+        "skipped": {},
+        "reading": "an excess that is positive on some chromosomes and negative on others is not a property of CTCF nodes; it is a property of where the boundaries happen to fall"
+      }
     },
     "coding_target_agrees_with_nearest": {
       "control": null,
@@ -359,7 +456,7 @@
     },
     "reading": "a rate that moves with chromosome size is a rate the small chromosomes bought; chr21 and chr22 are acrocentric and chrY is nearly gene-free, and the compression lane's per-chromosome layers already looked positive there and went negative genome-wide"
   },
-  "requests_total": 250937,
+  "requests_total": 252739,
   "cells": [
     "K562",
     "HepG2",

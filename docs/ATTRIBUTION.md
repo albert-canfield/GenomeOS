@@ -1987,17 +1987,38 @@ re-run as each lands. Twelve are complete (chr12 to chr22 and chrY), 319,833 ele
 |---|---|---|---|
 | names a gene at all | 65.4% | 58.1% (chr13) to 70.8% (chr19), median 64.5% | 87% of matched random windows in the locus benchmark |
 | the named coding gene is the nearest TSS | 61.5% | 48.8% (chrY) to 65.3% (chr22), median 60.9% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
-| the named coding gene is inside the element's own CTCF node | 79.0% | 68.4% (chr13) to 91.2% (chr19), median 75.4% | 79.1% for the same number of boundaries placed at random |
+| the named coding gene is inside the element's own CTCF node | 79.0% | 68.4% (chr13) to 91.2% (chr19), median 75.4% | 77.1% for as many boundaries placed at random, measured on these same elements |
 
-**The pooled numbers are the least interesting row in the table.** Node containment spans 22.8 points
-between chromosomes and the node's whole measured advantage over a random partition is 2.6 points
-(dbad593: 81.7% against 79.1% over the 113,399-element archive). At twelve chromosomes the containment
-rate is 79.0%, which is the random-boundary level, so the node's excess that the archive measured does
-not survive the wider sweep as a pooled number. That is not yet a refutation — the 79.1% control was
-placed against the archive's own element set and no matched random-boundary control has been run on
-these 319,833 — but it is the opposite of a confirmation, and the honest statement is that at this size
-a CTCF node predicts which gene an element moves about as well as a random partition of the same
-chromosome at the same resolution.
+**The node control, re-measured where the claim is now being made.** dbad593 qualified the old
+"90.2% of enhancers act inside their own CTCF node" to 81.7% against 79.1% for randomly placed
+boundaries — 2.6 points — over the archive as it stood. That control belonged to the archive's element
+set, not to this one, so the fold now places its own: the same 150,919 elements naming a coding gene,
+the same most-moved gene, the same `infer_domains` caller, against as many boundaries drawn uniformly
+at random (20 draws, seed 7). It reproduces the scorer's own containment figure to four decimals on all
+twelve chromosomes, which is the check that the two readings are the same reading.
+
+Pooled, the node keeps **79.0% against 77.1% at random: +1.85 points**, so dbad593's correction holds
+and is if anything slightly generous at this size. What the per-chromosome control adds is that the
+excess is not a property the nodes have; it is a property of where their boundaries happen to fall:
+
+| | chr18 | chr17 | chr12 | chr16 | chr14 | chr20 | chr19 | chr22 | chr15 | chr13 | chr21 | chrY |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| inside the node | 69.1 | 86.0 | 75.6 | 81.7 | 77.2 | 75.2 | 91.2 | 84.1 | 73.7 | 68.4 | 72.6 | 71.2 |
+| random boundaries | 61.6 | 81.3 | 71.9 | 79.9 | 75.9 | 74.2 | 90.5 | 84.7 | 74.6 | 69.7 | 74.7 | 93.1 |
+| excess, points | +7.5 | +4.6 | +3.7 | +1.8 | +1.3 | +1.1 | +0.7 | −0.6 | −0.9 | −1.3 | −2.1 | −21.9 |
+
+The node is ahead on seven of twelve and behind on five, and the two chromosomes the original 90.2%
+sample leaned on, chr21 and chr22, are both among the five. chrY is the extreme case and the clearest
+illustration of what the control is for: 48 boundaries over 57 Mb, nearly all of them in the short
+euchromatic arm, so uniformly placed boundaries leave the element-dense region uncut and beat the real
+nodes by 22 points on 125 elements. A single pooled excess of +1.85 points is the average of a quantity
+that changes sign between chromosomes, and any statement of the form "enhancers act inside their own
+node" should carry that, not the average.
+
+Nor does the excess follow the density relation that the containment level follows. chr19 is the
+densest chromosome and highest on containment at 91.2%, and its excess over random is +0.7, among the
+smallest; chr18 is sparse, low on containment at 69.1%, and carries the largest excess at +7.5. Being
+easy to contain and being better-than-random at containing are different things.
 
 The naming rate is the same kind of number. 65.4% of elements name some gene, and "some derived layer
 names a target" already fires at 52 of 60 matched random windows in the locus benchmark (303d0b0,
@@ -2024,7 +2045,8 @@ and both trends every time it runs, so that check is automatic.
 `data/results/enhancer_targets_all_genome_wide.json`; the per-element tables stay local under
 `data/knowledge/alphagenome/all_elements/<chrom>.json`. Cells K562, HepG2, GM12878 and IMR-90.
 Evidence: predicted (AlphaGenome deletion effect per element, per gene, per cell line) over inferred
-(CTCF-only nodes).
+(CTCF-only nodes). The node control re-runs with the fold, so its sign per chromosome is re-measured
+every time a chromosome lands rather than being quoted from this table.
 
 ## What comes next, in order
 

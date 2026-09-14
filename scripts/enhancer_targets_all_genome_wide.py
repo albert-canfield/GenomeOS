@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """One table over every chromosome's all-elements summary, as the chain lands them.
 
-    uv run python scripts/enhancer_targets_all_genome_wide.py
+    uv run python scripts/enhancer_targets_all_genome_wide.py [--no-control]
 
 Reads data/results/enhancer_targets_all_chr*.json (summaries only; the element tables stay local) and
 writes enhancer_targets_all_genome_wide.json: per chromosome the counts and rates, the totals over the
@@ -10,17 +10,27 @@ than one pooled number, the controls each rate has to be read against, and wheth
 chromosome size (chr21, chr22 and chrY are acrocentric or nearly gene-free, and a reading taken on them
 alone has already misled one lane). Every earlier reading is kept in `history`, one entry per distinct
 set of complete chromosomes, so the pooled rates can be watched moving as the sweep widens.
+
+The node-containment rate carries its own control, measured on this element set rather than borrowed
+from the archive: the same elements and the same most-moved coding gene, scored against as many
+boundaries placed uniformly at random (20 draws, seed 7), using the same `infer_domains` caller the
+scorer used. It needs the local element tables and takes about half a minute; `--no-control` skips it.
 """
 
 from __future__ import annotations
 
+import bisect
 import json
+import random
 import sys
 from pathlib import Path
 from statistics import median
 
 from genomeos.molecules.proteome import CHROM_LENGTHS
 from genomeos.results import save_result
+
+ARCHIVE = Path("data/knowledge/alphagenome/all_elements")
+SHUFFLES = 20
 
 # Chromosomes whose architecture is not the genome's: two acrocentric arms and the male-specific
 # chromosome, all three small and gene-poor. Rates are reported with and without them.
@@ -220,6 +230,86 @@ def aggregate(results_dir: Path = Path("data/results")) -> dict:
     }
 
 
+def _inside(starts: list[int], pairs: list[tuple[int, int]]) -> int:
+    """How many (element midpoint, target TSS) pairs fall in one node of a partition at `starts`."""
+    return sum(1 for m, t in pairs if bisect.bisect_right(starts, m) == bisect.bisect_right(starts, t))
+
+
+def node_control(chroms: list[str]) -> dict:
+    """The node-containment rate against as many boundaries placed at random, on this element set.
+
+    dbad593 measured 81.7% against 79.1% over the archive as it stood, a 2.6-point excess. That control
+    was placed against the archive's own elements; this one is placed against the elements the fold is
+    reporting, chromosome by chromosome, so the excess can be read where it is earned and where it is
+    not. The containment figure it recomputes is the scorer's own verdict rebuilt from the element
+    tables, which is also a check that the two agree.
+    """
+    from genomeos.genome import Annotation, default_gencode
+    from genomeos.genome.domains import infer_domains
+    from genomeos.genome.regulatory import load_ccres
+
+    rows: dict[str, dict] = {}
+    skipped: dict[str, str] = {}
+    for chrom in chroms:
+        arch = ARCHIVE / f"{chrom}.json"
+        length = CHROM_LENGTHS.get(chrom)
+        if not arch.exists() or not length:
+            skipped[chrom] = "no local element table" if length else "no length"
+            continue
+        gff = default_gencode({chrom})
+        ccres = load_ccres(chrom)
+        if not gff or not ccres:
+            skipped[chrom] = "no annotation or cCREs"
+            continue
+        ann = Annotation.from_gff3(gff, {chrom})
+        coding = {
+            g.symbol: g for g in ann.genes.values() if g.locus.chrom == chrom and g.type == "protein_coding"
+        }
+        pairs = []
+        for e in json.loads(arch.read_text()):
+            gene = (e.get("predicted_coding") or {}).get("gene")
+            g = coding.get(gene)
+            if g is not None:
+                tss = g.locus.end - 1 if g.locus.strand.value == "-" else g.locus.start
+                pairs.append(((e["start"] + e["end"]) // 2, tss))
+        if not pairs:
+            skipped[chrom] = "no element names a coding gene"
+            continue
+        starts = [d.start for d in infer_domains(chrom, length, ccres, ann)]
+        edges = starts[1:]
+        rng = random.Random(7)
+        null = [
+            _inside([0, *sorted(rng.randint(1, length - 1) for _ in edges)], pairs) for _ in range(SHUFFLES)
+        ]
+        ins, tot = _inside(starts, pairs), len(pairs)
+        rnd = sum(null) / len(null) / tot
+        rows[chrom] = {
+            "coding_named": tot,
+            "boundaries": len(edges),
+            "inside": round(ins / tot, 4),
+            "inside_random": round(rnd, 4),
+            "excess": round(ins / tot - rnd, 4),
+        }
+    tot = sum(r["coding_named"] for r in rows.values())
+    ins = sum(r["inside"] * r["coding_named"] for r in rows.values())
+    rnd = sum(r["inside_random"] * r["coding_named"] for r in rows.values())
+    won = sum(1 for r in rows.values() if r["excess"] > 0)
+    return {
+        "what": "the same elements and the same most-moved coding gene, against as many boundaries "
+        f"placed uniformly at random ({SHUFFLES} draws, seed 7), on the CTCF-only caller the scorer used",
+        "chromosomes": len(rows),
+        "coding_named": tot,
+        "inside": round(ins / tot, 4) if tot else None,
+        "inside_random": round(rnd / tot, 4) if tot else None,
+        "excess": round((ins - rnd) / tot, 4) if tot else None,
+        "chromosomes_where_the_node_beats_random": won,
+        "per_chromosome": dict(sorted(rows.items(), key=lambda kv: -kv[1]["excess"])),
+        "skipped": skipped,
+        "reading": "an excess that is positive on some chromosomes and negative on others is not a "
+        "property of CTCF nodes; it is a property of where the boundaries happen to fall",
+    }
+
+
 def with_history(out: dict, previous: dict | None) -> dict:
     """Keep every earlier reading beside the current one, so the pooled rates can be watched moving as
     chromosomes land instead of being recomputed and forgotten. One entry per distinct chromosome set."""
@@ -239,6 +329,14 @@ def with_history(out: dict, previous: dict | None) -> dict:
 
 def main() -> int:
     out = aggregate()
+    if "--no-control" not in sys.argv:
+        out["controls"] = {
+            **out["controls"],
+            "coding_target_inside_domain": {
+                **out["controls"]["coding_target_inside_domain"],
+                "measured_on_this_set": node_control(out["chromosomes_complete"]),
+            },
+        }
     path = Path("data/results/enhancer_targets_all_genome_wide.json")
     previous = json.loads(path.read_text()) if path.exists() else None
     out = with_history(out, previous)
@@ -251,6 +349,13 @@ def main() -> int:
         f"inside the node {g['coding_target_inside_domain']} (random boundaries 0.791, +2.6 points); "
         f"{out['requests_total']:,} requests so far"
     )
+    nc = out["controls"]["coding_target_inside_domain"].get("measured_on_this_set")
+    if nc and nc["chromosomes"]:
+        print(
+            f"  node against random boundaries on this set: {nc['inside']} against {nc['inside_random']}, "
+            f"{nc['excess']:+} over {nc['coding_named']:,} elements, the node ahead on "
+            f"{nc['chromosomes_where_the_node_beats_random']} of {nc['chromosomes']} chromosomes"
+        )
     for k, s in sp.items():
         if s:
             print(f"  {k}: {s['min']} ({s['lowest']}) to {s['max']} ({s['highest']}), median {s['median']}")

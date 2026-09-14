@@ -82,6 +82,22 @@ def test_the_acrocentric_chromosomes_are_split_out_and_the_controls_travel(tmp_p
     assert c["coding_target_inside_domain"]["excess"] == 0.026
 
 
+def test_inside_counts_pairs_the_partition_keeps_together():
+    starts = [0, 100, 200]  # three nodes: [0,100), [100,200), [200,...)
+    # element and target in the same node, then split by the boundary at 100
+    assert agw._inside(starts, [(10, 50), (120, 150), (250, 260)]) == 3
+    assert agw._inside(starts, [(10, 150), (90, 210)]) == 0
+    assert agw._inside(starts, [(10, 50), (10, 150)]) == 1
+
+
+def test_the_node_control_skips_a_chromosome_with_no_local_table(tmp_path, monkeypatch):
+    monkeypatch.setattr(agw, "ARCHIVE", tmp_path)
+    out = agw.node_control(["chr21", "chrNotAChromosome"])
+    assert out["chromosomes"] == 0 and out["inside"] is None
+    assert out["skipped"]["chr21"] == "no local element table"
+    assert out["skipped"]["chrNotAChromosome"] == "no length"
+
+
 def test_history_keeps_one_entry_per_chromosome_set(tmp_path):
     (tmp_path / "enhancer_targets_all_chr21.json").write_text(
         json.dumps(_res("chr21", 100, 100, True, 60, 30, 10, 10, 20))
