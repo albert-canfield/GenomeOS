@@ -62,7 +62,7 @@ GTEX_DIR = LANE / "gtex"
 PREDICTIONS = LANE / "predictions"
 CONTROL_WINDOW = 250_000  # controls sit within this distance of the unit's tested variant
 LD_MAX_R2 = 0.2  # a control must not be in panel linkage with the tested variant
-CONTROLS_PER_UNIT = 1
+CONTROLS_PER_UNIT = 2  # raised from 1 on 2026-09-14 after the first 308 requests: see AMENDMENTS
 MATCH_LEVELS = (
     ("gc_stratum", "rt_stratum", "value_bucket"),  # 0: every stratum
     ("gc_stratum", "rt_stratum"),  # 1: the number of values relaxed
@@ -75,6 +75,42 @@ EQTL_P = 1e-5
 DAPG_PIP = 0.5  # fine-mapped: the primary eQTL endpoint, where the value is probably the cause
 ENDPOINTS = ("E1_mpra", "E2_eqtl", "E3_eqtl_linked")
 SEED = 20260914
+
+AMENDMENTS: tuple[dict[str, str], ...] = (
+    {
+        "when": "2026-09-14, after a two-request smoke test and before any endpoint was scored",
+        "what": "a no-call grid of 0, 0.001 and 0.01 reported beside the primary 0.001",
+        "why": "single-variant gene effects came out near 0.001 log2, so the threshold choice is shown",
+    },
+    {
+        "when": "2026-09-14, after the first 308 requests (155 pairs, E1 and E2)",
+        "what": (
+            "E1's controls are drawn within 250 kb like E2's rather than chromosome-wide; the cache filter "
+            "keeps every gene's tracks in the read-out cell; two controls per unit instead of one"
+        ),
+        "why": (
+            "19 of E1's 20 controls returned no value at all: a chromosome-wide control's borrowed gene was "
+            "outside its window and the cache filter had dropped the cell's other genes, so the arm could "
+            "not be scored. The unit arm is unchanged and its answers come from cache; only controls are "
+            "added. Both readings are reported, before and after"
+        ),
+    },
+)
+
+HOLD_OUT = {
+    "when": "2026-09-14, written after E2's amended reading and before any E3 request",
+    "question": (
+        "is E2's agreement about the value being the cause, or about the model's behaviour in eQTL-rich "
+        "neighbourhoods? E3's variants are significant eQTLs that DAP-G does not fine-map, so most are "
+        "linked to a cause rather than causal"
+    ),
+    "prediction": (
+        "if a unit executes its value, E3's agreement difference should be clearly smaller than E2's "
+        "(dilution by linkage); if E3 matches E2, the difference is not about causality and E2's reading "
+        "is a property of the neighbourhood, which would be the more important result"
+    ),
+    "budget": "2,000 requests, 1,000 pairs in the pre-registered order, stopping rule unchanged",
+}
 
 CRITERION: dict[str, Any] = {
     "written": "2026-09-14, before any model request for this test",
@@ -467,7 +503,7 @@ def match_controls(
     unmatched = Counter()
     for t in tests:
         u, v = t["unit"], t["test"]
-        window = None if v["endpoint"] == "E1_mpra" else CONTROL_WINDOW
+        window = CONTROL_WINDOW  # E1 too, from 2026-09-14: see AMENDMENTS
         if u["chrom"] not in panels:
             panels[u["chrom"]] = Panel(PANEL_CACHE / u["chrom"])
         panel = panels[u["chrom"]]
@@ -685,11 +721,19 @@ def live_scorer() -> Scorer:
     return AlphaGenomeAdapter()._live_scorer(threshold=0.0)
 
 
-def kept(scorer: Scorer, gene: str | None, keep_min: float = 0.05) -> Scorer:
-    """Every track of the gene under test, and other genes only where they move by keep_min."""
+def kept(scorer: Scorer, gene: str | None, cell: str | None = None, keep_min: float = 0.05) -> Scorer:
+    """Every track of the gene under test, every track of the cell under test, and anything that moves.
+
+    The filter only shrinks the cache; what it keeps must cover the read-out of both arms, which is why
+    a cell read-out keeps that cell's tracks for every gene in the window.
+    """
 
     def score(chrom: str, pos: int, ref: str, alt: str) -> list[tuple[str, str, float]]:
-        return [(g, t, v) for g, t, v in scorer(chrom, pos, ref, alt) if g == gene or abs(v) >= keep_min]
+        return [
+            (g, t, v)
+            for g, t, v in scorer(chrom, pos, ref, alt)
+            if g == gene or abs(v) >= keep_min or (cell and _norm(cell) in _norm(t))
+        ]
 
     return score
 
@@ -700,10 +744,11 @@ def predict_side(
     """One request (or a cached answer) for one variant, read the way the criterion says."""
     from genomeos.predict.individual_effects import cache_path, score_variant
 
-    folder = cache / (borrowed.get("gene") or f"cell_{borrowed.get('cell')}")
+    cell = borrowed.get("cell")
+    folder = cache / (f"cell_{cell}" if cell else borrowed["gene"])
     hit = cache_path(chrom, side["pos"], side["ref"], side["alt"], folder).exists()
     effects = score_variant(
-        kept(scorer, borrowed.get("gene")), chrom, side["pos"], side["ref"], side["alt"], folder
+        kept(scorer, borrowed.get("gene"), cell), chrom, side["pos"], side["ref"], side["alt"], folder
     )
     r = readout(effects, borrowed.get("gene"), borrowed.get("tissue"), borrowed.get("cell"))
     v = r["value"]
@@ -903,6 +948,8 @@ def summarise(assembled: dict[str, Any], examples: int = 12) -> dict[str, Any]:
         "control_distance_median_kb": _median_abs([p["control"]["distance"] for p in pairs], 1000),
         "control_r2_max": max((p["control"]["r2_with_test"] or 0 for p in pairs), default=None),
         "criterion": CRITERION,
+        "amendments": list(AMENDMENTS),
+        "hold_out": HOLD_OUT,
         "plan": plan(pairs),
         "first_pairs": [
             {k: p[k] for k in ("order", "endpoint", "unit", "test", "control", "borrowed")}

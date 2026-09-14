@@ -58,6 +58,8 @@ def main(argv: list[str] | None = None) -> None:
     with gzip.open(ex.LANE / "run_rows.json.gz", "wt") as fh:
         json.dump(rows, fh)
     out["criterion"] = ex.CRITERION
+    out["amendments"] = list(ex.AMENDMENTS)
+    out["hold_out"] = ex.HOLD_OUT
     out["seconds"] = round(time.time() - t0, 1)
     say(f"saved {save_result('executor_test', out)}")
 
