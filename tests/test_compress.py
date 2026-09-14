@@ -1,0 +1,257 @@
+"""The compression probe: every code length checked against a brute-force count on small sequences."""
+
+import math
+import random
+
+import numpy as np
+import pytest
+
+from genomeos.attribution import compress as cz
+
+
+def _seq(n, seed=1, alphabet="ACGT"):
+    rng = random.Random(seed)
+    return "".join(rng.choice(alphabet) for _ in range(n))
+
+
+def _codes(text):
+    return cz.Chromosome.from_text("t", text).s
+
+
+def _ctx(s, i, k):
+    return tuple(int(s[i - j]) if i - j >= 0 else 0 for j in range(1, k + 1))
+
+
+def test_contexts_match_a_loop():
+    s = _codes(_seq(50))
+    for k in (0, 1, 3, 5):
+        x = cz.contexts(s, k)
+        for i in range(len(s)):
+            want = sum(v << (2 * j) for j, v in enumerate(_ctx(s, i, k)))
+            assert int(x[i]) == want
+    rc = cz.rc_contexts(s, 3)
+    for j in range(len(s) - 3):
+        want = sum((3 - int(s[j + m])) << (2 * (m - 1)) for m in range(1, 4))
+        assert int(rc[j]) == want
+
+
+@pytest.mark.parametrize("revcomp", [False, True])
+def test_adaptive_counts_equal_sequential_counting(revcomp, monkeypatch):
+    s = _codes(_seq(400, seed=3, alphabet="AACGTTT"))
+    k = 3
+    for parts in (1 << 25, 64):  # one part, and the hash space split into many
+        monkeypatch.setattr(cz, "PART_ELEMENTS", parts)
+        n_ca, n_c = cz.adaptive_counts(s, k, revcomp=revcomp)
+        seen: dict = {}
+        n = len(s)
+        for i in range(n):
+            c = _ctx(s, i, k)
+            assert n_ca[i] == seen.get((c, int(s[i])), 0)
+            assert n_c[i] == sum(seen.get((c, a), 0) for a in range(4))
+            seen[(c, int(s[i]))] = seen.get((c, int(s[i])), 0) + 1
+            j = i - k  # the reverse-strand event at j is known once base j + k is
+            if revcomp and j >= 0 and j + k < n - 1:
+                rc = tuple(3 - int(s[j + m]) for m in range(1, k + 1))
+                key = (rc, 3 - int(s[j]))
+                seen[key] = seen.get(key, 0) + 1
+
+
+def test_static_counts_equal_counting_both_strands_of_the_other_sequence():
+    test = _codes(_seq(120, seed=5))
+    train = _codes(_seq(300, seed=6, alphabet="ACGTTG"))
+    k = 2
+    state_t = np.array([i % 2 for i in range(len(test))], dtype=np.uint8)
+    state_r = np.array([i % 3 == 0 for i in range(len(train))], dtype=np.uint8)
+    n_ca, n_c = cz.static_counts(
+        test, train, k, test_state=state_t, train_state=state_r, train_rc_state=state_r, state_bits=1
+    )
+    table: dict = {}
+    for i in range(len(train)):
+        key = (_ctx(train, i, k), int(state_r[i]), int(train[i]))
+        table[key] = table.get(key, 0) + 1
+    for j in range(len(train) - k):
+        rc = tuple(3 - int(train[j + m]) for m in range(1, k + 1))
+        key = (rc, int(state_r[j]), 3 - int(train[j]))
+        table[key] = table.get(key, 0) + 1
+    for i in range(len(test)):
+        c, st = _ctx(test, i, k), int(state_t[i])
+        assert n_ca[i] == table.get((c, st, int(test[i])), 0)
+        assert n_c[i] == sum(table.get((c, st, a), 0) for a in range(4))
+
+
+def test_kt_closed_form_equals_the_sequential_code():
+    s = _codes(_seq(300, seed=9))
+    k = 2
+    n_ca, n_c = cz.adaptive_counts(s, k, revcomp=False)
+    sequential = -np.log2((n_ca + 0.5) / (n_c + 2.0)).sum()
+    key = cz.contexts(s, k).astype(np.int64) * 4 + s
+    counts = np.bincount(key, minlength=4 ** (k + 1)).reshape(-1, 4)
+    assert cz.kt_bits(counts, 0.5) == pytest.approx(sequential, rel=1e-9)
+
+
+def test_lgamma_fast_is_exact_enough():
+    x = np.array([0.5, 3.0, 255.5, 256.0, 1e3, 1e7])
+    want = [math.lgamma(v) for v in x]
+    assert np.allclose(cz._lgamma_fast(x), want, rtol=1e-12, atol=1e-9)
+
+
+def test_mixture_is_a_distribution_and_causal():
+    rng = np.random.default_rng(0)
+    n, m = 200, 3
+    probs = rng.dirichlet(np.ones(4), size=(m, n))  # every model's full distribution per base
+    s = rng.integers(0, 4, n)
+    base = [cz.quantise(-np.log2(probs[j, np.arange(n), s])) for j in range(m)]
+    out = cz.mix(base, window=16, beta=1.0, chunk=64)
+    i = 150
+    total = 0.0
+    for a in range(4):  # same history, each possible base at i
+        models = []
+        for j in range(m):
+            x = base[j].copy()
+            x[i] = cz.quantise(-np.log2(probs[j, i, a]))
+            models.append(x)
+        alt = cz.mix(models, window=16, beta=1.0, chunk=64)
+        assert np.array_equal(alt[:i], out[:i])  # the past does not see the base
+        total += 2.0 ** -float(alt[i])
+    assert total == pytest.approx(1.0, abs=2e-3)  # quantisation of the model codes only
+
+
+def test_mixture_follows_the_better_model():
+    n = 5000
+    good = np.full(n, cz.quantise(0.1), dtype=np.uint16)
+    bad = np.full(n, cz.quantise(4.0), dtype=np.uint16)
+    bits = cz.mix([bad, good], window=32, beta=1.0)
+    assert bits[100:].mean() < 0.15
+
+
+def test_annotation_costs():
+    assert cz.delta_bits([1]) == 1
+    assert cz.delta_bits([2, 3]) == 8  # 4 bits each
+    seq = [0, 0, 1, 0]
+    counts = [0, 0]
+    bits = 0.0
+    for x in seq:
+        bits -= math.log2((counts[x] + 0.5) / (sum(counts) + 1.0))
+        counts[x] += 1
+    assert cz.categorical_bits(seq, 2) == pytest.approx(bits)
+    assert cz.interval_bits([10, 30], [20, 35]) > 0
+    assert cz.names_bits(["AluY"]) == 40
+
+
+def test_copy_model_predicts_a_duplicated_segment():
+    rng = random.Random(4)
+    unit = _seq(3000, seed=11)
+    mutated = "".join(c if rng.random() > 0.02 else rng.choice("ACGT") for c in unit)
+    t, p = _codes(mutated), _codes(unit)
+    off = cz.copy_offsets(t, p)
+    usable = off >= 0
+    x, bits, hits = cz.copy_codes(t, p, off, usable)
+    assert len(x) > 2900
+    assert hits / len(x) > 0.95
+    assert bits.mean() < 0.5
+    # a reversed-complement partner is read on its own strand by the caller
+    rc = np.where(p < 4, 3 - p, 4).astype(np.uint8)[::-1]
+    back = np.where(rc < 4, 3 - rc, 4).astype(np.uint8)[::-1]
+    assert np.array_equal(back, p)
+
+
+def test_gc_state_reads_only_the_past():
+    s = _codes(_seq(3000, seed=2))
+    st = cz.gc_state(s, window=100)
+    s2 = s.copy()
+    s2[2000:] = 1  # change the future
+    st2 = cz.gc_state(s2, window=100)
+    assert np.array_equal(st[:2001], st2[:2001])
+    assert st.min() >= 1 and st.max() <= 18
+    islands = _codes("CG" * 300)
+    assert cz.gc_state(islands, window=100)[-1] == 5 * 3 + 2 + 1  # GC-rich, CpG island-like
+
+
+def test_coding_states_phase_and_strand():
+    c = cz.Chromosome.from_text("t", "N" * 5 + _seq(40))
+    fwd, rc = cz.coding_states(c, [(False, [(5, 11, 0)]), (True, [(20, 26, 1)])])
+    assert fwd[:6].tolist() == [1, 2, 3, 1, 2, 3]
+    # minus strand, phase 1: counted from the segment's high end, one base skipped first
+    assert fwd[15:21].tolist()[::-1] == [4 + (o - 1) % 3 for o in range(6)]
+    assert rc[:3].tolist() == [4, 5, 6]
+
+
+def test_pack_and_general_compressors():
+    s = _codes(_seq(4000, seed=8))
+    assert len(cz.pack2(s)) == 1000
+    out = cz.general_compressors(s, ascii_xz=False)
+    assert 1.5 < out["bzip2_packed"]["bits_per_base"] < 3.0
+
+
+def test_models_on_a_repetitive_sequence_beat_two_bits():
+    unit = _seq(500, seed=21)
+    text = _seq(2000, seed=22) + unit + _seq(1000, seed=23) + unit
+    s = _codes(text)
+    adaptive = cz.adaptive_model(s, 12).astype(float) / cz.SCALE
+    tail = adaptive[3500 + 12 :].mean()
+    assert tail < 1.0  # the second copy is predicted
+    train = _codes(_seq(5000, seed=24))
+    naive = cz.static_model(s, train, 2).astype(float) / cz.SCALE
+    assert naive.mean() == pytest.approx(2.0, abs=0.1)  # random sequence: nothing to learn
+
+
+def test_plan_stacks_names_every_question():
+    plan = cz.plan_stacks(["repeats", "coding"])
+    assert ("naive", "adaptive", "coding") in plan["over_generic"]
+    assert plan["over_repeat_aware"] == [("naive", "adaptive", "repeats", "coding")]
+    assert plan["leave_one_out"][0] == ("naive", "adaptive", "coding")
+
+
+def test_direct_and_sorted_counts_agree(monkeypatch):
+    test = _codes(_seq(500, seed=31))
+    train = _codes(_seq(900, seed=32, alphabet="AACGT"))
+    st_t = (np.arange(len(test)) % 3).astype(np.uint8)
+    st_r = (np.arange(len(train)) % 3).astype(np.uint8)
+    kw = {"test_state": st_t, "train_state": st_r, "train_rc_state": st_r, "state_bits": 2}
+    direct = cz.static_counts(test, train, 4, **kw)
+    monkeypatch.setattr(cz, "DIRECT_BITS", 0)
+    sorted_ = cz.static_counts(test, train, 4, **kw)
+    assert np.array_equal(direct[0], sorted_[0]) and np.array_equal(direct[1], sorted_[1])
+
+
+def test_an_inactive_model_takes_no_weight():
+    rng = np.random.default_rng(1)
+    a = cz.quantise(rng.uniform(0.5, 3.0, 3000))
+    b = cz.quantise(rng.uniform(0.5, 3.0, 3000))
+    off = np.full(3000, cz.INACTIVE, dtype=np.uint16)
+    assert np.allclose(cz.mix([a, b, off], 16, 0.5, chunk=700), cz.mix([a, b], 16, 0.5, chunk=700))
+    part = b.copy()
+    part[:1500] = cz.INACTIVE
+    bits = cz.mix([a, part], 16, 0.5)
+    assert np.allclose(bits[:1500], cz.mix([a], 16, 0.5)[:1500])
+
+
+def test_integer_code_is_proper_and_cheaper_than_delta_on_similar_values():
+    values = [300, 310, 290, 305] * 50
+    assert cz.integer_bits(values) < cz.delta_bits(values)
+    assert cz.integer_bits([1]) == pytest.approx(-math.log2(0.5 / 32))
+
+
+def test_training_set_paints_each_part():
+    a = cz.Chromosome.from_text("a", "ACGTNNACGT")
+    b = cz.Chromosome.from_text("b", "GGGG")
+    train = cz.Chromosome.training_set([a, b])
+    assert train.n == 12 and [p.name for p in train.parts] == ["a", "b"]
+
+    def state(c):
+        st = np.full(c.n, 1 if c.name == "a" else 2, dtype=np.uint8)
+        return st, st + 1
+
+    t, r, rc = cz._states(a, train, state)
+    assert r.tolist() == [1] * 8 + [2] * 4 and rc.tolist() == [2] * 8 + [3] * 4
+
+
+def test_priming_counts_the_held_sequence_before_the_first_base():
+    held = _codes(_seq(600, seed=41))
+    s = _codes(_seq(300, seed=42) + _seq(600, seed=41)[:300])
+    k = 12
+    plain = cz.adaptive_model(s, k).astype(float) / cz.SCALE
+    primed = cz.adaptive_model(s, k, prime=held).astype(float) / cz.SCALE
+    assert primed[312:].mean() < 0.5 < plain[312:].mean()
+    plan = cz.plan_stacks(["duplications"], control=True)
+    assert plan["control"][1] == ("naive", "adaptive_primed", "duplications")

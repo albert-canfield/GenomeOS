@@ -1671,6 +1671,40 @@ in order. "Owner" is the session that holds the files today (see §7).
     expected.
   - **Decision.** The other chromosomes are not built. ATTRIBUTION.md "The lexicon at base
     resolution"; LESSONS.md "The UNKNOWN space".
+- **Compression, chr21, chr22 and chr18 (2026-09-14, genomeos-m1).** Albert's probe of which way
+  of classifying the genome buys the most per unit of effort, done the information-theoretic way.
+  Each piece of knowledge becomes a model of the next base, and its worth is the bits it saves net
+  of its annotation. The tool is `attribution/compress.py` (`scripts/compress.py`,
+  `compress_chr21`, `compress_chr22`, `compress_chr18`), with no model call and one CpG-island
+  request per chromosome.
+  - **Honesty.** Static models are fitted on another chromosome; adaptive models pay as they
+    learn; annotations are charged; a layer is inactive outside its claim. A control primes the
+    generic models with the duplication partners' sequence.
+  - **Baselines, bits per base, chr21 / chr22 / chr18.** xz 1.706 / 1.673 / 1.700. Naive Markov
+    mixture 1.692 / 1.633 / 1.745. Generic with blind copy finding 1.590 / 1.545 / 1.650. Every
+    layer with its annotation paid 1.532 / 1.499 / 1.665. The best net is primed generic plus
+    duplications, 1.500 / 1.446 / 1.630.
+  - **What pays.** Segmental duplications: +85 / +91 / +18 kb per Mb, two thirds of it from
+    access to the partner's sequence, the alignment +0.22 to +0.33 bits per claimed base. GC and
+    CpG: +7 / +7 / +6 kb per Mb.
+  - **What does not. Negative.**
+    - Repeats, over blind copy finding: -13 / -20 / -27 kb per Mb, 31 bits per labelled copy
+      against 0.04 to 0.07 bits a base saved. This one is set by the training: fitted on two
+      chromosomes, chr21's repeats turn to +3.8 kb per Mb, and still lose 12.5 left out of
+      the full stack.
+    - Coding phase: +0.03 to 0.05 bits per coding base against 0.14 to point to it.
+    - cCREs: 0.01 bits per base or less against 0.08.
+    - Motif sites: 0.5 bits per site base against 1.6 to address them.
+    - Tiers: nothing over the repeat-aware stack.
+  - **The unknown space. Negative, loudly.** Unique sequence costs 1.89 to 1.94 bits per base
+    under every model in every tier. chr18's constrained_unknown (2.87 Mb, 43 blocks, 1.5%
+    duplicated) is 0.0105 bits per base harder than neutral (0.0073 to 0.0146, 38 against 82
+    blocks): the predicted sign at half a percent of the alphabet. Fossil repeat bases still cost
+    1.55 bits per base. chr21's tier compresses easier than neutral only because 61% of it is
+    copies.
+  - **Cost.** 28 to 29 s per Mb and 7.5 to 10 GB peak. A genome run is about 23 h as run, or
+    6 to 7 h for a production pass, with chr1 and chr2 needing chunked hashing on this machine.
+    ATTRIBUTION.md "Compression".
 - **Next.** 0. Done 2026-09-14 (the bullet above): the lexicon's axes at base resolution
   answered Question 2 negatively, so the genome-wide lexicon stays unbuilt. What could still
   sort sites into syntax and slots is measurement, not diversity: saturation mutagenesis and

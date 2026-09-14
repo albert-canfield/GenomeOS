@@ -190,6 +190,19 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   - The fossil tier failed a fourth time. Matched on replication timing, its
     copies are as variable as the same subfamily's intronic copies (0.994 and
     1.086), and the unmatched excess was timing.
+- Compression prices knowledge in bits, and three rules make the price honest (2026-09-14,
+  `compress_chr21`, `compress_chr22`, `compress_chr18`).
+  - A layer's model must be inactive where its annotation says it does not apply. Left active,
+    a JASPAR-site model saved 13 kb inside its 22 kb of sites and lost 87 kb elsewhere, because
+    a model that says "uniform" still takes weight in a mixture.
+  - Price an annotation against a baseline that holds the same sequence. Generic models primed
+    with the duplication partners recover two thirds of the duplication layer's gain; the
+    alignment alone is worth 0.22 to 0.33 bits per claimed base.
+  - Base-level compression sees copies, not function. Unique sequence costs 1.89 to 1.94 bits
+    per base in every tier, coding exons included, and constrained_unknown differs from neutral
+    by 0.01 bits per base. A curated repeat label (31 bits) is worth about what the copies the
+    models have already seen are worth: it loses to blind copy finding when subfamilies are
+    fitted on one chromosome, and just pays (+3.8 kb per Mb) when they are fitted on two.
 
 ## The reference is one haplotype
 

@@ -931,3 +931,31 @@ only.
 
 docs/NODES-READER-WRITER.md; `domains_ctcf_orientation`,
 `reader_poised_check`, `epigenome_fossil_alu`.
+
+## 2026-09-14 — what the project's knowledge is worth in bits
+
+A new probe, genomeos-m1's, asks which way of classifying the genome gives the
+most understanding per unit of effort, starting with the one that needs no
+labels: compression. `genomeos/attribution/compress.py` turns each piece of
+knowledge into a model of the next base, codes a chromosome under it, and
+charges the annotation's own description. chr21, chr22 and chr18 were coded
+under 47 model stacks, with no model call and one UCSC request per
+chromosome.
+
+- A generic compressor that finds copies blindly reaches 1.59, 1.55 and 1.65
+  bits per base; xz reaches 1.71, 1.67 and 1.70.
+- Segmental duplications pay: up to 91 kb saved per megabase, two thirds of
+  it for access to the partner copy. GC and CpG structure pays a little (6 to
+  7 kb per megabase).
+- Codon phase, cCRE classes, motif sites and the budget tiers all cost more
+  to write down than they save over a compressor that finds copies by itself.
+  So do RepeatMasker labels when their models see one chromosome; seeing two,
+  they just pay.
+- Unique sequence costs 1.89 to 1.94 bits per base in every tier. On chr18
+  the constrained unknown tier is 0.01 bits per base harder than neutral
+  sequence. Compression sees copies, not function, so the 32 Mb real unknown
+  holds no more information per base than neutral sequence.
+- A genome run would take 6 to 23 hours of one core.
+
+docs/ATTRIBUTION.md "Compression"; `compress_chr21`, `compress_chr22`,
+`compress_chr18`.

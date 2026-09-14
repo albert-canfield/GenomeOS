@@ -1413,6 +1413,231 @@ The panel is the measure to trust for what Gnocchi cannot see:
 - **The before timing** is from a run the infrastructure stall may have lengthened. The
   profile's per-request handshake cost is the measured cause either way.
 
+## Compression: what each piece of knowledge is worth in bits, chr21, chr22 and chr18 (2026-09-14)
+
+Albert's probe: try different ways of classifying the genome and find which buys the most
+understanding per unit of effort. This one is information-theoretic and needs no labels to score
+against. The best model of a sequence is the one that describes it in the fewest bits, so each
+piece of knowledge the project holds is turned into a model that predicts the next base. The
+chromosome is coded under that model, and the gain is read in bits against generic baselines. A
+layer that does not shorten the code is not knowledge about the sequence, however it reads in a
+table.
+
+Code: `attribution/compress.py`, run by `scripts/compress.py chr21:chr22 chr22:chr21 chr18:chr22`.
+Results: `compress_chr21.json`, `compress_chr22.json` and `compress_chr18.json`, plus the
+sensitivity run `compress_chr21_trained_chr20_chr22.json`. No model API is
+called. The only requests are UCSC's CpG islands, one per chromosome, cached under
+`data/knowledge/compress`.
+
+**How it is kept honest.**
+- **Code lengths.** They are ideal code lengths, -log2 of the probability given to the base that
+  came. An arithmetic coder reaches them within two bits per chromosome.
+- **Held-out fitting.** Every static model is fitted on both strands of another chromosome (chr22
+  for chr21 and chr18, chr21 for chr22). It is applied to the chromosome being coded, and its
+  parameters are not charged.
+- **Adaptive models.** These are fitted on the chromosome itself and learn as they code: counts
+  are updated after each base, and a reverse-strand context is added once its bases are known. The
+  decoder can rebuild them, so they pay for their parameters.
+- **Annotations are paid for.** A layer's annotation is side information the decoder needs: where
+  each repeat is and its subfamily and divergence, exon coordinates and phase, the islands, the
+  cCREs, the sites, the blocks and their tiers. Its description length is subtracted from the
+  layer's gain. Positions and lengths use an adaptive bit-length code, labels an adaptive
+  categorical code. Label dictionaries belong to the fitted models and are reported, not charged
+  (266 kb for RepeatMasker's names).
+- **The mixture.** Models are combined by a causal windowed Bayesian mixture: a model's weight at
+  a base is its likelihood over the previous W bases. W and the temperature come from a grid of 12
+  on the generic stack, and the log2(12) bits of that choice are charged; W = 8 was chosen on chr21
+  and chr22, W = 16 on chr18.
+- **A layer's models are inactive outside the region it claims.** The decoder knows that region,
+  because the annotation is transmitted. The first run left them active everywhere, and each layer
+  then cost more outside its claim than it saved inside. The motif sites saved 13 kb in their 22 kb
+  and lost 87 kb elsewhere on chr21, because a model that says "two bits" everywhere still takes
+  weight in a mixture. That was the mixing scheme failing, not the knowledge.
+- **CpG islands, decided in advance.** genomeos-i1's lexicon was swamped by CG words because a
+  chain fitted over a whole context cannot absorb island clustering. Here GC and CpG structure is
+  its own layer: a causal composition state over the previous kilobase, active everywhere, plus the
+  island annotation. The cCRE, motif and tier layers are also read left out of the full stack, so
+  what they add is measured on top of that structure.
+- **Repeats dominate, as expected.** Every later layer is therefore also reported over the
+  repeat-aware stack.
+- **A control for the duplications.** The duplication layer reads partners on earlier chromosomes,
+  which the chromosome-local generic models cannot see. The control primes the adaptive models with
+  the same partner sequence but without the alignment.
+
+**Baselines, bits per base** (A/C/G/T only; the assembly gaps cost 1.5 to 1.8 kb to describe):
+
+| model | chr21 | chr22 | chr18 |
+|---|---|---|---|
+| order 0, adaptive | 1.976 | 1.997 | 1.970 |
+| order 2, adaptive | 1.924 | 1.932 | 1.918 |
+| best single order, adaptive (k) | 1.743 (15) | 1.685 (14) | 1.745 (15) |
+| best short order, held out (k) | 1.783 (10) | 1.726 (10) | 1.822 (9) |
+| bzip2 -9, 2-bit packed | 1.824 | 1.786 | 1.804 |
+| xz -9e, 2-bit packed | 1.706 | 1.673 | 1.700 |
+| xz -9, letters | 1.700 | 1.667 | 1.746 |
+| naive: static orders 1 to 12 mixed, fitted on the other chromosome | 1.692 | 1.633 | 1.745 |
+| generic: naive plus adaptive orders 12 to 24 (blind copy finding) | 1.590 | 1.545 | 1.650 |
+| generic primed with the duplication partners (control) | 1.528 | 1.475 | 1.636 |
+| every layer, models only | 1.470 | 1.418 | 1.607 |
+| every layer, annotation paid | 1.532 | 1.499 | 1.665 |
+| best net: primed generic plus duplications | **1.500** | **1.446** | **1.630** |
+
+**Which order stops helping.**
+- **Short-range statistics saturate at order 9 to 10.** Held out, order 10 is the best short
+  context (1.783 on chr21). Adaptive single orders get no better from 9 to 12, as contexts outrun
+  the data.
+- **From order 13 the adaptive model becomes a copy finder.** It is best at 14 or 15 and flat to
+  16.
+- **In-sample fitting cheats.** The in-sample entropy falls to 0.10 bits per base at order 16: the
+  chromosome memorised, not modelled.
+- **Against the general compressors.** The generic mixture beats xz by 0.12, 0.13 and 0.05 bits per base on
+  chr21, chr22 and chr18.
+
+**The layers.** Figures are net of annotation, per claimed base and per megabase of the whole
+chromosome, given as chr21 / chr22 / chr18.
+
+| layer | claims | annotation, bits per claimed base | saved over generic, gross | **net per claimed base** | **net kb per Mb** | net kb per Mb, left out of the full stack | pays? |
+|---|---|---|---|---|---|---|---|
+| duplications | 12.6 / 13.3 / 2.0% | 0.016 / 0.027 / 0.030 | 0.69 / 0.71 / 0.94 | **+0.68 / +0.68 / +0.91** | **+85 / +91 / +18** | +73 / +76 / +17 | yes, everywhere |
+| GC and CpG | all bases | 0.0003 / 0.0005 / 0.0002 | 0.0075 / 0.0071 / 0.0057 | +0.007 / +0.007 / +0.006 | +7.2 / +6.6 / +5.6 | +3.5 / +3.2 / +3.9 | yes, everywhere |
+| tiers and blocks | 36 / 29 / 37% | 0.001 / 0.002 / 0.001 | 0.020 / 0.020 / 0.001 | +0.019 / +0.018 / -0.000 | +6.7 / +5.3 / -0.1 | -1.1 / -1.8 / -1.2 | only over generic, on two chromosomes |
+| repeats | 52 / 53 / 51% | 0.097 / 0.112 / 0.096 | 0.072 / 0.074 / 0.043 | **-0.025 / -0.038 / -0.054** | -12.6 / -20.4 / -27.4 | -25.3 / -35.8 / -29.9 | no; +3.8 kb per Mb on chr21 when fitted on two chromosomes |
+| cCREs | 9 / 15 / 8% | 0.081 / 0.080 / 0.081 | 0.006 / 0.011 / 0.004 | -0.075 / -0.068 / -0.078 | -6.8 / -10.1 / -6.5 | -7.1 / -11.2 / -6.7 | no |
+| coding (codon phase) | 0.8 / 1.8 / 0.7% | 0.144 / 0.137 / 0.136 | 0.034 / 0.049 / 0.028 | -0.11 / -0.09 / -0.11 | -0.9 / -1.6 / -0.7 | -0.9 / -1.9 / -0.8 | no |
+| motif sites | 0.06 / 0.09 / 0.04% | 1.67 / 1.68 / 1.61 | 0.53 / 0.53 / 0.47 | -1.14 / -1.15 / -1.14 | -0.6 / -1.1 / -0.4 | -0.7 / -1.2 / -0.4 | no |
+
+- **Duplications pay, and most of that is access to the partner's sequence.** Generic models
+  primed with the partners recover two thirds of the gain. The alignment itself still pays: +0.22,
+  +0.22 and +0.33 bits per claimed base over the primed stack (+28, +29 and +7 kb per Mb). The
+  copy model agrees with its partner at 89.5%, 89.0% and 84.0% of the bases it predicts. A
+  genome-wide generic coder holds more than the partners, so over it the alignment's value is at
+  most that.
+- **GC and CpG pay a little, everywhere.** On island bases the layer takes 0.06 to 0.09 bits
+  (1.577 to 1.518 on chr21, 1.860 to 1.773 on chr22, 1.890 to 1.817 on chr18). It is the only
+  layer that needs no annotation to do most of its work.
+- **Repeats do not pay over blind copy finding when fitted on one chromosome. Negative, and set by
+  the training.**
+  - 65,000 to 128,000 labelled copies cost 31 bits each and save 0.04 to 0.07 bits a base over
+    models that find copies with no annotation. Over the naive stack they are about level: +7.3
+    and +4.0 kb per Mb on chr21 and chr22, -0.9 on chr18.
+  - **Fitted on two chromosomes** (chr21 fitted on chr20 and chr22,
+    `compress_chr21_trained_chr20_chr22`), the gross gain over generic rises from 0.072 to 0.104
+    bits per claimed base. The net turns from -0.025 to +0.007 (+3.8 kb per Mb) over generic, and
+    from +7.3 to +24.5 kb per Mb over naive.
+  - Left out of the full stack it still loses 12.5 kb per Mb, where the duplications and tiers
+    already hold much of what it knows.
+  - Every other verdict is unchanged by the doubled training: duplications +86.4, GC and CpG
+    +7.9, cCREs -6.7, coding -0.8 and motifs -0.7 kb per Mb.
+  - A repeat library fitted on the whole genome would likely pay. RepeatMasker's labels are worth
+    about what the copies the models have already seen are worth.
+- **Coding, cCREs and motif sites do not pay. Negative.**
+  - Codon phase is worth 0.03 to 0.05 bits per coding base and costs 0.14 to point to.
+  - A cCRE class is worth about 0.01 bits per base of its element or less.
+  - A recorded JASPAR site does predict its bases (0.5 bits each, since sites were selected on
+    their score), but pointing to it costs 1.6 bits per base. Motif knowledge in this form is
+    worth less than its address.
+- **Tiers and blocks are repeat content by another name. Negative.** They save 0.02 bits per
+  claimed base over generic on chr21 and chr22 and nothing on chr18. Over the repeat-aware
+  stack they save +0.005, +0.002 and -0.002, and left out of the full stack they lose bits.
+
+**The tiers, and the prediction.** Bits per base under the naive, generic, repeat-aware and full
+stacks. "Unique" is outside RepeatMasker and segmental duplications. chr18 first: its 2.87 Mb of
+constrained_unknown in 43 blocks is the most the genome offers for its size, and only 1.5% of it is
+duplicated.
+
+| chr18 | Mb | interspersed | duplicated | naive | generic | +repeats | full | interspersed bases, full | unique, full | unique, full, GC-standardised |
+|---|---|---|---|---|---|---|---|---|---|---|
+| coding exons (calibration) | 0.52 | 0.3% | 5.1% | 1.959 | 1.945 | 1.945 | 1.861 | | 1.923 | 1.938 |
+| structural | 5.52 | 1.0% (tandem 98.6%) | 1.6% | 1.220 | 0.179 | 0.186 | 0.192 | | | |
+| fossil | 6.41 | 57.9% | 4.4% | 1.772 | 1.735 | 1.705 | 1.674 | 1.548 | 1.912 | 1.909 |
+| regulatory | 9.65 | 51.0% | 1.5% | 1.755 | 1.725 | 1.698 | 1.685 | 1.501 | 1.915 | 1.911 |
+| constrained_unknown | 2.87 | 42.7% | 1.5% | 1.828 | 1.811 | 1.795 | 1.768 | 1.626 | **1.921** | **1.918** |
+| neutral | 4.88 | 43.3% | 1.6% | 1.821 | 1.795 | 1.778 | 1.760 | 1.609 | **1.911** | **1.911** |
+| chromosome | 80.09 | 42.7% | 2.4% | 1.745 | 1.650 | 1.628 | 1.607 | 1.518 | 1.916 | 1.913 |
+
+| full stack | fossil | regulatory | constrained_unknown | neutral | coding exons | unique, constrained_unknown | unique, neutral |
+|---|---|---|---|---|---|---|---|
+| chr21 (duplicated share) | 1.473 (23%) | 1.626 (8%) | 1.144 (61%) | 1.475 (22%) | 1.788 | 1.934 | 1.927 |
+| chr22 (duplicated share) | 1.238 (37%) | 1.569 (7%) | 1.258 (42%) | 0.935 (64%) | 1.837 | 1.918 | 1.888 |
+
+- **Constrained_unknown compresses like neutral sequence. Negative, stated loudly.**
+  - **All bases, chr18:** 1.768 against 1.760 under the full stack. **Unique bases:** 1.921
+    against 1.911.
+  - **Block bootstrap, unique bases, 38 blocks against 82:** the difference is +0.0006 (-0.0010 to
+    0.0022) under the naive stack, +0.0075 (0.0048 to 0.0112) under the generic stack and +0.0105
+    (0.0073 to 0.0146) under the full stack.
+  - The sign is the predicted one: constrained sequence carries fewer unannotated near-copies than
+    neutral sequence. The size is half a percent of a two-bit alphabet. At base level the 32 Mb
+    thought most interesting holds no more information than unconstrained unique sequence, and no
+    less.
+  - On chr21 and chr22 the tier compresses easier than neutral, because 61% and 42% of it are
+    copies. The organiser's copies-first rule, measured in bits. With 5 and 11 blocks the unique
+    comparison has no power there: +0.007 (-0.003 to 0.015) and +0.030 (-0.017 to 0.069).
+- **Fossils do not "compress hard". Negative for the prediction.**
+  - Their repeat bases cost 1.55 bits per base under the full stack on chr18 (1.68 under the
+    naive one), 1.34 on chr21 and 1.10 on chr22. Old copies with a mean divergence around 20% leave a quarter of the letters to
+    chance.
+  - The fossil tier as a whole sits 0.09 bits below neutral on chr18 and level with it on chr21.
+  - Its repeat bases are 0.06 bits cheaper than the neutral tier's (1.61) and dearer than the
+    regulatory tier's (1.50).
+- **No model moves unique sequence.** Every stack codes it at 1.89 to 1.94 bits per base on every
+  tier and chromosome, coding exons included: 1.94 on chr18 against 1.91 for neutral once
+  GC-standardised. The compressible part of a chromosome is its copies, tandem arrays (structural
+  0.18 bits per base on chr18) and old repeats. Function without repetition is invisible to this
+  instrument, which is the limit of the method, not only of the tiers.
+
+**Efficiency.**
+
+| | chr21 (40.1 Mb coded) | chr22 (39.2 Mb) | chr18 (80.1 Mb) |
+|---|---|---|---|
+| wall clock | 1,132 s | 1,125 s | 2,356 s |
+| seconds per Mb | 28.2 | 28.7 | 29.4 |
+| peak memory | 7.5 GB | 8.4 GB (same process as chr21) | 10.0 GB (model codes spilled to disk, 5.8 GB) |
+| read from local disk | 2.94 GB | 2.99 GB | 2.77 GB |
+| requests, bytes streamed | 2 requests, 224 KB, for chr21 and chr22 on the first run | cached | 1 request, 97 KB |
+| model calls | 0 | 0 | 0 |
+
+- **Where the time goes (chr21).**
+  - 45 mixtures, 524 s: 11.7 s each for 12 to 32 models.
+  - The mixing grid, 95 s.
+  - The order 0 to 16 table, 173 s.
+  - The primed control, 115 s; the adaptive models, 79 s.
+  - The layers: repeats 49 s, GC and CpG 20 s, tiers 18 s, duplications 7 s, coding 5 s, cCREs 2
+    s, motifs 1 s.
+  - Almost all of the disk read is the earlier chromosomes' FASTA for the duplication partners.
+- **Result per unit of cost.**
+  - Duplications buy +85 kb per Mb (+28 over the primed control) for 7 s and a read of the earlier
+    chromosomes.
+  - GC and CpG buy +7 kb per Mb for 20 s and one 100 KB request.
+  - Repeats cost 49 s and lose 13 to 27 kb per Mb.
+  - The rest cost under 20 s each and lose bits.
+- **A genome-wide run.**
+  - **As run here** (47 mixtures, the table and the control): about 29 s per Mb, so 2,900 Mb of
+    bases is about 23 hours on one core.
+  - **A production pass** (generic, full and leave-one-out stacks only, no table): about 8 s per
+    Mb, 6 to 7 hours.
+  - **Memory.** It grows with the chromosome (7.5 GB at 40 Mb, 10 GB at 80 Mb with the models on
+    disk), so chr1 and chr2 extrapolate past this 19 GB machine. They need the context hashing
+    chunked, or a larger machine.
+  - **Disk and network.** Model spill is 2 bytes a base a model (17 GB for chr1, deleted after).
+    Reading the earlier chromosomes for partners is about 3 GB per chromosome, 70 GB of local reads
+    unless cached. Network is 24 requests, about 3 MB. Summaries are about 150 KB a chromosome.
+
+**What is weak.**
+- **The mixer.** The windowed Bayesian mixer is simple, and a stronger one (logistic mixing, as in
+  GeCo3 or cmix) would lower every stack. The per-layer comparisons share the mixer, so they are
+  fair to one another. The absolute numbers would move.
+- **Training data.** Static models are fitted on a single other chromosome. Doubling it lowers
+  every stack by 0.01 to 0.025 bits per base and turns the repeats verdict (above); nothing else
+  moves.
+- **The copy model** anchors on 12-mers nearest the linear expectation. It is right for most bases
+  of a pair and wrong inside internal repeats.
+- **One annotation code per layer.** The codes are universal rather than tuned. A better code for
+  the coordinates could make repeats level over generic, but not the motif sites, whose address
+  costs three times what they save.
+- **Chromosomes.** chr21 and chr22 have acrocentric copies that dominate their tiers; chr18 alone
+  carries the tier result.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
