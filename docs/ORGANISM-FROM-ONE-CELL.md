@@ -493,8 +493,8 @@ over time (peak, mean over the cell's life, exposure in minutes at the factor's 
 
 Scored on the 555 embryonic terminal cells (the atlas ends at the bean stage; the 406 larval cells keep the
 lookup). Before: the observed lookup, 555/555 by construction. The rules take precedence over it in
-`embryo_factors.bio` (`fates.bio` imported after the lineage, gated on a terminal cell type and the
-embryonic stages, so the lineage still says which cells stop dividing and when, and the factors say what
+`embryo_factors.bio` (`fates.bio`, each rule with a `priority` above the lookup's 0 under
+`regime { fates: first }`, gated on a terminal cell type and the embryonic stages, so the lineage still says which cells stop dividing and when, and the factors say what
 they become).
 
 | rule set, read | decided by factors | right | wrong | score with lookup fallback | lookup-free (factors, else sublineage majority) |
@@ -606,8 +606,10 @@ Sent for docs/BIOLANG-v0.4 (the IR and runtime are genomeos-c1's):
   cell_type; maintain: condition; excludes: factors or programmes; hysteresis: enter X, leave Y; release:
   never | after N min below leave | experiment; inherit: daughters | none }`. Semantics: evaluated before
   `differentiate`; once established, a differentiate decision to a type outside the locked type's
-  descendants is refused (today the last applying decision wins, which is why `fates.bio` lists its rules
-  bottom to top); signal-driven re-decisions no longer change the fate; excluded factors are masked in the
+  descendants is refused (the Body let the last applying decision win, against the v0.3 specification, so
+  `fates.bio` first listed its rules bottom to top; since genomeos-c1's `regime { fates: first }` and
+  decision `priority` (a20c922) the rules carry explicit priorities and the order is not load-bearing, but a
+  later decision point can still revise a fate until `commitment` refuses it); signal-driven re-decisions no longer change the fate; excluded factors are masked in the
   cell; the state is inherited as stated mechanism.
 - `competence NAME { when: context; allows: cell types; closes: at time | on commitment | after generation
   }`. A differentiate decision whose target is outside the cell's open competence is refused and reported as

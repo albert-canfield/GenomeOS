@@ -84,6 +84,7 @@ def test_factor_rules_take_precedence_over_the_lookup_in_the_body():
         "decision rd_A { action: express; when: cell = A; sets: ELT-2_integrated, HLH-1_integrated }\n"
         "decision fate_A { action: differentiate; when: cell = A; to: Neuron }\n"
         "decision fate_B { action: differentiate; when: cell = B; to: Neuron }\n"
+        "regime r { fates: first }\n"
     ) + "\n".join(
         line
         for line in fr.to_bio_fates(rules, integrated_read=True).splitlines()
@@ -94,7 +95,10 @@ def test_factor_rules_take_precedence_over_the_lookup_in_the_body():
     # both rules apply to A; the first in precedence (intestine) wins; B keeps the observed fate
     assert b.cells["A"].cell_type == "Intestine" and b.cells["B"].cell_type == "Neuron"
     text = fr.to_bio_fates(rules, integrated_read=False)
-    assert text.index("factor_fate_01") < text.index("factor_fate_00")  # precedence runs bottom to top
+    # precedence is explicit: the first rule has the highest priority, and line order carries none
+    assert "factor_fate_00" in text and "priority: 2;" in text.split("factor_fate_00")[1].split("\n")[0]
+    assert "priority: 1;" in text.split("factor_fate_01")[1].split("\n")[0]
+    assert b.summary()["ambiguous_fates"] == 0
     exposure = fr.to_bio_exposure(
         {"A": {"ELT-2"}, "C": {"HLH-1"}}, {"A": {"ELT-2"}, "C": {"UNC-3"}}, {"A": []}, ["ELT-2", "HLH-1"]
     )
@@ -119,6 +123,11 @@ def test_distilled_fate_rules():
     assert body["lookup"]["fate_accuracy"] == 1.0 and body["lookup"]["fates_checked"] == 555
     assert 0.8 < body["factors"]["fate_accuracy"] < 1.0
     assert body["factors_to_adult"]["fates_checked"] == 961
+    from genomeos.lang import parse_file
+
+    program = parse_file("data/organisms/celegans/embryo_factors.bio")
+    assert program.regime is not None and program.regime.fates == "first"
+    assert all(d.priority > 0 for d in program.decisions if d.id.startswith("factor_fate_"))
     assert (
         Path("data/organisms/celegans/fates.bio").exists()
         and Path("data/organisms/celegans/exposure.bio").exists()
