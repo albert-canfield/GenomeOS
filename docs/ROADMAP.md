@@ -937,12 +937,18 @@ in order. "Owner" is the session that holds the files today (see §7).
   `fates.bio` carries a `priority` per rule, all 1,439 fates to 800 min are
   unchanged, 45 order-dependent decision points become 0 and 620 fewer
   decisions fire.
-- **Next.** 1. When genomeos-c1 lands `commitment` and the exposure and
-  mean reads (v0.4 §7.2a), rewrite `fates.bio` and `exposure.bio` with them
-  in place of the generated `_integrated` factors, and score again. 2. PAR polarity rules for the first divisions.
-  3. The worm's founders in space with the real contacts replacing named
-  senders (needs the contact runtime requested from genomeos-c1), with the
-  AC/VU pair scored as an equivalence group. 4. Glia from factors: sheath
+- **Next.** 1. `commitment` and `competence` landed on 2026-09-14
+  (genomeos-c2, 126e65b) and earn their place by ablation: strip competence and
+  both late arms of the published plasticity series fail, strip commitment and the
+  terminal arm fails while the early arm collapses from 610 converts to 174. The
+  exposure and mean reads did NOT land: `_integrated` is still a precomputed
+  lookup, so `establish: ELT-2.exposure(lineage) >= 0.8` does not compile, and
+  rewriting `fates.bio` and `exposure.bio` waits on that. 2. PAR polarity rules for
+  the first divisions. 3. The worm's founders in space with the real contacts
+  replacing named senders: the contact runtime landed (21d3dbc, neighbours,
+  amounts, per-cell networks and seeded noise, the Collier gate passed 0 of 200
+  without noise and 200 of 200 with it), so this is unblocked, with the AC/VU pair
+  scored as an equivalence group. 4. Glia from factors: sheath
   and socket against their sister neurons. 5. libRoadRunner and MaBoSS
   adapters tested in CI on 3.12.
 - **Owner.** genomeos-d1 (from 2026-09-14; genomeos-73 before).
