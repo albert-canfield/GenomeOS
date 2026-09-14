@@ -2860,6 +2860,14 @@ def cmd_epigenome(args: argparse.Namespace) -> int:
         for cell, row in m["cell_types"].items():
             if "value" in row["methylation"]:
                 print(f"  {cell}: {row['methylation']['reason']}")
+        sig = ep.signal_coverage()
+        full = [
+            c for c in ep.CHROMS if all(c in chroms for marks in sig.values() for chroms in marks.values())
+        ]
+        print(
+            f"fold-change profiles read for every cell type and mark on: {', '.join(full) or 'none'}; "
+            "other chromosomes carry peaks only"
+        )
         return 0
     cells = args.cell_type or list(ep.CELL_TYPES)
     if args.action == "summary":

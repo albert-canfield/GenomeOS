@@ -136,3 +136,89 @@ def summarise(domains: list[Domain]) -> dict[str, Any]:
         "evidence": EVIDENCE,
         "confidence": 0.4,
     }
+
+
+# ------------------------------------------------------------------------------------------
+# CTCF motif orientation at the boundaries
+# ------------------------------------------------------------------------------------------
+
+#: JASPAR's CTCF core profile. Its forward strand reads GCCACCAGGGGGCGC, the CCACNAGGTGGCAG core
+#: that Rao et al. 2014 (Cell 159:1665) call forward: a loop is anchored by a forward (+) site at its
+#: upstream end and a reverse (-) site at its downstream end, the convergent rule of loop extrusion.
+CTCF_PROFILE = "MA0139"
+ORIENTATION_EVIDENCE = (
+    "inferred: JASPAR MA0139 best hits inside CTCF-only ENCODE elements; convergent = the domain's "
+    "upstream boundary carries a + site and its downstream boundary a - site (Rao et al. 2014)"
+)
+
+
+def boundary_clusters(
+    ccres: list[CCRE], merge_within: int = MERGE_BOUNDARIES_WITHIN
+) -> list[tuple[int, list[str]]]:
+    """`boundaries_from_ccres` with the CTCF-only element ids that were merged into each boundary."""
+    sites = sorted(((c.start + c.end) // 2, c.id) for c in ccres if c.cls == "CTCF-only")
+    out: list[tuple[int, list[str]]] = []
+    for s, cid in sites:
+        if out and s - out[-1][0] <= merge_within:
+            out[-1] = ((out[-1][0] + s) // 2, [*out[-1][1], cid])
+        else:
+            out.append((s, [cid]))
+    return out
+
+
+def domain_edges(length: int, boundaries: list[int], min_size: int = MIN_DOMAIN) -> list[int]:
+    """The edges `infer_domains` keeps, chromosome ends included."""
+    bounds = [0, *boundaries, length]
+    edges = [bounds[0]]
+    for b in bounds[1:]:
+        if b - edges[-1] < min_size and len(edges) > 1:
+            continue
+        edges.append(b)
+    if edges[-1] != length:
+        edges[-1] = length
+    return edges
+
+
+def orient_boundaries(
+    length: int,
+    ccres: list[CCRE],
+    strands: dict[str, set[str]],
+    min_size: int = MIN_DOMAIN,
+) -> list[dict[str, Any]]:
+    """Each interior domain edge with the motif strands of its CTCF-only elements and a class.
+
+    `strands` maps a CTCF-only element id to the strands its motif hits lie on ({"+"}, {"-"},
+    both, or empty). A boundary between domains k and k+1 anchors k+1 with a + site and k with a
+    - site. A domain is convergent when its upstream edge has a + site and its downstream edge a -
+    site, divergent when its upstream edge has only - and its downstream edge only +. Classes:
+    convergent (an edge of at least one convergent domain), divergent (an edge of a divergent
+    domain and of no convergent one), motif (a site, neither), none (no site)."""
+    clusters = boundary_clusters(ccres)
+    edges = domain_edges(length, [p for p, _ in clusters], min_size)
+    by_pos: dict[int, list[str]] = {}
+    for p, ids in clusters:
+        by_pos.setdefault(p, []).extend(ids)
+    rows = []
+    for e in edges:
+        ids = by_pos.get(e, []) if 0 < e < length else []
+        st: set[str] = set()
+        for i in ids:
+            st |= strands.get(i, set())
+        rows.append({"position": e, "elements": ids, "plus": "+" in st, "minus": "-" in st})
+    conv = [False] * len(rows)
+    div = [False] * len(rows)
+    for k in range(len(rows) - 1):  # domain k spans edges k .. k+1
+        up, down = rows[k], rows[k + 1]
+        if up["plus"] and down["minus"]:
+            conv[k] = conv[k + 1] = True
+        elif up["minus"] and not up["plus"] and down["plus"] and not down["minus"]:
+            div[k] = div[k + 1] = True
+    out = []
+    for k, r in enumerate(rows):
+        if not 0 < r["position"] < length:
+            continue
+        has = r["plus"] or r["minus"]
+        cls = "convergent" if conv[k] else "divergent" if div[k] else "motif" if has else "none"
+        sites = "both" if r["plus"] and r["minus"] else "+" if r["plus"] else "-" if r["minus"] else "none"
+        out.append({**r, "class": cls, "sites": sites})
+    return out

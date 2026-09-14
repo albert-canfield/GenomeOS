@@ -8,6 +8,8 @@
     uv run python scripts/epigenome.py direction      # marks against registry class, chr21 and chr22
     uv run python scripts/epigenome.py hox            # H3K27me3 over the HOX clusters, matched promoters
     uv run python scripts/epigenome.py fossil         # methylation of the fossil tier, GC and CpG matched
+    uv run python scripts/epigenome.py reader-check   # read, poised and silent genes against measured RNA
+    uv run python scripts/epigenome.py alu            # Alu against L1 remains, age, region and WCGW matched
 
 No model is called: the deletion effects are read from the per-element tables the
 all-enhancer chain already wrote (data/knowledge/alphagenome/all_elements).
@@ -813,7 +815,24 @@ def genome(argv: list[str]) -> None:
             f = t.pop("_f")
             t["fraction"] = round(f / t["covered"], 4) if t["covered"] else None
             t["covered_share_of_calls"] = round(t["covered"] / t["calls"], 4) if t["calls"] else None
-    save_result("epigenome_genome_wide", {"chromosomes": chroms, "cell_types": cells})
+    sig = ep.signal_coverage()
+    signal_chroms = sorted(
+        {c for marks in sig.values() for cs in marks.values() for c in cs}, key=lambda c: ep.CHROMS.index(c)
+    )
+    complete = [c for c in signal_chroms if all(c in cs for marks in sig.values() for cs in marks.values())]
+    save_result(
+        "epigenome_genome_wide",
+        {
+            "chromosomes": chroms,
+            "cell_types": cells,
+            "fold_change_profiles": {
+                "chromosomes_all_cells_all_marks": complete,
+                "note": "fold change over control is read on these chromosomes only; every other chromosome "
+                "carries replicated peaks for all five marks and WGBS where it exists, and a record's "
+                "fold_change field is UNKNOWN there with that reason",
+            },
+        },
+    )
     for cell, out in cells.items():
         rd, sl = out["promoters"].get("read", {}), out["promoters"].get("silent", {})
         k4 = (rd.get("H3K4me3") or {}).get("share")
@@ -823,6 +842,324 @@ def genome(argv: list[str]) -> None:
             f"{cell:24s} read {rd.get('n')} H3K4me3 {k4}; silent {sl.get('n')} H3K27me3 {k27}; "
             f"fossil methylation {fos}"
         )
+
+
+# ------------------------------------------------------------------------------------------
+# The Alu lead: is the methylation Alu remains keep in hypomethylated lines a family effect?
+# ------------------------------------------------------------------------------------------
+
+HYPOMETHYLATED = ("K562", "HepG2", "GM12878", "SK-N-SH")
+REGION = 50_000
+
+
+def _element_methylation(cols, start: int, end: int) -> tuple[float, int] | None:
+    """Mean fraction over the bins at least half inside [start, end), and their covered calls."""
+    lo = -(-start // ep.BIN) if start % ep.BIN > ep.BIN // 2 else start // ep.BIN
+    hi = (end // ep.BIN) + (1 if end % ep.BIN >= ep.BIN // 2 else 0)
+    covered = sum(cols[1][lo:hi])
+    if covered < 2:
+        return None
+    return sum(cols[2][lo:hi]) / covered / 1000, covered
+
+
+def _wcgw_share(seq: str) -> tuple[float, int]:
+    """Share of an element's CpGs flanked by A or T on both sides (solo-WCGW, Zhou et al. 2018)."""
+    s = seq.upper()
+    n = w = 0
+    for i in range(1, len(s) - 2):
+        if s[i] == "C" and s[i + 1] == "G":
+            n += 1
+            w += s[i - 1] in "AT" and s[i + 2] in "AT"
+    return (w / n if n else math.nan), n
+
+
+def alu(argv: list[str]) -> None:
+    from genomeos.coords import Locus
+    from genomeos.genome import IndexedGenome
+    from genomeos.results import load_result, save_result
+
+    m = ep.load_manifest()
+    cells = [c for c, r in m["cell_types"].items() if "cpg" in r["methylation"]]
+    chroms = argv or [c for c in ep.CHROMS if load_result(f"budget_{c}")]
+    units: list[dict] = []
+    for chrom in chroms:
+        rp = Path(f"data/results/rmsk_{chrom}.bed.gz")
+        budget = load_result(f"budget_{chrom}")
+        if not rp.exists() or not budget:
+            continue
+        blocks = sorted((b["start"], b["end"]) for b in budget["blocks"] if b["guess"]["tier"] == "fossil")
+        starts = [b[0] for b in blocks]
+        cols = {c: ep.load_methylation_profile(c, chrom) for c in cells}
+        if any(v is None for v in cols.values()):
+            continue
+        g = IndexedGenome(f"data/reference/{chrom}.fa.gz")
+        import bisect
+
+        with gzip.open(rp, "rt") as fh:
+            for line in fh:
+                if line[0] == "#":
+                    continue
+                f = line.rstrip("\n").split("\t")
+                s0, e0, cls, fam = int(f[0]), int(f[1]), f[2], f[3]
+                family = (
+                    "Alu" if (cls, fam) == ("SINE", "Alu") else "L1" if (cls, fam) == ("LINE", "L1") else None
+                )
+                if family is None or e0 - s0 < 200:
+                    continue
+                i = bisect.bisect_right(starts, s0) - 1
+                if i < 0 or not (blocks[i][0] <= s0 and e0 <= blocks[i][1]):
+                    continue
+                seq = str(g.fetch(Locus(chrom, s0, e0)))
+                gc, cpg = ep.gc_cpg(seq)
+                wcgw, n_cpg = _wcgw_share(seq)
+                if gc != gc or n_cpg < 2:
+                    continue
+                meth = {}
+                for c in cells:
+                    em = _element_methylation(cols[c], s0, e0)
+                    if em:
+                        meth[c] = em[0]
+                if not meth:
+                    continue
+                units.append(
+                    {
+                        "family": family,
+                        "region": f"{chrom}:{s0 // REGION}",
+                        "region_mb": f"{chrom}:{s0 // 1_000_000}",
+                        "gc": gc,
+                        "cpg": cpg,
+                        "div": float(f[5]),
+                        "wcgw": wcgw,
+                        "meth": meth,
+                    }
+                )
+        g.close()
+        print(f"{chrom}: {len(units):,} Alu and L1 remains in fossil blocks so far", flush=True)
+
+    def div_bin(d: float) -> int:
+        return min(int(d / 0.05), 6)
+
+    def wcgw_bin(w: float) -> int:
+        return min(int(w / 0.2), 4)
+
+    def matched_difference(cell: str, key) -> tuple[float | None, int, int]:
+        """Alu minus L1 inside strata given by `key`, weighted by Alu elements; strata need both."""
+        strata: dict = {}
+        for u in units:
+            if cell not in u["meth"]:
+                continue
+            st = strata.setdefault(key(u), {"Alu": [0.0, 0], "L1": [0.0, 0]})
+            st[u["family"]][0] += u["meth"][cell]
+            st[u["family"]][1] += 1
+        num = den = 0.0
+        used_alu = used_l1 = 0
+        for st in strata.values():
+            (sa, na), (sl, nl) = st["Alu"], st["L1"]
+            if na < 3 or nl < 3:
+                continue
+            num += na * (sa / na - sl / nl)
+            den += na
+            used_alu += na
+            used_l1 += nl
+        return (round(num / den, 4) if den else None), used_alu, used_l1
+
+    def base(u):
+        return (ep.stratum(u["gc"], u["cpg"]), div_bin(u["div"]))
+
+    designs = {
+        "raw": lambda u: 0,
+        "gc_cpg": lambda u: ep.stratum(u["gc"], u["cpg"]),
+        "gc_cpg_age": base,
+        "gc_cpg_age_wcgw": lambda u: (*base(u), wcgw_bin(u["wcgw"])),
+        "same_50kb_region": lambda u: u["region"],
+        "same_1mb_gc_cpg_wcgw": lambda u: (
+            u["region_mb"],
+            ep.stratum(u["gc"], u["cpg"]),
+            wcgw_bin(u["wcgw"]),
+        ),
+    }
+    out_cells = {}
+    for c in cells:
+        row = {}
+        for name, key in designs.items():
+            d, na, nl = matched_difference(c, key)
+            row[name] = {"alu_minus_l1": d, "alu": na, "l1": nl}
+        out_cells[c] = row
+        print(c, {k: v["alu_minus_l1"] for k, v in row.items()}, flush=True)
+    # context of the families: how different are they on the matching variables
+    fam_desc = {}
+    for fam in ("Alu", "L1"):
+        us = [u for u in units if u["family"] == fam]
+        if not us:
+            continue
+        fam_desc[fam] = {
+            "elements": len(us),
+            "median_gc": round(sorted(u["gc"] for u in us)[len(us) // 2], 3),
+            "median_cpg_per_100bp": round(sorted(u["cpg"] for u in us)[len(us) // 2], 2),
+            "median_divergence": round(sorted(u["div"] for u in us)[len(us) // 2], 3),
+            "median_wcgw_share": round(sorted(u["wcgw"] for u in us)[len(us) // 2], 3),
+        }
+    # the WCGW gradient itself, in every family: methylation by solo-WCGW share
+    gradient = {}
+    for c in cells:
+        gradient[c] = {}
+        for fam in ("Alu", "L1"):
+            bins: dict[int, list[float]] = {}
+            for u in units:
+                if u["family"] == fam and c in u["meth"]:
+                    bins.setdefault(wcgw_bin(u["wcgw"]), []).append(u["meth"][c])
+            gradient[c][fam] = {
+                f"wcgw_{b * 20}_{b * 20 + 20}pct": {"n": len(v), "mean": round(sum(v) / len(v), 4)}
+                for b, v in sorted(bins.items())
+                if len(v) >= 20
+            }
+    out = {
+        "chromosomes": chroms,
+        "elements": len(units),
+        "families": fam_desc,
+        "cell_types": out_cells,
+        "hypomethylated_lines": list(HYPOMETHYLATED),
+        "wcgw_gradient": gradient,
+        "designs": {
+            "raw": "Alu mean minus L1 mean",
+            "gc_cpg": "inside GC (0.05) x CpG per 100 bp strata",
+            "gc_cpg_age": "and RepeatMasker divergence in 0.05 bins",
+            "gc_cpg_age_wcgw": "and the share of solo-WCGW CpGs in 0.2 bins",
+            "same_50kb_region": "inside the same 50 kb window (regional domain held)",
+            "same_1mb_gc_cpg_wcgw": "inside the same 1 Mb window, GC x CpG stratum and solo-WCGW share",
+        },
+        "note": "RepeatMasker Alu (SINE/Alu) and L1 (LINE/L1) records of 200+ bp wholly inside fossil-tier "
+        "blocks; methylation from 200 bp bins at least half inside the element with 2+ calls of "
+        f"{ep.MIN_COVERAGE}+ reads, so a flank can dilute an element's value toward its neighbourhood"
+        f"; differences are weighted by Alu "
+        "elements in strata with 3+ of each family",
+        "evidence": {"methylation": ep.EVIDENCE_METHYLATION, "repeats": "curated: UCSC RepeatMasker (rmsk)"},
+    }
+    save_result("epigenome_fossil_alu", out)
+    print("saved", flush=True)
+
+
+# ------------------------------------------------------------------------------------------
+# Does calling poised promoters make the reader more right? Measured RNA says
+# ------------------------------------------------------------------------------------------
+
+RNA_CELLS = ("K562", "HepG2", "GM12878", "IMR-90")
+EXPRESSED = 0.3  # mean covered exon fraction the segment filter uses (genome/rna_measured.py)
+
+
+def _direct_url(href: str) -> str:
+    """The S3 URL behind an ENCODE download href, so range requests skip the portal's redirect."""
+    acc = href.rstrip("/").split("/")[-1].split(".")[0]
+    meta = ep._portal(f"/files/{acc}/?format=json&frame=object")
+    return (meta.get("cloud_metadata") or {}).get("url") or href
+
+
+def _reader_check_chrom(chrom: str) -> tuple[str, dict, dict]:
+    import bisect
+
+    from genomeos.genome import rna_measured
+    from genomeos.results import load_result
+
+    tallies: dict = {c: {} for c in RNA_CELLS}
+    orientation: dict = {}
+    try:
+        ann = _annotation(chrom)
+    except SystemExit:
+        return chrom, tallies, orientation
+    genes = [g for g in ann.genes.values() if g.locus.chrom == chrom and g.type == "protein_coding"]
+    by_strand: dict[str, list[tuple[int, int]]] = {"+": [], "-": []}
+    gene_exons: dict[str, tuple[str, list[tuple[int, int]]]] = {}
+    for g in genes:
+        ex = sorted({(e.start, e.end) for t in g.transcripts.values() for e in t.exons})
+        if ex:
+            gene_exons[g.symbol] = (g.locus.strand.value, ex)
+            by_strand[g.locus.strand.value].extend(ex)
+    merged: dict[str, list[tuple[int, int]]] = {}
+    for st, ivs in by_strand.items():
+        out: list[list[int]] = []
+        for a, b in sorted(ivs):
+            if out and a <= out[-1][1]:
+                out[-1][1] = max(out[-1][1], b)
+            else:
+                out.append([a, b])
+        merged[st] = [(a, b) for a, b in out]
+    for cell in RNA_CELLS:
+        r = load_result(f"reader_{reader.slug(cell)}_{chrom}")
+        if not r or "poised_genes" not in r:
+            continue
+        rna = rna_measured.MeasuredRna(cell, chrom)
+        for tr in rna.tracks_by_cell.values():
+            for t in tr.get("tracks", {}).values():
+                t["href"] = _direct_url(t["href"])
+        rna.prepare(merged)
+        orientation[cell] = rna.orientation.get(cell)
+        poised = set(r["poised_genes"])
+        silent = set(r["silent_genes"]) - poised
+        marked = set(r.get("marked_active_closed", []))
+        for sym, (st, ex) in gene_exons.items():
+            starts = [a for a, _ in merged[st]]
+            fr = []
+            for a, _b in ex:
+                i = bisect.bisect_right(starts, a) - 1
+                if i >= 0:
+                    m0, m1 = merged[st][i]
+                    fr.append(rna.covered_fraction(st, m0, m1))
+            score = sum(fr) / len(fr) if fr else 0.0
+            call = "poised" if sym in poised else "silent" if sym in silent else "read"
+            groups = [call] + (["marked_active_closed"] if sym in marked else [])
+            if call == "silent" and sym not in marked:
+                groups.append("silent_unmarked")
+            for grp in groups:
+                t = tallies[cell].setdefault(grp, {"genes": 0, "expressed": 0})
+                t["genes"] += 1
+                t["expressed"] += score >= EXPRESSED
+    return chrom, tallies, orientation
+
+
+def reader_check(argv: list[str]) -> None:
+    from genomeos.genome import rna_measured
+    from genomeos.results import save_result
+
+    chroms = argv or [f"chr{i}" for i in range(1, 23)] + ["chrX"]
+    tallies: dict = {c: {} for c in RNA_CELLS}
+    orientation: dict = {}
+    with ProcessPoolExecutor(6) as pool:
+        for chrom, t_chrom, orient in pool.map(_reader_check_chrom, chroms):
+            for cell, groups in t_chrom.items():
+                for grp, v in groups.items():
+                    t = tallies[cell].setdefault(grp, {"genes": 0, "expressed": 0})
+                    t["genes"] += v["genes"]
+                    t["expressed"] += v["expressed"]
+            for cell, o in orient.items():
+                orientation.setdefault(cell, {})[chrom] = o
+            print(chrom, {c: {k: v["genes"] for k, v in t.items()} for c, t in t_chrom.items()}, flush=True)
+    for t in tallies.values():
+        for v in t.values():
+            v["expressed_share"] = round(v["expressed"] / v["genes"], 4) if v["genes"] else None
+        if "read" in t and "poised" in t:
+            open_genes = t["read"]["genes"] + t["poised"]["genes"]
+            open_expr = t["read"]["expressed"] + t["poised"]["expressed"]
+            t["read_by_openness_only"] = {
+                "genes": open_genes,
+                "expressed": open_expr,
+                "expressed_share": round(open_expr / open_genes, 4),
+            }
+    save_result(
+        "reader_poised_check",
+        {
+            "chromosomes": chroms,
+            "cell_types": tallies,
+            "orientation": orientation,
+            "expressed": f"mean covered fraction of the gene's exons at or above {EXPRESSED}, ENCODE total "
+            f"RNA-seq on the gene's strand (signal {rna_measured.SIGNAL})",
+            "evidence": {
+                "rna": rna_measured.EVIDENCE,
+                "calls": "reader_<cell>_<chrom> after the poised rule",
+            },
+        },
+    )
+    for c, t in tallies.items():
+        print(c, {k: (v["genes"], v["expressed_share"]) for k, v in t.items()}, flush=True)
 
 
 def main() -> None:
@@ -842,6 +1179,10 @@ def main() -> None:
         summary(rest)
     elif action == "genome":
         genome(rest)
+    elif action == "alu":
+        alu(rest)
+    elif action == "reader-check":
+        reader_check(rest)
     else:
         raise SystemExit(f"unknown action {action}")
 

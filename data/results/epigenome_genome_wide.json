@@ -3450,5 +3450,16 @@
         }
       }
     }
+  },
+  "fold_change_profiles": {
+    "chromosomes_all_cells_all_marks": [
+      "chr2",
+      "chr7",
+      "chr12",
+      "chr17",
+      "chr21",
+      "chr22"
+    ],
+    "note": "fold change over control is read on these chromosomes only; every other chromosome carries replicated peaks for all five marks and WGBS where it exists, and a record's fold_change field is UNKNOWN there with that reason"
   }
 }

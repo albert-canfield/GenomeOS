@@ -509,6 +509,21 @@ def fetch_signal_profile(entry: dict, chrom: str) -> dict:
     return {**cost, "seconds": round(time.time() - t0, 1), "bins": len(prof)}
 
 
+def signal_coverage(cache: Path | None = None) -> dict[str, dict[str, list[str]]]:
+    """Which chromosomes carry a fold-change profile, per cell type and mark (the rest: peaks only)."""
+    root = (cache or CACHE) / "signal"
+    out: dict[str, dict[str, list[str]]] = {}
+    for cell in CELL_TYPES:
+        for mark in MARKS:
+            prefix = f"{slug(cell)}_{mark}_"
+            chroms = sorted(
+                (p.name[len(prefix) : -len(".f32.gz")] for p in root.glob(prefix + "chr*.f32.gz")),
+                key=lambda c: CHROMS.index(c) if c in CHROMS else 99,
+            )
+            out.setdefault(cell, {})[mark] = chroms
+    return out
+
+
 def load_signal_profile(cell_type: str, mark: str, chrom: str) -> array | None:
     p = signal_path(cell_type, mark, chrom)
     if not p.exists():
@@ -781,6 +796,7 @@ class Layer:
             out["signal_file"] = (e.get("signal") or {}).get("accession")
         else:
             out["fold_change"] = UNKNOWN
+            out["fold_change_reason"] = "fold-change profile not read for this chromosome; peaks only"
         replicated = (e.get("peaks") or {}).get("output_type") == "replicated peaks"
         pooled = len((e.get("signal") or {}).get("replicates") or []) >= 2
         out["evidence"] = EVIDENCE_MARK
