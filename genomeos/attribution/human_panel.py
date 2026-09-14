@@ -37,12 +37,16 @@ mixed with the panel's counts. Design and numbers: docs/ATTRIBUTION.md, "Many hu
 from __future__ import annotations
 
 import contextlib
+import functools
 import gzip
+import http.client
 import json
 import math
 import re
 import struct
+import threading
 import time
+import urllib.parse
 import zlib
 from bisect import bisect_left, bisect_right
 from collections import Counter
@@ -120,6 +124,85 @@ def assembly_of(src: str) -> str:
         parts = src.split(".")
         return f"{parts[0]}.{parts[1]}"
     return src.split(".", 1)[0]
+
+
+# ================================================================================================
+# Range requests over kept-alive connections
+# ================================================================================================
+REQUEST_TIMEOUT = 60  # seconds a single range request may take before it is retried
+REQUEST_RETRIES = 4
+_POOL = threading.local()
+
+
+class KeepAliveSource:
+    """Random access to a URL by (offset, size) over one persistent HTTPS connection per host and thread.
+
+    The standard reader (`bigwig._Source`) opens a new TLS connection for every range; profiling the
+    chr21 run showed each connection costing 0.5 s on a quiet link and 5 s on a busy one, and a
+    regional read issues hundreds. Same interface: `read`, `requests`, `bytes_fetched`, `close`.
+    """
+
+    remote = True
+
+    def __init__(self, url: str, timeout: int = REQUEST_TIMEOUT, retries: int = REQUEST_RETRIES):
+        u = urllib.parse.urlsplit(url)
+        self.scheme, self.host, self.path = u.scheme, u.netloc, u.path + (f"?{u.query}" if u.query else "")
+        self.timeout = timeout
+        self.retries = retries
+        self.requests = 0
+        self.bytes_fetched = 0
+        self.connections = 0
+
+    def _conn(self, fresh: bool = False) -> http.client.HTTPConnection:
+        pool = getattr(_POOL, "conns", None)
+        if pool is None:
+            pool = _POOL.conns = {}
+        key = (self.scheme, self.host)
+        conn = pool.get(key)
+        if conn is None or fresh:
+            if conn is not None:
+                conn.close()
+            cls = http.client.HTTPSConnection if self.scheme == "https" else http.client.HTTPConnection
+            conn = pool[key] = cls(self.host, timeout=self.timeout)
+            self.connections += 1
+        return conn
+
+    def get(self, headers: dict[str, str]) -> tuple[int, bytes]:
+        delay = 1.0
+        for attempt in range(self.retries):
+            try:
+                conn = self._conn(fresh=attempt > 0)
+                conn.request("GET", self.path, headers={"User-Agent": USER_AGENT, **headers})
+                r = conn.getresponse()
+                data = r.read()
+                if r.status >= 500:
+                    raise OSError(f"server error {r.status}")
+                return r.status, data
+            except (OSError, http.client.HTTPException):
+                if attempt == self.retries - 1:
+                    raise
+                time.sleep(delay)
+                delay *= 2
+        raise OSError("unreachable")  # pragma: no cover
+
+    def read(self, offset: int, size: int) -> bytes:
+        self.requests += 1
+        self.bytes_fetched += size
+        status, data = self.get({"Range": f"bytes={offset}-{offset + size - 1}"})
+        if status == 200 and len(data) > size:
+            raise OSError("server ignored the range request")
+        if status not in (200, 206):
+            raise OSError(f"range request failed ({status})")
+        return data
+
+    def close(self) -> None:
+        pass
+
+
+def open_source(source: str | Path):
+    if isinstance(source, str) and source.startswith(("http://", "https://")):
+        return KeepAliveSource(source)
+    return _Source(source)
 
 
 # ================================================================================================
@@ -348,12 +431,23 @@ def _list_chromosomes() -> dict[str, int]:
         return {k: int(v) for k, v in json.load(r)["chromosomes"].items()}
 
 
-def remote_size(url: str) -> int:
-    import urllib.request
-
-    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=60) as r:  # noqa: S310
-        return int(r.headers["Content-Length"])
+def remote_size(url: str, retries: int = REQUEST_RETRIES) -> int:
+    """The file's length from a HEAD request, retried over a fresh connection when the link stalls."""
+    src = KeepAliveSource(url)
+    delay = 2.0
+    for attempt in range(retries):
+        try:
+            conn = src._conn(fresh=attempt > 0)
+            conn.request("HEAD", src.path, headers={"User-Agent": USER_AGENT})
+            r = conn.getresponse()
+            r.read()
+            return int(r.headers["Content-Length"])
+        except (OSError, http.client.HTTPException, TypeError):
+            if attempt == retries - 1:
+                raise
+            time.sleep(delay)
+            delay *= 2
+    raise OSError("unreachable")  # pragma: no cover
 
 
 def byte_runs(
@@ -420,11 +514,10 @@ def distil_chromosome(
     runs = byte_runs(index, wanted, size)
     total = sum(n for _, n in runs)
     dist = Distiller(chrom)
-    src = _Source(url)
     done = 0
 
     def fetch(run: tuple[int, int]) -> bytes:
-        return _Source(url).read(run[0], run[1])
+        return KeepAliveSource(url, timeout=300).read(run[0], run[1])
 
     with ThreadPoolExecutor(max_workers=threads) as pool:
         for i in range(0, len(runs), threads * 2):
@@ -435,7 +528,6 @@ def distil_chromosome(
                 done += run[1]
                 if progress:
                     progress(done, total, dist.blocks_seen, time.time() - t0)
-    src.close()
     meta = {
         "source": url,
         "index_entries": len(index),
@@ -564,7 +656,7 @@ class BigBed(BigWig):
     """
 
     def __init__(self, source: str | Path):  # noqa: D107 - the parent's reader with bigBed's header
-        self.src = _Source(source)
+        self.src = open_source(source)
         h = self.src.read(0, 64)
         magic, version, zoom, ct, fd, fi, fc, dfc, asql, _ts, ubs, _res = struct.unpack("<IHHQQQHHQQIQ", h)
         if magic != BIGBED_MAGIC:
@@ -629,8 +721,15 @@ class BigBed(BigWig):
         return out
 
 
+_OPEN_BIGBEDS: dict[str, BigBed] = {}
+
+
 def open_bigbed(key: str) -> BigBed:
-    return BigBed(BIGBEDS[key])
+    """One reader per track for the life of the process: header, autoSql and chromosome tree once."""
+    bb = _OPEN_BIGBEDS.get(key)
+    if bb is None:
+        bb = _OPEN_BIGBEDS[key] = BigBed(BIGBEDS[key])
+    return bb
 
 
 # ================================================================================================
@@ -1212,6 +1311,7 @@ def repli_url(cell: str) -> str:
     return f"{REPLI_BASE}/wgEncodeUwRepliSeq{REPLI_CELLS[cell]}WaveSignalRep1.bigWig"
 
 
+@functools.lru_cache(maxsize=32)
 def load_chain(chrom: str, path: Path | None = None) -> list[tuple[int, int, str, int, bool, int]]:
     """Ungapped blocks of the hg38->hg19 chain for one hg38 chromosome: (t_start, t_end, q_chrom,
     q_start, q_minus, q_size), sorted by t_start. The chain file is fetched once into the cache."""
@@ -1260,6 +1360,25 @@ def lift_point(
     return (qc, qsize - q - 1) if minus else (qc, q)
 
 
+TIMING_CACHE = CACHE / "timing"
+
+
+def repli_local(cell: str, cache: Path = CACHE) -> Path:
+    """The cell's Repli-seq bigWig (about 10 MB) fetched once whole: a kilobase-resolution track is
+    cheaper to read locally than by hundreds of ranges."""
+    d = cache / "repliseq"
+    d.mkdir(parents=True, exist_ok=True)
+    p = d / Path(urllib.parse.urlsplit(repli_url(cell)).path).name
+    if not p.exists():
+        status, data = KeepAliveSource(repli_url(cell), timeout=300).get({})
+        if status != 200:
+            raise OSError(f"Repli-seq download failed ({status})")
+        tmp = p.with_suffix(".part")
+        tmp.write_bytes(data)
+        tmp.rename(p)
+    return p
+
+
 def replication_timing(
     chrom: str, bins: list[int], cells: list[str] | None = None, chain=None, progress=None
 ) -> tuple[dict[int, float], dict[str, Any]]:
@@ -1271,12 +1390,33 @@ def replication_timing(
 
 
 def replication_timing_many(
-    wanted: dict[str, list[int]], cells: list[str] | None = None, chains: dict | None = None, progress=None
+    wanted: dict[str, list[int]],
+    cells: list[str] | None = None,
+    chains: dict | None = None,
+    progress=None,
+    cache: Path | None = TIMING_CACHE,
 ) -> tuple[dict[str, dict[int, float]], dict[str, Any]]:
-    """The same for bins on several hg38 chromosomes, each cell's bigWig opened once."""
+    """The same for bins on several hg38 chromosomes, read from local copies of the 11 bigWigs.
+
+    Values already computed are kept per chromosome under `cache` and not read again; only the
+    missing bins are lifted and summarised.
+    """
     cells = cells or list(REPLI_CELLS)
-    points: dict[tuple[str, int], tuple[str, int]] = {}
+    t0 = time.time()
+    out: dict[str, dict[int, float]] = {}
+    missing: dict[str, list[int]] = {}
+    known: dict[str, dict[int, float | None]] = {}
     for chrom, bins in wanted.items():
+        stored: dict[int, float | None] = {}
+        if cache is not None and (cache / f"{chrom}.json.gz").exists():
+            with gzip.open(cache / f"{chrom}.json.gz", "rt") as fh:
+                stored = {int(k): v for k, v in json.load(fh).items()}
+        known[chrom] = stored
+        need = [b for b in set(bins) if b not in stored]
+        if need:
+            missing[chrom] = sorted(need)
+    points: dict[tuple[str, int], tuple[str, int]] = {}
+    for chrom, bins in missing.items():
         chain = (chains or {}).get(chrom) or load_chain(chrom)
         starts = [c[0] for c in chain]
         for b in bins:
@@ -1288,32 +1428,41 @@ def replication_timing_many(
         by_q.setdefault(qc, []).append(qp)
     sums: dict[tuple[str, int], float] = {}
     seen: dict[tuple[str, int], int] = {}
-    t0 = time.time()
-    requests = mb = 0.0
-    for cell in cells:
-        bw = BigWig(repli_url(cell))
-        try:
-            values: dict[tuple[str, int], float] = {}
-            for qc, pts in by_q.items():
-                uniq = sorted(set(pts))
-                for st in bw.summarise(qc, [(p, p + 1) for p in uniq], threshold=0.0):
-                    if st.bases:
-                        values[(qc, st.start)] = st.mean
-            for key, hit in points.items():
-                if hit in values:
-                    sums[key] = sums.get(key, 0.0) + values[hit]
-                    seen[key] = seen.get(key, 0) + 1
-            requests += bw.src.requests
-            mb += bw.src.bytes_fetched / 1e6
-        finally:
-            bw.close()
-        if progress:
-            progress(cell)
-    out: dict[str, dict[int, float]] = {}
-    for key, total in sums.items():
-        if seen[key] == len(cells):
-            out.setdefault(key[0], {})[key[1]] = total / seen[key]
-    cost = {"requests": int(requests), "mb_fetched": round(mb, 1), "seconds": round(time.time() - t0, 1)}
+    if missing:
+        for cell in cells:
+            bw = BigWig(repli_local(cell))
+            try:
+                values: dict[tuple[str, int], float] = {}
+                for qc, pts in by_q.items():
+                    if qc not in bw.chroms:
+                        continue
+                    uniq = sorted(set(pts))
+                    for st in bw.summarise(qc, [(p, p + 1) for p in uniq], threshold=0.0):
+                        if st.bases:
+                            values[(qc, st.start)] = st.mean
+                for key, hit in points.items():
+                    if hit in values:
+                        sums[key] = sums.get(key, 0.0) + values[hit]
+                        seen[key] = seen.get(key, 0) + 1
+            finally:
+                bw.close()
+            if progress:
+                progress(cell)
+    for chrom, bins in wanted.items():
+        stored = known[chrom]
+        for b in missing.get(chrom, []):
+            key = (chrom, b)
+            stored[b] = sums[key] / seen[key] if seen.get(key) == len(cells) else None
+        if cache is not None and chrom in missing:
+            cache.mkdir(parents=True, exist_ok=True)
+            with gzip.open(cache / f"{chrom}.json.gz", "wt") as fh:
+                json.dump(stored, fh)
+        out[chrom] = {b: stored[b] for b in bins if stored.get(b) is not None}
+    cost = {
+        "bins_computed": sum(len(v) for v in missing.values()),
+        "bins_cached": sum(len(v) for v in wanted.values()) - sum(len(v) for v in missing.values()),
+        "seconds": round(time.time() - t0, 1),
+    }
     return out, cost
 
 
@@ -1390,15 +1539,13 @@ def merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:
 def track_rows(key: str, chrom: str, intervals: list[tuple[int, int]]) -> tuple[list[dict], dict]:
     bb = open_bigbed(key)
     t0 = time.time()
-    try:
-        rows = bb.query(chrom, merge_intervals(intervals))
-        cost = {
-            "requests": bb.src.requests,
-            "mb_fetched": round(bb.src.bytes_fetched / 1e6, 2),
-            "seconds": round(time.time() - t0, 1),
-        }
-    finally:
-        bb.close()
+    r0, b0 = bb.src.requests, bb.src.bytes_fetched
+    rows = bb.query(chrom, merge_intervals(intervals))
+    cost = {
+        "requests": bb.src.requests - r0,
+        "mb_fetched": round((bb.src.bytes_fetched - b0) / 1e6, 2),
+        "seconds": round(time.time() - t0, 1),
+    }
     return rows, cost
 
 
@@ -1539,6 +1686,7 @@ MATCH_TRIES = 400
 SEED = 20260913
 
 
+@functools.lru_cache(maxsize=32)
 def coding_genes(chrom: str) -> list[tuple[str, list[tuple[int, int]]]]:
     """Canonical CDS intervals per protein-coding gene from GENCODE (0-based, half-open)."""
     from genomeos.attribution.variation import merge
@@ -2734,6 +2882,53 @@ def read_candidates(
         )
         if rows
         else None,
+        "rows": rows,
+    }
+
+
+def local_candidates(result: dict[str, Any], chrom: str, results_dir: Path | None = None) -> dict[str, Any]:
+    """The organiser's real unknown of this chromosome (constrained_unknown blocks that are not
+    copies), each read in the whole-chromosome store against its own flanks, as the 69 were."""
+    from genomeos.results import RESULTS_DIR, load_result
+
+    results_dir = results_dir or RESULTS_DIR
+    panel: Panel = result["_panel"]
+    rt = result["_rt"]
+    edges = result["_edges"]
+    blocks = (load_result(f"organised_{chrom}", results_dir) or {}).get("candidates", [])
+    rows = []
+    for b in blocks:
+        ivs = [(b["start"], b["end"])]
+        read = read_locus(panel, ivs, rt_value=rt_over(rt, ivs), edges=edges)
+        read.pop("_events")
+        cls = block_class(
+            read["measure"],
+            read["against_flanks"]["recurring_events"],
+            read["against_flanks"]["expected_from_flanks"],
+        )
+        rows.append(
+            {
+                "start": b["start"],
+                "end": b["end"],
+                "length": b["length"],
+                "case": b.get("case"),
+                "mammal_fraction": b.get("mammal_fraction"),
+                "human_fraction": b.get("human_fraction"),
+                "class": cls,
+                "presence": read["measure"]["presence"],
+                "missing_share": read["measure"]["missing_share"],
+                "domain_class": read["class"],
+                "replication_timing": read["replication_timing"],
+            }
+        )
+    obs = sum(r["class"]["recurring_events"] for r in rows)
+    exp = sum(r["class"]["expected"] for r in rows)
+    return {
+        "source": f"organised_{chrom} candidates (constrained_unknown, not copies)",
+        "read": len(rows),
+        "classes": dict(Counter(r["class"]["class"] for r in rows)),
+        "pooled_ratio_to_flanks": round(obs / exp, 3) if exp else None,
+        "median_ratio_to_flanks": _median([r["class"]["ratio"] for r in rows]),
         "rows": rows,
     }
 

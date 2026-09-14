@@ -27,6 +27,7 @@ from genomeos.results import load_result, save_result
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chrom", default="chr21")
+    ap.add_argument("--skip-calibration", action="store_true", help="refer to chr21's calibration loci")
     ap.add_argument(
         "--skip-regions", action="store_true", help="do not stream the calibration and candidate regions"
     )
@@ -61,24 +62,42 @@ def main(argv: list[str] | None = None) -> None:
                 say(f"streaming {len(ivs)} regions of {chrom}")
                 hp.distil_chromosome(chrom, wanted=ivs, name=f"{chrom}_regions")
 
-    say("blocks, controls and units")
-    result = hp.build(args.chrom, progress=say)
+    stages: dict[str, float] = {}
+
+    def stage(name: str, fn, pending=None):
+        say(name)
+        t = time.time()
+        try:
+            return fn()
+        except (OSError, TimeoutError) as e:  # a stalled stream is recorded, not waited on
+            say(f"{name}: pending ({e})")
+            return pending if pending is not None else {"pending": str(e)}
+        finally:
+            stages[name] = round(time.time() - t, 1)
+
+    result = stage("blocks, controls and units", lambda: hp.build(args.chrom, progress=say))
     edges = result["_edges"]
-    say("storage catalogue")
-    catalogue = hp.storage_catalogue(result, args.chrom)
-    hp.save_catalogue(catalogue, args.chrom)
-    say("against Gnocchi")
-    gnocchi = hp.against_gnocchi(result, args.chrom)
-    gnocchi["per_kilobase"]["poisson_null"] = hp.depletion_null(result)
-    say("sensitivity")
-    sens = hp.sensitivity(result)
-    say("calibration loci")
-    calibration = hp.calibrate(edges=edges)
-    say("candidates")
-    candidates = hp.read_candidates(edges=edges)
-    say("genome-wide cost")
-    cost = hp.genome_cost(result, catalogue)
+    catalogue = stage("storage catalogue", lambda: hp.storage_catalogue(result, args.chrom))
+    if "_catalogue" in catalogue:
+        hp.save_catalogue(catalogue, args.chrom)
+    else:
+        catalogue = {"summary": catalogue, "showcase": {}, "cost": {}}
+    gnocchi = stage("against Gnocchi", lambda: hp.against_gnocchi(result, args.chrom))
+    if "per_kilobase" in gnocchi:
+        gnocchi["per_kilobase"]["poisson_null"] = hp.depletion_null(result)
+    sens = stage("sensitivity", lambda: hp.sensitivity(result))
+    if args.skip_calibration:
+        calibration = [
+            {"see": "human_panel_chr21", "note": "the calibration loci do not depend on the chromosome read"}
+        ]
+    else:
+        calibration = stage("calibration loci", lambda: hp.calibrate(edges=edges), pending=[])
+    candidates = stage("candidates", lambda: hp.read_candidates(edges=edges))
+    local = stage("this chromosome's real unknown", lambda: hp.local_candidates(result, args.chrom))
+    cost = stage("genome-wide cost", lambda: hp.genome_cost(result, catalogue))
     payload = hp.summarise(result, catalogue, gnocchi, sens, calibration, candidates, cost)
+    payload["local_candidates"] = local
+    payload["stage_seconds"] = stages
     payload["seconds"] = round(time.time() - t0, 1)
     path = save_result(f"human_panel_{args.chrom}", payload)
     say(f"saved {path}")
