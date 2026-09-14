@@ -244,6 +244,15 @@ def _all_elements_total(root: Path, chrom: str) -> int | None:
         return None
 
 
+def _all_elements_complete(root: Path, chrom: str) -> bool:
+    """The chromosome's own result says the run finished; the chain and the Progress tab both trust it."""
+    p = root / "data" / "results" / f"enhancer_targets_all_{chrom}.json"
+    try:
+        return bool(json.loads(p.read_text()).get("complete")) if p.exists() else False
+    except (OSError, json.JSONDecodeError, ValueError, TypeError):
+        return False
+
+
 for _c in CHROMOSOMES:
     if _c == "chrM":
         continue
@@ -251,8 +260,10 @@ for _c in CHROMOSOMES:
         "argv": [sys.executable, "scripts/enhancer_targets_all.py", "--chrom", _c, "--workers", "8"],
         "describe": f"AlphaGenome: every enhancer in a {_c} node deleted, effect per cell; 8 at a time.",
         "total": _all_elements_total(Path("."), _c) or (12139 if _c == "chr21" else None),
+        "total_fn": lambda root, _c=_c: _all_elements_total(root, _c),
         "result": f"enhancer_targets_all_{_c}",
         "count": lambda r: int(r.get("scored", 0)),
+        "complete": lambda root, _c=_c: _all_elements_complete(root, _c),
         # not auto-healed: each chromosome spends the shared quota and their order matters, so restarts
         # belong to whoever is sequencing them (scripts/enhancer_targets_all_chain.py), not to a
         # supervisor tick that would start a chromosome nobody asked for on the next `serve` restart
@@ -477,10 +488,13 @@ def status(name: str, root: Path = Path(".")) -> JobStatus:
             state = (
                 "done" if meta.get("code") == 0 else "failed" if meta.get("code") is not None else "unknown"
             )
+    total_fn = spec.get("total_fn")
+    if total_fn is not None:  # a total only knowable once the run has written its result
+        spec = {**spec, "total": total_fn(root) or spec.get("total")}
     activity = last_activity(name, root)
     if state == "running" and activity is not None and activity > STALL_AFTER:
         state = "stalled"
-    if state in ("unknown", "failed") and is_complete(name, root):
+    if state in ("unknown", "failed", "stalled") and is_complete(name, root):
         state = "done"  # the results say it finished, whatever happened to the process that made them
     done: float = 0
     detail = ""
