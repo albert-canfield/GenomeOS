@@ -19,7 +19,7 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     signal <Id> { mode: contact; ligand: APX-1; receptor: GLP-1; from: cell = P2; to: cell = ABp; sets: N }
     decision <Id> { action: divide|differentiate|migrate|quiesce|die; when: ...; daughters: A, B; to: T; ... }
     field <Id> { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0 }
-    experiment <Id> { knockout: POP-1; until: 800 min; expect: "..."; assert: ... }
+    experiment <Id> { knockout: POP-1; add: HLH-1 at 350 min; until: 800 min; expect: "..."; assert: ... }
     design <Id> { knockout_any_of: A, B; at_most: 1; until: 3 yr; target: type X at 3 yr = 0; keep: ... }
 
 Properties are `key: value`, one per line or `;`-separated; a block may sit on
@@ -544,7 +544,12 @@ def _compile_block(b: Block, module: Module) -> None:
     elif b.kind == "experiment":
         ex = Experiment(name=b.header, evidence=ev, confidence=conf)
         ex.knockouts = _list(p.get("knockout", ""))
-        ex.adds = _list(p.get("add", ""))
+        for item in _list(p.get("add", "")):
+            name, sep, when = item.partition(" at ")
+            ex.adds.append(name.strip())
+            if sep:  # `add: HLH-1 at 350 min`: forced then, not in the zygote
+                val, unit = _quantity(when, "add", b.line)
+                ex.add_at[name.strip()] = to_minutes(val, unit)
         ex.environment = _parse_when(p.get("environment", ""))
         if "until" in p:
             val, unit = _quantity(p["until"], "until", b.line)

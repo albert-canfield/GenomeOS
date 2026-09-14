@@ -497,6 +497,10 @@ class Experiment:
     name: str
     knockouts: list[str] = field(default_factory=list)  # factor names, signal ids or ligands
     adds: list[str] = field(default_factory=list)  # factors present in the zygote in addition
+    # factors forced later instead of at the zygote: name -> minutes ("add: HLH-1 at 350 min"). A forced
+    # factor is held in every cell alive from then on and in every cell born after it, so a perturbation
+    # series can ask what the same factor does inside and outside a competence window.
+    add_at: dict[str, float] = field(default_factory=dict)
     environment: dict[str, str] = field(default_factory=dict)
     until: float | None = None  # minutes; None = the organism's last stage or 800
     asserts: list[str] = field(default_factory=list)

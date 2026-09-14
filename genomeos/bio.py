@@ -129,6 +129,27 @@ def evaluate(
                 for a in evaluate_replicate_asserts(bodies, spread):
                     got = f"{a.get('value')}% of {runs} runs" if runs else "declares no replicates"
                     results.append({"test": f"assert: {a['assert']}", "got": got, "ok": bool(a.get("ok"))})
+            # every `experiment` is a claim about a perturbation, so the program tests itself with it:
+            # the same program grown with the experiment's knockouts, forced factors and environment
+            from genomeos.runtime.body import evaluate_assert
+
+            for ex in module.experiments:
+                mutant = Body(
+                    module,
+                    seed=None,
+                    knockouts=set(ex.knockouts),
+                    adds=set(ex.adds),
+                    add_at=dict(ex.add_at),
+                    environment=ex.environment,
+                ).run(until=ex.until if ex.until is not None else horizon)
+                for a in (evaluate_assert(mutant, x) for x in ex.asserts):
+                    results.append(
+                        {
+                            "test": f"experiment {ex.name}: {a.get('assert')}",
+                            "got": a.get("value"),
+                            "ok": bool(a.get("ok")),
+                        }
+                    )
         except Exception as e:  # noqa: BLE001  (the organism layer reports its own failure as a claim)
             results.append({"test": "organism grows to its last stage", "got": str(e)[:80], "ok": False})
     for subject, measure, op, value in tests:

@@ -32,6 +32,7 @@ from .spatial import Field2D
 from .uncertainty import UncertaintyReport
 
 SUFFIXES = (("a", "p"), ("l", "r"))
+FORCE_LAST = 1 << 62  # event tie-break: a forced factor arrives after everything else at its instant
 
 
 @dataclass(slots=True)
@@ -85,16 +86,21 @@ class Body:
         adds: set[str] | frozenset[str] = frozenset(),
         environment: dict[str, str] | None = None,
         fates: str | None = None,
+        add_at: dict[str, float] | None = None,
     ):
         """`seed` overrides the organism's declared seed; `means=True` runs every timer at its mean;
         `knockouts` are factors never present and signals (by id, ligand or receptor) never sent;
-        `adds` are extra factors in the zygote; `environment` overrides the organism's."""
+        `adds` are extra factors in the zygote; `add_at` forces a factor at a stated time instead
+        (every cell alive then, and every cell born after); `environment` overrides the organism's."""
         if module.organism is None:
             raise ValueError(f"module {module.name!r} declares no organism block")
         self.module = module
         self.organism = module.organism
         self.knockouts = set(knockouts)
-        self.adds = set(adds)
+        self.add_at = {k: v for k, v in (add_at or {}).items() if k not in self.knockouts}
+        self.adds = {f for f in adds if f not in self.add_at}
+        self.forced: set[str] = set()  # factors already forced, carried by every cell born afterwards
+        self.forced_cells: Counter[str] = Counter()  # cells the forcing reached, per factor
         self.environment = {**module.organism.environment, **(environment or {})}
         # space: fields on the organism's grid, stepped between events; sites held by positioned cells
         self.fields: dict[str, Field2D] = {}
@@ -166,6 +172,10 @@ class Body:
         o = self.organism
         for st in self.module.stages:
             self._push(to_minutes(st.start, st.unit), "", "stage")
+        for when in sorted(set(self.add_at.values())):
+            # last at its instant: a cell dividing exactly then has already been replaced by its
+            # daughters, so a perturbation timed on a division boundary misses no lineage
+            heapq.heappush(self._queue, (when, FORCE_LAST, "", "force"))
         factors = {f: "present" for f in list(o.factors) + sorted(self.adds) if f not in self.knockouts}
         root = Cell(o.root, "", 0, 0.0, o.cell_type, factors)
         root.stated = set(factors)
@@ -191,6 +201,23 @@ class Body:
             self.environment[name] = value
         if current != value:
             self._stage_change()
+
+    def _force(self, t: float) -> None:
+        """A factor forced at a stated time (`add: HLH-1 at 350 min`): every cell alive now gains it as
+        stated mechanism, which the reader cannot drop, and decides again; cells born later inherit it.
+        This is the perturbation a competence window is measured with, so it must be able to arrive at
+        any time, not only in the zygote."""
+        names = sorted(f for f, when in self.add_at.items() if when == t)
+        if not names:
+            return
+        self.forced.update(names)
+        for c in self.alive_at(t):
+            for f in names:
+                c.factors[f] = "present"
+                c.stated.add(f)
+                c.measured.discard(f)
+                self.forced_cells[f] += 1
+            self._resolve(c, born=False)
 
     def _stage_change(self) -> None:
         """Populations and resting cells read the new stage and decide again."""
@@ -818,6 +845,9 @@ class Body:
             if kind == "stage":
                 self._stage_change()
                 continue
+            if kind == "force":
+                self._force(t)
+                continue
             if kind == "sense":
                 self._sense()
                 continue
@@ -982,6 +1012,7 @@ class Body:
             "neighbours_from": "table" if self.contacts else ("grid" if self.spatial else "none"),
             "ambiguous_fates": sum(self.ambiguous.values()),
             "revised_fates": sum(self.revised.values()),
+            "forced": {f: self.forced_cells[f] for f in sorted(self.forced)},
         }
 
 

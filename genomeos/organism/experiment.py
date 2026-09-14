@@ -178,6 +178,7 @@ def run_experiment(
         means=means,
         knockouts=set(ex.knockouts),
         adds=set(ex.adds),
+        add_at=dict(ex.add_at),
         environment=ex.environment,
     ).run(until=until)
     res = ExperimentResult(ex, until, wt, mu)

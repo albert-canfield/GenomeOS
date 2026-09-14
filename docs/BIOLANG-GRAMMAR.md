@@ -320,7 +320,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Timer**: `name`, `duration`, `unit`, `sd`, `lengthening`, `when`, `evidence`, `confidence`
 - **Stage**: `name`, `start`, `end`, `unit`, `evidence`, `confidence`
 - **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `priority`, `evidence`, `confidence`
-- **Experiment**: `name`, `knockouts`, `adds`, `environment`, `until`, `asserts`, `expect`, `evidence`, `confidence`
+- **Experiment**: `name`, `knockouts`, `adds`, `add_at`, `environment`, `until`, `asserts`, `expect`, `evidence`, `confidence`
 - **Design**: `name`, `knockout_any_of`, `add_any_of`, `at_most`, `vary`, `until`, `targets`, `keeps`, `evidence`, `confidence`
 - **Organism**: `name`, `species`, `genome`, `tempo`, `resolution`, `seed`, `width`, `height`, `origin`, `sense`, `root`, `cell_type`, `factors`, `environment`, `observe`, `asserts`, `reference`, `contacts`, `cell_network`, `replicates`, `placement`, `evidence`, `confidence`
 - **Module**: `name`, `entities`, `rules`, `parameters`, `imports`, `events`, `timers`, `stages`, `decisions`, `experiments`, `fields`, `designs`, `organism`, `regime`
