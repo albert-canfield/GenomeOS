@@ -1,0 +1,207 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+"""Terminal fates of the worm from measured factors, scored against Sulston (area E, Next step 1).
+
+Reads the local atlas levels (data/knowledge/celegans/atlas_levels.json; built from the Ma 2021 archive by
+genomeos.organism.atlas_levels.build, which streams the archive if it is not on disk), writes
+data/organisms/celegans/fates.bio and exposure.bio, runs data/organisms/celegans/embryo_factors.bio
+through the Body and the existing LineageDiff, and records everything in
+data/results/celegans_fate_rules.json. No model calls; about two minutes on one core.
+
+    uv run python scripts/celegans_fates.py [--permutations 20]
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import urllib.request
+from datetime import date
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path and not (Path.cwd() / "genomeos").is_dir():
+    sys.path.insert(0, str(ROOT))
+
+from genomeos.lang import parse_file  # noqa: E402
+from genomeos.organism import atlas_levels  # noqa: E402
+from genomeos.organism import fate_rules as fr  # noqa: E402
+from genomeos.organism.diff import compare  # noqa: E402
+from genomeos.organism.reference import ReferenceLineage  # noqa: E402
+from genomeos.organism.tf_atlas import ZENODO_URL, load_cells  # noqa: E402
+from genomeos.runtime.body import Body  # noqa: E402
+
+ORG = Path("data/organisms/celegans")
+RESULT = Path("data/results/celegans_fate_rules.json")
+KEYS = (
+    "cells",
+    "decided_by_factors",
+    "factor_correct",
+    "wrong",
+    "before",
+    "after",
+    "factor_only",
+    "precision",
+)
+
+
+def _levels() -> dict:
+    if not atlas_levels.LEVELS_FILE.exists():
+        if not atlas_levels.ARCHIVE_FILE.exists():
+            atlas_levels.ARCHIVE_FILE.parent.mkdir(parents=True, exist_ok=True)
+            with urllib.request.urlopen(ZENODO_URL, timeout=900) as r:  # noqa: S310 (fixed public URL)
+                atlas_levels.ARCHIVE_FILE.write_bytes(r.read())
+        atlas_levels.build()
+    return atlas_levels.load_levels()
+
+
+def _brief(s: dict) -> dict:
+    extra = {k: s[k] for k in ("lineage_majority_right_on_the_same_cells", "lookup_free_correct") if k in s}
+    return (
+        {k: s[k] for k in KEYS}
+        | extra
+        | {
+            "tissues": {
+                t: {k: v[k] for k in ("cells", "factor_correct", "lost", "claimed", "after", "precision")}
+                for t, v in s["tissues"].items()
+            },
+            "confusion": s["confusion"],
+        }
+    )
+
+
+def _body_diff(program: Path, ref: ReferenceLineage, until: float) -> dict:
+    body = Body(parse_file(program), means=True).run(until=until)
+    d = compare(body, ref, until=until)
+    per: dict[str, list[int]] = {}
+    for rc in ref.cells.values():
+        if rc.born > until or not rc.terminal or rc.dies is not None:
+            continue
+        bc = body.cells.get(rc.id)
+        row = per.setdefault(rc.tissue, [0, 0])
+        row[1] += 1
+        row[0] += bc is not None and bc.cell_type == rc.cell_type
+    return {
+        "program": str(program),
+        "until_min": until,
+        "fates_checked": d.fates_checked,
+        "fates_correct": d.fates_correct,
+        "fate_accuracy": d.fate_accuracy,
+        "fate_confusion": d.to_dict()["fate_confusion"],
+        "cells_born": d.matched,
+        "deaths_matched": d.deaths_matched,
+        "per_tissue": {
+            t: {"correct": c, "cells": n, "accuracy": round(c / n, 3)} for t, (c, n) in per.items()
+        },
+    }
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--permutations", type=int, default=20)
+    args = ap.parse_args()
+    ref = ReferenceLineage.load()
+    levels = _levels()
+    atlas = load_cells()
+    term = fr.embryonic_terminal(ref)
+    labels = {c.id: c.tissue for c in term}
+    exp = fr.exposures(ref, levels, term)
+    reads = {
+        "instantaneous": fr.instantaneous(ref, atlas, term),
+        "integrated": fr.integrated(exp),
+    }
+    textbook = fr.textbook_rules()
+    out: dict = {
+        "result": "celegans_fate_rules",
+        "date": date.today().isoformat(),
+        "question": "do the measured transcription factors decide the worm's terminal fates, with precedence "
+        "over the observed lineage lookup, and does a time-integrated read score better than a threshold?",
+        "cells": "555 embryonic terminal cells (born before 800 reference min, surviving); 406 larval cells "
+        "are outside the atlas and keep the lookup",
+        "baseline_lineage_majority": _brief(fr.score(fr.lineage_majority(labels), labels)),
+        "textbook": {},
+        "threshold_grid": [],
+        "learned": {},
+    }
+    majority = fr.lineage_majority(labels)
+    for name, feats in reads.items():
+        pred = fr.apply_rules(textbook, feats)
+        out["textbook"][name] = _brief(fr.score(pred, labels))
+        out["textbook"][name]["lineage_majority_right_on_the_same_cells"] = sum(
+            1 for c in pred if majority[c] == labels[c]
+        )
+        out["textbook"][name]["lookup_free_correct"] = sum(
+            1 for c in labels if pred.get(c, majority[c]) == labels[c]
+        )
+    for frac in (0.1, 0.2, 0.3, 0.5):
+        for name, feats in (
+            ("peak_in_own_life", fr.instantaneous(ref, fr.presence(levels, frac, 0), term)),
+            ("mean_over_own_life", fr.instantaneous(ref, fr.presence(levels, frac, 1), term)),
+            ("integrated_along_lineage", fr.integrated(exp, frac)),
+        ):
+            s = fr.score(fr.apply_rules(textbook, feats), labels)
+            out["threshold_grid"].append({"fraction": frac, "read": name} | {k: s[k] for k in KEYS})
+    for name, feats in reads.items():
+        cv = fr.score(fr.cross_validate(feats, labels), labels)
+        hybrid_pred = fr.cross_validate(feats, labels, before=textbook, tissues={"neuron"})
+        hybrid = fr.score(hybrid_pred, labels)
+        hybrid["lineage_majority_right_on_the_same_cells"] = sum(
+            1 for c in hybrid_pred if majority[c] == labels[c]
+        )
+        hybrid["lookup_free_correct"] = sum(1 for c in labels if hybrid_pred.get(c, majority[c]) == labels[c])
+        rules = fr.learn(feats, labels)
+        out["learned"][name] = {
+            "cross_validated": _brief(cv),
+            "textbook_then_learned_neuron_rules_cross_validated": _brief(hybrid),
+            "null_tissues_shuffled_within_sublineage": fr.label_null(feats, labels, n=args.permutations),
+            "rules_on_all_cells": [
+                {
+                    "tissue": r.tissue,
+                    "factors": list(r.factors),
+                    "precision": r.precision,
+                    "support": r.support,
+                }
+                for r in rules
+            ],
+        }
+        print(name, "learned CV", {k: cv[k] for k in KEYS}, flush=True)
+    neuron = [r for r in fr.learn(reads["integrated"], labels) if r.tissue == "neuron"]
+    program_rules = textbook + neuron
+    out["program_rules"] = [
+        {
+            "tissue": r.tissue,
+            "factors": list(r.factors),
+            "source": r.source,
+            "precision": r.precision,
+            "support": r.support,
+        }
+        for r in program_rules
+    ]
+    out["program_rules_in_sample"] = _brief(
+        fr.score(fr.apply_rules(program_rules, reads["integrated"]), labels)
+    )
+    rule_factors = {f for r in program_rules for f in r.factors}
+    (ORG / "fates.bio").write_text(fr.to_bio_fates(program_rules, integrated_read=True))
+    (ORG / "exposure.bio").write_text(
+        fr.to_bio_exposure(reads["integrated"], reads["instantaneous"], atlas, rule_factors)
+    )
+    out["body"] = {
+        "lookup": _body_diff(ORG / "embryo.bio", ref, 800.0),
+        "factors": _body_diff(ORG / "embryo_factors.bio", ref, 800.0),
+        "factors_to_adult": _body_diff(ORG / "embryo_factors.bio", ref, 6000.0),
+    }
+    out["generated"] = [str(ORG / "fates.bio"), str(ORG / "exposure.bio")]
+    RESULT.write_text(json.dumps(out, indent=2) + "\n")
+    b = out["body"]
+    print("body lookup", b["lookup"]["fates_correct"], "/", b["lookup"]["fates_checked"])
+    print("body factors", b["factors"]["fates_correct"], "/", b["factors"]["fates_checked"])
+    print(
+        "body factors to adult",
+        b["factors_to_adult"]["fates_correct"],
+        "/",
+        b["factors_to_adult"]["fates_checked"],
+    )
+
+
+if __name__ == "__main__":
+    main()

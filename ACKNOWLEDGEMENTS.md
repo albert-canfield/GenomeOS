@@ -63,6 +63,7 @@ these; raw files are never redistributed (docs/DECISIONS.md D7).
 | CellPhoneDB | ligand-receptor pairs | MIT |
 | WormWeb / Sulston 1983, Sulston & Horvitz 1977 | the complete C. elegans lineage | CC BY 1.0 (WormWeb), publications cited |
 | Packer et al. 2019 (GEO GSE126954) | worm single-cell lineage annotation | public GEO record |
+| Ma et al. 2021 (Zenodo 4737593) | protein levels of 266 transcription factors per lineaged C. elegans embryonic cell over time: the worm's reader, terminal-fate rules and the commitment tests | CC BY 4.0 |
 | Sender & Milo 2021 | human cell counts, lifespans, turnover | publication cited |
 | Horvath 2013, Hannum 2013 | epigenetic clock coefficients | publications cited |
 | Hart et al. 2017 (CEGv2) | core-essential gene set | publication cited |
