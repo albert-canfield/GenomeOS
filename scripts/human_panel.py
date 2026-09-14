@@ -69,6 +69,7 @@ def main(argv: list[str] | None = None) -> None:
     hp.save_catalogue(catalogue, args.chrom)
     say("against Gnocchi")
     gnocchi = hp.against_gnocchi(result, args.chrom)
+    gnocchi["per_kilobase"]["poisson_null"] = hp.depletion_null(result)
     say("sensitivity")
     sens = hp.sensitivity(result)
     say("calibration loci")

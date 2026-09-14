@@ -74,6 +74,11 @@ these; raw files are never redistributed (docs/DECISIONS.md D7).
 | UCSC genomicSuperDups (Bailey and Eichler) | segmental duplications | free for all uses; publication cited |
 | JASPAR 2026 | transcription-factor binding profiles, TFClass families | CC BY 4.0 |
 | Kircher et al. 2019 (GEO GSE126550) | saturation-mutagenesis MPRA: which bases of 21 regulatory elements change activity | CC BY 4.0 publication; data portal code GPL-3 |
+| Human Pangenome Reference Consortium, release 1 (Liao et al. 2023), UCSC `hprc90way`, `hprcArrV1`; release 2 v2.1 structural variants (UCSC `hprc2v21Sv`) | 89 human haplotype assemblies aligned to hg38 by Cactus (presence, alleles, insertions per base), arrangements against hg38, structural variants from 233 assemblies | HPRC open access, publication cited; UCSC tracks free for all uses |
+| gnomAD v4.1.1 genomes and v4.1 structural variants (UCSC bigBed tracks) | allele frequencies beside the panel's value domains, each with its allele number | gnomAD open terms |
+| TRExplorer v2 tandem-repeat catalogue (UCSC `trexplorer` track) | tandem-repeat loci with HPRC and TenK10K allele-size histograms | as distributed through UCSC |
+| ENCODE UW Repli-seq (wavelet-smoothed, 11 cell lines, hg19) and UCSC `hg38ToHg19` liftOver chain | replication timing per kilobase, the mutation-rate control of the human panel | ENCODE data-use policy; UCSC chains free for all uses |
+| GTEx v8 fine-mapped eQTLs (DAP-G, UCSC `gtexEqtlDapg`) and MPRAVarDB (UCSC `mpraVarDb`) | read-out evidence attached to storage units: eQTL variants and reporter-assay allele pairs | GTEx open access; MPRAVarDB as distributed through UCSC |
 
 ## Use and licence
 

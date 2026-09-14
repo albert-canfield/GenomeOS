@@ -1435,6 +1435,60 @@ in order. "Owner" is the session that holds the files today (see §7).
   - **Genome-wide cost.** About 1.4 s per Mb (71 minutes for the genome on one core), a
     5 GB peak for chr1, about 29 MB of index and under 1 MB of summaries. ATTRIBUTION.md
     "The lexicon".
+- **Many human genomes at once (2026-09-14, genomeos-h1).** Albert's question, what is common,
+  what varies among a few values and what is dispensable, asked of 89 human genomes rather than
+  of an aggregate score. `attribution/human_panel.py` (`scripts/human_panel.py`,
+  `human_panel_chr21`, no model call) streams the HPRC release-1 Cactus alignment of 90 human
+  assemblies (UCSC `hprc90way`; hg38, T2T-CHM13 and 88 haplotypes of 44 people) by the block
+  offsets the UCSC API returns and distils it per block into presence and status of every
+  assembly, every variable column with each assembly's allele, and inserted bases: chr21's
+  3.28 GB in 236 s into an 8.4 MB store under `data/knowledge/human_panel`, 1,054,284 variable
+  columns, 424,828 events. Beside it: the HPRC arrangement and v2.1 SV tracks, gnomAD v4.1.1
+  frequencies, the TRExplorer repeat histograms, GTEx DAP-G eQTLs and MPRAVarDB allele pairs,
+  and, as the mutation-rate control, ENCODE Repli-seq replication timing for 11 lines lifted
+  from hg19 per kilobase (the project's first replication-timing data).
+  - **Controls pass, and bound the claim.** Canonical CDS carries 0.41 of the recurring
+    variation a GC- and timing-matched background predicts, the neutral tier 0.91; 200-bp
+    coding units are fixed 70.3% against a matched expectation of 44.1%, neutral units 48.2%
+    against 47.6%; 58% of callable genes are core against 8% of neutral blocks and 14% of
+    length-, GC- and timing-matched control windows. Not "overwhelmingly": 64 of 153 callable
+    genes are variable, because synonymous variation is real.
+  - **Replication timing survives the control.** Late DNA carries 1.3 to 1.6 times the
+    background rate within a GC stratum, but 82% of the coding-against-neutral gap and 98% of
+    the coding units' excess of fixed windows survive matching on timing, and unit classes are
+    spread evenly over timing tertiles. What is late is what cannot be placed (74% of unplaced
+    units). The regulatory tier's apparent core blocks were mostly timing (9.3% to 3.5%).
+  - **The three catalogues of the unknown space** (200-bp units, 20.8 Mb): fixed 24,272 units
+    (4.85 Mb), storage 26,969 (5.40 Mb), cannot place 22,055 (4.41 Mb, of which 774
+    hypervariable). Storage domains are small (11,673 two-value, 9,024 three-value, median
+    effective 1.68) and 81.9% of their events have a gnomAD frequency (panel minor share
+    against gnomAD MAF, Spearman 0.69). 2,216 storage units carry a GTEx eQTL or an MPRA
+    allele pair, 1,053 of them early-replicating with at most three values: the shortlist for
+    the executor test. **But storage is the default**: half of all placed units on the
+    chromosome hold a recurring alternative and no unknown tier holds more than its matched
+    background.
+  - **Calibration.** rs12913832 (HERC2/OCA2) and rs4988235 (LCT) come out as two-value
+    columns, the DRD4 and SLC6A3 VNTRs as copy-number columns with the textbook alleles, ABO
+    as a two-value column by length and ten-value on substitutions, HLA-A as a
+    twenty-value slot; the INS class I/III VNTR fails, because the alignment breaks a 2-kb
+    expansion into replaced blocks.
+  - **Against Gnocchi** (area J's axis): weak agreement, Spearman -0.08 over 34,392
+    kilobases, a Gnocchi-constrained kilobase depleted in the panel 25% of the time against
+    18% for the rest. Gnocchi's constrained kilobases are early and GC-rich; the panel's are
+    late and GC-poor, where genealogy dominates (counts are 15.6 times overdispersed, so 6,374
+    depleted kilobases stand against 1,091 expected and the matched windows, not the Poisson
+    tail, are the test). Where Gnocchi is silent and the panel reads depleted, 58% of the
+    kilobases are segmental duplications with 45% of assembly-bases missing. At block scale
+    the two human axes disagree: of 13 core blocks with a case, 3 are human-constrained.
+  - **The 69 candidates** carry 1.21 times their own flanks' recurring variation (median
+    1.03), 6 core and 59 variable: blocks held across mammals and by Gnocchi are not invariant
+    among people at base resolution. The lexicon's negative, sharpened.
+  - **Cost.** The genome is 266.6 GB of MAF, 5.3 hours of streaming at the measured 13.9 MB/s,
+    about 1 GB of stores, 5 to 6 GB of memory for chr1, and 16 GB of gnomAD ranges for the
+    storage units. The chr21 run took 8.6 hours end to end, almost all of it in the unprofiled
+    regional calibration and candidate stage, which is what to fix before a genome run.
+    ATTRIBUTION.md "Many human genomes"; the source row in GRAMMAR-BY-COMPARISON.md is now
+    read rather than pending.
 - **Next.** 0. The lexicon's axes before its genome-wide build: per-base Zoonomia phyloP
   and per-kilobase Gnocchi joined to every unit occurrence, and a genome-wide JASPAR scan
   at 0.95, then Question 2 asked again on chr21 and chr22. The build of the other
@@ -1460,7 +1514,14 @@ in order. "Owner" is the session that holds the files today (see §7).
   (the Body runtime still produces a human's cell counts over decades); the
   gene level ran once (above) and returns after step 1. 6. Simpler genomes as
   the comparison, C. elegans first, then Drosophila enhancers, fugu as the
-  compact vertebrate, mouse for transfer.
+  compact vertebrate, mouse for transfer. 7. The human panel's next step
+  (genomeos-h1): profile and fix the regional stage that cost eight of the
+  chr21 run's 8.6 hours, then either the executor test on the 1,053
+  early-replicating storage units with an eQTL or an MPRA allele pair (allele-dependent
+  read-out, which needs GTEx by allele or in-silico swaps and so waits on quota), or the
+  882 non-copy constrained-unknown blocks and their flanks read across the panel on the
+  chromosomes that carry them. A repeat-aware reading of long VNTRs is the instrument's
+  one known failure.
 - **Owner.** genomeos-i1 since 2026-09-13 (this lane's files; earlier genomeos-f7 and genomeos-c6); the organism-level closure runs
   on genomeos-73's Body runtime and the block evidence on genomeos-fe's
   decoding results.

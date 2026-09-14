@@ -1402,13 +1402,19 @@ def track_rows(key: str, chrom: str, intervals: list[tuple[int, int]]) -> tuple[
     return rows, cost
 
 
+SV_COMMON_AF = 0.01  # a structural variant carried by 1% of alleles or more is common
+HPRC_ARR_ASSEMBLIES = 90  # the arrangement tracks count genomes of the release-1 set
+
+
 def sv_row_carriers(key: str, row: dict) -> tuple[int | None, int | None, float | None]:
     """(carriers, sample size, frequency) as the track states them."""
     if key.startswith("hprc_") and key != "hprc_v21_sv":
+        label = str(row.get("label") or row.get("score") or "")
         try:
-            return int(row.get("label") or row.get("score") or 0), 90, None
+            n = int(label.split(":", 1)[0])
         except ValueError:
-            return None, 90, None
+            return None, HPRC_ARR_ASSEMBLIES, None
+        return n, HPRC_ARR_ASSEMBLIES, round(n / HPRC_ARR_ASSEMBLIES, 4)
     if key == "hprc_v21_sv":
         return int(row["AC"]), int(row["alleleNumber"]), float(row["alleleFreq"])
     if key == "gnomad_sv":
@@ -1420,9 +1426,13 @@ def sv_row_carriers(key: str, row: dict) -> tuple[int | None, int | None, float 
 
 
 class Overlaps:
-    """Rows of one track over a chromosome, asked by interval."""
+    """Rows of one track over a chromosome, asked by interval; a zero-length item (an insertion
+    point) is read as the base after it."""
 
     def __init__(self, rows: list[dict]):
+        rows = [
+            dict(r, chromEnd=r["chromStart"] + 1) if r["chromEnd"] <= r["chromStart"] else r for r in rows
+        ]
         self.rows = sorted(rows, key=lambda r: r["chromStart"])
         self.starts = [r["chromStart"] for r in self.rows]
         self.max_len = max((r["chromEnd"] - r["chromStart"] for r in self.rows), default=0)
@@ -1433,11 +1443,14 @@ class Overlaps:
 
 
 def structure_over(tracks: dict[str, Overlaps], intervals: list[tuple[int, int]]) -> dict[str, Any]:
-    """Per structural track: items touching the unit, bases covered, the most carriers of any item."""
+    """Per structural track: items touching the unit, bases covered by any item and by common ones
+    (two or more genomes for the HPRC arrangements, 1% of the track's alleles for the others), and the
+    most carriers of any item."""
     bases = sum(e - s for s, e in intervals)
     out: dict[str, Any] = {}
     for key, ov in tracks.items():
         covered: set[int] = set()
+        common: set[int] = set()
         n = 0
         top: tuple | None = None
         for s, e in intervals:
@@ -1447,14 +1460,21 @@ def structure_over(tracks: dict[str, Overlaps], intervals: list[tuple[int, int]]
                 ):
                     continue
                 n += 1
-                covered.update(range(max(s, r["chromStart"]), min(e, r["chromEnd"])))
+                span = range(max(s, r["chromStart"]), min(e, r["chromEnd"]))
+                covered.update(span)
                 c = sv_row_carriers(key, r)
+                arrangement = key.startswith("hprc_") and key != "hprc_v21_sv"
+                if (arrangement and (c[0] or 0) >= MIN_RECURRING) or (
+                    not arrangement and c[2] is not None and c[2] >= SV_COMMON_AF
+                ):
+                    common.update(span)
                 if c[0] is not None and (top is None or c[0] > top[0]):
                     top = c
         if n:
             out[key] = {
                 "items": n,
                 "covered_share": round(len(covered) / bases, 4) if bases else None,
+                "common_covered_share": round(len(common) / bases, 4) if bases else None,
                 "most_carriers": top[0] if top else None,
                 "sample": top[1] if top else None,
             }
@@ -2294,6 +2314,43 @@ def against_gnocchi(result: dict[str, Any], chrom: str, results_dir: Path | None
     }
 
 
+def depletion_null(result: dict[str, Any], p: float = DEPLETED_P) -> dict[str, Any]:
+    """How many kilobases a Poisson would call depleted by chance, and how overdispersed the counts are.
+
+    Recurring events share genealogies (a haplotype carries many of them at once), so counts per
+    kilobase vary far more than a Poisson allows; the dispersion says by how much, and why the
+    matched control windows, not the Poisson tail, are the test for a block.
+    """
+    bg: Background = result["_bg"][1]
+    n = observed = 0
+    expected = 0.0
+    z: list[float] = []
+    for b, row in bg.bins.items():
+        if row[0] < 0.9 * BACKGROUND_BIN or row[2] is None:
+            continue
+        e = row[0] * bg.rate(b)
+        if e <= 0:
+            continue
+        n += 1
+        cdf = 0.0
+        term = math.exp(-e)
+        k = 0
+        while cdf + term <= p:
+            cdf += term
+            k += 1
+            term *= e / k
+        expected += cdf
+        observed += poisson_tails(int(row[1]), e)[0] <= p
+        z.append((row[1] - e) / math.sqrt(e))
+    mean = sum(z) / len(z) if z else 0.0
+    return {
+        "kilobases": n,
+        "depleted_observed": observed,
+        "depleted_expected_under_poisson": round(expected),
+        "pearson_dispersion": round(sum((x - mean) ** 2 for x in z) / len(z), 2) if z else None,
+    }
+
+
 def _superdups(chrom: str, results_dir: Path) -> list[tuple[int, int]]:
     p = results_dir / f"superdups_{chrom}.bed.gz"
     if not p.exists():
@@ -2759,21 +2816,67 @@ def compact_block(r: dict[str, Any], units: Counter | None = None) -> dict[str, 
             for k in ("gnocchi_case", "human_fraction", "mammal_fraction", "duplicated_fraction")
             if k in r
         },
-        **(
-            {
-                "structure": {
-                    k: {
-                        "covered_share": v["covered_share"],
-                        "most_carriers": v["most_carriers"],
-                        "sample": v["sample"],
-                    }
-                    for k, v in r["structure"].items()
-                }
-            }
-            if r.get("structure")
-            else {}
-        ),
+        **({"structure": r["structure"]} if r.get("structure") else {}),
     }
+
+
+STRUCTURE_TRACKS = ("hprc_dup", "hprc_inv", "hprc_del", "hprc_ins", "hprc_double", "hprc_v21_sv", "gnomad_sv")
+
+
+def structure_by_tier(blocks: list[dict[str, Any]]) -> dict[str, Any]:
+    """Bases of each tier under any item and under common items of every structural track."""
+    out: dict[str, Any] = {}
+    for t in TIERS:
+        rows = [b for b in blocks if b["tier"] == t]
+        bp = sum(b["length"] for b in rows) or 1
+        out[t] = {
+            key: {
+                "any": round(
+                    sum(
+                        (b.get("structure", {}).get(key, {}).get("covered_share") or 0) * b["length"]
+                        for b in rows
+                    )
+                    / bp,
+                    4,
+                ),
+                "common": round(
+                    sum(
+                        (b.get("structure", {}).get(key, {}).get("common_covered_share") or 0) * b["length"]
+                        for b in rows
+                    )
+                    / bp,
+                    4,
+                ),
+            }
+            for key in STRUCTURE_TRACKS
+        }
+    return out
+
+
+def refresh_structure(chrom: str, results_dir: Path | None = None) -> dict[str, Any]:
+    """Re-read the structural tracks over a saved result's blocks and rewrite those fields only."""
+    from genomeos.results import RESULTS_DIR, load_result, save_result
+
+    results_dir = results_dir or RESULTS_DIR
+    res = load_result(f"human_panel_{chrom}", results_dir)
+    ivs = [(b["start"], b["end"]) for b in res["blocks"]]
+    tracks: dict[str, Overlaps] = {}
+    cost = {}
+    for key in STRUCTURE_TRACKS:
+        rows, cost[key] = track_rows(key, chrom, ivs)
+        tracks[key] = Overlaps(rows)
+    for b in res["blocks"]:
+        b["structure"] = structure_over(tracks, [(b["start"], b["end"])])
+    res["structure_by_tier"] = structure_by_tier(res["blocks"])
+    res["structure_definition"] = (
+        f"any item, and recurring or common items: HPRC arrangements carried by {MIN_RECURRING} or more of "
+        f"{HPRC_ARR_ASSEMBLIES} genomes, v2.1 SVs and gnomAD SVs (PASS, under {SV_MAX_LENGTH:,} bp) at AF >= "
+        f"{SV_COMMON_AF}; the block classes use the alignment's own events, these tracks are annotation"
+    )
+    res["cost"].update({f"refresh_{k}": v for k, v in cost.items()})
+    payload = {k: v for k, v in res.items() if k not in ("result", "date")}
+    save_result(f"human_panel_{chrom}", payload, results_dir)
+    return res["structure_by_tier"]
 
 
 def summarise(
@@ -2809,6 +2912,7 @@ def summarise(
             "candidates": candidates,
             "genome_wide": cost,
             "cost": {**result["cost"], "storage_tracks": catalogue["cost"], "gnocchi": gnocchi.get("cost")},
+            "structure_by_tier": structure_by_tier(blocks),
             "blocks": blocks,
             "coding_genes": genes,
         }

@@ -246,7 +246,7 @@ in a table, and evidence in BioIR. Owner: area J in ROADMAP.md.
 | Ensembl Compara REST | orthologues and paralogues per gene, `target_taxon` filter, gene trees | `rest.ensembl.org/homology/symbol/human/OCA2?type=orthologues;target_taxon=40674` | one call, 92 mammal orthologues |
 | JASPAR 2026 | 1,019 CORE vertebrate profiles as PFM | `jaspar.elixir.no/api/v1/matrix/?collection=CORE&tax_group=vertebrates` | one call per matrix or one bulk download |
 | UCSC `genomicSuperDups` | segmental duplications > 1 kb | track API, as RepeatMasker is read | not yet read |
-| HPRC 90-way and v2.1 SVs | 90 human assemblies aligned; duplications, inversions, insertions against hg38 from 233 assemblies | UCSC `hprc90way`, `hprcArr*`, `hprc2v21Sv` tracks | not yet read |
+| HPRC 90-way and v2.1 SVs | 90 human assemblies aligned (hg38, CHM13, 88 haplotypes of 44 people); arrangements against hg38; SVs from 233 assemblies | UCSC `hprc90way` MAF at `gbdb/hg38/hprc/cactus90way/<chrom>.maf` by the block offsets the REST API returns; `hprcArrV1` and `hprc2v21Sv` as bigBed ranges (`attribution/human_panel.py`) | read 2026-09-14 on chr21: 3.28 GB in 236 s, 1.05 M variable columns per assembly; per-base presence, alleles and inserted lengths give block classes against GC- and timing-matched windows, fixed/storage/cannot-place catalogues with value domains, and a kilobase comparison with Gnocchi (weak agreement, Spearman -0.08); genome 266.6 GB (`human_panel_chr21`, ATTRIBUTION.md "Many human genomes") |
 | OrthoDB v12 | hierarchical orthologous groups per clade | REST and SPARQL | alternative to Ensembl for step 5 |
 
 Not found: a phyloP bigWig for the 447-way (primate-expanded) alignment

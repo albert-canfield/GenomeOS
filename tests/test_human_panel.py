@@ -174,7 +174,9 @@ def test_small_helpers():
         464,
         0.0366,
     )
-    assert hp.sv_row_carriers("hprc_inv", {"label": "2"}) == (2, 90, None)
+    assert hp.sv_row_carriers("hprc_inv", {"label": "2"}) == (2, 90, 0.0222)
+    assert hp.sv_row_carriers("hprc_del", {"label": "5:5512bp"}) == (5, 90, 0.0556)
+    assert hp.Overlaps([{"chromStart": 7, "chromEnd": 7}]).over(7, 8)[0]["chromEnd"] == 8
 
 
 def test_gnomad_join_keeps_the_two_counts_apart():
@@ -209,3 +211,13 @@ def test_length_class_reads_copy_numbers():
     assert hp.length_class({0: 58, 144: 22, -96: 4, 49: 2, 97: 1}, 89)["class"] == "storage"
     assert hp.length_class({0: 89}, 89)["class"] == "fixed"
     assert hp.length_class({i: 1 for i in range(89)}, 89)["class"] == "hypervariable"
+
+
+def test_depletion_null_counts_chance_and_dispersion():
+    bg = hp.Background(
+        bins={0: [1000, 0, 0.4], 1: [1000, 20, 0.4], 2: [1000, 10, 0.4]}, density={2: 0.01}, overall=0.01
+    )
+    out = hp.depletion_null({"_bg": (bg, bg)})
+    assert out["kilobases"] == 3 and out["depleted_observed"] == 1
+    assert out["depleted_expected_under_poisson"] == 0  # three bins at 3% each
+    assert out["pearson_dispersion"] > 1

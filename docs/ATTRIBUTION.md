@@ -1,10 +1,10 @@
 # The 98%: attributing function to the non-coding genome
 
 Area I of ROADMAP.md. Code: `genomeos/attribution/` (`bigwig.py`, `constraint.py`,
-`budget.py`, `organise.py`, `candidates.py`, `unknown_scoring.py`, `lexicon.py`),
-`scripts/budget_genome_wide.py`, `scripts/syntax_candidates.py`, `scripts/lexicon.py`,
+`budget.py`, `organise.py`, `candidates.py`, `unknown_scoring.py`, `lexicon.py`, `human_panel.py`),
+`scripts/budget_genome_wide.py`, `scripts/syntax_candidates.py`, `scripts/lexicon.py`, `scripts/human_panel.py`,
 `genomeos budget`. Results: `data/results/budget_<chrom>.json`, `budget_genome_wide.json`,
-`syntax_candidates_genome_wide.json`, `unknown_scoring_chr21.json`, `lexicon_<chrom>.json`.
+`syntax_candidates_genome_wide.json`, `unknown_scoring_chr21.json`, `lexicon_<chrom>.json`, `human_panel_chr21.json`.
 
 ## The question, and the house
 
@@ -740,6 +740,264 @@ per-base phyloP. A human axis that is a property of blocks rather than units. Se
 at the top 2,000 per chromosome. JASPAR sites that are a sample of selected elements.
 Poisson tails that remain optimistic wherever occurrences cluster, which is why the library
 link carries its random-gene-set calibration.
+
+## Many human genomes: fixed, storage and cannot place, chr21 (2026-09-14)
+
+Albert's question: compare as many human genomes as can be read, and catalogue what is common
+(the syntax), what varies among a few recurring values (the storage, "like a multiple-select
+db table column") and what cannot be placed, the unknown space above all and the known parts as
+the control. Until now the human axis was Gnocchi, a Z per kilobase from 76,156 genomes, SNVs
+only; the only genomes read were the GIAB trio. `attribution/human_panel.py`
+(`scripts/human_panel.py`, `human_panel_chr21.json`, no model call) reads the genomes.
+
+**What is read, and how.**
+- **The panel.** HPRC release 1 aligned to hg38 by Cactus (UCSC `hprc90way`): hg38, T2T-CHM13
+  and 88 haplotype assemblies of 44 people, so 89 genomes beside the reference. The alignment
+  is uncompressed MAF, 3.28 GB for chr21 and 266.6 GB for the genome. UCSC's REST API returns
+  the byte offset of every block; the blocks are streamed in 32 MB ranges and distilled on the
+  spot into three things kept under `data/knowledge/human_panel/chr21` (git-ignored, 8.4 MB):
+  each block's span with the status of every assembly (aligned, deleted with contiguous
+  flanks, replaced by other sequence, missing), every column where some assembly differs from
+  hg38 with each assembly's allele, and the bases each assembly inserts. chr21 cost 99
+  requests and 236 s: 21,495 blocks, 1,054,284 variable columns, 424,828 variants once
+  deletion runs and insertions are collapsed into events.
+- **Structure.** The HPRC arrangement tracks (`hprcArrV1`: duplications, inversions,
+  deletions, insertions, double rearrangements, with the number of genomes carrying each) and
+  the release-2 v2.1 structural variants from 233 assemblies (`hprc2v21Sv`, AC over AN), read
+  as bigBed by range. The classes use the alignment's own events; these tracks are annotation
+  (`structure_by_tier`).
+- **Frequencies beyond 89 haplotypes.** gnomAD v4.1.1 genomes for substitutions and short
+  indels, gnomAD v4.1 structural variants, and the TRExplorer catalogue's tandem-repeat
+  allele-size histograms (TenK10K, typically 3,850 alleles), all bigBed by range. Each carries
+  its own sample size and none is merged with a panel count: every event reports the panel's
+  minor count out of 89 and, beside it, gnomAD's AF with its AN.
+- **Replication timing** (genomeos-9c's control: late-replicating DNA mutates more, so
+  "variable" may be timing rather than selection). ENCODE UW Repli-seq wavelet-smoothed
+  signal for 11 lines (BG02ES, BJ, GM12878, HeLa-S3, HepG2, HUVEC, IMR-90, K562, MCF-7, NHEK,
+  SK-N-SH) exists only on hg19, so each hg38 kilobase's centre is lifted through UCSC's
+  `hg38ToHg19` chain and the 11 signals are averaged: 35,916 kilobases, 545 requests, 6.5 MB.
+  Tertiles of the chromosome's values are late, middle and early.
+- **Read-out evidence** for the later executor test: GTEx v8 fine-mapped eQTLs (DAP-G) and
+  MPRAVarDB allele pairs, both bigBed.
+
+**The two readings.** A *recurring* variant is one where two or more of the 89 assemblies
+depart from the commonest state; singletons (assembly errors among them) are left out.
+- **Blocks.** Presence, identity, π, the share of bases touched by a recurring deletion,
+  replacement or insertion, and the count of recurring variants against an expectation from
+  the chromosome's own rate outside coding exons, matched per kilobase on GC (seven strata)
+  and timing (tertiles). Classes: *unplaced* (under half aligned, a quarter of assembly-bases
+  missing, or fewer than 5 expected variants), *lineage-restricted* (presence under 0.5),
+  *polymorphic* (presence under 0.95, or a tenth of the bases under a recurring structural
+  event), *core* (half the expected rate or less, Poisson lower tail 0.01 or less) and
+  *variable*. Every block is also compared with two control windows of its own length
+  elsewhere on the chromosome, GC within 0.02 and the same timing tertile.
+- **Units.** Every block, every gene's canonical CDS and the whole chromosome (the background)
+  tiled into 200-bp units. Each assembly's value is its combination of states at the unit's
+  recurring variants (base, gap, inserted length, absence). *Fixed*: one value in 95% of
+  assemblies. *Storage*: recurring values cover 80% of the assemblies and there are at most
+  8 of them. *Hypervariable*: otherwise, a value per haplotype rather than a column.
+  *Unplaced*: under half aligned or under 80% of the assemblies informative. The same rule
+  applied to the length allele alone (net bases gained or lost) reads copy numbers.
+
+**The controls, first.** Coding exons against the tiers, pooled; ratio is recurring variants
+over the matched expectation:
+
+| set | presence | identity | π | recurring per kb | ratio, GC matched | ratio, GC and timing |
+|---|---|---|---|---|---|---|
+| canonical CDS (221 genes, 318 kb) | 0.9991 | 0.99930 | 0.00073 | 3.77 | 0.351 | **0.411** |
+| neutral tier | 0.9978 | 0.99874 | 0.00137 | 7.20 | 0.958 | **0.907** |
+| fossil tier | 0.9976 | 0.99842 | 0.00155 | 7.77 | 1.059 | 0.988 |
+| regulatory tier | 0.9946 | 0.99855 | 0.00161 | 8.94 | 1.030 | 1.087 |
+| constrained_unknown | 0.9972 | 0.99846 | 0.00242 | 7.99 | 1.029 | 0.649 |
+| structural (8.5% aligned) | 0.6248 | 0.98792 | 0.00259 | 12.91 | 1.578 | 1.064 |
+
+| blocks | core | variable | polymorphic | lineage-restricted | unplaced | core of callable (GC only) | matched windows |
+|---|---|---|---|---|---|---|---|
+| CDS, per gene | 89 | 64 | 5 | 0 | 63 | **58.2%** (66.0%) | 14.3% |
+| neutral | 6 | 70 | 3 | 0 | 22 | 7.9% (9.2%) | 3.7% |
+| fossil | 1 | 81 | 2 | 0 | 20 | 1.2% (2.4%) | 4.2% |
+| regulatory | 6 | 166 | 11 | 0 | 11 | 3.5% (9.3%) | 6.9% |
+| constrained_unknown | 4 | 6 | 0 | 0 | 10 | 40% (30%) | 10% |
+| structural | 0 | 2 | 2 | 1 | 22 | | |
+
+| 200-bp units, placed | fixed | storage | hypervariable | fixed expected, GC | fixed expected, GC and timing |
+|---|---|---|---|---|---|
+| CDS | **70.3%** | 29.5% | 0.1% | 43.5% | 44.1% |
+| neutral | 48.2% | 50.4% | 1.4% | 49.5% | 47.6% |
+| fossil | 44.4% | 54.4% | 1.2% | 48.7% | 47.4% |
+| regulatory | 41.7% | 56.5% | 1.9% | 46.6% | 46.8% |
+| constrained_unknown | 56.8% | 42.5% | 0.8% | 48.3% | 52.9% |
+| background (176,885 units) | 48.0% | 50.5% | 1.5% | | |
+
+The instrument passes the ordering the brief made its condition: coding exons carry 0.41 of the
+matched rate of recurring variation and the neutral tier 0.91, coding units are fixed 26 points
+above their matched expectation and neutral units sit on theirs, and callable genes are core
+58% of the time against 8% of neutral blocks and 14% of control windows of the same length, GC
+and timing. It does not pass "overwhelmingly core": 64 of 153 callable genes are variable, and
+30% of 200-bp coding units hold a common alternative, because synonymous and common coding
+variation are real (the checks, in `control_verdict`, were written after the first read of
+these numbers and describe the ordering seen). Only the coding exons stand clearly off the
+background. No tier of the unknown space does: regulatory and fossil units are slightly less
+fixed than matched windows, the neutral tier matches them, and the constrained_unknown tier's
+four core blocks include the two copies at 13.76 Mb (100% segmental duplication, where the
+alignment is paralogous) among ten callable blocks.
+
+**Replication timing, the control.** Within a GC stratum the background rate is 1.3 to 1.6
+times higher in late than in early DNA (GC 35-40%: 8.6 against 5.9 recurring variants per
+kb; GC 45-50%: 11.6 against 7.3; GC 50-55%: 12.2 against 8.4). How much of each difference
+survives matching on timing as well as GC:
+- CDS against neutral, pooled ratio: a gap of 0.61 before (0.35 against 0.96), 0.50 after
+  (0.41 against 0.91). **82% survives.**
+- CDS units' excess of fixed over matched: 26.8 points before, 26.2 after. **98% survives.**
+- Genes called core: 66% before, 58% after. The regulatory tier's core blocks fall from 9.3%
+  to 3.5% of callable, so most of its apparent depletion was early-replicating sequence;
+  constrained_unknown rises from 30% to 40% because its blocks are late.
+- Across the chromosome's 176,885 background units the classes are spread evenly over
+  timing: fixed 33% late, 34% middle, 33% early; storage 34%, 34%, 33%; hypervariable 32%,
+  32%, 35%. Variable units are not enriched in late DNA at this scale. What is late is what
+  cannot be placed: 74% of unplaced units.
+
+So fixed against variable does not separate only before the control; the coding signal is
+selection, not timing. The same control shows that most of the unknown space's small
+departures from the background were timing or GC.
+
+**The three catalogues** (200-bp units; the unknown space is 20.8 Mb):
+
+| catalogue | unknown space: units | Mb | coding exons: units | kb |
+|---|---|---|---|---|
+| fixed (one value in 95%) | 24,272 | 4.85 | 1,143 | 227 |
+| storage (a small value domain) | 26,969 | 5.40 | 480 | 97 |
+| cannot place: hypervariable | 774 | 0.15 | 2 | 0.5 |
+| cannot place: not aligned or missing | 21,281 | 4.26 | 3 | 0.6 |
+
+- **Value domains.** Of the 26,969 storage units, 11,673 hold two recurring values, 9,024
+  three, 3,642 four and 2,629 five to eight. The median effective number of values is 1.68,
+  the median commonest value holds 73% of the assemblies. 20,236 are substitutions only; the
+  rest carry deletion, insertion or absence values (1,995 deletions with substitutions, 1,706
+  insertions with substitutions, 1,105 all three, 1,600 indels alone, 137 a block absent in
+  some genomes); 5,955 overlap a TRExplorer tandem-repeat locus.
+- **Frequencies.** 49,764 of the 60,750 substitution and indel events (81.9%) have a gnomAD
+  site. Panel minor share against gnomAD minor allele frequency: Spearman 0.69. The two are
+  kept in separate fields.
+- **An example.** chr21:33,160,383, in a constrained_unknown block, is an (AC)n repeat of six
+  copies in hg38. In the panel, 55 of 89 assemblies carry 6 more bases (nine copies), 33 carry
+  hg38's six, one carries 8 more. TRExplorer's TenK10K histogram has nine copies in 1,646 of
+  3,850 alleles and six in 190.
+- **Hypervariable units.** 774, and 758 of them sit on a tandem repeat. Read by length allele,
+  359 become storage columns of copy number and 406 stay hypervariable.
+- **The executor shortlist** (Albert's third class, programs that read a stored value, is not
+  tested here). 2,185 storage units hold a GTEx fine-mapped eQTL variant and 107 an MPRAVarDB
+  allele pair: 2,216 in all. 1,794 are regulatory tier, 225 fossil, 194 neutral, 1
+  constrained_unknown. 1,509 are early-replicating, 768 two-value, and 1,053 are early with
+  at most three values: the strongest candidates, since early DNA that is still diverse is not
+  explained by mutational input. The full catalogue is local
+  (`data/knowledge/human_panel/chr21/storage_catalogue.json.gz`); the result keeps counts and
+  a showcase.
+
+Storage is not rare. Half of all placed 200-bp units anywhere on chr21 hold a recurring
+alternative, and no unknown tier holds more than its matched background. At this resolution
+a column with a few recurring values is the default state of human sequence under neutral
+drift; what marks function is depletion against matched windows (the coding exons) and,
+possibly, a read-out that depends on the value (the shortlist).
+
+**Calibration: slots whose values are known.** Each locus is a regional store of the same
+alignment (±20 kb, the flanks as the local rate). Positions were looked up and verified
+against the sources (rsIDs in gnomAD, CDS from GENCODE, repeat loci from TRExplorer by motif
+size).
+
+| locus | unit | class | recurring values | commonest | effective | by length | timing | rate vs flanks |
+|---|---|---|---|---|---|---|---|---|
+| rs12913832, HERC2 enhancer of OCA2 | 200 bp | **storage** | 2 (G in 13 of 89; gnomAD G 0.487, AN 152,216) | 0.85 | 1.33 | fixed | middle | 0.92 |
+| rs4988235, MCM6 enhancer of LCT | 200 bp | **storage** | 2 (A in 8; gnomAD A 0.397, AN 152,102) | 0.91 | 1.20 | fixed | early | 0.86 |
+| ABO | canonical CDS | hypervariable (storage at 16) | 10 | 0.21 | 6.93 | **storage**: 64 at hg38's length, 25 a base longer; rs8176719's frame-restoring C, absent from hg38's O allele, is in at least 31 of 89 (gnomAD 0.354, AN 151,710) | early | 2.03 |
+| HLA-A | canonical CDS | hypervariable (storage only at 32) | 19 | 0.10 | 19.6 | fixed | early | 1.80 |
+| DRD4 exon 3 48-bp VNTR | locus ±50 bp | **storage** | 8 | 0.43 | 4.09 | **storage**: 4 copies in 58, +144 bp (7 copies) in 22 | early | 5.04 |
+| SLC6A3 3' UTR 40-bp VNTR | locus ±50 bp | **storage** | 7 | 0.61 | 2.41 | **storage**: 10 copies in 62, -39 bp (9) in 24, -77 bp (8) in 3 | early | 2.98 |
+| INS promoter 14-bp VNTR | locus ±50 bp | hypervariable | 12 of 66 | 0.07 | 44.8 | hypervariable | early | 11.3 |
+
+Five of seven come out as Albert means. The two eye-colour and lactase switches are two-value
+columns, rs12913832 in a kilobase Gnocchi does not score. ABO is a two-value column by length
+and a ten-value one on substitutions. The DRD4 and SLC6A3 repeats are
+copy-number columns with the textbook alleles. HLA-A is a twenty-value slot and is filed as
+one, not as a small column. The failure is the INS VNTR: the alignment cannot represent the
+2-kb class III expansions, breaks them into replaced blocks and reads a value per haplotype.
+Long tandem repeats need the assemblies read directly or a repeat-aware caller. All seven loci
+are early or middle-replicating and more variable than their flanks, which is the pattern of a
+held value rather than of mutational input.
+
+**Against Gnocchi.** Per kilobase outside coding exons, 90% or more aligned (34,392 kb):
+"constrained" is Gnocchi's mean Z at 2.18 or more; "depleted" is the panel's Poisson lower
+tail at 0.05 or less against the GC and timing matched rate.
+
+| kilobases | n | panel ratio | Gnocchi Z | late | early | GC | duplicated | missing assemblies | in unknown space |
+|---|---|---|---|---|---|---|---|---|---|
+| both | 755 | 0.25 | 3.21 | 3% | 68% | 0.485 | 0.8% | 0.0 | 19% |
+| Gnocchi only | 2,235 | 0.91 | 2.98 | 2% | 65% | 0.454 | 1.5% | 0.0 | 18% |
+| panel only | 3,765 | 0.23 | -0.53 | 42% | 22% | 0.390 | 3.1% | 0.0 | 31% |
+| neither | 16,796 | 0.93 | -0.75 | 38% | 22% | 0.384 | 3.3% | 0.0 | 34% |
+| Gnocchi unscored, panel depleted | 1,854 | 0.20 | | 51% | 40% | 0.465 | 58% | 45% | 44% |
+| Gnocchi unscored, other | 8,987 | 1.71 | | 31% | 41% | 0.426 | 23% | 6% | 33% |
+
+- **Agreement is weak.** Spearman between Z and the panel ratio is -0.08. A Gnocchi-constrained
+  kilobase is panel-depleted 25% of the time, against 18% for the rest (1.4 times).
+- **The Poisson tail cannot be trusted per kilobase.** 6,374 kilobases are called depleted
+  where 1,091 are expected, and the counts are 15.6 times overdispersed. Recurring variants
+  share genealogies, so a kilobase with a shallow local tree carries few of them. The panel's
+  per-kilobase depletion is mostly that, which is why blocks are judged against matched
+  windows and not by their tail.
+- **Where the two disagree.** Gnocchi's constrained kilobases are early-replicating and
+  GC-rich, next to genes. The panel-only ones are late and GC-poor, where 89 haplotypes' tree
+  variance dominates. Gnocchi's rare-variant model sees purifying selection the panel's common
+  variants cannot: 2,235 Gnocchi-constrained kilobases carry a normal load of common
+  variation. Where Gnocchi is silent and the panel reads depleted, 58% of the kilobases are
+  segmental duplications with 45% of assembly-bases missing: copies, where neither axis
+  speaks (the organiser's copies-first rule again).
+- **By block.** None of chr21's blocks is Gnocchi "syntax". Of 13 core blocks with a case, 3
+  are human-constrained ("recent") and 10 tolerant; of 286 variable blocks, 85 are
+  human-constrained. Human-lineage invariance at block scale and Gnocchi's aggregate
+  constraint do not agree on this chromosome.
+
+**The 69 syntax candidates against their own flanks.** 6 core, 59 variable, 4 unplaced. Their
+recurring variation is 1.21 times their ±20 kb flanks pooled (median 1.03). Blocks constrained
+across mammals and in Gnocchi carry no less common human variation than the sequence around
+them. That is the same negative genomeos-i1's lexicon reached with coarser axes, now at base
+resolution: the candidates are not invariant among people. By reading: regulatory 3 core of
+22 callable, promoter-like 1 of 7, unexplained 1 of 24, 3' extension 1 of 7, coding exon 0 of
+5.
+
+**Sensitivity.**
+- **Unit width dominates** the fixed and storage split. Fixed share of placed CDS against
+  neutral units: 82.8% against 68.3% at 100 bp; 70.3% against 48.2% at 200; 45.9% against
+  19.2% at 500; 29.6% against 5.8% at 1 kb. The gap holds at every width; the absolute
+  catalogue sizes do not.
+- **The fixed bar** moves both sets together: at 90%, CDS 76.1% and neutral 56.3%; at 99%,
+  58.7% and 36.1%.
+- **The value-count bar** of 4, 8 or 16 moves only the hypervariable share (neutral 6.0%,
+  1.4%, 0.3%).
+- **Core ratio** of 0.3 instead of 0.5: genes 51% core of callable, neutral 5.3%, regulatory
+  0%, constrained_unknown 10%.
+
+**Cost of the genome.**
+- **Stream.** 266.6 GB of MAF: 5.3 hours at the measured 13.9 MB/s, about 1 GB of stores.
+- **Memory.** 5 to 6 GB for chr1 and chr2 with their events held in memory.
+- **gnomAD.** The storage units' frequencies cost 200 MB on chr21, about 16 GB genome-wide.
+- **Timing.** Replication timing costs 6.5 MB per chromosome.
+- **Wall time.** The chr21 run took 8.6 hours end to end. Under ten minutes was the
+  chromosome itself; the rest was the regional calibration and candidate stage, unprofiled,
+  which is the part to fix before a genome run. The genome is affordable in streaming and
+  disk; it waits on that fix and on a decision about whether a panel of 89 haplotypes is worth
+  reading everywhere after the negatives above.
+
+**What is weak.**
+- **The sample.** 44 people. The panel places common alleles but does not estimate their
+  frequency: rs12913832's G is 15% in the panel and 49% in gnomAD.
+- **Tail probabilities.** The Poisson tails are optimistic by the overdispersion.
+- **Missing data.** The expectation scales with aligned bases, not with informative
+  assemblies, so partly missing regions read as depleted.
+- **One alignment.** Presence in a duplicated block is paralogous, and long VNTRs break.
+- **The structural tracks.** gnomAD SVs include rare megabase calls (any gnomAD SV item covers
+  93% of the regulatory tier, common ones 3.7%); HPRC insertion items are points.
+- **One chromosome**, small, with no Gnocchi syntax block.
 
 ## What comes next, in order
 
