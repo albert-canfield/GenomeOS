@@ -590,6 +590,7 @@ def machine_report(analysis: dict[str, Any]) -> dict[str, Any]:
             for c in analysis["candidates"]
         ],
         "combinations": [x.to_dict() for x in analysis.get("combinations", [])],
+        "alterations": analysis.get("alterations", []),
         "missing_data": analysis["missing_data"],
         "providers": analysis["providers"],
     }

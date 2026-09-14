@@ -185,13 +185,23 @@ in order. "Owner" is the session that holds the files today (see §7).
   gained a perturbation that arrives at a time (`add: F at T`), and `bio test`
   now runs every organism program's `experiment` blocks — the eight worm and
   nine haematopoietic knockouts included.
-- **Next.** 1. The integrated reads of §7.2a (`F.exposure(lineage)`,
-  `F.mean(cell)`) as a language read rather than area E's precomputed lookup;
-  today they are a compile error. 2. A `commitment` a precursor can hold before
+- **Four defects and one language gap, from area E using it (2026-09-15).** A
+  `cell_network` cadence let a rule that had lost the precedence contest win it
+  later, costing the worm 17 terminal fates (484 of 555 against 501) for no
+  reason but the cadence; two decisions sharing an id silently made one
+  unreachable; a birth made its neighbours re-read their contacts but a death did
+  not; and `asymmetric: X -> D` created X in the keeper when the mother had none.
+  All four are fixed, counted (`overruled_fates`, `duplicate_decision_ids`) and
+  regression-tested, with every committed organism program identical before and
+  after. The **integrated reads** of §7.2a (`F.exposure(lineage)`,
+  `F.mean(cell)`) are now a language read the Body computes, in absolute units,
+  so area E can write their fate rules as declared windows instead of a
+  precomputed lookup; a read that does not name its window is a compile error.
+- **Next.** 1. A `commitment` a precursor can hold before
   it differentiates, so a cell born after a perturbation is protected as its
-  ancestors are (12 of 610 are not, today). 3. `bio` packaged as an extra entry
-  point with its own test set. 4. A `population` type in BioIR (today a counted
-  `Cell`). 5. PAR polarity rules for the worm's first divisions, so par-2 and
+  ancestors are (12 of 610 are not, today). 2. `bio` packaged as an extra entry
+  point with its own test set. 3. A `population` type in BioIR (today a counted
+  `Cell`). 4. PAR polarity rules for the worm's first divisions, so par-2 and
   par-3 knockouts are predicted rather than stated.
 - **Owner.** genomeos-c2 (the engine: language, IR, runtime, toolchain, v0.4).
 
@@ -1059,18 +1069,48 @@ in order. "Owner" is the session that holds the files today (see §7).
   whose requirements were established; such a mechanism is now capped at 0.25
   and carries the reason. All three are the same mistake in different
   clothes: treating an unanswered question as permission.
-- **Missing.** Copy number and structural variants from cBioPortal profiles
-  (only patient-supplied CNV today); a `cancer.*` library layer; the three
-  mechanism-ranking defects above; expression-driven targets such as CD19 and
-  BCMA, which need patient RNA rather than a variant; the demo runs at data
-  level 1 only.
-- **Next.** 1. Retrospective benchmark on public cases with known targets;
-  a test that fails if a known target drops out of the top ranks.
-  2. cBioPortal CNA and SV profiles. 3. `cancer.*` libraries with driver
-  evidence. 4. A `NeoantigenProvider` behind a licence-checked optional
-  extra.
-- **Owner.** unassigned since genomeos-b9 left; genomeos-f7 takes the
-  benchmark.
+- **Copy number and structural variants, done (2026-09-15).** The same
+  cBioPortal client reads the study's `_cna` and `_structural_variants`
+  profiles and distils them beside the mutation table
+  (`cancer_alterations_msk_impact_2017`, 110 genes, 62 s, 139 KB). The
+  mutation table alone calls CCND1 and MYC passengers at under 1%; both are
+  amplified in over 4%. CDKN2A is deep-deleted in 7.6% of tumours and 32.6%
+  of gliomas, ERBB2 amplified in 4.0% overall and 14.1% of breast
+  carcinomas. A gene now reaches the tumour comparison and the target
+  ranking through a copy-number or structural call exactly as through a
+  variant: same origin record, same cohort grading, same score scale
+  (`cancer/alterations.py`). Two refusals are the substance of it. A
+  homozygously deleted gene is classed `unsuitable`, dropped from the
+  surface targets, and fails a new hard requirement
+  (`gene_product_present`) on every mechanism that must recognise a
+  product — the tumour makes none of it. And the two copy-number
+  conventions disagree about the number 2, so the format is decided by a
+  stated rule and an ambiguous table is read the way that invents no
+  amplification.
+- **What the benchmark says about it: nothing, and that is the finding.**
+  Before and after are identical in all six rows — same targets, same
+  ranks, same classes, same mechanisms, same scores, 6/6 recovered, 6/6
+  verdicts, 4/6 mechanisms defensible. The benchmark cannot see this work,
+  because its one copy-number case carries a VCF passenger *inside* ERBB2
+  (chr17:39700064), so ERBB2 was always recovered through the variant and
+  never through the amplification, against that fixture's own stated
+  intent. The control that does see it is in
+  `tests/test_cancer_alterations.py` with fixtures in
+  `data/demo/alterations/`: run at 8a4fe6e, a 12-copy ERBB2 with no ERBB2
+  variant yields one candidate and it is not ERBB2; run after, ERBB2 is
+  rank 1, direct surface, blocking antibody 0.521. A case whose driver is
+  only a copy-number or structural call belongs in the benchmark;
+  genomeos-f7 owns it.
+- **Missing.** A `cancer.*` library layer; the two mechanism-ranking defects
+  above; expression-driven targets such as CD19 and BCMA, which need patient
+  RNA rather than a variant; the demo runs at data level 1 only; what a deep
+  deletion is actually worth (the dependency it creates) is not modelled.
+- **Next.** 1. The two open mechanism-ranking defects (BRAF and PIK3CA still
+  head their lists with a mechanism needing an extracellular epitope).
+  2. `cancer.*` libraries with driver evidence. 3. A `NeoantigenProvider`
+  behind a licence-checked optional extra. 4. A benchmark case whose driver
+  is a copy-number or structural call.
+- **Owner.** genomeos-f2 since 2026-09-14; genomeos-f7 takes the benchmark.
 
 ### G. Product: web UI, CLI, packaging, CI
 

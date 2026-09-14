@@ -47,6 +47,12 @@ DIAGNOSTIC = ("shedding",)
 #: what it does, so it cannot reach the score a measurement can.
 COPY_NUMBER_CAP = 0.5
 
+#: A discrete copy-number call carries a direction and no amount, so it scores
+#: below what the weakest count producing that call would score. An
+#: amplification is at least 4 copies, which the formula above would put at
+#: 0.25; a gain is at least 3, which it would put at 0.125.
+DISCRETE_COPY_NUMBER: dict[str, float] = {"amplification": 0.2, "gain": 0.1}
+
 SAFETY_UNKNOWN_CAP = 0.6
 SAFETY_POOR_CAP = 0.5
 SAFETY_POOR_THRESHOLD = 0.35
@@ -129,6 +135,16 @@ def tumour_expression_score(tumour: TumourState) -> tuple[float | None, str]:
             f"no tumour RNA-seq; {cn.value:g} copies against the diploid 2, scored as "
             f"({cn.value:g} - 2) / 8 and capped at {COPY_NUMBER_CAP:g} because copy number bounds what "
             "a cell could make and never shows that it does"
+        )
+    if cn.qualitative in DISCRETE_COPY_NUMBER:
+        # A discrete call says which direction the copy number moved and by how
+        # much it does not say. It therefore scores below the weakest count that
+        # would produce the same call, rather than being given one.
+        score = DISCRETE_COPY_NUMBER[cn.qualitative]
+        return score, (
+            f"no tumour RNA-seq and no copy count; the call is '{cn.qualitative}' ({cn.source}), scored "
+            f"at {score:g}, below what an actual count of copies could reach, because a discrete call "
+            "gives a direction and no amount"
         )
     return None, m.reason or "no tumour RNA-seq or proteomics supplied"
 

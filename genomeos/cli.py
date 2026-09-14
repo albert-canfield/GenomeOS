@@ -1203,6 +1203,9 @@ def cmd_cancer(args: argparse.Namespace) -> int:
             deep=args.deep,
             pathways=not args.no_pathways,
             therapeutics=args.therapeutic,
+            cnv=args.cnv,
+            sv=args.sv,
+            cna_format=args.cna_format,
             log=sys.stdout,
         )
         mb = a["mutation_burden"]
@@ -1256,6 +1259,21 @@ def cmd_cancer(args: argparse.Namespace) -> int:
                     f"lost over {e['pathways_checked']} pathways"
                     + (f"; most affected {w['name']} ({w['fraction_lost']:.0%})" if w else "")
                 )
+        if a.get("alterations"):
+            print("copy-number and structural alterations:")
+            for alt in a["alterations"][:10]:
+                freq = alt.get("cohort_frequency")
+                print(
+                    f"  {alt['label']:<44} score {alt['score']:<6}"
+                    + (f" {freq:.2%} of {alt['cohort_study']}" if freq else " frequency unknown")
+                )
+            if a.get("surface_targets_excluded"):
+                print(
+                    "  excluded from surface targets (deleted, so no product): "
+                    + ", ".join(a["surface_targets_excluded"])
+                )
+            for t_ in a.get("suggested_cancer_types_from_alterations") or []:
+                print(f"  by alteration: {t_['cancer_type']:<32} enrichment {t_['log_enrichment']:+.2f}")
         print("suggested cancer types (inferred):")
         for t_ in a["suggested_cancer_types"]:
             print(f"  {t_['cancer_type']:<36} enrichment {t_['log_enrichment']:+.2f}")
@@ -4339,6 +4357,8 @@ def cmd_therapeutic(args: argparse.Namespace) -> int:
         top_genes=args.top,
         purity=args.purity,
         cnv=args.cnv,
+        cna_format=args.cna_format,
+        sv=args.sv,
         cohort=args.cohort or "",
         net=not args.offline,
         indirect=not args.no_indirect,
@@ -4795,6 +4815,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--vcf", required=True)
     p.add_argument("--chrom", nargs="*")
+    p.add_argument(
+        "--cnv",
+        help="copy-number table: gene<TAB>value per line, absolute copies or GISTIC calls (-2..2)",
+    )
+    p.add_argument(
+        "--cna-format", default="auto", choices=("auto", "copies", "gistic"), help="how to read --cnv"
+    )
+    p.add_argument("--sv", help="structural-variant table: gene<TAB>partner[<TAB>class] per line")
     p.add_argument(
         "--deep", type=int, default=5, help="top coding variants to trace to peptides and pathways"
     )
@@ -5289,7 +5317,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--chrom", action="append", help="restrict to these chromosomes")
     p.add_argument("--purity", type=float, help="tumour purity 0-1, for clonality")
-    p.add_argument("--cnv", help="copy-number table: gene<TAB>copies per line")
+    p.add_argument(
+        "--cnv",
+        help="copy-number table: gene<TAB>value per line, absolute copies or GISTIC calls (-2..2)",
+    )
+    p.add_argument(
+        "--cna-format",
+        default="auto",
+        choices=("auto", "copies", "gistic"),
+        help="how to read --cnv; auto refuses to guess an amplification out of an ambiguous table",
+    )
+    p.add_argument("--sv", help="structural-variant table: gene<TAB>partner[<TAB>class] per line")
     p.add_argument(
         "--cohort",
         help="cBioPortal study id of the same cancer type, e.g. brca_tcga_pan_can_atlas_2018; "

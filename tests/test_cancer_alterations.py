@@ -1,33 +1,60 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 # Part of the GenomeOS application; see LICENSING.md.
-"""Copy-number and structural-variant knowledge, and the alterations it grades.
+"""Copy-number and structural variants: the knowledge, the reading, the effect.
 
 The distillation itself needs the network (`genomeos cancer alterations`);
 these tests read its committed result, so a change that loses the events or
-mis-grades them fails in CI within a second.
+mis-grades them fails in CI within a second. The pipeline tests at the bottom
+are the controls that say what the profiles actually add: each fixture's VCF
+carries a variant in a different gene, so the gene under test can reach the
+candidate list only through its copy-number or structural call.
 """
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
+from genomeos.cancer.alterations import (
+    GeneAlteration,
+    detect_cna_format,
+    grade,
+    read_cna_table,
+    read_sv_table,
+)
 from genomeos.results import load_result
 
 K = load_result("cancer_alterations_msk_impact_2017")
 MUT = load_result("cancer_msk_impact_2017")
-pytestmark = pytest.mark.skipif(not K, reason="run genomeos cancer alterations")
+
+ROOT = Path(__file__).resolve().parent.parent
+DEMO = ROOT / "data/demo/alterations"
+VEP_CACHE = ROOT / "data/knowledge/vep/vep_cache.jsonl"
+PROTEINS = ROOT / "data/knowledge/proteins"
+
+needs_knowledge = pytest.mark.skipif(not K, reason="run genomeos cancer alterations")
+needs_caches = pytest.mark.skipif(
+    not (DEMO.exists() and VEP_CACHE.exists() and (PROTEINS / "ERBB2.json").exists()),
+    reason="needs the cached VEP annotations and compiled proteins",
+)
 
 
 def freq(gene: str, kind: str) -> float:
     return ((K["genes"].get(gene) or {}).get(kind) or {}).get("frequency", 0.0)
 
 
+# --- the distilled cohort -------------------------------------------------------------
+
+
+@needs_knowledge
 def test_the_study_has_both_profiles():
     assert K["cna_profile"] == "msk_impact_2017_cna"
     assert K["sv_profile"] == "msk_impact_2017_structural_variants"
     assert K["samples"] > 10_000
 
 
+@needs_knowledge
 def test_the_canonical_deep_deletion_and_amplification_are_found():
     """CDKN2A is deleted and ERBB2 amplified, or the table is not describing cancer."""
     assert freq("CDKN2A", "deep_deletion") > 0.05
@@ -37,6 +64,7 @@ def test_the_canonical_deep_deletion_and_amplification_are_found():
     assert freq("RB1", "deep_deletion") > 0.01
 
 
+@needs_knowledge
 def test_amplification_finds_genes_the_mutation_table_calls_passengers():
     """The reason this table exists: frequency by mutation alone under-counts.
 
@@ -52,6 +80,7 @@ def test_amplification_finds_genes_the_mutation_table_calls_passengers():
         assert freq(gene, "amplification") > 4 * mutated
 
 
+@needs_knowledge
 def test_the_cancer_type_is_where_the_frequency_lives():
     """ERBB2 amplification is 4% of all tumours and 14% of breast tumours."""
     breast = K["genes"]["ERBB2"]["amplification"]["by_cancer_type"]["Breast Cancer"]
@@ -60,6 +89,7 @@ def test_the_cancer_type_is_where_the_frequency_lives():
     assert glioma > 0.25
 
 
+@needs_knowledge
 def test_the_recurrent_fusions_have_their_known_partners():
     partners = dict(K["genes"]["ALK"]["fusion_partners"])
     assert partners.get("EML4", 0) > 20, "EML4-ALK is the fusion of lung adenocarcinoma"
@@ -67,8 +97,154 @@ def test_the_recurrent_fusions_have_their_known_partners():
     assert {"KIF5B", "CCDC6"} <= set(ret)
 
 
+@needs_knowledge
 def test_a_panel_studys_silence_is_recorded_as_silence():
     """MSK-IMPACT calls only deep deletions and amplifications, not shallow ones."""
     kinds = {k for entry in K["genes"].values() for k in entry}
     assert "gain" not in kinds and "shallow_deletion" not in kinds
     assert "absence of a call" in K["note"]
+
+
+# --- reading a patient's table --------------------------------------------------------
+
+
+def test_the_two_copy_number_conventions_are_told_apart_and_never_guessed():
+    """A GISTIC 2 is an amplification; 2 copies is an untouched gene."""
+    assert detect_cna_format([12.0, 2.0])[0] == "copies"
+    assert detect_cna_format([-2.0, 2.0])[0] == "gistic"
+    assert detect_cna_format([1.4, 2.0])[0] == "copies"
+    fmt, reason = detect_cna_format([0.0, 1.0, 2.0])
+    assert fmt == "copies", "an ambiguous table must not be read as a table of amplifications"
+    assert "invents no amplification" in reason
+
+
+def test_copies_and_discrete_calls_produce_the_same_kinds(tmp_path):
+    copies = tmp_path / "copies.tsv"
+    copies.write_text("gene\tcopies\nERBB2\t12\nPTEN\t0\nCDK4\t3\nFLAT1\t2\n")
+    kinds = {a.gene: a.kind for a in read_cna_table(str(copies))}
+    assert kinds == {"ERBB2": "amplification", "PTEN": "deep_deletion", "CDK4": "gain"}
+    assert "FLAT1" not in kinds, "an untouched gene is not an alteration"
+
+    discrete = tmp_path / "gistic.tsv"
+    discrete.write_text("ERBB2\t2\nPTEN\t-2\nCDK4\t1\nFLAT1\t0\n")
+    kinds = {a.gene: a.kind for a in read_cna_table(str(discrete))}
+    assert kinds == {"ERBB2": "amplification", "PTEN": "deep_deletion", "CDK4": "gain"}
+    assert all(a.copies is None for a in read_cna_table(str(discrete))), (
+        "a discrete call is a call, not a copy count, and must never be turned into one"
+    )
+
+
+@needs_knowledge
+def test_grading_attaches_the_cohort_frequency_and_scores_a_recurrent_fusion_higher():
+    amp, fusion, rare = grade(
+        [
+            GeneAlteration("ERBB2", "amplification", copies=12.0),
+            GeneAlteration("ALK", "fusion", partner="EML4"),
+            GeneAlteration("ALK", "fusion", partner="NOTAREALGENE"),
+        ]
+    )[0:3]
+    by_gene = {(a.gene, a.partner): a for a in (amp, fusion, rare)}
+    eml4 = by_gene[("ALK", "EML4")]
+    other = by_gene[("ALK", "NOTAREALGENE")]
+    assert eml4.recurrent_partner and not other.recurrent_partner
+    assert eml4.score > other.score
+    erbb2 = by_gene[("ERBB2", "")]
+    assert erbb2.cohort_frequency and erbb2.cohort_frequency > 0.03
+    assert any("Breast Cancer" in e or "Esophagogastric" in e for e in erbb2.evidence)
+
+
+def test_a_deep_deletion_says_it_removes_the_product():
+    (a,) = grade([GeneAlteration("CDKN2A", "deep_deletion", gistic=-2)], knowledge={})
+    assert a.removes_product
+    assert any("never a target for a binder" in e for e in a.evidence)
+    assert not GeneAlteration("ERBB2", "amplification").removes_product
+
+
+def test_a_structural_table_reads_the_partner():
+    (a,) = read_sv_table(str(DEMO / "alk_eml4_fusion.sv"))
+    assert (a.gene, a.partner, a.kind) == ("ALK", "EML4", "fusion")
+    assert a.label() == "ALK-EML4 fusion"
+
+
+# --- the controls: what the profiles add to the pipeline ------------------------------
+
+
+def _run(vcf: str, **kw):
+    from genomeos.therapeutics import analyse_vcf
+
+    return analyse_vcf(str(DEMO / vcf), top_genes=8, net=False, indirect=False, **kw)
+
+
+@needs_caches
+@needs_knowledge
+def test_an_amplified_oncogene_reaches_the_ranking_with_no_variant_of_its_own():
+    """The control. ERBB2 is in this VCF nowhere; the tumour has 12 copies of it.
+
+    Before copy number reached the ranking, the same inputs produced one
+    candidate and it was not ERBB2 — the canonical surface target in oncology,
+    with an approved antibody, absent because no point mutation touched it.
+    """
+    a = _run("erbb2_amplification_only.vcf", cnv=str(DEMO / "erbb2_amplification_only.cnv"))
+    ranked = [c.gene for c in a["candidates"]]
+    assert ranked[0] == "ERBB2"
+    erbb2 = a["candidates"][0]
+    assert erbb2.target_class == "direct_surface"
+    assert not any(o.chromosome for o in erbb2.origins), "no variant of its own"
+    assert [o.alteration_kind for o in erbb2.origins] == ["amplification"]
+    assert erbb2.origins[0].copy_number == 12.0
+    assert erbb2.origins[0].driver_frequency, "the cohort frequency of the amplification is attached"
+
+
+@needs_caches
+def test_a_deleted_tumour_suppressor_is_never_offered_as_a_target():
+    """A homozygous deletion is actionable and it is not a target.
+
+    The gene has a plasma-membrane-adjacent annotation and a 7.6% deletion
+    frequency, both of which would have been read as reasons to aim at it. The
+    tumour makes none of the protein, so every mechanism that has to recognise
+    a product fails, and it fails with that sentence rather than a low score.
+    """
+    a = _run("cdkn2a_deleted.vcf", cnv=str(DEMO / "cdkn2a_deleted.cnv"))
+    genes = {c.gene: c for c in a["candidates"]}
+    assert "CDKN2A" in genes, "the deletion still reaches the analysis: it is a finding"
+    cdkn2a = genes["CDKN2A"]
+    assert cdkn2a.target_class == "unsuitable"
+    assert cdkn2a.best_mechanism is None
+    failed = [m for m in cdkn2a.therapeutic_mechanisms if m.gates_failed]
+    assert any("gene_product_present" in g for m in failed for g in m.gates_failed)
+    assert all(m.compatibility == 0.0 for m in cdkn2a.therapeutic_mechanisms)
+    # and the amplified gene in the same GISTIC table came through as a target
+    assert "EGFR" in genes and genes["EGFR"].target_class == "direct_surface"
+
+
+@needs_caches
+@needs_knowledge
+def test_a_fusion_reaches_the_ranking_and_its_junction_is_not_invented():
+    a = _run("alk_eml4_fusion.vcf", sv=str(DEMO / "alk_eml4_fusion.sv"))
+    alk = next(c for c in a["candidates"] if c.gene == "ALK")
+    assert alk.origins[0].alteration_kind == "fusion"
+    assert alk.origins[0].fusion_partner == "EML4"
+    assert alk.origins[0].recurrent_partner
+    assert any("not reconstructed" in limitation for limitation in alk.limitations), (
+        "the junction sequence is not reconstructed, and the report has to say so"
+    )
+
+
+@needs_caches
+def test_an_amplification_is_never_read_as_a_measurement_of_protein():
+    a = _run("erbb2_amplification_only.vcf", cnv=str(DEMO / "erbb2_amplification_only.cnv"))
+    erbb2 = a["candidates"][0]
+    assert not erbb2.tumour.expression.known, "copy number is not expression"
+    assert erbb2.scores.value("tumour_expression") <= 0.5
+    assert "never shows that it does" in erbb2.scores.components["tumour_expression"].basis
+    assert any("never shows that it makes it" in x for x in erbb2.limitations)
+
+
+@needs_caches
+def test_the_supplied_alterations_are_reported_as_an_input_level():
+    a = _run("erbb2_amplification_only.vcf", cnv=str(DEMO / "erbb2_amplification_only.cnv"))
+    assert "copy_number" in a["data_level"]["inputs_present"]
+    assert [x["label"] for x in a["alterations"]] == ["ERBB2 amplification (12 copies)"]
+    wanted = {m["input"] for m in a["missing_data"]}
+    assert "copy number" not in wanted
+    assert "structural variants" in wanted

@@ -691,7 +691,14 @@ class ScoreSet:
 
 @dataclass(slots=True)
 class VariantOrigin:
-    """The tumour DNA a candidate came from. Never dropped on the way up."""
+    """The tumour DNA a candidate came from. Never dropped on the way up.
+
+    A point mutation fills the position fields; a copy-number or structural
+    event fills `alteration_kind` and leaves them empty, because a deep
+    deletion has no reference and alternate allele. Both are tumour DNA and
+    both reach the candidate the same way, so the ranking cannot see one kind
+    of alteration and miss another.
+    """
 
     sample_id: str = ""
     chromosome: str = ""
@@ -714,6 +721,22 @@ class VariantOrigin:
     gnomad_af: float | None = None
     driver_frequency: float | None = None
     hotspot: bool = False
+    #: Copy-number and structural events. `alteration_kind` is one of
+    #: amplification, gain, shallow_deletion, deep_deletion, fusion.
+    alteration_kind: str = ""
+    gistic: int | None = None
+    fusion_partner: str | None = None
+    recurrent_partner: bool = False
+    alteration_label: str = ""
+
+    @property
+    def is_alteration(self) -> bool:
+        return bool(self.alteration_kind)
+
+    @property
+    def removes_product(self) -> bool:
+        """Both copies gone, so the gene makes nothing for a binder to find."""
+        return self.alteration_kind == "deep_deletion"
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -738,6 +761,18 @@ class VariantOrigin:
             "gnomad_af": self.gnomad_af,
             "driver_frequency": self.driver_frequency,
             "hotspot": self.hotspot,
+            **(
+                {
+                    "alteration_kind": self.alteration_kind,
+                    "alteration": self.alteration_label,
+                    "gistic": self.gistic,
+                    "fusion_partner": self.fusion_partner,
+                    "recurrent_partner": self.recurrent_partner,
+                    "removes_product": self.removes_product,
+                }
+                if self.alteration_kind
+                else {}
+            ),
         }
 
 

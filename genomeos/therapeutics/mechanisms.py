@@ -23,7 +23,7 @@ that a patient responds, and it is labelled as such wherever it is emitted.
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 from .evidence import Evidence, derived
@@ -122,11 +122,24 @@ LOF_TYPES = {
     "start_lost",
     "splice_acceptor_variant",
     "splice_donor_variant",
+    "deep_deletion",  # both copies gone: the completest loss of function there is
 }
 
 
 def _loss_of_function(c: Any) -> bool | None:
     return any(o.variant_type in LOF_TYPES for o in c.origins)
+
+
+def _product_present(c: Any) -> bool | None:
+    """Is there still a gene product in this tumour to recognise?
+
+    A homozygous deletion is not a weak signal about a target, it is the end of
+    the question: the cell makes none of the protein, so no binder can attach
+    to it and no peptide from it can be presented. Mechanisms that act *because*
+    the product is gone are exempt; every other one fails here rather than
+    scoring on a protein the tumour deleted.
+    """
+    return not (c.origins and all(getattr(o, "removes_product", False) for o in c.origins))
 
 
 SURFACE_GATE = Gate(
@@ -193,6 +206,11 @@ LOF_GATE = Gate(
     _loss_of_function,
     "restoration only applies to an inactivated gene; no loss-of-function alteration is present",
     unknown_is_failure=True,
+)
+PRODUCT_GATE = Gate(
+    "gene_product_present",
+    _product_present,
+    "this tumour has deleted both copies of the gene, so there is no product to recognise",
 )
 
 
@@ -623,6 +641,17 @@ _add(
         ),
     )
 )
+
+
+#: Mechanisms that act because the gene's product is gone rather than by
+#: recognising it. Every other mechanism in the ontology needs something left
+#: to bind or to present, so the product gate is added to all of them here
+#: rather than repeated in each declaration.
+PRODUCT_INDEPENDENT: tuple[str, ...] = ("tumour_suppressor_restoration", "genome_editing")
+
+for _name, _spec in list(MECHANISMS.items()):
+    if _name not in PRODUCT_INDEPENDENT:
+        MECHANISMS[_name] = replace(_spec, gates=(PRODUCT_GATE, *_spec.gates))
 
 
 SURFACE_MECHANISMS = tuple(m for m, s in MECHANISMS.items() if SURFACE_GATE in s.gates)

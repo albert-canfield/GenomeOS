@@ -111,10 +111,52 @@ evidence level and the missing data for each. See
 [docs/THERAPEUTICS.md](THERAPEUTICS.md). `genomeos cancer tumour --therapeutic`
 runs it from this command.
 
+## The other two ways a gene breaks
+
+A VCF of point mutations carries one of the three ways a tumour breaks a gene.
+The other two are read from the same cBioPortal client
+(`genomeos cancer alterations`, 110 genes in about a minute,
+`data/results/cancer_alterations_msk_impact_2017.json`, 139 KB kept):
+
+| gene | mutated | amplified | deep-deleted | where the frequency lives |
+|---|---|---|---|---|
+| CDKN2A | 4.3% | 0.06% | **7.6%** | Glioma 32.6%, GIST 21.2% |
+| ERBB2 | 3.0% | **4.0%** | 0.01% | Esophagogastric 22.6%, Breast 14.1% |
+| CCND1 | 0.5% | **4.3%** | 0.03% | |
+| MYC | 0.7% | **4.0%** | 0.02% | |
+| PTEN | 6.1% | 0.02% | **2.5%** | |
+
+CCND1 and MYC are passengers by mutation frequency and drivers by copy
+number. Structural variants come back with their partners: EML4-ALK in 42
+tumours, KIF5B-RET in 15, CCDC6-RET in 10.
+
+The discrete-copy-number endpoint is used rather than the molecular-data one,
+because the latter returns a row per gene per sample and 95% of those rows say
+"diploid". A panel study calls only what is on its panel and only the deep
+events: MSK-IMPACT makes no shallow gain or loss call at all, and the table
+records that absence as an absence of a call rather than as diploid.
+
+**These events are alterations, not annotations.** A gene reaches the tumour
+comparison and the target ranking through a copy-number or structural call
+exactly as it does through a variant (`genomeos/cancer/alterations.py`):
+a typed record, the cohort frequency, a score on the same scale as the variant
+score, and an evidence line per claim. Supply them with `--cnv` and `--sv` to
+`genomeos cancer tumour` or `genomeos therapeutic`.
+
+Two readings are refused. A copy-number table of absolute copies and one of
+GISTIC discrete calls disagree about the number 2 — an amplification in one
+convention, an untouched gene in the other — so the format is decided by a
+stated rule (a negative value can only be a call, a value above 2 can only be a
+count) and an ambiguous table is read the way that invents no amplification;
+`--cna-format` overrides. And a deep deletion is never read as a reason to aim
+at the gene: a homozygously deleted gene makes no product, so it is dropped
+from the surface targets, classed `unsuitable`, and every therapeutic mechanism
+that has to recognise a product fails on it with that sentence. What such a
+finding is worth is the dependency the loss creates, which GenomeOS does not
+yet model.
+
 ## Next
 
-- Copy-number and structural variants from cBioPortal (`_cna`,
-  `_structural_variants` profiles) alongside mutations.
 - Expression: tumour-versus-normal RNA to find surface proteins that are
   over-expressed rather than mutated, the more common target class. The
   therapeutic pipeline already accepts patient RNA (`--rna`); what is missing is

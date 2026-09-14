@@ -27,11 +27,15 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from genomeos.cancer.alterations import GeneAlteration, detect_cna_format, read_cna_table, read_sv_table
+from genomeos.cancer.alterations import by_gene as alterations_by_gene
+from genomeos.cancer.alterations import grade as grade_alterations
+from genomeos.cancer.alterations import rows as _table_rows
 from genomeos.cancer.tumour import CODING, TumourVariant
 
 from . import logic as combination_logic
 from . import mechanisms as mech
-from .evidence import derived, strongest_level
+from .evidence import database, derived, strongest_level
 from .evidence import patient as patient_evidence
 from .expression import (
     normal_profile,
@@ -104,13 +108,20 @@ class PatientProfile:
     copy_number: dict[str, float] = field(default_factory=dict)
     copy_number_path: str = ""
     cohort_study: str = ""
+    #: Copy-number and structural events, graded against the distilled cohort.
+    #: A gene reaches the candidate list through one of these exactly as it does
+    #: through a variant: an ERBB2 amplification with no ERBB2 point mutation is
+    #: still ERBB2 altered in this tumour.
+    alterations: list[GeneAlteration] = field(default_factory=list)
+    alterations_path: str = ""
+    structural_variants_path: str = ""
 
     def levels(self) -> dict[str, Any]:
         have = {
             "tumour_vcf": bool(self.tumour_vcf),
             "matched_normal": bool(self.normal_vcf),
             "tumour_rna": bool(self.rna_path),
-            "copy_number": bool(self.copy_number),
+            "copy_number": bool(self.copy_number or self.alterations),
             "proteomics": False,
             "surface_proteomics": False,
             "hla": bool(self.hla_alleles),
@@ -148,28 +159,46 @@ class PatientProfile:
         }
 
 
-def copy_number_table(path: str) -> dict[str, float]:
+def copy_number_table(path: str, fmt: str = "auto") -> dict[str, float]:
     """Gene to absolute copy number, from a two-column table.
 
     Amplification is one of the strongest reasons a surface protein is
     over-displayed, and it is the one piece of that story a VCF of point
-    mutations cannot carry.
+    mutations cannot carry. Every gene with a count is kept, the unchanged ones
+    included: a measured diploid 2 is a measurement, and it is what stops a
+    gene being reported as copy-number unknown. A table of discrete GISTIC
+    calls yields no counts at all, because a call is not a number; those reach
+    the pipeline as alterations instead.
     """
-    out: dict[str, float] = {}
     p = Path(path)
     if not p.exists():
-        return out
-    for line in p.read_text().splitlines():
-        if not line.strip() or line.lstrip().startswith("#"):
-            continue
-        parts = line.replace(",", "\t").split("\t")
+        return {}
+    pairs: list[tuple[str, float]] = []
+    for parts in _table_rows(p):
         if len(parts) < 2:
             continue
         try:
-            out[parts[0].strip().upper()] = float(parts[1])
+            pairs.append((parts[0].upper(), float(parts[1])))
         except ValueError:
             continue  # header row
-    return out
+    if fmt == "auto":
+        fmt, _reason = detect_cna_format([v for _, v in pairs])
+    return dict(pairs) if fmt == "copies" else {}
+
+
+def patient_alterations(
+    cnv: str | None = None,
+    sv: str | None = None,
+    cna_format: str = "auto",
+    knowledge: dict[str, Any] | None = None,
+) -> list[GeneAlteration]:
+    """This tumour's copy-number and structural events, graded against the cohort."""
+    found: list[GeneAlteration] = []
+    if cnv:
+        found.extend(read_cna_table(cnv, cna_format))
+    if sv:
+        found.extend(read_sv_table(sv))
+    return grade_alterations(found, knowledge) if found else []
 
 
 def vaf_table(vcf: str) -> dict[str, float]:
@@ -255,6 +284,31 @@ def origin_of(
     return o
 
 
+def alteration_origin(a: GeneAlteration, sample_id: str) -> VariantOrigin:
+    """A copy-number or structural event as a tumour-DNA origin record.
+
+    It carries no position, reference or alternate allele, because a deep
+    deletion has none; everything else a variant origin carries — the gene, how
+    often the cohort shows this event, whether the pairing is recurrent — it
+    carries in the same fields, so nothing downstream has to know which kind of
+    alteration it is looking at unless it cares.
+    """
+    return VariantOrigin(
+        sample_id=sample_id,
+        gene=a.gene,
+        variant_type=a.kind,
+        somatic_status="somatic_candidate",
+        somatic_basis=a.source or "supplied alteration table",
+        copy_number=a.copies,
+        driver_frequency=a.cohort_frequency,
+        alteration_kind=a.kind,
+        gistic=a.gistic,
+        fusion_partner=a.partner or None,
+        recurrent_partner=a.recurrent_partner,
+        alteration_label=a.label(),
+    )
+
+
 def _go_terms(providers: Providers, gene: str) -> frozenset[str] | None:
     kb = providers.trafficking.knowledge_base
     if kb is None:
@@ -272,10 +326,13 @@ def build_candidate(
     providers: Providers,
     vafs: dict[str, float],
     origin_class: str = "altered_gene",
+    alterations: list[GeneAlteration] | None = None,
 ) -> TherapeuticTargetCandidate:
     """Run every stage for one gene and return the assembled candidate."""
+    alterations = list(alterations or [])
     c = TherapeuticTargetCandidate(gene=gene)
     c.origins = [origin_of(v, profile.sample_id, vafs, profile.purity, profile.copy_number) for v in variants]
+    c.origins.extend(alteration_origin(a, profile.sample_id) for a in alterations)
 
     # --- stage 1: protein annotation
     ann = providers.protein.annotation(gene)
@@ -312,7 +369,7 @@ def build_candidate(
     cohort = providers.cohort.cohort(gene)
     c.tumour = tumour_state(
         gene,
-        [f"{o.variant_type} {o.protein_change or ''}".strip() for o in c.origins],
+        [o.alteration_label or f"{o.variant_type} {o.protein_change or ''}".strip() for o in c.origins],
         rna,
         c.normal_tissue,
         hpa.data if hpa.available else None,
@@ -328,6 +385,7 @@ def build_candidate(
             ("tumour RNA-seq", "tumour proteomics", "surface proteomics"),
         )
     cn = profile.copy_number.get(gene.upper())
+    copy_events = [a for a in alterations if a.kind != "fusion"]
     if cn is not None:
         c.tumour.copy_number = Measure(
             value=cn,
@@ -350,6 +408,41 @@ def build_candidate(
                 0.85,
             )
         )
+    elif copy_events:
+        # A discrete call without a count. It is a measurement of direction, not
+        # of amount, so it is recorded qualitatively and never given a number.
+        event = copy_events[0]
+        c.tumour.copy_number = Measure(
+            qualitative=event.kind,
+            unit="discrete copy-number call",
+            source=event.source or "supplied copy-number call",
+            level="human",
+            patient_specific=True,
+            confidence=0.7,
+        )
+        c.tumour.evidence.append(
+            patient_evidence(event.source or "copy-number call", "; ".join(event.evidence), 0.7)
+        )
+    for a in alterations:
+        if a.kind == "fusion":
+            c.ledger.add(patient_evidence(a.source or "structural variants", "; ".join(a.evidence), 0.7))
+        if a.cohort_frequency is not None:
+            c.ledger.add(
+                database(
+                    f"cBioPortal {a.cohort_study}",
+                    f"{a.label()}: this event is carried by {a.cohort_frequency:.2%} of tumours in "
+                    f"{a.cohort_study}"
+                    + (
+                        f", most often in {next(iter(a.cohort_types))} "
+                        f"({next(iter(a.cohort_types.values())):.1%})"
+                        if a.cohort_types
+                        else ""
+                    ),
+                    0.8,
+                    "human",
+                    url=f"https://www.cbioportal.org/study/summary?id={a.cohort_study}",
+                )
+            )
     clonal = next((o for o in c.origins if o.clonality != "unknown"), None)
     if clonal:
         c.tumour.clonality = clonal.clonality
@@ -447,6 +540,13 @@ def classify(c: TherapeuticTargetCandidate, origin_class: str) -> tuple[str, str
             "not altered in this tumour; reached as a surface protein associated with a disrupted "
             "driver, so it is a hypothesis about an induced phenotype, not an observed alteration"
         )
+    if c.origins and all(o.removes_product for o in c.origins):
+        return "unsuitable", (
+            f"this tumour has deleted both copies of {c.gene}, so it makes no product: there is nothing "
+            "for a binder to bind and no protein to yield a presented peptide. A homozygous loss is "
+            "among the most actionable findings in a tumour, but what it points at is the dependency "
+            "the loss creates, not this gene as a target"
+        )
     if loc.primary == "unknown" or not loc.compartments or max(loc.compartments.values()) == 0.0:
         return "unknown", "no curated localisation evidence, so accessibility cannot be established"
     if loc.reachable and loc.plasma_membrane is not False:
@@ -538,6 +638,22 @@ def select_mechanisms(c: TherapeuticTargetCandidate) -> list[Any]:
 
 def limitations_for(c: TherapeuticTargetCandidate) -> list[str]:
     out: list[str] = []
+    if any(o.removes_product for o in c.origins):
+        out.append(
+            "a homozygous deletion was called in this tumour: every mechanism that has to recognise the "
+            "gene's product fails on it, and the deletion's value is the dependency it creates, which "
+            "this pipeline does not model"
+        )
+    if any(o.alteration_kind in ("amplification", "gain") for o in c.origins):
+        out.append(
+            "copy number bounds how much protein a cell could make and never shows that it makes it; "
+            "whether this tumour actually displays more of the product needs RNA or protein measurement"
+        )
+    if any(o.alteration_kind == "fusion" for o in c.origins):
+        out.append(
+            "a fusion is recorded here as a rearrangement between two genes; the sequence of the "
+            "junction, and therefore any novel peptide it creates, is not reconstructed"
+        )
     if not c.tumour.expression.known:
         out.append(
             "surface expression in this tumour cannot be established: DNA evidence present, RNA "
@@ -571,10 +687,16 @@ def limitations_for(c: TherapeuticTargetCandidate) -> list[str]:
 
 def why_interesting(c: TherapeuticTargetCandidate) -> str:
     bits = []
+    alt = [o for o in c.origins if o.is_alteration]
+    if alt:
+        lead = max(alt, key=lambda o: o.driver_frequency or 0)
+        bits.append(lead.alteration_label or f"{c.gene} {lead.alteration_kind}")
     drivers = [o for o in c.origins if o.driver_frequency]
     if drivers:
         d = max(drivers, key=lambda o: o.driver_frequency or 0)
         bits.append(f"{c.gene} is a recurrent driver ({(d.driver_frequency or 0):.1%} of tumours)")
+    if c.target_class == "unsuitable":
+        bits.append("the tumour has deleted it, so it is a dependency to look for and not a target")
     if c.target_class == "direct_surface":
         bits.append("its product is physically reachable from outside the cell")
     elif c.target_class == "neoantigen_hla":
@@ -699,8 +821,15 @@ def missing_data_report(candidates: list[TherapeuticTargetCandidate], profile: P
         ),
         (
             "copy number",
-            not profile.copy_number,
-            "amplification is one of the strongest reasons a surface target is over-displayed",
+            not (profile.copy_number or any(a.kind != "fusion" for a in profile.alterations)),
+            "amplification is one of the strongest reasons a surface target is over-displayed, and a "
+            "homozygous deletion removes a target that a mutation list would still be offering",
+        ),
+        (
+            "structural variants",
+            not any(a.kind == "fusion" for a in profile.alterations),
+            "a fusion creates a protein that exists in no healthy cell, which is the cleanest tumour "
+            "specificity there is; a VCF of point mutations cannot show one",
         ),
         (
             "a cohort of the same cancer type",
@@ -762,7 +891,14 @@ def analyse(
     by_gene: dict[str, list[TumourVariant]] = {}
     for v in somatic:
         by_gene.setdefault(v.gene, []).append(v)
-    order = sorted(by_gene, key=lambda g: -max(v.score for v in by_gene[g]))[:top_genes]
+    # Copy-number and structural events rank on the same scale as variants, so a
+    # gene amplified and never mutated competes for a place rather than being
+    # invisible; the ERBB2 story is exactly that case.
+    alt_by_gene = alterations_by_gene(profile.alterations)
+    best: dict[str, float] = {g: max(v.score for v in vs) for g, vs in by_gene.items()}
+    for g, als in alt_by_gene.items():
+        best[g] = max(best.get(g, 0.0), max(a.score for a in als))
+    order = sorted(best, key=lambda g: (-best[g], g))[:top_genes]
 
     if providers.cohort.available:
         if log:
@@ -773,7 +909,16 @@ def analyse(
     for i, gene in enumerate(order, 1):
         if log:
             print(f"therapeutics: {i}/{len(order)} {gene}", file=log, flush=True)
-        candidates.append(build_candidate(gene, by_gene[gene], profile, providers, vafs))
+        candidates.append(
+            build_candidate(
+                gene,
+                by_gene.get(gene, []),
+                profile,
+                providers,
+                vafs,
+                alterations=alt_by_gene.get(gene, []),
+            )
+        )
 
     if indirect:
         blocked = [
@@ -802,6 +947,7 @@ def analyse(
         "generated": derived("GenomeOS", "therapeutic target analysis", 0.0).retrieved_at,
         "disclaimer": DISCLAIMER,
         "data_level": profile.levels(),
+        "alterations": [a.to_dict() for a in profile.alterations],
         "candidates": candidates,
         "combinations": combos,
         "missing_data": missing_data_report(candidates, profile),
@@ -815,6 +961,12 @@ def analyse(
                 (
                     "copy_number",
                     input_hash(profile.copy_number_path) if profile.copy_number_path else None,
+                ),
+                (
+                    "structural_variants",
+                    input_hash(profile.structural_variants_path)
+                    if profile.structural_variants_path
+                    else None,
                 ),
             )
             if v
@@ -861,6 +1013,8 @@ def analyse_vcf(
     top_genes: int = 12,
     purity: float | None = None,
     cnv: str | None = None,
+    cna_format: str = "auto",
+    sv: str | None = None,
     cohort: str = "",
     net: bool = True,
     indirect: bool = True,
@@ -874,6 +1028,7 @@ def analyse_vcf(
 
     knowledge = knowledge if knowledge is not None else load_result("cancer_msk_impact_2017")
     ranked = rank_variants(tumour_vcf, normal_vcf, chroms, knowledge, log)
+    alterations = patient_alterations(cnv, sv, cna_format)
     profile = PatientProfile(
         sample_id=Path(tumour_vcf).stem,
         tumour_vcf=tumour_vcf,
@@ -881,8 +1036,11 @@ def analyse_vcf(
         rna_path=rna,
         hla_alleles=list(hla or []),
         purity=purity,
-        copy_number=copy_number_table(cnv) if cnv else {},
+        copy_number=copy_number_table(cnv, cna_format) if cnv else {},
         copy_number_path=cnv or "",
+        alterations=alterations,
+        alterations_path=cnv or "",
+        structural_variants_path=sv or "",
         cohort_study=cohort,
     )
     kb = None

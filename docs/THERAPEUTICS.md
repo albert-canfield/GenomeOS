@@ -257,6 +257,35 @@ conclusion is never read above its data:
 | 8 | + immunopeptidomics |
 | 9 | + single-cell tumour data |
 
+### Alterations that are not point mutations
+
+Level 4 is an input, not an annotation. A gene enters the candidate list
+through a copy-number or structural call exactly as it does through a
+variant, with the same origin record, the same cohort frequency and a score on
+the same scale (`genomeos/cancer/alterations.py`, distilled knowledge in
+`cancer_alterations_msk_impact_2017`). Three consequences, each a control in
+`tests/test_cancer_alterations.py`:
+
+- **An amplified oncogene with no mutation of its own is a candidate.** With a
+  12-copy ERBB2 and no ERBB2 variant anywhere in the VCF, ERBB2 ranks first as
+  a direct surface target. Without this path, the same inputs produced one
+  candidate and it was not ERBB2.
+- **A homozygously deleted gene is never a target.** It is classed
+  `unsuitable`, dropped from the surface targets, and a hard requirement —
+  `gene_product_present` — fails every mechanism in the ontology that has to
+  recognise a product, because the tumour makes none of it. Only restoration
+  and editing are exempt, and they fail in turn on delivery, which is the
+  honest answer. A deep deletion is among the most actionable findings in a
+  tumour and what it points at is the dependency the loss creates, which this
+  pipeline does not model.
+- **Copy number is still not expression.** A count of copies scores
+  `(copies - 2) / 8` capped at 0.5; a discrete call with no count scores 0.2
+  for an amplification and 0.1 for a gain, below what the weakest count
+  producing that call would reach, because a call gives a direction and no
+  amount. A fusion is recorded as a rearrangement between two genes and its
+  junction sequence is not reconstructed, so no novel peptide is claimed
+  from it.
+
 ## The Therapeutic Design Dataset
 
 The bridge from cancer genomics to molecular design. It says what must be
@@ -309,6 +338,11 @@ genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --spec RUNX1
 # richer patient input
 genomeos therapeutic --tumour tumour.vcf --normal normal.vcf \
   --rna tumour_tpm.tsv --cnv copy_number.tsv --purity 0.7 --hla "HLA-A*02:01"
+
+# the driver is an amplification, a deletion or a fusion, not a mutation
+genomeos cancer alterations --study msk_impact_2017      # the cohort, once
+genomeos therapeutic --tumour t.vcf --cnv gistic.tsv --cna-format gistic --sv fusions.tsv
+genomeos cancer tumour --vcf t.vcf --cnv copy_number.tsv --sv fusions.tsv
 
 # offline, against the caches only
 genomeos therapeutic --tumour data/demo/cancer_tumour.vcf --offline

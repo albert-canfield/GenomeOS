@@ -42,6 +42,7 @@ from .pipeline import (
     analyse,
     analyse_vcf,
     build_candidate,
+    patient_alterations,
     rank_variants,
     write_outputs,
 )
@@ -75,6 +76,7 @@ __all__ = [
     "machine_report",
     "negative_set",
     "negative_targets",
+    "patient_alterations",
     "positive_set",
     "rank_variants",
     "specification",

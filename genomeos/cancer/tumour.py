@@ -342,6 +342,9 @@ def analyse(
     therapeutics: bool = False,
     hla: list[str] | None = None,
     rna: str | None = None,
+    cnv: str | None = None,
+    sv: str | None = None,
+    cna_format: str = "auto",
     log=None,
 ) -> dict[str, Any]:
     """The whole tumour-only pipeline; returns the analysis dict (the packet wraps it).
@@ -402,7 +405,17 @@ def analyse(
                     }
                 )
     genes = {t.gene for t in somatic if t.gene and t.consequence in CODING}
+    from genomeos.cancer.alterations import suggest_cancer_type as suggest_from_alterations
     from genomeos.cancer.compare import suggest_cancer_type, surface_targets
+
+    # Copy-number and structural events, read the same way a variant is: a gene
+    # this tumour has amplified, deleted or rearranged is altered whether or not
+    # any point mutation touched it.
+    from genomeos.therapeutics.pipeline import copy_number_table, patient_alterations
+
+    alterations = patient_alterations(cnv, sv, cna_format)
+    deleted = {a.gene for a in alterations if a.removes_product}
+    genes |= {a.gene for a in alterations}
 
     therapeutic: dict[str, Any] | None = None
     if therapeutics:
@@ -415,6 +428,11 @@ def analyse(
             tumour_vcf=vcf,
             rna_path=rna,
             hla_alleles=list(hla or []),
+            copy_number=copy_number_table(cnv, cna_format) if cnv else {},
+            copy_number_path=cnv or "",
+            alterations=alterations,
+            alterations_path=cnv or "",
+            structural_variants_path=sv or "",
         )
         therapeutic = machine_report(therapeutic_analyse(ranked, profile, log=log))
 
@@ -430,11 +448,21 @@ def analyse(
         "germline_set_aside": [t.to_dict() for t in germline[:20]],
         "mutant_peptides": peptides,
         "pathway_effects": effects,
+        "alterations": [a.to_dict() for a in alterations],
         "suggested_cancer_types": suggest_cancer_type(genes, knowledge),
-        "surface_targets": surface_targets(genes),
+        "suggested_cancer_types_from_alterations": suggest_from_alterations(alterations),
+        "surface_targets": surface_targets(genes, absent=deleted),
+        "surface_targets_excluded": sorted(deleted),
         "therapeutic_targets": therapeutic,
         "evidence": {
             "consequence": "curated: Ensembl VEP (canonical transcript, pick one)",
+            "alterations": (
+                "experimental: the supplied copy-number and structural-variant calls, graded against "
+                "cBioPortal frequencies; a deep-deleted gene is excluded from the surface targets "
+                "because the tumour makes none of its product"
+                if alterations
+                else "not supplied (--cnv / --sv)"
+            ),
             "germline_filter": f"inferred: gnomAD frequency ≥ {GERMLINE_AF} means inherited; rare germline "
             "variants cannot be told apart without the normal sample",
             "drivers": "curated: cBioPortal study frequencies and hotspots",
@@ -468,8 +496,11 @@ def tumour_packet(analysis: dict[str, Any]) -> dict[str, Any]:
                 "germline_set_aside",
                 "mutant_peptides",
                 "pathway_effects",
+                "alterations",
                 "suggested_cancer_types",
+                "suggested_cancer_types_from_alterations",
                 "surface_targets",
+                "surface_targets_excluded",
                 "evidence",
             )
         }
@@ -481,6 +512,9 @@ def tumour_packet(analysis: dict[str, Any]) -> dict[str, Any]:
         "constraints": [
             "Use only the evidence in inputs; mark any external knowledge as 'assumption'.",
             "Variants set aside as likely germline are not tumour-specific; do not build on them.",
+            "A deep deletion removes the gene's product: it is never a binder target, and what it is "
+            "worth is the dependency the loss creates.",
+            "An amplification bounds how much protein a cell could display and never shows that it does.",
             "A predicted damage score is not a measurement; a pathway loss is a reachability inference.",
             "Report confidence per claim on a 0-1 scale.",
             "This is a research analysis, not clinical advice.",
