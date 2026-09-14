@@ -6,10 +6,10 @@
   "genes_in_table": 76,
   "genes_modelled": 9,
   "observed_changes": 25,
-  "reproduced": 7,
-  "missed": 4,
+  "reproduced": 11,
+  "missed": 0,
   "not_modelled": 14,
-  "rate_over_modelled": 0.636,
+  "rate_over_modelled": 1.0,
   "genes": [
     {
       "gene": "apx-1",
@@ -200,7 +200,7 @@
         {
           "cell": "ABp",
           "adopts": "ABa",
-          "status": "missed"
+          "status": "reproduced"
         },
         {
           "cell": "ABar",
@@ -210,15 +210,76 @@
         {
           "cell": "P2",
           "adopts": "EMS",
-          "status": "missed"
+          "status": "reproduced"
         },
         {
           "cell": "E",
           "adopts": "MS",
-          "status": "missed"
+          "status": "reproduced"
         }
       ],
-      "predicted": []
+      "predicted": [
+        {
+          "cell": "ABp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "P2",
+          "wild_type": "Blastomere",
+          "mutant": "EMSPrecursor"
+        },
+        {
+          "cell": "ABpl",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpr",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "E",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        },
+        {
+          "cell": "P3",
+          "wild_type": "Blastomere",
+          "mutant": "EMSPrecursor"
+        },
+        {
+          "cell": "ABpla",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABplp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABpra",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "ABprp",
+          "wild_type": "ABpPrecursor",
+          "mutant": "ABaPrecursor"
+        },
+        {
+          "cell": "Ea",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        },
+        {
+          "cell": "Ep",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        }
+      ]
     },
     {
       "gene": "par-3",
@@ -227,7 +288,7 @@
         {
           "cell": "AB",
           "adopts": "EMS",
-          "status": "missed"
+          "status": "reproduced"
         },
         {
           "cell": "ABar",
@@ -240,7 +301,13 @@
           "status": "not modelled"
         }
       ],
-      "predicted": []
+      "predicted": [
+        {
+          "cell": "AB",
+          "wild_type": "Blastomere",
+          "mutant": "EMSPrecursor"
+        }
+      ]
     },
     {
       "gene": "pie-1",
@@ -279,6 +346,11 @@
           "mutant": "ABaPrecursor"
         },
         {
+          "cell": "E",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        },
+        {
           "cell": "P3",
           "wild_type": "Blastomere",
           "mutant": "EMSPrecursor"
@@ -307,6 +379,16 @@
           "cell": "P4",
           "wild_type": "GermCell",
           "mutant": "EMSPrecursor"
+        },
+        {
+          "cell": "Ea",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
+        },
+        {
+          "cell": "Ep",
+          "wild_type": "EPrecursor",
+          "mutant": "MSPrecursor"
         }
       ]
     },
@@ -798,5 +880,32 @@
     }
   },
   "inputs": [],
-  "describe": "Du 2014 founder fate changes per knockout (17 KB streamed) scored against the program's knockouts"
+  "describe": "Du 2014 founder fate changes per knockout (17 KB streamed) scored against the program's knockouts",
+  "programs": {
+    "named_senders": {
+      "program": "data/organisms/celegans/embryo.bio",
+      "reproduced": 11,
+      "missed": 0,
+      "not_modelled": 14,
+      "rate_over_modelled": 1.0,
+      "missed_changes": []
+    },
+    "contacts": {
+      "program": "data/organisms/celegans/embryo_contacts.bio",
+      "reproduced": 11,
+      "missed": 0,
+      "not_modelled": 14,
+      "rate_over_modelled": 1.0,
+      "missed_changes": []
+    }
+  },
+  "par_rules": {
+    "what": "the first two divisions segregate the maternal factors only while the PAR domain that does the segregating is there",
+    "before": "7 of 11 modelled transformations reproduced; the 4 misses were all par-2 and par-3",
+    "after": "11 of 11 reproduced",
+    "wild_type_unchanged": "PAR-2 and PAR-3 are maternal factors of the zygote, so the conditional decision is the one that applies in every wild-type run",
+    "extra_prediction": "gating the MOM-2 ligand on PIE-1 also predicts E adopting MS in pie-1, which the published table does not list for that gene; it is a prediction, not a miss",
+    "evidence": "Kemphues et al. 1988, Cell 52:311; Bowerman et al. 1993, Cell 74:443; Boyd et al. 1996, Development 122:3075; Cheeks et al. 2004, Curr Biol 14:851"
+  },
+  "seconds": 1.1
 }

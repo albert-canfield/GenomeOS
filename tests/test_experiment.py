@@ -45,7 +45,7 @@ def _types(result) -> dict[str, str]:
 def test_celegans_mutants_reproduce_the_published_founder_phenotypes():
     m = parse_file("data/organisms/celegans/mutants.bio")
     names = [e.name for e in m.experiments]
-    assert names == ["pop1", "skn1", "pie1", "apx1", "glp1", "mom2", "mom5", "pal1"]
+    assert names == ["pop1", "skn1", "pie1", "apx1", "glp1", "mom2", "mom5", "pal1", "par2", "par3"]
     by = {e.name: e for e in m.experiments}
     wt = Body(m, means=True).run(until=800)
     assert wt.cells["MS"].cell_type == "MSPrecursor" and wt.cells["E"].cell_type == "EPrecursor"
@@ -66,6 +66,19 @@ def test_celegans_mutants_reproduce_the_published_founder_phenotypes():
         assert r.descendants_changed("ABp") > 500 and all(a["ok"] for a in r.asserts())
     pal1 = run_experiment(m, by["pal1"])
     assert {f.cell for f in pal1.founders} == {"C", "D"} and all(a["ok"] for a in pal1.asserts())
+    # PAR polarity: the segregation is conditional on the domain that does it (Du et al. 2014)
+    par2 = run_experiment(m, by["par2"])
+    t = _types(par2)
+    # one lost identity, three published transformations: P2 keeps no PIE-1, so it takes the EMS
+    # fate, presents neither ligand, and ABp and E lose their inductions in turn
+    assert t["P2"] == "EMSPrecursor" and t["ABp"] == "ABaPrecursor" and t["E"] == "MSPrecursor"
+    assert all(a["ok"] for a in par2.asserts()), par2.asserts()
+    par3 = run_experiment(m, by["par3"])
+    # AB inherits the somatic factors it is normally kept away from, and takes the EMS fate
+    assert par3.mutant.cells["AB"].cell_type == "EMSPrecursor"
+    assert par3.wild_type.cells["AB"].cell_type != "EMSPrecursor"
+    assert _types(par3)["ABp"] == "ABpPrecursor" and _types(par3)["E"] == "EPrecursor"
+    assert all(a["ok"] for a in par3.asserts()), par3.asserts()
     # the wild type is untouched by the experiments and terminal fates stay the observed ones
     assert pop1.wild_type.count_at(800) == pal1.mutant.count_at(800) == 610
     assert "MS " in pop1.format() and "192 descendants" in pop1.format()

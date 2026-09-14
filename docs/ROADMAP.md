@@ -918,7 +918,8 @@ in order. "Owner" is the session that holds the files today (see §7).
   fields, division in place, contact inhibition, migration; the French flag
   grown from one cell), the measured reader, Packer 2019 at 84% on
   single-tissue ids (the rest is labelling depth), Digital Development as
-  the published knockout set (7 of 11 modelled transformations).
+  the published knockout set (7 of 11 modelled transformations then; 11 of 11
+  since the PAR rules of 2026-09-14, below).
 - **Done 2026-09-14.** Terminal fates from measured factors
   (`embryo_factors.bio`, `celegans_fate_rules`): with factor rules taking
   precedence over the lookup, 496 of 555 embryonic terminal fates (lookup
@@ -980,14 +981,26 @@ in order. "Owner" is the session that holds the files today (see §7).
   disagreement: the separation is below the measurement. What is missing is not
   another transcription factor but the ligand a glial cell receives and the
   terminal genes after the bean stage where the atlas stops.
+  **PAR polarity** (`scripts/celegans_par.py`, `celegans_digital_development`):
+  the first two divisions segregate the maternal factors only while the PAR
+  domain that does the segregating is there — `div_P0` conditional on PAR-3,
+  `div_P1` on PAR-2, the EMS fate rule reading `cell = AB|EMS|P2`, and MOM-2
+  presented by P2 only while it has PIE-1. Against Digital Development
+  **7 of 11 → 11 of 11 modelled transformations, 0 missed**, in both founder
+  layers: par-3 gives AB adopting EMS, and in par-2 one lost identity (P2 keeps
+  no PIE-1) produces all three of its observed changes. The wild type does not
+  move — 1,439 cells, 501 of 555 fates, deaths 110/110 — because PAR-2 and
+  PAR-3 are maternal factors of the zygote, and `mutants.bio` gains the two
+  experiments so the claims are asserts. One extra prediction recorded: the
+  same mechanism predicts E adopting MS in pie-1, which the table does not list.
 - **Next.** 1. `commitment` and `competence` landed on 2026-09-14
   (genomeos-c2, 126e65b) and earn their place by ablation: strip competence and
   both late arms of the published plasticity series fail, strip commitment and the
   terminal arm fails while the early arm collapses from 610 converts to 174. The
   exposure and mean reads did NOT land: `_integrated` is still a precomputed
   lookup, so `establish: ELT-2.exposure(lineage) >= 0.8` does not compile, and
-  rewriting `fates.bio` and `exposure.bio` waits on that. 2. PAR polarity rules for
-  the first divisions, still the two misses against Digital Development.
+  rewriting `fates.bio` and `exposure.bio` waits on that. 2. PAR polarity rules:
+  **done 2026-09-14** (above), and Digital Development is now 11 of 11.
   3. Contacts and AC/VU: **done 2026-09-14** (above). 4. Glia from factors:
   **done 2026-09-14** (above); what would move socket glia is a measurement the
   atlas does not contain, so this stays closed until there is one. 5. Three

@@ -456,7 +456,8 @@ Time axis (`genomeos data distil --only celegans_time_axis`): one reference minu
 topology, fates and deaths are unaffected.
 
 Knockouts against the published set (`genomeos data distil --only celegans_digital_development`): 7 of 11 modelled
-founder transformations of Du et al. 2014 reproduced; the misses are the PAR polarity genes, whose rules are not written.
+founder transformations of Du et al. 2014 reproduced; the misses were the PAR polarity genes, whose rules were not written.
+(11 of 11 since 2026-09-14, when they were: see the PAR section at the end.)
 
 Reader (`genomeos data distil --only celegans_tf_atlas`): the Ma 2021 transcription-factor atlas as one `express`
 decision per cell, imported by the worm program; textbook factors predict their tissues (ELT-2 intestine 0.96, HLH-1
@@ -665,14 +666,27 @@ measurement area E should fetch.
 
 **Two runtime changes area E would like (reported, not made; the engine is another lane's).**
 
-1. **A contact amount is read only when the receiving cell itself decides again.** A neighbour being
-   born, dividing or dying does not make its neighbours read again, so a receiver born before its
-   sender (ABp at 28 min, P2 at 42 min) never hears it. The program works around this with two
-   presence signals (`wake_at_new_delta`, `wake_at_new_wnt`) whose sender and receiver conditions are
-   states rather than names and which carry no geometry; they exist only to make receivers decide
-   again. Requested: in `Body._apply_signals(newborn)`, and where a cell divides or is culled, when
-   `self._amount_signals` is non-empty, re-resolve the cells `neighbours(...)` names. One resolve per
-   touching cell per division.
+1. **A contact amount is re-read when a neighbour is born, but not when one leaves.** *Corrected the
+   same night.* This section first said the Body never re-reads, and the program carried two
+   presence signals to force it; both were wrong and both are gone. `Body._add` already ends with
+   `for name in self.neighbours(c): self._resolve(...)` whenever there are amount signals and no
+   per-cell network, so a receiver born before its sender (ABp at 28 min, P2 at 36 to 42 min) does
+   hear it — provided the contact table already lists the pair at the moment the sender is born.
+   What is missing is the other half: a cell dividing or dying does not make its old neighbours read
+   again, and with a `cell_network` declared the birth hook is skipped entirely in favour of the
+   cadence. Requested: re-resolve `neighbours(...)` in `_divide` and `_cull` as well, and keep the
+   birth hook when a network is present.
+
+   The way this was found is the more useful half. The contact table's snapshots were first keyed to
+   the division times of one seeded run, and `run_experiment` runs every timer at its mean: P1
+   divides at 42 min with the seed and 36 min at the mean, so under the mean the 4-cell snapshot had
+   not started when P2 was born, P2 had no neighbours, and **three knockouts that had been
+   reproduced were silently missed** (apx-1, glp-1 and pie-1, all through ABp). The fix is in the
+   table, not the program: each snapshot is now taken at an AB division, which has no measured
+   spread, and lists the union of the configurations holding until the next one, with aliveness
+   filtering the rest. A contact table keyed to a time a timer can move is a trap, and nothing in
+   the language warns about it — a `contacts:` table whose rows never match a living pair should be
+   an error, not silence.
 2. **Two decisions may share an id, and the second becomes unreachable.** `Body.__init__` builds
    `named = {x.id for v in self._by_cell.values() for x in v}` and then `_general = [d for d in
    module.decisions if d.id not in named]`, so a decision keyed on `cell_type` is dropped from every
@@ -819,3 +833,48 @@ being the number of such cells — and the hypodermis bound was 99 because five 
 counted as hypodermis. With the sheath rule the number is 94, so the bound is 94 and a fourth
 assert (`type GliaSheath at 800 min >= 11`) now carries the five cells that moved. The arm is
 stronger, not weaker: it protects the same cells under their right names.
+
+## PAR polarity: the last four misses against the published knockout set (2026-09-14, genomeos-d2)
+
+The PAR genes were the only misses the worm had against Digital Development (Du et al. 2014, Cell
+156:359): 7 of 11 modelled founder transformations reproduced, and all four misses were par-2 and
+par-3. The reason was structural rather than biological — the first two divisions segregated the
+maternal factors unconditionally, so a program in which PAR-2 or PAR-3 is absent divided exactly as
+the wild type did. The segregation now depends on the domain that does it, which is one extra
+decision per division in each founder layer:
+
+```
+div_P0            when: cell = P0, PAR-3 = present   asymmetric: PIE-1, SKN-1, PAL-1, PAR-2 -> P1 ...
+div_P0_no_par3    when: cell = P0                    asymmetric: PIE-1, PAR-2 -> P1 ...
+div_P1            when: cell = P1, PAR-2 = present   asymmetric: PIE-1 -> P2
+div_P1_no_par2    when: cell = P1                    asymmetric: PIE-1 -> none
+```
+
+with two more statements of the same kind: the EMS fate rule reads `cell = AB|EMS|P2` rather than
+`EMS|P2` (a cell with SKN-1 and no PIE-1 takes the EMS fate, whichever cell it is), and the MOM-2
+ligand is presented by P2 only while P2 has PIE-1, as APX-1 already was.
+
+| knockout | observed (Du et al. 2014) | program |
+|---|---|---|
+| par-3 | AB adopts EMS | AB inherits SKN-1 and PAL-1 and becomes EMSPrecursor; the P lineage is untouched, so ABp is still induced and E is still endoderm |
+| par-2 | ABp adopts ABa; P2 adopts EMS; E adopts MS | neither daughter of P1 keeps PIE-1, so P2 becomes EMSPrecursor, presents neither APX-1 nor MOM-2, and ABp and E lose their inductions in turn — **one lost identity, three transformations** |
+
+**Measured (`scripts/celegans_par.py`, `data/results/celegans_digital_development.json`, no network
+call — the table is the one already distilled): 7 of 11 → 11 of 11 modelled transformations
+reproduced, 0 missed, in both the named-sender and the contact programs.** The 14 changes among the
+8-cell AB granddaughters stay out of scope: the program has no type for an ABalp identity.
+
+Nothing about the wild type moves: PAR-2 and PAR-3 are maternal factors of the zygote, so the
+conditional decision is the one that applies in every wild-type run — 1,439 of 1,439 cells, 501 of
+555 terminal fates, deaths 110/110, unchanged. `mutants.bio` gains the two experiments, so the
+claims are asserts the program checks on itself.
+
+One honest extra: gating MOM-2 on PIE-1 also makes the program predict E adopting MS in *pie-1*,
+which the published table does not list for that gene. It follows from the same mechanism (a P2
+that has lost its germline identity signals with neither ligand), it is a prediction rather than a
+miss, and it is the obvious thing to check against a pie-1 lineage.
+
+A runtime wart found on the way, reported rather than patched: `asymmetric: X -> D` **creates** X in
+the keeper when the mother did not have it (`factors[factor] = factors.get(factor, "present")`), so
+in the par-2 run P3 and P4 regain the PIE-1 their mother lost. Nothing scored here depends on it,
+but an asymmetric clause should divide what exists, not conjure it.
