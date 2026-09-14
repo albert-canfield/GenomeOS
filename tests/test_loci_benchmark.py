@@ -92,7 +92,22 @@ def test_the_class_reading_does_not_look_at_the_expectation():
 # ------------------------------------------------------------------------- the gate, on the result
 #: loci whose target a derived layer named on the first run (2026-09-14). A locus may join this set;
 #: one that leaves it is a regression.
-DERIVED_TARGET_PASSES = {"SHH_ZRS", "HBB_LCR", "BCL11A_enhancer", "ABO", "HLA_DRB1", "APP", "TP53", "HOXD"}
+DERIVED_TARGET_PASSES = {
+    "SHH_ZRS",
+    "HERC2_OCA2",
+    "MCM6_LCT",
+    "HBB_LCR",
+    "FTO_IRX3",
+    "BCL11A_enhancer",
+    "ABO",
+    "HLA_DRB1",
+    "APP",
+    "TP53",
+    "HOXD",
+}
+#: the element's own deletion naming the wrong gene, counted today. Lower it when one is fixed; a rise
+#: is a regression. Today: the ZRS names LMBR1 (SHH is 979 kb away) and MYC's enhancer names POU5F1B.
+KNOWN_ELEMENT_LEVEL_DEFECTS = 2
 #: loci whose published causal variant constraint ranks first among the window's variable positions
 CAUSAL_VARIANT_FIRST = {"HERC2_OCA2": "rs12913832", "BCL11A_enhancer": "rs1427407"}
 
@@ -203,3 +218,37 @@ def test_the_target_rate_is_reported_against_its_chance_floor():
     a = RESULT["aggregate"]
     chance = a["target_by_chance"]
     assert chance["of"] == len(PANEL) and 0 < chance["expected"] < len(PANEL)
+    assert a["target_derived"]["k"] > chance["expected"], (
+        "the derived target rate has fallen to the rate of drawing a gene at random from the window"
+    )
+
+
+@needs_result
+def test_the_element_level_misses_do_not_grow():
+    """An element scored in the model naming a gene that is not the published target: recorded, not asserted.
+
+    The ZRS is the case the panel exists for: its own deletion names LMBR1, the gene it sits inside,
+    while SHH is a megabase away. The count is pinned so a new one is a regression.
+    """
+    flagged = []
+    for name, r in loci().items():
+        layer = r["score"]["scored"]["target"]["by_layer"].get("deletion") or {}
+        if layer.get("named") and not layer["hit"]:
+            flagged.append(name)
+    assert len(flagged) <= KNOWN_ELEMENT_LEVEL_DEFECTS, f"more elements name the wrong gene: {flagged}"
+
+
+@needs_result
+def test_the_direction_of_effect_is_right_wherever_a_deletion_names_the_target():
+    d = RESULT["aggregate"]["direction_derived_where_judged"]
+    assert d["n"] >= 4 and d["k"] == d["n"], f"the direction became wrong at {d['misses']}"
+
+
+@needs_result
+def test_naming_a_target_is_still_reported_against_the_control_rate():
+    """The panel's most valuable number: matched windows get a target nearly as often as the loci."""
+    n = RESULT["negative_controls"]
+    assert n["negatives"]["target"]["rate"] > 0.5, (
+        "if matched windows stop getting a target, the control has changed and the headline must be redone"
+    )
+    assert n["positives"]["direction"]["rate"] >= 3 * n["negatives"]["direction"]["rate"]

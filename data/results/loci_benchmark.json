@@ -17,12 +17,15 @@
   "aggregate": {
     "loci": 12,
     "target_derived": {
-      "k": 8,
+      "k": 11,
       "n": 12,
-      "rate": 0.667,
+      "rate": 0.917,
       "hits": [
         "SHH_ZRS",
+        "HERC2_OCA2",
+        "MCM6_LCT",
         "HBB_LCR",
+        "FTO_IRX3",
         "BCL11A_enhancer",
         "ABO",
         "HLA_DRB1",
@@ -31,9 +34,6 @@
         "HOXD"
       ],
       "misses": [
-        "HERC2_OCA2",
-        "MCM6_LCT",
-        "FTO_IRX3",
         "MYC_8q24"
       ]
     },
@@ -43,12 +43,15 @@
       "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
     },
     "target_derived_where_reachable": {
-      "k": 7,
+      "k": 10,
       "n": 11,
-      "rate": 0.636,
+      "rate": 0.909,
       "hits": [
         "SHH_ZRS",
+        "HERC2_OCA2",
+        "MCM6_LCT",
         "HBB_LCR",
+        "FTO_IRX3",
         "BCL11A_enhancer",
         "ABO",
         "HLA_DRB1",
@@ -56,9 +59,6 @@
         "HOXD"
       ],
       "misses": [
-        "HERC2_OCA2",
-        "MCM6_LCT",
-        "FTO_IRX3",
         "MYC_8q24"
       ]
     },
@@ -141,21 +141,21 @@
       "HOXD"
     ],
     "direction_derived_where_judged": {
-      "k": 0,
-      "n": 1,
-      "rate": 0.0,
-      "hits": [],
-      "misses": [
+      "k": 4,
+      "n": 4,
+      "rate": 1.0,
+      "hits": [
+        "MCM6_LCT",
+        "HBB_LCR",
+        "BCL11A_enhancer",
         "HOXD"
-      ]
+      ],
+      "misses": []
     },
     "direction_not_judged": [
       "SHH_ZRS",
       "HERC2_OCA2",
-      "MCM6_LCT",
-      "HBB_LCR",
       "FTO_IRX3",
-      "BCL11A_enhancer",
       "MYC_8q24"
     ],
     "class_derived": {
@@ -205,9 +205,9 @@
         "rate": 0.833
       },
       "direction": {
-        "k": 2,
+        "k": 8,
         "n": 12,
-        "rate": 0.167
+        "rate": 0.667
       },
       "storage": {
         "k": 6,
@@ -215,9 +215,9 @@
         "rate": 0.5
       },
       "deletion_scored": {
-        "k": 3,
+        "k": 10,
         "n": 12,
-        "rate": 0.25
+        "rate": 0.833
       },
       "eqtl_present": {
         "k": 11,
@@ -237,9 +237,9 @@
         "rate": 0.533
       },
       "direction": {
-        "k": 6,
+        "k": 8,
         "n": 60,
-        "rate": 0.1
+        "rate": 0.133
       },
       "storage": {
         "k": 9,
@@ -247,9 +247,9 @@
         "rate": 0.15
       },
       "deletion_scored": {
-        "k": 8,
+        "k": 10,
         "n": 60,
-        "rate": 0.133
+        "rate": 0.167
       },
       "eqtl_present": {
         "k": 51,
@@ -281,24 +281,24 @@
           "cell": false,
           "direction": false,
           "storage": true,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": true
         },
         "negatives": 5,
         "target": 5,
         "cell": 1,
-        "direction": 0,
+        "direction": 2,
         "storage": 0,
-        "deletion_scored": 0,
+        "deletion_scored": 2,
         "eqtl_present": 5
       },
       "MCM6_LCT": {
         "positive": {
           "target": true,
           "cell": true,
-          "direction": false,
+          "direction": true,
           "storage": false,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": true
         },
         "negatives": 5,
@@ -313,9 +313,9 @@
         "positive": {
           "target": true,
           "cell": true,
-          "direction": false,
+          "direction": true,
           "storage": false,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": true
         },
         "negatives": 5,
@@ -347,9 +347,9 @@
         "positive": {
           "target": true,
           "cell": true,
-          "direction": false,
+          "direction": true,
           "storage": true,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": true
         },
         "negatives": 5,
@@ -364,9 +364,9 @@
         "positive": {
           "target": true,
           "cell": true,
-          "direction": false,
+          "direction": true,
           "storage": true,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": true
         },
         "negatives": 5,
@@ -381,9 +381,9 @@
         "positive": {
           "target": true,
           "cell": true,
-          "direction": false,
+          "direction": true,
           "storage": false,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": true
         },
         "negatives": 5,
@@ -398,9 +398,9 @@
         "positive": {
           "target": true,
           "cell": true,
-          "direction": false,
+          "direction": true,
           "storage": false,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": true
         },
         "negatives": 5,
@@ -543,8 +543,9 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 1,
+          "elements_scored": 2,
           "runs": [
+            "loci_windows",
             "vista"
           ],
           "targets": [
@@ -738,22 +739,52 @@
             155700000,
             157000000
           ],
-          "elements_scored": 3,
-          "naming_a_coding_gene": 1,
+          "elements_scored": 406,
+          "naming_a_coding_gene": 111,
           "genes": [
             {
               "gene": "SHH",
-              "elements": 1,
-              "activating": 1,
-              "summed": 0.43
+              "elements": 66,
+              "activating": 43,
+              "summed": 23.595
+            },
+            {
+              "gene": "LMBR1",
+              "elements": 18,
+              "activating": 15,
+              "summed": 3.444
+            },
+            {
+              "gene": "RNF32",
+              "elements": 12,
+              "activating": 7,
+              "summed": 2.754
+            },
+            {
+              "gene": "MNX1",
+              "elements": 6,
+              "activating": 5,
+              "summed": 2.003
+            },
+            {
+              "gene": "RBM33",
+              "elements": 5,
+              "activating": 4,
+              "summed": 1.103
+            },
+            {
+              "gene": "NOM1",
+              "elements": 4,
+              "activating": 2,
+              "summed": 1.102
             }
           ],
           "published_targets": [
             {
               "gene": "SHH",
-              "elements": 1,
-              "activating": 1,
-              "summed": 0.43
+              "elements": 66,
+              "activating": 43,
+              "summed": 23.595
             }
           ],
           "target": "SHH",
@@ -938,7 +969,12 @@
               "gene_input": {
                 "provenance": "derived",
                 "named": [
-                  "SHH"
+                  "SHH",
+                  "LMBR1",
+                  "RNF32",
+                  "MNX1",
+                  "RBM33",
+                  "NOM1"
                 ],
                 "hit": true,
                 "among": true,
@@ -1157,14 +1193,16 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
+          "elements_scored": 2,
+          "runs": [
+            "enhancer_targets_all"
+          ],
           "targets": [],
           "target": null,
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -1209,13 +1247,33 @@
             27700000,
             28400000
           ],
-          "elements_scored": 0,
-          "naming_a_coding_gene": 0,
-          "genes": [],
-          "published_targets": [],
-          "target": null,
-          "rank_of_first_published_target": null,
-          "pending": "no already-scored element anywhere in the locus window",
+          "elements_scored": 140,
+          "naming_a_coding_gene": 68,
+          "genes": [
+            {
+              "gene": "OCA2",
+              "elements": 67,
+              "activating": 46,
+              "summed": 18.047
+            },
+            {
+              "gene": "HERC2",
+              "elements": 1,
+              "activating": 0,
+              "summed": 0.19
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "OCA2",
+              "elements": 67,
+              "activating": 46,
+              "summed": 18.047
+            }
+          ],
+          "target": "OCA2",
+          "rank_of_first_published_target": 1,
+          "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
         "constraint": {
@@ -1402,7 +1460,7 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -1418,11 +1476,14 @@
               },
               "gene_input": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no already-scored element anywhere in the locus window"
+                "named": [
+                  "OCA2",
+                  "HERC2"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "OCA2",
+                "pending": null
               },
               "node": {
                 "provenance": "heuristic",
@@ -1443,9 +1504,11 @@
                 "pending": null
               }
             },
-            "hit_derived": false,
-            "hit_derived_by": [],
-            "hit_derived_among": false,
+            "hit_derived": true,
+            "hit_derived_by": [
+              "gene_input"
+            ],
+            "hit_derived_among": true,
             "hit_heuristic": true,
             "hit_looked_up": false
           },
@@ -1555,7 +1618,7 @@
             "hit_derived_all": true
           }
         },
-        "target_hit_derived": false,
+        "target_hit_derived": true,
         "target_hit_heuristic": true,
         "target_hit_looked_up": false,
         "nearest_gene_trap": "HERC2",
@@ -1565,8 +1628,6 @@
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
-          "gene_input: no already-scored element anywhere in the locus window",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -1665,14 +1726,29 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
-          "targets": [],
-          "target": null,
-          "action": null,
-          "tissue": null,
-          "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "elements_scored": 1,
+          "runs": [
+            "loci_windows"
+          ],
+          "targets": [
+            {
+              "gene": "LCT",
+              "elements": 1,
+              "best": -0.3558,
+              "action": "activates",
+              "tissue": "hepatocyte"
+            }
+          ],
+          "target": "LCT",
+          "action": "activates",
+          "tissue": "hepatocyte",
+          "summed_by_cell": {
+            "HepG2": -0.1752,
+            "IMR-90": 0.0356,
+            "K562": -0.0075,
+            "GM12878": 0.0182
+          },
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -1723,13 +1799,51 @@
             135700000,
             136000000
           ],
-          "elements_scored": 0,
-          "naming_a_coding_gene": 0,
-          "genes": [],
-          "published_targets": [],
-          "target": null,
-          "rank_of_first_published_target": null,
-          "pending": "no already-scored element anywhere in the locus window",
+          "elements_scored": 106,
+          "naming_a_coding_gene": 46,
+          "genes": [
+            {
+              "gene": "LCT",
+              "elements": 30,
+              "activating": 15,
+              "summed": 12.646
+            },
+            {
+              "gene": "MCM6",
+              "elements": 5,
+              "activating": 3,
+              "summed": 1.983
+            },
+            {
+              "gene": "UBXN4",
+              "elements": 5,
+              "activating": 3,
+              "summed": 0.869
+            },
+            {
+              "gene": "DARS1",
+              "elements": 5,
+              "activating": 4,
+              "summed": 0.695
+            },
+            {
+              "gene": "R3HDM1",
+              "elements": 1,
+              "activating": 1,
+              "summed": 0.109
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "LCT",
+              "elements": 30,
+              "activating": 15,
+              "summed": 12.646
+            }
+          ],
+          "target": "LCT",
+          "rank_of_first_published_target": 1,
+          "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
         "constraint": {
@@ -1941,11 +2055,13 @@
             "by_layer": {
               "deletion": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "named": [
+                  "LCT"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "LCT",
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -1964,11 +2080,17 @@
               },
               "gene_input": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no already-scored element anywhere in the locus window"
+                "named": [
+                  "LCT",
+                  "MCM6",
+                  "UBXN4",
+                  "DARS1",
+                  "R3HDM1"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "LCT",
+                "pending": null
               },
               "node": {
                 "provenance": "heuristic",
@@ -1989,9 +2111,12 @@
                 "pending": null
               }
             },
-            "hit_derived": false,
-            "hit_derived_by": [],
-            "hit_derived_among": false,
+            "hit_derived": true,
+            "hit_derived_by": [
+              "deletion",
+              "gene_input"
+            ],
+            "hit_derived_among": true,
             "hit_heuristic": true,
             "hit_looked_up": false
           },
@@ -2011,8 +2136,8 @@
             "promoter_cells_open": null,
             "eqtl_tissues_for_target": [],
             "eqtl_hit": false,
-            "model_tissue": null,
-            "model_hit": null,
+            "model_tissue": "hepatocyte",
+            "model_hit": false,
             "hit_derived": false,
             "specific": null,
             "unreachable": null
@@ -2020,15 +2145,19 @@
           "direction": {
             "field": "direction",
             "expected": "activates",
-            "model_action": null,
-            "hit_derived": false,
-            "judged": false
+            "model_action": "activates",
+            "hit_derived": true,
+            "judged": true
           },
           "distance": {
             "field": "distance",
             "expected": 13900,
-            "measured": null,
-            "within_twofold": null,
+            "measured": {
+              "layer": "deletion",
+              "gene": "LCT",
+              "distance": 13893
+            },
+            "within_twofold": true,
             "node_distance": 13893
           },
           "variant": {
@@ -2100,18 +2229,16 @@
             "hit_derived_all": false
           }
         },
-        "target_hit_derived": false,
+        "target_hit_derived": true,
         "target_hit_heuristic": true,
         "target_hit_looked_up": false,
         "nearest_gene_trap": "MCM6",
         "heuristic_fell_in_trap": false,
         "cell_hit_derived": false,
-        "direction_hit_derived": false,
+        "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
-          "gene_input: no already-scored element anywhere in the locus window",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -2236,14 +2363,64 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
-          "targets": [],
-          "target": null,
-          "action": null,
-          "tissue": null,
-          "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "elements_scored": 18,
+          "runs": [
+            "loci_windows"
+          ],
+          "targets": [
+            {
+              "gene": "HBE1",
+              "elements": 10,
+              "best": -1.5935,
+              "action": "activates",
+              "tissue": "skeletal muscle tissue"
+            },
+            {
+              "gene": "ENSG00000284931",
+              "elements": 1,
+              "best": -1.1416,
+              "action": "activates",
+              "tissue": "placental pericyte"
+            },
+            {
+              "gene": "OR51B4",
+              "elements": 1,
+              "best": 0.5269,
+              "action": "represses",
+              "tissue": "liver"
+            },
+            {
+              "gene": "HBB",
+              "elements": 4,
+              "best": -0.331,
+              "action": "activates",
+              "tissue": "GM23248"
+            },
+            {
+              "gene": "HBD",
+              "elements": 1,
+              "best": -0.1772,
+              "action": "activates",
+              "tissue": "placenta"
+            },
+            {
+              "gene": "OR51B6",
+              "elements": 1,
+              "best": 0.1002,
+              "action": "represses",
+              "tissue": "K562"
+            }
+          ],
+          "target": "HBE1",
+          "action": "activates",
+          "tissue": "skeletal muscle tissue",
+          "summed_by_cell": {
+            "HepG2": -2.1426,
+            "IMR-90": -0.2962,
+            "K562": -0.9724,
+            "GM12878": -0.5322
+          },
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -2363,13 +2540,93 @@
             5200000,
             5320000
           ],
-          "elements_scored": 0,
-          "naming_a_coding_gene": 0,
-          "genes": [],
-          "published_targets": [],
-          "target": null,
-          "rank_of_first_published_target": null,
-          "pending": "no already-scored element anywhere in the locus window",
+          "elements_scored": 51,
+          "naming_a_coding_gene": 50,
+          "genes": [
+            {
+              "gene": "HBG2",
+              "elements": 5,
+              "activating": 3,
+              "summed": 6.639
+            },
+            {
+              "gene": "HBE1",
+              "elements": 10,
+              "activating": 7,
+              "summed": 4.618
+            },
+            {
+              "gene": "HBD",
+              "elements": 13,
+              "activating": 7,
+              "summed": 4.099
+            },
+            {
+              "gene": "HBB",
+              "elements": 8,
+              "activating": 4,
+              "summed": 3.756
+            },
+            {
+              "gene": "HBG1",
+              "elements": 8,
+              "activating": 3,
+              "summed": 3.618
+            },
+            {
+              "gene": "ENSG00000284931",
+              "elements": 3,
+              "activating": 3,
+              "summed": 1.693
+            },
+            {
+              "gene": "OR51B4",
+              "elements": 2,
+              "activating": 0,
+              "summed": 0.646
+            },
+            {
+              "gene": "OR51B6",
+              "elements": 1,
+              "activating": 0,
+              "summed": 0.1
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "HBG2",
+              "elements": 5,
+              "activating": 3,
+              "summed": 6.639
+            },
+            {
+              "gene": "HBE1",
+              "elements": 10,
+              "activating": 7,
+              "summed": 4.618
+            },
+            {
+              "gene": "HBD",
+              "elements": 13,
+              "activating": 7,
+              "summed": 4.099
+            },
+            {
+              "gene": "HBB",
+              "elements": 8,
+              "activating": 4,
+              "summed": 3.756
+            },
+            {
+              "gene": "HBG1",
+              "elements": 8,
+              "activating": 3,
+              "summed": 3.618
+            }
+          ],
+          "target": "HBG2",
+          "rank_of_first_published_target": 1,
+          "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
         "ladder": {
@@ -2642,11 +2899,18 @@
             "by_layer": {
               "deletion": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "named": [
+                  "HBE1",
+                  "ENSG00000284931",
+                  "OR51B4",
+                  "HBB",
+                  "HBD",
+                  "OR51B6"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "HBE1",
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -2665,11 +2929,18 @@
               },
               "gene_input": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no already-scored element anywhere in the locus window"
+                "named": [
+                  "HBG2",
+                  "HBE1",
+                  "HBD",
+                  "HBB",
+                  "HBG1",
+                  "ENSG00000284931"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "HBG2",
+                "pending": null
               },
               "node": {
                 "provenance": "heuristic",
@@ -2694,7 +2965,9 @@
             },
             "hit_derived": true,
             "hit_derived_by": [
-              "eqtl"
+              "deletion",
+              "eqtl",
+              "gene_input"
             ],
             "hit_derived_among": true,
             "hit_heuristic": true,
@@ -2727,8 +3000,8 @@
               "Muscle_Skeletal"
             ],
             "eqtl_hit": false,
-            "model_tissue": null,
-            "model_hit": null,
+            "model_tissue": "skeletal muscle tissue",
+            "model_hit": false,
             "hit_derived": true,
             "specific": 0.0,
             "unreachable": null
@@ -2736,17 +3009,17 @@
           "direction": {
             "field": "direction",
             "expected": "activates",
-            "model_action": null,
-            "hit_derived": false,
-            "judged": false
+            "model_action": "activates",
+            "hit_derived": true,
+            "judged": true
           },
           "distance": {
             "field": "distance",
             "expected": null,
             "measured": {
-              "layer": "eqtl",
-              "gene": "HBG2",
-              "distance": 27220
+              "layer": "deletion",
+              "gene": "HBE1",
+              "distance": 12056
             },
             "within_twofold": null,
             "node_distance": 12056
@@ -2810,12 +3083,10 @@
         "nearest_gene_trap": null,
         "heuristic_fell_in_trap": false,
         "cell_hit_derived": true,
-        "direction_hit_derived": false,
+        "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
-          "gene_input: no already-scored element anywhere in the locus window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
       }
@@ -3015,20 +3286,20 @@
             53600000,
             54400000
           ],
-          "elements_scored": 218,
-          "naming_a_coding_gene": 72,
+          "elements_scored": 335,
+          "naming_a_coding_gene": 124,
           "genes": [
             {
-              "gene": "FTO",
-              "elements": 44,
-              "activating": 18,
-              "summed": 5.965
+              "gene": "IRX3",
+              "elements": 68,
+              "activating": 38,
+              "summed": 15.881
             },
             {
-              "gene": "IRX3",
-              "elements": 19,
-              "activating": 9,
-              "summed": 4.665
+              "gene": "FTO",
+              "elements": 47,
+              "activating": 21,
+              "summed": 6.445
             },
             {
               "gene": "RPGRIP1L",
@@ -3040,13 +3311,13 @@
           "published_targets": [
             {
               "gene": "IRX3",
-              "elements": 19,
-              "activating": 9,
-              "summed": 4.665
+              "elements": 68,
+              "activating": 38,
+              "summed": 15.881
             }
           ],
           "target": "IRX3",
-          "rank_of_first_published_target": 2,
+          "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
@@ -3214,11 +3485,11 @@
               "gene_input": {
                 "provenance": "derived",
                 "named": [
-                  "FTO",
                   "IRX3",
+                  "FTO",
                   "RPGRIP1L"
                 ],
-                "hit": false,
+                "hit": true,
                 "among": true,
                 "first_hit": "IRX3",
                 "pending": null
@@ -3244,8 +3515,10 @@
                 "pending": null
               }
             },
-            "hit_derived": false,
-            "hit_derived_by": [],
+            "hit_derived": true,
+            "hit_derived_by": [
+              "gene_input"
+            ],
             "hit_derived_among": true,
             "hit_heuristic": false,
             "hit_looked_up": false
@@ -3369,7 +3642,7 @@
             "hit_derived_all": true
           }
         },
-        "target_hit_derived": false,
+        "target_hit_derived": true,
         "target_hit_heuristic": false,
         "target_hit_looked_up": false,
         "nearest_gene_trap": "FTO",
@@ -3485,14 +3758,36 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
-          "targets": [],
-          "target": null,
-          "action": null,
-          "tissue": null,
-          "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "elements_scored": 5,
+          "runs": [
+            "loci_windows"
+          ],
+          "targets": [
+            {
+              "gene": "BCL11A",
+              "elements": 2,
+              "best": -0.4659,
+              "action": "activates",
+              "tissue": "small intestine"
+            },
+            {
+              "gene": "ENSG00000233953",
+              "elements": 1,
+              "best": -0.4455,
+              "action": "activates",
+              "tissue": "naive B cell"
+            }
+          ],
+          "target": "BCL11A",
+          "action": "activates",
+          "tissue": "small intestine",
+          "summed_by_cell": {
+            "HepG2": -0.0617,
+            "IMR-90": -0.0878,
+            "K562": -0.0005,
+            "GM12878": 0.013
+          },
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -3602,22 +3897,28 @@
             60200000,
             60800000
           ],
-          "elements_scored": 7,
-          "naming_a_coding_gene": 3,
+          "elements_scored": 319,
+          "naming_a_coding_gene": 112,
           "genes": [
             {
               "gene": "BCL11A",
-              "elements": 3,
-              "activating": 2,
-              "summed": 0.853
+              "elements": 105,
+              "activating": 71,
+              "summed": 20.474
+            },
+            {
+              "gene": "PAPOLG",
+              "elements": 7,
+              "activating": 5,
+              "summed": 2.123
             }
           ],
           "published_targets": [
             {
               "gene": "BCL11A",
-              "elements": 3,
-              "activating": 2,
-              "summed": 0.853
+              "elements": 105,
+              "activating": 71,
+              "summed": 20.474
             }
           ],
           "target": "BCL11A",
@@ -3816,11 +4117,14 @@
             "by_layer": {
               "deletion": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "named": [
+                  "BCL11A",
+                  "ENSG00000233953"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "BCL11A",
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -3838,7 +4142,8 @@
               "gene_input": {
                 "provenance": "derived",
                 "named": [
-                  "BCL11A"
+                  "BCL11A",
+                  "PAPOLG"
                 ],
                 "hit": true,
                 "among": true,
@@ -3866,6 +4171,7 @@
             },
             "hit_derived": true,
             "hit_derived_by": [
+              "deletion",
               "gene_input"
             ],
             "hit_derived_among": true,
@@ -3888,8 +4194,8 @@
             "promoter_cells_open": null,
             "eqtl_tissues_for_target": [],
             "eqtl_hit": false,
-            "model_tissue": null,
-            "model_hit": null,
+            "model_tissue": "small intestine",
+            "model_hit": false,
             "hit_derived": false,
             "specific": null,
             "unreachable": null
@@ -3897,15 +4203,19 @@
           "direction": {
             "field": "direction",
             "expected": "activates",
-            "model_action": null,
-            "hit_derived": false,
-            "judged": false
+            "model_action": "activates",
+            "hit_derived": true,
+            "judged": true
           },
           "distance": {
             "field": "distance",
             "expected": 59000,
-            "measured": null,
-            "within_twofold": null,
+            "measured": {
+              "layer": "deletion",
+              "gene": "BCL11A",
+              "distance": 60653
+            },
+            "within_twofold": true,
             "node_distance": 60653
           },
           "variant": {
@@ -3983,11 +4293,10 @@
         "nearest_gene_trap": null,
         "heuristic_fell_in_trap": false,
         "cell_hit_derived": false,
-        "direction_hit_derived": false,
+        "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window"
         ]
       }
@@ -4082,14 +4391,29 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
-          "targets": [],
-          "target": null,
-          "action": null,
-          "tissue": null,
-          "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "elements_scored": 2,
+          "runs": [
+            "loci_windows"
+          ],
+          "targets": [
+            {
+              "gene": "POU5F1B",
+              "elements": 2,
+              "best": -0.5327,
+              "action": "activates",
+              "tissue": "esophagus mucosa"
+            }
+          ],
+          "target": "POU5F1B",
+          "action": "activates",
+          "tissue": "esophagus mucosa",
+          "summed_by_cell": {
+            "HepG2": -0.3976,
+            "IMR-90": -0.0271,
+            "K562": -0.1618,
+            "GM12878": -0.1574
+          },
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -4227,12 +4551,32 @@
             126800000,
             128200000
           ],
-          "elements_scored": 3,
-          "naming_a_coding_gene": 0,
-          "genes": [],
-          "published_targets": [],
-          "target": null,
-          "rank_of_first_published_target": null,
+          "elements_scored": 917,
+          "naming_a_coding_gene": 134,
+          "genes": [
+            {
+              "gene": "POU5F1B",
+              "elements": 103,
+              "activating": 60,
+              "summed": 19.28
+            },
+            {
+              "gene": "MYC",
+              "elements": 31,
+              "activating": 21,
+              "summed": 5.872
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "MYC",
+              "elements": 31,
+              "activating": 21,
+              "summed": 5.872
+            }
+          ],
+          "target": "MYC",
+          "rank_of_first_published_target": 2,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
@@ -4400,11 +4744,13 @@
             "by_layer": {
               "deletion": {
                 "provenance": "derived",
-                "named": [],
+                "named": [
+                  "POU5F1B"
+                ],
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -4419,10 +4765,13 @@
               },
               "gene_input": {
                 "provenance": "derived",
-                "named": [],
+                "named": [
+                  "POU5F1B",
+                  "MYC"
+                ],
                 "hit": false,
-                "among": false,
-                "first_hit": null,
+                "among": true,
+                "first_hit": "MYC",
                 "pending": null
               },
               "node": {
@@ -4444,7 +4793,7 @@
             },
             "hit_derived": false,
             "hit_derived_by": [],
-            "hit_derived_among": false,
+            "hit_derived_among": true,
             "hit_heuristic": false,
             "hit_looked_up": false
           },
@@ -4463,8 +4812,8 @@
             "promoter_cells_open": null,
             "eqtl_tissues_for_target": [],
             "eqtl_hit": false,
-            "model_tissue": null,
-            "model_hit": null,
+            "model_tissue": "esophagus mucosa",
+            "model_hit": false,
             "hit_derived": false,
             "specific": null,
             "unreachable": null
@@ -4578,7 +4927,6 @@
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window"
         ]
       }
@@ -4671,14 +5019,29 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
-          "targets": [],
-          "target": null,
-          "action": null,
-          "tissue": null,
-          "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "elements_scored": 4,
+          "runs": [
+            "loci_windows"
+          ],
+          "targets": [
+            {
+              "gene": "ABO",
+              "elements": 4,
+              "best": -0.5087,
+              "action": "activates",
+              "tissue": "peripheral blood mononuclear cell"
+            }
+          ],
+          "target": "ABO",
+          "action": "activates",
+          "tissue": "peripheral blood mononuclear cell",
+          "summed_by_cell": {
+            "HepG2": -0.078,
+            "IMR-90": 0.0018,
+            "K562": -0.311,
+            "GM12878": -0.1705
+          },
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -4729,13 +5092,33 @@
             133200000,
             133300000
           ],
-          "elements_scored": 0,
-          "naming_a_coding_gene": 0,
-          "genes": [],
-          "published_targets": [],
-          "target": null,
-          "rank_of_first_published_target": null,
-          "pending": "no already-scored element anywhere in the locus window",
+          "elements_scored": 57,
+          "naming_a_coding_gene": 50,
+          "genes": [
+            {
+              "gene": "ABO",
+              "elements": 33,
+              "activating": 20,
+              "summed": 14.54
+            },
+            {
+              "gene": "OBP2B",
+              "elements": 17,
+              "activating": 8,
+              "summed": 6.349
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "ABO",
+              "elements": 33,
+              "activating": 20,
+              "summed": 14.54
+            }
+          ],
+          "target": "ABO",
+          "rank_of_first_published_target": 1,
+          "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
         "coding": {
@@ -5050,11 +5433,13 @@
             "by_layer": {
               "deletion": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "named": [
+                  "ABO"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "ABO",
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -5073,11 +5458,14 @@
               },
               "gene_input": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no already-scored element anywhere in the locus window"
+                "named": [
+                  "ABO",
+                  "OBP2B"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "ABO",
+                "pending": null
               },
               "coding": {
                 "provenance": "derived",
@@ -5110,7 +5498,9 @@
             },
             "hit_derived": true,
             "hit_derived_by": [
-              "eqtl"
+              "deletion",
+              "eqtl",
+              "gene_input"
             ],
             "hit_derived_among": true,
             "hit_heuristic": true,
@@ -5139,8 +5529,8 @@
               "Brain_Caudate_basal_ganglia"
             ],
             "eqtl_hit": false,
-            "model_tissue": null,
-            "model_hit": null,
+            "model_tissue": "peripheral blood mononuclear cell",
+            "model_hit": false,
             "hit_derived": false,
             "specific": null,
             "unreachable": null
@@ -5148,7 +5538,7 @@
           "direction": {
             "field": "direction",
             "expected": "coding",
-            "model_action": null,
+            "model_action": "activates",
             "hit_derived": false,
             "judged": false
           },
@@ -5156,7 +5546,7 @@
             "field": "distance",
             "expected": 0,
             "measured": {
-              "layer": "eqtl",
+              "layer": "deletion",
               "gene": "ABO",
               "distance": 18718
             },
@@ -5253,8 +5643,6 @@
         "class_hit_derived": false,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
-          "gene_input: no already-scored element anywhere in the locus window",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -5374,14 +5762,29 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
-          "targets": [],
-          "target": null,
-          "action": null,
-          "tissue": null,
-          "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "elements_scored": 9,
+          "runs": [
+            "loci_windows"
+          ],
+          "targets": [
+            {
+              "gene": "HLA-DRB1",
+              "elements": 9,
+              "best": -1.0137,
+              "action": "activates",
+              "tissue": "PC-3"
+            }
+          ],
+          "target": "HLA-DRB1",
+          "action": "activates",
+          "tissue": "PC-3",
+          "summed_by_cell": {
+            "HepG2": -0.4204,
+            "IMR-90": -0.3456,
+            "K562": -0.1772,
+            "GM12878": -0.3464
+          },
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -5456,26 +5859,68 @@
             32400000,
             32800000
           ],
-          "elements_scored": 1,
-          "naming_a_coding_gene": 1,
+          "elements_scored": 113,
+          "naming_a_coding_gene": 78,
           "genes": [
             {
+              "gene": "HLA-DQB1",
+              "elements": 13,
+              "activating": 9,
+              "summed": 6.659
+            },
+            {
+              "gene": "HLA-DQA1",
+              "elements": 16,
+              "activating": 10,
+              "summed": 5.831
+            },
+            {
               "gene": "HLA-DRB1",
-              "elements": 1,
-              "activating": 1,
-              "summed": 0.107
+              "elements": 19,
+              "activating": 12,
+              "summed": 5.732
+            },
+            {
+              "gene": "HLA-DRA",
+              "elements": 7,
+              "activating": 4,
+              "summed": 5.491
+            },
+            {
+              "gene": "BTNL2",
+              "elements": 10,
+              "activating": 9,
+              "summed": 4.0
+            },
+            {
+              "gene": "HLA-DRB5",
+              "elements": 6,
+              "activating": 3,
+              "summed": 2.791
+            },
+            {
+              "gene": "HLA-DQB2",
+              "elements": 5,
+              "activating": 4,
+              "summed": 2.185
+            },
+            {
+              "gene": "HLA-DQA2",
+              "elements": 2,
+              "activating": 0,
+              "summed": 0.76
             }
           ],
           "published_targets": [
             {
               "gene": "HLA-DRB1",
-              "elements": 1,
-              "activating": 1,
-              "summed": 0.107
+              "elements": 19,
+              "activating": 12,
+              "summed": 5.732
             }
           ],
           "target": "HLA-DRB1",
-          "rank_of_first_published_target": 1,
+          "rank_of_first_published_target": 3,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
@@ -5682,11 +6127,13 @@
             "by_layer": {
               "deletion": {
                 "provenance": "derived",
-                "named": [],
-                "hit": false,
-                "among": false,
-                "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "named": [
+                  "HLA-DRB1"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "HLA-DRB1",
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -5706,9 +6153,14 @@
               "gene_input": {
                 "provenance": "derived",
                 "named": [
-                  "HLA-DRB1"
+                  "HLA-DQB1",
+                  "HLA-DQA1",
+                  "HLA-DRB1",
+                  "HLA-DRA",
+                  "BTNL2",
+                  "HLA-DRB5"
                 ],
-                "hit": true,
+                "hit": false,
                 "among": true,
                 "first_hit": "HLA-DRB1",
                 "pending": null
@@ -5744,7 +6196,7 @@
             },
             "hit_derived": true,
             "hit_derived_by": [
-              "gene_input"
+              "deletion"
             ],
             "hit_derived_among": true,
             "hit_heuristic": true,
@@ -5784,8 +6236,8 @@
               "Brain_Caudate_basal_ganglia"
             ],
             "eqtl_hit": false,
-            "model_tissue": null,
-            "model_hit": null,
+            "model_tissue": "PC-3",
+            "model_hit": false,
             "hit_derived": true,
             "specific": 0.1,
             "unreachable": null
@@ -5793,7 +6245,7 @@
           "direction": {
             "field": "direction",
             "expected": "coding",
-            "model_action": null,
+            "model_action": "activates",
             "hit_derived": false,
             "judged": false
           },
@@ -5801,7 +6253,7 @@
             "field": "distance",
             "expected": 0,
             "measured": {
-              "layer": "eqtl",
+              "layer": "deletion",
               "gene": "HLA-DRB1",
               "distance": 5973
             },
@@ -5858,7 +6310,6 @@
         "class_hit_derived": false,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -7189,31 +7640,63 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 2,
+          "elements_scored": 167,
           "runs": [
-            "constrained_targets",
-            "enhancer_targets"
+            "loci_windows"
           ],
           "targets": [
             {
-              "gene": "HOXD10",
-              "elements": 1,
-              "best": 0.213,
-              "action": "represses",
-              "tissue": "adrenal gland"
+              "gene": "HOXD1",
+              "elements": 20,
+              "best": -2.5611,
+              "action": "activates",
+              "tissue": "small intestine"
             },
             {
-              "gene": "HOXD3",
-              "elements": 1,
-              "best": -0.1453,
+              "gene": "HOXD9",
+              "elements": 11,
+              "best": -1.9569,
               "action": "activates",
-              "tissue": "lung"
+              "tissue": "spleen"
+            },
+            {
+              "gene": "HOXD11",
+              "elements": 12,
+              "best": -1.6474,
+              "action": "activates",
+              "tissue": "kidney"
+            },
+            {
+              "gene": "HOXD13",
+              "elements": 12,
+              "best": -1.4652,
+              "action": "activates",
+              "tissue": "H7"
+            },
+            {
+              "gene": "HOXD4",
+              "elements": 24,
+              "best": -1.1075,
+              "action": "activates",
+              "tissue": "ascending aorta"
+            },
+            {
+              "gene": "HOXD8",
+              "elements": 13,
+              "best": -1.0607,
+              "action": "activates",
+              "tissue": "stomach"
             }
           ],
-          "target": "HOXD10",
-          "action": "represses",
-          "tissue": "adrenal gland",
-          "summed_by_cell": null,
+          "target": "HOXD1",
+          "action": "activates",
+          "tissue": "small intestine",
+          "summed_by_cell": {
+            "HepG2": -8.433,
+            "IMR-90": -8.9049,
+            "K562": -6.8646,
+            "GM12878": -3.352
+          },
           "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
@@ -7388,50 +7871,116 @@
             175900000,
             176400000
           ],
-          "elements_scored": 7,
-          "naming_a_coding_gene": 5,
+          "elements_scored": 274,
+          "naming_a_coding_gene": 226,
           "genes": [
             {
+              "gene": "HOXD1",
+              "elements": 24,
+              "activating": 14,
+              "summed": 13.859
+            },
+            {
               "gene": "EVX2",
-              "elements": 2,
-              "activating": 2,
-              "summed": 0.374
+              "elements": 52,
+              "activating": 35,
+              "summed": 13.199
             },
             {
-              "gene": "HOXD10",
-              "elements": 1,
-              "activating": 0,
-              "summed": 0.213
+              "gene": "HOXD11",
+              "elements": 12,
+              "activating": 10,
+              "summed": 8.487
             },
             {
-              "gene": "LNPK",
-              "elements": 1,
-              "activating": 1,
-              "summed": 0.165
+              "gene": "HOXD13",
+              "elements": 14,
+              "activating": 10,
+              "summed": 7.948
+            },
+            {
+              "gene": "HOXD4",
+              "elements": 24,
+              "activating": 14,
+              "summed": 6.738
             },
             {
               "gene": "HOXD3",
-              "elements": 1,
-              "activating": 1,
-              "summed": 0.145
+              "elements": 26,
+              "activating": 16,
+              "summed": 6.534
+            },
+            {
+              "gene": "HOXD9",
+              "elements": 11,
+              "activating": 7,
+              "summed": 6.521
+            },
+            {
+              "gene": "HOXD10",
+              "elements": 21,
+              "activating": 9,
+              "summed": 5.284
             }
           ],
           "published_targets": [
             {
-              "gene": "HOXD10",
-              "elements": 1,
-              "activating": 0,
-              "summed": 0.213
+              "gene": "HOXD1",
+              "elements": 24,
+              "activating": 14,
+              "summed": 13.859
+            },
+            {
+              "gene": "HOXD11",
+              "elements": 12,
+              "activating": 10,
+              "summed": 8.487
+            },
+            {
+              "gene": "HOXD13",
+              "elements": 14,
+              "activating": 10,
+              "summed": 7.948
+            },
+            {
+              "gene": "HOXD4",
+              "elements": 24,
+              "activating": 14,
+              "summed": 6.738
             },
             {
               "gene": "HOXD3",
-              "elements": 1,
-              "activating": 1,
-              "summed": 0.145
+              "elements": 26,
+              "activating": 16,
+              "summed": 6.534
+            },
+            {
+              "gene": "HOXD9",
+              "elements": 11,
+              "activating": 7,
+              "summed": 6.521
+            },
+            {
+              "gene": "HOXD10",
+              "elements": 21,
+              "activating": 9,
+              "summed": 5.284
+            },
+            {
+              "gene": "HOXD8",
+              "elements": 13,
+              "activating": 7,
+              "summed": 4.753
+            },
+            {
+              "gene": "HOXD12",
+              "elements": 13,
+              "activating": 6,
+              "summed": 3.933
             }
           ],
-          "target": "HOXD10",
-          "rank_of_first_published_target": 2,
+          "target": "HOXD1",
+          "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
         },
@@ -7705,12 +8254,16 @@
               "deletion": {
                 "provenance": "derived",
                 "named": [
-                  "HOXD10",
-                  "HOXD3"
+                  "HOXD1",
+                  "HOXD9",
+                  "HOXD11",
+                  "HOXD13",
+                  "HOXD4",
+                  "HOXD8"
                 ],
                 "hit": true,
                 "among": true,
-                "first_hit": "HOXD10",
+                "first_hit": "HOXD1",
                 "pending": null
               },
               "eqtl": {
@@ -7731,14 +8284,16 @@
               "gene_input": {
                 "provenance": "derived",
                 "named": [
+                  "HOXD1",
                   "EVX2",
-                  "HOXD10",
-                  "LNPK",
+                  "HOXD11",
+                  "HOXD13",
+                  "HOXD4",
                   "HOXD3"
                 ],
-                "hit": false,
+                "hit": true,
                 "among": true,
-                "first_hit": "HOXD10",
+                "first_hit": "HOXD1",
                 "pending": null
               },
               "node": {
@@ -7769,7 +8324,8 @@
             },
             "hit_derived": true,
             "hit_derived_by": [
-              "deletion"
+              "deletion",
+              "gene_input"
             ],
             "hit_derived_among": true,
             "hit_heuristic": true,
@@ -7796,7 +8352,7 @@
               "Nerve_Tibial"
             ],
             "eqtl_hit": null,
-            "model_tissue": "adrenal gland",
+            "model_tissue": "small intestine",
             "model_hit": false,
             "hit_derived": false,
             "specific": null,
@@ -7805,8 +8361,8 @@
           "direction": {
             "field": "direction",
             "expected": "activates",
-            "model_action": "represses",
-            "hit_derived": false,
+            "model_action": "activates",
+            "hit_derived": true,
             "judged": true
           },
           "distance": {
@@ -7814,8 +8370,8 @@
             "expected": null,
             "measured": {
               "layer": "deletion",
-              "gene": "HOXD10",
-              "distance": 25030
+              "gene": "HOXD1",
+              "distance": 46860
             },
             "within_twofold": null,
             "node_distance": 9742
@@ -7886,7 +8442,7 @@
         "nearest_gene_trap": null,
         "heuristic_fell_in_trap": false,
         "cell_hit_derived": false,
-        "direction_hit_derived": false,
+        "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
@@ -8047,13 +8603,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "TNFAIP8L3",
-      "deletion_target": null,
+      "deletion_target": "TNFAIP8L3",
       "eqtl_target": "ENSG00000259204",
       "cells_open": [
         "IMR-90"
@@ -8128,13 +8684,13 @@
       "claims": {
         "target": true,
         "cell": false,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "C2CD4B",
-      "deletion_target": null,
+      "deletion_target": "C2CD4B",
       "eqtl_target": "C2CD4A",
       "cells_open": [],
       "registry_classes": [
@@ -9780,13 +10336,13 @@
     },
     "rs63750847": {
       "panel": 25897620,
-      "ensembl": 25897620,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1042522": {
       "panel": 7676154,
-      "ensembl": 7676154,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     }
   },
   "not_in_panel": {
@@ -9811,6 +10367,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 2868.2
+    "seconds": 349.7
   }
 }

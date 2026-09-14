@@ -716,6 +716,11 @@ def _deletion_rows(chrom: str, start: int, end: int, results_dir: Path) -> list[
 
     rows: list[dict[str, Any]] = []
     seen: set[str] = set()
+    # the panel's own deletions first (scripts/loci_score.py: the windows, not whole chromosomes)
+    for e in (load_result("loci_deletions", results_dir) or {}).get("elements", []):
+        if e.get("chrom") == chrom and e["start"] < end and e["end"] > start:
+            seen.add(e["id"])
+            rows.append({**e, "run": "loci_windows"})
     for name in RUNS:
         try:
             els = run_elements(name, chrom, results_dir)

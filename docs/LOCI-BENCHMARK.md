@@ -95,7 +95,12 @@ the storage loci and two background windows,
 so the agreement with the published domain sizes is descriptive; the matched
 negatives are what test the reading.
 
-## 5. The run (2026-09-14)
+## 5. The first run, before the quota was reallocated (2026-09-14)
+
+*Superseded by section 6 for the target and direction verdicts, and kept because the
+comparison is the argument for the reallocation: this is what the panel said when only
+four of twelve loci sat on a chromosome the sweep had reached. The negative-control rates,
+the storage results and the two ordered loci are unchanged by it.*
 
 12 loci, 60 matched negatives, no AlphaGenome request, 21 to 48 minutes
 depending on the network. GTEx's
@@ -190,7 +195,7 @@ the honest answer to the question the locus was added for.
 
 | locus | what is missing | cost to fix |
 |---|---|---|
-| HERC2_OCA2, MCM6_LCT, FTO_IRX3, MYC_8q24, BCL11A, ABO, HLA_DRB1, HBB_LCR | no AlphaGenome deletion has been scored on chr15, chr2, chr16, chr8, chr9, chr6 or chr11 | the sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1; about 0.76 requests per element |
+| ~~HERC2_OCA2, MCM6_LCT, FTO_IRX3, MYC_8q24, BCL11A, ABO, HLA_DRB1, HBB_LCR~~ | no AlphaGenome deletion had been scored on their chromosomes | **fixed** in section 6: 2,283 requests over the windows alone |
 | SHH_ZRS, MCM6_LCT, FTO_IRX3, HOXD | the published cell type (limb bud, intestinal epithelium, adipocyte precursor) is not among the eleven reader cell types | ENCODE DNase for the tissue, or an embryonic panel |
 | HBB_LCR | developmental stage: the fetal-to-adult switch | no layer carries time |
 | every storage locus | two values against a few: the density of common positions cannot separate them | haplotype value domains (the HPRC panel, genomeos-h1) |
@@ -242,7 +247,78 @@ human-constrained on the Gnocchi axis. A value slot can be old syntax with a
 variable base or a recent change on free sequence, and only reading both axes
 tells them apart.
 
-## 6. Lessons the run produced
+## 6. The quota spent on the windows instead of the chromosomes (2026-09-14)
+
+The chromosome sweep costs about 770 hours of model time genome-wide and buys
++0.07 AUC on direction; eight of the twelve loci were blocked only because their
+chromosomes held no deletion data. genomeos-9c reallocated the quota, and
+`scripts/loci_score.py` spent it on the panel's windows alone: the same scorer,
+the same per-element cache, no whole-chromosome job, so the sweep finds these
+answers when it resumes. Elements over the published element go first, then the
+rest of the window, smallest window first.
+
+| locus | chromosome | elements | requests | minutes |
+|---|---|---|---|---|
+| ABO | chr9 | 57 | 57 | 0.1 |
+| HBB_LCR | chr11 | 51 | 51 | 0.1 |
+| MCM6_LCT | chr2 | 106 | 106 | 0.2 |
+| HLA_DRB1 | chr6 | 113 | 113 | 0.2 |
+| HOXD | chr2 | 273 | 284 | 1.6 |
+| BCL11A_enhancer | chr2 | 318 | 318 | 0.4 |
+| SHH_ZRS | chr7 | 405 | 421 | 1.8 |
+| MYC_8q24 | chr8 | 917 | 933 | 2.4 |
+| HERC2_OCA2, FTO_IRX3, TP53, APP | chr15, chr16, chr17, chr21 | 739 | 0 | 0 | 
+| **total** | | **2,979** | **2,283** | **8.4** |
+
+2,283 requests, 43 quota waits, eight and a half minutes, at 16 requests in
+flight. Four loci needed nothing because the sweep had finished their
+chromosomes. The requests exceed the elements by the retries a quota answer
+costs. For comparison, one chromosome of the sweep is 12,000 to 31,000 elements.
+
+### What moved
+
+| field | before (4 loci with deletion data) | after (12) |
+|---|---|---|
+| right target, derived | 8/12 | **11/12** |
+| right target, nearest TSS in node | 8/12 | 8/12 |
+| right target, annotation lookup | 6/12 | 6/12 |
+| chance floor (random gene in the window) | 5.5/12 | 5.5/12 |
+| direction, where a deletion names the target | 0/1 judged | **4/4 judged** |
+| right cell or tissue | 4/10 judged | 4/10 judged |
+| a published class read | 10/12 | 10/12 |
+
+Every locus that moved moved the right way, and the derived rate now clears both
+the heuristic and the chance floor. The direction of effect went from untestable
+to right everywhere it could be judged: the lactase enhancer, the globin locus
+control region, the BCL11A enhancer and HOXD are all called activating, as
+published. Distances land where they should: LCT 13.9 kb against 13.9 published,
+BCL11A 60.7 against 59, IRX3 519.7 kb against 520.
+
+**The negative controls did not move, and that is still the headline.** With
+element-level deletions now at 10 of the 60 matched windows as well, a derived
+layer names *some* target at 52 of 60 (87%) against 11 of 12 loci (92%). What
+separates the panel from its controls is which gene, and the direction: 8 of 12
+loci produce one against 8 of 60 windows (13%).
+
+### The two element-level failures, with the data in hand
+
+- **The ZRS still names LMBR1.** Its own deletion, scored fresh, moves LMBR1 -
+  the gene it sits inside - and calls it repressive in heart tissue. SHH, 979 kb
+  away, is named only when every element of the window is summed, where it comes
+  first. A 1 Mb reach is not something the element-level reading recovers, and
+  this is the clearest statement of that the project has.
+- **MYC's 8q24 enhancer names POU5F1B**, with MYC second in the window's summed
+  input and the eQTLs naming CASC8 first. It is the one target miss left.
+
+Two element-level misses of the ten loci where an element was scored; the count
+is pinned in the CI gate, so a third is a regression.
+
+At HERC2/OCA2 and FTO/IRX3 the new data changed a strict miss into a strict hit
+the same way: the summed window input ranks OCA2 above HERC2, and IRX3 above
+FTO, where the eQTL layer had ranked the neighbour first. The nearest-gene trap
+at FTO is escaped by the model and not by the heuristic, which still answers FTO.
+
+## 7. Lessons the runs produced
 
 - **Name a target and you have said nothing**: 87% of matched negative windows
   get one. Only the identity of the gene, a direction, or a value on syntax
@@ -266,6 +342,9 @@ tells them apart.
   session is the whole difference. Public range reads time out now and then;
   one chr2 timeout silently emptied three loci's syntax reading, the gate test
   caught it, and the reads now retry three times.
+- **Score the windows, not the chromosomes.** Twelve loci needed 2,283 requests and eight
+  minutes; the same answers by sweeping their eight chromosomes would have been about
+  160,000 elements. When a question names its loci, the shape of the job is the loci.
 - **A named target needs a floor.** Against a chance expectation of 5.5 of 12,
   8 of 12 is not a result. Any rate quoted for a target-naming layer should come
   with the number of genes it could have chosen from.
