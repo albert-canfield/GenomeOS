@@ -1153,6 +1153,51 @@ def cmd_cancer(args: argparse.Namespace) -> int:
     if not k:
         print("no distilled cancer knowledge yet: run `genomeos cancer distil` (cBioPortal, ~30 s)")
         return 1
+    if args.cancer_cmd == "libraries":
+        from genomeos.cancer.libraries import breaks_in, summary
+
+        if args.gene:
+            b = breaks_in(args.gene)
+            if not b["available"]:
+                print(b["reason"])
+                return 1
+            print(f"{b['gene']}: {b['study']}, {b['samples']:,} tumours")
+            print(f"  {b['note']}")
+            print("  libraries: " + (", ".join(b["libraries"]) or "none at the membership threshold"))
+            for w in b["breaks"]:
+                types = ", ".join(f"{t} {f:.1%}" for t, f in list(w["by_cancer_type"].items())[:4])
+                print(
+                    f"  {w['kind']:<15} {w['frequency']:.2%}"
+                    + ("  member" if w["member"] else "  below threshold")
+                    + (f"  [{types}]" if types else "")
+                )
+                if w.get("recurrent_changes"):
+                    print("      changes: " + ", ".join(f"{c} x{n}" for c, n in w["recurrent_changes"]))
+                if w.get("partners"):
+                    print("      partners: " + ", ".join(f"{c} x{n}" for c, n in w["partners"]))
+            return 0
+        s_ = summary()
+        if not s_["samples"]:
+            print("no distilled cancer knowledge yet: run `genomeos cancer distil` and `cancer alterations`")
+            return 1
+        print(f"cancer.* library layer: {s_['study']}, {s_['samples']:,} tumours, {s_['panel']} genes")
+        print(
+            _table(
+                [
+                    {
+                        "library": lid,
+                        "genes": v["members"],
+                        "at or above": f"{v['threshold']:.1%}",
+                        "largest members": ", ".join(list(v["top"])[:6]),
+                    }
+                    for lid, v in s_["libraries"].items()
+                ],
+                ["library", "genes", "at or above", "largest members"],
+            )
+        )
+        for limit in s_["limits"]:
+            print(f"  limit: {limit}")
+        return 0
     if args.cancer_cmd == "genes":
         rows = sorted(k["genes"].items(), key=lambda kv: -kv[1]["frequency"])[: args.top]
         print(f"{k['study']}: {k['samples']:,} tumours, {len(k['genes'])} driver genes")
@@ -4804,6 +4849,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="copy-number calls to count; ALL adds shallow gains and losses where a study makes them",
     )
     p.add_argument("--top", type=int, default=20, help="rows to print")
+    p = can.add_parser(
+        "libraries",
+        help="the cancer.* library layer: which genes break, how, and in which cancers",
+    )
+    p.add_argument("--gene", help="one gene: every way the study records it breaking")
     p = can.add_parser("genes", help="most frequently mutated driver genes")
     p.add_argument("--top", type=int, default=25)
     p = can.add_parser("gene", help="one gene: frequency, hotspots, cancer types")

@@ -155,11 +155,56 @@ that has to recognise a product fails on it with that sentence. What such a
 finding is worth is the dependency the loss creates, which GenomeOS does not
 yet model.
 
+## The `cancer.*` library layer
+
+The BioLib catalogue names the toolkits a healthy genome uses. This layer
+names the ones a tumour breaks, and it is the only one whose membership is a
+frequency rather than a function: a gene is in `cancer.amplified` because
+tumours amplify it, not because of what its product does. Membership is
+computed from the two committed tables and never written down
+(`genomeos/cancer/libraries.py`, `genomeos cancer libraries`), so a library
+cannot drift from its evidence and every member carries the number that put
+it there.
+
+| library | genes | at or above | largest members |
+|---|---|---|---|
+| `cancer.mutated` | 87 | 1% | TP53, KRAS, TERT, PIK3CA, APC |
+| `cancer.hotspots` | 8 | 1% | TERT, KRAS, PIK3CA, BRAF, TP53 |
+| `cancer.amplified` | 12 | 1% | CCND1, MYC, ERBB2, EGFR, CDK4 |
+| `cancer.deleted` | 3 | 1% | CDKN2A, PTEN, RB1 |
+| `cancer.rearranged` | 25 | 0.1% | EGFR, ALK, BRAF, ROS1, FGFR2 |
+
+`genomeos cancer libraries --gene CDKN2A` gives the question the layer exists
+for — every way the study records one gene breaking, with the cancer types
+that carry it:
+
+```
+deep_deletion  7.62%  member  [Glioma 32.6%, GIST 21.2%, Melanoma 18.4%]
+mutation       4.31%  member  [Skin, non-melanoma 20.3%, Melanoma 14.2%]
+hotspot        0.38%  below threshold; changes R80* x42, R58* x34, H83Y x32
+fusion         0.23%  member  partners CDKN2B-AS1 x8, MIR548H2 x2, MTAP x2
+```
+
+Three things the layer refuses to say. A hotspot gets no per-cancer-type
+breakdown, because the distillation counts recurrent changes study-wide and
+printing the gene's *mutation* distribution beside a hotspot frequency would
+read as the hotspot's. A gene off the panel is reported as never looked at
+rather than as unbroken: `breaks_in("CD19")` answers `on_panel: false` and
+says that silence is not evidence of a healthy gene. And membership means a
+gene is selected, not that it drives, and certainly not that it can be
+treated.
+
+The layer does not join the shared `LIBRARIES` catalogue on import —
+`genomeos/lib` is another area's file and a layer appearing there as a side
+effect of importing `genomeos.cancer` would be a surprise. `register(LIBRARIES,
+LAYERS)` wires it in one call, whenever that area wants it.
+
 ## Next
 
 - Expression: tumour-versus-normal RNA to find surface proteins that are
   over-expressed rather than mutated, the more common target class. The
   therapeutic pipeline already accepts patient RNA (`--rna`); what is missing is
   a cohort reference to compare it against.
-- Add the distilled driver table as a library layer (`cancer.*`) with
-  evidence, so the libraries know which genes break in which cancers.
+- What a deep deletion is actually worth: the dependency the loss creates
+  (MTAP with CDKN2A is in the fusion partners above), which nothing here
+  models.

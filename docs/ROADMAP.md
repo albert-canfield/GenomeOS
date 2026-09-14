@@ -1111,13 +1111,32 @@ in order. "Owner" is the session that holds the files today (see §7).
   rank 1, direct surface, blocking antibody 0.521. A case whose driver is
   only a copy-number or structural call belongs in the benchmark;
   genomeos-f7 owns it.
-- **Missing.** A `cancer.*` library layer; expression-driven targets such as CD19 and BCMA, which need patient
+- **The `cancer.*` library layer, done (2026-09-15).** Five libraries whose
+  membership is computed from the two committed tables rather than written
+  down (`cancer/libraries.py`, `genomeos cancer libraries`): `cancer.mutated`
+  87 genes, `cancer.hotspots` 8, `cancer.amplified` 12, `cancer.deleted` 3,
+  `cancer.rearranged` 25, each member carrying the frequency that put it
+  there. `--gene CDKN2A` answers the question the layer exists for: deleted in
+  7.6% of tumours and 32.6% of gliomas, mutated in 4.3% with truncating
+  hotspots R80* and R58*, rearranged in 0.23% with MTAP among the partners.
+  Three refusals. A hotspot gets no per-cancer-type breakdown, because the
+  distillation counts recurrent changes study-wide and printing the gene's
+  *mutation* distribution beside a hotspot frequency would read as the
+  hotspot's. A gene off the panel is reported as never looked at, not as
+  unbroken: `breaks_in("CD19")` says so in the sentence. And membership means
+  selected, not driving, and not treatable. The layer does not join the shared
+  `LIBRARIES` catalogue on import, since `genomeos/lib` is area C's file;
+  `register(LIBRARIES, LAYERS)` wires it in one call whenever that area wants
+  it, and a test asserts that importing `genomeos.cancer` mutates nothing.
+- **Missing.** Expression-driven targets such as CD19 and BCMA, which need patient
   RNA rather than a variant; the demo runs at data level 1 only; what a deep
   deletion is actually worth (the dependency it creates) is not modelled.
-- **Next.** 1. `cancer.*` libraries with driver evidence. 2. A
-  `NeoantigenProvider` behind a licence-checked optional extra. 3. A benchmark
-  case whose driver is a copy-number or structural call, and lowering the
-  pinned defect count from 2 to 0; genomeos-f7 owns both.
+- **Next.** 1. A cohort expression reference, so expression-driven targets
+  (CD19, BCMA) are reachable from patient RNA. 2. A `NeoantigenProvider`
+  behind a licence-checked optional extra. 3. A benchmark case whose driver is
+  a copy-number or structural call, and lowering the pinned defect count from
+  2 to 0; genomeos-f7 owns both. 4. What a deep deletion is worth: the
+  dependency the loss creates, which nothing models.
 - **Owner.** genomeos-f2 since 2026-09-14; genomeos-f7 takes the benchmark.
 
 ### G. Product: web UI, CLI, packaging, CI
