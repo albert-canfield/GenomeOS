@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr16",
+  "date": "2026-09-14",
+  "chrom": "chr16",
+  "elements_total": 32314,
+  "scored": 32314,
+  "requests_this_run": 33210,
+  "workers": 16,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 32314,
+    "with_predicted_target": 20803,
+    "fraction_with_target": 0.644,
+    "strong": 6461,
+    "weak": 14342,
+    "silencer_like": 7720,
+    "verdicts": {
+      "no predicted effect": 11511,
+      "another gene in the same domain": 10469,
+      "agrees with nearest TSS in domain": 6258,
+      "gene outside the domain": 4076
+    },
+    "verdicts_coding": {
+      "no predicted effect": 17515,
+      "agrees with nearest TSS in domain": 9073,
+      "another gene in the same domain": 3017,
+      "gene outside the domain": 2709
+    },
+    "coding_target_agrees_with_nearest": 0.613,
+    "fraction_agreeing_with_nearest": 0.301,
+    "fraction_inside_domain": 0.804,
+    "top_tissues": {
+      "K562": 748,
+      "CD14-positive monocyte": 691,
+      "placenta": 689,
+      "HepG2": 483,
+      "Purkinje cell": 461,
+      "Whole_Blood": 422,
+      "psoas muscle": 420,
+      "testis": 392,
+      "GM23338": 365,
+      "small intestine": 345,
+      "left lobe of liver": 339,
+      "kidney": 328
+    },
+    "median_distance_when_agreeing": 7894
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr16.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}
