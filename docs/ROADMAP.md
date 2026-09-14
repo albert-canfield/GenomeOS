@@ -1576,7 +1576,7 @@ in order. "Owner" is the session that holds the files today (see §7).
     against 47.6%; 58% of callable genes are core against 8% of neutral blocks and 14% of
     length-, GC- and timing-matched control windows. Not "overwhelmingly": 64 of 153 callable
     genes are variable, because synonymous variation is real.
-  - **Replication timing survives the control.** Late DNA carries 1.3 to 1.6 times the
+  - **Replication timing survives the control.** Late DNA carries up to 1.5 times the
     background rate within a GC stratum, but 82% of the coding-against-neutral gap and 98% of
     the coding units' excess of fixed windows survive matching on timing, and unit classes are
     spread evenly over timing tertiles. What is late is what cannot be placed (74% of unplaced
@@ -1612,6 +1612,23 @@ in order. "Owner" is the session that holds the files today (see §7).
     regional calibration and candidate stage, which is what to fix before a genome run.
     ATTRIBUTION.md "Many human genomes"; the source row in GRAMMAR-BY-COMPARISON.md is now
     read rather than pending.
+  - **Slow stage fixed, chr22 replicates (2026-09-14).** The 8.5 hours were TLS handshakes,
+    one per range request (0.5 s quiet, 4 to 17 s on UCSC's loaded host), not analysis (0.1 s
+    per locus). Kept-alive connections with a mirror fallback, readers opened once, and local
+    Repli-seq copies bring chr21's whole run from 31,099 s to 1,392 s with every committed
+    number identical; calibration is 91 s, the 69 candidates 2 s, and gnomAD transfer is what
+    remains. chr22 (`human_panel_chr22`) reproduces the headline results. Coding exons read
+    0.423 of the matched rate (chr21 0.411); 71% of the coding-neutral gap survives timing
+    (82%); half of all units hold a recurring alternative; no unknown tier is more fixed than
+    matched background, and chr22's blocks are core less often than matched windows in every
+    tier. The two human axes barely agree (Spearman -0.02) and counts are 26-fold
+    overdispersed. Three things do not replicate: on chr22 variable units lean late (37%
+    against 31%), Gnocchi's constrained kilobases are not strongly early, and core blocks agree
+    with Gnocchi at block scale (45% against 28%). chr22's 10 non-copy constrained-unknown
+    blocks are all variable against their flanks; its syntax candidate chr22:38,571,213 is the
+    most depleted (ratio 0.38, tail 0.0101). The view passed to area J: trust Gnocchi for
+    constraint among people, phyloP per base, and the panel for structure, alleles and value
+    domains, pooled or against matched windows only. ATTRIBUTION.md "replicated on chr22".
 - **The lexicon re-asked at base resolution, chr21 and chr22 (2026-09-14, genomeos-i1).**
   - **What changed.** `attribution/lexicon_axes.py` (`scripts/lexicon_axes.py`,
     `lexicon_axes_chr21`, `lexicon_axes_chr22`, no model call) replaces all three soft
@@ -1681,8 +1698,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   gene level ran once (above) and returns after step 1. 6. Simpler genomes as
   the comparison, C. elegans first, then Drosophila enhancers, fugu as the
   compact vertebrate, mouse for transfer. 7. The human panel's next step
-  (genomeos-h1): profile and fix the regional stage that cost eight of the
-  chr21 run's 8.6 hours, then either the executor test on the 1,053
+  (genomeos-h1): the regional stage is fixed and chr22 replicates (above); next either the executor test on the 1,053
   early-replicating storage units with an eQTL or an MPRA allele pair (allele-dependent
   read-out, which needs GTEx by allele or in-silico swaps and so waits on quota), or the
   882 non-copy constrained-unknown blocks and their flanks read across the panel on the

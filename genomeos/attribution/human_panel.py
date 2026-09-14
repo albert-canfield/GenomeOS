@@ -130,7 +130,11 @@ def assembly_of(src: str) -> str:
 # Range requests over kept-alive connections
 # ================================================================================================
 REQUEST_TIMEOUT = 60  # seconds a single range request may take before it is retried
-REQUEST_RETRIES = 4
+REQUEST_RETRIES = 6
+MIRRORS = {
+    "hgdownload.soe.ucsc.edu": "hgdownload2.soe.ucsc.edu",
+    "hgdownload2.soe.ucsc.edu": "hgdownload.soe.ucsc.edu",
+}
 _POOL = threading.local()
 
 
@@ -138,8 +142,12 @@ class KeepAliveSource:
     """Random access to a URL by (offset, size) over one persistent HTTPS connection per host and thread.
 
     The standard reader (`bigwig._Source`) opens a new TLS connection for every range; profiling the
-    chr21 run showed each connection costing 0.5 s on a quiet link and 5 s on a busy one, and a
-    regional read issues hundreds. Same interface: `read`, `requests`, `bytes_fetched`, `close`.
+    chr21 run showed each handshake costing 0.5 s on a quiet link and 4 to 17 s when UCSC's download
+    host is loaded, and a regional read issues hundreds. A failed request is retried with backoff,
+    alternating with UCSC's second download host, which serves the same files (sizes checked on
+    2026-09-14); every response's total size must equal the first one seen, so a mirror that differs
+    raises instead of mixing files. Same interface as `_Source`: `read`, `requests`,
+    `bytes_fetched`, `close`.
     """
 
     remote = True
@@ -152,47 +160,61 @@ class KeepAliveSource:
         self.requests = 0
         self.bytes_fetched = 0
         self.connections = 0
+        self.mirror_requests = 0
+        self.total: int | None = None
 
-    def _conn(self, fresh: bool = False) -> http.client.HTTPConnection:
+    def _conn(self, host: str | None = None, fresh: bool = False) -> http.client.HTTPConnection:
+        host = host or self.host
         pool = getattr(_POOL, "conns", None)
         if pool is None:
             pool = _POOL.conns = {}
-        key = (self.scheme, self.host)
+        key = (self.scheme, host)
         conn = pool.get(key)
         if conn is None or fresh:
             if conn is not None:
                 conn.close()
             cls = http.client.HTTPSConnection if self.scheme == "https" else http.client.HTTPConnection
-            conn = pool[key] = cls(self.host, timeout=self.timeout)
+            conn = pool[key] = cls(host, timeout=self.timeout)
             self.connections += 1
         return conn
 
-    def get(self, headers: dict[str, str]) -> tuple[int, bytes]:
-        delay = 1.0
+    def get(
+        self, headers: dict[str, str], method: str = "GET"
+    ) -> tuple[int, bytes, http.client.HTTPResponse]:
+        delay = 2.0
         for attempt in range(self.retries):
+            host = self.host if attempt % 2 == 0 or self.host not in MIRRORS else MIRRORS[self.host]
             try:
-                conn = self._conn(fresh=attempt > 0)
-                conn.request("GET", self.path, headers={"User-Agent": USER_AGENT, **headers})
+                conn = self._conn(host, fresh=attempt > 0)
+                conn.request(method, self.path, headers={"User-Agent": USER_AGENT, **headers})
                 r = conn.getresponse()
                 data = r.read()
                 if r.status >= 500:
                     raise OSError(f"server error {r.status}")
-                return r.status, data
+                if host != self.host:
+                    self.mirror_requests += 1
+                return r.status, data, r
             except (OSError, http.client.HTTPException):
                 if attempt == self.retries - 1:
                     raise
                 time.sleep(delay)
-                delay *= 2
+                delay = min(delay * 2, 30.0)
         raise OSError("unreachable")  # pragma: no cover
 
     def read(self, offset: int, size: int) -> bytes:
         self.requests += 1
         self.bytes_fetched += size
-        status, data = self.get({"Range": f"bytes={offset}-{offset + size - 1}"})
+        status, data, r = self.get({"Range": f"bytes={offset}-{offset + size - 1}"})
         if status == 200 and len(data) > size:
             raise OSError("server ignored the range request")
         if status not in (200, 206):
             raise OSError(f"range request failed ({status})")
+        total = r.headers.get("Content-Range", "").rpartition("/")[2]
+        if total.isdigit():
+            if self.total is None:
+                self.total = int(total)
+            elif int(total) != self.total:
+                raise OSError(f"{self.path}: hosts disagree on the file size ({total} against {self.total})")
         return data
 
     def close(self) -> None:
@@ -431,23 +453,14 @@ def _list_chromosomes() -> dict[str, int]:
         return {k: int(v) for k, v in json.load(r)["chromosomes"].items()}
 
 
-def remote_size(url: str, retries: int = REQUEST_RETRIES) -> int:
-    """The file's length from a HEAD request, retried over a fresh connection when the link stalls."""
+def remote_size(url: str) -> int:
+    """The file's length from a one-byte range request, retried as every range read is."""
     src = KeepAliveSource(url)
-    delay = 2.0
-    for attempt in range(retries):
-        try:
-            conn = src._conn(fresh=attempt > 0)
-            conn.request("HEAD", src.path, headers={"User-Agent": USER_AGENT})
-            r = conn.getresponse()
-            r.read()
-            return int(r.headers["Content-Length"])
-        except (OSError, http.client.HTTPException, TypeError):
-            if attempt == retries - 1:
-                raise
-            time.sleep(delay)
-            delay *= 2
-    raise OSError("unreachable")  # pragma: no cover
+    status, _, r = src.get({"Range": "bytes=0-0"})
+    total = r.headers.get("Content-Range", "").rpartition("/")[2]
+    if status == 206 and total.isdigit():
+        return int(total)
+    return int(r.headers["Content-Length"])
 
 
 def byte_runs(
@@ -645,6 +658,39 @@ class Panel:
 # bigBed over HTTP ranges
 # ================================================================================================
 BIGBED_MAGIC = 0x8789F2EB
+
+
+class RangeBigWig(BigWig):
+    """The bigWig reader over kept-alive connections (see KeepAliveSource)."""
+
+    def __init__(self, source: str | Path):  # noqa: D107
+        self.src = open_source(source)
+        h = self.src.read(0, 64)
+        magic, version, zoom, ct, fd, fi, _fc, _dfc, _asql, _ts, ubs, _res = struct.unpack("<IHHQQQHHQQIQ", h)
+        if magic != 0x888FFC26:
+            raise ValueError(f"not a little-endian bigWig: magic {magic:#x}")
+        self.header = Header(version, zoom, ct, fd, fi, ubs)
+        self.chroms: dict[str, tuple[int, int]] = {}
+        self._read_chrom_tree()
+        (_m, self._rtree_block_size, _n, _sc, _sb, _ec, _eb, _eo, self._items_per_slot, _r) = struct.unpack(
+            "<IIQIIIIQII", self.src.read(fi, 48)
+        )
+        self._node_cache: dict[int, bytes] = {}
+
+
+def gnocchi_ranges(chrom: str, intervals: list[tuple[int, int]]) -> tuple[list, dict]:
+    """Gnocchi summaries as variation.gnocchi_over gives them, over kept-alive connections."""
+    from genomeos.attribution.variation import GNOCCHI_THRESHOLD, GNOCCHI_URL
+
+    bw = RangeBigWig(GNOCCHI_URL)
+    t0 = time.time()
+    stats = bw.summarise(chrom, intervals, GNOCCHI_THRESHOLD)
+    cost = {
+        "requests": bw.src.requests,
+        "mb_fetched": round(bw.src.bytes_fetched / 1e6, 2),
+        "seconds": round(time.time() - t0, 1),
+    }
+    return stats, cost
 
 
 class BigBed(BigWig):
@@ -1370,7 +1416,7 @@ def repli_local(cell: str, cache: Path = CACHE) -> Path:
     d.mkdir(parents=True, exist_ok=True)
     p = d / Path(urllib.parse.urlsplit(repli_url(cell)).path).name
     if not p.exists():
-        status, data = KeepAliveSource(repli_url(cell), timeout=300).get({})
+        status, data, _ = KeepAliveSource(repli_url(cell), timeout=300).get({})
         if status != 200:
             raise OSError(f"Repli-seq download failed ({status})")
         tmp = p.with_suffix(".part")
@@ -2348,7 +2394,7 @@ DEPLETED_P = 0.05  # a kilobase is depleted of recurring variation when its Pois
 
 
 def against_gnocchi(result: dict[str, Any], chrom: str, results_dir: Path | None = None) -> dict[str, Any]:
-    from genomeos.attribution.variation import GNOCCHI_THRESHOLD, gnocchi_over
+    from genomeos.attribution.variation import GNOCCHI_THRESHOLD
     from genomeos.results import RESULTS_DIR
 
     results_dir = results_dir or RESULTS_DIR
@@ -2364,7 +2410,7 @@ def against_gnocchi(result: dict[str, Any], chrom: str, results_dir: Path | None
     d_starts = [s for s, _ in dups]
     d_ends = [e for _, e in dups]
     bins = sorted(b for b, row in bg_rt.bins.items() if row[0] >= 0.9 * BACKGROUND_BIN and row[2] is not None)
-    stats, cost = gnocchi_over(chrom, [(b * BACKGROUND_BIN, (b + 1) * BACKGROUND_BIN) for b in bins])
+    stats, cost = gnocchi_ranges(chrom, [(b * BACKGROUND_BIN, (b + 1) * BACKGROUND_BIN) for b in bins])
     rows = []
     for b, st in zip(bins, stats, strict=True):
         s, e = b * BACKGROUND_BIN, (b + 1) * BACKGROUND_BIN

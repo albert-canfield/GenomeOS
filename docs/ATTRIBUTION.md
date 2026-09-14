@@ -996,9 +996,10 @@ fixed than matched windows, the neutral tier matches them, and the constrained_u
 four core blocks include the two copies at 13.76 Mb (100% segmental duplication, where the
 alignment is paralogous) among ten callable blocks.
 
-**Replication timing, the control.** Within a GC stratum the background rate is 1.3 to 1.6
-times higher in late than in early DNA (GC 35-40%: 8.6 against 5.9 recurring variants per
-kb; GC 45-50%: 11.6 against 7.3; GC 50-55%: 12.2 against 8.4). How much of each difference
+**Replication timing, the control.** Within a GC stratum the background rate is up to 1.5
+times higher in late than in early DNA (GC 35-40%: 8.4 against 5.9 recurring variants per
+kb; GC 45-50%: 11.1 against 7.2; GC 50-55%: 11.7 against 8.2; near 1 in the most GC-poor and
+GC-rich strata). How much of each difference
 survives matching on timing as well as GC:
 - CDS against neutral, pooled ratio: a gap of 0.61 before (0.35 against 0.96), 0.50 after
   (0.41 against 0.91). **82% survives.**
@@ -1297,6 +1298,120 @@ half. The deletion scoring these vectors are made of cost 395,510 s of AlphaGeno
 request per element, already spent on these ten chromosomes by the chain. A curated class needs
 no model call at all, which is the real cost difference between the two ways of naming an
 element.
+
+## Many human genomes, replicated on chr22, and the slow stage fixed (2026-09-14)
+
+Two things had to hold before the human panel could be trusted at scale: the analysis had to
+stop costing hours, and chr21's results had to survive a second chromosome. chr22 is fully
+worked by every other layer and about the same size (3.39 GB of alignment, streamed in 484 s on
+a loaded link: 25,531 blocks, 1,107,993 variable columns).
+
+**The slow stage.** The chr21 run took 8.6 hours, 8.5 of them in calibration and candidates.
+A profile showed the analysis was never the cost: 0.1 s per locus. The time went to range
+requests, each of which opened a new TLS connection. On UCSC's download host a handshake cost
+0.5 s when quiet and 4 to 17 s when loaded; a chr7 subset of seven candidates spent 541 s on 99
+requests.
+- **The fix.** One kept-alive connection per host and thread, with patient retries and a 60 s
+  timeout. A failed request alternates with UCSC's second download host, which serves the same
+  files (sizes checked for every file used), and a size mismatch between hosts raises. Each
+  bigBed reader is opened once per track; chains and GENCODE are parsed once per chromosome.
+- **Replication timing** now comes from the 11 Repli-seq bigWigs fetched once whole (108 MB,
+  git-ignored), cached per chromosome. chr22's timing took 6 s.
+- **Stalls.** The script times every stage and records a stalled stream as pending, and
+  `--fill-pending` reruns only those stages. chr22 needed it once: its gnomAD and Gnocchi stages
+  timed out and were filled in 319 s.
+
+| chr21, same store | before | after |
+|---|---|---|
+| blocks, controls, units | about 90 s | 52 s |
+| storage catalogue (200 MB of gnomAD ranges) | 366 s | 1,147 s on a slower link |
+| calibration loci | about 8.5 hours with the candidates | 91 s |
+| the 69 candidates | | 2 s |
+| whole run | 31,099 s | 1,392 s |
+
+Every committed number reproduced exactly: controls, catalogues, tiers, units, matched windows,
+calibration and candidates. What is left is transfer: gnomAD's 200 MB for the storage units
+dominates and scales with the link. A genome run is now about the 5.3 hours of streaming plus
+roughly 16 GB of gnomAD ranges, not days of handshakes.
+
+**chr22 against chr21, claim by claim.**
+
+| claim | chr21 | chr22 | holds? |
+|---|---|---|---|
+| CDS pooled ratio to the GC and timing matched rate | 0.411 | 0.423 | yes |
+| neutral tier pooled ratio | 0.907 | 1.045 | yes (both near 1) |
+| CDS 200-bp units fixed, against matched expectation | 70.3% against 44.1% | 71.4% against 46.8% | yes |
+| callable genes core | 58.2% (153 genes) | 54.9% (359 genes) | yes |
+| share of the CDS-neutral gap surviving the timing match | 82% (0.61 to 0.50) | 71% (0.87 to 0.62) | yes, smaller |
+| late against early rate within a GC stratum | 1.1 to 1.5 times | 1.1 to 1.6 times | yes |
+| storage the default: placed background units holding a recurring alternative | 52.0% | 53.1% | yes |
+| no unknown tier more fixed than its matched expectation (units) | none | none: fossil 42.0/45.3, regulatory 40.0/45.8, constrained_unknown 41.4/44.7, neutral 41.1/42.6 | yes |
+| unknown blocks called core, against matched windows | fossil 1.2/4.2, regulatory 3.5/6.9, CU 40/10, neutral 7.9/3.7 | fossil 5.5/15.2, regulatory 7.5/10.1, CU 16.7/28, neutral 10.0/20.7 | yes, and chr21's CU excess (two copies) does not recur |
+| unit classes even over timing | flat (storage 34% late, fixed 33%) | storage 37% late against fixed 31% | **no**: on chr22 variable units lean late |
+| Gnocchi against panel per kilobase, Spearman | -0.08 | -0.02 | yes, weaker |
+| panel-depleted given Gnocchi-constrained, against the rest | 25% against 18% | 28% against 26% | yes, no agreement on chr22 |
+| Gnocchi's constrained kilobases early and GC-rich | 65-68% early, GC 0.45-0.49 | 32-44% early, GC 0.51 | **partly**: GC-rich yes, early much weaker |
+| the panel's depleted-only kilobases late and GC-poor | 42% late, GC 0.39 | 53% late, GC 0.44 | yes |
+| overdispersion of recurring counts per kilobase | 15.6 | 26.2 | yes, larger |
+| Gnocchi-unscored, panel-depleted kilobases are copies | 58% duplicated, 45% missing | 47% duplicated, 29% missing | yes |
+| core blocks Gnocchi-constrained, against variable blocks | 3 of 13 against 85 of 286 (23% against 30%) | 18 of 40 against 130 of 461 (45% against 28%) | **no**: on chr22 they agree at block scale |
+
+**What replicates.** Coding exons sit at 0.41 to 0.42 of the matched rate on both chromosomes,
+and most of that gap is not replication timing. Storage is the background state on both: about
+half of all units carry a common alternative. No tier of the unknown space holds more fixed
+sequence than matched background on either chromosome, and on chr22 its blocks are less often
+core than matched windows in every tier. The two human axes barely agree per kilobase. Counts
+are overdispersed well beyond a Poisson, and Gnocchi's silent, panel-depleted kilobases are
+copies.
+
+**What does not replicate.**
+- **Timing and unit class.** On chr22 variable units lean late (37% against 31% for fixed), so
+  timing is part of what separates fixed from storage units there, even though the coding
+  signal survives it.
+- **Gnocchi and replication timing.** The early-replication skew of Gnocchi's constrained
+  kilobases is a chr21 feature.
+- **Gnocchi at block scale.** Here the two measures agree modestly on chr22 and not on chr21.
+  Block-level agreement with Gnocchi is not a conclusion either way from two chromosomes.
+
+**chr22's catalogues and value domains** (200-bp units, unknown space):
+- **Fixed** 3.29 Mb, **storage** 4.79 Mb, **cannot place** 3.75 Mb (148 kb hypervariable).
+- **Domains.** 8,702 two-value and 7,890 three-value storage units; median effective values 1.71.
+- **Frequencies.** 69.8% of events matched in gnomAD (chr21 81.9%); panel minor share against
+  gnomAD MAF, Spearman 0.70 (chr21 0.69).
+- **Hypervariable units.** 742, and 391 become copy-number columns when read by length.
+- **The executor shortlist.** 4,034 units: 3,968 with a GTEx fine-mapped eQTL, 245 with an
+  MPRAVarDB allele pair.
+- **Presence** is lower in chr22's unknown tiers (fossil 0.968, constrained_unknown 0.927,
+  against 0.998 and 0.997 on chr21). Its low-copy repeats likely make more of the unknown space
+  structurally polymorphic, and its tiers read above the background rate (fossil
+  1.22, constrained_unknown 1.74).
+
+**chr22's own candidates.** The organiser's real unknown on chr22, 10 constrained-unknown blocks
+that are not copies, each read against its own ±20 kb flanks: all 10 variable, pooled ratio 0.92,
+median 0.77. The one genome-wide syntax candidate on the chromosome, chr22:38,571,213, is the
+most depleted: 5 recurring variants where its flanks predict 13.1, ratio 0.38, a Poisson lower
+tail of 0.0101, just above the 0.01 bar. It is the single block of the set worth a second look,
+and with a 15- to 26-fold overdispersion that tail is not evidence on its own. chr21's three listed
+real-unknown blocks read the same way, all variable against their flanks (pooled 1.14).
+
+**Which human measure to trust.** For "is this sequence held among people", trust Gnocchi over
+the panel. Gnocchi counts depletion of mostly rare variants in 76,156 genomes against a mutation
+model. The panel counts common variants in 89 haplotypes, whose number per kilobase follows the
+local genealogy (15- to 26-fold overdispersed) more than selection. The panel's recurring-variant
+depletion is interpretable only pooled over many kilobases, as for coding exons and tiers, or
+against matched windows, never per kilobase or per short block. For single bases use phyloP.
+
+The panel is the measure to trust for what Gnocchi cannot see:
+- presence and structure;
+- indels and copy number;
+- the alleles themselves and how they combine into values;
+- sequence Gnocchi leaves unscored, where it mostly reveals copies.
+
+**What is weak.**
+- **Two chromosomes, both small** and both acrocentric, with short arms the panel cannot align.
+- **The second host.** The mirror is trusted on file size, not on content.
+- **The before timing** is from a run the infrastructure stall may have lengthened. The
+  profile's per-request handshake cost is the measured cause either way.
 
 ## What comes next, in order
 

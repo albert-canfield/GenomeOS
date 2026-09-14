@@ -4367,7 +4367,7 @@
     "cost": {
       "requests": 7,
       "mb_fetched": 0.22,
-      "seconds": 2.2
+      "seconds": 9.1
     }
   },
   "sensitivity": {
@@ -12497,7 +12497,7 @@
     "store_gb_genome_estimate": 0.98,
     "memory_note": "a store is held in memory with its events; chr21 used about 1 GB, chr1 and chr2 would need 5 to 6 GB",
     "scale_factor_from_chr21": 81.3,
-    "gnomad_mb_chr21_storage_units": 200.63,
+    "gnomad_mb_chr21_storage_units": 200.61,
     "gnomad_gb_genome_estimate": 16.3
   },
   "cost": {
@@ -12508,101 +12508,218 @@
     },
     "replication_timing": "cached",
     "hprc_dup": {
-      "requests": 7,
-      "mb_fetched": 0.03,
-      "seconds": 1.0
+      "requests": 2,
+      "mb_fetched": 0.01,
+      "seconds": 0.3
     },
     "hprc_inv": {
-      "requests": 7,
-      "mb_fetched": 0.03,
-      "seconds": 1.0
+      "requests": 2,
+      "mb_fetched": 0.01,
+      "seconds": 0.3
     },
     "hprc_del": {
-      "requests": 9,
-      "mb_fetched": 1.6,
-      "seconds": 3.1
+      "requests": 4,
+      "mb_fetched": 1.58,
+      "seconds": 1.5
     },
     "hprc_ins": {
-      "requests": 8,
-      "mb_fetched": 1.57,
-      "seconds": 2.7
+      "requests": 3,
+      "mb_fetched": 1.55,
+      "seconds": 0.7
     },
     "hprc_double": {
-      "requests": 8,
-      "mb_fetched": 0.24,
-      "seconds": 2.5
+      "requests": 3,
+      "mb_fetched": 0.22,
+      "seconds": 0.5
     },
     "hprc_v21_sv": {
-      "requests": 8,
-      "mb_fetched": 0.2,
-      "seconds": 2.0
+      "requests": 3,
+      "mb_fetched": 0.18,
+      "seconds": 0.5
     },
     "gnomad_sv": {
-      "requests": 9,
-      "mb_fetched": 2.38,
-      "seconds": 3.4
+      "requests": 4,
+      "mb_fetched": 2.36,
+      "seconds": 0.8
     },
     "storage_tracks": {
       "gnomad_snv": {
-        "requests": 293,
-        "mb_fetched": 200.63,
-        "seconds": 327.4
+        "requests": 288,
+        "mb_fetched": 200.61,
+        "seconds": 978.5
       },
       "trexplorer": {
-        "requests": 11,
-        "mb_fetched": 3.98,
-        "seconds": 5.7
+        "requests": 6,
+        "mb_fetched": 3.97,
+        "seconds": 18.8
       },
       "gtex_dapg": {
-        "requests": 10,
-        "mb_fetched": 1.94,
-        "seconds": 4.1
+        "requests": 5,
+        "mb_fetched": 1.92,
+        "seconds": 15.3
       },
       "mpravardb": {
-        "requests": 8,
-        "mb_fetched": 0.13,
-        "seconds": 1.9
+        "requests": 3,
+        "mb_fetched": 0.11,
+        "seconds": 8.6
       }
     },
     "gnocchi": {
       "requests": 7,
       "mb_fetched": 0.22,
-      "seconds": 2.2
+      "seconds": 9.1
+    }
+  },
+  "structure_by_tier": {
+    "structural": {
+      "hprc_dup": {
+        "any": 0.0,
+        "common": 0.0
+      },
+      "hprc_inv": {
+        "any": 0.0224,
+        "common": 0.0
+      },
+      "hprc_del": {
+        "any": 0.0037,
+        "common": 0.0022
+      },
+      "hprc_ins": {
+        "any": 0.0001,
+        "common": 0.0001
+      },
+      "hprc_double": {
+        "any": 0.3205,
+        "common": 0.0308
+      },
+      "hprc_v21_sv": {
+        "any": 0.0143,
+        "common": 0.0114
+      },
+      "gnomad_sv": {
+        "any": 0.1347,
+        "common": 0.0643
+      }
     },
-    "refresh_hprc_dup": {
-      "requests": 7,
-      "mb_fetched": 0.03,
-      "seconds": 1.0
+    "fossil": {
+      "hprc_dup": {
+        "any": 0.0053,
+        "common": 0.0
+      },
+      "hprc_inv": {
+        "any": 0.0173,
+        "common": 0.0041
+      },
+      "hprc_del": {
+        "any": 0.0171,
+        "common": 0.0051
+      },
+      "hprc_ins": {
+        "any": 0.0006,
+        "common": 0.0005
+      },
+      "hprc_double": {
+        "any": 0.0762,
+        "common": 0.0079
+      },
+      "hprc_v21_sv": {
+        "any": 0.0796,
+        "common": 0.0164
+      },
+      "gnomad_sv": {
+        "any": 0.938,
+        "common": 0.0551
+      }
     },
-    "refresh_hprc_inv": {
-      "requests": 7,
-      "mb_fetched": 0.03,
-      "seconds": 1.0
+    "regulatory": {
+      "hprc_dup": {
+        "any": 0.0249,
+        "common": 0.0
+      },
+      "hprc_inv": {
+        "any": 0.004,
+        "common": 0.0
+      },
+      "hprc_del": {
+        "any": 0.0157,
+        "common": 0.011
+      },
+      "hprc_ins": {
+        "any": 0.0009,
+        "common": 0.0007
+      },
+      "hprc_double": {
+        "any": 0.0464,
+        "common": 0.0133
+      },
+      "hprc_v21_sv": {
+        "any": 0.0297,
+        "common": 0.0115
+      },
+      "gnomad_sv": {
+        "any": 0.9308,
+        "common": 0.0372
+      }
     },
-    "refresh_hprc_del": {
-      "requests": 9,
-      "mb_fetched": 1.6,
-      "seconds": 3.1
+    "constrained_unknown": {
+      "hprc_dup": {
+        "any": 0.0,
+        "common": 0.0
+      },
+      "hprc_inv": {
+        "any": 0.029,
+        "common": 0.0
+      },
+      "hprc_del": {
+        "any": 0.0098,
+        "common": 0.0023
+      },
+      "hprc_ins": {
+        "any": 0.0007,
+        "common": 0.0005
+      },
+      "hprc_double": {
+        "any": 0.0292,
+        "common": 0.0002
+      },
+      "hprc_v21_sv": {
+        "any": 0.0232,
+        "common": 0.0
+      },
+      "gnomad_sv": {
+        "any": 0.8232,
+        "common": 0.1099
+      }
     },
-    "refresh_hprc_ins": {
-      "requests": 8,
-      "mb_fetched": 1.57,
-      "seconds": 2.8
-    },
-    "refresh_hprc_double": {
-      "requests": 8,
-      "mb_fetched": 0.24,
-      "seconds": 2.1
-    },
-    "refresh_hprc_v21_sv": {
-      "requests": 8,
-      "mb_fetched": 0.2,
-      "seconds": 1.9
-    },
-    "refresh_gnomad_sv": {
-      "requests": 9,
-      "mb_fetched": 2.38,
-      "seconds": 3.2
+    "neutral": {
+      "hprc_dup": {
+        "any": 0.0036,
+        "common": 0.0
+      },
+      "hprc_inv": {
+        "any": 0.0122,
+        "common": 0.0037
+      },
+      "hprc_del": {
+        "any": 0.0089,
+        "common": 0.0077
+      },
+      "hprc_ins": {
+        "any": 0.0006,
+        "common": 0.0005
+      },
+      "hprc_double": {
+        "any": 0.0962,
+        "common": 0.0448
+      },
+      "hprc_v21_sv": {
+        "any": 0.0531,
+        "common": 0.0151
+      },
+      "gnomad_sv": {
+        "any": 0.934,
+        "common": 0.0976
+      }
     }
   },
   "blocks": [
@@ -12638,8 +12755,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": null,
-      "duplicated_fraction": 0.0004,
-      "structure": {}
+      "duplicated_fraction": 0.0004
     },
     {
       "start": 5017145,
@@ -12810,8 +12926,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0024,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 5163695,
@@ -13284,8 +13399,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0064,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6091407,
@@ -13321,8 +13435,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0162,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6123778,
@@ -13448,8 +13561,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.013,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6145730,
@@ -13528,8 +13640,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6223580,
@@ -13565,8 +13676,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6267431,
@@ -13602,8 +13712,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0045,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6276532,
@@ -14040,8 +14149,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0265,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6737596,
@@ -14075,8 +14183,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": null,
-      "duplicated_fraction": 0.0384,
-      "structure": {}
+      "duplicated_fraction": 0.0384
     },
     {
       "start": 6812297,
@@ -14157,8 +14264,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0329,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6899280,
@@ -14194,8 +14300,7 @@
       "gnocchi_case": "unmeasured",
       "human_fraction": null,
       "mammal_fraction": 0.0623,
-      "duplicated_fraction": 1.0,
-      "structure": {}
+      "duplicated_fraction": 1.0
     },
     {
       "start": 6906692,
@@ -47336,158 +47441,89 @@
       "rt_stratum": 2
     }
   ],
-  "seconds": 31099.3,
-  "structure_by_tier": {
-    "structural": {
-      "hprc_dup": {
-        "any": 0.0,
-        "common": 0.0
-      },
-      "hprc_inv": {
-        "any": 0.0224,
-        "common": 0.0
-      },
-      "hprc_del": {
-        "any": 0.0037,
-        "common": 0.0022
-      },
-      "hprc_ins": {
-        "any": 0.0001,
-        "common": 0.0001
-      },
-      "hprc_double": {
-        "any": 0.3205,
-        "common": 0.0308
-      },
-      "hprc_v21_sv": {
-        "any": 0.0143,
-        "common": 0.0114
-      },
-      "gnomad_sv": {
-        "any": 0.1347,
-        "common": 0.0643
-      }
+  "local_candidates": {
+    "source": "organised_chr21 candidates (constrained_unknown, not copies)",
+    "read": 3,
+    "classes": {
+      "variable": 3
     },
-    "fossil": {
-      "hprc_dup": {
-        "any": 0.0053,
-        "common": 0.0
+    "pooled_ratio_to_flanks": 1.142,
+    "median_ratio_to_flanks": 1.176,
+    "rows": [
+      {
+        "start": 15067837,
+        "end": 15101542,
+        "length": 33705,
+        "case": "relaxed",
+        "mammal_fraction": 0.07,
+        "human_fraction": 0.0333,
+        "class": {
+          "class": "variable",
+          "confidence": 0.6,
+          "recurring_events": 210,
+          "expected": 178.6,
+          "ratio": 1.176,
+          "p_depleted": 0.99017,
+          "p_enriched": 0.01185
+        },
+        "presence": 0.9992,
+        "missing_share": 0.0,
+        "domain_class": "hypervariable",
+        "replication_timing": 50.63
       },
-      "hprc_inv": {
-        "any": 0.0173,
-        "common": 0.0041
+      {
+        "start": 16815688,
+        "end": 16862874,
+        "length": 47186,
+        "case": "relaxed",
+        "mammal_fraction": 0.0643,
+        "human_fraction": 0.0,
+        "class": {
+          "class": "variable",
+          "confidence": 0.6,
+          "recurring_events": 360,
+          "expected": 259.5,
+          "ratio": 1.387,
+          "p_depleted": 1.0,
+          "p_enriched": 0.0
+        },
+        "presence": 0.9994,
+        "missing_share": 0.0,
+        "domain_class": "hypervariable",
+        "replication_timing": 35.01
       },
-      "hprc_del": {
-        "any": 0.0171,
-        "common": 0.0051
-      },
-      "hprc_ins": {
-        "any": 0.0006,
-        "common": 0.0005
-      },
-      "hprc_double": {
-        "any": 0.0762,
-        "common": 0.0079
-      },
-      "hprc_v21_sv": {
-        "any": 0.0796,
-        "common": 0.0164
-      },
-      "gnomad_sv": {
-        "any": 0.938,
-        "common": 0.0551
+      {
+        "start": 25103670,
+        "end": 25127468,
+        "length": 23798,
+        "case": "tolerant",
+        "mammal_fraction": 0.0456,
+        "human_fraction": 0.0435,
+        "class": {
+          "class": "variable",
+          "confidence": 0.35,
+          "recurring_events": 72,
+          "expected": 124.3,
+          "ratio": 0.579,
+          "p_depleted": 0.0,
+          "p_enriched": 1.0
+        },
+        "presence": 0.9999,
+        "missing_share": 0.0,
+        "domain_class": "hypervariable",
+        "replication_timing": 27.08
       }
-    },
-    "regulatory": {
-      "hprc_dup": {
-        "any": 0.0249,
-        "common": 0.0
-      },
-      "hprc_inv": {
-        "any": 0.004,
-        "common": 0.0
-      },
-      "hprc_del": {
-        "any": 0.0157,
-        "common": 0.011
-      },
-      "hprc_ins": {
-        "any": 0.0009,
-        "common": 0.0007
-      },
-      "hprc_double": {
-        "any": 0.0464,
-        "common": 0.0133
-      },
-      "hprc_v21_sv": {
-        "any": 0.0297,
-        "common": 0.0115
-      },
-      "gnomad_sv": {
-        "any": 0.9308,
-        "common": 0.0372
-      }
-    },
-    "constrained_unknown": {
-      "hprc_dup": {
-        "any": 0.0,
-        "common": 0.0
-      },
-      "hprc_inv": {
-        "any": 0.029,
-        "common": 0.0
-      },
-      "hprc_del": {
-        "any": 0.0098,
-        "common": 0.0023
-      },
-      "hprc_ins": {
-        "any": 0.0007,
-        "common": 0.0005
-      },
-      "hprc_double": {
-        "any": 0.0292,
-        "common": 0.0002
-      },
-      "hprc_v21_sv": {
-        "any": 0.0232,
-        "common": 0.0
-      },
-      "gnomad_sv": {
-        "any": 0.8232,
-        "common": 0.1099
-      }
-    },
-    "neutral": {
-      "hprc_dup": {
-        "any": 0.0036,
-        "common": 0.0
-      },
-      "hprc_inv": {
-        "any": 0.0122,
-        "common": 0.0037
-      },
-      "hprc_del": {
-        "any": 0.0089,
-        "common": 0.0077
-      },
-      "hprc_ins": {
-        "any": 0.0006,
-        "common": 0.0005
-      },
-      "hprc_double": {
-        "any": 0.0962,
-        "common": 0.0448
-      },
-      "hprc_v21_sv": {
-        "any": 0.0531,
-        "common": 0.0151
-      },
-      "gnomad_sv": {
-        "any": 0.934,
-        "common": 0.0976
-      }
-    }
+    ]
   },
-  "structure_definition": "any item, and recurring or common items: HPRC arrangements carried by 2 or more of 90 genomes, v2.1 SVs and gnomAD SVs (PASS, under 1,000,000 bp) at AF >= 0.01; the block classes use the alignment's own events, these tracks are annotation"
+  "stage_seconds": {
+    "blocks, controls and units": 52.3,
+    "storage catalogue": 1147.0,
+    "against Gnocchi": 31.4,
+    "sensitivity": 3.1,
+    "calibration loci": 91.0,
+    "candidates": 1.9,
+    "this chromosome's real unknown": 0.1,
+    "genome-wide cost": 62.7
+  },
+  "seconds": 1392.4
 }

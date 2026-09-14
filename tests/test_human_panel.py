@@ -221,3 +221,41 @@ def test_depletion_null_counts_chance_and_dispersion():
     assert out["kilobases"] == 3 and out["depleted_observed"] == 1
     assert out["depleted_expected_under_poisson"] == 0  # three bins at 3% each
     assert out["pearson_dispersion"] > 1
+
+
+class _FakeResponse:
+    def __init__(self, status, data, total):
+        self.status, self._data = status, data
+        self.headers = {"Content-Range": f"bytes 0-{len(data) - 1}/{total}"}
+
+    def read(self):
+        return self._data
+
+
+class _FakeConn:
+    def __init__(self, host, plan):
+        self.host, self.plan, self.calls = host, plan, 0
+
+    def request(self, method, path, headers=None):
+        self.calls += 1
+        if self.plan.get(self.host) == "fail":
+            raise TimeoutError("timed out")
+
+    def getresponse(self):
+        return _FakeResponse(206, b"abcd", self.plan.get(self.host, 100))
+
+    def close(self):
+        pass
+
+
+def test_keepalive_source_retries_on_the_mirror_and_checks_sizes(monkeypatch):
+    plan = {"hgdownload.soe.ucsc.edu": "fail", "hgdownload2.soe.ucsc.edu": 100}
+    monkeypatch.setattr(hp.time, "sleep", lambda s: None)
+    monkeypatch.setattr(hp.http.client, "HTTPSConnection", lambda host, timeout=None: _FakeConn(host, plan))
+    hp._POOL.conns = {}
+    src = hp.KeepAliveSource("https://hgdownload.soe.ucsc.edu/gbdb/hg38/x.bb")
+    assert src.read(0, 4) == b"abcd" and src.mirror_requests == 1 and src.total == 100
+    plan["hgdownload2.soe.ucsc.edu"] = 101  # a mirror with another file
+    with pytest.raises(OSError):
+        src.read(0, 4)
+    hp._POOL.conns = {}

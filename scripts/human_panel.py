@@ -27,6 +27,9 @@ from genomeos.results import load_result, save_result
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chrom", default="chr21")
+    ap.add_argument(
+        "--fill-pending", action="store_true", help="rerun only the stages a saved result records as pending"
+    )
     ap.add_argument("--skip-calibration", action="store_true", help="refer to chr21's calibration loci")
     ap.add_argument(
         "--skip-regions", action="store_true", help="do not stream the calibration and candidate regions"
@@ -76,6 +79,9 @@ def main(argv: list[str] | None = None) -> None:
             stages[name] = round(time.time() - t, 1)
 
     result = stage("blocks, controls and units", lambda: hp.build(args.chrom, progress=say))
+    if args.fill_pending:
+        fill_pending(args.chrom, result, stage, say)
+        return
     edges = result["_edges"]
     catalogue = stage("storage catalogue", lambda: hp.storage_catalogue(result, args.chrom))
     if "_catalogue" in catalogue:
@@ -103,6 +109,30 @@ def main(argv: list[str] | None = None) -> None:
     say(f"saved {path}")
     json.dump(payload["control"], sys.stdout, indent=1)
     print()
+
+
+def fill_pending(chrom: str, result: dict, stage, say) -> None:
+    """Rerun the network stages a saved result left pending and merge them in, nothing else."""
+    payload = load_result(f"human_panel_{chrom}")
+    filled = []
+    if "pending" in (payload.get("storage") or {}):
+        catalogue = stage("storage catalogue", lambda: hp.storage_catalogue(result, chrom))
+        if "_catalogue" in catalogue:
+            hp.save_catalogue(catalogue, chrom)
+            payload["storage"] = catalogue["summary"]
+            payload["storage_showcase"] = catalogue["showcase"]
+            payload["cost"]["storage_tracks"] = catalogue["cost"]
+            filled.append("storage")
+    if "pending" in (payload.get("against_gnocchi") or {}):
+        gnocchi = stage("against Gnocchi", lambda: hp.against_gnocchi(result, chrom))
+        if "per_kilobase" in gnocchi:
+            gnocchi["per_kilobase"]["poisson_null"] = hp.depletion_null(result)
+            payload["against_gnocchi"] = {k: v for k, v in gnocchi.items() if not k.startswith("_")}
+            payload["cost"]["gnocchi"] = gnocchi.get("cost")
+            filled.append("against_gnocchi")
+    payload.setdefault("filled_later", []).extend(filled)
+    save_result(f"human_panel_{chrom}", {k: v for k, v in payload.items() if k not in ("result", "date")})
+    say(f"filled {filled or 'nothing'}")
 
 
 if __name__ == "__main__":
