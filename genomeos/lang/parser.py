@@ -447,6 +447,11 @@ def _compile_block(b: Block, module: Module) -> None:
         sg.ligand, sg.receptor = p.get("ligand", ""), p.get("receptor", "")
         sg.sender, sg.receiver = _parse_when(p.get("from", "")), _parse_when(p.get("to", ""))
         sg.field_name = p.get("field", "")
+        sg.reads = p.get("reads", "presence")
+        if sg.reads not in ("presence", "amount"):
+            raise BioLangError(f"line {b.line}: a signal reads presence or amount")
+        if sg.reads == "amount" and sg.mode != "contact":
+            raise BioLangError(f"line {b.line}: only a contact signal reads an amount from its neighbours")
         if "threshold" in p:
             sg.threshold = _float(p["threshold"], "threshold", b.line)
         if sg.mode == "gradient" and not sg.field_name:
@@ -489,6 +494,15 @@ def _compile_block(b: Block, module: Module) -> None:
         org.observe = [x for part in p.get("observe", "").split(" ; ") for x in _list(part)]
         org.asserts = [x.strip() for x in p.get("assert", "").split(" ; ") if x.strip()]
         org.reference = p.get("reference", "")
+        org.contacts = p.get("contacts", "")  # resolved against the program's directory by parse()
+        if "cell_network" in p:
+            val, unit = _quantity(p["cell_network"], "cell_network", b.line)
+            org.cell_network = to_minutes(val, unit)
+        if "replicates" in p:
+            org.replicates = int(_float(p["replicates"], "replicates", b.line))
+        org.placement = p.get("placement", "nearest")
+        if org.placement not in ("nearest", "names"):
+            raise BioLangError(f"line {b.line}: placement must be nearest or names")
         module.organism = org
     elif b.kind == "field":
         fl = Field(name=b.header, evidence=ev, confidence=conf)
@@ -755,6 +769,14 @@ def parse(
         )
     for b in blocks:
         _compile_block(b, module)
+    org = module.organism
+    if org is not None and org.contacts and any(b.kind == "organism" for b in blocks):
+        table = Path(org.contacts)
+        if not table.is_absolute() and base_dir is not None:
+            table = base_dir / table
+        if not table.is_file():
+            raise BioLangError(f"organism {org.name!r}: contact table {org.contacts!r} not found")
+        org.contacts = str(table.resolve())
     if not blocks and not imports:
         raise BioLangError("empty source: no module, entities or rules found")
     if _done is None:  # references are checked once, over the whole program

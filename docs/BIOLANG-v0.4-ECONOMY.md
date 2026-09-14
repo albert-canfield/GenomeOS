@@ -519,7 +519,7 @@ body, haematopoiesis with its designs and mutants, the lineage demo and the
 French-flag demo — 0 cells differing, 0 ambiguous points anywhere. Population
 shares are not competitors, so a split is never counted as ambiguous.
 
-### 7.4 Contacts, neighbours and noise (Body runtime, for emergent lateral inhibition) [engine]
+### 7.4 Contacts, neighbours and noise (Body runtime, for emergent lateral inhibition) [engine, implemented]
 
 Today a contact `signal` names its sender (`from: cell = P2`), so lateral
 inhibition can only be stated. For it to emerge, area E needs the Body to
@@ -550,6 +550,62 @@ provide, in this order:
 stated winner must (a) not diverge with noise off, (b) diverge in nearly every
 replicate with noise on, and (c) split about evenly across replicates; a
 runtime that picks the same winner every time has smuggled in an order.
+
+**Implemented 2026-09-14, and the gate passed.** What the Body now does:
+
+```
+organism AcVu {
+  space: 2 x 1; placement: names          # daughters along the axis their names imply
+  contacts: contacts.tsv                   # or: neighbours from a time-resolved table instead of a grid
+  cell_network: 6 min                      # every cell's own network, stepped together
+  replicates: 100                          # outcomes decided by noise are scored over seeds
+  seed: 0
+  assert: exactly one of Z1.ppp, Z4.aaa is AnchorCell at 40 h in >= 90%
+  assert: Z1.ppp is AnchorCell at 40 h in 35..65%
+}
+signal DeltaAtContact { mode: contact; ligand: Dp; reads: amount; sets: Dext }
+param noise = 0.05
+```
+
+- **Neighbours** (`Body.neighbours`) come from the latest snapshot of a contact
+  table at or before now, weighted by contact area, or from the four grid
+  neighbours when there is no table. Nothing reads node geometry, so a change
+  to where nodes are called (area B's orientation-aware boundaries) moves
+  nothing here.
+- **Contact amounts.** A `reads: amount` signal gives the receiver the ligand
+  summed over the neighbours that match the sender condition — the ligand's
+  level in each neighbour's own network, or a count of touching senders when
+  there are no networks — so one rule serves every pair that touches.
+- **Per-cell networks, synchronous.** Every `cell_network` minutes all inputs
+  are read from every cell first, then every cell's copy of the module's
+  network is advanced, then every cell decides again on its new levels, which
+  its `when` clauses can read (`Dp = >=0.6`). No cell sees another's update
+  from the same step.
+- **Seeded noise as mechanism.** Each cell draws from its own stream, seeded
+  by the run's seed and the cell's name, never by the order cells are stored
+  in; a noisy network without a seed is refused. The seed is in the summary.
+- **Replicate asserts** (`exactly one of A, B is T in >= P%`, `A is T in
+  lo..hi%`) are scored across `replicates` seeds by `bio test`.
+- **A revised fate** now drops its old terminal name as well as being counted,
+  so a cell that stopped being the anchor cell is not still called AC.
+
+The gate (`scripts/body_contacts_gate.py`, `data/results/body_contacts_gate.json`,
+200 seeds, `data/demo/lateral_inhibition.bio`):
+
+| Condition | Result |
+|---|---|
+| noise off | 0 of 200 runs diverge; the two cells' Delta identical to the last digit; both stay progenitors |
+| noise on | **200 of 200** runs give exactly one anchor cell; Z1.ppp wins **96 (48%)**, Z4.aaa 104 |
+| daughters created in the opposite order | the **same winner in 200 of 200 seeds** — no order smuggled in |
+| a program that names the winner | the share assert fails at 100%, as it must |
+
+Area E's direct reference gives 198 of 200 and 51%. The comparison is
+qualitative on purpose: the Body's noise is multiplicative on every network
+species, Collier's reference adds it to Delta only. Every committed organism
+program and all 17 of their knockout experiments give identical cells on the
+Body before and after this change. The circuit's two Hill terms are Collier's
+constants (curated); the noise size, time scale and translation rate are
+inferred at 0.3, and the program says so.
 
 ## 8. Execution regime (declared per run)
 
@@ -597,7 +653,7 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
 | fate | commitment, competence, integrated reads | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | specified only; the atlas test was negative |
 | fate precedence | `regime fates`, decision `priority` | area E's worm fates identical under explicit priorities | **implemented and now the default**: 1,439 of 1,439 identical, 45 ambiguous points to 0 |
-| contacts | neighbours, contact amounts, per-cell networks, seeded noise, replicate diff | Collier 1996 equivalence group splits about evenly | specified only |
+| contacts | neighbours, contact amounts, per-cell networks, seeded noise, replicate asserts | Collier 1996 equivalence group splits about evenly | **passed 2026-09-14**: 0 of 200 diverge without noise, 200 of 200 with it, first cell 48%, same winner per seed in either creation order |
 
 ### 9.1 Stage 1 as measured (2026-09-14)
 
@@ -678,3 +734,34 @@ it there, and for an imported protein that link is the transport at 0.3.
 9. **Commitment and competence as refusals or as rates.** As specified, a
    locked cell refuses a fate outright; the published plasticity data could
    also be read as a declining probability. The perturbation series decides.
+
+10. **Order as a construct: position, direction and time.** The language can
+    say that a gene is read, not in which order a cluster is read. The
+    known-locus benchmark made this concrete: HOXD defeats the node model and
+    its colinear activation order is untestable with any layer we hold,
+    because nothing in BioLang can state an order. Proposed shape, for Albert:
+    an `order` clause on a `domain` naming the axis (genomic position,
+    direction of opening, time of activation) and the measured sequence, with
+    the falsifier a published activation series (for HOXD, the limb and trunk
+    colinearity data). Nothing is implemented; it should not bake node
+    identity in, since area B's boundary caller may move every node.
+
+**Which of these can be settled by measurement rather than preference.**
+
+| Decision | Settled by | How |
+|---|---|---|
+| 1. opt-in or mandatory locations | preference | a language-design choice; no experiment decides it |
+| 2. amounts or concentrations | **partly measurable** | run stage 2's burden gate both ways on cells of different volume; if only one reproduces the published burden scaling, it decides. Held for Albert until then |
+| 3. membranes as nodes or edges | preference, lightly constrained | both passed stage 1; the band-3 transport forced the "across one membrane" rule, which either shape can express |
+| 4. whose cost accounting | **measurable** | the ATP budget gate (Buttgereit & Brand's hierarchy, Lynch & Marinov's totals): the accounting that lands in the published order of magnitude wins |
+| 5. default allocation | **measurable** | gate (b), absolute abundance against PaxDb, run under each policy |
+| 6. protein turnover set | **measurable** | the dilution gate run with the human and the mouse sets; if they disagree beyond their own spread, the human set is required |
+| 7. which homeostats first | data availability, not preference | the pair whose failure direction is best documented; Na⁺/K⁺ and pH stand |
+| 8. `fates: first` default | **settled by measurement** (resolved above) | |
+| 9. commitment as refusal or rate | **measurable** | the perturbation series: a sharp window says refusal, a graded decline says rate |
+| 10. order as a construct | measurable once built | a published activation series |
+
+The next engine work that needs no preference from Albert is therefore
+decision 9's instrument (the perturbation series as a program, which area E
+can run) and decision 10's construct sketch; 4, 5 and 6 need stage 2 or 4
+first, and 2 holds stage 2.

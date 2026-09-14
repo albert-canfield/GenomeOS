@@ -24,6 +24,7 @@ import random
 import re
 from collections import Counter
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from genomeos.ir import Decision, EvidenceKind, Module, Timer, matches, to_minutes
 
@@ -59,6 +60,7 @@ class Cell:
     divide_seq: int = -1  # event token of the pending division: a rescheduled division runs exactly once
     measured: set[str] = field(default_factory=set)  # factors set by express decisions (the reader)
     stated: set[str] = field(default_factory=set)  # factors stated by mechanism: maternal load, asymmetry
+    levels: dict[str, float] = field(default_factory=dict)  # v0.4: this cell's own network state
 
     @property
     def end(self) -> float:
@@ -151,6 +153,7 @@ class Body:
         self.fates = fates or (module.regime.fates if module.regime is not None else "first")
         if self.fates not in ("first", "last"):
             raise ValueError(f"fates must be first or last, not {self.fates!r}")
+        self._init_contacts(seed, means)
         if self.fates == "last" and any(d.priority for d in module.decisions):
             raise ValueError(
                 "decision `priority` needs `regime { fates: first }`: with fates: last the final match wins"
@@ -205,7 +208,7 @@ class Body:
 
     # ---- context and decisions ------------------------------------------
 
-    def context(self, c: Cell, t: float | None = None) -> dict[str, str]:
+    def context(self, c: Cell, t: float | None = None, amounts: bool = True) -> dict[str, str]:
         t = self.time if t is None else t
         if self._stage_cache[0] != t:
             self._stage_cache = (t, self.module.stage_at(t))
@@ -218,7 +221,13 @@ class Body:
             "count": str(c.count),
         }
         ctx.update(self.environment)
+        if c.levels:
+            ctx.update({k: f"{v:.6g}" for k, v in c.levels.items()})
         ctx.update(c.factors)
+        if amounts and self._amount_signals and self.network is None:
+            for sg in self._amount_signals:  # without networks an amount is the count of touching senders
+                if not {sg.id, sg.ligand, sg.receptor, sg.sets} & self.knockouts:
+                    ctx[sg.sets] = f"{self.received(c, sg):.6g}"
         if c.x is not None:
             ctx["x"], ctx["y"] = str(c.x), str(c.y)
         return ctx
@@ -303,12 +312,13 @@ class Body:
             elif d.fraction < 1.0 and self.population(c):
                 self._split(c, d)
             else:
-                if had_fate and not changed:
+                revision = bool(had_fate) and not changed
+                if revision:
                     self.revised[d.id] += 1  # visible until `commitment` can refuse it (v0.4 §7.2)
                 before, changed = ctx, True
                 c.cell_type = d.to
-                if d.name:
-                    c.terminal_name = d.name
+                if d.name or revision:
+                    c.terminal_name = d.name  # a revised cell no longer answers to its old terminal name
             c.fired.append(d.id)
             self.fired[d.id] += 1
             ctx = self.context(c)
@@ -453,8 +463,14 @@ class Body:
         self.cells[c.name] = c
         if parent is not None:
             parent.children.append(c.name)
+            c.levels = dict(parent.levels)
+        elif self.network is not None:
+            c.levels = {p.id: p.initial for p in self.module.proteins() if p.initial}
         self._apply_signals(c)
         self._resolve(c)
+        if self._amount_signals and self.network is None:
+            for name in self.neighbours(c):
+                self._resolve(self.cells[name], born=False)
 
     def _read_gradients(self, c: Cell) -> bool:
         """Set or clear the factors of gradient signals from the fields at the cell's site."""
@@ -581,7 +597,7 @@ class Body:
 
     def _apply_signals(self, newborn: Cell) -> None:
         self._read_gradients(newborn)
-        signals = [sg for sg in self.module.signals() if sg.mode != "gradient"]
+        signals = [sg for sg in self.module.signals() if sg.mode != "gradient" and sg.reads != "amount"]
         if not signals:
             return
         alive = [x for x in self.cells.values() if x.born <= self.time < x.end and x is not newborn]
@@ -620,7 +636,7 @@ class Body:
             names = [c.name + a, c.name + b]
         sites: list[tuple[int, int] | None] = [None, None]
         if c.x is not None:
-            second = self._free_site(c, d.direction)
+            second = self._free_site(c, self._placement(d, names))
             if second is None:  # contact inhibition: no room, the cell waits another cycle
                 self.blocked_divisions += 1
                 c.divides_at = None
@@ -672,6 +688,125 @@ class Body:
         self._record()
         self._resolve(c, born=False)  # a smaller population may grow again (quiescence is re-read)
 
+    # ---- contacts and per-cell networks (v0.4 §7.4) -----------------------------------------
+
+    def _init_contacts(self, seed: int | None, means: bool) -> None:
+        """Neighbours come from a measured contact table when the organism names one, otherwise from grid
+        adjacency. With `cell_network`, every cell carries its own copy of the module's network, all copies
+        are stepped together every `cell_network` minutes, and contact signals that read an amount couple
+        them: a receiver's input is the ligand summed over its current neighbours, read before anyone moves
+        (a synchronous update), so no cell is advantaged by the order cells are visited in."""
+        o = self.organism
+        self.contacts = read_contacts(o.contacts) if o.contacts else []
+        self._contact_times = [t for t, _ in self.contacts]
+        self._amount_signals = [
+            sg for sg in self.module.signals() if sg.mode == "contact" and sg.reads == "amount" and sg.sets
+        ]
+        self.network = None
+        self.network_steps = 0
+        self._rngs: dict[str, random.Random] = {}
+        self.network_noise = 0.0
+        self.network_seed = None if means else seed
+        if o.cell_network <= 0:
+            return
+        from .grn import NetworkRuntime
+
+        self.network = NetworkRuntime(self.module)
+        self.network_noise = float(self.network.params.get("noise", 0.0))
+        if self.network_noise > 0 and self.network_seed is None:
+            raise ValueError(
+                "network noise needs a seed: declare `seed:` or pass one (noise is part of the mechanism)"
+            )
+        self.network.params["noise"] = 0.0  # noise is applied per cell below, from each cell's own stream
+        self._push(o.cell_network, "", "network")
+
+    def neighbours(self, c: Cell, t: float | None = None) -> dict[str, float]:
+        """The cells touching `c` now, with contact area: the latest contact snapshot at or before t, or the
+        four grid neighbours when there is no table. A cell not alive at t has no neighbours."""
+        t = self.time if t is None else t
+        if self.contacts:
+            i = bisect.bisect_right(self._contact_times, t) - 1
+            if i < 0:
+                return {}
+            snap = self.contacts[i][1].get(c.name, {})
+            return {
+                n: a
+                for n, a in snap.items()
+                if n in self.cells and self.cells[n].born <= t < self.cells[n].end
+            }
+        if c.x is None:
+            return {}
+        out = {}
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            name = self.occupied.get((c.x + dx, c.y + dy))
+            if name is not None:
+                out[name] = 1.0
+        return out
+
+    def received(self, c: Cell, sg) -> float:
+        """The amount of a contact signal a cell receives: the ligand level in each neighbour that matches the
+        sender condition, weighted by contact area and summed. Without per-cell networks the ligand amount is
+        1 per matching neighbour, so the reading is a count of senders touching the cell."""
+        total = 0.0
+        for name, area in self.neighbours(c).items():
+            other = self.cells[name]
+            if sg.sender and not _match(sg.sender, self.context(other, amounts=False)):
+                continue
+            level = other.levels.get(sg.ligand, 0.0) if self.network is not None else 1.0
+            total += area * level
+        return total
+
+    def _network_step(self) -> None:
+        """Advance every cell's network by one `cell_network` interval, all together.
+
+        Inputs are read from every cell before any cell changes, so the update is synchronous; each cell
+        draws its noise from its own stream (seeded by the run's seed and the cell's name), so which cell
+        wins a symmetric competition is decided by the seed and never by the order cells are stored in."""
+        vm = self.network
+        assert vm is not None
+        hours = self.organism.cell_network / 60.0
+        steps = max(1, math.ceil(hours / 0.01))
+        dt = hours / steps
+        live = [c for c in self.alive_at(self.time) if not self.population(c)]
+        signals = [
+            sg for sg in self._amount_signals if not {sg.id, sg.ligand, sg.receptor, sg.sets} & self.knockouts
+        ]
+        inputs = {c.name: {sg.sets: self.received(c, sg) for sg in signals} for c in live}
+        for c in live:
+            state = dict.fromkeys(vm.species, 0.0)
+            state.update(c.levels)
+            clamp = inputs[c.name]
+            state.update(clamp)
+            rng = self._rngs.get(c.name)
+            if rng is None and self.network_noise > 0:
+                rng = self._rngs[c.name] = random.Random(f"{self.network_seed}:{c.name}")
+            for _ in range(steps):
+                d = vm._derivatives(state)
+                for s in vm.species:
+                    if s in clamp:
+                        continue
+                    kick = 0.0
+                    if rng is not None:
+                        kick = (
+                            self.network_noise
+                            * math.sqrt(dt)
+                            * rng.gauss(0.0, 1.0)
+                            * math.sqrt(max(state[s], 1e-9))
+                        )
+                    state[s] = max(0.0, state[s] + d[s] * dt + kick)
+            c.levels = state
+        self.network_steps += 1
+        for c in live:
+            self._resolve(c, born=False)  # a level crossing a threshold is a new reading
+        self._push(self.time + self.organism.cell_network, "", "network")
+
+    def _placement(self, d: Decision, names: list[str]) -> str:
+        """Where the second daughter goes: the decision's `direction`, else, with `placement: names`, the axis
+        its name implies (a/p along x, l/r and d/v along y), else the nearest free site."""
+        if d.direction or self.organism.placement != "names":
+            return d.direction
+        return {"a": "-x", "p": "+x", "l": "-y", "r": "+y", "d": "-y", "v": "+y"}.get(names[1][-1:], "")
+
     def run(self, until: float = math.inf) -> Body:
         while self._queue and len(self.cells) < self.max_cells:
             t, seq, name, kind = self._queue[0]
@@ -685,6 +820,9 @@ class Body:
                 continue
             if kind == "sense":
                 self._sense()
+                continue
+            if kind == "network":
+                self._network_step()
                 continue
             c = self.cells[name]
             if (
@@ -821,7 +959,7 @@ class Body:
         return rep
 
     def check_asserts(self) -> list[dict]:
-        return [evaluate_assert(self, a) for a in self.organism.asserts]
+        return [evaluate_assert(self, a) for a in self.organism.asserts if not is_replicate_assert(a)]
 
     def summary(self) -> dict:
         t = self.time
@@ -839,6 +977,9 @@ class Body:
             "decisions_fired": sum(self.fired.values()),
             "unknown": dict(self.unknown),
             "fates_mode": self.fates,
+            "network_steps": self.network_steps,
+            "network_seed": self.network_seed if self.network is not None else None,
+            "neighbours_from": "table" if self.contacts else ("grid" if self.spatial else "none"),
             "ambiguous_fates": sum(self.ambiguous.values()),
             "revised_fates": sum(self.revised.values()),
         }
@@ -880,3 +1021,90 @@ def evaluate_assert(body: Body, text: str) -> dict:
         n = float(rhs)
         ok = {"=": value == n, ">=": value >= n, "<=": value <= n, ">": value > n, "<": value < n}[op]
     return {"assert": text, "ok": bool(ok), "value": value}
+
+
+# ---- contacts, neighbours and per-cell networks (v0.4 §7.4) -----------------------------------
+
+
+def read_contacts(path: str) -> list[tuple[float, dict[str, dict[str, float]]]]:
+    """A time-resolved contact table: rows of `time cell cell [area]`, whitespace or tab separated.
+
+    Returns snapshots sorted by time; the neighbours at t are the latest snapshot at or before t,
+    each with the contact area (1.0 when the table does not say). A measured table replaces grid
+    adjacency, which is why the worm can have neighbours without having a grid."""
+    snapshots: dict[float, dict[str, dict[str, float]]] = {}
+    for line in Path(path).read_text().splitlines():
+        row = line.split("#", 1)[0].split()
+        if len(row) < 3 or not row[0].replace(".", "", 1).replace("-", "", 1).isdigit():
+            continue  # a header or a comment
+        t, a, b = float(row[0]), row[1], row[2]
+        area = float(row[3]) if len(row) > 3 else 1.0
+        snap = snapshots.setdefault(t, {})
+        snap.setdefault(a, {})[b] = area
+        snap.setdefault(b, {})[a] = area
+    return sorted(snapshots.items())
+
+
+# ---- replicate runs (v0.4 §7.4): outcomes decided by noise are scored across seeds, never in one run ---
+
+_EXACTLY = re.compile(
+    r"^exactly one of\s+(.+?)\s+is\s+(\S+)(?:\s+at\s+([-0-9.]+)\s*(\w+)?)?\s+in\s*>=\s*([0-9.]+)\s*%$"
+)
+_SHARE = re.compile(r"^(\S+)\s+is\s+(\S+)(?:\s+at\s+([-0-9.]+)\s*(\w+)?)?\s+in\s+([0-9.]+)\.\.([0-9.]+)\s*%$")
+
+
+def is_replicate_assert(text: str) -> bool:
+    return bool(_EXACTLY.match(text.strip()) or _SHARE.match(text.strip()))
+
+
+def _is(body: Body, name: str, fate: str, t: float | None) -> bool:
+    c = body.cells.get(name)
+    if c is None or (t is not None and not (c.born <= t)):
+        return False
+    return fate in (c.cell_type, c.terminal_name)
+
+
+def replicate(module: Module, until: float, seeds: range | list[int], **kwargs) -> list[Body]:
+    """The same program grown once per seed; every other argument is passed to the Body unchanged."""
+    return [Body(module, seed=s, **kwargs).run(until=until) for s in seeds]
+
+
+def evaluate_replicate_asserts(bodies: list[Body], asserts: list[str]) -> list[dict]:
+    """`exactly one of A, B is T [at N min] in >= P%`: in at least P% of the runs exactly one of the named
+    cells took the fate. `A is T [at N min] in lo..hi%`: the share of runs in which A took it lies in the
+    range, which is how a coin-flip decision is tested: a runtime that picks the same winner every run has
+    smuggled in an order, and fails it."""
+    out = []
+    n = len(bodies)
+    for text in asserts:
+        m = _EXACTLY.match(text.strip())
+        if m:
+            names = [x.strip() for x in re.split(r",|\bor\b", m.group(1)) if x.strip()]
+            t = to_minutes(float(m.group(3)), m.group(4) or "min") if m.group(3) else None
+            winners = Counter()
+            hits = 0
+            for b in bodies:
+                took = [x for x in names if _is(b, x, m.group(2), t)]
+                if len(took) == 1:
+                    hits += 1
+                    winners[took[0]] += 1
+            share = 100.0 * hits / n if n else 0.0
+            out.append(
+                {
+                    "assert": text,
+                    "ok": n > 0 and share >= float(m.group(5)),
+                    "value": round(share, 2),
+                    "runs": n,
+                    "winners": dict(winners),
+                }
+            )
+            continue
+        m = _SHARE.match(text.strip())
+        if m:
+            t = to_minutes(float(m.group(3)), m.group(4) or "min") if m.group(3) else None
+            share = 100.0 * sum(_is(b, m.group(1), m.group(2), t) for b in bodies) / n if n else 0.0
+            ok = n > 0 and float(m.group(5)) <= share <= float(m.group(6))
+            out.append({"assert": text, "ok": ok, "value": round(share, 2), "runs": n})
+            continue
+        out.append({"assert": text, "ok": False, "error": "not a replicate assert"})
+    return out

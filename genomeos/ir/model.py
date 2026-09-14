@@ -286,6 +286,9 @@ class Signal(Entity):
     value: str = "active"
     field_name: str = ""  # gradient signals: the field read at the cell's position
     threshold: float = 0.0  # the factor is set while the local value is at or above this
+    reads: str = (
+        "presence"  # v0.4 contact: presence (a named sender exists) | amount (summed over neighbours)
+    )
 
     def __post_init__(self) -> None:
         self.kind = "signal"
@@ -543,6 +546,12 @@ class Organism:
     observe: list[str] = field(default_factory=list)
     asserts: list[str] = field(default_factory=list)
     reference: str = ""  # name of the ground truth to compare against
+    contacts: str = (
+        ""  # v0.4: a time-resolved contact table (time, cell, cell[, area]), path resolved at parse
+    )
+    cell_network: float = 0.0  # v0.4: minutes between synchronous steps of every cell's own network; 0 = off
+    replicates: int = 0  # v0.4: runs with seeds 0..N-1 over which `exactly one of` asserts are scored
+    placement: str = "nearest"  # v0.4: nearest free site, or names (a/p along x, l/r and d/v along y)
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
 

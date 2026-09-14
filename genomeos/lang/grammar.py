@@ -118,10 +118,19 @@ BLOCKS: dict[str, dict] = {
             "sense": ("time", "interval between gradient readings"),
             "observe": ("count, deaths, fates, lineage L", "repeatable"),
             "assert": (
-                "count|deaths|fate T|type T|lineage L at N unit (in a..b | = n | >= n | <= n)",
+                "count|deaths|fate T|type T|lineage L at N unit (in a..b | = n | >= n | <= n); "
+                "with replicates: "
+                "exactly one of A, B is T [at N unit] in >= P% | A is T [at N unit] in lo..hi%",
                 "repeatable",
             ),
             "reference": ("name", "ground truth to diff against"),
+            "contacts": ("path", "v0.4: time-resolved contact table (time, cell, cell[, area]); neighbours"),
+            "cell_network": ("time", "v0.4: step every cell's own network together at this interval"),
+            "replicates": ("integer", "v0.4: runs over seeds 0..N-1 for replicate asserts"),
+            "placement": (
+                "nearest | names",
+                "v0.4: second daughter at the nearest site or along its name's axis",
+            ),
         },
     },
     "stage": {"header": "stage <Id> { ... }", "props": {"from": ("time", ""), "to": ("time", "")}},
@@ -153,6 +162,10 @@ BLOCKS: dict[str, dict] = {
             "sets": ("FACTOR [= value]", "factor the receiver gains"),
             "field": ("Id", "gradient: field read at the cell's site"),
             "threshold": ("number", "gradient: factor set at or above this"),
+            "reads": (
+                "presence | amount",
+                "v0.4 contact: a named sender, or the ligand summed over neighbours",
+            ),
         },
     },
     "decision": {

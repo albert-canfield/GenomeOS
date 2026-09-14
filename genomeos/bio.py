@@ -119,6 +119,16 @@ def evaluate(
                 results.append(
                     {"test": f"assert: {a.get('assert')}", "got": a.get("value"), "ok": bool(a.get("ok"))}
                 )
+            # outcomes decided by noise are scored over seeds (v0.4 §7.4), never read off one run
+            from genomeos.runtime.body import evaluate_replicate_asserts, is_replicate_assert, replicate
+
+            spread = [a for a in module.organism.asserts if is_replicate_assert(a)]
+            if spread:
+                runs = module.organism.replicates
+                bodies = replicate(module, horizon, range(runs)) if runs > 0 else []
+                for a in evaluate_replicate_asserts(bodies, spread):
+                    got = f"{a.get('value')}% of {runs} runs" if runs else "declares no replicates"
+                    results.append({"test": f"assert: {a['assert']}", "got": got, "ok": bool(a.get("ok"))})
         except Exception as e:  # noqa: BLE001  (the organism layer reports its own failure as a claim)
             results.append({"test": "organism grows to its last stage", "got": str(e)[:80], "ok": False})
     for subject, measure, op, value in tests:

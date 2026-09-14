@@ -151,8 +151,12 @@ May contain `transcript` blocks.
 | `origin` | `x,y` | site of the first cell |
 | `sense` | `time` | interval between gradient readings |
 | `observe` | `count, deaths, fates, lineage L` | repeatable |
-| `assert` | `count|deaths|fate T|type T|lineage L at N unit (in a..b | = n | >= n | <= n)` | repeatable |
+| `assert` | `count|deaths|fate T|type T|lineage L at N unit (in a..b | = n | >= n | <= n); with replicates: exactly one of A, B is T [at N unit] in >= P% | A is T [at N unit] in lo..hi%` | repeatable |
 | `reference` | `name` | ground truth to diff against |
+| `contacts` | `path` | v0.4: time-resolved contact table (time, cell, cell[, area]); neighbours |
+| `cell_network` | `time` | v0.4: step every cell's own network together at this interval |
+| `replicates` | `integer` | v0.4: runs over seeds 0..N-1 for replicate asserts |
+| `placement` | `nearest | names` | v0.4: second daughter at the nearest site or along its name's axis |
 
 ### `stage`
 
@@ -188,6 +192,7 @@ May contain `transcript` blocks.
 | `sets` | `FACTOR [= value]` | factor the receiver gains |
 | `field` | `Id` | gradient: field read at the cell's site |
 | `threshold` | `number` | gradient: factor set at or above this |
+| `reads` | `presence | amount` | v0.4 contact: a named sender, or the ligand summed over neighbours |
 
 ### `decision`
 
@@ -302,7 +307,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Region**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `role`
 - **RegulatoryElement**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `cls`, `targets`, `domain`, `source`
 - **Domain**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `genes`, `boundaries`
-- **Signal**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `mode`, `ligand`, `receptor`, `sender`, `receiver`, `sets`, `value`, `field_name`, `threshold`
+- **Signal**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `mode`, `ligand`, `receptor`, `sender`, `receiver`, `sets`, `value`, `field_name`, `threshold`, `reads`
 - **Gene**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `symbol`, `locus`, `transcripts`, `basal_rate`, `location`
 - **Transcript**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `gene_id`, `exons`, `cds`, `cds_segments`, `cds_phase`, `tags`
 - **Protein**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `sequence`, `half_life_h`, `accession`, `isoforms`, `domains`, `structures`, `pathways`, `interactions`, `location`, `signals`, `initial`
@@ -317,5 +322,5 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `priority`, `evidence`, `confidence`
 - **Experiment**: `name`, `knockouts`, `adds`, `environment`, `until`, `asserts`, `expect`, `evidence`, `confidence`
 - **Design**: `name`, `knockout_any_of`, `add_any_of`, `at_most`, `vary`, `until`, `targets`, `keeps`, `evidence`, `confidence`
-- **Organism**: `name`, `species`, `genome`, `tempo`, `resolution`, `seed`, `width`, `height`, `origin`, `sense`, `root`, `cell_type`, `factors`, `environment`, `observe`, `asserts`, `reference`, `evidence`, `confidence`
+- **Organism**: `name`, `species`, `genome`, `tempo`, `resolution`, `seed`, `width`, `height`, `origin`, `sense`, `root`, `cell_type`, `factors`, `environment`, `observe`, `asserts`, `reference`, `contacts`, `cell_network`, `replicates`, `placement`, `evidence`, `confidence`
 - **Module**: `name`, `entities`, `rules`, `parameters`, `imports`, `events`, `timers`, `stages`, `decisions`, `experiments`, `fields`, `designs`, `organism`, `regime`
