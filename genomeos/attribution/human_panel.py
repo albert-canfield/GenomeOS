@@ -3242,3 +3242,322 @@ def save_catalogue(catalogue: dict[str, Any], chrom: str, cache: Path = CACHE) -
     with gzip.open(p, "wt") as fh:
         json.dump(catalogue["_catalogue"], fh)
     return p
+
+
+# ================================================================================================
+# Across the chromosomes: does a reading hold, or is it the chromosome?
+# ================================================================================================
+AUTOSOMES = tuple(f"chr{i}" for i in range(1, 23))
+ALL_CHROMS = (*AUTOSOMES, "chrX", "chrY")
+# chrY carries only the male haplotypes of the panel, so "recurring" (two assemblies) is a ten times
+# higher allele bar there; it is read and reported but never pooled with the rest.
+POOLED_CHROMS = (*AUTOSOMES, "chrX")
+
+
+def _get(d: Any, path: str) -> Any:
+    """result['a']['b'] as 'a.b', None if any step is missing."""
+    for key in path.split("."):
+        if not isinstance(d, dict) or key not in d:
+            return None
+        d = d[key]
+    return d
+
+
+# Every headline claim chr21 and chr22 made, as a number read out of one chromosome's result, with
+# the direction it must take to hold. `holds` is a predicate on the number; `gap` names the two
+# numbers a claim compares when it compares two.
+CLAIMS: tuple[tuple[str, str, Any, str], ...] = (
+    (
+        "cds_pooled_ratio_gc_rt",
+        "pooled.cds.ratio_gc_rt",
+        lambda v: v is not None and v <= 0.6,
+        "coding exons below 0.6 of the GC- and timing-matched recurring rate",
+    ),
+    (
+        "neutral_pooled_ratio_gc_rt",
+        "pooled.neutral.ratio_gc_rt",
+        lambda v: v is not None and 0.8 <= v <= 1.25,
+        "the neutral tier within a quarter of its matched rate",
+    ),
+    (
+        "cds_units_fixed_excess",
+        None,
+        lambda v: v is not None and v >= 0.15,
+        "coding 200-bp units fixed at least 15 points above their matched expectation",
+    ),
+    (
+        "neutral_units_fixed_excess",
+        None,
+        lambda v: v is not None and abs(v) <= 0.05,
+        "neutral 200-bp units fixed within 5 points of their matched expectation",
+    ),
+    (
+        "genes_core_share",
+        "genes.core_share_of_callable",
+        lambda v: v is not None and v >= 0.4,
+        "at least 40% of callable genes called core",
+    ),
+    (
+        "genes_core_excess_over_matched",
+        None,
+        lambda v: v is not None and v >= 0.3,
+        "callable genes core 30 points more often than their own matched windows",
+    ),
+    (
+        "timing_match_survival",
+        None,
+        lambda v: v is not None and v >= 0.5,
+        "at least half the coding-neutral gap surviving the replication-timing match",
+    ),
+    (
+        "background_storage_share",
+        "units.background.placed_shares.storage",
+        lambda v: v is not None and 0.35 <= v <= 0.65,
+        "storage the default: between a third and two thirds of placed background units",
+    ),
+    (
+        "no_unknown_tier_above_matched",
+        None,
+        lambda v: v is not None and v <= 0.05,
+        "no unknown tier more fixed than its matched expectation by more than 5 points",
+    ),
+    (
+        "unit_classes_even_over_timing",
+        None,
+        lambda v: v is not None and v <= 0.03,
+        "fixed and storage units within 3 points of each other in the late third",
+    ),
+    (
+        "gnocchi_panel_spearman",
+        "against_gnocchi.per_kilobase.spearman_z_vs_ratio",
+        lambda v: v is not None and abs(v) <= 0.2,
+        "Gnocchi and the panel barely agreeing per kilobase",
+    ),
+    (
+        "gnocchi_unscored_panel_depleted_duplicated",
+        "against_gnocchi.per_kilobase.gnocchi_unscored_panel_depleted.duplicated_share",
+        lambda v: v is not None and v >= 0.3,
+        "Gnocchi's silent, panel-depleted kilobases being copies",
+    ),
+    (
+        "overdispersion",
+        "against_gnocchi.per_kilobase.poisson_null.pearson_dispersion",
+        lambda v: v is not None and v >= 5,
+        "recurring counts per kilobase overdispersed well beyond a Poisson",
+    ),
+    (
+        "core_blocks_gnocchi_agreement",
+        None,
+        lambda v: v is not None and v >= 0.05,
+        "core blocks Gnocchi-constrained more often than variable blocks",
+    ),
+)
+
+
+def claim_numbers(res: dict[str, Any]) -> dict[str, float | None]:
+    """The claim numbers of one chromosome's saved result, whatever is present."""
+    u = res.get("units") or {}
+    out: dict[str, float | None] = {}
+    for name, path, _holds, _text in CLAIMS:
+        out[name] = _get(res, path) if path else None
+    for group in ("cds", "neutral"):
+        got = _get(u, f"{group}.placed_shares.fixed")
+        want = _get(u, f"{group}.expected_gc_rt_matched.fixed")
+        out[f"{group}_units_fixed_excess"] = None if got is None or want is None else round(got - want, 4)
+    genes = _get(res, "genes.core_share_of_callable")
+    matched = _get(res, "matched_windows.cds_genes.core_share_of_callable")
+    out["genes_core_excess_over_matched"] = (
+        None if genes is None or matched is None else round(genes - matched, 4)
+    )
+    gc_gap = _gap(_get(res, "pooled.neutral.ratio_gc"), _get(res, "pooled.cds.ratio_gc"))
+    rt_gap = _gap(_get(res, "pooled.neutral.ratio_gc_rt"), _get(res, "pooled.cds.ratio_gc_rt"))
+    out["timing_match_survival"] = None if not gc_gap or rt_gap is None else round(rt_gap / gc_gap, 3)
+    excess = [
+        round(_get(u, f"{t}.placed_shares.fixed") - _get(u, f"{t}.expected_gc_rt_matched.fixed"), 4)
+        for t in TIERS
+        if _get(u, f"{t}.placed_shares.fixed") is not None
+        and _get(u, f"{t}.expected_gc_rt_matched.fixed") is not None
+        and t != "structural"
+    ]
+    out["no_unknown_tier_above_matched"] = max(excess) if excess else None
+    t = res.get("timing_by_unit_class") or {}
+    if _get(t, "fixed.late") is not None and _get(t, "storage.late") is not None:
+        out["unit_classes_even_over_timing"] = round(abs(t["storage"]["late"] - t["fixed"]["late"]), 4)
+    else:
+        out["unit_classes_even_over_timing"] = None
+    b = _get(res, "against_gnocchi.blocks_core_or_variable_by_gnocchi") or {}
+    core_n = (b.get("core_gnocchi_constrained") or 0) + (b.get("core_gnocchi_free") or 0)
+    var_n = (b.get("variable_gnocchi_constrained") or 0) + (b.get("variable_gnocchi_free") or 0)
+    out["core_blocks_gnocchi_agreement"] = (
+        round(b["core_gnocchi_constrained"] / core_n - b["variable_gnocchi_constrained"] / var_n, 4)
+        if core_n and var_n
+        else None
+    )
+    return out
+
+
+def _gap(a: float | None, b: float | None) -> float | None:
+    return None if a is None or b is None else round(a - b, 4)
+
+
+def _quartiles(vals: list[float]) -> dict[str, float] | None:
+    v = sorted(vals)
+    if not v:
+        return None
+    return {
+        "min": v[0],
+        "median": v[len(v) // 2] if len(v) % 2 else round((v[len(v) // 2 - 1] + v[len(v) // 2]) / 2, 4),
+        "max": v[-1],
+    }
+
+
+def claims_across(per_chrom: dict[str, dict[str, float | None]]) -> dict[str, Any]:
+    """For each claim: its spread over the chromosomes and where it fails, never a pooled number."""
+    out: dict[str, Any] = {}
+    for name, _path, holds, text in CLAIMS:
+        vals = {c: n[name] for c, n in per_chrom.items() if n.get(name) is not None}
+        fails = sorted(c for c, v in vals.items() if not holds(v))
+        out[name] = {
+            "claim": text,
+            "chromosomes": len(vals),
+            "spread": _quartiles(list(vals.values())),
+            "holds_on": len(vals) - len(fails),
+            "fails_on": fails,
+            "verdict": "genome-wide"
+            if not fails
+            else ("mostly" if len(fails) <= 2 else "chromosome-specific"),
+            "per_chromosome": {c: vals[c] for c in sorted(vals, key=_chrom_order)},
+        }
+    return out
+
+
+def _chrom_order(chrom: str) -> tuple[int, str]:
+    body = chrom[3:]
+    return (int(body), "") if body.isdigit() else (99, body)
+
+
+CATALOGUE_SUMS = (
+    "storage_units",
+    "storage_bp",
+    "gnomad_matched_events",
+    "panel_events_snv_indel",
+    "with_tandem_repeat",
+    "with_gtex_eqtl",
+    "with_mpra_allele_pair",
+    "with_either",
+    "hypervariable_units",
+    "hypervariable_with_tandem_repeat",
+)
+
+
+def genome_catalogue(results: dict[str, dict[str, Any]], cache: Path = CACHE) -> dict[str, Any]:
+    """The storage catalogue of every read chromosome added up, with the exact pooled medians."""
+    out: dict[str, Any] = {k: 0 for k in CATALOGUE_SUMS}
+    by_tier: Counter = Counter()
+    values_hist: Counter = Counter()
+    kinds: Counter = Counter()
+    by_length: Counter = Counter()
+    for res in results.values():
+        s = res.get("storage") or {}
+        if "storage_units" not in s:
+            continue
+        for k in CATALOGUE_SUMS:
+            out[k] += s.get(k) or 0
+        by_tier.update(s.get("by_tier") or {})
+        values_hist.update({k: v for k, v in (s.get("recurring_values_histogram") or {}).items()})
+        kinds.update(s.get("event_kinds") or {})
+        by_length.update(s.get("hypervariable_read_by_length") or {})
+    eff: list[float] = []
+    top: list[float] = []
+    for chrom in results:
+        p = cache / chrom / "storage_catalogue.json.gz"
+        if not p.exists():
+            continue
+        with gzip.open(p, "rt") as fh:
+            for c in json.load(fh):
+                d = c.get("domain") or {}
+                if d.get("effective_values") is not None:
+                    eff.append(d["effective_values"])
+                if d.get("top_share") is not None:
+                    top.append(d["top_share"])
+    out.update(
+        {
+            "chromosomes": sorted(results, key=_chrom_order),
+            "by_tier": dict(by_tier.most_common()),
+            "recurring_values_histogram": {k: values_hist[k] for k in sorted(values_hist, key=_hist_key)},
+            "event_kinds": dict(kinds.most_common(10)),
+            "effective_values_median": _median(eff),
+            "top_share_median": _median(top),
+            "effective_values_counted": len(eff),
+            "gnomad_matched_share": (
+                round(out["gnomad_matched_events"] / out["panel_events_snv_indel"], 4)
+                if out["panel_events_snv_indel"]
+                else None
+            ),
+            "hypervariable_read_by_length": dict(by_length.most_common()),
+        }
+    )
+    return out
+
+
+def _hist_key(k: str) -> int:
+    return 99 if k.endswith("+") else int(k)
+
+
+def genome_wide(
+    chroms: tuple[str, ...] | list[str] = ALL_CHROMS, results_dir: Path | None = None
+) -> dict[str, Any]:
+    """Read every saved per-chromosome result and say what holds across them and what does not."""
+    from genomeos.results import RESULTS_DIR, load_result
+
+    results_dir = results_dir or RESULTS_DIR
+    results = {}
+    for chrom in chroms:
+        res = load_result(f"human_panel_{chrom}", results_dir)
+        if res:
+            results[chrom] = res
+    pooled = {c: r for c, r in results.items() if c in POOLED_CHROMS}
+    numbers = {c: claim_numbers(r) for c, r in pooled.items()}
+    catalogues: Counter = Counter()
+    units: Counter = Counter()
+    for res in pooled.values():
+        for name, row in (res.get("catalogues") or {}).get("unknown_space", {}).items():
+            if isinstance(row, dict) and "bp" in row:
+                catalogues[name] += row["bp"]
+        for name, row in ((res.get("units") or {}).get("background") or {}).get("classes", {}).items():
+            units[name] += row["n"]
+    placed = sum(units[k] for k in ("fixed", "storage", "hypervariable")) or 1
+    return {
+        "chromosomes_read": sorted(results, key=_chrom_order),
+        "pooled_over": sorted(pooled, key=_chrom_order),
+        "not_pooled": sorted(set(results) - set(pooled), key=_chrom_order),
+        "pooling_rule": (
+            "chrY is read and reported on its own: only the male haplotypes of the panel carry it, so a "
+            "recurring value there is two of 19 assemblies rather than two of 89 and the controls do not "
+            "pass"
+        ),
+        "claims": claims_across(numbers),
+        "claim_numbers": {c: numbers[c] for c in sorted(numbers, key=_chrom_order)},
+        "unknown_space_bp": dict(catalogues),
+        "background_units": {
+            "units": sum(units.values()),
+            "classes": dict(units),
+            "placed_shares": {k: round(units[k] / placed, 4) for k in ("fixed", "storage", "hypervariable")},
+        },
+        "storage": genome_catalogue(pooled),
+        "chrY": {
+            "control": (results.get("chrY") or {}).get("control"),
+            "storage": (results.get("chrY") or {}).get("storage"),
+        }
+        if "chrY" in results
+        else None,
+        "cost": {
+            c: {
+                "seconds": r.get("seconds"),
+                "maf_mb": _get(r, "cost.maf.mb_fetched"),
+                "maf_seconds": _get(r, "cost.maf.seconds"),
+                "stages": r.get("stage_seconds"),
+            }
+            for c, r in sorted(results.items(), key=lambda kv: _chrom_order(kv[0]))
+        },
+    }

@@ -259,3 +259,85 @@ def test_keepalive_source_retries_on_the_mirror_and_checks_sizes(monkeypatch):
     with pytest.raises(OSError):
         src.read(0, 4)
     hp._POOL.conns = {}
+
+
+def _fake_result(cds_ratio, storage_late, fixed_late, core_constrained, var_constrained):
+    """The fields claim_numbers reads, with everything else left out."""
+    return {
+        "pooled": {
+            "cds": {"ratio_gc": 0.35, "ratio_gc_rt": cds_ratio},
+            "neutral": {"ratio_gc": 0.96, "ratio_gc_rt": 0.91},
+        },
+        "units": {
+            "cds": {"placed_shares": {"fixed": 0.70}, "expected_gc_rt_matched": {"fixed": 0.44}},
+            "neutral": {"placed_shares": {"fixed": 0.48}, "expected_gc_rt_matched": {"fixed": 0.47}},
+            "fossil": {"placed_shares": {"fixed": 0.44}, "expected_gc_rt_matched": {"fixed": 0.47}},
+            "background": {
+                "placed_shares": {"storage": 0.5},
+                "classes": {"fixed": {"n": 10}, "storage": {"n": 10}, "hypervariable": {"n": 0}},
+            },
+        },
+        "genes": {"core_share_of_callable": 0.58},
+        "matched_windows": {"cds_genes": {"core_share_of_callable": 0.14}},
+        "timing_by_unit_class": {"fixed": {"late": fixed_late}, "storage": {"late": storage_late}},
+        "against_gnocchi": {
+            "per_kilobase": {
+                "spearman_z_vs_ratio": -0.08,
+                "poisson_null": {"pearson_dispersion": 15.6},
+                "gnocchi_unscored_panel_depleted": {"duplicated_share": 0.58},
+            },
+            "blocks_core_or_variable_by_gnocchi": {
+                "core_gnocchi_constrained": core_constrained,
+                "core_gnocchi_free": 10 - core_constrained,
+                "variable_gnocchi_constrained": var_constrained,
+                "variable_gnocchi_free": 100 - var_constrained,
+            },
+        },
+        "catalogues": {"unknown_space": {"fixed": {"bp": 100}, "storage": {"bp": 200}}},
+        "storage": {"storage_units": 3, "with_either": 2, "recurring_values_histogram": {"2": 3}},
+    }
+
+
+def test_claim_numbers_reads_the_gaps_and_the_timing_survival():
+    n = hp.claim_numbers(_fake_result(0.41, 0.34, 0.33, 3, 30))
+    assert n["cds_pooled_ratio_gc_rt"] == 0.41
+    assert n["cds_units_fixed_excess"] == pytest.approx(0.26)
+    assert n["neutral_units_fixed_excess"] == pytest.approx(0.01)
+    assert n["genes_core_excess_over_matched"] == pytest.approx(0.44)
+    # the coding-neutral gap is 0.61 before the timing match and 0.50 after
+    assert n["timing_match_survival"] == pytest.approx(0.82, abs=0.01)
+    assert n["unit_classes_even_over_timing"] == pytest.approx(0.01)
+    # core blocks constrained 30% of the time, variable blocks 30%: no agreement
+    assert n["core_blocks_gnocchi_agreement"] == pytest.approx(0.0)
+    # the worst of the unknown tiers present: fossil is 3 points under its matched share, neutral 1 over
+    assert n["no_unknown_tier_above_matched"] == pytest.approx(0.01)
+
+
+def test_claims_across_names_the_chromosomes_a_claim_fails_on():
+    per = {
+        "chr21": hp.claim_numbers(_fake_result(0.41, 0.34, 0.33, 3, 30)),
+        "chr22": hp.claim_numbers(_fake_result(0.42, 0.37, 0.31, 18, 28)),
+        "chr19": hp.claim_numbers(_fake_result(0.44, 0.34, 0.34, 5, 30)),
+    }
+    out = hp.claims_across(per)
+    assert out["cds_pooled_ratio_gc_rt"]["verdict"] == "genome-wide"
+    assert out["cds_pooled_ratio_gc_rt"]["spread"] == {"min": 0.41, "median": 0.42, "max": 0.44}
+    assert out["unit_classes_even_over_timing"]["fails_on"] == ["chr22"]
+    assert out["unit_classes_even_over_timing"]["holds_on"] == 2
+
+
+def test_genome_wide_pools_the_autosomes_and_keeps_chry_apart(tmp_path, monkeypatch):
+    import json as _json
+
+    for chrom, ratio in (("chr21", 0.41), ("chr22", 0.42), ("chrY", 1.66)):
+        (tmp_path / f"human_panel_{chrom}.json").write_text(
+            _json.dumps(_fake_result(ratio, 0.34, 0.33, 3, 30))
+        )
+    monkeypatch.setattr("genomeos.results.RESULTS_DIR", tmp_path)
+    out = hp.genome_wide(("chr21", "chr22", "chrY"), results_dir=tmp_path)
+    assert out["chromosomes_read"] == ["chr21", "chr22", "chrY"]
+    assert out["pooled_over"] == ["chr21", "chr22"] and out["not_pooled"] == ["chrY"]
+    assert out["claims"]["cds_pooled_ratio_gc_rt"]["chromosomes"] == 2  # chrY's 1.66 is not in it
+    assert out["unknown_space_bp"] == {"fixed": 200, "storage": 400}
+    assert out["storage"]["storage_units"] == 6 and out["storage"]["with_either"] == 4
+    assert out["chrY"]["storage"]["storage_units"] == 3

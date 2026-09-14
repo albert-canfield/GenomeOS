@@ -10,7 +10,13 @@ the neutral tier as the controls; the fixed, storage and cannot-place catalogues
 with gnomAD, TRExplorer, GTEx and MPRA beside them; the comparison with Gnocchi; the calibration
 loci; the candidates; and what the genome would cost. No model is called.
 
+With --genome-wide it reads nothing: it gathers the saved per-chromosome results into
+data/results/human_panel_genome_wide.json, which says for every headline claim whether it holds on
+every chromosome and which chromosomes it fails on, with the spread rather than a pooled number,
+and adds the storage catalogues up. chrY is read like the rest and pooled with none of it.
+
     uv run python scripts/human_panel.py [--chrom chr21] [--skip-regions]
+    uv run python scripts/human_panel.py --genome-wide
 """
 
 from __future__ import annotations
@@ -34,8 +40,28 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument(
         "--skip-regions", action="store_true", help="do not stream the calibration and candidate regions"
     )
+    ap.add_argument(
+        "--genome-wide",
+        action="store_true",
+        help="read nothing: gather the saved per-chromosome results into human_panel_genome_wide",
+    )
     args = ap.parse_args(argv)
     t0 = time.time()
+
+    if args.genome_wide:
+        payload = hp.genome_wide()
+        path = save_result("human_panel_genome_wide", payload)
+        print(f"saved {path}: {len(payload['chromosomes_read'])} chromosomes")
+        json.dump(
+            {
+                k: {kk: v[kk] for kk in ("spread", "fails_on", "verdict")}
+                for k, v in payload["claims"].items()
+            },
+            sys.stdout,
+            indent=1,
+        )
+        print()
+        return
 
     def say(*a) -> None:
         print(f"[{time.time() - t0:6.0f} s]", *a, flush=True)
