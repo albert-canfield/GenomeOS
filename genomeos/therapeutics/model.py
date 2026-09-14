@@ -575,6 +575,9 @@ class MechanismFit:
     contributions: list[dict[str, Any]] = field(default_factory=list)
     gates_failed: list[str] = field(default_factory=list)
     blocking_unknowns: list[str] = field(default_factory=list)
+    #: Hard requirements that were neither met nor refused. The mechanism is
+    #: still listed, and it is a hypothesis rather than an option.
+    provisional_requirements: list[str] = field(default_factory=list)
     immunogenic_cell_death: Grade = "unknown"
     antigen_release: Grade = "unknown"
     precedent: dict[str, Any] | None = None
@@ -583,7 +586,18 @@ class MechanismFit:
 
     @property
     def viable(self) -> bool:
+        """Nothing refused this mechanism. It may still rest on an open question."""
         return not self.gates_failed
+
+    @property
+    def established(self) -> bool:
+        """Every hard requirement was answered, not merely left unanswered.
+
+        The difference matters more than the compatibility score does. A
+        mechanism whose requirement is unanswered has not been shown to apply;
+        it has only failed to be ruled out.
+        """
+        return not self.gates_failed and not self.provisional_requirements
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -601,6 +615,8 @@ class MechanismFit:
             "contributions": self.contributions,
             "gates_failed": self.gates_failed,
             "blocking_unknowns": self.blocking_unknowns,
+            "requirements_unanswered": self.provisional_requirements,
+            "established": self.established,
             "precedent": self.precedent,
             "notes": self.notes,
             "evidence": [e.to_dict() for e in self.evidence],
@@ -805,8 +821,26 @@ class TherapeuticTargetCandidate:
 
     @property
     def best_mechanism(self) -> MechanismFit | None:
-        viable = [m for m in self.therapeutic_mechanisms if m.viable]
-        return max(viable, key=lambda m: m.compatibility) if viable else None
+        """The mechanism this candidate actually supports, or None.
+
+        Only a mechanism whose hard requirements were *answered* can be the
+        preferred one. A mechanism that merely was not ruled out heads no list:
+        for a cytoplasmic protein with 0.45 confidence of a membrane
+        compartment, "blocking antibody" is not the best available option, it
+        is an open question about reachability wearing an option's clothes.
+        Those are still scored, listed and reported, through
+        `best_provisional_mechanism` and the mechanism table.
+        """
+        ready = [m for m in self.therapeutic_mechanisms if m.established and m.compatibility > 0]
+        return max(ready, key=lambda m: m.compatibility) if ready else None
+
+    @property
+    def best_provisional_mechanism(self) -> MechanismFit | None:
+        """The nearest mechanism whose requirement is open, with that requirement."""
+        open_ = [
+            m for m in self.therapeutic_mechanisms if m.viable and not m.established and m.compatibility > 0
+        ]
+        return max(open_, key=lambda m: m.compatibility) if open_ else None
 
     def to_dict(self) -> dict[str, Any]:
         return {

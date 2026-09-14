@@ -1,10 +1,10 @@
 {
   "result": "therapeutic_benchmark",
-  "date": "2026-09-11",
+  "date": "2026-09-15",
   "cases": 6,
   "targets_recovered": 6,
   "verdicts_correct": 6,
-  "top_mechanism_defensible": 4,
+  "top_mechanism_defensible": 6,
   "surface_cases": 2,
   "surface_cases_recovered": 2,
   "evidence": "derived: GenomeOS therapeutic pipeline against publicly approved targets",
@@ -46,7 +46,7 @@
       ],
       "recovered": true,
       "rank": 1,
-      "seconds": 1.0,
+      "seconds": 1.1,
       "target_class": "direct_surface",
       "score": 0.494,
       "surface_accessibility": 1.0,
@@ -76,13 +76,11 @@
       "target_class": "neoantigen_hla",
       "score": 0.427,
       "surface_accessibility": 0.36,
-      "best_mechanism": "blocking_antibody",
-      "best_compatibility": 0.25,
+      "best_mechanism": null,
+      "best_compatibility": null,
       "peptide_route": true,
-      "mechanism_concerns": [
-        "top mechanism blocking_antibody needs an extracellular epitope, accessibility is 0.36"
-      ],
-      "mechanism_sane": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
       "verdict": "correctly not a surface target; approved drug is out of scope",
       "pass": true
     },
@@ -134,13 +132,11 @@
       "target_class": "neoantigen_hla",
       "score": 0.438,
       "surface_accessibility": 0.36,
-      "best_mechanism": "adcp",
-      "best_compatibility": 0.25,
+      "best_mechanism": null,
+      "best_compatibility": null,
       "peptide_route": true,
-      "mechanism_concerns": [
-        "top mechanism adcp needs an extracellular epitope, accessibility is 0.36"
-      ],
-      "mechanism_sane": false,
+      "mechanism_concerns": [],
+      "mechanism_sane": true,
       "verdict": "correctly not a surface target; approved drug is out of scope",
       "pass": true
     },

@@ -695,6 +695,7 @@ def evaluate(candidate: Any, spec: MechanismSpec, inputs: Inputs) -> MechanismFi
             fit.gates_failed.append(f"{gate.key} {state}: {gate.unmet}")
         elif result is None:
             provisional.append(gate.key)
+            fit.provisional_requirements.append(gate.key)
             fit.blocking_unknowns.append(f"{gate.key} is unknown; the mechanism is scored provisionally")
 
     numerator = 0.0

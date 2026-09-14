@@ -320,8 +320,10 @@ def text_report(analysis: dict[str, Any], detail: int = 5) -> str:
         )
     lines += ["", "THERAPEUTIC MECHANISM RECOMMENDATIONS", THIN]
     ranked = _mechanism_ranking(candidates)
-    for gene, mechanism, score, status, cargo, effector in ranked[:10]:
+    for gene, mechanism, score, status, cargo, effector, unanswered in ranked[:10]:
         flag = "  EXPERIMENTAL" if status == "experimental" else ""
+        if unanswered:
+            flag += f"  REQUIREMENT UNANSWERED: {', '.join(unanswered)}"
         lines.append(f"  {gene:<10} {mechanism:<26} {score:.0%}  cargo={cargo:<22} effector={effector}{flag}")
     if not ranked:
         lines.append("  (no mechanism passed its hard requirements for any candidate)")
@@ -411,10 +413,19 @@ def _summary_table(candidates: list[TherapeuticTargetCandidate]) -> list[str]:
             f"{_num(c.scores.value('tumour_selectivity')):<8}"
             f"{_num(c.scores.value('normal_tissue_safety')):<8}"
             f"{_num(c.scores.value('internalisation')):<8}"
-            f"{_num(c.scores.value('evidence_strength')):<7}"
-            + (f"{best.mechanism} {best.compatibility:.0%}" if best else "none")
+            f"{_num(c.scores.value('evidence_strength')):<7}" + _best_mechanism_cell(c, best)
         )
     return out
+
+
+def _best_mechanism_cell(c: TherapeuticTargetCandidate, best) -> str:
+    """The preferred mechanism, or the nearest open one named as open."""
+    if best is not None:
+        return f"{best.mechanism} {best.compatibility:.0%}"
+    nearest = c.best_provisional_mechanism
+    if nearest is None:
+        return "none"
+    return f"none ({nearest.mechanism} unresolved: {', '.join(nearest.provisional_requirements)})"
 
 
 def _mechanism_ranking(candidates: list[TherapeuticTargetCandidate]) -> list[tuple]:
@@ -422,8 +433,20 @@ def _mechanism_ranking(candidates: list[TherapeuticTargetCandidate]) -> list[tup
     for c in candidates:
         for m in c.therapeutic_mechanisms:
             if m.viable and m.compatibility > 0:
-                rows.append((c.gene, m.mechanism, m.compatibility, m.status, m.cargo.kind, m.effector.kind))
-    rows.sort(key=lambda r: -r[2])
+                rows.append(
+                    (
+                        c.gene,
+                        m.mechanism,
+                        m.compatibility,
+                        m.status,
+                        m.cargo.kind,
+                        m.effector.kind,
+                        list(m.provisional_requirements),
+                    )
+                )
+    # Established requirements first, so a mechanism that was merely not ruled
+    # out never heads the table over one that was actually shown to apply.
+    rows.sort(key=lambda r: (bool(r[6]), -r[2]))
     return rows
 
 
@@ -506,10 +529,21 @@ def target_specification_text(c: TherapeuticTargetCandidate, providers: Any = No
     viable = [m for m in c.therapeutic_mechanisms if m.viable and m.compatibility > 0]
     lines += _bullets([f"{m.mechanism} {m.compatibility:.0%} ({m.status})" for m in viable[:6]])
     best = c.best_mechanism
+    nearest = c.best_provisional_mechanism
     lines += [
         "",
         f"Preferred mechanism: {best.mechanism if best else 'none'}"
-        + (f" - cargo {best.cargo.kind}, effector {best.effector.kind}" if best else ""),
+        + (
+            f" - cargo {best.cargo.kind}, effector {best.effector.kind}"
+            if best
+            else (
+                f"; the nearest is {nearest.mechanism} at {nearest.compatibility:.0%}, and its "
+                f"requirement {', '.join(nearest.provisional_requirements)} is unanswered rather "
+                "than met, so it is a question and not an option"
+                if nearest
+                else ""
+            )
+        ),
         "",
         f"Design readiness: {r['overall']:.2f}",
     ]

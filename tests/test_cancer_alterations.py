@@ -248,3 +248,62 @@ def test_the_supplied_alterations_are_reported_as_an_input_level():
     wanted = {m["input"] for m in a["missing_data"]}
     assert "copy number" not in wanted
     assert "structural variants" in wanted
+
+
+# --- the two open mechanism-ranking defects -------------------------------------------
+
+BENCH = ROOT / "data/demo/benchmark"
+needs_bench = pytest.mark.skipif(
+    not (BENCH.exists() and VEP_CACHE.exists() and (PROTEINS / "BRAF.json").exists()),
+    reason="needs the benchmark fixtures and the caches",
+)
+
+
+def _bench(vcf: str, **kw):
+    from genomeos.therapeutics import analyse_vcf
+
+    return analyse_vcf(str(BENCH / vcf), top_genes=4, net=False, indirect=False, **kw)
+
+
+@needs_bench
+def test_an_unanswered_requirement_heads_no_list():
+    """The benchmark's two remaining mechanism defects, in one sentence.
+
+    BRAF is cytoplasmic. Its membrane compartment is curated at 0.45, below the
+    0.6 reachability threshold, so the surface requirement is neither met nor
+    refused. Every surface mechanism was therefore scored provisionally, capped
+    at 0.25 — and still headed the list, because everything else scored zero. A
+    mechanism that was merely not ruled out is a question, not the best option.
+    """
+    braf = next(c for c in _bench("braf_v600e_melanoma.vcf")["candidates"] if c.gene == "BRAF")
+    assert braf.best_mechanism is None
+    nearest = braf.best_provisional_mechanism
+    assert nearest is not None, "it is still scored and still listed, with its open requirement"
+    assert nearest.provisional_requirements == ["surface_accessible"]
+    assert nearest.viable and not nearest.established
+
+
+@needs_bench
+def test_the_answer_appears_as_soon_as_the_data_does():
+    """The control that says this is a fix and not a silencing.
+
+    The same cytoplasmic driver, with the patient's HLA genotype supplied,
+    gets a preferred mechanism: the peptide/HLA route, which is the correct
+    answer for a protein no binder reaches.
+    """
+    braf = next(
+        c for c in _bench("braf_v600e_melanoma.vcf", hla=["HLA-A*02:01"])["candidates"] if c.gene == "BRAF"
+    )
+    assert braf.best_mechanism is not None
+    assert braf.best_mechanism.mechanism in ("tcr_based", "tcr_mimic")
+    assert braf.best_mechanism.established
+
+
+@needs_bench
+def test_a_reachable_target_keeps_its_preferred_mechanism():
+    """The other side of the control: nothing was taken from the cases that work."""
+    egfr = next(c for c in _bench("egfr_l858r_lung.vcf")["candidates"] if c.gene == "EGFR")
+    assert egfr.best_mechanism is not None
+    assert egfr.best_mechanism.mechanism == "blocking_antibody"
+    assert egfr.best_mechanism.established
+    assert egfr.best_mechanism.compatibility > 0.5

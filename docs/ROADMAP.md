@@ -1050,14 +1050,11 @@ in order. "Owner" is the session that holds the files today (see §7).
   are found as surface targets; the four whose approved drug is a
   small-molecule inhibitor are correctly *not* called surface targets, and
   each still offers the peptide/HLA route, which is the pipeline's
-  distinctive claim. A third question is scored apart and the pipeline fails
-  it, though less than it did: 4 of 6 now, after two fixes the benchmark
-  prompted. What remains is that a cytoplasmic protein (BRAF, PIK3CA) still
-  heads its list with a mechanism needing an extracellular epitope, now capped
-  at the provisional ceiling of 0.25 and labelled with its unmet requirement,
-  so it misleads nobody but should not be first. Pinned at 2, may fall, must
-  not rise.
-- **Three fixes the benchmark prompted.** (1) A small-molecule precedent
+  distinctive claim. The third question, whether the mechanism ranked first is
+  defensible, was 4 of 6 and is **6 of 6 since 2026-09-15**; no known defect
+  remains, and the pin in `tests/test_therapeutic_benchmark.py` still reads 2
+  and may be lowered.
+- **Four fixes the benchmark prompted.** (1) A small-molecule precedent
   counted as evidence that a mechanism needing an extracellular epitope could
   reach the target, so a kinase inhibitor "supported" a radioligand against
   cytoplasmic BRAF; such precedent now requires positive evidence of
@@ -1067,8 +1064,21 @@ in order. "Owner" is the session that holds the files today (see §7).
   intent, and is refused on ignorance rather than offered on it. (3) A
   mechanism whose hard requirement merely went unanswered could outrank one
   whose requirements were established; such a mechanism is now capped at 0.25
-  and carries the reason. All three are the same mistake in different
-  clothes: treating an unanswered question as permission.
+  and carries the reason. (4) Capping it was not enough: a capped mechanism
+  still headed the list, because for a cytoplasmic driver nothing else scored
+  at all, so BRAF's preferred mechanism was a blocking antibody and PIK3CA's
+  was ADCP. A gate has three answers and not two, so a mechanism whose hard
+  requirement is *unanswered* is now provisional and can never be a
+  candidate's preferred mechanism; it stays scored, listed and named with its
+  open requirement, and `best_mechanism` returns none instead. Both rows
+  closed, 4 of 6 to 6 of 6, with no target, rank, class or verdict moved. The
+  control that says this is a fix and not a silencing: the same BRAF case
+  given an HLA genotype gets a preferred mechanism, `tcr_based` at 0.44, the
+  peptide/HLA route, which is the right answer for a protein no binder
+  reaches; and EGFR and ERBB2 keep `blocking_antibody` unchanged, their
+  surface requirement being answered rather than merely unrefused. All four
+  are the same mistake in different clothes: treating an unanswered question
+  as permission.
 - **Copy number and structural variants, done (2026-09-15).** The same
   cBioPortal client reads the study's `_cna` and `_structural_variants`
   profiles and distils them beside the mutation table
@@ -1101,15 +1111,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   rank 1, direct surface, blocking antibody 0.521. A case whose driver is
   only a copy-number or structural call belongs in the benchmark;
   genomeos-f7 owns it.
-- **Missing.** A `cancer.*` library layer; the two mechanism-ranking defects
-  above; expression-driven targets such as CD19 and BCMA, which need patient
+- **Missing.** A `cancer.*` library layer; expression-driven targets such as CD19 and BCMA, which need patient
   RNA rather than a variant; the demo runs at data level 1 only; what a deep
   deletion is actually worth (the dependency it creates) is not modelled.
-- **Next.** 1. The two open mechanism-ranking defects (BRAF and PIK3CA still
-  head their lists with a mechanism needing an extracellular epitope).
-  2. `cancer.*` libraries with driver evidence. 3. A `NeoantigenProvider`
-  behind a licence-checked optional extra. 4. A benchmark case whose driver
-  is a copy-number or structural call.
+- **Next.** 1. `cancer.*` libraries with driver evidence. 2. A
+  `NeoantigenProvider` behind a licence-checked optional extra. 3. A benchmark
+  case whose driver is a copy-number or structural call, and lowering the
+  pinned defect count from 2 to 0; genomeos-f7 owns both.
 - **Owner.** genomeos-f2 since 2026-09-14; genomeos-f7 takes the benchmark.
 
 ### G. Product: web UI, CLI, packaging, CI

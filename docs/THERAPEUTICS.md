@@ -222,6 +222,31 @@ factors whose input is unknown are dropped and listed as blocking unknowns, and
 the score is multiplied by an input-coverage factor so a mechanism cannot rank
 highly on ignorance. Mechanism maturity is a separate, visible multiplier.
 
+### Not refused is not established
+
+A gate has three answers, not two: met, refused, and *unanswered*. A mechanism
+whose hard requirement went unanswered is **provisional**: capped at 0.25,
+listed with the requirement named, and never the candidate's preferred
+mechanism. `best_mechanism` ranges only over mechanisms whose requirements were
+answered and returns None when there are none; `best_provisional_mechanism`
+gives the nearest open one with its open requirement, and the report prints
+both.
+
+This was the benchmark's last standing complaint and it closed two rows at
+once. BRAF's plasma-membrane compartment is curated at 0.45, below the 0.6
+reachability threshold, so the surface requirement was neither met nor refused;
+every surface mechanism was scored provisionally at 0.25 and still headed the
+list, because nothing else scored at all. The same for PIK3CA. Both now report
+no preferred mechanism, and name `surface_accessible` as the reason.
+
+The control that says this is a fix and not a silencing: give the same BRAF
+case an HLA genotype and the preferred mechanism appears — `tcr_based` at 0.44,
+the peptide/HLA route, which is the right answer for a protein no binder
+reaches. EGFR and ERBB2 keep `blocking_antibody` unchanged, because their
+surface requirement is answered rather than merely unrefused. It is the same
+mistake as the other three the benchmark found: treating an unanswered question
+as permission.
+
 Everything marked experimental stays experimental. `immune_marker_delivery` is
 the "mark the cell for the immune system" concept, and it is classed
 experimental with the note that GenomeOS can cite no clinical precedent for the
