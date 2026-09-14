@@ -235,6 +235,51 @@ def _inside(starts: list[int], pairs: list[tuple[int, int]]) -> int:
     return sum(1 for m, t in pairs if bisect.bisect_right(starts, m) == bisect.bisect_right(starts, t))
 
 
+BIN = 10_000_000  # the scale at which boundary placement and element placement are compared
+
+# What the sign of the node's excess over random might be a property of. Each is measurable from what
+# the control already loads, and each is a different account of why real boundaries beat scattered ones
+# on some chromosomes and lose on others.
+SHAPE = (
+    "boundaries_per_mb",
+    "median_node_kb",
+    "node_length_cv",
+    "median_pair_span_kb",
+    "coding_genes_per_mb",
+    "elements_per_mb",
+    "boundaries_follow_the_elements",
+    "inside_random",
+)
+
+
+def _shape(chrom: str, length: int, starts: list[int], pairs: list[tuple[int, int]], genes: int) -> dict:
+    """The chromosome's partition and its element set, described so the sign of the excess can be
+    regressed on something. `boundaries_follow_the_elements` is the mechanism worth testing: real CTCF
+    boundaries cluster where genes are, and so do the elements and their targets, so a chromosome whose
+    boundaries crowd into the element-dense stretches spends its cuts where the pairs are and can lose
+    to boundaries scattered uniformly, most of which land in empty sequence and cut nothing."""
+    mb = length / 1e6
+    nodes = [b - a for a, b in zip(starts, [*starts[1:], length], strict=True)]
+    mean = sum(nodes) / len(nodes)
+    var = sum((x - mean) ** 2 for x in nodes) / len(nodes)
+    bins = length // BIN + 1
+    per_bin_boundaries = [0] * bins
+    per_bin_pairs = [0] * bins
+    for e in starts[1:]:
+        per_bin_boundaries[e // BIN] += 1
+    for m, _ in pairs:
+        per_bin_pairs[m // BIN] += 1
+    return {
+        "boundaries_per_mb": round(len(starts[1:]) / mb, 2),
+        "median_node_kb": round(median(nodes) / 1e3, 1),
+        "node_length_cv": round(var**0.5 / mean, 3) if mean else None,
+        "median_pair_span_kb": round(median(abs(m - t) for m, t in pairs) / 1e3, 1),
+        "coding_genes_per_mb": round(genes / mb, 2),
+        "elements_per_mb": round(len(pairs) / mb, 1),
+        "boundaries_follow_the_elements": _spearman(per_bin_boundaries, per_bin_pairs),
+    }
+
+
 def node_control(chroms: list[str]) -> dict:
     """The node-containment rate against as many boundaries placed at random, on this element set.
 
@@ -289,6 +334,7 @@ def node_control(chroms: list[str]) -> dict:
             "inside": round(ins / tot, 4),
             "inside_random": round(rnd, 4),
             "excess": round(ins / tot - rnd, 4),
+            **_shape(chrom, length, starts, pairs, len(coding)),
         }
     tot = sum(r["coding_named"] for r in rows.values())
     ins = sum(r["inside"] * r["coding_named"] for r in rows.values())
@@ -303,10 +349,124 @@ def node_control(chroms: list[str]) -> dict:
         "inside_random": round(rnd / tot, 4) if tot else None,
         "excess": round((ins - rnd) / tot, 4) if tot else None,
         "chromosomes_where_the_node_beats_random": won,
+        "what_predicts_the_sign": _predicts_the_sign(rows),
         "per_chromosome": dict(sorted(rows.items(), key=lambda kv: -kv[1]["excess"])),
         "skipped": skipped,
         "reading": "an excess that is positive on some chromosomes and negative on others is not a "
         "property of CTCF nodes; it is a property of where the boundaries happen to fall",
+    }
+
+
+# Fixed on 2026-09-15 from the twelve chromosomes complete at the time (chr12 to chr22 and chrY), where
+# boundary density is the one shape measure that tracks the sign of the node's excess over random
+# (Spearman +0.82, +0.76 with chrY dropped) and separates it at 11 of 12. Every chromosome that lands
+# afterwards is a held-out test of it, and the fold scores each one as it arrives. The rule is fitted,
+# not derived, and it is recorded here so that it cannot be quietly refitted when it fails.
+SIGN_RULE = {
+    "fixed_on": [
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrY",
+    ],  # noqa: E501
+    "fixed_at": "2026-09-15",
+    "rule": "the node beats as many random boundaries where the caller cuts the chromosome more finely "
+    "than 5.8 boundaries per Mb, and loses below it; within 0.3 per Mb of the line the excess is near "
+    "zero and the call is refused",
+    "threshold_per_mb": 5.8,
+    "too_close_per_mb": 0.3,
+    "fitted_errors": ["chr19, 5.77 per Mb, predicted to lose and it wins by 0.7 points"],
+    "why": "an excess that is a function of how finely the caller cuts is a statement about resolution "
+    "rather than about CTCF: where CTCF-only elements are sparse the nodes carry nothing a partition of "
+    "the same count placed at random does not",
+}
+
+
+def sign_call(per_mb: float | None) -> str | None:
+    if per_mb is None:
+        return None
+    if abs(per_mb - SIGN_RULE["threshold_per_mb"]) < SIGN_RULE["too_close_per_mb"]:
+        return "too close to call"
+    return "positive" if per_mb > SIGN_RULE["threshold_per_mb"] else "negative"
+
+
+def boundary_density(chroms: list[str], known: dict | None = None) -> dict[str, float]:
+    """Boundaries per Mb for each chromosome, which needs no element table and so can be computed for
+    chromosomes the sweep has not reached. Cached from the previous fold: it does not change."""
+    from genomeos.genome import Annotation, default_gencode
+    from genomeos.genome.domains import infer_domains
+    from genomeos.genome.regulatory import load_ccres
+
+    out = dict(known or {})
+    for chrom in chroms:
+        length = CHROM_LENGTHS.get(chrom)
+        if chrom in out or not length:
+            continue
+        gff, ccres = default_gencode({chrom}), load_ccres(chrom)
+        if not gff or not ccres:
+            continue
+        doms = infer_domains(chrom, length, ccres, Annotation.from_gff3(gff, {chrom}))
+        out[chrom] = round(len(doms[1:]) / (length / 1e6), 2)
+    return out
+
+
+def sign_prediction(control: dict, density: dict[str, float]) -> dict:
+    """The rule's standing predictions, and its score on every chromosome that has landed since it was
+    fixed. A chromosome in `fixed_on` is in sample and is not counted towards the held-out score."""
+    measured = control.get("per_chromosome") or {}
+    rows: dict[str, dict] = {}
+    held_out_right = held_out_wrong = 0
+    for chrom, per_mb in sorted(density.items(), key=lambda kv: -kv[1]):
+        call = sign_call(per_mb)
+        row = {"boundaries_per_mb": per_mb, "predicted": call}
+        if chrom in measured:
+            actual = "positive" if measured[chrom]["excess"] > 0 else "negative"
+            row["excess"] = measured[chrom]["excess"]
+            row["actual"] = actual
+            row["in_sample"] = chrom in SIGN_RULE["fixed_on"]
+            if call != "too close to call":
+                row["held"] = call == actual
+                if not row["in_sample"]:
+                    held_out_right += call == actual
+                    held_out_wrong += call != actual
+        rows[chrom] = row
+    return {
+        **SIGN_RULE,
+        "held_out_chromosomes_scored": held_out_right + held_out_wrong,
+        "held_out_right": held_out_right,
+        "held_out_wrong": held_out_wrong,
+        "standing_predictions": {
+            c: r["predicted"] for c, r in rows.items() if "actual" not in r and r["predicted"]
+        },
+        "per_chromosome": rows,
+    }
+
+
+def _predicts_the_sign(rows: dict[str, dict]) -> dict:
+    """Rank the candidate accounts of why the excess changes sign. chrY carries 125 elements against
+    tens of thousands elsewhere and is the extreme of every shape measure, so every correlation is
+    given with it and without it: an account that only works because of chrY is not an account."""
+
+    def run(rs: dict[str, dict]) -> dict:
+        ex = [r["excess"] for r in rs.values()]
+        out = {}
+        for k in SHAPE:
+            xs = [r[k] for r in rs.values()]
+            out[k] = None if any(x is None for x in xs) else _spearman(xs, ex)
+        return {"chromosomes": len(rs), **out}
+
+    return {
+        "axis": "Spearman of each chromosome's shape against its excess over random boundaries",
+        "all": run(rows),
+        "without_chrY": run({k: v for k, v in rows.items() if k != "chrY"}),
     }
 
 
@@ -329,16 +489,23 @@ def with_history(out: dict, previous: dict | None) -> dict:
 
 def main() -> int:
     out = aggregate()
+    path = Path("data/results/enhancer_targets_all_genome_wide.json")
+    previous = json.loads(path.read_text()) if path.exists() else None
     if "--no-control" not in sys.argv:
+        control = node_control(out["chromosomes_complete"])
+        cached = ((previous or {}).get("node_excess_prediction") or {}).get("per_chromosome") or {}
+        density = boundary_density(
+            [c for c in CHROM_LENGTHS if c != "chrM"],
+            {c: r["boundaries_per_mb"] for c, r in cached.items() if r.get("boundaries_per_mb")},
+        )
         out["controls"] = {
             **out["controls"],
             "coding_target_inside_domain": {
                 **out["controls"]["coding_target_inside_domain"],
-                "measured_on_this_set": node_control(out["chromosomes_complete"]),
+                "measured_on_this_set": control,
             },
         }
-    path = Path("data/results/enhancer_targets_all_genome_wide.json")
-    previous = json.loads(path.read_text()) if path.exists() else None
+        out["node_excess_prediction"] = sign_prediction(control, density)
     out = with_history(out, previous)
     save_result("enhancer_targets_all_genome_wide", out)
     g, sp = out["genome"], out["spread"]
@@ -368,6 +535,22 @@ def main() -> int:
     print(f"  over {t['chromosomes']} chromosomes, rho with length / with elements per Mb:")
     for k in sp:
         print(f"    {k}: {t[k]} / {dens[k]}")
+    p = out.get("node_excess_prediction")
+    if p:
+        n = p["held_out_chromosomes_scored"]
+        print(
+            f"  the excess-sign rule ({p['threshold_per_mb']} boundaries per Mb), held out: "
+            + (f"{p['held_out_right']} right, {p['held_out_wrong']} wrong of {n}" if n else "nothing yet")
+        )
+        for chrom, r in p["per_chromosome"].items():
+            if "actual" in r and not r["in_sample"]:
+                verdict = "refused" if "held" not in r else ("held" if r["held"] else "FAILED")
+                print(
+                    f"    {chrom}: {r['boundaries_per_mb']}/Mb predicted {r['predicted']}, "
+                    f"got {r['excess']:+} ({verdict})"
+                )
+        standing = ", ".join(f"{c} {v}" for c, v in list(p["standing_predictions"].items())[:6])
+        print(f"    still to land: {standing}")
     return 0
 
 

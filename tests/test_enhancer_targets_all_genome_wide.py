@@ -98,6 +98,38 @@ def test_the_node_control_skips_a_chromosome_with_no_local_table(tmp_path, monke
     assert out["skipped"]["chrNotAChromosome"] == "no length"
 
 
+def test_the_sign_rule_refuses_the_chromosomes_too_near_its_line():
+    assert agw.sign_call(7.0) == "positive"
+    assert agw.sign_call(4.8) == "negative"
+    assert agw.sign_call(5.87) == "too close to call"  # chr9, and the rule says so rather than guessing
+    assert agw.sign_call(5.26) == "negative"  # chrX, the one autosome-or-X predicted to lose
+    assert agw.sign_call(None) is None
+
+
+def test_the_sign_rule_scores_only_the_chromosomes_it_was_not_fitted_on():
+    control = {
+        "per_chromosome": {
+            "chr21": {"excess": -0.0208},  # in sample, fitted on
+            "chr11": {"excess": 0.02},  # held out, predicted positive at 7.0/Mb
+            "chr9": {"excess": -0.001},  # held out but inside the refusal band
+        }
+    }
+    density = {"chr21": 4.86, "chr11": 7.0, "chr9": 5.87, "chrX": 5.26}
+    p = agw.sign_prediction(control, density)
+    assert p["held_out_chromosomes_scored"] == 1 and p["held_out_right"] == 1
+    assert p["per_chromosome"]["chr21"]["in_sample"] is True
+    assert p["per_chromosome"]["chr9"]["predicted"] == "too close to call"
+    assert "held" not in p["per_chromosome"]["chr9"]
+    assert p["standing_predictions"] == {"chrX": "negative"}
+
+
+def test_the_sign_rule_records_a_failure_rather_than_hiding_it():
+    control = {"per_chromosome": {"chr11": {"excess": -0.05}}}  # predicted positive, comes back negative
+    p = agw.sign_prediction(control, {"chr11": 7.0})
+    assert p["held_out_wrong"] == 1 and p["held_out_right"] == 0
+    assert p["per_chromosome"]["chr11"]["held"] is False
+
+
 def test_history_keeps_one_entry_per_chromosome_set(tmp_path):
     (tmp_path / "enhancer_targets_all_chr21.json").write_text(
         json.dumps(_res("chr21", 100, 100, True, 60, 30, 10, 10, 20))

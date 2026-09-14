@@ -2020,6 +2020,47 @@ densest chromosome and highest on containment at 91.2%, and its excess over rand
 smallest; chr18 is sparse, low on containment at 69.1%, and carries the largest excess at +7.5. Being
 easy to contain and being better-than-random at containing are different things.
 
+**What the sign is a property of.** Eight candidate accounts were measured on the same twelve, each
+computable from what the control already loads, and ranked against the excess:
+
+| | boundaries per Mb | median node | node length CV | element-target span | coding genes per Mb | elements per Mb | boundaries follow the elements | the null's own level |
+|---|---|---|---|---|---|---|---|---|
+| Spearman with the excess | **+0.82** | −0.66 | −0.52 | −0.36 | +0.43 | +0.48 | −0.55 | −0.31 |
+| with chrY dropped | **+0.76** | −0.56 | −0.46 | −0.16 | +0.26 | +0.33 | −0.41 | −0.10 |
+
+One thing tracks the sign, and it is how finely the caller cuts. Every chromosome the node wins on
+carries 5.77 boundaries per Mb or more; every one it loses on carries 5.78 or fewer. The median node
+length is the same quantity inverted, and the rest fade when chrY is dropped. The mechanism that would
+have been the interesting answer — that real CTCF boundaries crowd into the element-dense stretches and
+so spend their cuts where the pairs are, while uniformly scattered boundaries waste most of themselves
+on empty sequence — is there in the sign (−0.55, −0.41 with chrY out) but is weaker and partly the same
+measurement. chrY is that mechanism at its limit: 48 boundaries over 57 Mb, essentially all of them in
+the short arm, so random placement leaves the element-dense region uncut and beats the real nodes by 22
+points.
+
+This makes the node claim a statement about resolution rather than about CTCF. Where CTCF-only elements
+are dense enough to cut the chromosome finely, the partition they produce holds element and target
+together better than chance; where they are sparse, the nodes carry nothing that as many boundaries
+thrown at the chromosome would not carry, and on chr13, chr15, chr21, chr22 and chrY they carry less.
+
+**A rule fixed before the evidence, so it can fail.** The relation is fitted, not derived, so it is
+recorded as a rule with a threshold and scored out of sample. Fixed on 2026-09-15 from these twelve:
+*the node beats as many random boundaries above 5.8 boundaries per Mb and loses below it; within 0.3
+per Mb of the line the call is refused.* In sample it separates 11 of 12, its one error being chr19 at
+5.77 per Mb, predicted to lose and winning by 0.7 points. Boundary density needs no element table, so
+the standing predictions for every chromosome the sweep has not reached could be computed and committed
+before their elements existed:
+
+| | chr8 | chr3 | chr7 | chr11 | chr4 | chr6 | chr10 | chr2 | chr5 | chr1 | chr9 | chrX |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| boundaries per Mb | 7.65 | 7.26 | 7.10 | 7.00 | 6.94 | 6.90 | 6.88 | 6.83 | 6.85 | 6.58 | 5.87 | 5.26 |
+| predicted | + | + | + | + | + | + | + | + | + | + | refused | **−** |
+
+So the rule stakes something: every remaining autosome should show a positive excess, chr9 is too close
+to call and is refused rather than guessed, and **chrX alone should come back negative**. The fold
+scores each chromosome against this table as it lands and records right, wrong and refused, so a
+failure is visible in the committed result rather than absorbed.
+
 The naming rate is the same kind of number. 65.4% of elements name some gene, and "some derived layer
 names a target" already fires at 52 of 60 matched random windows in the locus benchmark (303d0b0,
 ef80075). The two instruments are not the same — the benchmark pools every layer over a whole window,
