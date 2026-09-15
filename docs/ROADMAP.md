@@ -207,9 +207,32 @@ in order. "Owner" is the session that holds the files today (see §7).
   dependencies, run in a Python with no site-packages where `import genomeos`
   fails outright — all four verbs, every module, the standard library and an
   organism, with the application absent.
-- **Next.** 1. A `population` type in BioIR (today a counted `Cell`), judged the
-  way `order` was: if the counted `Cell` already says everything the body program
-  needs, say so and do not build it. 2. Splitting the repository, which is a
+- **A `population` type: judged, and it does not earn its place (2026-09-15).**
+  Judged by the rule `order` was judged by — does it let a program *say* anything
+  it cannot say now? A counted `Cell` already carries the count, the factors, the
+  levels, the type and all five actions with `fraction`; a `Population` type would
+  reorganise fifteen branches in the runtime and leave every program able to say
+  exactly what it says today. The structure a real population has and a count does
+  not — an age distribution, a size spread — is asked for by no committed program
+  and by no measurement the project holds. It is refactoring, so it is not built.
+  **What judging it did find** is in the body program's numbers. Splits at one
+  decision point run in sequence, so a splitting `fraction` is a share *of what is
+  left*, and `genomeos/organism/human.py` converts each population's published
+  adult count into one. The run is correct, but every number after the first in a
+  germ layer is not the share its own `evidence` line claims it is: ectoderm's
+  glia read `fraction: 1.0000` for a 24.5% share, and mesoderm's myocytes read
+  `1.0000` for a share of 0.0000071 — **140,000× apart**, with the evidence text
+  saying "share of the layer's adult cell count" in both cases. The value also
+  depends on the order the decisions are emitted in, which is the order-dependence
+  §7.3 removed for fates. Two fixes, neither of them mine to make alone: the
+  generator should say what its number is, and the language wants a `share:` that
+  is absolute and normalised across the splits at one decision point, so a program
+  can state the published number rather than a derived one. Specified here rather
+  than built, because a construct no program uses is what this area has spent the
+  day refusing to ship — it should land with the generator that will use it.
+- **Next.** 1. `share:` for a partition, with the owner of
+  `genomeos/organism/human.py`, so the body program's numbers mean what their
+  evidence says. 2. Splitting the repository, which is a
   release decision rather than an engineering one now that the package builds.
   *Closed since this list was written:* the precursor-level `commitment` (measured
   closed — 0 of 12, §7.2a decision 3), `bio` packaged (above), and PAR polarity,

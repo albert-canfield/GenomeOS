@@ -124,6 +124,15 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   and the population decides again; `differentiate` with `fraction` splits
   that share into a new node; `die` with `fraction` and `after` is a
   recurring loss (turnover) that runs while the decision applies; `quiesce`
+  **A splitting `fraction` is a share of what is left at that decision point,
+  not of the whole**, because the splits at one decision point run in sequence:
+  three decisions taking 0.46, 0.55 and 1.0 leave 46%, 30% and 25% of the
+  original, not 46%, 55% and 100%. So the *value* of every split after the first
+  depends on the order the decisions are written in, and is not the published
+  share it was derived from. Writing a partition as shares would need a
+  construct the language does not have (see the note in ROADMAP area A,
+  2026-09-15); until it does, a generated program should say in its evidence
+  that the number is a fraction of the remainder, not a share of the layer.
   is re-read at every step, so `when: count = >=2.55e13` caps a tissue at
   its adult count and lets it regrow after losses. Populations wait from
   now, cells wait from birth. One runtime serves named cells (C. elegans)
