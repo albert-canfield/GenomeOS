@@ -591,3 +591,116 @@ does (90% against 82%).**
 **A value on constrained sequence is the only claim left standing: 53% at the panel against 16% at
 matched windows with the same data behind them.** Every other claim the benchmark scores has now
 been shown, on its own controls, to carry no information on its own.
+
+## 10. The element-level reading is bounded by the annotation, not by the sweep (2026-09-15)
+
+Asked to spend a handful of AlphaGenome requests on the two loci with no element-level reading
+(SOX9's element and the H19 ICR), the first thing to check was what there was to spend them on.
+The answer is nothing, and it is worth more than the requests would have been.
+
+**Both windows hold zero elements in every universe the scorer can ask about**: 0 ENCODE cCREs,
+0 VISTA, 0 lentiMPRA. The sweep did not skip them. Everything nearby is already scored - 11 cCREs
+within 20 kb of the SOX9 element, 2 within 20 kb of the H19 ICR - and none of those moves a coding
+gene. No quota can produce an element-level verdict where no annotation drew an interval.
+
+Measured across the panel (`aggregate.published_element_coverage` in the result):
+
+| | loci |
+|---|---|
+| no cCRE over the published element | **7 of 17**: SHH_ZRS, MYC_8q24, ABO, APP, TP53, SOX9_PierreRobin, H19_ICR1 |
+| no element-level reading of any kind | **4 of 17**: APP, TP53 (coding loci, scored by translation instead), SOX9_PierreRobin, H19_ICR1 |
+
+And the ZRS's element-level answer - the LMBR1 miss pinned in the CI gate, the single sharpest
+result the project has - **does not come from the registry at all**. It comes from the VISTA run.
+The flagship long-range element is not an ENCODE cCRE.
+
+So: **the element-level reading is bounded by which intervals ENCODE and VISTA happened to call,
+not by how much of the genome the model has covered.** Sweeping harder cannot fix it. Every rate
+this benchmark reports for an element-level layer is conditioned on somebody else having drawn the
+element first, which is a looked-up step sitting underneath a derived claim.
+
+## 11. Design: an interval the project defines itself (2026-09-15, before any locus is added)
+
+Two gaps turn out to be the same missing idea. `EPHA4` and `IHH` were dropped from the widening
+because the panel cannot write a structural variant down as an element. SOX9 and H19 have no
+element-level reading because no annotation called their published element. Both need the same
+thing: **a causal unit the project states, rather than one it looks up.** This section is the
+design, written before a locus is added, because that is the discipline the rest of the panel was
+built with.
+
+### 11a. The easy half: a published interval nobody annotated
+
+`Expect.element` is already a stated interval; what is missing is permission to *delete* it. The
+change is to let the scorer take an interval as well as a registry id, so the flagship question -
+does deleting the published element name the published gene - can be asked at SOX9 and H19 the way
+it is asked at the ZRS. Cost: a handful of requests per locus, and a small change to the scorer's
+input, which currently takes registry elements only. **This is a decision for the coordinator, not
+something to do while holding a key**, because it changes what the scorer is asked, not just how
+much of it runs.
+
+### 11b. The real half: the variable is a rearrangement
+
+At EPHA4 the published answer is not that an element was lost. It is that a deletion, inversion or
+duplication **moved a boundary**, so limb enhancers that belonged to EPHA4 now reach IHH, PAX3 or
+WNT6, and the limb gets the wrong instruction. The causal unit is a pair of breakpoints and a type,
+and the published effect is a **new adjacency**. Nothing in `Expect` can say that.
+
+**What the expectation record holds.** A `rearrangement` field beside `element`:
+
+| field | what it says |
+|---|---|
+| `kind` | deletion, inversion, duplication, translocation |
+| `breakpoints` | two intervals, carrying their published uncertainty rather than pretending to a base |
+| `boundary` | the interval of the boundary the rearrangement removes, as published |
+| `gains` | the adjacencies created: (donor element or region, recipient gene) |
+| `loses` | the adjacency destroyed |
+| `phenotype` | what the person or the mouse shows, in words |
+| `citations`, `answer_from` | as everywhere else |
+
+**What counts as derived, and it is not what it first looks like.** The tempting reading - our node
+model, recomputed on the rearranged coordinates, puts the donor element and the recipient gene in
+one node when it did not before - is **inferred, not derived**: the node model is built from
+CTCF-only cCREs at confidence 0.4, and it is the very thing under test. So it takes the heuristic
+slot that nearest-coding-TSS holds today: the baseline the rest has to beat. That is the honest
+place for it, and it makes a rearrangement locus the sharpest test of the node model the project
+could have.
+
+| provenance | the reading | cost |
+|---|---|---|
+| derived | AlphaGenome asked on the rearranged sequence: does the donor element's predicted target change when the boundary is cut | **needs work in the scorer**, which today deletes one element and cannot construct a rearranged input. Requests are the small part |
+| heuristic | the node model recomputed on rearranged coordinates: does the boundary disappear and the new adjacency appear | free and local |
+| looked_up | DECIPHER and ClinVar on the rearrangement, VISTA on the donor element | nothing about the approach |
+| free, and worth asking first | is there a CTCF-only element at the published boundary **at all**? At HOXD the answer was no, and that was one of the panel's sharpest negative results | free |
+
+**What the matched control is.** This is the part that decides whether the locus is worth adding,
+because everything the benchmark learned tonight says a claim is worth nothing until a matched
+random version of it has been tried. A window is the wrong control for a rearrangement; the unit is
+a pair brought together by a cut. The control is therefore **a random rearrangement of the same
+kind and size elsewhere on the same chromosome**, five per locus, matched on:
+
+- kind (exact), and span (exact, as window length is matched today);
+- coding TSSs inside the span, within 35% - the analogue of the TSS-distance match;
+- CTCF-only elements crossed, closest of the candidates - the analogue of the constraint match,
+  since boundary density is what decides whether a cut can create an adjacency at all;
+- away from every panel locus with 200 kb of flank, and away from known pathogenic CNVs.
+
+Three claims are then counted identically at the published rearrangements and at the random ones:
+the node model **loses a boundary**; a **new element-to-gene adjacency** appears; some derived
+layer **names the recipient gene**. Only the fourth - whether the gene named is the published one -
+belongs to the positives alone.
+
+**The prediction, written down before the run, as CYP2D6's was.** Cutting the genome at random will
+destroy boundaries and create new adjacencies constantly, so claims one and two will fire at most
+control rearrangements, and claim three will land near the 90% that naming a target already reaches
+at matched windows. **What should separate the published rearrangements is which gene, and nothing
+else.** If it does not, the node model has failed its sharpest test, and that is the result the
+project most needs to know.
+
+### 11c. Order of work
+
+The measurement in section 10 has to come first and is already done: it says how much of the panel
+the element-level reading can reach at all. Then 11a, which is cheap and needs a decision on the
+scorer's input. Then 11b, whose free half - the node model recomputed on rearranged coordinates,
+against matched random rearrangements - can be built and run with no model request whatsoever, and
+answers the question on its own. The derived half needs scorer work and should wait until the free
+half says whether there is anything there.

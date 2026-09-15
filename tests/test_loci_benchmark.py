@@ -298,6 +298,25 @@ def test_every_claim_a_deletion_makes_is_reported_with_its_coverage():
 
 
 @needs_result
+def test_an_element_no_annotation_called_is_told_from_one_the_sweep_has_not_reached():
+    """The element-level reading can only ask about intervals somebody else drew.
+
+    Seven of the panel's published elements have no cCRE over them, the ZRS among them, and its
+    pinned LMBR1 answer comes from VISTA rather than the registry. A locus with no annotated
+    interval cannot be fixed by sweeping harder, so the two causes must never be reported as one.
+    """
+    cov = RESULT["aggregate"]["published_element_coverage"]
+    assert set(cov["no_element_level_reading_at_all"]) <= set(cov["no_ccre_over_the_published_element"]), (
+        "a locus has no element-level reading although an annotation did call its element:"
+        " that one IS a coverage gap and belongs to the sweep, not to this list"
+    )
+    for name, row in cov["per_locus"].items():
+        assert row["ccres_over_element"] is not None, name
+        if row["elements_scored"]:
+            assert row["runs"], f"{name}: elements scored but no run named"
+
+
+@needs_result
 def test_the_controls_on_finished_chromosomes_are_reported_separately():
     """A control on an unfinished chromosome can only be under-read, so it cannot be compared.
 

@@ -2166,6 +2166,37 @@ def aggregate(loci: list[dict[str, Any]]) -> dict[str, Any]:
         "direction_not_judged": [r["locus"] for r in enhancers if r not in judged_dir],
         "class_derived": hits("class_hit_derived"),
         "unreachable_target": [r["locus"] for r in loci if r not in reachable],
+        "published_element_coverage": published_element_coverage(loci),
+    }
+
+
+def published_element_coverage(loci: list[dict[str, Any]]) -> dict[str, Any]:
+    """Whether any annotation calls an interval over the published element, and who supplied it.
+
+    The element-level reading can only ask about intervals somebody else drew: the ENCODE cCRE
+    registry, VISTA, lentiMPRA. Where none of them drew one over the published element there is
+    nothing to delete, and no amount of sweeping will change that - the bound is the annotation's
+    universe, not the model's coverage. Recorded per locus so the two are never confused.
+    """
+    rows = {}
+    for r in loci:
+        dl = r["readings"].get("deletion") or {}
+        rows[r["locus"]] = {
+            "ccres_over_element": r.get("ccres_over_element"),
+            "elements_scored": dl.get("elements_scored", 0),
+            "runs": dl.get("runs") or [],
+        }
+    uncalled = [k for k, v in rows.items() if not v["ccres_over_element"]]
+    unreadable = [k for k, v in rows.items() if not v["elements_scored"]]
+    return {
+        "per_locus": rows,
+        "no_ccre_over_the_published_element": uncalled,
+        "no_element_level_reading_at_all": unreadable,
+        "reading": (
+            "a locus in the second list cannot get an element-level verdict by sweeping harder: no"
+            " annotation drew an interval over its published element, so there is nothing to delete."
+            " The fix is a project-defined interval, not more requests"
+        ),
     }
 
 
@@ -2290,6 +2321,7 @@ def build(
             near = ch.nearest_coding((s + en) // 2)
             row = {"locus": e.locus, "expected": e.as_dict(), "readings": readings, "gc": gc}
             row["distance_to_coding_tss"] = near[1] if near else None
+            row["ccres_over_element"] = len(ch.ccres_in(s, en))
             row["coding_genes_in_window"] = sum(1 for t, _g in ch.coding if e.window[0] <= t < e.window[1])
             loci.append(row)
             if negatives and gc is not None and near is not None:

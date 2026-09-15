@@ -216,7 +216,139 @@
       "APP",
       "SOX9_PierreRobin",
       "H19_ICR1"
-    ]
+    ],
+    "published_element_coverage": {
+      "per_locus": {
+        "SHH_ZRS": {
+          "ccres_over_element": 0,
+          "elements_scored": 2,
+          "runs": [
+            "loci_windows",
+            "vista"
+          ]
+        },
+        "HERC2_OCA2": {
+          "ccres_over_element": 2,
+          "elements_scored": 2,
+          "runs": [
+            "enhancer_targets_all"
+          ]
+        },
+        "MCM6_LCT": {
+          "ccres_over_element": 1,
+          "elements_scored": 1,
+          "runs": [
+            "loci_windows"
+          ]
+        },
+        "HBB_LCR": {
+          "ccres_over_element": 20,
+          "elements_scored": 18,
+          "runs": [
+            "loci_windows"
+          ]
+        },
+        "FTO_IRX3": {
+          "ccres_over_element": 1,
+          "elements_scored": 1,
+          "runs": [
+            "enhancer_targets_all"
+          ]
+        },
+        "BCL11A_enhancer": {
+          "ccres_over_element": 5,
+          "elements_scored": 5,
+          "runs": [
+            "loci_windows"
+          ]
+        },
+        "MYC_8q24": {
+          "ccres_over_element": 0,
+          "elements_scored": 2,
+          "runs": [
+            "loci_windows"
+          ]
+        },
+        "ABO": {
+          "ccres_over_element": 0,
+          "elements_scored": 4,
+          "runs": [
+            "loci_windows"
+          ]
+        },
+        "HLA_DRB1": {
+          "ccres_over_element": 10,
+          "elements_scored": 9,
+          "runs": [
+            "loci_windows"
+          ]
+        },
+        "APP": {
+          "ccres_over_element": 0,
+          "elements_scored": 0,
+          "runs": []
+        },
+        "TP53": {
+          "ccres_over_element": 0,
+          "elements_scored": 0,
+          "runs": []
+        },
+        "HOXD": {
+          "ccres_over_element": 185,
+          "elements_scored": 167,
+          "runs": [
+            "loci_windows"
+          ]
+        },
+        "SOX9_PierreRobin": {
+          "ccres_over_element": 0,
+          "elements_scored": 0,
+          "runs": []
+        },
+        "H19_ICR1": {
+          "ccres_over_element": 0,
+          "elements_scored": 0,
+          "runs": []
+        },
+        "PMP22_CMT1A": {
+          "ccres_over_element": 52,
+          "elements_scored": 43,
+          "runs": [
+            "enhancer_targets_all"
+          ]
+        },
+        "CYP2D6": {
+          "ccres_over_element": 6,
+          "elements_scored": 4,
+          "runs": [
+            "enhancer_targets_all"
+          ]
+        },
+        "MC1R": {
+          "ccres_over_element": 1,
+          "elements_scored": 8,
+          "runs": [
+            "enhancer_targets_all"
+          ]
+        }
+      },
+      "no_ccre_over_the_published_element": [
+        "SHH_ZRS",
+        "MYC_8q24",
+        "ABO",
+        "APP",
+        "TP53",
+        "SOX9_PierreRobin",
+        "H19_ICR1"
+      ],
+      "no_element_level_reading_at_all": [
+        "APP",
+        "TP53",
+        "SOX9_PierreRobin",
+        "H19_ICR1"
+      ],
+      "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+    }
   },
   "negative_controls": {
     "windows": 85,
@@ -1200,6 +1332,7 @@
       },
       "gc": 0.3929,
       "distance_to_coding_tss": 101702,
+      "ccres_over_element": 0,
       "coding_genes_in_window": 4,
       "constrained_fraction": 0.5463,
       "score": {
@@ -1721,6 +1854,7 @@
       },
       "gc": 0.4389,
       "distance_to_coding_tss": 21270,
+      "ccres_over_element": 2,
       "coding_genes_in_window": 4,
       "constrained_fraction": 0.0773,
       "score": {
@@ -2329,6 +2463,7 @@
       },
       "gc": 0.415,
       "distance_to_coding_tss": 13893,
+      "ccres_over_element": 1,
       "coding_genes_in_window": 4,
       "constrained_fraction": 0.0225,
       "score": {
@@ -3184,6 +3319,7 @@
       },
       "gc": 0.4094,
       "distance_to_coding_tss": 12056,
+      "ccres_over_element": 20,
       "coding_genes_in_window": 8,
       "constrained_fraction": 0.025,
       "score": {
@@ -3763,6 +3899,7 @@
       },
       "gc": 0.455,
       "distance_to_coding_tss": 62887,
+      "ccres_over_element": 1,
       "coding_genes_in_window": 3,
       "constrained_fraction": 0.525,
       "score": {
@@ -4425,6 +4562,7 @@
       },
       "gc": 0.4545,
       "distance_to_coding_tss": 60653,
+      "ccres_over_element": 5,
       "coding_genes_in_window": 2,
       "constrained_fraction": 0.0578,
       "score": {
@@ -5061,6 +5199,7 @@
       },
       "gc": 0.465,
       "distance_to_coding_tss": 14806,
+      "ccres_over_element": 0,
       "coding_genes_in_window": 2,
       "constrained_fraction": 0.5975,
       "score": {
@@ -5759,6 +5898,7 @@
       },
       "gc": 0.6013,
       "distance_to_coding_tss": 18718,
+      "ccres_over_element": 0,
       "coding_genes_in_window": 2,
       "constrained_fraction": 0.0737,
       "score": {
@@ -6462,6 +6602,7 @@
       },
       "gc": 0.434,
       "distance_to_coding_tss": 5973,
+      "ccres_over_element": 10,
       "coding_genes_in_window": 8,
       "constrained_fraction": 0.0688,
       "score": {
@@ -6992,6 +7133,7 @@
       },
       "gc": 0.33,
       "distance_to_coding_tss": 162649,
+      "ccres_over_element": 0,
       "coding_genes_in_window": 1,
       "constrained_fraction": 0.21,
       "score": {
@@ -7666,6 +7808,7 @@
       },
       "gc": 0.6075,
       "distance_to_coding_tss": 11335,
+      "ccres_over_element": 0,
       "coding_genes_in_window": 8,
       "constrained_fraction": 0.23,
       "score": {
@@ -8607,6 +8750,7 @@
       },
       "gc": 0.5095,
       "distance_to_coding_tss": 9742,
+      "ccres_over_element": 185,
       "coding_genes_in_window": 12,
       "constrained_fraction": 0.3107,
       "score": {
@@ -9112,6 +9256,7 @@
       },
       "gc": 0.495,
       "distance_to_coding_tss": 500969,
+      "ccres_over_element": 0,
       "coding_genes_in_window": 1,
       "constrained_fraction": 0.0013,
       "score": {
@@ -9540,6 +9685,7 @@
       },
       "gc": 0.5805,
       "distance_to_coding_tss": 53519,
+      "ccres_over_element": 0,
       "coding_genes_in_window": 7,
       "constrained_fraction": 0.0162,
       "score": {
@@ -10243,6 +10389,7 @@
       },
       "gc": 0.4243,
       "distance_to_coding_tss": 41022,
+      "ccres_over_element": 52,
       "coding_genes_in_window": 7,
       "constrained_fraction": 0.0342,
       "score": {
@@ -11027,6 +11174,7 @@
       },
       "gc": 0.5672,
       "distance_to_coding_tss": 4465,
+      "ccres_over_element": 6,
       "coding_genes_in_window": 13,
       "constrained_fraction": 0.1133,
       "score": {
@@ -12017,6 +12165,7 @@
       },
       "gc": 0.5816,
       "distance_to_coding_tss": 2314,
+      "ccres_over_element": 1,
       "coding_genes_in_window": 13,
       "constrained_fraction": 0.0573,
       "score": {
@@ -15120,6 +15269,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 475.6
+    "seconds": 478.5
   }
 }
