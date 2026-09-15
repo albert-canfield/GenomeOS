@@ -1413,6 +1413,164 @@ The panel is the measure to trust for what Gnocchi cannot see:
 - **The before timing** is from a run the infrastructure stall may have lengthened. The
   profile's per-request handshake cost is the measured cause either way.
 
+## Many human genomes, nineteen chromosomes: what holds and what was the chromosome (2026-09-15)
+
+Two chromosomes could not carry the conclusions, and three of chr21's readings had already failed
+to replicate on chr22. The panel has now run on chr6 to chr22, chrX and chrY: 19 of 24
+chromosomes, 169.5 GB of alignment streamed in 8.1 hours of run time over two lanes (about four
+hours of wall clock). chr1 to chr5 are **not** read: they are 97.0 GB of the alignment, 36% of it,
+and the run was stopped by free disk, not by the panel. Every claim below is stated with its
+spread over the chromosomes and the chromosomes it fails on, never as one pooled number; the
+reader is `genome_wide()` in `attribution/human_panel.py`
+(`scripts/human_panel.py --genome-wide`, `human_panel_genome_wide.json`).
+
+**chrY is read and pooled with nothing.** Only 19 of the 89 HPRC haplotype assemblies carry it, so
+a recurring value there is two of 19 rather than two of 89, a ten times higher allele bar. 94% of
+its placed units read fixed against 48% elsewhere, its coding exons sit at 1.66 of the matched
+rate instead of below it, no callable gene is core and no storage unit carries an eQTL or an MPRA
+pair. That is a property of the panel's depth on a male-only chromosome, not of the sequence.
+Every pooled figure below is over the 18 chromosomes that are not chrY.
+
+**What holds on every chromosome read.**
+
+| claim | min | median | max |
+|---|---|---|---|
+| coding exons, ratio to the GC- and timing-matched recurring rate | 0.292 | **0.387** | 0.444 |
+| coding 200-bp units fixed above their matched expectation | +22.1 pts | **+26.2** | +29.7 pts |
+| callable genes called core | 42.0% | **58.6%** | 70.7% |
+| genes core above their own matched windows | +34.3 pts | **+48.9** | +61.4 pts |
+| share of the coding-neutral gap surviving the timing match | 71% | **91%** | 98% |
+| storage share of placed background units | 35.9% | **48.6%** | 53.4% |
+| overdispersion of recurring counts per kilobase | 7.4 | **9.9** | 26.2 |
+
+The instrument's ordering is not a chromosome. Coding exons carry between 0.29 and 0.44 of the
+matched rate of recurring variation on all eighteen, coding units are fixed 22 to 30 points above
+matched expectation on all eighteen, and most of that gap survives the replication-timing match on
+all eighteen (the 71% floor is chr22, which was the worst case at two chromosomes too). Storage is
+the default state of human sequence everywhere: on the seventeen autosomes read it is between 47.5%
+(chr14) and 53.4% (chr19) of placed 200-bp units, and chrX alone sits lower.
+
+**What was the chromosome.**
+
+| claim | chr21, chr22 said | over 18 | verdict |
+|---|---|---|---|
+| Gnocchi's silent, panel-depleted kilobases are copies | 58%, 47% duplicated | 8% to 57%, median 21%, fails on 11 | **chromosome-specific** |
+| core blocks agree with Gnocchi more than variable blocks | chr21 -6.6 pts, chr22 +17 pts | +5 to +29 pts, fails only on chr21 | **chr21 was the outlier: they agree** |
+| unit classes spread evenly over replication timing | flat on chr21, late-leaning on chr22 | 0.4 to 6.6 pts, fails on 5 | **no, and the direction is not fixed** |
+| no unknown tier more fixed than its matched expectation | none on either | fails on 5 | **no: constrained_unknown is** |
+| the neutral tier within a quarter of its matched rate | 0.91, 1.05 | 0.85 to 1.35, fails on 4 | **mostly, and always by reading high** |
+| Gnocchi's constrained kilobases are early-replicating | 65-68% on chr21, 32-44% on chr22 | 36% to 70%, median 50%, fails on 9 | **weak everywhere, strong nowhere but chr21** |
+
+- **The copies reading does not generalise.** chr21 and chr22 both said that where Gnocchi is
+  silent and the panel sees depletion, the sequence is duplicated: 58% and 47%. Over 18
+  chromosomes the median is 21% and eleven fall below 30% (chr18 0.08, chr12 0.086, chr19 0.086,
+  chr8 0.10, chrX 0.105). It is high where segmental duplication is high (chr9 0.57, chr16 0.45,
+  chr22 0.47, chr21 0.58) and low elsewhere. It was a fact about two acrocentrics.
+- **Gnocchi and the panel do agree at block scale.** chr21 said they did not (-6.6 points) and
+  chr22 said they did (+17). On seventeen of eighteen chromosomes core blocks are Gnocchi-
+  constrained more often than variable blocks, by 5 to 29 points, median 19. chr21 is the only
+  chromosome where the sign goes the other way. Per kilobase they still barely agree: Spearman
+  between -0.02 and -0.21, median -0.08, on every chromosome.
+- **Gnocchi's constrained kilobases and replication timing.** chr21 said its constrained
+  kilobases were 65 to 68% early-replicating and chr22 said 32 to 44%. Over eighteen the early
+  share runs from 0.362 (chr17) to 0.698 (chr8) with a median of 0.500. A tertile would give 0.33,
+  so the skew towards early DNA is there on every chromosome; what is not there is the strength
+  chr21 showed, which is the top of the range. Half the chromosomes do not reach 50%. The honest
+  statement is a weak early skew everywhere, not a property that separates constrained kilobases.
+- **Replication timing and unit class is unsettled.** The gap between the late share of storage
+  units and of fixed units runs from 0.4 to 6.6 points and exceeds 3 points on five chromosomes.
+  Two chromosomes could not settle it and eighteen do not either; the coding signal survives the
+  timing match regardless, which is the part that matters.
+
+**A new reading the two chromosomes could not give: the constrained-unknown tier.** Pooled ratio
+to the matched rate, per chromosome, median over the eighteen:
+
+| tier | median ratio | below 1 on | sign test |
+|---|---|---|---|
+| canonical CDS | 0.395 | 18 of 18 | — |
+| constrained_unknown | **0.919** | 14 of 18 | p = 0.015 |
+| fossil | 1.054 | 1 of 18 | — |
+| regulatory | 1.070 | 0 of 18 | — |
+| neutral | 1.121 | 2 of 18 | — |
+
+This is the first thing in the unknown space that reads as held, and it is small. Read against 1
+it is an 8% depletion; read against the neutral tier, which is the honest comparison because the
+matched background under-predicts every unknown tier by about a tenth, it is 0.82 where coding is
+0.35. chr21's 0.649 overstated it and chr22's 1.742 inverted it; neither chromosome could see the
+effect for what it is. The tier is also more fixed at the unit level than matched expectation on
+eleven of eighteen chromosomes (chr19 +6.5 points, chr11 +6.4, chr8 +6.1, chrX +5.0). The fossil
+and regulatory tiers read *above* their matched background on 17 and 18 of 18: whatever the
+panel's matched windows are, the unknown space is not less variable than them.
+
+**chrX is a third instrument.** Storage is 35.9% of its placed units against 47 to 53% everywhere
+else, and fixed 61.4% against about 50%; only 3.1% is unplaced, so this is not a coverage
+artefact. Its coding exons still sit at 0.342 and its genes are core 69.3% of the time, so the
+controls hold; it is the diversity that is lower, as a chromosome with three quarters of the
+autosomal effective population size should be. It is reported with the autosomes and flagged here.
+
+**The genome-wide storage catalogue** (18 chromosomes, 200-bp units of the unknown space):
+
+| catalogue | Mb |
+|---|---|
+| fixed (one value in 95% of assemblies) | 243.5 |
+| storage (a small recurring value domain) | 248.8 |
+| cannot place (hypervariable, or not aligned) | 56.7 |
+
+- **1,243,292 storage units.** Value-set sizes: 550,101 hold two recurring values, 409,547 three,
+  165,168 four, 63,610 five, 28,364 six, 16,041 seven, 10,327 eight. The median effective number
+  of values is **1.65** and the median commonest value holds **74.7%** of the assemblies, the same
+  to two places as chr21's 1.68 and 73% and chr22's 1.71. A storage column is a two- or
+  three-value column almost always: 77% of them hold two or three values.
+- **By tier:** regulatory 563,648, fossil 490,352, neutral 107,222, constrained_unknown 48,856,
+  structural 33,214.
+- **By event:** 919,887 substitutions only; 83,594 deletion with substitutions, 76,886 insertion
+  with substitutions, 51,790 all three, 31,131 deletions alone, 30,792 insertions alone, 24,000
+  indels together, 13,031 with a structural value. 281,765 sit on a TRExplorer tandem repeat.
+- **Frequencies.** 81.8% of the substitution and indel events have a gnomAD site, close to chr21's
+  81.9% and above chr22's 69.8%.
+- **Hypervariable units:** 31,158, of which 14,021 become copy-number columns when read by length
+  allele alone and 16,627 stay hypervariable.
+
+**The executor shortlist is no longer chromosome-shaped.** **123,667** storage units carry a
+measured value event: 121,599 with a GTEx fine-mapped eQTL and 5,786 with an MPRAVarDB allele
+pair. chr21 and chr22 together gave 6,250, so this is **117,417 new executor-ready units**, a
+twentyfold shortlist. Per chromosome it runs from 2,083 (chrX) to 12,875 (chr7); chr19 gives 9,156
+from 5.4 GB, the best return per byte streamed, and chr11 alone gives 11,101. The catalogues stay
+local and gzipped under `data/knowledge/human_panel/<chrom>/storage_catalogue.json.gz`, which is
+where `attribution/executor.py` already reads them from, so the executor lane needs no new format:
+it needs a longer `chroms` list.
+
+**Cost, measured.**
+
+| | |
+|---|---|
+| alignment streamed | 169.5 GB in 12,005 s, 14.1 MB/s on a shared link |
+| run time | 8.1 h over two lanes, about 4 h of wall clock |
+| per chromosome | 574 s (chr22) to 3,608 s (chr7); the median is 1,311 s |
+| the slow stage | the storage catalogue's gnomAD ranges, 300 to 2,300 s and growing with the chromosome |
+| local store | 662 MB for 19 chromosomes, git-ignored, about 35 MB per chromosome |
+
+**What is missing and why.** chr1 to chr5 are unread. Free space on the machine fell from 34 GB to
+16 GB over the night, none of it the panel's doing — the whole checkout including every cache is
+about 11 GB — and the sweep was held at the 15 GB floor every lane was given. The panel's own
+footprint per chromosome is about 35 MB, so this is a disk the panel shares, not a disk the panel
+spends. The five missing chromosomes are the five largest and 36% of the alignment; the claims
+above are over 64% of the alignment and every chromosome from chr6 down.
+Nothing in the readings varies with chromosome size, so the five are expected to extend rather
+than change them, and that is a prediction, not a result.
+
+**What is still weak.**
+- **The tier ratios are not centred.** Every unknown tier but constrained_unknown reads above its
+  GC- and timing-matched background, and the neutral tier, the control, reads 1.12. Either the
+  matched windows are drawn from sequence that is quieter than the tiers or the tiers are genuinely
+  freer. Until that is understood, the tier ratios should be read against the neutral tier and not
+  against 1.
+- **The constrained-unknown depletion is a sign test on 18 chromosomes**, not an effect size with
+  an interval. It is 0.82 of neutral where coding is 0.35 of neutral.
+- **The calibration loci were read once, on chr21**, and are referred to rather than re-read; they
+  do not depend on which chromosome is being swept, but they have not been re-measured since.
+- **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
+
 ## Compression: what each piece of knowledge is worth in bits, chr21, chr22 and chr18 (2026-09-14)
 
 Albert's probe: try different ways of classifying the genome and find which buys the most

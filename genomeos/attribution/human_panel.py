@@ -3334,6 +3334,12 @@ CLAIMS: tuple[tuple[str, str, Any, str], ...] = (
         "Gnocchi and the panel barely agreeing per kilobase",
     ),
     (
+        "gnocchi_constrained_early",
+        None,
+        lambda v: v is not None and v >= 0.5,
+        "Gnocchi's constrained kilobases mostly early-replicating",
+    ),
+    (
         "gnocchi_unscored_panel_depleted_duplicated",
         "against_gnocchi.per_kilobase.gnocchi_unscored_panel_depleted.duplicated_share",
         lambda v: v is not None and v >= 0.3,
@@ -3385,6 +3391,17 @@ def claim_numbers(res: dict[str, Any]) -> dict[str, float | None]:
         out["unit_classes_even_over_timing"] = round(abs(t["storage"]["late"] - t["fixed"]["late"]), 4)
     else:
         out["unit_classes_even_over_timing"] = None
+    # Gnocchi's constrained kilobases are the two buckets it scores as constrained, whatever the panel says
+    pk = _get(res, "against_gnocchi.per_kilobase") or {}
+    early = kb = 0.0
+    for bucket in ("both", "gnocchi_only"):
+        row = pk.get(bucket) or {}
+        n = row.get("kilobases") or 0
+        e = _get(row, "timing.early")
+        if n and e is not None:
+            kb += n
+            early += n * e
+    out["gnocchi_constrained_early"] = round(early / kb, 4) if kb else None
     b = _get(res, "against_gnocchi.blocks_core_or_variable_by_gnocchi") or {}
     core_n = (b.get("core_gnocchi_constrained") or 0) + (b.get("core_gnocchi_free") or 0)
     var_n = (b.get("variable_gnocchi_constrained") or 0) + (b.get("variable_gnocchi_free") or 0)
