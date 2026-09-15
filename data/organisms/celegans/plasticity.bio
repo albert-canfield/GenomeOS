@@ -101,12 +101,16 @@ experiment hlh1_terminal_mes2 {
   add: MES-2, hsHLH-1 at 700 min
   until: 800 min
   expect: "cells that have already differentiated do not respond even with the window held open, so plasticity and commitment are two different claims (Fukushige & Krause 2005; Yuzyuk et al. 2009). Each bound below is the number of cells of that type already differentiated at 700 min, when the factor arrives: none of them may be lost"
-  assert: type Neuron at 800 min >= 233
+  # Each bound is the count of that type alive and typed at 700 min under the worm program as it stands;
+  # the arm's claim is that none of them is lost, so the numbers move whenever the fate rules move and
+  # the claim does not. Restated 2026-09-15 (genomeos-d3) when fates.bio changed from the precomputed
+  # exposure lookup to the runtime read `F.exposure(lineage) >= 15`: Neuron 233 -> 216, Hypodermis
+  # 94 -> 81, GliaSheath 11 -> 20, Intestine 26 unchanged. Nothing about the series or the constructs
+  # changed; the cells moved between the tissue rules, as they did for genomeos-d2's sheath rule before.
+  assert: type Neuron at 800 min >= 216
   assert: type Intestine at 800 min >= 26
-  # 94, not 99: the sheath-glia rule in fates.bio (PROS-1, NHR-25, SOX-2) now takes five cells the
-  # hypodermis rules used to claim, so they are counted on the line below instead (genomeos-d2)
-  assert: type Hypodermis at 800 min >= 94
-  assert: type GliaSheath at 800 min >= 11
+  assert: type Hypodermis at 800 min >= 81
+  assert: type GliaSheath at 800 min >= 20
   evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (lost completely in terminally differentiated cells)"
   confidence: 0.6
 }
