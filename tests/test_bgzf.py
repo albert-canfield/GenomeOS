@@ -160,10 +160,42 @@ def test_a_plain_gzip_file_is_not_treated_as_blocked(tmp_path: Path) -> None:
 # --- the real reference cache -------------------------------------------------
 
 
-def _manifest() -> dict:
+def test_a_compressed_vcf_parses_to_the_same_variants(tmp_path: Path) -> None:
+    """The split HG002 files are compressed too; what matters is what iter_vcf gets back."""
+    from genomeos.genome import iter_vcf
+
+    plain = tmp_path / "S_chr21.vcf"
+    rng = random.Random(9)
+    lines = ["##fileformat=VCFv4.2\n", "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tS\n"]
+    for i in range(5_000):
+        ref, alt = rng.choice(["A", "C", "G", "T", "ACGT", "AT"]), rng.choice(["A", "C", "G", "TTT"])
+        gt = rng.choice(["0|1", "1|1", "0/1", "1|0"])
+        lines.append(f"chr21\t{i * 7 + 1}\t.\t{ref}\t{alt}\t.\tPASS\t.\tGT\t{gt}\n")
+    plain.write_text("".join(lines))
+    gz = tmp_path / "S_chr21.vcf.gz"
+    bgzf.compress_file(plain, gz, level=9)
+
+    ok, _, _ = bgzf.verify(plain, gz)
+    assert ok
+    a = list(iter_vcf(plain, pass_only=False))
+    b = list(iter_vcf(gz, pass_only=False))
+    assert len(a) == 5_000
+    assert a == b
+
+
+def _manifest(key: str = "chromosomes") -> dict:
     if not MANIFEST.exists():
         return {}
-    return json.loads(MANIFEST.read_text()).get("chromosomes", {})
+    return json.loads(MANIFEST.read_text()).get(key, {})
+
+
+@pytest.mark.parametrize("name", sorted(_manifest("variant_files")))
+def test_converted_variant_file_still_hashes_to_the_original(name: str) -> None:
+    row = _manifest("variant_files")[name]
+    gz = REFERENCE / (name + ".gz")
+    if not gz.exists():
+        pytest.skip(f"{gz} not present in this checkout")
+    assert bgzf.sha256_of_bgzf(gz) == row["sha256"], f"{name}: bytes differ from the original .vcf"
 
 
 @pytest.mark.parametrize("chrom", sorted(_manifest()))
@@ -195,9 +227,13 @@ def test_converted_chromosome_serves_loci(chrom: str) -> None:
     length = g.lengths[chrom]
     rec = g.index[chrom]
     rng = random.Random(len(chrom) * 17)
-    loci = sorted(
-        (lambda s: (s, s + rng.randrange(1, 5_000)))(rng.randrange(length - 5_000)) for _ in range(200)
-    )
+    loci: list[tuple[int, int]] = []  # sorted and disjoint, so one forward pass can answer them all
+    pos = 0
+    while pos < length - 5_000 and len(loci) < 200:
+        start = pos + rng.randrange(1, max(2, (length - 5_000) // 200))
+        end = min(start + rng.randrange(1, 5_000), length)
+        loci.append((start, end))
+        pos = end
 
     def byte_span(start: int, end: int) -> tuple[int, int]:
         a = rec.offset + (start // rec.line_bases) * rec.line_bytes + start % rec.line_bases

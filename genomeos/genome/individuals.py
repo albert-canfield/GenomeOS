@@ -35,8 +35,8 @@ HEADER = (
 )
 
 
-def _open(path: Path | str):
-    """A local file (plain or gzip) or an http(s) URL streamed straight from the server."""
+def open_variants(path: Path | str):
+    """A local variant file (plain or gzip) or an http(s) URL streamed straight from the server."""
     s = str(path)
     if s.startswith(("http://", "https://")):
         import io
@@ -83,7 +83,7 @@ def import_vcf(
     skipped_filter = skipped_contig = 0
     phased = 0
     try:
-        with _open(src) as fh:
+        with open_variants(src) as fh:
             for line in fh:
                 if line.startswith("#"):
                     if line.startswith("#CHROM"):
@@ -196,7 +196,7 @@ def sources(chrom: str, root: Path | None = None) -> list[tuple[str, Path, str]]
 
 def rows_in(path: Path, start: int, end: int):
     """VCF rows with 1-based position inside start..end (1-based inclusive); files are sorted."""
-    with path.open() as fh:
+    with open_variants(path) as fh:
         for line in fh:
             if line.startswith("#"):
                 continue
@@ -220,7 +220,7 @@ def gene_by_gene(
     if path is None:
         raise FileNotFoundError(f"{name} has no rows on {chrom}")
     positions: list[tuple[int, list[str]]] = []
-    with path.open() as fh:
+    with open_variants(path) as fh:
         for line in fh:
             if line.startswith("#"):
                 continue
@@ -405,7 +405,7 @@ def knockouts(
         try:
             module = ann.to_module("knockouts")
             positions: list[tuple[int, list[str]]] = []
-            with vcf.open() as fh:
+            with open_variants(vcf) as fh:
                 for line in fh:
                     if line.startswith("#"):
                         continue
@@ -778,7 +778,7 @@ def coding_inventory(
         try:
             module = ann.to_module("coding")
             positions: list[tuple[int, list[str]]] = []
-            with vcf.open() as fh:
+            with open_variants(vcf) as fh:
                 for line in fh:
                     if line.startswith("#"):
                         continue
@@ -950,7 +950,7 @@ def normalise_variant(pos: int, ref: str, alt: str, base_at=None) -> tuple[int, 
 
 def _genotypes(path: Path, base_at=None) -> dict[tuple[int, str, str], str]:
     out: dict[tuple[int, str, str], str] = {}
-    with path.open() as fh:
+    with open_variants(path) as fh:
         for line in fh:
             if line.startswith("#"):
                 continue
@@ -1129,7 +1129,7 @@ def import_regions(name: str, src: str | Path, root: Path | None = None, progres
     counts: dict[str, int] = {}
     handles: dict[str, Any] = {}
     try:
-        with _open(src) as fh:
+        with open_variants(src) as fh:
             for line in fh:
                 if line.startswith(("#", "track", "browser")):
                     continue

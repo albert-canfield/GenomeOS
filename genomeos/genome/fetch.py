@@ -139,9 +139,18 @@ GIAB_HG002 = (
 
 def individual_vcf_path(chrom: str, sample: str = "HG002") -> Path:
     """The per-chromosome variant file of the test human: chr21 is the committed distilled subset,
-    the rest are split once from the 156 MB GIAB file into data/reference (not committed)."""
+    the rest are split once from the 156 MB GIAB file into data/reference (not committed).
+
+    A split file may have been compressed since (`scripts/compact_reference.py --vcf`); every reader
+    of this path opens it through `individuals.open_variants`, which takes either form, so the
+    compressed one is returned when it is the one on disk.
+    """
     committed = RESULTS / f"{sample}_{chrom}.vcf"
-    return committed if committed.exists() else REFERENCE / f"{sample}_{chrom}.vcf"
+    if committed.exists():
+        return committed
+    plain = REFERENCE / f"{sample}_{chrom}.vcf"
+    gz = REFERENCE / f"{sample}_{chrom}.vcf.gz"
+    return plain if plain.exists() or not gz.exists() else gz
 
 
 def fetch_individual(sample: str = "HG002", progress=None, url: str = GIAB_HG002) -> dict[str, int]:

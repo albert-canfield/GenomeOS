@@ -161,6 +161,56 @@ def compact(chrom: str, dry_run: bool = False, keep: bool = False) -> dict | Non
     return row
 
 
+def compact_vcf(path: Path, keep: bool = False) -> dict | None:
+    """Compress one split variant file, proving first that the same variants come back out.
+
+    The proof is stronger than a byte hash alone: the file is read twice through
+    `iter_vcf`, once from the plain file and once from the compressed one, and
+    every variant must match in the same order, so a difference in what the
+    readers *parse* is caught, not only a difference in bytes.
+    """
+    from genomeos.genome import iter_vcf
+
+    gz = path.with_name(path.name + ".gz")
+    if not path.exists():
+        return None
+    if path.resolve() in held_open():
+        print(f"{path.name}: SKIPPED, a running process has it open")
+        return None
+
+    before = path.stat().st_size
+    tmp = path.with_name(path.name + ".compacting.gz")  # ends in .gz so every reader opens it as one
+    bgzf.compress_file(path, tmp, level=LEVEL)
+    plain_hash = bgzf.sha256_of(path)
+    if bgzf.sha256_of_bgzf(tmp) != plain_hash:
+        tmp.unlink(missing_ok=True)
+        bgzf.gzi_path(tmp).unlink(missing_ok=True)
+        raise SystemExit(f"{path.name}: compressed bytes differ from the original")
+
+    n = 0
+    for a, b in zip(iter_vcf(path, pass_only=False), iter_vcf(tmp, pass_only=False), strict=True):
+        if a != b:
+            tmp.unlink(missing_ok=True)
+            bgzf.gzi_path(tmp).unlink(missing_ok=True)
+            raise SystemExit(f"{path.name}: variant {n} differs: {a} != {b}")
+        n += 1
+
+    bgzf.gzi_path(tmp).rename(gz.with_name(gz.name + ".gzi"))
+    tmp.rename(gz)
+    if not keep:
+        path.unlink()
+    row = {
+        "sha256": plain_hash,
+        "uncompressed_bytes": before,
+        "was_bytes": before,
+        "now_bytes": gz.stat().st_size,
+        "variants": n,
+        "verified": f"{n:,} variants parsed identically and in the same order from both forms",
+    }
+    print(f"{path.name}: {before / 1e6:.0f} -> {row['now_bytes'] / 1e6:.0f} MB, {n:,} variants identical")
+    return row
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--chrom", action="append", default=[])
@@ -169,7 +219,26 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--keep", action="store_true", help="write the blocked file but keep the flat .fa")
     ap.add_argument("--list", action="store_true")
+    ap.add_argument(
+        "--vcf",
+        action="store_true",
+        help="compress the split HG002_chr*.vcf files instead of the chromosomes",
+    )
     args = ap.parse_args()
+
+    if args.vcf:
+        manifest = load_manifest()
+        rows = manifest.setdefault("variant_files", {})
+        reclaimed = 0
+        for p in sorted(REFERENCE.glob("HG002_chr*.vcf")):
+            row = compact_vcf(p, keep=args.keep)
+            if row is None:
+                continue
+            reclaimed += row["was_bytes"] - row["now_bytes"]
+            rows[p.name] = row
+            save_manifest(manifest)
+        print(f"reclaimed {reclaimed / 1e9:.2f} GB")
+        return 0
 
     if args.list:
         open_now = held_open()

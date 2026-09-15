@@ -29,6 +29,7 @@ from genomeos.genome.individuals import (
     _reference_base_reader,
     list_individuals,
     load_regions,
+    open_variants,
     vcf_path,
 )
 
@@ -125,7 +126,7 @@ def weights(fh) -> tuple[dict[str, str], list[tuple[str, int, str, str, float]]]
 def _dosages(path: Path) -> dict[int, dict[str, int]]:
     """Position → {alt allele: dosage} and the ref allele under key "ref", from one chromosome's calls."""
     out: dict[int, dict[str, Any]] = {}
-    with path.open() as fh:
+    with open_variants(path) as fh:
         for line in fh:
             if line.startswith("#"):
                 continue

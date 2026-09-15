@@ -149,7 +149,7 @@ def load_chromosome(chrom: str, knowledge: Path = KNOWLEDGE) -> dict[tuple[int, 
 
 def screen(name: str, chroms: list[str] | None = None, root: Path | None = None, knowledge: Path = KNOWLEDGE):
     """Every ClinVar pathogenic allele the person carries, chromosome by chromosome."""
-    from genomeos.genome.individuals import ROOT, list_individuals, vcf_path
+    from genomeos.genome.individuals import ROOT, list_individuals, open_variants, vcf_path
 
     root = root or ROOT
     people = {p["name"]: p for p in list_individuals(root)}
@@ -165,7 +165,7 @@ def screen(name: str, chroms: list[str] | None = None, root: Path | None = None,
         table = load_chromosome(chrom, knowledge)
         if not table:
             continue
-        with vcf.open() as fh:
+        with open_variants(vcf) as fh:
             for line in fh:
                 if line.startswith("#"):
                     continue

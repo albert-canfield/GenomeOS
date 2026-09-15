@@ -158,12 +158,12 @@ def carriers(chrom: str, pos: int, ref: str, alt: str) -> list[dict[str, Any]]:
             path = Path(INDIVIDUAL_FALLBACK.format(sample=name, chrom=chrom))
         if path.exists():
             scan.append((name, path, f"measured: {source}"))
-    from genomeos.genome.individuals import sources
+    from genomeos.genome.individuals import open_variants, sources
 
     scan += [(n, p, e) for n, p, e in sources(chrom) if n not in INDIVIDUALS]  # imported genomes
     for name, path, source in scan:
         found = None
-        with path.open() as fh:
+        with open_variants(path) as fh:
             for line in fh:
                 if line.startswith("#"):
                     continue
