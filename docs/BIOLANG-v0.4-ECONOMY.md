@@ -749,6 +749,76 @@ Body before and after this change. The circuit's two Hill terms are Collier's
 constants (curated); the noise size, time scale and translation rate are
 inferred at 0.3, and the program says so.
 
+### 7.5 Looking again: when a cell decides, and why not on a clock [engine]
+
+A cell decides when it is born, when a signal reaches it, when a stage starts,
+when a factor is forced on it, and when it finishes dividing. Nothing else makes
+a cell look again — so a rule whose guard becomes true *between* those moments
+never fires, and the language has no way to say "look again later".
+
+Area E hit this the moment their fate rules read a growing integral
+(`ELT-2.exposure(lineage) >= 15`, §7.2a): the threshold is crossed at some
+instant of the cell's own life, and unless an unrelated event happens then, the
+cell never notices. The only way to be re-read today is to declare
+`cell_network: 6 min`, which exists to step per-cell networks (§7.4) and
+re-decides every cell as a side effect. Used as a clock it is measurably wrong:
+the worm scored **386 of 555 against 522** at a 6-minute cadence, because a
+clock gives *every* rule extra chances, not only the one whose quantity arrived.
+`commitment` recovered it, but that is a lock compensating for a scheduler.
+Stepping a network must not change which fates are taken.
+
+**Two shapes, and the one chosen.**
+
+- *A declared interval* (`recheck: 6 min` on a decision or a cell type). Simple
+  and obviously deterministic, but it is a clock with a free parameter, and the
+  measurement above is the argument against it: the answer would depend on an
+  interval nobody can derive, and every rule pays for one rule's need. A cell
+  does not consult a clock.
+- *A crossing* — the cell decides again at the instant the quantity a guard
+  names reaches the threshold that guard states. **Chosen.** It has no free
+  parameter, it is what the biology does (a cell responds when a quantity
+  arrives), and it is *exactly* computable rather than merely approximable: the
+  runtime already integrates each read as a rate held constant between decision
+  points (§7.2a), so for `F.exposure(w) >= T` the crossing is
+  `now + (T - E)/r` for the current exposure `E` and rate `r`, and for
+  `F.mean(w) >= T` it is `now + (T·span - E)/(r - T)` when `r > T`. Both are
+  closed forms, so the re-decision is scheduled, not searched for. Determinism
+  is not weakened: the crossing goes into the same event queue as every other
+  event and draws no randomness, so a replicate under one seed is unchanged.
+
+**Semantics.** Declared in the regime, because it is an execution scheme and
+"a result without its regime is not a result" (§8):
+
+```
+regime worm { recheck: crossings }      # crossings (default) | none
+```
+
+- Under `crossings`, whenever a cell finishes deciding, the runtime computes the
+  earliest future instant at which any *unmet* threshold of an integrated read
+  named by a decision that could apply to it would be reached at the rate now in
+  force, and schedules one re-decision there. A rate of zero schedules nothing;
+  a factor that arrives or leaves already re-decides the cell, which recomputes
+  the crossing, so a cell holds at most one pending re-decision.
+- A crossing is a *re-reading*, not a new right: precedence (§7.3) applies
+  unchanged, so a rule that lost when the fate was settled cannot win at a
+  crossing, and `commitment` still refuses what it refuses.
+- Under `none` nothing is scheduled and a program must arrange its own
+  re-decisions, which is the behaviour before this section existed.
+- Every run reports `rechecks` (crossings taken) beside `ambiguous_fates`.
+
+**BioIR.** `Regime.recheck: str`; no new entity, and no change to `Decision` —
+the guard already names the quantity and the threshold, which is the whole
+input. A program that names no integrated read schedules nothing and is
+provably unchanged.
+
+**Falsifying measurement.** *If re-decision is a first-class thing, stepping a
+network must stop changing fates as a side effect.* The test is area E's worm
+with fate rules on integrated reads, scored against Sulston: the terminal fates
+must be **identical with no network and with a 6-minute network**, and identical
+to what the program scores today with `commitment` doing the work. Falsified if
+the cadence still moves a fate, or if `recheck: crossings` and `recheck: none`
+differ on any program that names no integrated read.
+
 ## 8. Execution regime (declared per run)
 
 ```
@@ -759,6 +829,7 @@ regime default {
   update: continuous       # continuous (ODE) | synchronous | asynchronous | event
   allocation: competitive  # default policy for pools and transports with none named
   fates: first            # Body: one fate per decision point by precedence (last = legacy)
+  recheck: crossings      # Body: a cell decides again when a read it names reaches a threshold (§7.5)
   seed: 0
 }
 ```
