@@ -489,12 +489,42 @@ every run's summary beside `ambiguous_fates` and `revised_fates`.
    This is the only way the third arm of the series can exist; it is an addition
    to §7.2a as first written, where a window closed unconditionally.
 3. **Commitment is established at differentiation**, so a cell *born after* the
-   perturbation is not protected: 12 of 610 cells in the last arm (8 of them in
-   the E lineage) take the forced fate at birth, because the program has no
-   determination before differentiation — a precursor is committed to nothing.
-   That is a real limitation, not a rounding error: in the embryo those cells
-   descend from a committed precursor. Stating it would need a `commitment` on
-   the founder lineages, which the atlas-driven program does not have.
+   perturbation had nothing to inherit: 12 of 610 cells in the last arm (8 of
+   them in the E lineage) took the forced fate at birth, because the program had
+   no determination before differentiation — a precursor was committed to
+   nothing. **Closed 2026-09-15, and not by a new construct.** Once area E's fate
+   rules read the integral directly and their programs declared
+   `commitment terminal_fate`, those parents reach a terminal fate *before* they
+   divide, commit, and the lock is inherited: **0 of the 12 now take the forced
+   fate**, under either `recheck` mode, and the ablation still shows what is doing
+   it — strip the commitment and **all 12** convert. The five published arms are
+   unchanged.
+
+   The *shape* of the hole is still real, and worth stating because a future
+   program will meet it: a cell that runs a programme for a long time **without
+   differentiating** has nothing to pass on. A program can now say so itself,
+   with no new construct, because `establish` on an integrated read is this
+   section's own example and compiles since the reads landed:
+
+   ```
+   commitment gut_programme {
+     programme: Intestine                      # what it commits to, before it becomes it
+     establish: ELT-2.exposure(lineage) >= 30  # a programme running, which is what the runtime can see
+     inherit: daughters; release: never
+   }
+   ```
+
+   So the two questions this raised answer themselves. *What establishes a
+   commitment in a cell that has not differentiated* is a **programme running**,
+   and the only thing the runtime can observe of that is a sustained read — the
+   same quantity the fate rule itself reads, at a lower threshold. And it is
+   **the same construct with an earlier trigger**, not a weaker one: a
+   determined precursor differs from a terminally differentiated cell in *when*
+   it locks, not in how firmly, which is why an early forcing beats it (no
+   exposure has accumulated yet) and a late one does not. A separate construct
+   with weaker claims would have been a second way of saying the same thing, and
+   it is not built. `tests/test_plasticity.py` pins both: the 12 cells, and a
+   precursor that never differentiates protecting its daughters.
 4. **Clauses specified here but not gated are compile errors, not no-ops:**
    `maintain`, `excludes`, `hysteresis` and any `release` other than `never`.
    The `.exposure(window)` / `.mean(window)` reads were in that list when the
@@ -1037,9 +1067,8 @@ it there, and for an imported protein that link is the transport at 0.3.
 
 Decision 9's instrument is built and run (§7.2a, 2026-09-14): the series is
 `data/organisms/celegans/plasticity.bio`, `bio test` runs it, and removing
-either construct breaks an arm. The next engine work that needs no preference
-from Albert is therefore decision 10's construct sketch and the piece §7.2a
-still leaves missing — a `commitment` that a precursor can hold before it
-differentiates, so a cell born after a perturbation is protected as its
-ancestors are. The integrated reads landed on 2026-09-15 and are area E's to
-gate. 4, 5 and 6 need stage 2 or 4 first, and 2 holds stage 2.
+either construct breaks an arm. The integrated reads landed on 2026-09-15 and
+are area E's to gate; re-decision is §7.5; and the precursor-level `commitment`
+turned out to need no construct at all (§7.2a decision 3). The next engine work
+that needs no preference from Albert is therefore decision 10's construct
+sketch. 4, 5 and 6 need stage 2 or 4 first, and 2 holds stage 2.

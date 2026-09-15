@@ -160,3 +160,57 @@ def test_removing_commitment_loses_the_cells_that_already_differentiated(series)
     result = arms(stripped)
     assert result["hlh1_terminal_mes2"] is False
     assert result["hlh1_early"] is False  # and the converted cells do not stay converted
+
+
+# ---- the hole in the last arm, and what closed it ------------------------------------
+
+
+def _born_after_the_induction(module) -> dict[str, str]:
+    ex = next(e for e in module.experiments if e.name == "hlh1_terminal_mes2")
+    body = Body(
+        module,
+        seed=None,
+        knockouts=set(ex.knockouts),
+        adds=set(ex.adds),
+        add_at=dict(ex.add_at),
+    ).run(until=ex.until)
+    return {n: c.cell_type for n, c in body.cells.items() if c.born > 700}
+
+
+def test_a_cell_born_after_the_induction_is_protected_by_what_its_parent_committed_to(series):
+    """The documented hole in this arm: `commitment` establishes when a cell differentiates, so the
+    twelve cells born after the factor arrives had nothing to inherit and took the forced fate. They
+    are protected now — their parents reach a terminal fate before dividing, commit, and the lock is
+    inherited — and the ablation still shows it is the commitment doing it, not the arithmetic."""
+    late = _born_after_the_induction(series)
+    assert len(late) == 12
+    assert [t for t in late.values() if t == "Muscle"] == []
+    stripped = copy.deepcopy(series)
+    stripped.commitments.clear()
+    assert set(_born_after_the_induction(stripped).values()) == {"Muscle"}  # all twelve, without it
+
+
+def test_a_precursor_that_never_differentiates_can_commit_on_a_sustained_read():
+    """The hole is closed on this program but the shape of it is real: a cell that runs a programme
+    for a long time without differentiating has nothing to pass on. A program can say so itself, with
+    no new construct — `establish` on an integrated read is §7.2a's own example, and it compiles since
+    the reads landed. Here the precursor divides for ever and never takes a fate."""
+    source = """
+module toy
+import bio.std.development
+cell_type Gut { parent: PostMitotic }
+cell_type Muscle { parent: PostMitotic }
+organism T { root: P0; cell_type: Blastomere; factors: ELT-2; observe: fates }
+stage S { from: 0 min }
+timer cycle { duration: 20 min }
+decision grow { action: divide; when: cell_type = Blastomere }
+decision forced { action: differentiate; when: HLH-1 = present; to: Muscle; priority: 9 }
+"""
+    precursor = (
+        "commitment gut_programme { programme: Gut; establish: ELT-2.exposure(lineage) >= 30; "
+        "inherit: daughters; release: never }\n"
+    )
+    for source_text, expected in ((source, "Muscle"), (source + precursor, "Blastomere")):
+        body = Body(parse(source_text), seed=None, add_at={"HLH-1": 70.0}).run(until=120)
+        kinds = {c.cell_type for c in body.alive_at(120)}
+        assert kinds == {expected}, source_text[-80:]
