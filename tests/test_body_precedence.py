@@ -25,6 +25,7 @@ from genomeos.runtime.body import Body
 
 ROOT = Path(__file__).resolve().parent.parent
 WORM = ROOT / "data" / "organisms" / "celegans" / "embryo_factors.bio"
+PLAIN_WORM = ROOT / "data" / "organisms" / "celegans" / "embryo.bio"  # the same worm, no factor rules
 
 SHARED_ID = """
 module toy
@@ -133,8 +134,12 @@ def test_exposure_and_mean_are_read_over_the_window_the_program_names():
     assert float(read["Ppl"]["M.mean(lineage)"]) == 0.25
 
 
-def test_a_program_that_asks_for_no_integrated_read_computes_none(worm):
-    assert Body(worm, seed=None)._reads == []
+def test_a_program_that_asks_for_no_integrated_read_computes_none():
+    """A program pays for an integrated read only by naming one. `embryo_factors.bio` asks for 33 of
+    them since area E rewrote its fate rules on this runtime, so the program that pins this is the one
+    without factor rules at all."""
+    assert Body(parse_file(PLAIN_WORM), seed=None)._reads == []
+    assert Body(parse_file(WORM), seed=None)._reads  # and the one that asks does get them
 
 
 def test_an_equal_or_higher_precedence_reading_may_still_change_a_fate():
