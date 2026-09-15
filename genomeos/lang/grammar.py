@@ -184,8 +184,7 @@ BLOCKS: dict[str, dict] = {
             "steps": ("integer", "migrate: sites per move"),
             "timer": ("Id", "divide: explicit timer; omitted = first matching"),
             "after": ("time", "delay from birth (cells) or from now (populations); recurring for flows"),
-            "fraction": ("number", "populations: a share of what is LEFT when it runs (divide may exceed 1)"),
-            "share": ("number", "populations: a share of the whole at this decision point, order-free"),
+            "fraction": ("number", "populations: share (divide may exceed 1)"),
             "priority": (
                 "integer",
                 "highest wins among matching decisions of one action; ties: first in module order",

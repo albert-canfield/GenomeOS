@@ -75,7 +75,6 @@ class Cell:
     inherited: dict[str, float] = field(default_factory=dict)
     exp_t: float = 0.0
     exp_val: dict[str, float] = field(default_factory=dict)
-    split_base: tuple[float, float] | None = None  # (time, count) the shares at that instant draw from
     recheck_at: float | None = None  # when a read this cell is waiting on reaches a threshold (§7.5)
     recheck_seq: int = -1  # event token: only the latest scheduled crossing is honoured
     measured: set[str] = field(default_factory=set)  # factors set by express decisions (the reader)
@@ -444,7 +443,7 @@ class Body:
                 and d.to != c.cell_type
                 and c.fate_ctx is not None
                 and d.applies(c.fate_ctx)
-                and not (self.population(c) and _partial(d))
+                and not (self.population(c) and d.fraction < 1.0)
             ):
                 # the same rule as inside a decision point, carried across them: a decision that could
                 # already have applied when the fate was settled, and lost on precedence, is a competitor
@@ -459,7 +458,7 @@ class Body:
             if chosen is None:
                 chosen = d
                 continue
-            share = self.population(c) and (_partial(d) or _partial(chosen))
+            share = self.population(c) and (d.fraction < 1.0 or chosen.fraction < 1.0)
             if not share and d.priority == chosen.priority and d.to != chosen.to:
                 self.ambiguous[chosen.id] += 1  # a population's shares are meant to split, not compete
             break
@@ -539,12 +538,12 @@ class Body:
             d = self._pick_fate(c, ctx, before if self.fates == "first" else None)
             if d is None:
                 break
-            if _partial(d) and self.population(c) and d.after is not None:
+            if d.fraction < 1.0 and self.population(c) and d.after is not None:
                 # a recurring flow: every `after`, this share moves into the target pool
                 if d.id not in c.flow_at:
                     c.flow_at[d.id] = self.time + d.after * self.organism.tempo
                     self._push(c.flow_at[d.id], c.name, f"flow:{d.id}")
-            elif _partial(d) and self.population(c):
+            elif d.fraction < 1.0 and self.population(c):
                 self._split(c, d)
             else:
                 # a decision that lands on the type the cell already holds revises nothing: it must not
@@ -654,32 +653,9 @@ class Body:
             c.factors.setdefault(f, "present")
         c.measured = set(wanted) - c.stated
 
-    def _share_base(self, c: Cell) -> float:
-        """What the shares at this instant are shares *of*: the count as it stood when the first of
-        them ran. Sibling splits and sibling flows due together therefore do not divide each other's
-        leftovers, and their stated numbers do not depend on the order they run in."""
-        if c.split_base is None or c.split_base[0] != self.time:
-            c.split_base = (self.time, c.count)
-        return c.split_base[1]
-
-    def _part(self, c: Cell, d: Decision) -> float:
-        """How much of a population a split or a flow takes. `share` is absolute, so several of them
-        can ask for more than there is; that is a program stating impossible facts, and it is refused
-        rather than rescaled."""
-        if d.share is None:
-            return c.count * d.fraction
-        part = self._share_base(c) * d.share
-        if part > c.count + 1e-9:
-            raise ValueError(
-                f"decision {d.id!r} takes a share of {d.share:g} of {c.name!r}, but the shares at this "
-                f"decision point already take more than the population has ({c.count:g} left of "
-                f"{self._share_base(c):g}): shares are of the whole, so they must not sum above 1"
-            )
-        return min(part, c.count)
-
     def _split(self, c: Cell, d: Decision) -> None:
-        """A share of a population differentiates into the target pool (created on first use)."""
-        part = self._part(c, d)
+        """A fraction of a population differentiates into the target pool (created on first use)."""
+        part = c.count * d.fraction
         c.count -= part
         self._pour(c, d.to, part)
         self._record()
@@ -711,7 +687,7 @@ class Body:
             if alive:
                 self._resolve(c, born=False)
             return
-        part = self._part(c, d)
+        part = c.count * d.fraction
         c.count -= part
         self.fired[did] += 1
         self._pour(c, d.to, part)
@@ -1313,12 +1289,6 @@ class Body:
             "refused_committed": sum(self.refused_committed.values()),
             "committed": dict(sorted(self.committed_cells.items())),
         }
-
-
-def _partial(d: Decision) -> bool:
-    """Does this decision move part of a population rather than all of it? `fraction` says so by being
-    below 1, `share` by being stated at all."""
-    return d.share is not None or d.fraction < 1.0
 
 
 def _match(when: dict[str, str], ctx: dict[str, str]) -> bool:

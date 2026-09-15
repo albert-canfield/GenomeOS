@@ -213,8 +213,7 @@ May contain `transcript` blocks.
 | `steps` | `integer` | migrate: sites per move |
 | `timer` | `Id` | divide: explicit timer; omitted = first matching |
 | `after` | `time` | delay from birth (cells) or from now (populations); recurring for flows |
-| `fraction` | `number` | populations: a share of what is LEFT when it runs (divide may exceed 1) |
-| `share` | `number` | populations: a share of the whole at this decision point, order-free |
+| `fraction` | `number` | populations: share (divide may exceed 1) |
 | `priority` | `integer` | highest wins among matching decisions of one action; ties: first in module order |
 | `competence` | `Id` | differentiate: the window this fate change needs open |
 
@@ -356,7 +355,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`
 - **Timer**: `name`, `duration`, `unit`, `sd`, `lengthening`, `when`, `evidence`, `confidence`
 - **Stage**: `name`, `start`, `end`, `unit`, `evidence`, `confidence`
-- **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `share`, `priority`, `competence`, `evidence`, `confidence`
+- **Decision**: `id`, `action`, `when`, `daughters`, `to`, `name`, `asymmetric`, `lineages`, `sets`, `toward`, `direction`, `steps`, `timer`, `after`, `fraction`, `priority`, `competence`, `evidence`, `confidence`
 - **Experiment**: `name`, `knockouts`, `adds`, `add_at`, `environment`, `until`, `asserts`, `expect`, `evidence`, `confidence`
 - **Design**: `name`, `knockout_any_of`, `add_any_of`, `at_most`, `vary`, `until`, `targets`, `keeps`, `evidence`, `confidence`
 - **Organism**: `name`, `species`, `genome`, `tempo`, `resolution`, `seed`, `width`, `height`, `origin`, `sense`, `root`, `cell_type`, `factors`, `environment`, `observe`, `asserts`, `reference`, `contacts`, `cell_network`, `replicates`, `placement`, `evidence`, `confidence`

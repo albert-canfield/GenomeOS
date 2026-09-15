@@ -129,28 +129,10 @@ lines are allowed. `after` and `duration` take a unit (min, h, d, wk, yr).
   three decisions taking 0.46, 0.55 and 1.0 leave 46%, 30% and 25% of the
   original, not 46%, 55% and 100%. So the *value* of every split after the first
   depends on the order the decisions are written in, and is not the published
-  share it was derived from.
-- **`share` (2026-09-15): the same partition, stated as the numbers it is made
-  of.** `share: 0.25` takes that much of the population **as it stood at the
-  start of the decision point** — or of the instant, for recurring flows with
-  `after` — so siblings never divide each other's leftovers and none of them
-  depends on where it is written. `fraction` and `share` on one decision is a
-  compile error, as is a `share` on any action but `differentiate`; a share
-  outside 0..1 is refused, and shares that together ask for more than the
-  population has are refused **with the numbers, never rescaled**, because
-  over-subscription is a program stating impossible facts.
-
-  The two spellings describe the same partition: `fraction: 0.25, 0.3333, 1.0`
-  and `share: 0.25, 0.25, 0.5` split a pool identically. Only the second says
-  what the shares are. Its falsifier is the human body program, whose germ-layer
-  splits were derived from Sender & Milo's counts and then written as
-  remainders: restating all 16 of them as shares leaves the 20-year total
-  **identical** (2.82871e13, relative difference 0.000e+00) and moves no
-  population by more than 1.2e-11, which is floating point and nothing else.
-  Recurring flows get the property haematopoiesis needs: two outflows of 0.1
-  due together retain `1 - 0.1 - 0.1 = 0.8`, not `0.9 x 0.9 = 0.81`, so a
-  generator no longer has to solve its growth term against the order the runtime
-  applies them in.
+  share it was derived from. Writing a partition as shares would need a
+  construct the language does not have (see the note in ROADMAP area A,
+  2026-09-15); until it does, a generated program should say in its evidence
+  that the number is a fraction of the remainder, not a share of the layer.
   is re-read at every step, so `when: count = >=2.55e13` caps a tissue at
   its adult count and lets it regrow after losses. Populations wait from
   now, cells wait from birth. One runtime serves named cells (C. elegans)
