@@ -2207,53 +2207,53 @@ and neither of them the model, showing the same two numbers: 0.670 against 0.679
 It is nonetheless the first result in this area whose evidence does not pass through a model, and it
 supports the reading the executor test reached by a different route.
 
-## The all-elements sweep folded: what 415,632 deleted elements say, and what they do not (2026-09-15)
+## The all-elements sweep folded: what 457,272 deleted elements say, and what they do not (2026-09-15)
 
 The chain (`scripts/enhancer_targets_all_chain.py`) is deleting every registry element of every
 chromosome in AlphaGenome, one chromosome at a time, and each finished chromosome commits its own
 summary. `scripts/enhancer_targets_all_genome_wide.py` folds the complete ones into one reading and is
 re-run as each lands; every reading it has taken is kept in the result's `history`, so what follows can
-be checked against what the same fold said one chromosome ago. Fourteen are complete (chr10 to chr22
-and chrY), 415,632 elements, 330,387 requests.
+be checked against what the same fold said one chromosome ago. Fifteen are complete (chr9 to chr22 and
+chrY), 457,272 elements, 370,538 requests.
 
-| reading | genome-wide, 14 chromosomes | across chromosomes | the control it has to be read against |
+| reading | genome-wide, 15 chromosomes | across chromosomes | the control it has to be read against |
 |---|---|---|---|
-| names a gene at all | 65.4% | 58.1% (chr13) to 70.8% (chr19), median 64.5% | 87% of matched random windows in the locus benchmark |
-| the named coding gene is the nearest TSS | 61.8% | 48.8% (chrY) to 65.3% (chr22), median 61.1% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
-| the named coding gene is inside the element's own CTCF node | 78.5% | 68.4% (chr13) to 91.2% (chr19), median 75.4% | 75.4% for as many boundaries placed at random, measured on these same elements |
+| names a gene at all | 65.1% | 58.1% (chr13) to 70.8% (chr19), median 64.4% | 87% of matched random windows in the locus benchmark |
+| the named coding gene is the nearest TSS | 61.8% | 48.8% (chrY) to 65.3% (chr22), median 61.3% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
+| the named coding gene is inside the element's own CTCF node | 78.1% | 68.4% (chr13) to 91.2% (chr19), median 75.2% | 75.3% for as many boundaries placed at random, measured on these same elements |
 
 **The node control, re-measured where the claim is now being made.** dbad593 qualified the old
 "90.2% of enhancers act inside their own CTCF node" to 81.7% against 79.1% for randomly placed
 boundaries — 2.6 points — over the archive as it stood. That control belonged to the archive's element
 set, not to this one, so the fold now places its own: the same 176,650 elements naming a coding gene,
 the same most-moved gene, the same `infer_domains` caller, against as many boundaries drawn uniformly
-at random (20 draws, seed 7); at fourteen chromosomes that is 197,673 elements. It reproduces the
+at random (20 draws, seed 7); at fifteen chromosomes that is 216,945 elements. It reproduces the
 scorer's own containment figure to four decimals on every chromosome, which is the check that the two
 readings are the same reading.
 
-Pooled, the node keeps **78.5% against 75.4% at random: +3.02 points**, so dbad593's correction holds
-and if anything understates it at this size. What the per-chromosome control adds is that the excess is
-not a property the nodes have; it is a property of where their boundaries happen to fall:
+Pooled, the node keeps **78.1% against 75.3% at random: +2.85 points**, so dbad593's correction holds
+and is close to right at this size. What the per-chromosome control adds is that the excess is not a
+property the nodes have; it is a property of where their boundaries happen to fall:
 
-| | chr10 | chr18 | chr11 | chr17 | chr12 | chr16 | chr14 | chr20 | chr19 | chr22 | chr15 | chr13 | chr21 | chrY |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| inside the node | 74.4 | 69.1 | 78.8 | 86.0 | 75.6 | 81.7 | 77.2 | 75.2 | 91.2 | 84.1 | 73.7 | 68.4 | 72.6 | 71.2 |
-| random boundaries | 66.8 | 61.6 | 72.7 | 81.3 | 71.9 | 79.9 | 75.9 | 74.2 | 90.5 | 84.7 | 74.6 | 69.7 | 74.7 | 93.1 |
-| excess, points | +7.6 | +7.5 | +6.1 | +4.6 | +3.7 | +1.8 | +1.3 | +1.1 | +0.7 | −0.6 | −0.9 | −1.3 | −2.1 | −21.9 |
+| | chr10 | chr18 | chr11 | chr17 | chr12 | chr16 | chr14 | chr9 | chr20 | chr19 | chr22 | chr15 | chr13 | chr21 | chrY |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| inside the node | 74.4 | 69.1 | 78.8 | 86.0 | 75.6 | 81.7 | 77.2 | 75.0 | 75.2 | 91.2 | 84.1 | 73.7 | 68.4 | 72.6 | 71.2 |
+| random boundaries | 66.8 | 61.6 | 72.7 | 81.3 | 71.9 | 79.9 | 75.9 | 73.9 | 74.2 | 90.5 | 84.7 | 74.6 | 69.7 | 74.7 | 93.1 |
+| excess, points | +7.6 | +7.5 | +6.1 | +4.6 | +3.7 | +1.8 | +1.3 | +1.1 | +1.1 | +0.7 | −0.6 | −0.9 | −1.3 | −2.1 | −21.9 |
 
-The node is ahead on nine of fourteen and behind on five, and the two chromosomes the original 90.2%
+The node is ahead on ten of fifteen and behind on five, and the two chromosomes the original 90.2%
 sample leaned on, chr21 and chr22, are both among the five. chrY is the extreme case and the clearest
 illustration of what the control is for: 48 boundaries over 57 Mb, nearly all of them in the short
 euchromatic arm, so uniformly placed boundaries leave the element-dense region uncut and beat the real
 nodes by 22 points on 125 elements.
 
-**The pooled excess is drifting, and that is the finding rather than a nuisance.** It has read +1.85,
-+2.47 and +3.02 points at twelve, thirteen and fourteen chromosomes, rising each time a finely cut
-chromosome arrived and touching none of the per-chromosome numbers underneath it. The genome-wide node
-excess is an average whose value depends on which chromosomes happen to be in it, so no single figure
-for it — dbad593's 2.6 included — is a property of the genome. Any statement of the form "enhancers act
-inside their own node" has to carry the sign table, not the average. The rule below says the drift will
-reverse when the coarsely cut chromosomes land, and chrX is the first of them.
+**The pooled excess drifts in both directions, and that is the finding rather than a nuisance.** It has
+read +1.85, +2.47, +3.02 and now +2.85 points at twelve, thirteen, fourteen and fifteen chromosomes:
+up as two finely cut chromosomes arrived, down when chr9 did, and touching none of the per-chromosome
+numbers underneath it at any point. The genome-wide node excess is an average whose value depends on
+which chromosomes happen to be in it, so no single figure for it — dbad593's 2.6 included, and this
+paragraph's +2.85 — is a property of the genome. Any statement of the form "enhancers act inside their
+own node" has to carry the sign table, not the average.
 
 Nor does the excess follow the density relation that the containment level follows. chr19 is the
 densest chromosome and highest on containment at 91.2%, and its excess over random is +0.7, among the
@@ -2265,12 +2265,13 @@ computable from what the control already loads, and ranked against the excess:
 
 | | boundaries per Mb | median node | node length CV | element-target span | coding genes per Mb | elements per Mb | boundaries follow the elements | the null's own level |
 |---|---|---|---|---|---|---|---|---|
-| Spearman with the excess | **+0.79** | −0.69 | −0.59 | −0.16 | +0.33 | +0.42 | −0.59 | −0.51 |
-| with chrY dropped | **+0.74** | −0.61 | −0.54 | +0.05 | +0.17 | +0.27 | −0.49 | −0.39 |
+| Spearman with the excess | **+0.80** | −0.68 | −0.53 | −0.17 | +0.31 | +0.39 | −0.60 | −0.51 |
+| with chrY dropped | **+0.76** | −0.61 | −0.50 | +0.02 | +0.15 | +0.25 | −0.50 | −0.40 |
 
-Two chromosomes on, the boundary-density account has held its ground while the alternatives have
-decayed: gene density fell from +0.32 to +0.17 without chrY and element-target span from −0.13 to
-+0.05, which is nothing. That is the shape of a real relation beside coincidences.
+Three chromosomes on, the boundary-density account has held its ground while the alternatives have
+decayed: without chrY, gene density has fallen from +0.32 to +0.15 across the three arrivals and
+element-target span from −0.13 to +0.02, which is nothing. That is the shape of a real relation beside
+coincidences.
 
 One thing tracks the sign, and it is how finely the caller cuts. Every chromosome the node wins on
 carries 5.77 boundaries per Mb or more; every one it loses on carries 5.78 or fewer. The median node
@@ -2295,10 +2296,12 @@ per Mb of the line the call is refused.* In sample it separates 11 of 12, its on
 the standing predictions for every chromosome the sweep has not reached could be computed and committed
 before their elements existed:
 
-| | chr8 | chr3 | chr7 | *chr11* | chr4 | chr6 | *chr10* | chr5 | chr2 | chr1 | chr9 | chrX |
+| | chr8 | chr3 | chr7 | *chr11* | chr4 | chr6 | *chr10* | chr5 | chr2 | chr1 | *chr9* | chrX |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| boundaries per Mb | 7.65 | 7.26 | 7.10 | *7.00* | 6.94 | 6.90 | *6.88* | 6.85 | 6.83 | 6.58 | 5.87 | 5.26 |
-| predicted | + | + | + | *+* | + | + | *+* | + | + | + | refused | **−** |
+| boundaries per Mb | 7.65 | 7.26 | 7.10 | *7.00* | 6.94 | 6.90 | *6.88* | 6.85 | 6.83 | 6.58 | *5.87* | 5.26 |
+| predicted | + | + | + | *+* | + | + | *+* | + | + | + | *refused* | **−** |
+
+*Italics mark the chromosomes that have since landed: chr11 +6.1, chr10 +7.6, chr9 +1.1.*
 
 So the rule stakes something: every remaining autosome should show a positive excess, chr9 is too close
 to call and is refused rather than guessed, and **chrX alone should come back negative**. The fold
@@ -2316,19 +2319,29 @@ either set.
 |---|---|---|---|---|
 | chr11 | positive | 7.00 | +6.1 points | held |
 | chr10 | positive | 6.88 | +7.6 points | held |
+| chr9 | *refused, too close to call* | 5.87 | +1.1 points | refused, and rightly |
 
-chr10's is the largest excess of the fourteen and chr11's the third largest, from the fourth and third
+chr10's is the largest excess of the fifteen and chr11's the third largest, from the third and fourth
 finest boundary spacing. Both are the easy half of the rule's range, and two chromosomes drawn from the
-half where it is confident is weak evidence for the rule and no evidence at all for the threshold. The
-test that can embarrass it is **chrX at 5.26 boundaries per Mb, the only remaining chromosome it calls
-negative**; chr9 at 5.87 sits inside the refusal band by design and will be scored as refused, not as a
-win. If chrX comes back positive the rule has failed and will be recorded as failed: the threshold, the
-band, the date and the twelve it was fitted on are asserted in
+half where it is confident is weak evidence for the rule and no evidence at all for the threshold.
+
+**The refusal band turns out to be calibrated rather than merely cautious.** It was drawn as a hedge —
+within 0.3 per Mb of the line, decline to call — and it now contains four chromosomes, chr14, chr9,
+chr19 and chr13, whose excesses average **1.09 points in magnitude** against **5.27 points** for the
+eleven outside it. The band is not a region where the rule is shy; it is the region where the quantity
+is near zero, which is what it claimed. Only chr9 is a held-out test of that, the other three having
+been in the fitted twelve, and chr9 landed at +1.1 points, the fifth-smallest magnitude of fifteen.
+A refusal is not a win and is not scored as one, but the band predicting *where the excess vanishes* is
+a second, independent thing the boundary-density account gets right.
+
+The test that can embarrass the rule is still **chrX at 5.26 boundaries per Mb, the only remaining
+chromosome it calls negative**. If chrX comes back positive the rule has failed and will be recorded as
+failed: the threshold, the band, the date and the twelve it was fitted on are asserted in
 `tests/test_enhancer_targets_all_genome_wide.py`, so refitting it costs a commit that says so.
 
-What the two held-out chromosomes do support is the rule's account of the pooled number. The excess
-rose +1.85 → +2.47 → +3.02 as two finely cut chromosomes arrived, exactly as a resolution account
-predicts and a property-of-CTCF account does not.
+What the held-out chromosomes support meanwhile is the rule's account of the pooled number. The excess
+rose +1.85 → +2.47 → +3.02 as two finely cut chromosomes arrived and fell to +2.85 when chr9's +1.1
+joined, which is what a resolution account predicts and a property-of-CTCF account does not.
 
 The naming rate is the same kind of number. 65.4% of elements name some gene, and "some derived layer
 names a target" already fires at 52 of 60 matched random windows in the locus benchmark (303d0b0,
@@ -2351,38 +2364,38 @@ predicted from its element density. That is testable with no new data: fit each 
 the twelve the relation was read from (chrY dropped as the outlier it is), then predict chr11 and
 chr10, which arrived afterwards.
 
-| | chr11 predicted | chr11 actual | chr10 predicted | chr10 actual |
-|---|---|---|---|---|
-| names a gene | 65.2% | **69.4%** | 65.1% | **60.9%** |
-| nearest TSS | 61.6% | 62.5% | 61.5% | 62.9% |
-| inside the node | 78.1% | 78.8% | 77.9% | 74.4% |
+| | chr11 pred | chr11 actual | chr10 pred | chr10 actual | chr9 pred | chr9 actual |
+|---|---|---|---|---|---|---|
+| names a gene | 65.2% | **69.4%** | 65.1% | **60.9%** | 63.5% | 62.8% |
+| nearest TSS | 61.6% | 62.5% | 61.5% | 62.9% | 60.3% | 61.9% |
+| inside the node | 78.1% | 78.8% | 77.9% | 74.4% | 74.2% | 75.0% |
 
 chr11 and chr10 have almost the same element density — 358 and 354 per Mb — so the relation predicts
 almost the same naming rate for both, 65.2% and 65.1%. They came back **8.5 points apart**, at 69.4%
-and 60.9%, and the residuals are +4.2 and −4.2 points: as large as most of the spread the relation was
-supposed to explain, and in opposite directions from two nearly identical inputs. For naming, density
-is not a predictor of an individual chromosome. Nearest-TSS agreement survives the same test well
-(+0.9 and +1.4 points), and containment survives it once and not twice (+0.7 and −3.5).
+and 60.9%, residuals +4.2 and −4.2 points: as large as most of the spread the relation was supposed to
+explain, and in opposite directions from two nearly identical inputs. chr9 then fitted it well, at
+−0.7, +1.6 and +0.8 points on the three rates. Three predictions in, the naming errors are −0.7, +4.2
+and −4.2, a mean absolute error of 3.0 points against a total spread of 12.7.
 
-So the corrected reading: element density ranks chromosomes on all three rates and predicts none of
-them at the resolution of a single chromosome, least of all naming, where its own correlation fell from
-+0.75 to +0.67 when chr10 arrived. Something other than how much gene is nearby sets how often an
-element names one, and chr10 is where to look for it: the lowest naming rate of any autosome bar the
-sparsest, and simultaneously the largest node excess of the fourteen. Whatever it is suppresses naming
-without touching placement.
+So the corrected reading: element density ranks chromosomes on all three rates and predicts an
+individual chromosome's naming rate only sometimes, missing by a third of the whole spread when it
+misses. Its correlation with naming fell from +0.75 to +0.67 when chr10 arrived and has recovered only
+to +0.69. Something other than how much gene is nearby sets how often an element names one, and chr10
+is where to look for it: the lowest naming rate of any autosome bar the sparsest, and simultaneously
+the largest node excess of the fifteen. Whatever it is suppresses naming without touching placement.
 
 **The acrocentric trap did not spring here.** chr21, chr22 and chrY pooled give 65.7% / 63.7% / 80.0%
 against 65.4% / 61.6% / 78.4% for the other eleven, so unlike the compression lane's per-chromosome
 layers, this reading was not bought by the small chromosomes. The standing prediction is the density
 one: chrX, chr4 and chr5 are sparse, and if the density relation held at the pooled level the rates
-should fall as they land. Both tests so far pointed the other way and both were small: chr11 at 358 and
-chr10 at 354 elements per Mb are each about a tenth denser than the 323.6 per Mb of the twelve they
-joined, so each should have nudged the pooled rates up. Naming went 65.4 → 65.9 → 65.4% and containment
-79.0 → 78.9 → 78.5%: up once, down once, net nothing. Given that the same two chromosomes are the pair
-the per-chromosome test above fails on, the honest statement is that the pooled prediction has not been
-tested yet rather than that it has survived. The sparse chromosomes are the test, and the fold keeps
-the per-chromosome rate, the spread, both trends and every earlier reading on every run, so it will be
-scored automatically rather than remembered.
+should fall as they land. Three arrivals in, it has one point in its favour. chr11 and chr10, at 358
+and 354 elements per Mb, are each about a tenth denser than the 323.6 per Mb of the twelve they joined
+and should have nudged the pooled rates up; naming went 65.4 → 65.9 → 65.4%, up once and down once.
+chr9 at 301 per Mb is the first arrival *sparser* than the pool it joined (330.6), and the pooled rates
+duly fell, naming to 65.1% and containment 78.5 → 78.1%. That is one observation in the predicted
+direction and a small one. chrX, chr4 and chr5 are the real test, and the fold keeps the per-chromosome
+rate, the spread, both trends and every earlier reading on every run, so it will be scored
+automatically rather than remembered.
 
 `data/results/enhancer_targets_all_genome_wide.json`; the per-element tables stay local under
 `data/knowledge/alphagenome/all_elements/<chrom>.json`. Cells K562, HepG2, GM12878 and IMR-90.

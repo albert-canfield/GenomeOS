@@ -186,16 +186,16 @@
     },
     "chr9": {
       "elements": 41640,
-      "scored": 1400,
-      "complete": false,
+      "scored": 41640,
+      "complete": true,
       "length": 138394717,
-      "fraction_with_target": 0.629,
-      "coding_target_agrees_with_nearest": 0.897,
-      "coding_target_inside_domain": 0.934,
-      "fraction_inside_domain": 0.868,
-      "strong": 187,
-      "silencer_like": 331,
-      "requests_this_run": 1410
+      "fraction_with_target": 0.628,
+      "coding_target_agrees_with_nearest": 0.619,
+      "coding_target_inside_domain": 0.75,
+      "fraction_inside_domain": 0.762,
+      "strong": 6785,
+      "silencer_like": 9933,
+      "requests_this_run": 40151
     },
     "chrY": {
       "elements": 907,
@@ -211,7 +211,7 @@
       "requests_this_run": 0
     }
   },
-  "complete_chromosomes": 14,
+  "complete_chromosomes": 15,
   "chromosomes_complete": [
     "chr10",
     "chr11",
@@ -226,31 +226,32 @@
     "chr20",
     "chr21",
     "chr22",
+    "chr9",
     "chrY"
   ],
   "genome": {
-    "elements": 415632,
-    "scored": 415632,
-    "named": 271677,
-    "coding_named": 197673,
-    "strong": 80169,
-    "silencer_like": 102270,
-    "fraction_with_target": 0.654,
+    "elements": 457272,
+    "scored": 457272,
+    "named": 297815,
+    "coding_named": 216945,
+    "strong": 86954,
+    "silencer_like": 112203,
+    "fraction_with_target": 0.651,
     "coding_target_agrees_with_nearest": 0.618,
-    "coding_target_inside_domain": 0.785,
+    "coding_target_inside_domain": 0.781,
     "verdicts_coding": {
-      "no predicted effect": 217959,
-      "agrees with nearest TSS in domain": 122165,
-      "gene outside the domain": 42581,
-      "another gene in the same domain": 32927
+      "no predicted effect": 240327,
+      "agrees with nearest TSS in domain": 134098,
+      "gene outside the domain": 47405,
+      "another gene in the same domain": 35442
     }
   },
   "spread": {
     "fraction_with_target": {
-      "n": 14,
+      "n": 15,
       "min": 0.581,
       "lowest": "chr13",
-      "median": 0.645,
+      "median": 0.644,
       "max": 0.708,
       "highest": "chr19",
       "range": 0.127,
@@ -260,6 +261,7 @@
         "chrY": 0.611,
         "chr18": 0.621,
         "chr14": 0.623,
+        "chr9": 0.628,
         "chr20": 0.63,
         "chr16": 0.644,
         "chr21": 0.646,
@@ -272,10 +274,10 @@
       }
     },
     "coding_target_agrees_with_nearest": {
-      "n": 14,
+      "n": 15,
       "min": 0.488,
       "lowest": "chrY",
-      "median": 0.611,
+      "median": 0.613,
       "max": 0.653,
       "highest": "chr22",
       "range": 0.165,
@@ -288,6 +290,7 @@
         "chr21": 0.609,
         "chr20": 0.61,
         "chr16": 0.613,
+        "chr9": 0.619,
         "chr11": 0.625,
         "chr10": 0.629,
         "chr18": 0.638,
@@ -297,10 +300,10 @@
       }
     },
     "coding_target_inside_domain": {
-      "n": 14,
+      "n": 15,
       "min": 0.684,
       "lowest": "chr13",
-      "median": 0.754,
+      "median": 0.752,
       "max": 0.912,
       "highest": "chr19",
       "range": 0.228,
@@ -311,6 +314,7 @@
         "chr21": 0.726,
         "chr15": 0.737,
         "chr10": 0.744,
+        "chr9": 0.75,
         "chr20": 0.752,
         "chr12": 0.756,
         "chr14": 0.772,
@@ -338,35 +342,35 @@
       "reading": "the node's advantage over a random partition at the same resolution is small, and it is measured on a model's reading rather than on observed enhancer-gene pairs",
       "measured_on_this_set": {
         "what": "the same elements and the same most-moved coding gene, against as many boundaries placed uniformly at random (20 draws, seed 7), on the CTCF-only caller the scorer used",
-        "chromosomes": 14,
-        "coding_named": 197673,
-        "inside": 0.7846,
-        "inside_random": 0.7544,
-        "excess": 0.0302,
-        "chromosomes_where_the_node_beats_random": 9,
+        "chromosomes": 15,
+        "coding_named": 216945,
+        "inside": 0.7815,
+        "inside_random": 0.753,
+        "excess": 0.0285,
+        "chromosomes_where_the_node_beats_random": 10,
         "what_predicts_the_sign": {
           "axis": "Spearman of each chromosome's shape against its excess over random boundaries",
           "all": {
-            "chromosomes": 14,
-            "boundaries_per_mb": 0.793,
-            "median_node_kb": -0.691,
-            "node_length_cv": -0.591,
-            "median_pair_span_kb": -0.16,
-            "coding_genes_per_mb": 0.332,
-            "elements_per_mb": 0.415,
-            "boundaries_follow_the_elements": -0.591,
-            "inside_random": -0.512
+            "chromosomes": 15,
+            "boundaries_per_mb": 0.804,
+            "median_node_kb": -0.681,
+            "node_length_cv": -0.525,
+            "median_pair_span_kb": -0.168,
+            "coding_genes_per_mb": 0.307,
+            "elements_per_mb": 0.393,
+            "boundaries_follow_the_elements": -0.596,
+            "inside_random": -0.511
           },
           "without_chrY": {
-            "chromosomes": 13,
-            "boundaries_per_mb": 0.742,
-            "median_node_kb": -0.613,
-            "node_length_cv": -0.544,
-            "median_pair_span_kb": 0.049,
-            "coding_genes_per_mb": 0.165,
-            "elements_per_mb": 0.269,
-            "boundaries_follow_the_elements": -0.489,
-            "inside_random": -0.39
+            "chromosomes": 14,
+            "boundaries_per_mb": 0.758,
+            "median_node_kb": -0.607,
+            "node_length_cv": -0.495,
+            "median_pair_span_kb": 0.024,
+            "coding_genes_per_mb": 0.147,
+            "elements_per_mb": 0.253,
+            "boundaries_follow_the_elements": -0.503,
+            "inside_random": -0.398
           }
         },
         "per_chromosome": {
@@ -467,6 +471,20 @@
             "coding_genes_per_mb": 5.78,
             "elements_per_mb": 125.0,
             "boundaries_follow_the_elements": 0.068
+          },
+          "chr9": {
+            "coding_named": 19272,
+            "boundaries": 813,
+            "inside": 0.7497,
+            "inside_random": 0.7388,
+            "excess": 0.0109,
+            "boundaries_per_mb": 5.87,
+            "median_node_kb": 104.8,
+            "node_length_cv": 3.886,
+            "median_pair_span_kb": 31.7,
+            "coding_genes_per_mb": 5.6,
+            "elements_per_mb": 139.3,
+            "boundaries_follow_the_elements": 0.369
           },
           "chr20": {
             "coding_named": 12702,
@@ -580,15 +598,15 @@
   },
   "size_trend": {
     "axis": "hg38 chromosome length against the chromosome's own rate, over the complete chromosomes",
-    "chromosomes": 14,
-    "fraction_with_target": -0.051,
-    "coding_target_agrees_with_nearest": -0.204,
-    "coding_target_inside_domain": -0.037,
+    "chromosomes": 15,
+    "fraction_with_target": -0.114,
+    "coding_target_agrees_with_nearest": -0.136,
+    "coding_target_inside_domain": -0.05,
     "against_element_density": {
       "axis": "registry elements per Mb, the stand-in for gene density this run already holds",
-      "fraction_with_target": 0.666,
-      "coding_target_agrees_with_nearest": 0.741,
-      "coding_target_inside_domain": 0.864,
+      "fraction_with_target": 0.686,
+      "coding_target_agrees_with_nearest": 0.696,
+      "coding_target_inside_domain": 0.857,
       "per_chromosome": {
         "chr19": 501.1,
         "chr17": 497.2,
@@ -599,6 +617,7 @@
         "chr10": 354.4,
         "chr12": 349.5,
         "chr15": 304.5,
+        "chr9": 300.9,
         "chr14": 297.0,
         "chr18": 273.4,
         "chr21": 259.9,
@@ -607,11 +626,11 @@
       }
     },
     "excluding_acrocentric_and_chrY": {
-      "chromosomes": 11,
+      "chromosomes": 12,
       "pooled": {
-        "fraction_with_target": 0.653,
-        "coding_target_agrees_with_nearest": 0.616,
-        "coding_target_inside_domain": 0.783
+        "fraction_with_target": 0.651,
+        "coding_target_agrees_with_nearest": 0.617,
+        "coding_target_inside_domain": 0.78
       }
     },
     "acrocentric_and_chrY_only": {
@@ -629,7 +648,7 @@
     },
     "reading": "a rate that moves with chromosome size is a rate the small chromosomes bought; chr21 and chr22 are acrocentric and chrY is nearly gene-free, and the compression lane's per-chromosome layers already looked positive there and went negative genome-wide"
   },
-  "requests_total": 331797,
+  "requests_total": 370538,
   "cells": [
     "K562",
     "HepG2",
@@ -661,11 +680,11 @@
       "chr19, 5.77 per Mb, predicted to lose and it wins by 0.7 points"
     ],
     "why": "an excess that is a function of how finely the caller cuts is a statement about resolution rather than about CTCF: where CTCF-only elements are sparse the nodes carry nothing a partition of the same count placed at random does not",
-    "scoreboard": "held out: 2 right, 0 wrong, 0 refused; 12 fitted on and not tests; 10 still to land",
+    "scoreboard": "held out: 2 right, 0 wrong, 1 refused; 12 fitted on and not tests; 9 still to land",
     "held_out_chromosomes_scored": 2,
     "held_out_right": 2,
     "held_out_wrong": 0,
-    "held_out_refused": 0,
+    "held_out_refused": 1,
     "verdict": "holding",
     "chromosomes_by_status": {
       "held out: right": [
@@ -673,7 +692,9 @@
         "chr10"
       ],
       "held out: WRONG": [],
-      "held out: refused": [],
+      "held out: refused": [
+        "chr9"
+      ],
       "fitted on, not a test": [
         "chr20",
         "chr18",
@@ -697,7 +718,6 @@
         "chr5",
         "chr2",
         "chr1",
-        "chr9",
         "chrX"
       ]
     },
@@ -710,7 +730,6 @@
       "chr5": "positive",
       "chr2": "positive",
       "chr1": "positive",
-      "chr9": "too close to call",
       "chrX": "negative"
     },
     "per_chromosome": {
@@ -813,7 +832,9 @@
       "chr9": {
         "boundaries_per_mb": 5.87,
         "predicted": "too close to call",
-        "status": "still to land"
+        "excess": 0.0109,
+        "actual": "positive",
+        "status": "held out: refused"
       },
       "chr13": {
         "boundaries_per_mb": 5.78,
@@ -930,6 +951,30 @@
       "fraction_with_target": 0.654,
       "coding_target_agrees_with_nearest": 0.618,
       "coding_target_inside_domain": 0.785
+    },
+    {
+      "chromosomes": 15,
+      "chromosomes_complete": [
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr9",
+        "chrY"
+      ],
+      "scored": 457272,
+      "fraction_with_target": 0.651,
+      "coding_target_agrees_with_nearest": 0.618,
+      "coding_target_inside_domain": 0.781
     }
   ]
 }
