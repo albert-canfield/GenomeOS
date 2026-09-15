@@ -1,10 +1,17 @@
 name: ci
 
+# Cadence: at most one scheduled run a day, plus a run when a promotion PR is opened and whatever
+# anyone asks for by hand. It used to run on every push to dev AND again on the same commit through
+# the open dev -> main pull request, so one commit produced two runs and a red morning produced two
+# notifications an hour. The per-commit gate is the pre-push hook, which runs the same checks in a
+# clean worktree before anything reaches the remote; CI is the daily second opinion, not the gate.
 on:
-  push:
-    branches: [main, dev]
+  schedule:
+    - cron: "0 6 * * *"  # 06:00 UTC, once a day
   pull_request:
     branches: [main]
+    types: [opened, reopened, ready_for_review]
+  workflow_dispatch:
 
 # one run per branch at a time: a newer push cancels the run it supersedes
 # instead of letting it finish and fail on code that no longer exists
