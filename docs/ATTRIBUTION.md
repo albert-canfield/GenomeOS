@@ -2270,7 +2270,11 @@ scores each chromosome against this table as it lands and records right, wrong a
 failure is visible in the committed result rather than absorbed.
 
 **Held out so far: two right, none wrong, none refused.** chr11 finished at 00:24 and chr10 at 03:09
-on 2026-09-15, both after the rule was fixed and committed, so neither was fitted on.
+on 2026-09-15, both after the rule was fixed and committed, so neither was fitted on. The committed
+result tags every chromosome with one of five words — `held out: right`, `held out: WRONG`,
+`held out: refused`, `fitted on, not a test`, `still to land` — and carries a one-line scoreboard and a
+verdict, so which chromosomes were fitted and which were tests can be read without reconstructing
+either set.
 
 | | predicted | boundaries per Mb | measured excess | |
 |---|---|---|---|---|
@@ -2305,25 +2309,44 @@ for containment and nearest-TSS agreement. The reading is that these rates measu
 is to name near an element, not how well the genome is being understood, and a target within a node is
 easier to find where targets are dense.
 
-**The density relation has one clear counterexample, and it is chr10.** At 354 elements per Mb chr10 is
-the seventh densest of the fourteen, above the median, and its neighbours in density name genes at 64.4
-to 69.4% — but chr10 names at 60.9%, lower than every chromosome except chr13, which is the sparsest
-autosome of the set. Naming's correlation with density fell from +0.75 to +0.67 on its arrival, while
-containment's did not move. So the density account holds for where a target sits and is weaker for
-whether one is named at all, and chr10 is the chromosome that will not fit it. It is also the
-chromosome with the largest node excess of the fourteen, so whatever is unusual about it suppresses
-naming without touching placement.
+**The density relation, scored out of sample, fails for naming.** The correlation is a statement about
+ranking fourteen chromosomes; what it claims in practice is that an arriving chromosome's rates can be
+predicted from its element density. That is testable with no new data: fit each rate on density over
+the twelve the relation was read from (chrY dropped as the outlier it is), then predict chr11 and
+chr10, which arrived afterwards.
+
+| | chr11 predicted | chr11 actual | chr10 predicted | chr10 actual |
+|---|---|---|---|---|
+| names a gene | 65.2% | **69.4%** | 65.1% | **60.9%** |
+| nearest TSS | 61.6% | 62.5% | 61.5% | 62.9% |
+| inside the node | 78.1% | 78.8% | 77.9% | 74.4% |
+
+chr11 and chr10 have almost the same element density — 358 and 354 per Mb — so the relation predicts
+almost the same naming rate for both, 65.2% and 65.1%. They came back **8.5 points apart**, at 69.4%
+and 60.9%, and the residuals are +4.2 and −4.2 points: as large as most of the spread the relation was
+supposed to explain, and in opposite directions from two nearly identical inputs. For naming, density
+is not a predictor of an individual chromosome. Nearest-TSS agreement survives the same test well
+(+0.9 and +1.4 points), and containment survives it once and not twice (+0.7 and −3.5).
+
+So the corrected reading: element density ranks chromosomes on all three rates and predicts none of
+them at the resolution of a single chromosome, least of all naming, where its own correlation fell from
++0.75 to +0.67 when chr10 arrived. Something other than how much gene is nearby sets how often an
+element names one, and chr10 is where to look for it: the lowest naming rate of any autosome bar the
+sparsest, and simultaneously the largest node excess of the fourteen. Whatever it is suppresses naming
+without touching placement.
 
 **The acrocentric trap did not spring here.** chr21, chr22 and chrY pooled give 65.7% / 63.7% / 80.0%
 against 65.4% / 61.6% / 78.4% for the other eleven, so unlike the compression lane's per-chromosome
 layers, this reading was not bought by the small chromosomes. The standing prediction is the density
-one: chrX, chr4 and chr5 are sparse, and if the density relation is real the pooled rates should fall
-as they land rather than stay flat. The two tests so far were both the weak half of it — chr11 and
-chr10 are denser than the running set — and they went 65.4 → 65.9 → 65.4% on naming, 61.5 → 61.7 →
-61.8% on nearest TSS and 79.0 → 78.9 → 78.5% on containment, which is flat to slightly down where the
-relation expected up. On its own that is noise at the third decimal; it is recorded here so that it
-cannot be forgotten if the sparse chromosomes go the other way. The fold keeps the per-chromosome rate,
-the spread, both trends and every earlier reading on every run, so the check is automatic.
+one: chrX, chr4 and chr5 are sparse, and if the density relation held at the pooled level the rates
+should fall as they land. Both tests so far pointed the other way and both were small: chr11 at 358 and
+chr10 at 354 elements per Mb are each about a tenth denser than the 323.6 per Mb of the twelve they
+joined, so each should have nudged the pooled rates up. Naming went 65.4 → 65.9 → 65.4% and containment
+79.0 → 78.9 → 78.5%: up once, down once, net nothing. Given that the same two chromosomes are the pair
+the per-chromosome test above fails on, the honest statement is that the pooled prediction has not been
+tested yet rather than that it has survived. The sparse chromosomes are the test, and the fold keeps
+the per-chromosome rate, the spread, both trends and every earlier reading on every run, so it will be
+scored automatically rather than remembered.
 
 `data/results/enhancer_targets_all_genome_wide.json`; the per-element tables stay local under
 `data/knowledge/alphagenome/all_elements/<chrom>.json`. Cells K562, HepG2, GM12878 and IMR-90.

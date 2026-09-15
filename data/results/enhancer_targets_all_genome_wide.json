@@ -184,6 +184,19 @@
       "silencer_like": 4952,
       "requests_this_run": 19708
     },
+    "chr9": {
+      "elements": 41640,
+      "scored": 1400,
+      "complete": false,
+      "length": 138394717,
+      "fraction_with_target": 0.629,
+      "coding_target_agrees_with_nearest": 0.897,
+      "coding_target_inside_domain": 0.934,
+      "fraction_inside_domain": 0.868,
+      "strong": 187,
+      "silencer_like": 331,
+      "requests_this_run": 1410
+    },
     "chrY": {
       "elements": 907,
       "scored": 907,
@@ -616,7 +629,7 @@
     },
     "reading": "a rate that moves with chromosome size is a rate the small chromosomes bought; chr21 and chr22 are acrocentric and chrY is nearly gene-free, and the compression lane's per-chromosome layers already looked positive there and went negative genome-wide"
   },
-  "requests_total": 330387,
+  "requests_total": 331797,
   "cells": [
     "K562",
     "HepG2",
@@ -648,9 +661,46 @@
       "chr19, 5.77 per Mb, predicted to lose and it wins by 0.7 points"
     ],
     "why": "an excess that is a function of how finely the caller cuts is a statement about resolution rather than about CTCF: where CTCF-only elements are sparse the nodes carry nothing a partition of the same count placed at random does not",
+    "scoreboard": "held out: 2 right, 0 wrong, 0 refused; 12 fitted on and not tests; 10 still to land",
     "held_out_chromosomes_scored": 2,
     "held_out_right": 2,
     "held_out_wrong": 0,
+    "held_out_refused": 0,
+    "verdict": "holding",
+    "chromosomes_by_status": {
+      "held out: right": [
+        "chr11",
+        "chr10"
+      ],
+      "held out: WRONG": [],
+      "held out: refused": [],
+      "fitted on, not a test": [
+        "chr20",
+        "chr18",
+        "chr12",
+        "chr17",
+        "chr16",
+        "chr14",
+        "chr13",
+        "chr19",
+        "chr15",
+        "chr21",
+        "chr22",
+        "chrY"
+      ],
+      "still to land": [
+        "chr8",
+        "chr3",
+        "chr7",
+        "chr4",
+        "chr6",
+        "chr5",
+        "chr2",
+        "chr1",
+        "chr9",
+        "chrX"
+      ]
+    },
     "standing_predictions": {
       "chr8": "positive",
       "chr3": "positive",
@@ -666,152 +716,151 @@
     "per_chromosome": {
       "chr8": {
         "boundaries_per_mb": 7.65,
-        "predicted": "positive"
+        "predicted": "positive",
+        "status": "still to land"
       },
       "chr20": {
         "boundaries_per_mb": 7.4,
         "predicted": "positive",
         "excess": 0.0106,
         "actual": "positive",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       },
       "chr3": {
         "boundaries_per_mb": 7.26,
-        "predicted": "positive"
+        "predicted": "positive",
+        "status": "still to land"
       },
       "chr7": {
         "boundaries_per_mb": 7.1,
-        "predicted": "positive"
+        "predicted": "positive",
+        "status": "still to land"
       },
       "chr11": {
         "boundaries_per_mb": 7.0,
         "predicted": "positive",
         "excess": 0.0614,
         "actual": "positive",
-        "in_sample": false,
-        "held": true
+        "status": "held out: right"
       },
       "chr18": {
         "boundaries_per_mb": 6.96,
         "predicted": "positive",
         "excess": 0.0753,
         "actual": "positive",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       },
       "chr4": {
         "boundaries_per_mb": 6.94,
-        "predicted": "positive"
+        "predicted": "positive",
+        "status": "still to land"
       },
       "chr12": {
         "boundaries_per_mb": 6.91,
         "predicted": "positive",
         "excess": 0.0368,
         "actual": "positive",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       },
       "chr6": {
         "boundaries_per_mb": 6.9,
-        "predicted": "positive"
+        "predicted": "positive",
+        "status": "still to land"
       },
       "chr10": {
         "boundaries_per_mb": 6.88,
         "predicted": "positive",
         "excess": 0.076,
         "actual": "positive",
-        "in_sample": false,
-        "held": true
+        "status": "held out: right"
       },
       "chr5": {
         "boundaries_per_mb": 6.85,
-        "predicted": "positive"
+        "predicted": "positive",
+        "status": "still to land"
       },
       "chr2": {
         "boundaries_per_mb": 6.83,
-        "predicted": "positive"
+        "predicted": "positive",
+        "status": "still to land"
       },
       "chr1": {
         "boundaries_per_mb": 6.58,
-        "predicted": "positive"
+        "predicted": "positive",
+        "status": "still to land"
       },
       "chr17": {
         "boundaries_per_mb": 6.55,
         "predicted": "positive",
         "excess": 0.0463,
         "actual": "positive",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       },
       "chr16": {
         "boundaries_per_mb": 6.22,
         "predicted": "positive",
         "excess": 0.018,
         "actual": "positive",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       },
       "chr14": {
         "boundaries_per_mb": 5.91,
         "predicted": "too close to call",
         "excess": 0.0129,
         "actual": "positive",
-        "in_sample": true
+        "status": "fitted on, not a test"
       },
       "chr9": {
         "boundaries_per_mb": 5.87,
-        "predicted": "too close to call"
+        "predicted": "too close to call",
+        "status": "still to land"
       },
       "chr13": {
         "boundaries_per_mb": 5.78,
         "predicted": "too close to call",
         "excess": -0.0126,
         "actual": "negative",
-        "in_sample": true
+        "status": "fitted on, not a test"
       },
       "chr19": {
         "boundaries_per_mb": 5.77,
         "predicted": "too close to call",
         "excess": 0.0072,
         "actual": "positive",
-        "in_sample": true
+        "status": "fitted on, not a test"
       },
       "chr15": {
         "boundaries_per_mb": 5.31,
         "predicted": "negative",
         "excess": -0.0093,
         "actual": "negative",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       },
       "chrX": {
         "boundaries_per_mb": 5.26,
-        "predicted": "negative"
+        "predicted": "negative",
+        "status": "still to land"
       },
       "chr21": {
         "boundaries_per_mb": 4.86,
         "predicted": "negative",
         "excess": -0.0208,
         "actual": "negative",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       },
       "chr22": {
         "boundaries_per_mb": 4.84,
         "predicted": "negative",
         "excess": -0.0058,
         "actual": "negative",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       },
       "chrY": {
         "boundaries_per_mb": 0.84,
         "predicted": "negative",
         "excess": -0.2192,
         "actual": "negative",
-        "in_sample": true,
-        "held": true
+        "status": "fitted on, not a test"
       }
     }
   },

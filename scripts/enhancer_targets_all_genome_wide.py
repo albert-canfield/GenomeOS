@@ -390,6 +390,17 @@ SIGN_RULE = {
 }
 
 
+# One word per chromosome, so a reader who has not followed the night can see which chromosomes the
+# rule was fitted on and which were tests of it without reconstructing either set.
+STATUSES = (
+    "held out: right",
+    "held out: WRONG",
+    "held out: refused",
+    "fitted on, not a test",
+    "still to land",
+)
+
+
 def sign_call(per_mb: float | None) -> str | None:
     if per_mb is None:
         return None
@@ -423,29 +434,40 @@ def sign_prediction(control: dict, density: dict[str, float]) -> dict:
     fixed. A chromosome in `fixed_on` is in sample and is not counted towards the held-out score."""
     measured = control.get("per_chromosome") or {}
     rows: dict[str, dict] = {}
-    held_out_right = held_out_wrong = 0
+    by_status: dict[str, list[str]] = {k: [] for k in STATUSES}
     for chrom, per_mb in sorted(density.items(), key=lambda kv: -kv[1]):
         call = sign_call(per_mb)
         row = {"boundaries_per_mb": per_mb, "predicted": call}
+        if chrom not in measured:
+            status = "still to land"
+        elif chrom in SIGN_RULE["fixed_on"]:
+            status = "fitted on, not a test"
+        elif call == "too close to call":
+            status = "held out: refused"
+        else:
+            right = (call == "positive") == (measured[chrom]["excess"] > 0)
+            status = "held out: right" if right else "held out: WRONG"
         if chrom in measured:
-            actual = "positive" if measured[chrom]["excess"] > 0 else "negative"
             row["excess"] = measured[chrom]["excess"]
-            row["actual"] = actual
-            row["in_sample"] = chrom in SIGN_RULE["fixed_on"]
-            if call != "too close to call":
-                row["held"] = call == actual
-                if not row["in_sample"]:
-                    held_out_right += call == actual
-                    held_out_wrong += call != actual
+            row["actual"] = "positive" if measured[chrom]["excess"] > 0 else "negative"
+        row["status"] = status
         rows[chrom] = row
+        by_status[status].append(chrom)
+    right, wrong = len(by_status["held out: right"]), len(by_status["held out: WRONG"])
+    refused, landed = len(by_status["held out: refused"]), len(by_status["still to land"])
     return {
         **SIGN_RULE,
-        "held_out_chromosomes_scored": held_out_right + held_out_wrong,
-        "held_out_right": held_out_right,
-        "held_out_wrong": held_out_wrong,
-        "standing_predictions": {
-            c: r["predicted"] for c, r in rows.items() if "actual" not in r and r["predicted"]
-        },
+        "scoreboard": f"held out: {right} right, {wrong} wrong, {refused} refused; "
+        f"{len(by_status['fitted on, not a test'])} fitted on and not tests; {landed} still to land",
+        "held_out_chromosomes_scored": right + wrong,
+        "held_out_right": right,
+        "held_out_wrong": wrong,
+        "held_out_refused": refused,
+        "verdict": "FAILED on " + ", ".join(by_status["held out: WRONG"])
+        if wrong
+        else ("holding" if right else "not yet tested"),
+        "chromosomes_by_status": by_status,
+        "standing_predictions": {c: rows[c]["predicted"] for c in by_status["still to land"]},
         "per_chromosome": rows,
     }
 
@@ -537,18 +559,20 @@ def main() -> int:
         print(f"    {k}: {t[k]} / {dens[k]}")
     p = out.get("node_excess_prediction")
     if p:
-        n = p["held_out_chromosomes_scored"]
         print(
-            f"  the excess-sign rule ({p['threshold_per_mb']} boundaries per Mb), held out: "
-            + (f"{p['held_out_right']} right, {p['held_out_wrong']} wrong of {n}" if n else "nothing yet")
+            f"  the excess-sign rule ({p['threshold_per_mb']} boundaries per Mb) is {p['verdict']}"
+            f" -- {p['scoreboard']}"
         )
-        for chrom, r in p["per_chromosome"].items():
-            if "actual" in r and not r["in_sample"]:
-                verdict = "refused" if "held" not in r else ("held" if r["held"] else "FAILED")
-                print(
-                    f"    {chrom}: {r['boundaries_per_mb']}/Mb predicted {r['predicted']}, "
-                    f"got {r['excess']:+} ({verdict})"
-                )
+        for chrom in (
+            p["chromosomes_by_status"]["held out: WRONG"]
+            + p["chromosomes_by_status"]["held out: right"]
+            + p["chromosomes_by_status"]["held out: refused"]
+        ):
+            r = p["per_chromosome"][chrom]
+            print(
+                f"    {chrom}: {r['boundaries_per_mb']}/Mb predicted {r['predicted']}, "
+                f"got {r['excess']:+} -- {r['status']}"
+            )
         standing = ", ".join(f"{c} {v}" for c, v in list(p["standing_predictions"].items())[:6])
         print(f"    still to land: {standing}")
     return 0

@@ -249,6 +249,27 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   "individual". After every push of a shared file, run the new command once
   from the pushed tree (the pre-push hook checks tests, not that the CLI
   surface is complete), or filter by line range instead of by word.
+- **A liveness check that can match itself is not a liveness check
+  (2026-09-15).** Three times in two days a process has looked for another
+  process by name and found its own command line instead. A
+  `ps | grep | kill` pipeline matched its own shell and killed itself
+  mid-command, twice, the second time from a heredoc written to avoid the
+  first; and a watcher polling
+  `pgrep -f "enhancer_targets_all_chain.py"` matched a sibling watcher whose
+  invocation contained that same string, so it reported the chain alive for
+  hours and would have reported it alive forever. The false positive is the
+  dangerous direction: the watch goes quiet and quiet looks like healthy.
+  The pattern you search for must be one your own invocation cannot contain,
+  and in this repository it need not be a pattern at all — every registry job
+  writes `data/jobs/<name>.heartbeat`, and `jobs.last_activity(name)` against
+  `jobs.STALL_AFTER` answers the question without naming a process. Ask the
+  job whether it is alive; do not ask the process table whether something
+  spelled like it exists.
+- A job that stops is not always a job that died: the chain was paused
+  deliberately at 03:09 so the AlphaGenome key could go to another lane, and
+  from outside that is indistinguishable from a crash. `jobs.key_holder()`
+  says who holds the key and what for, and it is the first thing to read
+  before reporting a stall.
 
 ## Engineering
 
