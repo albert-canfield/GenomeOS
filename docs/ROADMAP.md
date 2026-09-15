@@ -1146,15 +1146,32 @@ in order. "Owner" is the session that holds the files today (see §7).
   surface cases already sit on the poor-safety cap (EGFR raw 0.572, held at
   0.5), which is the reason a benchmark is not the only control a change
   needs.
-- **Missing.** Expression-driven targets such as CD19 and BCMA, which need patient
-  RNA rather than a variant; the demo runs at data level 1 only; what a deep
-  deletion is actually worth (the dependency it creates) is not modelled.
-- **Next.** 1. A cohort expression reference, so expression-driven targets
-  (CD19, BCMA) are reachable from patient RNA. 2. A `NeoantigenProvider`
-  behind a licence-checked optional extra. 3. A benchmark case whose driver is
-  a copy-number or structural call, and lowering the pinned defect count from
-  2 to 0; genomeos-f7 owns both. 4. What a deep deletion is worth: the
-  dependency the loss creates, which nothing models.
+- **Expression-driven targets, done (2026-09-15).** CD19 and BCMA are not
+  mutated, amplified or rearranged, so a pipeline that reaches a gene only
+  through an alteration could not propose either: a hole in the middle of the
+  target space. `--scan N` closes it from the patient's own RNA against the
+  packaged atlas (`therapeutics/scan.py`). On the demo B-cell lymphoma it
+  proposes FCRL5 at 5.9x and CD19 at 4.3x, both direct surface targets ranking
+  above the TP53 driver and neither reachable by any other route here. The
+  rejections are the more instructive half and are reported rather than
+  dropped: CD20 at 2.2x, CD79A at 1.4x, CD22 at 1.0x — the targets of the most
+  successful antibodies in oncology, each failing a selectivity screen because
+  healthy spleen is full of the same lineage (CD20 sits at 247 nTPM there). A
+  threshold here is a sort order and never a verdict. Three refusals hold: it
+  runs only on patient RNA and never on a cohort, raised transcript is never
+  called protein on the surface, and every candidate carries what the CD19
+  story costs — B-cell aplasia is not a side effect of CD19 therapy but the
+  same event from the other side. The benchmark does not move: the scan is off
+  unless asked for, and none of its six cases supply RNA.
+- **Missing.** The demo runs at data level 1 only; what a deep deletion is
+  actually worth (the dependency it creates) is not modelled; the scan's
+  healthy reference is 20 tissues of population consensus, not a matched
+  normal.
+- **Next.** 1. A `NeoantigenProvider`
+  behind a licence-checked optional extra. 2. A benchmark case whose driver is
+  a copy-number, structural or expression call, and lowering the pinned defect
+  count from 2 to 0; genomeos-f7 owns both. 3. What a deep deletion is worth:
+  the dependency the loss creates, which nothing models.
 - **Owner.** genomeos-f2 since 2026-09-14; genomeos-f7 takes the benchmark.
 
 ### G. Product: web UI, CLI, packaging, CI

@@ -54,6 +54,8 @@ from .model import (
 from .neoantigen import assess as assess_neoantigen
 from .neoantigen import neoantigen_strength, presentation_confidence
 from .providers import Providers
+from .scan import limitations as scan_limitations
+from .scan import scan as expression_scan
 from .scoring import (
     assemble,
     clinical_precedent,
@@ -535,6 +537,17 @@ def _lead_variant(variants: list[TumourVariant]) -> TumourVariant | None:
 def classify(c: TherapeuticTargetCandidate, origin_class: str) -> tuple[str, str]:
     """Assign the target class from localisation, never from the mutation alone."""
     loc: Localisation = c.localization
+    if origin_class == "expression_driven":
+        if loc.reachable and loc.plasma_membrane is not False:
+            return "direct_surface", (
+                f"{c.gene} is not altered in this tumour; it is reached because the tumour's RNA "
+                "carries far more of it than healthy tissue does, and curated localisation places it "
+                "at the membrane, so a circulating binder could engage it"
+            )
+        return "unsuitable", (
+            f"{c.gene} is raised in this tumour's RNA but curated localisation does not place it "
+            "where a binder can reach, and an unaltered gene yields no mutation-derived peptide either"
+        )
     if origin_class == "pathway_induced":
         return "pathway_induced_surface", (
             "not altered in this tumour; reached as a surface protein associated with a disrupted "
@@ -882,10 +895,18 @@ def analyse(
     providers: Providers | None = None,
     top_genes: int = 12,
     indirect: bool = True,
+    scan_expression: int = 0,
     log: Any = None,
 ) -> dict[str, Any]:
-    """Run the pipeline over one tumour's ranked variants."""
+    """Run the pipeline over one tumour's ranked variants.
+
+    `scan_expression` adds the third route into the candidate list: genes this
+    tumour's RNA carries far more of than healthy tissue does, altered or not,
+    which is the only route by which CD19 or BCMA could ever be proposed. It
+    needs patient RNA and does nothing without it.
+    """
     providers = providers or Providers.default()
+    expression_hits: list[Any] = []
     vafs = vaf_table(profile.tumour_vcf)
     somatic = [v for v in ranked if not v.likely_germline and v.gene]
     by_gene: dict[str, list[TumourVariant]] = {}
@@ -920,6 +941,28 @@ def analyse(
             )
         )
 
+    if scan_expression and providers.patient_rna.available:
+        hits = expression_scan(providers.patient_rna, limit=scan_expression)
+        expression_hits.extend(hits)
+        seen_genes = {c.gene for c in candidates}
+        fresh = [h for h in hits if h.passes and h.gene not in seen_genes]
+        if log:
+            print(f"therapeutics: expression scan proposes {[h.gene for h in fresh]}", file=log, flush=True)
+        for h in fresh:
+            c = build_candidate(h.gene, [], profile, providers, {}, origin_class="expression_driven")
+            c.ledger.add(*h.evidence)
+            c.ledger.lack(
+                "surface protein in this tumour",
+                "raised transcript is not protein on the surface",
+                ("tumour proteomics", "tumour surface proteomics", "flow cytometry of the tumour cells"),
+            )
+            c.limitations = scan_limitations(h) + c.limitations
+            c.why_interesting = (
+                f"{h.gene} is {h.ratio:.1f}x the highest queried healthy tissue in this tumour's RNA "
+                f"({h.normal_tissue} at {h.normal_max:g} nTPM); unaltered, and reached by expression"
+            )
+            candidates.append(c)
+
     if indirect:
         blocked = [
             c
@@ -948,6 +991,7 @@ def analyse(
         "disclaimer": DISCLAIMER,
         "data_level": profile.levels(),
         "alterations": [a.to_dict() for a in profile.alterations],
+        "expression_hits": [h.to_dict() for h in expression_hits],
         "candidates": candidates,
         "combinations": combos,
         "missing_data": missing_data_report(candidates, profile),
@@ -1018,6 +1062,7 @@ def analyse_vcf(
     cohort: str = "",
     net: bool = True,
     indirect: bool = True,
+    scan_expression: int = 0,
     hla_predictor: str = "",
     log: Any = None,
 ) -> dict[str, Any]:
@@ -1059,7 +1104,15 @@ def analyse_vcf(
         cohort_study=cohort,
         hla_predictor=hla_predictor,
     )
-    analysis = analyse(ranked, profile, providers, top_genes=top_genes, indirect=indirect, log=log)
+    analysis = analyse(
+        ranked,
+        profile,
+        providers,
+        top_genes=top_genes,
+        indirect=indirect,
+        scan_expression=scan_expression,
+        log=log,
+    )
     analysis["variants_total"] = len(ranked)
     analysis["somatic_candidates"] = sum(1 for v in ranked if not v.likely_germline)
     return analysis

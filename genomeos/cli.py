@@ -4404,6 +4404,7 @@ def cmd_therapeutic(args: argparse.Namespace) -> int:
         cnv=args.cnv,
         cna_format=args.cna_format,
         sv=args.sv,
+        scan_expression=args.scan,
         cohort=args.cohort or "",
         net=not args.offline,
         indirect=not args.no_indirect,
@@ -5378,6 +5379,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="how to read --cnv; auto refuses to guess an amplification out of an ambiguous table",
     )
     p.add_argument("--sv", help="structural-variant table: gene<TAB>partner[<TAB>class] per line")
+    p.add_argument(
+        "--scan",
+        type=int,
+        default=0,
+        metavar="N",
+        help="also propose up to N targets the tumour never altered, from --rna against the packaged "
+        "healthy-tissue atlas; the route by which CD19 or BCMA could be found. Needs --rna",
+    )
     p.add_argument(
         "--cohort",
         help="cBioPortal study id of the same cancer type, e.g. brca_tcga_pan_can_atlas_2018; "

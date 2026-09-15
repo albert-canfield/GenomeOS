@@ -40,6 +40,42 @@ separate answers:
                                        phenotype
 ```
 
+### The target the tumour never altered
+
+CD19 and BCMA are not mutated, amplified or rearranged. They are lineage
+antigens the malignant cell carries in quantity and most healthy tissue does
+not, and a pipeline that reaches a gene only through an alteration cannot
+propose either — a hole in the middle of the target space rather than a missing
+refinement. `--scan N` closes it, using the patient's own tumour RNA against
+the packaged healthy-tissue atlas over the membrane and CD-marker universe:
+
+```bash
+genomeos therapeutic --tumour t.vcf --rna tumour_tpm.tsv --scan 6
+```
+
+On the demo B-cell lymphoma (`data/demo/expression/`, synthetic values in a
+plausible range) the scan proposes FCRL5 at 5.9x and CD19 at 4.3x, both direct
+surface targets ranking above the TP53 driver, and neither reachable by any
+other route in this pipeline.
+
+**The rejections are the more instructive half.** MS4A1 (CD20) is turned down
+at 2.2x, CD79A at 1.4x, CD22 at 1.0x — the targets of the most successful
+antibodies in oncology, every one failing a selectivity screen because healthy
+spleen is full of the same lineage: CD20 sits at 247 nTPM there. They are
+reported as turned down with the number rather than dropped, because a
+threshold here is a sort order and never a verdict. The screen measures
+selectivity against healthy tissue, and an antigen shared with a healthy
+lineage can still be the right target when losing that lineage is survivable.
+
+Three refusals hold. The scan runs only on patient RNA — a cohort describes a
+cancer type and cannot say what this tumour displays, so without patient RNA
+the answer is that no expression-driven target can be proposed. Raised
+transcript is never called protein, still less protein on the surface, and the
+missing evidence is recorded as such. And every candidate it produces carries
+the sentence the CD19 story actually teaches: hitting an unaltered antigen hits
+the healthy lineage that shares it, and B-cell aplasia is not a side effect of
+CD19 therapy but the same event seen from the other side.
+
 ## Five concepts, kept apart
 
 Collapsing these is what makes a pipeline assume every target needs a toxin.
