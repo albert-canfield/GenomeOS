@@ -203,6 +203,16 @@ BLOCKS: dict[str, dict] = {
             "assert": ("assert grammar", "repeatable; checked on the mutant"),
         },
     },
+    "order": {
+        "header": "order <Id> { ... }",
+        "props": {
+            "members": ("A, B|C, D", "required; the steps in order, `|` for members a source does not order"),
+            "axis": ("position | time", "position is checked when it compiles, time against a run"),
+            "direction": ("increasing | decreasing", "position only: along the chromosome"),
+            "observe": ("birth", "time only: what counts as a step having happened"),
+            "threshold": ("number", "time: the level at which a member counts as on"),
+        },
+    },
     "competence": {
         "header": "competence <Id> { ... }",
         "props": {

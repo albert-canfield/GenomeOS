@@ -272,6 +272,29 @@ class Domain(Entity):
 
 
 @dataclass(slots=True)
+class Order(Entity):
+    """A sequence the runtime can be wrong about (BioLang v0.4 §7.6).
+
+    An order drives nothing: it sets no time, fires no rule and changes no level. `stage` and `timer`
+    cause things to happen; an order states what must be true of the things that happen, and is
+    checked. `axis: position` is checked against the members' own coordinates at compile time;
+    `axis: time` is checked against a run, which reports the order taken and the inversions."""
+
+    groups: list[list[str]] = field(default_factory=list)  # members that happen together share a group
+    axis: str = "position"  # position | time
+    direction: str = ""  # position: increasing | decreasing along the chromosome
+    observe: str = "birth"  # time: what counts as a step having happened
+    threshold: float = 0.5  # the level at which a member counts as on
+
+    def __post_init__(self) -> None:
+        self.kind = "order"
+
+    @property
+    def members(self) -> list[str]:
+        return [m for g in self.groups for m in g]
+
+
+@dataclass(slots=True)
 class Signal(Entity):
     """A cue one cell sends and another reads: contact (ligand on a neighbour), gradient
     (a diffusing morphogen) or systemic (hormone). When a sender and a receiver coexist the
@@ -642,6 +665,9 @@ class Module:
     def domains(self) -> list[Domain]:
         return [e for e in self.entities.values() if isinstance(e, Domain)]
 
+    def orders(self) -> list[Order]:
+        return [e for e in self.entities.values() if isinstance(e, Order)]
+
     def compartments(self) -> list[Compartment]:
         return [e for e in self.entities.values() if isinstance(e, Compartment)]
 
@@ -765,6 +791,7 @@ class Module:
             "Domain": Domain,
             "Signal": Signal,
             "Compartment": Compartment,
+            "Order": Order,
             "Transport": Transport,
         }
 
@@ -873,6 +900,7 @@ __all__ = [
     "Gene",
     "Locus",
     "Module",
+    "Order",
     "Organism",
     "Parameter",
     "Protein",

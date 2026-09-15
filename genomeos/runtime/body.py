@@ -1224,6 +1224,37 @@ class Body:
                 rep.add("organism", 0.0, EvidenceKind.NONE, f"UNKNOWN: {reason}")
         return rep
 
+    def orders(self) -> list[dict]:
+        """What a run did with each `order` along time (§7.6): the sequence it actually took, the
+        inversions against the declared one, and the members that never happened. An order drives
+        nothing, so this changes no result; it reports whether the program was right."""
+        out = []
+        for od in self.module.orders():
+            if od.axis != "time":
+                continue
+            when = {m: self.cells[m].born for m in od.members if m in self.cells}
+            taken = sorted(when, key=lambda m: (when[m], od.members.index(m)))
+            # members sharing a step are not ordered against each other, and neither are members the
+            # run put at the same instant: an inversion needs both a stated order and a real gap
+            rank = {m: i for i, g in enumerate(od.groups) for m in g}
+            inversions = sum(
+                1
+                for i, a in enumerate(taken)
+                for b in taken[i + 1 :]
+                if rank[a] > rank[b] and when[a] != when[b]
+            )
+            out.append(
+                {
+                    "order": od.id,
+                    "expected": ["|".join(g) for g in od.groups],
+                    "taken": taken,
+                    "inversions": inversions,
+                    "never happened": [m for m in od.members if m not in when],
+                    "ok": inversions == 0 and len(when) == len(od.members),
+                }
+            )
+        return out
+
     def check_asserts(self) -> list[dict]:
         return [evaluate_assert(self, a) for a in self.organism.asserts if not is_replicate_assert(a)]
 
@@ -1251,6 +1282,7 @@ class Body:
             "overruled_fates": sum(self.overruled.values()),
             "recheck": self.recheck,
             "rechecks": self.rechecks,
+            "orders": self.orders(),
             "duplicate_decision_ids": dict(sorted(self.duplicate_ids.items())),
             "forced": {f: self.forced_cells[f] for f in sorted(self.forced)},
             "outside_competence": sum(self.outside_competence.values()),

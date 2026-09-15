@@ -277,6 +277,18 @@ May contain `transcript` blocks.
 | `inherit` | `daughters | no` | the lock passes to the daughters |
 | `release` | `never` | only never is implemented |
 
+### `order`
+
+`order <Id> { ... }`
+
+| property | form | meaning |
+|---|---|---|
+| `members` | `A, B|C, D` | required; the steps in order, `|` for members a source does not order |
+| `axis` | `position | time` | position is checked when it compiles, time against a run |
+| `direction` | `increasing | decreasing` | position only: along the chromosome |
+| `observe` | `birth` | time only: what counts as a step having happened |
+| `threshold` | `number` | time: the level at which a member counts as on |
+
 ### `compartment`
 
 `compartment <Id> { ... }`

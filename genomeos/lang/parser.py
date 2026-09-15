@@ -21,6 +21,7 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     field <Id> { diffusion: 0.4; decay: 0.02; source: 0,0 = 1.0 }
     experiment <Id> { knockout: POP-1; add: HLH-1 at 350 min; until: 800 min; expect: "..."; assert: ... }
     design <Id> { knockout_any_of: A, B; at_most: 1; until: 3 yr; target: type X at 3 yr = 0; keep: ... }
+    order <Id> { members: A, B|C, D; axis: position; direction: decreasing }  # B|C: one step, not ordered
     competence <Id> { allows: Muscle; closes: at 180 min; closed_by: MES-2; when: ... }
     commitment <Id> { establish: cell_type = Muscle; locks: cell_type; inherit: daughters; release: never }
 
@@ -62,6 +63,7 @@ from genomeos.ir import (
     Field,
     Gene,
     Module,
+    Order,
     Organism,
     Parameter,
     Protein,
@@ -100,6 +102,7 @@ _KINDS = (
     "design",
     "competence",
     "commitment",
+    "order",
     "compartment",
     "transport",
     "regime",
@@ -577,6 +580,46 @@ def _compile_block(b: Block, module: Module) -> None:
         ex.asserts = [x.strip() for x in p.get("assert", "").split(" ; ") if x.strip()]
         ex.expect = p.get("expect", "")
         module.experiments.append(ex)
+    elif b.kind == "order":
+        od = Order(id=b.header, kind="order", evidence=ev, confidence=conf)
+        # `A, B|C, D` is A, then B and C together, then D: members that a source does not order are
+        # not ordered by the program either, because inventing the order is what §2 forbids
+        od.groups = [
+            [x.strip() for x in item.split("|") if x.strip()] for item in _list(p.get("members", ""))
+        ]
+        if len(od.groups) < 2:
+            raise BioLangError(f"line {b.line}: order {b.header!r} needs at least two steps to order")
+        if len(set(od.members)) != len(od.members):
+            raise BioLangError(f"line {b.line}: order {b.header!r} names a member twice")
+        od.axis = p.get("axis", "position")
+        if od.axis not in ("position", "time"):
+            raise BioLangError(f"line {b.line}: order axis must be position or time, got {od.axis!r}")
+        od.direction = p.get("direction", "")
+        if od.axis == "position":
+            if od.direction == "opening":
+                raise BioLangError(
+                    f"line {b.line}: direction: opening is sketched in BIOLANG-v0.4-ECONOMY.md §10 but we "
+                    "hold no measurement of which way chromatin opens, and a clause the runtime cannot "
+                    "check would be a comment"
+                )
+            if od.direction not in ("increasing", "decreasing"):
+                raise BioLangError(
+                    f"line {b.line}: an order along position needs direction: increasing or decreasing"
+                )
+            if "observe" in p:
+                raise BioLangError(f"line {b.line}: observe belongs to an order along time, not position")
+        else:
+            if od.direction:
+                raise BioLangError(f"line {b.line}: direction belongs to an order along position")
+            od.observe = p.get("observe", "birth")
+            if od.observe != "birth":
+                raise BioLangError(
+                    f"line {b.line}: only 'observe: birth' is implemented; {od.observe!r} is specified in "
+                    "BIOLANG-v0.4-ECONOMY.md §7.6 and the measurement that would gate it is named there"
+                )
+        if "threshold" in p:
+            od.threshold = _float(p["threshold"], "threshold", b.line)
+        module.add(od)
     elif b.kind == "competence":
         cm = Competence(name=b.header, evidence=ev, confidence=conf)
         if "when" in p:
@@ -780,6 +823,58 @@ def _check_references(module: Module) -> None:
             raise BioLangError(
                 f"decision {d.id!r} differentiates to {d.to!r}, which competence {window.name!r} does "
                 f"not allow ({', '.join(window.allows)})"
+            )
+    for od in module.orders():
+        # an order along position is a claim about the genome the program already holds, so it is
+        # checked against it here: a sequence that contradicts its own coordinates is a compile error,
+        # exactly as a chrM gene declared nuclear is (§7.6)
+        if od.axis != "position":
+            continue
+        loci = {}
+        for m in od.members:
+            entity = module.entities.get(m)
+            if entity is None:
+                raise BioLangError(f"order {od.id!r} names undeclared {m!r}")
+            locus = getattr(entity, "locus", None)
+            if locus is None:
+                raise BioLangError(
+                    f"order {od.id!r} runs along position but {m!r} has no locus, so the program cannot "
+                    "be wrong about it"
+                )
+            loci[m] = locus
+        if len({locus.chrom for locus in loci.values()}) > 1:
+            raise BioLangError(
+                f"order {od.id!r} runs along position but its members are on "
+                f"{sorted({locus.chrom for locus in loci.values()})}, which have no common order"
+            )
+
+        # compared at the transcription start, which is where a gene is read from, not at the span's
+        # left edge: on the minus strand those are opposite ends
+        def tss(locus: Locus) -> int:
+            return locus.start if locus.strand.value != "-" else locus.end
+
+        up = od.direction == "increasing"
+        for before, after in zip(od.groups, od.groups[1:], strict=False):
+            # every member of a step must lie ahead of every member of the one before it; members
+            # sharing a step are not compared, which is what a step is for
+            edge = max if up else min
+            a = edge(before, key=lambda m: tss(loci[m]))
+            b_name = edge(after, key=lambda m: -tss(loci[m]) if up else tss(loci[m]))
+            first, second = loci[a], loci[b_name]
+            if (tss(second) > tss(first)) if up else (tss(second) < tss(first)):
+                continue
+            overlap = first.start < second.end and second.start < first.end
+            raise BioLangError(
+                f"order {od.id!r} says {a!r} comes before {b_name!r} along {od.direction} position, "
+                f"but {a!r} starts at {first.chrom}:{tss(first)} and {b_name!r} at "
+                f"{second.chrom}:{tss(second)}"
+                + (
+                    f" (their spans overlap, {first} and {second}, so which comes first is a question "
+                    "about the annotation and not about the sequence: name them as one step, A|B, if "
+                    "the source does not order them)"
+                    if overlap
+                    else ""
+                )
             )
     for cm in module.competences:
         for fate in cm.allows:

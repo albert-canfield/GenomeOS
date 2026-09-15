@@ -119,6 +119,16 @@ def evaluate(
                 results.append(
                     {"test": f"assert: {a.get('assert')}", "got": a.get("value"), "ok": bool(a.get("ok"))}
                 )
+            # an `order` along time is a claim about the run, so the program is checked against it (§7.6)
+            for o in body.orders():
+                missing = f", never happened: {o['never happened']}" if o["never happened"] else ""
+                results.append(
+                    {
+                        "test": f"order {o['order']}: {' before '.join(o['expected'])}",
+                        "got": f"{o['inversions']} inversions{missing}",
+                        "ok": bool(o["ok"]),
+                    }
+                )
             # outcomes decided by noise are scored over seeds (v0.4 §7.4), never read off one run
             from genomeos.runtime.body import evaluate_replicate_asserts, is_replicate_assert, replicate
 
