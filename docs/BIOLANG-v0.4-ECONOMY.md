@@ -930,14 +930,20 @@ order is in the layout*, not *the order is in a clock*.
 
 ```
 order hoxd_colinear {
-  members: HOXD1, HOXD3, HOXD4, HOXD8, HOXD9, HOXD10, HOXD11, HOXD12, HOXD13
+  members: HOXD1, HOXD4, HOXD3, HOXD8, HOXD9, HOXD10, HOXD11, HOXD12, HOXD13
   axis: position                   # position | time
   direction: decreasing            # position only: along the chromosome
-  observe: activation              # what counts as a step having happened
-  threshold: 0.5                   # the level at which a member counts as on
   evidence: experimental "..."; confidence: 0.8
 }
+order founders { members: AB|P1, EMS|P2, MS|E|C|P3, D|P4; axis: time; observe: birth }
 ```
+
+**A step may name members a source does not order** (`B|C`). Both falsifiers
+needed it, which is why it is here rather than in a later version: the worm's
+reference puts MS, E, C and P3 at one instant, and a construct that took only a
+total sequence would have made the author invent an order between them, which is
+what §2 forbids. An inversion therefore needs both a stated order and a real gap
+in the run.
 
 **Semantics, and the one rule that keeps it from being a second `stage`.** An
 `order` **never drives anything**. It sets no time, fires no rule and changes no
@@ -992,7 +998,34 @@ before implementing:
   line — per-gene expression for the nine members at three or more time points,
   which is an external dataset, not a run. Until that exists, the `time` axis of
   this construct is gated only by the worm, and this document says so rather than
-  claiming HOXD as a pass. **Nothing here is implemented yet.**
+  claiming HOXD as a pass.
+
+**Built and measured 2026-09-15**, in exactly those two places.
+`data/demo/hoxd_order.bio` is the benchmark's untestable sentence written down:
+the cluster from GENCODE v50, refused if two members are swapped. The worm's
+founders report zero inversions and none missing, a reversed sequence is reported
+with the order the run actually took, and a member that never happens is counted
+apart from one that happens early. `bio test` checks every order in a committed
+program, and a test pins the rule that keeps this from being a second `stage`:
+adding an order to the worm changes no field of the run's summary.
+
+**Two things writing it found, both of which changed the specification above.**
+
+1. **On GENCODE v50 the HOXD3 gene record spans HOXD4**
+   (chr2:176,136,077-176,174,483 against 176,151,544-176,156,078), so the
+   canonical textbook sequence HOXD1, HOXD3, HOXD4 **is not monotonic in
+   transcription start** and the first version of the check refused it. That is a
+   question about HOXD3's annotated start rather than about colinearity, so the
+   refusal now names the overlap and suggests the step form — and the demo states
+   the order this annotation supports, with the discrepancy recorded in the file.
+2. **The steps came from the falsifiers, not from the design.** Neither of the two
+   things we can actually check is a total order, and pretending otherwise would
+   have required inventing facts in both axes at once: the worm's four tied
+   founders, and HOXD3 against HOXD4.
+
+*Still not implemented:* `observe: activation` (a network's first threshold
+crossing), refused rather than accepted, because the dataset that would gate it
+is the HOX time course we do not hold.
 
 ## 8. Execution regime (declared per run)
 
@@ -1043,6 +1076,7 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | fate | integrated reads (`.exposure(window)`, `.mean(window)`) | area E's three readings on 555 terminal cells | **implemented 2026-09-15**, in absolute units; the gate is area E's to run, by writing their fate rules as declared reads instead of a precomputed lookup |
 | fate precedence | `regime fates`, decision `priority` | area E's worm fates identical under explicit priorities | **implemented and now the default**: 1,439 of 1,439 identical, 45 ambiguous points to 0 |
 | re-decision | `regime recheck`, crossings of an integrated read | stepping a network must stop changing fates as a side effect | **passed 2026-09-15** (§7.5): 522 of 555 in all four combinations of cadence and recheck, 0 cells differing, all 14 programs identical |
+| order | `order` along position or time | a sequence that contradicts the genome is refused; the worm's founder births are reproduced and a reversed one reported | **position passed 2026-09-15** (§7.6, HOXD from GENCODE v50); **time passed on the worm**; the motivating claim, that HOXD *activates* in that order, is **not testable**: no human HOX time course |
 | contacts | neighbours, contact amounts, per-cell networks, seeded noise, replicate asserts | Collier 1996 equivalence group splits about evenly | **passed 2026-09-14**: 0 of 200 diverge without noise, 200 of 200 with it, first cell 48%, same winner per seed in either creation order |
 
 ### 9.1 Stage 1 as measured (2026-09-14)
