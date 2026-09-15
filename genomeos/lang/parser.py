@@ -730,6 +730,17 @@ def _compile_block(b: Block, module: Module) -> None:
                 raise BioLangError(
                     f"line {b.line}: fraction must be within 0..{'1' if top == 1.0 else 'any'}"
                 )
+        if "share" in p:
+            if "fraction" in p:
+                raise BioLangError(
+                    f"line {b.line}: a decision takes `fraction` (of what is left) or `share` (of the "
+                    "population at this decision point), not both"
+                )
+            if action != "differentiate":
+                raise BioLangError(f"line {b.line}: only a differentiate decision takes a share")
+            dc.share = _float(p["share"], "share", b.line)
+            if not 0.0 < dc.share <= 1.0:
+                raise BioLangError(f"line {b.line}: share must be within 0..1, got {dc.share}")
         if "priority" in p:
             dc.priority = int(_float(p["priority"], "priority", b.line))
         dc.competence = p.get("competence", "")
