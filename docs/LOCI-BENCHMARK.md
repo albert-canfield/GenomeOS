@@ -992,3 +992,77 @@ The control shared the deletion's span and not the pair's separation. Section 12
 control has to share the construction and not only the size; this is the same mistake one level
 further in, and it produced a five-out-of-five positive that survived until it was divided by a
 length. **Every count needs its denominator, and the denominator has to be the thing that varies.**
+
+## 16. Boundary strength: the last reading, and it is a null (2026-09-15)
+
+Counting calls is not measuring insulation, so the last thing left to ask was the quantity the calls
+are a threshold on. It turns out the project already had it and was throwing it away:
+**4DN's boundary files carry five columns - chrom, start, end, a Strong/Weak label and a numeric
+strength - and `genome/hic.py` writes only the first three.** The informative column was being
+discarded at the point of download. This module re-streams the same accessions named in each cell
+type's manifest, keeping the score, so the comparison is against exactly the files the call counts
+came from.
+
+### What was registered, before anything was fetched
+
+The denominator problem was already known, so the statistic was chosen to avoid it rather than to be
+corrected afterwards. The interval *between the genes* is 727 kb for the published pair and about
+1.8 Mb for the controls, and any "deepest point in the interval" statistic is biased towards the
+longer one. **So the primary reading uses the deleted span instead**, which the controls were matched
+on for length within 35%: length-matched by construction, needing no normalising. It is also the
+biologically right question - a deletion removes whatever boundary lies in its span, and the
+published claim is that the boundary it removes is the one that mattered. The mean strength inside
+the span is reported beside it as a length-independent second reading, and the span lengths are
+reported so the match can be checked rather than assumed.
+
+One honest adjustment: the registration was written expecting an insulation profile, where a
+boundary is a *minimum*. What 4DN's file actually carries is a per-boundary strength where higher is
+stronger. Same question, opposite sign, and it is recorded here rather than quietly rewritten.
+
+The registered prediction was: **no separation.**
+
+### The result
+
+| cell type | boundaries in the span (strong) | strongest, published | strongest, 5 matched control spans | stronger than all? |
+|---|---|---|---|---|
+| GM12878 | 29 (11) | 1.90 | 1.70, 1.75, 1.99, 2.05, 2.25 | no |
+| H1-hESC | 8 (4) | 1.83 | 0.88, 1.31, 1.36, 1.39, 1.73 | **yes** |
+| HepG2 | 3 (2) | 0.68 | 0.73, 1.10, 1.28, 1.37, 2.05 | no - weakest of six |
+| IMR-90 | 6 (2) | 1.39 | 0.48, 0.74, 0.76, 1.17, 1.46 | no |
+| K562 | 3 (1) | 0.59 | 0.57, 0.83, 1.03, 1.08, 1.62 | no - second weakest |
+
+Stronger than every matched control in **1 of 5** cell types. In two of the five the published span's
+strongest boundary is the weakest or second weakest of the six. On the mean, published is above every
+control in 2 of 5 (H1-hESC and IMR-90). **There is no consistent separation**, and the prediction
+registered before the fetch was right.
+
+### The tempting exception, named so it cannot be quietly promoted
+
+The one cell type where the published span's boundary is stronger than every control is **H1-hESC,
+the embryonic stem line - and limb malformation is an embryonic phenotype.** That is a good story and
+it is not a result. Picking the one cell type of five that fits, after looking, is precisely the
+artefact this benchmark has caught three times in a day. It is recorded as a hypothesis with an
+obvious test - the other three Lupiáñez cases, and other published limb rearrangements, scored the
+same way - and it stays a hypothesis until something like that is run. One locus, one cell type, no
+correction for having looked at five.
+
+### The honest summary
+
+**Measured chromatin boundaries, whether read as calls or as strengths, do not distinguish this
+published rearrangement from a random cut of the same kind.** Together with sections 14 and 15 that
+is the whole of what this experiment could ask: the CTCF-only proxy fails, the measured calls fail,
+and the strength behind the calls fails. The node concept as this project uses it carries no
+information at this locus.
+
+**And it is one locus**, on a stated span, with the other three published cases still withdrawn for
+want of coordinates. That is the load-bearing caveat and it belongs in every quotation of this
+result. What would change it is not another reading of the same locus but more loci - which is the
+same conclusion the panel reached at twelve, and the reason it is now seventeen.
+
+### What to fix regardless of the verdict
+
+`genome/hic.py` discards columns 4 and 5 of every 4DN boundary file it downloads. Whatever the
+answer here, a layer that reads a threshold crossing and throws away the quantity it is a threshold
+on is worth repairing, and the fix is three lines in `fetch_boundaries` plus a loader beside
+`load_boundaries`. That file is not mine; the finding is passed to its owner with the cache this
+module built (`data/knowledge/hic_scored`) as evidence that the column is there and useful.

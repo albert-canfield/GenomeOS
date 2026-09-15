@@ -196,3 +196,21 @@ def test_the_boundary_count_is_reported_as_a_density_and_not_only_raw():
             assert r["published_per_mb"] > 0, cell
             assert len(r["control_per_mb"]) == len(r["control_boundaries_between"]), cell
             assert "published_is_below_every_control_on_density" in r, cell
+
+
+@needs_result
+def test_the_boundary_strength_reading_is_pre_registered_and_length_matched():
+    """The primary statistic was chosen before looking, and uses the span the controls were matched on."""
+    for c in RESULT["cases"]:
+        b = c["boundary_strength"]
+        assert "THE DELETED SPAN" in b["preregistered"]
+        assert "PREDICTION" in b["preregistered"]
+        for cell, r in b["by_cell"].items():
+            if r.get("pending"):
+                continue
+            pub, ctl = r["published_span_length"], r["control_span_lengths"]
+            assert all(0.6 * pub <= x <= 1.6 * pub for x in ctl), (
+                f"{cell}: a control span is not length-matched, so the strongest-boundary"
+                " comparison is confounded the way the raw call count was"
+            )
+            assert "published_stronger_than_every_control" in r, cell

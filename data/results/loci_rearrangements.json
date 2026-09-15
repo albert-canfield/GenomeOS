@@ -557,6 +557,371 @@
           }
         }
       },
+      "boundary_strength": {
+        "preregistered": "WHICH QUANTITY, decided before looking, and why. The denominator problem is already known: the published gene pair is 727 kb apart and the control pairs about 1.8 Mb, so anything of the form 'the deepest point in the interval between the genes' is biased, and biased TOWARDS the controls - a longer interval has more chances to contain a deep minimum. The primary reading therefore does not use the interval between the genes at all. It uses THE DELETED SPAN, which the matched controls were matched on for length (within 35%), so the comparison is length-matched by construction and needs no normalising: the deepest insulation minimum inside the span the rearrangement removes, published against the five matched control spans, per cell type. That is also the biologically right question, because the deletion removes whatever boundary lies in its span, and the published claim is that the boundary it removes is the one that mattered. The mean insulation inside the span is reported beside it as a length-independent second reading, and the span lengths are reported so the match can be checked rather than assumed. PREDICTION: on the evidence of the call-count reading, no separation - the published span's deepest minimum will sit inside the range of the controls'. If it is instead deeper than every control's in most cell types, then the project's boundary layer has been discarding the informative part by reading threshold crossings instead of the score, and genome/hic.py is where that is fixed. Reported per cell type and never pooled.",
+        "by_cell": {
+          "GM12878": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 29,
+            "published_strongest": 1.8975,
+            "published_mean": 0.5949,
+            "published_strong_calls": 11,
+            "control_strongest": [
+              1.6996,
+              1.7456,
+              1.9914,
+              2.0515,
+              2.2516
+            ],
+            "control_mean": [
+              0.5203,
+              0.5805,
+              0.5879,
+              0.6253,
+              0.6296
+            ],
+            "published_stronger_than_every_control": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 32,
+                "strongest": 1.9914,
+                "mean": 0.6296,
+                "strong_calls": 14
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 37,
+                "strongest": 1.7456,
+                "mean": 0.5203,
+                "strong_calls": 14
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 26,
+                "strongest": 2.0515,
+                "mean": 0.6253,
+                "strong_calls": 11
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 24,
+                "strongest": 2.2516,
+                "mean": 0.5879,
+                "strong_calls": 9
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 37,
+                "strongest": 1.6996,
+                "mean": 0.5805,
+                "strong_calls": 17
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          },
+          "H1-hESC": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 8,
+            "published_strongest": 1.8264,
+            "published_mean": 0.7371,
+            "published_strong_calls": 4,
+            "control_strongest": [
+              0.8846,
+              1.3134,
+              1.3612,
+              1.3929,
+              1.7285
+            ],
+            "control_mean": [
+              0.4362,
+              0.5517,
+              0.6428,
+              0.6823,
+              0.7042
+            ],
+            "published_stronger_than_every_control": true,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 9,
+                "strongest": 1.3929,
+                "mean": 0.5517,
+                "strong_calls": 3
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 8,
+                "strongest": 1.3612,
+                "mean": 0.6428,
+                "strong_calls": 4
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 5,
+                "strongest": 1.7285,
+                "mean": 0.6823,
+                "strong_calls": 2
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 7,
+                "strongest": 1.3134,
+                "mean": 0.7042,
+                "strong_calls": 4
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 12,
+                "strongest": 0.8846,
+                "mean": 0.4362,
+                "strong_calls": 4
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          },
+          "HepG2": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 3,
+            "published_strongest": 0.6807,
+            "published_mean": 0.4936,
+            "published_strong_calls": 2,
+            "control_strongest": [
+              0.7335,
+              1.1021,
+              1.279,
+              1.3723,
+              2.0526
+            ],
+            "control_mean": [
+              0.4667,
+              0.5707,
+              0.6267,
+              0.6645,
+              0.6807
+            ],
+            "published_stronger_than_every_control": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 3,
+                "strongest": 1.3723,
+                "mean": 0.6645,
+                "strong_calls": 1
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 5,
+                "strongest": 2.0526,
+                "mean": 0.6807,
+                "strong_calls": 2
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 4,
+                "strongest": 0.7335,
+                "mean": 0.4667,
+                "strong_calls": 2
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 4,
+                "strongest": 1.1021,
+                "mean": 0.5707,
+                "strong_calls": 2
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 3,
+                "strongest": 1.279,
+                "mean": 0.6267,
+                "strong_calls": 1
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          },
+          "IMR-90": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 6,
+            "published_strongest": 1.3939,
+            "published_mean": 0.6361,
+            "published_strong_calls": 2,
+            "control_strongest": [
+              0.4754,
+              0.7379,
+              0.7559,
+              1.1675,
+              1.4609
+            ],
+            "control_mean": [
+              0.3496,
+              0.3654,
+              0.3724,
+              0.3956,
+              0.4219
+            ],
+            "published_stronger_than_every_control": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 7,
+                "strongest": 1.1675,
+                "mean": 0.3956,
+                "strong_calls": 1
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 7,
+                "strongest": 0.7559,
+                "mean": 0.3724,
+                "strong_calls": 2
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 7,
+                "strongest": 0.7379,
+                "mean": 0.3496,
+                "strong_calls": 1
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 6,
+                "strongest": 0.4754,
+                "mean": 0.3654,
+                "strong_calls": 0
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 11,
+                "strongest": 1.4609,
+                "mean": 0.4219,
+                "strong_calls": 3
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          },
+          "K562": {
+            "published_span_length": 1900000,
+            "control_span_lengths": [
+              1653345,
+              1764643,
+              1811460,
+              1915780,
+              2092083
+            ],
+            "published_boundaries": 3,
+            "published_strongest": 0.5879,
+            "published_mean": 0.4439,
+            "published_strong_calls": 1,
+            "control_strongest": [
+              0.5718,
+              0.8275,
+              1.0264,
+              1.0824,
+              1.6245
+            ],
+            "control_mean": [
+              0.3389,
+              0.4239,
+              0.5534,
+              0.6563,
+              0.8459
+            ],
+            "published_stronger_than_every_control": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "span_length": 1915780,
+                "boundaries": 3,
+                "strongest": 1.6245,
+                "mean": 0.8459,
+                "strong_calls": 2
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "span_length": 1811460,
+                "boundaries": 4,
+                "strongest": 0.5718,
+                "mean": 0.3389,
+                "strong_calls": 1
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "span_length": 1653345,
+                "boundaries": 3,
+                "strongest": 1.0824,
+                "mean": 0.6563,
+                "strong_calls": 1
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "span_length": 1764643,
+                "boundaries": 4,
+                "strongest": 1.0264,
+                "mean": 0.5534,
+                "strong_calls": 1
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "span_length": 2092083,
+                "boundaries": 4,
+                "strongest": 0.8275,
+                "mean": 0.4239,
+                "strong_calls": 1
+              }
+            ],
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)"
+          }
+        }
+      },
       "controls": [
         {
           "span": [
@@ -1071,6 +1436,6 @@
   },
   "note": "The free half of docs/LOCI-BENCHMARK.md 11b: no model request was made. The node model is INFERRED at confidence 0.4 and is the thing under test, so it is never counted as a derived hit. One published case is an anecdote by the panel's own standard; the other three are recorded in not_yet_runnable with what each is waiting for.",
   "cost": {
-    "seconds": 27.5
+    "seconds": 33.5
   }
 }

@@ -28,6 +28,8 @@ produces *the published gene*.
 from __future__ import annotations
 
 import bisect
+import gzip
+import json
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -77,6 +79,27 @@ HIC_PREREGISTERED = (
     " boundaries and not to our proxy for them, which is the larger statement. Reported per cell"
     " type and never pooled: a boundary is a cell's boundary, and GM12878's calls are dense enough"
     " (3,909 on chr2 against 683 for K562) to dominate any pooled figure."
+)
+
+#: Written down before any insulation score was fetched or looked at.
+INSULATION_PREREGISTERED = (
+    "WHICH QUANTITY, decided before looking, and why. The denominator problem is already known: the"
+    " published gene pair is 727 kb apart and the control pairs about 1.8 Mb, so anything of the"
+    " form 'the deepest point in the interval between the genes' is biased, and biased TOWARDS the"
+    " controls - a longer interval has more chances to contain a deep minimum. The primary reading"
+    " therefore does not use the interval between the genes at all. It uses THE DELETED SPAN, which"
+    " the matched controls were matched on for length (within 35%), so the comparison is"
+    " length-matched by construction and needs no normalising: the deepest insulation minimum inside"
+    " the span the rearrangement removes, published against the five matched control spans, per cell"
+    " type. That is also the biologically right question, because the deletion removes whatever"
+    " boundary lies in its span, and the published claim is that the boundary it removes is the one"
+    " that mattered. The mean insulation inside the span is reported beside it as a"
+    " length-independent second reading, and the span lengths are reported so the match can be"
+    " checked rather than assumed. PREDICTION: on the evidence of the call-count reading, no"
+    " separation - the published span's deepest minimum will sit inside the range of the controls'."
+    " If it is instead deeper than every control's in most cell types, then the project's boundary"
+    " layer has been discarding the informative part by reading threshold crossings instead of the"
+    " score, and genome/hic.py is where that is fixed. Reported per cell type and never pooled."
 )
 
 KINDS = ("deletion", "inversion", "duplication")
@@ -424,6 +447,97 @@ def domains_from(chrom: str, length: int, boundaries: list[int]) -> list:
     return _domains_from(chrom, length, [], None, 50_000, sorted(boundaries))
 
 
+SCORED = Path("data/knowledge/hic_scored")
+
+
+def scored_boundaries(cell: str, chrom: str) -> list[tuple[int, float, str]]:
+    """(position, strength, label) for one cell type, from the SAME 4DN file the calls came from.
+
+    `genome/hic.py` streams these files and writes only chrom/start/end, discarding columns 4 and 5 -
+    the label (Strong/Weak) and a numeric strength. That discarded column is the whole question here,
+    so this re-streams the accession named in that cell type's manifest, keeping the score, into a
+    cache of its own. Using the same accession is what makes this comparable with the call counts.
+    """
+    from genomeos.genome.hic import KNOWLEDGE, _get, credentials
+
+    out_path = SCORED / cell / f"{chrom}.bed"
+    if not out_path.exists():
+        man = json.loads((KNOWLEDGE / cell / "manifest.json").read_text())
+        raw = _get(man["href"], credentials(), accept="*/*", timeout=600)
+        text = gzip.decompress(raw).decode() if raw[:2] == b"\x1f\x8b" else raw.decode()
+        rows: dict[str, list[str]] = {}
+        for line in text.splitlines():
+            f = line.split("\t")
+            if len(f) < 5 or line.startswith(("#", "track", "browser")):
+                continue
+            c = f[0] if f[0].startswith("chr") else f"chr{f[0]}"
+            rows.setdefault(c, []).append(f"{c}\t{f[1]}\t{f[2]}\t{f[3]}\t{f[4]}")
+        for c, lines in rows.items():
+            q = SCORED / cell / f"{c}.bed"
+            q.parent.mkdir(parents=True, exist_ok=True)
+            q.write_text("\n".join(lines) + "\n")
+        if not out_path.exists():
+            return []
+    got = []
+    for line in out_path.read_text().splitlines():
+        f = line.split("\t")
+        if len(f) < 5:
+            continue
+        got.append(((int(f[1]) + int(f[2])) // 2, float(f[4]), f[3]))
+    return sorted(got)
+
+
+def insulation_reading(ch, span: tuple[int, int], controls: list[dict[str, Any]]) -> dict[str, Any]:
+    """The strongest boundary inside the deleted span, published against the matched control spans.
+
+    Length-matched by construction: the controls were matched on span length, so no normalising is
+    needed and none is done. Reported per cell type and never pooled.
+    """
+    out: dict[str, Any] = {"preregistered": INSULATION_PREREGISTERED, "by_cell": {}}
+
+    def inside(rows, a, b):
+        return [(pos, sc, lab) for pos, sc, lab in rows if a <= pos < b]
+
+    for cell in HIC_CELLS:
+        try:
+            rows = scored_boundaries(cell, ch.chrom)
+        except Exception as exc:  # noqa: BLE001 - a fetch failure is recorded, never guessed at
+            out["by_cell"][cell] = {"pending": f"{cell}: scored boundaries unavailable ({exc})"}
+            continue
+        if not rows:
+            out["by_cell"][cell] = {"pending": f"{cell}: no scored boundary rows for {ch.chrom}"}
+            continue
+        pub = inside(rows, *span)
+        ctrl = []
+        for c in controls:
+            got = inside(rows, *c["span"])
+            ctrl.append(
+                {
+                    "pair": f"{c['donor']}-{c['recipient']}",
+                    "span_length": c["length"],
+                    "boundaries": len(got),
+                    "strongest": round(max((x[1] for x in got), default=0.0), 4),
+                    "mean": round(sum(x[1] for x in got) / len(got), 4) if got else 0.0,
+                    "strong_calls": sum(1 for x in got if x[2].lower().startswith("strong")),
+                }
+            )
+        strongest = round(max((x[1] for x in pub), default=0.0), 4)
+        out["by_cell"][cell] = {
+            "published_span_length": span[1] - span[0],
+            "control_span_lengths": sorted(c["span_length"] for c in ctrl),
+            "published_boundaries": len(pub),
+            "published_strongest": strongest,
+            "published_mean": round(sum(x[1] for x in pub) / len(pub), 4) if pub else 0.0,
+            "published_strong_calls": sum(1 for x in pub if x[2].lower().startswith("strong")),
+            "control_strongest": sorted(c["strongest"] for c in ctrl),
+            "control_mean": sorted(c["mean"] for c in ctrl),
+            "published_stronger_than_every_control": all(strongest > c["strongest"] for c in ctrl),
+            "controls": ctrl,
+            "evidence": "experimental: 4D Nucleome boundary strength (column 5 of the call file)",
+        }
+    return out
+
+
 def hic_reading(ch, donor_pos: int, recipient_pos: int, controls: list[dict[str, Any]]) -> dict[str, Any]:
     """The same precondition asked of measured boundaries, per cell type, never pooled."""
     from genomeos.genome.hic import load_boundaries
@@ -580,6 +694,8 @@ def run(results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
             controls = matched_controls(ch, case, tuple(widest["span"]), widest, results_dir)
             say(f"{case.locus}: {len(controls)} matched random rearrangements")
             hic = hic_reading(ch, donor_pos, recipient_pos, controls)
+            ins = insulation_reading(ch, tuple(widest["span"]), controls)
+            say(f"{case.locus}: boundary strength read for {len(HIC_CELLS)} cell types")
             say(f"{case.locus}: measured boundaries read for {len(HIC_CELLS)} cell types")
             out_cases.append(
                 {
@@ -595,6 +711,7 @@ def run(results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
                     "published": widest,
                     "recipient_named": named,
                     "measured_boundaries": hic,
+                    "boundary_strength": ins,
                     "controls": controls,
                 }
             )
