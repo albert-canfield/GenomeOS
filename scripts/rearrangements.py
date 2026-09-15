@@ -43,6 +43,30 @@ def main() -> int:
                 f" recipient intact={row['leaves_the_recipient_intact']}"
                 f"  boundary_lost={cl['boundary_lost']} new_adjacency={cl['new_adjacency']}"
             )
+        m = c.get("measured_boundaries") or {}
+        if m:
+            print("  measured Hi-C boundaries, per cell type (never pooled):")
+            for cell, r in m["by_cell"].items():
+                if r.get("pending"):
+                    print(f"    {cell:9s} {r['pending']}")
+                    continue
+                covered = r["a_domain_covers_the_donor"] and r["a_domain_covers_the_recipient"]
+                nc = len(r["controls"])
+                print(
+                    f"    {cell:9s} domains cover both={covered}"
+                    f" separated={r['separated_before']}"
+                    f" (controls {r['controls_separated']}/{nc})"
+                )
+                print(
+                    f"              raw count  published {r['boundaries_between_the_published_pair']}"
+                    f"  controls {r['control_boundaries_between']}"
+                    f"   -> below all: {r['published_is_below_every_control_on_raw_count']}"
+                )
+                print(
+                    f"              per Mb     published {r['published_per_mb']}"
+                    f"  controls {r['control_per_mb']}"
+                    f"   -> below all: {r['published_is_below_every_control_on_density']}"
+                )
     print()
     a3 = out["aggregate"]
     for claim in ("separated_before", "boundary_lost", "new_adjacency", "recipient_named"):

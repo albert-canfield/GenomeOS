@@ -232,6 +232,331 @@
         "names_the_recipient": true,
         "pending": null
       },
+      "measured_boundaries": {
+        "preregistered": "What the measured boundaries can and cannot change, stated before looking. Claim three - does an already-computed deletion near the recipient name it - does NOT depend on the boundary model at all, so swapping CTCF-only proxies for Hi-C calls cannot move it and a change there would mean a bug. Claims one and two are askable at the matched random rearrangements but not at the published case, whose faithful span deletes the donor gene. What is left, and what this test is really for, is the precondition: does a measured boundary separate EPHA4 from PAX3, and does it do so more than it separates a matched random pair the same distance apart. The prediction is that the yes/no form saturates - at 1.8 Mb apart almost any pair of genes has some boundary between it in any model - so the reading to trust is the COUNT of boundaries between the pair, per cell type, against the count at matched pairs. If the published pair is not unusual on that count in any of the five cell types, then the negative belongs to boundaries and not to our proxy for them, which is the larger statement. Reported per cell type and never pooled: a boundary is a cell's boundary, and GM12878's calls are dense enough (3,909 on chr2 against 683 for K562) to dominate any pooled figure.",
+        "by_cell": {
+          "GM12878": {
+            "boundaries_on_the_chromosome": 3909,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 11,
+            "published_per_mb": 15.14,
+            "control_per_mb": [
+              13.6,
+              15.73,
+              16.7,
+              17.69,
+              20.43
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 32,
+                "per_mb": 16.7,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 37,
+                "per_mb": 20.43,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 26,
+                "per_mb": 15.73,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 24,
+                "per_mb": 13.6,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 37,
+                "per_mb": 17.69,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              24,
+              26,
+              32,
+              37,
+              37
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          },
+          "H1-hESC": {
+            "boundaries_on_the_chromosome": 1091,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 3,
+            "published_per_mb": 4.13,
+            "control_per_mb": [
+              3.02,
+              3.97,
+              4.42,
+              4.7,
+              5.74
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 9,
+                "per_mb": 4.7,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 8,
+                "per_mb": 4.42,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 5,
+                "per_mb": 3.02,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 7,
+                "per_mb": 3.97,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 12,
+                "per_mb": 5.74,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              5,
+              7,
+              8,
+              9,
+              12
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          },
+          "HepG2": {
+            "boundaries_on_the_chromosome": 710,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 2,
+            "published_per_mb": 2.75,
+            "control_per_mb": [
+              1.43,
+              1.57,
+              2.27,
+              2.42,
+              2.76
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 3,
+                "per_mb": 1.57,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 5,
+                "per_mb": 2.76,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 4,
+                "per_mb": 2.42,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 4,
+                "per_mb": 2.27,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 3,
+                "per_mb": 1.43,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              3,
+              3,
+              4,
+              4,
+              5
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          },
+          "IMR-90": {
+            "boundaries_on_the_chromosome": 900,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 2,
+            "published_per_mb": 2.75,
+            "control_per_mb": [
+              3.4,
+              3.65,
+              3.86,
+              4.23,
+              5.26
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": true,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 7,
+                "per_mb": 3.65,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 7,
+                "per_mb": 3.86,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 7,
+                "per_mb": 4.23,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 6,
+                "per_mb": 3.4,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 11,
+                "per_mb": 5.26,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              6,
+              7,
+              7,
+              7,
+              11
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          },
+          "K562": {
+            "boundaries_on_the_chromosome": 683,
+            "a_domain_covers_the_donor": true,
+            "a_domain_covers_the_recipient": true,
+            "separated_before": true,
+            "published_pair_apart": 726694,
+            "boundaries_between_the_published_pair": 2,
+            "published_per_mb": 2.75,
+            "control_per_mb": [
+              1.57,
+              1.81,
+              1.91,
+              2.21,
+              2.27
+            ],
+            "published_is_below_every_control_on_raw_count": true,
+            "published_is_below_every_control_on_density": false,
+            "controls": [
+              {
+                "pair": "TRIB2-LRATD1",
+                "apart": 1915781,
+                "boundaries_between": 3,
+                "per_mb": 1.57,
+                "separated": true
+              },
+              {
+                "pair": "GCFC2-LRRTM4",
+                "apart": 1811461,
+                "boundaries_between": 4,
+                "per_mb": 2.21,
+                "separated": true
+              },
+              {
+                "pair": "PLCL1-SATB2",
+                "apart": 1653346,
+                "boundaries_between": 3,
+                "per_mb": 1.81,
+                "separated": true
+              },
+              {
+                "pair": "RNF144A-ID2",
+                "apart": 1764644,
+                "boundaries_between": 4,
+                "per_mb": 2.27,
+                "separated": true
+              },
+              {
+                "pair": "TMEM182-POU3F3",
+                "apart": 2092084,
+                "boundaries_between": 4,
+                "per_mb": 1.91,
+                "separated": true
+              }
+            ],
+            "control_boundaries_between": [
+              3,
+              3,
+              4,
+              4,
+              4
+            ],
+            "controls_separated": 5,
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38"
+          }
+        }
+      },
       "controls": [
         {
           "span": [
@@ -746,6 +1071,6 @@
   },
   "note": "The free half of docs/LOCI-BENCHMARK.md 11b: no model request was made. The node model is INFERRED at confidence 0.4 and is the thing under test, so it is never counted as a derived hit. One published case is an anecdote by the panel's own standard; the other three are recorded in not_yet_runnable with what each is waiting for.",
   "cost": {
-    "seconds": 26.2
+    "seconds": 27.5
   }
 }

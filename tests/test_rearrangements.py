@@ -166,3 +166,33 @@ def test_naming_the_recipient_is_not_quoted_without_coverage():
         assert b["rates"]["recipient_named"]["k"] == 0, (
             "a recipient was named with no deletion scored near it: that cannot happen"
         )
+
+
+@needs_result
+def test_the_measured_boundary_reading_is_per_cell_type_and_pre_registered():
+    """A boundary is a cell's boundary; GM12878's calls are dense enough to dominate a pooled figure."""
+    for c in RESULT["cases"]:
+        m = c["measured_boundaries"]
+        assert "COUNT of boundaries" in m["preregistered"], "the reading must be registered verbatim"
+        assert len(m["by_cell"]) >= 5, "fewer than five cell types read"
+        for cell, r in m["by_cell"].items():
+            if r.get("pending"):
+                continue
+            assert r["boundaries_on_the_chromosome"] > 0, cell
+            assert "a_domain_covers_the_donor" in r and "a_domain_covers_the_recipient" in r, cell
+
+
+@needs_result
+def test_the_boundary_count_is_reported_as_a_density_and_not_only_raw():
+    """The pair is 727 kb apart and the control pairs about 1.8 Mb: a raw count favours the pair.
+
+    Reporting the raw count alone showed the published pair below every control in all five cell
+    types, which was interval length and nothing else. Both readings must travel together.
+    """
+    for c in RESULT["cases"]:
+        for cell, r in c["measured_boundaries"]["by_cell"].items():
+            if r.get("pending"):
+                continue
+            assert r["published_per_mb"] > 0, cell
+            assert len(r["control_per_mb"]) == len(r["control_boundaries_between"]), cell
+            assert "published_is_below_every_control_on_density" in r, cell

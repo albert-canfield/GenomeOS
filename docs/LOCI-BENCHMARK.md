@@ -918,3 +918,77 @@ The honest next step is not another rearrangement. It is a boundary model that i
 Hi-C-called domains, which the project already holds for five cell types under
 `data/knowledge/hic`, against which the same three claims could be asked without changing a line of
 this module.
+
+## 15. The Hi-C test: a positive that did not survive its own scrutiny (2026-09-15)
+
+The negative in section 14 was about **our** boundary model - CTCF-only cCREs, no Hi-C, confidence
+0.4 - and that left the interesting question open: does the negative belong to the proxy or to
+boundaries themselves? The project holds measured 4D Nucleome boundary calls for five cell types, so
+the same three claims can be asked of them. `_domains_from` is what `infer_domains` calls once it has
+decided where the boundaries are, so handing it measured calls swaps the boundary source and changes
+nothing else: same 50 kb minimum, same merging, same intervals-between-boundaries model. Same matched
+random rearrangements, so only one thing changes at a time.
+
+**The reading was registered before the measured boundaries were read**, and it is kept verbatim in
+the result. It said: claim three cannot move, because it does not depend on the boundary model at
+all; claims one and two are askable at the controls but not at the published case, whose faithful
+span deletes the donor; what is left is the precondition, and the yes/no form of it will saturate,
+so **the count of boundaries between the pair is the reading to trust**, per cell type, never pooled.
+
+### Coverage first, as it must be
+
+All five cell types have a measured domain over both EPHA4 and PAX3, and all five separate them -
+as do all five matched control pairs, in all five cell types. The yes/no form saturates exactly as
+registered, so it decides nothing. This is not a coverage failure: the locus is covered everywhere.
+
+### The count, raw, looked like the first positive result about a node in this project
+
+| cell type | boundaries between EPHA4 and PAX3 | at the 5 matched pairs | below every control? |
+|---|---|---|---|
+| GM12878 | 11 | 24, 26, 32, 37, 37 | **yes** |
+| H1-hESC | 3 | 5, 7, 8, 9, 12 | **yes** |
+| HepG2 | 2 | 3, 3, 4, 4, 5 | **yes** |
+| IMR-90 | 2 | 6, 7, 7, 7, 11 | **yes** |
+| K562 | 2 | 3, 3, 4, 4, 4 | **yes** |
+
+Five cell types out of five, the published pair strictly below every matched control. If that had
+held it would have been the first positive thing anyone found about a node here.
+
+### It is interval length, and nothing else
+
+**The published pair is 727 kb apart. The control pairs are about 1.8 Mb apart** - because the
+controls were matched on the *span of the deletion*, not on the distance between the two genes. A
+longer interval holds more boundaries for nothing. Per megabase:
+
+| cell type | published, per Mb | at the 5 matched pairs, per Mb | below every control? |
+|---|---|---|---|
+| GM12878 | 15.14 | 13.60, 15.73, 16.70, 17.69, 20.43 | no - second lowest of six |
+| H1-hESC | 4.13 | 3.02, 3.97, 4.42, 4.70, 5.74 | no - middle |
+| HepG2 | 2.75 | 1.43, 1.57, 2.27, 2.42, 2.76 | no - second **highest** |
+| IMR-90 | 2.75 | 3.40, 3.65, 3.86, 4.23, 5.26 | yes |
+| K562 | 2.75 | 1.57, 1.81, 1.91, 2.21, 2.27 | no - **above every control** |
+
+Below every control in **1 of 5** cell types, above every control in one, inside the range in three.
+The 5-of-5 became 1-of-5 on dividing by a length. Both readings are now carried together in the
+result and the gate requires it, so the raw count can never be quoted alone again.
+
+### So the negative is about boundaries, not only about our proxy
+
+That is the larger statement and it is worth making carefully. Measured Hi-C boundaries, in five
+cell types, separate the published rearrangement's gene pair no more distinctively than they
+separate matched random pairs on the same chromosome. The node model's failure in section 14 is not
+an artefact of using CTCF-only cCREs as a stand-in: swapping in the measured calls the project holds
+does not rescue it.
+
+What this does **not** say is that boundary strength carries nothing. Insulation is a continuous
+quantity and this test counted calls; a boundary's insulation score, which 4DN publishes and this
+project does not yet read, is the obvious next thing to ask, and it is the reading that could still
+come out positive. What it does say is that **the count of boundaries between two genes, measured or
+inferred, is not evidence about whether a rearrangement between them matters.**
+
+### The lesson, which is the same one as last time in a new costume
+
+The control shared the deletion's span and not the pair's separation. Section 12 recorded that a
+control has to share the construction and not only the size; this is the same mistake one level
+further in, and it produced a five-out-of-five positive that survived until it was divided by a
+length. **Every count needs its denominator, and the denominator has to be the thing that varies.**

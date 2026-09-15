@@ -58,6 +58,27 @@ EVIDENCE = {
     ),
 }
 
+HIC_CELLS = ("GM12878", "H1-hESC", "HepG2", "IMR-90", "K562")
+
+#: Written down before the measured boundaries were read (genomeos-9c asked for a pre-registered
+#: reading, and it is worth nothing written afterwards).
+HIC_PREREGISTERED = (
+    "What the measured boundaries can and cannot change, stated before looking. Claim three - does"
+    " an already-computed deletion near the recipient name it - does NOT depend on the boundary"
+    " model at all, so swapping CTCF-only proxies for Hi-C calls cannot move it and a change there"
+    " would mean a bug. Claims one and two are askable at the matched random rearrangements but not"
+    " at the published case, whose faithful span deletes the donor gene. What is left, and what this"
+    " test is really for, is the precondition: does a measured boundary separate EPHA4 from PAX3,"
+    " and does it do so more than it separates a matched random pair the same distance apart."
+    " The prediction is that the yes/no form saturates - at 1.8 Mb apart almost any pair of genes"
+    " has some boundary between it in any model - so the reading to trust is the COUNT of boundaries"
+    " between the pair, per cell type, against the count at matched pairs. If the published pair is"
+    " not unusual on that count in any of the five cell types, then the negative belongs to"
+    " boundaries and not to our proxy for them, which is the larger statement. Reported per cell"
+    " type and never pooled: a boundary is a cell's boundary, and GM12878's calls are dense enough"
+    " (3,909 on chr2 against 683 for K562) to dominate any pooled figure."
+)
+
 KINDS = ("deletion", "inversion", "duplication")
 CONTROLS_PER_CASE = 5
 CANDIDATES_PER_CASE = 60
@@ -391,6 +412,73 @@ def named_by_a_derived_layer(ch, results_dir: Path, pos: int, gene: str) -> dict
     }
 
 
+def domains_from(chrom: str, length: int, boundaries: list[int]) -> list:
+    """The project's own node construction over a boundary list from any source.
+
+    `_domains_from` is what `infer_domains` calls once it has decided where the boundaries are, so
+    handing it measured calls instead of CTCF-only midpoints swaps the boundary source and changes
+    nothing else: same 50 kb minimum, same merging, same intervals-between-boundaries model.
+    """
+    from genomeos.genome.domains import _domains_from
+
+    return _domains_from(chrom, length, [], None, 50_000, sorted(boundaries))
+
+
+def hic_reading(ch, donor_pos: int, recipient_pos: int, controls: list[dict[str, Any]]) -> dict[str, Any]:
+    """The same precondition asked of measured boundaries, per cell type, never pooled."""
+    from genomeos.genome.hic import load_boundaries
+
+    out: dict[str, Any] = {"preregistered": HIC_PREREGISTERED, "by_cell": {}}
+    for cell in HIC_CELLS:
+        b = load_boundaries(cell, ch.chrom)
+        if not b:
+            out["by_cell"][cell] = {"pending": f"no measured boundary file for {cell} on {ch.chrom}"}
+            continue
+        doms = domains_from(ch.chrom, ch.length, b)
+        lo, hi = sorted((donor_pos, recipient_pos))
+        between = [x for x in b if lo <= x < hi]
+        ctrl = []
+        for c in controls:
+            a, z = sorted((c["donor_tss"], c["recipient_tss"]))
+            n = sum(1 for x in b if a <= x < z)
+            ctrl.append(
+                {
+                    "pair": f"{c['donor']}-{c['recipient']}",
+                    "apart": z - a,
+                    "boundaries_between": n,
+                    "per_mb": round(n / ((z - a) / 1e6), 2),
+                    "separated": node_of(doms, a) != node_of(doms, z),
+                }
+            )
+        dn, rn = node_of(doms, donor_pos), node_of(doms, recipient_pos)
+        out["by_cell"][cell] = {
+            "boundaries_on_the_chromosome": len(b),
+            "a_domain_covers_the_donor": dn is not None,
+            "a_domain_covers_the_recipient": rn is not None,
+            "separated_before": bool(dn and rn and dn != rn),
+            "published_pair_apart": hi - lo,
+            "boundaries_between_the_published_pair": len(between),
+            # the raw count is confounded: the published pair is 727 kb apart and the matched
+            # rearrangements put their pairs about 1.8 Mb apart, because the controls were matched on
+            # the SPAN of the deletion and not on the distance between the two genes. A longer
+            # interval holds more boundaries for nothing. Density is the comparison that is like for
+            # like, and it is the one to read.
+            "published_per_mb": round(len(between) / ((hi - lo) / 1e6), 2),
+            "control_per_mb": sorted(c["per_mb"] for c in ctrl),
+            "published_is_below_every_control_on_raw_count": all(
+                len(between) < c["boundaries_between"] for c in ctrl
+            ),
+            "published_is_below_every_control_on_density": all(
+                round(len(between) / ((hi - lo) / 1e6), 2) < c["per_mb"] for c in ctrl
+            ),
+            "controls": ctrl,
+            "control_boundaries_between": sorted(c["boundaries_between"] for c in ctrl),
+            "controls_separated": sum(1 for c in ctrl if c["separated"]),
+            "evidence": "experimental: 4D Nucleome insulation-score boundary calls, GRCh38",
+        }
+    return out
+
+
 def boundary_behaviour(chrom: str = "chr2", results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
     """What a deletion of the published size does to the node model, anywhere on the chromosome.
 
@@ -491,6 +579,8 @@ def run(results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
             widest = max(sized, key=lambda x: x["length"])
             controls = matched_controls(ch, case, tuple(widest["span"]), widest, results_dir)
             say(f"{case.locus}: {len(controls)} matched random rearrangements")
+            hic = hic_reading(ch, donor_pos, recipient_pos, controls)
+            say(f"{case.locus}: measured boundaries read for {len(HIC_CELLS)} cell types")
             out_cases.append(
                 {
                     "locus": case.locus,
@@ -504,6 +594,7 @@ def run(results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
                     "spans_across_the_published_size_range": sized,
                     "published": widest,
                     "recipient_named": named,
+                    "measured_boundaries": hic,
                     "controls": controls,
                 }
             )
