@@ -2161,51 +2161,69 @@ one number the model's own 0.606 against 0.515 now sits closest to.
   1 Mb window and both alleles in one request. The rerun that produced the committed hold-out
   numbers spent none: every variant was already in the cache.
 
-## Two measurements agree without the model, and they split the same way (2026-09-14)
+## Two measurements agree without the model, and they split the same way (2026-09-15)
 
 Every claim in this area rests on one model's predictions, and the model learned from ENCODE tracks
 that are kin to the outcomes it is asked about. This reading does not. It compares two measurements
 of the same alleles, made by different laboratories with different instruments, with nothing between
 them.
 
-- **A reporter assay.** MPRAVarDB's log2 fold change for the alternative allele over the reference
-  in GM12878, a lymphoblastoid line: a few hundred bases of human sequence on a plasmid, the two
-  alleles side by side, transcripts counted.
-- **An expression quantitative trait locus.** GTEx v8's slope for the same alternative allele in
-  EBV-transformed lymphocytes: the gene's expression in hundreds of donors, against the allele they
-  carry in their own chromosomes.
-- **Fine-mapping to separate cause from company.** DAP-G's posterior at that very variant, the same
-  instrument E2 and E3 used: at or above 0.5 the allele is probably the cause; below it the allele is
-  usually a passenger of one.
+- **A reporter assay.** MPRAVarDB's log2 fold change for the alternative allele over the reference: a
+  few hundred bases of human sequence on a plasmid, the two alleles side by side, transcripts counted.
+- **An expression quantitative trait locus.** GTEx v8's slope for the same alternative allele: the
+  gene's expression in hundreds of donors, against the allele they carry in their own chromosomes.
+- **Fine-mapping to separate cause from company.** DAP-G's posterior at that very variant: at or
+  above 0.5 the allele is probably the cause; below it, usually a passenger of one.
 
-Over the 1,826 variants this project's widened E1 tests that carry both measurements, **the two
-directions agree 946 times, 0.518, which is chance (p 0.12)**. Among the 179 that DAP-G fine-maps,
-**they agree 120 times, 0.670, p 6e-6**. Code: `attribution/executor.py`'s `wide_sign_check`, run by
-`scripts/executor_test.py --wide`, one GTEx tissue streamed through `attribution/eqtl.py`. No model
-request.
+It was first read on the 179 fine-mapped variants the widened E1 happened to carry in GM12878, where
+it gave 0.670 against 0.518. `TWO_INSTRUMENTS`, written before the genome-wide table was built, asked
+it at scale: every variant with a significant MPRA row and a significant GTEx pair at the same
+position with the same alleles, in every cell line, the eQTL taken from DAP-G where it fine-maps one,
+reported per cell line and per study with the sample size beside every figure, against a control of
+variants the same libraries measured and found not significant. GTEx was distilled at the MPRA-tested
+positions rather than over storage units, so nothing here depends on the human panel either. 18
+minutes, no model request.
 
-**Why it matters.** The executor test found the model agreeing with the measured direction 0.679 of
-the time at fine-mapped values and 0.531 at linked ones, and the hold-out read that fall as the
-dilution a real executor predicts. The obvious objection was that both numbers describe the model:
-its training data is expression of the GTEx kind, so it may simply be reproducing what it learned,
-split by how clean the eQTL is. Here are two measurements, neither of them the model's training data,
-and neither of them the model, showing the same two numbers: 0.670 against 0.679, 0.518 against
-0.531. The split between causal and linked values is a property of the alleles, not of AlphaGenome.
+**The split is real and the control is clean.** Of 5,252 rows both instruments measured (309 distinct
+fine-mapped variants), the fine-mapped stratum agrees **221 of 350, 0.631**, against **2,525 of 4,902,
+0.515** for the rest: a difference of **+0.116 at one-sided p 1.5e-5**. The control — 58,302 rows
+whose MPRA measurement was not significant — agrees **0.502 in the fine-mapped stratum and 0.502 in
+the rest, a difference of exactly 0.000**. Whatever produces the split, it is not the way the data
+were assembled: when one instrument measured nothing, the two agree at chance in both strata.
 
-**What it does not establish.**
-- **The two assays measure different things.** A plasmid fragment in a dish is not a gene in its
-  chromosome, and a 0.670 ceiling is exactly what that mismatch predicts: even where both call the
-  allele causal, a third of the time they disagree about which way it pushes.
-- **The eQTL's gene need not be the element's gene.** The reporter has no target; the eQTL names one.
-  The comparison is of signs, not of targets.
-- **The variants are not a random sample.** MPRA libraries are built from eQTL and GWAS variants, so
-  the overlap is enriched for exactly the sequence both instruments were pointed at.
-- **One cell type.** Lymphoblastoid lines are where both assays exist in bulk; nothing here shows the
-  same holds in liver or in neurons.
-- **179 variants** carry the fine-mapped reading. It is a clear result at that size, and a small one.
+**But one cell line carries it, and by the pre-registration that means it resolves nothing.** The
+reading asked for four things and got three: the fine-mapped stratum above 0.60, a margin of at least
+0.08 at p 0.01 or better, and a control at chance. The fourth was the same direction in the two
+largest cell lines separately, and that fails. **GM12878 reads 0.668 against 0.508 (p 1.2e-7) on 289
+fine-mapped rows; every other cell line together reads 0.459 against 0.524 on 61.** No second cell
+line has more than 15 fine-mapped variants, so this is one cell line's result with no corroboration
+rather than a contradicted one — the same shape as a claim carried by one chromosome, and it is
+reported the way that would be.
 
-It is nonetheless the first result in this area whose evidence does not pass through a model, and it
-supports the reading the executor test reached by a different route.
+**Why it is probably a cell type and not an accident.** Directions can only correspond if the
+reporter's cell and the eQTL's tissue are the same tissue, and GM12878 against EBV-transformed
+lymphocytes is the one such pair that exists in bulk. Where the cell and the tissue do match, the
+fine-mapped stratum agrees **29 of 33, 0.879**; where they do not, **0.606**. By study, Tewhey's
+lymphoblastoid library reads 0.754 of 138 and Abell's 0.592 of 147, while every non-lymphoblastoid
+study has fewer than 16 fine-mapped rows and no consistent direction. The claim that survives is
+therefore narrower than the one that was asked: **two instruments agree about which way a causal
+allele pushes, in lymphoblastoid cells, where both are measuring the same tissue** — 0.631 pooled,
+0.668 in GM12878, 0.879 where the tissue matches, against 0.515 for alleles that are only linked to a
+cause.
+
+**What it cannot mean**, kept from the pre-registration.
+- **The overlap is not a sample of the genome.** MPRA libraries are built from eQTL and GWAS
+  variants, so these are alleles already suspected of doing something; no statement about the genome
+  follows.
+- **A plasmid fragment is not a gene in its chromosome.** Agreement says the allele does something in
+  both assays and in the same direction, not that the eQTL's gene is the reporter element's target.
+- **Fine-mapping is itself an instrument.** The split is between what DAP-G calls causal and what it
+  does not.
+- **One cell type**, and 350 fine-mapped rows over 309 variants carry the whole reading.
+
+It remains the only evidence in this area that does not pass through AlphaGenome, it is now measured
+at twice the size with a null control that behaves, and it is smaller and narrower than the first
+reading suggested.
 
 ## The all-elements sweep folded: what 559,805 deleted elements say, and what they do not (2026-09-15)
 
