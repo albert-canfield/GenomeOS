@@ -1005,6 +1005,33 @@ it there, and for an imported protein that link is the transport at 0.3.
 
 1. **Opt-in or mandatory.** Located rules apply to programs that declare a
    compartment. Should v0.5 make locations mandatory everywhere?
+   **Priced 2026-09-15** (`scripts/mandatory_locations.py`,
+   `data/results/mandatory_locations.json`). This was filed as a preference, but
+   what it needs is a price, and a price is measurable. Over every committed
+   program: **27 of 36 are unaffected**, having no genes or proteins at all (the
+   organism layer is about cells, not molecules), and **2 of the remaining 9 are
+   located already**. The cost falls entirely on the other 7, and it splits in
+   two:
+
+   - **Where the program is about human molecules, the facts exist.** 193 genes
+     in `noncoding_chr21.bio` carry no locus, but 163 of them are symbols the
+     packaged proteome already holds, so their compartment is a lookup (a gene
+     is placed by the compartment whose genome holds its chromosome), not an
+     invention. UniProt places the proteins: SDHB in the mitochondrial inner
+     membrane, TP53 in cytoplasm and nucleus.
+   - **Where it is not, there is no source at all.** All **19** proteins that
+     would need a compartment — the repressilator's TetR, LacI and CI, the
+     worm's factors, the demo circuits — are not human symbols, so no human
+     source can ever place them. Their author would write a compartment with no
+     citation, which under §2 is `inferred` at 0.3 and **caps the confidence of
+     everything computed from it**.
+
+   So mandatory is free for the human molecular programs and converts a
+   language-design preference into a confidence penalty on every program that is
+   not about human molecules. That is an argument for the rule we have (located
+   when you declare a compartment), or for a narrower mandatory — required only
+   where the program names a genome whose molecules a source can place. It is
+   Albert's call, but it is no longer a call made without a number.
 2. **Amounts or concentrations** (stage 2 is held on this one: pools and costs would bake it in). Stage 1 keeps amounts per compartment, so
    Hill thresholds are amounts. Concentration needs volumes, which vary per cell
    type; the choice changes what every threshold in the project means.
@@ -1051,10 +1078,19 @@ it there, and for an imported protein that link is the transport at 0.3.
     identity in, since area B's boundary caller may move every node.
 
 **Which of these can be settled by measurement rather than preference.**
+*What is actually decidable today, 2026-09-15, without the API and without stage
+2:* **1** is priced (below, done); **8** is resolved and **9** has been run and
+stayed open, needing Fukushige & Krause's per-stage frequencies, which is a paper
+to read rather than a run to do; **4, 5 and 6 are blocked behind decision 2**,
+not behind any missing work of ours, because each needs the pools or the
+division layer that decision 2 holds; **3 and 7** are genuinely preference and
+data availability, and both are already argued in place; **10** must be built
+before it can be measured. So of the ten, exactly one was decidable and cheap,
+and it is done.
 
 | Decision | Settled by | How |
 |---|---|---|
-| 1. opt-in or mandatory locations | preference | a language-design choice; no experiment decides it |
+| 1. opt-in or mandatory locations | **priced, 2026-09-15** | not a truth but a cost, and the cost is countable: 27 of 36 programs unaffected, 2 located already, 163 gene facts a lookup, and **19 proteins with no possible source** whose invented compartments would cap every confidence downstream |
 | 2. amounts or concentrations | **partly measurable** | run stage 2's burden gate both ways on cells of different volume; if only one reproduces the published burden scaling, it decides. Held for Albert until then |
 | 3. membranes as nodes or edges | preference, lightly constrained | both passed stage 1; the band-3 transport forced the "across one membrane" rule, which either shape can express |
 | 4. whose cost accounting | **measurable** | the ATP budget gate (Buttgereit & Brand's hierarchy, Lynch & Marinov's totals): the accounting that lands in the published order of magnitude wins |
