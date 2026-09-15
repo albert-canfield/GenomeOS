@@ -130,7 +130,11 @@ def fetch_boundaries(biosource: str, knowledge: Path = KNOWLEDGE, progress=None)
             chrom = f[0] if f[0].startswith("chr") else f"chr{f[0]}"
             if chrom not in handles:
                 handles[chrom] = open(d / f"{chrom}.bed", "w")  # noqa: SIM115
-            handles[chrom].write(f"{chrom}\t{f[1]}\t{f[2]}\n")
+            # 4DN's boundary files carry the label and the strength the call was thresholded on;
+            # writing only the interval threw away the quantity itself at the point of download
+            label = f[3] if len(f) > 3 else ""
+            strength = f[4] if len(f) > 4 else ""
+            handles[chrom].write(f"{chrom}\t{f[1]}\t{f[2]}\t{label}\t{strength}\n")
             counts[chrom] = counts.get(chrom, 0) + 1
     finally:
         for h in handles.values():
@@ -147,6 +151,17 @@ def fetch_boundaries(biosource: str, knowledge: Path = KNOWLEDGE, progress=None)
 
 def load_boundaries(biosource: str, chrom: str, knowledge: Path = KNOWLEDGE) -> list[int]:
     """Measured boundary positions (interval centres) on a chromosome, sorted."""
+    return [b["centre"] for b in load_scored_boundaries(biosource, chrom, knowledge)]
+
+
+def load_scored_boundaries(biosource: str, chrom: str, knowledge: Path = KNOWLEDGE) -> list[dict[str, Any]]:
+    """Measured boundaries with what 4DN says about each: its label and its strength.
+
+    A boundary call is a threshold crossing on a continuous quantity, and reading the calls without
+    the quantity loses the part that distinguishes a strong boundary from a marginal one. Files
+    written before the strength was kept carry no fourth and fifth column; those rows report
+    `strength: None` rather than a zero, which would read as "measured and weak".
+    """
     slug = biosource.replace(" ", "_").replace("/", "_")
     p = knowledge / slug / f"{chrom}.bed"
     if not p.exists():
@@ -154,9 +169,24 @@ def load_boundaries(biosource: str, chrom: str, knowledge: Path = KNOWLEDGE) -> 
     out = []
     with p.open() as fh:
         for line in fh:
-            f = line.split("\t")
-            out.append((int(f[1]) + int(f[2])) // 2)
-    return sorted(out)
+            f = line.rstrip("\n").split("\t")
+            if len(f) < 3:
+                continue
+            start, end = int(f[1]), int(f[2])
+            try:
+                strength = float(f[4]) if len(f) > 4 and f[4] != "" else None
+            except ValueError:
+                strength = None
+            out.append(
+                {
+                    "start": start,
+                    "end": end,
+                    "centre": (start + end) // 2,
+                    "label": f[3] if len(f) > 3 and f[3] != "" else None,
+                    "strength": strength,
+                }
+            )
+    return sorted(out, key=lambda b: b["centre"])
 
 
 def compare_with_inferred(inferred: list[int], measured: list[int], length: int) -> dict[str, Any]:
