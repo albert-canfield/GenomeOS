@@ -1093,6 +1093,32 @@ in order. "Owner" is the session that holds the files today (see §7).
   cadence invariant is an invariant **for time-invariant guards**, and any program
   whose fate guards are integrated reads needs a `commitment` to have a stable fate
   at all; that belongs in §7.2a beside the two limits it already states.
+  Two consequences of the rewrite elsewhere, both measured rather than assumed.
+  **The precursor-commitment hole of §7.2a decision 3 is closed**: of the 12 cells
+  born after the 700 min induction in the plasticity series' terminal arm, **0 now
+  take the forced fate**, where the note recorded 12 of 610 taking it. What closed
+  it is the fate rules, not the new lock — the count is 0 with `terminal_fate`
+  stripped as well — because the rewrite makes those parents reach a terminal fate
+  before they divide, so `plasticity.bio`'s own `commitment` with
+  `inherit: daughters` already protects the daughters. **The human tissue
+  generator's split fractions said what they are not.** Splits at one decision
+  point run in sequence, so a splitting `fraction` is a share of what is left
+  (docs/BIOLANG-v0.3.md); `human.py` converted each published adult count as though
+  it were a share of the layer and every line carried the evidence "share of the
+  layer's adult cell count". After the first split that sentence is false and the
+  gap is enormous: ectoderm's glia read `fraction: 1.0000` for a 24.5% share and
+  mesoderm's myocytes read `fraction: 1.0000` for 0.00071%. Every emitted line now
+  carries both numbers — the cells and the published share of the layer, then the
+  fraction with the split's position and what the earlier splits left — and the
+  arithmetic is untouched: all 80 decisions in `tissues.bio` keep byte-identical
+  fractions and `body.bio` still reaches 2.83e13 cells at 20 years. Checked and
+  **not** changed: `haematopoiesis.py` has the same shape and is not the same
+  defect, because its solve already encodes the sequential semantics
+  (`retained = prod(1 - f_i)`), so each compartment's total outflow is right; what
+  is off there is the split between two siblings, by 1.7% (MPP → CLP) to 7.9%
+  (GMP → Monoblast) of the solved share. Compensating the emitted fractions by
+  hand was tried and reverted: it moves a solved steady state the 39 mutant
+  asserts are tuned to, taking erythrocytes at 3 years from 2.5e13 to 8.8e12.
 - **Next.** 1. `commitment` and `competence` landed on 2026-09-14
   (genomeos-c2, 126e65b) and earn their place by ablation: strip competence and
   both late arms of the published plasticity series fail, strip commitment and the
@@ -1114,7 +1140,18 @@ in order. "Owner" is the session that holds the files today (see §7).
   8. A terminal cell decides once, at birth, so nothing in the worm can read its
   own window; a `differentiate` that may be read after a stated delay, or a
   re-decision that is not a network cadence, is what would let the `cell` window
-  be tested at all.
+  be tested at all. 9. **`share:` is wanted** (area A offered
+  to build it only with a generator that uses it): an absolute split normalised
+  across the decisions at one decision point, so a partition line states the
+  published number instead of a ratio of leftovers. Two generators would use it
+  the day it lands — `human.to_bio_tissues`, whose lines would carry Sender &
+  Milo's share directly and be checkable against the paper without replaying a
+  sequence, and `haematopoiesis.to_bio`, whose solve would no longer have to
+  encode the runtime's application order in `retained` and whose sibling splits
+  would be exactly the solved ones. It also removes an order-dependence of the
+  same kind §7.3 removed for fates. Until it lands both generators state both
+  numbers on every line, which is honest but is a sentence standing in for a
+  construct.
 - **Owner.** genomeos-d3 (from 2026-09-15; genomeos-d2, genomeos-d1 and
   genomeos-73 before).
 
