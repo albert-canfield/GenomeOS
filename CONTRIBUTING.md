@@ -83,7 +83,9 @@ uv run python scripts/stage_section.py docs/ATTRIBUTION.md "## My section" ["## 
 
 It takes the file as your private index already holds it, replaces only the
 section whose heading you name with the working copy's, and writes the result
-into that index. Nothing outside your section can reach the commit, because
+into that index. A section runs to the next heading of the same level or
+shallower, so `"### E. From one cell to an organism"` takes area E and not the
+rest of the roadmap; headings inside fenced code blocks are ignored. Nothing outside your section can reach the commit, because
 everything outside it is the base verbatim; run it once per section you own and
 the runs compose. It refuses, staging nothing, when your heading is missing from
 the working copy or when a new section has no named heading to go before, rather

@@ -15,6 +15,10 @@ private index with `hash-object` and `update-index`. Nothing outside your sectio
 because everything outside it is the base verbatim. Run it once per section you own; each run builds on
 the last, so two sections of the same file compose.
 
+A section runs from its heading to the next heading of the same level or shallower, so naming a `###`
+subsection takes that subsection and not the rest of its parent. Headings inside fenced code blocks are
+not headings.
+
 It refuses rather than guesses: if your heading is not in the working copy there is nothing to stage,
 and if it is not in the base it has no home, so you must name the heading it goes before. A refusal
 stages nothing and exits 2.
@@ -29,19 +33,51 @@ import sys
 import tempfile
 from pathlib import Path
 
-HEADING = "## "
-
 
 class RefusedError(Exception):
     """Staging nothing is always safer than staging the wrong thing."""
 
 
+def _level(line: str) -> int:
+    """Heading depth, or 0 for a line that is not a heading. `### A. BioLang` is 3."""
+    n = len(line) - len(line.lstrip("#"))
+    return n if 1 <= n <= 6 and line[n : n + 1] in (" ", "\t") else 0
+
+
+def _headings(lines: list[str]) -> list[int]:
+    """Heading depth per line, counting nothing inside a fenced code block: a shell comment at the
+    start of a line in a ``` block is not a heading, and treating one as a heading would end a
+    section early and drop the rest of it."""
+    out, fenced = [], False
+    for line in lines:
+        if line.lstrip().startswith(("```", "~~~")):
+            fenced = not fenced
+            out.append(0)
+            continue
+        out.append(0 if fenced else _level(line))
+    return out
+
+
 def _bounds(lines: list[str], heading: str) -> tuple[int, int] | None:
-    """The half-open line range of the section starting with `heading`, up to the next heading."""
-    start = next((i for i, x in enumerate(lines) if x.startswith(heading)), None)
+    """The half-open line range of the `heading` section: from its heading to the next heading of the
+    same level or shallower.
+
+    Ending at the next `## ` regardless of depth was wrong, and wrong in the dangerous direction. Every
+    roadmap area is a `### ` heading, so a lane staging `### E. From one cell to an organism` got
+    everything from E to the next `## ` — areas E through J in one splice, nine other lanes' text
+    carried out under its commit, which is the exact hazard this tool exists to prevent.
+    """
+    depth = _level(heading)
+    if not depth:
+        raise RefusedError(f"{heading!r} is not a markdown heading: it must start with # and a space")
+    levels = _headings(lines)
+    start = next((i for i, x in enumerate(lines) if levels[i] and x.startswith(heading)), None)
     if start is None:
         return None
-    end = next((j for j in range(start + 1, len(lines)) if lines[j].startswith(HEADING)), len(lines))
+    end = next(
+        (j for j in range(start + 1, len(lines)) if 0 < levels[j] <= depth),
+        len(lines),
+    )
     return start, end
 
 
@@ -60,7 +96,8 @@ def splice(base: list[str], work: list[str], heading: str, anchor: str | None = 
             f"{heading!r} is new to the committed file; name the heading it goes before, so it is not "
             "appended to the end of a file another lane is also writing"
         )
-    at = next((i for i, x in enumerate(base) if x.startswith(anchor)), None)
+    levels = _headings(base)
+    at = next((i for i, x in enumerate(base) if levels[i] and x.startswith(anchor)), None)
     if at is None:
         raise RefusedError(f"the anchor {anchor!r} is not in the committed file")
     return base[:at] + body + base[at:]
