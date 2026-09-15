@@ -270,6 +270,22 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   from outside that is indistinguishable from a crash. `jobs.key_holder()`
   says who holds the key and what for, and it is the first thing to read
   before reporting a stall.
+- **A stale base is a silent revert, and care is not the fix
+  (2026-09-15).** Three times in one day a lane staged a whole shared file
+  from a copy it had read before HEAD moved, publishing the older text over
+  what landed in between. Twice it was a paragraph; the third took out the
+  entire `share:` construct — parser clause, IR field, runtime, grammar row,
+  documentation and 155 lines of tests — and nobody noticed until the lane
+  that wrote it came back to its own feature. The last of the three was
+  committed by a session that knew the rule, had a tool for it, and still
+  lost the race: it read the base blob in one shell call and moved the ref in
+  a later one. So the interval between reading and writing must not exist —
+  read the base and write the index in one call, with the parent pinned at
+  `read-tree` time — and the check must be mechanical, not remembered:
+  `scripts/check_staged.py` asks the staged tree whether it deletes lines a
+  recent commit added, names the peer commit when it does, and refuses. It
+  costs a second and it replays the real accident correctly. A rule nobody
+  can follow perfectly under concurrency belongs in a program.
 
 ## Engineering
 
