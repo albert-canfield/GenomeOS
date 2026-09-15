@@ -50,9 +50,16 @@ RESULTS = Path("data/results")
 JOBS = Path("data/jobs")
 FIRST = "chr21"  # already running when the chain was asked for
 # smallest first (the decoding lane's order of 2026-09-13); chr21 is the run already in progress
+# Smallest first was the right order while the sweep was buying coverage. Since 2026-09-15 the next
+# three are chosen by what they decide rather than by size, and the rest keep the old order:
+#   chr9  resumes from its cache, and is the refusal case of the fold's boundary-density rule;
+#   chrX  is the only chromosome that rule predicts negative, so it is the one test that can falsify it;
+#   chr2  carries EPHA4, PAX3 and the rest of the published TAD-rearrangement set, where the node
+#         model's one discriminating claim ("which gene") cannot be scored while the chromosome is
+#         unswept — the sharpest published test of what a node is for.
 ORDER = [
     "chr22", "chrY", "chr19", "chr20", "chr18", "chr17", "chr16", "chr15", "chr14", "chr13", "chr12",
-    "chr11", "chr10", "chr9", "chr8", "chrX", "chr7", "chr6", "chr5", "chr4", "chr3", "chr2", "chr1",
+    "chr11", "chr10", "chr9", "chrX", "chr2", "chr8", "chr7", "chr6", "chr5", "chr4", "chr3", "chr1",
 ]  # fmt: skip
 POLL = 60
 RETRY_PAUSE = 600
