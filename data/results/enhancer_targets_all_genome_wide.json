@@ -145,6 +145,19 @@
       "silencer_like": 7280,
       "requests_this_run": 21590
     },
+    "chr2": {
+      "elements": 79639,
+      "scored": 400,
+      "complete": false,
+      "length": 242193529,
+      "fraction_with_target": 0.677,
+      "coding_target_agrees_with_nearest": 0.89,
+      "coding_target_inside_domain": 0.906,
+      "fraction_inside_domain": 0.838,
+      "strong": 61,
+      "silencer_like": 112,
+      "requests_this_run": 408
+    },
     "chr20": {
       "elements": 26954,
       "scored": 26954,
@@ -197,6 +210,19 @@
       "silencer_like": 9933,
       "requests_this_run": 40151
     },
+    "chrX": {
+      "elements": 22894,
+      "scored": 22894,
+      "complete": true,
+      "length": 156040895,
+      "fraction_with_target": 0.607,
+      "coding_target_agrees_with_nearest": 0.647,
+      "coding_target_inside_domain": 0.775,
+      "fraction_inside_domain": 0.789,
+      "strong": 4317,
+      "silencer_like": 4658,
+      "requests_this_run": 22911
+    },
     "chrY": {
       "elements": 907,
       "scored": 907,
@@ -211,7 +237,7 @@
       "requests_this_run": 0
     }
   },
-  "complete_chromosomes": 15,
+  "complete_chromosomes": 16,
   "chromosomes_complete": [
     "chr10",
     "chr11",
@@ -227,36 +253,38 @@
     "chr21",
     "chr22",
     "chr9",
+    "chrX",
     "chrY"
   ],
   "genome": {
-    "elements": 457272,
-    "scored": 457272,
-    "named": 297815,
-    "coding_named": 216945,
-    "strong": 86954,
-    "silencer_like": 112203,
-    "fraction_with_target": 0.651,
-    "coding_target_agrees_with_nearest": 0.618,
+    "elements": 480166,
+    "scored": 480166,
+    "named": 311704,
+    "coding_named": 227762,
+    "strong": 91271,
+    "silencer_like": 116861,
+    "fraction_with_target": 0.649,
+    "coding_target_agrees_with_nearest": 0.62,
     "coding_target_inside_domain": 0.781,
     "verdicts_coding": {
-      "no predicted effect": 240327,
-      "agrees with nearest TSS in domain": 134098,
-      "gene outside the domain": 47405,
-      "another gene in the same domain": 35442
+      "no predicted effect": 252404,
+      "agrees with nearest TSS in domain": 141100,
+      "gene outside the domain": 49843,
+      "another gene in the same domain": 36819
     }
   },
   "spread": {
     "fraction_with_target": {
-      "n": 15,
+      "n": 16,
       "min": 0.581,
       "lowest": "chr13",
-      "median": 0.644,
+      "median": 0.637,
       "max": 0.708,
       "highest": "chr19",
       "range": 0.127,
       "per_chromosome": {
         "chr13": 0.581,
+        "chrX": 0.607,
         "chr10": 0.609,
         "chrY": 0.611,
         "chr18": 0.621,
@@ -274,10 +302,10 @@
       }
     },
     "coding_target_agrees_with_nearest": {
-      "n": 15,
+      "n": 16,
       "min": 0.488,
       "lowest": "chrY",
-      "median": 0.613,
+      "median": 0.616,
       "max": 0.653,
       "highest": "chr22",
       "range": 0.165,
@@ -295,15 +323,16 @@
         "chr10": 0.629,
         "chr18": 0.638,
         "chr17": 0.643,
+        "chrX": 0.647,
         "chr19": 0.65,
         "chr22": 0.653
       }
     },
     "coding_target_inside_domain": {
-      "n": 15,
+      "n": 16,
       "min": 0.684,
       "lowest": "chr13",
-      "median": 0.752,
+      "median": 0.754,
       "max": 0.912,
       "highest": "chr19",
       "range": 0.228,
@@ -318,6 +347,7 @@
         "chr20": 0.752,
         "chr12": 0.756,
         "chr14": 0.772,
+        "chrX": 0.775,
         "chr11": 0.788,
         "chr16": 0.817,
         "chr22": 0.841,
@@ -341,36 +371,36 @@
       "source": "data/results/domains_oriented_comparison.json (commit dbad593)",
       "reading": "the node's advantage over a random partition at the same resolution is small, and it is measured on a model's reading rather than on observed enhancer-gene pairs",
       "measured_on_this_set": {
-        "what": "the same elements and the same most-moved coding gene, against as many boundaries placed uniformly at random (20 draws, seed 7), on the CTCF-only caller the scorer used",
-        "chromosomes": 15,
-        "coding_named": 216945,
-        "inside": 0.7815,
-        "inside_random": 0.753,
-        "excess": 0.0285,
+        "what": "the same elements and the same most-moved coding gene, against as many boundaries placed uniformly at random (200 draws, seed 7), on the CTCF-only caller the scorer used",
+        "chromosomes": 16,
+        "coding_named": 227762,
+        "inside": 0.7812,
+        "inside_random": 0.7555,
+        "excess": 0.0257,
         "chromosomes_where_the_node_beats_random": 10,
         "what_predicts_the_sign": {
           "axis": "Spearman of each chromosome's shape against its excess over random boundaries",
           "all": {
-            "chromosomes": 15,
-            "boundaries_per_mb": 0.804,
+            "chromosomes": 16,
+            "boundaries_per_mb": 0.791,
             "median_node_kb": -0.681,
-            "node_length_cv": -0.525,
-            "median_pair_span_kb": -0.168,
-            "coding_genes_per_mb": 0.307,
-            "elements_per_mb": 0.393,
-            "boundaries_follow_the_elements": -0.596,
-            "inside_random": -0.511
+            "node_length_cv": -0.456,
+            "median_pair_span_kb": -0.191,
+            "coding_genes_per_mb": 0.347,
+            "elements_per_mb": 0.45,
+            "boundaries_follow_the_elements": -0.591,
+            "inside_random": -0.459
           },
           "without_chrY": {
-            "chromosomes": 14,
-            "boundaries_per_mb": 0.758,
-            "median_node_kb": -0.607,
-            "node_length_cv": -0.495,
-            "median_pair_span_kb": 0.024,
-            "coding_genes_per_mb": 0.147,
-            "elements_per_mb": 0.253,
-            "boundaries_follow_the_elements": -0.503,
-            "inside_random": -0.398
+            "chromosomes": 15,
+            "boundaries_per_mb": 0.746,
+            "median_node_kb": -0.613,
+            "node_length_cv": -0.411,
+            "median_pair_span_kb": -0.018,
+            "coding_genes_per_mb": 0.207,
+            "elements_per_mb": 0.332,
+            "boundaries_follow_the_elements": -0.504,
+            "inside_random": -0.343
           }
         },
         "per_chromosome": {
@@ -378,8 +408,12 @@
             "coding_named": 21023,
             "boundaries": 921,
             "inside": 0.7441,
-            "inside_random": 0.6681,
-            "excess": 0.076,
+            "inside_random": 0.6724,
+            "inside_random_sd": 0.01567,
+            "excess": 0.0717,
+            "excess_in_sds": 4.58,
+            "p": 0.01,
+            "distinguishable_from_random": true,
             "boundaries_per_mb": 6.88,
             "median_node_kb": 104.2,
             "node_length_cv": 1.129,
@@ -392,8 +426,12 @@
             "coding_named": 9250,
             "boundaries": 559,
             "inside": 0.6911,
-            "inside_random": 0.6158,
-            "excess": 0.0753,
+            "inside_random": 0.6227,
+            "inside_random_sd": 0.02412,
+            "excess": 0.0685,
+            "excess_in_sds": 2.84,
+            "p": 0.01,
+            "distinguishable_from_random": true,
             "boundaries_per_mb": 6.96,
             "median_node_kb": 100.8,
             "node_length_cv": 1.86,
@@ -406,8 +444,12 @@
             "coding_named": 25731,
             "boundaries": 946,
             "inside": 0.788,
-            "inside_random": 0.7266,
-            "excess": 0.0614,
+            "inside_random": 0.7263,
+            "inside_random_sd": 0.01368,
+            "excess": 0.0617,
+            "excess_in_sds": 4.51,
+            "p": 0.01,
+            "distinguishable_from_random": true,
             "boundaries_per_mb": 7.0,
             "median_node_kb": 102.5,
             "node_length_cv": 1.44,
@@ -420,8 +462,12 @@
             "coding_named": 21608,
             "boundaries": 545,
             "inside": 0.8595,
-            "inside_random": 0.8132,
-            "excess": 0.0463,
+            "inside_random": 0.8182,
+            "inside_random_sd": 0.01175,
+            "excess": 0.0413,
+            "excess_in_sds": 3.52,
+            "p": 0.01,
+            "distinguishable_from_random": true,
             "boundaries_per_mb": 6.55,
             "median_node_kb": 111.7,
             "node_length_cv": 1.401,
@@ -434,8 +480,12 @@
             "coding_named": 22814,
             "boundaries": 921,
             "inside": 0.7557,
-            "inside_random": 0.7189,
-            "excess": 0.0368,
+            "inside_random": 0.7203,
+            "inside_random_sd": 0.01328,
+            "excess": 0.0354,
+            "excess_in_sds": 2.67,
+            "p": 0.01,
+            "distinguishable_from_random": true,
             "boundaries_per_mb": 6.91,
             "median_node_kb": 102.4,
             "node_length_cv": 0.99,
@@ -449,7 +499,11 @@
             "boundaries": 562,
             "inside": 0.8169,
             "inside_random": 0.799,
+            "inside_random_sd": 0.01379,
             "excess": 0.018,
+            "excess_in_sds": 1.3,
+            "p": 0.2289,
+            "distinguishable_from_random": false,
             "boundaries_per_mb": 6.22,
             "median_node_kb": 108.0,
             "node_length_cv": 2.902,
@@ -462,8 +516,12 @@
             "coding_named": 13385,
             "boundaries": 633,
             "inside": 0.7721,
-            "inside_random": 0.7591,
-            "excess": 0.0129,
+            "inside_random": 0.7554,
+            "inside_random_sd": 0.01771,
+            "excess": 0.0166,
+            "excess_in_sds": 0.94,
+            "p": 0.3483,
+            "distinguishable_from_random": false,
             "boundaries_per_mb": 5.91,
             "median_node_kb": 105.1,
             "node_length_cv": 4.376,
@@ -477,7 +535,11 @@
             "boundaries": 813,
             "inside": 0.7497,
             "inside_random": 0.7388,
+            "inside_random_sd": 0.0154,
             "excess": 0.0109,
+            "excess_in_sds": 0.71,
+            "p": 0.5075,
+            "distinguishable_from_random": false,
             "boundaries_per_mb": 5.87,
             "median_node_kb": 104.8,
             "node_length_cv": 3.886,
@@ -486,26 +548,16 @@
             "elements_per_mb": 139.3,
             "boundaries_follow_the_elements": 0.369
           },
-          "chr20": {
-            "coding_named": 12702,
-            "boundaries": 477,
-            "inside": 0.7523,
-            "inside_random": 0.7417,
-            "excess": 0.0106,
-            "boundaries_per_mb": 7.4,
-            "median_node_kb": 97.0,
-            "node_length_cv": 1.022,
-            "median_pair_span_kb": 24.2,
-            "coding_genes_per_mb": 8.5,
-            "elements_per_mb": 197.1,
-            "boundaries_follow_the_elements": -0.036
-          },
           "chr19": {
             "coding_named": 17265,
             "boundaries": 338,
             "inside": 0.9122,
-            "inside_random": 0.9049,
-            "excess": 0.0072,
+            "inside_random": 0.9042,
+            "inside_random_sd": 0.00823,
+            "excess": 0.008,
+            "excess_in_sds": 0.98,
+            "p": 0.3582,
+            "distinguishable_from_random": false,
             "boundaries_per_mb": 5.77,
             "median_node_kb": 106.6,
             "node_length_cv": 1.47,
@@ -514,12 +566,52 @@
             "elements_per_mb": 294.5,
             "boundaries_follow_the_elements": 0.6
           },
+          "chr20": {
+            "coding_named": 12702,
+            "boundaries": 477,
+            "inside": 0.7523,
+            "inside_random": 0.7452,
+            "inside_random_sd": 0.01565,
+            "excess": 0.0071,
+            "excess_in_sds": 0.45,
+            "p": 0.6965,
+            "distinguishable_from_random": false,
+            "boundaries_per_mb": 7.4,
+            "median_node_kb": 97.0,
+            "node_length_cv": 1.022,
+            "median_pair_span_kb": 24.2,
+            "coding_genes_per_mb": 8.5,
+            "elements_per_mb": 197.1,
+            "boundaries_follow_the_elements": -0.036
+          },
+          "chrX": {
+            "coding_named": 10817,
+            "boundaries": 821,
+            "inside": 0.7746,
+            "inside_random": 0.7753,
+            "inside_random_sd": 0.01396,
+            "excess": -0.0007,
+            "excess_in_sds": -0.05,
+            "p": 0.9353,
+            "distinguishable_from_random": false,
+            "boundaries_per_mb": 5.26,
+            "median_node_kb": 138.2,
+            "node_length_cv": 1.165,
+            "median_pair_span_kb": 26.7,
+            "coding_genes_per_mb": 5.56,
+            "elements_per_mb": 69.3,
+            "boundaries_follow_the_elements": 0.633
+          },
           "chr22": {
             "coding_named": 9612,
             "boundaries": 246,
             "inside": 0.8408,
-            "inside_random": 0.8466,
-            "excess": -0.0058,
+            "inside_random": 0.8482,
+            "inside_random_sd": 0.0182,
+            "excess": -0.0074,
+            "excess_in_sds": -0.4,
+            "p": 0.6667,
+            "distinguishable_from_random": false,
             "boundaries_per_mb": 4.84,
             "median_node_kb": 114.3,
             "node_length_cv": 3.416,
@@ -532,8 +624,12 @@
             "coding_named": 14474,
             "boundaries": 542,
             "inside": 0.737,
-            "inside_random": 0.7463,
-            "excess": -0.0093,
+            "inside_random": 0.7472,
+            "inside_random_sd": 0.01861,
+            "excess": -0.0102,
+            "excess_in_sds": -0.55,
+            "p": 0.5672,
+            "distinguishable_from_random": false,
             "boundaries_per_mb": 5.31,
             "median_node_kb": 111.6,
             "node_length_cv": 3.955,
@@ -546,8 +642,12 @@
             "coding_named": 9711,
             "boundaries": 661,
             "inside": 0.6839,
-            "inside_random": 0.6965,
-            "excess": -0.0126,
+            "inside_random": 0.6982,
+            "inside_random_sd": 0.0219,
+            "excess": -0.0143,
+            "excess_in_sds": -0.65,
+            "p": 0.4577,
+            "distinguishable_from_random": false,
             "boundaries_per_mb": 5.78,
             "median_node_kb": 111.6,
             "node_length_cv": 3.67,
@@ -560,8 +660,12 @@
             "coding_named": 5174,
             "boundaries": 227,
             "inside": 0.7261,
-            "inside_random": 0.7469,
-            "excess": -0.0208,
+            "inside_random": 0.7482,
+            "inside_random_sd": 0.02935,
+            "excess": -0.0221,
+            "excess_in_sds": -0.75,
+            "p": 0.4478,
+            "distinguishable_from_random": false,
             "boundaries_per_mb": 4.86,
             "median_node_kb": 115.1,
             "node_length_cv": 2.238,
@@ -574,8 +678,12 @@
             "coding_named": 125,
             "boundaries": 48,
             "inside": 0.712,
-            "inside_random": 0.9312,
-            "excess": -0.2192,
+            "inside_random": 0.9328,
+            "inside_random_sd": 0.06191,
+            "excess": -0.2208,
+            "excess_in_sds": -3.57,
+            "p": 0.0199,
+            "distinguishable_from_random": true,
             "boundaries_per_mb": 0.84,
             "median_node_kb": 260.4,
             "node_length_cv": 3.716,
@@ -598,15 +706,15 @@
   },
   "size_trend": {
     "axis": "hg38 chromosome length against the chromosome's own rate, over the complete chromosomes",
-    "chromosomes": 15,
-    "fraction_with_target": -0.114,
-    "coding_target_agrees_with_nearest": -0.136,
-    "coding_target_inside_domain": -0.05,
+    "chromosomes": 16,
+    "fraction_with_target": -0.256,
+    "coding_target_agrees_with_nearest": -0.012,
+    "coding_target_inside_domain": 0.003,
     "against_element_density": {
       "axis": "registry elements per Mb, the stand-in for gene density this run already holds",
-      "fraction_with_target": 0.686,
-      "coding_target_agrees_with_nearest": 0.696,
-      "coding_target_inside_domain": 0.857,
+      "fraction_with_target": 0.729,
+      "coding_target_agrees_with_nearest": 0.515,
+      "coding_target_inside_domain": 0.735,
       "per_chromosome": {
         "chr19": 501.1,
         "chr17": 497.2,
@@ -622,14 +730,15 @@
         "chr18": 273.4,
         "chr21": 259.9,
         "chr13": 224.1,
+        "chrX": 146.7,
         "chrY": 15.8
       }
     },
     "excluding_acrocentric_and_chrY": {
-      "chromosomes": 12,
+      "chromosomes": 13,
       "pooled": {
-        "fraction_with_target": 0.651,
-        "coding_target_agrees_with_nearest": 0.617,
+        "fraction_with_target": 0.649,
+        "coding_target_agrees_with_nearest": 0.618,
         "coding_target_inside_domain": 0.78
       }
     },
@@ -648,7 +757,7 @@
     },
     "reading": "a rate that moves with chromosome size is a rate the small chromosomes bought; chr21 and chr22 are acrocentric and chrY is nearly gene-free, and the compression lane's per-chromosome layers already looked positive there and went negative genome-wide"
   },
-  "requests_total": 370538,
+  "requests_total": 393857,
   "cells": [
     "K562",
     "HepG2",
@@ -680,18 +789,20 @@
       "chr19, 5.77 per Mb, predicted to lose and it wins by 0.7 points"
     ],
     "why": "an excess that is a function of how finely the caller cuts is a statement about resolution rather than about CTCF: where CTCF-only elements are sparse the nodes carry nothing a partition of the same count placed at random does not",
-    "scoreboard": "held out: 2 right, 0 wrong, 1 refused; 12 fitted on and not tests; 9 still to land",
-    "held_out_chromosomes_scored": 2,
+    "scoreboard": "held out: 2 right, 1 wrong, 1 refused; 12 fitted on and not tests; 8 still to land",
+    "held_out_chromosomes_scored": 3,
     "held_out_right": 2,
-    "held_out_wrong": 0,
+    "held_out_wrong": 1,
     "held_out_refused": 1,
-    "verdict": "holding",
+    "verdict": "FAILED on chrX",
     "chromosomes_by_status": {
       "held out: right": [
         "chr11",
         "chr10"
       ],
-      "held out: WRONG": [],
+      "held out: WRONG": [
+        "chrX"
+      ],
       "held out: refused": [
         "chr9"
       ],
@@ -717,8 +828,7 @@
         "chr6",
         "chr5",
         "chr2",
-        "chr1",
-        "chrX"
+        "chr1"
       ]
     },
     "standing_predictions": {
@@ -729,8 +839,7 @@
       "chr6": "positive",
       "chr5": "positive",
       "chr2": "positive",
-      "chr1": "positive",
-      "chrX": "negative"
+      "chr1": "positive"
     },
     "per_chromosome": {
       "chr8": {
@@ -741,7 +850,7 @@
       "chr20": {
         "boundaries_per_mb": 7.4,
         "predicted": "positive",
-        "excess": 0.0106,
+        "excess": 0.0071,
         "actual": "positive",
         "status": "fitted on, not a test"
       },
@@ -758,14 +867,20 @@
       "chr11": {
         "boundaries_per_mb": 7.0,
         "predicted": "positive",
-        "excess": 0.0614,
+        "verdict_as_landed": {
+          "landed": "2026-09-15T00:24",
+          "excess": 0.0614,
+          "draws": 20,
+          "verdict": "right"
+        },
+        "excess": 0.0617,
         "actual": "positive",
         "status": "held out: right"
       },
       "chr18": {
         "boundaries_per_mb": 6.96,
         "predicted": "positive",
-        "excess": 0.0753,
+        "excess": 0.0685,
         "actual": "positive",
         "status": "fitted on, not a test"
       },
@@ -777,7 +892,7 @@
       "chr12": {
         "boundaries_per_mb": 6.91,
         "predicted": "positive",
-        "excess": 0.0368,
+        "excess": 0.0354,
         "actual": "positive",
         "status": "fitted on, not a test"
       },
@@ -789,7 +904,13 @@
       "chr10": {
         "boundaries_per_mb": 6.88,
         "predicted": "positive",
-        "excess": 0.076,
+        "verdict_as_landed": {
+          "landed": "2026-09-15T03:09",
+          "excess": 0.076,
+          "draws": 20,
+          "verdict": "right"
+        },
+        "excess": 0.0717,
         "actual": "positive",
         "status": "held out: right"
       },
@@ -811,7 +932,7 @@
       "chr17": {
         "boundaries_per_mb": 6.55,
         "predicted": "positive",
-        "excess": 0.0463,
+        "excess": 0.0413,
         "actual": "positive",
         "status": "fitted on, not a test"
       },
@@ -825,13 +946,19 @@
       "chr14": {
         "boundaries_per_mb": 5.91,
         "predicted": "too close to call",
-        "excess": 0.0129,
+        "excess": 0.0166,
         "actual": "positive",
         "status": "fitted on, not a test"
       },
       "chr9": {
         "boundaries_per_mb": 5.87,
         "predicted": "too close to call",
+        "verdict_as_landed": {
+          "landed": "2026-09-15T06:22",
+          "excess": 0.0109,
+          "draws": 20,
+          "verdict": "refused"
+        },
         "excess": 0.0109,
         "actual": "positive",
         "status": "held out: refused"
@@ -839,47 +966,57 @@
       "chr13": {
         "boundaries_per_mb": 5.78,
         "predicted": "too close to call",
-        "excess": -0.0126,
+        "excess": -0.0143,
         "actual": "negative",
         "status": "fitted on, not a test"
       },
       "chr19": {
         "boundaries_per_mb": 5.77,
         "predicted": "too close to call",
-        "excess": 0.0072,
+        "excess": 0.008,
         "actual": "positive",
         "status": "fitted on, not a test"
       },
       "chr15": {
         "boundaries_per_mb": 5.31,
         "predicted": "negative",
-        "excess": -0.0093,
+        "excess": -0.0102,
         "actual": "negative",
         "status": "fitted on, not a test"
       },
       "chrX": {
         "boundaries_per_mb": 5.26,
         "predicted": "negative",
-        "status": "still to land"
+        "verdict_as_landed": {
+          "landed": "2026-09-15T07:38",
+          "excess": 0.0007,
+          "draws": 20,
+          "verdict": "WRONG",
+          "note": "predicted negative at 5.26 boundaries per Mb, measured +0.0007, so the rule is wrong. Under the later 200-draw null the same chromosome reads -0.0007 and the rule would score right; that is not a rescue and is not taken as one. The excess is 0.0 with a null scatter of 1.4 points, p 0.94: chrX's sign is not measurable, and the rule made a confident call on it. The refusal band was too narrow, and it is NOT being widened - the remaining chromosomes must test the rule as written."
+        },
+        "recomputes_differently_now": "the current null scores this right; the verdict as landed stands",
+        "excess": -0.0007,
+        "actual": "negative",
+        "status": "held out: WRONG"
       },
       "chr21": {
         "boundaries_per_mb": 4.86,
         "predicted": "negative",
-        "excess": -0.0208,
+        "excess": -0.0221,
         "actual": "negative",
         "status": "fitted on, not a test"
       },
       "chr22": {
         "boundaries_per_mb": 4.84,
         "predicted": "negative",
-        "excess": -0.0058,
+        "excess": -0.0074,
         "actual": "negative",
         "status": "fitted on, not a test"
       },
       "chrY": {
         "boundaries_per_mb": 0.84,
         "predicted": "negative",
-        "excess": -0.2192,
+        "excess": -0.2208,
         "actual": "negative",
         "status": "fitted on, not a test"
       }
@@ -974,6 +1111,31 @@
       "scored": 457272,
       "fraction_with_target": 0.651,
       "coding_target_agrees_with_nearest": 0.618,
+      "coding_target_inside_domain": 0.781
+    },
+    {
+      "chromosomes": 16,
+      "chromosomes_complete": [
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chr9",
+        "chrX",
+        "chrY"
+      ],
+      "scored": 480166,
+      "fraction_with_target": 0.649,
+      "coding_target_agrees_with_nearest": 0.62,
       "coding_target_inside_domain": 0.781
     }
   ]

@@ -113,6 +113,24 @@ def test_the_sign_rule_is_frozen_so_a_failure_cannot_be_refitted_away():
     assert "chrX" not in agw.SIGN_RULE["fixed_on"]  # the one the rule can lose on
 
 
+def test_the_chrX_failure_cannot_be_recomputed_away():
+    """chrX measured +0.0007 under the null in force when the rule was fixed and -0.0007 under the
+    better null adopted afterwards. The quantity is zero and the sign belongs to the seed, so a verdict
+    re-derived from the current control would turn a failure into a pass every time the instrument is
+    improved. The verdict as landed is frozen, and this asserts it stays frozen and stays a failure."""
+    assert agw.HELD_OUT_LOG["chrX"]["verdict"] == "WRONG"
+    assert agw.HELD_OUT_LOG["chrX"]["excess"] == 0.0007  # as measured at 20 draws, when it landed
+    assert "NOT being widened" in agw.HELD_OUT_LOG["chrX"]["note"]
+
+    # the current control says the opposite; the frozen verdict must win, and must say so
+    control = {"per_chromosome": {"chrX": {"excess": -0.0007}}}
+    p = agw.sign_prediction(control, {"chrX": 5.26})
+    assert p["per_chromosome"]["chrX"]["status"] == "held out: WRONG"
+    assert "recomputes_differently_now" in p["per_chromosome"]["chrX"]
+    assert p["verdict"] == "FAILED on chrX"
+    assert p["held_out_wrong"] == 1
+
+
 def test_the_sign_rule_refuses_the_chromosomes_too_near_its_line():
     assert agw.sign_call(7.0) == "positive"
     assert agw.sign_call(4.8) == "negative"
@@ -145,11 +163,12 @@ def test_the_sign_rule_scores_only_the_chromosomes_it_was_not_fitted_on():
 
 
 def test_the_sign_rule_records_a_failure_rather_than_hiding_it():
-    control = {"per_chromosome": {"chr11": {"excess": -0.05}}}  # predicted positive, comes back negative
-    p = agw.sign_prediction(control, {"chr11": 7.0})
+    # chr8 has not landed and is not in the frozen log, so its verdict is derived live
+    control = {"per_chromosome": {"chr8": {"excess": -0.05}}}  # predicted positive, comes back negative
+    p = agw.sign_prediction(control, {"chr8": 7.65})
     assert p["held_out_wrong"] == 1 and p["held_out_right"] == 0
-    assert p["per_chromosome"]["chr11"]["status"] == "held out: WRONG"
-    assert p["verdict"] == "FAILED on chr11"  # it says so in the committed result, in capitals
+    assert p["per_chromosome"]["chr8"]["status"] == "held out: WRONG"
+    assert p["verdict"] == "FAILED on chr8"  # it says so in the committed result, in capitals
 
 
 def test_history_keeps_one_entry_per_chromosome_set(tmp_path):

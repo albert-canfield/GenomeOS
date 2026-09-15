@@ -13,8 +13,10 @@ set of complete chromosomes, so the pooled rates can be watched moving as the sw
 
 The node-containment rate carries its own control, measured on this element set rather than borrowed
 from the archive: the same elements and the same most-moved coding gene, scored against as many
-boundaries placed uniformly at random (20 draws, seed 7), using the same `infer_domains` caller the
-scorer used. It needs the local element tables and takes about half a minute; `--no-control` skips it.
+boundaries placed uniformly at random (200 draws, seed 7), using the same `infer_domains` caller the
+scorer used, and it reports the null's own scatter and a permutation p beside every excess, because ten
+of the first sixteen chromosomes turned out to sit inside that scatter. It needs the local element
+tables and takes about forty seconds; `--no-control` skips it.
 """
 
 from __future__ import annotations
@@ -30,7 +32,9 @@ from genomeos.molecules.proteome import CHROM_LENGTHS
 from genomeos.results import save_result
 
 ARCHIVE = Path("data/knowledge/alphagenome/all_elements")
-SHUFFLES = 20
+# 200 draws, not 20: at 20 the null's own scatter could be seen but not tested, and ten of sixteen
+# chromosomes turned out to sit inside it. A claim about the sign of an excess needs a p-value.
+SHUFFLES = 200
 
 # Chromosomes whose architecture is not the genome's: two acrocentric arms and the male-specific
 # chromosome, all three small and gene-poor. Rates are reported with and without them.
@@ -327,13 +331,27 @@ def node_control(chroms: list[str]) -> dict:
             _inside([0, *sorted(rng.randint(1, length - 1) for _ in edges)], pairs) for _ in range(SHUFFLES)
         ]
         ins, tot = _inside(starts, pairs), len(pairs)
-        rnd = sum(null) / len(null) / tot
+        shares = [x / tot for x in null]
+        rnd = sum(shares) / len(shares)
+        # How far the observed partition sits from the null in units of the null's own spread. The
+        # observed value has no sampling error - it is the actual partition - so the null's scatter is
+        # the whole uncertainty, and an excess inside it is not a sign, it is a coin.
+        var = sum((x - rnd) ** 2 for x in shares) / (len(shares) - 1)
+        sd = var**0.5
+        excess = ins / tot - rnd
+        beat = sum(1 for x in shares if x >= ins / tot)
+        lost = sum(1 for x in shares if x <= ins / tot)
+        p_two_sided = round(2 * min(beat + 1, lost + 1) / (len(shares) + 1), 4)
         rows[chrom] = {
             "coding_named": tot,
             "boundaries": len(edges),
             "inside": round(ins / tot, 4),
             "inside_random": round(rnd, 4),
-            "excess": round(ins / tot - rnd, 4),
+            "inside_random_sd": round(sd, 5),
+            "excess": round(excess, 4),
+            "excess_in_sds": round(excess / sd, 2) if sd else None,
+            "p": min(p_two_sided, 1.0),
+            "distinguishable_from_random": min(p_two_sided, 1.0) < 0.05,
             **_shape(chrom, length, starts, pairs, len(coding)),
         }
     tot = sum(r["coding_named"] for r in rows.values())
@@ -389,6 +407,30 @@ SIGN_RULE = {
     "the same count placed at random does not",
 }
 
+# The verdict on each held-out chromosome, written down when it landed and never recomputed. The
+# scoring below re-derives verdicts from whatever the current control says, and that is exactly how a
+# failure disappears: chrX measured +0.0007 under the 20-draw null in force when the rule was fixed,
+# which is a failure, and -0.0007 under the 200-draw null adopted an hour later, which is a pass. The
+# quantity is zero either way and the sign belongs to the seed. A verdict that moves when the
+# instrument is improved is not a verdict, so the ones that count are frozen here.
+HELD_OUT_LOG = {
+    "chr11": {"landed": "2026-09-15T00:24", "excess": 0.0614, "draws": 20, "verdict": "right"},
+    "chr10": {"landed": "2026-09-15T03:09", "excess": 0.0760, "draws": 20, "verdict": "right"},
+    "chr9": {"landed": "2026-09-15T06:22", "excess": 0.0109, "draws": 20, "verdict": "refused"},
+    "chrX": {
+        "landed": "2026-09-15T07:38",
+        "excess": 0.0007,
+        "draws": 20,
+        "verdict": "WRONG",
+        "note": "predicted negative at 5.26 boundaries per Mb, measured +0.0007, so the rule is wrong. "
+        "Under the later 200-draw null the same chromosome reads -0.0007 and the rule would score "
+        "right; that is not a rescue and is not taken as one. The excess is 0.0 with a null scatter of "
+        "1.4 points, p 0.94: chrX's sign is not measurable, and the rule made a confident call on it. "
+        "The refusal band was too narrow, and it is NOT being widened - the remaining chromosomes must "
+        "test the rule as written.",
+    },
+}
+
 
 # One word per chromosome, so a reader who has not followed the night can see which chromosomes the
 # rule was fitted on and which were tests of it without reconstructing either set.
@@ -438,10 +480,26 @@ def sign_prediction(control: dict, density: dict[str, float]) -> dict:
     for chrom, per_mb in sorted(density.items(), key=lambda kv: -kv[1]):
         call = sign_call(per_mb)
         row = {"boundaries_per_mb": per_mb, "predicted": call}
+        logged = HELD_OUT_LOG.get(chrom)
         if chrom not in measured:
             status = "still to land"
         elif chrom in SIGN_RULE["fixed_on"]:
             status = "fitted on, not a test"
+        elif logged:
+            # the verdict recorded when it landed, not one re-derived from the current null
+            status = {"right": "held out: right", "WRONG": "held out: WRONG"}.get(
+                logged["verdict"], "held out: refused"
+            )
+            row["verdict_as_landed"] = logged
+            live = (
+                "refused"
+                if call == "too close to call"
+                else ("right" if (call == "positive") == (measured[chrom]["excess"] > 0) else "WRONG")
+            )
+            if live != logged["verdict"]:
+                row["recomputes_differently_now"] = (
+                    f"the current null scores this {live}; the verdict as landed stands"
+                )
         elif call == "too close to call":
             status = "held out: refused"
         else:
