@@ -30,8 +30,30 @@ def main() -> int:
     print("registered before the run:")
     print(f"  {out['prediction_registered_before_the_run']}")
     print()
-    print("no published case is runnable:")
-    print(f"  {out['no_case_is_runnable']}")
+    for c in out["cases"]:
+        e = c["expected"]
+        print(f"{c['locus']}  ({e['span_source']} span, {e['kind']})")
+        print(f"  phenotype: {e['phenotype']}")
+        cen = c["boundary_census"]
+        print(f"  CTCF-only between donor and recipient: {cen['ctcf_only_between_donor_and_recipient']}")
+        for row in c["spans_across_the_published_size_range"]:
+            cl = row["claims"]
+            print(
+                f"  span {row['length'] / 1e6:.2f} Mb  donor removed={row['removes_the_donor_entire']}"
+                f" recipient intact={row['leaves_the_recipient_intact']}"
+                f"  boundary_lost={cl['boundary_lost']} new_adjacency={cl['new_adjacency']}"
+            )
+    print()
+    a3 = out["aggregate"]
+    for claim in ("separated_before", "boundary_lost", "new_adjacency", "recipient_named"):
+        p3, q3 = a3["published"][claim], a3["controls"][claim]
+        print(f"{claim:18s} published {p3['k']}/{p3['n']}   matched random {q3['k']}/{q3['n']}")
+    n3 = a3["recipient_named_where_a_deletion_was_scored"]
+    print(
+        f"{'claim 3, gated':18s} published {n3['published']['k']}/{n3['published']['n']}"
+        f"   matched random {n3['controls']['k']}/{n3['controls']['n']}"
+        f"   (judgeable={n3['judgeable']})"
+    )
     print()
     b = out["boundary_behaviour"]
     lo, hi = b["published_deletion_size"]

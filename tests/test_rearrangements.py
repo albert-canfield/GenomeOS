@@ -87,13 +87,23 @@ def test_the_cases_that_cannot_run_say_what_each_is_waiting_for():
         )
 
 
-def test_no_case_is_placed_approximately():
-    """The rule: if a breakpoint cannot be had cleanly, drop the case rather than guess it.
+def test_a_stated_span_matches_the_published_construction():
+    """A case may be run on a stated span only if the span is the published SHAPE, not a guess.
 
-    Applied to all four, including the EPHA4-to-PAX3 deletion an earlier run placed approximately.
+    The EPHA4-to-PAX3 deletion was withdrawn when its stated span turned out to exclude EPHA4, which
+    the published deletions remove. It is back with a span anchored at the recipient's gene start and
+    sized across the published range, and the record has to carry both.
     """
-    assert CASES == (), "a case is being run without published breakpoints"
-    assert "EPHA4_PAX3_deletion" in NOT_YET_RUNNABLE
+    for c in CASES:
+        assert c.span_source == "stated"
+        assert c.published_size_range and c.published_size_range[0] < c.published_size_range[1]
+        assert len(c.anchor) > 80, f"{c.locus}: a stated span must say what it is anchored to"
+        assert "STATED, not cited" in c.span_citation, c.locus
+
+
+def test_the_three_cases_with_no_coordinates_stay_withdrawn():
+    assert "EPHA4_PAX3_deletion" not in NOT_YET_RUNNABLE
+    assert len(NOT_YET_RUNNABLE) == 3
 
 
 def test_the_analytic_note_says_why_two_of_the_three_claims_cannot_discriminate():
@@ -116,9 +126,24 @@ def test_the_node_model_is_never_counted_as_a_derived_hit():
 
 
 @needs_result
-def test_the_result_says_plainly_that_no_case_is_runnable():
-    assert RESULT["cases"] == []
-    assert "nothing to lift over" in RESULT["no_case_is_runnable"]
+def test_a_claim_the_construction_cannot_ask_is_not_scored_as_a_miss():
+    """The published deletion removes the donor gene, so donor-to-recipient adjacency is unaskable.
+
+    Recording that as False would say the model failed a test it was never given.
+    """
+    for c in RESULT["cases"]:
+        for row in c["spans_across_the_published_size_range"]:
+            cl = row["claims"]
+            if cl["donor_or_recipient_deleted"]:
+                assert cl["boundary_lost"] is None and cl["new_adjacency"] is None, c["locus"]
+    a = RESULT["aggregate"]["published"]
+    assert a["boundary_lost"]["not_applicable"] >= 0
+
+
+@needs_result
+def test_the_withdrawal_and_the_reinstatement_are_both_on_the_record():
+    assert "wrong in kind" in RESULT["withdrawn_and_reinstated"]
+    assert "STATED and not cited" in RESULT["withdrawn_and_reinstated"]
 
 
 @needs_result

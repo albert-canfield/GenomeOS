@@ -65,6 +65,10 @@ MATCH_TSS = 0.35  # coding TSSs inside the span, within this fraction of the pub
 KEEP_OUT = 200_000  # a control span stays this far from the published one
 
 
+#: the one thing about the published deletions that IS citable: their size (Lupianez et al. 2015)
+PUBLISHED_DELETION_SIZE = (1_750_000, 1_900_000)
+
+
 @dataclass(frozen=True)
 class Rearrangement:
     """One published rearrangement, written down before anything is read."""
@@ -80,6 +84,11 @@ class Rearrangement:
     citations: tuple[str, ...]
     answer_from: tuple[str, ...]
     span: tuple[int, int] | None = None  # filled from the genes when stated
+    #: the published SIZE range, when the size is citable and the breakpoints are not. The case
+    #: is then run at several spans across it, so the uncertainty is carried rather than collapsed.
+    published_size_range: tuple[int, int] | None = None
+    #: the fixed end the stated span is anchored to, and why that anchor is the published one
+    anchor: str = ""
     note: str = ""
 
     def as_dict(self) -> dict[str, Any]:
@@ -92,6 +101,8 @@ class Rearrangement:
             "phenotype": self.phenotype,
             "span": list(self.span) if self.span else None,
             "span_source": self.span_source,
+            "published_size_range": list(self.published_size_range) if self.published_size_range else None,
+            "anchor": self.anchor,
             "span_citation": self.span_citation,
             "citations": list(self.citations),
             "answer_from": list(self.answer_from),
@@ -106,19 +117,51 @@ class Rearrangement:
 #: coordinate. So the blocker was never the liftover - UCSC's chain and this project's chain reader
 #: (attribution/human_panel.py) would take seconds - it is that there is no number to lift.
 #: Placing a case approximately is the one thing the rule forbids, so all four are recorded here.
-CASES: tuple[Rearrangement, ...] = ()
+CASES: tuple[Rearrangement, ...] = (
+    Rearrangement(
+        locus="EPHA4_PAX3_deletion",
+        chrom="chr2",
+        kind="deletion",
+        donor="EPHA4",
+        recipient="PAX3",
+        phenotype=(
+            "brachydactyly: short digits on the preaxial side, from PAX3 falling under the EPHA4"
+            " limb enhancers once the boundary between their domains is gone"
+        ),
+        span_source="stated",
+        published_size_range=PUBLISHED_DELETION_SIZE,
+        anchor=(
+            "the 3' end is PAX3's GENCODE gene start (chr2:222,199,886): the published deletions"
+            " extend into the NON-CODING part of the PAX3 domain and PAX3 itself survives to be"
+            " misexpressed, so the deletion must stop before the gene. The 5' end follows from the"
+            " published size, and at every size in the range it falls below EPHA4's start"
+            " (chr2:221,418,026), so EPHA4 is removed entire, as published"
+        ),
+        span_citation=(
+            "Lupianez et al. 2015, Cell 161:1012: heterozygous deletions of 1.75 to 1.9 Mb at"
+            " 2q35-36 remove EPHA4 with much of its domain and extend into the non-coding part of"
+            " the PAX3 domain, taking the boundary with them. The SIZE is cited and the breakpoints"
+            " are not - the paper states no human coordinates anywhere in its accessible text - so"
+            " this span is STATED, not cited: anchored at PAX3's gene start and run at every size"
+            " across the published range, so the uncertainty is reported rather than hidden. An"
+            " earlier version of this file stated a 626 kb intergenic span that excluded EPHA4; that"
+            " was wrong in kind and the case was withdrawn until it could be stated faithfully"
+        ),
+        citations=(
+            "Lupianez et al. 2015, Cell 161:1012 (disruptions of topological chromatin domains cause"
+            " pathogenic rewiring of gene-enhancer interactions)",
+            "Lupianez, Spielmann and Mundlos 2016, Trends Genet 32:225 (breaking TADs)",
+        ),
+        answer_from=("human pedigrees with aCGH", "4C-seq in patient fibroblasts", "mouse models"),
+        note=(
+            "the only claim this case can still decide is the third one - which gene the machinery"
+            " names - because the first two are guaranteed by how the node model is built"
+        ),
+    ),
+)
 
 #: published cases and exactly what each is waiting for. None of these is "needs a liftover".
 NOT_YET_RUNNABLE = {
-    "EPHA4_PAX3_deletion": (
-        "brachydactyly (NOT polydactyly - an earlier version of this file had the phenotype wrong):"
-        " heterozygous deletions of 1.75 to 1.9 Mb at 2q35-36 remove EPHA4 together with much of its"
-        " domain and extend into the non-coding part of the PAX3 domain, taking the boundary with"
-        " them, so PAX3 falls under the EPHA4 limb enhancers (Lupianez et al. 2015, Cell 161:1012)."
-        " This case WAS run here with a stated span, and the stated span was wrong in kind: it was"
-        " the 626 kb intergenic interval between EPHA4 and PAX3, which excludes EPHA4, where the"
-        " published deletion is three times longer and includes it. Needs the real breakpoints"
-    ),
     "EPHA4_IHH_duplication": (
         "polydactyly: a duplication of about 900 kb at 2q35 brings IHH under the EPHA4 enhancers"
         " (Lupianez et al. 2015). The effect depends on where the breakpoints fall INSIDE the"
@@ -136,9 +179,6 @@ NOT_YET_RUNNABLE = {
         " locus panel, so the expectation would not be independent"
     ),
 }
-
-#: the one thing about the published deletions that IS citable: their size (Lupianez et al. 2015)
-PUBLISHED_DELETION_SIZE = (1_750_000, 1_900_000)
 
 #: why claims one and two could never have discriminated, whatever the coordinates turn out to be
 ANALYTIC_NOTE = (
@@ -243,16 +283,22 @@ def claims_for(ch, span: tuple[int, int], kind: str, donor_pos: int, recipient_p
     walls_after = ctcf_between(
         rearranged_ccres(ch.ccres, span, kind), d1 if d1 is not None else 0, r1 if r1 is not None else 0
     )
+    gone = d1 is None or r1 is None
     return {
+        # the published deletion removes EPHA4 itself, so the donor GENE does not survive to share a
+        # node with anything. The mechanism is that the donor's surviving ENHANCERS reach the
+        # recipient, and this module has no published coordinate for them. Marked not-applicable
+        # rather than False: a claim the construction cannot ask is not a claim the model failed.
+        "donor_or_recipient_deleted": gone,
         "separated_before": bool(d0 and r0 and d0 != r0),
         "node_before": {"donor": d0, "recipient": r0},
         "node_after": {"donor": d1n, "recipient": r1n},
         "ctcf_between_before": len(walls_before),
         "ctcf_between_after": len(walls_after),
         # claim 1: the node model loses a boundary between the pair
-        "boundary_lost": len(walls_after) < len(walls_before),
+        "boundary_lost": None if gone else len(walls_after) < len(walls_before),
         # claim 2: a new adjacency appears - the pair now shares a node when it did not
-        "new_adjacency": bool(d0 and r0 and d0 != r0 and d1n and r1n and d1n == r1n),
+        "new_adjacency": None if gone else bool(d0 and r0 and d0 != r0 and d1n and r1n and d1n == r1n),
         "nodes_before": len(before),
         "nodes_after": len(after),
     }
@@ -396,14 +442,88 @@ def boundary_behaviour(chrom: str = "chr2", results_dir: Path = RESULTS_DIR, pro
         ch.close()
 
 
+def spans_across_the_range(case: Rearrangement, anchor_end: int, steps: int = 4) -> list[tuple[int, int]]:
+    """One span per size across the published range, all ending at the anchor.
+
+    The breakpoints are not published; the size is. Running every size in the range and reporting
+    them together is the honest form of "take the published uncertainty with the coordinates".
+    """
+    lo, hi = case.published_size_range or (0, 0)
+    if not lo:
+        return [case.span] if case.span else []
+    step = (hi - lo) // max(1, steps - 1)
+    return [(anchor_end - (lo + i * step), anchor_end) for i in range(steps)]
+
+
 def run(results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
+    from genomeos.benchmark.loci import Chromosome, tss_of
+
     t0 = time.time()
+    say = progress or (lambda _m: None)
     out_cases: list[dict[str, Any]] = []
+    chroms: dict[str, Any] = {}
+    try:
+        for case in CASES:
+            ch = chroms.get(case.chrom) or chroms.setdefault(case.chrom, Chromosome(case.chrom, results_dir))
+            genes = {
+                g.symbol: g for g in ch.annotation.genes.values() if g.symbol in (case.donor, case.recipient)
+            }
+            if len(genes) < 2:
+                out_cases.append({"locus": case.locus, "pending": "donor or recipient not in GENCODE"})
+                continue
+            d, r = genes[case.donor], genes[case.recipient]
+            donor_pos, recipient_pos = tss_of(d), tss_of(r)
+            walls = ctcf_between(ch.ccres, donor_pos, recipient_pos)
+            named = named_by_a_derived_layer(ch, results_dir, recipient_pos, case.recipient)
+            sized = []
+            for span in spans_across_the_range(case, r.locus.start):
+                row = {
+                    "span": list(span),
+                    "length": span[1] - span[0],
+                    "removes_the_donor_entire": span[0] <= d.locus.start and d.locus.end <= span[1],
+                    "leaves_the_recipient_intact": span[1] <= r.locus.start,
+                    "ctcf_crossed": len(ctcf_between(ch.ccres, *span)),
+                    "claims": claims_for(ch, span, case.kind, donor_pos, recipient_pos),
+                }
+                row["claims"]["recipient_named"] = named["names_the_recipient"]
+                sized.append(row)
+            say(f"{case.locus}: {len(sized)} spans across the published size range")
+            widest = max(sized, key=lambda x: x["length"])
+            controls = matched_controls(ch, case, tuple(widest["span"]), widest, results_dir)
+            say(f"{case.locus}: {len(controls)} matched random rearrangements")
+            out_cases.append(
+                {
+                    "locus": case.locus,
+                    "expected": case.as_dict(),
+                    "boundary_census": {
+                        "ctcf_only_between_donor_and_recipient": len(walls),
+                        "elements": walls[:8],
+                        "there_is_a_boundary_at_all": bool(walls),
+                        "evidence": EVIDENCE["boundary_census"],
+                    },
+                    "spans_across_the_published_size_range": sized,
+                    "published": widest,
+                    "recipient_named": named,
+                    "controls": controls,
+                }
+            )
+    finally:
+        for ch in chroms.values():
+            ch.close()
     behaviour = boundary_behaviour(results_dir=results_dir, progress=progress)
     return {
         "result": "loci_rearrangements",
         "prediction_registered_before_the_run": PREDICTION,
         "cases": out_cases,
+        "aggregate": aggregate(out_cases),
+        "withdrawn_and_reinstated": (
+            "The EPHA4-to-PAX3 deletion was withdrawn when hunting its breakpoints showed the span"
+            " stated for it was wrong in kind (626 kb intergenic, excluding EPHA4, where the"
+            " published deletions are 1.75 to 1.9 Mb and include it) and its phenotype was wrong"
+            " (brachydactyly, not polydactyly). It is reinstated here with a span that matches the"
+            " published construction, still STATED and not cited, run at every size across the"
+            " published range. The other three cases stay withdrawn: no coordinate for them exists."
+        ),
         "no_case_is_runnable": (
             "Every published case needs human breakpoint coordinates and the paper states none: the"
             " accessible text gives sizes and gene content only. Two routes were tried (the PMC full"
@@ -432,9 +552,16 @@ def aggregate(cases: list[dict[str, Any]]) -> dict[str, Any]:
     neg = [x["claims"] for c in cases for x in c.get("controls", [])]
 
     def rate(rows, k):
-        n = len(rows)
-        got = sum(1 for r in rows if r.get(k))
-        return {"k": got, "n": n, "rate": round(got / n, 3) if n else None}
+        """Only rows where the claim applies: a None is not a miss, it is a question not asked."""
+        asked = [r for r in rows if r.get(k) is not None]
+        n = len(asked)
+        got = sum(1 for r in asked if r[k])
+        return {
+            "k": got,
+            "n": n,
+            "rate": round(got / n, 3) if n else None,
+            "not_applicable": len(rows) - n,
+        }
 
     pub_named = [c["recipient_named"] for c in cases if c.get("recipient_named")]
     ctl_named = [x["recipient_named"] for c in cases for x in c.get("controls", [])]

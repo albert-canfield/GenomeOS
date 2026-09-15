@@ -856,3 +856,65 @@ it still cannot be scored because no control recipient has a deletion near it un
 
 That sharpens what the coordinator is spending chr2 on. It is not that claim three is the last of
 three; it is that claim three is **the only one there ever was**.
+
+## 14. chr2 landed, claim 3 scored, and the verdict (2026-09-15)
+
+chr2 completed at 79,639 elements, the largest chromosome in the sweep, promoted deliberately so
+that the only claim capable of discriminating could be scored at the controls as well as at the
+case. It now can be.
+
+**The case was reinstated, on a stated span, and that word is load-bearing.** The published
+breakpoints still do not exist in any accessible form; what is citable is the size. A span anchored
+at PAX3's GENCODE gene start and sized across the published 1.75 to 1.9 Mb range removes EPHA4
+entire at every size and leaves PAX3 alive to be misexpressed, which is the published construction -
+unlike the 626 kb intergenic span this file used before, which excluded EPHA4 and was withdrawn.
+The case is run at every size across the range rather than at one, so the published uncertainty is
+reported instead of collapsed. Phenotype corrected to brachydactyly. The other three cases stay
+withdrawn.
+
+### What a faithful span turns out not to be able to ask
+
+At every size in the published range the deletion **removes the donor gene itself**. So
+"donor and recipient end up in one node" is not a question this case can put: EPHA4 does not survive
+to share a node with anything. The published mechanism is that EPHA4's surviving *enhancers* reach
+PAX3, and this module has no published coordinate for that enhancer cluster. Claims one and two are
+therefore recorded as **not applicable** for the case - a question the construction cannot ask is
+not a test the model failed - and they remain, as section 13 showed, arithmetic anyway: 5 of 5 at
+matched random deletions, 4 of 4 at size-matched ones anywhere on chr2.
+
+### Claim 3, the only claim there ever was
+
+| claim | published | 5 matched random rearrangements |
+|---|---|---|
+| the pair is in different nodes to begin with | 1/1 | 5/5 |
+| loses a boundary between them | **not applicable** | 5/5 |
+| a new adjacency appears | **not applicable** | 5/5 |
+| **a derived layer names the recipient gene** | **1/1** | **5/5** |
+
+Gated on coverage, as it must be: chr2 is swept, so 4 of 4 control recipients now have deletions
+scored near them and the claim is judgeable for the first time. It separates nothing. PAX3 is named
+by an already-computed deletion in its neighbourhood, and so is the recipient of every matched
+random deletion, 5 times out of 5.
+
+**So: the node model gives a random cut's answer on every claim the experiment can ask.** That is
+the verdict. Two claims were arithmetic and could never have discriminated; the third, the one this
+whole module was built around and the one chr2 was promoted for, gives the same answer at the
+published rearrangement and at matched random cuts of the same size on the same chromosome.
+
+It is the same shape as the panel's oldest finding, one level up: naming a target fires at 90% of
+matched windows, and naming the gene at the far end of a boundary-crossing deletion fires at 100% of
+matched deletions. What a gene is near, and what a cut puts it next to, are not evidence.
+
+### What this does and does not say
+
+It does not say TAD boundaries are not real. It says **our** boundary model - CTCF-only cCREs, no
+Hi-C, confidence 0.4 - carries no information that distinguishes a pathogenic rearrangement from a
+random one, on any claim this experiment can put to it. That is the mechanistic counterpart to the
+statistical result the fold lane reached the same night: an excess distinguishable from random on
+six chromosomes, all cut between 6.55 and 7.00 boundaries per Mb, with the finest-cut chromosome of
+all indistinguishable, and ten of sixteen carrying no measurable excess either way.
+
+The honest next step is not another rearrangement. It is a boundary model that is not a proxy:
+Hi-C-called domains, which the project already holds for five cell types under
+`data/knowledge/hic`, against which the same three claims could be asked without changing a line of
+this module.
