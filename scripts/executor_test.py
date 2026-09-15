@@ -79,6 +79,49 @@ def wide(args, say, t0: float) -> None:
     say(f"saved {save_result('executor_mpra_wide_run', out)}")
 
 
+def replicate(args, say, t0: float) -> None:
+    """The replication of E2 and E3 away from chr21 and chr22: assemble, then spend the quota."""
+    table = ex.LANE / "replication_assembled.json.gz"
+    if not args.run:
+        built = ex.replication_pairs(progress=say)
+        ex.LANE.mkdir(parents=True, exist_ok=True)
+        with gzip.open(table, "wt") as fh:
+            json.dump(built, fh, default=str)
+        summary = ex.replication_summary(built)
+        summary["seconds"] = round(time.time() - t0, 1)
+        say(f"saved {save_result('executor_replication', summary)}")
+        return
+    if not args.quota_handed:
+        raise SystemExit("part two spends AlphaGenome requests: pass --quota-handed once the quota is yours")
+    with gzip.open(table, "rt") as fh:
+        pairs = json.load(fh)["pairs"]
+    wanted = set(args.endpoints.split(",")) & set(ex.REPLICATION_ENDPOINTS) or {ex.REPLICATION_ENDPOINTS[0]}
+    pairs = [p for p in pairs if p["endpoint"] in wanted]
+    out = ex.run_pairs(
+        pairs,
+        ex.live_scorer(),
+        max_requests=args.max_requests,
+        progress=say,
+        max_pairs=args.max_pairs,
+        looks_at=(ex.REPLICATION_ENDPOINTS[0],) if ex.REPLICATION_ENDPOINTS[0] in wanted else (),
+        endpoints=ex.REPLICATION_ENDPOINTS,
+    )
+    rows = out.pop("rows")
+    out["no_call_grid"] = {e: [ex.recall(rows, e, t) for t in (0.0, 0.001, 0.01)] for e in sorted(wanted)}
+    out["leave_one_out"] = {e: ex.leave_one_out(rows, e) for e in sorted(wanted)}
+    with gzip.open(ex.LANE / f"replication_rows_{'-'.join(sorted(wanted))}.json.gz", "wt") as fh:
+        json.dump(rows, fh)
+    if set(ex.REPLICATION_ENDPOINTS) <= wanted:
+        out["dilution_again"] = ex.compare_endpoints(rows, rows, *ex.REPLICATION_ENDPOINTS)
+    out["against_the_discovery_run"] = {
+        "E2_eqtl": "units 38 of 56, controls 30 of 73, +0.268 at p 0.0021 on chr21 and chr22",
+        "E3_eqtl_linked": "units 239 of 450, controls 351 of 749, +0.062 at p 0.021 on chr21 and chr22",
+    }
+    out["pre_registration"] = ex.E2_REPLICATION
+    out["seconds"] = round(time.time() - t0, 1)
+    say(f"saved {save_result('executor_replication_run', out)}")
+
+
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--chroms", default="chr21,chr22")
@@ -88,6 +131,11 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--max-pairs", type=int, default=None, help="stop at this many pairs as well")
     ap.add_argument(
         "--endpoints", default="E1_mpra,E2_eqtl", help="E3 runs only when the quota holder agrees"
+    )
+    ap.add_argument(
+        "--replicate",
+        action="store_true",
+        help="E2 and E3 asked again on every catalogued chromosome but chr21 and chr22",
     )
     ap.add_argument(
         "--wide",
@@ -102,6 +150,9 @@ def main(argv: list[str] | None = None) -> None:
 
     if args.wide:
         wide(args, say, t0)
+        return
+    if args.replicate:
+        replicate(args, say, t0)
         return
     table = ex.LANE / "assembled.json.gz"
     if not args.run:

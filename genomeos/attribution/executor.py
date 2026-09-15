@@ -257,6 +257,87 @@ CRITERION: dict[str, Any] = {
     ),
 }
 
+E2_REPLICATION: dict[str, Any] = {
+    "written": (
+        "2026-09-15, before any model request of the replication and before a pair of it was scored; the "
+        "human panel had just reached 19 chromosomes and the shortlist 123,667 units with a measured value"
+    ),
+    "why": (
+        "E2 is the strongest result this lane has (+0.268, units 38 of 56 against controls 30 of 73, p "
+        "0.0021) and E3 showed its agreement follows causality rather than the neighbourhood. Both rest on "
+        "161 pairs from chr21 and chr22, the two chromosomes that happened to be scored first, and chr22 "
+        "carried the difference while chr21 did not reach significance alone. A claim that holds on those "
+        "two and nowhere else has caught this project four times already, so the question is asked again "
+        "where the answer can be different"
+    ),
+    "population": (
+        "storage units on the catalogued chromosomes other than chr21 and chr22, which are the discovery "
+        "set and are excluded from the replication claim entirely. E2R_eqtl_replication: the unit's "
+        "recurring value is a variant DAP-G fine-maps (PIP at or above 0.5) for a gene with GTEx p at or "
+        "below 1e-5 and one sign across tissues. E3R_eqtl_linked_replication: the other significant eQTL "
+        "values, which are usually linked to a cause rather than causal"
+    ),
+    "unchanged": (
+        "everything the first run fixed stays fixed: the read-out (the gene GTEx names, the track matching "
+        "the most significant tissue else the mean over the gene's tracks), the measured sign (GTEx slope "
+        "for the alternative allele), the no-call at 0.001 with the 0, 0.001 and 0.01 grid, two matched "
+        "controls per unit from the same chromosome within 250 kb with the same GC stratum and, where the "
+        "neighbourhood allows, the same timing tertile and value count, panel r-squared under 0.2, no "
+        "measured value of their own, borrowing the unit's gene, tissue and measured sign, each unit "
+        "counted once and each control once"
+    ),
+    "order": (
+        "round robin over chromosomes, strongest evidence first inside each: the first requests answer "
+        "whether the effect appears on chromosomes the original never saw, not which chromosome has the "
+        "most units. A unit's two pairs stay together, so a stop leaves no half-answered unit. E2R is "
+        "spent before E3R"
+    ),
+    "alpha_spending": {"look_1_pairs": 150, "alpha_1": 0.0005, "look_2_pairs": 400, "alpha_2": 0.002},
+    "final_alpha": 0.01,
+    "stopping": (
+        "unchanged: at 150 and 400 pairs an endpoint stops for success at its alpha or for futility if the "
+        "upper 95% bound of the difference is below 0.05; otherwise the run ends at the budget and is read "
+        "at 0.01. E3R never stops the run and is read against E2R by the hold-out's own rule "
+        "(compare_endpoints)"
+    ),
+    "replicates": (
+        "the pooled difference on the replication chromosomes is at or above 0.10 with one-sided Fisher p "
+        "at or below the alpha of the look, AND no single chromosome's removal takes the pooled difference "
+        "below 0.05 (leave_one_out). The second half is the point: it is what would have caught a claim "
+        "carried by one chromosome, and E2 itself would have passed it only because chr21 and chr22 both "
+        "leaned the same way"
+    ),
+    "fails_to_replicate": (
+        "the pooled difference is at or below 0 with the budget spent, or the run stops for futility. Then "
+        "E2's +0.268 belongs to chr21 and chr22 or to 161 pairs, the executor claim loses the result it "
+        "rested on, and E3's dilution becomes a statement about two chromosomes"
+    ),
+    "resolves_nothing": (
+        "a pooled difference between 0 and 0.10, or p above the alpha with the upper 95% bound above 0.05, "
+        "or a pooled difference that only clears 0.10 while one chromosome carries it (leave-one-out below "
+        "0.05). The last case is reported as 'not replicated as a genome-wide claim', never as a success"
+    ),
+    "dilution_again": (
+        "E3R is the hold-out asked at power: if a unit executes its value, E3R's difference should again be "
+        "clearly smaller than E2R's, with the gap's one-sided 95% lower bound above zero. If the two match "
+        "this time, the reading is the neighbourhood and not causality, whatever the first run found"
+    ),
+    "what_a_success_would_still_not_mean": (
+        "this endpoint is one model agreeing with fine-mapping. The widened E1, the endpoint whose outcome "
+        "is an external measurement, came back at +0.014 with an upper bound of 0.073 and resolved nothing, "
+        "and the benchmark lane has since shown that a model producing a direction is evidence of having "
+        "been scored rather than of an element doing anything. The only part of this work that does not "
+        "depend on AlphaGenome is the measured-against-measured reading: MPRA direction against GTEx slope, "
+        "0.670 where DAP-G fine-maps the variant and 0.518 over all of them, with no model in between. A "
+        "replication here strengthens the pattern; it does not move the evidence outside the model"
+    ),
+    "caveat": (
+        "the same ENCODE caveat as E2: the model learned from RNA-seq tracks and GTEx expression is the "
+        "same kind of measurement. Five chromosomes (chr1 to chr5) have no panel yet, so 'genome-wide' "
+        "means 17 replication chromosomes, and chrY contributes almost nothing"
+    ),
+}
+
 E1_WIDE: dict[str, Any] = {
     "written": "2026-09-14, before any model request of the widened endpoint and before any pair was scored",
     "why": (
@@ -617,6 +698,152 @@ def tested_variant(unit: dict[str, Any]) -> dict[str, Any] | None:
         ):
             best = cand
     return best
+
+
+# ------------------------------------------------------------------------------------------------
+# The replication: E2 and E3 asked again on every catalogued chromosome but the discovery pair
+# ------------------------------------------------------------------------------------------------
+DISCOVERY_CHROMS = ("chr21", "chr22")  # where E2 and E3 were found: excluded from the replication
+GTEX_WIDE = LANE / "gtex_wide"  # the genome-wide distillation, kept apart from the first run's
+REPLICATION_ENDPOINTS = ("E2R_eqtl_replication", "E3R_eqtl_linked_replication")
+REPLICATION_OF = {"E2_eqtl": REPLICATION_ENDPOINTS[0], "E3_eqtl_linked": REPLICATION_ENDPOINTS[1]}
+
+
+def catalogued_chroms(cache: Path = PANEL_CACHE) -> list[str]:
+    """The chromosomes the human panel has catalogued, in genome order."""
+    have = {p.parent.name for p in cache.glob("chr*/storage_catalogue.json.gz")}
+    return [c for c in MAIN_CHROMS if c in have]
+
+
+def shard_gtex(directory: Path = GTEX_WIDE) -> Path:
+    """The distilled hits split into one file per chromosome, written once.
+
+    Without this every chromosome's assembly would scan all 49 tissue files again.
+    """
+    out = directory / "by_chrom"
+    if out.exists() and any(out.glob("*.tsv")):
+        return out
+    out.mkdir(parents=True, exist_ok=True)
+    handles: dict[str, Any] = {}
+    for p in sorted(directory.glob("hits_*.tsv")):
+        with p.open() as fh:
+            next(fh, None)
+            for line in fh:
+                chrom = line.split("\t", 3)[1]
+                h = handles.get(chrom)
+                if h is None:
+                    h = handles[chrom] = (out / f"{chrom}.tsv").open("w")
+                h.write(line)
+    for h in handles.values():
+        h.close()
+    return out
+
+
+def gtex_of_chrom(chrom: str, shards: Path) -> dict[tuple[str, int], list[dict[str, Any]]]:
+    """One chromosome's significant pairs, keyed the way gtex_by_variant keys them."""
+    out: dict[tuple[str, int], list[dict[str, Any]]] = {}
+    p = shards / f"{chrom}.tsv"
+    if not p.exists():
+        return out
+    with p.open() as fh:
+        for line in fh:
+            f = line.rstrip("\n").split("\t")
+            out.setdefault((f[1], int(f[2])), []).append(
+                {
+                    "tissue": f[0],
+                    "ref": f[3],
+                    "alt": f[4],
+                    "gene_id": f[5],
+                    "slope": float(f[6]),
+                    "pval": float(f[7]),
+                }
+            )
+    return out
+
+
+def _units_in_order(pairs: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
+    """A chromosome's pairs grouped by unit, each group kept together and in its own order."""
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for p in pairs:
+        groups.setdefault(p["unit"], []).append(p)
+    return list(groups.values())
+
+
+def round_robin(pairs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """One unit from each chromosome in turn, endpoint by endpoint: breadth before depth.
+
+    The first requests then answer whether the effect appears away from the discovery chromosomes,
+    which is the question, instead of filling up on whichever chromosome has the most units.
+    """
+    out: list[dict[str, Any]] = []
+    for endpoint in REPLICATION_ENDPOINTS:
+        queues: dict[str, list[list[dict[str, Any]]]] = {}
+        for p in pairs:
+            if p["endpoint"] == endpoint:
+                queues.setdefault(p["unit"].split(":")[0], []).append(p)
+        ordered = {c: _units_in_order(v) for c, v in queues.items()}
+        while any(ordered.values()):
+            for c in sorted(ordered, key=lambda c: MAIN_CHROMS.index(c)):
+                if ordered[c]:
+                    out.extend(ordered[c].pop(0))
+    for i, p in enumerate(out, 1):
+        p["order"] = i
+    return out
+
+
+def replication_pairs(
+    chroms: list[str] | None = None, shards: Path | None = None, progress=None
+) -> dict[str, Any]:
+    """Assemble E2R and E3R chromosome by chromosome, keeping only the pairs. No model request."""
+    chroms = chroms or [c for c in catalogued_chroms() if c not in DISCOVERY_CHROMS]
+    shards = shards or shard_gtex()
+    say = progress or (lambda *a: None)
+    pairs: list[dict[str, Any]] = []
+    counts: dict[str, Any] = {}
+    unmatched: Counter = Counter()
+    for chrom in chroms:
+        gtex = gtex_of_chrom(chrom, shards)
+        if not gtex:
+            say(f"{chrom}: no distilled GTEx pairs, skipped")
+            continue
+        symbols = gene_ids([chrom])
+        mpra = {chrom: track_over_units("mpravardb", chrom)}
+        dapg = {chrom: track_over_units("gtex_dapg", chrom)}
+        shortlist, pool = build_shortlist([chrom], gtex, symbols, mpra, dapg)
+        tests = []
+        for u in shortlist:
+            t = tested_variant(u)
+            if t and t["endpoint"] in REPLICATION_OF:
+                tests.append({"unit": u, "test": t, "order_key": order_key(u, t)})
+        matched = match_controls(tests, pool, random.Random(SEED))
+        for p in matched["pairs"]:
+            p["endpoint"] = REPLICATION_OF[p["endpoint"]]
+            p.pop("order", None)
+        pairs.extend(matched["pairs"])
+        for k, v in matched["unmatched"].items():
+            unmatched[REPLICATION_OF.get(k, k)] += v
+        counts[chrom] = {
+            "units_with_a_measured_value": len(shortlist),
+            "tests": dict(Counter(REPLICATION_OF[t["test"]["endpoint"]] for t in tests)),
+            "pairs": dict(Counter(p["endpoint"] for p in matched["pairs"])),
+            "control_pool": len(pool),
+        }
+        say(f"{chrom}: {counts[chrom]['tests']} tests, {counts[chrom]['pairs']} pairs")
+        del gtex, shortlist, pool, tests, matched
+    return {"pairs": round_robin(pairs), "by_chromosome": counts, "unmatched": dict(unmatched)}
+
+
+def leave_one_out(rows: list[dict[str, Any]], endpoint: str) -> dict[str, Any]:
+    """The pooled difference with each chromosome removed in turn: does one chromosome carry it?"""
+    chroms = sorted({d["chrom"] for d in rows if d["endpoint"] == endpoint})
+    out = {c: tally([d for d in rows if d["chrom"] != c], endpoint) for c in chroms}
+    diffs = [(c, t["difference"]) for c, t in out.items() if t["difference"] is not None]
+    worst = min(diffs, key=lambda x: x[1]) if diffs else None
+    return {
+        "by_chromosome_removed": out,
+        "lowest": {"chromosome_removed": worst[0], "difference": worst[1]} if worst else None,
+        "holds_above_0.05": bool(worst and worst[1] >= 0.05),
+    }
 
 
 # ------------------------------------------------------------------------------------------------
@@ -1421,6 +1648,48 @@ def wide_sign_check(pairs: list[dict[str, Any]], progress=None) -> dict[str, Any
             if share
             else "no overlap: the convention is not checked by these variants"
         ),
+    }
+
+
+def replication_summary(built: dict[str, Any], examples: int = 8) -> dict[str, Any]:
+    """The committed plan of the replication: what is available, what the first requests buy, the budget."""
+    pairs = built["pairs"]
+    per = {e: [p for p in pairs if p["endpoint"] == e] for e in REPLICATION_ENDPOINTS}
+    units = {e: len({p["unit"] for p in v}) for e, v in per.items()}
+    first = {e: [p for p in per[e][:400]] for e in REPLICATION_ENDPOINTS}
+    budget = {}
+    # the ask, fixed here before the key arrives: E2R buys the replication, E3R the dilution contrast
+    for e, want in (("E2R_eqtl_replication", 600), ("E3R_eqtl_linked_replication", 400)):
+        u = min(want, units[e])
+        budget[e] = {
+            "units": u,
+            "pairs": sum(1 for p in per[e][: 2 * u]),
+            "requests": 3 * u,  # one for the unit, one for each of its two controls
+        }
+    return {
+        "chromosomes": sorted({p["unit"].split(":")[0] for p in pairs}, key=MAIN_CHROMS.index),
+        "discovery_chromosomes_excluded": list(DISCOVERY_CHROMS),
+        "by_chromosome": built["by_chromosome"],
+        "unmatched": built["unmatched"],
+        "pairs": {e: len(v) for e, v in per.items()},
+        "units": units,
+        "chromosomes_in_the_first_400_pairs": {
+            e: dict(Counter(p["unit"].split(":")[0] for p in v)) for e, v in first.items()
+        },
+        "match_levels": {e: dict(Counter(str(p.get("match_level")) for p in v)) for e, v in per.items()},
+        "measured_positive_share": {
+            e: _share([p["borrowed"]["measured_sign"] > 0 for p in v]) for e, v in per.items()
+        },
+        "control_distance_median_kb": {
+            e: _median_abs([p["control"]["distance"] for p in v], 1000) for e, v in per.items()
+        },
+        "budget": budget,
+        "pre_registration": E2_REPLICATION,
+        "first_pairs": [
+            {k: p[k] for k in ("order", "endpoint", "unit", "test", "control", "borrowed", "match_level")}
+            for p in pairs[:examples]
+        ],
+        "model_requests_spent": 0,
     }
 
 

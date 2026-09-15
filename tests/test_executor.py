@@ -267,3 +267,41 @@ def test_criterion_is_complete_and_pre_registered():
         assert ex.CRITERION[key]
     assert "before any model request" in ex.CRITERION["written"]
     assert ex.plan([{"endpoint": "E1_mpra"}, {"endpoint": "E2_eqtl"}])["requests_if_all_run"] == 4
+
+
+def test_round_robin_puts_breadth_before_depth():
+    def pair(chrom, unit, endpoint="E2R_eqtl_replication"):
+        return {"endpoint": endpoint, "unit": f"{chrom}:{unit}", "borrowed": {"measured_sign": 1}}
+
+    pairs = [pair("chr6", i) for i in range(3) for _ in range(2)]
+    pairs += [pair("chr19", i) for i in range(2) for _ in range(2)]
+    pairs += [pair("chr7", 0, "E3R_eqtl_linked_replication")]
+    out = ex.round_robin(pairs)
+    assert [p["unit"] for p in out[:4]] == ["chr6:0", "chr6:0", "chr19:0", "chr19:0"]
+    assert out[-1]["endpoint"] == "E3R_eqtl_linked_replication"  # E2R is spent first
+    assert [p["order"] for p in out] == list(range(1, len(out) + 1))
+
+
+def test_leave_one_out_finds_the_chromosome_that_carries_a_difference():
+    rows = [_pair("E2R_eqtl_replication", True, False, "chr6") for _ in range(20)]
+    rows += [_pair("E2R_eqtl_replication", False, False, "chr7") for _ in range(20)]
+    out = ex.leave_one_out(rows, "E2R_eqtl_replication")
+    assert out["lowest"]["chromosome_removed"] == "chr6" and out["lowest"]["difference"] == 0.0
+    assert out["holds_above_0.05"] is False
+
+
+def test_the_replication_pre_registration_names_every_outcome():
+    for key in (
+        "population",
+        "unchanged",
+        "order",
+        "replicates",
+        "fails_to_replicate",
+        "resolves_nothing",
+        "dilution_again",
+        "what_a_success_would_still_not_mean",
+        "caveat",
+    ):
+        assert ex.E2_REPLICATION[key]
+    assert set(ex.REPLICATION_OF.values()) == set(ex.REPLICATION_ENDPOINTS)
+    assert "chr21" in ex.DISCOVERY_CHROMS and "chr22" in ex.DISCOVERY_CHROMS

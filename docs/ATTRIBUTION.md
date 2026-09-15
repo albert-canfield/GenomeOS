@@ -2070,6 +2070,43 @@ doing it against a reporter assay's direction at this size.
   two assays being too far apart for the question. The honest summary is that the external endpoint
   is now built, genome-wide, at 3,260 available pairs — and the first 1,000 of them did not answer.
 
+**E2 and E3 asked again away from chr21 and chr22, pre-registered and waiting on quota
+(2026-09-15).** The human panel reached 19 chromosomes overnight, so the two results this lane rests
+on can be asked where the answer can come out differently. GTEx v8 was distilled over every
+catalogued chromosome's storage units in 138 seconds (71.5 M pairs scanned, 8,995,460 kept inside
+1,247,338 units, 1.4 GB streamed, nothing of the tar stored), and the pairs were assembled chromosome
+by chromosome in 33 minutes with no model request: **E2R, 1,441 units and 2,671 matched pairs on 16
+chromosomes, against the 81 units and 161 pairs the original had on two; E3R, 142,097 units and
+270,558 pairs**. chr21 and chr22 are the discovery set and are excluded from the replication claim
+outright; chrY has no significant GTEx pair in a storage unit and drops out.
+
+Everything the first run fixed stays fixed — the read-out, the measured sign, the no-call at 0.001,
+two matched controls per unit within 250 kb with the same GC stratum and, where the neighbourhood
+allows, the same timing tertile and value count, panel r-squared under 0.2, each unit counted once.
+Two things are new, both in `E2_REPLICATION` and both written before any request.
+
+- **The order is round robin over chromosomes**, strongest evidence first inside each, so the first
+  requests answer whether the effect exists away from the discovery chromosomes rather than filling
+  up on whichever chromosome has the most units: the first 400 pairs carry 21 to 28 from every one of
+  the 16.
+- **Success needs a leave-one-out.** The pooled difference must reach 0.10 at the look's alpha *and*
+  survive the removal of any single chromosome above 0.05. A pooled difference that only clears the
+  bar because one chromosome carries it is reported as "not replicated as a genome-wide claim", never
+  as a success. That is the instrument the four chromosome-specific readings this project found on
+  the acrocentrics would have failed.
+
+**What a replication would and would not buy.** It would say E2 is not chr21-and-chr22-shaped, and
+E3R would re-ask the dilution contrast at power. It would not move the evidence outside the model:
+this endpoint is one model agreeing with fine-mapping, the external endpoint (the widened E1) came
+back at +0.014 with an upper bound of 0.073 and resolved nothing, and the benchmark lane has since
+shown that a model producing a direction is evidence of having been scored rather than of an element
+doing anything. The only part of this work whose evidence does not pass through AlphaGenome remains
+the measured-against-measured reading below.
+
+**The budget, fixed before the key:** 600 units of E2R (1,200 pairs, 1,800 requests) and 400 of E3R
+(800 pairs, 1,200 requests), 3,000 requests in all, with the looks at 150 and 400 pairs and the
+stopping rule unchanged.
+
 **Caveats kept with the result.**
 - **Effect sizes are tiny.** The median absolute predicted log2 fold change is 0.0012 in units and
   0.0011 in controls, so the no-call threshold of 0.001 decides which pairs are scored at all. The
