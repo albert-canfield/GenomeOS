@@ -45,10 +45,50 @@ def _download(url: str, dest: Path, progress=None) -> None:
 
 
 def fetch_sequence(chrom: str, progress=None) -> Path:
+    """Download one chromosome and leave it blocked, so it is kept once rather than twice.
+
+    UCSC serves plain gzip, which cannot be seeked, so `IndexedGenome` would
+    decompress a flat copy beside it the first time anything fetched a locus --
+    3.1 GB of duplicate FASTA across the assembly (docs/STORAGE.md). Rewriting
+    the download as blocked gzip costs about a minute per chromosome and makes
+    that copy unnecessary: the same file then serves both streaming and random
+    access. The rewrite is verified by hash and abandoned if it does not match,
+    in which case the plain download is kept and everything still works.
+    """
     dest = REFERENCE / f"{chrom}.fa.gz"
     if not dest.exists():
         _download(UCSC_FASTA.format(chrom=chrom), dest, progress)
+    _make_blocked(dest, progress)
     return dest
+
+
+def _make_blocked(gz: Path, progress=None) -> bool:
+    """Rewrite a plain-gzip file as blocked gzip in place. False if it was left alone."""
+    from genomeos.genome import bgzf
+
+    if bgzf.is_bgzf(gz):
+        return False
+    tmp = gz.with_name(gz.name + ".blocking")
+    try:
+        with gzip.open(gz, "rb") as src, open(tmp.with_name(tmp.name + ".raw"), "wb") as flat:
+            shutil.copyfileobj(src, flat, 1 << 20)
+        raw = tmp.with_name(tmp.name + ".raw")
+        bgzf.compress_file(raw, tmp, level=9)
+        if bgzf.sha256_of_bgzf(tmp) != bgzf.sha256_of(raw):
+            raise ValueError(f"{gz.name}: blocked rewrite does not match the download")
+        bgzf.gzi_path(tmp).rename(gz.with_name(gz.name + ".gzi"))
+        tmp.rename(gz)
+        if progress:
+            progress(f"{gz.name}: blocked, {gz.stat().st_size / 1e6:.1f} MB, randomly accessible")
+        return True
+    except (OSError, ValueError, EOFError) as ex:
+        if progress:
+            progress(f"{gz.name}: left as plain gzip ({ex})")
+        return False
+    finally:
+        tmp.unlink(missing_ok=True)
+        tmp.with_name(tmp.name + ".raw").unlink(missing_ok=True)
+        bgzf.gzi_path(tmp).unlink(missing_ok=True)
 
 
 def fetch_gencode_chrom(chrom: str, progress=None) -> Path:
