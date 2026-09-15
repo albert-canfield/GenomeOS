@@ -220,3 +220,30 @@ def test_the_module_level_controls_are_never_mutated_by_a_fold(tmp_path):
     }
     assert json.dumps(agw.CONTROLS, sort_keys=True) == before
     assert "measured_on_this_set" not in agw.CONTROLS["coding_target_inside_domain"]
+
+
+def test_the_measurability_rule_is_frozen_and_owns_its_in_sample_misses():
+    """A second rule, fixed after the first failed. It must state its own fitted accuracy honestly and
+    name both chromosomes it already gets wrong, or it is a description dressed as a prediction."""
+    assert agw.MEASURABILITY_RULE["threshold_per_mb"] == 6.55
+    assert agw.MEASURABILITY_RULE["fixed_on_chromosomes"] == 18
+    assert len(agw.MEASURABILITY_RULE["known_exceptions"]) == 2
+    assert any("chr20" in x for x in agw.MEASURABILITY_RULE["known_exceptions"])
+    assert any("chrY" in x for x in agw.MEASURABILITY_RULE["known_exceptions"])
+    for chrom in ("chr3", "chr7", "chr4", "chr6", "chr5", "chr1"):
+        assert chrom not in agw.MEASURABILITY_RULE_FIXED_ON  # the six it can lose on
+
+
+def test_the_measurability_rule_scores_only_chromosomes_it_was_not_fitted_on():
+    control = {
+        "per_chromosome": {
+            "chr20": {"boundaries_per_mb": 7.40, "distinguishable_from_random": False, "p": 0.70},
+            "chr3": {"boundaries_per_mb": 7.26, "distinguishable_from_random": True, "p": 0.01},
+            "chr7": {"boundaries_per_mb": 7.10, "distinguishable_from_random": False, "p": 0.40},
+        }
+    }
+    m = agw.score_measurability(control)
+    assert m["per_chromosome"]["chr20"]["held_out"] is False  # fitted on, and a known miss
+    assert m["per_chromosome"]["chr20"]["held"] is False
+    assert m["held_out_right"] == 1 and m["held_out_wrong"] == 1
+    assert m["verdict"] == "FAILED on chr7"

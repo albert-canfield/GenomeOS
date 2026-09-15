@@ -2210,27 +2210,27 @@ and neither of them the model, showing the same two numbers: 0.670 against 0.679
 It is nonetheless the first result in this area whose evidence does not pass through a model, and it
 supports the reading the executor test reached by a different route.
 
-## The all-elements sweep folded: what 559,805 deleted elements say, and what they do not (2026-09-15)
+## The all-elements sweep folded: what 605,137 deleted elements say, and what they do not (2026-09-15)
 
 The chain (`scripts/enhancer_targets_all_chain.py`) is deleting every registry element of every
 chromosome in AlphaGenome, one chromosome at a time, and each finished chromosome commits its own
 summary. `scripts/enhancer_targets_all_genome_wide.py` folds the complete ones into one reading and is
 re-run as each lands; every reading it has taken is kept in the result's `history`, so what follows can
-be checked against what the same fold said one chromosome ago. Seventeen are complete (chr2, chr9 to
-chr22, chrX and chrY), 559,805 elements, 407,459 requests.
+be checked against what the same fold said one chromosome ago. Eighteen are complete (chr2, chr8 to
+chr22, chrX and chrY), 605,137 elements, 425,526 requests.
 
-| reading | genome-wide, 17 chromosomes | across chromosomes | the control it has to be read against |
+| reading | genome-wide, 18 chromosomes | across chromosomes | the control it has to be read against |
 |---|---|---|---|
-| names a gene at all | 64.4% | 58.1% (chr13) to 70.8% (chr19), median 63.0% | 87% of matched random windows in the locus benchmark |
-| the named coding gene is the nearest TSS | 62.1% | 48.8% (chrY) to 65.3% (chr22), median 61.9% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
-| the named coding gene is inside the element's own CTCF node | 77.6% | 68.4% (chr13) to 91.2% (chr19), median 75.2% | 74.9% for as many boundaries placed at random, measured on these same elements |
+| names a gene at all | 64.1% | 58.1% (chr13) to 70.8% (chr19), median 62.8% | 87% of matched random windows in the locus benchmark |
+| the named coding gene is the nearest TSS | 62.0% | 48.8% (chrY) to 65.3% (chr22), median 61.9% | none measured; the nearest-TSS heuristic itself scores 8 of 12 published loci |
+| the named coding gene is inside the element's own CTCF node | 77.2% | 68.4% (chr13) to 91.2% (chr19), median 75.1% | 74.3% for as many boundaries placed at random, measured on these same elements |
 
 **The node control, re-measured where the claim is now being made.** dbad593 qualified the old
 "90.2% of enhancers act inside their own CTCF node" to 81.7% against 79.1% for randomly placed
 boundaries — 2.6 points — over the archive as it stood. That control belonged to the archive's element
 set, not to this one, so the fold now places its own: the same 176,650 elements naming a coding gene,
 the same most-moved gene, the same `infer_domains` caller, against as many boundaries drawn uniformly
-at random (200 draws, seed 7); at seventeen chromosomes that is 260,679 elements. It reproduces the
+at random (200 draws, seed 7); at eighteen chromosomes that is 279,231 elements. It reproduces the
 scorer's own containment figure to four decimals on every chromosome, which is the check that the two
 readings are the same reading.
 
@@ -2256,11 +2256,30 @@ statement is that the node beats a random partition of the same resolution on si
 one, and on ten the measurement cannot tell. That is a smaller claim than "the excess changes sign
 between chromosomes", and it is the one the evidence supports.
 
-What survives, and is if anything sharper: **all six clear wins carry 6.55 to 7.00 boundaries per Mb**,
-a band a quarter as wide as the range across chromosomes, and the one clear loss carries 0.84. chrY
-remains the clearest illustration of what the control is for — 48 boundaries over 57 Mb, nearly all in
-the short euchromatic arm, so uniformly placed boundaries leave the element-dense region uncut and beat
-the real nodes by 22 points on 125 elements.
+**What survives is a clean line, and it is not about sign.** Sorting the eighteen by how finely the
+caller cuts them separates the measurable from the unmeasurable almost perfectly:
+
+| at or above 6.55 boundaries per Mb | chr8 7.65 | chr20 7.40 | chr11 7.00 | chr18 6.96 | chr12 6.91 | chr10 6.88 | chr2 6.83 | chr17 6.55 |
+|---|---|---|---|---|---|---|---|---|
+| | **+4.6** | +0.7 | **+6.2** | **+6.9** | **+3.5** | **+7.2** | **+3.8** | **+4.1** |
+| p | **.01** | .70 | **.01** | **.01** | **.01** | **.01** | **.01** | **.01** |
+
+Seven of the eight at or above 6.55 per Mb carry an excess distinguishable from their null; none of the
+nine autosomes below it does. The two exceptions are chr20 at 7.40, above the line and unmeasurable,
+and chrY at 0.84, far below it and the one clearly measurable *negative* in the set — 48 boundaries
+over 57 Mb, nearly all in the short euchromatic arm, so uniformly placed boundaries leave the
+element-dense region uncut and beat the real nodes by 22 points on 125 elements. Sixteen of eighteen
+fall on the right side of the line.
+
+**A second rule, fixed now, because the first one failed for a reason this one avoids.** The sign rule
+called the *direction* of the excess and came unstuck on chrX, where there was no direction to call.
+This one claims only *where an excess exists at all*, which the p-values say is the answerable
+question: **an excess is measurable if and only if the chromosome is cut at 6.55 boundaries per Mb or
+finer.** It is fitted on these eighteen, scores 16 of 18 with both misses named above, and says nothing
+about sign. Every one of the six chromosomes still to land is cut at 6.58 or finer (chr3 7.26, chr7
+7.10, chr4 6.94, chr6 6.90, chr5 6.85, chr1 6.58), so it predicts all six measurable and has six wrong
+calls available to it. It is recorded in `MEASURABILITY_RULE` with its own scoreboard, and the sign
+rule is **not** amended by it and keeps its failure.
 
 **The pooled excess drifts in both directions, and that is still the finding.** It has read +1.85,
 +2.47, +3.02, +2.85, +2.57 and +2.73 points at twelve through seventeen chromosomes — up as finely cut
@@ -2343,11 +2362,12 @@ either set.
 | chr9 | *refused, too close to call* | 5.87 | +1.1 points, p 0.51 | refused, and rightly |
 | **chrX** | **negative** | **5.26** | **+0.0007, p 0.94** | **FAILED** |
 | chr2 | positive | 6.83 | +3.8 points, p 0.01 | held |
+| chr8 | positive | 7.65 | +4.6 points, p 0.01 | held |
 
-chr2 is the largest chromosome scored, 79,639 elements, and the fourth held-out test: three right, one
-wrong, one refused. Its excess is clearly distinguishable from its null, which the two other passes
-also were — so every chromosome the rule has called positive and been right about is one where the
-effect is real, and the one it got wrong is one where there is no effect to get right.
+Held out: four right, one wrong, one refused. Every chromosome the rule has called positive and been
+right about carries an excess distinguishable from its null, and the one it got wrong is one where
+there is no effect to get right. That is the shape of a rule that has found something narrow and states
+it too broadly, which is what the second rule below is for.
 
 **The rule failed on chrX, and the failure stands.** chrX was the one chromosome the rule called
 negative and the only standing prediction that could falsify it. It came back at +0.0007 — seven

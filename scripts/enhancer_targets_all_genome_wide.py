@@ -432,6 +432,75 @@ HELD_OUT_LOG = {
 }
 
 
+# A SECOND rule, fixed on 2026-09-15 at eighteen chromosomes, after the first one failed on chrX. The
+# first asks which way the excess points and got a sign call wrong on a chromosome where there is no
+# sign to get right. This one asks the prior question - whether there is an excess to point at all -
+# which is the question the p-values say is the answerable one. It is fitted, post hoc, and separate:
+# the sign rule above is NOT amended by it and keeps its failure.
+#
+# At eighteen chromosomes, seven of the eight cut at 6.55 boundaries per Mb or finer have an excess
+# distinguishable from their null (p 0.01), and one of the ten below 6.55 does. It scores 16 of 18 in
+# sample and both misses are named below so neither can be forgotten: chr20 at 7.40 per Mb is above the
+# line and not measurable, and chrY at 0.84 is far below it and is the one clearly measurable negative
+# in the set. Every one of the six chromosomes still to land is cut at 6.58 or finer, so the rule
+# predicts all six measurable, and six wrong calls are available to it.
+MEASURABILITY_RULE = {
+    "fixed_at": "2026-09-15",
+    "fixed_on_chromosomes": 18,
+    "rule": "a chromosome's node excess is distinguishable from randomly placed boundaries (p < 0.05) "
+    "if and only if the caller cuts it at 6.55 boundaries per Mb or finer",
+    "threshold_per_mb": 6.55,
+    "in_sample": "16 of 18: 7 of the 8 at or above the line are measurable, 9 of the 10 below are not",
+    "known_exceptions": [
+        "chr20, 7.40 per Mb, above the line and not measurable: excess +0.7 points at p 0.70",
+        "chrY, 0.84 per Mb, far below the line and measurable: excess -22.1 points at p 0.02, the one "
+        "clearly measurable negative in the set, and the rule says nothing about sign",
+    ],
+    "predicts": "all six chromosomes still to land (chr3 7.26, chr7 7.10, chr4 6.94, chr6 6.90, "
+    "chr5 6.85, chr1 6.58) carry a measurable positive excess",
+    "why_it_is_not_the_sign_rule": "the sign rule failed because it called the direction of a quantity "
+    "that was zero; this one only claims where a quantity exists, and says nothing about its sign",
+}
+
+
+def score_measurability(control: dict) -> dict:
+    """The second rule against every chromosome that has landed, in sample and out."""
+    rows, right, wrong = {}, 0, 0
+    for chrom, v in (control.get("per_chromosome") or {}).items():
+        per_mb = v.get("boundaries_per_mb")
+        if per_mb is None:
+            continue
+        predicted = per_mb >= MEASURABILITY_RULE["threshold_per_mb"]
+        actual = bool(v.get("distinguishable_from_random"))
+        held_out = chrom not in MEASURABILITY_RULE_FIXED_ON
+        rows[chrom] = {
+            "boundaries_per_mb": per_mb,
+            "predicted_measurable": predicted,
+            "measurable": actual,
+            "p": v.get("p"),
+            "held_out": held_out,
+            "held": predicted == actual,
+        }
+        if held_out:
+            right += predicted == actual
+            wrong += predicted != actual
+    return {
+        **MEASURABILITY_RULE,
+        "held_out_right": right,
+        "held_out_wrong": wrong,
+        "verdict": f"FAILED on {', '.join(c for c, r in rows.items() if r['held_out'] and not r['held'])}"
+        if wrong
+        else ("holding" if right else "not yet tested"),
+        "per_chromosome": rows,
+    }
+
+
+MEASURABILITY_RULE_FIXED_ON = (
+    "chr2", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15",
+    "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY",
+)  # fmt: skip
+
+
 # One word per chromosome, so a reader who has not followed the night can see which chromosomes the
 # rule was fitted on and which were tests of it without reconstructing either set.
 STATUSES = (
@@ -607,6 +676,7 @@ def main() -> int:
             },
         }
         out["node_excess_prediction"] = sign_prediction(control, density)
+        out["node_excess_measurability"] = score_measurability(control)
     out = with_history(out, previous)
     save_result("enhancer_targets_all_genome_wide", out)
     g, sp = out["genome"], out["spread"]
