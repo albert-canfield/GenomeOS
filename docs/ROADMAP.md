@@ -197,12 +197,23 @@ in order. "Owner" is the session that holds the files today (see §7).
   `F.mean(cell)`) are now a language read the Body computes, in absolute units,
   so area E can write their fate rules as declared windows instead of a
   precomputed lookup; a read that does not name its window is a compile error.
-- **Next.** 1. A `commitment` a precursor can hold before
-  it differentiates, so a cell born after a perturbation is protected as its
-  ancestors are (12 of 610 are not, today). 2. `bio` packaged as an extra entry
-  point with its own test set. 3. A `population` type in BioIR (today a counted
-  `Cell`). 4. PAR polarity rules for the worm's first divisions, so par-2 and
-  par-3 knockouts are predicted rather than stated.
+- **Order, and the engine packaged on its own (2026-09-15).** `order` (§7.6) is
+  the benchmark's untestable sentence written down: HOXD colinearity as a claim
+  the compiler refuses when a sequence contradicts its own coordinates, and a
+  sequence along time reported against a run with its inversions. It drives
+  nothing, which is what keeps it from being a second `stage`. And the engine now
+  **builds and runs as a package of its own** (`scripts/package_engine.py`,
+  `docs/ARCHITECTURE.md` §10.1, milestone 2.0): 31 files, Apache-2.0, no
+  dependencies, run in a Python with no site-packages where `import genomeos`
+  fails outright — all four verbs, every module, the standard library and an
+  organism, with the application absent.
+- **Next.** 1. A `population` type in BioIR (today a counted `Cell`), judged the
+  way `order` was: if the counted `Cell` already says everything the body program
+  needs, say so and do not build it. 2. Splitting the repository, which is a
+  release decision rather than an engineering one now that the package builds.
+  *Closed since this list was written:* the precursor-level `commitment` (measured
+  closed — 0 of 12, §7.2a decision 3), `bio` packaged (above), and PAR polarity,
+  which landed with area E.
 - **Owner.** genomeos-c2 (the engine: language, IR, runtime, toolchain, v0.4).
 
 ### B. Genome decoding (reverse-engineering the sequence)

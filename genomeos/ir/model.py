@@ -162,7 +162,7 @@ class Transcript(Entity):
 @dataclass(slots=True)
 class Protein(Entity):
     """A protein definition: what the molecule is. One protein in one place at one
-    time is a ProteinState (genomeos.molecules.compiler), kept separate on purpose.
+    time is a ProteinState, which an application builds on top of this, kept separate on purpose.
     Gene → Transcript(s) → Protein isoform(s) → modified states; never Gene → Protein."""
 
     sequence: str = ""

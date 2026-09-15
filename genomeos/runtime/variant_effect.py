@@ -29,8 +29,8 @@ def reverse_complement(seq: str) -> str:
 class Variant(Protocol):
     """What the engine needs of a variant, structurally.
 
-    The application's VCF-backed `genomeos.genome.variants.Variant` satisfies
-    this; declaring it here keeps the engine from importing the application
+    An application's VCF-backed variant record satisfies this; declaring it
+    here keeps the engine from importing the application
     (LICENSING.md: engine to application only, never the reverse).
     """
 
