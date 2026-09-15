@@ -180,14 +180,21 @@ def _born_after_the_induction(module) -> dict[str, str]:
 def test_a_cell_born_after_the_induction_is_protected_by_what_its_parent_committed_to(series):
     """The documented hole in this arm: `commitment` establishes when a cell differentiates, so the
     twelve cells born after the factor arrives had nothing to inherit and took the forced fate. They
-    are protected now — their parents reach a terminal fate before dividing, commit, and the lock is
-    inherited — and the ablation still shows it is the commitment doing it, not the arithmetic."""
+    are protected now, because their parents reach a terminal fate before dividing and the lock is
+    inherited — and the ablation is per block, because a coarse one named the wrong cause once:
+    either block alone is enough, since both establish on a terminal type."""
     late = _born_after_the_induction(series)
     assert len(late) == 12
     assert [t for t in late.values() if t == "Muscle"] == []
-    stripped = copy.deepcopy(series)
-    stripped.commitments.clear()
-    assert set(_born_after_the_induction(stripped).values()) == {"Muscle"}  # all twelve, without it
+    names = [c.name for c in series.commitments]
+    assert len(names) > 1, "the per-block ablation below needs more than one block to be meaningful"
+    for drop in names:
+        one = copy.deepcopy(series)
+        one.commitments = [c for c in one.commitments if c.name != drop]
+        assert [t for t in _born_after_the_induction(one).values() if t == "Muscle"] == [], drop
+    both = copy.deepcopy(series)
+    both.commitments.clear()
+    assert set(_born_after_the_induction(both).values()) == {"Muscle"}  # all twelve, with none left
 
 
 def test_a_precursor_that_never_differentiates_can_commit_on_a_sustained_read():

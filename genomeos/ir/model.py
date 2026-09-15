@@ -489,7 +489,11 @@ class Decision:
     differentiate: become cell type `to` (optionally taking terminal `name`).
     die: after `after` minutes from birth (or at once). quiesce: stop dividing. migrate: move.
     express: the cell carries the factors in `sets` (its measured or inferred reader state).
-    `fraction` applies to populations: the share of the population that takes the decision."""
+    `fraction` and `share` apply to populations and differ in what they are a share *of*: `fraction`
+    takes that much of what is left when it runs, so sibling splits multiply and their values depend
+    on the order they are written in; `share` takes that much of the population as it stood at the
+    start of the decision point (or of the instant, for recurring flows), so siblings are independent
+    of each other and a program can state a published share as the number it is."""
 
     id: str
     action: str = "divide"
@@ -505,7 +509,8 @@ class Decision:
     steps: int = 1  # migrate: grid steps per move
     timer: str = ""
     after: float | None = None  # minutes
-    fraction: float = 1.0
+    fraction: float = 1.0  # a share of what is LEFT when this decision runs (order-dependent)
+    share: float | None = None  # a share of the population as it stood at this decision point (absolute)
     priority: int = 0  # among matching decisions of one action the highest wins; ties: first in module order
     competence: str = ""  # differentiate: the window this fate change needs open (v0.4 §7.2a)
     evidence: Evidence = field(default_factory=Evidence)

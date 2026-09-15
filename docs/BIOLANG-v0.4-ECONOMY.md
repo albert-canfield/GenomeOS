@@ -493,12 +493,29 @@ every run's summary beside `ambiguous_fates` and `revised_fates`.
    them in the E lineage) took the forced fate at birth, because the program had
    no determination before differentiation — a precursor was committed to
    nothing. **Closed 2026-09-15, and not by a new construct.** Once area E's fate
-   rules read the integral directly and their programs declared
-   `commitment terminal_fate`, those parents reach a terminal fate *before* they
-   divide, commit, and the lock is inherited: **0 of the 12 now take the forced
-   fate**, under either `recheck` mode, and the ablation still shows what is doing
-   it — strip the commitment and **all 12** convert. The five published arms are
+   rules read the integral directly, those parents reach a terminal fate *before*
+   they divide, commit, and the lock is inherited: **0 of the 12 now take the
+   forced fate**, under either `recheck` mode, and the five published arms are
    unchanged.
+
+   *Corrected 2026-09-15, after area E checked the attribution.* This document
+   first credited their new `commitment terminal_fate`. It is not what does the
+   work, and a one-block ablation shows why not — **either block alone is
+   enough**, because both establish on a terminal type and the daughters inherit
+   whichever locked first:
+
+   | ablation | of the 12 born after the induction, forced to muscle |
+   |---|---|
+   | as written | 0 |
+   | area E's `terminal_fate` stripped | 0 |
+   | this program's own `differentiated` stripped | 0 |
+   | **both stripped** | **12** |
+
+   So what closed the hole is the parents reaching a terminal fate before
+   dividing; the lock that then protects the daughters was already in
+   `plasticity.bio` and had been all along. The coarse ablation that cleared
+   every commitment at once could not see that, which is why the first version of
+   this paragraph named the wrong cause.
 
    The *shape* of the hole is still real, and worth stating because a future
    program will meet it: a cell that runs a programme for a long time **without
