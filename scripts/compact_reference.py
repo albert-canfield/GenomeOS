@@ -88,8 +88,21 @@ def load_manifest() -> dict:
 
 
 def save_manifest(m: dict) -> None:
+    """Merge into whatever is on disk rather than overwrite it.
+
+    Two runs can be in flight at once (the chromosomes take half an hour, the
+    variant files a minute), and each holds a copy of the manifest it loaded at
+    the start. Writing that copy back would drop the other run's rows -- which
+    is exactly how the first pass lost the variant-file section.
+    """
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
-    MANIFEST.write_text(json.dumps(m, indent=1, sort_keys=True) + "\n")
+    on_disk = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
+    for key, value in m.items():
+        if isinstance(value, dict) and isinstance(on_disk.get(key), dict):
+            on_disk[key].update(value)
+        else:
+            on_disk[key] = value
+    MANIFEST.write_text(json.dumps(on_disk, indent=1, sort_keys=True) + "\n")
 
 
 def compact(chrom: str, dry_run: bool = False, keep: bool = False) -> dict | None:
