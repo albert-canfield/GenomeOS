@@ -1,0 +1,94 @@
+# Which cells touch which, in the early C. elegans embryo: a time-resolved contact table for
+# BioLang v0.4 §7.4 (`contacts:` on the organism block). Rows are `time cell cell [area]`;
+# the neighbours of a cell at time t are the latest snapshot at or before t, filtered to the cells
+# alive then, so a snapshot may name cells that are not yet born or have already divided.
+#
+# WHAT THIS IS, HONESTLY. It is curated from the published geometry of the cleavage-stage embryo,
+# not measured contact areas: no time-resolved contact-area table for C. elegans is held locally,
+# and the Ma et al. 2021 atlas carries expression per cell per minute, not positions. Every area
+# below is 1.0 (touching) or 0.5 (a minor face), which is a statement about topology only. A
+# measured table would replace this file without changing a line of any program that reads it.
+#
+# WHY THE SNAPSHOT TIMES ARE COARSE. Only the AB divisions have no measured spread (timers.bio, sd
+# 0.0); the P lineage's do, so P1 divides at 42 min with the program's seed and at 36 min when every
+# timer runs at its mean, and a snapshot keyed to either is wrong for the other. Each snapshot here
+# is therefore taken at an AB division and lists the union of the configurations that hold until the
+# next one. Aliveness does the rest: a row naming a cell that is not yet born, or has already
+# divided, is ignored. A table keyed to the P divisions instead silently loses the P2 signal under a
+# different draw of the timers, which is how this was found.
+#
+# Geometry and sources:
+#   2-cell   AB anterior, P1 posterior; one interface.                    Sulston et al. 1983, Dev Biol 100:64
+#   3-cell   AB divides ~2 min before P1; ABp lies between ABa and P1,
+#            so ABa has no face on the P lineage.                         Sulston 1983; Priess 2005, WormBook
+#   4-cell   the rhomboid: ABa-ABp, ABa-EMS, ABp-EMS, ABp-P2, EMS-P2.
+#            ABa does NOT touch P2. This single fact is what makes ABp
+#            different from ABa, and it is the fact the program now reads
+#            from here instead of naming ABp in the signal.               Priess & Thomson 1987, Cell 48:241;
+#                                                                         Mello et al. 1994, Cell 77:95;
+#                                                                         Hutter & Schnabel 1994, Development 120:2051
+#   6-cell   AB daughters over EMS and P2; only the posterior pair
+#            (ABpl, ABpr) reaches P2.                                     Priess 2005, WormBook
+#   8-cell   P2 divides into C (dorsal) and P3 (ventral).                 Sulston 1983
+#  10-cell   EMS divides into MS (anterior) and E (posterior).            Sulston 1983
+#  12-cell   MS reaches ABalp and ABara: the second Notch interaction,
+#            which makes anterior pharynx from the ABa lineage.           Priess 2005, WormBook;
+#                                                                         Hutter & Schnabel 1994
+#
+# time	cell	cell	area
+
+# --- 2-cell, 0 to 28 min ---
+0	AB	P1	1.0
+
+# --- AB has divided (28 min): the 3-cell embryo and then the 4-cell rhomboid ---
+28	ABa	ABp	1.0
+28	ABp	P1	1.0
+28	ABa	EMS	1.0
+28	ABp	EMS	1.0
+28	ABp	P2	1.0
+28	EMS	P2	1.0
+
+# --- the AB daughters (60 min): the 6-, 8- and 10-cell configurations ---
+60	ABal	ABar	1.0
+60	ABpl	ABpr	1.0
+60	ABal	ABpl	1.0
+60	ABar	ABpr	1.0
+60	ABal	EMS	1.0
+60	ABar	EMS	1.0
+60	ABpl	EMS	1.0
+60	ABpr	EMS	1.0
+60	ABpl	P2	1.0
+60	ABpr	P2	1.0
+60	EMS	P2	1.0
+60	ABpl	C	1.0
+60	ABpr	C	1.0
+60	EMS	C	1.0
+60	EMS	P3	1.0
+60	C	P3	1.0
+60	ABal	MS	1.0
+60	ABar	MS	1.0
+60	ABpl	MS	1.0
+60	ABpr	MS	1.0
+60	MS	E	1.0
+60	E	C	1.0
+60	E	P3	1.0
+
+# --- the AB granddaughters (94 min): MS reaches ABalp and ABara ---
+94	ABala	ABalp	1.0
+94	ABara	ABarp	1.0
+94	ABalp	ABara	1.0
+94	ABala	ABara	0.5
+94	ABpla	ABplp	1.0
+94	ABpra	ABprp	1.0
+94	ABalp	MS	1.0
+94	ABara	MS	1.0
+94	ABala	MS	0.5
+94	ABarp	MS	0.5
+94	ABpla	MS	0.5
+94	ABpra	MS	0.5
+94	ABplp	C	1.0
+94	ABprp	C	1.0
+94	MS	E	1.0
+94	E	C	1.0
+94	E	P3	1.0
+94	C	P3	1.0

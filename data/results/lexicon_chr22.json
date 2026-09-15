@@ -1,0 +1,1546 @@
+{
+  "result": "lexicon_chr22",
+  "date": "2026-09-13",
+  "chrom": "chr22",
+  "length": 50818468,
+  "levels": {
+    "kmers": {
+      "k": 6
+    },
+    "seeds": {
+      "k": 16,
+      "minimum": 50,
+      "kept": 2000,
+      "families": 39,
+      "largest_families": [
+        {
+          "seeds": [
+            "GACAGAAGCATTCTCA",
+            "GAAACACTCTTTTTGT",
+            "TTTGAAACACTCTTTT",
+            "TTGAAACACTCTTTTT",
+            "TTCGTTGGAAACGGGA",
+            "TTTCGTTGGAAACGGG",
+            "ATTTCGTTGGAAACGG",
+            "AGACAGAAGCATTCTC"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 135,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0,
+          "dominant_context": "unknown_structural",
+          "seed_count": 1004
+        },
+        {
+          "seeds": [
+            "CAAAGTGCTGGGATTA",
+            "CCAAAGTGCTGGGATT",
+            "GCCTCCCAAAGTGCTG",
+            "TCCCAAAGTGCTGGGA",
+            "CCCAAAGTGCTGGGAT",
+            "AAGTGCTGGGATTACA",
+            "CCTCCCAAAGTGCTGG",
+            "AGTGCTGGGATTACAG"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 79,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0029,
+          "dominant_context": "intron",
+          "seed_count": 317
+        },
+        {
+          "seeds": [
+            "TAATCCCAGCACTTTG",
+            "AATCCCAGCACTTTGG",
+            "CAGCACTTTGGGAGGC",
+            "TCCCAGCACTTTGGGA",
+            "TGTAATCCCAGCACTT",
+            "ATCCCAGCACTTTGGG",
+            "CTGTAATCCCAGCACT",
+            "CCAGCACTTTGGGAGG"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 50,
+          "repeat_fraction": 0.999,
+          "conserved_fraction": 0.004,
+          "dominant_context": "intron",
+          "seed_count": 175
+        },
+        {
+          "seeds": [
+            "TACTAAAAATACAAAA",
+            "CTACTAAAAATACAAA",
+            "TCTACTAAAAATACAA",
+            "CTCTACTAAAAATACA",
+            "TCTCTACTAAAAATAC",
+            "ACTAAAAATACAAAAA",
+            "GTCTCTACTAAAAATA",
+            "AAAAATACAAAAATTA"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 55,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0025,
+          "dominant_context": "intron",
+          "seed_count": 171
+        },
+        {
+          "seeds": [
+            "GAGGTTGCAGTGAGCC",
+            "GGAGGTTGCAGTGAGC",
+            "TGCAGTGAGCCGAGAT",
+            "TTGCAGTGAGCCGAGA",
+            "AGAGGTTGCAGTGAGC",
+            "TGCAGTGAGCCAAGAT",
+            "CAGAGGTTGCAGTGAG",
+            "TGCAGTGAGCTGAGAT"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 25,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0023,
+          "dominant_context": "intron",
+          "seed_count": 45
+        },
+        {
+          "seeds": [
+            "CCCAGGCTGGAGTGCA",
+            "AGGCTGGAGTGCAGTG",
+            "CAGGCTGGAGTGCAGT",
+            "GGCTGGAGTGCAGTGG",
+            "CCAGGCTGGAGTGCAG",
+            "GCCCAGGCTGGAGTGC",
+            "GCTGGAGTGCAGTGGC",
+            "TTGCCCAGGCTGGAGT"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 24,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0041,
+          "dominant_context": "intron",
+          "seed_count": 44
+        },
+        {
+          "seeds": [
+            "TGCACTCCAGCCTGGG",
+            "CACTGCACTCCAGCCT",
+            "ACTGCACTCCAGCCTG",
+            "CCACTGCACTCCAGCC",
+            "CTGCACTCCAGCCTGG",
+            "GCCACTGCACTCCAGC",
+            "GCACTCCAGCCTGGGC",
+            "ACTCCAGCCTGGGCAA"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 23,
+          "repeat_fraction": 0.999,
+          "conserved_fraction": 0.0028,
+          "dominant_context": "intron",
+          "seed_count": 42
+        },
+        {
+          "seeds": [
+            "GGCTCACTGCAACCTC",
+            "GCTCACTGCAACCTCC",
+            "ATCTCGGCTCACTGCA",
+            "TCTCGGCTCACTGCAA",
+            "GCTCACTGCAACCTCT",
+            "CTCACTGCAACCTCTG",
+            "TCACTGCAACCTCTGC",
+            "ATCTTGGCTCACTGCA"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 23,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0011,
+          "dominant_context": "intron",
+          "seed_count": 35
+        },
+        {
+          "seeds": [
+            "TTTTTTTTTTTTTTTG",
+            "TTTTTTTTTTTTGAGA",
+            "TTTTTTTTTTTTTGAG",
+            "TTTTTTTTTTTTTTGA",
+            "TTTTTTTTTTTGAGAC",
+            "TTTTTTTTTTGAGACA",
+            "TTTTTTTTTGAGACAG",
+            "TTTTGAGACAGAGTCT"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 24,
+          "repeat_fraction": 0.987,
+          "conserved_fraction": 0.004,
+          "dominant_context": "intron",
+          "seed_count": 29
+        },
+        {
+          "seeds": [
+            "CAAAAAAAAAAAAAAA",
+            "TCTCAAAAAAAAAAAA",
+            "CTCAAAAAAAAAAAAA",
+            "TCAAAAAAAAAAAAAA",
+            "GTCTCAAAAAAAAAAA",
+            "TGTCTCAAAAAAAAAA",
+            "CTGTCTCAAAAAAAAA",
+            "ACTCTGTCTCAAAAAA"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 24,
+          "repeat_fraction": 0.994,
+          "conserved_fraction": 0.0037,
+          "dominant_context": "intron",
+          "seed_count": 29
+        },
+        {
+          "seeds": [
+            "TTAGCCAGGATGGTCT",
+            "GTTAGCCAGGATGGTC",
+            "TGTTAGCCAGGATGGT",
+            "CTCCTGACCTCGTGAT",
+            "TCCTGACCTCGTGATC",
+            "TAGCCAGGATGGTCTC",
+            "GGATGGTCTCGATCTC",
+            "GGTCTCGATCTCCTGA"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 39,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0018,
+          "dominant_context": "intron",
+          "seed_count": 22
+        },
+        {
+          "seeds": [
+            "GAGAATTGCTTGAACC",
+            "CAGGAGAATTGCTTGA",
+            "AGGAGAATTGCTTGAA",
+            "GGAGAATTGCTTGAAC",
+            "CTGAGGCAGGAGAATT",
+            "TGAGGCAGGAGAATTG",
+            "AGGCAGGAGAATTGCT",
+            "GAGGCAGGAGAATTGC"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 25,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0024,
+          "dominant_context": "intron",
+          "seed_count": 10
+        },
+        {
+          "seeds": [
+            "GGTTCAAGCAATTCTC",
+            "TCAAGCAATTCTCCTG",
+            "TTCAAGCAATTCTCCT",
+            "GTTCAAGCAATTCTCC",
+            "CAATTCTCCTGCCTCA",
+            "AATTCTCCTGCCTCAG",
+            "GCAATTCTCCTGCCTC",
+            "AGCAATTCTCCTGCCT"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 25,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0027,
+          "dominant_context": "intron",
+          "seed_count": 10
+        },
+        {
+          "seeds": [
+            "ATCTCAGCTCACTGCA",
+            "TCTCAGCTCACTGCAA",
+            "AGCTCACTGCAACCTC",
+            "CAGCTCACTGCAACCT",
+            "CTCAGCTCACTGCAAC",
+            "TCAGCTCACTGCAACC",
+            "GATCTCAGCTCACTGC"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 22,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.0003,
+          "dominant_context": "intron",
+          "seed_count": 7
+        },
+        {
+          "seeds": [
+            "CTTGAGGTCAGGAGTT",
+            "ATCACTTGAGGTCAGG",
+            "GATCACTTGAGGTCAG",
+            "TCACTTGAGGTCAGGA",
+            "ACTTGAGGTCAGGAGT"
+          ],
+          "occurrences_of_leading_seed": 400,
+          "span": 21,
+          "repeat_fraction": 1.0,
+          "conserved_fraction": 0.001,
+          "dominant_context": "intron",
+          "seed_count": 5
+        }
+      ],
+      "makeup": {
+        "mostly_repeatmasker": 1980,
+        "tandem_period_up_to_6": 20,
+        "neither": 0,
+        "neither_examples": []
+      }
+    },
+    "curated": 1098,
+    "blocks": 635,
+    "nodes": 247,
+    "libraries": 33
+  },
+  "kmers_per_context": {
+    "unknown_structural": {
+      "kmers_seen": 4096,
+      "positions": 3697510,
+      "tests": 4096,
+      "bh_threshold": 0.011371382878873092,
+      "passing_bh": 1044,
+      "passing_bh_twofold_over_markov": 430
+    },
+    "exon_noncoding": {
+      "kmers_seen": 4096,
+      "positions": 1808294,
+      "tests": 4096,
+      "bh_threshold": 0.013220305868323089,
+      "passing_bh": 1102,
+      "passing_bh_twofold_over_markov": 39
+    },
+    "intron": {
+      "kmers_seen": 4096,
+      "positions": 19615243,
+      "tests": 4096,
+      "bh_threshold": 0.01605216459612586,
+      "passing_bh": 1325,
+      "passing_bh_twofold_over_markov": 155
+    },
+    "unknown_neutral": {
+      "kmers_seen": 4094,
+      "positions": 539107,
+      "tests": 4094,
+      "bh_threshold": 0.008207210415736866,
+      "passing_bh": 678,
+      "passing_bh_twofold_over_markov": 82
+    },
+    "ctcf_only": {
+      "kmers_seen": 4056,
+      "positions": 101740,
+      "tests": 4056,
+      "bh_threshold": 0.0005362764437510518,
+      "passing_bh": 44,
+      "passing_bh_twofold_over_markov": 9
+    },
+    "promoter_like": {
+      "kmers_seen": 4096,
+      "positions": 204379,
+      "tests": 4096,
+      "bh_threshold": 0.003881743277524441,
+      "passing_bh": 318,
+      "passing_bh_twofold_over_markov": 81
+    },
+    "unknown_regulatory": {
+      "kmers_seen": 4096,
+      "positions": 4434559,
+      "tests": 4096,
+      "bh_threshold": 0.013419152895169434,
+      "passing_bh": 1155,
+      "passing_bh_twofold_over_markov": 152
+    },
+    "enhancer_like": {
+      "kmers_seen": 4096,
+      "positions": 4351501,
+      "tests": 4096,
+      "bh_threshold": 0.015764741021995304,
+      "passing_bh": 1292,
+      "passing_bh_twofold_over_markov": 29
+    },
+    "unknown_fossil": {
+      "kmers_seen": 4096,
+      "positions": 1649185,
+      "tests": 4096,
+      "bh_threshold": 0.012080771891347089,
+      "passing_bh": 1000,
+      "passing_bh_twofold_over_markov": 138
+    },
+    "unknown_constrained": {
+      "kmers_seen": 3920,
+      "positions": 56059,
+      "tests": 3920,
+      "bh_threshold": 0.0005960550181607385,
+      "passing_bh": 49,
+      "passing_bh_twofold_over_markov": 26
+    },
+    "cds": {
+      "kmers_seen": 4096,
+      "positions": 829945,
+      "tests": 4096,
+      "bh_threshold": 0.011137519757336033,
+      "passing_bh": 924,
+      "passing_bh_twofold_over_markov": 84
+    },
+    "utr_or_exon": {
+      "kmers_seen": 4096,
+      "positions": 1848063,
+      "tests": 4096,
+      "bh_threshold": 0.013741903013633533,
+      "passing_bh": 1132,
+      "passing_bh_twofold_over_markov": 61
+    },
+    "other": {
+      "kmers_seen": 3634,
+      "positions": 23952,
+      "tests": 3634,
+      "bh_threshold": 0.00043842118708278447,
+      "passing_bh": 33,
+      "passing_bh_twofold_over_markov": 31
+    }
+  },
+  "kmer_examples": {
+    "unknown_structural": [
+      {
+        "kmer": "CCTACG",
+        "observed": 2375,
+        "expected": 128.79,
+        "p": 0.0,
+        "ratio": 18.44
+      },
+      {
+        "kmer": "GAGCGC",
+        "observed": 2907,
+        "expected": 187.0,
+        "p": 0.0,
+        "ratio": 15.55
+      },
+      {
+        "kmer": "CGTTGG",
+        "observed": 4991,
+        "expected": 332.29,
+        "p": 0.0,
+        "ratio": 15.02
+      },
+      {
+        "kmer": "TACGGT",
+        "observed": 2165,
+        "expected": 148.45,
+        "p": 0.0,
+        "ratio": 14.58
+      },
+      {
+        "kmer": "GAGGCC",
+        "observed": 2726,
+        "expected": 210.12,
+        "p": 0.0,
+        "ratio": 12.97
+      }
+    ],
+    "exon_noncoding": [
+      {
+        "kmer": "CGCGCG",
+        "observed": 82,
+        "expected": 21.45,
+        "p": 2.033620246036995e-23,
+        "ratio": 3.82
+      },
+      {
+        "kmer": "TACTAA",
+        "observed": 447,
+        "expected": 138.94,
+        "p": 2.400932777179458e-95,
+        "ratio": 3.22
+      },
+      {
+        "kmer": "TAGTAG",
+        "observed": 333,
+        "expected": 112.72,
+        "p": 3.3939517096243934e-63,
+        "ratio": 2.95
+      },
+      {
+        "kmer": "CGGGCG",
+        "observed": 237,
+        "expected": 82.76,
+        "p": 1.9596027962882733e-43,
+        "ratio": 2.86
+      },
+      {
+        "kmer": "CTACTA",
+        "observed": 304,
+        "expected": 107.64,
+        "p": 5.668011124058888e-54,
+        "ratio": 2.82
+      }
+    ],
+    "intron": [
+      {
+        "kmer": "CGGGCG",
+        "observed": 2325,
+        "expected": 390.63,
+        "p": 0.0,
+        "ratio": 5.95
+      },
+      {
+        "kmer": "CGCCCG",
+        "observed": 2308,
+        "expected": 390.18,
+        "p": 0.0,
+        "ratio": 5.92
+      },
+      {
+        "kmer": "GGCGCG",
+        "observed": 1751,
+        "expected": 384.81,
+        "p": 0.0,
+        "ratio": 4.55
+      },
+      {
+        "kmer": "CGCGCC",
+        "observed": 1697,
+        "expected": 384.49,
+        "p": 0.0,
+        "ratio": 4.41
+      },
+      {
+        "kmer": "GTCTCG",
+        "observed": 4200,
+        "expected": 960.16,
+        "p": 0.0,
+        "ratio": 4.37
+      }
+    ],
+    "unknown_neutral": [
+      {
+        "kmer": "CGCCGC",
+        "observed": 92,
+        "expected": 8.22,
+        "p": 3.531770547069323e-62,
+        "ratio": 11.19
+      },
+      {
+        "kmer": "TCGAGT",
+        "observed": 177,
+        "expected": 19.38,
+        "p": 8.736961869072463e-104,
+        "ratio": 9.13
+      },
+      {
+        "kmer": "CGAGTC",
+        "observed": 159,
+        "expected": 18.53,
+        "p": 1.3741160097337461e-89,
+        "ratio": 8.58
+      },
+      {
+        "kmer": "CCGCCG",
+        "observed": 92,
+        "expected": 11.09,
+        "p": 1.860829284337987e-51,
+        "ratio": 8.3
+      },
+      {
+        "kmer": "CCGCGG",
+        "observed": 52,
+        "expected": 7.63,
+        "p": 5.494266632474516e-26,
+        "ratio": 6.82
+      }
+    ],
+    "ctcf_only": [
+      {
+        "kmer": "CGCCCG",
+        "observed": 12,
+        "expected": 2.54,
+        "p": 1.4922299619854049e-05,
+        "ratio": 4.72
+      },
+      {
+        "kmer": "CGTGCG",
+        "observed": 6,
+        "expected": 1.86,
+        "p": 0.012008471534721548,
+        "ratio": 3.23
+      },
+      {
+        "kmer": "GACGCG",
+        "observed": 4,
+        "expected": 1.35,
+        "p": 0.047742127464326774,
+        "ratio": 2.96
+      },
+      {
+        "kmer": "TAGTCG",
+        "observed": 6,
+        "expected": 2.17,
+        "p": 0.02346456652668107,
+        "ratio": 2.76
+      },
+      {
+        "kmer": "CCGGCG",
+        "observed": 7,
+        "expected": 2.54,
+        "p": 0.015346945999788702,
+        "ratio": 2.76
+      }
+    ],
+    "promoter_like": [
+      {
+        "kmer": "TATATA",
+        "observed": 43,
+        "expected": 9.19,
+        "p": 5.64228006420859e-16,
+        "ratio": 4.68
+      },
+      {
+        "kmer": "TAACGA",
+        "observed": 22,
+        "expected": 5.41,
+        "p": 7.037923961867631e-08,
+        "ratio": 4.07
+      },
+      {
+        "kmer": "TCGCTA",
+        "observed": 35,
+        "expected": 8.95,
+        "p": 3.4639009488251124e-11,
+        "ratio": 3.91
+      },
+      {
+        "kmer": "GCGTCG",
+        "observed": 32,
+        "expected": 9.67,
+        "p": 1.1579676565921977e-08,
+        "ratio": 3.31
+      },
+      {
+        "kmer": "TACATA",
+        "observed": 33,
+        "expected": 10.18,
+        "p": 1.129447145676381e-08,
+        "ratio": 3.24
+      }
+    ],
+    "unknown_regulatory": [
+      {
+        "kmer": "CGGGCG",
+        "observed": 579,
+        "expected": 106.03,
+        "p": 7.125561979622499e-224,
+        "ratio": 5.46
+      },
+      {
+        "kmer": "CGCCCG",
+        "observed": 545,
+        "expected": 104.62,
+        "p": 8.642017740209337e-202,
+        "ratio": 5.21
+      },
+      {
+        "kmer": "TAGTAG",
+        "observed": 1406,
+        "expected": 331.8,
+        "p": 0.0,
+        "ratio": 4.24
+      },
+      {
+        "kmer": "GGCGCG",
+        "observed": 424,
+        "expected": 101.39,
+        "p": 1.1136589106362009e-125,
+        "ratio": 4.18
+      },
+      {
+        "kmer": "CTACTA",
+        "observed": 1467,
+        "expected": 352.06,
+        "p": 0.0,
+        "ratio": 4.17
+      }
+    ],
+    "enhancer_like": [
+      {
+        "kmer": "CGCGCG",
+        "observed": 228,
+        "expected": 44.19,
+        "p": 7.253398450930081e-85,
+        "ratio": 5.16
+      },
+      {
+        "kmer": "GGCGCG",
+        "observed": 523,
+        "expected": 178.78,
+        "p": 1.260789691340946e-96,
+        "ratio": 2.93
+      },
+      {
+        "kmer": "CGGGCG",
+        "observed": 575,
+        "expected": 197.74,
+        "p": 4.94530679676889e-105,
+        "ratio": 2.91
+      },
+      {
+        "kmer": "CGCCCG",
+        "observed": 573,
+        "expected": 199.73,
+        "p": 1.7567824132785198e-102,
+        "ratio": 2.87
+      },
+      {
+        "kmer": "GCGCGG",
+        "observed": 480,
+        "expected": 180.58,
+        "p": 5.0536207740669e-76,
+        "ratio": 2.66
+      }
+    ],
+    "unknown_fossil": [
+      {
+        "kmer": "CGGGCG",
+        "observed": 160,
+        "expected": 16.73,
+        "p": 7.165252132499469e-97,
+        "ratio": 9.56
+      },
+      {
+        "kmer": "CGCCCG",
+        "observed": 149,
+        "expected": 16.85,
+        "p": 8.319028325343035e-86,
+        "ratio": 8.84
+      },
+      {
+        "kmer": "GGCGCG",
+        "observed": 122,
+        "expected": 17.68,
+        "p": 3.759819759366469e-59,
+        "ratio": 6.9
+      },
+      {
+        "kmer": "CGCGCC",
+        "observed": 97,
+        "expected": 17.21,
+        "p": 3.135540803765391e-40,
+        "ratio": 5.64
+      },
+      {
+        "kmer": "CGCGCG",
+        "observed": 19,
+        "expected": 3.45,
+        "p": 5.250016854029724e-09,
+        "ratio": 5.51
+      }
+    ],
+    "unknown_constrained": [
+      {
+        "kmer": "CGCGCT",
+        "observed": 3,
+        "expected": 0.44,
+        "p": 0.010083538678283167,
+        "ratio": 6.0
+      },
+      {
+        "kmer": "GCGATC",
+        "observed": 5,
+        "expected": 1.04,
+        "p": 0.004342948286995512,
+        "ratio": 4.81
+      },
+      {
+        "kmer": "CGGGGC",
+        "observed": 11,
+        "expected": 2.69,
+        "p": 0.00011761555610371056,
+        "ratio": 4.09
+      },
+      {
+        "kmer": "GGCGCG",
+        "observed": 2,
+        "expected": 0.34,
+        "p": 0.04741748910202078,
+        "ratio": 4.0
+      },
+      {
+        "kmer": "CGCGCC",
+        "observed": 2,
+        "expected": 0.37,
+        "p": 0.05443856533981819,
+        "ratio": 4.0
+      }
+    ],
+    "cds": [
+      {
+        "kmer": "TTATTA",
+        "observed": 58,
+        "expected": 13.71,
+        "p": 5.52147013343719e-19,
+        "ratio": 4.23
+      },
+      {
+        "kmer": "ATAATA",
+        "observed": 52,
+        "expected": 15.15,
+        "p": 1.1063250502096717e-13,
+        "ratio": 3.43
+      },
+      {
+        "kmer": "TATAAT",
+        "observed": 49,
+        "expected": 15.05,
+        "p": 3.3804727925243924e-12,
+        "ratio": 3.26
+      },
+      {
+        "kmer": "TATTAC",
+        "observed": 72,
+        "expected": 22.27,
+        "p": 5.452297265699573e-17,
+        "ratio": 3.23
+      },
+      {
+        "kmer": "TAATAA",
+        "observed": 44,
+        "expected": 13.63,
+        "p": 5.344928432513947e-11,
+        "ratio": 3.23
+      }
+    ],
+    "utr_or_exon": [
+      {
+        "kmer": "CGCGCG",
+        "observed": 310,
+        "expected": 55.43,
+        "p": 1.7351270035479096e-123,
+        "ratio": 5.59
+      },
+      {
+        "kmer": "CGCCGC",
+        "observed": 603,
+        "expected": 151.72,
+        "p": 9.131111601529531e-168,
+        "ratio": 3.97
+      },
+      {
+        "kmer": "GCGGCG",
+        "observed": 569,
+        "expected": 156.86,
+        "p": 8.616512784109254e-142,
+        "ratio": 3.63
+      },
+      {
+        "kmer": "TATATA",
+        "observed": 533,
+        "expected": 152.73,
+        "p": 1.6626367734555977e-126,
+        "ratio": 3.49
+      },
+      {
+        "kmer": "CGGGCG",
+        "observed": 546,
+        "expected": 161.07,
+        "p": 1.1973224454115632e-124,
+        "ratio": 3.39
+      }
+    ],
+    "other": [
+      {
+        "kmer": "TATATA",
+        "observed": 42,
+        "expected": 2.61,
+        "p": 1.7025829837750306e-35,
+        "ratio": 16.09
+      },
+      {
+        "kmer": "ATATAT",
+        "observed": 40,
+        "expected": 3.36,
+        "p": 5.098585819168276e-29,
+        "ratio": 11.9
+      },
+      {
+        "kmer": "TACGTA",
+        "observed": 4,
+        "expected": 0.39,
+        "p": 0.0007274179096274811,
+        "ratio": 8.0
+      },
+      {
+        "kmer": "CGGGCG",
+        "observed": 10,
+        "expected": 1.33,
+        "p": 1.397385609374722e-06,
+        "ratio": 7.52
+      },
+      {
+        "kmer": "GATCGA",
+        "observed": 5,
+        "expected": 0.69,
+        "p": 0.0007204998737116409,
+        "ratio": 7.25
+      }
+    ]
+  },
+  "units": 3098,
+  "units_by_kind": {
+    "repeat": 962,
+    "repeat_family": 46,
+    "ccre": 5,
+    "gencode": 2,
+    "segmental_duplication": 1,
+    "jaspar": 82,
+    "seed": 2000
+  },
+  "windows": {
+    "window": 10000,
+    "count": 3918,
+    "gc_edges": [
+      0.4078,
+      0.4509,
+      0.4861,
+      0.5273
+    ],
+    "repeat_edges": [
+      0.3494,
+      0.4959,
+      0.6589
+    ],
+    "strata": 20,
+    "bases_per_context": {
+      "cds": 829945,
+      "exon_noncoding": 1808141,
+      "utr_or_exon": 1848063,
+      "promoter_like": 203946,
+      "enhancer_like": 4351501,
+      "ctcf_only": 101740,
+      "intron": 19616763,
+      "unknown_structural": 3717039,
+      "unknown_fossil": 1649185,
+      "unknown_regulatory": 4434559,
+      "unknown_constrained": 56059,
+      "unknown_neutral": 539107,
+      "other": 23952
+    }
+  },
+  "tests": {
+    "context_enrichment": 22795,
+    "bh_threshold": 0.004944190436470049,
+    "passing": 2279,
+    "fdr": 0.05
+  },
+  "context_enrichments_passing": 2231,
+  "most_enriched": [
+    {
+      "unit": "repeat:snRNA:U6",
+      "context": "exon_noncoding",
+      "observed": 21,
+      "expected": 1.2,
+      "ratio": 17.553,
+      "p": 2.701438503202365e-19,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat:L1:L1MCa",
+      "context": "unknown_neutral",
+      "observed": 14,
+      "expected": 0.87,
+      "ratio": 16.121,
+      "p": 7.09045761268499e-13,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat:Satellite:HSATI",
+      "context": "exon_noncoding",
+      "observed": 18,
+      "expected": 1.18,
+      "ratio": 15.318,
+      "p": 9.378409585699448e-16,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:ZNF93",
+      "context": "cds",
+      "observed": 20,
+      "expected": 1.46,
+      "ratio": 13.722,
+      "p": 1.9233221403697276e-16,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:CGGBP1",
+      "context": "cds",
+      "observed": 14,
+      "expected": 1.07,
+      "ratio": 13.124,
+      "p": 1.0497209024452041e-11,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat:ERVL:MLT2B3",
+      "context": "exon_noncoding",
+      "observed": 16,
+      "expected": 1.24,
+      "ratio": 12.903,
+      "p": 4.661105673835548e-13,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat_family:scRNA",
+      "context": "exon_noncoding",
+      "observed": 13,
+      "expected": 1.17,
+      "ratio": 11.082,
+      "p": 4.316910875305742e-10,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat:srpRNA:7SLRNA",
+      "context": "exon_noncoding",
+      "observed": 19,
+      "expected": 1.91,
+      "ratio": 9.969,
+      "p": 2.833149659805559e-13,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat_family:srpRNA",
+      "context": "exon_noncoding",
+      "observed": 19,
+      "expected": 1.91,
+      "ratio": 9.969,
+      "p": 2.833149659805559e-13,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat_family:snRNA",
+      "context": "exon_noncoding",
+      "observed": 26,
+      "expected": 2.9,
+      "ratio": 8.97,
+      "p": 1.5879032401278577e-16,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:MEF2B",
+      "context": "enhancer_like",
+      "observed": 29,
+      "expected": 3.59,
+      "ratio": 8.078,
+      "p": 4.439852415792441e-17,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:PROP1",
+      "context": "enhancer_like",
+      "observed": 22,
+      "expected": 2.79,
+      "ratio": 7.892,
+      "p": 3.888788663962001e-13,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:MEF2D",
+      "context": "enhancer_like",
+      "observed": 35,
+      "expected": 4.6,
+      "ratio": 7.606,
+      "p": 1.77032147259953e-19,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:MEF2A",
+      "context": "enhancer_like",
+      "observed": 35,
+      "expected": 4.61,
+      "ratio": 7.59,
+      "p": 1.889783343517392e-19,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:HOXB13",
+      "context": "enhancer_like",
+      "observed": 27,
+      "expected": 3.86,
+      "ratio": 7.003,
+      "p": 1.501720221834074e-14,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat:ERVL:MLT2A2",
+      "context": "unknown_fossil",
+      "observed": 10,
+      "expected": 1.44,
+      "ratio": 6.962,
+      "p": 2.8133682284122712e-06,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:ONECUT1",
+      "context": "enhancer_like",
+      "observed": 17,
+      "expected": 2.44,
+      "ratio": 6.96,
+      "p": 1.1079684089269127e-09,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:ZNF362",
+      "context": "enhancer_like",
+      "observed": 66,
+      "expected": 9.5,
+      "ratio": 6.949,
+      "p": 5.364260909772221e-33,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:ZNF460",
+      "context": "enhancer_like",
+      "observed": 24,
+      "expected": 3.47,
+      "ratio": 6.925,
+      "p": 5.264234504483277e-13,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:HMGA1",
+      "context": "enhancer_like",
+      "observed": 73,
+      "expected": 10.61,
+      "ratio": 6.883,
+      "p": 4.714890021459508e-36,
+      "passes_bh": true
+    },
+    {
+      "unit": "repeat_family:telo",
+      "context": "exon_noncoding",
+      "observed": 11,
+      "expected": 1.63,
+      "ratio": 6.761,
+      "p": 1.2016040239659174e-06,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:PBX2",
+      "context": "enhancer_like",
+      "observed": 17,
+      "expected": 2.54,
+      "ratio": 6.692,
+      "p": 1.9697557211776595e-09,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:STAT2",
+      "context": "enhancer_like",
+      "observed": 32,
+      "expected": 4.9,
+      "ratio": 6.53,
+      "p": 4.069033843134154e-16,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:FOXQ1",
+      "context": "enhancer_like",
+      "observed": 29,
+      "expected": 4.5,
+      "ratio": 6.444,
+      "p": 1.2965729609623252e-14,
+      "passes_bh": true
+    },
+    {
+      "unit": "jaspar:MAFK",
+      "context": "enhancer_like",
+      "observed": 27,
+      "expected": 4.52,
+      "ratio": 5.978,
+      "p": 5.717892341842138e-13,
+      "passes_bh": true
+    }
+  ],
+  "fossil_as_node_library": {
+    "blocks": 106,
+    "nodes_with_two_or_more": 20,
+    "within_node_mean_cosine": 0.178,
+    "between_node_mean_cosine": 0.0996,
+    "null_label_permutation": 0.092,
+    "p_label_permutation": 0.001,
+    "null_boundary_shift": 0.142,
+    "p_boundary_shift": 0.1144,
+    "permutations": 1000,
+    "shifts": 200
+  },
+  "fossil_library_link": {
+    "libraries_tested": 33,
+    "families_tested": 34,
+    "tests": 995,
+    "bh_threshold": 0.00023490673376742226,
+    "passing_bh": 5,
+    "passing_with_ratio_above_one": 5,
+    "top": [
+      {
+        "library": "timer.puberty_reproduction",
+        "family": "L1:L1MA10",
+        "observed": 12,
+        "expected": 2.35,
+        "ratio": 5.101,
+        "p": 6.939749999784076e-06
+      },
+      {
+        "library": "core.apoptosis",
+        "family": "L1:L1MA10",
+        "observed": 8,
+        "expected": 1.11,
+        "ratio": 7.236,
+        "p": 2.0859170927966173e-05
+      },
+      {
+        "library": "core.cytoskeleton",
+        "family": "L1:L1MA10",
+        "observed": 12,
+        "expected": 2.71,
+        "ratio": 4.432,
+        "p": 2.7201318775564267e-05
+      },
+      {
+        "library": "blueprint.organ_eye",
+        "family": "L1:L1MC3",
+        "observed": 5,
+        "expected": 0.36,
+        "ratio": 13.848,
+        "p": 3.7895263406310905e-05
+      },
+      {
+        "library": "systems.nervous",
+        "family": "L1:L1MB3",
+        "observed": 5,
+        "expected": 0.54,
+        "ratio": 9.343,
+        "p": 0.00023490673376742226
+      }
+    ],
+    "random_gene_sets_passing": [
+      10,
+      8,
+      9,
+      11,
+      10,
+      15,
+      17,
+      9,
+      23,
+      12
+    ],
+    "reading": "the random gene sets say how many pairs a Poisson tail passes when the only structure is that repeats cluster inside nodes; a positive claim needs the real libraries to pass more"
+  },
+  "syntax_against_slots": {
+    "units_tested": 2395,
+    "by_case": {
+      "recent": 443,
+      "tolerant": 1277,
+      "syntax": 22,
+      "relaxed": 8,
+      "unmeasured": 645
+    },
+    "by_kind": {
+      "repeat": {
+        "recent": 95,
+        "tolerant": 224,
+        "syntax": 2,
+        "unmeasured": 7
+      },
+      "repeat_family": {
+        "tolerant": 25,
+        "recent": 6,
+        "syntax": 2,
+        "relaxed": 4
+      },
+      "ccre": {
+        "tolerant": 1,
+        "recent": 3,
+        "syntax": 1
+      },
+      "gencode": {
+        "unmeasured": 2
+      },
+      "segmental_duplication": {
+        "tolerant": 1
+      },
+      "jaspar": {
+        "syntax": 16,
+        "relaxed": 4,
+        "unmeasured": 1,
+        "recent": 1
+      },
+      "seed": {
+        "tolerant": 1026,
+        "recent": 338,
+        "unmeasured": 635,
+        "syntax": 1
+      }
+    },
+    "conservation_tests": 2395,
+    "conservation_bh_threshold": 0.0002854861276561649,
+    "conservation_passing": 23,
+    "human_tests": 1750,
+    "human_bh_threshold": 0.0004702862320351809,
+    "human_passing": 19,
+    "own_element_tests": 22,
+    "own_element_bh_threshold": 0.0,
+    "own_element_passing": 0,
+    "jaspar_pooled_against_own_element": {
+      "factors": 82,
+      "site_bases": 10576,
+      "conserved_fraction": 0.3363,
+      "own_element_expected_fraction": 0.3101,
+      "p_site_equivalents": 0.0451679841210637,
+      "note": "sites of different factors overlap, so the pooled p is optimistic"
+    },
+    "jaspar_above_own_element": 0,
+    "syntax_survival": {
+      "syntax_by_thresholds": 22,
+      "and_above_context_matched_neighbourhood": 12,
+      "surviving_every_null": 2,
+      "jaspar_lost_to_own_element_null": 10
+    },
+    "value_slots_found": 0,
+    "syntax_candidates": [
+      {
+        "unit": "ccre:PLS",
+        "kind": "ccre",
+        "occurrences": 958,
+        "conserved_fraction": 0.1678,
+        "conserved_expected_fraction": 0.1133,
+        "human_constrained_fraction": 0.2569,
+        "block_tiers": {
+          "regulatory": 107,
+          "fossil": 6,
+          "neutral": 1,
+          "constrained_unknown": 3
+        },
+        "contexts": {
+          "exon_noncoding": 184,
+          "promoter_like": 398,
+          "cds": 71,
+          "utr_or_exon": 305
+        }
+      },
+      {
+        "unit": "seed:GATGGATGGATGGATG",
+        "kind": "seed",
+        "occurrences": 400,
+        "conserved_fraction": 0.1103,
+        "conserved_expected_fraction": 0.0247,
+        "human_constrained_fraction": 0.4587,
+        "block_tiers": {
+          "regulatory": 218
+        },
+        "contexts": {
+          "enhancer_like": 1,
+          "intron": 156,
+          "exon_noncoding": 18,
+          "unknown_regulatory": 218,
+          "promoter_like": 7
+        }
+      }
+    ],
+    "value_slot_candidates": [],
+    "by_dominant_tier": {
+      "regulatory": {
+        "recent": 428,
+        "tolerant": 858,
+        "syntax": 22,
+        "relaxed": 8
+      },
+      "structural": {
+        "tolerant": 389,
+        "recent": 5,
+        "unmeasured": 640
+      },
+      "neutral": {
+        "recent": 2,
+        "tolerant": 2
+      },
+      "fossil": {
+        "tolerant": 28,
+        "recent": 7,
+        "unmeasured": 1
+      },
+      "constrained_unknown": {
+        "recent": 1
+      }
+    },
+    "by_dominant_block_case": {
+      "tolerant": {
+        "recent": 412,
+        "tolerant": 880,
+        "syntax": 17,
+        "relaxed": 8
+      },
+      "unmeasured": {
+        "recent": 16,
+        "tolerant": 397,
+        "unmeasured": 641
+      },
+      "recent": {
+        "recent": 15,
+        "syntax": 3
+      },
+      "relaxed": {
+        "syntax": 2
+      }
+    },
+    "units_in_the_syntax_candidates": [
+      {
+        "unit": "repeat_family:Alu",
+        "kind": "repeat_family",
+        "in_syntax_candidates": 4,
+        "occurrences": 25031,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0029
+      },
+      {
+        "unit": "repeat_family:L1",
+        "kind": "repeat_family",
+        "in_syntax_candidates": 3,
+        "occurrences": 11526,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0135
+      },
+      {
+        "unit": "repeat:L1:L1ME4a",
+        "kind": "repeat",
+        "in_syntax_candidates": 2,
+        "occurrences": 375,
+        "axis_case": "recent",
+        "conserved_fraction": 0.0407
+      },
+      {
+        "unit": "repeat:Alu:AluSc5",
+        "kind": "repeat",
+        "in_syntax_candidates": 2,
+        "occurrences": 148,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0067
+      },
+      {
+        "unit": "repeat_family:L2",
+        "kind": "repeat_family",
+        "in_syntax_candidates": 1,
+        "occurrences": 6981,
+        "axis_case": "recent",
+        "conserved_fraction": 0.0144
+      },
+      {
+        "unit": "repeat:Alu:AluJo",
+        "kind": "repeat",
+        "in_syntax_candidates": 1,
+        "occurrences": 1640,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0029
+      },
+      {
+        "unit": "repeat:Alu:AluJb",
+        "kind": "repeat",
+        "in_syntax_candidates": 1,
+        "occurrences": 2484,
+        "axis_case": "recent",
+        "conserved_fraction": 0.005
+      },
+      {
+        "unit": "repeat:L1:L1M5",
+        "kind": "repeat",
+        "in_syntax_candidates": 1,
+        "occurrences": 787,
+        "axis_case": "recent",
+        "conserved_fraction": 0.022
+      },
+      {
+        "unit": "repeat:L2:L2b",
+        "kind": "repeat",
+        "in_syntax_candidates": 1,
+        "occurrences": 2039,
+        "axis_case": "recent",
+        "conserved_fraction": 0.0155
+      },
+      {
+        "unit": "ccre:CTCF-only",
+        "kind": "ccre",
+        "in_syntax_candidates": 1,
+        "occurrences": 465,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0687
+      },
+      {
+        "unit": "ccre:pELS",
+        "kind": "ccre",
+        "in_syntax_candidates": 1,
+        "occurrences": 4642,
+        "axis_case": "recent",
+        "conserved_fraction": 0.0883
+      },
+      {
+        "unit": "seed:TTACAGGTGTGAGCCA",
+        "kind": "seed",
+        "in_syntax_candidates": 1,
+        "occurrences": 400,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0025
+      },
+      {
+        "unit": "seed:TTCTTTTTTTTTTTTT",
+        "kind": "seed",
+        "in_syntax_candidates": 1,
+        "occurrences": 400,
+        "axis_case": "recent",
+        "conserved_fraction": 0.0013
+      },
+      {
+        "unit": "seed:TACAGGTGTGAGCCAC",
+        "kind": "seed",
+        "in_syntax_candidates": 1,
+        "occurrences": 400,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0
+      },
+      {
+        "unit": "seed:TTTCTTTTTTTTTTTT",
+        "kind": "seed",
+        "in_syntax_candidates": 1,
+        "occurrences": 400,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0
+      },
+      {
+        "unit": "seed:ACAGGTGTGAGCCACC",
+        "kind": "seed",
+        "in_syntax_candidates": 1,
+        "occurrences": 400,
+        "axis_case": "tolerant",
+        "conserved_fraction": 0.0
+      }
+    ],
+    "thresholds": {
+      "conserved_min": 0.1,
+      "human_min": 0.25,
+      "fdr": 0.05
+    }
+  },
+  "index_file": "data/knowledge/lexicon/lexicon_chr22.json.gz",
+  "index_bytes": 475575,
+  "evidence": {
+    "sequence": "curated: GRCh38 primary assembly",
+    "repeats": "curated: UCSC RepeatMasker (rmsk_<chrom>)",
+    "annotation": "curated: GENCODE v50 (CDS, exons)",
+    "registry": "curated: ENCODE SCREEN cCREs v3",
+    "blocks": "inferred: genomeos unknown classes with the budget's tiers",
+    "nodes": "inferred: CTCF-only elements as node boundaries",
+    "conservation": "experimental-derived: UCSC phastConsElements100way, per base (local cache)",
+    "human_axis": "inferred: gnomAD Gnocchi per block at a kilobase (variation_<chrom>)",
+    "null": "stratified: a unit's own density inside GC x repeat-share strata spread over the context's bases; Poisson tail; Benjamini-Hochberg over the family of tests, whose size is reported"
+  },
+  "seconds": 68.8,
+  "seconds_with_questions": 70.1,
+  "cost": {
+    "seconds_per_mb": 1.38,
+    "index_bytes_per_mb": 9358
+  }
+}

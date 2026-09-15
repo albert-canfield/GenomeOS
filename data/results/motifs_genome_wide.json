@@ -1,0 +1,2316 @@
+{
+  "result": "motifs_genome_wide",
+  "date": "2026-09-12",
+  "chromosomes": 24,
+  "promoters": 20067,
+  "units": 110,
+  "promoters_with_composition": 20067,
+  "strata_used": 39,
+  "unit_share": {
+    "FOX": 0.4379,
+    "SALL3": 0.3062,
+    "Regulators of differentiation": 0.4738,
+    "Paired-related HD factors": 0.1653,
+    "ZNF24": 0.0543,
+    "POU domain factors": 0.3061,
+    "STAT factors": 0.3645,
+    "ZNF250": 0.0951,
+    "ZNF131": 0.3124,
+    "KLF9": 0.2597,
+    "ZNF93": 0.3322,
+    "KLF17": 0.0573,
+    "NRF": 0.2173,
+    "ZNF865": 0.1403,
+    "CGGBP1": 0.4358,
+    "ZNF436": 0.0114,
+    "ZNF460": 0.3675,
+    "ZNF135": 0.3323,
+    "Ets-related": 0.1797,
+    "RREB1": 0.0904,
+    "ZSCAN4": 0.0474,
+    "CREB-related factors": 0.0666,
+    "Thyroid hormone receptor-related factors (NR1)": 0.0201,
+    "ZNF606": 0.0805,
+    "Interferon-regulatory factors": 0.1793,
+    "ZNF683": 0.0876,
+    "THAP-related factors": 0.0609,
+    "ZNF143": 0.0465,
+    "ZNF470": 0.0654,
+    "ZNF471": 0.0885,
+    "ZNF407": 0.0186,
+    "ZNF347": 0.0985,
+    "RFX-related factors": 0.04,
+    "Paired-related HD factors + TBX1-related factors": 0.0025,
+    "REST": 0.0082,
+    "ZNF775": 0.0434,
+    "ZNF146": 0.0094,
+    "HD-LIM": 0.1706,
+    "DMRT factors": 0.0123,
+    "ZFP28": 0.0102,
+    "FIZ1": 0.0148,
+    "ZNF234": 0.0076,
+    "ZNF354A": 0.0059,
+    "ZNF623": 0.0038,
+    "ZNF251": 0.0033,
+    "ZNF226": 0.0078,
+    "RXR-related receptors (NR2) + Thyroid hormone receptor-related factors (NR1)": 0.0014,
+    "ZNF260": 0.0049,
+    "ZNF8": 0.0031,
+    "FLYWCH1": 0.0008,
+    "ZKSCAN4": 0.0008,
+    "Maf-related": 0.0367,
+    "TALE-type homeo domain factors": 0.0697,
+    "Ets-related + Tal-related": 0.0176,
+    "Ets-related + bHLH-ZIP": 0.0076,
+    "HD-CUT": 0.0493,
+    "ZBTB40": 0.0376,
+    "ZNF721": 0.0132,
+    "POU domain factors + SOX-related factors": 0.0216,
+    "ZSCAN2": 0.0014,
+    "ZNF510": 0.0123,
+    "Fos-related + Jun-related": 0.0378,
+    "Brachyury-related factors": 0.0005,
+    "ZNF382": 0.0001,
+    "ZNF596": 0.0896,
+    "bHLH-ZIP": 0.121,
+    "PRDM9": 0.0442,
+    "MECOM": 0.0095,
+    "SOX-related factors": 0.0003,
+    "Steroid hormone receptors (NR3)": 0.0057,
+    "ZNF814": 0.009,
+    "ZNF286B": 0.0001,
+    "Jun-related": 0.0162,
+    "ZNF582": 0.0003,
+    "HOX": 0.0301,
+    "ZNF362": 0.1012,
+    "HMGA": 0.0798,
+    "Ets-related + HOX": 0.0009,
+    "ZNF772": 0.0002,
+    "MTF1": 0.0005,
+    "ZSCAN16": 0.0001,
+    "Myb-SANT": 0.0215,
+    "ZNF211": 0.0055,
+    "ZIM3": 0.0023,
+    "PRDM5": 0.0015,
+    "ZNF677": 0.0009,
+    "ZNF16": 0.0023,
+    "FTZF1-related (NR5A)": 0.0062,
+    "ZNF696": 0.0002,
+    "ZNF551": 0.0001,
+    "Paired plus homeo domain": 0.0047,
+    "Ets-related + HOX-related factors": 0.0003,
+    "ZNF76": 0.001,
+    "CREB-related": 0.0014,
+    "ZFP42": 0.0077,
+    "ZNF85": 0.001,
+    "ZNF282": 0.0008,
+    "NK": 0.0004,
+    "ZNF707": 0.0025,
+    "ZNF732": 0.0009,
+    "ZNF816": 0.0027,
+    "ZNF410": 0.0003,
+    "ZNF57": 0.0,
+    "Hairy-related factors": 0.0002,
+    "EGR3": 0.0006,
+    "TCF-7-related factors": 0.0003,
+    "ZNF418": 0.0001,
+    "ARID-related": 0.0005,
+    "KLF13": 0.0001,
+    "ZNF669": 0.0003
+  },
+  "libraries": {
+    "core.replication": {
+      "members_placed": 201,
+      "members": 235,
+      "families": [
+        {
+          "family": "ZNF721",
+          "members_with_hit": 7,
+          "share": 0.035,
+          "expected_share": 0.0131,
+          "all_share": 0.0132,
+          "ratio": 2.66
+        },
+        {
+          "family": "ZNF143",
+          "members_with_hit": 24,
+          "share": 0.119,
+          "expected_share": 0.0535,
+          "all_share": 0.0465,
+          "ratio": 2.23
+        },
+        {
+          "family": "THAP-related factors",
+          "members_with_hit": 25,
+          "share": 0.124,
+          "expected_share": 0.0682,
+          "all_share": 0.0609,
+          "ratio": 1.82
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 7,
+          "share": 0.035,
+          "expected_share": 0.0203,
+          "all_share": 0.0216,
+          "ratio": 1.72
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "core.transcription": {
+      "members_placed": 1580,
+      "members": 1743,
+      "families": [
+        {
+          "family": "ZNF143",
+          "members_with_hit": 152,
+          "share": 0.096,
+          "expected_share": 0.0496,
+          "all_share": 0.0465,
+          "ratio": 1.94
+        },
+        {
+          "family": "ZNF251",
+          "members_with_hit": 8,
+          "share": 0.005,
+          "expected_share": 0.0026,
+          "all_share": 0.0033,
+          "ratio": 1.94
+        },
+        {
+          "family": "HOX",
+          "members_with_hit": 87,
+          "share": 0.055,
+          "expected_share": 0.0312,
+          "all_share": 0.0301,
+          "ratio": 1.76
+        },
+        {
+          "family": "ZNF362",
+          "members_with_hit": 290,
+          "share": 0.184,
+          "expected_share": 0.1062,
+          "all_share": 0.1012,
+          "ratio": 1.73
+        },
+        {
+          "family": "THAP-related factors",
+          "members_with_hit": 171,
+          "share": 0.108,
+          "expected_share": 0.0643,
+          "all_share": 0.0609,
+          "ratio": 1.68
+        },
+        {
+          "family": "HMGA",
+          "members_with_hit": 215,
+          "share": 0.136,
+          "expected_share": 0.0842,
+          "all_share": 0.0798,
+          "ratio": 1.62
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 2
+    },
+    "core.splicing": {
+      "members_placed": 264,
+      "members": 1160,
+      "families": [
+        {
+          "family": "ARID-related",
+          "members_with_hit": 5,
+          "share": 0.019,
+          "expected_share": 0.0009,
+          "all_share": 0.0005,
+          "ratio": 21.29
+        },
+        {
+          "family": "CREB-related",
+          "members_with_hit": 4,
+          "share": 0.015,
+          "expected_share": 0.0016,
+          "all_share": 0.0014,
+          "ratio": 9.5
+        },
+        {
+          "family": "RXR-related receptors (NR2) + Thyroid hormone receptor-related factors (NR1)",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0014,
+          "all_share": 0.0014,
+          "ratio": 8.22
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 11,
+          "share": 0.042,
+          "expected_share": 0.0082,
+          "all_share": 0.0077,
+          "ratio": 5.06
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 4,
+          "share": 0.015,
+          "expected_share": 0.0051,
+          "all_share": 0.0059,
+          "ratio": 2.94
+        },
+        {
+          "family": "ZNF407",
+          "members_with_hit": 8,
+          "share": 0.03,
+          "expected_share": 0.0148,
+          "all_share": 0.0186,
+          "ratio": 2.05
+        },
+        {
+          "family": "REST",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0065,
+          "all_share": 0.0082,
+          "ratio": 1.76
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 12,
+          "share": 0.045,
+          "expected_share": 0.0293,
+          "all_share": 0.0215,
+          "ratio": 1.55
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "core.translation": {
+      "members_placed": 452,
+      "members": 1750,
+      "families": [
+        {
+          "family": "ZNF211",
+          "members_with_hit": 5,
+          "share": 0.011,
+          "expected_share": 0.0053,
+          "all_share": 0.0055,
+          "ratio": 2.1
+        },
+        {
+          "family": "ZNF143",
+          "members_with_hit": 45,
+          "share": 0.1,
+          "expected_share": 0.054,
+          "all_share": 0.0465,
+          "ratio": 1.84
+        },
+        {
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 4,
+          "share": 0.009,
+          "expected_share": 0.005,
+          "all_share": 0.0047,
+          "ratio": 1.77
+        },
+        {
+          "family": "THAP-related factors",
+          "members_with_hit": 54,
+          "share": 0.119,
+          "expected_share": 0.0687,
+          "all_share": 0.0609,
+          "ratio": 1.74
+        },
+        {
+          "family": "ZNF814",
+          "members_with_hit": 6,
+          "share": 0.013,
+          "expected_share": 0.0087,
+          "all_share": 0.009,
+          "ratio": 1.52
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 2
+    },
+    "core.folding_proteostasis": {
+      "members_placed": 266,
+      "members": 290,
+      "families": [
+        {
+          "family": "ZNF251",
+          "members_with_hit": 7,
+          "share": 0.026,
+          "expected_share": 0.0034,
+          "all_share": 0.0033,
+          "ratio": 7.7
+        },
+        {
+          "family": "ZNF146",
+          "members_with_hit": 7,
+          "share": 0.026,
+          "expected_share": 0.0093,
+          "all_share": 0.0094,
+          "ratio": 2.84
+        },
+        {
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0048,
+          "all_share": 0.0047,
+          "ratio": 2.37
+        },
+        {
+          "family": "DMRT factors",
+          "members_with_hit": 7,
+          "share": 0.026,
+          "expected_share": 0.0129,
+          "all_share": 0.0123,
+          "ratio": 2.04
+        },
+        {
+          "family": "ZNF814",
+          "members_with_hit": 5,
+          "share": 0.019,
+          "expected_share": 0.0094,
+          "all_share": 0.009,
+          "ratio": 2.0
+        },
+        {
+          "family": "ZNF143",
+          "members_with_hit": 25,
+          "share": 0.094,
+          "expected_share": 0.0509,
+          "all_share": 0.0465,
+          "ratio": 1.85
+        },
+        {
+          "family": "THAP-related factors",
+          "members_with_hit": 31,
+          "share": 0.117,
+          "expected_share": 0.066,
+          "all_share": 0.0609,
+          "ratio": 1.77
+        },
+        {
+          "family": "Thyroid hormone receptor-related factors (NR1)",
+          "members_with_hit": 9,
+          "share": 0.034,
+          "expected_share": 0.0205,
+          "all_share": 0.0201,
+          "ratio": 1.65
+        },
+        {
+          "family": "RFX-related factors",
+          "members_with_hit": 17,
+          "share": 0.064,
+          "expected_share": 0.0409,
+          "all_share": 0.04,
+          "ratio": 1.56
+        },
+        {
+          "family": "Fos-related + Jun-related",
+          "members_with_hit": 16,
+          "share": 0.06,
+          "expected_share": 0.0389,
+          "all_share": 0.0378,
+          "ratio": 1.55
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "core.degradation": {
+      "members_placed": 1056,
+      "members": 1258,
+      "families": [
+        {
+          "family": "Ets-related + HOX",
+          "members_with_hit": 3,
+          "share": 0.003,
+          "expected_share": 0.0011,
+          "all_share": 0.0009,
+          "ratio": 2.67
+        },
+        {
+          "family": "ZNF143",
+          "members_with_hit": 83,
+          "share": 0.079,
+          "expected_share": 0.0499,
+          "all_share": 0.0465,
+          "ratio": 1.58
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "core.dna_repair": {
+      "members_placed": 581,
+      "members": 665,
+      "families": [
+        {
+          "family": "ZNF251",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0025,
+          "all_share": 0.0033,
+          "ratio": 2.07
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 25,
+          "share": 0.043,
+          "expected_share": 0.0258,
+          "all_share": 0.0215,
+          "ratio": 1.67
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "core.cell_cycle": {
+      "members_placed": 1821,
+      "members": 2107,
+      "families": [],
+      "operators": [],
+      "pairs_explained_by_gc": 2
+    },
+    "core.apoptosis": {
+      "members_placed": 638,
+      "members": 674,
+      "families": [
+        {
+          "family": "ZNF732",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.001,
+          "all_share": 0.0009,
+          "ratio": 4.75
+        },
+        {
+          "family": "ZIM3",
+          "members_with_hit": 5,
+          "share": 0.008,
+          "expected_share": 0.0024,
+          "all_share": 0.0023,
+          "ratio": 3.33
+        },
+        {
+          "family": "ZNF814",
+          "members_with_hit": 11,
+          "share": 0.017,
+          "expected_share": 0.0096,
+          "all_share": 0.009,
+          "ratio": 1.79
+        },
+        {
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 5,
+          "share": 0.008,
+          "expected_share": 0.0046,
+          "all_share": 0.0047,
+          "ratio": 1.71
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0028,
+          "all_share": 0.0025,
+          "ratio": 1.69
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "core.energy": {
+      "members_placed": 151,
+      "members": 182,
+      "families": [
+        {
+          "family": "ZNF226",
+          "members_with_hit": 3,
+          "share": 0.02,
+          "expected_share": 0.0075,
+          "all_share": 0.0078,
+          "ratio": 2.66
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 4,
+          "share": 0.026,
+          "expected_share": 0.0102,
+          "all_share": 0.0102,
+          "ratio": 2.6
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 3,
+          "share": 0.02,
+          "expected_share": 0.0086,
+          "all_share": 0.0077,
+          "ratio": 2.32
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 4,
+          "share": 0.026,
+          "expected_share": 0.0123,
+          "all_share": 0.0123,
+          "ratio": 2.15
+        },
+        {
+          "family": "CREB-related factors",
+          "members_with_hit": 16,
+          "share": 0.106,
+          "expected_share": 0.067,
+          "all_share": 0.0666,
+          "ratio": 1.58
+        },
+        {
+          "family": "ZNF721",
+          "members_with_hit": 3,
+          "share": 0.02,
+          "expected_share": 0.0129,
+          "all_share": 0.0132,
+          "ratio": 1.54
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "core.cytoskeleton": {
+      "members_placed": 2335,
+      "members": 2388,
+      "families": [
+        {
+          "family": "PRDM5",
+          "members_with_hit": 8,
+          "share": 0.003,
+          "expected_share": 0.0016,
+          "all_share": 0.0015,
+          "ratio": 2.12
+        },
+        {
+          "family": "ZNF16",
+          "members_with_hit": 11,
+          "share": 0.005,
+          "expected_share": 0.0025,
+          "all_share": 0.0023,
+          "ratio": 1.86
+        },
+        {
+          "family": "ZNF282",
+          "members_with_hit": 4,
+          "share": 0.002,
+          "expected_share": 0.0009,
+          "all_share": 0.0008,
+          "ratio": 1.83
+        },
+        {
+          "family": "ZSCAN2",
+          "members_with_hit": 6,
+          "share": 0.003,
+          "expected_share": 0.0015,
+          "all_share": 0.0014,
+          "ratio": 1.71
+        },
+        {
+          "family": "ZNF85",
+          "members_with_hit": 4,
+          "share": 0.002,
+          "expected_share": 0.0011,
+          "all_share": 0.001,
+          "ratio": 1.61
+        },
+        {
+          "family": "RFX-related factors",
+          "members_with_hit": 147,
+          "share": 0.063,
+          "expected_share": 0.0416,
+          "all_share": 0.04,
+          "ratio": 1.51
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 2
+    },
+    "core.membrane_transport": {
+      "members_placed": 1241,
+      "members": 1416,
+      "families": [
+        {
+          "family": "REST",
+          "members_with_hit": 21,
+          "share": 0.017,
+          "expected_share": 0.0085,
+          "all_share": 0.0082,
+          "ratio": 1.99
+        },
+        {
+          "family": "ZNF260",
+          "members_with_hit": 9,
+          "share": 0.007,
+          "expected_share": 0.0039,
+          "all_share": 0.0049,
+          "ratio": 1.85
+        },
+        {
+          "family": "ZNF623",
+          "members_with_hit": 8,
+          "share": 0.006,
+          "expected_share": 0.0037,
+          "all_share": 0.0038,
+          "ratio": 1.73
+        },
+        {
+          "family": "RXR-related receptors (NR2) + Thyroid hormone receptor-related factors (NR1)",
+          "members_with_hit": 3,
+          "share": 0.002,
+          "expected_share": 0.0015,
+          "all_share": 0.0014,
+          "ratio": 1.62
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 0
+    },
+    "core.chromatin_epigenome": {
+      "members_placed": 884,
+      "members": 1473,
+      "families": [
+        {
+          "family": "ZNF669",
+          "members_with_hit": 6,
+          "share": 0.007,
+          "expected_share": 0.0005,
+          "all_share": 0.0003,
+          "ratio": 13.5
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 18,
+          "share": 0.02,
+          "expected_share": 0.0083,
+          "all_share": 0.0077,
+          "ratio": 2.47
+        },
+        {
+          "family": "DMRT factors",
+          "members_with_hit": 18,
+          "share": 0.02,
+          "expected_share": 0.0121,
+          "all_share": 0.0123,
+          "ratio": 1.68
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 7,
+          "share": 0.008,
+          "expected_share": 0.005,
+          "all_share": 0.0059,
+          "ratio": 1.57
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.pluripotency": {
+      "members_placed": 73,
+      "members": 75,
+      "families": [
+        {
+          "family": "Thyroid hormone receptor-related factors (NR1)",
+          "members_with_hit": 4,
+          "share": 0.055,
+          "expected_share": 0.0224,
+          "all_share": 0.0201,
+          "ratio": 2.44
+        },
+        {
+          "family": "ZBTB40",
+          "members_with_hit": 4,
+          "share": 0.055,
+          "expected_share": 0.0331,
+          "all_share": 0.0376,
+          "ratio": 1.66
+        },
+        {
+          "family": "ZNF470",
+          "members_with_hit": 7,
+          "share": 0.096,
+          "expected_share": 0.0605,
+          "all_share": 0.0654,
+          "ratio": 1.58
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.germ_layers": {
+      "members_placed": 800,
+      "members": 851,
+      "families": [
+        {
+          "family": "ZNF8",
+          "members_with_hit": 4,
+          "share": 0.005,
+          "expected_share": 0.0013,
+          "all_share": 0.0031,
+          "ratio": 3.92
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 15,
+          "share": 0.019,
+          "expected_share": 0.0051,
+          "all_share": 0.0059,
+          "ratio": 3.71
+        },
+        {
+          "family": "ZNF76",
+          "members_with_hit": 3,
+          "share": 0.004,
+          "expected_share": 0.0011,
+          "all_share": 0.001,
+          "ratio": 3.51
+        },
+        {
+          "family": "ZNF260",
+          "members_with_hit": 4,
+          "share": 0.005,
+          "expected_share": 0.0018,
+          "all_share": 0.0049,
+          "ratio": 2.73
+        },
+        {
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 4,
+          "share": 0.005,
+          "expected_share": 0.0028,
+          "all_share": 0.0025,
+          "ratio": 1.75
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 4,
+          "share": 0.005,
+          "expected_share": 0.0033,
+          "all_share": 0.0025,
+          "ratio": 1.53
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.axes": {
+      "members_placed": 429,
+      "members": 432,
+      "families": [
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 5,
+          "share": 0.012,
+          "expected_share": 0.005,
+          "all_share": 0.0059,
+          "ratio": 2.35
+        },
+        {
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 4,
+          "share": 0.009,
+          "expected_share": 0.0044,
+          "all_share": 0.0047,
+          "ratio": 2.1
+        },
+        {
+          "family": "ZNF816",
+          "members_with_hit": 3,
+          "share": 0.007,
+          "expected_share": 0.0041,
+          "all_share": 0.0027,
+          "ratio": 1.71
+        },
+        {
+          "family": "ZNF234",
+          "members_with_hit": 5,
+          "share": 0.012,
+          "expected_share": 0.0069,
+          "all_share": 0.0076,
+          "ratio": 1.7
+        },
+        {
+          "family": "ZNF814",
+          "members_with_hit": 8,
+          "share": 0.019,
+          "expected_share": 0.0117,
+          "all_share": 0.009,
+          "ratio": 1.6
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.segmentation": {
+      "members_placed": 265,
+      "members": 266,
+      "families": [
+        {
+          "family": "ZNF816",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0041,
+          "all_share": 0.0027,
+          "ratio": 2.79
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.005,
+          "all_share": 0.0059,
+          "ratio": 2.29
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 11,
+          "share": 0.042,
+          "expected_share": 0.0186,
+          "all_share": 0.0216,
+          "ratio": 2.23
+        },
+        {
+          "family": "ZNF234",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0067,
+          "all_share": 0.0076,
+          "ratio": 1.68
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.signalling_toolkit": {
+      "members_placed": 1973,
+      "members": 2185,
+      "families": [
+        {
+          "family": "ZNF732",
+          "members_with_hit": 5,
+          "share": 0.003,
+          "expected_share": 0.0011,
+          "all_share": 0.0009,
+          "ratio": 2.28
+        },
+        {
+          "family": "ZNF85",
+          "members_with_hit": 4,
+          "share": 0.002,
+          "expected_share": 0.001,
+          "all_share": 0.001,
+          "ratio": 1.98
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 18,
+          "share": 0.009,
+          "expected_share": 0.0052,
+          "all_share": 0.0059,
+          "ratio": 1.75
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.organ_heart": {
+      "members_placed": 384,
+      "members": 399,
+      "families": [
+        {
+          "family": "PRDM5",
+          "members_with_hit": 3,
+          "share": 0.008,
+          "expected_share": 0.0017,
+          "all_share": 0.0015,
+          "ratio": 4.49
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 6,
+          "share": 0.016,
+          "expected_share": 0.0053,
+          "all_share": 0.0059,
+          "ratio": 2.97
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.008,
+          "expected_share": 0.0033,
+          "all_share": 0.0025,
+          "ratio": 2.33
+        },
+        {
+          "family": "PRDM9",
+          "members_with_hit": 40,
+          "share": 0.104,
+          "expected_share": 0.0605,
+          "all_share": 0.0442,
+          "ratio": 1.72
+        },
+        {
+          "family": "Steroid hormone receptors (NR3)",
+          "members_with_hit": 5,
+          "share": 0.013,
+          "expected_share": 0.0076,
+          "all_share": 0.0057,
+          "ratio": 1.72
+        },
+        {
+          "family": "MECOM",
+          "members_with_hit": 6,
+          "share": 0.016,
+          "expected_share": 0.0099,
+          "all_share": 0.0095,
+          "ratio": 1.58
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 6,
+          "share": 0.016,
+          "expected_share": 0.0104,
+          "all_share": 0.0123,
+          "ratio": 1.5
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.organ_nervous": {
+      "members_placed": 1750,
+      "members": 1810,
+      "families": [
+        {
+          "family": "MTF1",
+          "members_with_hit": 5,
+          "share": 0.003,
+          "expected_share": 0.0007,
+          "all_share": 0.0005,
+          "ratio": 4.33
+        },
+        {
+          "family": "ZNF8",
+          "members_with_hit": 5,
+          "share": 0.003,
+          "expected_share": 0.0012,
+          "all_share": 0.0031,
+          "ratio": 2.32
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 20,
+          "share": 0.011,
+          "expected_share": 0.0054,
+          "all_share": 0.0059,
+          "ratio": 2.11
+        },
+        {
+          "family": "ZNF76",
+          "members_with_hit": 3,
+          "share": 0.002,
+          "expected_share": 0.001,
+          "all_share": 0.001,
+          "ratio": 1.65
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.organ_eye": {
+      "members_placed": 499,
+      "members": 546,
+      "families": [
+        {
+          "family": "ZNF816",
+          "members_with_hit": 5,
+          "share": 0.01,
+          "expected_share": 0.0037,
+          "all_share": 0.0027,
+          "ratio": 2.74
+        },
+        {
+          "family": "REST",
+          "members_with_hit": 12,
+          "share": 0.024,
+          "expected_share": 0.0106,
+          "all_share": 0.0082,
+          "ratio": 2.27
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 6,
+          "share": 0.012,
+          "expected_share": 0.0054,
+          "all_share": 0.0059,
+          "ratio": 2.22
+        },
+        {
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 3,
+          "share": 0.006,
+          "expected_share": 0.0027,
+          "all_share": 0.0025,
+          "ratio": 2.22
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.006,
+          "expected_share": 0.0032,
+          "all_share": 0.0025,
+          "ratio": 1.88
+        },
+        {
+          "family": "ZNF226",
+          "members_with_hit": 7,
+          "share": 0.014,
+          "expected_share": 0.008,
+          "all_share": 0.0078,
+          "ratio": 1.75
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 9,
+          "share": 0.018,
+          "expected_share": 0.0111,
+          "all_share": 0.0123,
+          "ratio": 1.63
+        },
+        {
+          "family": "ZSCAN4",
+          "members_with_hit": 45,
+          "share": 0.09,
+          "expected_share": 0.0579,
+          "all_share": 0.0474,
+          "ratio": 1.56
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.organ_endoderm_gut": {
+      "members_placed": 242,
+      "members": 245,
+      "families": [
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 4,
+          "share": 0.017,
+          "expected_share": 0.0053,
+          "all_share": 0.0059,
+          "ratio": 3.14
+        },
+        {
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 3,
+          "share": 0.012,
+          "expected_share": 0.0046,
+          "all_share": 0.0047,
+          "ratio": 2.71
+        },
+        {
+          "family": "Ets-related + bHLH-ZIP",
+          "members_with_hit": 6,
+          "share": 0.025,
+          "expected_share": 0.0095,
+          "all_share": 0.0076,
+          "ratio": 2.62
+        },
+        {
+          "family": "ZNF226",
+          "members_with_hit": 5,
+          "share": 0.021,
+          "expected_share": 0.008,
+          "all_share": 0.0078,
+          "ratio": 2.59
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 9,
+          "share": 0.037,
+          "expected_share": 0.0195,
+          "all_share": 0.0216,
+          "ratio": 1.91
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 4,
+          "share": 0.017,
+          "expected_share": 0.0087,
+          "all_share": 0.0102,
+          "ratio": 1.9
+        },
+        {
+          "family": "ZNF814",
+          "members_with_hit": 5,
+          "share": 0.021,
+          "expected_share": 0.0115,
+          "all_share": 0.009,
+          "ratio": 1.8
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 4,
+          "share": 0.017,
+          "expected_share": 0.0108,
+          "all_share": 0.0123,
+          "ratio": 1.54
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.organ_kidney_urogenital": {
+      "members_placed": 314,
+      "members": 317,
+      "families": [
+        {
+          "family": "ZNF814",
+          "members_with_hit": 8,
+          "share": 0.025,
+          "expected_share": 0.0112,
+          "all_share": 0.009,
+          "ratio": 2.28
+        },
+        {
+          "family": "MECOM",
+          "members_with_hit": 6,
+          "share": 0.019,
+          "expected_share": 0.0097,
+          "all_share": 0.0095,
+          "ratio": 1.98
+        },
+        {
+          "family": "DMRT factors",
+          "members_with_hit": 7,
+          "share": 0.022,
+          "expected_share": 0.0122,
+          "all_share": 0.0123,
+          "ratio": 1.83
+        },
+        {
+          "family": "PRDM9",
+          "members_with_hit": 31,
+          "share": 0.099,
+          "expected_share": 0.0582,
+          "all_share": 0.0442,
+          "ratio": 1.7
+        },
+        {
+          "family": "Ets-related + bHLH-ZIP",
+          "members_with_hit": 5,
+          "share": 0.016,
+          "expected_share": 0.0096,
+          "all_share": 0.0076,
+          "ratio": 1.67
+        },
+        {
+          "family": "ZNF596",
+          "members_with_hit": 56,
+          "share": 0.178,
+          "expected_share": 0.113,
+          "all_share": 0.0896,
+          "ratio": 1.58
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.organ_musculoskeletal": {
+      "members_placed": 596,
+      "members": 604,
+      "families": [
+        {
+          "family": "ZNF814",
+          "members_with_hit": 14,
+          "share": 0.023,
+          "expected_share": 0.0105,
+          "all_share": 0.009,
+          "ratio": 2.23
+        },
+        {
+          "family": "ZNF623",
+          "members_with_hit": 4,
+          "share": 0.007,
+          "expected_share": 0.0033,
+          "all_share": 0.0038,
+          "ratio": 2.01
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 7,
+          "share": 0.012,
+          "expected_share": 0.006,
+          "all_share": 0.0059,
+          "ratio": 1.97
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0029,
+          "all_share": 0.0025,
+          "ratio": 1.75
+        },
+        {
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 5,
+          "share": 0.008,
+          "expected_share": 0.0049,
+          "all_share": 0.0047,
+          "ratio": 1.7
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 10,
+          "share": 0.017,
+          "expected_share": 0.0106,
+          "all_share": 0.0123,
+          "ratio": 1.58
+        },
+        {
+          "family": "MECOM",
+          "members_with_hit": 9,
+          "share": 0.015,
+          "expected_share": 0.0098,
+          "all_share": 0.0095,
+          "ratio": 1.54
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "blueprint.organ_blood_immune": {
+      "members_placed": 483,
+      "members": 511,
+      "families": [
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 7,
+          "share": 0.014,
+          "expected_share": 0.0056,
+          "all_share": 0.0059,
+          "ratio": 2.58
+        },
+        {
+          "family": "ZNF816",
+          "members_with_hit": 3,
+          "share": 0.006,
+          "expected_share": 0.0031,
+          "all_share": 0.0027,
+          "ratio": 2.02
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 2
+    },
+    "blueprint.organ_skin": {
+      "members_placed": 237,
+      "members": 238,
+      "families": [
+        {
+          "family": "ZSCAN2",
+          "members_with_hit": 4,
+          "share": 0.017,
+          "expected_share": 0.0015,
+          "all_share": 0.0014,
+          "ratio": 11.28
+        },
+        {
+          "family": "ZNF211",
+          "members_with_hit": 8,
+          "share": 0.034,
+          "expected_share": 0.0066,
+          "all_share": 0.0055,
+          "ratio": 5.11
+        },
+        {
+          "family": "ZNF260",
+          "members_with_hit": 3,
+          "share": 0.013,
+          "expected_share": 0.0033,
+          "all_share": 0.0049,
+          "ratio": 3.81
+        },
+        {
+          "family": "ZNF146",
+          "members_with_hit": 6,
+          "share": 0.025,
+          "expected_share": 0.0082,
+          "all_share": 0.0094,
+          "ratio": 3.09
+        },
+        {
+          "family": "ZNF234",
+          "members_with_hit": 6,
+          "share": 0.025,
+          "expected_share": 0.009,
+          "all_share": 0.0076,
+          "ratio": 2.82
+        },
+        {
+          "family": "DMRT factors",
+          "members_with_hit": 8,
+          "share": 0.034,
+          "expected_share": 0.0134,
+          "all_share": 0.0123,
+          "ratio": 2.51
+        },
+        {
+          "family": "ZNF226",
+          "members_with_hit": 5,
+          "share": 0.021,
+          "expected_share": 0.0094,
+          "all_share": 0.0078,
+          "ratio": 2.25
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 5,
+          "share": 0.021,
+          "expected_share": 0.0094,
+          "all_share": 0.0102,
+          "ratio": 2.25
+        },
+        {
+          "family": "FIZ1",
+          "members_with_hit": 6,
+          "share": 0.025,
+          "expected_share": 0.0127,
+          "all_share": 0.0148,
+          "ratio": 1.99
+        },
+        {
+          "family": "ZNF721",
+          "members_with_hit": 6,
+          "share": 0.025,
+          "expected_share": 0.0141,
+          "all_share": 0.0132,
+          "ratio": 1.79
+        },
+        {
+          "family": "ZNF436",
+          "members_with_hit": 4,
+          "share": 0.017,
+          "expected_share": 0.0098,
+          "all_share": 0.0114,
+          "ratio": 1.73
+        },
+        {
+          "family": "Maf-related",
+          "members_with_hit": 13,
+          "share": 0.055,
+          "expected_share": 0.033,
+          "all_share": 0.0367,
+          "ratio": 1.66
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 0
+    },
+    "timer.telomere": {
+      "members_placed": 179,
+      "members": 201,
+      "families": [
+        {
+          "family": "ZNF251",
+          "members_with_hit": 3,
+          "share": 0.017,
+          "expected_share": 0.0029,
+          "all_share": 0.0033,
+          "ratio": 5.74
+        },
+        {
+          "family": "Fos-related + Jun-related",
+          "members_with_hit": 13,
+          "share": 0.073,
+          "expected_share": 0.0367,
+          "all_share": 0.0378,
+          "ratio": 1.98
+        },
+        {
+          "family": "ZNF407",
+          "members_with_hit": 5,
+          "share": 0.028,
+          "expected_share": 0.016,
+          "all_share": 0.0186,
+          "ratio": 1.74
+        },
+        {
+          "family": "NRF",
+          "members_with_hit": 60,
+          "share": 0.335,
+          "expected_share": 0.2031,
+          "all_share": 0.2173,
+          "ratio": 1.65
+        },
+        {
+          "family": "ZNF721",
+          "members_with_hit": 4,
+          "share": 0.022,
+          "expected_share": 0.0143,
+          "all_share": 0.0132,
+          "ratio": 1.56
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 3,
+          "share": 0.017,
+          "expected_share": 0.0111,
+          "all_share": 0.0102,
+          "ratio": 1.51
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "timer.circadian": {
+      "members_placed": 207,
+      "members": 219,
+      "families": [
+        {
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 3,
+          "share": 0.014,
+          "expected_share": 0.0045,
+          "all_share": 0.0047,
+          "ratio": 3.2
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 5,
+          "share": 0.024,
+          "expected_share": 0.008,
+          "all_share": 0.0077,
+          "ratio": 3.04
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 3,
+          "share": 0.014,
+          "expected_share": 0.0049,
+          "all_share": 0.0059,
+          "ratio": 2.96
+        },
+        {
+          "family": "Jun-related",
+          "members_with_hit": 7,
+          "share": 0.034,
+          "expected_share": 0.0181,
+          "all_share": 0.0162,
+          "ratio": 1.86
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 6,
+          "share": 0.029,
+          "expected_share": 0.0164,
+          "all_share": 0.0215,
+          "ratio": 1.77
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 4,
+          "share": 0.019,
+          "expected_share": 0.0116,
+          "all_share": 0.0123,
+          "ratio": 1.67
+        },
+        {
+          "family": "ZNF143",
+          "members_with_hit": 16,
+          "share": 0.077,
+          "expected_share": 0.0494,
+          "all_share": 0.0465,
+          "ratio": 1.57
+        },
+        {
+          "family": "Fos-related + Jun-related",
+          "members_with_hit": 13,
+          "share": 0.063,
+          "expected_share": 0.0399,
+          "all_share": 0.0378,
+          "ratio": 1.57
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "timer.segmentation_clock": {
+      "members_placed": 265,
+      "members": 266,
+      "families": [
+        {
+          "family": "ZNF816",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0041,
+          "all_share": 0.0027,
+          "ratio": 2.79
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.005,
+          "all_share": 0.0059,
+          "ratio": 2.29
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 11,
+          "share": 0.042,
+          "expected_share": 0.0186,
+          "all_share": 0.0216,
+          "ratio": 2.23
+        },
+        {
+          "family": "ZNF234",
+          "members_with_hit": 3,
+          "share": 0.011,
+          "expected_share": 0.0067,
+          "all_share": 0.0076,
+          "ratio": 1.68
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "timer.developmental_timing": {
+      "members_placed": 121,
+      "members": 135,
+      "families": [
+        {
+          "family": "FIZ1",
+          "members_with_hit": 4,
+          "share": 0.033,
+          "expected_share": 0.0122,
+          "all_share": 0.0148,
+          "ratio": 2.72
+        },
+        {
+          "family": "PRDM9",
+          "members_with_hit": 14,
+          "share": 0.116,
+          "expected_share": 0.0563,
+          "all_share": 0.0442,
+          "ratio": 2.05
+        },
+        {
+          "family": "ZNF775",
+          "members_with_hit": 12,
+          "share": 0.099,
+          "expected_share": 0.0516,
+          "all_share": 0.0434,
+          "ratio": 1.92
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 4,
+          "share": 0.033,
+          "expected_share": 0.0193,
+          "all_share": 0.0216,
+          "ratio": 1.71
+        },
+        {
+          "family": "ZNF470",
+          "members_with_hit": 13,
+          "share": 0.107,
+          "expected_share": 0.0635,
+          "all_share": 0.0654,
+          "ratio": 1.69
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 3,
+          "share": 0.025,
+          "expected_share": 0.0153,
+          "all_share": 0.0215,
+          "ratio": 1.62
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "timer.puberty_reproduction": {
+      "members_placed": 1233,
+      "members": 1272,
+      "families": [
+        {
+          "family": "ZNF282",
+          "members_with_hit": 4,
+          "share": 0.003,
+          "expected_share": 0.0009,
+          "all_share": 0.0008,
+          "ratio": 3.73
+        },
+        {
+          "family": "EGR3",
+          "members_with_hit": 3,
+          "share": 0.002,
+          "expected_share": 0.0007,
+          "all_share": 0.0006,
+          "ratio": 3.56
+        },
+        {
+          "family": "Ets-related + HOX",
+          "members_with_hit": 4,
+          "share": 0.003,
+          "expected_share": 0.001,
+          "all_share": 0.0009,
+          "ratio": 3.31
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 7,
+          "share": 0.006,
+          "expected_share": 0.0027,
+          "all_share": 0.0025,
+          "ratio": 2.13
+        },
+        {
+          "family": "ZNF8",
+          "members_with_hit": 6,
+          "share": 0.005,
+          "expected_share": 0.0031,
+          "all_share": 0.0031,
+          "ratio": 1.55
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 15,
+          "share": 0.012,
+          "expected_share": 0.008,
+          "all_share": 0.0077,
+          "ratio": 1.52
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "timer.growth_longevity_axis": {
+      "members_placed": 560,
+      "members": 583,
+      "families": [
+        {
+          "family": "PRDM5",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0016,
+          "all_share": 0.0015,
+          "ratio": 3.3
+        },
+        {
+          "family": "ZNF816",
+          "members_with_hit": 5,
+          "share": 0.009,
+          "expected_share": 0.0031,
+          "all_share": 0.0027,
+          "ratio": 2.87
+        },
+        {
+          "family": "ZIM3",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0023,
+          "all_share": 0.0023,
+          "ratio": 2.38
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0029,
+          "all_share": 0.0025,
+          "ratio": 1.82
+        },
+        {
+          "family": "FTZF1-related (NR5A)",
+          "members_with_hit": 7,
+          "share": 0.013,
+          "expected_share": 0.007,
+          "all_share": 0.0062,
+          "ratio": 1.79
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 7,
+          "share": 0.013,
+          "expected_share": 0.008,
+          "all_share": 0.0077,
+          "ratio": 1.57
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 2
+    },
+    "timer.senescence_checkpoint": {
+      "members_placed": 260,
+      "members": 290,
+      "families": [
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 8,
+          "share": 0.031,
+          "expected_share": 0.0155,
+          "all_share": 0.0215,
+          "ratio": 1.99
+        },
+        {
+          "family": "Fos-related + Jun-related",
+          "members_with_hit": 19,
+          "share": 0.073,
+          "expected_share": 0.0394,
+          "all_share": 0.0378,
+          "ratio": 1.85
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 4,
+          "share": 0.015,
+          "expected_share": 0.0099,
+          "all_share": 0.0102,
+          "ratio": 1.55
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "timer.progeroid_maintenance": {
+      "members_placed": 525,
+      "members": 584,
+      "families": [
+        {
+          "family": "DMRT factors",
+          "members_with_hit": 11,
+          "share": 0.021,
+          "expected_share": 0.0122,
+          "all_share": 0.0123,
+          "ratio": 1.72
+        },
+        {
+          "family": "ZBTB40",
+          "members_with_hit": 31,
+          "share": 0.059,
+          "expected_share": 0.0365,
+          "all_share": 0.0376,
+          "ratio": 1.62
+        },
+        {
+          "family": "ZNF143",
+          "members_with_hit": 42,
+          "share": 0.08,
+          "expected_share": 0.0515,
+          "all_share": 0.0465,
+          "ratio": 1.55
+        },
+        {
+          "family": "Ets-related + bHLH-ZIP",
+          "members_with_hit": 6,
+          "share": 0.011,
+          "expected_share": 0.0075,
+          "all_share": 0.0076,
+          "ratio": 1.53
+        },
+        {
+          "family": "THAP-related factors",
+          "members_with_hit": 53,
+          "share": 0.101,
+          "expected_share": 0.0666,
+          "all_share": 0.0609,
+          "ratio": 1.52
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "timer.stem_cell_niches": {
+      "members_placed": 195,
+      "members": 200,
+      "families": [
+        {
+          "family": "DMRT factors",
+          "members_with_hit": 5,
+          "share": 0.026,
+          "expected_share": 0.0123,
+          "all_share": 0.0123,
+          "ratio": 2.09
+        },
+        {
+          "family": "ZFP42",
+          "members_with_hit": 3,
+          "share": 0.015,
+          "expected_share": 0.0086,
+          "all_share": 0.0077,
+          "ratio": 1.78
+        },
+        {
+          "family": "ZFP28",
+          "members_with_hit": 3,
+          "share": 0.015,
+          "expected_share": 0.0097,
+          "all_share": 0.0102,
+          "ratio": 1.58
+        },
+        {
+          "family": "ZNF596",
+          "members_with_hit": 37,
+          "share": 0.19,
+          "expected_share": 0.1218,
+          "all_share": 0.0896,
+          "ratio": 1.56
+        },
+        {
+          "family": "ZSCAN4",
+          "members_with_hit": 18,
+          "share": 0.092,
+          "expected_share": 0.0592,
+          "all_share": 0.0474,
+          "ratio": 1.56
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "systems.endocrine": {
+      "members_placed": 727,
+      "members": 749,
+      "families": [
+        {
+          "family": "ZNF816",
+          "members_with_hit": 5,
+          "share": 0.007,
+          "expected_share": 0.003,
+          "all_share": 0.0027,
+          "ratio": 2.32
+        },
+        {
+          "family": "Ets-related + bHLH-ZIP",
+          "members_with_hit": 12,
+          "share": 0.017,
+          "expected_share": 0.008,
+          "all_share": 0.0076,
+          "ratio": 2.07
+        },
+        {
+          "family": "REST",
+          "members_with_hit": 13,
+          "share": 0.018,
+          "expected_share": 0.009,
+          "all_share": 0.0082,
+          "ratio": 1.98
+        },
+        {
+          "family": "ZNF251",
+          "members_with_hit": 4,
+          "share": 0.006,
+          "expected_share": 0.0032,
+          "all_share": 0.0033,
+          "ratio": 1.74
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 15,
+          "share": 0.021,
+          "expected_share": 0.012,
+          "all_share": 0.0123,
+          "ratio": 1.72
+        },
+        {
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 3,
+          "share": 0.004,
+          "expected_share": 0.0025,
+          "all_share": 0.0025,
+          "ratio": 1.66
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 26,
+          "share": 0.036,
+          "expected_share": 0.0224,
+          "all_share": 0.0216,
+          "ratio": 1.6
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 7,
+          "share": 0.01,
+          "expected_share": 0.0063,
+          "all_share": 0.0059,
+          "ratio": 1.53
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 0
+    },
+    "systems.nervous": {
+      "members_placed": 443,
+      "members": 491,
+      "families": [
+        {
+          "family": "REST",
+          "members_with_hit": 28,
+          "share": 0.063,
+          "expected_share": 0.0111,
+          "all_share": 0.0082,
+          "ratio": 5.69
+        },
+        {
+          "family": "ZNF623",
+          "members_with_hit": 3,
+          "share": 0.007,
+          "expected_share": 0.0034,
+          "all_share": 0.0038,
+          "ratio": 1.97
+        },
+        {
+          "family": "ZSCAN4",
+          "members_with_hit": 47,
+          "share": 0.106,
+          "expected_share": 0.057,
+          "all_share": 0.0474,
+          "ratio": 1.86
+        },
+        {
+          "family": "Myb-SANT",
+          "members_with_hit": 11,
+          "share": 0.025,
+          "expected_share": 0.0143,
+          "all_share": 0.0215,
+          "ratio": 1.74
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "systems.immune": {
+      "members_placed": 2821,
+      "members": 3842,
+      "families": [
+        {
+          "family": "ZKSCAN4",
+          "members_with_hit": 5,
+          "share": 0.002,
+          "expected_share": 0.0009,
+          "all_share": 0.0008,
+          "ratio": 1.93
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 1
+    },
+    "systems.circulation_respiration": {
+      "members_placed": 569,
+      "members": 599,
+      "families": [
+        {
+          "family": "REST",
+          "members_with_hit": 15,
+          "share": 0.026,
+          "expected_share": 0.0104,
+          "all_share": 0.0082,
+          "ratio": 2.55
+        },
+        {
+          "family": "FTZF1-related (NR5A)",
+          "members_with_hit": 8,
+          "share": 0.014,
+          "expected_share": 0.0057,
+          "all_share": 0.0062,
+          "ratio": 2.47
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 8,
+          "share": 0.014,
+          "expected_share": 0.0058,
+          "all_share": 0.0059,
+          "ratio": 2.43
+        },
+        {
+          "family": "ZNF814",
+          "members_with_hit": 11,
+          "share": 0.019,
+          "expected_share": 0.0105,
+          "all_share": 0.009,
+          "ratio": 1.84
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 10,
+          "share": 0.018,
+          "expected_share": 0.011,
+          "all_share": 0.0123,
+          "ratio": 1.6
+        },
+        {
+          "family": "ZNF816",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0034,
+          "all_share": 0.0027,
+          "ratio": 1.54
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 3
+    },
+    "systems.extracellular_matrix_adhesion": {
+      "members_placed": 1249,
+      "members": 1303,
+      "families": [
+        {
+          "family": "EGR3",
+          "members_with_hit": 4,
+          "share": 0.003,
+          "expected_share": 0.0007,
+          "all_share": 0.0006,
+          "ratio": 4.38
+        },
+        {
+          "family": "Ets-related + HOX",
+          "members_with_hit": 3,
+          "share": 0.002,
+          "expected_share": 0.001,
+          "all_share": 0.0009,
+          "ratio": 2.34
+        },
+        {
+          "family": "ZSCAN2",
+          "members_with_hit": 4,
+          "share": 0.003,
+          "expected_share": 0.0014,
+          "all_share": 0.0014,
+          "ratio": 2.31
+        },
+        {
+          "family": "ZIM3",
+          "members_with_hit": 7,
+          "share": 0.006,
+          "expected_share": 0.0025,
+          "all_share": 0.0023,
+          "ratio": 2.21
+        },
+        {
+          "family": "ZNF510",
+          "members_with_hit": 28,
+          "share": 0.022,
+          "expected_share": 0.0115,
+          "all_share": 0.0123,
+          "ratio": 1.94
+        },
+        {
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 6,
+          "share": 0.005,
+          "expected_share": 0.0025,
+          "all_share": 0.0025,
+          "ratio": 1.93
+        },
+        {
+          "family": "ZNF8",
+          "members_with_hit": 5,
+          "share": 0.004,
+          "expected_share": 0.0021,
+          "all_share": 0.0031,
+          "ratio": 1.9
+        },
+        {
+          "family": "FIZ1",
+          "members_with_hit": 27,
+          "share": 0.022,
+          "expected_share": 0.0126,
+          "all_share": 0.0148,
+          "ratio": 1.72
+        },
+        {
+          "family": "ZNF816",
+          "members_with_hit": 6,
+          "share": 0.005,
+          "expected_share": 0.003,
+          "all_share": 0.0027,
+          "ratio": 1.59
+        },
+        {
+          "family": "FTZF1-related (NR5A)",
+          "members_with_hit": 11,
+          "share": 0.009,
+          "expected_share": 0.0056,
+          "all_share": 0.0062,
+          "ratio": 1.57
+        },
+        {
+          "family": "POU domain factors + SOX-related factors",
+          "members_with_hit": 44,
+          "share": 0.035,
+          "expected_share": 0.0225,
+          "all_share": 0.0216,
+          "ratio": 1.56
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 0
+    },
+    "systems.ligand_receptor_protocol": {
+      "members_placed": 2085,
+      "members": 2417,
+      "families": [
+        {
+          "family": "Brachyury-related factors",
+          "members_with_hit": 6,
+          "share": 0.003,
+          "expected_share": 0.0007,
+          "all_share": 0.0005,
+          "ratio": 4.05
+        },
+        {
+          "family": "REST",
+          "members_with_hit": 40,
+          "share": 0.019,
+          "expected_share": 0.0086,
+          "all_share": 0.0082,
+          "ratio": 2.23
+        },
+        {
+          "family": "FLYWCH1",
+          "members_with_hit": 4,
+          "share": 0.002,
+          "expected_share": 0.0009,
+          "all_share": 0.0008,
+          "ratio": 2.05
+        },
+        {
+          "family": "FTZF1-related (NR5A)",
+          "members_with_hit": 18,
+          "share": 0.009,
+          "expected_share": 0.0045,
+          "all_share": 0.0062,
+          "ratio": 1.9
+        },
+        {
+          "family": "Paired-related HD factors + TBX1-related factors",
+          "members_with_hit": 7,
+          "share": 0.003,
+          "expected_share": 0.002,
+          "all_share": 0.0025,
+          "ratio": 1.71
+        },
+        {
+          "family": "ZNF226",
+          "members_with_hit": 29,
+          "share": 0.014,
+          "expected_share": 0.0092,
+          "all_share": 0.0078,
+          "ratio": 1.51
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 0
+    },
+    "systems.metabolic_homeostasis": {
+      "members_placed": 583,
+      "members": 663,
+      "families": [
+        {
+          "family": "PRDM5",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0016,
+          "all_share": 0.0015,
+          "ratio": 3.21
+        },
+        {
+          "family": "ZNF816",
+          "members_with_hit": 4,
+          "share": 0.007,
+          "expected_share": 0.0032,
+          "all_share": 0.0027,
+          "ratio": 2.11
+        },
+        {
+          "family": "ZNF623",
+          "members_with_hit": 5,
+          "share": 0.009,
+          "expected_share": 0.0041,
+          "all_share": 0.0038,
+          "ratio": 2.08
+        },
+        {
+          "family": "Paired plus homeo domain",
+          "members_with_hit": 5,
+          "share": 0.009,
+          "expected_share": 0.0043,
+          "all_share": 0.0047,
+          "ratio": 2.0
+        },
+        {
+          "family": "ZNF707",
+          "members_with_hit": 3,
+          "share": 0.005,
+          "expected_share": 0.0029,
+          "all_share": 0.0025,
+          "ratio": 1.78
+        },
+        {
+          "family": "ZNF354A",
+          "members_with_hit": 5,
+          "share": 0.009,
+          "expected_share": 0.0052,
+          "all_share": 0.0059,
+          "ratio": 1.65
+        },
+        {
+          "family": "FTZF1-related (NR5A)",
+          "members_with_hit": 6,
+          "share": 0.01,
+          "expected_share": 0.0066,
+          "all_share": 0.0062,
+          "ratio": 1.56
+        }
+      ],
+      "operators": [],
+      "pairs_explained_by_gc": 2
+    }
+  },
+  "pairs_explained_by_gc": 84,
+  "libraries_with_operators": 0,
+  "thresholds": {
+    "relative_score": 0.85,
+    "requires_enrichment": 1.5,
+    "operator_ratio": 2.0,
+    "operator_share": 0.25,
+    "gc_bins": 10,
+    "repeat_edges": [
+      0.0,
+      0.1,
+      0.3
+    ],
+    "min_stratum": 30
+  },
+  "evidence": {
+    "matrix": "curated: JASPAR 2026 CORE vertebrates, non-redundant",
+    "hit": "predicted: log-odds window at >= 85% of the matrix range, either strand",
+    "requires": "inferred: factors with a hit whose share of real promoters is >= 1.5x the shuffled share",
+    "operator": "inferred: factor combinations recurring across a library's promoters beyond expectation",
+    "units": "curated: TFClass family per JASPAR matrix; C2H2 zinc-finger factors counted one by one",
+    "null": "inferred: expectation within GC-decile by repeat-share strata; naive one kept too"
+  },
+  "cost": {
+    "seconds": 1590.9
+  }
+}

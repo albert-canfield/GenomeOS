@@ -1,0 +1,127 @@
+{
+  "result": "expression_brca_tcga_pan_can_atlas_2018",
+  "date": "2026-09-11",
+  "study": "brca_tcga_pan_can_atlas_2018",
+  "profile": "brca_tcga_pan_can_atlas_2018_rna_seq_v2_mrna_median_all_sample_ref_normal_Zscores",
+  "kind": "z_vs_normal",
+  "meaning": "z-score of each tumour against the study's normal samples",
+  "samples": 1082,
+  "genes": {
+    "APP": {
+      "n": 1082,
+      "min": -5.646,
+      "q1": -1.55,
+      "median": -0.768,
+      "q3": -0.055,
+      "p90": 0.818,
+      "max": 4.76,
+      "fraction_raised": 0.0222,
+      "raised_threshold": 2.0
+    },
+    "CEACAM5": {
+      "n": 1082,
+      "min": -1.649,
+      "q1": 0.19,
+      "median": 1.513,
+      "q3": 2.664,
+      "p90": 3.771,
+      "max": 6.004,
+      "fraction_raised": 0.3882,
+      "raised_threshold": 2.0
+    },
+    "CSF1R": {
+      "n": 1082,
+      "min": -5.367,
+      "q1": -1.399,
+      "median": -0.564,
+      "q3": 0.164,
+      "p90": 0.774,
+      "max": 3.816,
+      "fraction_raised": 0.012,
+      "raised_threshold": 2.0
+    },
+    "EGFR": {
+      "n": 1082,
+      "min": -13.156,
+      "q1": -5.859,
+      "median": -4.203,
+      "q3": -2.532,
+      "p90": -1.167,
+      "max": 7.703,
+      "fraction_raised": 0.0092,
+      "raised_threshold": 2.0
+    },
+    "ERBB2": {
+      "n": 1082,
+      "min": -3.84,
+      "q1": 0.222,
+      "median": 0.767,
+      "q3": 1.286,
+      "p90": 2.418,
+      "max": 5.596,
+      "fraction_raised": 0.11,
+      "raised_threshold": 2.0
+    },
+    "MKI67": {
+      "n": 1082,
+      "min": -2.409,
+      "q1": 1.76,
+      "median": 2.362,
+      "q3": 2.946,
+      "p90": 3.466,
+      "max": 4.378,
+      "fraction_raised": 0.658,
+      "raised_threshold": 2.0
+    },
+    "MSLN": {
+      "n": 1082,
+      "min": -1.809,
+      "q1": -1.099,
+      "median": -0.411,
+      "q3": 0.863,
+      "p90": 3.296,
+      "max": 7.274,
+      "fraction_raised": 0.1562,
+      "raised_threshold": 2.0
+    },
+    "NRIP1": {
+      "n": 1082,
+      "min": -8.017,
+      "q1": -1.39,
+      "median": -0.283,
+      "q3": 0.869,
+      "p90": 1.861,
+      "max": 4.711,
+      "fraction_raised": 0.086,
+      "raised_threshold": 2.0
+    },
+    "RUNX1": {
+      "n": 1082,
+      "min": -4.48,
+      "q1": -0.265,
+      "median": 0.278,
+      "q3": 0.766,
+      "p90": 1.173,
+      "max": 2.348,
+      "fraction_raised": 0.0083,
+      "raised_threshold": 2.0
+    },
+    "SOD1": {
+      "n": 1082,
+      "min": -4.903,
+      "q1": -0.144,
+      "median": 0.745,
+      "q3": 1.804,
+      "p90": 2.873,
+      "max": 7.01,
+      "fraction_raised": 0.207,
+      "raised_threshold": 2.0
+    }
+  },
+  "missing": [],
+  "evidence": {
+    "kind": "experimental",
+    "source": "cBioPortal brca_tcga_pan_can_atlas_2018 (brca_tcga_pan_can_atlas_2018_rna_seq_v2_mrna_median_all_sample_ref_normal_Zscores), via public REST API"
+  },
+  "confidence": 0.8
+}

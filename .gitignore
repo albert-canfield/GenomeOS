@@ -12,11 +12,43 @@ build/
 # Fetch them with scripts/fetch_reference.sh (see docs/DATA.md).
 data/reference/
 data/knowledge/
+# imported personal genomes (genomeos individual import) never leave the machine
+data/individuals/
 data/cache/
-data/twins/*.fa
-data/twins/*.fa.fai
+# A twin holds a named person's measured biological state: chronological age,
+# telomere length, epigenetic age, their variants and modifiers. Only the
+# open-consent public test subject is tracked; anyone else's twin stays local,
+# like their imported genome (data/individuals) and their predictions.
+data/twins/*
+!data/twins/HG002.json
+!data/twins/HG002_TERT.json
 *.fa.gz
 *.fa.fai
 *.vcf.gz
 !data/results/*.vcf.gz
 *.series_matrix.txt.gz
+.claude/
+# per-chromosome GENCODE splits are reference data (data fetch --chrom), not results; only the chr21+chrM subset is tracked
+data/results/gencode_v50_chr*.gff3.gz
+!data/results/gencode_v50_chr21_chrM.gff3.gz
+
+# Local secrets (API keys): ALPHAGENOME_API_KEY=... lives in .env, never in the repository.
+.env
+# RepeatMasker rows per chromosome are local reference data (1 MB each); only chr21 is tracked as the worked example
+data/results/rmsk_chr*.bed.gz
+!data/results/rmsk_chr21.bed.gz
+# segmental duplication rows per chromosome are local track data (genomeos duplications); chr21 is the worked example
+data/results/superdups_chr*.bed.gz
+!data/results/superdups_chr21.bed.gz
+# reader v1 per-chromosome results and DNase peak rows stay local; the genome-wide summary and chr21 are tracked
+data/results/reader_*_chr*.json
+!data/results/reader_*_chr21.json
+data/results/dnase_*_chr*.bed.gz
+!data/results/dnase_*_chr21.bed.gz
+
+# Background-job metadata and logs are per-machine runtime state: pids, timings and
+# console output that mean nothing on another checkout. The job registry lives in
+# genomeos/jobs.py and the results the jobs produce are under data/results.
+data/jobs/
+# The work board (genomeos work): who is working on what right now, per machine like data/jobs
+data/work/

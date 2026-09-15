@@ -1,0 +1,1064 @@
+{
+  "result": "epigenome_fossil",
+  "date": "2026-09-14",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX",
+    "chrY"
+  ],
+  "cell_types_with_wgbs": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "H1",
+    "IMR-90",
+    "SK-N-SH",
+    "hepatocyte",
+    "CD14-positive monocyte"
+  ],
+  "cell_types_without": [
+    "cardiac muscle cell",
+    "keratinocyte",
+    "astrocyte"
+  ],
+  "window": "1000 bp windows on a fixed grid inside each block, over 10% N dropped; a window is measured with 2+ CpG strand calls of 5+ reads",
+  "match": "GC (0.05 bins) x CpG per 100 bp (0.5, 1, 2, 4, 8) strata; the fossil-minus-tier difference is the per-stratum difference of mean window methylation weighted by fossil windows, strata with 5+ windows on both sides; bootstrap resamples blocks, not windows",
+  "tiers": {
+    "fossil": {
+      "blocks": 7302,
+      "bp": 328523829,
+      "windows": 320656,
+      "ref_cpg": 2084920
+    },
+    "neutral": {
+      "blocks": 2632,
+      "bp": 73328371,
+      "windows": 70658,
+      "ref_cpg": 482191
+    },
+    "regulatory": {
+      "blocks": 15536,
+      "bp": 345170726,
+      "windows": 329604,
+      "ref_cpg": 3436105
+    },
+    "constrained_unknown": {
+      "blocks": 1098,
+      "bp": 32025494,
+      "windows": 30911,
+      "ref_cpg": 203507
+    },
+    "structural": {
+      "blocks": 120,
+      "bp": 70055360,
+      "windows": 65250,
+      "ref_cpg": 938159
+    }
+  },
+  "fossil_bp_read": 328523829,
+  "fossil_bp_genome": 328523829,
+  "fossil_bp_share_of_genome_tier": 1.0,
+  "methylation": {
+    "K562": {
+      "raw_mean": {
+        "fossil": 0.0534,
+        "neutral": 0.0369,
+        "regulatory": 0.1559,
+        "constrained_unknown": 0.0396,
+        "structural": 0.0233
+      },
+      "matched_fossil_minus": {
+        "neutral": {
+          "difference": 0.017,
+          "fossil_windows_in_shared_strata": 0.9996,
+          "bootstrap_95_and_share_no_excess": [
+            0.0118,
+            0.0221,
+            0.0
+          ]
+        },
+        "regulatory": {
+          "difference": -0.0651,
+          "fossil_windows_in_shared_strata": 0.9998,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0709,
+            -0.0598,
+            1.0
+          ]
+        },
+        "constrained_unknown": {
+          "difference": 0.0135,
+          "fossil_windows_in_shared_strata": 0.9976,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0047,
+            0.0247,
+            0.06
+          ]
+        },
+        "structural": {
+          "difference": 0.0333,
+          "fossil_windows_in_shared_strata": 0.9969,
+          "bootstrap_95_and_share_no_excess": [
+            0.0286,
+            0.0376,
+            0.0
+          ]
+        }
+      },
+      "coverage": {
+        "fossil": {
+          "windows_measured_share": 0.8533,
+          "cpg_strand_calls_covered_share": 0.5146
+        },
+        "neutral": {
+          "windows_measured_share": 0.8751,
+          "cpg_strand_calls_covered_share": 0.5214
+        },
+        "regulatory": {
+          "windows_measured_share": 0.9599,
+          "cpg_strand_calls_covered_share": 0.5372
+        },
+        "constrained_unknown": {
+          "windows_measured_share": 0.9194,
+          "cpg_strand_calls_covered_share": 0.5894
+        },
+        "structural": {
+          "windows_measured_share": 0.3381,
+          "cpg_strand_calls_covered_share": 0.104
+        }
+      },
+      "fossil_families": {
+        "LINE": {
+          "raw_mean": 0.044,
+          "matched_minus_neutral": 0.0087,
+          "windows": 239725
+        },
+        "SINE": {
+          "raw_mean": 0.1999,
+          "matched_minus_neutral": 0.1496,
+          "windows": 14049
+        },
+        "LTR": {
+          "raw_mean": 0.0628,
+          "matched_minus_neutral": 0.0241,
+          "windows": 16711
+        },
+        "Retroposon": {
+          "raw_mean": 0.2056,
+          "matched_minus_neutral": 0.1388,
+          "windows": 53
+        },
+        "DNA": {
+          "raw_mean": 0.1452,
+          "matched_minus_neutral": 0.1066,
+          "windows": 421
+        },
+        "interspersed_repeat": {
+          "raw_mean": 0.0502,
+          "matched_minus_neutral": 0.0091,
+          "windows": 2665
+        }
+      }
+    },
+    "HepG2": {
+      "raw_mean": {
+        "fossil": 0.1761,
+        "neutral": 0.1524,
+        "regulatory": 0.3464,
+        "constrained_unknown": 0.1716,
+        "structural": 0.2342
+      },
+      "matched_fossil_minus": {
+        "neutral": {
+          "difference": 0.0247,
+          "fossil_windows_in_shared_strata": 0.9995,
+          "bootstrap_95_and_share_no_excess": [
+            0.0186,
+            0.031,
+            0.0
+          ]
+        },
+        "regulatory": {
+          "difference": -0.0985,
+          "fossil_windows_in_shared_strata": 0.9998,
+          "bootstrap_95_and_share_no_excess": [
+            -0.1039,
+            -0.0938,
+            1.0
+          ]
+        },
+        "constrained_unknown": {
+          "difference": 0.0056,
+          "fossil_windows_in_shared_strata": 0.9976,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0068,
+            0.0155,
+            0.14
+          ]
+        },
+        "structural": {
+          "difference": 0.04,
+          "fossil_windows_in_shared_strata": 0.9977,
+          "bootstrap_95_and_share_no_excess": [
+            0.0271,
+            0.0486,
+            0.0
+          ]
+        }
+      },
+      "coverage": {
+        "fossil": {
+          "windows_measured_share": 0.9145,
+          "cpg_strand_calls_covered_share": 0.5831
+        },
+        "neutral": {
+          "windows_measured_share": 0.9236,
+          "cpg_strand_calls_covered_share": 0.6088
+        },
+        "regulatory": {
+          "windows_measured_share": 0.9711,
+          "cpg_strand_calls_covered_share": 0.554
+        },
+        "constrained_unknown": {
+          "windows_measured_share": 0.9529,
+          "cpg_strand_calls_covered_share": 0.6754
+        },
+        "structural": {
+          "windows_measured_share": 0.4029,
+          "cpg_strand_calls_covered_share": 0.1286
+        }
+      },
+      "fossil_families": {
+        "LINE": {
+          "raw_mean": 0.1593,
+          "matched_minus_neutral": 0.0146,
+          "windows": 256523
+        },
+        "SINE": {
+          "raw_mean": 0.4252,
+          "matched_minus_neutral": 0.1838,
+          "windows": 14613
+        },
+        "LTR": {
+          "raw_mean": 0.2027,
+          "matched_minus_neutral": 0.0371,
+          "windows": 18430
+        },
+        "Retroposon": {
+          "raw_mean": 0.43,
+          "matched_minus_neutral": 0.107,
+          "windows": 58
+        },
+        "DNA": {
+          "raw_mean": 0.3431,
+          "matched_minus_neutral": 0.1654,
+          "windows": 435
+        },
+        "interspersed_repeat": {
+          "raw_mean": 0.2034,
+          "matched_minus_neutral": 0.0149,
+          "windows": 3196
+        }
+      }
+    },
+    "GM12878": {
+      "raw_mean": {
+        "fossil": 0.2723,
+        "neutral": 0.2484,
+        "regulatory": 0.4187,
+        "constrained_unknown": 0.2622,
+        "structural": 0.2974
+      },
+      "matched_fossil_minus": {
+        "neutral": {
+          "difference": 0.0273,
+          "fossil_windows_in_shared_strata": 0.9995,
+          "bootstrap_95_and_share_no_excess": [
+            0.0217,
+            0.0326,
+            0.0
+          ]
+        },
+        "regulatory": {
+          "difference": -0.1004,
+          "fossil_windows_in_shared_strata": 0.9998,
+          "bootstrap_95_and_share_no_excess": [
+            -0.1062,
+            -0.095,
+            1.0
+          ]
+        },
+        "constrained_unknown": {
+          "difference": 0.0115,
+          "fossil_windows_in_shared_strata": 0.9975,
+          "bootstrap_95_and_share_no_excess": [
+            0.0043,
+            0.02,
+            0.0
+          ]
+        },
+        "structural": {
+          "difference": 0.0631,
+          "fossil_windows_in_shared_strata": 0.9986,
+          "bootstrap_95_and_share_no_excess": [
+            0.0539,
+            0.0721,
+            0.0
+          ]
+        }
+      },
+      "coverage": {
+        "fossil": {
+          "windows_measured_share": 0.9153,
+          "cpg_strand_calls_covered_share": 0.707
+        },
+        "neutral": {
+          "windows_measured_share": 0.9235,
+          "cpg_strand_calls_covered_share": 0.7247
+        },
+        "regulatory": {
+          "windows_measured_share": 0.9817,
+          "cpg_strand_calls_covered_share": 0.7244
+        },
+        "constrained_unknown": {
+          "windows_measured_share": 0.9586,
+          "cpg_strand_calls_covered_share": 0.7788
+        },
+        "structural": {
+          "windows_measured_share": 0.3847,
+          "cpg_strand_calls_covered_share": 0.1346
+        }
+      },
+      "fossil_families": {
+        "LINE": {
+          "raw_mean": 0.2579,
+          "matched_minus_neutral": 0.0184,
+          "windows": 258165
+        },
+        "SINE": {
+          "raw_mean": 0.4794,
+          "matched_minus_neutral": 0.1564,
+          "windows": 14457
+        },
+        "LTR": {
+          "raw_mean": 0.3039,
+          "matched_minus_neutral": 0.0477,
+          "windows": 17516
+        },
+        "Retroposon": {
+          "raw_mean": 0.5053,
+          "matched_minus_neutral": 0.215,
+          "windows": 59
+        },
+        "DNA": {
+          "raw_mean": 0.4592,
+          "matched_minus_neutral": 0.1903,
+          "windows": 435
+        },
+        "interspersed_repeat": {
+          "raw_mean": 0.3012,
+          "matched_minus_neutral": 0.0229,
+          "windows": 2850
+        }
+      }
+    },
+    "H1": {
+      "raw_mean": {
+        "fossil": 0.8694,
+        "neutral": 0.8738,
+        "regulatory": 0.857,
+        "constrained_unknown": 0.8736,
+        "structural": 0.7753
+      },
+      "matched_fossil_minus": {
+        "neutral": {
+          "difference": -0.0036,
+          "fossil_windows_in_shared_strata": 0.9996,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0065,
+            -0.0012,
+            0.995
+          ]
+        },
+        "regulatory": {
+          "difference": 0.0099,
+          "fossil_windows_in_shared_strata": 0.9998,
+          "bootstrap_95_and_share_no_excess": [
+            0.0081,
+            0.0112,
+            0.0
+          ]
+        },
+        "constrained_unknown": {
+          "difference": -0.0042,
+          "fossil_windows_in_shared_strata": 0.9975,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0067,
+            -0.0019,
+            1.0
+          ]
+        },
+        "structural": {
+          "difference": 0.1188,
+          "fossil_windows_in_shared_strata": 0.9968,
+          "bootstrap_95_and_share_no_excess": [
+            0.0994,
+            0.1376,
+            0.0
+          ]
+        }
+      },
+      "coverage": {
+        "fossil": {
+          "windows_measured_share": 0.9102,
+          "cpg_strand_calls_covered_share": 0.6235
+        },
+        "neutral": {
+          "windows_measured_share": 0.9257,
+          "cpg_strand_calls_covered_share": 0.6717
+        },
+        "regulatory": {
+          "windows_measured_share": 0.9788,
+          "cpg_strand_calls_covered_share": 0.6495
+        },
+        "constrained_unknown": {
+          "windows_measured_share": 0.9577,
+          "cpg_strand_calls_covered_share": 0.7429
+        },
+        "structural": {
+          "windows_measured_share": 0.3563,
+          "cpg_strand_calls_covered_share": 0.12
+        }
+      },
+      "fossil_families": {
+        "LINE": {
+          "raw_mean": 0.8706,
+          "matched_minus_neutral": -0.0023,
+          "windows": 255586
+        },
+        "SINE": {
+          "raw_mean": 0.8644,
+          "matched_minus_neutral": -0.011,
+          "windows": 14217
+        },
+        "LTR": {
+          "raw_mean": 0.8611,
+          "matched_minus_neutral": -0.0108,
+          "windows": 18407
+        },
+        "Retroposon": {
+          "raw_mean": 0.8069,
+          "matched_minus_neutral": -0.0648,
+          "windows": 58
+        },
+        "DNA": {
+          "raw_mean": 0.8662,
+          "matched_minus_neutral": -0.0078,
+          "windows": 437
+        },
+        "interspersed_repeat": {
+          "raw_mean": 0.8453,
+          "matched_minus_neutral": -0.0298,
+          "windows": 3164
+        }
+      }
+    },
+    "IMR-90": {
+      "raw_mean": {
+        "fossil": 0.6131,
+        "neutral": 0.6194,
+        "regulatory": 0.6974,
+        "constrained_unknown": 0.6209,
+        "structural": 0.5087
+      },
+      "matched_fossil_minus": {
+        "neutral": {
+          "difference": 0.0027,
+          "fossil_windows_in_shared_strata": 0.9978,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0113,
+            0.0174,
+            0.335
+          ]
+        },
+        "regulatory": {
+          "difference": -0.0865,
+          "fossil_windows_in_shared_strata": 0.9984,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0944,
+            -0.0797,
+            1.0
+          ]
+        },
+        "constrained_unknown": {
+          "difference": -0.0088,
+          "fossil_windows_in_shared_strata": 0.9761,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0252,
+            0.0102,
+            0.845
+          ]
+        },
+        "structural": {
+          "difference": 0.1713,
+          "fossil_windows_in_shared_strata": 0.9882,
+          "bootstrap_95_and_share_no_excess": [
+            0.151,
+            0.1925,
+            0.0
+          ]
+        }
+      },
+      "coverage": {
+        "fossil": {
+          "windows_measured_share": 0.0826,
+          "cpg_strand_calls_covered_share": 0.0278
+        },
+        "neutral": {
+          "windows_measured_share": 0.093,
+          "cpg_strand_calls_covered_share": 0.0311
+        },
+        "regulatory": {
+          "windows_measured_share": 0.2462,
+          "cpg_strand_calls_covered_share": 0.0558
+        },
+        "constrained_unknown": {
+          "windows_measured_share": 0.1037,
+          "cpg_strand_calls_covered_share": 0.033
+        },
+        "structural": {
+          "windows_measured_share": 0.0352,
+          "cpg_strand_calls_covered_share": 0.0127
+        }
+      },
+      "fossil_families": {
+        "SINE": {
+          "raw_mean": 0.702,
+          "matched_minus_neutral": 0.076,
+          "windows": 3427
+        },
+        "LTR": {
+          "raw_mean": 0.6253,
+          "matched_minus_neutral": 0.0199,
+          "windows": 2317
+        },
+        "LINE": {
+          "raw_mean": 0.5965,
+          "matched_minus_neutral": -0.0111,
+          "windows": 20273
+        },
+        "Retroposon": {
+          "raw_mean": 0.7943,
+          "matched_minus_neutral": null,
+          "windows": 12
+        },
+        "DNA": {
+          "raw_mean": 0.711,
+          "matched_minus_neutral": 0.1073,
+          "windows": 60
+        },
+        "interspersed_repeat": {
+          "raw_mean": 0.6019,
+          "matched_minus_neutral": -0.0358,
+          "windows": 411
+        }
+      }
+    },
+    "SK-N-SH": {
+      "raw_mean": {
+        "fossil": 0.2867,
+        "neutral": 0.3175,
+        "regulatory": 0.5316,
+        "constrained_unknown": 0.3969,
+        "structural": 0.2074
+      },
+      "matched_fossil_minus": {
+        "neutral": {
+          "difference": -0.0256,
+          "fossil_windows_in_shared_strata": 0.9996,
+          "bootstrap_95_and_share_no_excess": [
+            -0.047,
+            -0.0045,
+            0.995
+          ]
+        },
+        "regulatory": {
+          "difference": -0.1961,
+          "fossil_windows_in_shared_strata": 0.9998,
+          "bootstrap_95_and_share_no_excess": [
+            -0.2072,
+            -0.1835,
+            1.0
+          ]
+        },
+        "constrained_unknown": {
+          "difference": -0.1114,
+          "fossil_windows_in_shared_strata": 0.9977,
+          "bootstrap_95_and_share_no_excess": [
+            -0.1389,
+            -0.085,
+            1.0
+          ]
+        },
+        "structural": {
+          "difference": 0.176,
+          "fossil_windows_in_shared_strata": 0.9972,
+          "bootstrap_95_and_share_no_excess": [
+            0.1619,
+            0.1937,
+            0.0
+          ]
+        }
+      },
+      "coverage": {
+        "fossil": {
+          "windows_measured_share": 0.9158,
+          "cpg_strand_calls_covered_share": 0.6489
+        },
+        "neutral": {
+          "windows_measured_share": 0.9247,
+          "cpg_strand_calls_covered_share": 0.6642
+        },
+        "regulatory": {
+          "windows_measured_share": 0.9775,
+          "cpg_strand_calls_covered_share": 0.5836
+        },
+        "constrained_unknown": {
+          "windows_measured_share": 0.9566,
+          "cpg_strand_calls_covered_share": 0.7093
+        },
+        "structural": {
+          "windows_measured_share": 0.4059,
+          "cpg_strand_calls_covered_share": 0.1404
+        }
+      },
+      "fossil_families": {
+        "LINE": {
+          "raw_mean": 0.2728,
+          "matched_minus_neutral": -0.0373,
+          "windows": 257974
+        },
+        "SINE": {
+          "raw_mean": 0.5082,
+          "matched_minus_neutral": 0.1634,
+          "windows": 14616
+        },
+        "LTR": {
+          "raw_mean": 0.296,
+          "matched_minus_neutral": -0.0172,
+          "windows": 17495
+        },
+        "Retroposon": {
+          "raw_mean": 0.3798,
+          "matched_minus_neutral": 0.0772,
+          "windows": 57
+        },
+        "DNA": {
+          "raw_mean": 0.4808,
+          "matched_minus_neutral": 0.1614,
+          "windows": 438
+        },
+        "interspersed_repeat": {
+          "raw_mean": 0.3172,
+          "matched_minus_neutral": -0.0125,
+          "windows": 3081
+        }
+      }
+    },
+    "hepatocyte": {
+      "raw_mean": {
+        "fossil": 0.8077,
+        "neutral": 0.8241,
+        "regulatory": 0.8319,
+        "constrained_unknown": 0.8343,
+        "structural": 0.6842
+      },
+      "matched_fossil_minus": {
+        "neutral": {
+          "difference": -0.0145,
+          "fossil_windows_in_shared_strata": 0.9996,
+          "bootstrap_95_and_share_no_excess": [
+            -0.019,
+            -0.0101,
+            1.0
+          ]
+        },
+        "regulatory": {
+          "difference": -0.0219,
+          "fossil_windows_in_shared_strata": 0.9998,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0249,
+            -0.019,
+            1.0
+          ]
+        },
+        "constrained_unknown": {
+          "difference": -0.0267,
+          "fossil_windows_in_shared_strata": 0.9975,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0303,
+            -0.0231,
+            1.0
+          ]
+        },
+        "structural": {
+          "difference": 0.1912,
+          "fossil_windows_in_shared_strata": 0.9987,
+          "bootstrap_95_and_share_no_excess": [
+            0.1658,
+            0.2159,
+            0.0
+          ]
+        }
+      },
+      "coverage": {
+        "fossil": {
+          "windows_measured_share": 0.9276,
+          "cpg_strand_calls_covered_share": 0.7974
+        },
+        "neutral": {
+          "windows_measured_share": 0.9342,
+          "cpg_strand_calls_covered_share": 0.8094
+        },
+        "regulatory": {
+          "windows_measured_share": 0.9861,
+          "cpg_strand_calls_covered_share": 0.8017
+        },
+        "constrained_unknown": {
+          "windows_measured_share": 0.9658,
+          "cpg_strand_calls_covered_share": 0.8649
+        },
+        "structural": {
+          "windows_measured_share": 0.4825,
+          "cpg_strand_calls_covered_share": 0.181
+        }
+      },
+      "fossil_families": {
+        "LINE": {
+          "raw_mean": 0.8057,
+          "matched_minus_neutral": -0.0155,
+          "windows": 261594
+        },
+        "SINE": {
+          "raw_mean": 0.842,
+          "matched_minus_neutral": 0.0045,
+          "windows": 14650
+        },
+        "LTR": {
+          "raw_mean": 0.8126,
+          "matched_minus_neutral": -0.0106,
+          "windows": 17712
+        },
+        "Retroposon": {
+          "raw_mean": 0.7955,
+          "matched_minus_neutral": -0.0653,
+          "windows": 59
+        },
+        "DNA": {
+          "raw_mean": 0.8418,
+          "matched_minus_neutral": 0.0134,
+          "windows": 439
+        },
+        "interspersed_repeat": {
+          "raw_mean": 0.7816,
+          "matched_minus_neutral": -0.0489,
+          "windows": 2994
+        }
+      }
+    },
+    "CD14-positive monocyte": {
+      "raw_mean": {
+        "fossil": 0.8646,
+        "neutral": 0.8581,
+        "regulatory": 0.8501,
+        "constrained_unknown": 0.8635,
+        "structural": 0.7435
+      },
+      "matched_fossil_minus": {
+        "neutral": {
+          "difference": 0.0082,
+          "fossil_windows_in_shared_strata": 0.9989,
+          "bootstrap_95_and_share_no_excess": [
+            0.0043,
+            0.0122,
+            0.0
+          ]
+        },
+        "regulatory": {
+          "difference": 0.0033,
+          "fossil_windows_in_shared_strata": 0.9995,
+          "bootstrap_95_and_share_no_excess": [
+            0.0005,
+            0.0063,
+            0.005
+          ]
+        },
+        "constrained_unknown": {
+          "difference": 0.0007,
+          "fossil_windows_in_shared_strata": 0.9958,
+          "bootstrap_95_and_share_no_excess": [
+            -0.0047,
+            0.0054,
+            0.38
+          ]
+        },
+        "structural": {
+          "difference": 0.1365,
+          "fossil_windows_in_shared_strata": 0.9887,
+          "bootstrap_95_and_share_no_excess": [
+            0.1184,
+            0.1558,
+            0.0
+          ]
+        }
+      },
+      "coverage": {
+        "fossil": {
+          "windows_measured_share": 0.2379,
+          "cpg_strand_calls_covered_share": 0.0905
+        },
+        "neutral": {
+          "windows_measured_share": 0.2661,
+          "cpg_strand_calls_covered_share": 0.1071
+        },
+        "regulatory": {
+          "windows_measured_share": 0.5224,
+          "cpg_strand_calls_covered_share": 0.1711
+        },
+        "constrained_unknown": {
+          "windows_measured_share": 0.3122,
+          "cpg_strand_calls_covered_share": 0.1129
+        },
+        "structural": {
+          "windows_measured_share": 0.0735,
+          "cpg_strand_calls_covered_share": 0.0295
+        }
+      },
+      "fossil_families": {
+        "LINE": {
+          "raw_mean": 0.8627,
+          "matched_minus_neutral": 0.007,
+          "windows": 60780
+        },
+        "SINE": {
+          "raw_mean": 0.8872,
+          "matched_minus_neutral": 0.0253,
+          "windows": 7737
+        },
+        "LTR": {
+          "raw_mean": 0.8685,
+          "matched_minus_neutral": 0.0134,
+          "windows": 6319
+        },
+        "Retroposon": {
+          "raw_mean": 0.8629,
+          "matched_minus_neutral": -0.0023,
+          "windows": 25
+        },
+        "DNA": {
+          "raw_mean": 0.8961,
+          "matched_minus_neutral": 0.0411,
+          "windows": 163
+        },
+        "interspersed_repeat": {
+          "raw_mean": 0.7945,
+          "matched_minus_neutral": -0.0664,
+          "windows": 1264
+        }
+      }
+    }
+  },
+  "h3k9me3": {
+    "K562": {
+      "share_windows_with_peak": {
+        "fossil": 0.0093,
+        "neutral": 0.0073,
+        "regulatory": 0.012,
+        "constrained_unknown": 0.0071,
+        "structural": 0.001
+      },
+      "matched_fossil_minus": {
+        "neutral": 0.0018,
+        "regulatory": -0.002,
+        "constrained_unknown": 0.002,
+        "structural": 0.0056
+      }
+    },
+    "HepG2": {
+      "share_windows_with_peak": {
+        "fossil": 0.2079,
+        "neutral": 0.2449,
+        "regulatory": 0.0569,
+        "constrained_unknown": 0.1833,
+        "structural": 0.0682
+      },
+      "matched_fossil_minus": {
+        "neutral": -0.0425,
+        "regulatory": 0.1294,
+        "constrained_unknown": 0.0237,
+        "structural": -0.0556
+      }
+    },
+    "GM12878": {
+      "share_windows_with_peak": {
+        "fossil": 0.0034,
+        "neutral": 0.0018,
+        "regulatory": 0.0128,
+        "constrained_unknown": 0.002,
+        "structural": 0.0007
+      },
+      "matched_fossil_minus": {
+        "neutral": 0.0015,
+        "regulatory": -0.0079,
+        "constrained_unknown": 0.0013,
+        "structural": 0.0019
+      }
+    },
+    "H1": {
+      "share_windows_with_peak": {
+        "fossil": 0.0527,
+        "neutral": 0.0435,
+        "regulatory": 0.0397,
+        "constrained_unknown": 0.0269,
+        "structural": 0.058
+      },
+      "matched_fossil_minus": {
+        "neutral": 0.006,
+        "regulatory": 0.0123,
+        "constrained_unknown": 0.0249,
+        "structural": -0.1445
+      }
+    },
+    "IMR-90": {
+      "share_windows_with_peak": {
+        "fossil": 0.0828,
+        "neutral": 0.1129,
+        "regulatory": 0.0617,
+        "constrained_unknown": 0.075,
+        "structural": 0.0159
+      },
+      "matched_fossil_minus": {
+        "neutral": -0.0382,
+        "regulatory": 0.0406,
+        "constrained_unknown": 0.0099,
+        "structural": 0.0315
+      }
+    },
+    "SK-N-SH": {
+      "share_windows_with_peak": {
+        "fossil": 0.014,
+        "neutral": 0.0094,
+        "regulatory": 0.0104,
+        "constrained_unknown": 0.0095,
+        "structural": 0.0044
+      },
+      "matched_fossil_minus": {
+        "neutral": 0.0052,
+        "regulatory": -0.0074,
+        "constrained_unknown": 0.0031,
+        "structural": -0.0022
+      }
+    },
+    "cardiac muscle cell": {
+      "share_windows_with_peak": {
+        "fossil": 0.0012,
+        "neutral": 0.0009,
+        "regulatory": 0.0005,
+        "constrained_unknown": 0.0012,
+        "structural": 0.0035
+      },
+      "matched_fossil_minus": {
+        "neutral": 0.0004,
+        "regulatory": 0.0003,
+        "constrained_unknown": -0.0001,
+        "structural": -0.01
+      }
+    },
+    "keratinocyte": {
+      "share_windows_with_peak": {
+        "fossil": 0.0079,
+        "neutral": 0.0135,
+        "regulatory": 0.011,
+        "constrained_unknown": 0.0061,
+        "structural": 0.0071
+      },
+      "matched_fossil_minus": {
+        "neutral": -0.0054,
+        "regulatory": -0.0002,
+        "constrained_unknown": 0.0018,
+        "structural": -0.0086
+      }
+    },
+    "hepatocyte": {
+      "share_windows_with_peak": {
+        "fossil": 0.0074,
+        "neutral": 0.0035,
+        "regulatory": 0.0051,
+        "constrained_unknown": 0.0025,
+        "structural": 0.0168
+      },
+      "matched_fossil_minus": {
+        "neutral": 0.0039,
+        "regulatory": -0.0016,
+        "constrained_unknown": 0.0047,
+        "structural": -0.0509
+      }
+    },
+    "astrocyte": {
+      "share_windows_with_peak": {
+        "fossil": 0.0175,
+        "neutral": 0.0195,
+        "regulatory": 0.0191,
+        "constrained_unknown": 0.0136,
+        "structural": 0.0101
+      },
+      "matched_fossil_minus": {
+        "neutral": -0.0035,
+        "regulatory": 0.0045,
+        "constrained_unknown": 0.0039,
+        "structural": -0.0116
+      }
+    },
+    "CD14-positive monocyte": {
+      "share_windows_with_peak": {
+        "fossil": 0.0791,
+        "neutral": 0.0588,
+        "regulatory": 0.0431,
+        "constrained_unknown": 0.0432,
+        "structural": 0.0619
+      },
+      "matched_fossil_minus": {
+        "neutral": 0.0157,
+        "regulatory": 0.0382,
+        "constrained_unknown": 0.036,
+        "structural": -0.1271
+      }
+    }
+  },
+  "evidence": {
+    "methylation": "experimental: ENCODE WGBS, methylation state at CpG (GRCh38 bedMethyl)",
+    "tiers": "inferred: budget tiers (attribution/budget.py), sequence class and Zoonomia constraint",
+    "h3k9me3": "experimental: ENCODE Histone ChIP-seq (GRCh38, default analysis), replicated peaks"
+  }
+}

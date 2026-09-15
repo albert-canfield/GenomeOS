@@ -1,0 +1,276 @@
+{
+  "result": "human_cell_turnover",
+  "date": "2026-09-11",
+  "source": "Sender & Milo 2021, Nat Med 27:45; github.com/milo-lab/cellular_turnover Summary.xlsx",
+  "url": "https://raw.githubusercontent.com/milo-lab/cellular_turnover/master/Summary.xlsx",
+  "cell_types": 26,
+  "total_cells": 28875100000000.0,
+  "total_turnover_per_day": 342884470000.0,
+  "types": [
+    {
+      "cell_type": "Erythrocytes",
+      "tissue": "Blood",
+      "cells": 25500000000000.0,
+      "lifespan_days": 119.0,
+      "turnover_per_day": 214000000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 94.0,
+      "total_mass_g": 2380.0
+    },
+    {
+      "cell_type": "Mature T cells",
+      "tissue": "Blood",
+      "cells": 710000000000.0,
+      "lifespan_days": 320.0,
+      "turnover_per_day": 2200000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 190.0,
+      "total_mass_g": 132.0
+    },
+    {
+      "cell_type": "Neutrophils",
+      "tissue": "Blood",
+      "cells": 640000000000.0,
+      "lifespan_days": 6.6,
+      "turnover_per_day": 60000000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 300.0,
+      "total_mass_g": 190.0
+    },
+    {
+      "cell_type": "Endothelial cells",
+      "tissue": "epithelia",
+      "cells": 600000000000.0,
+      "lifespan_days": 2300.0,
+      "turnover_per_day": 240000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 1200.0,
+      "total_mass_g": 700.0
+    },
+    {
+      "cell_type": "Mature B cells",
+      "tissue": "Blood",
+      "cells": 320000000000.0,
+      "lifespan_days": 63.0,
+      "turnover_per_day": 5100000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 190.0,
+      "total_mass_g": 59.0
+    },
+    {
+      "cell_type": "Hepatocytes",
+      "tissue": "Liver",
+      "cells": 230000000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 640000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 4300.0,
+      "total_mass_g": 980.0
+    },
+    {
+      "cell_type": "Lung interstitial cells",
+      "tissue": "epithelia",
+      "cells": 136000000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 3100000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 740.0,
+      "total_mass_g": 101.0
+    },
+    {
+      "cell_type": "Small intestine epithelia",
+      "tissue": "epithelia",
+      "cells": 120000000000.0,
+      "lifespan_days": 5.3,
+      "turnover_per_day": 22000000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 840.0,
+      "total_mass_g": 100.0
+    },
+    {
+      "cell_type": "Epidermal cells",
+      "tissue": "epithelia",
+      "cells": 120000000000.0,
+      "lifespan_days": 31.0,
+      "turnover_per_day": 3700000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 830.0,
+      "total_mass_g": 100.0
+    },
+    {
+      "cell_type": "Alveolar epithelial cells",
+      "tissue": "epithelia",
+      "cells": 109000000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 3500000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 2200.0,
+      "total_mass_g": 240.0
+    },
+    {
+      "cell_type": "Neurons",
+      "tissue": "Brain",
+      "cells": 77000000000.0,
+      "lifespan_days": 300000.0,
+      "turnover_per_day": 300000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 7000.0,
+      "total_mass_g": 530.0
+    },
+    {
+      "cell_type": "Glial cells",
+      "tissue": "Brain",
+      "cells": 64000000000.0,
+      "lifespan_days": 21000.0,
+      "turnover_per_day": 3100000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 7000.0,
+      "total_mass_g": 440.0
+    },
+    {
+      "cell_type": "Colon epithelia",
+      "tissue": "epithelia",
+      "cells": 60000000000.0,
+      "lifespan_days": 3.4,
+      "turnover_per_day": 17000000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 840.0,
+      "total_mass_g": 50.0
+    },
+    {
+      "cell_type": "Dermal fibroblasts",
+      "tissue": "epithelia",
+      "cells": 38000000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 270000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 2300.0,
+      "total_mass_g": 90.0
+    },
+    {
+      "cell_type": "Adipocytes",
+      "tissue": "Adipose tissue",
+      "cells": 34000000000.0,
+      "lifespan_days": 4000.0,
+      "turnover_per_day": 8000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 390000.0,
+      "total_mass_g": 13300.0
+    },
+    {
+      "cell_type": "Alveolar macrophages",
+      "tissue": "epithelia",
+      "cells": 29000000000.0,
+      "lifespan_days": 165.0,
+      "turnover_per_day": 180000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 2100.0,
+      "total_mass_g": 60.0
+    },
+    {
+      "cell_type": "Kupffer cells",
+      "tissue": "",
+      "cells": 27000000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 68000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 470.0,
+      "total_mass_g": 12.6
+    },
+    {
+      "cell_type": "Stomach epithelia",
+      "tissue": "epithelia",
+      "cells": 17000000000.0,
+      "lifespan_days": 13.0,
+      "turnover_per_day": 1300000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 810.0,
+      "total_mass_g": 14.0
+    },
+    {
+      "cell_type": "Stellate cells",
+      "tissue": "",
+      "cells": 14500000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 480000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 520.0,
+      "total_mass_g": 7.5
+    },
+    {
+      "cell_type": "Bronchial epithelial cells",
+      "tissue": "epithelia",
+      "cells": 10400000000.0,
+      "lifespan_days": 139.0,
+      "turnover_per_day": 75000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 890.0,
+      "total_mass_g": 9.3
+    },
+    {
+      "cell_type": "B cells progenitors",
+      "tissue": "Blood",
+      "cells": 5500000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 6600000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 190.0,
+      "total_mass_g": 1.03
+    },
+    {
+      "cell_type": "Monocytes",
+      "tissue": "Blood",
+      "cells": 5200000000.0,
+      "lifespan_days": 3.5,
+      "turnover_per_day": 1520000000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 460.0,
+      "total_mass_g": 2.4
+    },
+    {
+      "cell_type": "Cardiomyocytes",
+      "tissue": "Muscles",
+      "cells": 3200000000.0,
+      "lifespan_days": 56000.0,
+      "turnover_per_day": 57000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 35000.0,
+      "total_mass_g": 111.0
+    },
+    {
+      "cell_type": "Transitional B cells",
+      "tissue": "Blood",
+      "cells": 2800000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 290000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 190.0,
+      "total_mass_g": 0.53
+    },
+    {
+      "cell_type": "Thymocytes",
+      "tissue": "Blood",
+      "cells": 2300000000.0,
+      "lifespan_days": null,
+      "turnover_per_day": 610000000.0,
+      "turnover_extrapolated_from_rodents": true,
+      "cell_mass_pg": 190.0,
+      "total_mass_g": 0.43
+    },
+    {
+      "cell_type": "Myocytes",
+      "tissue": "Muscles",
+      "cells": 200000000.0,
+      "lifespan_days": 18000.0,
+      "turnover_per_day": 13000.0,
+      "turnover_extrapolated_from_rodents": false,
+      "cell_mass_pg": 80000000.0,
+      "total_mass_g": 19000.0
+    }
+  ],
+  "generated": [
+    "data/organisms/human/tissues.bio"
+  ],
+  "inputs": [],
+  "describe": "Sender & Milo 2021 cell counts, lifespans and turnover per cell type (Summary.xlsx streamed)"
+}

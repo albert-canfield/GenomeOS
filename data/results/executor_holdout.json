@@ -1,0 +1,234 @@
+{
+  "result": "executor_holdout",
+  "date": "2026-09-14",
+  "pairs_done": 1415,
+  "requests_spent": 0,
+  "stopped": {},
+  "E1_mpra": {
+    "pairs": 0,
+    "units_called": 0,
+    "units_agree": 0,
+    "controls_called": 0,
+    "controls_agree": 0,
+    "difference": null,
+    "p_one_sided": null,
+    "difference_upper_95": null,
+    "by_chromosome": {
+      "chr21": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr22": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      }
+    },
+    "verdict": "negative"
+  },
+  "E2_eqtl": {
+    "pairs": 0,
+    "units_called": 0,
+    "units_agree": 0,
+    "controls_called": 0,
+    "controls_agree": 0,
+    "difference": null,
+    "p_one_sided": null,
+    "difference_upper_95": null,
+    "by_chromosome": {
+      "chr21": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      },
+      "chr22": {
+        "pairs": 0,
+        "units_called": 0,
+        "units_agree": 0,
+        "controls_called": 0,
+        "controls_agree": 0,
+        "difference": null,
+        "p_one_sided": null,
+        "difference_upper_95": null
+      }
+    },
+    "verdict": "negative"
+  },
+  "E3_eqtl_linked": {
+    "pairs": 1415,
+    "units_called": 450,
+    "units_agree": 239,
+    "controls_called": 749,
+    "controls_agree": 351,
+    "difference": 0.062,
+    "p_one_sided": 0.02086229,
+    "difference_upper_95": 0.111,
+    "by_chromosome": {
+      "chr21": {
+        "pairs": 367,
+        "units_called": 121,
+        "units_agree": 64,
+        "controls_called": 202,
+        "controls_agree": 96,
+        "difference": 0.054,
+        "p_one_sided": 0.20642143,
+        "difference_upper_95": 0.148
+      },
+      "chr22": {
+        "pairs": 1048,
+        "units_called": 329,
+        "units_agree": 175,
+        "controls_called": 547,
+        "controls_agree": 255,
+        "difference": 0.066,
+        "p_one_sided": 0.03474795,
+        "difference_upper_95": 0.123
+      }
+    },
+    "verdict": "negative"
+  },
+  "no_call_grid": {
+    "E3_eqtl_linked": [
+      {
+        "no_call": 0.0,
+        "pairs": 1415,
+        "units_called": 749,
+        "units_agree": 394,
+        "controls_called": 1375,
+        "controls_agree": 670,
+        "difference": 0.039,
+        "p_one_sided": 0.0482733,
+        "difference_upper_95": 0.076
+      },
+      {
+        "no_call": 0.001,
+        "pairs": 1415,
+        "units_called": 450,
+        "units_agree": 239,
+        "controls_called": 749,
+        "controls_agree": 351,
+        "difference": 0.062,
+        "p_one_sided": 0.02086229,
+        "difference_upper_95": 0.111
+      },
+      {
+        "no_call": 0.01,
+        "pairs": 1415,
+        "units_called": 30,
+        "units_agree": 22,
+        "controls_called": 7,
+        "controls_agree": 2,
+        "difference": 0.448,
+        "p_one_sided": 0.03866865,
+        "difference_upper_95": 0.758
+      }
+    ]
+  },
+  "hold_out_read": {
+    "E2_eqtl": {
+      "pairs": 161,
+      "units_called": 56,
+      "units_agree": 38,
+      "controls_called": 73,
+      "controls_agree": 30,
+      "difference": 0.268,
+      "p_one_sided": 0.00213786,
+      "difference_upper_95": 0.407
+    },
+    "E3_eqtl_linked": {
+      "pairs": 1415,
+      "units_called": 450,
+      "units_agree": 239,
+      "controls_called": 749,
+      "controls_agree": 351,
+      "difference": 0.062,
+      "p_one_sided": 0.02086229,
+      "difference_upper_95": 0.111
+    },
+    "gap": 0.206,
+    "gap_lower_95": 0.058,
+    "second_endpoint_meets_success": false,
+    "reading": "E3_eqtl_linked is diluted against E2_eqtl as the executor claim predicts"
+  },
+  "criterion": {
+    "written": "2026-09-14, before any model request for this test",
+    "claim_tested": "a storage unit executes its value: swapping the stored allele changes the predicted read-out of the measured gene or cell in the measured direction, more often than the same swap at a matched unit that stores a value nobody has measured",
+    "unit_of_test": "one variant per shortlist unit: the recurring value event that is the measured variant (rsID match to gnomAD at the event, same alternative base); units whose measured variant is not one of their recurring values are listed but not tested",
+    "prediction": "AlphaGenome RNA-seq gene scorer through predict/alphagenome_adapter.py: both alleles in one request over the 1 Mb window centred on the variant; the read-out is the log2 fold change of alternative over reference on the implicated gene",
+    "readout_eqtl": "the gene GTEx names; the track whose GTEx tissue name matches the eQTL's most significant tissue, else the mean over the gene's tracks (declared per unit)",
+    "readout_mpra": "the MPRA's cell line tracks on the gene the variant's eQTL names; without an eQTL, the gene with the largest absolute predicted effect in that cell's tracks, chosen identically for the control",
+    "measured_sign_eqtl": "sign of GTEx v8 slope for the alternative allele (hg38 ref/alt of the variant id)",
+    "measured_sign_mpra": "sign of MPRAVarDB log2FC, which UCSC's track description defines as log2(alt RNA/DNA) - log2(ref RNA/DNA): alternative over reference",
+    "no_call": "a predicted |log2FC| below 0.001 is a no-call in either arm and is counted, not scored",
+    "endpoints": {
+      "E1_mpra": "sign agreement among units whose value has an MPRA allele pair at FDR <= 0.05 (or nominal p <= 0.01 where no FDR is given), 3'UTR stability libraries excluded, against matched controls drawn chromosome-wide; the cleaner test, reported apart",
+      "E2_eqtl": "sign agreement among units whose value is DAP-G fine-mapped (PIP >= 0.5) for a gene with GTEx p <= 1e-5 and one sign across tissues, against controls within 250 kb; partly the model reading back ENCODE-like training data",
+      "E3_eqtl_linked": "the other significant eQTL values, which may only be linked to the cause; exploratory, run only after E1 and E2 are decided and only if the quota holder agrees, never a claim"
+    },
+    "controls": "one per unit, never reused: same chromosome and GC stratum, and where the neighbourhood allows the same timing tertile and number of recurring values (2, 3, 4+), relaxed in that order and recorded as match_level (0 all, 1 values relaxed, 2 timing relaxed); a substitution value with no GTEx pair and no MPRA row anywhere in the unit; panel r-squared under 0.2 with the tested variant; within 250 kb for E2 and E3, anywhere on the chromosome for E1; the control borrows the unit's gene, tissue or cell and measured sign",
+    "power": "a difference of 0.10 in agreement needs about 495 pairs (80% power, one-sided alpha 0.01); with the 20 MPRA pairs chr21 and chr22 offer, only a difference of 0.5 or more is detectable, so a negative E1 here is a lack of power and not evidence of absence; E2's 135 pairs detect about 0.19. Both primary endpoints together are 155 pairs, so the first look (150 pairs) falls near their end and the later looks matter only if E3 is run",
+    "success": "for an endpoint: agreement in units minus agreement in controls >= 0.10, one-sided Fisher exact p at or below the alpha of the look, and the same direction of difference on chr21 and chr22 separately; anything else is a negative",
+    "secondary": [
+      "absolute predicted effect larger in units than in controls (Mann-Whitney, reported only)",
+      "rank correlation of predicted log2FC with GTEx slope among units (reported only)",
+      "agreement against 0.5 without controls (reported only; the controls decide)",
+      "a no-call grid of 0, 0.001 and 0.01 on |predicted log2FC|, added 2026-09-14 after a two-request smoke test showed single-variant gene effects of about 0.001, before any endpoint was scored; the primary keeps 0.001"
+    ],
+    "alpha_spending": {
+      "look_1_pairs": 150,
+      "alpha_1": 0.0005,
+      "look_2_pairs": 400,
+      "alpha_2": 0.002,
+      "final_alpha": 0.01
+    },
+    "stopping": "requests go out in unit-control pairs in the order below; at each look an endpoint stops for success at its alpha, or for futility if the upper 95% bound of the agreement difference is below 0.05; the run stops when both endpoints have stopped, when the ordered list is exhausted, or when the quota holder asks for it back; a stopped run reports requests spent against units answered",
+    "order": [
+      "1: E1 MPRA units, strongest |log2FC| first",
+      "2: E2 fine-mapped eQTL units, early-replicating with at most three values, smallest p first",
+      "3: the other E2 units, smallest p first",
+      "4: E3 linked eQTL units, only on request"
+    ],
+    "caveat": "AlphaGenome learned from ENCODE RNA-seq, DNase and histone tracks, and GTEx expression is the same kind of measurement; agreement with an eQTL is partly the model reading back its inputs. MPRA reporter activity is not a training track in that way, so E1 is the cleaner test"
+  },
+  "amendments": [
+    {
+      "when": "2026-09-14, after a two-request smoke test and before any endpoint was scored",
+      "what": "a no-call grid of 0, 0.001 and 0.01 reported beside the primary 0.001",
+      "why": "single-variant gene effects came out near 0.001 log2, so the threshold choice is shown"
+    },
+    {
+      "when": "2026-09-14, after the first 308 requests (155 pairs, E1 and E2)",
+      "what": "E1's controls are drawn within 250 kb like E2's rather than chromosome-wide; the cache filter keeps every gene's tracks in the read-out cell; two controls per unit instead of one",
+      "why": "19 of E1's 20 controls returned no value at all: a chromosome-wide control's borrowed gene was outside its window and the cache filter had dropped the cell's other genes, so the arm could not be scored. The unit arm is unchanged and its answers come from cache; only controls are added. Both readings are reported, before and after"
+    },
+    {
+      "when": "2026-09-14, after E1 and E2 were scored and before any E3 row was read",
+      "what": "a unit with two controls is counted once in the unit arm and its controls once each, instead of once per pair",
+      "why": "the second amendment gave each unit two controls, and the first tally counted the unit's own answer twice: E2's unit arm read 68 of 100 where 56 units were answered. The difference barely moves (+0.269 to +0.268) but the p-value it deserves does, from 0.00036 to 0.0021, still a success by the criterion; every number from here counts each unit once and each control once"
+    }
+  ],
+  "hold_out": {
+    "when": "2026-09-14, written after E2's amended reading and before any E3 request",
+    "question": "is E2's agreement about the value being the cause, or about the model's behaviour in eQTL-rich neighbourhoods? E3's variants are significant eQTLs that DAP-G does not fine-map, so most are linked to a cause rather than causal",
+    "prediction": "if a unit executes its value, E3's agreement difference should be clearly smaller than E2's (dilution by linkage); if E3 matches E2, the difference is not about causality and E2's reading is a property of the neighbourhood, which would be the more important result",
+    "budget": "2,000 requests, 1,000 pairs in the pre-registered order, stopping rule unchanged",
+    "read": "written 2026-09-14 by the session that ran E3, before any E3 row was read, because 'clearly smaller' needed a number: compare_endpoints takes E2's agreement difference minus E3's with a normal-approximation one-sided 95% bound. 'diluted by linkage' if that bound puts the gap above zero; 'E3 matches E2' if the gap does not clear zero while E3 on its own meets the success criterion (difference at or above 0.10 at p 0.01), which is the reading that says the effect is the neighbourhood and not the value; 'neither separated' otherwise"
+  },
+  "seconds": 6.3
+}

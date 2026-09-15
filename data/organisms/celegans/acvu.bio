@@ -1,0 +1,105 @@
+# The one decision in C. elegans that the invariant lineage cannot predict: AC/VU.
+#
+# Z1.ppp and Z4.aaa are an equivalence group. In any one animal exactly one of them becomes the
+# anchor cell and the other becomes a ventral uterine precursor, and across animals it is about
+# half and half; kill either and the survivor becomes the anchor cell (Kimble & Hirsh 1979,
+# Dev Biol 70:396; Kimble 1981, Dev Biol 87:286; Seydoux & Greenwald 1989, Cell 57:1237). The
+# reference lineage records one outcome — WormWeb names Z1.ppp `gon herm anch` — so a program
+# scored against it can only ever be right about half the time here, and a program that is right
+# every time has smuggled in an order. This file is the program that is right about half the time
+# on purpose, and says so in its own asserts.
+#
+# Nothing here names the winner. The two cells are identical: same rules, same initial levels, same
+# circuit. They touch (contacts_acvu.tsv), each reads the other's Delta as an amount at the contact,
+# and the symmetric state is a steady state that noise makes unstable — the Collier et al. 1996
+# circuit (J Theor Biol 183:429), which is how lateral inhibition breaks a symmetry nothing else
+# breaks. The seed decides, and the outcome is reported as a split over 100 seeds, never read off
+# one run (BioLang v0.4 §7.4).
+#
+# Scope, honestly. The program starts at the two somatic gonad precursors rather than at P0: running
+# the whole worm to L3 for every one of 100 seeds costs minutes and adds nothing, since Z1 and Z4 are
+# reached by the observed lineage in embryo.bio. `SGP` is therefore a modelling root standing for the
+# pair, not a cell: it divides into Z1.p and Z4.a at 529 min (Z4.a is born at 528, a one-minute
+# fudge), and every division after that is at its measured time on the WormWeb axis. The four
+# central granddaughters are the only cells that matter; their sisters rest.
+#
+# Which two cells are in the group is stated, not derived: `cell = Z1ppp|Z4aaa` on the anchor
+# decision, from Kimble 1981's ablations. The `competence` construct cannot say it — a window
+# governs the cells its `when` matches and leaves every other cell competent, so "only these two may
+# take this fate" would have to be written inside out as a window closed at time zero for everyone
+# else. Which of the two wins is not stated anywhere, and that is the part being measured.
+#
+# Run: genomeos grow data/organisms/celegans/acvu.bio --until 4200
+# Measured: scripts/celegans_acvu.py, data/results/celegans_acvu.json
+module organism.celegans.acvu
+import cell_types.bio
+# test: cells >= 9
+
+organism AcVu {
+  species: Caenorhabditis elegans
+  genome: WBcel235
+  root: SGP
+  cell_type: Progenitor
+  contacts: contacts_acvu.tsv
+  cell_network: 6 min
+  replicates: 100
+  seed: 0
+  observe: fates
+  assert: exactly one of Z1ppa, Z1ppp, Z4aaa, Z4aap is AnchorCell at 4200 min in >= 95%
+  assert: Z1ppp is AnchorCell at 4200 min in 35..65%
+  evidence: experimental "Kimble & Hirsh 1979, Dev Biol 70:396; Kimble 1981, Dev Biol 87:286; Seydoux & Greenwald 1989, Cell 57:1237"
+  confidence: 0.8
+}
+
+stage L1 { from: 0 min; to: 2400 min; evidence: experimental "Sulston & Horvitz 1977, Dev Biol 56:110"; confidence: 0.7 }
+stage L2 { from: 2400 min; to: 3200 min; evidence: experimental "Sulston & Horvitz 1977"; confidence: 0.7 }
+stage L3 { from: 3200 min; to: 4200 min; evidence: experimental "Kimble & Hirsh 1979 (the anchor cell is specified in L2/L3)"; confidence: 0.7 }
+
+cell_type AnchorCell { parent: PostMitotic; evidence: experimental "Kimble & Hirsh 1979 (gon herm anch); Cell Ontology"; confidence: 0.8 }
+cell_type VentralUterine { parent: Progenitor; evidence: experimental "Kimble 1981 (the other three of the group are ventral uterine precursors)"; confidence: 0.8 }
+
+# --- the circuit, one copy per cell, stepped together --------------------------------------------
+gene N { max: 1.0; produces: Np; evidence: curated "Collier et al. 1996, J Theor Biol 183:429; LIN-12 in the worm (Seydoux & Greenwald 1989)"; confidence: 0.7 }
+gene D { max: 1.0; produces: Dp; evidence: curated "Collier et al. 1996; LAG-2 in the worm (Wilkinson et al. 1994, Cell 79:1187)"; confidence: 0.7 }
+protein Np { initial: 0.5; evidence: curated "Collier et al. 1996: n(0) = 0.5"; confidence: 0.6 }
+protein Dp { initial: 0.5; evidence: curated "Collier et al. 1996: d(0) = 0.5"; confidence: 0.6 }
+protein Dext { evidence: curated "the neighbours' Delta, read at the contact"; confidence: 0.7 }
+
+rule Dext activates N { strength: 1.0; threshold: 0.1; hill: 2; evidence: curated "Collier et al. 1996: f(d) = d^2 / (0.01 + d^2)"; confidence: 0.7 }
+rule Np inhibits D { strength: 1.0; threshold: 0.1; hill: 2; evidence: curated "Collier et al. 1996: g(n) = 1 / (1 + 100 n^2)"; confidence: 0.7 }
+
+decision presents_lag2 { action: express; when: cell = Z1ppp|Z4aaa; sets: LAG-2; evidence: experimental "Kimble 1981, Dev Biol 87:286 (the equivalence group is Z1.ppp and Z4.aaa: ablating both leaves no anchor cell, ablating either leaves the survivor as one); Wilkinson et al. 1994, Cell 79:1187 (lag-2)"; confidence: 0.75 }
+
+signal DeltaAtContact { mode: contact; ligand: Dp; receptor: N; reads: amount; from: LAG-2 = present; sets: Dext; evidence: experimental "LAG-2 on one cell binds LIN-12 on the other (Wilkinson et al. 1994, Cell 79:1187; Seydoux & Greenwald 1989)"; confidence: 0.8 }
+
+param mrna_half_life = 0.693 h { evidence: inferred "Collier's dimensionless unit time"; confidence: 0.3 }
+param translation_rate = 20 { evidence: inferred "fast translation, so protein tracks its transcript"; confidence: 0.3 }
+param protein_half_life = 0.0347 h { evidence: inferred "fast turnover, the same reason"; confidence: 0.3 }
+param noise = 0.05 { evidence: inferred "the symmetry has to be broken by something; the size is not measured"; confidence: 0.3 }
+
+# --- the lineage to the group, at its measured times ---------------------------------------------
+decision div_SGP { action: divide; when: cell = SGP; daughters: Z1p, Z4a; after: 529 min; evidence: curated "a modelling root: Z1 divides at 529 min and Z4 at 528 min (Sulston & Horvitz 1977 via WormWeb)"; confidence: 0.5 }
+decision div_Z1p { action: divide; when: cell = Z1p; daughters: Z1pa, Z1pp; after: 1928 min; evidence: experimental "Sulston & Horvitz 1977 via WormWeb (Z1.p divides at 2457 min)"; confidence: 0.9 }
+decision div_Z4a { action: divide; when: cell = Z4a; daughters: Z4aa, Z4ap; after: 1984 min; evidence: experimental "Sulston & Horvitz 1977 via WormWeb (Z4.a divides at 2513 min)"; confidence: 0.9 }
+decision div_Z1pp { action: divide; when: cell = Z1pp; daughters: Z1ppa, Z1ppp; after: 285 min; evidence: experimental "Sulston & Horvitz 1977 via WormWeb (Z1.pp divides at 2742 min)"; confidence: 0.9 }
+decision div_Z4aa { action: divide; when: cell = Z4aa; daughters: Z4aaa, Z4aap; after: 285 min; evidence: experimental "Sulston & Horvitz 1977 via WormWeb (Z4.aa divides at 2798 min)"; confidence: 0.9 }
+decision resting { action: quiesce; when: cell = Z1pa|Z4ap|Z1ppa|Z1ppp|Z4aaa|Z4aap; evidence: curated "the program ends at the AC/VU decision; these cells' later divisions are in lineage_larva.bio"; confidence: 0.6 }
+
+# --- the decision itself: the winner is not named ------------------------------------------------
+decision anchor { action: differentiate; when: cell = Z1ppp|Z4aaa, stage = L3, Dp = >=0.6; to: AnchorCell; name: gon herm anch; priority: 3; evidence: experimental "Kimble 1981, Dev Biol 87:286 (only Z1.ppp and Z4.aaa can become the anchor cell); Seydoux & Greenwald 1989 (the one with more LAG-2 keeps the anchor fate)"; confidence: 0.75 }
+decision uterine { action: differentiate; when: cell = Z1ppp|Z4aaa, stage = L3, Np = >=0.6; to: VentralUterine; priority: 2; evidence: experimental "Seydoux & Greenwald 1989, Cell 57:1237 (the cell with more LIN-12 activity takes the uterine fate)"; confidence: 0.75 }
+decision uterine_flanking { action: differentiate; when: cell = Z1ppa|Z4aap; to: VentralUterine; priority: 1; evidence: experimental "Kimble 1981 (Z1.ppa and Z4.aap are ventral uterine precursors in every animal)"; confidence: 0.8 }
+
+# --- the experiment that defines the group (Kimble 1981) ----------------------------------------
+# Ablate either cell and the survivor becomes the anchor cell every time; ablate both and there is
+# no anchor cell; ablate a flanking cell and nothing changes. That is what makes this an equivalence
+# group rather than a coin flip between two cells that were going to be different anyway. `ablate`
+# is an environment value the experiments below set, so the wild-type program never reads it.
+decision ablate_Z1ppp { action: die; when: cell = Z1ppp, ablate = Z1ppp|both; after: 0 min; evidence: experimental "Kimble 1981, Dev Biol 87:286 (laser ablation of Z1.ppp)"; confidence: 0.9 }
+decision ablate_Z4aaa { action: die; when: cell = Z4aaa, ablate = Z4aaa|both; after: 0 min; evidence: experimental "Kimble 1981, Dev Biol 87:286 (laser ablation of Z4.aaa)"; confidence: 0.9 }
+decision ablate_Z1ppa { action: die; when: cell = Z1ppa, ablate = Z1ppa; after: 0 min; evidence: experimental "Kimble 1981 (the control: a flanking ventral uterine precursor)"; confidence: 0.9 }
+
+experiment ablate_z1ppp { environment: ablate = Z1ppp; until: 4200 min; expect: "Z4.aaa becomes the anchor cell every time: with its partner gone it hears no Delta, keeps its own, and takes the fate (Kimble 1981)"; assert: type AnchorCell at 4200 min = 1; evidence: experimental "Kimble 1981, Dev Biol 87:286"; confidence: 0.85 }
+experiment ablate_z4aaa { environment: ablate = Z4aaa; until: 4200 min; expect: "Z1.ppp becomes the anchor cell every time, for the same reason (Kimble 1981)"; assert: type AnchorCell at 4200 min = 1; evidence: experimental "Kimble 1981, Dev Biol 87:286"; confidence: 0.85 }
+experiment ablate_both { environment: ablate = both; until: 4200 min; expect: "no anchor cell: the two flanking cells are ventral uterine precursors and cannot take the fate (Kimble 1981; Seydoux & Greenwald 1989)"; assert: type AnchorCell at 4200 min = 0; assert: type VentralUterine at 4200 min = 2; evidence: experimental "Kimble 1981, Dev Biol 87:286"; confidence: 0.8 }
+experiment ablate_flanking { environment: ablate = Z1ppa; until: 4200 min; expect: "the control: removing a flanking ventral uterine precursor leaves the decision where it was, so there is still exactly one anchor cell among the two that compete"; assert: type AnchorCell at 4200 min = 1; evidence: experimental "Kimble 1981, Dev Biol 87:286"; confidence: 0.8 }

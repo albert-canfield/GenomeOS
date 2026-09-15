@@ -1,50 +1,1589 @@
 {
-  "result": "unknown_genome_wide",
-  "date": "2026-09-10",
-  "chromosomes": {
-    "chr1": {
-      "unknown_blocks": 2425,
-      "unknown_bp": 77202925,
-      "classified_fraction": 0.9627,
-      "by_class": {
-        "regulatory": {
-          "blocks": 1528,
-          "bp": 31874182
-        },
-        "gap": {
-          "blocks": 7,
-          "bp": 22004558
-        },
-        "long_orf": {
-          "blocks": 114,
-          "bp": 10506602
-        },
-        "unique_intergenic": {
-          "blocks": 87,
-          "bp": 5074693
-        },
-        "interspersed_repeat": {
-          "blocks": 143,
-          "bp": 2961371
-        },
-        "unclassified": {
-          "blocks": 405,
-          "bp": 2876745
-        },
-        "mixed_intergenic": {
-          "blocks": 20,
-          "bp": 879641
-        },
-        "promoter_like": {
-          "blocks": 36,
-          "bp": 540930
-        },
-        "interspersed_repeat_SINE": {
-          "blocks": 85,
-          "bp": 484203
-        }
-      },
-      "seconds": 372
+ "result": "unknown_genome_wide",
+ "date": "2026-09-10",
+ "chromosomes": {
+  "chr1": {
+   "unknown_blocks": 2425,
+   "unknown_bp": 77202925,
+   "classified_fraction": 0.9877,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 1528,
+     "bp": 31874182
+    },
+    "gap": {
+     "blocks": 7,
+     "bp": 22004558
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 376,
+     "bp": 15287731
+    },
+    "unique_intergenic": {
+     "blocks": 40,
+     "bp": 2829640
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 90,
+     "bp": 1940484
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 150,
+     "bp": 1296759
+    },
+    "unclassified": {
+     "blocks": 173,
+     "bp": 949752
+    },
+    "mixed_intergenic": {
+     "blocks": 11,
+     "bp": 459769
+    },
+    "interspersed_repeat": {
+     "blocks": 10,
+     "bp": 245339
+    },
+    "promoter_like": {
+     "blocks": 21,
+     "bp": 245181
+    },
+    "long_orf": {
+     "blocks": 11,
+     "bp": 41076
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 6,
+     "bp": 22922
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 2,
+     "bp": 5532
     }
+   },
+   "seconds": 288
+  },
+  "chr2": {
+   "unknown_blocks": 1943,
+   "unknown_bp": 64057848,
+   "classified_fraction": 0.9789,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 1137,
+     "bp": 28470480
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 344,
+     "bp": 20861250
+    },
+    "unique_intergenic": {
+     "blocks": 64,
+     "bp": 4773117
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 2150554
+    },
+    "gap": {
+     "blocks": 6,
+     "bp": 1752835
+    },
+    "mixed_intergenic": {
+     "blocks": 19,
+     "bp": 1659302
+    },
+    "unclassified": {
+     "blocks": 193,
+     "bp": 1348928
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 48,
+     "bp": 1049413
+    },
+    "interspersed_repeat": {
+     "blocks": 24,
+     "bp": 726029
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 72,
+     "bp": 642156
+    },
+    "promoter_like": {
+     "blocks": 22,
+     "bp": 434524
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 9,
+     "bp": 122138
+    },
+    "tandem_repeat": {
+     "blocks": 1,
+     "bp": 57619
+    },
+    "long_orf": {
+     "blocks": 2,
+     "bp": 6764
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 2739
+    }
+   },
+   "seconds": 313
+  },
+  "chr3": {
+   "unknown_blocks": 1298,
+   "unknown_bp": 50435547,
+   "classified_fraction": 0.9896,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 811,
+     "bp": 20122763
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 239,
+     "bp": 18848045
+    },
+    "unique_intergenic": {
+     "blocks": 46,
+     "bp": 4543646
+    },
+    "centromere": {
+     "blocks": 2,
+     "bp": 3425034
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 51,
+     "bp": 1597997
+    },
+    "mixed_intergenic": {
+     "blocks": 8,
+     "bp": 562372
+    },
+    "unclassified": {
+     "blocks": 81,
+     "bp": 522791
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 47,
+     "bp": 497813
+    },
+    "interspersed_repeat": {
+     "blocks": 2,
+     "bp": 100027
+    },
+    "promoter_like": {
+     "blocks": 5,
+     "bp": 90216
+    },
+    "gap": {
+     "blocks": 2,
+     "bp": 78903
+    },
+    "satellite_array": {
+     "blocks": 2,
+     "bp": 23490
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 2,
+     "bp": 22450
+    }
+   },
+   "seconds": 260
+  },
+  "chr4": {
+   "unknown_blocks": 1398,
+   "unknown_bp": 62222046,
+   "classified_fraction": 0.989,
+   "curated_repeats": true,
+   "by_class": {
+    "interspersed_repeat_LINE": {
+     "blocks": 313,
+     "bp": 24623434
+    },
+    "regulatory": {
+     "blocks": 687,
+     "bp": 19170750
+    },
+    "unique_intergenic": {
+     "blocks": 100,
+     "bp": 9558288
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 73,
+     "bp": 2846426
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 2231006
+    },
+    "mixed_intergenic": {
+     "blocks": 21,
+     "bp": 1522258
+    },
+    "unclassified": {
+     "blocks": 115,
+     "bp": 684181
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 40,
+     "bp": 542324
+    },
+    "promoter_like": {
+     "blocks": 20,
+     "bp": 476014
+    },
+    "gap": {
+     "blocks": 3,
+     "bp": 323587
+    },
+    "interspersed_repeat": {
+     "blocks": 7,
+     "bp": 154765
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 9,
+     "bp": 43196
+    },
+    "long_orf": {
+     "blocks": 6,
+     "bp": 34485
+    },
+    "satellite_array": {
+     "blocks": 2,
+     "bp": 9806
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 1526
+    }
+   },
+   "seconds": 305
+  },
+  "chr5": {
+   "unknown_blocks": 1363,
+   "unknown_bp": 54693236,
+   "classified_fraction": 0.9874,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 755,
+     "bp": 20721141
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 281,
+     "bp": 18565947
+    },
+    "unique_intergenic": {
+     "blocks": 82,
+     "bp": 6587448
+    },
+    "satellite_array": {
+     "blocks": 1,
+     "bp": 4486419
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 46,
+     "bp": 1582827
+    },
+    "mixed_intergenic": {
+     "blocks": 9,
+     "bp": 789823
+    },
+    "unclassified": {
+     "blocks": 121,
+     "bp": 687641
+    },
+    "interspersed_repeat": {
+     "blocks": 3,
+     "bp": 350411
+    },
+    "promoter_like": {
+     "blocks": 10,
+     "bp": 334186
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 46,
+     "bp": 306889
+    },
+    "gap": {
+     "blocks": 2,
+     "bp": 121310
+    },
+    "long_orf": {
+     "blocks": 3,
+     "bp": 114725
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 4,
+     "bp": 44469
+    }
+   },
+   "seconds": 269
+  },
+  "chr6": {
+   "unknown_blocks": 1396,
+   "unknown_bp": 48010332,
+   "classified_fraction": 0.987,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 876,
+     "bp": 21231210
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 236,
+     "bp": 17188371
+    },
+    "unique_intergenic": {
+     "blocks": 57,
+     "bp": 4459379
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 1843079
+    },
+    "satellite_array": {
+     "blocks": 2,
+     "bp": 770379
+    },
+    "unclassified": {
+     "blocks": 105,
+     "bp": 624580
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 36,
+     "bp": 549825
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 45,
+     "bp": 379480
+    },
+    "promoter_like": {
+     "blocks": 11,
+     "bp": 280327
+    },
+    "gap": {
+     "blocks": 3,
+     "bp": 225585
+    },
+    "interspersed_repeat": {
+     "blocks": 8,
+     "bp": 208794
+    },
+    "mixed_intergenic": {
+     "blocks": 3,
+     "bp": 105403
+    },
+    "long_orf": {
+     "blocks": 3,
+     "bp": 88430
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 8,
+     "bp": 53132
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 2,
+     "bp": 2358
+    }
+   },
+   "seconds": 246
+  },
+  "chr7": {
+   "unknown_blocks": 1400,
+   "unknown_bp": 45180049,
+   "classified_fraction": 0.9819,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 825,
+     "bp": 19109749
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 206,
+     "bp": 12766794
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 4407198
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 126,
+     "bp": 3123020
+    },
+    "unique_intergenic": {
+     "blocks": 33,
+     "bp": 2629404
+    },
+    "unclassified": {
+     "blocks": 125,
+     "bp": 816347
+    },
+    "satellite_array": {
+     "blocks": 7,
+     "bp": 730143
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 43,
+     "bp": 641103
+    },
+    "promoter_like": {
+     "blocks": 14,
+     "bp": 356411
+    },
+    "mixed_intergenic": {
+     "blocks": 6,
+     "bp": 304562
+    },
+    "interspersed_repeat": {
+     "blocks": 4,
+     "bp": 208774
+    },
+    "long_orf": {
+     "blocks": 3,
+     "bp": 45010
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 4,
+     "bp": 16614
+    },
+    "gap": {
+     "blocks": 1,
+     "bp": 12703
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 2,
+     "bp": 12217
+    }
+   },
+   "seconds": 230
+  },
+  "chr8": {
+   "unknown_blocks": 1180,
+   "unknown_bp": 40338003,
+   "classified_fraction": 0.981,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 658,
+     "bp": 17539852
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 229,
+     "bp": 13760390
+    },
+    "unique_intergenic": {
+     "blocks": 37,
+     "bp": 2928461
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 2354212
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 49,
+     "bp": 1098775
+    },
+    "unclassified": {
+     "blocks": 127,
+     "bp": 766048
+    },
+    "satellite_array": {
+     "blocks": 6,
+     "bp": 662412
+    },
+    "mixed_intergenic": {
+     "blocks": 5,
+     "bp": 327923
+    },
+    "gap": {
+     "blocks": 5,
+     "bp": 321438
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 38,
+     "bp": 255385
+    },
+    "interspersed_repeat": {
+     "blocks": 5,
+     "bp": 140555
+    },
+    "promoter_like": {
+     "blocks": 12,
+     "bp": 123418
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 4,
+     "bp": 29841
+    },
+    "long_orf": {
+     "blocks": 3,
+     "bp": 26428
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 2865
+    }
+   },
+   "seconds": 219
+  },
+  "chr9": {
+   "unknown_blocks": 1080,
+   "unknown_bp": 49076798,
+   "classified_fraction": 0.9873,
+   "curated_repeats": true,
+   "by_class": {
+    "gap": {
+     "blocks": 17,
+     "bp": 18833814
+    },
+    "regulatory": {
+     "blocks": 619,
+     "bp": 15189169
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 187,
+     "bp": 9544679
+    },
+    "unique_intergenic": {
+     "blocks": 29,
+     "bp": 1735948
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 52,
+     "bp": 751292
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 41,
+     "bp": 648251
+    },
+    "unclassified": {
+     "blocks": 91,
+     "bp": 625133
+    },
+    "centromere": {
+     "blocks": 3,
+     "bp": 385211
+    },
+    "interspersed_repeat": {
+     "blocks": 4,
+     "bp": 379917
+    },
+    "mixed_intergenic": {
+     "blocks": 6,
+     "bp": 374317
+    },
+    "promoter_like": {
+     "blocks": 15,
+     "bp": 267202
+    },
+    "satellite_array": {
+     "blocks": 5,
+     "bp": 256269
+    },
+    "long_orf": {
+     "blocks": 9,
+     "bp": 82477
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 2,
+     "bp": 3119
+    }
+   },
+   "seconds": 164
+  },
+  "chr10": {
+   "unknown_blocks": 1190,
+   "unknown_bp": 38684994,
+   "classified_fraction": 0.9806,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 752,
+     "bp": 20139674
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 167,
+     "bp": 9643733
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 3366201
+    },
+    "unique_intergenic": {
+     "blocks": 33,
+     "bp": 2558349
+    },
+    "unclassified": {
+     "blocks": 115,
+     "bp": 750287
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 57,
+     "bp": 658013
+    },
+    "promoter_like": {
+     "blocks": 27,
+     "bp": 630533
+    },
+    "interspersed_repeat": {
+     "blocks": 5,
+     "bp": 280903
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 21,
+     "bp": 262384
+    },
+    "gap": {
+     "blocks": 4,
+     "bp": 218417
+    },
+    "long_orf": {
+     "blocks": 3,
+     "bp": 109587
+    },
+    "mixed_intergenic": {
+     "blocks": 1,
+     "bp": 43013
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 4,
+     "bp": 23900
+    }
+   },
+   "seconds": 198
+  },
+  "chr11": {
+   "unknown_blocks": 1453,
+   "unknown_bp": 39033317,
+   "classified_fraction": 0.9681,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 784,
+     "bp": 15689745
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 301,
+     "bp": 13532758
+    },
+    "satellite_array": {
+     "blocks": 8,
+     "bp": 5036166
+    },
+    "unique_intergenic": {
+     "blocks": 28,
+     "bp": 1846276
+    },
+    "unclassified": {
+     "blocks": 205,
+     "bp": 1243405
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 52,
+     "bp": 773918
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 54,
+     "bp": 519222
+    },
+    "promoter_like": {
+     "blocks": 6,
+     "bp": 88708
+    },
+    "gap": {
+     "blocks": 2,
+     "bp": 86493
+    },
+    "mixed_intergenic": {
+     "blocks": 2,
+     "bp": 83746
+    },
+    "interspersed_repeat": {
+     "blocks": 2,
+     "bp": 45705
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 36747
+    },
+    "long_orf": {
+     "blocks": 2,
+     "bp": 25999
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 3,
+     "bp": 14575
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 3,
+     "bp": 9854
+    }
+   },
+   "seconds": 214
+  },
+  "chr12": {
+   "unknown_blocks": 1165,
+   "unknown_bp": 35335065,
+   "classified_fraction": 0.9874,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 714,
+     "bp": 15603988
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 210,
+     "bp": 11619169
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 3293946
+    },
+    "unique_intergenic": {
+     "blocks": 22,
+     "bp": 1514345
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 36,
+     "bp": 1032233
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 79,
+     "bp": 1012553
+    },
+    "satellite_array": {
+     "blocks": 1,
+     "bp": 501000
+    },
+    "unclassified": {
+     "blocks": 83,
+     "bp": 444612
+    },
+    "promoter_like": {
+     "blocks": 9,
+     "bp": 169071
+    },
+    "mixed_intergenic": {
+     "blocks": 2,
+     "bp": 74959
+    },
+    "long_orf": {
+     "blocks": 4,
+     "bp": 26433
+    },
+    "interspersed_repeat": {
+     "blocks": 1,
+     "bp": 24948
+    },
+    "gap": {
+     "blocks": 1,
+     "bp": 12309
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 1,
+     "bp": 2876
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 2623
+    }
+   },
+   "seconds": 186
+  },
+  "chr13": {
+   "unknown_blocks": 771,
+   "unknown_bp": 52177945,
+   "classified_fraction": 0.9892,
+   "curated_repeats": true,
+   "by_class": {
+    "gap": {
+     "blocks": 6,
+     "bp": 18496301
+    },
+    "regulatory": {
+     "blocks": 394,
+     "bp": 11265702
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 138,
+     "bp": 10746648
+    },
+    "unique_intergenic": {
+     "blocks": 81,
+     "bp": 9304185
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 24,
+     "bp": 690911
+    },
+    "unclassified": {
+     "blocks": 75,
+     "bp": 565049
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 26,
+     "bp": 447717
+    },
+    "promoter_like": {
+     "blocks": 12,
+     "bp": 313307
+    },
+    "interspersed_repeat": {
+     "blocks": 6,
+     "bp": 177221
+    },
+    "mixed_intergenic": {
+     "blocks": 2,
+     "bp": 105950
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 5,
+     "bp": 50575
+    },
+    "long_orf": {
+     "blocks": 1,
+     "bp": 12668
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 1711
+    }
+   },
+   "seconds": 162
+  },
+  "chr14": {
+   "unknown_blocks": 942,
+   "unknown_bp": 40660526,
+   "classified_fraction": 0.9859,
+   "curated_repeats": true,
+   "by_class": {
+    "gap": {
+     "blocks": 3,
+     "bp": 16380988
+    },
+    "regulatory": {
+     "blocks": 568,
+     "bp": 9786166
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 153,
+     "bp": 7364564
+    },
+    "unique_intergenic": {
+     "blocks": 29,
+     "bp": 2867061
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 2231718
+    },
+    "unclassified": {
+     "blocks": 107,
+     "bp": 573275
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 26,
+     "bp": 455011
+    },
+    "mixed_intergenic": {
+     "blocks": 7,
+     "bp": 427731
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 34,
+     "bp": 313640
+    },
+    "satellite_array": {
+     "blocks": 2,
+     "bp": 143173
+    },
+    "promoter_like": {
+     "blocks": 5,
+     "bp": 63486
+    },
+    "long_orf": {
+     "blocks": 2,
+     "bp": 25793
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 4,
+     "bp": 23379
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 4541
+    }
+   },
+   "seconds": 122
+  },
+  "chr15": {
+   "unknown_blocks": 684,
+   "unknown_bp": 33817955,
+   "classified_fraction": 0.9844,
+   "curated_repeats": true,
+   "by_class": {
+    "gap": {
+     "blocks": 6,
+     "bp": 20187210
+    },
+    "regulatory": {
+     "blocks": 390,
+     "bp": 8146653
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 98,
+     "bp": 2929961
+    },
+    "unique_intergenic": {
+     "blocks": 15,
+     "bp": 803154
+    },
+    "unclassified": {
+     "blocks": 84,
+     "bp": 529072
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 48,
+     "bp": 497456
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 26,
+     "bp": 433584
+    },
+    "promoter_like": {
+     "blocks": 11,
+     "bp": 183476
+    },
+    "interspersed_repeat": {
+     "blocks": 3,
+     "bp": 83447
+    },
+    "long_orf": {
+     "blocks": 3,
+     "bp": 23942
+    }
+   },
+   "seconds": 484
+  },
+  "chr16": {
+   "unknown_blocks": 862,
+   "unknown_bp": 29431594,
+   "classified_fraction": 0.9842,
+   "curated_repeats": true,
+   "by_class": {
+    "gap": {
+     "blocks": 5,
+     "bp": 10832273
+    },
+    "regulatory": {
+     "blocks": 502,
+     "bp": 8502780
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 96,
+     "bp": 4350934
+    },
+    "unique_intergenic": {
+     "blocks": 18,
+     "bp": 1756600
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 101,
+     "bp": 1412638
+    },
+    "satellite_array": {
+     "blocks": 10,
+     "bp": 790325
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 19,
+     "bp": 542519
+    },
+    "unclassified": {
+     "blocks": 79,
+     "bp": 464302
+    },
+    "mixed_intergenic": {
+     "blocks": 4,
+     "bp": 237003
+    },
+    "promoter_like": {
+     "blocks": 16,
+     "bp": 209395
+    },
+    "interspersed_repeat": {
+     "blocks": 4,
+     "bp": 130183
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 102930
+    },
+    "long_orf": {
+     "blocks": 7,
+     "bp": 99712
+    }
+   },
+   "seconds": 138
+  },
+  "chr17": {
+   "unknown_blocks": 1022,
+   "unknown_bp": 20118383,
+   "classified_fraction": 0.9846,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 723,
+     "bp": 10476330
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 4274982
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 83,
+     "bp": 2486708
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 90,
+     "bp": 760589
+    },
+    "unique_intergenic": {
+     "blocks": 11,
+     "bp": 673841
+    },
+    "unclassified": {
+     "blocks": 63,
+     "bp": 310345
+    },
+    "tandem_repeat": {
+     "blocks": 1,
+     "bp": 273121
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 23,
+     "bp": 268890
+    },
+    "gap": {
+     "blocks": 4,
+     "bp": 184748
+    },
+    "promoter_like": {
+     "blocks": 8,
+     "bp": 181796
+    },
+    "mixed_intergenic": {
+     "blocks": 2,
+     "bp": 122242
+    },
+    "interspersed_repeat": {
+     "blocks": 3,
+     "bp": 46702
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 5,
+     "bp": 24776
+    },
+    "long_orf": {
+     "blocks": 4,
+     "bp": 20225
+    },
+    "satellite_array": {
+     "blocks": 1,
+     "bp": 13088
+    }
+   },
+   "seconds": 264
+  },
+  "chr18": {
+   "unknown_blocks": 612,
+   "unknown_bp": 29570872,
+   "classified_fraction": 0.9855,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 335,
+     "bp": 9285142
+    },
+    "unique_intergenic": {
+     "blocks": 60,
+     "bp": 6636290
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 101,
+     "bp": 6155613
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 5614098
+    },
+    "unclassified": {
+     "blocks": 58,
+     "bp": 428863
+    },
+    "promoter_like": {
+     "blocks": 5,
+     "bp": 361574
+    },
+    "mixed_intergenic": {
+     "blocks": 7,
+     "bp": 338032
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 18,
+     "bp": 324185
+    },
+    "long_orf": {
+     "blocks": 7,
+     "bp": 170504
+    },
+    "gap": {
+     "blocks": 2,
+     "bp": 136793
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 14,
+     "bp": 81025
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 22943
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 3,
+     "bp": 15810
+    }
+   },
+   "seconds": 282
+  },
+  "chr19": {
+   "unknown_blocks": 1066,
+   "unknown_bp": 14926665,
+   "classified_fraction": 0.983,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 688,
+     "bp": 7664462
+    },
+    "satellite_array": {
+     "blocks": 7,
+     "bp": 3548120
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 168,
+     "bp": 1231195
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 85,
+     "bp": 1207390
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 43,
+     "bp": 426579
+    },
+    "unclassified": {
+     "blocks": 55,
+     "bp": 253958
+    },
+    "unique_intergenic": {
+     "blocks": 4,
+     "bp": 249266
+    },
+    "mixed_intergenic": {
+     "blocks": 3,
+     "bp": 154617
+    },
+    "gap": {
+     "blocks": 2,
+     "bp": 73343
+    },
+    "promoter_like": {
+     "blocks": 5,
+     "bp": 54159
+    },
+    "interspersed_repeat": {
+     "blocks": 2,
+     "bp": 50891
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 3,
+     "bp": 11359
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 1,
+     "bp": 1326
+    }
+   },
+   "seconds": 85
+  },
+  "chr20": {
+   "unknown_blocks": 762,
+   "unknown_bp": 21639991,
+   "classified_fraction": 0.9871,
+   "curated_repeats": true,
+   "by_class": {
+    "regulatory": {
+     "blocks": 516,
+     "bp": 10788742
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 92,
+     "bp": 4240524
+    },
+    "centromere": {
+     "blocks": 4,
+     "bp": 2871078
+    },
+    "unique_intergenic": {
+     "blocks": 19,
+     "bp": 1009478
+    },
+    "satellite_array": {
+     "blocks": 3,
+     "bp": 889120
+    },
+    "mixed_intergenic": {
+     "blocks": 3,
+     "bp": 394194
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 37,
+     "bp": 387960
+    },
+    "unclassified": {
+     "blocks": 52,
+     "bp": 279263
+    },
+    "gap": {
+     "blocks": 3,
+     "bp": 276124
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 18,
+     "bp": 270679
+    },
+    "promoter_like": {
+     "blocks": 5,
+     "bp": 102668
+    },
+    "interspersed_repeat": {
+     "blocks": 2,
+     "bp": 74649
+    },
+    "long_orf": {
+     "blocks": 4,
+     "bp": 38368
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 3,
+     "bp": 11166
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 5978
+    }
+   },
+   "seconds": 102
+  },
+  "chr22": {
+   "unknown_blocks": 635,
+   "unknown_bp": 22866245,
+   "classified_fraction": 0.9893,
+   "curated_repeats": true,
+   "by_class": {
+    "gap": {
+     "blocks": 8,
+     "bp": 11034591
+    },
+    "regulatory": {
+     "blocks": 441,
+     "bp": 5344002
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 2460268
+    },
+    "satellite_array": {
+     "blocks": 9,
+     "bp": 1666926
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 52,
+     "bp": 1154243
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 49,
+     "bp": 473733
+    },
+    "unique_intergenic": {
+     "blocks": 3,
+     "bp": 292527
+    },
+    "unclassified": {
+     "blocks": 58,
+     "bp": 245391
+    },
+    "mixed_intergenic": {
+     "blocks": 1,
+     "bp": 60055
+    },
+    "promoter_like": {
+     "blocks": 2,
+     "bp": 52400
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 6,
+     "bp": 40795
+    },
+    "interspersed_repeat": {
+     "blocks": 1,
+     "bp": 23891
+    },
+    "long_orf": {
+     "blocks": 1,
+     "bp": 9605
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 2,
+     "bp": 4180
+    },
+    "tandem_repeat": {
+     "blocks": 1,
+     "bp": 3638
+    }
+   },
+   "seconds": 58
+  },
+  "chrX": {
+   "unknown_blocks": 1338,
+   "unknown_bp": 71729458,
+   "classified_fraction": 0.9897,
+   "curated_repeats": true,
+   "by_class": {
+    "interspersed_repeat_LINE": {
+     "blocks": 603,
+     "bp": 48565481
+    },
+    "regulatory": {
+     "blocks": 366,
+     "bp": 8919119
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 4793116
+    },
+    "unique_intergenic": {
+     "blocks": 26,
+     "bp": 2038665
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 78,
+     "bp": 1937932
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 100,
+     "bp": 1589401
+    },
+    "mixed_intergenic": {
+     "blocks": 10,
+     "bp": 1163911
+    },
+    "gap": {
+     "blocks": 6,
+     "bp": 1036141
+    },
+    "unclassified": {
+     "blocks": 118,
+     "bp": 737689
+    },
+    "promoter_like": {
+     "blocks": 12,
+     "bp": 542854
+    },
+    "interspersed_repeat": {
+     "blocks": 7,
+     "bp": 288642
+    },
+    "satellite_array": {
+     "blocks": 1,
+     "bp": 62215
+    },
+    "long_orf": {
+     "blocks": 3,
+     "bp": 31751
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 5,
+     "bp": 16472
+    },
+    "interspersed_repeat_Retroposon": {
+     "blocks": 1,
+     "bp": 3497
+    },
+    "tandem_repeat": {
+     "blocks": 1,
+     "bp": 2572
+    }
+   },
+   "seconds": 314
+  },
+  "chrY": {
+   "unknown_blocks": 375,
+   "unknown_bp": 46733158,
+   "classified_fraction": 0.9893,
+   "curated_repeats": true,
+   "by_class": {
+    "gap": {
+     "blocks": 5,
+     "bp": 30866084
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 143,
+     "bp": 8489451
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 60,
+     "bp": 2643393
+    },
+    "unique_intergenic": {
+     "blocks": 29,
+     "bp": 1309017
+    },
+    "interspersed_repeat": {
+     "blocks": 6,
+     "bp": 1000810
+    },
+    "satellite_array": {
+     "blocks": 13,
+     "bp": 671929
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 17,
+     "bp": 559782
+    },
+    "promoter_like": {
+     "blocks": 14,
+     "bp": 550388
+    },
+    "unclassified": {
+     "blocks": 77,
+     "bp": 500002
+    },
+    "regulatory": {
+     "blocks": 6,
+     "bp": 91030
+    },
+    "long_orf": {
+     "blocks": 4,
+     "bp": 31272
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 20000
+    }
+   },
+   "seconds": 71
+  },
+  "chr21": {
+   "unknown_blocks": 446,
+   "unknown_bp": 20813319,
+   "classified_fraction": 0.9764,
+   "curated_repeats": true,
+   "by_class": {
+    "gap": {
+     "blocks": 15,
+     "bp": 6155943
+    },
+    "regulatory": {
+     "blocks": 177,
+     "bp": 3650278
+    },
+    "interspersed_repeat_LINE": {
+     "blocks": 69,
+     "bp": 3164936
+    },
+    "centromere": {
+     "blocks": 1,
+     "bp": 2349840
+    },
+    "unique_intergenic": {
+     "blocks": 32,
+     "bp": 1926392
+    },
+    "satellite_array": {
+     "blocks": 8,
+     "bp": 1228523
+    },
+    "mixed_intergenic": {
+     "blocks": 6,
+     "bp": 652777
+    },
+    "unclassified": {
+     "blocks": 75,
+     "bp": 490633
+    },
+    "interspersed_repeat_LTR": {
+     "blocks": 19,
+     "bp": 451581
+    },
+    "promoter_like": {
+     "blocks": 17,
+     "bp": 276323
+    },
+    "interspersed_repeat": {
+     "blocks": 4,
+     "bp": 228172
+    },
+    "long_orf": {
+     "blocks": 4,
+     "bp": 128280
+    },
+    "interspersed_repeat_SINE": {
+     "blocks": 14,
+     "bp": 84659
+    },
+    "tandem_repeat": {
+     "blocks": 3,
+     "bp": 17689
+    },
+    "interspersed_repeat_DNA": {
+     "blocks": 2,
+     "bp": 7293
+    }
+   },
+   "seconds": 77
   }
+ },
+ "totals": {
+  "chromosomes": 24,
+  "unknown_blocks": 26806,
+  "unknown_bp": 1008756271,
+  "classified_fraction": 0.9853,
+  "by_class_bp": {
+   "regulatory": 338783109,
+   "interspersed_repeat_LINE": 287098754,
+   "gap": 159652491,
+   "unique_intergenic": 74830777,
+   "centromere": 48211218,
+   "interspersed_repeat_LTR": 22509695,
+   "satellite_array": 21489503,
+   "interspersed_repeat_SINE": 17824701,
+   "unclassified": 14841547,
+   "mixed_intergenic": 9963959,
+   "promoter_like": 6387617,
+   "interspersed_repeat": 4970775,
+   "long_orf": 1193534,
+   "interspersed_repeat_DNA": 554209,
+   "tandem_repeat": 354639,
+   "interspersed_repeat_Retroposon": 89743
+  },
+  "curated_repeats_chromosomes": 24,
+  "seconds": 5051
+ },
+ "note": "chrM has no UNKNOWN blocks (fully annotated 16.6 kb); every autosome, X and Y classified with the curated repeat pass"
 }

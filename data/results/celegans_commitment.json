@@ -1,0 +1,362 @@
+{
+  "result": "celegans_commitment",
+  "date": "2026-09-14",
+  "source": "Ma et al. 2021 atlas (Zenodo 4737593, CC BY 4.0) x WormWeb lineage (Sulston 1983)",
+  "cells_with_complete_lifetimes": 755,
+  "states": {
+    "bins_birth_frame": [
+      "0-40",
+      "40-80",
+      "80-120",
+      "120-160",
+      "160-200"
+    ],
+    "cells_per_bin": [
+      50,
+      122,
+      204,
+      244,
+      135
+    ],
+    "subsample": 36,
+    "series": {
+      "factors_per_cell": [
+        10.3611,
+        21.1921,
+        38.1782,
+        58.4931,
+        79.1481
+      ],
+      "spread": [
+        0.5372,
+        0.5503,
+        0.6533,
+        0.6613,
+        0.6364
+      ],
+      "nearest_neighbour": [
+        0.2019,
+        0.3234,
+        0.4273,
+        0.4207,
+        0.4495
+      ],
+      "discreteness": [
+        0.3765,
+        0.5858,
+        0.6538,
+        0.6363,
+        0.7064
+      ],
+      "fate_silhouette": [
+        -0.1452,
+        -0.1629,
+        -0.0988,
+        -0.135,
+        -0.1239
+      ],
+      "lineage_silhouette": [
+        -0.1284,
+        -0.0225,
+        0.0109,
+        -0.033,
+        -0.0355
+      ],
+      "discreteness_excess": [
+        -0.1396,
+        -0.1269,
+        -0.1498,
+        -0.1684,
+        -0.1181
+      ]
+    },
+    "slope": {
+      "factors_per_cell": 17.4875,
+      "spread": 0.03094,
+      "nearest_neighbour": 0.05925,
+      "discreteness": 0.07104,
+      "fate_silhouette": 0.00705,
+      "lineage_silhouette": 0.01752,
+      "discreteness_excess": 0.00014
+    },
+    "p_shuffled_time": {
+      "factors_per_cell": {
+        "lower": 1.0,
+        "higher": 0.005
+      },
+      "spread": {
+        "lower": 1.0,
+        "higher": 0.005
+      },
+      "nearest_neighbour": {
+        "lower": 1.0,
+        "higher": 0.005
+      },
+      "discreteness": {
+        "lower": 1.0,
+        "higher": 0.005
+      },
+      "fate_silhouette": {
+        "lower": 0.7562,
+        "higher": 0.2488
+      },
+      "lineage_silhouette": {
+        "lower": 0.9851,
+        "higher": 0.0199
+      },
+      "discreteness_excess": {
+        "lower": 0.4876,
+        "higher": 0.5174
+      }
+    },
+    "permutations": 200
+  },
+  "programmes": {
+    "programmes": {
+      "intestine": [
+        "ELT-2",
+        "ELT-7"
+      ],
+      "muscle": [
+        "HLH-1",
+        "UNC-120"
+      ],
+      "hypoderm": [
+        "ELT-1",
+        "LIN-26",
+        "NHR-25"
+      ],
+      "neuron": [
+        "LIN-32",
+        "NGN-1",
+        "HLH-14",
+        "CND-1"
+      ]
+    },
+    "sources": {
+      "intestine": "Fukushige et al. 1998; Sommermann et al. 2010",
+      "muscle": "Krause et al. 1990; Fukushige et al. 2006",
+      "hypoderm": "Page et al. 1997; Labouesse et al. 1994; Gissendanner & Sluder 2000",
+      "neuron": "Zhao & Emmons 1995 (LIN-32); Nakano et al. 2010 (NGN-1); Frank et al. 2003 (HLH-14); Hallam et al. 2000 (CND-1)"
+    },
+    "cells_with_a_programme_per_bin": [
+      0,
+      2,
+      52,
+      80,
+      81
+    ],
+    "share_with_two_or_more": [
+      null,
+      0.0,
+      0.0,
+      0.025,
+      0.111
+    ],
+    "relative_to_curveball": [
+      null,
+      null,
+      0.0,
+      0.096,
+      0.368
+    ],
+    "slope": 0.03583,
+    "slope_relative": 0.18377,
+    "p_shuffled_time_lower": 0.995
+  },
+  "ratchet": {
+    "persistence_rises": {
+      "pairs": 88,
+      "mean": 0.705,
+      "by_bin": {
+        "1": [
+          0.0,
+          4
+        ],
+        "2": [
+          0.789,
+          57
+        ],
+        "3": [
+          0.63,
+          27
+        ]
+      },
+      "r_with_mother_birth": 0.0674,
+      "p": 0.2677
+    },
+    "switching_falls": {
+      "pairs": 88,
+      "mean": 0.091,
+      "by_bin": {
+        "1": [
+          0.5,
+          4
+        ],
+        "2": [
+          0.035,
+          57
+        ],
+        "3": [
+          0.148,
+          27
+        ]
+      },
+      "r_with_mother_birth": -0.0095,
+      "p": 0.4755
+    },
+    "caveat": "reporter protein perdures across a division, so persistence is an upper bound"
+  },
+  "competence": {
+    "all_factors": {
+      "onsets": 15353,
+      "strata": 931,
+      "stratum": "factor x sublineage",
+      "composition": {
+        "bits": 0.3445,
+        "null_median_bits": 0.2664,
+        "excess_bits": 0.0781,
+        "p": 0.005
+      },
+      "dominant_tissue": {
+        "bits": 0.3932,
+        "null_median_bits": 0.3177,
+        "excess_bits": 0.0755,
+        "p": 0.005
+      },
+      "permutations": 200
+    },
+    "all_factors_same_generation": {
+      "onsets": 1081,
+      "strata": 103,
+      "stratum": "factor x sublineage x generation",
+      "composition": {
+        "bits": 0.2391,
+        "null_median_bits": 0.1985,
+        "excess_bits": 0.0405,
+        "p": 0.005
+      },
+      "dominant_tissue": {
+        "bits": 0.2084,
+        "null_median_bits": 0.1973,
+        "excess_bits": 0.0111,
+        "p": 0.1393
+      },
+      "permutations": 200
+    },
+    "programme_factors": {
+      "onsets": 124,
+      "strata": 17,
+      "stratum": "factor x sublineage",
+      "composition": {
+        "bits": 0.1064,
+        "null_median_bits": 0.0848,
+        "excess_bits": 0.0216,
+        "p": 0.1638
+      },
+      "dominant_tissue": {
+        "bits": 0.133,
+        "null_median_bits": 0.0979,
+        "excess_bits": 0.0351,
+        "p": 0.1189
+      },
+      "permutations": 1000
+    }
+  },
+  "sisters": {
+    "sister_pairs": 327,
+    "by_axis": {
+      "a/p": {
+        "pairs": 314,
+        "factor_distance_median": 0.405,
+        "fate_total_variation_median": 0.36,
+        "dominant_tissue_differs": 124,
+        "factor_distance_when_fates_differ": 0.429,
+        "factor_distance_when_fates_agree": 0.389,
+        "examples_fates_differ": [
+          "ABa:hypoderm / ABp:neuron",
+          "ABalaaaa:neuron / ABalaaap:socket",
+          "ABalaaaala:neuron / ABalaaaalp:sheath",
+          "ABalaaapa:sheath / ABalaaapp:socket",
+          "ABalaapa:socket / ABalaapp:neuron",
+          "ABalaapaa:sheath / ABalaapap:socket",
+          "ABalaapaaa:neuron / ABalaapaap:sheath",
+          "ABalaappa:socket / ABalaappp:neuron"
+        ]
+      },
+      "l/r": {
+        "pairs": 9,
+        "factor_distance_median": 0.315,
+        "fate_total_variation_median": 0.5,
+        "dominant_tissue_differs": 5,
+        "factor_distance_when_fates_differ": 0.321,
+        "factor_distance_when_fates_agree": 0.168,
+        "examples_fates_differ": [
+          "ABal:neuron / ABar:hypoderm",
+          "ABalaaaal:sheath / ABalaaaar:neuron",
+          "ABalaaapal:neuron / ABalaaapar:sheath",
+          "ABalaaapall:socket / ABalaaapalr:neuron",
+          "ABalaaappl:sheath / ABalaaappr:socket"
+        ]
+      },
+      "d/v": {
+        "pairs": 0,
+        "factor_distance_median": null,
+        "fate_total_variation_median": null,
+        "dominant_tissue_differs": 0,
+        "factor_distance_when_fates_differ": null,
+        "factor_distance_when_fates_agree": null,
+        "examples_fates_differ": []
+      }
+    },
+    "bilateral_homologues_ABpl_ABpr": {
+      "pairs": 107,
+      "factor_distance_median": 0.516,
+      "fate_total_variation_median": 0.0,
+      "dominant_tissue_differs": 18,
+      "factor_distance_when_fates_differ": 0.594,
+      "factor_distance_when_fates_agree": 0.509,
+      "examples_fates_differ": [
+        "ABplaa:hypoderm / ABpraa:neuron",
+        "ABplaaa:hypoderm / ABpraaa:neuron",
+        "ABplaaaaa:neuron / ABpraaaaa:sheath",
+        "ABplaaaaaa:neuron / ABpraaaaaa:sheath",
+        "ABplaaaaap:neuron / ABpraaaaap:sheath",
+        "ABplaaaap:hypoderm / ABpraaaap:neuron",
+        "ABplaaap:hypoderm / ABpraaap:neuron",
+        "ABplaaapa:hypoderm / ABpraaapa:neuron"
+      ]
+    },
+    "measurement_floor": {
+      "factors_with_two_strains": 24,
+      "strain_disagreement": 0.678,
+      "sister_disagreement_same_factors": 0.453,
+      "homologue_disagreement_same_factors": 0.533
+    },
+    "pop1_anterior_over_posterior": {
+      "pairs": 271,
+      "anterior_higher": 255,
+      "log2_ratio_median": 0.515,
+      "sign_test_z": 14.52,
+      "abs_log2_ratio_fates_differ_minus_agree": 0.042,
+      "p_asymmetry_larger_when_fates_differ": 0.1994
+    },
+    "notch_targets": {
+      "REF-1": {
+        "cells": 21,
+        "fate_discordance_gain_when_sisters_differ_on_it": 0.083,
+        "same_frequency_factors": 42,
+        "rank_among_them": 17
+      }
+    }
+  },
+  "lateral_inhibition_model": {
+    "model": "Collier et al. 1996 two-cell lateral inhibition",
+    "deterministic_equal_start_diverges": false,
+    "noise_sd": 0.02,
+    "runs": 200,
+    "diverged": 198,
+    "first_cell_wins": 101,
+    "first_cell_win_share": 0.51
+  }
+}

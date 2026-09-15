@@ -36,6 +36,41 @@ event divide {
 }
 ```
 
+### Added 2026-09-11: compiled protein properties and regulatory elements
+
+A `protein` block may carry what the federated compiler knows
+(`genomeos protein TP53 --bio` writes one):
+
+```
+protein TP53 {
+  accession: P04637;
+  sequence: MEEPQ…;
+  isoforms: P04637-1, P04637-2;
+  domains: p53_DNA-bd, p53_TAD2;
+  pathways: R-HSA-69541, R-HSA-6804756;
+  interactions: MDM2, CREBBP;          # partners with STRING experimental support
+  structures: 1TUP, AF-P04637;         # PDB ids; AF- marks the AlphaFold model
+  evidence: curated "UniProtKB/Swiss-Prot; InterPro; Reactome; PDB; STRING physical channel";
+  confidence: 0.5
+}
+```
+
+An `element` block is a regulatory element with the genes it reaches and
+the node (CTCF domain) that bounds it:
+
+```
+element APP_enh1 {
+  class: enhancer;                     # promoter | enhancer | insulator | open_chromatin
+  locus: chr21:25900000-25900400(+);
+  targets: APP, CYYR1;
+  domain: chr21:D89;
+  evidence: inferred "same CTCF domain"; confidence: 0.4
+}
+```
+
+Both compile to BioIR entities (`Protein` with the new fields,
+`RegulatoryElement`); `bio check` reports them with the rest.
+
 ## Semantics
 
 - **Imports** merge the imported module's entities, rules, events and

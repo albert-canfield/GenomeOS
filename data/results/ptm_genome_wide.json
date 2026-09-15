@@ -1,0 +1,151 @@
+{
+  "result": "ptm_genome_wide",
+  "date": "2026-09-11",
+  "proteins": 19452,
+  "proteins_with_sites": 13083,
+  "sites": 96362,
+  "by_class": {
+    "phospho": 41661,
+    "disulfide": 18329,
+    "glyco": 17603,
+    "acetyl": 7041,
+    "other": 4895,
+    "methyl": 2879,
+    "hydroxy": 1979,
+    "lipid": 1207,
+    "adp-ribosyl": 251,
+    "sulfo": 191,
+    "citrulline": 181,
+    "nitro": 145
+  },
+  "writers": 352,
+  "writer_edges": 2985,
+  "top_writers": [
+    {
+      "writer": "PKA",
+      "substrates": 166,
+      "sites": 247
+    },
+    {
+      "writer": "PKC",
+      "substrates": 164,
+      "sites": 268
+    },
+    {
+      "writer": "CDK1",
+      "substrates": 95,
+      "sites": 165
+    },
+    {
+      "writer": "CK2",
+      "substrates": 94,
+      "sites": 183
+    },
+    {
+      "writer": "FAM20C",
+      "substrates": 94,
+      "sites": 192
+    },
+    {
+      "writer": "PKB",
+      "substrates": 68,
+      "sites": 99
+    },
+    {
+      "writer": "PRMT5",
+      "substrates": 59,
+      "sites": 73
+    },
+    {
+      "writer": "AMPK",
+      "substrates": 57,
+      "sites": 80
+    },
+    {
+      "writer": "AKT1",
+      "substrates": 56,
+      "sites": 76
+    },
+    {
+      "writer": "ATM",
+      "substrates": 53,
+      "sites": 76
+    },
+    {
+      "writer": "SRC",
+      "substrates": 51,
+      "sites": 79
+    },
+    {
+      "writer": "MAPK1",
+      "substrates": 44,
+      "sites": 87
+    },
+    {
+      "writer": "RPS6KA5",
+      "substrates": 41,
+      "sites": 60
+    },
+    {
+      "writer": "GSK3-BETA",
+      "substrates": 39,
+      "sites": 84
+    },
+    {
+      "writer": "AURKB",
+      "substrates": 36,
+      "sites": 67
+    },
+    {
+      "writer": "PLK1",
+      "substrates": 36,
+      "sites": 71
+    },
+    {
+      "writer": "CDK2",
+      "substrates": 35,
+      "sites": 60
+    },
+    {
+      "writer": "PRMT1",
+      "substrates": 33,
+      "sites": 88
+    },
+    {
+      "writer": "CDK5",
+      "substrates": 29,
+      "sites": 46
+    },
+    {
+      "writer": "EHMT2",
+      "substrates": 28,
+      "sites": 36
+    },
+    {
+      "writer": "ABL1",
+      "substrates": 27,
+      "sites": 59
+    },
+    {
+      "writer": "PDPK1",
+      "substrates": 27,
+      "sites": 44
+    },
+    {
+      "writer": "RPS6KA3",
+      "substrates": 27,
+      "sites": 30
+    },
+    {
+      "writer": "MTOR",
+      "substrates": 25,
+      "sites": 47
+    },
+    {
+      "writer": "MAPK",
+      "substrates": 25,
+      "sites": 39
+    }
+  ],
+  "evidence": "curated: UniProt sequence features (modified residue, glycosylation, lipidation, cross-link, disulfide)"
+}

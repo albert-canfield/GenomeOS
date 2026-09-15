@@ -15,6 +15,7 @@ ranking is `inferred`.
 from __future__ import annotations
 
 import math
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -154,13 +155,23 @@ def suggest_cancer_type(
     ]
 
 
-def surface_targets(genes: set[str], kb=None) -> list[dict[str, Any]]:
-    """Altered genes whose products are on the plasma membrane / cell surface (reachable by a binder)."""
+def surface_targets(genes: set[str], kb=None, absent: Iterable[str] = ()) -> list[dict[str, Any]]:
+    """Altered genes whose products are on the plasma membrane / cell surface (reachable by a binder).
+
+    `absent` names the genes this tumour has deleted outright. A gene with a
+    plasma-membrane annotation and no remaining copy is not a surface target:
+    the annotation describes where the protein would sit, and this tumour makes
+    none of it. They are excluded here and reported as excluded, rather than
+    offered and caveated.
+    """
     from genomeos.lib import KnowledgeBase
 
     kb = kb or KnowledgeBase()
+    gone = {g.upper() for g in absent}
     out = []
     for g in sorted(genes):
+        if g.upper() in gone:
+            continue
         terms = kb.annotations.terms(g)
         if any(t in terms for t in SURFACE_TERMS):
             out.append(

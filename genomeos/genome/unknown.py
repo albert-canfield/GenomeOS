@@ -270,7 +270,11 @@ def composition(seq: str, counts: array | None, window: int = 5000) -> dict[str,
 
 
 def classify_block(
-    seq: str, counts: array | None, patterns: list[Pattern], ccre: dict[str, int] | None = None
+    seq: str,
+    counts: array | None,
+    patterns: list[Pattern],
+    ccre: dict[str, int] | None = None,
+    repeats: dict[str, int] | None = None,
 ) -> tuple[str, str, float, dict, dict]:
     n = len(seq)
     f: dict[str, Any] = {}
@@ -320,6 +324,27 @@ def classify_block(
         and (ccre.get("PLS", 0) + ccre.get("pELS", 0) + ccre.get("dELS", 0)) >= 2
     ):
         return "regulatory", "curated", 0.7, f, hits
+    # curated repeat annotation (RepeatMasker) beats every sequence-only repeat rule
+    rep_frac = {}
+    if repeats:
+        from genomeos.genome.repeats import INTERSPERSED
+
+        rep_frac = {k: v / n for k, v in repeats.items()}
+        f["repeat_coverage"] = {k: round(v, 3) for k, v in sorted(rep_frac.items(), key=lambda kv: -kv[1])}
+        inter = sum(v for k, v in rep_frac.items() if k in INTERSPERSED)
+        f["interspersed_coverage"] = round(inter, 3)
+        sat = rep_frac.get("Satellite", 0)
+        simple = rep_frac.get("Simple_repeat", 0) + rep_frac.get("Low_complexity", 0)
+        if sat >= 0.5:
+            cls = (
+                "centromere" if "centromere" in by_class or f["periodicity_171"] > 0.15 else "satellite_array"
+            )
+            return cls, "curated", 0.9, f, hits
+        if inter >= 0.5:
+            top = max((k for k in rep_frac if k in INTERSPERSED), key=lambda k: rep_frac[k])
+            return f"interspersed_repeat_{top}", "curated", 0.9, f, hits
+        if simple >= 0.5:
+            return "tandem_repeat", "curated", 0.9, f, hits
     if "centromere" in by_class:
         return "centromere", by_class["centromere"][1], by_class["centromere"][2], f, hits
     if f["tandem_fraction"] > 0.5:
@@ -338,6 +363,7 @@ def classify_block(
         ORF_MIN_AA <= f["longest_orf_aa"] <= ORF_MAX_AA
         and f["tandem_fraction"] < 0.2
         and (f["high_copy_fraction"] is None or f["high_copy_fraction"] < 0.5)
+        and f.get("interspersed_coverage", 0.0) < 0.3  # a LINE-1 ORF2 is not an unannotated gene
     )
     if f["longest_orf_aa"] > ORF_MAX_AA:
         # a stop-free frame tens of kb long is an array of a repeat unit with no stop in one frame
@@ -390,6 +416,9 @@ def investigate(
     s = str(Sequence(str(seq)))
     patterns = patterns if patterns is not None else load_patterns()
     ccres = ccre_index(load_ccres(chrom))
+    from genomeos.genome.repeats import repeat_index
+
+    rindex = repeat_index(chrom)
     if progress:
         progress("counting 16-mers over the chromosome")
     counts = kmer_table(s)
@@ -398,7 +427,8 @@ def investigate(
         blocks = blocks[:max_blocks]
     for i, b in enumerate(blocks):
         cc = count_in(ccres, b.start, b.end) if ccres else None
-        cls, ev, conf, f, hits = classify_block(s[b.start : b.end], counts, patterns, cc)
+        rc_ = rindex.coverage(b.start, b.end) if rindex else None
+        cls, ev, conf, f, hits = classify_block(s[b.start : b.end], counts, patterns, cc, rc_)
         b.cls, b.evidence, b.confidence, b.features, b.patterns = cls, ev, conf, f, hits
         if progress and (i % 25 == 0 or i == len(blocks) - 1):
             progress(f"{i + 1}/{len(blocks)} blocks ({b.length:,} bp -> {cls})")
@@ -428,6 +458,7 @@ def investigate(
         "classified_fraction": round(1 - by_class.get("unclassified", {"bp": 0})["bp"] / total, 4)
         if total
         else None,
+        "curated_repeats": bool(rindex),
         "high_copy_threshold": HIGH_COPY,
         "patterns": [p.name for p in patterns],
         "ccres_used": len(ccres),

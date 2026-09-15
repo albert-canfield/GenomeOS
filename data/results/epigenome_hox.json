@@ -1,0 +1,3000 @@
+{
+  "result": "epigenome_hox",
+  "date": "2026-09-14",
+  "chromosomes": [
+    "chr7",
+    "chr17",
+    "chr12",
+    "chr2"
+  ],
+  "coding_promoters": 4415,
+  "hox_promoters": 39,
+  "clusters": {
+    "HOXA": {
+      "chrom": "chr7",
+      "start": 27096038,
+      "end": 27200090,
+      "genes": [
+        "HOXA1",
+        "HOXA10",
+        "HOXA11",
+        "HOXA13",
+        "HOXA2",
+        "HOXA3",
+        "HOXA4",
+        "HOXA5",
+        "HOXA6",
+        "HOXA7",
+        "HOXA9"
+      ],
+      "cells": {
+        "K562": {
+          "h3k27me3_bp_share": 0.6493,
+          "h3k27me3_fc_cluster": 4.323,
+          "h3k27me3_fc_chromosome_mean": 0.757,
+          "h3k4me3_bp_share": 0.0075,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1373
+            },
+            "HOXA2": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1633
+            },
+            "HOXA4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1109
+            },
+            "HOXA5": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.4194
+            },
+            "HOXA6": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.1303
+            },
+            "HOXA3": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.0458
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1913
+            },
+            "HOXA9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1414
+            },
+            "HOXA10": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.3106
+            },
+            "HOXA11": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.2886
+            },
+            "HOXA13": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.1438
+            }
+          }
+        },
+        "HepG2": {
+          "h3k27me3_bp_share": 0.3147,
+          "h3k27me3_fc_cluster": 1.755,
+          "h3k27me3_fc_chromosome_mean": 0.702,
+          "h3k4me3_bp_share": 0.2229,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.679
+            },
+            "HOXA2": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.9426
+            },
+            "HOXA4": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.415
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.7021
+            },
+            "HOXA6": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.4005
+            },
+            "HOXA3": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.5142
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.7759
+            },
+            "HOXA9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.8378
+            },
+            "HOXA10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.3613
+            },
+            "HOXA11": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.3357
+            },
+            "HOXA13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1363
+            }
+          }
+        },
+        "GM12878": {
+          "h3k27me3_bp_share": 0.1262,
+          "h3k27me3_fc_cluster": 2.457,
+          "h3k27me3_fc_chromosome_mean": 0.515,
+          "h3k4me3_bp_share": 0.0304,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "promoter mark, not acetylated",
+              "methylation": 0.0912
+            },
+            "HOXA2": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5073
+            },
+            "HOXA4": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.5832
+            },
+            "HOXA5": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.534
+            },
+            "HOXA6": {
+              "open": false,
+              "state": "promoter mark, not acetylated",
+              "methylation": 0.0726
+            },
+            "HOXA3": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.1408
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1388
+            },
+            "HOXA9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.713
+            },
+            "HOXA10": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.344
+            },
+            "HOXA11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2729
+            },
+            "HOXA13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1363
+            }
+          }
+        },
+        "H1": {
+          "h3k27me3_bp_share": 0.9741,
+          "h3k27me3_fc_cluster": 32.681,
+          "h3k27me3_fc_chromosome_mean": 0.453,
+          "h3k4me3_bp_share": 0.203,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0433
+            },
+            "HOXA2": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0633
+            },
+            "HOXA4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1626
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2055
+            },
+            "HOXA6": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1224
+            },
+            "HOXA3": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2094
+            },
+            "HOXA7": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2685
+            },
+            "HOXA9": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.157
+            },
+            "HOXA10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1503
+            },
+            "HOXA11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0941
+            },
+            "HOXA13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1071
+            }
+          }
+        },
+        "IMR-90": {
+          "h3k27me3_bp_share": 0.3154,
+          "h3k27me3_fc_cluster": 2.682,
+          "h3k27me3_fc_chromosome_mean": 0.49,
+          "h3k4me3_bp_share": 0.3622,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.0748
+            },
+            "HOXA2": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.0125
+            },
+            "HOXA4": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.0167
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.0071
+            },
+            "HOXA6": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.0
+            },
+            "HOXA3": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.1717
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.733
+            },
+            "HOXA9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5988
+            },
+            "HOXA10": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1853
+            },
+            "HOXA11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0612
+            },
+            "HOXA13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0227
+            }
+          }
+        },
+        "SK-N-SH": {
+          "h3k27me3_bp_share": 0.9445,
+          "h3k27me3_fc_cluster": 5.22,
+          "h3k27me3_fc_chromosome_mean": 0.857,
+          "h3k4me3_bp_share": 0.0573,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.109
+            },
+            "HOXA2": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1556
+            },
+            "HOXA4": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2014
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1201
+            },
+            "HOXA6": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1037
+            },
+            "HOXA3": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1885
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3229
+            },
+            "HOXA9": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2425
+            },
+            "HOXA10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2195
+            },
+            "HOXA11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1819
+            },
+            "HOXA13": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.076
+            }
+          }
+        },
+        "cardiac muscle cell": {
+          "h3k27me3_bp_share": 0.9985,
+          "h3k27me3_fc_cluster": 11.722,
+          "h3k27me3_fc_chromosome_mean": 0.753,
+          "h3k4me3_bp_share": 0.0992,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA2": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXA4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA6": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXA3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXA9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA10": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXA11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            }
+          }
+        },
+        "keratinocyte": {
+          "h3k27me3_bp_share": 0.1599,
+          "h3k27me3_fc_cluster": 2.847,
+          "h3k27me3_fc_chromosome_mean": 0.597,
+          "h3k4me3_bp_share": 0.5118,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXA2": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXA4": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXA6": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXA3": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXA9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA10": {
+              "open": false,
+              "state": "no mark",
+              "methylation": null
+            },
+            "HOXA11": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA13": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            }
+          }
+        },
+        "hepatocyte": {
+          "h3k27me3_bp_share": 0.8381,
+          "h3k27me3_fc_cluster": 3.059,
+          "h3k27me3_fc_chromosome_mean": 0.767,
+          "h3k4me3_bp_share": 0.3107,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0758
+            },
+            "HOXA2": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1865
+            },
+            "HOXA4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1293
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1678
+            },
+            "HOXA6": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1291
+            },
+            "HOXA3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1679
+            },
+            "HOXA7": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4278
+            },
+            "HOXA9": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1347
+            },
+            "HOXA10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1448
+            },
+            "HOXA11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0263
+            },
+            "HOXA13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.039
+            }
+          }
+        },
+        "astrocyte": {
+          "h3k27me3_bp_share": 0.8563,
+          "h3k27me3_fc_cluster": 6.918,
+          "h3k27me3_fc_chromosome_mean": 0.657,
+          "h3k4me3_bp_share": 0.2074,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA2": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA6": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXA9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXA10": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": null
+            },
+            "HOXA11": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXA13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            }
+          }
+        },
+        "CD14-positive monocyte": {
+          "h3k27me3_bp_share": 0.6805,
+          "h3k27me3_fc_cluster": 16.523,
+          "h3k27me3_fc_chromosome_mean": 0.659,
+          "h3k4me3_bp_share": 0.305,
+          "promoters": {
+            "HOXA1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0161
+            },
+            "HOXA2": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.241
+            },
+            "HOXA4": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.4334
+            },
+            "HOXA5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.7815
+            },
+            "HOXA6": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0057
+            },
+            "HOXA3": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0595
+            },
+            "HOXA7": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0534
+            },
+            "HOXA9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.2843
+            },
+            "HOXA10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2569
+            },
+            "HOXA11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0329
+            },
+            "HOXA13": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0177
+            }
+          }
+        }
+      }
+    },
+    "HOXB": {
+      "chrom": "chr17",
+      "start": 48531010,
+      "end": 48729075,
+      "genes": [
+        "HOXB1",
+        "HOXB13",
+        "HOXB2",
+        "HOXB3",
+        "HOXB4",
+        "HOXB5",
+        "HOXB6",
+        "HOXB7",
+        "HOXB8",
+        "HOXB9"
+      ],
+      "cells": {
+        "K562": {
+          "h3k27me3_bp_share": 0.1113,
+          "h3k27me3_fc_cluster": 1.122,
+          "h3k27me3_fc_chromosome_mean": 0.952,
+          "h3k4me3_bp_share": 0.2281,
+          "promoters": {
+            "HOXB1": {
+              "open": true,
+              "state": "primed enhancer",
+              "methylation": 0.7722
+            },
+            "HOXB2": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.1303
+            },
+            "HOXB4": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.0058
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "primed enhancer",
+              "methylation": 0.6467
+            },
+            "HOXB3": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.1531
+            },
+            "HOXB6": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.1976
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.387
+            },
+            "HOXB9": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.0147
+            },
+            "HOXB7": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": 0.5834
+            },
+            "HOXB13": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.1454
+            }
+          }
+        },
+        "HepG2": {
+          "h3k27me3_bp_share": 0.661,
+          "h3k27me3_fc_cluster": 3.193,
+          "h3k27me3_fc_chromosome_mean": 0.839,
+          "h3k4me3_bp_share": 0.015,
+          "promoters": {
+            "HOXB1": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3252
+            },
+            "HOXB2": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.388
+            },
+            "HOXB4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3067
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.2562
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2146
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2242
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1965
+            },
+            "HOXB9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2263
+            },
+            "HOXB7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3369
+            },
+            "HOXB13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3392
+            }
+          }
+        },
+        "GM12878": {
+          "h3k27me3_bp_share": 0.0719,
+          "h3k27me3_fc_cluster": 1.658,
+          "h3k27me3_fc_chromosome_mean": 0.601,
+          "h3k4me3_bp_share": 0.0579,
+          "promoters": {
+            "HOXB1": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.7137
+            },
+            "HOXB2": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": 0.445
+            },
+            "HOXB4": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.1641
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "promoter mark, not acetylated",
+              "methylation": 0.238
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2309
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.331
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2408
+            },
+            "HOXB9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1923
+            },
+            "HOXB7": {
+              "open": true,
+              "state": "primed enhancer",
+              "methylation": 0.373
+            },
+            "HOXB13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1867
+            }
+          }
+        },
+        "H1": {
+          "h3k27me3_bp_share": 0.6375,
+          "h3k27me3_fc_cluster": 19.109,
+          "h3k27me3_fc_chromosome_mean": 0.694,
+          "h3k4me3_bp_share": 0.1171,
+          "promoters": {
+            "HOXB1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2431
+            },
+            "HOXB2": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1024
+            },
+            "HOXB4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1066
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1051
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1914
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1899
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.118
+            },
+            "HOXB9": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0673
+            },
+            "HOXB7": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.157
+            },
+            "HOXB13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1489
+            }
+          }
+        },
+        "IMR-90": {
+          "h3k27me3_bp_share": 0.3483,
+          "h3k27me3_fc_cluster": 3.229,
+          "h3k27me3_fc_chromosome_mean": 0.775,
+          "h3k4me3_bp_share": 0.237,
+          "promoters": {
+            "HOXB1": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.8785
+            },
+            "HOXB2": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXB4": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.008
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.0
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.846
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.7662
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0507
+            },
+            "HOXB9": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0143
+            },
+            "HOXB7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0379
+            },
+            "HOXB13": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1
+            }
+          }
+        },
+        "SK-N-SH": {
+          "h3k27me3_bp_share": 0.9226,
+          "h3k27me3_fc_cluster": 4.572,
+          "h3k27me3_fc_chromosome_mean": 0.842,
+          "h3k4me3_bp_share": 0.0291,
+          "promoters": {
+            "HOXB1": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2931
+            },
+            "HOXB2": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.1656
+            },
+            "HOXB4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1802
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1257
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0713
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1313
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0904
+            },
+            "HOXB9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0282
+            },
+            "HOXB7": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3398
+            },
+            "HOXB13": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0846
+            }
+          }
+        },
+        "cardiac muscle cell": {
+          "h3k27me3_bp_share": 0.8033,
+          "h3k27me3_fc_cluster": 6.748,
+          "h3k27me3_fc_chromosome_mean": 0.802,
+          "h3k4me3_bp_share": 0.1219,
+          "promoters": {
+            "HOXB1": {
+              "open": false,
+              "state": "active enhancer",
+              "methylation": null
+            },
+            "HOXB2": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXB4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": null
+            },
+            "HOXB9": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXB13": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": null
+            }
+          }
+        },
+        "keratinocyte": {
+          "h3k27me3_bp_share": 0.5183,
+          "h3k27me3_fc_cluster": 8.201,
+          "h3k27me3_fc_chromosome_mean": 0.882,
+          "h3k4me3_bp_share": 0.0933,
+          "promoters": {
+            "HOXB1": {
+              "open": false,
+              "state": "promoter mark, not acetylated",
+              "methylation": null
+            },
+            "HOXB2": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB4": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB5": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB8": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": null
+            },
+            "HOXB9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB7": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB13": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            }
+          }
+        },
+        "hepatocyte": {
+          "h3k27me3_bp_share": 0.5883,
+          "h3k27me3_fc_cluster": 2.715,
+          "h3k27me3_fc_chromosome_mean": 0.764,
+          "h3k4me3_bp_share": 0.0385,
+          "promoters": {
+            "HOXB1": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.6224
+            },
+            "HOXB2": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1646
+            },
+            "HOXB4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0679
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "active enhancer",
+              "methylation": 0.1597
+            },
+            "HOXB3": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2736
+            },
+            "HOXB6": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2868
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0988
+            },
+            "HOXB9": {
+              "open": true,
+              "state": "acetylated element",
+              "methylation": 0.0206
+            },
+            "HOXB7": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1981
+            },
+            "HOXB13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1416
+            }
+          }
+        },
+        "astrocyte": {
+          "h3k27me3_bp_share": 0.5843,
+          "h3k27me3_fc_cluster": 5.315,
+          "h3k27me3_fc_chromosome_mean": 0.808,
+          "h3k4me3_bp_share": 0.1432,
+          "promoters": {
+            "HOXB1": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXB2": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXB9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXB7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXB13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            }
+          }
+        },
+        "CD14-positive monocyte": {
+          "h3k27me3_bp_share": 0.7982,
+          "h3k27me3_fc_cluster": 14.228,
+          "h3k27me3_fc_chromosome_mean": 1.037,
+          "h3k4me3_bp_share": 0.1033,
+          "promoters": {
+            "HOXB1": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.9753
+            },
+            "HOXB2": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0
+            },
+            "HOXB4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0354
+            },
+            "HOXB5": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2071
+            },
+            "HOXB3": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.5492
+            },
+            "HOXB6": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.5436
+            },
+            "HOXB8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0718
+            },
+            "HOXB9": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0207
+            },
+            "HOXB7": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4043
+            },
+            "HOXB13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0856
+            }
+          }
+        }
+      }
+    },
+    "HOXC": {
+      "chrom": "chr12",
+      "start": 53938717,
+      "end": 54033047,
+      "genes": [
+        "HOXC10",
+        "HOXC11",
+        "HOXC12",
+        "HOXC13",
+        "HOXC4",
+        "HOXC5",
+        "HOXC6",
+        "HOXC8",
+        "HOXC9"
+      ],
+      "cells": {
+        "K562": {
+          "h3k27me3_bp_share": 0.3366,
+          "h3k27me3_fc_cluster": 2.403,
+          "h3k27me3_fc_chromosome_mean": 0.681,
+          "h3k4me3_bp_share": 0.1171,
+          "promoters": {
+            "HOXC13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.3608
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0817
+            },
+            "HOXC11": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.2488
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "primed enhancer",
+              "methylation": 0.554
+            },
+            "HOXC6": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2117
+            },
+            "HOXC9": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.23
+            },
+            "HOXC8": {
+              "open": false,
+              "state": "primed enhancer",
+              "methylation": 0.9071
+            },
+            "HOXC4": {
+              "open": false,
+              "state": "promoter mark, not acetylated",
+              "methylation": 0.69
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "primed enhancer",
+              "methylation": 0.4956
+            }
+          }
+        },
+        "HepG2": {
+          "h3k27me3_bp_share": 0.7999,
+          "h3k27me3_fc_cluster": 3.497,
+          "h3k27me3_fc_chromosome_mean": 0.743,
+          "h3k4me3_bp_share": 0.0746,
+          "promoters": {
+            "HOXC13": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4592
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.522
+            },
+            "HOXC11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3592
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.712
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.3579
+            },
+            "HOXC9": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.7473
+            },
+            "HOXC8": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.1714
+            },
+            "HOXC4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3085
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1535
+            }
+          }
+        },
+        "GM12878": {
+          "h3k27me3_bp_share": 0.2455,
+          "h3k27me3_fc_cluster": 3.505,
+          "h3k27me3_fc_chromosome_mean": 0.546,
+          "h3k4me3_bp_share": 0.0334,
+          "promoters": {
+            "HOXC13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5371
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.293
+            },
+            "HOXC11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5825
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.3109
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.0574
+            },
+            "HOXC9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.1309
+            },
+            "HOXC8": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.08
+            },
+            "HOXC4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1777
+            },
+            "HOXC5": {
+              "open": false,
+              "state": "promoter mark, not acetylated",
+              "methylation": 0.0903
+            }
+          }
+        },
+        "H1": {
+          "h3k27me3_bp_share": 0.9823,
+          "h3k27me3_fc_cluster": 33.713,
+          "h3k27me3_fc_chromosome_mean": 0.527,
+          "h3k4me3_bp_share": 0.1402,
+          "promoters": {
+            "HOXC13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1829
+            },
+            "HOXC12": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1244
+            },
+            "HOXC11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2048
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1371
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2252
+            },
+            "HOXC9": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1419
+            },
+            "HOXC8": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0894
+            },
+            "HOXC4": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1667
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1466
+            }
+          }
+        },
+        "IMR-90": {
+          "h3k27me3_bp_share": 0.9154,
+          "h3k27me3_fc_cluster": 7.134,
+          "h3k27me3_fc_chromosome_mean": 0.565,
+          "h3k4me3_bp_share": 0.0194,
+          "promoters": {
+            "HOXC13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0231
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0362
+            },
+            "HOXC11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0108
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0593
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0543
+            },
+            "HOXC9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0629
+            },
+            "HOXC8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.02
+            },
+            "HOXC4": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.175
+            }
+          }
+        },
+        "SK-N-SH": {
+          "h3k27me3_bp_share": 0.6122,
+          "h3k27me3_fc_cluster": 3.616,
+          "h3k27me3_fc_chromosome_mean": 0.788,
+          "h3k4me3_bp_share": 0.0813,
+          "promoters": {
+            "HOXC13": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1072
+            },
+            "HOXC12": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.257
+            },
+            "HOXC11": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2206
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1477
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0887
+            },
+            "HOXC9": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5179
+            },
+            "HOXC8": {
+              "open": true,
+              "state": "promoter mark, not acetylated",
+              "methylation": 0.3018
+            },
+            "HOXC4": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.7453
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.1398
+            }
+          }
+        },
+        "cardiac muscle cell": {
+          "h3k27me3_bp_share": 1.0,
+          "h3k27me3_fc_cluster": 12.045,
+          "h3k27me3_fc_chromosome_mean": 0.802,
+          "h3k4me3_bp_share": 0.0255,
+          "promoters": {
+            "HOXC13": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXC8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            }
+          }
+        },
+        "keratinocyte": {
+          "h3k27me3_bp_share": 0.1195,
+          "h3k27me3_fc_cluster": 2.055,
+          "h3k27me3_fc_chromosome_mean": 0.578,
+          "h3k4me3_bp_share": 0.3391,
+          "promoters": {
+            "HOXC13": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXC11": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "promoter mark, not acetylated",
+              "methylation": null
+            },
+            "HOXC9": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXC8": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXC4": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": null
+            },
+            "HOXC5": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": null
+            }
+          }
+        },
+        "hepatocyte": {
+          "h3k27me3_bp_share": 0.8993,
+          "h3k27me3_fc_cluster": 3.557,
+          "h3k27me3_fc_chromosome_mean": 0.801,
+          "h3k4me3_bp_share": 0.0559,
+          "promoters": {
+            "HOXC13": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2104
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1311
+            },
+            "HOXC11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1178
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.2055
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1751
+            },
+            "HOXC9": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.1459
+            },
+            "HOXC8": {
+              "open": true,
+              "state": "acetylated element",
+              "methylation": 0.0458
+            },
+            "HOXC4": {
+              "open": true,
+              "state": "acetylated element",
+              "methylation": 0.1492
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "active enhancer",
+              "methylation": 0.1069
+            }
+          }
+        },
+        "astrocyte": {
+          "h3k27me3_bp_share": 0.9182,
+          "h3k27me3_fc_cluster": 7.82,
+          "h3k27me3_fc_chromosome_mean": 0.696,
+          "h3k4me3_bp_share": 0.0098,
+          "promoters": {
+            "HOXC13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXC8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            }
+          }
+        },
+        "CD14-positive monocyte": {
+          "h3k27me3_bp_share": 1.0,
+          "h3k27me3_fc_cluster": 28.956,
+          "h3k27me3_fc_chromosome_mean": 0.74,
+          "h3k4me3_bp_share": 0.1018,
+          "promoters": {
+            "HOXC13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0794
+            },
+            "HOXC12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.034
+            },
+            "HOXC11": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0546
+            },
+            "HOXC10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.045
+            },
+            "HOXC6": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0821
+            },
+            "HOXC9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0313
+            },
+            "HOXC8": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0271
+            },
+            "HOXC4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.034
+            },
+            "HOXC5": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0658
+            }
+          }
+        }
+      }
+    },
+    "HOXD": {
+      "chrom": "chr2",
+      "start": 176092689,
+      "end": 176188658,
+      "genes": [
+        "HOXD1",
+        "HOXD10",
+        "HOXD11",
+        "HOXD12",
+        "HOXD13",
+        "HOXD3",
+        "HOXD4",
+        "HOXD8",
+        "HOXD9"
+      ],
+      "cells": {
+        "K562": {
+          "h3k27me3_bp_share": 0.596,
+          "h3k27me3_fc_cluster": 4.607,
+          "h3k27me3_fc_chromosome_mean": 0.679,
+          "h3k4me3_bp_share": 0.0267,
+          "promoters": {
+            "HOXD13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1986
+            },
+            "HOXD12": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.2609
+            },
+            "HOXD11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0736
+            },
+            "HOXD10": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.0602
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.17
+            },
+            "HOXD8": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1501
+            },
+            "HOXD3": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.1637
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "poised enhancer",
+              "methylation": 0.0347
+            },
+            "HOXD1": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.234
+            }
+          }
+        },
+        "HepG2": {
+          "h3k27me3_bp_share": 0.7309,
+          "h3k27me3_fc_cluster": 3.279,
+          "h3k27me3_fc_chromosome_mean": 0.812,
+          "h3k4me3_bp_share": 0.0835,
+          "promoters": {
+            "HOXD13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4398
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5865
+            },
+            "HOXD11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.318
+            },
+            "HOXD10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.532
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5415
+            },
+            "HOXD8": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.6322
+            },
+            "HOXD3": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3609
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4702
+            },
+            "HOXD1": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.6905
+            }
+          }
+        },
+        "GM12878": {
+          "h3k27me3_bp_share": 0.0946,
+          "h3k27me3_fc_cluster": 2.813,
+          "h3k27me3_fc_chromosome_mean": 0.565,
+          "h3k4me3_bp_share": 0.015,
+          "promoters": {
+            "HOXD13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.322
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4344
+            },
+            "HOXD11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4448
+            },
+            "HOXD10": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5358
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4397
+            },
+            "HOXD8": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4571
+            },
+            "HOXD3": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.3382
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.2752
+            },
+            "HOXD1": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.3811
+            }
+          }
+        },
+        "H1": {
+          "h3k27me3_bp_share": 0.9631,
+          "h3k27me3_fc_cluster": 29.157,
+          "h3k27me3_fc_chromosome_mean": 0.45,
+          "h3k4me3_bp_share": 0.242,
+          "promoters": {
+            "HOXD13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0793
+            },
+            "HOXD12": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0785
+            },
+            "HOXD11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0593
+            },
+            "HOXD10": {
+              "open": true,
+              "state": "poised enhancer",
+              "methylation": 0.1523
+            },
+            "HOXD9": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0909
+            },
+            "HOXD8": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0415
+            },
+            "HOXD3": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1062
+            },
+            "HOXD4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1295
+            },
+            "HOXD1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0551
+            }
+          }
+        },
+        "IMR-90": {
+          "h3k27me3_bp_share": 0.7994,
+          "h3k27me3_fc_cluster": 6.848,
+          "h3k27me3_fc_chromosome_mean": 0.581,
+          "h3k4me3_bp_share": 0.0276,
+          "promoters": {
+            "HOXD13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0143
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0787
+            },
+            "HOXD11": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0
+            },
+            "HOXD10": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0304
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0571
+            },
+            "HOXD8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0
+            },
+            "HOXD3": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0621
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD1": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0404
+            }
+          }
+        },
+        "SK-N-SH": {
+          "h3k27me3_bp_share": 0.2169,
+          "h3k27me3_fc_cluster": 1.477,
+          "h3k27me3_fc_chromosome_mean": 0.742,
+          "h3k4me3_bp_share": 0.1938,
+          "promoters": {
+            "HOXD13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.2154
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.5092
+            },
+            "HOXD11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.3967
+            },
+            "HOXD10": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": 0.4888
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "active promoter",
+              "methylation": 0.632
+            },
+            "HOXD8": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.7618
+            },
+            "HOXD3": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.1457
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "no mark",
+              "methylation": 0.949
+            },
+            "HOXD1": {
+              "open": true,
+              "state": "active promoter",
+              "methylation": 0.5885
+            }
+          }
+        },
+        "cardiac muscle cell": {
+          "h3k27me3_bp_share": 0.9991,
+          "h3k27me3_fc_cluster": 10.872,
+          "h3k27me3_fc_chromosome_mean": 0.793,
+          "h3k4me3_bp_share": 0.0858,
+          "promoters": {
+            "HOXD13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD10": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD8": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXD3": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD1": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            }
+          }
+        },
+        "keratinocyte": {
+          "h3k27me3_bp_share": 0.8619,
+          "h3k27me3_fc_cluster": 13.331,
+          "h3k27me3_fc_chromosome_mean": 0.6,
+          "h3k4me3_bp_share": 0.0476,
+          "promoters": {
+            "HOXD13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD10": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD8": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD3": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD1": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            }
+          }
+        },
+        "hepatocyte": {
+          "h3k27me3_bp_share": 0.9223,
+          "h3k27me3_fc_cluster": 3.811,
+          "h3k27me3_fc_chromosome_mean": 0.792,
+          "h3k4me3_bp_share": 0.1393,
+          "promoters": {
+            "HOXD13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0377
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "acetylated element",
+              "methylation": 0.0844
+            },
+            "HOXD11": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0558
+            },
+            "HOXD10": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0962
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.48
+            },
+            "HOXD8": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0774
+            },
+            "HOXD3": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.1122
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.21
+            },
+            "HOXD1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0247
+            }
+          }
+        },
+        "astrocyte": {
+          "h3k27me3_bp_share": 0.818,
+          "h3k27me3_fc_cluster": 7.022,
+          "h3k27me3_fc_chromosome_mean": 0.698,
+          "h3k4me3_bp_share": 0.1353,
+          "promoters": {
+            "HOXD13": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD10": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD8": {
+              "open": true,
+              "state": "Polycomb-repressed",
+              "methylation": null
+            },
+            "HOXD3": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXD4": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            },
+            "HOXD1": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": null
+            }
+          }
+        },
+        "CD14-positive monocyte": {
+          "h3k27me3_bp_share": 0.9991,
+          "h3k27me3_fc_cluster": 24.91,
+          "h3k27me3_fc_chromosome_mean": 0.687,
+          "h3k4me3_bp_share": 0.1026,
+          "promoters": {
+            "HOXD13": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0255
+            },
+            "HOXD12": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0744
+            },
+            "HOXD11": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.057
+            },
+            "HOXD10": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0201
+            },
+            "HOXD9": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.1009
+            },
+            "HOXD8": {
+              "open": true,
+              "state": "bivalent",
+              "methylation": 0.0096
+            },
+            "HOXD3": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0335
+            },
+            "HOXD4": {
+              "open": false,
+              "state": "Polycomb-repressed",
+              "methylation": 0.0764
+            },
+            "HOXD1": {
+              "open": false,
+              "state": "bivalent",
+              "methylation": 0.0214
+            }
+          }
+        }
+      }
+    }
+  },
+  "cell_types": {
+    "K562": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 0.641,
+          "h3k27me3_share_matched": 0.1984,
+          "bivalent_share_hox": 0.0769,
+          "bivalent_share_matched": 0.0622
+        },
+        {
+          "promoters": "silent",
+          "hox": 17,
+          "hox_matched": 17,
+          "h3k27me3_share_hox": 0.8235,
+          "h3k27me3_share_matched": 0.4526,
+          "bivalent_share_hox": 0.0,
+          "bivalent_share_matched": 0.0048
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "H3K27me3": 351,
+          "CpG methylation >= 0.5": 195,
+          "none of the three": 475,
+          "H3K9me3": 11,
+          "none measured (no methylation data)": 63
+        },
+        "read": {
+          "H3K27me3": 535,
+          "none of the three": 2464,
+          "H3K9me3": 73,
+          "CpG methylation >= 0.5": 241,
+          "none measured (no methylation data)": 7
+        }
+      }
+    },
+    "HepG2": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 0.8974,
+          "h3k27me3_share_matched": 0.2299,
+          "bivalent_share_hox": 0.2308,
+          "bivalent_share_matched": 0.1313
+        },
+        {
+          "promoters": "silent",
+          "hox": 24,
+          "hox_matched": 24,
+          "h3k27me3_share_hox": 0.9583,
+          "h3k27me3_share_matched": 0.5494,
+          "bivalent_share_hox": 0.125,
+          "bivalent_share_matched": 0.1598
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "CpG methylation >= 0.5": 481,
+          "H3K27me3": 568,
+          "none of the three": 355,
+          "none measured (no methylation data)": 41,
+          "H3K9me3": 23
+        },
+        "read": {
+          "H3K27me3": 460,
+          "CpG methylation >= 0.5": 382,
+          "none of the three": 2086,
+          "none measured (no methylation data)": 4,
+          "H3K9me3": 15
+        }
+      }
+    },
+    "GM12878": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 0.7179,
+          "h3k27me3_share_matched": 0.1492,
+          "bivalent_share_hox": 0.0513,
+          "bivalent_share_matched": 0.0535
+        },
+        {
+          "promoters": "silent",
+          "hox": 33,
+          "hox_matched": 33,
+          "h3k27me3_share_hox": 0.7879,
+          "h3k27me3_share_matched": 0.3539,
+          "bivalent_share_hox": 0.0606,
+          "bivalent_share_matched": 0.1101
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "none of the three": 1024,
+          "H3K9me3": 21,
+          "H3K27me3": 476,
+          "CpG methylation >= 0.5": 651,
+          "none measured (no methylation data)": 51
+        },
+        "read": {
+          "CpG methylation >= 0.5": 68,
+          "none of the three": 2031,
+          "H3K27me3": 67,
+          "H3K9me3": 24,
+          "none measured (no methylation data)": 2
+        }
+      }
+    },
+    "H1": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 1.0,
+          "h3k27me3_share_matched": 0.2622,
+          "bivalent_share_hox": 0.8205,
+          "bivalent_share_matched": 0.2585
+        },
+        {
+          "promoters": "silent",
+          "hox": 4,
+          "hox_matched": 4,
+          "h3k27me3_share_hox": 1.0,
+          "h3k27me3_share_matched": 0.0934,
+          "bivalent_share_hox": 0.25,
+          "bivalent_share_matched": 0.0805
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "CpG methylation >= 0.5": 911,
+          "H3K27me3": 42,
+          "none of the three": 10,
+          "H3K9me3": 29,
+          "none measured (no methylation data)": 46
+        },
+        "read": {
+          "H3K27me3": 871,
+          "CpG methylation >= 0.5": 483,
+          "H3K9me3": 24,
+          "none of the three": 1993,
+          "none measured (no methylation data)": 6
+        }
+      }
+    },
+    "IMR-90": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 0.6667,
+          "h3k27me3_share_matched": 0.1684,
+          "bivalent_share_hox": 0.1282,
+          "bivalent_share_matched": 0.0932
+        },
+        {
+          "promoters": "silent",
+          "hox": 19,
+          "hox_matched": 19,
+          "h3k27me3_share_hox": 0.7895,
+          "h3k27me3_share_matched": 0.4835,
+          "bivalent_share_hox": 0.1053,
+          "bivalent_share_matched": 0.1227
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "H3K27me3": 376,
+          "CpG methylation >= 0.5": 274,
+          "none of the three": 66,
+          "none measured (no methylation data)": 492,
+          "H3K9me3": 77
+        },
+        "read": {
+          "none of the three": 2190,
+          "H3K27me3": 363,
+          "CpG methylation >= 0.5": 175,
+          "none measured (no methylation data)": 387,
+          "H3K9me3": 15
+        }
+      }
+    },
+    "SK-N-SH": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 0.7949,
+          "h3k27me3_share_matched": 0.1205,
+          "bivalent_share_hox": 0.2564,
+          "bivalent_share_matched": 0.0784
+        },
+        {
+          "promoters": "silent",
+          "hox": 10,
+          "hox_matched": 10,
+          "h3k27me3_share_hox": 0.8,
+          "h3k27me3_share_matched": 0.0768,
+          "bivalent_share_hox": 0.2,
+          "bivalent_share_matched": 0.0152
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "CpG methylation >= 0.5": 612,
+          "none measured (no methylation data)": 43,
+          "none of the three": 294,
+          "H3K27me3": 141,
+          "H3K9me3": 4
+        },
+        "read": {
+          "none of the three": 2252,
+          "H3K27me3": 401,
+          "CpG methylation >= 0.5": 657,
+          "H3K9me3": 10,
+          "none measured (no methylation data)": 1
+        }
+      }
+    },
+    "cardiac muscle cell": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 0.9487,
+          "h3k27me3_share_matched": 0.2085,
+          "bivalent_share_hox": 0.359,
+          "bivalent_share_matched": 0.1575
+        },
+        {
+          "promoters": "silent",
+          "hox": 20,
+          "hox_matched": 19,
+          "h3k27me3_share_hox": 0.9474,
+          "h3k27me3_share_matched": 0.2841,
+          "bivalent_share_hox": 0.1053,
+          "bivalent_share_matched": 0.1118
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "H3K27me3": 140,
+          "none measured (no methylation data)": 865
+        },
+        "read": {
+          "none measured (no methylation data)": 2765,
+          "H3K27me3": 643,
+          "H3K9me3": 2
+        }
+      }
+    },
+    "keratinocyte": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 0.5641,
+          "h3k27me3_share_matched": 0.2006,
+          "bivalent_share_hox": 0.359,
+          "bivalent_share_matched": 0.129
+        },
+        {
+          "promoters": "silent",
+          "hox": 34,
+          "hox_matched": 34,
+          "h3k27me3_share_hox": 0.6471,
+          "h3k27me3_share_matched": 0.3356,
+          "bivalent_share_hox": 0.4118,
+          "bivalent_share_matched": 0.1997
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "H3K27me3": 666,
+          "none measured (no methylation data)": 1865,
+          "H3K9me3": 6
+        },
+        "read": {
+          "none measured (no methylation data)": 1769,
+          "H3K27me3": 104,
+          "H3K9me3": 5
+        }
+      }
+    },
+    "hepatocyte": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 1.0,
+          "h3k27me3_share_matched": 0.1343,
+          "bivalent_share_hox": 0.4872,
+          "bivalent_share_matched": 0.0719
+        },
+        {
+          "promoters": "silent",
+          "hox": 8,
+          "hox_matched": 8,
+          "h3k27me3_share_hox": 1.0,
+          "h3k27me3_share_matched": 0.0765,
+          "bivalent_share_hox": 0.0,
+          "bivalent_share_matched": 0.0063
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "CpG methylation >= 0.5": 856,
+          "H3K27me3": 40,
+          "none of the three": 12,
+          "H3K9me3": 2,
+          "none measured (no methylation data)": 38
+        },
+        "read": {
+          "none of the three": 2393,
+          "H3K27me3": 444,
+          "CpG methylation >= 0.5": 619,
+          "none measured (no methylation data)": 3,
+          "H3K9me3": 8
+        }
+      }
+    },
+    "astrocyte": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 1.0,
+          "h3k27me3_share_matched": 0.1601,
+          "bivalent_share_hox": 0.359,
+          "bivalent_share_matched": 0.0987
+        },
+        {
+          "promoters": "silent",
+          "hox": 25,
+          "hox_matched": 25,
+          "h3k27me3_share_hox": 1.0,
+          "h3k27me3_share_matched": 0.428,
+          "bivalent_share_hox": 0.2,
+          "bivalent_share_matched": 0.1049
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "H3K27me3": 289,
+          "none measured (no methylation data)": 998,
+          "H3K9me3": 18
+        },
+        "read": {
+          "none measured (no methylation data)": 2743,
+          "H3K27me3": 357,
+          "H3K9me3": 10
+        }
+      }
+    },
+    "CD14-positive monocyte": {
+      "matched": [
+        {
+          "promoters": "all",
+          "hox": 39,
+          "hox_matched": 39,
+          "h3k27me3_share_hox": 0.9744,
+          "h3k27me3_share_matched": 0.3127,
+          "bivalent_share_hox": 0.5641,
+          "bivalent_share_matched": 0.2324
+        },
+        {
+          "promoters": "silent",
+          "hox": 21,
+          "hox_matched": 21,
+          "h3k27me3_share_hox": 1.0,
+          "h3k27me3_share_matched": 0.6569,
+          "bivalent_share_hox": 0.4286,
+          "bivalent_share_matched": 0.2474
+        }
+      ],
+      "promoter_mechanism": {
+        "silent": {
+          "H3K27me3": 420,
+          "CpG methylation >= 0.5": 577,
+          "none measured (no methylation data)": 279,
+          "none of the three": 18,
+          "H3K9me3": 23
+        },
+        "read": {
+          "none of the three": 2033,
+          "H3K27me3": 782,
+          "CpG methylation >= 0.5": 187,
+          "none measured (no methylation data)": 82,
+          "H3K9me3": 14
+        }
+      }
+    }
+  },
+  "control": "non-HOX coding promoters on the same chromosomes in the same GC (0.05) x CpG per 100 bp (0.5, 1, 2, 4, 8) stratum; expectation averaged over each HOX promoter's stratum; strata with fewer than 5 controls are dropped",
+  "mechanism_order": "H3K27me3 peak, else H3K9me3 peak, else CpG methylation >= 0.5 (4+ covered calls), else none; for promoters the DNase reader calls silent, beside the same count for read ones",
+  "evidence": {
+    "marks": "experimental: ENCODE Histone ChIP-seq (GRCh38, default analysis)",
+    "methylation": "experimental: ENCODE WGBS, methylation state at CpG (GRCh38 bedMethyl)",
+    "open": "DNase reader"
+  }
+}

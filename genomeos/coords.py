@@ -3,6 +3,8 @@
 Lives at the top level so that both the genome engine and BioIR can import it
 without a circular dependency. Coordinates are 0-based, half-open.
 """
+# SPDX-License-Identifier: Apache-2.0
+# Part of the BioLang engine (language, IR, VM, standard library); see LICENSING.md.
 
 from __future__ import annotations
 

@@ -1,0 +1,1068 @@
+# The known-locus benchmark
+
+Albert's brief (2026-09-13): take the few blocks where biology is already
+known, their variants, their syntax, their enhancers and their context, and use
+them as a coherence check on everything the project builds. If the machinery
+cannot reproduce what is settled at a dozen well-studied loci, its genome-wide
+numbers are not to be believed.
+
+Code: `genomeos/benchmark/loci.py`, `scripts/loci_benchmark.py`,
+`tests/test_loci_benchmark.py`. Result: `data/results/loci_benchmark.json`.
+The pattern is the therapeutic benchmark (`tests/test_therapeutic_benchmark.py`).
+
+## 1. The panel
+
+Seventeen loci (twelve until 2026-09-15; see section 9), each chosen because the
+published answer is unambiguous and
+because each tests a different failure mode. The expectations are written down
+in the code (`PANEL`) before anything is read, with citations and with the kinds
+of data the published answer itself came from, so a reader can see where a
+layer might only be restating the discovery.
+
+| locus | class | published target, tissue | causal variant | failure mode it tests |
+|---|---|---|---|---|
+| SHH_ZRS | program | SHH, limb bud, 979 kb away | many rare point mutations | long-range target naming: the nearest TSS (LMBR1) must fail |
+| HERC2_OCA2 | storage, program | OCA2, melanocyte, 21 kb | rs12913832 (A brown, G blue) | a two-value slot Gnocchi does not score |
+| MCM6_LCT | storage, program | LCT, small intestine, 14 kb | rs4988235 (T-13910) | allele-dependent activity, population structure |
+| HBB_LCR | syntax, order, program | five beta-like globins, erythroid | LCR deletion | several genes in one node, a stage switch, hypersensitive ladder |
+| FTO_IRX3 | program | IRX3, IRX5, adipocyte precursors, 520 kb | rs1421085 | the textbook nearest-gene fallacy (FTO) |
+| BCL11A_enhancer | program, storage | BCL11A, erythroid, 59 kb | rs1427407 (GATA1 site) | a known causal variant in a cell the reader has (K562) |
+| MYC_8q24 | program | MYC, colon, 334 kb | rs6983267 | whether a gene's whole input assembles |
+| ABO | storage | ABO | rs8176719 (O), rs8176746 (B) | a few-valued slot |
+| HLA_DRB1 | storage | HLA-DRB1, antigen-presenting cells | thousands of alleles | a many-valued slot |
+| APP | storage, syntax | APP, brain | rs63750847 (A673T) | coding calibration on a fully scored chromosome |
+| TP53 | syntax, storage | TP53, every tissue | rs1042522 (P72R) | a constrained frame with one common value |
+| HOXD | order, program, syntax | HOXD1 to HOXD13, limb and trunk | none | position as the order of execution; the boundary between HOXD11 and HOXD13 |
+| SOX9_PierreRobin | program | SOX9, mandibular arch, 1.45 Mb away | translocations and rare point mutations | a **second** megabase reach, so the ZRS is not an anecdote; KCNJ2 is the trap |
+| H19_ICR1 | program, syntax | IGF2 and H19, most fetal tissues, 138 kb | ICR microdeletions, loss of methylation | **parent of origin**: the same two alleles behave oppositely |
+| PMP22_CMT1A | program | PMP22, Schwann cell | the 1.4 Mb CMT1A duplication | **copy number**, not a base, is the variable |
+| CYP2D6 | storage, syntax | CYP2D6, liver | rs3892097 (*4), rs1065852 (*10) | a many-valued slot outside the MHC |
+| MC1R | storage, syntax | MC1R, melanocyte | rs1805007 (R151C), rs1805008 (R160W) | a few-valued slot with a sharp population structure |
+
+The last five were added on 2026-09-15, after the saturation finding in section 8 showed the sweep
+had nothing left to give twelve loci. They were chosen for what the first twelve underweighted:
+one more long-range case, and three mechanisms the project cannot represent at all (parent of
+origin, copy number, and — already present at the globin locus — developmental stage). Those
+mechanisms are written down per locus in `Expect.beyond_sequence` and read as **pending with the
+cost of reaching them**, never as a miss: a locus the machinery cannot reach in principle is a
+different thing from one it reaches and gets wrong, and mixing the two makes the panel worth less.
+
+Two coordinates in the new five are **anchored rather than quoted**, and the code says so: the
+SOX9 element is placed at the published −1.45 Mb offset from GENCODE's canonical SOX9 TSS, and the
+H19 ICR at the published 2-to-4 kb upstream of GENCODE's canonical H19 TSS. Both windows are wide
+enough to absorb the uncertainty. Variants whose hg38 position the panel does not hard-code carry
+`pos: None` and are resolved from Ensembl at run time, labelled `position_from: ensembl`; the cost
+is that the position check is not independent for those, so a citable hard-coded position is still
+better where one exists.
+
+HOXD was added at the coordinator's request (Albert asking in what order DNA is
+read): it is the clearest case where position on the chromosome is the order of
+execution. With the beta-globin cluster the panel covers ordered in time and
+ordered in space.
+
+Considered and left out (`NOT_IN_PANEL`): IRX5 on its own (kept as a second
+target of FTO_IRX3); the HS2 core alone (no citable hg38 coordinate without a
+liftover, so the whole LCR is the element and its hypersensitive sites are
+derived from DNase); HLA-B (one HLA gene answers the value-domain question);
+the African lactase alleles (their window overlaps rs4988235's, so the
+expectation would not be independent). Nothing on the brief was dropped.
+
+Dropped from the 2026-09-15 widening, and the reasons are the discipline: **SMN1/SMN2**, the
+cleanest dosage phenotype there is, because the two genes are a segmental duplication differing at
+a handful of bases, so every layer's answer would be a statement about read mapping rather than
+about biology — PMP22 carries dosage instead; **RHD**, because Rh negative is a whole-gene deletion
+and asks the same question as PMP22 on a chromosome the sweep has not reached; **FUT2** secretor
+status, clean but a two-valued slot the panel already has at HERC2/OCA2; **AMY1** copy number,
+because the published association with dietary starch is contested; and the **EPHA4/IHH** TAD
+rearrangements, the best evidence anywhere that node boundaries matter, because the causal unit is
+a structural variant spanning a boundary and the panel has no way to write one down as an element.
+That last one is a gap in the benchmark's own vocabulary, not in the literature.
+
+Every hard-coded variant position is checked against Ensembl on each run, and
+four coding positions are checked a second way: the engine's own translation
+must derive the published protein change from them (APP's p.Ala673Thr, TP53's
+p.Pro72Arg, MC1R's p.Arg151Cys and p.Arg160Trp).
+
+## 2. Circularity: four provenances
+
+Several answers are already inside the annotations we read, so every hit is
+labelled by where it came from, and the rates are reported apart.
+
+| provenance | layers | what a hit proves |
+|---|---|---|
+| derived | AlphaGenome deletion (already computed), GTEx v8 eQTLs, ENCODE DNase in 11 cell types (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the GIAB trio's variants, gnomAD frequencies, the translation engine | the approach works |
+| targeted | Kircher et al. 2019 saturation mutagenesis | a measurement made at the locus because it was known: confirms, cannot discover |
+| heuristic | nearest coding TSS in the CTCF node | the baseline the rest has to beat |
+| looked_up | VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, cCRE class | nothing about the approach |
+
+A layer's target hit is strict: the gene it ranks first must be a published
+target. The lenient reading (a published target anywhere in its list) is kept
+as `among` and never counted. Two caveats are recorded rather than hidden: the
+coding layer derives the protein change, but the gene's name is GENCODE's; and
+at FTO and MYC the published answer was itself partly found by eQTLs, so the
+eQTL layer there is closer to restating the discovery than elsewhere.
+
+## 3. Negative controls
+
+For every locus, five windows of the same length with no known function,
+matched on GC (within 0.04), distance to the nearest coding TSS (within 35%)
+and the Zoonomia constrained fraction (closest of 40 candidates, 20 for windows
+over 20 kb), drawn from the same chromosome away from every panel locus (200 kb
+of flank), VISTA elements and GWAS Catalog hits. They go through the same
+readers, and the same four claims are counted at both: a target named by a
+derived layer, a cell open in the reader, a direction, a value on syntax.
+
+## 4. The class mapping, fixed in advance
+
+- **syntax**: a fifth or more of the window's bases constrained across mammals;
+- **storage**: a position where the people we hold differ sits on constrained
+  sequence (a value in syntax, `attribution/syntax.py`'s reading);
+- **program**: a derived layer names a target;
+- **order**: three or more published targets in one node, or the node boundary
+  between two of them.
+
+The value-domain size is read as common variable positions per kilobase
+(gnomAD v4.1.1 genomes, allele frequency 5% or more, read by range as a bigBed
+through `attribution/human_panel.py`'s reader): **many** at 50 per kb or more,
+**few** at 10 or more, **two** below. The two boundaries were set after reading
+the storage loci and two background windows,
+so the agreement with the published domain sizes is descriptive; the matched
+negatives are what test the reading.
+
+## 5. The first run, before the quota was reallocated (2026-09-14)
+
+*Superseded by section 6 for the target and direction verdicts, and kept because the
+comparison is the argument for the reallocation: this is what the panel said when only
+four of twelve loci sat on a chromosome the sweep had reached. The negative-control rates,
+the storage results and the two ordered loci are unchanged by it.*
+
+12 loci, 60 matched negatives, no AlphaGenome request, 21 to 48 minutes
+depending on the network. GTEx's
+archive streamed once (71.5 million pairs scanned, 123,520 kept inside the
+windows, 132 s), Zoonomia phyloP and gnomAD Gnocchi read by range over 463
+windows plus one base per variable position, gnomAD frequencies read as a
+bigBed, Ensembl asked for the named variants' positions. The position check
+earned its place on the first pass: ten of eleven agreed and rs8176746 was
+seven bases out in the panel, now corrected; on the second pass Ensembl timed
+out for most of them, which is recorded as unverified rather than agreed.
+
+| field | derived | heuristic (nearest TSS in node) | looked up |
+|---|---|---|---|
+| the right target gene | **8/12** | 8/12 | 6/12 |
+| the right cell or tissue | 4/10 judged | - | - |
+| the direction | 0/1 judged | - | - |
+| at least one published class | 10/12 | - | - |
+
+No locus was a looked-up hit without also being a derived one, so the panel is
+not measuring annotation lookup. But the derived layers do **not** beat the
+nearest-TSS heuristic: both score 8 of 12, on different loci. The derived
+misses are HERC2_OCA2, MCM6_LCT, FTO_IRX3 and MYC_8q24, all four programs acting
+at a distance or through an allele, all four on chromosomes where no deletion
+has been scored, so the only derived target layer there was GTEx, which names
+the neighbour (HERC2, MCM6, FTO, CASC8). The heuristic gets OCA2 and LCT right
+because they are the nearest genes, and falls into the one trap it was set at
+FTO. Of the derived hits, four come from summing every already-scored element in
+the locus window (SHH, BCL11A, HLA-DRB1, APP), two from eQTLs (HBG2, ABO), two
+from the translation engine (APP, TP53) and one from an element's own deletion
+(HOXD10); the only other element-level deletion in the panel, the ZRS itself,
+names LMBR1, the textbook wrong answer.
+
+### What the negative controls say, and it is the main finding
+
+| claim | positives | matched negatives |
+|---|---|---|
+| a derived layer names *some* target | 11/12 (92%) | 52/60 (87%) |
+| the reader has it open in some cell | 10/12 (83%) | 32/60 (53%) |
+| a direction is produced | 2/12 (17%) | 6/60 (10%) |
+| a value sits on constrained sequence | 6/12 (50%) | 9/60 (15%) |
+
+**Naming a target is not evidence of anything.** At windows matched for length,
+GC, distance to the nearest coding TSS and mammalian constraint, the pipeline
+names a gene almost as often as at the panel, because GTEx ties an eQTL to
+something nearly everywhere (51 of 60 negatives carry one). What separates the
+panel from its controls is *which* gene is named, whether a direction comes with
+it, and whether a variable position sits on syntax. Any genome-wide count of
+"elements with a named target" should be read against 87%, not against zero.
+
+### Per locus
+
+| locus | target, derived (layer) | heuristic | cell | causal variant by constraint | notes |
+|---|---|---|---|---|---|
+| SHH_ZRS | SHH (window input; the element's own deletion says **LMBR1**) | none in node | unreachable (no limb cell) | - | the flagship long-range case fails at the element and passes only at window level |
+| HERC2_OCA2 | miss (eQTLs name HERC2) | OCA2 | miss | rs12913832 rank 1 of 4, phyloP 3.41 | no deletion scored on chr15; the 957 bp window reads 100% human-constrained because it touches scored neighbouring kilobases, while rs12913832's own kilobase is unscored |
+| MCM6_LCT | miss (eQTLs name MCM6, UBXN4) | LCT | unreachable in the reader; GTEx intestine silent for LCT | rs4988235 rank 1 of 2, phyloP 0.22 (not constrained) | no deletion scored on chr2 here |
+| HBB_LCR | HBG2 (eQTL) | HBE1 | K562 | - | the reader finds 8 strong K562 sites, 5 of them erythroid-specific, median spacing 2.9 kb: the hypersensitive ladder, derived; the LCR is only 2.5% mammal-constrained, so "syntax" is not read |
+| FTO_IRX3 | strict miss: the eQTLs rank FTO first and IRX3 second, and IRX3 sits at 519.7 kb against the published 520 kb | **FTO, the trap** | unreachable in the reader; the only GTEx tissue for IRX3 here is pancreas | - | the lenient reading is right and the strict one is wrong: the answer is in the layer, one rank down |
+| BCL11A_enhancer | BCL11A (window input) | BCL11A | K562 not open over the +62 DHS | rs1427407 rank 1 of 12, phyloP 7.01 | the sharpest causal-variant result of the panel |
+| MYC_8q24 | miss: no element on chr8 is scored, and the eQTLs name CASC8 and POU5F1B | none in node | miss | rs6983267 rank 1 of 2, phyloP 4.97 | saturation mutagenesis calls rs6983267 **not** functional in its element (effect 0.0, 41st by effect), a measured disagreement with the published colorectal result |
+| ABO | ABO (eQTL, 43 tissues) | ABO | miss: the eQTL tissues are 43 of 49, not blood | rs8176746 19th of 20 by constraint (phyloP -2.6), at the corrected position | the O frameshift is not derivable: the local trace substitutes single bases only |
+| HLA_DRB1 | HLA-DRB1 (window input) | HLA-DRB1 | GM12878 and monocyte open | - | 112.8 common variable positions per kb against a median 2.5 at the controls: the many-valued slot, derived |
+| APP | APP (window input, 100 of 197 scored elements; and p.Ala673Thr from the translation engine) | none (the variant is 273 kb inside a minus-strand gene) | promoter open in SK-N-SH and astrocyte | - | the coding calibration passes exactly |
+| TP53 | TP53 (p.Pro72Arg derived from the reference sequence) | TP53 | K562 | rs1042522 rank 1 of 1, phyloP 3.40 | 23% mammal-constrained, read as syntax |
+| HOXD | HOXD10 (element deletion, 2 sampled elements) | HOXD4 | unreachable (no limb cell) | - | see below |
+
+### The two ordered loci
+
+**Beta-globin, ordered in time.** The reader recovers the locus control region
+without being told it is there: 8 K562 DNase sites above signal 100 inside
+chr11:5,269,000-5,295,000, five of them open in at most one of the other ten
+cell types, median spacing 2.9 kb. That is the published HS ladder, derived from
+measurement alone. The node holds HBB, HBD and HBG1 together (HBG2 and HBE1 fall in the next node), so
+"several genes under one control region" is recovered as structure. The switch
+itself is not: nothing in the project carries developmental stage, so fetal
+against adult is unmeasurable here and is recorded as pending.
+
+**HOXD, ordered in space.** The node model does not recover the cluster's
+architecture. There is no CTCF-only element anywhere inside the cluster in the
+registry, so no inferred boundary falls in the published HOXD11-to-HOXD13
+interval, and all nine genes sit in one 300 kb node (chr2:D1195) instead of the
+two regulatory landscapes the 4C and Hi-C work describes. What is recovered is
+that the cluster is unusual sequence: 31% mammal-constrained and 29%
+human-constrained (the "syntax" case on both axes, the only panel locus that
+reads so), 26 variable positions of the trio sitting on constrained bases, and
+a deletion-scored element naming HOXD10. The order of activation is not
+testable with anything we hold - there is no time axis and no position along the
+body axis in any layer - and the language has no construct for order. That is
+the honest answer to the question the locus was added for.
+
+### What could not be reached, and why
+
+| locus | what is missing | cost to fix |
+|---|---|---|
+| ~~HERC2_OCA2, MCM6_LCT, FTO_IRX3, MYC_8q24, BCL11A, ABO, HLA_DRB1, HBB_LCR~~ | no AlphaGenome deletion had been scored on their chromosomes | **fixed** in section 6: 2,283 requests over the windows alone |
+| SHH_ZRS, MCM6_LCT, FTO_IRX3, HOXD | the published cell type (limb bud, intestinal epithelium, adipocyte precursor) is not among the eleven reader cell types | ENCODE DNase for the tissue, or an embryonic panel |
+| HBB_LCR | developmental stage: the fetal-to-adult switch | no layer carries time |
+| every storage locus | two values against a few: the density of common positions cannot separate them | haplotype value domains (the HPRC panel, genomeos-h1) |
+| ABO | the O allele is a deletion: neither the frequency reader nor the trace handles an indel | an indel path in both |
+| every locus | the direction of effect is only judged where a deletion names the target: one locus of twelve | the same sweep |
+
+### The chance floor, and why 8 of 12 is not a result on its own
+
+A locus window holds few coding genes: 1 at APP, 2 at MYC, BCL11A and ABO, 3 at FTO,
+4 at the ZRS, HERC2 and MCM6, 8 at the globin cluster, HLA and TP53, 12 at HOXD.
+Drawing a coding gene at random from each window and asking whether it is one of
+the published targets gives an expectation of **5.5 hits of 12**. The derived
+layers score 8 and the nearest-TSS heuristic 8, so neither is far above the
+floor, and the panel is too small for that difference to mean anything. The
+result to carry away is not the rate; it is which loci fail and how.
+
+### The storage side: values, frequencies and domains
+
+For every named common value, gnomAD v4.1.1 gives back the published population
+structure without being told it: rs12913832 G at 0.76 in non-Finnish Europeans,
+rs4988235 A at 0.64 there, rs1421085 C at 0.42, rs1042522 C (R72) at 0.75,
+rs6983267 T at 0.60 in East Asians, rs1427407 as the minor allele at 0.19, and
+APP's rs63750847 at 0.0003 - rare everywhere, as published for a variant found
+in Iceland. That is 6 of 6 common values with the right frequency and the right
+commonest population, derived. The seventh, ABO's O allele, is a single-base
+deletion, and neither the frequency reader nor the local trace handles an indel:
+recorded as pending.
+
+The value-domain size separates the extremes and nothing finer. On the decade
+scale, HLA-DRB1 reads 112.8 common positions per kb (many), ABO 17.0 (few),
+HERC2 4.2 and APP 0.0 (two) - four of six as published - while TP53 reads 10.0
+(few, expected two) and the lactase enhancer 5.0 (two, where the published
+domain is a handful of alleles across continents, of which only rs4988235 is
+inside this window). The 60 matched negative windows read a median of 2.5 per kb,
+90% of them below 8.2 and the highest 25. So the reading
+tells a hypervariable slot from an ordinary one, and cannot tell two values from
+a few; separating those needs haplotypes, not positions, which is what the HPRC
+panel (`attribution/human_panel.py`) is for.
+
+One class result is worth more than the domain sizes. The "value on syntax"
+reading - a position where our three people differ that sits on mammal-constrained
+sequence - fires at 6 of 12 panel loci and at 9 of 60 matched windows, the only
+claim in the benchmark that the controls do not erase. It puts rs1427407 first of
+the twelve variable positions in the BCL11A enhancer at phyloP 7.01 and
+rs12913832 first of four at 3.41. And it fails in an informative way at the
+lactase enhancer: rs4988235 sits at phyloP 0.22, on sequence mammals never held
+still, because it is a recent human adaptation. Its kilobase is 50%
+human-constrained on the Gnocchi axis. A value slot can be old syntax with a
+variable base or a recent change on free sequence, and only reading both axes
+tells them apart.
+
+## 6. The quota spent on the windows instead of the chromosomes (2026-09-14)
+
+The chromosome sweep costs about 770 hours of model time genome-wide and buys
++0.07 AUC on direction; eight of the twelve loci were blocked only because their
+chromosomes held no deletion data. genomeos-9c reallocated the quota, and
+`scripts/loci_score.py` spent it on the panel's windows alone: the same scorer,
+the same per-element cache, no whole-chromosome job, so the sweep finds these
+answers when it resumes. Elements over the published element go first, then the
+rest of the window, smallest window first.
+
+| locus | chromosome | elements | requests | minutes |
+|---|---|---|---|---|
+| ABO | chr9 | 57 | 57 | 0.1 |
+| HBB_LCR | chr11 | 51 | 51 | 0.1 |
+| MCM6_LCT | chr2 | 106 | 106 | 0.2 |
+| HLA_DRB1 | chr6 | 113 | 113 | 0.2 |
+| HOXD | chr2 | 273 | 284 | 1.6 |
+| BCL11A_enhancer | chr2 | 318 | 318 | 0.4 |
+| SHH_ZRS | chr7 | 405 | 421 | 1.8 |
+| MYC_8q24 | chr8 | 917 | 933 | 2.4 |
+| HERC2_OCA2, FTO_IRX3, TP53, APP | chr15, chr16, chr17, chr21 | 739 | 0 | 0 | 
+| **total** | | **2,979** | **2,283** | **8.4** |
+
+2,283 requests, 43 quota waits, eight and a half minutes, at 16 requests in
+flight. Four loci needed nothing because the sweep had finished their
+chromosomes. The requests exceed the elements by the retries a quota answer
+costs. For comparison, one chromosome of the sweep is 12,000 to 31,000 elements.
+
+### What moved
+
+| field | before (4 loci with deletion data) | after (12) |
+|---|---|---|
+| right target, derived | 8/12 | **11/12** |
+| right target, nearest TSS in node | 8/12 | 8/12 |
+| right target, annotation lookup | 6/12 | 6/12 |
+| chance floor (random gene in the window) | 5.5/12 | 5.5/12 |
+| direction, where a deletion names the target | 0/1 judged | **4/4 judged** |
+| right cell or tissue | 4/10 judged | 4/10 judged |
+| a published class read | 10/12 | 10/12 |
+
+Every locus that moved moved the right way, and the derived rate now clears both
+the heuristic and the chance floor. The direction of effect went from untestable
+to right everywhere it could be judged: the lactase enhancer, the globin locus
+control region, the BCL11A enhancer and HOXD are all called activating, as
+published. Distances land where they should: LCT 13.9 kb against 13.9 published,
+BCL11A 60.7 against 59, IRX3 519.7 kb against 520.
+
+**The negative controls did not move, and that is still the headline.** With
+element-level deletions now at 10 of the 60 matched windows as well, a derived
+layer names *some* target at 52 of 60 (87%) against 11 of 12 loci (92%). What
+separates the panel from its controls is which gene, and the direction: 8 of 12
+loci produce one against 8 of 60 windows (13%).
+
+### The two element-level failures, with the data in hand
+
+- **The ZRS still names LMBR1.** Its own deletion, scored fresh, moves LMBR1 -
+  the gene it sits inside - and calls it repressive in heart tissue. SHH, 979 kb
+  away, is named only when every element of the window is summed, where it comes
+  first. A 1 Mb reach is not something the element-level reading recovers, and
+  this is the clearest statement of that the project has.
+- **MYC's 8q24 enhancer names POU5F1B**, with MYC second in the window's summed
+  input and the eQTLs naming CASC8 first. It is the one target miss left.
+
+Two element-level misses of the ten loci where an element was scored; the count
+is pinned in the CI gate, so a third is a regression.
+
+At HERC2/OCA2 and FTO/IRX3 the new data changed a strict miss into a strict hit
+the same way: the summed window input ranks OCA2 above HERC2, and IRX3 above
+FTO, where the eQTL layer had ranked the neighbour first. The nearest-gene trap
+at FTO is escaped by the model and not by the heuristic, which still answers FTO.
+
+## 7. Lessons the runs produced
+
+- **Name a target and you have said nothing**: 87% of matched negative windows
+  get one. Only the identity of the gene, a direction, or a value on syntax
+  separates the panel from its controls.
+- **GENCODE gene spans are not transcription starts.** HBG2 and HBE1 span to
+  chr11:5.5 Mb through read-through transcripts, which puts two globin genes a
+  quarter of a megabase from their promoters. The benchmark takes the canonical
+  transcript's start (`tss_of`); a gene-span TSS would have made the globin
+  cluster unrecognisable.
+- **The strict and the lenient reading disagree exactly where it matters.** At
+  FTO the right gene is second in the eQTL list at the published distance. A
+  pipeline that reports "the target" hides this; reporting a ranked list with
+  distances does not.
+- **A hard-coded coordinate is a bug waiting.** Ten of eleven positions checked
+  out against Ensembl and one did not; the translation engine then confirmed two
+  of them a second way by deriving p.Ala673Thr and p.Pro72Arg.
+- **Cost.** The run is 21 to 48 minutes: local layers and two constraint axes over
+  523 windows, one GTEx pass of 2 minutes, one bigBed query per window. The
+  first version took six hours because it opened a bigWig session per negative
+  window for the per-base reading; batching a chromosome's windows into one
+  session is the whole difference. Public range reads time out now and then;
+  one chr2 timeout silently emptied three loci's syntax reading, the gate test
+  caught it, and the reads now retry three times.
+- **Score the windows, not the chromosomes.** Twelve loci needed 2,283 requests and eight
+  minutes; the same answers by sweeping their eight chromosomes would have been about
+  160,000 elements. When a question names its loci, the shape of the job is the loci.
+- **A named target needs a floor.** Against a chance expectation of 5.5 of 12,
+  8 of 12 is not a result. Any rate quoted for a target-naming layer should come
+  with the number of genes it could have chosen from.
+- **A claim needs a coverage denominator too.** "A direction is produced" looked
+  like the panel's second real discriminator at 8 of 12 against 8 of 60. It was
+  a statement about where the requests had been spent; see section 8.
+- **A panel that cannot fail is not a panel.** Widening from twelve to seventeen
+  added the project's first two loci whose mechanism nothing here can represent
+  (parent of origin, copy number) and a second megabase-reach case that behaves
+  exactly like the first. A benchmark grows by adding what it is expected to
+  fail at, not by adding what it will pass; see section 9.
+- **Position-counting cannot see a haplotype domain.** CYP2D6 reads two common
+  positions per kilobase where the published domain is a hundred star alleles,
+  for the same reason the reader could not see ABO's frameshift. Both new storage
+  loci underread, which takes the value-domain reading from 4 of 6 to 4 of 8.
+
+## 8. The reruns as the chromosome sweep lands (2026-09-14, overnight)
+
+The benchmark is rerun whenever the all-element sweep puts a scored deletion
+inside one of the 523 windows. The run costs 6 to 11 minutes when GTEx's
+distilled hits are already cached (the 21 to 48 minutes of section 5 included
+the archive pass) and makes no AlphaGenome request: a locus that still needs
+scoring is recorded as pending.
+
+| run | commit | derived | heuristic | looked up | direction (panel) | control target | control direction |
+|---|---|---|---|---|---|---|---|
+| section 6 | ef80075 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 8/60 (13%) |
+| rerun 1 | 02a1b98 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 8/60 (13%) |
+| rerun 2 | b7092da | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **9/60 (15%)** |
+| rerun 3 | 88ae1d2 | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | **11/60 (18%)** |
+| rerun 4 | this section | 11/12 | 8/12 | 6/12 | 4/4 judged | 52/60 (87%) | 11/60 (18%) |
+
+Control windows holding an element-level deletion: 10, then 11, then 13, then 13
+of 60. Every one of the three the sweep reached produced a direction on its first
+reading. Nothing at the panel moved across any of the four runs.
+
+Rerun 4 was taken when chr11 finished - the first panel chromosome to complete
+since the quota was reallocated to the windows. Its last 16,000 elements put
+eight more scored deletions inside the benchmark's 523 windows and changed no
+verdict anywhere. The chromosome is saturated.
+
+Rerun 1 reproduced every verdict of the committed run exactly: the same sixty
+negative windows were redrawn from the same candidates, so the panel is
+deterministic and any later movement is new data rather than run-to-run noise.
+Its one change was the position check, which had timed out at Ensembl on the
+previous pass and this time answered for six of the eleven named variants: all
+six agree (rs8176719 within the anchor base its deletion is written on), none
+disagree, five remain unverified.
+
+Between the reruns the sweep reached one of the five matched negatives of the
+beta-globin locus control region (chr11:100,686,471-100,712,471) and scored six
+elements in it. That window immediately produced a direction, and the control
+direction rate rose from 8 of 60 to 9 of 60.
+
+### The direction claim is a coverage artefact, and this is the finding
+
+Counting the same claims only where an element inside the window has actually
+been deleted - the result now carries this as
+`negative_controls.given_deletion_data`, so the number cannot be quoted without
+its denominator:
+
+| claim | panel, with deletion data | matched negatives, with deletion data | negatives, without |
+|---|---|---|---|
+| a derived layer names *some* target | 10/10 | 12/13 (92%) | 40/47 (85%) |
+| the reader has it open in some cell | 9/10 (90%) | 9/13 (69%) | 23/47 (49%) |
+| **a direction is produced** | **8/10 (80%)** | **11/13 (85%)** | **0/47** |
+| **a value sits on constrained sequence** | **5/10 (50%)** | **2/13 (15%)** | **7/47 (15%)** |
+
+The direction separation is gone. No window without a scored element can produce
+a direction at all, and among windows that have one the matched negatives produce
+a direction slightly *more* often than the panel. The panel looked better only
+because `scripts/loci_score.py` deliberately spent 2,283 requests on the twelve
+locus windows and nothing on the sixty controls. **Producing a direction is
+evidence of having been scored, not of the element doing anything**, and it joins
+"names a target" as a claim that must never be quoted on its own.
+
+The `positives.direction >= 3 x negatives.direction` assertion has been removed
+from the gate for that reason: it was pinning an artefact, and it would have
+broken by arithmetic once about 14 of the 60 controls had deletion data. In its
+place the gate requires the run to carry the coverage-conditioned counts, and
+requires that no window without a scored element ever produces a direction.
+
+**What survives conditioning is the one claim that survived the controls: a value
+on syntax, 50% at the panel against 15% at the matched windows that hold the same
+kind of data.** Separating it from the rest is what the benchmark is for. Note
+that the value-on-syntax rate at the controls is the same whether or not they
+carry a deletion (15% against 15%), which is what a claim independent of model
+coverage looks like, and the opposite of what the direction row shows.
+
+### What the sweep can still change
+
+The twelve locus windows were scored end to end in section 6, so the sweep adds
+little to them; nearly everything it can still move is on the control side,
+where 47 of the 60 windows of that run had no element-level deletion. The
+controls sit on the panel's own chromosomes, so the sweep's remaining order
+matters to the benchmark only where it reaches chr11 (5 controls), chr9, chr8,
+chr7 and chr6 (5 each) and chr2 (15). Each control window the sweep reaches has
+about a 5-in-6 chance of producing a direction and about a 1-in-7 chance of
+producing a value on syntax. (Section 9 widens the panel and restates these
+counts over 85 controls.)
+
+### How far the controls can actually go, measured rather than extrapolated
+
+The first extrapolation here said the control direction rate would converge on
+the panel's 80%. Finishing chr11 shows that it will not, and the reason is worth
+more than the guess was. **Half of the matched windows contain no registry
+element at all**, so no amount of sweeping can give them a deletion: two of the
+five beta-globin controls hold nothing even on a finished chromosome.
+
+Restricting to the controls whose chromosome the sweep has completed - chr11,
+chr15, chr16, chr17, chr21, twenty-five of the sixty windows, where coverage is
+no longer the variable:
+
+| claim | panel | controls on finished chromosomes |
+|---|---|---|
+| an element inside the window has been deleted | 10/12 (83%) | 12/25 (48%) |
+| a derived layer names *some* target | 11/12 (92%) | 20/25 (80%) |
+| the reader has it open in some cell | 10/12 (83%) | 9/25 (36%) |
+| a direction is produced | 8/12 (67%) | 10/25 (40%) |
+| a value sits on constrained sequence | 6/12 (50%) | 2/25 (8%) |
+
+So the honest projected end state, once the sweep reaches chr2, chr6, chr7, chr8
+and chr9, is a control direction rate near 40% against the panel's 67% - not the
+13% the first run reported, and not the 80% the last extrapolation predicted.
+What is left of that gap is mostly the first row: a published functional element
+coincides with an ENCODE cCRE more often than a window matched only on length,
+GC, TSS distance and constraint does. That is a property of the registry, not of
+the model, and it should be read as one.
+
+The value-on-syntax claim is the exception again, and by a wider margin on this
+subset than on the whole: 50% against 8%.
+
+## 9. The panel widened to seventeen (2026-09-15)
+
+Section 8 said the sweep had nothing left to give twelve loci, so the panel was widened instead:
+a second long-range case (SOX9/Pierre Robin), an imprinted locus (H19/IGF2 ICR1), a dosage locus
+(PMP22/CMT1A) and two more value domains (CYP2D6, MC1R). Seventeen loci, 85 matched negatives,
+about 10 minutes and no AlphaGenome request. `scripts/loci_benchmark.py --gate` runs only the
+twelve pinned loci into `loci_benchmark_gate.json` when the question is whether anything regressed.
+
+| field | twelve loci | seventeen |
+|---|---|---|
+| right target, derived | 11/12 (92%) | **15/17 (88%)** |
+| right target, nearest TSS in node | 8/12 (67%) | 11/17 (65%) |
+| right target, annotation lookup | 6/12 (50%) | 8/17 (47%) |
+| chance floor (random gene in the window) | 5.5/12 (46%) | 7.1/17 (42%) |
+| direction, where a deletion names the target | 4/4 | 5/5 |
+| a published class read | 10/12 | 13/17 |
+
+Nothing that passed stopped passing. The derived layers still clear the heuristic and the floor,
+by about the same margin, which is the first evidence that the twelve were not a lucky draw.
+
+### What the five new loci say
+
+- **SOX9/Pierre Robin behaves exactly like the ZRS, and that is the result.** The summed window
+  input names SOX9 first, ahead of KCNJ2; the nearest-TSS heuristic answers KCNJ2, 500 kb away in a
+  gene desert; and no element inside the 3 kb element window has been scored, so there is no
+  element-level reading at all. Two megabase-reach loci now behave the same way: **summing a whole
+  locus window reaches a megabase and reading one element does not.** One example was an anecdote.
+- **H19/IGF2 ICR1 misses everything.** The summed window input names TNNT3, the heuristic names
+  MRPL23, the lookups name nothing, and the element holds no common variable position at all
+  (0.0 per kb), so no class is read either. It is the panel's second full miss beside MYC. That is
+  the honest answer for a locus whose whole mechanism is parent of origin: the two alleles are the
+  same sequence, and nothing read off a reference can tell them apart. Recorded as pending with
+  what it would take - an allele-resolved methylation layer, or phased reads with a parental
+  assignment - rather than as a defeat.
+- **PMP22/CMT1A finds its target easily and misses the point.** The element's own deletion, the
+  node and the lookups all name PMP22, and the direction is right. But the published variable is
+  three copies of an intact gene against one, and no layer here counts copies: every reader asks
+  what a sequence says, never how many times it is present. Pending, with the cost written down.
+- **CYP2D6 confirms the prediction written into the panel before the run.** The value-domain
+  reading gives **two** (5.4 common positions per kb) where the published domain is over a hundred
+  star alleles. Counting positions per kilobase cannot see a system whose diversity is haplotypes,
+  gene conversion with CYP2D7 and copy number - the same blindness that could not see ABO's
+  frameshift. The causal base is found, though: rs1065852 ranks **1 of 57** variable positions by
+  constraint at phyloP 8.26, as sharp a result as BCL11A's rs1427407.
+- **MC1R also underreads its domain** (two, at 6.0 per kb, against a published few) but gives the
+  panel its **third and fourth coding calibrations**: the translation engine derives p.Arg151Cys for
+  rs1805007 and p.Arg160Trp for rs1805008 from the reference sequence and both match, beside APP's
+  p.Ala673Thr and TP53's p.Pro72Arg. Neither position was typed into the panel; both came from
+  Ensembl at run time and were then confirmed a second way by the engine's own translation.
+
+On this run Ensembl answered for every hard-coded variant and **all eleven agree, none disagree** -
+the first run where the position check is complete rather than partly timed out.
+
+So the value-domain reading is now right at 4 of 8 storage loci, not 4 of 6. Both new storage loci
+underread, in the same direction and for the same reason. **The reading tells a hypervariable slot
+from an ordinary one and nothing finer, and it cannot see a domain built from haplotypes at all.**
+
+### The controls moved, and they moved the way section 8 predicted
+
+The five new loci sit on chr11, chr16, chr17 and chr22, all of which the sweep has finished, so
+their 25 new control windows arrived with deletion data already in them:
+
+| claim | panel 17 | all 85 controls | the 50 controls on finished chromosomes |
+|---|---|---|---|
+| a derived layer names *some* target | 14/17 (82%) | 77/85 (91%) | **45/50 (90%)** |
+| the reader has it open in some cell | 14/17 (82%) | 54/85 (64%) | 31/50 (62%) |
+| a direction is produced | 11/17 (65%) | 31/85 (36%) | **30/50 (60%)** |
+| a value sits on constrained sequence | 9/17 (53%) | 15/85 (18%) | **8/50 (16%)** |
+| an element inside was deleted | 13/17 (76%) | 34/85 (40%) | 33/50 (66%) |
+
+The control direction rate went from 18% to 36% in one step, purely by adding loci on chromosomes
+the sweep had finished, and on the fair subset it is **60% against the panel's 65%**. The
+projection in section 8 said 40% from a sample of 25 windows where two thirds held no element;
+with 50 windows, two thirds *do* hold one, and the observed 60% is what that revision predicts.
+**Naming a target is now worse than worthless: the matched windows do it more often than the panel
+does (90% against 82%).**
+
+**A value on constrained sequence is the only claim left standing: 53% at the panel against 16% at
+matched windows with the same data behind them.** Every other claim the benchmark scores has now
+been shown, on its own controls, to carry no information on its own.
+
+## 10. The element-level reading is bounded by the annotation, not by the sweep (2026-09-15)
+
+Asked to spend a handful of AlphaGenome requests on the two loci with no element-level reading
+(SOX9's element and the H19 ICR), the first thing to check was what there was to spend them on.
+The answer is nothing, and it is worth more than the requests would have been.
+
+**Both windows hold zero elements in every universe the scorer can ask about**: 0 ENCODE cCREs,
+0 VISTA, 0 lentiMPRA. The sweep did not skip them. Everything nearby is already scored - 11 cCREs
+within 20 kb of the SOX9 element, 2 within 20 kb of the H19 ICR - and none of those moves a coding
+gene. No quota can produce an element-level verdict where no annotation drew an interval.
+
+Measured across the panel (`aggregate.published_element_coverage` in the result):
+
+| | loci |
+|---|---|
+| no cCRE over the published element | **7 of 17**: SHH_ZRS, MYC_8q24, ABO, APP, TP53, SOX9_PierreRobin, H19_ICR1 |
+| no element-level reading of any kind | **4 of 17**: APP, TP53 (coding loci, scored by translation instead), SOX9_PierreRobin, H19_ICR1 |
+
+And the ZRS's element-level answer - the LMBR1 miss pinned in the CI gate, the single sharpest
+result the project has - **does not come from the registry at all**. It comes from the VISTA run.
+The flagship long-range element is not an ENCODE cCRE.
+
+So: **the element-level reading is bounded by which intervals ENCODE and VISTA happened to call,
+not by how much of the genome the model has covered.** Sweeping harder cannot fix it. Every rate
+this benchmark reports for an element-level layer is conditioned on somebody else having drawn the
+element first, which is a looked-up step sitting underneath a derived claim.
+
+## 11. Design: an interval the project defines itself (2026-09-15, before any locus is added)
+
+Two gaps turn out to be the same missing idea. `EPHA4` and `IHH` were dropped from the widening
+because the panel cannot write a structural variant down as an element. SOX9 and H19 have no
+element-level reading because no annotation called their published element. Both need the same
+thing: **a causal unit the project states, rather than one it looks up.** This section is the
+design, written before a locus is added, because that is the discipline the rest of the panel was
+built with.
+
+### 11a. The easy half: a published interval nobody annotated
+
+`Expect.element` is already a stated interval; what is missing is permission to *delete* it. The
+change is to let the scorer take an interval as well as a registry id, so the flagship question -
+does deleting the published element name the published gene - can be asked at SOX9 and H19 the way
+it is asked at the ZRS. Cost: a handful of requests per locus, and a small change to the scorer's
+input, which currently takes registry elements only. **This is a decision for the coordinator, not
+something to do while holding a key**, because it changes what the scorer is asked, not just how
+much of it runs.
+
+### 11b. The real half: the variable is a rearrangement
+
+At EPHA4 the published answer is not that an element was lost. It is that a deletion, inversion or
+duplication **moved a boundary**, so limb enhancers that belonged to EPHA4 now reach IHH, PAX3 or
+WNT6, and the limb gets the wrong instruction. The causal unit is a pair of breakpoints and a type,
+and the published effect is a **new adjacency**. Nothing in `Expect` can say that.
+
+**What the expectation record holds.** A `rearrangement` field beside `element`:
+
+| field | what it says |
+|---|---|
+| `kind` | deletion, inversion, duplication, translocation |
+| `breakpoints` | two intervals, carrying their published uncertainty rather than pretending to a base |
+| `boundary` | the interval of the boundary the rearrangement removes, as published |
+| `gains` | the adjacencies created: (donor element or region, recipient gene) |
+| `loses` | the adjacency destroyed |
+| `phenotype` | what the person or the mouse shows, in words |
+| `citations`, `answer_from` | as everywhere else |
+
+**What counts as derived, and it is not what it first looks like.** The tempting reading - our node
+model, recomputed on the rearranged coordinates, puts the donor element and the recipient gene in
+one node when it did not before - is **inferred, not derived**: the node model is built from
+CTCF-only cCREs at confidence 0.4, and it is the very thing under test. So it takes the heuristic
+slot that nearest-coding-TSS holds today: the baseline the rest has to beat. That is the honest
+place for it, and it makes a rearrangement locus the sharpest test of the node model the project
+could have.
+
+| provenance | the reading | cost |
+|---|---|---|
+| derived | AlphaGenome asked on the rearranged sequence: does the donor element's predicted target change when the boundary is cut | **needs work in the scorer**, which today deletes one element and cannot construct a rearranged input. Requests are the small part |
+| heuristic | the node model recomputed on rearranged coordinates: does the boundary disappear and the new adjacency appear | free and local |
+| looked_up | DECIPHER and ClinVar on the rearrangement, VISTA on the donor element | nothing about the approach |
+| free, and worth asking first | is there a CTCF-only element at the published boundary **at all**? At HOXD the answer was no, and that was one of the panel's sharpest negative results | free |
+
+**What the matched control is.** This is the part that decides whether the locus is worth adding,
+because everything the benchmark learned tonight says a claim is worth nothing until a matched
+random version of it has been tried. A window is the wrong control for a rearrangement; the unit is
+a pair brought together by a cut. The control is therefore **a random rearrangement of the same
+kind and size elsewhere on the same chromosome**, five per locus, matched on:
+
+- kind (exact), and span (exact, as window length is matched today);
+- coding TSSs inside the span, within 35% - the analogue of the TSS-distance match;
+- CTCF-only elements crossed, closest of the candidates - the analogue of the constraint match,
+  since boundary density is what decides whether a cut can create an adjacency at all;
+- away from every panel locus with 200 kb of flank, and away from known pathogenic CNVs.
+
+Three claims are then counted identically at the published rearrangements and at the random ones:
+the node model **loses a boundary**; a **new element-to-gene adjacency** appears; some derived
+layer **names the recipient gene**. Only the fourth - whether the gene named is the published one -
+belongs to the positives alone.
+
+**The prediction, written down before the run, as CYP2D6's was.** Cutting the genome at random will
+destroy boundaries and create new adjacencies constantly, so claims one and two will fire at most
+control rearrangements, and claim three will land near the 90% that naming a target already reaches
+at matched windows. **What should separate the published rearrangements is which gene, and nothing
+else.** If it does not, the node model has failed its sharpest test, and that is the result the
+project most needs to know.
+
+### 11c. Order of work
+
+The measurement in section 10 has to come first and is already done: it says how much of the panel
+the element-level reading can reach at all. Then 11a, which is cheap and needs a decision on the
+scorer's input. Then 11b, whose free half - the node model recomputed on rearranged coordinates,
+against matched random rearrangements - can be built and run with no model request whatsoever, and
+answers the question on its own. The derived half needs scorer work and should wait until the free
+half says whether there is anything there.
+
+## 12. 11a built, and 11b's free half run (2026-09-15)
+
+Both approved by the coordinator. Neither spent a model request; the key went straight to the
+executor lane.
+
+### 11a: the scorer already takes a stated interval
+
+**Cost: nothing.** `Context.score_region` in `genomeos/predict/enhancer_target.py` already scores a
+region as an ad-hoc element when no ENCODE element overlaps it, caching it under
+`{chrom}_{start}_{end}`. It returns `predicted` and `predicted_coding` - exactly what the
+benchmark's deletion layer reads. The only thing a stated interval does not get is `verdict`, the
+comparison against the domain's nearest-TSS inference, which the benchmark computes itself anyway.
+No rewrite was needed and none was attempted.
+
+The three guardrails are in the code, not in this paragraph:
+
+- **a stated interval carries its own citation.** `Expect.element_source` is `annotated` or
+  `stated`, and `Expect.element_citation` is required for a stated one - the gate fails a stated
+  interval with no citation, because that is the panel inventing an element;
+- **every result from one is labelled**, in the row (`readings.deletion.from_stated_interval`) and
+  in the aggregate (`target_derived_by_element_source`), and a stated-interval run is read from its
+  own result file so its rows can never be mistaken for registry ones;
+- **the rates are never pooled without the split showing.** `target_derived_by_element_source`
+  reports annotated and stated apart, with the loci in each, and the gate asserts they add up to the
+  panel and that the stated set is exactly the loci declaring it.
+
+SOX9_PierreRobin and H19_ICR1 are the two stated intervals. Scoring them is a handful of requests
+whenever the key is next free; until then their deletion reading stays pending, as it was.
+
+### 11b free half: the node model against a published rearrangement
+
+`genomeos/benchmark/rearrangements.py`, `scripts/rearrangements.py`,
+`data/results/loci_rearrangements.json`. **No model request, no network**: the cCRE registry,
+GENCODE and the project's own `infer_domains`, recomputed over a transformed cCRE list and a
+transformed chromosome length - the same function, not a simplification of it.
+
+One published case is runnable: the **EPHA4 to PAX3 deletion** (Lupiáñez et al. 2015), where
+deleting across the boundary gives PAX3 the EPHA4 limb enhancers and causes polydactyly. Its span
+is **stated, not cited**: the paper's breakpoints are hg19 and we have not lifted them over, so the
+span is the intergenic interval between GENCODE's EPHA4 and PAX3, which is the interval the
+published deletions remove the boundary from. Three more cases are in `NOT_YET_RUNNABLE` with what
+each waits for - the IHH duplication and the WNT6 inversion both depend on breakpoints falling
+*inside* the domains, so an intergenic stand-in is not faithful the way it is for a deletion.
+
+**The free reading, asked first: there are 7 CTCF-only elements between EPHA4 and PAX3.** Unlike
+HOXD, where no CTCF-only element sat anywhere in the cluster and the boundary was a fiction, this
+boundary exists in our registry. The node model does separate the pair (`chr2:D1512` and
+`chr2:D1517`), which is the precondition the experiment needs.
+
+| claim | published | 5 matched random rearrangements |
+|---|---|---|
+| the pair is in different nodes to begin with | 1/1 | 5/5 |
+| the rearrangement loses a boundary between them | 1/1 | **5/5** |
+| a new adjacency appears - they end up in one node | 1/1 | **5/5** |
+| a derived layer names the recipient gene | 1/1 | **not judgeable** |
+
+**The registered prediction was right, and the node model failed its sharpest test.** Deleting the
+interval between any matched pair of consecutive genes destroys every boundary between them and puts
+them in one node - 5 times out of 5. The published rearrangement does exactly what a random one of
+the same shape does. Nothing in the node model distinguishes the deletion that causes polydactyly
+from a deletion of the same length crossing the same number of boundaries somewhere else on chr2.
+
+The fourth claim - which gene - is the only one that could have separated them, and it **cannot be
+judged**: all five control recipients have no deletion scored anywhere near them, because chr2 is
+not swept. An ungated 1/1 against 0/5 would have been the coverage artefact of section 8 all over
+again, so the result records it as not judgeable and the gate refuses to quote it.
+
+### Two mistakes this run made, both caught by its own controls
+
+Worth recording because both looked like findings first.
+
+1. **The control has to share the construction, not only the size.** The first version drew a random
+   span of the published length and took the nearest coding TSS on each side. The published span is
+   the whole interval *between* two genes, so deleting it removes every boundary between them by
+   construction, while a random span leaves the boundaries between itself and the flanking genes.
+   That produced a new adjacency at 1/1 against 0/5 - a beautiful result, and entirely an artefact
+   of how the two were built. A control is now the same thing done elsewhere: a consecutive coding
+   pair and the whole interval between them.
+2. **An endpoint must not sit inside its own deletion.** With the span running from one TSS to the
+   next, the lower TSS was inside the interval being removed, so it transformed to nowhere and every
+   downstream count was nonsense (boundaries "after" in the hundreds). The span now lies strictly
+   between the two starts.
+
+Both were visible only because the claims are scored at controls as well as at the case. A run that
+reported the positives alone would have published the first one.
+
+### What this says about the node, beside tonight's other three qualifications
+
+The node claim was already qualified three ways: 2.6 points above random on the full archive, an
+excess that changes sign across chromosomes, and a sign that tracks boundary density rather than
+biology. This is the fourth and the most direct: **at the one published experiment designed to test
+exactly this, the node model's answer is indistinguishable from the answer it gives to a random cut
+of the same shape.** One case is an anecdote by the panel's own standard, and the honest next step
+is the other three cases, which need the paper's breakpoints lifted to hg38 - a liftover, not a
+quota.
+
+## 13. The liftover that was not the problem (2026-09-15)
+
+Asked to lift the other three Lupiáñez breakpoints from hg19 to hg38 and run them, the first step
+was to find the breakpoints. **There are none to find.** The accessible paper gives sizes and gene
+content and no human coordinates at all: deletions of 1.75 to 1.9 Mb at 2q35-36, an inversion of
+about 1.1 Mb whose telomeric breakpoint is about 1.4 Mb from EPHA4, a duplication of about 1.4 Mb
+with a breakpoint about 1.2 Mb away, and a polydactyly duplication of about 900 kb. The breakpoints
+themselves live in aCGH supplementary data. Two independent routes were tried - the PMC full text
+and POSTRE's re-curation of the same variants - and neither carries a coordinate.
+
+**So the blocker was never the liftover, and saying it was sent the next session after the wrong
+thing.** UCSC's chain and this project's own chain reader (`attribution/human_panel.py`, already
+used for Repli-seq) would do the conversion in seconds. There is no number to convert. The gate now
+refuses any `NOT_YET_RUNNABLE` reason containing the word "liftover", so the mistake cannot be
+written back in.
+
+### The rule applied to my own case
+
+The instruction was to drop a case rather than place it approximately. Applied honestly, that takes
+the case section 12 *ran*: **EPHA4 to PAX3 is now dropped too.** Looking for the breakpoints turned
+up two errors in the expectation record I had already committed:
+
+- **the phenotype was wrong.** The EPHA4-to-PAX3 deletion causes **brachydactyly**, not polydactyly;
+  polydactyly comes from a duplication of about 900 kb. The record said polydactyly.
+- **the stated span was wrong in kind.** The published deletions are 1.75 to 1.9 Mb and **include
+  EPHA4 itself**, extending into the non-coding part of the PAX3 domain. The span I stated was the
+  626 kb intergenic interval between the two genes, which excludes EPHA4 - three times too short
+  and a different construction. It was not the faithful stand-in I claimed it was.
+
+Neither error changed the verdict, for a reason worth more than the case was.
+
+### Two of the three claims could never have discriminated, and that is the finding
+
+The node model puts its boundaries at CTCF-only elements. A deletion removes every element inside
+its span. So **any** deletion spanning a boundary loses that boundary, and any deletion of the whole
+interval between two genes puts them in one node. That is arithmetic, not biology. Deleting an
+interval of the published size (1.75 to 1.9 Mb) between a consecutive coding pair anywhere on chr2
+loses a boundary and creates a new adjacency at **4 of 4** attempts, exactly as it did for the
+approximately-placed case.
+
+| claim | a deletion of the published size, anywhere on chr2 |
+|---|---|
+| the pair is in different nodes to begin with | 4/4 |
+| loses a boundary between them | **4/4** |
+| a new adjacency appears | **4/4** |
+| a derived layer names the recipient | 0/4, and **0 of 4 recipients have any deletion scored near them** |
+
+**Two of this module's three claims were incapable of discriminating by construction.** Whatever the
+real breakpoints turn out to be, they cannot separate a published rearrangement from a random one on
+either claim, because both are guaranteed by how the node model is built. Only the third - which
+gene the machinery names - could ever have worked, which is what the registered prediction said, and
+it still cannot be scored because no control recipient has a deletion near it until chr2 is swept.
+
+That sharpens what the coordinator is spending chr2 on. It is not that claim three is the last of
+three; it is that claim three is **the only one there ever was**.
+
+## 14. chr2 landed, claim 3 scored, and the verdict (2026-09-15)
+
+chr2 completed at 79,639 elements, the largest chromosome in the sweep, promoted deliberately so
+that the only claim capable of discriminating could be scored at the controls as well as at the
+case. It now can be.
+
+**The case was reinstated, on a stated span, and that word is load-bearing.** The published
+breakpoints still do not exist in any accessible form; what is citable is the size. A span anchored
+at PAX3's GENCODE gene start and sized across the published 1.75 to 1.9 Mb range removes EPHA4
+entire at every size and leaves PAX3 alive to be misexpressed, which is the published construction -
+unlike the 626 kb intergenic span this file used before, which excluded EPHA4 and was withdrawn.
+The case is run at every size across the range rather than at one, so the published uncertainty is
+reported instead of collapsed. Phenotype corrected to brachydactyly. The other three cases stay
+withdrawn.
+
+### What a faithful span turns out not to be able to ask
+
+At every size in the published range the deletion **removes the donor gene itself**. So
+"donor and recipient end up in one node" is not a question this case can put: EPHA4 does not survive
+to share a node with anything. The published mechanism is that EPHA4's surviving *enhancers* reach
+PAX3, and this module has no published coordinate for that enhancer cluster. Claims one and two are
+therefore recorded as **not applicable** for the case - a question the construction cannot ask is
+not a test the model failed - and they remain, as section 13 showed, arithmetic anyway: 5 of 5 at
+matched random deletions, 4 of 4 at size-matched ones anywhere on chr2.
+
+### Claim 3, the only claim there ever was
+
+| claim | published | 5 matched random rearrangements |
+|---|---|---|
+| the pair is in different nodes to begin with | 1/1 | 5/5 |
+| loses a boundary between them | **not applicable** | 5/5 |
+| a new adjacency appears | **not applicable** | 5/5 |
+| **a derived layer names the recipient gene** | **1/1** | **5/5** |
+
+Gated on coverage, as it must be: chr2 is swept, so 4 of 4 control recipients now have deletions
+scored near them and the claim is judgeable for the first time. It separates nothing. PAX3 is named
+by an already-computed deletion in its neighbourhood, and so is the recipient of every matched
+random deletion, 5 times out of 5.
+
+**So: the node model gives a random cut's answer on every claim the experiment can ask.** That is
+the verdict. Two claims were arithmetic and could never have discriminated; the third, the one this
+whole module was built around and the one chr2 was promoted for, gives the same answer at the
+published rearrangement and at matched random cuts of the same size on the same chromosome.
+
+It is the same shape as the panel's oldest finding, one level up: naming a target fires at 90% of
+matched windows, and naming the gene at the far end of a boundary-crossing deletion fires at 100% of
+matched deletions. What a gene is near, and what a cut puts it next to, are not evidence.
+
+### What this does and does not say
+
+It does not say TAD boundaries are not real. It says **our** boundary model - CTCF-only cCREs, no
+Hi-C, confidence 0.4 - carries no information that distinguishes a pathogenic rearrangement from a
+random one, on any claim this experiment can put to it. That is the mechanistic counterpart to the
+statistical result the fold lane reached the same night: an excess distinguishable from random on
+six chromosomes, all cut between 6.55 and 7.00 boundaries per Mb, with the finest-cut chromosome of
+all indistinguishable, and ten of sixteen carrying no measurable excess either way.
+
+The honest next step is not another rearrangement. It is a boundary model that is not a proxy:
+Hi-C-called domains, which the project already holds for five cell types under
+`data/knowledge/hic`, against which the same three claims could be asked without changing a line of
+this module.
+
+## 15. The Hi-C test: a positive that did not survive its own scrutiny (2026-09-15)
+
+The negative in section 14 was about **our** boundary model - CTCF-only cCREs, no Hi-C, confidence
+0.4 - and that left the interesting question open: does the negative belong to the proxy or to
+boundaries themselves? The project holds measured 4D Nucleome boundary calls for five cell types, so
+the same three claims can be asked of them. `_domains_from` is what `infer_domains` calls once it has
+decided where the boundaries are, so handing it measured calls swaps the boundary source and changes
+nothing else: same 50 kb minimum, same merging, same intervals-between-boundaries model. Same matched
+random rearrangements, so only one thing changes at a time.
+
+**The reading was registered before the measured boundaries were read**, and it is kept verbatim in
+the result. It said: claim three cannot move, because it does not depend on the boundary model at
+all; claims one and two are askable at the controls but not at the published case, whose faithful
+span deletes the donor; what is left is the precondition, and the yes/no form of it will saturate,
+so **the count of boundaries between the pair is the reading to trust**, per cell type, never pooled.
+
+### Coverage first, as it must be
+
+All five cell types have a measured domain over both EPHA4 and PAX3, and all five separate them -
+as do all five matched control pairs, in all five cell types. The yes/no form saturates exactly as
+registered, so it decides nothing. This is not a coverage failure: the locus is covered everywhere.
+
+### The count, raw, looked like the first positive result about a node in this project
+
+| cell type | boundaries between EPHA4 and PAX3 | at the 5 matched pairs | below every control? |
+|---|---|---|---|
+| GM12878 | 11 | 24, 26, 32, 37, 37 | **yes** |
+| H1-hESC | 3 | 5, 7, 8, 9, 12 | **yes** |
+| HepG2 | 2 | 3, 3, 4, 4, 5 | **yes** |
+| IMR-90 | 2 | 6, 7, 7, 7, 11 | **yes** |
+| K562 | 2 | 3, 3, 4, 4, 4 | **yes** |
+
+Five cell types out of five, the published pair strictly below every matched control. If that had
+held it would have been the first positive thing anyone found about a node here.
+
+### It is interval length, and nothing else
+
+**The published pair is 727 kb apart. The control pairs are about 1.8 Mb apart** - because the
+controls were matched on the *span of the deletion*, not on the distance between the two genes. A
+longer interval holds more boundaries for nothing. Per megabase:
+
+| cell type | published, per Mb | at the 5 matched pairs, per Mb | below every control? |
+|---|---|---|---|
+| GM12878 | 15.14 | 13.60, 15.73, 16.70, 17.69, 20.43 | no - second lowest of six |
+| H1-hESC | 4.13 | 3.02, 3.97, 4.42, 4.70, 5.74 | no - middle |
+| HepG2 | 2.75 | 1.43, 1.57, 2.27, 2.42, 2.76 | no - second **highest** |
+| IMR-90 | 2.75 | 3.40, 3.65, 3.86, 4.23, 5.26 | yes |
+| K562 | 2.75 | 1.57, 1.81, 1.91, 2.21, 2.27 | no - **above every control** |
+
+Below every control in **1 of 5** cell types, above every control in one, inside the range in three.
+The 5-of-5 became 1-of-5 on dividing by a length. Both readings are now carried together in the
+result and the gate requires it, so the raw count can never be quoted alone again.
+
+### So the negative is about boundaries, not only about our proxy
+
+That is the larger statement and it is worth making carefully. Measured Hi-C boundaries, in five
+cell types, separate the published rearrangement's gene pair no more distinctively than they
+separate matched random pairs on the same chromosome. The node model's failure in section 14 is not
+an artefact of using CTCF-only cCREs as a stand-in: swapping in the measured calls the project holds
+does not rescue it.
+
+What this does **not** say is that boundary strength carries nothing. Insulation is a continuous
+quantity and this test counted calls; a boundary's insulation score, which 4DN publishes and this
+project does not yet read, is the obvious next thing to ask, and it is the reading that could still
+come out positive. What it does say is that **the count of boundaries between two genes, measured or
+inferred, is not evidence about whether a rearrangement between them matters.**
+
+### The lesson, which is the same one as last time in a new costume
+
+The control shared the deletion's span and not the pair's separation. Section 12 recorded that a
+control has to share the construction and not only the size; this is the same mistake one level
+further in, and it produced a five-out-of-five positive that survived until it was divided by a
+length. **Every count needs its denominator, and the denominator has to be the thing that varies.**
+
+## 16. Boundary strength: the last reading, and it is a null (2026-09-15)
+
+Counting calls is not measuring insulation, so the last thing left to ask was the quantity the calls
+are a threshold on. It turns out the project already had it and was throwing it away:
+**4DN's boundary files carry five columns - chrom, start, end, a Strong/Weak label and a numeric
+strength - and `genome/hic.py` writes only the first three.** The informative column was being
+discarded at the point of download. This module re-streams the same accessions named in each cell
+type's manifest, keeping the score, so the comparison is against exactly the files the call counts
+came from.
+
+### What was registered, before anything was fetched
+
+The denominator problem was already known, so the statistic was chosen to avoid it rather than to be
+corrected afterwards. The interval *between the genes* is 727 kb for the published pair and about
+1.8 Mb for the controls, and any "deepest point in the interval" statistic is biased towards the
+longer one. **So the primary reading uses the deleted span instead**, which the controls were matched
+on for length within 35%: length-matched by construction, needing no normalising. It is also the
+biologically right question - a deletion removes whatever boundary lies in its span, and the
+published claim is that the boundary it removes is the one that mattered. The mean strength inside
+the span is reported beside it as a length-independent second reading, and the span lengths are
+reported so the match can be checked rather than assumed.
+
+One honest adjustment: the registration was written expecting an insulation profile, where a
+boundary is a *minimum*. What 4DN's file actually carries is a per-boundary strength where higher is
+stronger. Same question, opposite sign, and it is recorded here rather than quietly rewritten.
+
+The registered prediction was: **no separation.**
+
+### The result
+
+| cell type | boundaries in the span (strong) | strongest, published | strongest, 5 matched control spans | stronger than all? |
+|---|---|---|---|---|
+| GM12878 | 29 (11) | 1.90 | 1.70, 1.75, 1.99, 2.05, 2.25 | no |
+| H1-hESC | 8 (4) | 1.83 | 0.88, 1.31, 1.36, 1.39, 1.73 | **yes** |
+| HepG2 | 3 (2) | 0.68 | 0.73, 1.10, 1.28, 1.37, 2.05 | no - weakest of six |
+| IMR-90 | 6 (2) | 1.39 | 0.48, 0.74, 0.76, 1.17, 1.46 | no |
+| K562 | 3 (1) | 0.59 | 0.57, 0.83, 1.03, 1.08, 1.62 | no - second weakest |
+
+Stronger than every matched control in **1 of 5** cell types. In two of the five the published span's
+strongest boundary is the weakest or second weakest of the six. On the mean, published is above every
+control in 2 of 5 (H1-hESC and IMR-90). **There is no consistent separation**, and the prediction
+registered before the fetch was right.
+
+### The tempting exception, named so it cannot be quietly promoted
+
+The one cell type where the published span's boundary is stronger than every control is **H1-hESC,
+the embryonic stem line - and limb malformation is an embryonic phenotype.** That is a good story and
+it is not a result. Picking the one cell type of five that fits, after looking, is precisely the
+artefact this benchmark has caught three times in a day. It is recorded as a hypothesis with an
+obvious test - the other three Lupiáñez cases, and other published limb rearrangements, scored the
+same way - and it stays a hypothesis until something like that is run. One locus, one cell type, no
+correction for having looked at five.
+
+### The honest summary
+
+**Measured chromatin boundaries, whether read as calls or as strengths, do not distinguish this
+published rearrangement from a random cut of the same kind.** Together with sections 14 and 15 that
+is the whole of what this experiment could ask: the CTCF-only proxy fails, the measured calls fail,
+and the strength behind the calls fails. The node concept as this project uses it carries no
+information at this locus.
+
+**And it is one locus**, on a stated span, with the other three published cases still withdrawn for
+want of coordinates. That is the load-bearing caveat and it belongs in every quotation of this
+result. What would change it is not another reading of the same locus but more loci - which is the
+same conclusion the panel reached at twelve, and the reason it is now seventeen.
+
+### What to fix regardless of the verdict
+
+`genome/hic.py` discards columns 4 and 5 of every 4DN boundary file it downloads. Whatever the
+answer here, a layer that reads a threshold crossing and throws away the quantity it is a threshold
+on is worth repairing, and the fix is three lines in `fetch_boundaries` plus a loader beside
+`load_boundaries`. That file is not mine; the finding is passed to its owner with the cache this
+module built (`data/knowledge/hic_scored`) as evidence that the column is there and useful.

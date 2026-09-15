@@ -75,3 +75,56 @@ def test_http_roundtrip():
     finally:
         srv.shutdown()
         srv.server_close()
+
+
+def test_api_grow_reports_the_organism_and_its_space():
+    api = Api(ROOT)
+    worm = api.grow("data/demo/celegans_lineage.bio", "150", 2)
+    assert (
+        worm["summary"]["organism"] == "CelegansEarly"
+        and worm["space"] is None
+        and worm["diff"]["matched"] > 0
+    )
+    flag = api.grow("data/demo/flag_organism.bio", "200 h", 0)
+    rows = flag["space"]["rows"]
+    assert (
+        flag["space"]["width"] == 30
+        and len(rows) == 1
+        and rows[0].startswith("BBB")
+        and rows[0].endswith("RRR")
+    )
+    assert [b[0] for b in flag["space"]["bands"]] == ["Blue", "White", "Red"] and flag["asserts"][0]["ok"]
+
+
+def test_api_budget_wide(tmp_path):
+    """The 98% card: per-chromosome budgets summed, the job's state attached, empty when nothing ran."""
+    empty = Api(tmp_path).budget_wide()
+    assert empty["done"] == 0 and empty["table"] == [] and empty["tiers"]["neutral"] == 0
+    (tmp_path / "data" / "results").mkdir(parents=True)
+    (tmp_path / "data" / "results" / "budget_chr21.json").write_text(
+        json.dumps(
+            {
+                "chrom": "chr21",
+                "unknown_bp": 1000,
+                "chromosome_length": 4000,
+                "constrained_bp": 9,
+                "measured_bp": 900,
+                "constrained_fraction": 0.01,
+                "blocks": [{}, {}],
+                "by_tier": {
+                    "structural": {"blocks": 1, "bp": 100},
+                    "fossil": {"blocks": 0, "bp": 0},
+                    "regulatory": {"blocks": 0, "bp": 0},
+                    "constrained_unknown": {"blocks": 1, "bp": 300},
+                    "neutral": {"blocks": 0, "bp": 600},
+                },
+                "cost": {"phylop": {"mb_fetched": 3.0}, "seconds": 12.5},
+            }
+        )
+    )
+    b = Api(tmp_path).budget_wide()
+    assert b["done"] == 1 and b["total"] == 24 and b["unknown_bp"] == 1000 and b["genome_bp"] == 4000
+    assert b["tiers"]["constrained_unknown"] == 300 and b["constrained_fraction"] == 0.01
+    row = b["table"][0]
+    assert row["blocks"] == 2 and row["constrained_unknown_blocks"] == 1 and row["mb_fetched"] == 3.0
+    assert b["job"] is None or b["job"]["name"] == "budget_genome_wide"

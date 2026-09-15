@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr10",
+  "date": "2026-09-15",
+  "chrom": "chr10",
+  "elements_total": 47419,
+  "scored": 47419,
+  "requests_this_run": 47466,
+  "workers": 8,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 47419,
+    "with_predicted_target": 28865,
+    "fraction_with_target": 0.609,
+    "strong": 7502,
+    "weak": 21363,
+    "silencer_like": 10861,
+    "verdicts": {
+      "no predicted effect": 18554,
+      "another gene in the same domain": 11977,
+      "agrees with nearest TSS in domain": 9875,
+      "gene outside the domain": 7013
+    },
+    "verdicts_coding": {
+      "no predicted effect": 26396,
+      "agrees with nearest TSS in domain": 13226,
+      "gene outside the domain": 5379,
+      "another gene in the same domain": 2418
+    },
+    "coding_target_agrees_with_nearest": 0.629,
+    "fraction_agreeing_with_nearest": 0.342,
+    "fraction_inside_domain": 0.757,
+    "top_tissues": {
+      "K562": 1495,
+      "placenta": 1181,
+      "HepG2": 881,
+      "CD14-positive monocyte": 873,
+      "common myeloid progenitor, CD34-positive": 563,
+      "Whole_Blood": 519,
+      "CD8-positive, alpha-beta T cell": 503,
+      "testis": 497,
+      "naive thymus-derived CD4-positive, alpha-beta T cell": 490,
+      "Karpas-422": 484,
+      "neural cell": 482,
+      "small intestine": 481
+    },
+    "median_distance_when_agreeing": 17786
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr10.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}

@@ -1,0 +1,55 @@
+{
+  "result": "enhancer_targets_all_chr22",
+  "date": "2026-09-13",
+  "chrom": "chr22",
+  "elements_total": 19708,
+  "scored": 19708,
+  "requests_this_run": 19708,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 19708,
+    "with_predicted_target": 13108,
+    "fraction_with_target": 0.665,
+    "strong": 4115,
+    "weak": 8993,
+    "silencer_like": 4952,
+    "verdicts": {
+      "no predicted effect": 6600,
+      "another gene in the same domain": 6282,
+      "agrees with nearest TSS in domain": 4699,
+      "gene outside the domain": 2127
+    },
+    "verdicts_coding": {
+      "no predicted effect": 10096,
+      "agrees with nearest TSS in domain": 6280,
+      "another gene in the same domain": 1802,
+      "gene outside the domain": 1530
+    },
+    "coding_target_agrees_with_nearest": 0.653,
+    "fraction_agreeing_with_nearest": 0.358,
+    "fraction_inside_domain": 0.838,
+    "top_tissues": {
+      "K562": 533,
+      "placenta": 438,
+      "HepG2": 392,
+      "CD14-positive monocyte": 334,
+      "Purkinje cell": 300,
+      "OCI-LY7": 263,
+      "CD8-positive, alpha-beta T cell": 260,
+      "psoas muscle": 255,
+      "Whole_Blood": 249,
+      "neural cell": 241,
+      "left lobe of liver": 236,
+      "GM23338": 224
+    },
+    "median_distance_when_agreeing": 9528
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr22.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}
