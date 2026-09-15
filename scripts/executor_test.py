@@ -22,9 +22,23 @@ import argparse
 import gzip
 import json
 import time
+from contextlib import contextmanager
 
+from genomeos import jobs
 from genomeos.attribution import executor as ex
 from genomeos.results import save_result
+
+HOLDER = "genomeos-x1"
+
+
+@contextmanager
+def the_key(what: str):
+    """Hold the shared model key for the length of a run, so nothing starts a chromosome underneath it."""
+    jobs.take_key(HOLDER, what)
+    try:
+        yield
+    finally:
+        jobs.drop_key(HOLDER)
 
 
 def wide(args, say, t0: float) -> None:
@@ -48,16 +62,17 @@ def wide(args, say, t0: float) -> None:
         pairs = json.load(fh)["pairs"]
     wanted = set(args.endpoints.split(",")) & set(ex.WIDE_ENDPOINTS) or {"E1W_mpra_wide"}
     pairs = [p for p in pairs if p["endpoint"] in wanted]
-    out = ex.run_pairs(
-        pairs,
-        ex.live_scorer(),
-        max_requests=args.max_requests,
-        progress=say,
-        max_pairs=args.max_pairs,
-        looks_at=tuple(sorted(wanted)),
-        endpoints=ex.WIDE_ENDPOINTS,
-        split="cell",
-    )
+    with the_key(f"executor widened E1, {sorted(wanted)}"):
+        out = ex.run_pairs(
+            pairs,
+            ex.live_scorer(),
+            max_requests=args.max_requests,
+            progress=say,
+            max_pairs=args.max_pairs,
+            looks_at=tuple(sorted(wanted)),
+            endpoints=ex.WIDE_ENDPOINTS,
+            split="cell",
+        )
     rows = out.pop("rows")
     out["no_call_grid"] = {e: [ex.recall(rows, e, t) for t in (0.0, 0.001, 0.01)] for e in sorted(wanted)}
     with gzip.open(ex.LANE / f"wide_rows_{'-'.join(sorted(wanted))}.json.gz", "wt") as fh:
@@ -97,15 +112,16 @@ def replicate(args, say, t0: float) -> None:
         pairs = json.load(fh)["pairs"]
     wanted = set(args.endpoints.split(",")) & set(ex.REPLICATION_ENDPOINTS) or {ex.REPLICATION_ENDPOINTS[0]}
     pairs = [p for p in pairs if p["endpoint"] in wanted]
-    out = ex.run_pairs(
-        pairs,
-        ex.live_scorer(),
-        max_requests=args.max_requests,
-        progress=say,
-        max_pairs=args.max_pairs,
-        looks_at=(ex.REPLICATION_ENDPOINTS[0],) if ex.REPLICATION_ENDPOINTS[0] in wanted else (),
-        endpoints=ex.REPLICATION_ENDPOINTS,
-    )
+    with the_key(f"executor replication, {sorted(wanted)}"):
+        out = ex.run_pairs(
+            pairs,
+            ex.live_scorer(),
+            max_requests=args.max_requests,
+            progress=say,
+            max_pairs=args.max_pairs,
+            looks_at=(ex.REPLICATION_ENDPOINTS[0],) if ex.REPLICATION_ENDPOINTS[0] in wanted else (),
+            endpoints=ex.REPLICATION_ENDPOINTS,
+        )
     rows = out.pop("rows")
     out["no_call_grid"] = {e: [ex.recall(rows, e, t) for t in (0.0, 0.001, 0.01)] for e in sorted(wanted)}
     out["leave_one_out"] = {e: ex.leave_one_out(rows, e) for e in sorted(wanted)}
@@ -119,7 +135,8 @@ def replicate(args, say, t0: float) -> None:
     }
     out["pre_registration"] = ex.E2_REPLICATION
     out["seconds"] = round(time.time() - t0, 1)
-    say(f"saved {save_result('executor_replication_run', out)}")
+    name = "executor_replication_run" if ex.REPLICATION_ENDPOINTS[0] in wanted else "executor_replication_e3r"
+    say(f"saved {save_result(name, out)}")
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -170,13 +187,14 @@ def main(argv: list[str] | None = None) -> None:
         pairs = json.load(fh)["matched"]["pairs"]
     wanted = set(args.endpoints.split(","))
     pairs = [p for p in pairs if p["endpoint"] in wanted]
-    out = ex.run_pairs(
-        pairs,
-        ex.live_scorer(),
-        max_requests=args.max_requests,
-        progress=say,
-        max_pairs=args.max_pairs,
-    )
+    with the_key(f"executor test, {sorted(wanted)}"):
+        out = ex.run_pairs(
+            pairs,
+            ex.live_scorer(),
+            max_requests=args.max_requests,
+            progress=say,
+            max_pairs=args.max_pairs,
+        )
     rows = out.pop("rows")
     out["no_call_grid"] = {e: [ex.recall(rows, e, t) for t in (0.0, 0.001, 0.01)] for e in sorted(wanted)}
     with gzip.open(ex.LANE / f"run_rows_{'-'.join(sorted(wanted))}.json.gz", "wt") as fh:

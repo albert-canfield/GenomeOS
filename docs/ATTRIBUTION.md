@@ -2107,6 +2107,42 @@ the measured-against-measured reading below.
 (800 pairs, 1,200 requests), 3,000 requests in all, with the looks at 150 and 400 pairs and the
 stopping rule unchanged.
 
+**The replication ran: the direction holds away from chr21 and chr22, the size does not, and by the
+pre-registered bar it resolves nothing (2026-09-15).** 3,000 requests exactly, under the shared-key
+lock, in the round-robin order.
+
+- **E2R, the replication.** 1,166 pairs over 16 chromosomes, 1,801 requests. Units agree **231 of 381
+  (0.606)**, matched controls **255 of 495 (0.515)**: a difference of **+0.091**, one-sided p
+  **0.0043**, upper 95% bound 0.146. The pre-registration asked for 0.10 and it did not get there, so
+  the outcome is the third one, written before the run and not bent now: **a difference between 0 and
+  0.10 resolves nothing**. What did hold is everything around the number. The difference is positive
+  and significant at the final alpha, it survives **leave-one-out on every chromosome** (the lowest is
+  +0.070, with chr6 removed, above the 0.05 floor the rule set), and 11 of the 16 chromosomes lean the
+  same way (sign test p 0.105). Neither look fired: at 150 and at 400 pairs it was neither a success
+  at its alpha nor futile.
+- **The size did not replicate.** The discovery run read +0.268 on chr21 and chr22; **+0.268 is far
+  outside this run's 95% interval**, whose upper bound is 0.146. The honest reading is that the first
+  estimate was inflated about threefold by the two chromosomes it was found on, and that the effect
+  which survives at genome scale is about a third of it and just under the bar the pre-registration
+  set for calling it real. chr6 (+0.415) and chr7 (+0.383) are the two chromosomes that would have
+  carried a bolder claim, and the leave-one-out is what keeps them from doing so.
+- **E3R, the dilution, replicates cleanly.** 775 pairs, 1,199 requests: units 107 of 216 (0.495),
+  controls 178 of 339 (0.525), a difference of **−0.030**, upper bound 0.042, which is a **futility**
+  verdict by the rule — linked values show no agreement excess at all. Against E2R the gap is
+  **+0.121 with a one-sided 95% lower bound of +0.031**, so the split between values fine-mapping
+  calls causal and values merely linked to a cause is there again, on 16 chromosomes the discovery
+  never saw. The dilution is the part of this result that replicated best.
+
+**What it adds up to.** The executor claim's *shape* survived a genuine replication — causal values
+agree, linked values do not, and no single chromosome carries it — while its *effect size* shrank by
+two thirds and fell below the line drawn in advance. That is the fifth claim in this area to shrink
+under a control tonight, and it is recorded as such rather than as a success. It also remains, as the
+pre-registration says in the code itself, one model agreeing with fine-mapping: the endpoint whose
+outcome is an external measurement resolved nothing at +0.014, and the only evidence here that does
+not pass through AlphaGenome is the measured-against-measured reading below — 0.670 agreement where
+DAP-G fine-maps against 0.518 overall, two instruments and no model between them, which is also the
+one number the model's own 0.606 against 0.515 now sits closest to.
+
 **Caveats kept with the result.**
 - **Effect sizes are tiny.** The median absolute predicted log2 fold change is 0.0012 in units and
   0.0011 in controls, so the no-call threshold of 0.001 decides which pairs are scored at all. The

@@ -1548,7 +1548,9 @@ def run_pairs(
     requests = 0
     stopped: dict[str, str] = {}
     for p in pairs:
-        if len(stopped) >= len(looks_at) or (max_requests is not None and requests >= max_requests):
+        if (looks_at and len(stopped) >= len(looks_at)) or (
+            max_requests is not None and requests >= max_requests
+        ):
             break
         if max_pairs is not None and len(done) >= max_pairs:
             break
