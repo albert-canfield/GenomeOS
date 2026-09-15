@@ -201,3 +201,22 @@ def test_the_length_trend_needs_four_chromosomes(tmp_path):
     t = agw.aggregate(tmp_path)["size_trend"]
     assert t["chromosomes"] == 4
     assert t["fraction_with_target"] == 1.0  # the rate rises with length, perfectly ranked
+
+
+def test_the_module_level_controls_are_never_mutated_by_a_fold(tmp_path):
+    """`aggregate` hands out the CONTROLS dict itself; a fold that wrote into it would edit the
+    constant for every later fold in the same process. Both branches of main copy before writing."""
+    before = json.dumps(agw.CONTROLS, sort_keys=True)
+    (tmp_path / "enhancer_targets_all_chr21.json").write_text(
+        json.dumps(_res("chr21", 100, 100, True, 60, 30, 10, 10, 20))
+    )
+    out = agw.aggregate(tmp_path)
+    out["controls"] = {
+        **out["controls"],
+        "coding_target_inside_domain": {
+            **out["controls"]["coding_target_inside_domain"],
+            "measured_on_this_set": {"whatever": 1},
+        },
+    }
+    assert json.dumps(agw.CONTROLS, sort_keys=True) == before
+    assert "measured_on_this_set" not in agw.CONTROLS["coding_target_inside_domain"]

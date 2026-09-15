@@ -571,7 +571,28 @@ def main() -> int:
     out = aggregate()
     path = Path("data/results/enhancer_targets_all_genome_wide.json")
     previous = json.loads(path.read_text()) if path.exists() else None
-    if "--no-control" not in sys.argv:
+    if "--no-control" in sys.argv:
+        # Skipping the control must not publish a result that silently lacks one. Carry the previous
+        # control forward, marked with the chromosome set it was measured on, so a reader can see it is
+        # behind rather than absent. (Running with --no-control once dropped the whole control block,
+        # p-values included, from the committed result.)
+        stale = ((previous or {}).get("controls") or {}).get("coding_target_inside_domain", {})
+        carried = stale.get("measured_on_this_set")
+        if carried:
+            out["controls"] = {
+                **out["controls"],
+                "coding_target_inside_domain": {
+                    **out["controls"]["coding_target_inside_domain"],
+                    "measured_on_this_set": {
+                        **carried,
+                        "stale": f"carried from the fold of "
+                        f"{len(carried.get('per_chromosome') or {})} chromosomes; this fold has "
+                        f"{out['complete_chromosomes']} and was run --no-control",
+                    },
+                },
+            }
+            out["node_excess_prediction"] = (previous or {}).get("node_excess_prediction")
+    else:
         control = node_control(out["chromosomes_complete"])
         cached = ((previous or {}).get("node_excess_prediction") or {}).get("per_chromosome") or {}
         density = boundary_density(
