@@ -74,21 +74,23 @@ returns whichever is cached, preferring the blocked one, and a freshly fetched
 UCSC `.fa.gz` (plain gzip, not blocked) still falls back to being decompressed
 once, so nothing breaks before conversion.
 
-**What it costs.** Measured on chr21 (46.7 Mb), warm cache, against the flat
-`.fa` it replaces:
+**What it costs.** Measured on chr2 (242 Mb), the same bytes read both ways on
+the same machine, warm cache:
 
-| Access pattern | Flat `.fa` | Blocked `.fa.gz` |
-|---|---|---|
-| whole chromosome in one fetch (the lexicon's pattern) | 0.035 s | 0.067 s |
-| 50,000 sorted loci of 200-3,000 bp (the element sweep) | 0.21 s | 0.17 s |
-| 5,000 unsorted random loci of 100-2,000 bp | 0.052 s | 0.310 s |
-| 2,000 unsorted random loci of 10-50 kb | 0.055 s | 0.263 s |
+| Access pattern | Flat `.fa` | Blocked `.fa.gz` | Per fetch |
+|---|---|---|---|
+| whole chromosome in one fetch (the lexicon's pattern) | 0.41 s | 0.47 s | +60 ms, once |
+| 200,000 sorted loci of 200-3,000 bp (the element sweep) | 0.53 s | 0.82 s | +1.5 µs |
+| 20,000 unsorted random loci of 100-2,000 bp | 0.28 s | 1.56 s | +64 µs |
+| 247 MB on disk | | 80 MB | |
 
-A sorted sweep is *faster* blocked, because consecutive loci land in the same
-cached block and cost no syscall at all. The worst case, unsorted random loci,
-costs 52 microseconds more per fetch: a job doing 100,000 scattered fetches
-pays five seconds. Nothing in the project is a lane that becomes slower in any
-way that can be noticed, and the size is 12.8 MB against 60.3 MB for the pair.
+The whole-chromosome read, which is what the heavy lanes actually do, costs 15%
+more and is still under half a second for the largest chromosome. A sorted
+sweep costs 1.5 microseconds more per locus, because consecutive loci land in
+the same cached block and cost no syscall at all; on chr21 the sorted sweep was
+in fact *faster* blocked than flat. The worst case is scattered random access,
+at 64 microseconds more per fetch: a job doing 100,000 unsorted fetches pays
+six seconds. No lane in the project becomes slower in a way anyone can notice.
 
 **The proof that nothing was lost.** `scripts/compact_reference.py` writes the
 blocked file beside the old two, checks that its decompressed bytes hash to the
@@ -101,6 +103,17 @@ scoring run never loses the file underneath it. The manifest is committed, so
 originals are gone; the same file also round-trips synthetic FASTA with
 soft-masking, N runs and IUPAC codes, and asserts that a file with one base
 changed is *rejected*, so the proof can fail.
+
+The split HG002 variant files went the same way. `iter_vcf` already took either
+form, but several readers opened the file directly as text; they now go through
+`individuals.open_variants`, and the conversion proves equality twice over --
+the decompressed bytes hash to the original, and both forms are parsed through
+`iter_vcf` and compared variant by variant in order. 141 MB to 22 MB, 3,993,132
+variants. `data/individuals/` is never touched: a person's imported genome is
+not cache and is not compressed, pruned or moved.
+
+**What it came to.** `data/reference` fell from 4.4 GB to 1.4 GB, and the only
+flat `.fa` left is the chromosome that was being scored while this ran.
 
 What was not done: 2-bit packing (four bases per byte, the UCSC `.2bit` idea)
 would be smaller still, around 800 MB for the whole cache, but it cannot
