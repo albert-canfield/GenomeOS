@@ -1,6 +1,6 @@
 {
   "result": "celegans_fate_rules",
-  "date": "2026-09-14",
+  "date": "2026-09-15",
   "question": "do the measured transcription factors decide the worm's terminal fates, with precedence over the observed lineage lookup, and does a time-integrated read score better than a threshold?",
   "cells": "555 embryonic terminal cells (born before 800 reference min, surviving); 406 larval cells are outside the atlas and keep the lookup",
   "baseline_lineage_majority": {
@@ -2408,6 +2408,7 @@
       "excretory->hypoderm": 1
     }
   },
+  "generates": "nothing; scripts/celegans_fate_reads.py writes data/organisms/celegans/fates.bio",
   "body": {
     "lookup": {
       "program": "data/organisms/celegans/embryo.bio",
@@ -2505,57 +2506,56 @@
       "program": "data/organisms/celegans/embryo_factors.bio",
       "until_min": 800.0,
       "fates_checked": 555,
-      "fates_correct": 501,
-      "fate_accuracy": 0.9027027027027027,
+      "fates_correct": 522,
+      "fate_accuracy": 0.9405405405405406,
       "fate_confusion": {
         "Neuron->Hypodermis": 14,
-        "Muscle->Neuron": 9,
-        "GliaSheath->Hypodermis": 8,
-        "GliaSocket->Neuron": 5,
-        "GliaSocket->Hypodermis": 4,
+        "Neuron->Muscle": 4,
+        "Other->Neuron": 4,
         "Coelomocyte->Muscle": 4,
-        "GliaSheath->Neuron": 3,
-        "Valve->Neuron": 2,
-        "PharyngealMarginal->Neuron": 1,
-        "Excretory->Hypodermis": 1
+        "GliaSheath->Neuron": 2,
+        "GliaSocket->Hypodermis": 2,
+        "Muscle->Neuron": 1,
+        "Excretory->Muscle": 1,
+        "Gland->Neuron": 1
       },
       "cells_born": 1439,
       "deaths_matched": 110,
       "per_tissue": {
         "neuron": {
-          "correct": 212,
+          "correct": 208,
           "cells": 226,
-          "accuracy": 0.938
+          "accuracy": 0.92
         },
         "sheath": {
-          "correct": 11,
+          "correct": 20,
           "cells": 22,
-          "accuracy": 0.5
+          "accuracy": 0.909
         },
         "socket": {
-          "correct": 9,
+          "correct": 16,
           "cells": 18,
-          "accuracy": 0.5
+          "accuracy": 0.889
         },
         "epithelium": {
-          "correct": 12,
+          "correct": 13,
           "cells": 13,
-          "accuracy": 0.923
+          "accuracy": 1.0
         },
         "muscle": {
-          "correct": 113,
+          "correct": 121,
           "cells": 122,
-          "accuracy": 0.926
+          "accuracy": 0.992
         },
         "other": {
-          "correct": 14,
+          "correct": 11,
           "cells": 15,
-          "accuracy": 0.933
+          "accuracy": 0.733
         },
         "marginal": {
-          "correct": 8,
+          "correct": 9,
           "cells": 9,
-          "accuracy": 0.889
+          "accuracy": 1.0
         },
         "hypoderm": {
           "correct": 69,
@@ -2568,14 +2568,14 @@
           "accuracy": 0.8
         },
         "rectal": {
-          "correct": 1,
+          "correct": 2,
           "cells": 2,
-          "accuracy": 0.5
+          "accuracy": 1.0
         },
         "valve": {
-          "correct": 6,
+          "correct": 8,
           "cells": 8,
-          "accuracy": 0.75
+          "accuracy": 1.0
         },
         "intestine": {
           "correct": 34,
@@ -2583,9 +2583,9 @@
           "accuracy": 1.0
         },
         "gland": {
-          "correct": 5,
+          "correct": 4,
           "cells": 5,
-          "accuracy": 1.0
+          "accuracy": 0.8
         },
         "coelomocyte": {
           "correct": 0,
@@ -2608,57 +2608,56 @@
       "program": "data/organisms/celegans/embryo_factors.bio",
       "until_min": 6000.0,
       "fates_checked": 961,
-      "fates_correct": 907,
-      "fate_accuracy": 0.9438085327783559,
+      "fates_correct": 928,
+      "fate_accuracy": 0.9656607700312175,
       "fate_confusion": {
         "Neuron->Hypodermis": 14,
-        "Muscle->Neuron": 9,
-        "GliaSheath->Hypodermis": 8,
-        "GliaSocket->Neuron": 5,
-        "GliaSocket->Hypodermis": 4,
+        "Neuron->Muscle": 4,
+        "Other->Neuron": 4,
         "Coelomocyte->Muscle": 4,
-        "GliaSheath->Neuron": 3,
-        "Valve->Neuron": 2,
-        "PharyngealMarginal->Neuron": 1,
-        "Excretory->Hypodermis": 1
+        "GliaSheath->Neuron": 2,
+        "GliaSocket->Hypodermis": 2,
+        "Muscle->Neuron": 1,
+        "Excretory->Muscle": 1,
+        "Gland->Neuron": 1
       },
       "cells_born": 2183,
       "deaths_matched": 131,
       "per_tissue": {
         "neuron": {
-          "correct": 288,
+          "correct": 284,
           "cells": 302,
-          "accuracy": 0.954
+          "accuracy": 0.94
         },
         "sheath": {
-          "correct": 13,
+          "correct": 22,
           "cells": 24,
-          "accuracy": 0.542
+          "accuracy": 0.917
         },
         "socket": {
-          "correct": 17,
+          "correct": 24,
           "cells": 26,
-          "accuracy": 0.654
+          "accuracy": 0.923
         },
         "epithelium": {
-          "correct": 28,
+          "correct": 29,
           "cells": 29,
-          "accuracy": 0.966
+          "accuracy": 1.0
         },
         "muscle": {
-          "correct": 143,
+          "correct": 151,
           "cells": 152,
-          "accuracy": 0.941
+          "accuracy": 0.993
         },
         "other": {
-          "correct": 14,
+          "correct": 11,
           "cells": 15,
-          "accuracy": 0.933
+          "accuracy": 0.733
         },
         "marginal": {
-          "correct": 8,
+          "correct": 9,
           "cells": 9,
-          "accuracy": 0.889
+          "accuracy": 1.0
         },
         "hypoderm": {
           "correct": 192,
@@ -2676,14 +2675,14 @@
           "accuracy": 1.0
         },
         "rectal": {
-          "correct": 1,
+          "correct": 2,
           "cells": 2,
-          "accuracy": 0.5
+          "accuracy": 1.0
         },
         "valve": {
-          "correct": 6,
+          "correct": 8,
           "cells": 8,
-          "accuracy": 0.75
+          "accuracy": 1.0
         },
         "intestine": {
           "correct": 34,
@@ -2691,9 +2690,9 @@
           "accuracy": 1.0
         },
         "gland": {
-          "correct": 5,
+          "correct": 4,
           "cells": 5,
-          "accuracy": 1.0
+          "accuracy": 0.8
         },
         "coelomocyte": {
           "correct": 2,
@@ -2707,9 +2706,5 @@
         }
       }
     }
-  },
-  "generated": [
-    "data/organisms/celegans/fates.bio",
-    "data/organisms/celegans/exposure.bio"
-  ]
+  }
 }
