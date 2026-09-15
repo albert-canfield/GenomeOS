@@ -1,0 +1,380 @@
+{
+  "result": "loci_rearrangements",
+  "date": "2026-09-15",
+  "prediction_registered_before_the_run": "Cutting the genome at random destroys boundaries and creates adjacencies constantly, so the first two claims will fire at most control rearrangements, and naming the recipient gene will land near the 90% that naming a target already reaches at matched windows. What should separate the published rearrangements is which gene, and nothing else - if it does not, the node model has failed its sharpest test.",
+  "cases": [
+    {
+      "locus": "EPHA4_PAX3_deletion",
+      "expected": {
+        "locus": "EPHA4_PAX3_deletion",
+        "chrom": "chr2",
+        "kind": "deletion",
+        "donor": "EPHA4",
+        "recipient": "PAX3",
+        "phenotype": "polydactyly: PAX3 is switched on in the limb bud by EPHA4's enhancers",
+        "span": null,
+        "span_source": "stated",
+        "span_citation": "Lupianez et al. 2015, Cell 161:1012 map the polydactyly deletions across the boundary between the EPHA4 and PAX3 domains; the paper's breakpoints are hg19 and the panel does not have them lifted over, so the span here is STATED as the intergenic interval between GENCODE's EPHA4 and PAX3, which is the interval the published deletions remove the boundary from. A cited hg38 breakpoint set would be strictly better and is recorded as pending",
+        "citations": [
+          "Lupianez et al. 2015, Cell 161:1012 (disruptions of topological chromatin domains cause pathogenic rewiring of gene-enhancer interactions)",
+          "Lupianez, Spielmann and Mundlos 2016, Trends Genet 32:225 (breaking TADs: how alterations of chromatin domains result in disease)"
+        ],
+        "answer_from": [
+          "human pedigrees with CNVs",
+          "4C-seq in patient fibroblasts",
+          "mouse models"
+        ],
+        "note": "the sharpest published test of the node model there is: the same enhancers, the same genes, and the only thing that changed is which side of a boundary they are on"
+      },
+      "boundary_census": {
+        "ctcf_only_between_donor_and_recipient": 7,
+        "elements": [
+          {
+            "id": "EH38E2077520",
+            "start": 222174536,
+            "end": 222174723
+          },
+          {
+            "id": "EH38E3402367",
+            "start": 221823217,
+            "end": 221823376
+          },
+          {
+            "id": "EH38E3402283",
+            "start": 221576609,
+            "end": 221576911
+          },
+          {
+            "id": "EH38E3402290",
+            "start": 221591346,
+            "end": 221591525
+          },
+          {
+            "id": "EH38E3402319",
+            "start": 221689169,
+            "end": 221689511
+          },
+          {
+            "id": "EH38E2077416",
+            "start": 221847357,
+            "end": 221847575
+          },
+          {
+            "id": "EH38E3402411",
+            "start": 222017325,
+            "end": 222017608
+          }
+        ],
+        "there_is_a_boundary_at_all": true,
+        "evidence": "curated: ENCODE cCRE registry, CTCF-only class (an annotation lookup)"
+      },
+      "published": {
+        "span": [
+          221574202,
+          222199886
+        ],
+        "length": 625684,
+        "coding_tss_inside": 0,
+        "ctcf_crossed": 7,
+        "donor_tss": 221572303,
+        "recipient_tss": 222298997,
+        "claims": {
+          "separated_before": true,
+          "node_before": {
+            "donor": "chr2:D1512",
+            "recipient": "chr2:D1517"
+          },
+          "node_after": {
+            "donor": "chr2:D1512",
+            "recipient": "chr2:D1512"
+          },
+          "ctcf_between_before": 7,
+          "ctcf_between_after": 0,
+          "boundary_lost": true,
+          "new_adjacency": true,
+          "nodes_before": 1654,
+          "nodes_after": 1649,
+          "recipient_named": true
+        }
+      },
+      "recipient_named": {
+        "elements_scored": 2,
+        "genes_named": [
+          "PAX3"
+        ],
+        "names_the_recipient": true,
+        "pending": null
+      },
+      "controls": [
+        {
+          "span": [
+            45009452,
+            45611266
+          ],
+          "kind": "deletion",
+          "length": 601814,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 7,
+          "donor_tss": 45009451,
+          "recipient_tss": 45611266,
+          "donor": "SIX2",
+          "recipient": "SRBD1",
+          "claims": {
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D327",
+              "recipient": "chr2:D331"
+            },
+            "node_after": {
+              "donor": "chr2:D327",
+              "recipient": "chr2:D327"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1650,
+            "recipient_named": false
+          },
+          "recipient_named": {
+            "elements_scored": 0,
+            "genes_named": [],
+            "names_the_recipient": false,
+            "pending": "no deletion has been scored within 100 kb of the recipient"
+          }
+        },
+        {
+          "span": [
+            133568463,
+            134254071
+          ],
+          "kind": "deletion",
+          "length": 685608,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 7,
+          "donor_tss": 133568462,
+          "recipient_tss": 134254071,
+          "donor": "NCKAP5",
+          "recipient": "MGAT5",
+          "claims": {
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D895",
+              "recipient": "chr2:D899"
+            },
+            "node_after": {
+              "donor": "chr2:D895",
+              "recipient": "chr2:D895"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1650,
+            "recipient_named": false
+          },
+          "recipient_named": {
+            "elements_scored": 0,
+            "genes_named": [],
+            "names_the_recipient": false,
+            "pending": "no deletion has been scored within 100 kb of the recipient"
+          }
+        },
+        {
+          "span": [
+            113890089,
+            114442640
+          ],
+          "kind": "deletion",
+          "length": 552551,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 7,
+          "donor_tss": 113890088,
+          "recipient_tss": 114442640,
+          "donor": "ACTR3",
+          "recipient": "DPP10",
+          "claims": {
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D742",
+              "recipient": "chr2:D747"
+            },
+            "node_after": {
+              "donor": "chr2:D742",
+              "recipient": "chr2:D742"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1649,
+            "recipient_named": false
+          },
+          "recipient_named": {
+            "elements_scored": 0,
+            "genes_named": [],
+            "names_the_recipient": false,
+            "pending": "no deletion has been scored within 100 kb of the recipient"
+          }
+        },
+        {
+          "span": [
+            23385179,
+            23927122
+          ],
+          "kind": "deletion",
+          "length": 541943,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 7,
+          "donor_tss": 23385178,
+          "recipient_tss": 23927122,
+          "donor": "KLHL29",
+          "recipient": "ATAD2B",
+          "claims": {
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D178",
+              "recipient": "chr2:D182"
+            },
+            "node_after": {
+              "donor": "chr2:D178",
+              "recipient": "chr2:D178"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1650,
+            "recipient_named": false
+          },
+          "recipient_named": {
+            "elements_scored": 0,
+            "genes_named": [],
+            "names_the_recipient": false,
+            "pending": "no deletion has been scored within 100 kb of the recipient"
+          }
+        },
+        {
+          "span": [
+            187554435,
+            188291873
+          ],
+          "kind": "deletion",
+          "length": 737438,
+          "coding_tss_inside": 0,
+          "ctcf_crossed": 7,
+          "donor_tss": 187554434,
+          "recipient_tss": 188291873,
+          "donor": "TFPI",
+          "recipient": "GULP1",
+          "claims": {
+            "separated_before": true,
+            "node_before": {
+              "donor": "chr2:D1284",
+              "recipient": "chr2:D1289"
+            },
+            "node_after": {
+              "donor": "chr2:D1284",
+              "recipient": "chr2:D1284"
+            },
+            "ctcf_between_before": 7,
+            "ctcf_between_after": 0,
+            "boundary_lost": true,
+            "new_adjacency": true,
+            "nodes_before": 1654,
+            "nodes_after": 1649,
+            "recipient_named": false
+          },
+          "recipient_named": {
+            "elements_scored": 0,
+            "genes_named": [],
+            "names_the_recipient": false,
+            "pending": "no deletion has been scored within 100 kb of the recipient"
+          }
+        }
+      ]
+    }
+  ],
+  "aggregate": {
+    "published": {
+      "separated_before": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0
+      },
+      "boundary_lost": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0
+      },
+      "new_adjacency": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0
+      },
+      "recipient_named": {
+        "k": 1,
+        "n": 1,
+        "rate": 1.0
+      }
+    },
+    "controls": {
+      "separated_before": {
+        "k": 5,
+        "n": 5,
+        "rate": 1.0
+      },
+      "boundary_lost": {
+        "k": 5,
+        "n": 5,
+        "rate": 1.0
+      },
+      "new_adjacency": {
+        "k": 5,
+        "n": 5,
+        "rate": 1.0
+      },
+      "recipient_named": {
+        "k": 0,
+        "n": 5,
+        "rate": 0.0
+      }
+    },
+    "recipient_named_where_a_deletion_was_scored": {
+      "published": {
+        "k": 1,
+        "n": 1,
+        "of": 1,
+        "not_scored": 0
+      },
+      "controls": {
+        "k": 0,
+        "n": 0,
+        "of": 5,
+        "not_scored": 5
+      },
+      "judgeable": false,
+      "reading": "claim three is only meaningful where both sides have deletion data; where the controls have none it is not judgeable and must not be quoted"
+    },
+    "reading": "claims one and two are expected to fire at most control rearrangements: cutting a chromosome anywhere destroys boundaries. Only the identity of the gene can separate the published cases, which is what the registered prediction says to look at"
+  },
+  "not_yet_runnable": {
+    "EPHA4_IHH_duplication": "brachydactyly: a duplication brings IHH into the EPHA4 domain (Lupianez et al. 2015). The effect depends on where the duplication's breakpoints fall INSIDE the domains, so the intergenic interval between the genes is not a faithful stand-in the way it is for the deletion. Needs the paper's hg19 breakpoints lifted to hg38",
+    "EPHA4_WNT6_inversion": "F-syndrome: an inversion moves WNT6 into the EPHA4 domain (Lupianez et al. 2015). Same reason as the duplication - an inversion of the intergenic interval does not reproduce it. Needs the paper's hg19 breakpoints lifted to hg38",
+    "SOX9_KCNJ2_duplication": "Cooks syndrome, duplications at the SOX9/KCNJ2 boundary (Franke et al. 2016, Nature 538:265). Same breakpoint problem, and it would overlap SOX9_PierreRobin's window in the locus panel, so the expectation would not be independent"
+  },
+  "evidence": {
+    "expectation": "curated: the published rearrangement and its phenotype, written down before the run",
+    "boundary_census": "curated: ENCODE cCRE registry, CTCF-only class (an annotation lookup)",
+    "node_model": "inferred: CTCF-only elements as boundary proxies, confidence 0.4 (genome/domains.py). The node model is the thing under test here, so it takes the heuristic slot that nearest-coding-TSS holds in the locus benchmark, never the derived one",
+    "derived": "predicted: AlphaGenome asked on the rearranged sequence. NOT RUN - the scorer deletes one element and cannot construct a rearranged input. The free half reports first"
+  },
+  "note": "The free half of docs/LOCI-BENCHMARK.md 11b: no model request was made. The node model is INFERRED at confidence 0.4 and is the thing under test, so it is never counted as a derived hit. One published case is an anecdote by the panel's own standard; the other three are recorded in not_yet_runnable with what each is waiting for.",
+  "cost": {
+    "seconds": 7.8
+  }
+}

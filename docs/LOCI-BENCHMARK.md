@@ -704,3 +704,99 @@ scorer's input. Then 11b, whose free half - the node model recomputed on rearran
 against matched random rearrangements - can be built and run with no model request whatsoever, and
 answers the question on its own. The derived half needs scorer work and should wait until the free
 half says whether there is anything there.
+
+## 12. 11a built, and 11b's free half run (2026-09-15)
+
+Both approved by the coordinator. Neither spent a model request; the key went straight to the
+executor lane.
+
+### 11a: the scorer already takes a stated interval
+
+**Cost: nothing.** `Context.score_region` in `genomeos/predict/enhancer_target.py` already scores a
+region as an ad-hoc element when no ENCODE element overlaps it, caching it under
+`{chrom}_{start}_{end}`. It returns `predicted` and `predicted_coding` - exactly what the
+benchmark's deletion layer reads. The only thing a stated interval does not get is `verdict`, the
+comparison against the domain's nearest-TSS inference, which the benchmark computes itself anyway.
+No rewrite was needed and none was attempted.
+
+The three guardrails are in the code, not in this paragraph:
+
+- **a stated interval carries its own citation.** `Expect.element_source` is `annotated` or
+  `stated`, and `Expect.element_citation` is required for a stated one - the gate fails a stated
+  interval with no citation, because that is the panel inventing an element;
+- **every result from one is labelled**, in the row (`readings.deletion.from_stated_interval`) and
+  in the aggregate (`target_derived_by_element_source`), and a stated-interval run is read from its
+  own result file so its rows can never be mistaken for registry ones;
+- **the rates are never pooled without the split showing.** `target_derived_by_element_source`
+  reports annotated and stated apart, with the loci in each, and the gate asserts they add up to the
+  panel and that the stated set is exactly the loci declaring it.
+
+SOX9_PierreRobin and H19_ICR1 are the two stated intervals. Scoring them is a handful of requests
+whenever the key is next free; until then their deletion reading stays pending, as it was.
+
+### 11b free half: the node model against a published rearrangement
+
+`genomeos/benchmark/rearrangements.py`, `scripts/rearrangements.py`,
+`data/results/loci_rearrangements.json`. **No model request, no network**: the cCRE registry,
+GENCODE and the project's own `infer_domains`, recomputed over a transformed cCRE list and a
+transformed chromosome length - the same function, not a simplification of it.
+
+One published case is runnable: the **EPHA4 to PAX3 deletion** (Lupiáñez et al. 2015), where
+deleting across the boundary gives PAX3 the EPHA4 limb enhancers and causes polydactyly. Its span
+is **stated, not cited**: the paper's breakpoints are hg19 and we have not lifted them over, so the
+span is the intergenic interval between GENCODE's EPHA4 and PAX3, which is the interval the
+published deletions remove the boundary from. Three more cases are in `NOT_YET_RUNNABLE` with what
+each waits for - the IHH duplication and the WNT6 inversion both depend on breakpoints falling
+*inside* the domains, so an intergenic stand-in is not faithful the way it is for a deletion.
+
+**The free reading, asked first: there are 7 CTCF-only elements between EPHA4 and PAX3.** Unlike
+HOXD, where no CTCF-only element sat anywhere in the cluster and the boundary was a fiction, this
+boundary exists in our registry. The node model does separate the pair (`chr2:D1512` and
+`chr2:D1517`), which is the precondition the experiment needs.
+
+| claim | published | 5 matched random rearrangements |
+|---|---|---|
+| the pair is in different nodes to begin with | 1/1 | 5/5 |
+| the rearrangement loses a boundary between them | 1/1 | **5/5** |
+| a new adjacency appears - they end up in one node | 1/1 | **5/5** |
+| a derived layer names the recipient gene | 1/1 | **not judgeable** |
+
+**The registered prediction was right, and the node model failed its sharpest test.** Deleting the
+interval between any matched pair of consecutive genes destroys every boundary between them and puts
+them in one node - 5 times out of 5. The published rearrangement does exactly what a random one of
+the same shape does. Nothing in the node model distinguishes the deletion that causes polydactyly
+from a deletion of the same length crossing the same number of boundaries somewhere else on chr2.
+
+The fourth claim - which gene - is the only one that could have separated them, and it **cannot be
+judged**: all five control recipients have no deletion scored anywhere near them, because chr2 is
+not swept. An ungated 1/1 against 0/5 would have been the coverage artefact of section 8 all over
+again, so the result records it as not judgeable and the gate refuses to quote it.
+
+### Two mistakes this run made, both caught by its own controls
+
+Worth recording because both looked like findings first.
+
+1. **The control has to share the construction, not only the size.** The first version drew a random
+   span of the published length and took the nearest coding TSS on each side. The published span is
+   the whole interval *between* two genes, so deleting it removes every boundary between them by
+   construction, while a random span leaves the boundaries between itself and the flanking genes.
+   That produced a new adjacency at 1/1 against 0/5 - a beautiful result, and entirely an artefact
+   of how the two were built. A control is now the same thing done elsewhere: a consecutive coding
+   pair and the whole interval between them.
+2. **An endpoint must not sit inside its own deletion.** With the span running from one TSS to the
+   next, the lower TSS was inside the interval being removed, so it transformed to nowhere and every
+   downstream count was nonsense (boundaries "after" in the hundreds). The span now lies strictly
+   between the two starts.
+
+Both were visible only because the claims are scored at controls as well as at the case. A run that
+reported the positives alone would have published the first one.
+
+### What this says about the node, beside tonight's other three qualifications
+
+The node claim was already qualified three ways: 2.6 points above random on the full archive, an
+excess that changes sign across chromosomes, and a sign that tracks boundary density rather than
+biology. This is the fourth and the most direct: **at the one published experiment designed to test
+exactly this, the node model's answer is indistinguishable from the answer it gives to a random cut
+of the same shape.** One case is an anecdote by the panel's own standard, and the honest next step
+is the other three cases, which need the paper's breakpoints lifted to hg38 - a liftover, not a
+quota.

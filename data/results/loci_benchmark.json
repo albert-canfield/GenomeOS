@@ -348,6 +348,75 @@
         "H19_ICR1"
       ],
       "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
+    },
+    "target_derived_by_element_source": {
+      "reading": "never quote a pooled derived-target rate without this split: a stated interval is the panel's own claim about where the element is, an annotated one is somebody else's",
+      "annotated": {
+        "k": 14,
+        "n": 15,
+        "rate": 0.933,
+        "loci": [
+          "SHH_ZRS",
+          "HERC2_OCA2",
+          "MCM6_LCT",
+          "HBB_LCR",
+          "FTO_IRX3",
+          "BCL11A_enhancer",
+          "MYC_8q24",
+          "ABO",
+          "HLA_DRB1",
+          "APP",
+          "TP53",
+          "HOXD",
+          "PMP22_CMT1A",
+          "CYP2D6",
+          "MC1R"
+        ],
+        "hits": [
+          "SHH_ZRS",
+          "HERC2_OCA2",
+          "MCM6_LCT",
+          "HBB_LCR",
+          "FTO_IRX3",
+          "BCL11A_enhancer",
+          "ABO",
+          "HLA_DRB1",
+          "APP",
+          "TP53",
+          "HOXD",
+          "PMP22_CMT1A",
+          "CYP2D6",
+          "MC1R"
+        ],
+        "scored_at_the_element": [
+          "SHH_ZRS",
+          "HERC2_OCA2",
+          "MCM6_LCT",
+          "HBB_LCR",
+          "FTO_IRX3",
+          "BCL11A_enhancer",
+          "MYC_8q24",
+          "ABO",
+          "HLA_DRB1",
+          "HOXD",
+          "PMP22_CMT1A",
+          "CYP2D6",
+          "MC1R"
+        ]
+      },
+      "stated": {
+        "k": 1,
+        "n": 2,
+        "rate": 0.5,
+        "loci": [
+          "SOX9_PierreRobin",
+          "H19_ICR1"
+        ],
+        "hits": [
+          "SOX9_PierreRobin"
+        ],
+        "scored_at_the_element": []
+      }
     }
   },
   "negative_controls": {
@@ -895,6 +964,8 @@
         "value_domain": null,
         "frequency": null,
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Lettice et al. 2003, Hum Mol Genet 12:1725 (the ZRS, 1 Mb from SHH, point mutations cause preaxial polydactyly)",
           "Sagai et al. 2005, Development 132:797 (deleting the ZRS removes limb Shh entirely)",
@@ -940,6 +1011,7 @@
             "loci_windows",
             "vista"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "LMBR1",
@@ -1548,6 +1620,8 @@
         "value_domain": "two",
         "frequency": "G near 0.8 in Europeans, rare in Africa and East Asia",
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Sturm et al. 2008, Am J Hum Genet 82:424 (rs12913832 in HERC2 intron 86 sets blue-brown)",
           "Eiberg et al. 2008, Hum Genet 123:177",
@@ -1599,6 +1673,7 @@
           "runs": [
             "enhancer_targets_all"
           ],
+          "from_stated_interval": false,
           "targets": [],
           "target": null,
           "action": null,
@@ -2090,6 +2165,8 @@
         "value_domain": "few",
         "frequency": "A near 0.75 in northern Europe, near 0 in East Asia; other alleles in Africa and Arabia",
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Enattah et al. 2002, Nat Genet 30:233 (C/T-13910 in MCM6 intron 13 with lactase persistence)",
           "Olds and Sibley 2003, Hum Mol Genet 12:2333; Lewinsky et al. 2005, Hum Mol Genet 14:3945 (the T allele raises LCT promoter activity in intestinal cells)",
@@ -2142,6 +2219,7 @@
           "runs": [
             "loci_windows"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "LCT",
@@ -2717,6 +2795,8 @@
         "beyond_sequence": [
           "developmental stage"
         ],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Tuan et al. 1985, PNAS 82:6384 (the erythroid-specific hypersensitive sites 5' of epsilon)",
           "Grosveld et al. 1987, Cell 51:975 (position-independent high-level expression from the LCR)",
@@ -2791,6 +2871,7 @@
           "runs": [
             "loci_windows"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "HBE1",
@@ -3581,6 +3662,8 @@
         "value_domain": null,
         "frequency": null,
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Smemo et al. 2014, Nature 507:371 (the FTO intron-1 variants connect to IRX3, not FTO)",
           "Claussnitzer et al. 2015, N Engl J Med 373:895 (rs1421085 disrupts ARID5B; IRX3/IRX5 double)"
@@ -3637,6 +3720,7 @@
           "runs": [
             "enhancer_targets_all"
           ],
+          "from_stated_interval": false,
           "targets": [],
           "target": null,
           "action": null,
@@ -4150,6 +4234,8 @@
         "value_domain": null,
         "frequency": null,
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Bauer et al. 2013, Science 342:253 (the erythroid enhancer of BCL11A in intron 2; rs1427407 is the causal variant of the fetal-haemoglobin association)",
           "Canver et al. 2015, Nature 527:192 (Cas9 tiling finds the +58 core and its GATA1 motif)"
@@ -4211,6 +4297,7 @@
           "runs": [
             "loci_windows"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "BCL11A",
@@ -4808,6 +4895,8 @@
         "value_domain": null,
         "frequency": null,
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Pomerantz et al. 2009, Nat Genet 41:882 (the rs6983267 enhancer physically interacts with MYC)",
           "Tuupanen et al. 2009, Nat Genet 41:885 (rs6983267 enhances TCF7L2 binding and Wnt signalling)",
@@ -4854,6 +4943,7 @@
           "runs": [
             "loci_windows"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "POU5F1B",
@@ -5446,6 +5536,8 @@
         "value_domain": "few",
         "frequency": "A, B and O in every population, O commonest; frequencies differ by continent",
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Yamamoto et al. 1990, Nature 345:229 (the molecular basis of ABO: a frameshift for O and four substitutions for B)"
         ],
@@ -5492,6 +5584,7 @@
           "runs": [
             "loci_windows"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "ABO",
@@ -6167,6 +6260,8 @@
         "value_domain": "many",
         "frequency": "thousands of alleles; the polymorphism is concentrated in exon 2 (the peptide groove)",
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Barker et al. 2023, Nucleic Acids Res 51:D1053 (IPD-IMGT/HLA: >3,600 DRB1 alleles)",
           "Brown et al. 1993, Nature 364:33 (the class II groove the exon-2 polymorphism lines)"
@@ -6245,6 +6340,7 @@
           "runs": [
             "loci_windows"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "HLA-DRB1",
@@ -6852,6 +6948,8 @@
         "value_domain": "two",
         "frequency": "T at 0.5% in Iceland, essentially absent elsewhere",
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Jonsson et al. 2012, Nature 488:96 (A673T protects against Alzheimer's disease)",
           "Di Fede et al. 2009, Science 323:1473 (A673V, the recessive pathogenic change at that codon)"
@@ -6895,6 +6993,7 @@
           "provenance": "derived",
           "elements_scored": 0,
           "runs": [],
+          "from_stated_interval": false,
           "targets": [],
           "target": null,
           "action": null,
@@ -7385,6 +7484,8 @@
         "value_domain": "two",
         "frequency": "the R72 allele runs from 0.2 to 0.7 depending on the population",
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Olivier et al. 2010, Cold Spring Harb Perspect Biol 2:a001008 (TP53 mutation across cancers)",
           "Dumont et al. 2003, Nat Genet 33:357 (codon 72 changes the apoptotic potential)"
@@ -7434,6 +7535,7 @@
           "provenance": "derived",
           "elements_scored": 0,
           "runs": [],
+          "from_stated_interval": false,
           "targets": [],
           "target": null,
           "action": null,
@@ -8070,6 +8172,8 @@
         "value_domain": null,
         "frequency": null,
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Duboule 1994, Development Suppl:135 and Deschamps and Duboule 2017, Genes Dev 31:1406 (temporal and spatial collinearity: 3' genes first and anterior, 5' genes later and posterior)",
           "Andrey et al. 2013, Science 340:1234167 (a switch between two topological domains underlies HoxD collinearity in limbs)",
@@ -8153,6 +8257,7 @@
           "runs": [
             "loci_windows"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "HOXD1",
@@ -9008,6 +9113,8 @@
         "value_domain": null,
         "frequency": null,
         "beyond_sequence": [],
+        "element_source": "stated",
+        "element_citation": "Benko et al. 2009, Nat Genet 41:359: the Pierre Robin breakpoint cluster lies 1.0 to 1.5 Mb upstream of SOX9 and the conserved element driving mandibular expression sits at about -1.45 Mb. No ENCODE cCRE, VISTA element or lentiMPRA tile covers it, so the panel states the interval at that offset from GENCODE's canonical SOX9 TSS rather than borrowing one somebody else drew",
         "citations": [
           "Benko et al. 2009, Nat Genet 41:359 (translocation breakpoints 1.0 to 1.5 Mb upstream of SOX9 cause Pierre Robin sequence; a conserved element at about -1.45 Mb drives mandibular expression)",
           "Gordon et al. 2014, J Med Genet 51:264 (point mutations in that element)",
@@ -9054,6 +9161,7 @@
           "provenance": "derived",
           "elements_scored": 0,
           "runs": [],
+          "from_stated_interval": false,
           "targets": [],
           "target": null,
           "action": null,
@@ -9451,6 +9559,8 @@
         "beyond_sequence": [
           "parent of origin"
         ],
+        "element_source": "stated",
+        "element_citation": "Bell and Felsenfeld 2000, Nature 405:482 and Hark et al. 2000, Nature 405:486: the imprinting control region is the CTCF-site cluster 2 to 4 kb upstream of the H19 promoter. No ENCODE cCRE, VISTA element or lentiMPRA tile covers it, so the panel states the interval at that offset from GENCODE's canonical H19 TSS",
         "citations": [
           "Bell and Felsenfeld 2000, Nature 405:482 and Hark et al. 2000, Nature 405:486 (the ICR is a methylation-sensitive CTCF boundary: unmethylated on the maternal allele it insulates IGF2 from the shared enhancers)",
           "Sparago et al. 2004, Nat Genet 36:958 (microdeletions of the ICR cause Beckwith-Wiedemann)",
@@ -9502,6 +9612,7 @@
           "provenance": "derived",
           "elements_scored": 0,
           "runs": [],
+          "from_stated_interval": false,
           "targets": [],
           "target": null,
           "action": null,
@@ -9883,6 +9994,8 @@
         "beyond_sequence": [
           "copy number"
         ],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Lupski et al. 1991, Cell 66:219 (a 1.4 Mb duplication containing PMP22 causes CMT1A)",
           "Chance et al. 1993, Cell 72:143 (the reciprocal deletion causes hereditary neuropathy with liability to pressure palsies)",
@@ -9957,6 +10070,7 @@
           "runs": [
             "enhancer_targets_all"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "PMP22",
@@ -10625,6 +10739,8 @@
         "value_domain": "many",
         "frequency": "*4 is about 0.19 in Europeans and rare in East Asia; *10 is about 0.5 in East Asia",
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Gaedigk et al. 2018, Clin Pharmacol Ther 103:399 (PharmVar: over a hundred named star alleles, four metaboliser phenotypes)",
           "Ingelman-Sundberg 2005, Pharmacogenomics J 5:6 (the clinical value domain)"
@@ -10703,6 +10819,7 @@
           "runs": [
             "enhancer_targets_all"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "CYP2D6",
@@ -11478,6 +11595,8 @@
         "value_domain": "few",
         "frequency": "the R alleles are a European specialty: R151C about 0.08 there and near absent elsewhere",
         "beyond_sequence": [],
+        "element_source": "annotated",
+        "element_citation": null,
         "citations": [
           "Valverde et al. 1995, Nat Genet 11:328 (MC1R variants and red hair)",
           "Box et al. 1997, Hum Mol Genet 6:1891 (R151C, R160W and D294H are the strong R alleles)",
@@ -11542,6 +11661,7 @@
           "runs": [
             "enhancer_targets_all"
           ],
+          "from_stated_interval": false,
           "targets": [
             {
               "gene": "MC1R",
@@ -15269,6 +15389,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 478.5
+    "seconds": 429.0
   }
 }

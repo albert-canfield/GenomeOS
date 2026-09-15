@@ -126,6 +126,11 @@ class Expect:
     #: published mechanisms that are not in the reference sequence at all, so no layer here can carry
     #: them: parent of origin, copy number, developmental stage. Read as pending, never as a miss.
     beyond_sequence: tuple[str, ...] = ()
+    #: "annotated" when some registry drew an interval over the published element, "stated" when the
+    #: panel draws it itself because nobody else did. A stated interval must carry its own citation,
+    #: and every rate computed from one is reported apart from the registry-derived ones.
+    element_source: str = "annotated"
+    element_citation: str | None = None
     citations: tuple[str, ...] = ()
     answer_from: tuple[str, ...] = ()  # the kinds of data the published answer itself came from
     note: str = ""
@@ -149,6 +154,8 @@ class Expect:
             "value_domain": self.value_domain,
             "frequency": self.frequency,
             "beyond_sequence": list(self.beyond_sequence),
+            "element_source": self.element_source,
+            "element_citation": self.element_citation,
             "citations": list(self.citations),
             "answer_from": list(self.answer_from),
             "note": self.note,
@@ -569,6 +576,14 @@ PANEL: tuple[Expect, ...] = (
             },
         ),
         nearest_gene_trap="KCNJ2",
+        element_source="stated",
+        element_citation=(
+            "Benko et al. 2009, Nat Genet 41:359: the Pierre Robin breakpoint cluster lies 1.0 to"
+            " 1.5 Mb upstream of SOX9 and the conserved element driving mandibular expression sits at"
+            " about -1.45 Mb. No ENCODE cCRE, VISTA element or lentiMPRA tile covers it, so the panel"
+            " states the interval at that offset from GENCODE's canonical SOX9 TSS rather than"
+            " borrowing one somebody else drew"
+        ),
         citations=(
             "Benko et al. 2009, Nat Genet 41:359 (translocation breakpoints 1.0 to 1.5 Mb upstream of"
             " SOX9 cause Pierre Robin sequence; a conserved element at about -1.45 Mb drives mandibular"
@@ -607,6 +622,13 @@ PANEL: tuple[Expect, ...] = (
         ),
         nearest_gene_trap="MRPL23",
         beyond_sequence=("parent of origin",),
+        element_source="stated",
+        element_citation=(
+            "Bell and Felsenfeld 2000, Nature 405:482 and Hark et al. 2000, Nature 405:486: the"
+            " imprinting control region is the CTCF-site cluster 2 to 4 kb upstream of the H19"
+            " promoter. No ENCODE cCRE, VISTA element or lentiMPRA tile covers it, so the panel"
+            " states the interval at that offset from GENCODE's canonical H19 TSS"
+        ),
         citations=(
             "Bell and Felsenfeld 2000, Nature 405:482 and Hark et al. 2000, Nature 405:486 (the ICR is a"
             " methylation-sensitive CTCF boundary: unmethylated on the maternal allele it insulates IGF2"
@@ -956,6 +978,13 @@ def _deletion_rows(chrom: str, start: int, end: int, results_dir: Path) -> list[
 
     rows: list[dict[str, Any]] = []
     seen: set[str] = set()
+    # intervals the panel stated itself, because no registry drew one over the published element
+    # (docs/LOCI-BENCHMARK.md 11a). Kept first and labelled, so a rate built on one is never pooled
+    # with the registry-derived rates without the split showing.
+    for e in (load_result("loci_stated_intervals", results_dir) or {}).get("elements", []):
+        if e.get("chrom") == chrom and e["start"] < end and e["end"] > start:
+            seen.add(e["id"])
+            rows.append({**e, "run": "stated_interval"})
     # the panel's own deletions first (scripts/loci_score.py: the windows, not whole chromosomes)
     for e in (load_result("loci_deletions", results_dir) or {}).get("elements", []):
         if e.get("chrom") == chrom and e["start"] < end and e["end"] > start:
@@ -1014,6 +1043,7 @@ def read_deletion(ch: Chromosome, start: int, end: int, results_dir: Path = RESU
         "provenance": "derived",
         "elements_scored": len(rows),
         "runs": sorted({e["run"] for e in rows}),
+        "from_stated_interval": any(e["run"] == "stated_interval" for e in rows),
         "targets": ranked[:6],
         "target": ranked[0]["gene"] if ranked else None,
         "action": ranked[0]["action"] if ranked else None,
@@ -2167,7 +2197,36 @@ def aggregate(loci: list[dict[str, Any]]) -> dict[str, Any]:
         "class_derived": hits("class_hit_derived"),
         "unreachable_target": [r["locus"] for r in loci if r not in reachable],
         "published_element_coverage": published_element_coverage(loci),
+        "target_derived_by_element_source": by_element_source(loci),
     }
+
+
+def by_element_source(loci: list[dict[str, Any]]) -> dict[str, Any]:
+    """The derived target rate split by whether anybody else drew the element we deleted.
+
+    A hit on an interval the panel stated itself is a different kind of claim from a hit on an
+    ENCODE cCRE: the first says the machinery found the gene, the second says it found the gene at a
+    place the annotation had already picked out. Pooling them hides the second half of that, so the
+    split is reported and the pooled rate is only ever quoted beside it.
+    """
+    out: dict[str, Any] = {
+        "reading": "never quote a pooled derived-target rate without this split: a stated interval is"
+        " the panel's own claim about where the element is, an annotated one is somebody else's",
+    }
+    for source in ("annotated", "stated"):
+        mine = [r for r in loci if r["expected"].get("element_source", "annotated") == source]
+        hits = [r["locus"] for r in mine if r["score"]["target_hit_derived"]]
+        out[source] = {
+            "k": len(hits),
+            "n": len(mine),
+            "rate": round(len(hits) / len(mine), 3) if mine else None,
+            "loci": [r["locus"] for r in mine],
+            "hits": hits,
+            "scored_at_the_element": [
+                r["locus"] for r in mine if (r["readings"].get("deletion") or {}).get("elements_scored")
+            ],
+        }
+    return out
 
 
 def published_element_coverage(loci: list[dict[str, Any]]) -> dict[str, Any]:

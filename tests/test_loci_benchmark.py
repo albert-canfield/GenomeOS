@@ -297,6 +297,31 @@ def test_every_claim_a_deletion_makes_is_reported_with_its_coverage():
     )
 
 
+def test_a_stated_interval_carries_its_own_citation():
+    """The panel may draw an element nobody else drew, but it has to say on whose authority."""
+    for e in PANEL:
+        assert e.element_source in ("annotated", "stated"), e.locus
+        if e.element_source == "stated":
+            assert e.element_citation and len(e.element_citation) > 80, (
+                f"{e.locus}: a stated interval without a citation is the panel inventing an element"
+            )
+
+
+@needs_result
+def test_stated_and_annotated_element_rates_are_never_pooled_without_the_split():
+    """A hit on an interval we drew ourselves is a different claim from a hit on an ENCODE cCRE."""
+    split = RESULT["aggregate"]["target_derived_by_element_source"]
+    for source in ("annotated", "stated"):
+        assert {"k", "n", "rate", "loci", "hits"} <= set(split[source]), source
+    assert split["annotated"]["n"] + split["stated"]["n"] == len(PANEL)
+    stated = {e.locus for e in PANEL if e.element_source == "stated"}
+    assert set(split["stated"]["loci"]) == stated
+    for r in RESULT["loci"]:
+        dl = r["readings"].get("deletion") or {}
+        if dl.get("elements_scored"):
+            assert "from_stated_interval" in dl, f"{r['locus']}: a deletion reading without its source"
+
+
 @needs_result
 def test_an_element_no_annotation_called_is_told_from_one_the_sweep_has_not_reached():
     """The element-level reading can only ask about intervals somebody else drew.
