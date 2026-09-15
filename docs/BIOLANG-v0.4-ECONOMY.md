@@ -898,6 +898,102 @@ changing what its rules were fitted to, and should say so.
    cell reading it at birth is taking the instantaneous read, which is the
    honest answer and needs no wake-up.
 
+### 7.6 `order`: a sequence the runtime can be wrong about [engine] (specified, §10 decision 10)
+
+The language can say *when* a thing happens (`timer`, `stage`, a crossing) and
+*where* it is (`locus`, `compartment`), but not that A happens before B. The
+known-locus benchmark hit this on HOXD, where position on the chromosome *is*
+the order of execution — the cluster is read 3′ to 5′, and the benchmark's
+verdict was that colinearity is untestable with any layer the project holds,
+because nothing can write it down.
+
+**First, whether it earns its place, because mostly it does not.** Wherever a
+program knows the times, order is already expressible and needs no construct:
+
+```
+assert: lineage AB at 20 min >= 1        # AB exists by 20 minutes
+assert: lineage EMS at 20 min = 0        # and EMS does not: AB is born first
+```
+
+That is the worm's founder order, written with v0.3 and checked today. So an
+`order` block earns its place in exactly one case: **a sequence that is known
+without its times.** There the alternatives are all worse — invent times and
+assert them (fabricating the facts §2 exists to prevent), or write a relay of
+rules (asserting that each member switches the next on, which for a HOX cluster
+is false: colinearity is progressive chromatin opening, not a cascade), or write
+nothing, which is what the benchmark did. Two published cases have that shape:
+HOXD limb and trunk colinearity, and the β-globin switch, where HBE1, HBG1/2 and
+HBB come on in the order of their distance from the control region. Both are *the
+order is in the layout*, not *the order is in a clock*.
+
+**The construct.**
+
+```
+order hoxd_colinear {
+  members: HOXD1, HOXD3, HOXD4, HOXD8, HOXD9, HOXD10, HOXD11, HOXD12, HOXD13
+  axis: position                   # position | time
+  direction: decreasing            # position only: along the chromosome
+  observe: activation              # what counts as a step having happened
+  threshold: 0.5                   # the level at which a member counts as on
+  evidence: experimental "..."; confidence: 0.8
+}
+```
+
+**Semantics, and the one rule that keeps it from being a second `stage`.** An
+`order` **never drives anything**. It sets no time, fires no rule and changes no
+level; it is a claim *about* a run, and its whole content is that it can be
+contradicted. `stage` and `timer` cause things to happen; `order` states what
+must be true of the things that happen, and is checked.
+
+- **`axis: position` is checked at compile time**, against the coordinates the
+  program already holds: the declared sequence must be monotonic in the members'
+  loci, in `direction`. A program whose sequence contradicts its own genome is a
+  compile error, not a warning — the same treatment as a chrM gene declared
+  nuclear (§9.1). This is the check with teeth today, because the loci are
+  measured and we hold them.
+- **`axis: time` is checked against a run.** The runtime records when each member
+  first crossed `threshold` (for a network) or when its cell was born or took its
+  fate (for a Body), and reports `order_taken`, the number of **inversions**
+  against the declared sequence, and the members that never happened. An `order`
+  with inversions does not stop the run: it is reported, as `ambiguous_fates` is,
+  because a program that predicts the wrong sequence is a result, not a crash.
+- Members that a run never activates are reported separately from members that
+  activate out of order, since "did not happen" and "happened too early" are
+  different failures and a single score would hide both.
+- `direction: opening` appears in §10's sketch — the direction chromatin opens —
+  and is **refused**: we hold no measurement of it, and a clause the runtime
+  cannot check would be the comment this construct exists not to be.
+- It must not bake node identity in (§10): `members` are genes, never nodes, so
+  area B's boundary caller can move every node without touching an `order`.
+
+**BioIR.** `Order(Entity)`: `members`, `axis`, `direction`, `observe`,
+`threshold`; `kind = "order"`. No change to any existing type. **[engine]** —
+language and runtime are Apache 2.0; the loci and any activation series that test
+it are read by **[app]** scripts, as §3 requires.
+
+**Falsifying measurement, and the part we cannot do.** The honest position, stated
+before implementing:
+
+- *What we can falsify today:* the **position** claim. We hold the HOXD cluster's
+  coordinates (`data/cache/gencode_genes.tsv`: HOXD13 at chr2:176,092,689 through
+  HOXD1 at chr2:176,188,658), so a program can state the colinear sequence and the
+  runtime can refuse it if it contradicts the genome. Falsified if a correct
+  sequence is refused, or a scrambled one accepted.
+- *What we can falsify today in a run:* the **worm's founder birth order**, where
+  the reference gives every cell's birth time independently of the program. An
+  `order` over AB, EMS, P2, MS, E, C, D, P4 must report zero inversions on the
+  wild type, and must report the inversion when a timer is perturbed to reverse a
+  pair. Falsified if a reversed run is reported as in order.
+- **What we cannot do, and what it would take.** The motivating case is not
+  testable: *the project holds no expression time course for a human HOX cluster*,
+  so the claim "HOXD activates in the order it is laid out" can be checked for
+  consistency with the genome but never **reproduced**. What it would need is a
+  staged time course over a differentiating limb bud or an embryonic stem cell
+  line — per-gene expression for the nine members at three or more time points,
+  which is an external dataset, not a run. Until that exists, the `time` axis of
+  this construct is gated only by the worm, and this document says so rather than
+  claiming HOXD as a pass. **Nothing here is implemented yet.**
+
 ## 8. Execution regime (declared per run)
 
 ```
@@ -1074,8 +1170,11 @@ it there, and for an imported protein that link is the transport at 0.3.
     an `order` clause on a `domain` naming the axis (genomic position,
     direction of opening, time of activation) and the measured sequence, with
     the falsifier a published activation series (for HOXD, the limb and trunk
-    colinearity data). Nothing is implemented; it should not bake node
-    identity in, since area B's boundary caller may move every node.
+    colinearity data). It should not bake node identity in, since area B's
+    boundary caller may move every node. **Specified 2026-09-15 as §7.6**, with
+    the part that cannot be done stated there: the position claim is checkable
+    against coordinates we hold and the time claim is gated only by the worm,
+    because the project holds no expression time course for a human HOX cluster.
 
 **Which of these can be settled by measurement rather than preference.**
 *What is actually decidable today, 2026-09-15, without the API and without stage
