@@ -45,3 +45,14 @@ stage Larva { from: 800 min; to: 5700 min; evidence: experimental "Sulston & Hor
 stage Adult { from: 5700 min; evidence: experimental "Sulston & Horvitz 1977"; confidence: 0.7 }
 
 decision blastomere { action: differentiate; when: cell_type = Zygote; to: Blastomere; evidence: curated "every descendant of the zygote is a blastomere until it differentiates"; confidence: 0.9 }
+
+# The same lock as embryo_factors.bio: a terminal fate read from a growing integral is only a fate if it
+# cannot be taken again at a later decision point. See the comment there for the measurement.
+commitment terminal_fate {
+  establish: cell_type = Coelomocyte|Epithelium|Excretory|Gland|GliaSheath|GliaSocket|Hypodermis|Intestine|Mesoderm|Muscle|Neuron|Other|PharyngealMarginal|Rectal|Reproductive|TailSpike|Valve
+  locks: cell_type
+  inherit: daughters
+  release: never
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (the myogenic response is lost completely in terminally differentiated cells, and mes-2 does not restore it)"
+  confidence: 0.6
+}

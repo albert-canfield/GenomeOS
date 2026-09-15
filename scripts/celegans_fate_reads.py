@@ -264,6 +264,15 @@ def plateau(reads: dict, labels: dict[str, str], instant: dict[str, set[str]]) -
     return rows
 
 
+def _without_commitment(text: str) -> str:
+    """The worm program with its `commitment terminal_fate` block removed, for the ablation below."""
+    at = text.find("commitment terminal_fate {")
+    if at < 0:
+        return text
+    end = text.find("\n}", at)
+    return text[:at] + text[end + 2 :]
+
+
 def cadence_stability(ref: ReferenceLineage, tmpdir: Path, reads: dict, labels: dict[str, str]) -> dict:
     """A fate rule on an integrated read is not stable when the cell decides again, and this measures how
     far. `F.exposure(lineage)` grows for as long as the cell carries the factor, so a guard that was false
@@ -271,7 +280,11 @@ def cadence_stability(ref: ReferenceLineage, tmpdir: Path, reads: dict, labels: 
     lower-precedence decision at a later decision point only when it *could already have applied* then
     (§7.3), and a threshold on a growing integral is never in that set. With a `cell_network` cadence the
     worm re-decides every live cell every step, and the score falls. The lookup this rewrite replaces was
-    a time-invariant guard and did not move, which is why the engine's cadence invariant held for it."""
+    a time-invariant guard and did not move, which is why the engine's cadence invariant held for it.
+
+    The program's answer is the `commitment terminal_fate` it now declares: a terminal fate, once taken,
+    is not taken again (§7.2a). This is its ablation — the same program with the block stripped — and it
+    is the whole justification for the block, because at cadence 0 the two are identical to the cell."""
     cells = sorted(labels)
     rows = {}
     for kind, thr in (("exposure", fr.THRESHOLD_MIN), ("mean", 0.25)):
@@ -280,19 +293,25 @@ def cadence_stability(ref: ReferenceLineage, tmpdir: Path, reads: dict, labels: 
         (arm.dir / "fates.bio").write_text(
             fr.to_bio_fates(program_rules(feats, labels, cells), read=kind, window="lineage", threshold=thr)
         )
-        for cadence in (0, 6):
-            module = parse_file(arm.dir / "embryo_factors.bio")
-            module.organism.cell_network = cadence
-            body = Body(module, seed=None).run(until=HATCH)
-            d = compare(body, ref, until=HATCH)
-            s = body.summary()
-            rows[f"{kind}(lineage) >= {thr:g}, cadence {cadence} min"] = {
-                "fates_correct": d.fates_correct,
-                "fates_checked": d.fates_checked,
-                "overruled_fates": s["overruled_fates"],
-                "revised_fates": s["revised_fates"],
-                "network_steps": s["network_steps"],
-            }
+        shipped = (arm.dir / "embryo_factors.bio").read_text()
+        for lock, text in (("as shipped", shipped), ("commitment removed", _without_commitment(shipped))):
+            (arm.dir / "embryo_factors.bio").write_text(text)
+            for cadence in (0, 6):
+                module = parse_file(arm.dir / "embryo_factors.bio")
+                module.organism.cell_network = cadence
+                body = Body(module, seed=None).run(until=HATCH)
+                d = compare(body, ref, until=HATCH)
+                s = body.summary()
+                rows[f"{kind}(lineage) >= {thr:g}, cadence {cadence} min, {lock}"] = {
+                    "fates_correct": d.fates_correct,
+                    "fates_checked": d.fates_checked,
+                    "overruled_fates": s["overruled_fates"],
+                    "revised_fates": s["revised_fates"],
+                    "refused_committed": sum(s["refused_committed"].values())
+                    if isinstance(s["refused_committed"], dict)
+                    else s["refused_committed"],
+                    "network_steps": s["network_steps"],
+                }
         shutil.rmtree(arm.dir, ignore_errors=True)
     return rows
 

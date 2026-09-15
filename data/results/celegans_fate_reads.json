@@ -875,32 +875,68 @@
     }
   ],
   "stability_under_a_re_decision_cadence": {
-    "exposure(lineage) >= 15, cadence 0 min": {
+    "exposure(lineage) >= 15, cadence 0 min, as shipped": {
       "fates_correct": 522,
       "fates_checked": 555,
       "overruled_fates": 0,
       "revised_fates": 0,
+      "refused_committed": 0,
       "network_steps": 0
     },
-    "exposure(lineage) >= 15, cadence 6 min": {
+    "exposure(lineage) >= 15, cadence 6 min, as shipped": {
+      "fates_correct": 522,
+      "fates_checked": 555,
+      "overruled_fates": 104,
+      "revised_fates": 372,
+      "refused_committed": 269,
+      "network_steps": 133
+    },
+    "exposure(lineage) >= 15, cadence 0 min, commitment removed": {
+      "fates_correct": 522,
+      "fates_checked": 555,
+      "overruled_fates": 0,
+      "revised_fates": 0,
+      "refused_committed": 0,
+      "network_steps": 0
+    },
+    "exposure(lineage) >= 15, cadence 6 min, commitment removed": {
       "fates_correct": 386,
       "fates_checked": 555,
       "overruled_fates": 188,
       "revised_fates": 473,
+      "refused_committed": 0,
       "network_steps": 133
     },
-    "mean(lineage) >= 0.25, cadence 0 min": {
+    "mean(lineage) >= 0.25, cadence 0 min, as shipped": {
       "fates_correct": 503,
       "fates_checked": 555,
       "overruled_fates": 0,
       "revised_fates": 0,
+      "refused_committed": 0,
       "network_steps": 0
     },
-    "mean(lineage) >= 0.25, cadence 6 min": {
+    "mean(lineage) >= 0.25, cadence 6 min, as shipped": {
+      "fates_correct": 503,
+      "fates_checked": 555,
+      "overruled_fates": 293,
+      "revised_fates": 420,
+      "refused_committed": 733,
+      "network_steps": 133
+    },
+    "mean(lineage) >= 0.25, cadence 0 min, commitment removed": {
+      "fates_correct": 503,
+      "fates_checked": 555,
+      "overruled_fates": 0,
+      "revised_fates": 0,
+      "refused_committed": 0,
+      "network_steps": 0
+    },
+    "mean(lineage) >= 0.25, cadence 6 min, commitment removed": {
       "fates_correct": 327,
       "fates_checked": 555,
       "overruled_fates": 568,
       "revised_fates": 528,
+      "refused_committed": 0,
       "network_steps": 133
     }
   },

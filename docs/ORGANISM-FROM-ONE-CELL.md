@@ -895,3 +895,196 @@ A runtime wart found on the way, reported rather than patched: `asymmetric: X ->
 the keeper when the mother did not have it (`factors[factor] = factors.get(factor, "present")`), so
 in the par-2 run P3 and P4 regain the PIE-1 their mother lost. Nothing scored here depends on it,
 but an asymmetric clause should divide what exists, not conjure it.
+
+## The fate rules rewritten on the read the runtime computes (2026-09-15, genomeos-d3)
+
+The engine landed the integrated reads of §7.2a on 2026-09-15 (8042a57): `F.exposure(cell)`,
+`F.exposure(lineage)`, `F.mean(cell)` and `F.mean(lineage)` compile and run, a factor counts 1
+while carried, the integral is banked at every decision point and clamped when the cell divides
+or dies, and a read that does not name its window is a compile error. That is what area E's fate
+rules had been waiting for, because until now they did not read a factor at all: `fates.bio`
+tested `ELT-2_integrated = present`, and `ELT-2_integrated` was a per-cell lookup generated into
+`exposure.bio` by `scripts/celegans_fates.py`, which called a factor present at **20% of its
+largest path exposure over the finished run**. That is a statistic of the answer. No cell deciding
+at 480 min can hold the maximum over 555 terminal cells, several of which are not yet born.
+
+`exposure.bio` is deleted. `fates.bio` now reads `ELT-2.exposure(lineage) >= 15`, and the Body
+integrates the reader's own presence calls. `scripts/celegans_fate_reads.py` is the generator and
+the measurement; `data/results/celegans_fate_reads.json` holds it.
+
+### The threshold, and why it is not a knob
+
+**15 minutes, one AB cell cycle at 20 °C** (Sulston et al. 1983; Richards et al. 2013 measure 15
+to 16 min for the first AB rounds). The rule says: *the path to this cell carried this factor
+across at least one division* — not that a reporter crossed a line in one frame. The number is in
+minutes, which is what the read is in, and a deciding cell holds it.
+
+It is not fitted, and this is measured rather than asserted. On the cited textbook rules alone,
+with nothing learned anywhere, every threshold from 1 to 60 min gives **the identical 164 cells
+claimed and the identical 25 errors**; for the whole program through the Body, 1 to 30 min give
+the identical program and the identical score. Above the plateau the score rises — 120 min scores
+531 in sample against 522 — but only by claiming 62 fewer cells. That is buying a number with
+abstention, and the plateau is where the threshold was taken.
+
+`mean(lineage) >= 0.25` scores better than the shipped rule (533 in sample, 515 held out) and is
+**not** shipped, for exactly that reason: it is not on a plateau. 0.20, 0.22 and 0.25 all give
+different answers, so 0.25 is a point chosen because it scored well on the cells it is scored on.
+It is in the result file as the alternative it is.
+
+### The three scores, all through the Body and the existing LineageDiff
+
+Same rule shape throughout — the cited textbook rules for intestine and body-wall muscle, the
+cited sheath-glia rule, the cited hypodermis rules, then neuron rules learned from the atlas.
+Only the neuron rules are fitted, so only they are held out: eight folds, one founder sublineage
+held out at a time, each fold scored only on the lineage its rules never saw. The baseline is the
+precomputed lookup **regenerated and run through the same Body in the same eight folds**, so the
+comparison is like for like rather than against a number in an old table.
+
+| read | embryonic fates | cells the factors decide | to the adult | held out | decided |
+|---|---|---|---|---|---|
+| instantaneous, `F = present` | 483 / 555 | 412 | 889 / 961 | 467 / 555 | 393 |
+| **baseline**: precomputed `_integrated` lookup | **501 / 555** | 437 | **907 / 961** | **476 / 555** | 449 |
+| **rewrite**: `F.exposure(lineage) >= 15` | **522 / 555** | 332 | **928 / 961** | **483 / 555** | 340 |
+| `F.mean(lineage) >= 0.25` (not shipped) | 533 / 555 | 285 | 939 / 961 | 515 / 555 | 251 |
+| `F.exposure(cell)`, any threshold | 555 / 555 | **5** | 961 / 961 | 555 / 555 | 5 |
+| `F.mean(cell)`, any threshold | 555 / 555 | **5** | 961 / 961 | 555 / 555 | 5 |
+
+So the rewrite is ahead of the lookup it replaces: **501 → 522 of 555 in sample (90.3% → 94.1%),
+907 → 928 of 961 to the adult, and 476 → 483 of 555 held out (85.8% → 87.0%)**. Cells born
+1,439/1,439, parent mismatches 0, deaths 110/110, unchanged.
+
+**Three negatives in that table, and they are the interesting part.**
+
+1. **The gain held out is a third of the gain in sample** (+7 against +21). The rewrite fits its
+   own training set harder than the lookup did: its in-sample-to-held-out gap is 39 fates against
+   the baseline's 25. A continuous read gives the neuron learner a larger effective hypothesis
+   class than a binary lookup does, and it overfits accordingly. The honest number is 483.
+2. **The rewrite claims 105 fewer cells** (332 against 437; 340 against 449 held out). It is more
+   accurate on what it claims — 89% against 88% in sample, 88% against 82% held out — and it
+   abstains more, and part of the score is the abstention. Scored without the lineage lookup as
+   the fallback (factors, else the founder sublineage's majority tissue), the baseline reaches
+   414 of 555 and the rewrite 377. **On that measure the rewrite is worse**, and it is worse for
+   the reason this rewrite exists: the precomputed statistic normalised every factor by its own
+   maximum over the run, so a factor with a small total exposure still called cells, and an
+   absolute threshold in minutes cannot do that. That normalisation was carrying real
+   information, and it was information no cell has.
+3. **The cited sheath-glia rule stopped being load-bearing.** Under the precomputed read it was
+   worth +5 terminal fates (sheath 6/22 → 11/22, genomeos-d2). Under the integrated read the
+   program scores 522 with it and 522 without it, and sheath glia reach 20/22 either way — the
+   hypodermis and neuron rules that used to steal them no longer fire on those cells, so there is
+   nothing left for PROS-1 ∧ NHR-25 ∧ SOX-2 to win back. The rule is kept, because it is a cited
+   claim about mechanism that the runtime now checks, and it is recorded here as worth nothing.
+
+Per tissue, the rewrite against the baseline: muscle 113 → 121 of 122, sheath glia 11 → 20 of 22,
+socket glia 9 → 16 of 18, intestine 34/34 and hypodermis 69/69 kept, coelomocytes still 0 of 4
+(HLH-1-positive MS cells, called muscle), and neurons 212 → 208 of 226, which is the one tissue
+that loses. The confusions are the same ones: 14 neurons to hypodermis, 4 to muscle.
+
+### Does the ordering survive a real runtime? Yes. Does the cell window win anywhere? No
+
+The measurement this replaces said the instantaneous peak makes 62 errors, exposure along the
+lineage 38, and the mean over the cell's own life 29 — the instantaneous read worst at every
+threshold from 0.1 to 0.5, with the mean over the cell's own life making the fewest errors. All
+three were computed from the atlas's record of each cell's whole life.
+
+**The instantaneous-versus-integrated ordering holds, and by more.** On the cited rules alone,
+with nothing fitted, read by the Body at each cell's own decision point: the instantaneous read
+claims 225 cells and gets **61 wrong**; `exposure(lineage)` claims 164 and gets **25 wrong**.
+Through the whole program the same ordering: 483 of 555 instantaneous against 522 integrated in
+sample, 467 against 483 held out. A cell that reads sustained carriage beats a cell that reads a
+moment, in a runtime that integrates it honestly.
+
+**The cell window wins nothing, because it is empty when the cell decides.** Every one of the 555
+embryonic terminal cells gets **exactly one decision point, at its birth**, so at the instant its
+fate is settled `t - born` is zero: `F.exposure(cell)` is 0 and `F.mean(cell)` is 0 for every
+factor and every cell, and a rule written on either fires for nothing. The five cells still
+decided in those two arms are the sheath-glia rule, which reads instantaneous presence.
+
+That is the second statistic of the future that came out of this rewrite, and it is a bigger one
+than the normalisation. "The mean over the cell's own life" was the best-scoring read in the
+earlier measurement (29 errors), and it cannot be a fate rule: it is a summary of what the cell
+went on to carry *after* it decided what to be. A cell can only integrate its own window if it
+decides again later, which in this program it never does. So the honest answer to "which window
+does a cell integrate over" is that this program can only ask about the lineage window, and the
+question the earlier table appeared to settle was never posed to a deciding cell.
+
+What would pose it: a re-decision cadence (a `cell_network` step re-resolves every live cell, so a
+terminal cell born at 455 min would read its own window at 461, 467, …), or a `differentiate` that
+is allowed to name a delay after birth. The first exists in the engine today and changes when
+every fate is taken, which is a separate experiment and not this one.
+
+### What the read means here, stated as §7.2a asks
+
+It integrates **carriage, not concentration**: this program declares no `cell_network`, so there
+is no level to integrate and a factor counts 1 for every minute the cell carried it. What is
+carried is the reader's presence call (Ma et al. 2021, max adjusted expression ≥ 20% of the
+factor's maximum), so `ELT-2.exposure(lineage) >= 15` means "the path to this cell spent at least
+15 minutes above the atlas's presence threshold for ELT-2", and the 20% in that sentence is the
+reader's, measured per factor over the atlas and not over this run. The rules' own threshold adds
+no second normalisation, which is the whole change.
+
+One consequence in another lane's file, recorded here as genomeos-d2 recorded the last one.
+`plasticity.bio`'s terminal arm bounds each type by the number of cells of that type already
+differentiated at 700 min, so those numbers move whenever the fate rules move: Neuron 233 → 216,
+Hypodermis 94 → 81, GliaSheath 11 → 20, Intestine 26 unchanged. Nothing about the series, the
+`competence` or the `commitment` changed — all five arms pass, and the two arms that assert the
+wild type is untouched still read 130 muscle cells inside their 110..130 bound.
+
+### A fate written on a growing integral is only a fate if the cell cannot take it back
+
+The engine fixed a defect tonight and pinned it: a `cell_network` cadence used to let a rule that had
+lost the precedence contest take a fate back, costing the worm 17 terminal fates, and
+`test_a_network_cadence_does_not_change_which_fates_are_taken` asserts that the worm's Sulston score
+is the same with a 6-minute cadence and without it. **The rewrite broke that invariant, and the
+runtime was not at fault — the read was.**
+
+`F.exposure(lineage)` grows for as long as the cell carries the factor, so a rule whose threshold was
+not met when the fate was settled meets it later for no reason but the clock. `_pick_fate` refuses a
+lower-precedence decision at a later decision point only when it *could already have applied* then
+(`d.applies(c.fate_ctx)`), and a threshold on a growing integral is never in that set — so with enough
+decision points every rule whose factor the cell ever carried fires, and the highest-priority one wins
+whatever the threshold says. Measured, at a 6-minute cadence: **522 → 386 of 555**, 473 fates revised.
+
+The obvious engine patch is **not** the fix, and that was measured rather than assumed: dropping
+`d.applies(c.fate_ctx)`, so a strictly lower-precedence decision can never revise a settled fate,
+recovers 31 of the 136 (386 → 417). Most of the revisions come from rules of *higher* priority whose
+guard was genuinely false at birth, which the runtime is right to allow.
+
+The fix is the construct §7.2a already has, and the worm's own program now declares it — the first
+use of `commitment` outside the plasticity series:
+
+```
+commitment terminal_fate {
+  establish: cell_type = Coelomocyte|Epithelium|...|Valve    # every terminal type
+  locks: cell_type
+  inherit: daughters
+  release: never
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795"
+}
+```
+
+Its ablation, which is the only justification for it, is the same program with the block stripped
+(`stability_under_a_re_decision_cadence` in the result file; these rows run the timers from the
+program's declared seed rather than at their mean, as the engine's regression test does, which is why
+the `mean` row reads 503 where the table above reads 533):
+
+| program | cadence 0 | cadence 6 min |
+|---|---|---|
+| the lookup this replaces (`_integrated`, a guard that never changes) | 501 / 555 | 501 / 555 |
+| `F.exposure(lineage) >= 15`, commitment removed | 522 / 555 | **386 / 555** |
+| `F.exposure(lineage) >= 15`, **as shipped** | 522 / 555 | **522 / 555** |
+| `F.mean(lineage) >= 0.25`, commitment removed | 503 / 555 | **327 / 555** |
+| `F.mean(lineage) >= 0.25`, as shipped | 503 / 555 | **503 / 555** |
+
+At cadence 0 the two are identical to the cell — 1,439 cells, 522 of 555, deaths 110/110, the same
+in `embryo_contacts.bio` — so the block costs nothing in the program as it ships and is what makes
+the fate a fate the moment anything asks the cell twice. `bio test` stays 202/202, and the five arms
+of `plasticity.bio`, which declares a `commitment` of its own over a subset of the same types, pass
+unchanged.
+
+What this says about the language, and it is the general point rather than a worm detail: `exposure`
+and `mean` are absolute and monotone, and a fate is not. A cell decides what to be from what it has
+carried **so far**, and nothing in `when:` can say "as of now, once". So the cadence invariant is an
+invariant **for time-invariant guards**, and any program whose fate guards are integrated reads needs
+a `commitment` to have a stable fate at all. That belongs in §7.2a beside the two limits the engine
+already states there.

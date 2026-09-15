@@ -18,3 +18,19 @@ import embryo.bio
 import fates.bio
 
 regime worm { fates: first }
+
+# A terminal fate, once taken, is not taken again. The rules above read `F.exposure(lineage)`, which
+# grows for as long as the cell carries the factor, so a rule whose threshold was not met when the fate
+# was settled meets it later for no reason but the clock. Without this lock the worm's score depends on
+# how often a cell is asked: 522 of 555 when each cell decides once, 386 with a 6-minute `cell_network`
+# cadence re-deciding every live cell. With it, 522 either way, and the shipped program (which declares
+# no cadence) is unchanged to the last cell. So it costs nothing here and is what makes the fate a fate.
+# Measured: `stability_under_a_re_decision_cadence` in data/results/celegans_fate_reads.json.
+commitment terminal_fate {
+  establish: cell_type = Coelomocyte|Epithelium|Excretory|Gland|GliaSheath|GliaSocket|Hypodermis|Intestine|Mesoderm|Muscle|Neuron|Other|PharyngealMarginal|Rectal|Reproductive|TailSpike|Valve
+  locks: cell_type
+  inherit: daughters
+  release: never
+  evidence: experimental "Fukushige & Krause 2005, Development 132:1795 (the myogenic response is lost completely in terminally differentiated cells, and mes-2 does not restore it)"
+  confidence: 0.6
+}

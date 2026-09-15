@@ -918,10 +918,12 @@ in order. "Owner" is the session that holds the files today (see §7).
   haematopoiesis; the worm's terminal fates below the founders were the
   observed lineage program, although every cell carries its measured
   transcription factors (Ma 2021 atlas, `express`) and factor rules now
-  decide the embryonic fates they can (below); nothing in the language
-  models commitment, competence or hysteresis; the PAR polarity rules
-  are not written (par-2 and par-3 are the misses against Digital
-  Development); the external engines (libRoadRunner, MaBoSS, CompuCell3D)
+  decide the embryonic fates they can (below); the PAR polarity rules are
+  written since 2026-09-14 and Digital Development is 11 of 11;
+  `commitment` and `competence` are in the language since 2026-09-14, and the
+  worm's own program declares the first of them only since 2026-09-15, when a
+  fate read from a growing integral turned out not to be stable without it;
+  the external engines (libRoadRunner, MaBoSS, CompuCell3D)
   are deferred for lack of Python 3.14 wheels, although CI runs 3.12 and
   could test them as optional extras. Done 2026-09-11: haematopoiesis,
   the Body as a process-bigraph process gated by a network, space (sites,
@@ -1006,26 +1008,81 @@ in order. "Owner" is the session that holds the files today (see §7).
   PAR-3 are maternal factors of the zygote, and `mutants.bio` gains the two
   experiments so the claims are asserts. One extra prediction recorded: the
   same mechanism predicts E adopting MS in pie-1, which the table does not list.
+- **Done 2026-09-15. The fate rules rewritten on the read the runtime computes**
+  (`scripts/celegans_fate_reads.py`, `celegans_fate_reads`). The engine landed the
+  integrated reads of §7.2a (8042a57), so `fates.bio` no longer tests
+  `ELT-2_integrated = present` against a generated per-cell lookup whose threshold
+  was 20% of a factor's largest path exposure **over the finished run** — a
+  statistic of the answer. `exposure.bio` is deleted and the rules read
+  `ELT-2.exposure(lineage) >= 15`, which the Body integrates from the reader's own
+  presence calls. **15 min is one AB cell cycle** (Sulston 1983), so the rule says
+  the path carried the factor across at least one division, and it is a plateau
+  rather than a knob: 1 to 60 min give the identical 164 cells and 25 errors on the
+  cited rules, 1 to 30 min the identical program, and above the plateau the score
+  rises only by claiming fewer cells. Scored through the Body and the existing diff,
+  with the baseline regenerated and run in the same eight folds:
+  **501 → 522 of 555 embryonic terminal fates, 907 → 928 of 961 to the adult, and
+  held out by founder sublineage 476 → 483 of 555 (85.8% → 87.0%)**; 1,439 cells,
+  0 parent mismatches, deaths 110/110. Muscle 113 → 121 of 122, sheath glia
+  11 → 20 of 22, socket glia 9 → 16 of 18, neurons 212 → 208 of 226, coelomocytes
+  still 0 of 4. **The three negatives.** The held-out gain is a third of the
+  in-sample gain (+7 against +21): the rewrite overfits harder, its in-to-held-out
+  gap 39 fates against the lookup's 25. It claims 105 fewer cells, and scored
+  without the lookup as fallback (factors, else the sublineage majority) it is
+  **worse** — 377 against 414 — because the precomputed statistic normalised each
+  factor by its own maximum over the run, which was carrying real information that
+  no cell has. And the cited sheath-glia rule stopped being load-bearing: 522 with
+  it and 522 without it, sheath 20/22 either way, kept and recorded as worth
+  nothing. **The ordering survives a real runtime and the cell window wins
+  nothing.** On the cited rules with nothing fitted, read at each cell's own
+  decision point, the instantaneous read claims 225 cells and gets 61 wrong and
+  `exposure(lineage)` claims 164 and gets 25 wrong; through the whole program 483
+  against 522 in sample and 467 against 483 held out. But every one of the 555
+  embryonic terminal cells gets **exactly one decision point, at its birth**, so
+  `F.exposure(cell)` and `F.mean(cell)` are zero for every factor and every cell
+  and decide nothing at all. "The mean over the cell's own life", the best read in
+  the earlier measurement at 29 errors, is a summary of what the cell went on to
+  carry *after* it chose — a second statistic of the future, larger than the first.
+  **A fate written on a growing integral is only a fate if the cell cannot take it
+  back.** The integral grows, so a rule whose threshold was not met when the fate
+  was settled meets it later for no reason but the clock: with a 6-minute
+  `cell_network` cadence the worm fell from 522 to 386 where the time-invariant
+  lookup did not move. The obvious engine patch is not the fix and that was
+  measured — dropping `d.applies(c.fate_ctx)` from the precedence refusal recovers
+  only 31 of the 136, because most revisions come from rules of higher priority
+  whose guard was genuinely false at birth. The fix is §7.2a's own construct, and
+  `embryo_factors.bio` and `embryo_contacts.bio` now declare
+  `commitment terminal_fate` over every terminal type — the first use of
+  `commitment` outside the plasticity series. With it: **522 at cadence 0 and 522
+  at cadence 6**, and at cadence 0 the program is identical to the cell with the
+  block and without it, so its ablation is the whole of its justification. The
+  cadence invariant is an invariant **for time-invariant guards**, and any program
+  whose fate guards are integrated reads needs a `commitment` to have a stable fate
+  at all; that belongs in §7.2a beside the two limits it already states.
 - **Next.** 1. `commitment` and `competence` landed on 2026-09-14
   (genomeos-c2, 126e65b) and earn their place by ablation: strip competence and
   both late arms of the published plasticity series fail, strip commitment and the
   terminal arm fails while the early arm collapses from 610 converts to 174. The
-  exposure and mean reads did NOT land: `_integrated` is still a precomputed
-  lookup, so `establish: ELT-2.exposure(lineage) >= 0.8` does not compile, and
-  rewriting `fates.bio` and `exposure.bio` waits on that. 2. PAR polarity rules:
+  exposure and mean reads landed on 2026-09-15 and the rules are rewritten on
+  them (above), which also put the first `commitment` into the worm's own
+  program. 2. PAR polarity rules:
   **done 2026-09-14** (above), and Digital Development is now 11 of 11.
   3. Contacts and AC/VU: **done 2026-09-14** (above). 4. Glia from factors:
   **done 2026-09-14** (above); what would move socket glia is a measurement the
   atlas does not contain, so this stays closed until there is one. 5. Three
   runtime changes area E asked for and did not make, written up with their
-  measurements in ORGANISM-FROM-ONE-CELL.md: a contact amount is read only when
-  the receiver itself decides again; two decisions sharing an id make the one
-  without a `cell` clause silently unreachable; and a `cell_network` cadence lets
-  a lower-precedence `differentiate` overwrite a fate the program already settled
-  (496 → 482 with a 2-minute cadence and no other change). 6. A measured
-  time-resolved contact table for the embryo, to replace the curated one.
-  7. libRoadRunner and MaBoSS adapters tested in CI on 3.12.
-- **Owner.** genomeos-d2 (from 2026-09-14; genomeos-d1 and genomeos-73 before).
+  measurements in ORGANISM-FROM-ONE-CELL.md: **all three fixed 2026-09-15** by
+  genomeos-c2 (8042a57), along with `asymmetric` conjuring a factor the mother
+  lacked. One request stands in their place, and it is a line of the specification
+  rather than a patch: the cadence invariant holds only for time-invariant guards
+  (above). 6. A measured time-resolved contact table for the embryo, to replace
+  the curated one. 7. libRoadRunner and MaBoSS adapters tested in CI on 3.12.
+  8. A terminal cell decides once, at birth, so nothing in the worm can read its
+  own window; a `differentiate` that may be read after a stated delay, or a
+  re-decision that is not a network cadence, is what would let the `cell` window
+  be tested at all.
+- **Owner.** genomeos-d3 (from 2026-09-15; genomeos-d2, genomeos-d1 and
+  genomeos-73 before).
 
 ### F. Cancer and therapeutics
 
