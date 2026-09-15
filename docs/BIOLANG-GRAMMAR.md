@@ -327,7 +327,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Entity**: `id`, `kind`, `attrs`, `evidence`, `confidence`
 - **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`
 - **Transport**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `from_compartment`, `to_compartment`, `cargo`, `capacity`, `affinity`, `via`, `via_threshold`
-- **Regime**: `name`, `treatment`, `threshold`, `units`, `update`, `fates`, `allocation`, `seed`, `evidence`, `confidence`
+- **Regime**: `name`, `treatment`, `threshold`, `units`, `update`, `fates`, `recheck`, `allocation`, `seed`, `evidence`, `confidence`
 - **Region**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `role`
 - **RegulatoryElement**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `cls`, `targets`, `domain`, `source`
 - **Domain**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `genes`, `boundaries`

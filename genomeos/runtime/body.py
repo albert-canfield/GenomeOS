@@ -35,6 +35,10 @@ SUFFIXES = (("a", "p"), ("l", "r"))
 FORCE_LAST = 1 << 62  # event tie-break: a forced factor arrives after everything else at its instant
 # an integrated read of a factor over a named window (v0.4 §7.2a): `ELT-2.exposure(lineage)`
 READ = re.compile(r"^(.+)\.(exposure|mean)\((cell|lineage)\)$")
+# a threshold this close is reached, and a wake-up this soon is now: without both, a crossing computed
+# to land exactly on its threshold can miss it by a float's width and reschedule itself for ever
+REACHED = 1e-9
+SOONEST = 1e-6  # minutes
 
 
 @dataclass(slots=True)
@@ -71,6 +75,8 @@ class Cell:
     inherited: dict[str, float] = field(default_factory=dict)
     exp_t: float = 0.0
     exp_val: dict[str, float] = field(default_factory=dict)
+    recheck_at: float | None = None  # when a read this cell is waiting on reaches a threshold (§7.5)
+    recheck_seq: int = -1  # event token: only the latest scheduled crossing is honoured
     measured: set[str] = field(default_factory=set)  # factors set by express decisions (the reader)
     stated: set[str] = field(default_factory=set)  # factors stated by mechanism: maternal load, asymmetry
     levels: dict[str, float] = field(default_factory=dict)  # v0.4: this cell's own network state
@@ -99,6 +105,7 @@ class Body:
         environment: dict[str, str] | None = None,
         fates: str | None = None,
         add_at: dict[str, float] | None = None,
+        recheck: str | None = None,
     ):
         """`seed` overrides the organism's declared seed; `means=True` runs every timer at its mean;
         `knockouts` are factors never present and signals (by id, ligand or receptor) never sent;
@@ -156,6 +163,27 @@ class Body:
                 if (m := READ.match(key))
             }
         )
+        # §7.5: the thresholds each decision waits for, so a cell can be woken at the instant one is
+        # reached. Only lower bounds schedule anything: an integral that has not yet reached a floor
+        # will reach it at a computable time, while `< T` is true until it stops being true and needs
+        # no wake-up (a fate is never withdrawn).
+        self._terms: dict[int, list[tuple[str, str, str, float]]] = {}
+        for d in module.decisions:
+            terms = []
+            for key, want in d.when.items():
+                m = READ.match(key)
+                op = want[:2] if want[:2] == ">=" else want[:1]
+                if m and op in (">=", ">"):
+                    try:
+                        terms.append((m.group(1), m.group(2), m.group(3), float(want[len(op) :])))
+                    except ValueError:
+                        continue
+            if terms:
+                self._terms[id(d)] = terms
+        self.recheck = recheck or (module.regime.recheck if module.regime is not None else "crossings")
+        if self.recheck not in ("crossings", "none"):
+            raise ValueError(f"recheck must be crossings or none, not {self.recheck!r}")
+        self.rechecks = 0  # re-decisions taken at a crossing
         self.committed_cells: Counter[str] = Counter()  # cells committed, by programme
         self.timers_used: Counter[str] = Counter()
         self._queue: list[tuple[float, int, str, str]] = []
@@ -301,7 +329,50 @@ class Body:
             span = max(t, 0.0)  # the path starts with the first cell, at time zero
         if kind == "exposure":
             return total
-        return total / span if span > 0 else 0.0
+        # over a window of no length the mean is its own limit, the value in force: a cell reading
+        # `mean(cell)` at the instant it is born is taking the instantaneous read, and says so
+        return total / span if span > 0 else c.exp_val.get(factor, 0.0)
+
+    def _crossing(self, c: Cell, factor: str, kind: str, window: str, threshold: float, t: float) -> float:
+        """How long until this read reaches this threshold at the rate now in force, or infinity if it
+        never does. The runtime integrates each read at a rate held constant between decision points
+        (§7.2a), so the answer is a closed form rather than a search: exposure grows at `r`, and a mean
+        of a growing total over a growing window rises only while `r` exceeds the threshold itself."""
+        total = c.own.get(factor, 0.0) + (c.inherited.get(factor, 0.0) if window == "lineage" else 0.0)
+        rate = c.exp_val.get(factor, 0.0)
+        if kind == "exposure":
+            if total >= threshold - REACHED:
+                return math.inf  # already met: this decision point has considered it
+            return (threshold - total) / rate if rate > 0 else math.inf
+        span = max(t if window == "lineage" else t - c.born, 0.0)
+        if (total / span if span > 0 else rate) >= threshold - REACHED:
+            return math.inf
+        if rate <= threshold:
+            return math.inf  # the window grows at least as fast as the total, so the mean cannot rise to it
+        return max((threshold * span - total) / (rate - threshold), 0.0)
+
+    def _schedule_recheck(self, c: Cell) -> None:
+        """One pending re-decision per cell: the earliest instant at which any threshold a decision it
+        could still take is waiting for would be reached. A crossing is a re-reading, not a new right -
+        precedence and commitment refuse at a crossing exactly what they refuse anywhere else."""
+        t = self.time
+        if not (c.born <= t < c.end):
+            return
+        self._sync(c, t)
+        soonest = math.inf
+        for d in self._candidates(c):
+            terms = self._terms.get(id(d))
+            if terms is None or d.id in c.fired:
+                continue
+            for factor, kind, window, threshold in terms:
+                dt = self._crossing(c, factor, kind, window, threshold, t)
+                if SOONEST < dt < soonest:
+                    soonest = dt
+        if soonest == math.inf:
+            c.recheck_at = None
+            return
+        c.recheck_at = t + soonest
+        c.recheck_seq = self._push(c.recheck_at, c.name, "recheck")
 
     # ---- context and decisions ------------------------------------------
 
@@ -438,7 +509,14 @@ class Body:
         return dur
 
     def _resolve(self, c: Cell, born: bool = True) -> None:
-        """Decide what a cell does next; called at birth and after a signal changes its factors."""
+        """Decide what a cell does next; called at birth and after a signal changes its factors, and
+        then (§7.5) put the cell down for a re-decision at the instant a read it is waiting on arrives."""
+        self._decide(c, born)
+        if self._terms and self.recheck == "crossings":
+            self._schedule_recheck(c)
+
+    def _decide(self, c: Cell, born: bool = True) -> None:
+        """One decision point: die, express, differentiate, quiesce, migrate, divide."""
         ctx = self.context(c)
         if c.dies_at is None and (d := self._first(c, "die", ctx)):
             if self.population(c) and d.fraction < 1.0:
@@ -468,7 +546,10 @@ class Body:
             elif d.fraction < 1.0 and self.population(c):
                 self._split(c, d)
             else:
-                revision = bool(had_fate) and not changed
+                # a decision that lands on the type the cell already holds revises nothing: it must not
+                # be counted as a revision and must not take the cell's terminal name away, or a cell
+                # re-read at a crossing (§7.5) would quietly stop answering to its name
+                revision = bool(had_fate) and not changed and d.to != c.cell_type
                 if revision:
                     self.revised[d.id] += 1  # visible until `commitment` can refuse it (v0.4 §7.2)
                 before, changed = ctx, True
@@ -1007,6 +1088,9 @@ class Body:
                 and (c.dies_at is None or c.dies_at > t)
             ):
                 self._divide(c)
+            elif kind == "recheck" and seq == c.recheck_seq and c.born <= t < c.end:
+                self.rechecks += 1  # a read this cell was waiting on has arrived (§7.5)
+                self._resolve(c, born=False)
             elif kind == "cull" and c.dies_at is None:
                 self._cull(c)
             elif kind.startswith("flow:"):
@@ -1165,6 +1249,8 @@ class Body:
             "ambiguous_fates": sum(self.ambiguous.values()),
             "revised_fates": sum(self.revised.values()),
             "overruled_fates": sum(self.overruled.values()),
+            "recheck": self.recheck,
+            "rechecks": self.rechecks,
             "duplicate_decision_ids": dict(sorted(self.duplicate_ids.items())),
             "forced": {f: self.forced_cells[f] for f in sorted(self.forced)},
             "outside_competence": sum(self.outside_competence.values()),

@@ -361,6 +361,7 @@ class Regime:
     units: str = "au"  # au | copies
     update: str = "continuous"
     fates: str = "first"  # one fate per decision point by precedence | last (legacy: last match wins)
+    recheck: str = "crossings"  # a cell decides again when a read it names reaches a threshold | none
     allocation: str = "competitive"
     seed: int | None = None
     evidence: Evidence = field(default_factory=Evidence)
@@ -371,6 +372,7 @@ REGIME_TREATMENTS = ("continuous", "stochastic", "auto")
 REGIME_UPDATES = ("continuous", "synchronous", "asynchronous", "event")
 REGIME_ALLOCATIONS = ("competitive", "proportional", "priority", "optimise")
 REGIME_FATES = ("first", "last")
+REGIME_RECHECKS = ("crossings", "none")
 
 
 _UNIT_MIN = {
@@ -848,6 +850,7 @@ __all__ = [
     "DECISION_ACTIONS",
     "REGIME_ALLOCATIONS",
     "REGIME_FATES",
+    "REGIME_RECHECKS",
     "REGIME_TREATMENTS",
     "REGIME_UPDATES",
     "UNKNOWN",

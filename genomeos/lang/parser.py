@@ -42,6 +42,7 @@ from genomeos.ir import (
     DECISION_ACTIONS,
     REGIME_ALLOCATIONS,
     REGIME_FATES,
+    REGIME_RECHECKS,
     REGIME_TREATMENTS,
     REGIME_UPDATES,
     UNKNOWN,
@@ -737,6 +738,7 @@ def _compile_block(b: Block, module: Module) -> None:
             ("update", REGIME_UPDATES),
             ("allocation", REGIME_ALLOCATIONS),
             ("fates", REGIME_FATES),
+            ("recheck", REGIME_RECHECKS),
             ("units", ("au", "copies")),
         ):
             if key in p:
