@@ -28,13 +28,13 @@ CONSTRAINED = PHYLOP_THRESHOLD  # the attribution's own threshold for a constrai
 def chromosome_elements(chrom: str, reference: Path = Path("data/reference")):
     """The chromosome's regulatory elements with their targets, and an interval index over them."""
     from genomeos.attribution.eqtl import Intervals
-    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
     from genomeos.genome.domains import infer_domains
     from genomeos.genome.regulation import assign_targets
     from genomeos.genome.regulatory import load_ccres
 
     ccres = load_ccres(chrom)
-    fasta = reference / f"{chrom}.fa"
+    fasta = reference_fasta(chrom, reference)
     gff = default_gencode({chrom})
     if not ccres or not fasta.exists() or gff is None:
         raise FileNotFoundError(f"{chrom} is not fetched; run `genomeos data fetch --chrom {chrom}` first")

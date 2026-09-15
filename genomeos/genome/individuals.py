@@ -318,13 +318,13 @@ def check(
     """Apply one person's variants of one chromosome to the local reference, keep the statistics only
     (no haplotype FASTA), and say whether the file fits GRCh38. Stored under the person's directory."""
     from genomeos.coords import Locus
-    from genomeos.genome import IndexedGenome, apply_variants, iter_vcf
+    from genomeos.genome import IndexedGenome, apply_variants, iter_vcf, reference_fasta
 
     root = root or ROOT
     vcf = vcf_path(name, chrom, root)
     if vcf is None:
         raise FileNotFoundError(f"{name} has no rows on {chrom}")
-    fa = reference / f"{chrom}.fa"
+    fa = reference_fasta(chrom, reference)
     if not fa.exists():
         raise FileNotFoundError(f"no reference sequence for {chrom} (genomeos data fetch --chrom {chrom})")
     t0 = time.time()
@@ -383,7 +383,7 @@ def knockouts(
     (nonsense, start lost, stop lost), homozygous first: the natural knockouts. Derived by the local
     trace; SNVs only, so frameshift indels are not counted. Stored under the person's directory."""
     from genomeos.flow import trace_gene
-    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
 
     root = root or ROOT
     people = {p["name"]: p for p in list_individuals(root)}
@@ -397,7 +397,7 @@ def knockouts(
     for chrom in chroms:
         vcf = vcf_path(name, chrom, root)
         gff = default_gencode({chrom})
-        fa = reference / f"{chrom}.fa"
+        fa = reference_fasta(chrom, reference)
         if vcf is None or not gff or not fa.exists():
             continue
         ann = Annotation.from_gff3(gff, {chrom})
@@ -751,7 +751,7 @@ def coding_inventory(
     gene; the genes with the most protein-changing variants first. Derived by the local trace, SNVs only.
     Stored under the person's directory."""
     from genomeos.flow import trace_gene
-    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
 
     root = root or ROOT
     people = {p["name"]: p for p in list_individuals(root)}
@@ -770,7 +770,7 @@ def coding_inventory(
     for chrom in chroms:
         vcf = vcf_path(name, chrom, root)
         gff = default_gencode({chrom})
-        fa = reference / f"{chrom}.fa"
+        fa = reference_fasta(chrom, reference)
         if vcf is None or not gff or not fa.exists():
             continue
         ann = Annotation.from_gff3(gff, {chrom})
@@ -969,11 +969,12 @@ def _genotypes(path: Path, base_at=None) -> dict[tuple[int, str, str], str]:
 
 def _reference_base_reader(chrom: str, reference: Path = Path("data/reference")):
     """A base_at(pos1) over the local reference, or None when the chromosome is not fetched."""
-    fa = reference / f"{chrom}.fa"
+    from genomeos.coords import Locus
+    from genomeos.genome import IndexedGenome, reference_fasta
+
+    fa = reference_fasta(chrom, reference)
     if not fa.exists():
         return None, None
-    from genomeos.coords import Locus
-    from genomeos.genome import IndexedGenome
 
     g = IndexedGenome(str(fa))
 
@@ -1217,13 +1218,13 @@ def tissue_proteins(
     """Which protein each tissue makes in this person: GTEx's dominant transcript per tissue, traced,
     with the person's coding variants read on that transcript rather than on the canonical one."""
     from genomeos.flow.trace import trace
-    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
     from genomeos.molecules.rna import gtex_isoforms
 
     root = root or ROOT
     vcf = vcf_path(name, chrom, root)
     gff = default_gencode({chrom})
-    fa = reference / f"{chrom}.fa"
+    fa = reference_fasta(chrom, reference)
     if vcf is None:
         raise FileNotFoundError(f"{name} has no rows on {chrom}")
     if not gff or not fa.exists():

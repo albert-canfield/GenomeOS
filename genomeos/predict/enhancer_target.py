@@ -320,14 +320,14 @@ class Context:
     """One chromosome's elements, domains and genes, loaded once for many predictions."""
 
     def __init__(self, chrom: str, reference: Path = Path("data/reference")) -> None:
-        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
         from genomeos.genome.domains import infer_domains
         from genomeos.genome.regulation import assign_targets
         from genomeos.genome.regulatory import load_ccres
 
         self.chrom = chrom
         self.ccres = load_ccres(chrom)
-        fasta = reference / f"{chrom}.fa"
+        fasta = reference_fasta(chrom, reference)
         if not self.ccres or not fasta.exists():
             raise FileNotFoundError(
                 f"{chrom} is not fetched; run `genomeos data fetch --chrom {chrom}` first"

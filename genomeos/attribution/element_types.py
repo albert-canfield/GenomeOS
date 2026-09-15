@@ -198,13 +198,21 @@ def _fai(path: Path) -> dict[str, tuple[int, int, int, int]]:
 def gc_of(
     chrom: str, intervals: Sequence[tuple[int, int]], reference: Path = REFERENCE
 ) -> list[float | None]:
-    """GC fraction over called bases of each 0-based half-open interval, read by seek through the .fai."""
-    fa = reference / f"{chrom}.fa"
-    if not fa.exists() or not (reference / f"{chrom}.fa.fai").exists():
+    """GC fraction over called bases of each 0-based half-open interval, read by seek through the .fai.
+
+    The bytes come from whichever form of the chromosome is cached: the flat
+    `.fa` seeked directly, or the blocked `.fa.gz` seeked through its `.gzi`.
+    """
+    from genomeos.genome.index import resolve_fasta
+
+    fa = resolve_fasta(reference / f"{chrom}.fa")
+    fai = fa.with_name(fa.name + ".fai")
+    if not fa.exists() or not fai.exists():
         return [None] * len(intervals)
-    _length, offset, per_line, line_bytes = _fai(reference / f"{chrom}.fa.fai")[chrom]
+    _length, offset, per_line, line_bytes = _fai(fai)[chrom]
     out: list[float | None] = []
-    with open(fa, "rb") as fh:
+    fh = _seekable(fa)
+    try:
         for s, e in intervals:
             a = offset + (s // per_line) * line_bytes + s % per_line
             b = offset + (e // per_line) * line_bytes + e % per_line
@@ -214,7 +222,18 @@ def gc_of(
             seq = chunk.replace(b"\n", b"").upper()
             acgt = sum(seq.count(x) for x in (b"A", b"C", b"G", b"T"))
             out.append((seq.count(b"G") + seq.count(b"C")) / acgt if acgt else None)
+    finally:
+        fh.close()
     return out
+
+
+def _seekable(fa: Path):
+    """A binary handle over the FASTA bytes that supports seek, compressed or not."""
+    from genomeos.genome import bgzf
+
+    if fa.suffix == ".gz" and bgzf.is_bgzf(fa):
+        return bgzf.BgzfReader(fa)
+    return open(fa, "rb")  # noqa: SIM115  (closed by the caller)
 
 
 def load_chromosome(chrom: str) -> list[dict]:

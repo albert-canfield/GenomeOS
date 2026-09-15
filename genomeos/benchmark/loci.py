@@ -830,7 +830,7 @@ class Chromosome:
     """One chromosome's local layers, loaded once: elements, nodes, genes, sequence, peaks."""
 
     def __init__(self, chrom: str, results_dir: Path = RESULTS_DIR) -> None:
-        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
         from genomeos.genome.domains import infer_domains
         from genomeos.genome.regulatory import load_ccres
 
@@ -838,7 +838,7 @@ class Chromosome:
         self.results_dir = results_dir
         self.ccres = load_ccres(chrom)
         gff = default_gencode({chrom})
-        fasta = Path("data/reference") / f"{chrom}.fa"
+        fasta = reference_fasta(chrom)
         if not self.ccres or gff is None or not fasta.exists():
             raise FileNotFoundError(f"{chrom} is not fetched; run `genomeos data fetch --chrom {chrom}`")
         self.annotation = Annotation.from_gff3(gff, {chrom})

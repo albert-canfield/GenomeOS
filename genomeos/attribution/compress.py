@@ -76,6 +76,7 @@ from typing import Any
 
 import numpy as np
 
+from genomeos.genome.index import resolve_fasta
 from genomeos.results import RESULTS_DIR, load_result, save_result
 
 REFERENCE = Path("data/reference")
@@ -245,9 +246,7 @@ class Chromosome:
 
     @classmethod
     def load(cls, name: str, reference: Path = REFERENCE, ledger: Ledger | None = None) -> Chromosome:
-        p = reference / f"{name}.fa"
-        if not p.exists():
-            p = reference / f"{name}.fa.gz"
+        p = resolve_fasta(reference / f"{name}.fa")
         raw = ledger.read(p) if ledger else p.read_bytes()
         return cls(name, parse_fasta_codes(raw))
 
@@ -1067,7 +1066,7 @@ def segdup_layer(
     for pc in sorted(by_chrom, key=lambda c: order[c]):
         genome = test.genome if pc == test.name else partners.get(pc)
         if genome is None:
-            p = reference / f"{pc}.fa"
+            p = resolve_fasta(reference / f"{pc}.fa")
             if not p.exists():
                 continue
             genome = parse_fasta_codes(ledger.read(p) if ledger else p.read_bytes())

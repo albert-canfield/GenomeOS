@@ -15,8 +15,8 @@ import json
 import subprocess
 import sys
 import time
-from pathlib import Path
 
+from genomeos.genome import has_reference
 from genomeos.jobs import heartbeat
 from genomeos.results import load_result, save_result
 
@@ -94,7 +94,7 @@ def main() -> int:
     args = ap.parse_args()
     waits = 0
     while True:
-        todo = [c for c in ORDER if scored(c) < args.sample and (Path("data/reference") / f"{c}.fa").exists()]
+        todo = [c for c in ORDER if scored(c) < args.sample and has_reference(c)]
         if not todo:
             done = [c for c in ORDER if scored(c) >= args.sample]
             summary = aggregate(done)

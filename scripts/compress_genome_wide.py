@@ -32,6 +32,7 @@ import time
 from pathlib import Path
 
 from genomeos.attribution.compress import DISK_FLOOR_GB, KARYOTYPE, DiskGuard, rollup
+from genomeos.genome.index import fasta_bytes
 from genomeos.jobs import heartbeat
 from genomeos.results import save_result
 
@@ -67,9 +68,8 @@ def alive(pid: int) -> bool:
 
 
 def need_bytes(chrom: str, rows_memory_gb: float | None = None) -> int:
-    p = REFERENCE / f"{chrom}.fa"
     per_base = MAP_BYTES_PER_BASE if rows_memory_gb else BYTES_PER_BASE
-    return per_base * (p.stat().st_size if p.exists() else 0)
+    return per_base * fasta_bytes(REFERENCE / f"{chrom}.fa")
 
 
 def clean_spill() -> None:

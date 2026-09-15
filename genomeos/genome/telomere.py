@@ -183,9 +183,9 @@ def comparable_gc(seq: str, centre: float = TELOMERIC_GC, window: float = GC_WIN
 def sequence_ends(chrom: str, reference: Path = Path("data/reference")) -> tuple[int, int] | None:
     """(first, last) non-N positions of the chromosome: where its assembled sequence starts and ends."""
     from genomeos.coords import Locus
-    from genomeos.genome import IndexedGenome
+    from genomeos.genome import IndexedGenome, reference_fasta
 
-    fa = reference / f"{chrom}.fa"
+    fa = reference_fasta(chrom, reference)
     if not fa.exists():
         return None
     g = IndexedGenome(str(fa))

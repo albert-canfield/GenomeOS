@@ -403,11 +403,11 @@ class Api:
 
     def individual_genes(self, name: str, chrom: str, limit: int = 40) -> dict:
         """One chromosome gene by gene for one person: variants and coding consequences."""
-        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
         from genomeos.genome.individuals import gene_by_gene
 
         gff = default_gencode({chrom})
-        fa = self.root / "data" / "reference" / f"{chrom}.fa"
+        fa = reference_fasta(chrom, self.root / "data" / "reference")
         if not gff or not fa.exists():
             raise ApiError(f"{chrom} needs local models and sequence (genomeos data fetch --chrom {chrom})")
         ann = Annotation.from_gff3(gff, {chrom})
@@ -421,7 +421,7 @@ class Api:
 
     def individual_predict(self, name: str, gene: str, chrom: str, max_variants: int = 30) -> dict:
         """Feature d: the person's regulatory variants on one gene, predicted per variant (cached)."""
-        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
         from genomeos.genome.individuals import vcf_path
         from genomeos.genome.regulation import regulation_of
         from genomeos.genome.regulatory import load_ccres
@@ -435,7 +435,7 @@ class Api:
         if vcf is None:
             raise ApiError(f"{name} has no rows on {chrom}")
         gff = default_gencode({chrom})
-        fa = self.root / "data" / "reference" / f"{chrom}.fa"
+        fa = reference_fasta(chrom, self.root / "data" / "reference")
         ccres = load_ccres(chrom)
         if not gff or not fa.exists() or not ccres:
             raise ApiError(

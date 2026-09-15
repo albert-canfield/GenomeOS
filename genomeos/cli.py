@@ -3416,7 +3416,7 @@ def cmd_individual(args: argparse.Namespace) -> int:
         print(f"  stored under data/individuals/{args.name}/knockouts.json (never under data/results)")
         return 0
     if args.action == "screen":
-        from genomeos.genome import clinvar
+        from genomeos.genome import clinvar, has_reference
 
         if not clinvar.pathogenic_path().exists():
             print("ClinVar not distilled yet: streaming the GRCh38 VCF once (about 190 MB, kept locally)")
@@ -3454,9 +3454,7 @@ def cmd_individual(args: argparse.Namespace) -> int:
         if args.name not in people:
             print(f"{args.name}: not a local individual (genomeos individual list)")
             return 1
-        chroms = args.chrom or [
-            c for c in people[args.name]["chromosomes"] if (Path("data/reference") / f"{c}.fa").exists()
-        ]
+        chroms = args.chrom or [c for c in people[args.name]["chromosomes"] if has_reference(c)]
         if not chroms:
             print(f"{args.name}: no chromosome with both this person's rows and a local reference sequence")
             return 1
@@ -3473,10 +3471,10 @@ def cmd_individual(args: argparse.Namespace) -> int:
         print(f"  [{r['evidence']}]  stored under data/individuals/{args.name}/ (never under data/results)")
         return 0
     if args.action == "genes":
-        from genomeos.genome import Annotation, IndexedGenome, default_gencode
+        from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
 
         gff = default_gencode({args.chrom})
-        fa = Path("data/reference") / f"{args.chrom}.fa"
+        fa = reference_fasta(args.chrom)
         if not gff or not fa.exists():
             print(f"{args.chrom}: needs local models and sequence (genomeos data fetch --chrom {args.chrom})")
             return 1
@@ -3536,7 +3534,7 @@ def cmd_individual(args: argparse.Namespace) -> int:
 
 def _individual_predict(args: argparse.Namespace) -> int:
     """Feature d: what this person's regulatory variants do to one gene, predicted per variant."""
-    from genomeos.genome import Annotation, IndexedGenome, default_gencode
+    from genomeos.genome import Annotation, IndexedGenome, default_gencode, reference_fasta
     from genomeos.genome.individuals import vcf_path
     from genomeos.genome.regulation import regulation_of
     from genomeos.genome.regulatory import load_ccres
@@ -3552,7 +3550,7 @@ def _individual_predict(args: argparse.Namespace) -> int:
         print(f"{args.name} has no rows on {args.chrom} (genomeos individual list)")
         return 1
     gff = default_gencode({args.chrom})
-    fa = Path("data/reference") / f"{args.chrom}.fa"
+    fa = reference_fasta(args.chrom)
     ccres = load_ccres(args.chrom)
     if not gff or not fa.exists() or not ccres:
         print(
