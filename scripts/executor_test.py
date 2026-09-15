@@ -94,6 +94,36 @@ def wide(args, say, t0: float) -> None:
     say(f"saved {save_result('executor_mpra_wide_run', out)}")
 
 
+def two_instruments(say, t0: float) -> None:
+    """The model-free reading at genome scale: two measurements of the same alleles, no key needed."""
+    rows_path = ex.LANE / "two_instrument_rows.json.gz"
+    mpra = ex.mpra_genome_wide(progress=say)
+    calls = [ex.mpra_call(r) for r in mpra]
+    positions = sorted({(c["chrom"], c["pos"]) for c in calls})
+    say(f"{len(mpra)} MPRA rows over {len(positions)} positions; streaming GTEx v8 at those positions")
+    ex.distil_gtex_at(positions, progress=say)
+    gtex = ex.gtex_at_positions()
+    say(f"{len(gtex)} positions carry a significant GTEx pair; pairing the two instruments")
+    rows = ex.two_instrument_rows(mpra, gtex, progress=say)
+    with gzip.open(rows_path, "wt") as fh:
+        json.dump(rows, fh)
+    out = {
+        "pre_registration": ex.TWO_INSTRUMENTS,
+        "rows": len(rows),
+        "variants": len({r["variant"] for r in rows}),
+        "significant": ex.two_instruments(rows, significant=True),
+        "control_not_significant": ex.two_instruments(rows, significant=False),
+        "first_reading": {
+            "when": "2026-09-14, on the widened E1's GM12878 variants only",
+            "fine_mapped": "120 of 179 agree, 0.670, p 6e-6",
+            "all": "946 of 1,826 agree, 0.518, p 0.12",
+        },
+        "model_requests_spent": 0,
+        "seconds": round(time.time() - t0, 1),
+    }
+    say(f"saved {save_result('two_instruments', out)}")
+
+
 def replicate(args, say, t0: float) -> None:
     """The replication of E2 and E3 away from chr21 and chr22: assemble, then spend the quota."""
     table = ex.LANE / "replication_assembled.json.gz"
@@ -150,6 +180,11 @@ def main(argv: list[str] | None = None) -> None:
         "--endpoints", default="E1_mpra,E2_eqtl", help="E3 runs only when the quota holder agrees"
     )
     ap.add_argument(
+        "--two-instruments",
+        action="store_true",
+        help="MPRA direction against GTEx slope genome-wide, split by fine-mapping: no model request",
+    )
+    ap.add_argument(
         "--replicate",
         action="store_true",
         help="E2 and E3 asked again on every catalogued chromosome but chr21 and chr22",
@@ -170,6 +205,9 @@ def main(argv: list[str] | None = None) -> None:
         return
     if args.replicate:
         replicate(args, say, t0)
+        return
+    if args.two_instruments:
+        two_instruments(say, t0)
         return
     table = ex.LANE / "assembled.json.gz"
     if not args.run:

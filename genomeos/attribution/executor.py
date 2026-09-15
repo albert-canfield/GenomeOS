@@ -338,6 +338,68 @@ E2_REPLICATION: dict[str, Any] = {
     ),
 }
 
+TWO_INSTRUMENTS: dict[str, Any] = {
+    "written": (
+        "2026-09-15, before the genome-wide table was built and before any of its numbers were seen; the "
+        "first reading of it, on 179 fine-mapped variants in one cell type, is in the result it replaces"
+    ),
+    "question": (
+        "do two instruments agree about what an allele does, and does their agreement follow causality? "
+        "A massively parallel reporter assay measures the alternative allele's effect on a plasmid "
+        "fragment's transcription; a GTEx eQTL measures the same allele against a gene's expression in "
+        "hundreds of donors' own chromosomes. DAP-G says whether the allele is probably the cause of the "
+        "eQTL or a passenger of one. No model is involved at any point, which is why this is worth doing"
+    ),
+    "population": (
+        "every variant with a significant MPRAVarDB row (FDR at or below 0.05, or nominal p at or below "
+        "0.01 where the study reports none; 3'UTR stability libraries excluded) and a significant GTEx v8 "
+        "pair at the same position with the same reference and alternative base. Every cell line, "
+        "including those the model has no track for: this comparison does not need one"
+    ),
+    "the_eqtl_used": (
+        "the pair DAP-G fine-maps at that very variant (highest PIP) where there is one, else the most "
+        "significant pair at the variant. One row per (variant, cell line, study): the MPRA direction is a "
+        "property of the cell line and the study that measured it, so rows are not pooled across them "
+        "before they are reported"
+    ),
+    "split": (
+        "fine-mapped, meaning DAP-G gives the variant a posterior at or above 0.5 for the gene used, "
+        "against the rest, which are usually passengers. Declared before the table was built"
+    ),
+    "control": (
+        "the same comparison on variants whose MPRA row is not significant (FDR above 0.2, or p above 0.2 "
+        "where no FDR): two instruments, one of which measured nothing, should agree at chance in both "
+        "strata. If the fine-mapped stratum of this control also reads near 0.67, the split is an artefact "
+        "of the data's construction and not a property of the alleles"
+    ),
+    "reported": (
+        "per cell line and per study with the sample size beside every figure, and pooled only after "
+        "those, because the studies differ in library, cell and depth and a pooled figure hides which of "
+        "them carries it"
+    ),
+    "holds_at_scale": (
+        "the fine-mapped stratum agrees at 0.60 or better, it beats the rest by at least 0.08 with a "
+        "one-sided Fisher p at or below 0.01, the same direction appears in the two largest cell lines "
+        "separately, and the non-significant control sits near 0.5 in both strata"
+    ),
+    "thins_out": (
+        "the difference between the strata is 0.03 or less, or the fine-mapped stratum agrees at 0.55 or "
+        "less. Then the one piece of evidence in this area that owes nothing to the model is no better "
+        "than the model-dependent ones, and that is the more important result, to be said as plainly as "
+        "the E2 replication was"
+    ),
+    "resolves_nothing": "anything between those, reported as such and not as support",
+    "what_it_cannot_mean": [
+        "MPRA libraries are built from eQTL and GWAS variants, so the overlap between the two "
+        "instruments is not a random sample of the genome and no statement about the genome follows from "
+        "it; it is a statement about alleles that were already suspected of doing something",
+        "a plasmid fragment is not a gene in its chromosome: agreement says the allele does something in "
+        "both assays and in the same direction, not that the eQTL's gene is the reporter element's target",
+        "fine-mapping is itself a statistical instrument, and the split is between what DAP-G calls causal "
+        "and what it does not, not between truth and falsehood",
+    ],
+}
+
 E1_WIDE: dict[str, Any] = {
     "written": "2026-09-14, before any model request of the widened endpoint and before any pair was scored",
     "why": (
@@ -1693,6 +1755,147 @@ def replication_summary(built: dict[str, Any], examples: int = 8) -> dict[str, A
         ],
         "model_requests_spent": 0,
     }
+
+
+GTEX_AT_MPRA = LANE / "gtex_at_mpra"  # GTEx distilled over the MPRA-tested positions, not over units
+MATCHED_TISSUE = {  # the GTEx tissue closest to each MPRA cell line, for the declared secondary
+    "GM12878": "Cells_EBV-transformed_lymphocytes",
+    "Jurkat": "Cells_EBV-transformed_lymphocytes",
+    "HepG2": "Liver",
+    "K562": "Whole_Blood",
+    "HEL92.1.7": "Whole_Blood",
+}
+
+
+def distil_gtex_at(positions: list[tuple[str, int]], directory: Path = GTEX_AT_MPRA, progress=None):
+    """Every significant GTEx pair at the given 1-based positions, one file per tissue. No model call."""
+    from genomeos.attribution.eqtl import Intervals, distil
+
+    iv = Intervals()
+    for chrom, pos in positions:
+        iv.add(chrom, pos - 1, pos, f"{chrom}:{pos}")
+    return distil(iv.freeze(), knowledge=directory, progress=progress)
+
+
+def gtex_at_positions(directory: Path = GTEX_AT_MPRA) -> dict[tuple[str, int], list[dict[str, Any]]]:
+    """The distilled pairs, keyed by (chromosome, 1-based position)."""
+    out: dict[tuple[str, int], list[dict[str, Any]]] = {}
+    for p in sorted(directory.glob("hits_*.tsv")):
+        with p.open() as fh:
+            next(fh, None)
+            for line in fh:
+                f = line.rstrip("\n").split("\t")
+                out.setdefault((f[1], int(f[2])), []).append(
+                    {
+                        "tissue": f[0],
+                        "ref": f[3],
+                        "alt": f[4],
+                        "gene_id": f[5],
+                        "slope": float(f[6]),
+                        "pval": float(f[7]),
+                    }
+                )
+    return out
+
+
+def two_instrument_rows(
+    mpra: list[dict[str, Any]], gtex: dict[tuple[str, int], list[dict[str, Any]]], progress=None
+) -> list[dict[str, Any]]:
+    """One row per (variant, cell line, study) that both instruments measured, with the two directions.
+
+    The eQTL used is the one DAP-G fine-maps at that very variant, else the most significant pair
+    there. Rows carry the stratum, the cell, the study and both signs; nothing is pooled here.
+    """
+    calls = [mpra_call(r) for r in mpra]
+    wanted: dict[str, list[int]] = {}
+    for c in calls:
+        if (c["chrom"], c["pos"]) in gtex:
+            wanted.setdefault(c["chrom"], []).append(c["pos"])
+    dapg: dict[tuple[str, int], dict[str, Any]] = {}
+    for chrom, positions in sorted(wanted.items()):
+        for pos, best in dapg_at(chrom, positions).items():
+            dapg[(chrom, pos)] = best
+        if progress:
+            progress(f"{chrom}: {len(positions)} positions with both instruments")
+    rows = []
+    for c in calls:
+        if c["log2fc"] is None or MPRA_EXCLUDE in (c["study"] or ""):
+            continue
+        pairs = [
+            p for p in gtex.get((c["chrom"], c["pos"]), []) if p["ref"] == c["ref"] and p["alt"] == c["alt"]
+        ]
+        if not pairs:
+            continue
+        fine = dapg.get((c["chrom"], c["pos"]))
+        used = None
+        if fine and (fine["pip"] or 0) >= DAPG_PIP:
+            named = [p for p in pairs if p["tissue"] == fine["tissue"]]
+            used = min(named or pairs, key=lambda p: p["pval"])
+        else:
+            used = min(pairs, key=lambda p: p["pval"])
+        significant = bool(mpra_significant([c]))
+        null = (c["fdr"] if c["fdr"] is not None else (c["pvalue"] or 1)) > MPRA_NULL_P
+        if not significant and not null:
+            continue
+        rows.append(
+            {
+                "variant": f"{c['chrom']}:{c['pos']}",
+                "rsid": c["rsid"],
+                "cell": c["cell"],
+                "study": c["study"][:60],
+                "mpra_log2fc": c["log2fc"],
+                "mpra_significant": significant,
+                "gtex_tissue": used["tissue"],
+                "gtex_gene": used["gene_id"],
+                "gtex_slope": used["slope"],
+                "gtex_pval": used["pval"],
+                "pip": (fine or {}).get("pip"),
+                "fine_mapped": bool(fine and (fine["pip"] or 0) >= DAPG_PIP),
+                "tissue_matches_cell": MATCHED_TISSUE.get(c["cell"]) == used["tissue"],
+                "agree": (c["log2fc"] > 0) == (used["slope"] > 0),
+            }
+        )
+    return rows
+
+
+def _agreement(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    n = len(rows)
+    k = sum(r["agree"] for r in rows)
+    return {
+        "rows": n,
+        "agree": k,
+        "share": round(k / n, 3) if n else None,
+        "binomial_p_two_sided": binom_two_sided(k, n) if n else None,
+    }
+
+
+def two_instruments(rows: list[dict[str, Any]], significant: bool = True) -> dict[str, Any]:
+    """The reading TWO_INSTRUMENTS asks for: split by fine-mapping, reported per cell and per study."""
+    mine = [r for r in rows if r["mpra_significant"] is significant]
+    fine = [r for r in mine if r["fine_mapped"]]
+    rest = [r for r in mine if not r["fine_mapped"]]
+    out: dict[str, Any] = {
+        "fine_mapped": _agreement(fine),
+        "the_rest": _agreement(rest),
+        "matched_tissue_only": {
+            "fine_mapped": _agreement([r for r in fine if r["tissue_matches_cell"]]),
+            "the_rest": _agreement([r for r in rest if r["tissue_matches_cell"]]),
+        },
+    }
+    a, b = out["fine_mapped"], out["the_rest"]
+    if a["rows"] and b["rows"]:
+        out["difference"] = round(a["share"] - b["share"], 3)
+        out["p_one_sided"] = fisher_greater(a["agree"], a["rows"], b["agree"], b["rows"])
+    for key, field in (("by_cell", "cell"), ("by_study", "study")):
+        groups = sorted({r[field] for r in mine})
+        out[key] = {
+            g: {
+                "fine_mapped": _agreement([r for r in fine if r[field] == g]),
+                "the_rest": _agreement([r for r in rest if r[field] == g]),
+            }
+            for g in groups
+        }
+    return out
 
 
 def fine_mapped_split(rows: list[dict[str, Any]], endpoint: str) -> dict[str, Any]:
