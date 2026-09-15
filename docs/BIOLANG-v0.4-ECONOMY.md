@@ -764,8 +764,8 @@ cell never notices. The only way to be re-read today is to declare
 re-decides every cell as a side effect. Used as a clock it is measurably wrong:
 the worm scored **386 of 555 against 522** at a 6-minute cadence, because a
 clock gives *every* rule extra chances, not only the one whose quantity arrived.
-`commitment` recovered it, but that is a lock compensating for a scheduler.
-Stepping a network must not change which fates are taken.
+Area E recovered it with `commitment`. Stepping a network must not change which
+fates are taken.
 
 **Two shapes, and the one chosen.**
 
@@ -819,6 +819,55 @@ to what the program scores today with `commitment` doing the work. Falsified if
 the cadence still moves a fate, or if `recheck: crossings` and `recheck: none`
 differ on any program that names no integrated read.
 
+**Implemented and measured 2026-09-15; it passes, and it refutes part of the
+argument above.** The worm scores **522 of 555 in all four combinations** of
+cadence (none, 6 min) and `recheck` (none, crossings), with **not one cell
+differing** in type or terminal name, and all 14 committed organism programs are
+identical under `crossings` and `none` — the only difference anywhere is 250
+further decisions firing on the three worm programs that name a read, which
+change nothing. So the falsifier holds and the default is `crossings`.
+
+But the sentence "a lock compensating for a scheduler" was wrong, and the
+measurement says so. Strip `commitment terminal_fate` from the worm and the
+score depends on when the cell looks, whatever the scheduler:
+
+| `embryo_factors.bio` | no network | 6-minute network |
+|---|---|---|
+| as written (`commitment` declared) | 522 | 522 |
+| `commitment` stripped, `recheck: none` | 522 | **386** |
+| `commitment` stripped, `recheck: crossings` | **412** | 386 |
+
+A crossing is *better* than a clock (412 against 386) and it is principled where
+a clock has a free parameter, but it does not restore 522: with a monotonically
+growing integral **every later look is a genuinely new reading**, so any extra
+look moves fates unless the fate is locked. Area E's conclusion stands exactly as
+they wrote it — *a fate written on a growing integral is only a fate if the cell
+cannot take it back* — and `commitment` is doing real work, not covering for the
+scheduler. What §7.5 buys is that the *when* is now declared, parameter-free and
+exact, instead of being smuggled in by a construct that means something else.
+
+The second lesson is in the 412 itself: these rules were learned against the
+decision points the program already had (births, signals, stages), so looking
+more often is not automatically truer. A program that changes `recheck` is
+changing what its rules were fitted to, and should say so.
+
+**Decided while implementing.**
+
+1. **A crossing that has effectively happened has happened.** A wake-up computed
+   to land exactly on its threshold can miss it by a float's width and reschedule
+   itself for ever — the worm hung on the first run. A threshold within 1e-9 is
+   reached, and a wake-up sooner than 1e-6 minutes is now.
+2. **Revising nothing is not a revision.** A decision that lands on the type the
+   cell already holds was counted in `revised_fates` and took the cell's terminal
+   name away, so 250 of 555 terminal cells kept the right type and stopped
+   answering to their names — the §7.4 anchor-cell bug, reached from the other
+   side. Fixed, and it changes nothing under `recheck: none`, where
+   `revised_fates` was already 0 on every committed program.
+3. **The mean over a window of no length is the value in force.** At the instant
+   a cell is born `mean(cell)` is 0/0; its limit is the rate now in force, so a
+   cell reading it at birth is taking the instantaneous read, which is the
+   honest answer and needs no wake-up.
+
 ## 8. Execution regime (declared per run)
 
 ```
@@ -867,6 +916,7 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | fate | commitment, competence | a published perturbation series (Fukushige & Krause 2005; Yuzyuk et al. 2009) | **passed 2026-09-14** (§7.2a): five arms reproduced, and each construct fails an arm when removed |
 | fate | integrated reads (`.exposure(window)`, `.mean(window)`) | area E's three readings on 555 terminal cells | **implemented 2026-09-15**, in absolute units; the gate is area E's to run, by writing their fate rules as declared reads instead of a precomputed lookup |
 | fate precedence | `regime fates`, decision `priority` | area E's worm fates identical under explicit priorities | **implemented and now the default**: 1,439 of 1,439 identical, 45 ambiguous points to 0 |
+| re-decision | `regime recheck`, crossings of an integrated read | stepping a network must stop changing fates as a side effect | **passed 2026-09-15** (§7.5): 522 of 555 in all four combinations of cadence and recheck, 0 cells differing, all 14 programs identical |
 | contacts | neighbours, contact amounts, per-cell networks, seeded noise, replicate asserts | Collier 1996 equivalence group splits about evenly | **passed 2026-09-14**: 0 of 200 diverge without noise, 200 of 200 with it, first cell 48%, same winner per seed in either creation order |
 
 ### 9.1 Stage 1 as measured (2026-09-14)
