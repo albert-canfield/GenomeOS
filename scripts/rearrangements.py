@@ -26,30 +26,23 @@ def main() -> int:
         print(f"[{time.time() - t0:6.1f}s] {msg}", flush=True)
 
     out = run_and_save(progress=say)
-    a = out["aggregate"]
     print()
     print("registered before the run:")
     print(f"  {out['prediction_registered_before_the_run']}")
     print()
-    for claim in ("separated_before", "boundary_lost", "new_adjacency"):
-        p, q = a["published"][claim], a["controls"][claim]
-        print(f"{claim:18s} published {p['k']}/{p['n']}   matched random {q['k']}/{q['n']}")
-    n = a["recipient_named_where_a_deletion_was_scored"]
-    if n["judgeable"]:
-        print(
-            f"{'recipient named':18s} published {n['published']['k']}/{n['published']['n']}"
-            f"   matched random {n['controls']['k']}/{n['controls']['n']}"
-        )
-    else:
-        print(
-            f"{'recipient named':18s} NOT JUDGEABLE: {n['controls']['not_scored']} of"
-            f" {n['controls']['of']} control recipients have no deletion scored near them,"
-            " so the claim would measure coverage and not biology"
-        )
-    for c in out["cases"]:
-        b = c.get("boundary_census") or {}
-        walls = b.get("ctcf_only_between_donor_and_recipient")
-        print(f"  {c['locus']}: CTCF-only between donor and recipient = {walls}")
+    print("no published case is runnable:")
+    print(f"  {out['no_case_is_runnable']}")
+    print()
+    b = out["boundary_behaviour"]
+    lo, hi = b["published_deletion_size"]
+    print(f"a deletion of the published size ({lo / 1e6:.2f}-{hi / 1e6:.2f} Mb), anywhere on {b['chrom']}:")
+    for claim, r in b["rates"].items():
+        print(f"  {claim:18s} {r['k']}/{r['n']}")
+    near, total = b["scored_near_the_recipient"], len(b["deletions"])
+    print(f"  recipients with any deletion scored near them: {near}/{total}")
+    print()
+    print(out["analytic_note"])
+    print()
     print(f"saved data/results/loci_rearrangements.json in {out['cost']['seconds']} s")
     return 0
 

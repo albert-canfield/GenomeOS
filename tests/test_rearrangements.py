@@ -12,6 +12,7 @@ from __future__ import annotations
 import pytest
 
 from genomeos.benchmark.rearrangements import (
+    ANALYTIC_NOTE,
     CASES,
     KINDS,
     NOT_YET_RUNNABLE,
@@ -80,6 +81,24 @@ def test_the_cases_that_cannot_run_say_what_each_is_waiting_for():
     assert NOT_YET_RUNNABLE, "dropping a case silently is what the panel exists to prevent"
     for name, why in NOT_YET_RUNNABLE.items():
         assert len(why) > 60, name
+        assert "liftover" not in why.lower(), (
+            f"{name}: the blocker is that no breakpoint coordinate is published, not a liftover -"
+            " saying otherwise sends the next session after a chain file it does not need"
+        )
+
+
+def test_no_case_is_placed_approximately():
+    """The rule: if a breakpoint cannot be had cleanly, drop the case rather than guess it.
+
+    Applied to all four, including the EPHA4-to-PAX3 deletion an earlier run placed approximately.
+    """
+    assert CASES == (), "a case is being run without published breakpoints"
+    assert "EPHA4_PAX3_deletion" in NOT_YET_RUNNABLE
+
+
+def test_the_analytic_note_says_why_two_of_the_three_claims_cannot_discriminate():
+    assert "guaranteed by construction" in ANALYTIC_NOTE
+    assert "arithmetic, not biology" in ANALYTIC_NOTE
 
 
 # ------------------------------------------------------------------------- the gate, on the result
@@ -97,37 +116,28 @@ def test_the_node_model_is_never_counted_as_a_derived_hit():
 
 
 @needs_result
-def test_every_claim_is_scored_at_the_controls_too():
-    a = RESULT["aggregate"]
-    for claim in ("separated_before", "boundary_lost", "new_adjacency"):
-        assert a["published"][claim]["n"] >= 1, claim
-        assert a["controls"][claim]["n"] >= 1, f"{claim} has no matched control"
+def test_the_result_says_plainly_that_no_case_is_runnable():
+    assert RESULT["cases"] == []
+    assert "nothing to lift over" in RESULT["no_case_is_runnable"]
 
 
 @needs_result
-def test_naming_the_recipient_is_not_quoted_without_coverage_on_both_sides():
-    """The claim that could separate the cases is the one most easily faked by where requests went."""
-    n = RESULT["aggregate"]["recipient_named_where_a_deletion_was_scored"]
-    if not n["judgeable"]:
-        assert n["controls"]["n"] == 0, "not judgeable but the controls do have data"
-    assert n["published"]["n"] + n["published"]["not_scored"] == n["published"]["of"]
+def test_a_deletion_of_the_published_size_loses_a_boundary_wherever_it_is_put():
+    """The measurement that survives: claims one and two fire everywhere, so they discriminate nothing."""
+    b = RESULT["boundary_behaviour"]
+    assert b["rates"]["separated_before"]["n"] >= 1
+    r = b["rates"]
+    assert r["boundary_lost"]["k"] == r["boundary_lost"]["n"], (
+        "a size-matched deletion that did not lose a boundary would contradict the analytic note"
+    )
+    assert r["new_adjacency"]["k"] == r["new_adjacency"]["n"]
 
 
 @needs_result
-def test_the_boundary_census_is_asked_before_anything_else():
-    """Whether a CTCF-only element sits between donor and recipient at all: at HOXD there was none."""
-    for c in RESULT["cases"]:
-        b = c["boundary_census"]
-        assert b["ctcf_only_between_donor_and_recipient"] >= 0
-        assert b["there_is_a_boundary_at_all"] == bool(b["ctcf_only_between_donor_and_recipient"])
-
-
-@needs_result
-def test_a_case_whose_pair_the_node_model_does_not_separate_says_nothing():
-    """`separated_before` is the precondition, not a result: no boundary, no experiment."""
-    for c in RESULT["cases"]:
-        claims = c["published"]["claims"]
-        if not claims["separated_before"]:
-            assert not claims["new_adjacency"], (
-                f"{c['locus']}: a new adjacency where the pair was never separated is a bug"
-            )
+def test_naming_the_recipient_is_not_quoted_without_coverage():
+    """The one claim that could discriminate, and it cannot be scored until chr2 is swept."""
+    b = RESULT["boundary_behaviour"]
+    if not b["scored_near_the_recipient"]:
+        assert b["rates"]["recipient_named"]["k"] == 0, (
+            "a recipient was named with no deletion scored near it: that cannot happen"
+        )

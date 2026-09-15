@@ -800,3 +800,59 @@ exactly this, the node model's answer is indistinguishable from the answer it gi
 of the same shape.** One case is an anecdote by the panel's own standard, and the honest next step
 is the other three cases, which need the paper's breakpoints lifted to hg38 - a liftover, not a
 quota.
+
+## 13. The liftover that was not the problem (2026-09-15)
+
+Asked to lift the other three Lupiáñez breakpoints from hg19 to hg38 and run them, the first step
+was to find the breakpoints. **There are none to find.** The accessible paper gives sizes and gene
+content and no human coordinates at all: deletions of 1.75 to 1.9 Mb at 2q35-36, an inversion of
+about 1.1 Mb whose telomeric breakpoint is about 1.4 Mb from EPHA4, a duplication of about 1.4 Mb
+with a breakpoint about 1.2 Mb away, and a polydactyly duplication of about 900 kb. The breakpoints
+themselves live in aCGH supplementary data. Two independent routes were tried - the PMC full text
+and POSTRE's re-curation of the same variants - and neither carries a coordinate.
+
+**So the blocker was never the liftover, and saying it was sent the next session after the wrong
+thing.** UCSC's chain and this project's own chain reader (`attribution/human_panel.py`, already
+used for Repli-seq) would do the conversion in seconds. There is no number to convert. The gate now
+refuses any `NOT_YET_RUNNABLE` reason containing the word "liftover", so the mistake cannot be
+written back in.
+
+### The rule applied to my own case
+
+The instruction was to drop a case rather than place it approximately. Applied honestly, that takes
+the case section 12 *ran*: **EPHA4 to PAX3 is now dropped too.** Looking for the breakpoints turned
+up two errors in the expectation record I had already committed:
+
+- **the phenotype was wrong.** The EPHA4-to-PAX3 deletion causes **brachydactyly**, not polydactyly;
+  polydactyly comes from a duplication of about 900 kb. The record said polydactyly.
+- **the stated span was wrong in kind.** The published deletions are 1.75 to 1.9 Mb and **include
+  EPHA4 itself**, extending into the non-coding part of the PAX3 domain. The span I stated was the
+  626 kb intergenic interval between the two genes, which excludes EPHA4 - three times too short
+  and a different construction. It was not the faithful stand-in I claimed it was.
+
+Neither error changed the verdict, for a reason worth more than the case was.
+
+### Two of the three claims could never have discriminated, and that is the finding
+
+The node model puts its boundaries at CTCF-only elements. A deletion removes every element inside
+its span. So **any** deletion spanning a boundary loses that boundary, and any deletion of the whole
+interval between two genes puts them in one node. That is arithmetic, not biology. Deleting an
+interval of the published size (1.75 to 1.9 Mb) between a consecutive coding pair anywhere on chr2
+loses a boundary and creates a new adjacency at **4 of 4** attempts, exactly as it did for the
+approximately-placed case.
+
+| claim | a deletion of the published size, anywhere on chr2 |
+|---|---|
+| the pair is in different nodes to begin with | 4/4 |
+| loses a boundary between them | **4/4** |
+| a new adjacency appears | **4/4** |
+| a derived layer names the recipient | 0/4, and **0 of 4 recipients have any deletion scored near them** |
+
+**Two of this module's three claims were incapable of discriminating by construction.** Whatever the
+real breakpoints turn out to be, they cannot separate a published rearrangement from a random one on
+either claim, because both are guaranteed by how the node model is built. Only the third - which
+gene the machinery names - could ever have worked, which is what the registered prediction said, and
+it still cannot be scored because no control recipient has a deletion near it until chr2 is swept.
+
+That sharpens what the coordinator is spending chr2 on. It is not that claim three is the last of
+three; it is that claim three is **the only one there ever was**.

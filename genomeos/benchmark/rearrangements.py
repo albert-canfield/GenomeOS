@@ -99,49 +99,36 @@ class Rearrangement:
         }
 
 
-CASES: tuple[Rearrangement, ...] = (
-    Rearrangement(
-        locus="EPHA4_PAX3_deletion",
-        chrom="chr2",
-        kind="deletion",
-        donor="EPHA4",
-        recipient="PAX3",
-        phenotype="polydactyly: PAX3 is switched on in the limb bud by EPHA4's enhancers",
-        span_source="stated",
-        span_citation=(
-            "Lupianez et al. 2015, Cell 161:1012 map the polydactyly deletions across the boundary"
-            " between the EPHA4 and PAX3 domains; the paper's breakpoints are hg19 and the panel does"
-            " not have them lifted over, so the span here is STATED as the intergenic interval"
-            " between GENCODE's EPHA4 and PAX3, which is the interval the published deletions remove"
-            " the boundary from. A cited hg38 breakpoint set would be strictly better and is recorded"
-            " as pending"
-        ),
-        citations=(
-            "Lupianez et al. 2015, Cell 161:1012 (disruptions of topological chromatin domains cause"
-            " pathogenic rewiring of gene-enhancer interactions)",
-            "Lupianez, Spielmann and Mundlos 2016, Trends Genet 32:225 (breaking TADs: how alterations"
-            " of chromatin domains result in disease)",
-        ),
-        answer_from=("human pedigrees with CNVs", "4C-seq in patient fibroblasts", "mouse models"),
-        note=(
-            "the sharpest published test of the node model there is: the same enhancers, the same"
-            " genes, and the only thing that changed is which side of a boundary they are on"
-        ),
-    ),
-)
+#: No published case is runnable. Every one of them needs human breakpoint coordinates, and the
+#: Lupianez paper does not state any in its text: the accessible article gives SIZES and gene
+#: content only, and the breakpoints live in aCGH supplementary data. Two independent routes were
+#: tried (the PMC full text, and POSTRE's re-curation of the same variants) and neither carries a
+#: coordinate. So the blocker was never the liftover - UCSC's chain and this project's chain reader
+#: (attribution/human_panel.py) would take seconds - it is that there is no number to lift.
+#: Placing a case approximately is the one thing the rule forbids, so all four are recorded here.
+CASES: tuple[Rearrangement, ...] = ()
 
-#: published cases the panel cannot run yet, and exactly what each is waiting for
+#: published cases and exactly what each is waiting for. None of these is "needs a liftover".
 NOT_YET_RUNNABLE = {
+    "EPHA4_PAX3_deletion": (
+        "brachydactyly (NOT polydactyly - an earlier version of this file had the phenotype wrong):"
+        " heterozygous deletions of 1.75 to 1.9 Mb at 2q35-36 remove EPHA4 together with much of its"
+        " domain and extend into the non-coding part of the PAX3 domain, taking the boundary with"
+        " them, so PAX3 falls under the EPHA4 limb enhancers (Lupianez et al. 2015, Cell 161:1012)."
+        " This case WAS run here with a stated span, and the stated span was wrong in kind: it was"
+        " the 626 kb intergenic interval between EPHA4 and PAX3, which excludes EPHA4, where the"
+        " published deletion is three times longer and includes it. Needs the real breakpoints"
+    ),
     "EPHA4_IHH_duplication": (
-        "brachydactyly: a duplication brings IHH into the EPHA4 domain (Lupianez et al. 2015). The"
-        " effect depends on where the duplication's breakpoints fall INSIDE the domains, so the"
-        " intergenic interval between the genes is not a faithful stand-in the way it is for the"
-        " deletion. Needs the paper's hg19 breakpoints lifted to hg38"
+        "polydactyly: a duplication of about 900 kb at 2q35 brings IHH under the EPHA4 enhancers"
+        " (Lupianez et al. 2015). The effect depends on where the breakpoints fall INSIDE the"
+        " domains, so no intergenic stand-in is faithful. Needs the real breakpoints"
     ),
     "EPHA4_WNT6_inversion": (
-        "F-syndrome: an inversion moves WNT6 into the EPHA4 domain (Lupianez et al. 2015). Same"
-        " reason as the duplication - an inversion of the intergenic interval does not reproduce it."
-        " Needs the paper's hg19 breakpoints lifted to hg38"
+        "F-syndrome: a heterozygous inversion of about 1.1 Mb, its telomeric breakpoint about 1.4 Mb"
+        " from EPHA4, moves WNT6 under the EPHA4 enhancers; a second family carries a 1.4 Mb"
+        " duplication with a breakpoint about 1.2 Mb away (Lupianez et al. 2015). Sizes and offsets"
+        " are published, the breakpoints are not. Needs the real breakpoints"
     ),
     "SOX9_KCNJ2_duplication": (
         "Cooks syndrome, duplications at the SOX9/KCNJ2 boundary (Franke et al. 2016, Nature"
@@ -149,6 +136,22 @@ NOT_YET_RUNNABLE = {
         " locus panel, so the expectation would not be independent"
     ),
 }
+
+#: the one thing about the published deletions that IS citable: their size (Lupianez et al. 2015)
+PUBLISHED_DELETION_SIZE = (1_750_000, 1_900_000)
+
+#: why claims one and two could never have discriminated, whatever the coordinates turn out to be
+ANALYTIC_NOTE = (
+    "Claims one and two are guaranteed by construction and cannot separate anything. The node model"
+    " puts its boundaries at CTCF-only elements; a deletion removes every element inside its span,"
+    " so any deletion spanning a boundary loses that boundary, and any deletion of the whole"
+    " interval between two genes puts them in one node. This is arithmetic, not biology, and the"
+    " size-matched deletions below confirm it at every one tried. Only claim three - WHICH gene the"
+    " machinery then names - could ever have discriminated, which is exactly what the registered"
+    " prediction said. The right reading of this module is therefore: two of its three claims were"
+    " incapable of discriminating by construction, and the third needs chr2 swept before it can be"
+    " scored at the controls at all."
+)
 
 
 # ------------------------------------------------------------------ the coordinate transforms
@@ -342,68 +345,74 @@ def named_by_a_derived_layer(ch, results_dir: Path, pos: int, gene: str) -> dict
     }
 
 
-def run(results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
-    from genomeos.benchmark.loci import Chromosome, tss_of
+def boundary_behaviour(chrom: str = "chr2", results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
+    """What a deletion of the published size does to the node model, anywhere on the chromosome.
 
-    t0 = time.time()
+    No published case is runnable (see NOT_YET_RUNNABLE), but one thing about them IS citable: the
+    brachydactyly deletions are 1.75 to 1.9 Mb. Deleting an interval of that size between a
+    consecutive coding pair is a lower bound on what any of these rearrangements would do to our
+    boundaries, and it is enough to show that two of the three claims can never discriminate.
+    """
+    from genomeos.benchmark.loci import Chromosome
+
     say = progress or (lambda _m: None)
-    chroms: dict[str, Any] = {}
-    out_cases = []
+    ch = Chromosome(chrom, results_dir)
     try:
-        for case in CASES:
-            ch = chroms.get(case.chrom) or chroms.setdefault(case.chrom, Chromosome(case.chrom, results_dir))
-            genes = {
-                g.symbol: g for g in ch.annotation.genes.values() if g.symbol in (case.donor, case.recipient)
-            }
-            if len(genes) < 2:
-                out_cases.append({"locus": case.locus, "pending": "donor or recipient not in GENCODE"})
-                continue
-            d, r = genes[case.donor], genes[case.recipient]
-            donor_pos, recipient_pos = tss_of(d), tss_of(r)
-            lo, hi = sorted(
-                (d.locus.end, r.locus.start) if donor_pos < recipient_pos else (r.locus.end, d.locus.start)
+        lo, hi = PUBLISHED_DELETION_SIZE
+        stub = Rearrangement(
+            locus="size_matched_deletion",
+            chrom=chrom,
+            kind="deletion",
+            donor="-",
+            recipient="-",
+            phenotype="-",
+            span_source="stated",
+            span_citation="x" * 81,
+            citations=(),
+            answer_from=(),
+        )
+        cands = [c for c in control_candidates(ch, stub) if lo <= c["length"] <= hi]
+        say(f"{chrom}: {len(cands)} consecutive gene pairs {lo / 1e6:.2f} to {hi / 1e6:.2f} Mb apart")
+        rows = []
+        for c in cands[:CONTROLS_PER_CASE]:
+            c["claims"] = claims_for(ch, tuple(c["span"]), "deletion", c["donor_tss"], c["recipient_tss"])
+            c["recipient_named"] = named_by_a_derived_layer(
+                ch, results_dir, c["recipient_tss"], c["recipient"]
             )
-            span = case.span or (lo, hi)
-            walls = ctcf_between(ch.ccres, donor_pos, recipient_pos)
-            published = {
-                "span": list(span),
-                "length": span[1] - span[0],
-                "coding_tss_inside": sum(1 for t, _s in ch.coding if span[0] <= t < span[1]),
-                "ctcf_crossed": len(ctcf_between(ch.ccres, *span)),
-                "donor_tss": donor_pos,
-                "recipient_tss": recipient_pos,
-            }
-            published["claims"] = claims_for(ch, span, case.kind, donor_pos, recipient_pos)
-            named = named_by_a_derived_layer(ch, results_dir, recipient_pos, case.recipient)
-            published["claims"]["recipient_named"] = named["names_the_recipient"]
-            say(f"{case.locus}: published rearrangement read")
-            controls = matched_controls(ch, case, span, published, results_dir)
-            say(f"{case.locus}: {len(controls)} matched random rearrangements")
-            out_cases.append(
-                {
-                    "locus": case.locus,
-                    "expected": case.as_dict(),
-                    "boundary_census": {
-                        "ctcf_only_between_donor_and_recipient": len(walls),
-                        "elements": walls[:8],
-                        "there_is_a_boundary_at_all": bool(walls),
-                        "evidence": EVIDENCE["boundary_census"],
-                    },
-                    "published": published,
-                    "recipient_named": named_by_a_derived_layer(
-                        ch, results_dir, recipient_pos, case.recipient
-                    ),
-                    "controls": controls,
-                }
-            )
+            c["claims"]["recipient_named"] = c["recipient_named"]["names_the_recipient"]
+            rows.append(c)
+        say(f"{chrom}: {len(rows)} size-matched deletions scored")
+        keys = ("separated_before", "boundary_lost", "new_adjacency", "recipient_named")
+        return {
+            "chrom": chrom,
+            "published_deletion_size": list(PUBLISHED_DELETION_SIZE),
+            "candidate_pairs_at_that_size": len(cands),
+            "deletions": rows,
+            "rates": {k: {"k": sum(1 for r in rows if r["claims"].get(k)), "n": len(rows)} for k in keys},
+            "scored_near_the_recipient": sum(1 for r in rows if r["recipient_named"]["elements_scored"]),
+            "analytic_note": ANALYTIC_NOTE,
+        }
     finally:
-        for ch in chroms.values():
-            ch.close()
+        ch.close()
+
+
+def run(results_dir: Path = RESULTS_DIR, progress=None) -> dict[str, Any]:
+    t0 = time.time()
+    out_cases: list[dict[str, Any]] = []
+    behaviour = boundary_behaviour(results_dir=results_dir, progress=progress)
     return {
         "result": "loci_rearrangements",
         "prediction_registered_before_the_run": PREDICTION,
         "cases": out_cases,
-        "aggregate": aggregate(out_cases),
+        "no_case_is_runnable": (
+            "Every published case needs human breakpoint coordinates and the paper states none: the"
+            " accessible text gives sizes and gene content only. Two routes were tried (the PMC full"
+            " text and POSTRE's re-curation) and neither carries a coordinate, so there is nothing to"
+            " lift over. The rule is to drop rather than place approximately, and it is applied here"
+            " to the EPHA4-to-PAX3 deletion as well, which an earlier run placed approximately."
+        ),
+        "boundary_behaviour": behaviour,
+        "analytic_note": ANALYTIC_NOTE,
         "not_yet_runnable": NOT_YET_RUNNABLE,
         "evidence": EVIDENCE,
         "note": (
