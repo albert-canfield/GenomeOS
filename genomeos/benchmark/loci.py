@@ -123,6 +123,9 @@ class Expect:
     nearest_gene_trap: str | None = None  # the gene the nearest-TSS heuristic is expected to name wrongly
     value_domain: str | None = None  # two | few | many, for the storage loci
     frequency: str | None = None  # the published population structure, in words
+    #: published mechanisms that are not in the reference sequence at all, so no layer here can carry
+    #: them: parent of origin, copy number, developmental stage. Read as pending, never as a miss.
+    beyond_sequence: tuple[str, ...] = ()
     citations: tuple[str, ...] = ()
     answer_from: tuple[str, ...] = ()  # the kinds of data the published answer itself came from
     note: str = ""
@@ -145,6 +148,7 @@ class Expect:
             "nearest_gene_trap": self.nearest_gene_trap,
             "value_domain": self.value_domain,
             "frequency": self.frequency,
+            "beyond_sequence": list(self.beyond_sequence),
             "citations": list(self.citations),
             "answer_from": list(self.answer_from),
             "note": self.note,
@@ -272,6 +276,7 @@ PANEL: tuple[Expect, ...] = (
                 "effect": "deleting the LCR (Hispanic thalassaemia) silences every beta-like globin gene",
             },
         ),
+        beyond_sequence=("developmental stage",),
         citations=(
             "Tuan et al. 1985, PNAS 82:6384 (the erythroid-specific hypersensitive sites 5' of epsilon)",
             "Grosveld et al. 1987, Cell 51:975 (position-independent high-level expression from the LCR)",
@@ -541,6 +546,218 @@ PANEL: tuple[Expect, ...] = (
             " carries the order at all"
         ),
     ),
+    # ---- added 2026-09-15 (genomeos-k2), widening the panel where the first twelve were thin:
+    # a second long-range case, an imprinted locus, a dosage locus, and two more value domains.
+    Expect(
+        locus="SOX9_PierreRobin",
+        chrom="chr17",
+        element=(70_669_000, 70_672_000),
+        window=(70_400_000, 72_400_000),
+        classes=("program",),
+        targets=("SOX9",),
+        direction="activates",
+        tissues=("mandibular arch", "cranial neural crest"),
+        gtex_tissues=(),
+        cells=(),
+        distance=1_450_000,
+        variants=(
+            {
+                "rsid": None,
+                "pos": None,
+                "effect": "translocation breakpoints and point mutations in the element cause"
+                " Pierre Robin sequence (individually rare)",
+            },
+        ),
+        nearest_gene_trap="KCNJ2",
+        citations=(
+            "Benko et al. 2009, Nat Genet 41:359 (translocation breakpoints 1.0 to 1.5 Mb upstream of"
+            " SOX9 cause Pierre Robin sequence; a conserved element at about -1.45 Mb drives mandibular"
+            " expression)",
+            "Gordon et al. 2014, J Med Genet 51:264 (point mutations in that element)",
+            "Long et al. 2020, Cell Stem Cell 27:765 (the SOX9 regulatory landscape stretches over 2 Mb)",
+        ),
+        answer_from=("human translocation breakpoint mapping", "transgenic mouse reporters"),
+        note=(
+            "the second long-range case, added because one example of a megabase reach is an anecdote."
+            " The element's coordinate is ANCHORED, not cited: the published offset is about -1.45 Mb"
+            " and the anchor is GENCODE's canonical SOX9 TSS (chr17:72,121,019), so the element is"
+            " placed rather than quoted and the window is wide enough to absorb the uncertainty."
+            " The nearest coding TSS is KCNJ2, 500 kb away: the same trap the ZRS sets, in a gene desert"
+        ),
+    ),
+    Expect(
+        locus="H19_ICR1",
+        chrom="chr11",
+        element=(1_999_800, 2_001_900),
+        window=(1_900_000, 2_250_000),
+        classes=("program", "syntax"),
+        targets=("IGF2", "H19"),
+        direction="represses",
+        tissues=("most fetal tissues", "placenta"),
+        gtex_tissues=(),
+        cells=(),
+        distance=138_000,
+        variants=(
+            {
+                "rsid": None,
+                "pos": None,
+                "effect": "microdeletions of the CTCF sites and loss of methylation cause"
+                " Beckwith-Wiedemann and Silver-Russell syndromes",
+            },
+        ),
+        nearest_gene_trap="MRPL23",
+        beyond_sequence=("parent of origin",),
+        citations=(
+            "Bell and Felsenfeld 2000, Nature 405:482 and Hark et al. 2000, Nature 405:486 (the ICR is a"
+            " methylation-sensitive CTCF boundary: unmethylated on the maternal allele it insulates IGF2"
+            " from the shared enhancers)",
+            "Sparago et al. 2004, Nat Genet 36:958 (microdeletions of the ICR cause Beckwith-Wiedemann)",
+            "Gicquel et al. 2005, Nat Genet 37:1003 (loss of ICR methylation causes Silver-Russell)",
+        ),
+        answer_from=("human imprinting disorders", "mouse deletions", "allele-specific methylation"),
+        note=(
+            "the imprinted case, added because parent of origin is the clearest information that is not"
+            " in the sequence at all and no layer here carries it: the same two alleles behave"
+            " oppositely depending on which parent they came from. The element's coordinate is ANCHORED:"
+            " the published ICR is 2 to 4 kb upstream of the H19 promoter and the anchor is GENCODE's"
+            " canonical H19 TSS (chr11:1,997,841, minus strand). The nearest coding TSS is MRPL23 and"
+            " the published target is IGF2, 138 kb away"
+        ),
+    ),
+    Expect(
+        locus="PMP22_CMT1A",
+        chrom="chr17",
+        element=(15_176_315, 15_272_292),
+        window=(14_100_000, 15_600_000),
+        classes=("program",),
+        targets=("PMP22",),
+        direction="activates",
+        tissues=("Schwann cell", "peripheral nerve"),
+        gtex_tissues=("Nerve_Tibial",),
+        cells=(),
+        distance=0,
+        variants=(
+            {
+                "rsid": None,
+                "pos": None,
+                "effect": "a 1.4 Mb duplication between the CMT1A-REP repeats causes CMT1A and the"
+                " reciprocal deletion causes HNPP: the variable is copy number, not a base",
+            },
+        ),
+        beyond_sequence=("copy number",),
+        citations=(
+            "Lupski et al. 1991, Cell 66:219 (a 1.4 Mb duplication containing PMP22 causes CMT1A)",
+            "Chance et al. 1993, Cell 72:143 (the reciprocal deletion causes hereditary neuropathy with"
+            " liability to pressure palsies)",
+            "Li et al. 2013, J Neurol Sci 335:29 (dosage, not sequence, sets the severity)",
+        ),
+        answer_from=("human pedigrees", "dosage mapping", "transgenic rodents"),
+        note=(
+            "the dosage case, added because the four classes have no term for copy number and the"
+            " project has no layer that carries it: three copies of an intact gene cause the disease and"
+            " one copy causes a different one. The element is PMP22's GENCODE span, the dosage-sensitive"
+            " unit; the window is the CMT1A-REP interval. Everything except the target's identity is"
+            " expected to be pending, which is the point of including it"
+        ),
+    ),
+    Expect(
+        locus="CYP2D6",
+        chrom="chr22",
+        element=(42_120_961, 42_131_727),
+        window=(41_900_000, 42_400_000),
+        classes=("storage", "syntax"),
+        targets=("CYP2D6",),
+        direction="coding",
+        tissues=("liver",),
+        gtex_tissues=("Liver",),
+        cells=("HepG2",),
+        distance=0,
+        variants=(
+            {
+                "rsid": "rs3892097",
+                "pos": None,
+                "effect": "CYP2D6*4, the commonest European loss-of-function allele",
+            },
+            {"rsid": "rs1065852", "pos": None, "effect": "CYP2D6*10, common in East Asia, reduced activity"},
+        ),
+        value_domain="many",
+        frequency="*4 is about 0.19 in Europeans and rare in East Asia; *10 is about 0.5 in East Asia",
+        citations=(
+            "Gaedigk et al. 2018, Clin Pharmacol Ther 103:399 (PharmVar: over a hundred named star"
+            " alleles, four metaboliser phenotypes)",
+            "Ingelman-Sundberg 2005, Pharmacogenomics J 5:6 (the clinical value domain)",
+        ),
+        answer_from=("pharmacogenomic allele curation", "enzyme activity assays"),
+        note=(
+            "a many-valued slot outside the MHC, added to ask whether the value-domain reading"
+            " generalises. The prediction written down before the run is that it will NOT read many:"
+            " CYP2D6's diversity is star alleles, gene conversion with CYP2D7 and copy number, not a"
+            " dense field of common positions, so counting positions per kilobase should underread it"
+            " the same way it could not see ABO's frameshift"
+        ),
+    ),
+    Expect(
+        locus="MC1R",
+        chrom="chr16",
+        element=(89_912_118, 89_920_977),
+        window=(89_700_000, 90_100_000),
+        classes=("storage", "syntax"),
+        targets=("MC1R",),
+        direction="coding",
+        tissues=("melanocyte",),
+        gtex_tissues=(),
+        cells=(),
+        distance=0,
+        variants=(
+            {
+                "rsid": "rs1805007",
+                "pos": None,
+                "ref": "C",
+                "alt": "T",
+                "protein_change": "p.Arg151Cys",
+                "effect": "R151C, a red-hair R allele",
+            },
+            {
+                "rsid": "rs1805008",
+                "pos": None,
+                "ref": "C",
+                "alt": "T",
+                "protein_change": "p.Arg160Trp",
+                "effect": "R160W, a red-hair R allele",
+            },
+            {"rsid": "rs1805009", "pos": None, "effect": "D294H, a red-hair R allele"},
+        ),
+        value_domain="few",
+        frequency="the R alleles are a European specialty: R151C about 0.08 there and near absent elsewhere",
+        citations=(
+            "Valverde et al. 1995, Nat Genet 11:328 (MC1R variants and red hair)",
+            "Box et al. 1997, Hum Mol Genet 6:1891 (R151C, R160W and D294H are the strong R alleles)",
+            "Beaumont et al. 2007, Hum Mol Genet 16:2249 (R against r alleles by receptor function)",
+        ),
+        answer_from=("association with hair and skin colour", "receptor signalling assays"),
+        note=(
+            "a few-valued slot with a sharp population structure, and a third coding calibration beside"
+            " APP and TP53: the translation engine should derive p.Arg151Cys and p.Arg160Trp from the"
+            " reference sequence. The element is MC1R's GENCODE span"
+        ),
+    ),
+)
+#: the twelve loci whose verdicts were settled before the panel was widened (2026-09-14). The CI gate
+#: pins these; the five added on 2026-09-15 are reported but not yet pinned, because a verdict has to
+#: be seen before it can be defended.
+GATE_PANEL: tuple[str, ...] = (
+    "SHH_ZRS",
+    "HERC2_OCA2",
+    "MCM6_LCT",
+    "HBB_LCR",
+    "FTO_IRX3",
+    "BCL11A_enhancer",
+    "MYC_8q24",
+    "ABO",
+    "HLA_DRB1",
+    "APP",
+    "TP53",
+    "HOXD",
 )
 #: the published HOXD boundary, between HOXD11 and HOXD13 (Rodriguez-Carballo et al. 2017)
 HOXD_BOUNDARY = (176_096_240, 176_109_754)
@@ -555,6 +772,29 @@ NOT_IN_PANEL = {
     "LCT_African_alleles": (
         "G-13915 and C-14010 are published but their enhancer window overlaps rs4988235's, so the"
         " expectation would not be independent"
+    ),
+    # considered for the 2026-09-15 widening and dropped, with the reason
+    "SMN1_SMN2": (
+        "the cleanest dosage phenotype there is, but SMN1 and SMN2 are a segmental duplication"
+        " differing at a handful of bases, so no element here has an unambiguous hg38 coordinate and"
+        " every layer's answer would be a statement about read mapping. PMP22 carries dosage instead"
+    ),
+    "RHD_deletion": (
+        "Rh negative is a whole-gene deletion, a two-valued slot whose value is copy number: it asks"
+        " the same question as PMP22_CMT1A and chr1 is not swept"
+    ),
+    "FUT2_secretor": (
+        "rs601338 is a clean two-valued slot with sharp population structure, but HERC2/OCA2 already"
+        " tests a two-valued slot and this adds no failure mode the panel is missing"
+    ),
+    "AMY1_copy_number": (
+        "copy number again, and the published association with starch in the diet is contested, so the"
+        " expectation would not be unambiguous"
+    ),
+    "EPHA4_IHH_TAD_boundaries": (
+        "the Lupianez 2015 rearrangements are the best evidence that node boundaries matter, but the"
+        " causal unit is a structural variant spanning a boundary and the panel has no way to write"
+        " one down as an element"
     ),
 }
 
@@ -782,9 +1022,9 @@ def read_deletion(ch: Chromosome, start: int, end: int, results_dir: Path = RESU
         "pending": None
         if rows
         else (
-            "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on"
-            " chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is"
-            " about 0.76 requests"
+            "no AlphaGenome deletion has been scored inside this window; the all-element sweep has"
+            f" finished {', '.join(swept_chromosomes(results_dir)) or 'no chromosome yet'}."
+            " One element is about 0.76 requests"
         ),
         "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed",
     }
@@ -1752,6 +1992,46 @@ def score_class(expect: Expect, readings: dict[str, Any]) -> dict[str, Any]:
 
 
 # ----------------------------------------------------------------------------------- the run
+#: what the project would need before each mechanism outside the reference sequence could be read
+BEYOND_SEQUENCE_NEEDS = {
+    "parent of origin": (
+        "an allele-resolved methylation layer, or phased reads with a parental assignment: the two"
+        " alleles are the same sequence and behave oppositely, so nothing read off the reference can"
+        " separate them"
+    ),
+    "copy number": (
+        "a dosage axis: read depth or an assembly-based copy count. Every layer here asks what a"
+        " sequence says, never how many times it is present"
+    ),
+    "developmental stage": (
+        "a time axis. No layer carries when it is read, so a fetal-to-adult switch is unmeasurable"
+    ),
+}
+
+
+def read_beyond_sequence(expect: Expect) -> dict[str, Any]:
+    """The published mechanisms this locus turns on that are not in the reference sequence at all.
+
+    Recorded as pending with what it would take, never scored as a miss: a locus the project cannot
+    reach in principle is a different thing from a locus it reaches and gets wrong, and the panel is
+    worth less if the two are mixed.
+    """
+    mechanisms = list(expect.beyond_sequence)
+    return {
+        "layer": "beyond_sequence",
+        "provenance": "derived",
+        "mechanisms": mechanisms,
+        "needs": {m: BEYOND_SEQUENCE_NEEDS.get(m, "unrecorded") for m in mechanisms},
+        "pending": None
+        if not mechanisms
+        else (
+            f"{', '.join(mechanisms)}: published here and carried by no layer in the project, so this"
+            " locus is scored on its target and its class only"
+        ),
+        "evidence": "curated: the published mechanism, written down before the run",
+    }
+
+
 LOCAL_LAYERS = ("registry", "node", "deletion", "reader", "mpra", "lookups")
 
 
@@ -1996,6 +2276,7 @@ def build(
             readings = local_readings(ch, s, en, results_dir)
             readings["satmut"] = read_satmut(ch, s, en, e)
             readings["gene_input"] = read_gene_input(ch, e, results_dir)
+            readings["beyond_sequence"] = read_beyond_sequence(e)
             if e.direction == "coding":
                 readings["coding"] = read_coding(ch, e)
                 tss = ch.tss(e.targets[0])
@@ -2062,21 +2343,32 @@ def build(
             w.readings["eqtl"] = read_eqtl(chroms[w.chrom], w.start, w.end, knowledge=gtex_dir)
 
         checked: dict[str, Any] = {}
+        resolved_panel: list[Expect] = []
         for r, e in zip(loci, panel, strict=True):
             freqs: dict[str, Any] = {}
             if network:
                 for v in e.variants:
                     if v.get("rsid"):
                         checked[v["rsid"]] = position_check(v, ensembl_variant(v["rsid"]))
+                was = tuple(v.get("pos") for v in e.variants)
+                e = resolve_positions(e, checked)
+                r["expected"] = e.as_dict()
+                if e.direction == "coding" and was != tuple(v.get("pos") for v in e.variants):
+                    # the coding layer ran with the local readings, before Ensembl had been asked:
+                    # a locus whose positions the panel does not hard-code needs it read again
+                    r["readings"]["coding"] = read_coding(chroms[e.chrom], e)
                 freqs = _guarded(read_frequencies, chroms[e.chrom], *e.element, e)
                 r["readings"]["frequencies"] = freqs
+            resolved_panel.append(e)
             r["readings"]["values"] = read_values(chroms[e.chrom], e, freqs)
+        panel = tuple(resolved_panel)
         if network:  # syntax against values, one bigWig session per chromosome, positives and negatives
             for chrom, ch in chroms.items():
                 mine = [r for r in loci if r["expected"]["chrom"] == chrom]
                 negs = [w for w in chosen if w.chrom == chrom]
                 wins = [tuple(r["expected"]["element"]) for r in mine] + [(w.start, w.end) for w in negs]
-                exps = [panel_by_name()[r["locus"]] for r in mine] + [None] * len(negs)
+                by_name = {e.locus: e for e in panel}
+                exps = [by_name[r["locus"]] for r in mine] + [None] * len(negs)
                 got_sv = _retry(read_syntax_values_many, ch, wins, exps, say=say)
                 if got_sv is None:
                     say(f"{chrom}: syntax against values unavailable after {RETRIES} tries")
@@ -2156,14 +2448,40 @@ def non_overlapping(ivs: list[tuple[int, int]]) -> list[tuple[int, int]]:
     return out
 
 
+def resolve_positions(e: Expect, checked: dict[str, Any]) -> Expect:
+    """Fill in a variant the panel deliberately did not hard-code, from Ensembl's answer.
+
+    A locus added later should not need a coordinate typed from memory: `pos: None` says the panel is
+    not claiming one, and the position comes from Ensembl at run time. The cost is that the
+    position check is not independent for that variant - `agrees` stays null and the result records
+    `position_from: ensembl` - so a hard-coded position is still better where one can be cited.
+    """
+    from dataclasses import replace
+
+    out = []
+    changed = False
+    for v in e.variants:
+        got = checked.get(v.get("rsid") or "")
+        if v.get("pos") is None and got and got.get("ensembl"):
+            out.append({**v, "pos": got["ensembl"], "position_from": "ensembl"})
+            changed = True
+        else:
+            out.append(dict(v))
+    return replace(e, variants=tuple(out)) if changed else e
+
+
 def position_check(v: dict[str, Any], got: dict[str, Any] | None) -> dict[str, Any]:
     """The panel's hard-coded position against Ensembl's; an indel may differ by its anchor base."""
     if got is None or got.get("position") is None:
         return {"panel": v.get("pos"), "ensembl": None, "agrees": None}
+    if v.get("pos") is None:
+        # the panel deliberately does not claim a position for this variant: Ensembl supplies it and
+        # there is nothing to check. Recording False here would read as a disagreement that never was.
+        return {"panel": None, "ensembl": got["position"], "agrees": None, "position_from": "ensembl"}
     return {
-        "panel": v.get("pos"),
+        "panel": v["pos"],
         "ensembl": got["position"],
-        "agrees": v.get("pos") is not None and abs(got["position"] - v["pos"]) <= 1,
+        "agrees": abs(got["position"] - v["pos"]) <= 1,
     }
 
 
@@ -2213,7 +2531,15 @@ def negative_row(w: Window) -> dict[str, Any]:
     }
 
 
-def run_and_save(results_dir: Path = RESULTS_DIR, network: bool = True, progress=None) -> dict[str, Any]:
-    out = build(results_dir=results_dir, network=network, progress=progress)
-    save_result("loci_benchmark", out, results_dir)
+def run_and_save(
+    results_dir: Path = RESULTS_DIR, network: bool = True, progress=None, gate_only: bool = False
+) -> dict[str, Any]:
+    """The full panel by default; `gate_only` runs the twelve pinned loci for a quick check.
+
+    The gate set is not a different benchmark, only a cheaper pass over the loci whose verdicts are
+    already defended, so the two write different files and neither overwrites the other.
+    """
+    panel = tuple(e for e in PANEL if e.locus in GATE_PANEL) if gate_only else PANEL
+    out = build(panel=panel, results_dir=results_dir, network=network, progress=progress)
+    save_result("loci_benchmark_gate" if gate_only else "loci_benchmark", out, results_dir)
     return out

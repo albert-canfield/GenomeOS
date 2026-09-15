@@ -1,7 +1,7 @@
 {
   "result": "loci_benchmark",
   "date": "2026-09-15",
-  "panel": 12,
+  "panel": 17,
   "classes": [
     "syntax",
     "storage",
@@ -15,11 +15,11 @@
     "looked_up"
   ],
   "aggregate": {
-    "loci": 12,
+    "loci": 17,
     "target_derived": {
-      "k": 11,
-      "n": 12,
-      "rate": 0.917,
+      "k": 15,
+      "n": 17,
+      "rate": 0.882,
       "hits": [
         "SHH_ZRS",
         "HERC2_OCA2",
@@ -31,21 +31,26 @@
         "HLA_DRB1",
         "APP",
         "TP53",
-        "HOXD"
+        "HOXD",
+        "SOX9_PierreRobin",
+        "PMP22_CMT1A",
+        "CYP2D6",
+        "MC1R"
       ],
       "misses": [
-        "MYC_8q24"
+        "MYC_8q24",
+        "H19_ICR1"
       ]
     },
     "target_by_chance": {
-      "expected": 5.54,
-      "of": 12,
+      "expected": 7.12,
+      "of": 17,
       "reading": "naming one of the published targets by drawing a coding gene at random from the locus window: the floor any target rate has to clear"
     },
     "target_derived_where_reachable": {
-      "k": 10,
-      "n": 11,
-      "rate": 0.909,
+      "k": 13,
+      "n": 14,
+      "rate": 0.929,
       "hits": [
         "SHH_ZRS",
         "HERC2_OCA2",
@@ -56,16 +61,19 @@
         "ABO",
         "HLA_DRB1",
         "TP53",
-        "HOXD"
+        "HOXD",
+        "PMP22_CMT1A",
+        "CYP2D6",
+        "MC1R"
       ],
       "misses": [
         "MYC_8q24"
       ]
     },
     "target_heuristic": {
-      "k": 8,
-      "n": 12,
-      "rate": 0.667,
+      "k": 11,
+      "n": 17,
+      "rate": 0.647,
       "hits": [
         "HERC2_OCA2",
         "MCM6_LCT",
@@ -74,26 +82,33 @@
         "ABO",
         "HLA_DRB1",
         "TP53",
-        "HOXD"
+        "HOXD",
+        "PMP22_CMT1A",
+        "CYP2D6",
+        "MC1R"
       ],
       "misses": [
         "SHH_ZRS",
         "FTO_IRX3",
         "MYC_8q24",
-        "APP"
+        "APP",
+        "SOX9_PierreRobin",
+        "H19_ICR1"
       ]
     },
     "target_looked_up": {
-      "k": 6,
-      "n": 12,
-      "rate": 0.5,
+      "k": 8,
+      "n": 17,
+      "rate": 0.471,
       "hits": [
         "SHH_ZRS",
         "HBB_LCR",
         "HLA_DRB1",
         "APP",
         "TP53",
-        "HOXD"
+        "HOXD",
+        "PMP22_CMT1A",
+        "MC1R"
       ],
       "misses": [
         "HERC2_OCA2",
@@ -101,7 +116,10 @@
         "FTO_IRX3",
         "BCL11A_enhancer",
         "MYC_8q24",
-        "ABO"
+        "ABO",
+        "SOX9_PierreRobin",
+        "H19_ICR1",
+        "CYP2D6"
       ]
     },
     "target_only_looked_up": [],
@@ -111,21 +129,24 @@
         "HERC2_OCA2",
         "MCM6_LCT",
         "FTO_IRX3",
-        "MYC_8q24"
+        "MYC_8q24",
+        "SOX9_PierreRobin",
+        "H19_ICR1"
       ],
       "heuristic_fell_in": [
         "FTO_IRX3"
       ]
     },
     "cell_derived_where_judged": {
-      "k": 4,
-      "n": 10,
-      "rate": 0.4,
+      "k": 5,
+      "n": 12,
+      "rate": 0.417,
       "hits": [
         "HBB_LCR",
         "HLA_DRB1",
         "APP",
-        "TP53"
+        "TP53",
+        "CYP2D6"
       ],
       "misses": [
         "HERC2_OCA2",
@@ -133,22 +154,27 @@
         "FTO_IRX3",
         "BCL11A_enhancer",
         "MYC_8q24",
-        "ABO"
+        "ABO",
+        "PMP22_CMT1A"
       ]
     },
     "cell_unreachable": [
       "SHH_ZRS",
-      "HOXD"
+      "HOXD",
+      "SOX9_PierreRobin",
+      "H19_ICR1",
+      "MC1R"
     ],
     "direction_derived_where_judged": {
-      "k": 4,
-      "n": 4,
+      "k": 5,
+      "n": 5,
       "rate": 1.0,
       "hits": [
         "MCM6_LCT",
         "HBB_LCR",
         "BCL11A_enhancer",
-        "HOXD"
+        "HOXD",
+        "PMP22_CMT1A"
       ],
       "misses": []
     },
@@ -156,12 +182,14 @@
       "SHH_ZRS",
       "HERC2_OCA2",
       "FTO_IRX3",
-      "MYC_8q24"
+      "MYC_8q24",
+      "SOX9_PierreRobin",
+      "H19_ICR1"
     ],
     "class_derived": {
-      "k": 10,
-      "n": 12,
-      "rate": 0.833,
+      "k": 13,
+      "n": 17,
+      "rate": 0.765,
       "hits": [
         "SHH_ZRS",
         "HERC2_OCA2",
@@ -172,19 +200,26 @@
         "MYC_8q24",
         "APP",
         "TP53",
-        "HOXD"
+        "HOXD",
+        "PMP22_CMT1A",
+        "CYP2D6",
+        "MC1R"
       ],
       "misses": [
         "ABO",
-        "HLA_DRB1"
+        "HLA_DRB1",
+        "SOX9_PierreRobin",
+        "H19_ICR1"
       ]
     },
     "unreachable_target": [
-      "APP"
+      "APP",
+      "SOX9_PierreRobin",
+      "H19_ICR1"
     ]
   },
   "negative_controls": {
-    "windows": 60,
+    "windows": 85,
     "per_locus": 5,
     "matched_on": [
       "length (exact)",
@@ -195,66 +230,66 @@
     "excluded": "every panel locus with 200 kb of flank, VISTA elements and GWAS Catalog hits (5 kb)",
     "positives": {
       "target": {
-        "k": 11,
-        "n": 12,
-        "rate": 0.917
+        "k": 14,
+        "n": 17,
+        "rate": 0.824
       },
       "cell": {
-        "k": 10,
-        "n": 12,
-        "rate": 0.833
+        "k": 14,
+        "n": 17,
+        "rate": 0.824
       },
       "direction": {
-        "k": 8,
-        "n": 12,
-        "rate": 0.667
+        "k": 11,
+        "n": 17,
+        "rate": 0.647
       },
       "storage": {
-        "k": 6,
-        "n": 12,
-        "rate": 0.5
+        "k": 9,
+        "n": 17,
+        "rate": 0.529
       },
       "deletion_scored": {
-        "k": 10,
-        "n": 12,
-        "rate": 0.833
+        "k": 13,
+        "n": 17,
+        "rate": 0.765
       },
       "eqtl_present": {
-        "k": 11,
-        "n": 12,
-        "rate": 0.917
+        "k": 14,
+        "n": 17,
+        "rate": 0.824
       }
     },
     "negatives": {
       "target": {
-        "k": 52,
-        "n": 60,
-        "rate": 0.867
+        "k": 77,
+        "n": 85,
+        "rate": 0.906
       },
       "cell": {
-        "k": 32,
-        "n": 60,
-        "rate": 0.533
+        "k": 54,
+        "n": 85,
+        "rate": 0.635
       },
       "direction": {
-        "k": 11,
-        "n": 60,
-        "rate": 0.183
+        "k": 31,
+        "n": 85,
+        "rate": 0.365
       },
       "storage": {
-        "k": 9,
-        "n": 60,
-        "rate": 0.15
+        "k": 15,
+        "n": 85,
+        "rate": 0.176
       },
       "deletion_scored": {
-        "k": 13,
-        "n": 60,
-        "rate": 0.217
+        "k": 34,
+        "n": 85,
+        "rate": 0.4
       },
       "eqtl_present": {
-        "k": 51,
-        "n": 60,
-        "rate": 0.85
+        "k": 75,
+        "n": 85,
+        "rate": 0.882
       }
     },
     "given_deletion_data": {
@@ -262,60 +297,14 @@
       "positives": {
         "with_deletion_data": {
           "target": {
-            "k": 10,
-            "n": 10,
+            "k": 13,
+            "n": 13,
             "rate": 1.0
           },
           "cell": {
-            "k": 9,
-            "n": 10,
-            "rate": 0.9
-          },
-          "direction": {
-            "k": 8,
-            "n": 10,
-            "rate": 0.8
-          },
-          "storage": {
-            "k": 5,
-            "n": 10,
-            "rate": 0.5
-          }
-        },
-        "without_deletion_data": {
-          "target": {
-            "k": 1,
-            "n": 2,
-            "rate": 0.5
-          },
-          "cell": {
-            "k": 1,
-            "n": 2,
-            "rate": 0.5
-          },
-          "direction": {
-            "k": 0,
-            "n": 2,
-            "rate": 0.0
-          },
-          "storage": {
-            "k": 1,
-            "n": 2,
-            "rate": 0.5
-          }
-        }
-      },
-      "negatives": {
-        "with_deletion_data": {
-          "target": {
             "k": 12,
             "n": 13,
             "rate": 0.923
-          },
-          "cell": {
-            "k": 9,
-            "n": 13,
-            "rate": 0.692
           },
           "direction": {
             "k": 11,
@@ -323,31 +312,77 @@
             "rate": 0.846
           },
           "storage": {
-            "k": 2,
+            "k": 8,
             "n": 13,
-            "rate": 0.154
+            "rate": 0.615
           }
         },
         "without_deletion_data": {
           "target": {
-            "k": 40,
-            "n": 47,
-            "rate": 0.851
+            "k": 1,
+            "n": 4,
+            "rate": 0.25
           },
           "cell": {
-            "k": 23,
-            "n": 47,
-            "rate": 0.489
+            "k": 2,
+            "n": 4,
+            "rate": 0.5
           },
           "direction": {
             "k": 0,
-            "n": 47,
+            "n": 4,
             "rate": 0.0
           },
           "storage": {
+            "k": 1,
+            "n": 4,
+            "rate": 0.25
+          }
+        }
+      },
+      "negatives": {
+        "with_deletion_data": {
+          "target": {
+            "k": 33,
+            "n": 34,
+            "rate": 0.971
+          },
+          "cell": {
+            "k": 29,
+            "n": 34,
+            "rate": 0.853
+          },
+          "direction": {
+            "k": 31,
+            "n": 34,
+            "rate": 0.912
+          },
+          "storage": {
             "k": 7,
-            "n": 47,
-            "rate": 0.149
+            "n": 34,
+            "rate": 0.206
+          }
+        },
+        "without_deletion_data": {
+          "target": {
+            "k": 44,
+            "n": 51,
+            "rate": 0.863
+          },
+          "cell": {
+            "k": 25,
+            "n": 51,
+            "rate": 0.49
+          },
+          "direction": {
+            "k": 0,
+            "n": 51,
+            "rate": 0.0
+          },
+          "storage": {
+            "k": 8,
+            "n": 51,
+            "rate": 0.157
           }
         }
       }
@@ -358,39 +393,40 @@
         "chr15",
         "chr16",
         "chr17",
-        "chr21"
+        "chr21",
+        "chr22"
       ],
-      "windows": 25,
+      "windows": 50,
       "rates": {
         "target": {
-          "k": 20,
-          "n": 25,
-          "rate": 0.8
+          "k": 45,
+          "n": 50,
+          "rate": 0.9
         },
         "cell": {
-          "k": 9,
-          "n": 25,
-          "rate": 0.36
+          "k": 31,
+          "n": 50,
+          "rate": 0.62
         },
         "direction": {
-          "k": 10,
-          "n": 25,
-          "rate": 0.4
+          "k": 30,
+          "n": 50,
+          "rate": 0.6
         },
         "storage": {
-          "k": 2,
-          "n": 25,
-          "rate": 0.08
+          "k": 8,
+          "n": 50,
+          "rate": 0.16
         },
         "deletion_scored": {
-          "k": 12,
-          "n": 25,
-          "rate": 0.48
+          "k": 33,
+          "n": 50,
+          "rate": 0.66
         },
         "eqtl_present": {
-          "k": 19,
-          "n": 25,
-          "rate": 0.76
+          "k": 43,
+          "n": 50,
+          "rate": 0.86
         }
       },
       "reading": "matched negatives whose chromosome the sweep has finished: the only controls that can be compared with the panel on any claim a deletion makes"
@@ -599,6 +635,91 @@
         "storage": 4,
         "deletion_scored": 1,
         "eqtl_present": 5
+      },
+      "SOX9_PierreRobin": {
+        "positive": {
+          "target": false,
+          "cell": true,
+          "direction": false,
+          "storage": false,
+          "deletion_scored": false,
+          "eqtl_present": false
+        },
+        "negatives": 5,
+        "target": 5,
+        "cell": 2,
+        "direction": 2,
+        "storage": 0,
+        "deletion_scored": 2,
+        "eqtl_present": 4
+      },
+      "H19_ICR1": {
+        "positive": {
+          "target": false,
+          "cell": false,
+          "direction": false,
+          "storage": false,
+          "deletion_scored": false,
+          "eqtl_present": false
+        },
+        "negatives": 5,
+        "target": 5,
+        "cell": 5,
+        "direction": 4,
+        "storage": 0,
+        "deletion_scored": 5,
+        "eqtl_present": 5
+      },
+      "PMP22_CMT1A": {
+        "positive": {
+          "target": true,
+          "cell": true,
+          "direction": true,
+          "storage": true,
+          "deletion_scored": true,
+          "eqtl_present": true
+        },
+        "negatives": 5,
+        "target": 5,
+        "cell": 5,
+        "direction": 4,
+        "storage": 3,
+        "deletion_scored": 4,
+        "eqtl_present": 5
+      },
+      "CYP2D6": {
+        "positive": {
+          "target": true,
+          "cell": true,
+          "direction": true,
+          "storage": true,
+          "deletion_scored": true,
+          "eqtl_present": true
+        },
+        "negatives": 5,
+        "target": 5,
+        "cell": 5,
+        "direction": 5,
+        "storage": 3,
+        "deletion_scored": 5,
+        "eqtl_present": 5
+      },
+      "MC1R": {
+        "positive": {
+          "target": true,
+          "cell": true,
+          "direction": true,
+          "storage": true,
+          "deletion_scored": true,
+          "eqtl_present": true
+        },
+        "negatives": 5,
+        "target": 5,
+        "cell": 5,
+        "direction": 5,
+        "storage": 0,
+        "deletion_scored": 5,
+        "eqtl_present": 5
       }
     }
   },
@@ -641,6 +762,7 @@
         "nearest_gene_trap": "LMBR1",
         "value_domain": null,
         "frequency": null,
+        "beyond_sequence": [],
         "citations": [
           "Lettice et al. 2003, Hum Mol Genet 12:1725 (the ZRS, 1 Mb from SHH, point mutations cause preaxial polydactyly)",
           "Sagai et al. 2005, Development 132:797 (deleting the ZRS removes limb Shh entirely)",
@@ -929,6 +1051,14 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "constraint": {
           "layer": "constraint",
@@ -1284,6 +1414,7 @@
         "nearest_gene_trap": "HERC2",
         "value_domain": "two",
         "frequency": "G near 0.8 in Europeans, rare in Africa and East Asia",
+        "beyond_sequence": [],
         "citations": [
           "Sturm et al. 2008, Am J Hum Genet 82:424 (rs12913832 in HERC2 intron 86 sets blue-brown)",
           "Eiberg et al. 2008, Hum Genet 123:177",
@@ -1413,6 +1544,14 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "constraint": {
           "layer": "constraint",
@@ -1816,6 +1955,7 @@
         "nearest_gene_trap": "MCM6",
         "value_domain": "few",
         "frequency": "A near 0.75 in northern Europe, near 0 in East Asia; other alleles in Africa and Arabia",
+        "beyond_sequence": [],
         "citations": [
           "Enattah et al. 2002, Nat Genet 30:233 (C/T-13910 in MCM6 intron 13 with lactase persistence)",
           "Olds and Sibley 2003, Hum Mol Genet 12:2333; Lewinsky et al. 2005, Hum Mol Genet 14:3945 (the T allele raises LCT promoter activity in intestinal cells)",
@@ -1983,6 +2123,14 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "constraint": {
           "layer": "constraint",
@@ -2431,6 +2579,9 @@
         "nearest_gene_trap": null,
         "value_domain": null,
         "frequency": null,
+        "beyond_sequence": [
+          "developmental stage"
+        ],
         "citations": [
           "Tuan et al. 1985, PNAS 82:6384 (the erythroid-specific hypersensitive sites 5' of epsilon)",
           "Grosveld et al. 1987, Cell 51:975 (position-independent high-level expression from the LCR)",
@@ -2766,6 +2917,18 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [
+            "developmental stage"
+          ],
+          "needs": {
+            "developmental stage": "a time axis. No layer carries when it is read, so a fetal-to-adult switch is unmeasurable"
+          },
+          "pending": "developmental stage: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "ladder": {
           "layer": "ladder",
@@ -3225,6 +3388,7 @@
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
+          "beyond_sequence: developmental stage: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
       }
@@ -3280,6 +3444,7 @@
         "nearest_gene_trap": "FTO",
         "value_domain": null,
         "frequency": null,
+        "beyond_sequence": [],
         "citations": [
           "Smemo et al. 2014, Nature 507:371 (the FTO intron-1 variants connect to IRX3, not FTO)",
           "Claussnitzer et al. 2015, N Engl J Med 373:895 (rs1421085 disrupts ARID5B; IRX3/IRX5 double)"
@@ -3458,6 +3623,14 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "constraint": {
           "layer": "constraint",
@@ -3839,6 +4012,7 @@
         "nearest_gene_trap": null,
         "value_domain": null,
         "frequency": null,
+        "beyond_sequence": [],
         "citations": [
           "Bauer et al. 2013, Science 342:253 (the erythroid enhancer of BCL11A in intron 2; rs1427407 is the causal variant of the fetal-haemoglobin association)",
           "Canver et al. 2015, Nature 527:192 (Cas9 tiling finds the +58 core and its GATA1 motif)"
@@ -4063,6 +4237,14 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "constraint": {
           "layer": "constraint",
@@ -4487,6 +4669,7 @@
         "nearest_gene_trap": "CASC8",
         "value_domain": null,
         "frequency": null,
+        "beyond_sequence": [],
         "citations": [
           "Pomerantz et al. 2009, Nat Genet 41:882 (the rs6983267 enhancer physically interacts with MYC)",
           "Tuupanen et al. 2009, Nat Genet 41:885 (rs6983267 enhances TCF7L2 binding and Wnt signalling)",
@@ -4717,6 +4900,14 @@
           "rank_of_first_published_target": 2,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "constraint": {
           "layer": "constraint",
@@ -5115,6 +5306,7 @@
         "nearest_gene_trap": null,
         "value_domain": "few",
         "frequency": "A, B and O in every population, O commonest; frequencies differ by continent",
+        "beyond_sequence": [],
         "citations": [
           "Yamamoto et al. 1990, Nature 345:229 (the molecular basis of ABO: a frameshift for O and four substitutions for B)"
         ],
@@ -5258,6 +5450,14 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "coding": {
           "layer": "coding",
@@ -5826,6 +6026,7 @@
         "nearest_gene_trap": null,
         "value_domain": "many",
         "frequency": "thousands of alleles; the polymorphism is concentrated in exon 2 (the peptide groove)",
+        "beyond_sequence": [],
         "citations": [
           "Barker et al. 2023, Nucleic Acids Res 51:D1053 (IPD-IMGT/HLA: >3,600 DRB1 alleles)",
           "Brown et al. 1993, Nature 364:33 (the class II groove the exon-2 polymorphism lines)"
@@ -6061,6 +6262,14 @@
           "rank_of_first_published_target": 3,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "coding": {
           "layer": "coding",
@@ -6501,6 +6710,7 @@
         "nearest_gene_trap": null,
         "value_domain": "two",
         "frequency": "T at 0.5% in Iceland, essentially absent elsewhere",
+        "beyond_sequence": [],
         "citations": [
           "Jonsson et al. 2012, Nature 488:96 (A673T protects against Alzheimer's disease)",
           "Di Fede et al. 2009, Science 323:1473 (A673V, the recessive pathogenic change at that codon)"
@@ -6549,7 +6759,7 @@
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -6618,6 +6828,14 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "coding": {
           "layer": "coding",
@@ -6790,7 +7008,7 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests"
               },
               "eqtl": {
                 "provenance": "derived",
@@ -6968,7 +7186,7 @@
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": false,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -7024,6 +7242,7 @@
         "nearest_gene_trap": null,
         "value_domain": "two",
         "frequency": "the R72 allele runs from 0.2 to 0.7 depending on the population",
+        "beyond_sequence": [],
         "citations": [
           "Olivier et al. 2010, Cold Spring Harb Perspect Biol 2:a001008 (TP53 mutation across cancers)",
           "Dumont et al. 2003, Nat Genet 33:357 (codon 72 changes the apoptotic potential)"
@@ -7078,7 +7297,7 @@
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -7204,6 +7423,14 @@
           "rank_of_first_published_target": 6,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "coding": {
           "layer": "coding",
@@ -7455,7 +7682,7 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests"
+                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests"
               },
               "eqtl": {
                 "provenance": "derived",
@@ -7651,7 +7878,7 @@
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has run on chr21, chr22, chrY, chr19, chr20, chr18 and is running on chr17 and chr1. One element is about 0.76 requests",
+          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -7699,6 +7926,7 @@
         "nearest_gene_trap": null,
         "value_domain": null,
         "frequency": null,
+        "beyond_sequence": [],
         "citations": [
           "Duboule 1994, Development Suppl:135 and Deschamps and Duboule 2017, Genes Dev 31:1406 (temporal and spatial collinearity: 3' genes first and anterior, 5' genes later and posterior)",
           "Andrey et al. 2013, Science 340:1234167 (a switch between two topological domains underlies HoxD collinearity in limbs)",
@@ -8121,6 +8349,14 @@
           "rank_of_first_published_target": 1,
           "pending": null,
           "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
         },
         "order": {
           "layer": "order",
@@ -8585,6 +8821,3456 @@
         "reachable_by_a_derived_target_layer": true,
         "pending": [
           "order: no measurement in the project carries developmental time or position along the body axis: the ordered activation of the cluster cannot be tested with the layers we hold, and the language has no construct for order",
+          "satmut: no saturation-mutagenesis element covers this window"
+        ]
+      }
+    },
+    {
+      "locus": "SOX9_PierreRobin",
+      "expected": {
+        "locus": "SOX9_PierreRobin",
+        "chrom": "chr17",
+        "element": [
+          70669000,
+          70672000
+        ],
+        "window": [
+          70400000,
+          72400000
+        ],
+        "length": 3000,
+        "classes": [
+          "program"
+        ],
+        "targets": [
+          "SOX9"
+        ],
+        "direction": "activates",
+        "tissues": [
+          "mandibular arch",
+          "cranial neural crest"
+        ],
+        "gtex_tissues": [],
+        "cells": [],
+        "distance": 1450000,
+        "variants": [
+          {
+            "rsid": null,
+            "pos": null,
+            "effect": "translocation breakpoints and point mutations in the element cause Pierre Robin sequence (individually rare)"
+          }
+        ],
+        "nearest_gene_trap": "KCNJ2",
+        "value_domain": null,
+        "frequency": null,
+        "beyond_sequence": [],
+        "citations": [
+          "Benko et al. 2009, Nat Genet 41:359 (translocation breakpoints 1.0 to 1.5 Mb upstream of SOX9 cause Pierre Robin sequence; a conserved element at about -1.45 Mb drives mandibular expression)",
+          "Gordon et al. 2014, J Med Genet 51:264 (point mutations in that element)",
+          "Long et al. 2020, Cell Stem Cell 27:765 (the SOX9 regulatory landscape stretches over 2 Mb)"
+        ],
+        "answer_from": [
+          "human translocation breakpoint mapping",
+          "transgenic mouse reporters"
+        ],
+        "note": "the second long-range case, added because one example of a megabase reach is an anecdote. The element's coordinate is ANCHORED, not cited: the published offset is about -1.45 Mb and the anchor is GENCODE's canonical SOX9 TSS (chr17:72,121,019), so the element is placed rather than quoted and the window is wide enough to absorb the uncertainty. The nearest coding TSS is KCNJ2, 500 kb away: the same trap the ZRS sets, in a gene desert"
+      },
+      "readings": {
+        "registry": {
+          "layer": "registry",
+          "provenance": "looked_up",
+          "elements": 0,
+          "classes": [],
+          "ids": [],
+          "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
+        },
+        "node": {
+          "layer": "node",
+          "provenance": "heuristic",
+          "domain": "chr17:D457",
+          "domain_span": [
+            70586875,
+            70716740
+          ],
+          "coding_genes_in_node": 0,
+          "genes_in_node": [
+            "ENSG00000267471",
+            "ENSG00000300827",
+            "ENSG00000300921",
+            "ENSG00000301514"
+          ],
+          "target": null,
+          "distance": null,
+          "nearest_coding_anywhere": "KCNJ2",
+          "nearest_distance": 500969,
+          "evidence": "inferred: nearest coding TSS inside the CTCF node (confidence 0.4)"
+        },
+        "deletion": {
+          "layer": "deletion",
+          "provenance": "derived",
+          "elements_scored": 0,
+          "runs": [],
+          "targets": [],
+          "target": null,
+          "action": null,
+          "tissue": null,
+          "summed_by_cell": null,
+          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+        },
+        "reader": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {
+            "HepG2": 0.15
+          },
+          "cells_open": [
+            "HepG2"
+          ],
+          "strongest_cell": "HepG2",
+          "peaks_K562": [],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "mpra": {
+          "layer": "mpra",
+          "provenance": "derived",
+          "tested": 0,
+          "active": null,
+          "best": null,
+          "pending": "no lentiMPRA element was tested inside this window",
+          "evidence": "experimental: ENCODE4 joint lentiMPRA, log2 RNA/DNA in K562, HepG2 and WTC11"
+        },
+        "lookups": {
+          "layer": "lookups",
+          "provenance": "looked_up",
+          "vista": [],
+          "vista_tissues": [],
+          "gwas": [],
+          "gwas_genes": [],
+          "clinvar_genes": [],
+          "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "satmut": {
+          "layer": "satmut",
+          "provenance": "targeted",
+          "pending": "no saturation-mutagenesis element covers this window"
+        },
+        "gene_input": {
+          "layer": "gene_input",
+          "provenance": "derived",
+          "window": [
+            70400000,
+            72400000
+          ],
+          "elements_scored": 501,
+          "naming_a_coding_gene": 113,
+          "genes": [
+            {
+              "gene": "SOX9",
+              "elements": 110,
+              "activating": 65,
+              "summed": 22.311
+            },
+            {
+              "gene": "KCNJ2",
+              "elements": 3,
+              "activating": 3,
+              "summed": 0.813
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "SOX9",
+              "elements": 110,
+              "activating": 65,
+              "summed": 22.311
+            }
+          ],
+          "target": "SOX9",
+          "rank_of_first_published_target": 1,
+          "pending": null,
+          "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
+        },
+        "constraint": {
+          "layer": "constraint",
+          "provenance": "derived",
+          "mammals": {
+            "bases": 3000,
+            "mean": -0.076,
+            "maximum": 3.502,
+            "fraction_above": 0.0013
+          },
+          "humans": {
+            "bases": 1000,
+            "mean": 1.814,
+            "maximum": 1.814,
+            "fraction_above": 0.0,
+            "strong": false
+          },
+          "case": {
+            "case": "tolerant",
+            "mammals": "free",
+            "humans": "free",
+            "confidence": 0.59
+          },
+          "evidence": "the project's own layers read at the locus: AlphaGenome deletion effects (already computed), GTEx v8 eQTLs, ENCODE DNase (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the imported people's variants, 1000 Genomes frequencies; thresholds phyloP 2.27, Gnocchi 2.18"
+        },
+        "eqtl": {
+          "layer": "eqtl",
+          "provenance": "derived",
+          "eqtls": 0,
+          "egenes": [],
+          "target": null,
+          "pending": null,
+          "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
+        },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 694,
+          "common": 10,
+          "per_kb": 3.33,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
+        "values": {
+          "layer": "values",
+          "provenance": "derived",
+          "people": [
+            "HG002",
+            "HG003",
+            "HG004"
+          ],
+          "variable_positions_in_element": 6,
+          "named_variants": {},
+          "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
+        },
+        "syntax_values": {
+          "layer": "syntax_values",
+          "provenance": "derived",
+          "values": 6,
+          "values_in_syntax": 0,
+          "top": [
+            {
+              "pos": 70670739,
+              "phylop": 0.46,
+              "carriers": [
+                "HG002",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 70669493,
+              "phylop": -0.18,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 70669755,
+              "phylop": -0.18,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 70670314,
+              "phylop": -1.1,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 70671327,
+              "phylop": -1.55,
+              "carriers": [
+                "HG002",
+                "HG004"
+              ]
+            }
+          ],
+          "published": {},
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
+        }
+      },
+      "gc": 0.495,
+      "distance_to_coding_tss": 500969,
+      "coding_genes_in_window": 1,
+      "constrained_fraction": 0.0013,
+      "score": {
+        "scored": {
+          "target": {
+            "field": "target",
+            "expected": [
+              "SOX9"
+            ],
+            "by_layer": {
+              "deletion": {
+                "provenance": "derived",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests"
+              },
+              "eqtl": {
+                "provenance": "derived",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "gene_input": {
+                "provenance": "derived",
+                "named": [
+                  "SOX9",
+                  "KCNJ2"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "SOX9",
+                "pending": null
+              },
+              "node": {
+                "provenance": "heuristic",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "lookups": {
+                "provenance": "looked_up",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              }
+            },
+            "hit_derived": true,
+            "hit_derived_by": [
+              "gene_input"
+            ],
+            "hit_derived_among": true,
+            "hit_heuristic": false,
+            "hit_looked_up": false
+          },
+          "cell": {
+            "field": "cell",
+            "expected_cells": [],
+            "expected_gtex": [],
+            "reader_open_in_expected": null,
+            "reader_hit": null,
+            "reader_cells_open": 1,
+            "promoter_open_in_expected": null,
+            "promoter_hit": null,
+            "promoter_cells_open": null,
+            "eqtl_tissues_for_target": [],
+            "eqtl_hit": null,
+            "model_tissue": null,
+            "model_hit": null,
+            "hit_derived": false,
+            "specific": null,
+            "unreachable": "the published tissue has no counterpart in the eleven reader cells or the GTEx panel"
+          },
+          "direction": {
+            "field": "direction",
+            "expected": "activates",
+            "model_action": null,
+            "hit_derived": false,
+            "judged": false
+          },
+          "distance": {
+            "field": "distance",
+            "expected": 1450000,
+            "measured": null,
+            "within_twofold": null,
+            "node_distance": null
+          },
+          "variant": {
+            "field": "variant",
+            "expected": [],
+            "variable_in_the_trio": {},
+            "frequencies": {},
+            "constraint_rank": null,
+            "in_the_top_decile_by_constraint": null,
+            "satmut_functional": null,
+            "protein_change": null,
+            "hit_derived": false,
+            "hit_targeted": null,
+            "reading": "derived means the machinery pointed at the base by itself: constraint ranking it in the top tenth of the window's variable positions, or the translation engine deriving the published protein change. Carrying the frequency of a base someone else named is not a hit."
+          },
+          "class": {
+            "field": "class",
+            "expected": [
+              "program"
+            ],
+            "read": [],
+            "agrees_on": [],
+            "missed": [
+              "program"
+            ],
+            "mammal_fraction": 0.0013,
+            "human_fraction": 0.0,
+            "case": {
+              "case": "tolerant",
+              "mammals": "free",
+              "humans": "free",
+              "confidence": 0.59
+            },
+            "values_in_syntax": 0,
+            "published_targets_in_one_node": [],
+            "value_domain_expected": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 3.33,
+            "value_domain_hit": null,
+            "hit_derived": false,
+            "hit_derived_all": false
+          }
+        },
+        "target_hit_derived": true,
+        "target_hit_heuristic": false,
+        "target_hit_looked_up": false,
+        "nearest_gene_trap": "KCNJ2",
+        "heuristic_fell_in_trap": false,
+        "cell_hit_derived": false,
+        "direction_hit_derived": false,
+        "class_hit_derived": false,
+        "reachable_by_a_derived_target_layer": false,
+        "pending": [
+          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "mpra: no lentiMPRA element was tested inside this window",
+          "satmut: no saturation-mutagenesis element covers this window"
+        ]
+      }
+    },
+    {
+      "locus": "H19_ICR1",
+      "expected": {
+        "locus": "H19_ICR1",
+        "chrom": "chr11",
+        "element": [
+          1999800,
+          2001900
+        ],
+        "window": [
+          1900000,
+          2250000
+        ],
+        "length": 2100,
+        "classes": [
+          "program",
+          "syntax"
+        ],
+        "targets": [
+          "IGF2",
+          "H19"
+        ],
+        "direction": "represses",
+        "tissues": [
+          "most fetal tissues",
+          "placenta"
+        ],
+        "gtex_tissues": [],
+        "cells": [],
+        "distance": 138000,
+        "variants": [
+          {
+            "rsid": null,
+            "pos": null,
+            "effect": "microdeletions of the CTCF sites and loss of methylation cause Beckwith-Wiedemann and Silver-Russell syndromes"
+          }
+        ],
+        "nearest_gene_trap": "MRPL23",
+        "value_domain": null,
+        "frequency": null,
+        "beyond_sequence": [
+          "parent of origin"
+        ],
+        "citations": [
+          "Bell and Felsenfeld 2000, Nature 405:482 and Hark et al. 2000, Nature 405:486 (the ICR is a methylation-sensitive CTCF boundary: unmethylated on the maternal allele it insulates IGF2 from the shared enhancers)",
+          "Sparago et al. 2004, Nat Genet 36:958 (microdeletions of the ICR cause Beckwith-Wiedemann)",
+          "Gicquel et al. 2005, Nat Genet 37:1003 (loss of ICR methylation causes Silver-Russell)"
+        ],
+        "answer_from": [
+          "human imprinting disorders",
+          "mouse deletions",
+          "allele-specific methylation"
+        ],
+        "note": "the imprinted case, added because parent of origin is the clearest information that is not in the sequence at all and no layer here carries it: the same two alleles behave oppositely depending on which parent they came from. The element's coordinate is ANCHORED: the published ICR is 2 to 4 kb upstream of the H19 promoter and the anchor is GENCODE's canonical H19 TSS (chr11:1,997,841, minus strand). The nearest coding TSS is MRPL23 and the published target is IGF2, 138 kb away"
+      },
+      "readings": {
+        "registry": {
+          "layer": "registry",
+          "provenance": "looked_up",
+          "elements": 0,
+          "classes": [],
+          "ids": [],
+          "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
+        },
+        "node": {
+          "layer": "node",
+          "provenance": "heuristic",
+          "domain": "chr11:D16",
+          "domain_span": [
+            1966733,
+            2074441
+          ],
+          "coding_genes_in_node": 0,
+          "genes_in_node": [
+            "ENSG00000274866",
+            "ENSG00000275266",
+            "ENSG00000295902",
+            "ENSG00000303720",
+            "H19",
+            "LINC01219",
+            "MIR675",
+            "MRPL23-AS1"
+          ],
+          "target": null,
+          "distance": null,
+          "nearest_coding_anywhere": "MRPL23",
+          "nearest_distance": 53519,
+          "evidence": "inferred: nearest coding TSS inside the CTCF node (confidence 0.4)"
+        },
+        "deletion": {
+          "layer": "deletion",
+          "provenance": "derived",
+          "elements_scored": 0,
+          "runs": [],
+          "targets": [],
+          "target": null,
+          "action": null,
+          "tissue": null,
+          "summed_by_cell": null,
+          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+        },
+        "reader": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {},
+          "cells_open": [],
+          "strongest_cell": null,
+          "peaks_K562": [],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "mpra": {
+          "layer": "mpra",
+          "provenance": "derived",
+          "tested": 0,
+          "active": null,
+          "best": null,
+          "pending": "no lentiMPRA element was tested inside this window",
+          "evidence": "experimental: ENCODE4 joint lentiMPRA, log2 RNA/DNA in K562, HepG2 and WTC11"
+        },
+        "lookups": {
+          "layer": "lookups",
+          "provenance": "looked_up",
+          "vista": [],
+          "vista_tissues": [],
+          "gwas": [],
+          "gwas_genes": [],
+          "clinvar_genes": [],
+          "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "satmut": {
+          "layer": "satmut",
+          "provenance": "targeted",
+          "pending": "no saturation-mutagenesis element covers this window"
+        },
+        "gene_input": {
+          "layer": "gene_input",
+          "provenance": "derived",
+          "window": [
+            1900000,
+            2250000
+          ],
+          "elements_scored": 171,
+          "naming_a_coding_gene": 128,
+          "genes": [
+            {
+              "gene": "TNNT3",
+              "elements": 33,
+              "activating": 23,
+              "summed": 11.564
+            },
+            {
+              "gene": "TH",
+              "elements": 17,
+              "activating": 13,
+              "summed": 9.968
+            },
+            {
+              "gene": "INS-IGF2",
+              "elements": 28,
+              "activating": 15,
+              "summed": 9.316
+            },
+            {
+              "gene": "INS",
+              "elements": 9,
+              "activating": 5,
+              "summed": 6.819
+            },
+            {
+              "gene": "ASCL2",
+              "elements": 21,
+              "activating": 12,
+              "summed": 6.018
+            },
+            {
+              "gene": "ENSG00000284779",
+              "elements": 11,
+              "activating": 7,
+              "summed": 3.314
+            },
+            {
+              "gene": "PRR33",
+              "elements": 6,
+              "activating": 5,
+              "summed": 2.461
+            },
+            {
+              "gene": "MRPL23",
+              "elements": 2,
+              "activating": 1,
+              "summed": 0.991
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "IGF2",
+              "elements": 1,
+              "activating": 1,
+              "summed": 0.244
+            }
+          ],
+          "target": "IGF2",
+          "rank_of_first_published_target": 9,
+          "pending": null,
+          "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [
+            "parent of origin"
+          ],
+          "needs": {
+            "parent of origin": "an allele-resolved methylation layer, or phased reads with a parental assignment: the two alleles are the same sequence and behave oppositely, so nothing read off the reference can separate them"
+          },
+          "pending": "parent of origin: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
+          "evidence": "curated: the published mechanism, written down before the run"
+        },
+        "constraint": {
+          "layer": "constraint",
+          "provenance": "derived",
+          "mammals": {
+            "bases": 2100,
+            "mean": -0.407,
+            "maximum": 7.34,
+            "fraction_above": 0.0162
+          },
+          "humans": null,
+          "case": null,
+          "evidence": "the project's own layers read at the locus: AlphaGenome deletion effects (already computed), GTEx v8 eQTLs, ENCODE DNase (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the imported people's variants, 1000 Genomes frequencies; thresholds phyloP 2.27, Gnocchi 2.18"
+        },
+        "eqtl": {
+          "layer": "eqtl",
+          "provenance": "derived",
+          "eqtls": 0,
+          "egenes": [],
+          "target": null,
+          "pending": null,
+          "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
+        },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 41,
+          "common": 0,
+          "per_kb": 0.0,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
+        "values": {
+          "layer": "values",
+          "provenance": "derived",
+          "people": [
+            "HG002",
+            "HG003",
+            "HG004"
+          ],
+          "variable_positions_in_element": 0,
+          "named_variants": {},
+          "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
+        },
+        "syntax_values": {
+          "layer": "syntax_values",
+          "provenance": "derived",
+          "values": 0,
+          "values_in_syntax": 0,
+          "top": [],
+          "published": {},
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
+        }
+      },
+      "gc": 0.5805,
+      "distance_to_coding_tss": 53519,
+      "coding_genes_in_window": 7,
+      "constrained_fraction": 0.0162,
+      "score": {
+        "scored": {
+          "target": {
+            "field": "target",
+            "expected": [
+              "H19",
+              "IGF2"
+            ],
+            "by_layer": {
+              "deletion": {
+                "provenance": "derived",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests"
+              },
+              "eqtl": {
+                "provenance": "derived",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "gene_input": {
+                "provenance": "derived",
+                "named": [
+                  "TNNT3",
+                  "TH",
+                  "INS-IGF2",
+                  "INS",
+                  "ASCL2",
+                  "ENSG00000284779"
+                ],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "node": {
+                "provenance": "heuristic",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "lookups": {
+                "provenance": "looked_up",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              }
+            },
+            "hit_derived": false,
+            "hit_derived_by": [],
+            "hit_derived_among": false,
+            "hit_heuristic": false,
+            "hit_looked_up": false
+          },
+          "cell": {
+            "field": "cell",
+            "expected_cells": [],
+            "expected_gtex": [],
+            "reader_open_in_expected": null,
+            "reader_hit": null,
+            "reader_cells_open": 0,
+            "promoter_open_in_expected": null,
+            "promoter_hit": null,
+            "promoter_cells_open": null,
+            "eqtl_tissues_for_target": [],
+            "eqtl_hit": null,
+            "model_tissue": null,
+            "model_hit": null,
+            "hit_derived": false,
+            "specific": null,
+            "unreachable": "the published tissue has no counterpart in the eleven reader cells or the GTEx panel"
+          },
+          "direction": {
+            "field": "direction",
+            "expected": "represses",
+            "model_action": null,
+            "hit_derived": false,
+            "judged": false
+          },
+          "distance": {
+            "field": "distance",
+            "expected": 138000,
+            "measured": null,
+            "within_twofold": null,
+            "node_distance": null
+          },
+          "variant": {
+            "field": "variant",
+            "expected": [],
+            "variable_in_the_trio": {},
+            "frequencies": {},
+            "constraint_rank": null,
+            "in_the_top_decile_by_constraint": null,
+            "satmut_functional": null,
+            "protein_change": null,
+            "hit_derived": false,
+            "hit_targeted": null,
+            "reading": "derived means the machinery pointed at the base by itself: constraint ranking it in the top tenth of the window's variable positions, or the translation engine deriving the published protein change. Carrying the frequency of a base someone else named is not a hit."
+          },
+          "class": {
+            "field": "class",
+            "expected": [
+              "program",
+              "syntax"
+            ],
+            "read": [],
+            "agrees_on": [],
+            "missed": [
+              "program",
+              "syntax"
+            ],
+            "mammal_fraction": 0.0162,
+            "human_fraction": null,
+            "case": null,
+            "values_in_syntax": 0,
+            "published_targets_in_one_node": [
+              "H19"
+            ],
+            "value_domain_expected": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 0.0,
+            "value_domain_hit": null,
+            "hit_derived": false,
+            "hit_derived_all": false
+          }
+        },
+        "target_hit_derived": false,
+        "target_hit_heuristic": false,
+        "target_hit_looked_up": false,
+        "nearest_gene_trap": "MRPL23",
+        "heuristic_fell_in_trap": false,
+        "cell_hit_derived": false,
+        "direction_hit_derived": false,
+        "class_hit_derived": false,
+        "reachable_by_a_derived_target_layer": false,
+        "pending": [
+          "beyond_sequence: parent of origin: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
+          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "mpra: no lentiMPRA element was tested inside this window",
+          "satmut: no saturation-mutagenesis element covers this window"
+        ]
+      }
+    },
+    {
+      "locus": "PMP22_CMT1A",
+      "expected": {
+        "locus": "PMP22_CMT1A",
+        "chrom": "chr17",
+        "element": [
+          15176315,
+          15272292
+        ],
+        "window": [
+          14100000,
+          15600000
+        ],
+        "length": 95977,
+        "classes": [
+          "program"
+        ],
+        "targets": [
+          "PMP22"
+        ],
+        "direction": "activates",
+        "tissues": [
+          "Schwann cell",
+          "peripheral nerve"
+        ],
+        "gtex_tissues": [
+          "Nerve_Tibial"
+        ],
+        "cells": [],
+        "distance": 0,
+        "variants": [
+          {
+            "rsid": null,
+            "pos": null,
+            "effect": "a 1.4 Mb duplication between the CMT1A-REP repeats causes CMT1A and the reciprocal deletion causes HNPP: the variable is copy number, not a base"
+          }
+        ],
+        "nearest_gene_trap": null,
+        "value_domain": null,
+        "frequency": null,
+        "beyond_sequence": [
+          "copy number"
+        ],
+        "citations": [
+          "Lupski et al. 1991, Cell 66:219 (a 1.4 Mb duplication containing PMP22 causes CMT1A)",
+          "Chance et al. 1993, Cell 72:143 (the reciprocal deletion causes hereditary neuropathy with liability to pressure palsies)",
+          "Li et al. 2013, J Neurol Sci 335:29 (dosage, not sequence, sets the severity)"
+        ],
+        "answer_from": [
+          "human pedigrees",
+          "dosage mapping",
+          "transgenic rodents"
+        ],
+        "note": "the dosage case, added because the four classes have no term for copy number and the project has no layer that carries it: three copies of an intact gene cause the disease and one copy causes a different one. The element is PMP22's GENCODE span, the dosage-sensitive unit; the window is the CMT1A-REP interval. Everything except the target's identity is expected to be pending, which is the point of including it"
+      },
+      "readings": {
+        "registry": {
+          "layer": "registry",
+          "provenance": "looked_up",
+          "elements": 52,
+          "classes": [
+            "CTCF-only",
+            "PLS",
+            "dELS",
+            "pELS"
+          ],
+          "ids": [
+            "EH38E1848657",
+            "EH38E3210484",
+            "EH38E3210486",
+            "EH38E3210487",
+            "EH38E3210488",
+            "EH38E3210489",
+            "EH38E1848671",
+            "EH38E3210494"
+          ],
+          "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
+        },
+        "node": {
+          "layer": "node",
+          "provenance": "heuristic",
+          "domain": "chr17:D106",
+          "domain_span": [
+            15213881,
+            15553165
+          ],
+          "coding_genes_in_node": 3,
+          "genes_in_node": [
+            "CDRT4",
+            "ENSG00000237377",
+            "ENSG00000265445",
+            "ENSG00000266538",
+            "ENSG00000266667",
+            "ENSG00000279567",
+            "ENSG00000279660",
+            "ENSG00000298674",
+            "MIR4731",
+            "PMP22",
+            "PPIAP53",
+            "RN7SL792P",
+            "RNU6-799P",
+            "RPL9P2",
+            "TEKT3"
+          ],
+          "target": "PMP22",
+          "distance": 41022,
+          "nearest_coding_anywhere": "PMP22",
+          "nearest_distance": 41022,
+          "evidence": "inferred: nearest coding TSS inside the CTCF node (confidence 0.4)"
+        },
+        "deletion": {
+          "layer": "deletion",
+          "provenance": "derived",
+          "elements_scored": 43,
+          "runs": [
+            "enhancer_targets_all"
+          ],
+          "targets": [
+            {
+              "gene": "PMP22",
+              "elements": 35,
+              "best": -0.8914,
+              "action": "activates",
+              "tissue": "immature natural killer cell"
+            },
+            {
+              "gene": "ENSG00000265445",
+              "elements": 1,
+              "best": -0.2753,
+              "action": "activates",
+              "tissue": "heart"
+            },
+            {
+              "gene": "CDRT8",
+              "elements": 1,
+              "best": 0.1181,
+              "action": "represses",
+              "tissue": "dorsolateral prefrontal cortex"
+            },
+            {
+              "gene": "MIR4731",
+              "elements": 1,
+              "best": -0.1131,
+              "action": "activates",
+              "tissue": "skeletal muscle myoblast"
+            }
+          ],
+          "target": "PMP22",
+          "action": "activates",
+          "tissue": "immature natural killer cell",
+          "summed_by_cell": {
+            "HepG2": -0.9765,
+            "IMR-90": -0.6259,
+            "K562": -1.6559,
+            "GM12878": -0.7727
+          },
+          "pending": null,
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+        },
+        "reader": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {
+            "K562": 820.0,
+            "HepG2": 1.2,
+            "GM12878": 0.73,
+            "H1": 1.81,
+            "IMR-90": 2.76,
+            "SK-N-SH": 6.53,
+            "cardiac muscle cell": 6.83,
+            "keratinocyte": 1.25,
+            "hepatocyte": 3.3,
+            "astrocyte": 2.88,
+            "CD14-positive monocyte": 8.25
+          },
+          "cells_open": [
+            "CD14-positive monocyte",
+            "GM12878",
+            "H1",
+            "HepG2",
+            "IMR-90",
+            "K562",
+            "SK-N-SH",
+            "astrocyte",
+            "cardiac muscle cell",
+            "hepatocyte",
+            "keratinocyte"
+          ],
+          "strongest_cell": "K562",
+          "peaks_K562": [
+            [
+              15184875,
+              15185025,
+              87.0
+            ],
+            [
+              15213832,
+              15213982,
+              93.0
+            ],
+            [
+              15232275,
+              15232425,
+              78.0
+            ],
+            [
+              15232635,
+              15232785,
+              151.0
+            ],
+            [
+              15233155,
+              15233305,
+              198.0
+            ],
+            [
+              15236335,
+              15236485,
+              238.0
+            ],
+            [
+              15236755,
+              15236905,
+              134.0
+            ],
+            [
+              15257455,
+              15257605,
+              491.0
+            ],
+            [
+              15260835,
+              15260985,
+              735.0
+            ],
+            [
+              15261315,
+              15261465,
+              146.0
+            ],
+            [
+              15262135,
+              15262285,
+              76.0
+            ],
+            [
+              15262555,
+              15262705,
+              820.0
+            ]
+          ],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "mpra": {
+          "layer": "mpra",
+          "provenance": "derived",
+          "tested": 4,
+          "active": {
+            "K562": 0,
+            "HepG2": 0,
+            "WTC11": 0
+          },
+          "best": {
+            "K562": 0.59,
+            "HepG2": -0.425,
+            "WTC11": -1.484
+          },
+          "pending": null,
+          "evidence": "experimental: ENCODE4 joint lentiMPRA, log2 RNA/DNA in K562, HepG2 and WTC11"
+        },
+        "lookups": {
+          "layer": "lookups",
+          "provenance": "looked_up",
+          "vista": [],
+          "vista_tissues": [],
+          "gwas": [],
+          "gwas_genes": [],
+          "clinvar_genes": [
+            "PMP22"
+          ],
+          "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "satmut": {
+          "layer": "satmut",
+          "provenance": "targeted",
+          "pending": "no saturation-mutagenesis element covers this window"
+        },
+        "gene_input": {
+          "layer": "gene_input",
+          "provenance": "derived",
+          "window": [
+            14100000,
+            15600000
+          ],
+          "elements_scored": 480,
+          "naming_a_coding_gene": 213,
+          "genes": [
+            {
+              "gene": "HS3ST3B1",
+              "elements": 78,
+              "activating": 60,
+              "summed": 22.955
+            },
+            {
+              "gene": "PMP22",
+              "elements": 65,
+              "activating": 39,
+              "summed": 14.261
+            },
+            {
+              "gene": "TEKT3",
+              "elements": 31,
+              "activating": 21,
+              "summed": 7.494
+            },
+            {
+              "gene": "CDRT4",
+              "elements": 23,
+              "activating": 16,
+              "summed": 3.707
+            },
+            {
+              "gene": "TVP23C",
+              "elements": 4,
+              "activating": 4,
+              "summed": 1.105
+            },
+            {
+              "gene": "FBXW10B",
+              "elements": 5,
+              "activating": 2,
+              "summed": 1.072
+            },
+            {
+              "gene": "CDRT15",
+              "elements": 3,
+              "activating": 2,
+              "summed": 0.74
+            },
+            {
+              "gene": "COX10",
+              "elements": 4,
+              "activating": 3,
+              "summed": 0.498
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "PMP22",
+              "elements": 65,
+              "activating": 39,
+              "summed": 14.261
+            }
+          ],
+          "target": "PMP22",
+          "rank_of_first_published_target": 2,
+          "pending": null,
+          "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [
+            "copy number"
+          ],
+          "needs": {
+            "copy number": "a dosage axis: read depth or an assembly-based copy count. Every layer here asks what a sequence says, never how many times it is present"
+          },
+          "pending": "copy number: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
+          "evidence": "curated: the published mechanism, written down before the run"
+        },
+        "constraint": {
+          "layer": "constraint",
+          "provenance": "derived",
+          "mammals": {
+            "bases": 95977,
+            "mean": 0.054,
+            "maximum": 8.903,
+            "fraction_above": 0.0342
+          },
+          "humans": {
+            "bases": 83000,
+            "mean": 1.094,
+            "maximum": 5.184,
+            "fraction_above": 0.241,
+            "strong": true
+          },
+          "case": {
+            "case": "tolerant",
+            "mammals": "free",
+            "humans": "free",
+            "confidence": 0.31
+          },
+          "evidence": "the project's own layers read at the locus: AlphaGenome deletion effects (already computed), GTEx v8 eQTLs, ENCODE DNase (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the imported people's variants, 1000 Genomes frequencies; thresholds phyloP 2.27, Gnocchi 2.18"
+        },
+        "eqtl": {
+          "layer": "eqtl",
+          "provenance": "derived",
+          "eqtls": 202,
+          "egenes": [
+            {
+              "gene": "TEKT3",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Caudate_basal_ganglia",
+                "Brain_Frontal_Cortex_BA9"
+              ],
+              "n_tissues": 16,
+              "best_p": 5.02117e-17,
+              "slope": -0.402147
+            },
+            {
+              "gene": "ENSG00000230971",
+              "tissues": [
+                "Testis"
+              ],
+              "n_tissues": 1,
+              "best_p": 1.94941e-14,
+              "slope": -0.227841
+            },
+            {
+              "gene": "ENSG00000265519",
+              "tissues": [
+                "Cells_Cultured_fibroblasts"
+              ],
+              "n_tissues": 1,
+              "best_p": 7.47652e-07,
+              "slope": -1.00927
+            },
+            {
+              "gene": "PMP22",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Cells_Cultured_fibroblasts",
+                "Esophagus_Muscularis"
+              ],
+              "n_tissues": 3,
+              "best_p": 9.44168e-07,
+              "slope": -0.0764625
+            },
+            {
+              "gene": "ADORA2B",
+              "tissues": [
+                "Stomach"
+              ],
+              "n_tissues": 1,
+              "best_p": 2.30096e-06,
+              "slope": -0.707237
+            },
+            {
+              "gene": "MEIS3P1",
+              "tissues": [
+                "Cells_Cultured_fibroblasts",
+                "Colon_Sigmoid",
+                "Colon_Transverse",
+                "Esophagus_Muscularis",
+                "Skin_Sun_Exposed_Lower_leg",
+                "Thyroid"
+              ],
+              "n_tissues": 6,
+              "best_p": 6.62521e-06,
+              "slope": -0.69871
+            }
+          ],
+          "target": "TEKT3",
+          "pending": null,
+          "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
+        },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 23151,
+          "common": 250,
+          "per_kb": 2.6,
+          "named": {},
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
+        "values": {
+          "layer": "values",
+          "provenance": "derived",
+          "people": [
+            "HG002",
+            "HG003",
+            "HG004"
+          ],
+          "variable_positions_in_element": 164,
+          "named_variants": {},
+          "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
+        },
+        "syntax_values": {
+          "layer": "syntax_values",
+          "provenance": "derived",
+          "values": 137,
+          "values_in_syntax": 1,
+          "top": [
+            {
+              "pos": 15230689,
+              "phylop": 8.86,
+              "carriers": [
+                "HG004"
+              ]
+            },
+            {
+              "pos": 15256100,
+              "phylop": 1.33,
+              "carriers": [
+                "HG003"
+              ]
+            },
+            {
+              "pos": 15230858,
+              "phylop": 1.24,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 15261055,
+              "phylop": 1.1,
+              "carriers": [
+                "HG003"
+              ]
+            },
+            {
+              "pos": 15219552,
+              "phylop": 1.04,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            }
+          ],
+          "published": {},
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
+        }
+      },
+      "gc": 0.4243,
+      "distance_to_coding_tss": 41022,
+      "coding_genes_in_window": 7,
+      "constrained_fraction": 0.0342,
+      "score": {
+        "scored": {
+          "target": {
+            "field": "target",
+            "expected": [
+              "PMP22"
+            ],
+            "by_layer": {
+              "deletion": {
+                "provenance": "derived",
+                "named": [
+                  "PMP22",
+                  "ENSG00000265445",
+                  "CDRT8",
+                  "MIR4731"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "PMP22",
+                "pending": null
+              },
+              "eqtl": {
+                "provenance": "derived",
+                "named": [
+                  "TEKT3",
+                  "ENSG00000230971",
+                  "ENSG00000265519",
+                  "PMP22",
+                  "ADORA2B",
+                  "MEIS3P1"
+                ],
+                "hit": false,
+                "among": true,
+                "first_hit": "PMP22",
+                "pending": null
+              },
+              "gene_input": {
+                "provenance": "derived",
+                "named": [
+                  "HS3ST3B1",
+                  "PMP22",
+                  "TEKT3",
+                  "CDRT4",
+                  "TVP23C",
+                  "FBXW10B"
+                ],
+                "hit": false,
+                "among": true,
+                "first_hit": "PMP22",
+                "pending": null
+              },
+              "node": {
+                "provenance": "heuristic",
+                "named": [
+                  "PMP22"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "PMP22",
+                "pending": null
+              },
+              "lookups": {
+                "provenance": "looked_up",
+                "named": [
+                  "PMP22"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "PMP22",
+                "pending": null
+              }
+            },
+            "hit_derived": true,
+            "hit_derived_by": [
+              "deletion"
+            ],
+            "hit_derived_among": true,
+            "hit_heuristic": true,
+            "hit_looked_up": true
+          },
+          "cell": {
+            "field": "cell",
+            "expected_cells": [],
+            "expected_gtex": [
+              "Nerve_Tibial"
+            ],
+            "reader_open_in_expected": null,
+            "reader_hit": null,
+            "reader_cells_open": 11,
+            "promoter_open_in_expected": null,
+            "promoter_hit": null,
+            "promoter_cells_open": null,
+            "eqtl_tissues_for_target": [
+              "Adipose_Subcutaneous",
+              "Cells_Cultured_fibroblasts",
+              "Esophagus_Muscularis"
+            ],
+            "eqtl_hit": false,
+            "model_tissue": "immature natural killer cell",
+            "model_hit": false,
+            "hit_derived": false,
+            "specific": null,
+            "unreachable": null
+          },
+          "direction": {
+            "field": "direction",
+            "expected": "activates",
+            "model_action": "activates",
+            "hit_derived": true,
+            "judged": true
+          },
+          "distance": {
+            "field": "distance",
+            "expected": 0,
+            "measured": {
+              "layer": "deletion",
+              "gene": "PMP22",
+              "distance": 41022
+            },
+            "within_twofold": null,
+            "node_distance": 41022
+          },
+          "variant": {
+            "field": "variant",
+            "expected": [],
+            "variable_in_the_trio": {},
+            "frequencies": {},
+            "constraint_rank": null,
+            "in_the_top_decile_by_constraint": null,
+            "satmut_functional": null,
+            "protein_change": null,
+            "hit_derived": false,
+            "hit_targeted": null,
+            "reading": "derived means the machinery pointed at the base by itself: constraint ranking it in the top tenth of the window's variable positions, or the translation engine deriving the published protein change. Carrying the frequency of a base someone else named is not a hit."
+          },
+          "class": {
+            "field": "class",
+            "expected": [
+              "program"
+            ],
+            "read": [
+              "storage",
+              "program"
+            ],
+            "agrees_on": [
+              "program"
+            ],
+            "missed": [],
+            "mammal_fraction": 0.0342,
+            "human_fraction": 0.241,
+            "case": {
+              "case": "tolerant",
+              "mammals": "free",
+              "humans": "free",
+              "confidence": 0.31
+            },
+            "values_in_syntax": 1,
+            "published_targets_in_one_node": [
+              "PMP22"
+            ],
+            "value_domain_expected": null,
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 2.6,
+            "value_domain_hit": null,
+            "hit_derived": true,
+            "hit_derived_all": true
+          }
+        },
+        "target_hit_derived": true,
+        "target_hit_heuristic": true,
+        "target_hit_looked_up": true,
+        "nearest_gene_trap": null,
+        "heuristic_fell_in_trap": false,
+        "cell_hit_derived": false,
+        "direction_hit_derived": true,
+        "class_hit_derived": true,
+        "reachable_by_a_derived_target_layer": true,
+        "pending": [
+          "beyond_sequence: copy number: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
+          "satmut: no saturation-mutagenesis element covers this window"
+        ]
+      }
+    },
+    {
+      "locus": "CYP2D6",
+      "expected": {
+        "locus": "CYP2D6",
+        "chrom": "chr22",
+        "element": [
+          42120961,
+          42131727
+        ],
+        "window": [
+          41900000,
+          42400000
+        ],
+        "length": 10766,
+        "classes": [
+          "storage",
+          "syntax"
+        ],
+        "targets": [
+          "CYP2D6"
+        ],
+        "direction": "coding",
+        "tissues": [
+          "liver"
+        ],
+        "gtex_tissues": [
+          "Liver"
+        ],
+        "cells": [
+          "HepG2"
+        ],
+        "distance": 0,
+        "variants": [
+          {
+            "rsid": "rs3892097",
+            "pos": 42128945,
+            "effect": "CYP2D6*4, the commonest European loss-of-function allele",
+            "position_from": "ensembl"
+          },
+          {
+            "rsid": "rs1065852",
+            "pos": 42130692,
+            "effect": "CYP2D6*10, common in East Asia, reduced activity",
+            "position_from": "ensembl"
+          }
+        ],
+        "nearest_gene_trap": null,
+        "value_domain": "many",
+        "frequency": "*4 is about 0.19 in Europeans and rare in East Asia; *10 is about 0.5 in East Asia",
+        "beyond_sequence": [],
+        "citations": [
+          "Gaedigk et al. 2018, Clin Pharmacol Ther 103:399 (PharmVar: over a hundred named star alleles, four metaboliser phenotypes)",
+          "Ingelman-Sundberg 2005, Pharmacogenomics J 5:6 (the clinical value domain)"
+        ],
+        "answer_from": [
+          "pharmacogenomic allele curation",
+          "enzyme activity assays"
+        ],
+        "note": "a many-valued slot outside the MHC, added to ask whether the value-domain reading generalises. The prediction written down before the run is that it will NOT read many: CYP2D6's diversity is star alleles, gene conversion with CYP2D7 and copy number, not a dense field of common positions, so counting positions per kilobase should underread it the same way it could not see ABO's frameshift"
+      },
+      "readings": {
+        "registry": {
+          "layer": "registry",
+          "provenance": "looked_up",
+          "elements": 6,
+          "classes": [
+            "PLS",
+            "dELS",
+            "pELS"
+          ],
+          "ids": [
+            "EH38E2166907",
+            "EH38E3484169",
+            "EH38E3484171",
+            "EH38E3484172",
+            "EH38E3484173",
+            "EH38E3484167"
+          ],
+          "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
+        },
+        "node": {
+          "layer": "node",
+          "provenance": "heuristic",
+          "domain": "chr22:D182",
+          "domain_span": [
+            41906917,
+            42226069
+          ],
+          "coding_genes_in_node": 12,
+          "genes_in_node": [
+            "CENPM",
+            "CYP2D6",
+            "CYP2D7",
+            "CYP2D8P",
+            "ENSG00000224883",
+            "ENSG00000227370",
+            "ENSG00000232710",
+            "ENSG00000270083",
+            "ENSG00000281538",
+            "ENSG00000286659",
+            "ENSG00000288719",
+            "ENSG00000293202",
+            "ENSG00000301540",
+            "ENSG00000303069",
+            "ENSG00000304470",
+            "ENSG00000309045",
+            "MIR378I",
+            "NAGA",
+            "NDUFA6",
+            "NDUFA6-DT",
+            "OLA1P1",
+            "PHETA2",
+            "SEPTIN3",
+            "SHISA8"
+          ],
+          "target": "CYP2D6",
+          "distance": 4465,
+          "nearest_coding_anywhere": "CYP2D6",
+          "nearest_distance": 4465,
+          "evidence": "inferred: nearest coding TSS inside the CTCF node (confidence 0.4)"
+        },
+        "deletion": {
+          "layer": "deletion",
+          "provenance": "derived",
+          "elements_scored": 4,
+          "runs": [
+            "enhancer_targets_all"
+          ],
+          "targets": [
+            {
+              "gene": "CYP2D6",
+              "elements": 3,
+              "best": -0.2793,
+              "action": "activates",
+              "tissue": "placental basal plate"
+            },
+            {
+              "gene": "NDUFA6-DT",
+              "elements": 1,
+              "best": -0.172,
+              "action": "activates",
+              "tissue": "Liver"
+            }
+          ],
+          "target": "CYP2D6",
+          "action": "activates",
+          "tissue": "placental basal plate",
+          "summed_by_cell": {
+            "HepG2": -0.298,
+            "IMR-90": -0.0236,
+            "K562": -0.0533,
+            "GM12878": 0.0326
+          },
+          "pending": null,
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+        },
+        "reader": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {
+            "K562": 218.0,
+            "HepG2": 0.54,
+            "GM12878": 1.15,
+            "H1": 0.45,
+            "SK-N-SH": 0.41,
+            "hepatocyte": 0.32
+          },
+          "cells_open": [
+            "GM12878",
+            "H1",
+            "HepG2",
+            "K562",
+            "SK-N-SH",
+            "hepatocyte"
+          ],
+          "strongest_cell": "K562",
+          "peaks_K562": [
+            [
+              42120815,
+              42120965,
+              86.0
+            ],
+            [
+              42129475,
+              42129625,
+              218.0
+            ]
+          ],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "mpra": {
+          "layer": "mpra",
+          "provenance": "derived",
+          "tested": 0,
+          "active": null,
+          "best": null,
+          "pending": "no lentiMPRA element was tested inside this window",
+          "evidence": "experimental: ENCODE4 joint lentiMPRA, log2 RNA/DNA in K562, HepG2 and WTC11"
+        },
+        "lookups": {
+          "layer": "lookups",
+          "provenance": "looked_up",
+          "vista": [],
+          "vista_tissues": [],
+          "gwas": [],
+          "gwas_genes": [],
+          "clinvar_genes": [],
+          "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "satmut": {
+          "layer": "satmut",
+          "provenance": "targeted",
+          "pending": "no saturation-mutagenesis element covers this window"
+        },
+        "gene_input": {
+          "layer": "gene_input",
+          "provenance": "derived",
+          "window": [
+            41900000,
+            42400000
+          ],
+          "elements_scored": 369,
+          "naming_a_coding_gene": 177,
+          "genes": [
+            {
+              "gene": "SHISA8",
+              "elements": 33,
+              "activating": 20,
+              "summed": 15.512
+            },
+            {
+              "gene": "SEPTIN3",
+              "elements": 24,
+              "activating": 15,
+              "summed": 11.383
+            },
+            {
+              "gene": "TNFRSF13C",
+              "elements": 25,
+              "activating": 13,
+              "summed": 8.998
+            },
+            {
+              "gene": "SMIM45",
+              "elements": 12,
+              "activating": 6,
+              "summed": 8.444
+            },
+            {
+              "gene": "NFAM1",
+              "elements": 23,
+              "activating": 16,
+              "summed": 6.114
+            },
+            {
+              "gene": "CENPM",
+              "elements": 10,
+              "activating": 5,
+              "summed": 4.91
+            },
+            {
+              "gene": "SMDT1",
+              "elements": 4,
+              "activating": 4,
+              "summed": 3.911
+            },
+            {
+              "gene": "PHETA2",
+              "elements": 11,
+              "activating": 4,
+              "summed": 3.816
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "CYP2D6",
+              "elements": 8,
+              "activating": 7,
+              "summed": 1.475
+            }
+          ],
+          "target": "CYP2D6",
+          "rank_of_first_published_target": 13,
+          "pending": null,
+          "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
+        },
+        "coding": {
+          "layer": "coding",
+          "provenance": "derived",
+          "variants": {
+            "rs3892097": {
+              "genes": [
+                "CYP2D6"
+              ],
+              "expected": null,
+              "pending": "the local trace substitutes single bases; an indel's consequence is not derived"
+            },
+            "rs1065852": {
+              "genes": [
+                "CYP2D6"
+              ],
+              "expected": null,
+              "pending": "the local trace substitutes single bases; an indel's consequence is not derived"
+            }
+          },
+          "target": "CYP2D6",
+          "evidence": "derived: GenomeOS trace of the canonical transcript on the local sequence"
+        },
+        "promoter": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {
+            "HepG2": 0.54,
+            "hepatocyte": 0.32
+          },
+          "cells_open": [
+            "HepG2",
+            "hepatocyte"
+          ],
+          "strongest_cell": "HepG2",
+          "peaks_K562": [],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "constraint": {
+          "layer": "constraint",
+          "provenance": "derived",
+          "mammals": {
+            "bases": 10766,
+            "mean": 0.307,
+            "maximum": 8.693,
+            "fraction_above": 0.1133
+          },
+          "humans": {
+            "bases": 5000,
+            "mean": -0.933,
+            "maximum": 2.318,
+            "fraction_above": 0.2,
+            "strong": false
+          },
+          "case": {
+            "case": "relaxed",
+            "mammals": "constrained",
+            "humans": "free",
+            "confidence": 0.36
+          },
+          "evidence": "the project's own layers read at the locus: AlphaGenome deletion effects (already computed), GTEx v8 eQTLs, ENCODE DNase (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the imported people's variants, 1000 Genomes frequencies; thresholds phyloP 2.27, Gnocchi 2.18"
+        },
+        "eqtl": {
+          "layer": "eqtl",
+          "provenance": "derived",
+          "eqtls": 13051,
+          "egenes": [
+            {
+              "gene": "SMDT1",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Amygdala",
+                "Brain_Anterior_cingulate_cortex_BA24"
+              ],
+              "n_tissues": 48,
+              "best_p": 2.58487e-183,
+              "slope": -0.846598
+            },
+            {
+              "gene": "CYP2D6",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Amygdala",
+                "Brain_Anterior_cingulate_cortex_BA24"
+              ],
+              "n_tissues": 48,
+              "best_p": 1.01061e-96,
+              "slope": 0.740593
+            },
+            {
+              "gene": "NDUFA6",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Amygdala",
+                "Brain_Anterior_cingulate_cortex_BA24"
+              ],
+              "n_tissues": 48,
+              "best_p": 8.70838e-84,
+              "slope": 1.18361
+            },
+            {
+              "gene": "CYP2D7",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Amygdala",
+                "Brain_Anterior_cingulate_cortex_BA24"
+              ],
+              "n_tissues": 45,
+              "best_p": 7.1409e-71,
+              "slope": -0.609549
+            },
+            {
+              "gene": "NAGA",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Amygdala",
+                "Brain_Anterior_cingulate_cortex_BA24"
+              ],
+              "n_tissues": 46,
+              "best_p": 1.17156e-61,
+              "slope": -0.517909
+            },
+            {
+              "gene": "ENSG00000227370",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Amygdala",
+                "Brain_Anterior_cingulate_cortex_BA24"
+              ],
+              "n_tissues": 43,
+              "best_p": 6.68826e-49,
+              "slope": -0.629561
+            }
+          ],
+          "target": "SMDT1",
+          "pending": null,
+          "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
+        },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 3530,
+          "common": 58,
+          "per_kb": 5.39,
+          "named": {
+            "rs3892097": {
+              "af": 0.141017,
+              "rsid_in_gnomad": "rs3892097",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.198627,
+              "allele": "C>T"
+            },
+            "rs1065852": {
+              "af": 0.190415,
+              "rsid_in_gnomad": "rs1065852",
+              "commonest_in": "East Asian",
+              "af_there": 0.541438,
+              "allele": "G>A"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
+        "values": {
+          "layer": "values",
+          "provenance": "derived",
+          "people": [
+            "HG002",
+            "HG003",
+            "HG004"
+          ],
+          "variable_positions_in_element": 60,
+          "named_variants": {
+            "rs3892097": {
+              "pos": 42128945,
+              "carried_by": {
+                "HG002": "C>T het",
+                "HG003": "C>T hom"
+              },
+              "variable_in_the_trio": true,
+              "frequency": {
+                "af": 0.141017,
+                "rsid_in_gnomad": "rs3892097",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.198627,
+                "allele": "C>T"
+              }
+            },
+            "rs1065852": {
+              "pos": 42130692,
+              "carried_by": {
+                "HG002": "G>A het",
+                "HG003": "G>A hom"
+              },
+              "variable_in_the_trio": true,
+              "frequency": {
+                "af": 0.190415,
+                "rsid_in_gnomad": "rs1065852",
+                "commonest_in": "East Asian",
+                "af_there": 0.541438,
+                "allele": "G>A"
+              }
+            }
+          },
+          "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
+        },
+        "syntax_values": {
+          "layer": "syntax_values",
+          "provenance": "derived",
+          "values": 57,
+          "values_in_syntax": 6,
+          "top": [
+            {
+              "pos": 42130692,
+              "phylop": 8.26,
+              "carriers": [
+                "HG002",
+                "HG003"
+              ]
+            },
+            {
+              "pos": 42128945,
+              "phylop": 6.51,
+              "carriers": [
+                "HG002",
+                "HG003"
+              ]
+            },
+            {
+              "pos": 42129819,
+              "phylop": 4.67,
+              "carriers": [
+                "HG002",
+                "HG003"
+              ]
+            },
+            {
+              "pos": 42127001,
+              "phylop": 3.44,
+              "carriers": [
+                "HG002",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 42127941,
+              "phylop": 2.66,
+              "carriers": [
+                "HG002",
+                "HG004"
+              ]
+            }
+          ],
+          "published": {
+            "rs3892097": {
+              "variable_in_the_trio": true,
+              "phylop": 6.51,
+              "rank": 2,
+              "of": 57
+            },
+            "rs1065852": {
+              "variable_in_the_trio": true,
+              "phylop": 8.26,
+              "rank": 1,
+              "of": 57
+            }
+          },
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
+        }
+      },
+      "gc": 0.5672,
+      "distance_to_coding_tss": 4465,
+      "coding_genes_in_window": 13,
+      "constrained_fraction": 0.1133,
+      "score": {
+        "scored": {
+          "target": {
+            "field": "target",
+            "expected": [
+              "CYP2D6"
+            ],
+            "by_layer": {
+              "deletion": {
+                "provenance": "derived",
+                "named": [
+                  "CYP2D6",
+                  "NDUFA6-DT"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "CYP2D6",
+                "pending": null
+              },
+              "eqtl": {
+                "provenance": "derived",
+                "named": [
+                  "SMDT1",
+                  "CYP2D6",
+                  "NDUFA6",
+                  "CYP2D7",
+                  "NAGA",
+                  "ENSG00000227370"
+                ],
+                "hit": false,
+                "among": true,
+                "first_hit": "CYP2D6",
+                "pending": null
+              },
+              "gene_input": {
+                "provenance": "derived",
+                "named": [
+                  "SHISA8",
+                  "SEPTIN3",
+                  "TNFRSF13C",
+                  "SMIM45",
+                  "NFAM1",
+                  "CENPM"
+                ],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              },
+              "coding": {
+                "provenance": "derived",
+                "named": [
+                  "CYP2D6"
+                ],
+                "hit": false,
+                "among": true,
+                "first_hit": "CYP2D6",
+                "pending": null
+              },
+              "node": {
+                "provenance": "heuristic",
+                "named": [
+                  "CYP2D6"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "CYP2D6",
+                "pending": null
+              },
+              "lookups": {
+                "provenance": "looked_up",
+                "named": [],
+                "hit": false,
+                "among": false,
+                "first_hit": null,
+                "pending": null
+              }
+            },
+            "hit_derived": true,
+            "hit_derived_by": [
+              "deletion"
+            ],
+            "hit_derived_among": true,
+            "hit_heuristic": true,
+            "hit_looked_up": false
+          },
+          "cell": {
+            "field": "cell",
+            "expected_cells": [
+              "HepG2"
+            ],
+            "expected_gtex": [
+              "Liver"
+            ],
+            "reader_open_in_expected": [
+              "HepG2"
+            ],
+            "reader_hit": true,
+            "reader_cells_open": 6,
+            "promoter_open_in_expected": [
+              "HepG2"
+            ],
+            "promoter_hit": true,
+            "promoter_cells_open": 2,
+            "eqtl_tissues_for_target": [
+              "Adipose_Subcutaneous",
+              "Adipose_Visceral_Omentum",
+              "Adrenal_Gland",
+              "Artery_Aorta",
+              "Artery_Coronary",
+              "Artery_Tibial",
+              "Brain_Amygdala",
+              "Brain_Anterior_cingulate_cortex_BA24"
+            ],
+            "eqtl_hit": false,
+            "model_tissue": "placental basal plate",
+            "model_hit": false,
+            "hit_derived": true,
+            "specific": 0.5,
+            "unreachable": null
+          },
+          "direction": {
+            "field": "direction",
+            "expected": "coding",
+            "model_action": "activates",
+            "hit_derived": false,
+            "judged": false
+          },
+          "distance": {
+            "field": "distance",
+            "expected": 0,
+            "measured": {
+              "layer": "deletion",
+              "gene": "CYP2D6",
+              "distance": 4465
+            },
+            "within_twofold": null,
+            "node_distance": 4465
+          },
+          "variant": {
+            "field": "variant",
+            "expected": [
+              "rs3892097",
+              "rs1065852"
+            ],
+            "variable_in_the_trio": {
+              "rs3892097": true,
+              "rs1065852": true
+            },
+            "frequencies": {
+              "rs3892097": {
+                "af": 0.141017,
+                "rsid_in_gnomad": "rs3892097",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.198627,
+                "allele": "C>T"
+              },
+              "rs1065852": {
+                "af": 0.190415,
+                "rsid_in_gnomad": "rs1065852",
+                "commonest_in": "East Asian",
+                "af_there": 0.541438,
+                "allele": "G>A"
+              }
+            },
+            "constraint_rank": {
+              "rs3892097": {
+                "variable_in_the_trio": true,
+                "phylop": 6.51,
+                "rank": 2,
+                "of": 57
+              },
+              "rs1065852": {
+                "variable_in_the_trio": true,
+                "phylop": 8.26,
+                "rank": 1,
+                "of": 57
+              }
+            },
+            "in_the_top_decile_by_constraint": {
+              "rs3892097": true,
+              "rs1065852": true
+            },
+            "satmut_functional": null,
+            "protein_change": {
+              "rs3892097": null,
+              "rs1065852": null
+            },
+            "hit_derived": true,
+            "hit_targeted": null,
+            "reading": "derived means the machinery pointed at the base by itself: constraint ranking it in the top tenth of the window's variable positions, or the translation engine deriving the published protein change. Carrying the frequency of a base someone else named is not a hit."
+          },
+          "class": {
+            "field": "class",
+            "expected": [
+              "storage",
+              "syntax"
+            ],
+            "read": [
+              "storage",
+              "program"
+            ],
+            "agrees_on": [
+              "storage"
+            ],
+            "missed": [
+              "syntax"
+            ],
+            "mammal_fraction": 0.1133,
+            "human_fraction": 0.2,
+            "case": {
+              "case": "relaxed",
+              "mammals": "constrained",
+              "humans": "free",
+              "confidence": 0.36
+            },
+            "values_in_syntax": 6,
+            "published_targets_in_one_node": [
+              "CYP2D6"
+            ],
+            "value_domain_expected": "many",
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 5.39,
+            "value_domain_hit": false,
+            "hit_derived": true,
+            "hit_derived_all": false
+          }
+        },
+        "target_hit_derived": true,
+        "target_hit_heuristic": true,
+        "target_hit_looked_up": false,
+        "nearest_gene_trap": null,
+        "heuristic_fell_in_trap": false,
+        "cell_hit_derived": true,
+        "direction_hit_derived": false,
+        "class_hit_derived": true,
+        "reachable_by_a_derived_target_layer": true,
+        "pending": [
+          "mpra: no lentiMPRA element was tested inside this window",
+          "satmut: no saturation-mutagenesis element covers this window"
+        ]
+      }
+    },
+    {
+      "locus": "MC1R",
+      "expected": {
+        "locus": "MC1R",
+        "chrom": "chr16",
+        "element": [
+          89912118,
+          89920977
+        ],
+        "window": [
+          89700000,
+          90100000
+        ],
+        "length": 8859,
+        "classes": [
+          "storage",
+          "syntax"
+        ],
+        "targets": [
+          "MC1R"
+        ],
+        "direction": "coding",
+        "tissues": [
+          "melanocyte"
+        ],
+        "gtex_tissues": [],
+        "cells": [],
+        "distance": 0,
+        "variants": [
+          {
+            "rsid": "rs1805007",
+            "pos": 89919709,
+            "ref": "C",
+            "alt": "T",
+            "protein_change": "p.Arg151Cys",
+            "effect": "R151C, a red-hair R allele",
+            "position_from": "ensembl"
+          },
+          {
+            "rsid": "rs1805008",
+            "pos": 89919736,
+            "ref": "C",
+            "alt": "T",
+            "protein_change": "p.Arg160Trp",
+            "effect": "R160W, a red-hair R allele",
+            "position_from": "ensembl"
+          },
+          {
+            "rsid": "rs1805009",
+            "pos": 89920138,
+            "effect": "D294H, a red-hair R allele",
+            "position_from": "ensembl"
+          }
+        ],
+        "nearest_gene_trap": null,
+        "value_domain": "few",
+        "frequency": "the R alleles are a European specialty: R151C about 0.08 there and near absent elsewhere",
+        "beyond_sequence": [],
+        "citations": [
+          "Valverde et al. 1995, Nat Genet 11:328 (MC1R variants and red hair)",
+          "Box et al. 1997, Hum Mol Genet 6:1891 (R151C, R160W and D294H are the strong R alleles)",
+          "Beaumont et al. 2007, Hum Mol Genet 16:2249 (R against r alleles by receptor function)"
+        ],
+        "answer_from": [
+          "association with hair and skin colour",
+          "receptor signalling assays"
+        ],
+        "note": "a few-valued slot with a sharp population structure, and a third coding calibration beside APP and TP53: the translation engine should derive p.Arg151Cys and p.Arg160Trp from the reference sequence. The element is MC1R's GENCODE span"
+      },
+      "readings": {
+        "registry": {
+          "layer": "registry",
+          "provenance": "looked_up",
+          "elements": 1,
+          "classes": [
+            "PLS"
+          ],
+          "ids": [
+            "EH38E3201370"
+          ],
+          "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
+        },
+        "node": {
+          "layer": "node",
+          "provenance": "heuristic",
+          "domain": "chr16:D562",
+          "domain_span": [
+            89794823,
+            90039912
+          ],
+          "coding_genes_in_node": 9,
+          "genes_in_node": [
+            "AFG3L1P",
+            "AFG3L1P",
+            "CENPBD1P",
+            "CENPBD1P",
+            "DBNDD1",
+            "DEF8",
+            "DRC4",
+            "ENSG00000198211",
+            "ENSG00000259006",
+            "ENSG00000267048",
+            "FANCA",
+            "GAS8-AS1",
+            "MC1R",
+            "SPIRE2",
+            "TCF25",
+            "TUBB3"
+          ],
+          "target": "MC1R",
+          "distance": 2314,
+          "nearest_coding_anywhere": "MC1R",
+          "nearest_distance": 2314,
+          "evidence": "inferred: nearest coding TSS inside the CTCF node (confidence 0.4)"
+        },
+        "deletion": {
+          "layer": "deletion",
+          "provenance": "derived",
+          "elements_scored": 8,
+          "runs": [
+            "enhancer_targets_all"
+          ],
+          "targets": [
+            {
+              "gene": "MC1R",
+              "elements": 4,
+              "best": -1.3073,
+              "action": "activates",
+              "tissue": "kidney"
+            },
+            {
+              "gene": "ENSG00000198211",
+              "elements": 3,
+              "best": -1.0013,
+              "action": "activates",
+              "tissue": "naive thymus-derived CD8-positive, alpha-beta T cell"
+            },
+            {
+              "gene": "TUBB3",
+              "elements": 1,
+              "best": 0.1772,
+              "action": "represses",
+              "tissue": "placenta"
+            }
+          ],
+          "target": "MC1R",
+          "action": "activates",
+          "tissue": "kidney",
+          "summed_by_cell": {
+            "HepG2": -1.0179,
+            "IMR-90": -0.3204,
+            "K562": -0.6255,
+            "GM12878": -0.5009
+          },
+          "pending": null,
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+        },
+        "reader": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {
+            "K562": 776.0,
+            "HepG2": 3.76,
+            "GM12878": 2.85,
+            "H1": 0.92,
+            "IMR-90": 1.19,
+            "SK-N-SH": 2.54,
+            "cardiac muscle cell": 5.77,
+            "keratinocyte": 1.07,
+            "hepatocyte": 1.67,
+            "astrocyte": 2.0,
+            "CD14-positive monocyte": 1.12
+          },
+          "cells_open": [
+            "CD14-positive monocyte",
+            "GM12878",
+            "H1",
+            "HepG2",
+            "IMR-90",
+            "K562",
+            "SK-N-SH",
+            "astrocyte",
+            "cardiac muscle cell",
+            "hepatocyte",
+            "keratinocyte"
+          ],
+          "strongest_cell": "K562",
+          "peaks_K562": [
+            [
+              89912355,
+              89912505,
+              48.0
+            ],
+            [
+              89912615,
+              89912765,
+              37.0
+            ],
+            [
+              89912975,
+              89913125,
+              61.0
+            ],
+            [
+              89913255,
+              89913405,
+              45.0
+            ],
+            [
+              89913655,
+              89913805,
+              50.0
+            ],
+            [
+              89915075,
+              89915225,
+              43.0
+            ],
+            [
+              89915455,
+              89915605,
+              35.0
+            ],
+            [
+              89915775,
+              89915925,
+              51.0
+            ],
+            [
+              89917955,
+              89918105,
+              381.0
+            ],
+            [
+              89918675,
+              89918825,
+              776.0
+            ],
+            [
+              89919195,
+              89919345,
+              79.0
+            ],
+            [
+              89919575,
+              89919725,
+              54.0
+            ]
+          ],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "mpra": {
+          "layer": "mpra",
+          "provenance": "derived",
+          "tested": 0,
+          "active": null,
+          "best": null,
+          "pending": "no lentiMPRA element was tested inside this window",
+          "evidence": "experimental: ENCODE4 joint lentiMPRA, log2 RNA/DNA in K562, HepG2 and WTC11"
+        },
+        "lookups": {
+          "layer": "lookups",
+          "provenance": "looked_up",
+          "vista": [],
+          "vista_tissues": [],
+          "gwas": [],
+          "gwas_genes": [],
+          "clinvar_genes": [
+            "MC1R"
+          ],
+          "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "satmut": {
+          "layer": "satmut",
+          "provenance": "targeted",
+          "pending": "no saturation-mutagenesis element covers this window"
+        },
+        "gene_input": {
+          "layer": "gene_input",
+          "provenance": "derived",
+          "window": [
+            89700000,
+            90100000
+          ],
+          "elements_scored": 281,
+          "naming_a_coding_gene": 151,
+          "genes": [
+            {
+              "gene": "DBNDD1",
+              "elements": 22,
+              "activating": 10,
+              "summed": 9.608
+            },
+            {
+              "gene": "SPIRE2",
+              "elements": 40,
+              "activating": 26,
+              "summed": 8.943
+            },
+            {
+              "gene": "TUBB3",
+              "elements": 15,
+              "activating": 7,
+              "summed": 6.44
+            },
+            {
+              "gene": "PRDM7",
+              "elements": 10,
+              "activating": 6,
+              "summed": 3.312
+            },
+            {
+              "gene": "DEF8",
+              "elements": 10,
+              "activating": 8,
+              "summed": 2.903
+            },
+            {
+              "gene": "MC1R",
+              "elements": 7,
+              "activating": 6,
+              "summed": 2.658
+            },
+            {
+              "gene": "ZNF276",
+              "elements": 8,
+              "activating": 8,
+              "summed": 2.478
+            },
+            {
+              "gene": "VPS9D1",
+              "elements": 10,
+              "activating": 6,
+              "summed": 2.472
+            }
+          ],
+          "published_targets": [
+            {
+              "gene": "MC1R",
+              "elements": 7,
+              "activating": 6,
+              "summed": 2.658
+            }
+          ],
+          "target": "MC1R",
+          "rank_of_first_published_target": 6,
+          "pending": null,
+          "evidence": "predicted: AlphaGenome deletions already computed, summed |log2| per coding gene"
+        },
+        "beyond_sequence": {
+          "layer": "beyond_sequence",
+          "provenance": "derived",
+          "mechanisms": [],
+          "needs": {},
+          "pending": null,
+          "evidence": "curated: the published mechanism, written down before the run"
+        },
+        "coding": {
+          "layer": "coding",
+          "provenance": "derived",
+          "variants": {
+            "rs1805007": {
+              "genes": [
+                "ENSG00000198211",
+                "MC1R"
+              ],
+              "expected": "p.Arg151Cys",
+              "transcript": "MC1R-202",
+              "consequence": "missense",
+              "hgvs_p": "p.Arg151Cys",
+              "matches": true
+            },
+            "rs1805008": {
+              "genes": [
+                "ENSG00000198211",
+                "MC1R"
+              ],
+              "expected": "p.Arg160Trp",
+              "transcript": "MC1R-202",
+              "consequence": "missense",
+              "hgvs_p": "p.Arg160Trp",
+              "matches": true
+            },
+            "rs1805009": {
+              "genes": [
+                "ENSG00000198211",
+                "MC1R"
+              ],
+              "expected": null,
+              "pending": "the local trace substitutes single bases; an indel's consequence is not derived"
+            }
+          },
+          "target": "MC1R",
+          "evidence": "derived: GenomeOS trace of the canonical transcript on the local sequence"
+        },
+        "promoter": {
+          "layer": "reader",
+          "provenance": "derived",
+          "cells_read": 11,
+          "open_in": {
+            "K562": 776.0,
+            "HepG2": 3.76,
+            "GM12878": 2.85,
+            "H1": 0.92,
+            "IMR-90": 1.19,
+            "SK-N-SH": 2.54,
+            "cardiac muscle cell": 5.77,
+            "keratinocyte": 1.07,
+            "hepatocyte": 1.67,
+            "astrocyte": 2.0,
+            "CD14-positive monocyte": 1.12
+          },
+          "cells_open": [
+            "CD14-positive monocyte",
+            "GM12878",
+            "H1",
+            "HepG2",
+            "IMR-90",
+            "K562",
+            "SK-N-SH",
+            "astrocyte",
+            "cardiac muscle cell",
+            "hepatocyte",
+            "keratinocyte"
+          ],
+          "strongest_cell": "K562",
+          "peaks_K562": [
+            [
+              89917955,
+              89918105,
+              381.0
+            ],
+            [
+              89918675,
+              89918825,
+              776.0
+            ],
+            [
+              89919195,
+              89919345,
+              79.0
+            ],
+            [
+              89919575,
+              89919725,
+              54.0
+            ],
+            [
+              89919775,
+              89919925,
+              50.0
+            ]
+          ],
+          "pending": null,
+          "evidence": "experimental: ENCODE DNase-seq narrowPeak, eleven cell types (the reader)"
+        },
+        "constraint": {
+          "layer": "constraint",
+          "provenance": "derived",
+          "mammals": {
+            "bases": 8859,
+            "mean": -0.119,
+            "maximum": 8.707,
+            "fraction_above": 0.0573
+          },
+          "humans": {
+            "bases": 3000,
+            "mean": 1.473,
+            "maximum": 3.956,
+            "fraction_above": 0.3333,
+            "strong": false
+          },
+          "case": {
+            "case": "syntax",
+            "mammals": "constrained",
+            "humans": "constrained",
+            "confidence": 0.34
+          },
+          "evidence": "the project's own layers read at the locus: AlphaGenome deletion effects (already computed), GTEx v8 eQTLs, ENCODE DNase (the reader), ENCODE4 lentiMPRA, Zoonomia phyloP, gnomAD Gnocchi, the imported people's variants, 1000 Genomes frequencies; thresholds phyloP 2.27, Gnocchi 2.18"
+        },
+        "eqtl": {
+          "layer": "eqtl",
+          "provenance": "derived",
+          "eqtls": 2762,
+          "egenes": [
+            {
+              "gene": "CDK10",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Amygdala",
+                "Brain_Anterior_cingulate_cortex_BA24"
+              ],
+              "n_tissues": 47,
+              "best_p": 3.89292e-86,
+              "slope": -0.658144
+            },
+            {
+              "gene": "SPIRE2",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Brain_Caudate_basal_ganglia",
+                "Brain_Cerebellar_Hemisphere"
+              ],
+              "n_tissues": 34,
+              "best_p": 5.82359e-43,
+              "slope": 0.822769
+            },
+            {
+              "gene": "TUBB3",
+              "tissues": [
+                "Artery_Tibial",
+                "Breast_Mammary_Tissue",
+                "Cells_Cultured_fibroblasts",
+                "Esophagus_Mucosa",
+                "Pituitary",
+                "Skin_Not_Sun_Exposed_Suprapubic",
+                "Skin_Sun_Exposed_Lower_leg"
+              ],
+              "n_tissues": 7,
+              "best_p": 2.69707e-34,
+              "slope": 0.808993
+            },
+            {
+              "gene": "MC1R",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Tibial",
+                "Brain_Amygdala",
+                "Brain_Anterior_cingulate_cortex_BA24",
+                "Brain_Caudate_basal_ganglia"
+              ],
+              "n_tissues": 39,
+              "best_p": 7.42393e-34,
+              "slope": -0.424805
+            },
+            {
+              "gene": "DEF8",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Tibial",
+                "Brain_Putamen_basal_ganglia",
+                "Cells_Cultured_fibroblasts",
+                "Colon_Sigmoid"
+              ],
+              "n_tissues": 20,
+              "best_p": 5.41853e-31,
+              "slope": -0.499705
+            },
+            {
+              "gene": "DBNDD1",
+              "tissues": [
+                "Adipose_Subcutaneous",
+                "Adipose_Visceral_Omentum",
+                "Adrenal_Gland",
+                "Artery_Aorta",
+                "Artery_Coronary",
+                "Artery_Tibial",
+                "Breast_Mammary_Tissue",
+                "Cells_Cultured_fibroblasts"
+              ],
+              "n_tissues": 27,
+              "best_p": 1.33028e-29,
+              "slope": 0.849143
+            }
+          ],
+          "target": "CDK10",
+          "pending": null,
+          "evidence": "experimental: GTEx v8 significant single-tissue cis-eQTL pairs"
+        },
+        "frequencies": {
+          "layer": "frequencies",
+          "provenance": "derived",
+          "variants_in_window": 4848,
+          "common": 53,
+          "per_kb": 5.98,
+          "named": {
+            "rs1805007": {
+              "af": 0.0462416,
+              "rsid_in_gnomad": "rs1805007",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.0740812,
+              "allele": "C>T"
+            },
+            "rs1805008": {
+              "af": 0.0462845,
+              "rsid_in_gnomad": "rs1805008",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.0771843,
+              "allele": "C>T"
+            },
+            "rs1805009": {
+              "af": 0.010898,
+              "rsid_in_gnomad": "rs1805009",
+              "commonest_in": "European (Non-Finnish)",
+              "af_there": 0.018239,
+              "allele": "G>C"
+            }
+          },
+          "threshold": 0.05,
+          "evidence": "curated: gnomAD v4.1.1 genomes, frequencies from up to 76,215 genomes (UCSC bigBed)"
+        },
+        "values": {
+          "layer": "values",
+          "provenance": "derived",
+          "people": [
+            "HG002",
+            "HG003",
+            "HG004"
+          ],
+          "variable_positions_in_element": 16,
+          "named_variants": {
+            "rs1805007": {
+              "pos": 89919709,
+              "carried_by": {},
+              "variable_in_the_trio": false,
+              "frequency": {
+                "af": 0.0462416,
+                "rsid_in_gnomad": "rs1805007",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.0740812,
+                "allele": "C>T"
+              }
+            },
+            "rs1805008": {
+              "pos": 89919736,
+              "carried_by": {
+                "HG004": "C>T het"
+              },
+              "variable_in_the_trio": true,
+              "frequency": {
+                "af": 0.0462845,
+                "rsid_in_gnomad": "rs1805008",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.0771843,
+                "allele": "C>T"
+              }
+            },
+            "rs1805009": {
+              "pos": 89920138,
+              "carried_by": {},
+              "variable_in_the_trio": false,
+              "frequency": {
+                "af": 0.010898,
+                "rsid_in_gnomad": "rs1805009",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.018239,
+                "allele": "G>C"
+              }
+            }
+          },
+          "evidence": "measured: each person's own variant calls (GIAB HG002/HG003/HG004); curated: 1000 Genomes allele frequencies through Ensembl"
+        },
+        "syntax_values": {
+          "layer": "syntax_values",
+          "provenance": "derived",
+          "values": 14,
+          "values_in_syntax": 1,
+          "top": [
+            {
+              "pos": 89919746,
+              "phylop": 4.32,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 89919736,
+              "phylop": 1.03,
+              "carriers": [
+                "HG004"
+              ]
+            },
+            {
+              "pos": 89918814,
+              "phylop": 0.64,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 89912644,
+              "phylop": 0.17,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            },
+            {
+              "pos": 89917962,
+              "phylop": 0.0,
+              "carriers": [
+                "HG002",
+                "HG003",
+                "HG004"
+              ]
+            }
+          ],
+          "published": {
+            "rs1805007": {
+              "variable_in_the_trio": false,
+              "phylop": null,
+              "rank": null,
+              "of": 14
+            },
+            "rs1805008": {
+              "variable_in_the_trio": true,
+              "phylop": 1.03,
+              "rank": 2,
+              "of": 14
+            },
+            "rs1805009": {
+              "variable_in_the_trio": false,
+              "phylop": null,
+              "rank": null,
+              "of": 14
+            }
+          },
+          "evidence": "curated: Zoonomia phyloP per base; measured: the GIAB trio's own SNVs"
+        }
+      },
+      "gc": 0.5816,
+      "distance_to_coding_tss": 2314,
+      "coding_genes_in_window": 13,
+      "constrained_fraction": 0.0573,
+      "score": {
+        "scored": {
+          "target": {
+            "field": "target",
+            "expected": [
+              "MC1R"
+            ],
+            "by_layer": {
+              "deletion": {
+                "provenance": "derived",
+                "named": [
+                  "MC1R",
+                  "ENSG00000198211",
+                  "TUBB3"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "MC1R",
+                "pending": null
+              },
+              "eqtl": {
+                "provenance": "derived",
+                "named": [
+                  "CDK10",
+                  "SPIRE2",
+                  "TUBB3",
+                  "MC1R",
+                  "DEF8",
+                  "DBNDD1"
+                ],
+                "hit": false,
+                "among": true,
+                "first_hit": "MC1R",
+                "pending": null
+              },
+              "gene_input": {
+                "provenance": "derived",
+                "named": [
+                  "DBNDD1",
+                  "SPIRE2",
+                  "TUBB3",
+                  "PRDM7",
+                  "DEF8",
+                  "MC1R"
+                ],
+                "hit": false,
+                "among": true,
+                "first_hit": "MC1R",
+                "pending": null
+              },
+              "coding": {
+                "provenance": "derived",
+                "named": [
+                  "MC1R"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "MC1R",
+                "pending": null
+              },
+              "node": {
+                "provenance": "heuristic",
+                "named": [
+                  "MC1R"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "MC1R",
+                "pending": null
+              },
+              "lookups": {
+                "provenance": "looked_up",
+                "named": [
+                  "MC1R"
+                ],
+                "hit": true,
+                "among": true,
+                "first_hit": "MC1R",
+                "pending": null
+              }
+            },
+            "hit_derived": true,
+            "hit_derived_by": [
+              "deletion",
+              "coding"
+            ],
+            "hit_derived_among": true,
+            "hit_heuristic": true,
+            "hit_looked_up": true
+          },
+          "cell": {
+            "field": "cell",
+            "expected_cells": [],
+            "expected_gtex": [],
+            "reader_open_in_expected": null,
+            "reader_hit": null,
+            "reader_cells_open": 11,
+            "promoter_open_in_expected": null,
+            "promoter_hit": null,
+            "promoter_cells_open": 11,
+            "eqtl_tissues_for_target": [
+              "Adipose_Subcutaneous",
+              "Adipose_Visceral_Omentum",
+              "Adrenal_Gland",
+              "Artery_Aorta",
+              "Artery_Tibial",
+              "Brain_Amygdala",
+              "Brain_Anterior_cingulate_cortex_BA24",
+              "Brain_Caudate_basal_ganglia"
+            ],
+            "eqtl_hit": null,
+            "model_tissue": "kidney",
+            "model_hit": false,
+            "hit_derived": false,
+            "specific": null,
+            "unreachable": "the published tissue has no counterpart in the eleven reader cells or the GTEx panel"
+          },
+          "direction": {
+            "field": "direction",
+            "expected": "coding",
+            "model_action": "activates",
+            "hit_derived": false,
+            "judged": false
+          },
+          "distance": {
+            "field": "distance",
+            "expected": 0,
+            "measured": {
+              "layer": "deletion",
+              "gene": "MC1R",
+              "distance": 2314
+            },
+            "within_twofold": null,
+            "node_distance": 2314
+          },
+          "variant": {
+            "field": "variant",
+            "expected": [
+              "rs1805007",
+              "rs1805008",
+              "rs1805009"
+            ],
+            "variable_in_the_trio": {
+              "rs1805007": false,
+              "rs1805008": true,
+              "rs1805009": false
+            },
+            "frequencies": {
+              "rs1805007": {
+                "af": 0.0462416,
+                "rsid_in_gnomad": "rs1805007",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.0740812,
+                "allele": "C>T"
+              },
+              "rs1805008": {
+                "af": 0.0462845,
+                "rsid_in_gnomad": "rs1805008",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.0771843,
+                "allele": "C>T"
+              },
+              "rs1805009": {
+                "af": 0.010898,
+                "rsid_in_gnomad": "rs1805009",
+                "commonest_in": "European (Non-Finnish)",
+                "af_there": 0.018239,
+                "allele": "G>C"
+              }
+            },
+            "constraint_rank": {
+              "rs1805007": {
+                "variable_in_the_trio": false,
+                "phylop": null,
+                "rank": null,
+                "of": 14
+              },
+              "rs1805008": {
+                "variable_in_the_trio": true,
+                "phylop": 1.03,
+                "rank": 2,
+                "of": 14
+              },
+              "rs1805009": {
+                "variable_in_the_trio": false,
+                "phylop": null,
+                "rank": null,
+                "of": 14
+              }
+            },
+            "in_the_top_decile_by_constraint": {
+              "rs1805007": false,
+              "rs1805008": false,
+              "rs1805009": false
+            },
+            "satmut_functional": null,
+            "protein_change": {
+              "rs1805007": "p.Arg151Cys",
+              "rs1805008": "p.Arg160Trp",
+              "rs1805009": null
+            },
+            "hit_derived": true,
+            "hit_targeted": null,
+            "reading": "derived means the machinery pointed at the base by itself: constraint ranking it in the top tenth of the window's variable positions, or the translation engine deriving the published protein change. Carrying the frequency of a base someone else named is not a hit."
+          },
+          "class": {
+            "field": "class",
+            "expected": [
+              "storage",
+              "syntax"
+            ],
+            "read": [
+              "storage",
+              "program"
+            ],
+            "agrees_on": [
+              "storage"
+            ],
+            "missed": [
+              "syntax"
+            ],
+            "mammal_fraction": 0.0573,
+            "human_fraction": 0.3333,
+            "case": {
+              "case": "syntax",
+              "mammals": "constrained",
+              "humans": "constrained",
+              "confidence": 0.34
+            },
+            "values_in_syntax": 1,
+            "published_targets_in_one_node": [
+              "MC1R"
+            ],
+            "value_domain_expected": "few",
+            "value_domain_read": "two",
+            "common_variable_positions_per_kb": 5.98,
+            "value_domain_hit": false,
+            "hit_derived": true,
+            "hit_derived_all": false
+          }
+        },
+        "target_hit_derived": true,
+        "target_hit_heuristic": true,
+        "target_hit_looked_up": true,
+        "nearest_gene_trap": null,
+        "heuristic_fell_in_trap": false,
+        "cell_hit_derived": false,
+        "direction_hit_derived": false,
+        "class_hit_derived": true,
+        "reachable_by_a_derived_target_layer": true,
+        "pending": [
+          "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
       }
@@ -10424,43 +14110,937 @@
       "common_variants_per_kb": 8.24,
       "values_in_syntax": 38,
       "mammal_fraction": 0.0883
+    },
+    {
+      "chrom": "chr17",
+      "start": 22210291,
+      "end": 22213291,
+      "gc": 0.46,
+      "distance_to_coding_tss": 519269,
+      "constrained_fraction": 0.0007,
+      "of_locus": "SOX9_PierreRobin",
+      "claims": {
+        "target": true,
+        "cell": false,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": false
+      },
+      "node_target": "KCNJ18",
+      "deletion_target": "UBBP4",
+      "eqtl_target": null,
+      "cells_open": [],
+      "registry_classes": [
+        "dELS"
+      ],
+      "common_variants_per_kb": 1.0,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0007
+    },
+    {
+      "chrom": "chr17",
+      "start": 22089496,
+      "end": 22092496,
+      "gc": 0.523,
+      "distance_to_coding_tss": 398474,
+      "constrained_fraction": 0.0,
+      "of_locus": "SOX9_PierreRobin",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "KCNJ18",
+      "deletion_target": "ENSG00000265233",
+      "eqtl_target": "NCOR1P2",
+      "cells_open": [
+        "HepG2",
+        "K562",
+        "SK-N-SH"
+      ],
+      "registry_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 10.33,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0
+    },
+    {
+      "chrom": "chr17",
+      "start": 22044564,
+      "end": 22047564,
+      "gc": 0.524,
+      "distance_to_coding_tss": 353542,
+      "constrained_fraction": 0.004,
+      "of_locus": "SOX9_PierreRobin",
+      "claims": {
+        "target": true,
+        "cell": false,
+        "direction": false,
+        "storage": false,
+        "deletion_scored": false,
+        "eqtl_present": true
+      },
+      "node_target": "KCNJ18",
+      "deletion_target": null,
+      "eqtl_target": "LINC02693",
+      "cells_open": [],
+      "registry_classes": [],
+      "common_variants_per_kb": 25.67,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.004
+    },
+    {
+      "chrom": "chr17",
+      "start": 72755678,
+      "end": 72758678,
+      "gc": 0.4553,
+      "distance_to_coding_tss": 335509,
+      "constrained_fraction": 0.0043,
+      "of_locus": "SOX9_PierreRobin",
+      "claims": {
+        "target": true,
+        "cell": false,
+        "direction": false,
+        "storage": false,
+        "deletion_scored": false,
+        "eqtl_present": true
+      },
+      "node_target": null,
+      "deletion_target": null,
+      "eqtl_target": "COG1",
+      "cells_open": [],
+      "registry_classes": [],
+      "common_variants_per_kb": 3.67,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0043
+    },
+    {
+      "chrom": "chr17",
+      "start": 72674499,
+      "end": 72677499,
+      "gc": 0.4627,
+      "distance_to_coding_tss": 416688,
+      "constrained_fraction": 0.0053,
+      "of_locus": "SOX9_PierreRobin",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": false,
+        "storage": false,
+        "deletion_scored": false,
+        "eqtl_present": true
+      },
+      "node_target": null,
+      "deletion_target": null,
+      "eqtl_target": "LINC00511",
+      "cells_open": [
+        "HepG2",
+        "IMR-90",
+        "astrocyte"
+      ],
+      "registry_classes": [],
+      "common_variants_per_kb": 7.33,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0053
+    },
+    {
+      "chrom": "chr11",
+      "start": 116725731,
+      "end": 116727831,
+      "gc": 0.5462,
+      "distance_to_coding_tss": 46205,
+      "constrained_fraction": 0.0152,
+      "of_locus": "H19_ICR1",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": false,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "BUD13",
+      "deletion_target": null,
+      "eqtl_target": "ENSG00000254851",
+      "cells_open": [
+        "IMR-90",
+        "astrocyte",
+        "cardiac muscle cell"
+      ],
+      "registry_classes": [
+        "dELS"
+      ],
+      "common_variants_per_kb": 2.86,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0152
+    },
+    {
+      "chrom": "chr11",
+      "start": 119789712,
+      "end": 119791812,
+      "gc": 0.5576,
+      "distance_to_coding_tss": 61563,
+      "constrained_fraction": 0.0138,
+      "of_locus": "H19_ICR1",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": null,
+      "deletion_target": "ENSG00000287545",
+      "eqtl_target": "DRC12",
+      "cells_open": [
+        "SK-N-SH"
+      ],
+      "registry_classes": [],
+      "common_variants_per_kb": 2.38,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0138
+    },
+    {
+      "chrom": "chr11",
+      "start": 119469073,
+      "end": 119471173,
+      "gc": 0.5438,
+      "distance_to_coding_tss": 46952,
+      "constrained_fraction": 0.0086,
+      "of_locus": "H19_ICR1",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "THY1",
+      "deletion_target": "THY1",
+      "eqtl_target": "THY1",
+      "cells_open": [
+        "H1",
+        "IMR-90",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "dELS"
+      ],
+      "common_variants_per_kb": 2.38,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0086
+    },
+    {
+      "chrom": "chr11",
+      "start": 43981151,
+      "end": 43983251,
+      "gc": 0.5462,
+      "distance_to_coding_tss": 39565,
+      "constrained_fraction": 0.0076,
+      "of_locus": "H19_ICR1",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "C11orf96",
+      "deletion_target": "C11orf96",
+      "eqtl_target": "ACCS",
+      "cells_open": [
+        "K562"
+      ],
+      "registry_classes": [
+        "dELS"
+      ],
+      "common_variants_per_kb": 8.57,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0076
+    },
+    {
+      "chrom": "chr11",
+      "start": 3108975,
+      "end": 3111075,
+      "gc": 0.5424,
+      "distance_to_coding_tss": 52603,
+      "constrained_fraction": 0.0057,
+      "of_locus": "H19_ICR1",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "OSBPL5",
+      "deletion_target": "OSBPL5",
+      "eqtl_target": "OSBPL5",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "cardiac muscle cell",
+        "hepatocyte"
+      ],
+      "registry_classes": [
+        "dELS"
+      ],
+      "common_variants_per_kb": 2.38,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0057
+    },
+    {
+      "chrom": "chr17",
+      "start": 68146735,
+      "end": 68242712,
+      "gc": 0.4619,
+      "distance_to_coding_tss": 53319,
+      "constrained_fraction": 0.0343,
+      "of_locus": "PMP22_CMT1A",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": true,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "AMZ2",
+      "deletion_target": "ENSG00000278740",
+      "eqtl_target": "ARHGAP27P2",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "CTCF-only",
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 6.55,
+      "values_in_syntax": 8,
+      "mammal_fraction": 0.0343
+    },
+    {
+      "chrom": "chr17",
+      "start": 34345195,
+      "end": 34441172,
+      "gc": 0.4547,
+      "distance_to_coding_tss": 29951,
+      "constrained_fraction": 0.032,
+      "of_locus": "PMP22_CMT1A",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": true,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "CCL1",
+      "deletion_target": "CCL1",
+      "eqtl_target": "CCL11",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "CTCF-only",
+        "DNase-H3K4me3",
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 4.48,
+      "values_in_syntax": 8,
+      "mammal_fraction": 0.032
+    },
+    {
+      "chrom": "chr17",
+      "start": 16481294,
+      "end": 16577271,
+      "gc": 0.4539,
+      "distance_to_coding_tss": 37090,
+      "constrained_fraction": 0.0369,
+      "of_locus": "PMP22_CMT1A",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "LRRC75A",
+      "deletion_target": "LRRC75A",
+      "eqtl_target": "LRRC75A",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "CTCF-only",
+        "DNase-H3K4me3",
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 2.64,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0369
+    },
+    {
+      "chrom": "chr17",
+      "start": 45478269,
+      "end": 45574246,
+      "gc": 0.445,
+      "distance_to_coding_tss": 35537,
+      "constrained_fraction": 0.0308,
+      "of_locus": "PMP22_CMT1A",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "PLEKHM1",
+      "deletion_target": "PLEKHM1",
+      "eqtl_target": "LINC02210",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 2.4,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0308
+    },
+    {
+      "chrom": "chr17",
+      "start": 62285837,
+      "end": 62381814,
+      "gc": 0.3891,
+      "distance_to_coding_tss": 46727,
+      "constrained_fraction": 0.0307,
+      "of_locus": "PMP22_CMT1A",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": false,
+        "storage": true,
+        "deletion_scored": false,
+        "eqtl_present": true
+      },
+      "node_target": "EFCAB3",
+      "deletion_target": null,
+      "eqtl_target": "TBC1D3P2",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte"
+      ],
+      "registry_classes": [
+        "CTCF-only"
+      ],
+      "common_variants_per_kb": 3.76,
+      "values_in_syntax": 5,
+      "mammal_fraction": 0.0307
+    },
+    {
+      "chrom": "chr22",
+      "start": 21467356,
+      "end": 21478122,
+      "gc": 0.5833,
+      "distance_to_coding_tss": 5353,
+      "constrained_fraction": 0.1151,
+      "of_locus": "CYP2D6",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "TMEM191C",
+      "deletion_target": "TMEM191C",
+      "eqtl_target": "PI4KAP2",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "DNase-H3K4me3",
+        "pELS"
+      ],
+      "common_variants_per_kb": 3.9,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1151
+    },
+    {
+      "chrom": "chr22",
+      "start": 29259535,
+      "end": 29270301,
+      "gc": 0.5585,
+      "distance_to_coding_tss": 3062,
+      "constrained_fraction": 0.1182,
+      "of_locus": "CYP2D6",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "RHBDD3",
+      "deletion_target": "RHBDD3",
+      "eqtl_target": "GAS2L1",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 1.02,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.1182
+    },
+    {
+      "chrom": "chr22",
+      "start": 36496125,
+      "end": 36506891,
+      "gc": 0.5294,
+      "distance_to_coding_tss": 5531,
+      "constrained_fraction": 0.1033,
+      "of_locus": "CYP2D6",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": true,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "FOXRED2",
+      "deletion_target": "FOXRED2",
+      "eqtl_target": "FOXRED2",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "H1",
+        "HepG2",
+        "K562",
+        "SK-N-SH",
+        "hepatocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 3.25,
+      "values_in_syntax": 1,
+      "mammal_fraction": 0.1033
+    },
+    {
+      "chrom": "chr22",
+      "start": 38746459,
+      "end": 38757225,
+      "gc": 0.5642,
+      "distance_to_coding_tss": 4155,
+      "constrained_fraction": 0.0975,
+      "of_locus": "CYP2D6",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": true,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "SUN2",
+      "deletion_target": "ENSG00000225450",
+      "eqtl_target": "FAM227A",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 1.58,
+      "values_in_syntax": 2,
+      "mammal_fraction": 0.0975
+    },
+    {
+      "chrom": "chr22",
+      "start": 39245408,
+      "end": 39256174,
+      "gc": 0.561,
+      "distance_to_coding_tss": 5810,
+      "constrained_fraction": 0.0911,
+      "of_locus": "CYP2D6",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": true,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "PDGFB",
+      "deletion_target": "PDGFB",
+      "eqtl_target": "PDGFB",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 4.46,
+      "values_in_syntax": 1,
+      "mammal_fraction": 0.0911
+    },
+    {
+      "chrom": "chr16",
+      "start": 2458679,
+      "end": 2467538,
+      "gc": 0.602,
+      "distance_to_coding_tss": 3000,
+      "constrained_fraction": 0.0655,
+      "of_locus": "MC1R",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "TEDC2",
+      "deletion_target": "CCNF",
+      "eqtl_target": "ENSG00000261613",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 1.02,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0655
+    },
+    {
+      "chrom": "chr16",
+      "start": 2770956,
+      "end": 2779815,
+      "gc": 0.5669,
+      "distance_to_coding_tss": 1894,
+      "constrained_fraction": 0.0698,
+      "of_locus": "MC1R",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "ELOB",
+      "deletion_target": "ELOB",
+      "eqtl_target": "ENSG00000276791",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 3.39,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0698
+    },
+    {
+      "chrom": "chr16",
+      "start": 1915629,
+      "end": 1924488,
+      "gc": 0.6082,
+      "distance_to_coding_tss": 1644,
+      "constrained_fraction": 0.0436,
+      "of_locus": "MC1R",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "HS3ST6",
+      "deletion_target": "HS3ST6",
+      "eqtl_target": "FAHD1",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "H1",
+        "HepG2",
+        "K562",
+        "SK-N-SH",
+        "cardiac muscle cell",
+        "hepatocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 5.31,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0436
+    },
+    {
+      "chrom": "chr16",
+      "start": 2265482,
+      "end": 2274341,
+      "gc": 0.5906,
+      "distance_to_coding_tss": 1786,
+      "constrained_fraction": 0.0409,
+      "of_locus": "MC1R",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "RNPS1",
+      "deletion_target": "MIR3677HG",
+      "eqtl_target": "RNPS1",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte",
+        "keratinocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 1.81,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0409
+    },
+    {
+      "chrom": "chr16",
+      "start": 1935799,
+      "end": 1944658,
+      "gc": 0.5589,
+      "distance_to_coding_tss": 2970,
+      "constrained_fraction": 0.0407,
+      "of_locus": "MC1R",
+      "claims": {
+        "target": true,
+        "cell": true,
+        "direction": true,
+        "storage": false,
+        "deletion_scored": true,
+        "eqtl_present": true
+      },
+      "node_target": "MSRB1",
+      "deletion_target": "MSRB1",
+      "eqtl_target": "FAHD1",
+      "cells_open": [
+        "CD14-positive monocyte",
+        "GM12878",
+        "H1",
+        "HepG2",
+        "IMR-90",
+        "K562",
+        "SK-N-SH",
+        "astrocyte",
+        "cardiac muscle cell",
+        "hepatocyte"
+      ],
+      "registry_classes": [
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
+      "common_variants_per_kb": 2.26,
+      "values_in_syntax": 0,
+      "mammal_fraction": 0.0407
     }
   ],
   "variant_positions": {
     "rs12913832": {
       "panel": 28120472,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 28120472,
+      "agrees": true
     },
     "rs4988235": {
       "panel": 135851076,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 135851076,
+      "agrees": true
     },
     "rs1421085": {
       "panel": 53767042,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 53767042,
+      "agrees": true
     },
     "rs1558902": {
       "panel": 53769662,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 53769662,
+      "agrees": true
     },
     "rs1427407": {
       "panel": 60490908,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 60490908,
+      "agrees": true
     },
     "rs6983267": {
       "panel": 127401060,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 127401060,
+      "agrees": true
     },
     "rs11986220": {
       "panel": 127519444,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 127519444,
+      "agrees": true
     },
     "rs8176719": {
       "panel": 133257521,
@@ -10469,25 +15049,60 @@
     },
     "rs8176746": {
       "panel": 133255935,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 133255935,
+      "agrees": true
     },
     "rs63750847": {
       "panel": 25897620,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 25897620,
+      "agrees": true
     },
     "rs1042522": {
       "panel": 7676154,
       "ensembl": 7676154,
       "agrees": true
+    },
+    "rs3892097": {
+      "panel": null,
+      "ensembl": 42128945,
+      "agrees": null,
+      "position_from": "ensembl"
+    },
+    "rs1065852": {
+      "panel": null,
+      "ensembl": 42130692,
+      "agrees": null,
+      "position_from": "ensembl"
+    },
+    "rs1805007": {
+      "panel": null,
+      "ensembl": 89919709,
+      "agrees": null,
+      "position_from": "ensembl"
+    },
+    "rs1805008": {
+      "panel": null,
+      "ensembl": 89919736,
+      "agrees": null,
+      "position_from": "ensembl"
+    },
+    "rs1805009": {
+      "panel": null,
+      "ensembl": 89920138,
+      "agrees": null,
+      "position_from": "ensembl"
     }
   },
   "not_in_panel": {
     "IRX5": "kept inside FTO_IRX3 as a second published target rather than as a locus of its own",
     "HBB_HS2_alone": "the single HS2 core has no hg38 coordinate we can cite without lifting one over, so the whole locus control region is the element and the hypersensitive ladder is derived from DNase",
     "HLA_B": "one HLA gene is enough for the value-domain question; DRB1 is the classical exon-2 case",
-    "LCT_African_alleles": "G-13915 and C-14010 are published but their enhancer window overlaps rs4988235's, so the expectation would not be independent"
+    "LCT_African_alleles": "G-13915 and C-14010 are published but their enhancer window overlaps rs4988235's, so the expectation would not be independent",
+    "SMN1_SMN2": "the cleanest dosage phenotype there is, but SMN1 and SMN2 are a segmental duplication differing at a handful of bases, so no element here has an unambiguous hg38 coordinate and every layer's answer would be a statement about read mapping. PMP22 carries dosage instead",
+    "RHD_deletion": "Rh negative is a whole-gene deletion, a two-valued slot whose value is copy number: it asks the same question as PMP22_CMT1A and chr1 is not swept",
+    "FUT2_secretor": "rs601338 is a clean two-valued slot with sharp population structure, but HERC2/OCA2 already tests a two-valued slot and this adds no failure mode the panel is missing",
+    "AMY1_copy_number": "copy number again, and the published association with starch in the diet is contested, so the expectation would not be unambiguous",
+    "EPHA4_IHH_TAD_boundaries": "the Lupianez 2015 rearrangements are the best evidence that node boundaries matter, but the causal unit is a structural variant spanning a boundary and the panel has no way to write one down as an element"
   },
   "gtex": {
     "tissues": 49,
@@ -10505,6 +15120,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 499.1
+    "seconds": 475.6
   }
 }

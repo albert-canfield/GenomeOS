@@ -12,7 +12,8 @@ The pattern is the therapeutic benchmark (`tests/test_therapeutic_benchmark.py`)
 
 ## 1. The panel
 
-Twelve loci, each chosen because the published answer is unambiguous and
+Seventeen loci (twelve until 2026-09-15; see section 9), each chosen because the
+published answer is unambiguous and
 because each tests a different failure mode. The expectations are written down
 in the code (`PANEL`) before anything is read, with citations and with the kinds
 of data the published answer itself came from, so a reader can see where a
@@ -32,6 +33,27 @@ layer might only be restating the discovery.
 | APP | storage, syntax | APP, brain | rs63750847 (A673T) | coding calibration on a fully scored chromosome |
 | TP53 | syntax, storage | TP53, every tissue | rs1042522 (P72R) | a constrained frame with one common value |
 | HOXD | order, program, syntax | HOXD1 to HOXD13, limb and trunk | none | position as the order of execution; the boundary between HOXD11 and HOXD13 |
+| SOX9_PierreRobin | program | SOX9, mandibular arch, 1.45 Mb away | translocations and rare point mutations | a **second** megabase reach, so the ZRS is not an anecdote; KCNJ2 is the trap |
+| H19_ICR1 | program, syntax | IGF2 and H19, most fetal tissues, 138 kb | ICR microdeletions, loss of methylation | **parent of origin**: the same two alleles behave oppositely |
+| PMP22_CMT1A | program | PMP22, Schwann cell | the 1.4 Mb CMT1A duplication | **copy number**, not a base, is the variable |
+| CYP2D6 | storage, syntax | CYP2D6, liver | rs3892097 (*4), rs1065852 (*10) | a many-valued slot outside the MHC |
+| MC1R | storage, syntax | MC1R, melanocyte | rs1805007 (R151C), rs1805008 (R160W) | a few-valued slot with a sharp population structure |
+
+The last five were added on 2026-09-15, after the saturation finding in section 8 showed the sweep
+had nothing left to give twelve loci. They were chosen for what the first twelve underweighted:
+one more long-range case, and three mechanisms the project cannot represent at all (parent of
+origin, copy number, and — already present at the globin locus — developmental stage). Those
+mechanisms are written down per locus in `Expect.beyond_sequence` and read as **pending with the
+cost of reaching them**, never as a miss: a locus the machinery cannot reach in principle is a
+different thing from one it reaches and gets wrong, and mixing the two makes the panel worth less.
+
+Two coordinates in the new five are **anchored rather than quoted**, and the code says so: the
+SOX9 element is placed at the published −1.45 Mb offset from GENCODE's canonical SOX9 TSS, and the
+H19 ICR at the published 2-to-4 kb upstream of GENCODE's canonical H19 TSS. Both windows are wide
+enough to absorb the uncertainty. Variants whose hg38 position the panel does not hard-code carry
+`pos: None` and are resolved from Ensembl at run time, labelled `position_from: ensembl`; the cost
+is that the position check is not independent for those, so a citable hard-coded position is still
+better where one exists.
 
 HOXD was added at the coordinator's request (Albert asking in what order DNA is
 read): it is the clearest case where position on the chromosome is the order of
@@ -45,9 +67,21 @@ derived from DNase); HLA-B (one HLA gene answers the value-domain question);
 the African lactase alleles (their window overlaps rs4988235's, so the
 expectation would not be independent). Nothing on the brief was dropped.
 
+Dropped from the 2026-09-15 widening, and the reasons are the discipline: **SMN1/SMN2**, the
+cleanest dosage phenotype there is, because the two genes are a segmental duplication differing at
+a handful of bases, so every layer's answer would be a statement about read mapping rather than
+about biology — PMP22 carries dosage instead; **RHD**, because Rh negative is a whole-gene deletion
+and asks the same question as PMP22 on a chromosome the sweep has not reached; **FUT2** secretor
+status, clean but a two-valued slot the panel already has at HERC2/OCA2; **AMY1** copy number,
+because the published association with dietary starch is contested; and the **EPHA4/IHH** TAD
+rearrangements, the best evidence anywhere that node boundaries matter, because the causal unit is
+a structural variant spanning a boundary and the panel has no way to write one down as an element.
+That last one is a gap in the benchmark's own vocabulary, not in the literature.
+
 Every hard-coded variant position is checked against Ensembl on each run, and
-the two coding positions are checked a second way: the engine's own translation
-must derive the published protein change from them.
+four coding positions are checked a second way: the engine's own translation
+must derive the published protein change from them (APP's p.Ala673Thr, TP53's
+p.Pro72Arg, MC1R's p.Arg151Cys and p.Arg160Trp).
 
 ## 2. Circularity: four provenances
 
@@ -351,6 +385,15 @@ at FTO is escaped by the model and not by the heuristic, which still answers FTO
 - **A claim needs a coverage denominator too.** "A direction is produced" looked
   like the panel's second real discriminator at 8 of 12 against 8 of 60. It was
   a statement about where the requests had been spent; see section 8.
+- **A panel that cannot fail is not a panel.** Widening from twelve to seventeen
+  added the project's first two loci whose mechanism nothing here can represent
+  (parent of origin, copy number) and a second megabase-reach case that behaves
+  exactly like the first. A benchmark grows by adding what it is expected to
+  fail at, not by adding what it will pass; see section 9.
+- **Position-counting cannot see a haplotype domain.** CYP2D6 reads two common
+  positions per kilobase where the published domain is a hundred star alleles,
+  for the same reason the reader could not see ABO's frameshift. Both new storage
+  loci underread, which takes the value-domain reading from 4 of 6 to 4 of 8.
 
 ## 8. The reruns as the chromosome sweep lands (2026-09-14, overnight)
 
@@ -429,11 +472,13 @@ coverage looks like, and the opposite of what the direction row shows.
 
 The twelve locus windows were scored end to end in section 6, so the sweep adds
 little to them; nearly everything it can still move is on the control side,
-where 47 of 60 windows have no element-level deletion. The controls sit on the
-panel's own chromosomes, so the sweep's remaining order matters to the benchmark
-only where it reaches chr11 (5 controls), chr9, chr8, chr7 and chr6 (5 each) and
-chr2 (15). Each control window the sweep reaches has about a 5-in-6 chance of
-producing a direction and about a 1-in-7 chance of producing a value on syntax.
+where 47 of the 60 windows of that run had no element-level deletion. The
+controls sit on the panel's own chromosomes, so the sweep's remaining order
+matters to the benchmark only where it reaches chr11 (5 controls), chr9, chr8,
+chr7 and chr6 (5 each) and chr2 (15). Each control window the sweep reaches has
+about a 5-in-6 chance of producing a direction and about a 1-in-7 chance of
+producing a value on syntax. (Section 9 widens the panel and restates these
+counts over 85 controls.)
 
 ### How far the controls can actually go, measured rather than extrapolated
 
@@ -465,3 +510,84 @@ the model, and it should be read as one.
 
 The value-on-syntax claim is the exception again, and by a wider margin on this
 subset than on the whole: 50% against 8%.
+
+## 9. The panel widened to seventeen (2026-09-15)
+
+Section 8 said the sweep had nothing left to give twelve loci, so the panel was widened instead:
+a second long-range case (SOX9/Pierre Robin), an imprinted locus (H19/IGF2 ICR1), a dosage locus
+(PMP22/CMT1A) and two more value domains (CYP2D6, MC1R). Seventeen loci, 85 matched negatives,
+about 10 minutes and no AlphaGenome request. `scripts/loci_benchmark.py --gate` runs only the
+twelve pinned loci into `loci_benchmark_gate.json` when the question is whether anything regressed.
+
+| field | twelve loci | seventeen |
+|---|---|---|
+| right target, derived | 11/12 (92%) | **15/17 (88%)** |
+| right target, nearest TSS in node | 8/12 (67%) | 11/17 (65%) |
+| right target, annotation lookup | 6/12 (50%) | 8/17 (47%) |
+| chance floor (random gene in the window) | 5.5/12 (46%) | 7.1/17 (42%) |
+| direction, where a deletion names the target | 4/4 | 5/5 |
+| a published class read | 10/12 | 13/17 |
+
+Nothing that passed stopped passing. The derived layers still clear the heuristic and the floor,
+by about the same margin, which is the first evidence that the twelve were not a lucky draw.
+
+### What the five new loci say
+
+- **SOX9/Pierre Robin behaves exactly like the ZRS, and that is the result.** The summed window
+  input names SOX9 first, ahead of KCNJ2; the nearest-TSS heuristic answers KCNJ2, 500 kb away in a
+  gene desert; and no element inside the 3 kb element window has been scored, so there is no
+  element-level reading at all. Two megabase-reach loci now behave the same way: **summing a whole
+  locus window reaches a megabase and reading one element does not.** One example was an anecdote.
+- **H19/IGF2 ICR1 misses everything.** The summed window input names TNNT3, the heuristic names
+  MRPL23, the lookups name nothing, and the element holds no common variable position at all
+  (0.0 per kb), so no class is read either. It is the panel's second full miss beside MYC. That is
+  the honest answer for a locus whose whole mechanism is parent of origin: the two alleles are the
+  same sequence, and nothing read off a reference can tell them apart. Recorded as pending with
+  what it would take - an allele-resolved methylation layer, or phased reads with a parental
+  assignment - rather than as a defeat.
+- **PMP22/CMT1A finds its target easily and misses the point.** The element's own deletion, the
+  node and the lookups all name PMP22, and the direction is right. But the published variable is
+  three copies of an intact gene against one, and no layer here counts copies: every reader asks
+  what a sequence says, never how many times it is present. Pending, with the cost written down.
+- **CYP2D6 confirms the prediction written into the panel before the run.** The value-domain
+  reading gives **two** (5.4 common positions per kb) where the published domain is over a hundred
+  star alleles. Counting positions per kilobase cannot see a system whose diversity is haplotypes,
+  gene conversion with CYP2D7 and copy number - the same blindness that could not see ABO's
+  frameshift. The causal base is found, though: rs1065852 ranks **1 of 57** variable positions by
+  constraint at phyloP 8.26, as sharp a result as BCL11A's rs1427407.
+- **MC1R also underreads its domain** (two, at 6.0 per kb, against a published few) but gives the
+  panel its **third and fourth coding calibrations**: the translation engine derives p.Arg151Cys for
+  rs1805007 and p.Arg160Trp for rs1805008 from the reference sequence and both match, beside APP's
+  p.Ala673Thr and TP53's p.Pro72Arg. Neither position was typed into the panel; both came from
+  Ensembl at run time and were then confirmed a second way by the engine's own translation.
+
+On this run Ensembl answered for every hard-coded variant and **all eleven agree, none disagree** -
+the first run where the position check is complete rather than partly timed out.
+
+So the value-domain reading is now right at 4 of 8 storage loci, not 4 of 6. Both new storage loci
+underread, in the same direction and for the same reason. **The reading tells a hypervariable slot
+from an ordinary one and nothing finer, and it cannot see a domain built from haplotypes at all.**
+
+### The controls moved, and they moved the way section 8 predicted
+
+The five new loci sit on chr11, chr16, chr17 and chr22, all of which the sweep has finished, so
+their 25 new control windows arrived with deletion data already in them:
+
+| claim | panel 17 | all 85 controls | the 50 controls on finished chromosomes |
+|---|---|---|---|
+| a derived layer names *some* target | 14/17 (82%) | 77/85 (91%) | **45/50 (90%)** |
+| the reader has it open in some cell | 14/17 (82%) | 54/85 (64%) | 31/50 (62%) |
+| a direction is produced | 11/17 (65%) | 31/85 (36%) | **30/50 (60%)** |
+| a value sits on constrained sequence | 9/17 (53%) | 15/85 (18%) | **8/50 (16%)** |
+| an element inside was deleted | 13/17 (76%) | 34/85 (40%) | 33/50 (66%) |
+
+The control direction rate went from 18% to 36% in one step, purely by adding loci on chromosomes
+the sweep had finished, and on the fair subset it is **60% against the panel's 65%**. The
+projection in section 8 said 40% from a sample of 25 windows where two thirds held no element;
+with 50 windows, two thirds *do* hold one, and the observed 60% is what that revision predicts.
+**Naming a target is now worse than worthless: the matched windows do it more often than the panel
+does (90% against 82%).**
+
+**A value on constrained sequence is the only claim left standing: 53% at the panel against 16% at
+matched windows with the same data behind them.** Every other claim the benchmark scores has now
+been shown, on its own controls, to carry no information on its own.

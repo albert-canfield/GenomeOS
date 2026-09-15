@@ -12,7 +12,9 @@ from __future__ import annotations
 import pytest
 
 from genomeos.benchmark.loci import (
+    BEYOND_SEQUENCE_NEEDS,
     CLASSES,
+    GATE_PANEL,
     PANEL,
     READER_CELLS,
     Expect,
@@ -27,11 +29,30 @@ needs_result = pytest.mark.skipif(not RESULT, reason="benchmark result not prese
 
 # ------------------------------------------------------------------ the expectations, offline
 def test_the_panel_is_small_and_covers_every_class():
-    assert 10 <= len(PANEL) <= 14, "the panel must stay small enough to run and to read"
+    assert 10 <= len(PANEL) <= 24, "the panel must stay small enough to run and to read"
     seen = {c for e in PANEL for c in e.classes}
     assert seen == set(CLASSES)
     names = {e.locus for e in PANEL}
     assert {"HBB_LCR", "HOXD"} <= names, "ordered in time and ordered in space are both required"
+
+
+def test_the_gate_set_is_the_pinned_subset_of_the_panel():
+    """The full panel may grow; the gate set is the loci whose verdicts have been seen and defended."""
+    names = {e.locus for e in PANEL}
+    assert set(GATE_PANEL) <= names, "the gate names a locus that is not in the panel"
+    assert len(GATE_PANEL) <= len(PANEL)
+    assert set(GATE_PANEL) >= DERIVED_TARGET_PASSES, "a pinned pass sits outside the gate set"
+
+
+def test_the_panel_covers_the_mechanisms_that_are_not_in_the_sequence():
+    """Widening the panel was for the gaps: parent of origin, copy number, a second long-range case."""
+    beyond = {m for e in PANEL for m in e.beyond_sequence}
+    assert {"parent of origin", "copy number", "developmental stage"} <= beyond
+    for e in PANEL:
+        for m in e.beyond_sequence:
+            assert m in BEYOND_SEQUENCE_NEEDS, f"{e.locus}: {m} has no recorded cost to reach"
+    long_range = [e for e in PANEL if (e.distance or 0) >= 500_000]
+    assert len(long_range) >= 2, "one megabase-reach locus is an anecdote; the panel needs two"
 
 
 def test_every_expectation_is_written_down_with_its_sources():
@@ -235,7 +256,8 @@ def test_the_element_level_misses_do_not_grow():
         layer = r["score"]["scored"]["target"]["by_layer"].get("deletion") or {}
         if layer.get("named") and not layer["hit"]:
             flagged.append(name)
-    assert len(flagged) <= KNOWN_ELEMENT_LEVEL_DEFECTS, f"more elements name the wrong gene: {flagged}"
+    pinned = [n for n in flagged if n in GATE_PANEL]
+    assert len(pinned) <= KNOWN_ELEMENT_LEVEL_DEFECTS, f"more elements name the wrong gene: {pinned}"
 
 
 @needs_result
