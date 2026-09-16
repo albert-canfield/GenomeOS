@@ -1,0 +1,511 @@
+{
+  "result": "crispri_benchmark",
+  "date": "2026-09-16",
+  "evidence": "experimental: CRISPRi enhancer-gene screens, ENCODE benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025); predicted: AlphaGenome deletion per element",
+  "preregistered": "fitted on the K562 training pairs, 'activity + distance + deletion' has a higher AUPRC than 'activity + distance' on the held-out K562 pairs and on the held-out GM12878 pairs",
+  "verdict": "passed",
+  "coverage": {
+    "training_pairs": 10356,
+    "training_pairs_on_a_deleted_element": 9237,
+    "training_positives_on_a_deleted_element": 451,
+    "heldout_pairs": 4378,
+    "heldout_pairs_on_a_deleted_element": 3849
+  },
+  "training_single_predictors": {
+    "distance": {
+      "pairs": 9237,
+      "positives": 451,
+      "baseline_precision": 0.0488,
+      "auprc": 0.4413,
+      "auroc": 0.8963
+    },
+    "activity over distance": {
+      "pairs": 9237,
+      "positives": 451,
+      "baseline_precision": 0.0488,
+      "auprc": 0.519,
+      "auroc": 0.925
+    },
+    "deletion (top target x drop)": {
+      "pairs": 9237,
+      "positives": 451,
+      "baseline_precision": 0.0488,
+      "auprc": 0.4613,
+      "auroc": 0.7071
+    }
+  },
+  "training_leave_chromosome_out": {
+    "models": {
+      "distance": {
+        "pairs": 9237,
+        "positives": 451,
+        "baseline_precision": 0.0488,
+        "auprc": 0.4304,
+        "auroc": 0.8925
+      },
+      "activity + distance": {
+        "pairs": 9237,
+        "positives": 451,
+        "baseline_precision": 0.0488,
+        "auprc": 0.5113,
+        "auroc": 0.9215
+      },
+      "activity + distance + deletion": {
+        "pairs": 9237,
+        "positives": 451,
+        "baseline_precision": 0.0488,
+        "auprc": 0.6741,
+        "auroc": 0.9338
+      }
+    },
+    "deletion_gain": {
+      "gain": 0.1628,
+      "ci95": [
+        0.1212,
+        0.2104
+      ],
+      "resamples": 200
+    }
+  },
+  "weights": {
+    "distance": {
+      "intercept": 10.7943,
+      "log_distance": -1.1886
+    },
+    "activity + distance": {
+      "intercept": 9.0273,
+      "log_distance": -0.4403,
+      "log_activity": 0.3415,
+      "activity_over_distance": 0.7818
+    },
+    "activity + distance + deletion": {
+      "intercept": 6.9915,
+      "log_distance": -0.3624,
+      "log_activity": 0.3294,
+      "activity_over_distance": 0.6918,
+      "top_target": 1.284,
+      "deletion_drop": 15.9416
+    }
+  },
+  "heldout": {
+    "GM12878": {
+      "models": {
+        "distance": {
+          "pairs": 62,
+          "positives": 14,
+          "baseline_precision": 0.2258,
+          "auprc": 0.8207,
+          "auroc": 0.8616
+        },
+        "activity + distance": {
+          "pairs": 62,
+          "positives": 14,
+          "baseline_precision": 0.2258,
+          "auprc": 0.8648,
+          "auroc": 0.9048
+        },
+        "activity + distance + deletion": {
+          "pairs": 62,
+          "positives": 14,
+          "baseline_precision": 0.2258,
+          "auprc": 0.9618,
+          "auroc": 0.9851
+        }
+      },
+      "deletion_gain": {
+        "gain": 0.0969,
+        "ci95": [
+          0.0,
+          0.2273
+        ],
+        "resamples": 200
+      },
+      "passes": true
+    },
+    "HCT116": {
+      "refused": "no AlphaGenome line for this cell type in the deletion table"
+    },
+    "Jurkat": {
+      "refused": "no AlphaGenome line for this cell type in the deletion table"
+    },
+    "K562": {
+      "models": {
+        "distance": {
+          "pairs": 1744,
+          "positives": 114,
+          "baseline_precision": 0.0654,
+          "auprc": 0.3753,
+          "auroc": 0.826
+        },
+        "activity + distance": {
+          "pairs": 1744,
+          "positives": 114,
+          "baseline_precision": 0.0654,
+          "auprc": 0.5501,
+          "auroc": 0.8927
+        },
+        "activity + distance + deletion": {
+          "pairs": 1744,
+          "positives": 114,
+          "baseline_precision": 0.0654,
+          "auprc": 0.6332,
+          "auroc": 0.9015
+        }
+      },
+      "deletion_gain": {
+        "gain": 0.0831,
+        "ci95": [
+          0.031,
+          0.1657
+        ],
+        "resamples": 200
+      },
+      "passes": true
+    },
+    "WTC11": {
+      "refused": "no AlphaGenome line for this cell type in the deletion table"
+    }
+  },
+  "heldout_elements_not_in_training": {
+    "GM12878": {
+      "models": {
+        "distance": {
+          "pairs": 62,
+          "positives": 14,
+          "baseline_precision": 0.2258,
+          "auprc": 0.8207,
+          "auroc": 0.8616
+        },
+        "activity + distance": {
+          "pairs": 62,
+          "positives": 14,
+          "baseline_precision": 0.2258,
+          "auprc": 0.8648,
+          "auroc": 0.9048
+        },
+        "activity + distance + deletion": {
+          "pairs": 62,
+          "positives": 14,
+          "baseline_precision": 0.2258,
+          "auprc": 0.9618,
+          "auroc": 0.9851
+        }
+      },
+      "deletion_gain": {
+        "gain": 0.0969,
+        "ci95": [
+          0.0,
+          0.2273
+        ],
+        "resamples": 200
+      }
+    },
+    "K562": {
+      "models": {
+        "distance": {
+          "pairs": 1580,
+          "positives": 91,
+          "baseline_precision": 0.0576,
+          "auprc": 0.3365,
+          "auroc": 0.8108
+        },
+        "activity + distance": {
+          "pairs": 1580,
+          "positives": 91,
+          "baseline_precision": 0.0576,
+          "auprc": 0.4971,
+          "auroc": 0.8825
+        },
+        "activity + distance + deletion": {
+          "pairs": 1580,
+          "positives": 91,
+          "baseline_precision": 0.0576,
+          "auprc": 0.5874,
+          "auroc": 0.8922
+        }
+      },
+      "deletion_gain": {
+        "gain": 0.0903,
+        "ci95": [
+          0.0374,
+          0.1726
+        ],
+        "resamples": 200
+      }
+    }
+  },
+  "one_call_per_element_k562": {
+    "0.0": {
+      "threshold": 0.0,
+      "elements": 3472,
+      "elements_with_a_regulated_gene": 400,
+      "all_elements": {
+        "closest gene": {
+          "calls": 3472,
+          "right": 378,
+          "precision": 0.1089
+        },
+        "activity over distance": {
+          "calls": 3472,
+          "right": 378,
+          "precision": 0.1089
+        },
+        "nearest TSS in node": {
+          "calls": 488,
+          "right": 223,
+          "precision": 0.457
+        },
+        "deletion": {
+          "calls": 207,
+          "right": 166,
+          "precision": 0.8019
+        }
+      },
+      "deletion_elements": {
+        "closest gene": {
+          "calls": 207,
+          "right": 163,
+          "precision": 0.7874
+        },
+        "activity over distance": {
+          "calls": 207,
+          "right": 163,
+          "precision": 0.7874
+        },
+        "deletion": {
+          "calls": 207,
+          "right": 166,
+          "precision": 0.8019
+        }
+      }
+    },
+    "0.1": {
+      "threshold": 0.1,
+      "elements": 3472,
+      "elements_with_a_regulated_gene": 400,
+      "all_elements": {
+        "closest gene": {
+          "calls": 3472,
+          "right": 378,
+          "precision": 0.1089
+        },
+        "activity over distance": {
+          "calls": 3472,
+          "right": 378,
+          "precision": 0.1089
+        },
+        "nearest TSS in node": {
+          "calls": 488,
+          "right": 223,
+          "precision": 0.457
+        },
+        "deletion": {
+          "calls": 124,
+          "right": 119,
+          "precision": 0.9597
+        }
+      },
+      "deletion_elements": {
+        "closest gene": {
+          "calls": 124,
+          "right": 117,
+          "precision": 0.9435
+        },
+        "activity over distance": {
+          "calls": 124,
+          "right": 117,
+          "precision": 0.9435
+        },
+        "deletion": {
+          "calls": 124,
+          "right": 119,
+          "precision": 0.9597
+        }
+      }
+    },
+    "0.2": {
+      "threshold": 0.2,
+      "elements": 3472,
+      "elements_with_a_regulated_gene": 400,
+      "all_elements": {
+        "closest gene": {
+          "calls": 3472,
+          "right": 378,
+          "precision": 0.1089
+        },
+        "activity over distance": {
+          "calls": 3472,
+          "right": 378,
+          "precision": 0.1089
+        },
+        "nearest TSS in node": {
+          "calls": 488,
+          "right": 223,
+          "precision": 0.457
+        },
+        "deletion": {
+          "calls": 84,
+          "right": 84,
+          "precision": 1.0
+        }
+      },
+      "deletion_elements": {
+        "closest gene": {
+          "calls": 84,
+          "right": 83,
+          "precision": 0.9881
+        },
+        "activity over distance": {
+          "calls": 84,
+          "right": 83,
+          "precision": 0.9881
+        },
+        "deletion": {
+          "calls": 84,
+          "right": 84,
+          "precision": 1.0
+        }
+      }
+    }
+  },
+  "element_level": {
+    "K562 training": {
+      "activity": {
+        "pairs": 3472,
+        "positives": 400,
+        "baseline_precision": 0.1152,
+        "auprc": 0.2798,
+        "auroc": 0.7716
+      },
+      "closest distance": {
+        "pairs": 3472,
+        "positives": 400,
+        "baseline_precision": 0.1152,
+        "auprc": 0.5114,
+        "auroc": 0.8768
+      },
+      "deletion drop": {
+        "pairs": 3472,
+        "positives": 400,
+        "baseline_precision": 0.1152,
+        "auprc": 0.5234,
+        "auroc": 0.7028
+      }
+    },
+    "GM12878 held out": {
+      "activity": {
+        "pairs": 62,
+        "positives": 14,
+        "baseline_precision": 0.2258,
+        "auprc": 0.6693,
+        "auroc": 0.7872
+      },
+      "closest distance": {
+        "pairs": 62,
+        "positives": 14,
+        "baseline_precision": 0.2258,
+        "auprc": 0.8207,
+        "auroc": 0.8616
+      },
+      "deletion drop": {
+        "pairs": 62,
+        "positives": 14,
+        "baseline_precision": 0.2258,
+        "auprc": 0.6741,
+        "auroc": 0.7857
+      }
+    },
+    "HCT116 held out": {
+      "activity": {
+        "pairs": 363,
+        "positives": 34,
+        "baseline_precision": 0.0937,
+        "auprc": 0.2937,
+        "auroc": 0.8026
+      },
+      "closest distance": {
+        "pairs": 363,
+        "positives": 34,
+        "baseline_precision": 0.0937,
+        "auprc": 0.3342,
+        "auroc": 0.8242
+      },
+      "deletion drop": {
+        "pairs": 363,
+        "positives": 34,
+        "baseline_precision": 0.0937,
+        "auprc": 0.1388,
+        "auroc": 0.5
+      }
+    },
+    "Jurkat held out": {
+      "activity": {
+        "pairs": 62,
+        "positives": 5,
+        "baseline_precision": 0.0806,
+        "auprc": 0.3401,
+        "auroc": 0.8982
+      },
+      "closest distance": {
+        "pairs": 62,
+        "positives": 5,
+        "baseline_precision": 0.0806,
+        "auprc": 0.3354,
+        "auroc": 0.7509
+      },
+      "deletion drop": {
+        "pairs": 62,
+        "positives": 5,
+        "baseline_precision": 0.0806,
+        "auprc": 0.4434,
+        "auroc": 0.5
+      }
+    },
+    "K562 held out": {
+      "activity": {
+        "pairs": 635,
+        "positives": 101,
+        "baseline_precision": 0.1591,
+        "auprc": 0.4077,
+        "auroc": 0.8057
+      },
+      "closest distance": {
+        "pairs": 635,
+        "positives": 101,
+        "baseline_precision": 0.1591,
+        "auprc": 0.4359,
+        "auroc": 0.7706
+      },
+      "deletion drop": {
+        "pairs": 635,
+        "positives": 101,
+        "baseline_precision": 0.1591,
+        "auprc": 0.5601,
+        "auroc": 0.657
+      }
+    },
+    "WTC11 held out": {
+      "activity": {
+        "pairs": 367,
+        "positives": 13,
+        "baseline_precision": 0.0354,
+        "auprc": 0.1945,
+        "auroc": 0.864
+      },
+      "closest distance": {
+        "pairs": 367,
+        "positives": 13,
+        "baseline_precision": 0.0354,
+        "auprc": 0.4709,
+        "auroc": 0.9309
+      },
+      "deletion drop": {
+        "pairs": 367,
+        "positives": 13,
+        "baseline_precision": 0.0354,
+        "auprc": 0.043,
+        "auroc": 0.5
+      }
+    }
+  }
+}

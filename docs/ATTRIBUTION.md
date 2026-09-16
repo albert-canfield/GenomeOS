@@ -2473,6 +2473,74 @@ Evidence: predicted (AlphaGenome deletion effect per element, per gene, per cell
 (CTCF-only nodes). The node control re-runs with the fold, so its sign per chromosome is re-measured
 every time a chromosome lands rather than being quoted from this table.
 
+## Measured perturbations: the deletion held against CRISPRi screens (2026-09-16)
+
+Every enhancer-to-gene target so far came from a predicted deletion or the nearest TSS in the
+node; none had been held against an element silenced in a cell and its genes measured. The ENCODE
+enhancer-gene benchmark (EngreitzLab/CRISPR_comparison, Gschwind et al. 2025) is that
+measurement: 10,356 valid K562 pairs from Nasser 2021, Gasperini 2019 and Schraivogel 2020 for
+training, 4,378 held-out pairs in five cell types. `scripts/crispri_score.py`
+(`attribution/crispri.py`, `crispri_benchmark`, 14 s, no model request) joins each pair to the
+all-enhancer deletion table by overlap: 9,237 training pairs (451 regulated) and 3,849 held-out
+pairs sit on a deleted element.
+
+Three predictors on the same pairs. Activity is sqrt(DNase × H3K27ac) measured in the screen's
+own cell, from the benchmark's columns; contact is 1/distance, so no Hi-C enters. The deletion is
+the predicted drop in the screen's cell line when the pair's gene is the element's top target,
+zero otherwise, because the table keeps one gene per element.
+
+| K562 training, same 9,237 pairs | AUPRC | AUROC |
+|---|---|---|
+| distance alone | 0.441 | 0.896 |
+| activity over distance | 0.519 | 0.925 |
+| deletion alone | 0.461 | 0.707 |
+| logistic, activity + distance, leave-chromosome-out | 0.511 | 0.922 |
+| logistic, activity + distance + deletion, leave-chromosome-out | **0.674** | 0.934 |
+
+The deletion adds +0.163 AUPRC (95% interval +0.121 to +0.210, chromosomes resampled). The model
+set was chosen after the single predictors had been read, so the claim was then fixed in the code
+(`PREREGISTERED`) before the held-out pairs were scored: fitted on the K562 training pairs, the
+model with the deletion has the higher AUPRC on held-out K562 and on held-out GM12878.
+
+| held out | pairs (regulated) | activity + distance | + deletion | gain (95%) |
+|---|---|---|---|---|
+| K562 | 1,744 (114) | 0.550 | 0.633 | +0.083 (+0.031 to +0.166) |
+| K562, elements not in training | 1,580 (91) | 0.497 | 0.587 | +0.090 (+0.037 to +0.173) |
+| GM12878 | 62 (14) | 0.865 | 0.962 | +0.097 (0.000 to +0.227) |
+| HCT116, Jurkat, WTC11 | | refused: no AlphaGenome line in the table | | |
+
+**Passed**, with the caveat that GM12878 rests on 14 regulated pairs and its interval touches zero.
+
+**What the deletion adds is which elements, not which gene.** Given one call per element, the
+deletion calls only where its top target was tested and the predicted drop clears a threshold. At
+0.1 it makes 124 calls on 3,472 elements and 119 are right (96%); at 0.2, 84 of 84. On those same
+elements the closest tested gene is right 117 and 83 times. Choosing the gene is mostly distance on
+this set (activity is one value per element, so within an element it picks the closest gene too). The deletion's contribution is high precision about which elements act at all, at low
+recall: at 0.1 it reaches 30% of the 400 elements with a regulated gene. The nearest TSS inside the
+CTCF node names a tested gene on 488 elements and is right on 223 (46%). The node boundary costs
+recall here without buying precision.
+
+**Limits.** One gene per element was kept by the sweep, so the deletion cannot rank a second
+target; a full per-gene table would cost the sweep again. The benchmark's activity columns are
+measured in the screen's cell, while the table's per-element DNase is not used. The screens test
+elements chosen near expressed genes, mostly in K562.
+
+**Next, proposed as roadmap rows** (for the roadmap editor to fold; not written into ROADMAP.md):
+
+1. Area I: measured contact. Replace 1/distance with 4DN or ENCODE Hi-C contact in K562 and
+   GM12878 and rerun the same pre-registration; the question is whether measured contact moves
+   the activity model the way the deletion did.
+2. Area A: a methylation state machine in BioVM, one CpG with a de novo writer (DNMT3A/B),
+   maintenance at division (UHRF1 and DNMT1 with a fidelity below 1) and an eraser (TET1-3). Its
+   falsifiable prediction is the solo-WCGW loss already measured in K562, HepG2 and GM12878
+   (NODES-READER-WRITER.md, the Alu lead), and its link is the twin's epigenetic age.
+3. Area F: synthetic lethality from a tumour's own losses against DepMap dependencies, with
+   BRCA1/2 to PARP1 as the control that must be recovered; and marker selectivity as A and B and
+   not C over the healthy-tissue atlas. Target discovery and selectivity only, inside the
+   non-goals: no payload, construct or claim that a therapy works.
+4. Area J: motif spacing and orientation against lentiMPRA activity, beyond motif counts, so a
+   grammar rule is a test that can fail.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
