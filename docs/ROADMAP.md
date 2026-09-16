@@ -2108,6 +2108,36 @@ in order. "Owner" is the session that holds the files today (see §7).
     (--rows-memory-gb) does not help, because 19 GB of RAM is already 11 GB spoken for. They hold
     197 of the 1,098 blocks and 5.3 of the 32 Mb, which cannot overturn the interval. The chain
     resumes on them when there is room. ATTRIBUTION.md "Compression genome-wide".
+- **The all-elements sweep is complete, and the node claim is now its final size
+  (2026-09-16).** Every chromosome scored: 961,227 enhancer elements deleted inside
+  their node in AlphaGenome, 778,780 requests, one scorer at a time behind the key
+  lock. Genome-wide the node beats as many randomly placed boundaries: **0.754 against
+  0.725, +2.88 points over 440,377 coding-target elements, ahead on 18 of 24
+  chromosomes (sign test one-sided p 0.011)**. Real and small; the headline 90.2% of
+  the 4,800-element sample was mostly what random boundaries give too. The large
+  chromosomes pulled every rate down (inside the domain 0.772 at 18 chromosomes to
+  0.754; agreement with nearest TSS 0.620 to 0.611).
+  - **Two rules about where the excess lives were fixed before the data and tested
+    on it.** The sign rule (the node wins above 5.8 boundaries per Mb) ends 10 right,
+    1 wrong, 1 refused; its miss, chrX, carries an excess of -0.07 points, which is
+    none. The measurability rule fixed at fold 18 (an excess is distinguishable from
+    random iff the caller cuts at 6.55 per Mb or finer) predicted all six unseen
+    chromosomes measurable and got **4 right, 2 wrong: chr7 (7.10 per Mb, p 0.24) and
+    chr5 (6.85, p 0.07). FAILED as written.** Both misses are positive excesses that did
+    not reach p 0.05. The per-chromosome scatter does not support a third rule; the
+    genome-wide number is the claim.
+  - **The panel at 23 of 24.** chr1, chr3 and chr4 landed. The claims that held at
+    twenty still hold: coding exons at 0.387 of the matched rate (median), genes core
+    58.6%. The constrained-unknown depletion weakened and did not break: below the
+    matched rate on 16 of 22 (p 0.026), below the neutral tier on 18 of 22 (p 0.002),
+    and 13 of 16 either way on the chromosomes that pass every control (p 0.011);
+    chr4 (1.127) reads against it. **Seven chromosomes fail a control**, and on all six
+    autosomes and X the failing check is the neutral tier missing its GC- and
+    timing-matched rate (chr1, chr8, chr16, chr17, chr20, chrX); chrY fails the coding
+    checks, as a gene-poor chromosome should. The checks were written after chr21's
+    first read, so they describe an ordering rather than predict one. 174,210
+    executor-ready units. chr2 is unread: the session reading it ended at the weekly
+    usage limit, not on the disk.
 - **Next.** 0. Done 2026-09-14 (the bullet above): the lexicon's axes at base resolution
   answered Question 2 negatively, so the genome-wide lexicon stays unbuilt. What could still
   sort sites into syntax and slots is measurement, not diversity: saturation mutagenesis and
@@ -2145,7 +2175,8 @@ in order. "Owner" is the session that holds the files today (see §7).
   named as the one that would have mattered more. Weak points stated: E3's own difference is
   small and positive rather than zero, everything rests on one model whose ENCODE training is
   kin to GTEx, and E1, the MPRA endpoint that would answer that objection, has 20 allele pairs
-  on chr21 and chr22 and needs more chromosomes. Next: E1 widened as chromosomes land, and the
+  on chr21 and chr22 and needs more chromosomes. Next: E1 widened to every chromosome, which it no longer waits for (23 of 24 panel
+  chromosomes and all 24 swept, 2026-09-16), and the
   882 non-copy constrained-unknown blocks and their flanks read across the panel on the
   chromosomes that carry them. A repeat-aware reading of long VNTRs is the instrument's
   one known failure.
@@ -2373,6 +2404,8 @@ or the CLI; results land in `data/results` and are committed.
 | Knowledge graph | genome-wide (2026-09-11) | done | 41,982 nodes, 330,018 edges after the 2,985 `modifies` edges, 19,283 compiled proteins, largest component 15,165, 3,924 components |
 | Modifiable sites (post-translational state) | genome-wide (2026-09-11) | done | 96,362 sites on 13,083 proteins, 352 named writers; `ptm_genome_wide` |
 | Enhancer targets, predicted (AlphaGenome) | 24 of 24 chromosomes (4,800 elements) | done | 2,994 elements move a gene, 2,291 name a coding gene; 90.2% of those sit inside the element's CTCF node, against 79.1% for random boundaries on the full archive (qualified 2026-09-14) (79.8% to 91.8% per chromosome) and 71.2% are exactly the nearest TSS; 1,157 behave as silencers. Needs a key; the daily quota ran out mid-run and the job waited and resumed rather than failing |
+| All-elements deletion scoring (every ENCODE enhancer inside a node, AlphaGenome) | 24 of 24 (2026-09-16) | done, `scripts/enhancer_targets_all_chain.py` | 961,227 elements, 778,780 requests; 63.7% name a gene (matched random windows 87%); the node beats as many random boundaries by +2.88 points over 440,377 coding-target elements, ahead on 18 of 24 chromosomes. Summaries committed, element tables local and packed. See area I |
+| Human panel (HPRC release 1, 90 assemblies, storage units and executor-ready values) | 23 of 24 (2026-09-16); chr2 unread | `scripts/human_panel.py`, one chromosome at a time | 1,786,068 storage units, 174,210 executor-ready (GTEx fine-mapped or MPRA allele pair); seven chromosomes fail a control, six of them on the neutral tier. chr2 (22.6 GB of alignment) needs about 20 GB free to start. See area I |
 | HG002 twin | 22 of 22 autosomes | done | 4.05 M PASS variants applied, zero reference mismatches; chrX and chrY are not phased in the GIAB benchmark, so they are out of scope rather than pending |
 | Curated repeats distilled | 25 of 25 | done | the 25 RepeatMasker BEDs (60 MB) stay local; summaries committed |
 | Composition budget: constraint per UNKNOWN block, a tier per block | 24 of 24 (2026-09-12) | done | Zoonomia phyloP read per base over HTTP ranges, never stored, 2,252 MB for the genome in eight hours; 1,009 Mb tiered, constrained 1.93%, constrained-unknown 32 Mb; see area I |
@@ -2394,6 +2427,38 @@ One-off jobs, each needing a decision or a resource:
 ---
 
 ## 5. Next steps, consolidated
+
+**Where things stand on 2026-09-16.** The overnight series finished: the all-elements
+sweep is complete on 24 chromosomes, the human panel on 23, the executor test and its
+hold-out are done, `share:`, `commitment`, `competence` and the integrated reads are in the
+engine, and the worm's fate rules read what a cell could know (522 of 555 in sample, 483
+held out). Nothing is running. What is next, in order of what it decides:
+
+1. **E1 genome-wide: the MPRA allele endpoint for the executor test.** The one objection
+   the executor result carries is that AlphaGenome's ENCODE training is kin to GTEx; E1
+   answers it with measured allele effects instead, and was held at 20 pairs on chr21 and
+   chr22 only because the chromosomes had not landed. They have. Needs the model key, and
+   the key is free. Area I.
+2. **The panel's chr2, then the 24-chromosome rollup.** Decides the constrained-unknown
+   depletion at full size (13 of 16 clean chromosomes today). No key; about 20 GB free to
+   start. Area I.
+3. **Whether the neutral tier is neutral.** Seven chromosomes fail a panel control and six
+   of those on the neutral tier, which is the tier every other ratio is read against. A
+   measured reason (segmental duplication, pericentromeric sequence in the background
+   windows) or a better-matched background, before the tier ratios are quoted further.
+   No key. Area I.
+4. **The known-locus benchmark with more loci**, not more readings of the one it has:
+   SOX9 and H19 stated-interval scoring is a handful of requests. Needs the key briefly.
+5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). Decision 2, amounts or
+   concentrations, holds stage 2 (pools and costs) and is the one blocking code; decision
+   9 (refusal or rate) waits on Fukushige & Krause's per-stage conversion tables; 3 and 7
+   are preference; 1 is priced.
+6. **Disk.** The project is 7.3 GB of a 460 GB disk; the four disk stops of 2026-09-15 came
+   from outside it (80 GB of stale Chrome code-sign clones in the system temp tree, among
+   others). Freeing that is Albert's call and unblocks item 2 and area I's compression of
+   chr1 and chr2.
+
+The list below is the consolidated order as it stood on 2026-09-11, kept as history.
 
 The ordered list across areas, each with the milestone it serves and the
 session that holds it. Items 1–4 run in parallel today.
@@ -2462,7 +2527,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
 | **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. Outstanding: the two remaining ranking defects, CNA and SV, the library layer |
-| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth |
+| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
 ---
