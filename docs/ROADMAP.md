@@ -2459,7 +2459,25 @@ held out). Nothing is running. What is next, in order of what it decides:
    concentrations, holds stage 2 (pools and costs) and is the one blocking code; decision
    9 (refusal or rate) waits on Fukushige & Krause's per-stage conversion tables; 3 and 7
    are preference; 1 is priced.
-6. **Disk.** The project is 7.3 GB of a 460 GB disk; the four disk stops of 2026-09-15 came
+6. **Four lanes opened by genomeos-79 on 2026-09-16, running in worktrees and merged onto dev one
+   piece at a time** (proposed by that session, folded here as the roadmap's rows; the CRISPRi
+   benchmark they follow from is `138824f`, where adding the deletion to activity-over-distance lifted
+   held-out K562 AUPRC 0.550 to 0.633):
+   - **Area I, measured contact.** 4DN or ENCODE Hi-C contact in place of 1/distance in the CRISPRi
+     scorer, K562 and GM12878, rerunning the same pre-registration: does measured contact move the
+     activity model the way the deletion did? `genome/hic_contact.py`. Note for it: the boundary
+     loader already discards the strength column (`load_scored_boundaries` was added for that), and
+     measured boundaries did not separate the one rearrangement the benchmark has.
+   - **Area A, a methylation state machine in BioVM.** One CpG with a de novo writer (DNMT3A/B),
+     maintenance at division (UHRF1, DNMT1, fidelity below 1) and an eraser (TET1-3), falsified
+     against the solo-WCGW loss measured in K562, HepG2 and GM12878. Links to the twin's epigenetic
+     age.
+   - **Area F, synthetic lethality and selectivity.** A tumour's own losses against DepMap
+     dependencies with BRCA1/2 to PARP1 as the control that must be recovered, and marker selectivity
+     (A and B and not C) over the healthy-tissue atlas. Target discovery only, inside the non-goals.
+   - **Area J, motif spacing and orientation** against lentiMPRA activity, beyond motif counts, so a
+     grammar rule is a test that can fail.
+7. **Disk.** The project is 7.3 GB of a 460 GB disk; the four disk stops of 2026-09-15 came
    from outside it (80 GB of stale Chrome code-sign clones in the system temp tree, among
    others). Freeing that is Albert's call and unblocks item 2 and area I's compression of
    chr1 and chr2.
