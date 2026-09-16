@@ -1574,6 +1574,51 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## Pre-registration: E1's remaining 2,260 pairs, read as a replication and not as a continuation (2026-09-16)
+
+Written before any request of the extension and before any of its pairs were scored. The run it
+extends is `cbff5f6`: 1,000 of E1W's 3,260 pairs, agreement 0.515 against matched nulls at 0.501,
+**+0.014, one-sided p 0.38, upper 95% bound 0.073**, which its own pre-registration called a result
+that decides nothing.
+
+**Why this needs a document at all.** The obvious move -- spend the remaining pairs and read all 3,260
+together -- is optional stopping run backwards: the decision to continue was taken *because* the first
+look came out at p 0.38, so a pooled p-value from that sequence does not mean what a p-value means.
+There are two honest routes and this takes the second: abandon the endpoint, or treat the unspent
+pairs as a fresh sample with its own pre-registered reading, whose result stands whether or not it
+agrees with the first.
+
+**The sample.** All 2,260 pairs of E1W not scored in `cbff5f6`, in the order the original
+pre-registration fixed (strongest measured MPRA effect first), with no further selection. They are
+weaker by construction than the first 1,000, since the order was by effect size: this reading is
+therefore of *weaker measured effects*, and that is a difference from the first sample, not a flaw in
+it, but it must be stated wherever the two are put side by side.
+
+**The primary reading**, identical in form to the first: the share of units whose model read-out moves
+in the direction the reporter measured, minus the same share for the matched nulls drawn from the same
+library, with its one-sided p and its 95% upper bound. Success is a difference of **0.10 or more at
+one-sided p 0.01 or better**; **0.05 to 0.10** is a weak positive that settles nothing on its own;
+**below 0.05, with an upper bound under 0.10**, is the endpoint failing at a size that would matter,
+and is to be reported as the ENCODE objection standing unanswered rather than as an absence of
+evidence.
+
+**The secondary**, also carried over: agreement should be higher where DAP-G fine-maps the variant
+than where it does not. It failed in the first run (-0.152 on 57 fine-mapped pairs) at power too low
+to mean much; it is declared again here, and a second failure is a failure of the prediction, not of
+the pairs.
+
+**One look, no more.** At 1,130 pairs, for futility only: if the difference is at or below 0 with an
+upper bound under 0.05, the run stops and is reported as stopped for futility. There is no interim
+success look, so nothing can be gained by watching it.
+
+**What no outcome here can do.** It cannot make E2 and E3 independent of the model -- only a
+measurement that does not pass through AlphaGenome can, and the one this project has (two instruments,
+2026-09-15) is carried by a single cell line. A success would say the model's agreement with a
+reporter assay survives at the size the executor claim needs; a failure says the model does not track
+a reporter assay's direction at that size, which is compatible both with the executor claim being
+wrong and with a plasmid fragment being a poor proxy for a gene in its chromosome. The pooled figure
+over all 3,260 pairs may be reported as a description, never as a test.
+
 ## The matched background is not a neutral baseline, and that is why the controls fail (2026-09-16)
 
 Seven of the 23 chromosomes the panel has read fail one of its six controls, and on all six autosomes
