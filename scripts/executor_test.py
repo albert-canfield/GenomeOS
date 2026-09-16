@@ -62,6 +62,17 @@ def wide(args, say, t0: float) -> None:
         pairs = json.load(fh)["pairs"]
     wanted = set(args.endpoints.split(",")) & set(ex.WIDE_ENDPOINTS) or {"E1W_mpra_wide"}
     pairs = [p for p in pairs if p["endpoint"] in wanted]
+    looks = None
+    if args.extension:
+        # the fresh sample of E1_EXTENSION: the pairs the first run did not score, in the same order,
+        # read on their own. Scoring the first 1,000 again would cost nothing (they are cached) and
+        # would pool a sample whose result has been seen, which is what the registration forbids.
+        skipped = args.skip_pairs if args.skip_pairs is not None else ex.E1_EXTENSION_SKIP
+        pairs = pairs[skipped:]
+        looks = ex.E1_EXTENSION["alpha_spending"]
+        say(f"extension: {len(pairs)} pairs after skipping the {skipped} already scored, looks {looks}")
+    elif args.skip_pairs:
+        raise SystemExit("--skip-pairs is the extension's sample; pass --extension with it")
     with the_key(f"executor widened E1, {sorted(wanted)}"):
         out = ex.run_pairs(
             pairs,
@@ -72,6 +83,7 @@ def wide(args, say, t0: float) -> None:
             looks_at=tuple(sorted(wanted)),
             endpoints=ex.WIDE_ENDPOINTS,
             split="cell",
+            looks=looks,
         )
     rows = out.pop("rows")
     out["no_call_grid"] = {e: [ex.recall(rows, e, t) for t in (0.0, 0.001, 0.01)] for e in sorted(wanted)}
@@ -89,9 +101,19 @@ def wide(args, say, t0: float) -> None:
             "fragment's activity - so a gap between them is not the hold-out's dilution and must not be "
             "read as one"
         )
-    out["pre_registration"] = ex.E1_WIDE
+    out["pre_registration"] = ex.E1_EXTENSION if args.extension else ex.E1_WIDE
     out["seconds"] = round(time.time() - t0, 1)
-    say(f"saved {save_result('executor_mpra_wide_run', out)}")
+    name = "executor_mpra_wide_extension" if args.extension else "executor_mpra_wide_run"
+    if args.extension:
+        out["first_run"] = {
+            "result": "executor_mpra_wide_run",
+            "commit": "cbff5f6",
+            "reading": (
+                "1,000 pairs, +0.014, one-sided p 0.38, upper 95% bound 0.073; undecided by its own "
+                "pre-registration. This result is a separate sample and is not to be pooled with it as a test"
+            ),
+        }
+    say(f"saved {save_result(name, out)}")
 
 
 def two_instruments(say, t0: float) -> None:
@@ -176,6 +198,14 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--quota-handed", action="store_true", help="confirm the quota holder has handed it over")
     ap.add_argument("--max-requests", type=int, default=None)
     ap.add_argument("--max-pairs", type=int, default=None, help="stop at this many pairs as well")
+    ap.add_argument(
+        "--extension",
+        action="store_true",
+        help="E1_EXTENSION: the pairs the first widened run did not score, read as their own sample",
+    )
+    ap.add_argument(
+        "--skip-pairs", type=int, default=None, help="pairs to skip (default: what the first run scored)"
+    )
     ap.add_argument(
         "--endpoints", default="E1_mpra,E2_eqtl", help="E3 runs only when the quota holder agrees"
     )

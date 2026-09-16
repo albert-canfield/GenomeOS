@@ -400,6 +400,69 @@ TWO_INSTRUMENTS: dict[str, Any] = {
     ],
 }
 
+# what cbff5f6 scored: the extension's sample is everything after it, in the same order
+E1_EXTENSION_SKIP = 1000
+
+
+E1_EXTENSION: dict[str, Any] = {
+    "written": (
+        "2026-09-16, before any request of the extension and before any of its pairs were scored; the "
+        "prose is docs/ATTRIBUTION.md, 'Pre-registration: E1's remaining 2,260 pairs'"
+    ),
+    "why": (
+        "the widened E1 ran on 1,000 of its 3,260 pairs and returned +0.014 at one-sided p 0.38, upper "
+        "95% bound 0.073 — the band its own pre-registration called a result that decides nothing. "
+        "Spending the remaining pairs and reading all 3,260 together would be optional stopping run "
+        "backwards, because the decision to continue was taken after seeing that result. So the unspent "
+        "pairs are a fresh sample with its own reading, and the pooled figure over all 3,260 may be "
+        "described but never used as a test"
+    ),
+    "sample": (
+        "the 2,260 pairs of E1W_mpra_wide not scored in cbff5f6, in the order the original "
+        "pre-registration fixed (strongest measured MPRA effect first), with no further selection. They "
+        "are weaker by construction than the first 1,000, since the order was by effect size: this is a "
+        "reading of weaker measured effects and must be stated as such wherever the two are compared"
+    ),
+    "primary": (
+        "the share of units whose model read-out moves in the direction the reporter measured, minus the "
+        "same share for the matched nulls from the same library, with its one-sided p and 95% upper bound"
+    ),
+    "outcomes": {
+        "success": "a difference of 0.10 or more at one-sided p 0.01 or better",
+        "weak": "0.05 to 0.10, which settles nothing on its own",
+        "failure": (
+            "below 0.05 with an upper bound under 0.10: reported as the ENCODE objection standing "
+            "unanswered, not as an absence of evidence"
+        ),
+    },
+    "secondary_fine_mapped_split": (
+        "agreement higher where DAP-G fine-maps the variant than where it does not; it failed in the "
+        "first run (-0.152 on 57 fine-mapped pairs) at power too low to mean much, is declared again "
+        "here, and a second failure is a failure of the prediction"
+    ),
+    "alpha_spending": {
+        # one look, for futility only: alpha 0 is a success threshold no p can meet, which is how
+        # "no interim success look" is written in a schedule the runner already understands
+        "look_1_pairs": 1130,
+        "alpha_1": 0.0,
+        "look_2_pairs": 0,  # never reached: the first pair is n = 1
+        "alpha_2": 0.0,
+        "final_alpha": 0.01,
+    },
+    "stopping": (
+        "one look at 1,130 pairs, for futility only (the upper 95% bound below 0.05); no interim success "
+        "look, so nothing can be gained by watching it; otherwise the run ends at the budget of 2,260 "
+        "pairs and is read at 0.01"
+    ),
+    "cannot_do": (
+        "no outcome here makes E2 and E3 independent of the model. A success says the model's agreement "
+        "with a reporter assay survives at the size the executor claim needs; a failure says it does not "
+        "track a reporter assay's direction at that size, which is compatible both with the executor "
+        "claim being wrong and with a plasmid fragment being a poor proxy for a gene in its chromosome"
+    ),
+}
+
+
 E1_WIDE: dict[str, Any] = {
     "written": "2026-09-14, before any model request of the widened endpoint and before any pair was scored",
     "why": (
@@ -1599,13 +1662,18 @@ def run_pairs(
     looks_at: tuple[str, ...] = ("E1_mpra", "E2_eqtl"),
     endpoints: tuple[str, ...] = ENDPOINTS,
     split: str = "chrom",
+    looks: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Spend requests in the pre-registered order, look at the pre-registered points, stop by the rule.
 
     max_pairs stops at a pair count as well as at a request count: the budget is written in both, and a
     rerun over the cache answers the same pairs again for nothing.
+
+    looks carries the schedule a registration declares, defaulting to the project's. A run that declares
+    no interim success look passes alpha 0 for that look, which no p can meet, rather than a schedule
+    the code has to be told to ignore.
     """
-    looks = CRITERION["alpha_spending"]
+    looks = looks or CRITERION["alpha_spending"]
     done: list[dict[str, Any]] = []
     requests = 0
     stopped: dict[str, str] = {}
