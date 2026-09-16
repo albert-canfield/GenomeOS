@@ -215,6 +215,25 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
     models have already seen are worth: it loses to blind copy finding when subfamilies are
     fitted on one chromosome, and just pays (+3.8 kb per Mb) when they are fitted on two.
 
+- **Three measurements of chromatin structure, three nulls, and one perturbation that works
+  (2026-09-17).** Asked which element acts on which gene, every structural reading this project has
+  made has failed, and they were made by different lanes on different data:
+  1. **CTCF orientation** is real at measured boundaries (two thirds of sites point away in H1, K562
+     and HepG2) and predicts nothing about our edges (convergent edges at their strand-shuffle
+     median).
+  2. **Measured boundary calls and their strength** do not distinguish a published rearrangement from
+     a random cut of the same kind, in any of five cell types, called or scored.
+  3. **Balanced 4DN Hi-C contact at 5 kb**, put in place of 1/distance in the CRISPRi scorer, *costs*
+     0.081 AUPRC on 9,165 training pairs (interval clear of zero); its held-out +0.012 straddles zero.
+     At CRISPRi distances raw contact is mostly the distance decay (0.379 against 0.442 for distance
+     alone) and observed-over-expected alone collapses to 0.083.
+  What does add signal at the same task is the **perturbation**: the AlphaGenome deletion lifts
+  held-out K562 AUPRC 0.550 to 0.633 over activity-over-distance, and the node's containment excess is
+  +2.88 points genome-wide, small but measured against random boundaries. The reading is not that
+  structure does not exist — it is measured, and it is real where it was measured — but that **at these
+  distances structure is not the discriminating variable and perturbation is**. A fourth structural
+  reading needs a reason why it would differ from these three, stated before it is run.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory
