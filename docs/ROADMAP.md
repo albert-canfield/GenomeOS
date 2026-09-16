@@ -2460,9 +2460,17 @@ held out). Nothing is running. What is next, in order of what it decides:
    9 (refusal or rate) waits on Fukushige & Krause's per-stage conversion tables; 3 and 7
    are preference; 1 is priced.
 6. **Four lanes opened by genomeos-79 on 2026-09-16, running in worktrees and merged onto dev one
-   piece at a time** (proposed by that session, folded here as the roadmap's rows; the CRISPRi
-   benchmark they follow from is `138824f`, where adding the deletion to activity-over-distance lifted
-   held-out K562 AUPRC 0.550 to 0.633):
+   piece at a time** (proposed by that session, folded here as the roadmap's rows). They follow from
+   the CRISPRi benchmark, `138824f`: on held-out K562, adding the AlphaGenome deletion to activity
+   over distance lifts AUPRC **0.550 to 0.633 (+0.083, 95% +0.031 to +0.166)**, as pre-registered in
+   the code before the held-out pairs were scored; GM12878 agrees on 14 regulated pairs with an
+   interval touching zero. Its denominator was then checked on both arms (`8359872`, after the
+   coverage artefact this benchmark and the locus benchmark have each produced): coverage is
+   all-or-nothing per element, 3,472 of 3,941 elements fully covered and none partly, and the arms do
+   differ — **95.8% of regulated pairs covered against 88.9% of the rest** — but the covered subset is
+   not the easier one: distance reads 0.438 AUPRC on all 10,356 valid pairs against 0.441 on the 9,237
+   covered, activity over distance 0.517 against 0.519. **So the lift stands with its scope named: a
+   claim about cCREs inside a node near a tested gene, not about enhancers at large.**
    - **Area I, measured contact.** 4DN or ENCODE Hi-C contact in place of 1/distance in the CRISPRi
      scorer, K562 and GM12878, rerunning the same pre-registration: does measured contact move the
      activity model the way the deletion did? `genome/hic_contact.py`. Note for it: the boundary
