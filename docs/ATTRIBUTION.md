@@ -1574,6 +1574,54 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## Pre-registration: the 69 syntax blocks, tiled and deleted against two matched arms (2026-09-17)
+
+Written before the instrument existed and before any window was scored; the machine-readable copy is
+`PRE_REGISTRATION` in `attribution/syntax_tiling.py`, committed in the same state.
+
+**What prompts it.** Reading the finished sweep over the 882 blocks of the real unknown made the tier
+the least active in the genome per element (0.248 against 0.293 at the neutral tier, P 7e-9 below).
+One slice read the other way: the 69 blocks of the `syntax` case — held across mammals *and*
+constrained among people — at **0.575 of 40 elements**. Forty elements, chosen by where ENCODE
+happened to call a cCRE inside those blocks, compared with a tier average rather than matched
+sequence, and sliced after the reading. That is an observation, not a result, and this is the
+instrument that can fail it.
+
+**The design, fixed now.** Each block of each arm is tiled in non-overlapping **300 bp** windows from
+its start; a block yielding more than **12** contributes 12 evenly spaced across it, so a 40 kb block
+cannot outvote a 2 kb one. Each window is one deletion request, as an element is in the sweep. Three
+arms:
+
+- **syntax**, the 69 blocks;
+- **relaxed**, the 437 blocks held across mammals but variable among people — this arm differs from
+  the first in the human axis alone, which is the variable the case claims;
+- **neutral**, the tier the whole reading was taken against.
+
+Each syntax window is matched on its own chromosome to one relaxed and one neutral window with **GC
+within 0.04** and **distance to the nearest coding TSS within 35% relative**; length is equal by
+construction. **The arms are deliberately not matched on constraint**, because mammalian constraint
+defines the tier and human constraint is what the relaxed arm isolates: matching on either would
+remove the variable under test. Unmatched syntax windows are dropped from that comparison and counted.
+
+**Outcome and bars.** A window moves a gene at |log2| ≥ 0.1 with a named gene, the sweep's threshold.
+Primary: the difference in that share, syntax minus neutral and syntax minus relaxed, each with a
+one-sided p and a 95% upper bound. **Success is at least +0.10 against both arms at p 0.01 or better.
+Weak is 0.05 to 0.10 against both, or +0.10 against one arm only. Failure is below 0.05 against
+neutral — and failure means the syntax case stops being carried in the roadmap as the sharpest
+candidate.** Budget 2,400 requests; one futility look at half, no interim success look.
+
+**Declared secondary.** Inside the syntax arm, windows overlapping an element the sweep already scored
+should act about as often as those 40 did; windows overlapping none are the new information. If only
+the overlapping windows act, the tiling has added nothing and the arm's rate is the old observation in
+a new coat.
+
+**What it cannot do, stated first.** This is the same model that produced the observation, so it
+cannot be independent evidence about it. What it fixes is the sampling: 40 ENCODE-chosen elements
+against a tier average become a few hundred windows fixed by the blocks themselves against matched
+sequence. A positive would say the model reacts more to deleting these sequences than to deleting
+matched sequence — not that the sequence is functional. Measured evidence on these blocks remains the
+thing that would, and lentiMPRA's coverage of them is the next question after this one.
+
 ## E1's extension ran: a weak positive by its own bar, carried by one cell line, with its declared secondary passing (2026-09-17)
 
 The 2,260 pairs were scored as the pre-registration below declares them — a fresh sample, the first
