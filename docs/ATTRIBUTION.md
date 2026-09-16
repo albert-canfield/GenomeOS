@@ -1619,6 +1619,48 @@ a reporter assay's direction at that size, which is compatible both with the exe
 wrong and with a plasmid fragment being a poor proxy for a gene in its chromosome. The pooled figure
 over all 3,260 pairs may be reported as a description, never as a test.
 
+## What scoring every element bought the 98%, replicated on chr22 and read genome-wide (2026-09-16)
+
+The reading of 2026-09-13 was decided on chromosome 21, the only chromosome then fully scored. With
+the sweep complete, chr22 has its own closure table and can be asked the same questions, and the 69
+syntax candidates can be read against every chromosome at once. No model request: 95 s of arithmetic
+over tables already on disk.
+
+**The falsifiable test replicates, and it is a negative on both chromosomes.** The closure recomputed
+with the elements over UNKNOWN blocks dropped from every gene's input barely moves — chr21 0.407 to
+0.405, chr22 0.321 to 0.302 — and both sit inside random removals of the same size per gene (50 draws:
+0.86 of chr21's draws at or below the observed, 0.14 of chr22's). Recomputed with *only* those
+elements it is **0.287 at p 0.26 on chr21 and 0.257 at p 0.42 on chr22**, against shuffled inputs at
+0.25: no better than chance on either chromosome, and no better than random subsets of the same size
+(0.12 and 0.06 of draws at or below). Both runs reproduce their committed closure first, so this is a
+test of the elements and not of the arithmetic.
+
+**Elements over unknown blocks act less, not more, and that replicates too.** Within strata of length,
+GC and distance to the nearest coding TSS, an element over an UNKNOWN block moves a gene **0.185 less
+often on chr21 and 0.116 less often on chr22** (both p 0.0005 by permutation within strata). The
+unknown space is gene-poor sequence by construction, and the strata are there to take that out; what
+is left is still negative.
+
+**The 69 syntax candidates, at last read against a complete genome.** The chr21 run could reach 2 of
+them; now all 69 sit on fully scored chromosomes:
+
+| what the scoring gives a candidate | blocks |
+|---|---|
+| nothing — no element over it moves a gene | **44** |
+| a target and a magnitude, no cell line at the bar | 17 |
+| a target, a cell and a magnitude | **8** |
+
+**25 of 69 gain a named target**, 11 of them a coding gene — GJD3 at chr17:40,365,372-40,367,951 with
+log2 -1.39 in memory T cells, ZNF503 at chr10:75,412,413-75,428,875 in monocytes, GJD2 on chr15 in
+endodermal cells. Nine of the 25 were read as "unexplained" before the deletion was scored, which is
+the one category where the sweep changed a block's reading rather than confirming it.
+
+**What this does not say.** A named target is a prediction from one model, and the same model names a
+target at 87% of matched random windows; the number that matters is not 25 of 69 but whether these
+differ from matched controls, which the sweep's own fold answers for elements at large (+2.88 points)
+and which nobody has answered for these 69. The two-thirds that gain nothing are the honest headline:
+**scoring every element of the genome leaves 44 of 69 candidate blocks exactly where they were.**
+
 ## Many human genomes, every chromosome: the panel closes at 24 of 24 (2026-09-16)
 
 chr2 was the last one, read in 3,308 s with every control passing, and it moved nothing: coding exons
