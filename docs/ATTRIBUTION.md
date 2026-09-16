@@ -1619,6 +1619,45 @@ a reporter assay's direction at that size, which is compatible both with the exe
 wrong and with a plasmid fragment being a poor proxy for a gene in its chromosome. The pooled figure
 over all 3,260 pairs may be reported as a description, never as a test.
 
+## The 882 blocks of the real unknown, read against the completed sweep (2026-09-16)
+
+Milestone 1.3 asks for the constrained-unknown blocks attributed to a gene and a tissue. The sweep
+finished today, so every ENCODE element inside a node has a deletion answer on every chromosome, and
+the question is arithmetic: `scripts/constrained_unknown_targets.py`, no model request, 7 minutes over
+tables on disk. The target is the organiser's real unknown — the constrained-unknown tier with the
+copies removed, **882 blocks**, the number area I has been carrying as its remaining work.
+
+**Per element, the real unknown is the least active tier in the genome, not the most.** The rate that
+does not depend on how long a block is:
+
+| tier | elements inside its blocks | move a gene | rate |
+|---|---|---|---|
+| regulatory | 145,002 | 66,915 | **0.462** |
+| fossil | 23,487 | 7,122 | 0.303 |
+| neutral | 5,706 | 1,670 | 0.293 |
+| **real unknown (882 blocks)** | **3,280** | **812** | **0.248** |
+
+Against the neutral tier that is z = -5.7 (P 7e-9); against fossil, -6.9; against regulatory, -24.6.
+An element sitting in the sequence this project calls its sharpest attribution target moves a gene
+**less often** than one sitting in sequence the budget calls neutral. The blocks are denser in elements
+than neutral blocks (3.7 per block against 2.2), which is why the per-block rate goes the other way
+(+4.6 points inside length deciles) — and that per-block excess is not consistent, running from -4.3 to
++6.9 points across the ten deciles. **Density of cCREs is not evidence of function; the per-element
+rate is the one to quote, and it is negative.**
+
+**331 of the 882 carry at least one element that moves a gene**, and they are leads rather than
+findings: the same model names a target at 87% of matched random windows, and these rates sit below
+the tiers they are read against.
+
+**One slice reads the other way, and it is 40 elements.** Split by the case the two axes make, the
+**syntax** case — constrained across mammals *and* among people, the 69 blocks named as the sharpest
+candidates — has 40 elements inside 27 of its blocks, of which 23 move a gene: **0.575, 95% CI 0.42 to
+0.73**, above the neutral tier at P 0.0002 and indistinguishable from the regulatory tier (P 0.10).
+The `recent` case reads 0.636 on 22 elements. Both are small, both are post hoc in the sense that the
+cases were defined before this reading but this slicing was not pre-registered, and the honest summary
+is: **the tier as a whole fails, and the 69 blocks it was narrowed to do not — on 40 elements.** That
+is the number to grow, and the pre-registration to write, before anything is claimed for them.
+
 ## What scoring every element bought the 98%, replicated on chr22 and read genome-wide (2026-09-16)
 
 The reading of 2026-09-13 was decided on chromosome 21, the only chromosome then fully scored. With
