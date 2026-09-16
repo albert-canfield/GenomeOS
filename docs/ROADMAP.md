@@ -2428,11 +2428,20 @@ One-off jobs, each needing a decision or a resource:
 
 ## 5. Next steps, consolidated
 
-**Where things stand on 2026-09-16.** The overnight series finished: the all-elements
-sweep is complete on 24 chromosomes, the human panel on 23, the executor test and its
-hold-out are done, `share:`, `commitment`, `competence` and the integrated reads are in the
-engine, and the worm's fate rules read what a cell could know (522 of 555 in sample, 483
-held out). Nothing is running. What is next, in order of what it decides:
+**Where things stand at the end of 2026-09-16.** Both genome-wide sweeps are finished: every
+chromosome scored by deletion (961,227 elements) and every chromosome read by the human panel
+(24 of 24, 187,966 executor-ready units). The executor test and its hold-out are done, `share:`,
+`commitment`, `competence` and the integrated reads are in the engine, and the worm's fate rules
+read what a cell could know. Four lanes run in worktrees under genomeos-79 (item 6).
+
+**The result of the day is a negative, and it points area I somewhere else.** With the sweep
+complete, the 882 blocks of the real unknown were read against every scored element
+(`1d0a137`): per element they move a gene **0.248** of the time, against 0.293 for the neutral
+tier, 0.303 fossil and 0.462 regulatory — z -5.7, P 7e-9 below neutral. The tier this project
+has treated as its sharpest attribution target is **the least active tier in the genome by the
+one rate that block length cannot inflate.** The same day, chr22 replicated chr21's ablation as
+a negative on both chromosomes, and 44 of the 69 syntax candidates gained nothing from the
+entire sweep. What is next, in order of what it decides:
 
 1. **The executor claim's external endpoint is inconclusive, and extending it costs a
    pre-registration.** E1 was widened genome-wide and run on 2026-09-14 (`cbff5f6`): 1,000
@@ -2443,16 +2452,27 @@ held out). Nothing is running. What is next, in order of what it decides:
    ENCODE objection to E2 and E3 is still open. The 2,260 remaining pairs would tighten the
    bound, but spending them *because* the first 1,000 came out at p 0.38 is optional
    stopping run backwards: it needs a new pre-registration, written first, naming the
-   budget, the looks and what each outcome would mean. That document is the next step here,
-   not the run. Area I.
-2. **The panel's chr2, then the 24-chromosome rollup.** Decides the constrained-unknown
-   depletion at full size (13 of 16 clean chromosomes today). No key; about 20 GB free to
-   start. Area I.
-3. **Whether the neutral tier is neutral.** Seven chromosomes fail a panel control and six
-   of those on the neutral tier, which is the tier every other ratio is read against. A
-   measured reason (segmental duplication, pericentromeric sequence in the background
-   windows) or a better-matched background, before the tier ratios are quoted further.
-   No key. Area I.
+   budget, the looks and what each outcome would mean. **Both are now done**: the
+   pre-registration is in ATTRIBUTION.md (`1da09a8`), the runner takes the declared schedule
+   (`e290744`, with the 1,000-pair skip verified against the rows the first run scored), and the
+   run of the remaining 2,260 pairs is under way tonight as the registry job
+   `executor_e1_extension`. It is read when it lands, against that document and nothing else.
+   Area I.
+2. ~~The panel's chr2, then the 24-chromosome rollup.~~ **Done 2026-09-16** (`17a76d8`): chr2
+   read with every control passing and moved nothing; eight claims hold on all 23 pooled
+   chromosomes, five are named chromosome-specific. The constrained-unknown depletion ends at
+   0.829 of the neutral tier on 19 of 23 (p 0.0013).
+3. ~~Whether the neutral tier is neutral.~~ **Answered 2026-09-16** (`e9245d9`), and it was
+   bigger than the question: *every* non-coding tier reads above the GC- and timing-matched
+   background (regulatory 23 of 23, fossil 22 of 23, neutral 21 of 23), so the background is not
+   a neutral baseline and carries a systematic +6 to +11 points that belongs to the control. Tier
+   statements are read against the neutral tier from now on. What is left is measuring what the
+   background actually holds — coding bases, conserved elements, segmental duplication — which is
+   a day's work and changes no conclusion already drawn.
+3a. **The 69 syntax blocks, pre-registered.** The one slice of the real unknown that reads above
+   its tier (0.575 of 40 elements, above neutral at P 0.0002, indistinguishable from regulatory)
+   — on 40 elements, sliced after the fact. It needs a document naming the test and a sample
+   large enough to fail it, before anything is claimed. Area I.
 4. **The known-locus benchmark with more loci**, not more readings of the one it has:
    SOX9 and H19 stated-interval scoring is a handful of requests. Needs the key briefly.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). Decision 2, amounts or
@@ -2559,7 +2579,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
 | **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. Outstanding: the two remaining ranking defects, CNA and SV, the library layer |
-| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
+| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution reached its answer on 2026-09-16 and it is negative: the 882 blocks of the real unknown move a gene 0.248 per element against 0.293 at the neutral tier (P 7e-9), so the tier is not where deletion finds function; 331 of 882 carry a lead. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
 ---
