@@ -1,0 +1,57 @@
+{
+  "result": "enhancer_targets_all_chr5",
+  "date": "2026-09-16",
+  "chrom": "chr5",
+  "elements_total": 53114,
+  "scored": 53114,
+  "requests_this_run": 53142,
+  "workers": 8,
+  "capped_to": null,
+  "cells": [
+    "K562",
+    "HepG2",
+    "GM12878",
+    "IMR-90"
+  ],
+  "complete": true,
+  "summary": {
+    "elements_scored": 53114,
+    "with_predicted_target": 32993,
+    "fraction_with_target": 0.621,
+    "strong": 8400,
+    "weak": 24593,
+    "silencer_like": 12551,
+    "verdicts": {
+      "no predicted effect": 20121,
+      "another gene in the same domain": 13165,
+      "agrees with nearest TSS in domain": 10127,
+      "gene outside the domain": 9701
+    },
+    "verdicts_coding": {
+      "no predicted effect": 30342,
+      "agrees with nearest TSS in domain": 13427,
+      "gene outside the domain": 6864,
+      "another gene in the same domain": 2481
+    },
+    "coding_target_agrees_with_nearest": 0.59,
+    "fraction_agreeing_with_nearest": 0.307,
+    "fraction_inside_domain": 0.706,
+    "top_tissues": {
+      "K562": 1900,
+      "placenta": 1309,
+      "CD14-positive monocyte": 972,
+      "HepG2": 871,
+      "GM23338": 727,
+      "psoas muscle": 618,
+      "neural cell": 575,
+      "testis": 573,
+      "Whole_Blood": 545,
+      "kidney": 537,
+      "common myeloid progenitor, CD34-positive": 536,
+      "Karpas-422": 529
+    },
+    "median_distance_when_agreeing": 17049
+  },
+  "elements_where": "data/knowledge/alphagenome/all_elements/chr5.json",
+  "evidence": "predicted: AlphaGenome deletion effect per element, per gene and per cell line (K562, HepG2, GM12878, IMR-90 RNA-seq tracks); inferred: CTCF-only nodes"
+}
