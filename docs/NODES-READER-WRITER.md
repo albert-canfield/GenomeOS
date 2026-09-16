@@ -902,3 +902,126 @@ For the lexicon's negative (area I: the fossil tier is not a library for its
 node), this closes the obvious mechanism too. Methylation keeps the fossil
 tier quiet exactly as much as it keeps the rest of the unconstrained genome
 quiet, and no more.
+
+## The first chromatin mechanism the VM runs: CpG methylation across divisions (2026-09-16)
+
+Everything above reads methylation. This runs it. `genomeos/runtime/methylation.py`
+is an engine, not an annotation: per CpG dyad it holds three states
+(unmethylated, hemimethylated, methylated) and steps them through one cell
+division at a time — replication makes a methylated site hemimethylated,
+UHRF1 plus DNMT1 restore it with a fidelity below 1 (Bostick 2007, Sharif 2007),
+DNMT3A/B methylate de novo (Okano 1999), TET1-3 erase (Tahiliani 2009, Ito
+2011) — with **both maintenance and de novo efficiency rising with the local CpG
+density**, which is the published account of why an isolated CpG erodes and a
+clustered one does not (collaborative models: Haerter 2014, Lövkvist 2016; the
+genomic observation is Zhou 2018). The expectation and the steady state are
+propagated exactly through the per-division transition matrix; individual sites
+are sampled from a seeded generator when a lineage rather than a mean is wanted.
+
+Six of the eight rates are not established per CpG per division, so **`param x =
+unknown` is now BioLang**: `bio.std.methylation` states maintenance fidelity
+(roughly 0.95–0.99: Laird 2004, Genereux 2005; above 0.99 clonally: Ushijima
+2003) and the 35 bp solo definition, and says `unknown` for the two solo
+fidelities, both de novo rates, TET turnover and the neighbour scale. The engine
+**refuses to run** until a program binds them, and `bio check` lists what is
+still UNKNOWN. `data/demo/methylation_erosion.bio` binds them as its own
+labelled assumptions and tests what it predicts: from 0.95 at 100 divisions,
+solo-WCGW falls to 0.17 while dense holds 0.77.
+
+### The claim, registered before the data
+
+Committed in 9a2860c, before any methylation value was read, with the window
+classes fixed from **sequence alone**: solo-WCGW windows are 200 bp bins whose
+every CpG is isolated (no other CpG within 35 bp) and A/T-flanked; dense windows
+hold six or more CpGs, none isolated, and are not island-like (CpG obs/exp <
+0.6, because islands are unmethylated in every cell type and would not be a
+control). On chr19 to chr22 that is 2,976,042 CpGs, 231,295 of them solo-WCGW,
+giving **11,257 solo-WCGW windows and 53,522 dense windows**. The prediction:
+the dense-minus-solo gap is larger in the long-cultured lines (K562, HepG2,
+GM12878) than in the three biosamples with an intact methylome (H1, hepatocyte,
+CD14-positive monocyte). Falsified if any cultured line's gap is below any
+intact one's. (`scripts/methylation_erosion.py`, `methylation_erosion`.)
+
+| biosample | solo-WCGW | dense | gap | gap / dense | gap within 50 kb | solo windows measured |
+|---|---|---|---|---|---|---|
+| K562 | 0.172 | 0.408 | **+0.236** | 0.579 | +0.091 | 8,872 |
+| HepG2 | 0.307 | 0.676 | **+0.368** | 0.545 | +0.231 | 9,970 |
+| GM12878 | 0.277 | 0.631 | **+0.354** | 0.561 | +0.274 | 10,153 |
+| H1 | 0.815 | 0.832 | +0.017 | 0.020 | +0.038 | 10,035 |
+| hepatocyte (H9) | 0.760 | 0.836 | +0.076 | 0.090 | +0.084 | 10,365 |
+| CD14-positive monocyte | 0.786 | 0.771 | −0.015 | −0.019 | +0.014 | 1,271 |
+| SK-N-SH (outside the claim) | 0.381 | 0.723 | +0.342 | 0.473 | +0.216 | 9,944 |
+| IMR-90 (outside the claim) | 0.555 | 0.739 | +0.184 | 0.249 | +0.111 | 371 |
+
+**Not a blind test, and the brief is part of the record.** When this claim was
+registered the ordering was already known here: the fossil-tier reading of
+2026-09-14 had measured SINE and solo-WCGW loss in the same hypomethylated
+lines, and the brief that opened this lane named the expected direction. The
+registration still did its work — the window classes were fixed from sequence,
+and the numbers were read once — but what the result establishes is that the
+engine's context-dependent mechanism is *consistent with* a fact already in
+hand, not that it predicted an unknown one. The region-matched arm is where a
+test of the mechanism itself would live, and it is thin.
+
+**The ordering holds, on all three metrics.** In points, the smallest cultured
+gap (K562, +0.236) is 0.160 above the largest intact one (hepatocyte, +0.076).
+Relative to the dense level the separation is wider (0.545–0.579 against
+−0.019–0.090, margin 0.454). The region control — the gap recomputed inside 50 kb
+windows that hold both classes, 878 to 3,012 such windows per biosample of the
+claim (230 in IMR-90, whose WGBS is thin) — keeps
+the ordering but **thinly**: K562's +0.091 is only 0.0075 above hepatocyte's
++0.084, so region (late-replicating, AT-rich PMD sequence) carries much of the
+raw effect, and one line's margin is inside what the earlier fossil-tier
+bootstraps would call noise. The two biosamples outside the pre-registered set
+sit where the logic would put them: SK-N-SH, the fourth transformed line, with
+the cultured group; IMR-90, a mortal strain grown to senescence, between them.
+The monocyte's −0.015 is the only negative raw gap, and its WGBS measures 1,271
+of the 11,257 solo windows (2,659 calls), the coverage problem already recorded
+for that donor.
+
+### What the fit implies — inferred, not measured
+
+Starting each lineage at H1's own measured levels (0.832 dense, 0.815 solo),
+with no TET turnover and de novo at 0.01 (dense) and 0.002 (solo) per strand per
+division, the engine's inverses say:
+
+- **At the literature fidelity of 0.97**, the observed dense level needs 123
+  divisions in K562, 24 in GM12878, 17 in HepG2, 11 in SK-N-SH, 10 in IMR-90, 6
+  in the monocyte and 0 in H1 and hepatocyte. These lines have doubled *thousands*
+  of times, so 0.97 per division is far too lossy to describe them: real
+  maintenance in these genomes must be nearer the top of the published range.
+- Read the other way — fidelity solved at a fixed division count — that is what
+  comes out. At 100 divisions: K562 0.968 dense against 0.960 solo (deficit
+  0.008), HepG2 0.990/0.976 (0.014), GM12878 0.988/0.973 (0.014). At 500:
+  0.972/0.980 (−0.008), 0.992/0.990 (0.002), 0.990/0.989 (0.001).
+- Under the higher de novo scenario (0.05/0.01) the observed dense levels are
+  **below anything a fidelity of 0.97 can reach**, and the engine returns nothing
+  rather than a number — the refusal that `fidelity_for_level` exists to make.
+
+So the ordering is confirmed and the rates are not. The data fixes where each
+class sits, and any (divisions, fidelity, de novo) triple on a one-dimensional
+family reproduces it; past a few hundred divisions the fidelity deficit the fit
+needs falls below 0.008 and can invert, meaning the lower de novo rate of an
+isolated CpG would suffice on its own. Everything in this section beyond the
+table is inferred.
+
+**And one thing the mechanism does not explain.** The dense class erodes too:
+0.832 in H1 against 0.408 in K562 and 0.631 in GM12878. Context dependence
+cannot produce that, because a CpG with six close neighbours is the case the
+model says is well maintained. The cultured lines have lost methylation
+genome-wide — a dosage or domain-level change (DNMT1/UHRF1, PMD-wide) that this
+engine has no construct for. The engine's own demo run overshoots for the same
+reason: a 0.60 gap at 100 divisions against a measured maximum of 0.37, because
+it holds the dense class up while the real genomes let it fall. What was
+measured here is that the *ordering* of the context effect tracks culture
+history, which is the prediction; a mechanism for the global loss is the next
+construct, not this one.
+
+**Beside the twin's clocks.** `genomeos/twin/clocks.py` carries Horvath 2013 (353
+CpGs) and Hannum 2013 (71 CpGs): elastic-net regressions on beta values that
+predict chronological age and contain no mechanism at all. This engine is the
+other kind of object — a mechanism with no fit to age — and the two meet at the
+divisions. A clock reads a state; this says how the state changes when a cell
+divides. Connecting them (a predicted drift at the clock's own CpGs, in their own
+sequence context, against a twin's measured betas) is a real next step and is not
+claimed here: none of the numbers above involve a clock.

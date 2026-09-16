@@ -90,7 +90,7 @@ May contain `transcript` blocks.
 
 ### `param`
 
-`param <name> = <number> [unit] { ... }`
+`param <name> = <number>|unknown [unit] { ... }`
 
 ### `cell_type`
 

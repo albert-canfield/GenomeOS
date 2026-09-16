@@ -11,7 +11,7 @@ Grammar (see docs/BIOLANG-v0.2.md and docs/BIOLANG-v0.3.md):
     cell_type <Id> { expresses: a, b; parent: X; ontology: CL:0000540 }
     event <Id> { rate: 0.5 /yr; when: cell_type = X; effect: telomere_bp -= 70 bp; ... }
     rule <Source> activates|inhibits|produces|binds|degrades|modifies <Target> { <props> }
-    param <name> = <number> [unit] { evidence: ...; confidence: ... }
+    param <name> = <number>|unknown [unit] { evidence: ...; confidence: ... }
     domain <Id> { locus: chr21:a-b; genes: A, B; boundaries: E1, E2 }
     organism <Id> { species: ...; genome: ...; tempo: 1.0; cell_type: Zygote; factors: A, B; ... }
     stage <Id> { from: 0 min; to: 100 min }
@@ -109,7 +109,7 @@ _KINDS = (
 )
 _REPEATABLE = ("effect", "assert", "observe", "source", "target", "keep", "vary")
 _HEADER = re.compile(r"^(" + "|".join(_KINDS) + r")\s+([^{]*?)\s*\{(.*)$")
-_PARAM = re.compile(r"^(\w[\w.]*)\s*=\s*([-+0-9.eE]+)\s*([^\s{]*)\s*$")
+_PARAM = re.compile(r"^(\w[\w.]*)\s*=\s*([-+0-9.eE]+|unknown|UNKNOWN)\s*([^\s{]*)\s*$")
 _EFFECT = re.compile(r"^(\w+)\s*(\+=|-=|\*=|=)\s*([-+0-9.eE]+)\s*(.*)$")
 STD_DIR = Path(__file__).resolve().parent.parent / "std"
 
@@ -453,8 +453,12 @@ def _compile_block(b: Block, module: Module) -> None:
         pm = _PARAM.match(b.header)
         if not pm:
             raise BioLangError(f"line {b.line}: param must be 'name = value [unit]'")
+        # A rate nobody has measured is UNKNOWN, not a default: the engine that needs it refuses
+        # to run until a program binds it (docs/BIOLANG-GRAMMAR.md, `param`).
+        raw = pm.group(2)
+        value = UNKNOWN if raw.lower() == "unknown" else float(raw)
         module.parameters[pm.group(1)] = Parameter(
-            name=pm.group(1), value=float(pm.group(2)), unit=pm.group(3), evidence=ev, confidence=conf
+            name=pm.group(1), value=value, unit=pm.group(3), evidence=ev, confidence=conf
         )
     elif b.kind == "domain":
         dm = Domain(id=b.header, kind="domain", evidence=ev, confidence=conf)

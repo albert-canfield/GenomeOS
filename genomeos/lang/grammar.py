@@ -83,7 +83,7 @@ BLOCKS: dict[str, dict] = {
             "id": ("text", "explicit rule id"),
         },
     },
-    "param": {"header": "param <name> = <number> [unit] { ... }", "props": {}},
+    "param": {"header": "param <name> = <number>|unknown [unit] { ... }", "props": {}},
     "cell_type": {
         "header": "cell_type <Id> { ... }",
         "props": {

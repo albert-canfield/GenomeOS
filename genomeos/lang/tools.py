@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import Module
+from genomeos.ir import UNKNOWN, Module
 from genomeos.lang import parse_file
 
 
@@ -52,6 +52,12 @@ def check_module(module: Module, context: dict[str, str] | None = None) -> str:
     lines.append("  mean confidence by kind:")
     for kind, val in sorted(module.confidence_report().items()):
         lines.append(f"    {kind:<10} {'█' * int(val * 20):<20} {val:.2f}")
+    unknown_params = [p.name for p in module.parameters.values() if p.value is UNKNOWN]
+    if unknown_params:
+        lines.append(
+            f"  parameters UNKNOWN: {len(unknown_params)} of {len(module.parameters)}: "
+            + ", ".join(unknown_params)
+        )
     unknowns = module.unknowns()
     if unknowns:
         lines.append(f"  UNKNOWN regions: {len(unknowns)}")
@@ -108,6 +114,33 @@ def run_module(
                 fh.write(f"{t:.4f}," + ",".join(f"{traj.levels[s][i]:.6g}" for s in traj.species) + "\n")
         lines.append(f"  wrote {csv}")
     return "\n".join(lines), traj
+
+
+def run_methylation(module: Module, divisions: int | None = None) -> tuple[str, Any]:
+    """The CpG methylation state machine on a program's `param methylation.*` sheet."""
+    from genomeos.runtime.methylation import PARAM_PREFIX
+    from genomeos.runtime.methylation import run_module as run_methylation_module
+
+    run = run_methylation_module(module, divisions=divisions)
+    lines = [
+        f"module {module.name} (methylation): {len(run.contexts)} CpG contexts, {run.divisions} divisions, "
+        f"{run.cpgs} CpGs each, seed {run.seed}"
+    ]
+    for ctx in run.contexts:
+        key = PARAM_PREFIX + ctx.name
+        xs = run.levels[key]
+        lines.append(
+            f"  {ctx.name:<12} {spark(xs, 30)}  start={xs[0]:.3f} final={xs[-1]:.3f} "
+            f"(expected {run.expected[key][-1]:.3f})  steady={run.steady[key]:.3f} "
+            f"after {run.steady_divisions[key]} divisions   "
+            f"maintenance={run.params.maintenance(ctx):.3f} de novo={run.params.de_novo(ctx):.3f}"
+        )
+    gap = run.levels.get(PARAM_PREFIX + "gap")
+    if gap:
+        lines.append(f"  dense minus solo-WCGW: start={gap[0]:+.3f} final={gap[-1]:+.3f}")
+    for note in run.params.assumptions:
+        lines.append(f"  assumption: {note}")
+    return "\n".join(lines), run
 
 
 def run_sbml(path: str, hours: float = 48.0, dt: float = 0.05) -> str:

@@ -33,7 +33,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from genomeos.ir import Module
+from genomeos.ir import UNKNOWN, Module
 from genomeos.lang import parse, parse_file
 from genomeos.lang.parser import BioLangError
 from genomeos.lang.tools import (
@@ -44,6 +44,7 @@ from genomeos.lang.tools import (
     located_measure,
     run_boolean,
     run_located,
+    run_methylation,
     run_module,
     run_sbml,
 )
@@ -81,12 +82,24 @@ def evaluate(
     """Run the module once (if any test needs a trajectory) and judge each test line."""
     from genomeos.runtime import NetworkRuntime
 
-    facts = ("rules", "entities", "unknowns", "confidence", "events")
+    facts = ("rules", "entities", "unknowns", "confidence", "events", "parameters", "unknown_parameters")
     body_subjects = ("cells", "alive", "deaths")
     needs_run = any(s not in facts and s not in body_subjects for s, *_ in tests)
     traj = None
     results: list[dict[str, Any]] = []
     located = None
+    # a `# test:` line naming a methylation context runs the CpG state machine on the program's own
+    # parameter sheet; an unbound UNKNOWN rate is a failing check, not a substituted default
+    if any(s.startswith("methylation.") for s, *_ in tests):
+        from genomeos.runtime.methylation import UnknownParametersError
+        from genomeos.runtime.methylation import run_module as run_methylation_module
+
+        try:
+            traj = run_methylation_module(module)
+        except UnknownParametersError as e:
+            results.append({"test": "methylation rates are bound", "got": str(e)[:120], "ok": False})
+        else:
+            needs_run = False
     if getattr(module, "located", False):  # v0.4: the wild type, then each experiment's knockouts
         from genomeos.runtime.located import LocatedRuntime
 
@@ -172,6 +185,10 @@ def evaluate(
             got = len(module.unknowns())
         elif subject == "events":
             got = len(module.events)
+        elif subject == "parameters":
+            got = len(module.parameters)
+        elif subject == "unknown_parameters":
+            got = sum(1 for p in module.parameters.values() if p.value is UNKNOWN)
         elif subject == "confidence":
             got = sum(r.confidence for r in module.rules) / len(module.rules) if module.rules else 0.0
         elif subject in body_subjects and body is not None:
@@ -399,6 +416,12 @@ def cmd_run(args: argparse.Namespace) -> int:
     module = load_module(args.module)
     context = dict(kv.split("=", 1) for kv in args.context) if args.context else {}
     initial = {k: float(v) for k, v in (kv.split("=", 1) for kv in (args.init or []))}
+    from genomeos.runtime.methylation import declares_methylation
+
+    if declares_methylation(module) and not module.rules:  # the CpG methylation state machine
+        text, _ = run_methylation(module)
+        print(text)
+        return 0
     if module.located:  # places, transports and mislocalisation (v0.4)
         text, _ = run_located(module, args.hours, args.dt, context, initial, set(args.knockout or []))
         print(text)

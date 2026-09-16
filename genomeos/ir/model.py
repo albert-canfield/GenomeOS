@@ -220,10 +220,14 @@ class Event:
 
 @dataclass(slots=True)
 class Parameter:
-    """A numeric fact used by the runtime, with provenance attached."""
+    """A numeric fact used by the runtime, with provenance attached.
+
+    `value` is UNKNOWN when the literature does not establish the number; an engine that needs
+    it says so rather than substituting one of its own.
+    """
 
     name: str
-    value: float
+    value: float | _Unknown
     unit: str = ""
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
@@ -846,6 +850,7 @@ class Module:
         for pd in data.get("parameters", []):
             pd.pop("__type__", None)
             pd["evidence"] = evid(pd.get("evidence", {}))
+            pd["value"] = unk(pd.get("value"))
             m.parameters[pd["name"]] = Parameter(**pd)
         for fd in data.get("fields", []):
             fd["sources"] = [tuple(x) for x in fd.get("sources", [])]

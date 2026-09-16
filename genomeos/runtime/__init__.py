@@ -17,6 +17,7 @@ from .central_dogma import (
 )
 from .grn import NetworkRuntime, Trajectory
 from .located import LocatedResult, LocatedRuntime
+from .methylation import CpGContext, MethylationParams, MethylationRun, UnknownParametersError
 from .variant_effect import Effect, classify, classify_all, severity
 
 __all__ = [
@@ -45,4 +46,8 @@ __all__ = [
     "Environment",
     "TissueReport",
     "CELL_TYPES",
+    "CpGContext",
+    "MethylationParams",
+    "MethylationRun",
+    "UnknownParametersError",
 ]
