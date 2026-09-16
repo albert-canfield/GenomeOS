@@ -2541,9 +2541,20 @@ entire sweep. What is next, in order of what it decides:
      is located: a 7-TPM threshold crossing mistaken for surface density.
 7. **Two lanes opened 2026-09-17 by genomeos-79, both following from the day's findings rather than
    opening new ground.** Each reports a pre-registration before scoring.
-   - **Area I, calibration.** Turn the CRISPRi benchmark into a calibration curve, so every predicted
-     target in the finished sweep carries a confidence backed by measured precision rather than by the
-     model's own effect size. `attribution/calibration.py`, `scripts/calibrate_targets.py`. It is the
+   - **Area I, calibration. Landed `bdc2364`, and its pre-registered reliability claim FAILED — on the
+     population, not the curve.** Out of sample on training chromosomes the curve is reliable (9 of 10
+     bins, ECE 0.006); on held-out pairs 6 of 10 bins fall inside their Wilson intervals against a
+     declared 7, and **all four failures are under-predictions in the same direction**. The cause is
+     named: the held-out screens call **6.53% of pairs regulated against 4.97%** in the screens it was
+     fitted on, 1.31 times the prevalence, and a single log-odds shift of +0.679 restores 9 of 10 bins
+     — fitted on the held-out labels and reported as a description of the failure, not a test. What
+     does hold is the table with no fitted model between it and the measurement, on 286 pooled K562
+     pairs: at a predicted drop **above 0.2 the screens called 105 of 105 regulated**. Genome-wide only
+     **24,114 coding targets (5.5%)** reach that drop, 3.2% (chr18) to 10.1% (chr19) per chromosome —
+     a shortlist to hold against an independent perturbation, not a claim. Scope: K562, conditional on
+     a screen having tested the pair, with four named falsifiers. Turn the CRISPRi benchmark into a
+     calibration curve, so every predicted target in the finished sweep carries a confidence backed by
+     measured precision rather than by the model's own effect size. `attribution/calibration.py`, `scripts/calibrate_targets.py`. It is the
      direct consequence of the structure-against-perturbation lesson: if perturbation is the
      discriminating variable, its output is what deserves calibrating. **The denominator to watch is
      the one the locus benchmark and the CRISPRi lane have each already been caught by** — a
