@@ -1,6 +1,6 @@
 {
   "result": "loci_benchmark",
-  "date": "2026-09-15",
+  "date": "2026-09-16",
   "panel": 17,
   "classes": [
     "syntax",
@@ -463,9 +463,9 @@
     },
     "negatives": {
       "target": {
-        "k": 77,
+        "k": 79,
         "n": 85,
-        "rate": 0.906
+        "rate": 0.929
       },
       "cell": {
         "k": 54,
@@ -473,9 +473,9 @@
         "rate": 0.635
       },
       "direction": {
-        "k": 31,
+        "k": 54,
         "n": 85,
-        "rate": 0.365
+        "rate": 0.635
       },
       "storage": {
         "k": 15,
@@ -483,9 +483,9 @@
         "rate": 0.176
       },
       "deletion_scored": {
-        "k": 34,
+        "k": 60,
         "n": 85,
-        "rate": 0.4
+        "rate": 0.706
       },
       "eqtl_present": {
         "k": 75,
@@ -544,46 +544,46 @@
       "negatives": {
         "with_deletion_data": {
           "target": {
-            "k": 33,
-            "n": 34,
-            "rate": 0.971
+            "k": 58,
+            "n": 60,
+            "rate": 0.967
           },
           "cell": {
-            "k": 29,
-            "n": 34,
-            "rate": 0.853
+            "k": 49,
+            "n": 60,
+            "rate": 0.817
           },
           "direction": {
-            "k": 31,
-            "n": 34,
-            "rate": 0.912
+            "k": 54,
+            "n": 60,
+            "rate": 0.9
           },
           "storage": {
-            "k": 7,
-            "n": 34,
-            "rate": 0.206
+            "k": 12,
+            "n": 60,
+            "rate": 0.2
           }
         },
         "without_deletion_data": {
           "target": {
-            "k": 44,
-            "n": 51,
-            "rate": 0.863
+            "k": 21,
+            "n": 25,
+            "rate": 0.84
           },
           "cell": {
-            "k": 25,
-            "n": 51,
-            "rate": 0.49
+            "k": 5,
+            "n": 25,
+            "rate": 0.2
           },
           "direction": {
             "k": 0,
-            "n": 51,
+            "n": 25,
             "rate": 0.0
           },
           "storage": {
-            "k": 8,
-            "n": 51,
-            "rate": 0.157
+            "k": 3,
+            "n": 25,
+            "rate": 0.12
           }
         }
       }
@@ -594,40 +594,45 @@
         "chr15",
         "chr16",
         "chr17",
+        "chr2",
         "chr21",
-        "chr22"
+        "chr22",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9"
       ],
-      "windows": 50,
+      "windows": 85,
       "rates": {
         "target": {
-          "k": 45,
-          "n": 50,
-          "rate": 0.9
+          "k": 79,
+          "n": 85,
+          "rate": 0.929
         },
         "cell": {
-          "k": 31,
-          "n": 50,
-          "rate": 0.62
+          "k": 54,
+          "n": 85,
+          "rate": 0.635
         },
         "direction": {
-          "k": 30,
-          "n": 50,
-          "rate": 0.6
+          "k": 54,
+          "n": 85,
+          "rate": 0.635
         },
         "storage": {
-          "k": 8,
-          "n": 50,
-          "rate": 0.16
+          "k": 15,
+          "n": 85,
+          "rate": 0.176
         },
         "deletion_scored": {
-          "k": 33,
-          "n": 50,
-          "rate": 0.66
+          "k": 60,
+          "n": 85,
+          "rate": 0.706
         },
         "eqtl_present": {
-          "k": 43,
-          "n": 50,
-          "rate": 0.86
+          "k": 75,
+          "n": 85,
+          "rate": 0.882
         }
       },
       "reading": "matched negatives whose chromosome the sweep has finished: the only controls that can be compared with the panel on any claim a deletion makes"
@@ -645,9 +650,9 @@
         "negatives": 5,
         "target": 4,
         "cell": 2,
-        "direction": 0,
+        "direction": 2,
         "storage": 1,
-        "deletion_scored": 0,
+        "deletion_scored": 3,
         "eqtl_present": 4
       },
       "HERC2_OCA2": {
@@ -679,9 +684,9 @@
         "negatives": 5,
         "target": 5,
         "cell": 0,
-        "direction": 0,
+        "direction": 1,
         "storage": 0,
-        "deletion_scored": 0,
+        "deletion_scored": 1,
         "eqtl_present": 5
       },
       "HBB_LCR": {
@@ -730,9 +735,9 @@
         "negatives": 5,
         "target": 5,
         "cell": 3,
-        "direction": 0,
+        "direction": 3,
         "storage": 2,
-        "deletion_scored": 0,
+        "deletion_scored": 4,
         "eqtl_present": 5
       },
       "MYC_8q24": {
@@ -745,11 +750,11 @@
           "eqtl_present": true
         },
         "negatives": 5,
-        "target": 3,
+        "target": 5,
         "cell": 4,
-        "direction": 0,
+        "direction": 4,
         "storage": 0,
-        "deletion_scored": 0,
+        "deletion_scored": 5,
         "eqtl_present": 3
       },
       "ABO": {
@@ -764,9 +769,9 @@
         "negatives": 5,
         "target": 5,
         "cell": 4,
-        "direction": 0,
+        "direction": 5,
         "storage": 0,
-        "deletion_scored": 0,
+        "deletion_scored": 5,
         "eqtl_present": 5
       },
       "HLA_DRB1": {
@@ -781,9 +786,9 @@
         "negatives": 5,
         "target": 5,
         "cell": 5,
-        "direction": 0,
+        "direction": 4,
         "storage": 0,
-        "deletion_scored": 0,
+        "deletion_scored": 4,
         "eqtl_present": 5
       },
       "APP": {
@@ -832,9 +837,9 @@
         "negatives": 5,
         "target": 5,
         "cell": 5,
-        "direction": 1,
+        "direction": 5,
         "storage": 4,
-        "deletion_scored": 1,
+        "deletion_scored": 5,
         "eqtl_present": 5
       },
       "SOX9_PierreRobin": {
@@ -6999,7 +7004,7 @@
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -7249,7 +7254,7 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests"
+                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests"
               },
               "eqtl": {
                 "provenance": "derived",
@@ -7427,7 +7432,7 @@
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": false,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -7541,7 +7546,7 @@
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -7927,7 +7932,7 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests"
+                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests"
               },
               "eqtl": {
                 "provenance": "derived",
@@ -8123,7 +8128,7 @@
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -9167,7 +9172,7 @@
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -9381,7 +9386,7 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests"
+                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests"
               },
               "eqtl": {
                 "provenance": "derived",
@@ -9510,7 +9515,7 @@
         "class_hit_derived": false,
         "reachable_by_a_derived_target_layer": false,
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -9618,7 +9623,7 @@
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -9814,7 +9819,7 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests"
+                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests"
               },
               "eqtl": {
                 "provenance": "derived",
@@ -9945,7 +9950,7 @@
         "reachable_by_a_derived_target_layer": false,
         "pending": [
           "beyond_sequence: parent of origin: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22, chrY. One element is about 0.76 requests",
+          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -12584,13 +12589,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "ZNF92",
-      "deletion_target": null,
+      "deletion_target": "ENSG00000238124",
       "eqtl_target": "CCT6P3",
       "cells_open": [
         "astrocyte"
@@ -12640,7 +12645,7 @@
         "cell": false,
         "direction": false,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": false
       },
       "node_target": "WNT2",
@@ -12663,13 +12668,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "C1GALT1",
-      "deletion_target": null,
+      "deletion_target": "COL28A1",
       "eqtl_target": "RPA3",
       "cells_open": [
         "IMR-90",
@@ -12904,13 +12909,13 @@
       "claims": {
         "target": true,
         "cell": false,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "ANXA4",
-      "deletion_target": null,
+      "deletion_target": "ANXA4",
       "eqtl_target": "ANXA4",
       "cells_open": [],
       "registry_classes": [
@@ -13269,13 +13274,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": true,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "MAP4K3",
-      "deletion_target": null,
+      "deletion_target": "TMEM178A",
       "eqtl_target": "MAP4K3-DT",
       "cells_open": [
         "CD14-positive monocyte",
@@ -13311,7 +13316,7 @@
         "cell": true,
         "direction": false,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "ITM2C",
@@ -13344,13 +13349,13 @@
       "claims": {
         "target": true,
         "cell": false,
-        "direction": false,
+        "direction": true,
         "storage": true,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": null,
-      "deletion_target": null,
+      "deletion_target": "DNER",
       "eqtl_target": "DNER",
       "cells_open": [],
       "registry_classes": [
@@ -13371,13 +13376,13 @@
       "claims": {
         "target": true,
         "cell": false,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": null,
-      "deletion_target": null,
+      "deletion_target": "ENSG00000223530",
       "eqtl_target": "KLHL29",
       "cells_open": [],
       "registry_classes": [
@@ -13400,7 +13405,7 @@
         "cell": true,
         "direction": false,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "PLPP5",
@@ -13427,13 +13432,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "ASAP1",
-      "deletion_target": null,
+      "deletion_target": "ENSG00000286535",
       "eqtl_target": "ASAP1",
       "cells_open": [
         "GM12878"
@@ -13454,13 +13459,13 @@
       "claims": {
         "target": true,
         "cell": false,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "NKX3-1",
-      "deletion_target": null,
+      "deletion_target": "NKX3-1",
       "eqtl_target": "NKX3-1",
       "cells_open": [],
       "registry_classes": [
@@ -13479,15 +13484,15 @@
       "constrained_fraction": 0.1075,
       "of_locus": "MYC_8q24",
       "claims": {
-        "target": false,
+        "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": false
       },
       "node_target": "ANGPT2",
-      "deletion_target": null,
+      "deletion_target": "ANGPT2",
       "eqtl_target": null,
       "cells_open": [
         "astrocyte",
@@ -13509,15 +13514,15 @@
       "constrained_fraction": 0.07,
       "of_locus": "MYC_8q24",
       "claims": {
-        "target": false,
+        "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": false
       },
       "node_target": "RAB11FIP1",
-      "deletion_target": null,
+      "deletion_target": "ENSG00000285880",
       "eqtl_target": null,
       "cells_open": [
         "CD14-positive monocyte",
@@ -13546,13 +13551,13 @@
       "claims": {
         "target": true,
         "cell": false,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "ADAMTSL2",
-      "deletion_target": null,
+      "deletion_target": "ADAMTSL2",
       "eqtl_target": "ADAMTSL2",
       "cells_open": [],
       "registry_classes": [],
@@ -13571,13 +13576,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "ENG",
-      "deletion_target": null,
+      "deletion_target": "ENG",
       "eqtl_target": "ENSG00000225032",
       "cells_open": [
         "CD14-positive monocyte",
@@ -13607,13 +13612,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "DBH",
-      "deletion_target": null,
+      "deletion_target": "DBH",
       "eqtl_target": "DBH-AS1",
       "cells_open": [
         "H1",
@@ -13640,13 +13645,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "SPTLC1",
-      "deletion_target": null,
+      "deletion_target": "ENSG00000234537",
       "eqtl_target": "ENSG00000234537",
       "cells_open": [
         "CD14-positive monocyte",
@@ -13679,13 +13684,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "WNK2",
-      "deletion_target": null,
+      "deletion_target": "WNK2",
       "eqtl_target": "ENSG00000203364",
       "cells_open": [
         "H1",
@@ -13711,13 +13716,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "AMD1",
-      "deletion_target": null,
+      "deletion_target": "AMD1",
       "eqtl_target": "RPF2",
       "cells_open": [
         "CD14-positive monocyte",
@@ -13752,13 +13757,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "DYNLT1",
-      "deletion_target": null,
+      "deletion_target": "DYNLT1",
       "eqtl_target": "DYNLT1",
       "cells_open": [
         "CD14-positive monocyte",
@@ -13791,13 +13796,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "CNR1",
-      "deletion_target": null,
+      "deletion_target": "CNR1",
       "eqtl_target": "CNR1",
       "cells_open": [
         "CD14-positive monocyte",
@@ -13860,13 +13865,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "CILK1",
-      "deletion_target": null,
+      "deletion_target": "ENSG00000288614",
       "eqtl_target": "CILK1",
       "cells_open": [
         "CD14-positive monocyte",
@@ -14181,13 +14186,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": true,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "STK11IP",
-      "deletion_target": null,
+      "deletion_target": "INHA",
       "eqtl_target": "ASIC4",
       "cells_open": [
         "CD14-positive monocyte",
@@ -14222,13 +14227,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": false,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "DCTN1",
-      "deletion_target": null,
+      "deletion_target": "WDR54",
       "eqtl_target": "ENSG00000272183",
       "cells_open": [
         "CD14-positive monocyte",
@@ -14265,13 +14270,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": true,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "CRYBA2",
-      "deletion_target": null,
+      "deletion_target": "FEV",
       "eqtl_target": "NHEJ1",
       "cells_open": [
         "CD14-positive monocyte",
@@ -14313,7 +14318,7 @@
         "eqtl_present": true
       },
       "node_target": "MAPRE3",
-      "deletion_target": "MAPRE3",
+      "deletion_target": "OST4",
       "eqtl_target": "KHK",
       "cells_open": [
         "CD14-positive monocyte",
@@ -14349,13 +14354,13 @@
       "claims": {
         "target": true,
         "cell": true,
-        "direction": false,
+        "direction": true,
         "storage": true,
-        "deletion_scored": false,
+        "deletion_scored": true,
         "eqtl_present": true
       },
       "node_target": "TUBA3D",
-      "deletion_target": null,
+      "deletion_target": "TUBA3D",
       "eqtl_target": "SMPD4BP",
       "cells_open": [
         "CD14-positive monocyte",
@@ -15389,6 +15394,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 429.0
+    "seconds": 513.0
   }
 }

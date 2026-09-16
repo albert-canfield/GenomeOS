@@ -1066,3 +1066,35 @@ answer here, a layer that reads a threshold crossing and throws away the quantit
 on is worth repairing, and the fix is three lines in `fetch_boundaries` plus a loader beside
 `load_boundaries`. That file is not mine; the finding is passed to its owner with the cache this
 module built (`data/knowledge/hic_scored`) as evidence that the column is there and useful.
+
+## 17. The sweep finished, and the coverage artefact of section 8 is confirmed at full coverage (2026-09-16)
+
+The all-elements sweep completed on every chromosome, so this benchmark was rerun with no model
+request: the loci it had been queued behind a quota handover for (SOX9, H19) were already scored, and
+the handover is not needed.
+
+**This is not a new finding.** Section 8 called the direction claim a coverage artefact on 2026-09-15,
+on 13 of 60 control windows that had deletion data, and predicted that the separation would vanish as
+the rest were scored. It has, at full coverage, which is the prediction being met rather than a
+discovery:
+
+| | 2026-09-15 | now |
+|---|---|---|
+| control windows with a scored deletion | 34 of 85 | **60 of 85** |
+| a direction produced, published loci | 11/17, 0.647 | 11/17, 0.647 |
+| a direction produced, matched controls | 31/85, 0.365 | **54/85, 0.635** |
+
+Unconditioned, the direction rate at the controls has risen from 0.365 to 0.635 while the panel's
+stayed at 0.647: **0.647 against 0.635 is nothing**, exactly as section 8 said it would be, and by the
+arithmetic it named (the assertion it removed would have broken once about 14 of the controls had been
+scored; 60 have).
+
+**Everything else is unchanged.** 15 of 17 targets derived, 13 of 14 where the target is reachable, a
+cell in 14 of 17, a value on syntax 9 of 17 against 15 of 85 at the controls — the one claim that
+separates the panel, and the one whose control rate has not moved with coverage at any point.
+
+**What the rerun is worth, stated plainly.** It cost no requests and confirmed a prediction rather
+than producing a result. The reason to record it is that the prediction was made when its own evidence
+was 13 windows, and it is the third time this benchmark has had to withdraw something for the same
+reason — so a rate whose denominator is "was it measured" is now the first thing to check here, not the
+last.
