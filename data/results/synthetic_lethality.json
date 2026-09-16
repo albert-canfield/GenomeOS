@@ -1,0 +1,1406 @@
+{
+  "result": "synthetic_lethality",
+  "date": "2026-09-16",
+  "claim": "Cell lines that lost gene A depend more on gene B than lines that kept A, for pairs drawn from a pre-declared DNA-repair and replication-stress panel plus paralogue pairs. Recovered at Benjamini-Hochberg q <= 0.10 one-sided, with the five positive controls recovered, the two PARP1 controls expected to be weak, and a permuted-label sweep finding nothing.",
+  "preregistered": [
+    {
+      "lost": "BRCA1",
+      "loss": "damaging_mutation",
+      "dependency": "PARP1",
+      "expect": "weak",
+      "why": "the textbook synthetic-lethal pair clinically, and known to be weak in CRISPR knockout screens: PARP inhibitors trap PARP1 on DNA, which deleting PARP1 does not reproduce. A sweep that recovers this pair strongly is suspect, not impressive."
+    },
+    {
+      "lost": "BRCA2",
+      "loss": "damaging_mutation",
+      "dependency": "PARP1",
+      "expect": "weak",
+      "why": "as BRCA1; the same mechanistic mismatch between knockout and inhibition"
+    },
+    {
+      "lost": "ARID1A",
+      "loss": "damaging_mutation",
+      "dependency": "ARID1B",
+      "expect": "recovered",
+      "why": "the paralogue that carries the residual BAF complex when ARID1A is lost"
+    },
+    {
+      "lost": "SMARCA4",
+      "loss": "damaging_mutation",
+      "dependency": "SMARCA2",
+      "expect": "recovered",
+      "why": "the other BAF ATPase; the basis of the SMARCA2 degrader programmes"
+    },
+    {
+      "lost": "MTAP",
+      "loss": "deletion",
+      "dependency": "PRMT5",
+      "expect": "recovered",
+      "why": "MTAP deletion, passenger to CDKN2A loss, accumulates MTA, which inhibits PRMT5 partially and leaves the cell dependent on what activity remains"
+    },
+    {
+      "lost": "MTAP",
+      "loss": "deletion",
+      "dependency": "MAT2A",
+      "expect": "recovered",
+      "why": "the same axis one step back: SAM supply to the partially inhibited PRMT5"
+    },
+    {
+      "lost": "MSI",
+      "loss": "msi_high",
+      "dependency": "WRN",
+      "expect": "recovered",
+      "why": "expanded TA dinucleotide repeats in MSI-high cells form non-B DNA that needs the WRN helicase; the cleanest dependency in the public screens"
+    }
+  ],
+  "thresholds": {
+    "fdr": 0.1,
+    "min_lines_lost": 5,
+    "min_lines_intact": 20,
+    "damaging_min": 1,
+    "deletion_max_copies": 0.5,
+    "msi_high_msisensor2": 20.0,
+    "test": "Mann-Whitney rank sum, one-sided, normal approximation with tie and continuity correction",
+    "multiple_testing": "Benjamini-Hochberg across every tested pair in the sweep",
+    "verdict_rules": {
+      "recovered": "q <= 0.1 and the dependency is stronger in the lines that lost the gene",
+      "nominal": "p <= 0.05 but q above the false-discovery rate",
+      "not_recovered": "neither, with enough lines to have seen an effect",
+      "untestable": "fewer than 5 lost or 20 intact lines, or the gene is absent"
+    }
+  },
+  "candidate_space": {
+    "panel_genes": 206,
+    "pathways": {
+      "homologous_recombination": 35,
+      "nonhomologous_end_joining": 9,
+      "single_strand_break_and_alternative_end_joining": 12,
+      "mismatch_repair": 8,
+      "base_excision_repair": 13,
+      "nucleotide_excision_repair": 16,
+      "fanconi_anaemia": 14,
+      "translesion_synthesis": 11,
+      "checkpoint_and_replication_stress": 42,
+      "topoisomerases": 6,
+      "chromatin_paralogue_pairs": 33,
+      "methionine_salvage": 7
+    },
+    "panel_pairs": 42230,
+    "paralogue_pairs": 318,
+    "paralogue_identity_floor": 20.0,
+    "paralogues_per_gene_cap": 15
+  },
+  "data": {
+    "provenance": {
+      "release": "DepMap 24Q4 Public",
+      "doi": "10.25452/figshare.plus.27993248.v1",
+      "figshare_article": "27993248",
+      "licence": "DepMap Public 24Q4, Broad Institute, CC BY 4.0",
+      "citation": "DepMap, Broad (2024). DepMap 24Q4 Public. Figshare+. doi:10.25452/figshare.plus.27993248.v1",
+      "files": {
+        "gene_effect": {
+          "figshare_file": "51064667",
+          "name": "CRISPRGeneEffect.csv",
+          "what": "Chronos gene effect, copy-number corrected and screen-quality corrected"
+        },
+        "damaging": {
+          "figshare_file": "51065747",
+          "name": "OmicsSomaticMutationsMatrixDamaging.csv",
+          "what": "1 or 2 where a gene carries at least one likely loss-of-function mutation"
+        },
+        "absolute_cn": {
+          "figshare_file": "51065303",
+          "name": "OmicsAbsoluteCNGene.csv",
+          "what": "PureCN absolute copy number per gene; segmental-duplication genes are masked"
+        },
+        "signatures": {
+          "figshare_file": "51065726",
+          "name": "OmicsSignatures.csv",
+          "what": "model-level MSIsensor2 MSI score, ploidy, LoH fraction, WGD, CIN, aneuploidy"
+        },
+        "model": {
+          "figshare_file": "51065297",
+          "name": "Model.csv",
+          "what": "one row per cell line: lineage, Oncotree disease, origin"
+        },
+        "expression": {
+          "figshare_file": "51065489",
+          "name": "OmicsExpressionProteinCodingGenesTPMLogp1.csv",
+          "what": "log2(TPM+1) per protein-coding gene per line, RSEM unstranded"
+        }
+      },
+      "storage": "streamed over HTTP and discarded; only the requested gene columns are cached",
+      "limits": [
+        "cell lines, not patient tumours: no stroma, no immune system, no tissue architecture, and a growth-selected subset of the disease",
+        "a CRISPR gene effect is a measurement of proliferation in culture over days to weeks, not of what a drug would do in a patient",
+        "the damaging-mutation matrix is a call about a variant's predicted consequence, not a measured loss of protein",
+        "genes overlapping segmental duplications are masked in the copy-number matrices, so an absent copy-number value is not a copy-number-neutral gene"
+      ]
+    },
+    "cell_lines_with_gene_effect": 1178,
+    "cell_lines_with_mutation_calls": 1929,
+    "cell_lines_with_absolute_cn": 1607,
+    "cell_lines_with_msi_score": 1929,
+    "msi_high_lines": 112,
+    "dependency_genes_found": 295,
+    "dependency_genes_missing": [
+      "CENPS",
+      "DNA2",
+      "DRC8",
+      "PARG",
+      "PRKDC",
+      "RECQL4",
+      "SHLD3",
+      "UBE2NL",
+      "XNDC1N"
+    ],
+    "lineages": {
+      "Lung": 126,
+      "Lymphoid": 93,
+      "CNS/Brain": 90,
+      "Head and Neck": 77,
+      "Skin": 74,
+      "Esophagus/Stomach": 69,
+      "Bowel": 63,
+      "Ovary/Fallopian Tube": 59,
+      "Breast": 53,
+      "Pancreas": 47,
+      "Bone": 46,
+      "Soft Tissue": 45,
+      "Peripheral Nervous System": 44,
+      "Myeloid": 42,
+      "Biliary Tract": 35,
+      "Bladder/Urinary Tract": 34,
+      "Kidney": 34,
+      "Uterus": 34,
+      "Liver": 24,
+      "Pleura": 21,
+      "Cervix": 18,
+      "Eye": 15,
+      "Thyroid": 11,
+      "Prostate": 10,
+      "Testis": 5,
+      "Ampulla of Vater": 4,
+      "Vulva/Vagina": 2,
+      "Fibroblast": 1,
+      "Adrenal Gland": 1,
+      "Other": 1
+    }
+  },
+  "tests": 19749,
+  "untestable": 6830,
+  "loss_genes_with_enough_lines": 171,
+  "hits": 44,
+  "controls": [
+    {
+      "lost": "BRCA1",
+      "loss": "damaging_mutation",
+      "dependency": "PARP1",
+      "expect": "weak",
+      "why": "the textbook synthetic-lethal pair clinically, and known to be weak in CRISPR knockout screens: PARP inhibitors trap PARP1 on DNA, which deleting PARP1 does not reproduce. A sweep that recovers this pair strongly is suspect, not impressive.",
+      "result": {
+        "lost": "BRCA1",
+        "loss": "damaging_mutation",
+        "dependency": "PARP1",
+        "lines_lost": 21,
+        "lines_intact": 1157,
+        "median_effect_lost": -0.215,
+        "median_effect_intact": -0.168,
+        "median_difference": -0.047,
+        "cliffs_delta": -0.271,
+        "p": 0.01653127,
+        "q_within_controls": 0.016531
+      },
+      "in_sweep": {
+        "lines_lost": 21,
+        "lines_intact": 934,
+        "cliffs_delta": -0.278,
+        "median_difference": -0.048,
+        "p": 0.014512617400799727,
+        "q": 0.45731910763852,
+        "verdict": "nominal"
+      },
+      "verdict": "recovered",
+      "agrees_with_preregistration": false
+    },
+    {
+      "lost": "BRCA2",
+      "loss": "damaging_mutation",
+      "dependency": "PARP1",
+      "expect": "weak",
+      "why": "as BRCA1; the same mechanistic mismatch between knockout and inhibition",
+      "result": {
+        "lost": "BRCA2",
+        "loss": "damaging_mutation",
+        "dependency": "PARP1",
+        "lines_lost": 36,
+        "lines_intact": 1142,
+        "median_effect_lost": -0.196,
+        "median_effect_intact": -0.168,
+        "median_difference": -0.028,
+        "cliffs_delta": -0.213,
+        "p": 0.01462578,
+        "q_within_controls": 0.016531
+      },
+      "in_sweep": {
+        "lines_lost": 37,
+        "lines_intact": 923,
+        "cliffs_delta": -0.212,
+        "median_difference": -0.022,
+        "p": 0.014125323127782195,
+        "q": 0.4572221891763551,
+        "verdict": "nominal"
+      },
+      "verdict": "recovered",
+      "agrees_with_preregistration": false
+    },
+    {
+      "lost": "ARID1A",
+      "loss": "damaging_mutation",
+      "dependency": "ARID1B",
+      "expect": "recovered",
+      "why": "the paralogue that carries the residual BAF complex when ARID1A is lost",
+      "result": {
+        "lost": "ARID1A",
+        "loss": "damaging_mutation",
+        "dependency": "ARID1B",
+        "lines_lost": 118,
+        "lines_intact": 1060,
+        "median_effect_lost": -0.114,
+        "median_effect_intact": 0.021,
+        "median_difference": -0.135,
+        "cliffs_delta": -0.421,
+        "p": 0.0,
+        "q_within_controls": 0.0
+      },
+      "in_sweep": {
+        "lines_lost": 121,
+        "lines_intact": 865,
+        "cliffs_delta": -0.428,
+        "median_difference": -0.137,
+        "p": 1.2063418808723269e-14,
+        "q": 1.191202290267379e-10,
+        "verdict": "recovered"
+      },
+      "verdict": "recovered",
+      "agrees_with_preregistration": true
+    },
+    {
+      "lost": "SMARCA4",
+      "loss": "damaging_mutation",
+      "dependency": "SMARCA2",
+      "expect": "recovered",
+      "why": "the other BAF ATPase; the basis of the SMARCA2 degrader programmes",
+      "result": {
+        "lost": "SMARCA4",
+        "loss": "damaging_mutation",
+        "dependency": "SMARCA2",
+        "lines_lost": 59,
+        "lines_intact": 1119,
+        "median_effect_lost": -0.099,
+        "median_effect_intact": 0.015,
+        "median_difference": -0.114,
+        "cliffs_delta": -0.424,
+        "p": 2e-08,
+        "q_within_controls": 0.0
+      },
+      "in_sweep": {
+        "lines_lost": 63,
+        "lines_intact": 899,
+        "cliffs_delta": -0.443,
+        "median_difference": -0.135,
+        "p": 2.03244159673042e-09,
+        "q": 5.734098441975581e-06,
+        "verdict": "recovered"
+      },
+      "verdict": "recovered",
+      "agrees_with_preregistration": true
+    },
+    {
+      "lost": "MTAP",
+      "loss": "deletion",
+      "dependency": "PRMT5",
+      "expect": "recovered",
+      "why": "MTAP deletion, passenger to CDKN2A loss, accumulates MTA, which inhibits PRMT5 partially and leaves the cell dependent on what activity remains",
+      "result": {
+        "lost": "MTAP",
+        "loss": "deletion",
+        "dependency": "PRMT5",
+        "lines_lost": 175,
+        "lines_intact": 773,
+        "median_effect_lost": -1.136,
+        "median_effect_intact": -0.974,
+        "median_difference": -0.162,
+        "cliffs_delta": -0.367,
+        "p": 0.0,
+        "q_within_controls": 0.0
+      },
+      "in_sweep": {
+        "lines_lost": 177,
+        "lines_intact": 771,
+        "cliffs_delta": -0.36,
+        "median_difference": -0.158,
+        "p": 4.015575618130624e-14,
+        "q": 2.64345342941539e-10,
+        "verdict": "recovered"
+      },
+      "verdict": "recovered",
+      "agrees_with_preregistration": true
+    },
+    {
+      "lost": "MTAP",
+      "loss": "deletion",
+      "dependency": "MAT2A",
+      "expect": "recovered",
+      "why": "the same axis one step back: SAM supply to the partially inhibited PRMT5",
+      "result": {
+        "lost": "MTAP",
+        "loss": "deletion",
+        "dependency": "MAT2A",
+        "lines_lost": 175,
+        "lines_intact": 773,
+        "median_effect_lost": -1.867,
+        "median_effect_intact": -1.724,
+        "median_difference": -0.144,
+        "cliffs_delta": -0.188,
+        "p": 5.22e-05,
+        "q_within_controls": 7.3e-05
+      },
+      "in_sweep": {
+        "lines_lost": 177,
+        "lines_intact": 771,
+        "cliffs_delta": -0.186,
+        "median_difference": -0.144,
+        "p": 5.364565210714247e-05,
+        "q": 0.03923881420236876,
+        "verdict": "recovered"
+      },
+      "verdict": "recovered",
+      "agrees_with_preregistration": true
+    },
+    {
+      "lost": "MSI",
+      "loss": "msi_high",
+      "dependency": "WRN",
+      "expect": "recovered",
+      "why": "expanded TA dinucleotide repeats in MSI-high cells form non-B DNA that needs the WRN helicase; the cleanest dependency in the public screens",
+      "result": {
+        "lost": "MSI",
+        "loss": "msi_high",
+        "dependency": "WRN",
+        "lines_lost": 74,
+        "lines_intact": 1104,
+        "median_effect_lost": -0.42,
+        "median_effect_intact": -0.05,
+        "median_difference": -0.37,
+        "cliffs_delta": -0.467,
+        "p": 0.0,
+        "q_within_controls": 0.0
+      },
+      "in_sweep": null,
+      "verdict": "recovered",
+      "agrees_with_preregistration": true
+    }
+  ],
+  "controls_recovered": 5,
+  "shuffled_null": {
+    "permutations": 20,
+    "seed": 20260916,
+    "hits_per_permutation": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mean_hits": 0.0,
+    "max_hits": 0,
+    "what_it_controls": "the sweep as a whole, not any one pair: group sizes are preserved and only the association is destroyed"
+  },
+  "loss_genes_that_are_the_same_event": [
+    {
+      "genes": [
+        "CDKN2A",
+        "CDKN2B"
+      ],
+      "lost_lines": [
+        653,
+        421
+      ],
+      "shared_lines": 410,
+      "overlap_of_the_smaller_set": 0.974,
+      "reading": "CDKN2A and CDKN2B are lost in the same lines; a pair test cannot say which of them the dependency belongs to"
+    },
+    {
+      "genes": [
+        "CDKN2A",
+        "MTAP"
+      ],
+      "lost_lines": [
+        653,
+        287
+      ],
+      "shared_lines": 273,
+      "overlap_of_the_smaller_set": 0.951,
+      "reading": "CDKN2A and MTAP are lost in the same lines; a pair test cannot say which of them the dependency belongs to"
+    },
+    {
+      "genes": [
+        "CDKN2B",
+        "MTAP"
+      ],
+      "lost_lines": [
+        421,
+        287
+      ],
+      "shared_lines": 260,
+      "overlap_of_the_smaller_set": 0.906,
+      "reading": "CDKN2B and MTAP are lost in the same lines; a pair test cannot say which of them the dependency belongs to"
+    }
+  ],
+  "confounders": [
+    "a co-deleted neighbour is indistinguishable from the gene that carries the effect; loss_genes_that_are_the_same_event lists the pairs this sweep cannot separate",
+    "a loss enriched in one lineage brings that lineage's dependencies with it; no lineage covariate is fitted here, so a hit can be a lineage effect wearing a gene's name",
+    "significance is not effect size: with about a thousand lines a shift of 0.05 gene-effect units reaches p = 0.015, so every row carries the two group medians beside the p-value",
+    "a damaging-mutation call is a prediction about a variant's consequence, not a measured absence of protein, and a heterozygous damaging mutation is counted as loss"
+  ],
+  "top_hits": [
+    {
+      "lost": "MTAP",
+      "loss": "loss",
+      "dependency": "WDR77",
+      "lines_lost": 177,
+      "lines_intact": 771,
+      "median_effect_lost": -1.635,
+      "median_effect_intact": -1.288,
+      "median_difference": -0.347,
+      "cliffs_delta": -0.441,
+      "p": 0.0,
+      "q": 0.0,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WDR77 dependency is stronger in cell lines with MTAP loss (n=177 lost vs 771 intact, Cliff's delta -0.441, q=0.0)",
+        "level": "computational",
+        "confidence": 0.641,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "ARID1A",
+      "loss": "loss",
+      "dependency": "ARID1B",
+      "lines_lost": 121,
+      "lines_intact": 865,
+      "median_effect_lost": -0.116,
+      "median_effect_intact": 0.021,
+      "median_difference": -0.137,
+      "cliffs_delta": -0.428,
+      "p": 0.0,
+      "q": 0.0,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "ARID1B dependency is stronger in cell lines with ARID1A loss (n=121 lost vs 865 intact, Cliff's delta -0.428, q=0.0)",
+        "level": "computational",
+        "confidence": 0.628,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "MTAP",
+      "loss": "loss",
+      "dependency": "PRMT5",
+      "lines_lost": 177,
+      "lines_intact": 771,
+      "median_effect_lost": -1.132,
+      "median_effect_intact": -0.975,
+      "median_difference": -0.158,
+      "cliffs_delta": -0.36,
+      "p": 0.0,
+      "q": 0.0,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "PRMT5 dependency is stronger in cell lines with MTAP loss (n=177 lost vs 771 intact, Cliff's delta -0.36, q=0.0)",
+        "level": "computational",
+        "confidence": 0.56,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "CDKN2B",
+      "loss": "loss",
+      "dependency": "WDR77",
+      "lines_lost": 274,
+      "lines_intact": 675,
+      "median_effect_lost": -1.472,
+      "median_effect_intact": -1.279,
+      "median_difference": -0.193,
+      "cliffs_delta": -0.286,
+      "p": 0.0,
+      "q": 0.0,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WDR77 dependency is stronger in cell lines with CDKN2B loss (n=274 lost vs 675 intact, Cliff's delta -0.286, q=0.0)",
+        "level": "computational",
+        "confidence": 0.486,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "CDKN2A",
+      "loss": "loss",
+      "dependency": "WDR77",
+      "lines_lost": 427,
+      "lines_intact": 538,
+      "median_effect_lost": -1.417,
+      "median_effect_intact": -1.272,
+      "median_difference": -0.145,
+      "cliffs_delta": -0.245,
+      "p": 0.0,
+      "q": 0.0,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WDR77 dependency is stronger in cell lines with CDKN2A loss (n=427 lost vs 538 intact, Cliff's delta -0.245, q=0.0)",
+        "level": "computational",
+        "confidence": 0.445,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "ARID1A",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 121,
+      "lines_intact": 865,
+      "median_effect_lost": -0.136,
+      "median_effect_intact": -0.049,
+      "median_difference": -0.087,
+      "cliffs_delta": -0.339,
+      "p": 0.0,
+      "q": 0.0,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with ARID1A loss (n=121 lost vs 865 intact, Cliff's delta -0.339, q=0.0)",
+        "level": "computational",
+        "confidence": 0.539,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "SMARCA4",
+      "loss": "loss",
+      "dependency": "SMARCA2",
+      "lines_lost": 63,
+      "lines_intact": 899,
+      "median_effect_lost": -0.122,
+      "median_effect_intact": 0.013,
+      "median_difference": -0.135,
+      "cliffs_delta": -0.443,
+      "p": 0.0,
+      "q": 1e-05,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "SMARCA2 dependency is stronger in cell lines with SMARCA4 loss (n=63 lost vs 899 intact, Cliff's delta -0.443, q=0.0)",
+        "level": "computational",
+        "confidence": 0.643,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "EP300",
+      "loss": "loss",
+      "dependency": "CREBBP",
+      "lines_lost": 81,
+      "lines_intact": 884,
+      "median_effect_lost": -0.188,
+      "median_effect_intact": 0.028,
+      "median_difference": -0.215,
+      "cliffs_delta": -0.393,
+      "p": 0.0,
+      "q": 1e-05,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "CREBBP dependency is stronger in cell lines with EP300 loss (n=81 lost vs 884 intact, Cliff's delta -0.393, q=0.0)",
+        "level": "computational",
+        "confidence": 0.593,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "KMT2D",
+      "loss": "loss",
+      "dependency": "RAD50",
+      "lines_lost": 103,
+      "lines_intact": 880,
+      "median_effect_lost": -0.122,
+      "median_effect_intact": 0.006,
+      "median_difference": -0.128,
+      "cliffs_delta": -0.324,
+      "p": 0.0,
+      "q": 8e-05,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "RAD50 dependency is stronger in cell lines with KMT2D loss (n=103 lost vs 880 intact, Cliff's delta -0.324, q=0.0001)",
+        "level": "computational",
+        "confidence": 0.524,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "KMT2D",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 103,
+      "lines_intact": 880,
+      "median_effect_lost": -0.144,
+      "median_effect_intact": -0.05,
+      "median_difference": -0.094,
+      "cliffs_delta": -0.323,
+      "p": 0.0,
+      "q": 8e-05,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with KMT2D loss (n=103 lost vs 880 intact, Cliff's delta -0.323, q=0.0001)",
+        "level": "computational",
+        "confidence": 0.523,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "ARID1A",
+      "loss": "loss",
+      "dependency": "ARID2",
+      "lines_lost": 121,
+      "lines_intact": 865,
+      "median_effect_lost": -0.458,
+      "median_effect_intact": -0.337,
+      "median_difference": -0.121,
+      "cliffs_delta": -0.286,
+      "p": 0.0,
+      "q": 0.00031,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "ARID2 dependency is stronger in cell lines with ARID1A loss (n=121 lost vs 865 intact, Cliff's delta -0.286, q=0.0003)",
+        "level": "computational",
+        "confidence": 0.485,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "MSH3",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 32,
+      "lines_intact": 925,
+      "median_effect_lost": -0.311,
+      "median_effect_intact": -0.049,
+      "median_difference": -0.261,
+      "cliffs_delta": -0.496,
+      "p": 1e-06,
+      "q": 0.00146,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with MSH3 loss (n=32 lost vs 925 intact, Cliff's delta -0.496, q=0.0015)",
+        "level": "computational",
+        "confidence": 0.689,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "ARID1A",
+      "loss": "loss",
+      "dependency": "KDM6A",
+      "lines_lost": 121,
+      "lines_intact": 865,
+      "median_effect_lost": 0.045,
+      "median_effect_intact": 0.106,
+      "median_difference": -0.06,
+      "cliffs_delta": -0.26,
+      "p": 2e-06,
+      "q": 0.0026,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "KDM6A dependency is stronger in cell lines with ARID1A loss (n=121 lost vs 865 intact, Cliff's delta -0.26, q=0.0026)",
+        "level": "computational",
+        "confidence": 0.453,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "RECQL",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 10,
+      "lines_intact": 941,
+      "median_effect_lost": -0.901,
+      "median_effect_intact": -0.05,
+      "median_difference": -0.85,
+      "cliffs_delta": -0.823,
+      "p": 4e-06,
+      "q": 0.0052,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with RECQL loss (n=10 lost vs 941 intact, Cliff's delta -0.823, q=0.0052)",
+        "level": "computational",
+        "confidence": 0.674,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "SMARCA4",
+      "loss": "loss",
+      "dependency": "RBBP8",
+      "lines_lost": 63,
+      "lines_intact": 899,
+      "median_effect_lost": -1.028,
+      "median_effect_intact": -0.901,
+      "median_difference": -0.127,
+      "cliffs_delta": -0.331,
+      "p": 5e-06,
+      "q": 0.00671,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "RBBP8 dependency is stronger in cell lines with SMARCA4 loss (n=63 lost vs 899 intact, Cliff's delta -0.331, q=0.0067)",
+        "level": "computational",
+        "confidence": 0.509,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "CDKN2B",
+      "loss": "loss",
+      "dependency": "PRMT5",
+      "lines_lost": 274,
+      "lines_intact": 675,
+      "median_effect_lost": -1.049,
+      "median_effect_intact": -0.992,
+      "median_difference": -0.058,
+      "cliffs_delta": -0.182,
+      "p": 5e-06,
+      "q": 0.00671,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "PRMT5 dependency is stronger in cell lines with CDKN2B loss (n=274 lost vs 675 intact, Cliff's delta -0.182, q=0.0067)",
+        "level": "computational",
+        "confidence": 0.37,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "KMT2D",
+      "loss": "loss",
+      "dependency": "RIF1",
+      "lines_lost": 103,
+      "lines_intact": 880,
+      "median_effect_lost": -0.396,
+      "median_effect_intact": -0.325,
+      "median_difference": -0.071,
+      "cliffs_delta": -0.264,
+      "p": 6e-06,
+      "q": 0.00673,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "RIF1 dependency is stronger in cell lines with KMT2D loss (n=103 lost vs 880 intact, Cliff's delta -0.264, q=0.0067)",
+        "level": "computational",
+        "confidence": 0.446,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "CDKN2A",
+      "loss": "loss",
+      "dependency": "PRMT5",
+      "lines_lost": 427,
+      "lines_intact": 538,
+      "median_effect_lost": -1.044,
+      "median_effect_intact": -0.974,
+      "median_difference": -0.07,
+      "cliffs_delta": -0.163,
+      "p": 7e-06,
+      "q": 0.00771,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "PRMT5 dependency is stronger in cell lines with CDKN2A loss (n=427 lost vs 538 intact, Cliff's delta -0.163, q=0.0077)",
+        "level": "computational",
+        "confidence": 0.35,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "RAD50",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 27,
+      "lines_intact": 929,
+      "median_effect_lost": -0.783,
+      "median_effect_intact": -0.05,
+      "median_difference": -0.733,
+      "cliffs_delta": -0.482,
+      "p": 1e-05,
+      "q": 0.01007,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with RAD50 loss (n=27 lost vs 929 intact, Cliff's delta -0.482, q=0.0101)",
+        "level": "computational",
+        "confidence": 0.633,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "CREBBP",
+      "loss": "loss",
+      "dependency": "EP300",
+      "lines_lost": 56,
+      "lines_intact": 901,
+      "median_effect_lost": -0.489,
+      "median_effect_intact": -0.253,
+      "median_difference": -0.236,
+      "cliffs_delta": -0.335,
+      "p": 1.2e-05,
+      "q": 0.01228,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "EP300 dependency is stronger in cell lines with CREBBP loss (n=56 lost vs 901 intact, Cliff's delta -0.335, q=0.0123)",
+        "level": "computational",
+        "confidence": 0.494,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "TP53BP1",
+      "loss": "loss",
+      "dependency": "RBBP8",
+      "lines_lost": 28,
+      "lines_intact": 929,
+      "median_effect_lost": -1.088,
+      "median_effect_intact": -0.906,
+      "median_difference": -0.182,
+      "cliffs_delta": -0.459,
+      "p": 1.7e-05,
+      "q": 0.01601,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "RBBP8 dependency is stronger in cell lines with TP53BP1 loss (n=28 lost vs 929 intact, Cliff's delta -0.459, q=0.016)",
+        "level": "computational",
+        "confidence": 0.586,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "MSH6",
+      "loss": "loss",
+      "dependency": "KDM6A",
+      "lines_lost": 42,
+      "lines_intact": 917,
+      "median_effect_lost": 0.016,
+      "median_effect_intact": 0.103,
+      "median_difference": -0.088,
+      "cliffs_delta": -0.367,
+      "p": 2.8e-05,
+      "q": 0.02558,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "KDM6A dependency is stronger in cell lines with MSH6 loss (n=42 lost vs 917 intact, Cliff's delta -0.367, q=0.0256)",
+        "level": "computational",
+        "confidence": 0.473,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "ATAD5",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 16,
+      "lines_intact": 938,
+      "median_effect_lost": -0.498,
+      "median_effect_intact": -0.05,
+      "median_difference": -0.448,
+      "cliffs_delta": -0.576,
+      "p": 3.8e-05,
+      "q": 0.03303,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with ATAD5 loss (n=16 lost vs 938 intact, Cliff's delta -0.576, q=0.033)",
+        "level": "computational",
+        "confidence": 0.535,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "ARID1B",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 42,
+      "lines_intact": 923,
+      "median_effect_lost": -0.174,
+      "median_effect_intact": -0.05,
+      "median_difference": -0.124,
+      "cliffs_delta": -0.354,
+      "p": 5e-05,
+      "q": 0.03832,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with ARID1B loss (n=42 lost vs 923 intact, Cliff's delta -0.354, q=0.0383)",
+        "level": "computational",
+        "confidence": 0.418,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "KMT2C",
+      "loss": "loss",
+      "dependency": "KMT2D",
+      "lines_lost": 58,
+      "lines_intact": 911,
+      "median_effect_lost": -0.473,
+      "median_effect_intact": -0.331,
+      "median_difference": -0.142,
+      "cliffs_delta": -0.305,
+      "p": 4.7e-05,
+      "q": 0.03832,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "KMT2D dependency is stronger in cell lines with KMT2C loss (n=58 lost vs 911 intact, Cliff's delta -0.305, q=0.0383)",
+        "level": "computational",
+        "confidence": 0.388,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "ARID1A",
+      "loss": "loss",
+      "dependency": "RBBP8",
+      "lines_lost": 121,
+      "lines_intact": 865,
+      "median_effect_lost": -0.983,
+      "median_effect_intact": -0.9,
+      "median_difference": -0.083,
+      "cliffs_delta": -0.218,
+      "p": 5e-05,
+      "q": 0.03832,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "RBBP8 dependency is stronger in cell lines with ARID1A loss (n=121 lost vs 865 intact, Cliff's delta -0.218, q=0.0383)",
+        "level": "computational",
+        "confidence": 0.334,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "MTAP",
+      "loss": "loss",
+      "dependency": "MAT2A",
+      "lines_lost": 177,
+      "lines_intact": 771,
+      "median_effect_lost": -1.867,
+      "median_effect_intact": -1.724,
+      "median_difference": -0.144,
+      "cliffs_delta": -0.186,
+      "p": 5.4e-05,
+      "q": 0.03924,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "MAT2A dependency is stronger in cell lines with MTAP loss (n=177 lost vs 771 intact, Cliff's delta -0.186, q=0.0392)",
+        "level": "computational",
+        "confidence": 0.313,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "RAD51AP1",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 11,
+      "lines_intact": 940,
+      "median_effect_lost": -0.433,
+      "median_effect_intact": -0.05,
+      "median_difference": -0.383,
+      "cliffs_delta": -0.669,
+      "p": 6.7e-05,
+      "q": 0.0456,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with RAD51AP1 loss (n=11 lost vs 940 intact, Cliff's delta -0.669, q=0.0456)",
+        "level": "computational",
+        "confidence": 0.472,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "BRCA1",
+      "loss": "loss",
+      "dependency": "HELQ",
+      "lines_lost": 21,
+      "lines_intact": 934,
+      "median_effect_lost": -0.148,
+      "median_effect_intact": -0.061,
+      "median_difference": -0.087,
+      "cliffs_delta": -0.487,
+      "p": 6.6e-05,
+      "q": 0.0456,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "HELQ dependency is stronger in cell lines with BRCA1 loss (n=21 lost vs 934 intact, Cliff's delta -0.487, q=0.0456)",
+        "level": "computational",
+        "confidence": 0.465,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "EXO1",
+      "loss": "loss",
+      "dependency": "PARP2",
+      "lines_lost": 9,
+      "lines_intact": 944,
+      "median_effect_lost": -0.2,
+      "median_effect_intact": -0.077,
+      "median_difference": -0.124,
+      "cliffs_delta": -0.731,
+      "p": 7.9e-05,
+      "q": 0.04901,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "PARP2 dependency is stronger in cell lines with EXO1 loss (n=9 lost vs 944 intact, Cliff's delta -0.731, q=0.049)",
+        "level": "computational",
+        "confidence": 0.455,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "MSH3",
+      "loss": "loss",
+      "dependency": "XRCC4",
+      "lines_lost": 32,
+      "lines_intact": 925,
+      "median_effect_lost": -0.352,
+      "median_effect_intact": -0.261,
+      "median_difference": -0.091,
+      "cliffs_delta": -0.392,
+      "p": 7.9e-05,
+      "q": 0.04901,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "XRCC4 dependency is stronger in cell lines with MSH3 loss (n=32 lost vs 925 intact, Cliff's delta -0.392, q=0.049)",
+        "level": "computational",
+        "confidence": 0.4,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "KMT2D",
+      "loss": "loss",
+      "dependency": "MRE11",
+      "lines_lost": 103,
+      "lines_intact": 880,
+      "median_effect_lost": -0.461,
+      "median_effect_intact": -0.355,
+      "median_difference": -0.107,
+      "cliffs_delta": -0.228,
+      "p": 7.6e-05,
+      "q": 0.04901,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "MRE11 dependency is stronger in cell lines with KMT2D loss (n=103 lost vs 880 intact, Cliff's delta -0.228, q=0.049)",
+        "level": "computational",
+        "confidence": 0.316,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "BRCA1",
+      "loss": "loss",
+      "dependency": "RAD54B",
+      "lines_lost": 21,
+      "lines_intact": 934,
+      "median_effect_lost": -0.137,
+      "median_effect_intact": -0.085,
+      "median_difference": -0.051,
+      "cliffs_delta": -0.479,
+      "p": 8.6e-05,
+      "q": 0.05152,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "RAD54B dependency is stronger in cell lines with BRCA1 loss (n=21 lost vs 934 intact, Cliff's delta -0.479, q=0.0515)",
+        "level": "computational",
+        "confidence": 0.432,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "POLQ",
+      "loss": "loss",
+      "dependency": "CDKN2B",
+      "lines_lost": 19,
+      "lines_intact": 923,
+      "median_effect_lost": -0.089,
+      "median_effect_intact": 0.044,
+      "median_difference": -0.134,
+      "cliffs_delta": -0.498,
+      "p": 9.9e-05,
+      "q": 0.05777,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "CDKN2B dependency is stronger in cell lines with POLQ loss (n=19 lost vs 923 intact, Cliff's delta -0.498, q=0.0578)",
+        "level": "computational",
+        "confidence": 0.41,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "USP1",
+      "loss": "loss",
+      "dependency": "ZSWIM7",
+      "lines_lost": 7,
+      "lines_intact": 945,
+      "median_effect_lost": -0.251,
+      "median_effect_intact": -0.045,
+      "median_difference": -0.206,
+      "cliffs_delta": -0.812,
+      "p": 0.000106,
+      "q": 0.05835,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "ZSWIM7 dependency is stronger in cell lines with USP1 loss (n=7 lost vs 945 intact, Cliff's delta -0.812, q=0.0584)",
+        "level": "computational",
+        "confidence": 0.408,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "BRCA2",
+      "loss": "loss",
+      "dependency": "WRN",
+      "lines_lost": 37,
+      "lines_intact": 923,
+      "median_effect_lost": -0.175,
+      "median_effect_intact": -0.05,
+      "median_difference": -0.125,
+      "cliffs_delta": -0.359,
+      "p": 0.000106,
+      "q": 0.05835,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "WRN dependency is stronger in cell lines with BRCA2 loss (n=37 lost vs 923 intact, Cliff's delta -0.359, q=0.0584)",
+        "level": "computational",
+        "confidence": 0.35,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "MSH3",
+      "loss": "loss",
+      "dependency": "PNKP",
+      "lines_lost": 32,
+      "lines_intact": 925,
+      "median_effect_lost": -0.517,
+      "median_effect_intact": -0.381,
+      "median_difference": -0.136,
+      "cliffs_delta": -0.381,
+      "p": 0.000124,
+      "q": 0.06633,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "PNKP dependency is stronger in cell lines with MSH3 loss (n=32 lost vs 925 intact, Cliff's delta -0.381, q=0.0663)",
+        "level": "computational",
+        "confidence": 0.328,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "FANCA",
+      "loss": "loss",
+      "dependency": "RAD50",
+      "lines_lost": 16,
+      "lines_intact": 937,
+      "median_effect_lost": -0.175,
+      "median_effect_intact": 0.004,
+      "median_difference": -0.179,
+      "cliffs_delta": -0.53,
+      "p": 0.000137,
+      "q": 0.07132,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "RAD50 dependency is stronger in cell lines with FANCA loss (n=16 lost vs 937 intact, Cliff's delta -0.53, q=0.0713)",
+        "level": "computational",
+        "confidence": 0.343,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "ERCC5",
+      "loss": "loss",
+      "dependency": "SLFN11",
+      "lines_lost": 6,
+      "lines_intact": 945,
+      "median_effect_lost": -0.21,
+      "median_effect_intact": -0.021,
+      "median_difference": -0.19,
+      "cliffs_delta": -0.852,
+      "p": 0.000158,
+      "q": 0.07987,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "SLFN11 dependency is stronger in cell lines with ERCC5 loss (n=6 lost vs 945 intact, Cliff's delta -0.852, q=0.0799)",
+        "level": "computational",
+        "confidence": 0.301,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    },
+    {
+      "lost": "BRCA1",
+      "loss": "loss",
+      "dependency": "CENPX",
+      "lines_lost": 21,
+      "lines_intact": 934,
+      "median_effect_lost": -0.38,
+      "median_effect_intact": -0.224,
+      "median_difference": -0.156,
+      "cliffs_delta": -0.455,
+      "p": 0.000177,
+      "q": 0.08762,
+      "verdict": "recovered",
+      "evidence": {
+        "source": "GenomeOS synthetic-lethality sweep over DepMap 24Q4 Public",
+        "source_type": "prediction",
+        "claim": "CENPX dependency is stronger in cell lines with BRCA1 loss (n=21 lost vs 934 intact, Cliff's delta -0.455, q=0.0876)",
+        "level": "computational",
+        "confidence": 0.256,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      }
+    }
+  ],
+  "not_a_therapy": "A dependency is a hypothesis about a target. No molecule, construct, formulation or protocol follows from it here, and a cell-line dependency is not a clinical effect.",
+  "seconds": 108.5
+}

@@ -1,0 +1,2434 @@
+{
+  "result": "marker_selectivity",
+  "date": "2026-09-16",
+  "claim": "Marker combinations containing at least one approved or clinical surface target (the BENCHMARK set of 16 genes) score above random combinations drawn from the same pool of surface proteins. Declared in advance: supported only if the one-sided rank-test p is at or below 0.05, Cliff's delta is at least 0.1, and that delta is above the 95th percentile of a placebo null in which gene sets of the same size are drawn at random from the same pool. A comparison set is not neutral because it was called random: the null says what the comparison reads when the labels carry no information, and the result is read against that number rather than against zero.",
+  "thresholds": {
+    "present_log2_tpm_plus_1": 3.0,
+    "not_marker_protects_at_ntpm": 10.0,
+    "co_expression_floor": 0.25,
+    "min_lines_per_lineage": 15,
+    "excluded_lines": "137 models DepMap calls Non-Cancerous",
+    "pool_size": 250,
+    "score": "coverage / (1 + healthy_burden_nTPM / 10), where the burden is the worst essential healthy tissue the gate still reaches, floored at a quarter of its highest required marker",
+    "essential_tissues": [
+      "heart muscle",
+      "cerebral cortex",
+      "cerebellum",
+      "hypothalamus",
+      "bone marrow",
+      "lung",
+      "liver",
+      "kidney"
+    ]
+  },
+  "benchmark_set": {
+    "ERBB2": "trastuzumab, pertuzumab, trastuzumab deruxtecan (approved)",
+    "EGFR": "cetuximab, panitumumab (approved)",
+    "CD19": "blinatumomab, tisagenlecleucel (approved)",
+    "MS4A1": "rituximab, obinutuzumab (approved)",
+    "CD22": "inotuzumab ozogamicin, moxetumomab (approved)",
+    "TNFRSF17": "belantamab, teclistamab, idecabtagene (approved; BCMA)",
+    "CD38": "daratumumab, isatuximab (approved)",
+    "CD33": "gemtuzumab ozogamicin (approved)",
+    "TACSTD2": "sacituzumab govitecan (approved; TROP2)",
+    "FOLH1": "lutetium-177 PSMA-617 (approved; PSMA)",
+    "MSLN": "mesothelin ADCs and CAR T (clinical)",
+    "CEACAM5": "tusamitamab ravtansine (clinical)",
+    "DLL3": "tarlatamab (approved; small-cell lung)",
+    "CLDN18": "zolbetuximab (approved; claudin-18.2)",
+    "GPC3": "glypican-3 CAR T (clinical)",
+    "CD70": "CD70 CAR T and ADCs (clinical)"
+  },
+  "data": {
+    "provenance": {
+      "release": "DepMap 24Q4 Public",
+      "doi": "10.25452/figshare.plus.27993248.v1",
+      "figshare_article": "27993248",
+      "licence": "DepMap Public 24Q4, Broad Institute, CC BY 4.0",
+      "citation": "DepMap, Broad (2024). DepMap 24Q4 Public. Figshare+. doi:10.25452/figshare.plus.27993248.v1",
+      "files": {
+        "gene_effect": {
+          "figshare_file": "51064667",
+          "name": "CRISPRGeneEffect.csv",
+          "what": "Chronos gene effect, copy-number corrected and screen-quality corrected"
+        },
+        "damaging": {
+          "figshare_file": "51065747",
+          "name": "OmicsSomaticMutationsMatrixDamaging.csv",
+          "what": "1 or 2 where a gene carries at least one likely loss-of-function mutation"
+        },
+        "absolute_cn": {
+          "figshare_file": "51065303",
+          "name": "OmicsAbsoluteCNGene.csv",
+          "what": "PureCN absolute copy number per gene; segmental-duplication genes are masked"
+        },
+        "signatures": {
+          "figshare_file": "51065726",
+          "name": "OmicsSignatures.csv",
+          "what": "model-level MSIsensor2 MSI score, ploidy, LoH fraction, WGD, CIN, aneuploidy"
+        },
+        "model": {
+          "figshare_file": "51065297",
+          "name": "Model.csv",
+          "what": "one row per cell line: lineage, Oncotree disease, origin"
+        },
+        "expression": {
+          "figshare_file": "51065489",
+          "name": "OmicsExpressionProteinCodingGenesTPMLogp1.csv",
+          "what": "log2(TPM+1) per protein-coding gene per line, RSEM unstranded"
+        }
+      },
+      "storage": "streamed over HTTP and discarded; only the requested gene columns are cached",
+      "limits": [
+        "cell lines, not patient tumours: no stroma, no immune system, no tissue architecture, and a growth-selected subset of the disease",
+        "a CRISPR gene effect is a measurement of proliferation in culture over days to weeks, not of what a drug would do in a patient",
+        "the damaging-mutation matrix is a call about a variant's predicted consequence, not a measured loss of protein",
+        "genes overlapping segmental duplications are masked in the copy-number matrices, so an absent copy-number value is not a copy-number-neutral gene"
+      ]
+    },
+    "healthy_atlas": {
+      "source": "Human Protein Atlas consensus tissue RNA, CC BY-SA 4.0, packaged in genomeos/therapeutics/data/normal_tissue.json.gz",
+      "genes": 5588,
+      "genes_with_essential_tissue_values": 5588
+    },
+    "cell_lines": 1588,
+    "lineages": {
+      "Biliary Tract": 43,
+      "Bladder/Urinary Tract": 37,
+      "Bone": 55,
+      "Bowel": 86,
+      "Breast": 69,
+      "CNS/Brain": 94,
+      "Cervix": 20,
+      "Esophagus/Stomach": 77,
+      "Eye": 17,
+      "Head and Neck": 74,
+      "Kidney": 49,
+      "Liver": 26,
+      "Lung": 208,
+      "Lymphoid": 185,
+      "Myeloid": 74,
+      "Ovary/Fallopian Tube": 66,
+      "Pancreas": 54,
+      "Peripheral Nervous System": 45,
+      "Pleura": 22,
+      "Skin": 120,
+      "Soft Tissue": 76,
+      "Thyroid": 22,
+      "Uterus": 43
+    },
+    "genes_in_both": 5410,
+    "expression_genes_missing_from_depmap": 178
+  },
+  "single_markers_scored": 4781,
+  "combinations_scored": 154991,
+  "top_single_markers": [
+    {
+      "required": [
+        "ZACN"
+      ],
+      "lineage": "Liver",
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "score": 0.9615
+    },
+    {
+      "required": [
+        "TSPAN10"
+      ],
+      "lineage": "Eye",
+      "coverage": 0.882,
+      "healthy_burden_ntpm": 0.1,
+      "score": 0.8736
+    },
+    {
+      "required": [
+        "MED17"
+      ],
+      "lineage": "Bladder/Urinary Tract",
+      "coverage": 1.0,
+      "healthy_burden_ntpm": 1.6,
+      "score": 0.8621
+    },
+    {
+      "required": [
+        "ALG6"
+      ],
+      "lineage": "Bladder/Urinary Tract",
+      "coverage": 0.973,
+      "healthy_burden_ntpm": 1.4,
+      "score": 0.8535
+    },
+    {
+      "required": [
+        "GPR87"
+      ],
+      "lineage": "Head and Neck",
+      "coverage": 0.878,
+      "healthy_burden_ntpm": 0.3,
+      "score": 0.8528
+    },
+    {
+      "required": [
+        "DSG3"
+      ],
+      "lineage": "Head and Neck",
+      "coverage": 0.838,
+      "healthy_burden_ntpm": 0.2,
+      "score": 0.8214
+    },
+    {
+      "required": [
+        "MYEOV"
+      ],
+      "lineage": "Pancreas",
+      "coverage": 0.907,
+      "healthy_burden_ntpm": 1.2,
+      "score": 0.8102
+    },
+    {
+      "required": [
+        "CHRNA5"
+      ],
+      "lineage": "Bladder/Urinary Tract",
+      "coverage": 0.892,
+      "healthy_burden_ntpm": 1.1,
+      "score": 0.8035
+    },
+    {
+      "required": [
+        "DSC3"
+      ],
+      "lineage": "Head and Neck",
+      "coverage": 0.824,
+      "healthy_burden_ntpm": 0.3,
+      "score": 0.8003
+    },
+    {
+      "required": [
+        "SLC35E3"
+      ],
+      "lineage": "Liver",
+      "coverage": 0.885,
+      "healthy_burden_ntpm": 1.3,
+      "score": 0.7828
+    },
+    {
+      "required": [
+        "CD70"
+      ],
+      "lineage": "Kidney",
+      "coverage": 0.816,
+      "healthy_burden_ntpm": 0.8,
+      "score": 0.7559
+    },
+    {
+      "required": [
+        "PAQR3"
+      ],
+      "lineage": "CNS/Brain",
+      "coverage": 0.904,
+      "healthy_burden_ntpm": 2.1,
+      "score": 0.7473
+    },
+    {
+      "required": [
+        "SLC24A5"
+      ],
+      "lineage": "Eye",
+      "coverage": 0.765,
+      "healthy_burden_ntpm": 0.3,
+      "score": 0.7424
+    },
+    {
+      "required": [
+        "ATR"
+      ],
+      "lineage": "Biliary Tract",
+      "coverage": 1.0,
+      "healthy_burden_ntpm": 3.5,
+      "score": 0.7407
+    },
+    {
+      "required": [
+        "GJB5"
+      ],
+      "lineage": "Head and Neck",
+      "coverage": 0.824,
+      "healthy_burden_ntpm": 1.2,
+      "score": 0.736
+    }
+  ],
+  "top_combinations": [
+    {
+      "required": [
+        "ITGAE"
+      ],
+      "excluded": [
+        "CD33"
+      ],
+      "logic": "A and not C",
+      "lineage": "Ovary/Fallopian Tube",
+      "lines": 66,
+      "coverage": 1.0,
+      "healthy_burden_ntpm": 0.1,
+      "worst_essential_tissue": "liver",
+      "score": 0.9901,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ITGAE and not CD33 addresses 100% of Ovary/Fallopian Tube lines while the worst essential healthy tissue carries 0.1 nTPM (liver)",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ITGAE"
+      ],
+      "excluded": [
+        "RPGR"
+      ],
+      "logic": "A and not C",
+      "lineage": "Kidney",
+      "lines": 49,
+      "coverage": 1.0,
+      "healthy_burden_ntpm": 0.1,
+      "worst_essential_tissue": "liver",
+      "score": 0.9901,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ITGAE and not RPGR addresses 100% of Kidney lines while the worst essential healthy tissue carries 0.1 nTPM (liver)",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ITGAE"
+      ],
+      "excluded": [
+        "TACSTD2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 1.0,
+      "healthy_burden_ntpm": 0.1,
+      "worst_essential_tissue": "liver",
+      "score": 0.9901,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ITGAE and not TACSTD2 addresses 100% of Liver lines while the worst essential healthy tissue carries 0.1 nTPM (liver)",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [],
+      "logic": "A",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "ABCB5"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not ABCB5 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "ADCY8"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not ADCY8 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "ADGRG5"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not ADGRG5 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "ALDH3B2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not ALDH3B2 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "ALK"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not ALK addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "BCL2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not BCL2 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "CD19"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not CD19 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "CD38"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not CD38 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "CD96"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not CD96 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "CHRNA3"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not CHRNA3 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "CHRNA7"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not CHRNA7 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "CHRNB4"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not CHRNB4 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "CLCA2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not CLCA2 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "CLDN18"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not CLDN18 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "DCST1"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not DCST1 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "DCT"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not DCT addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "DLL3"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not DLL3 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "DSG3"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not DSG3 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "ERN2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not ERN2 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "FAM163A"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not FAM163A addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "GJB5"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not GJB5 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "GPR34"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not GPR34 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "GPR87"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not GPR87 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "HTR2B"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not HTR2B addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "LILRB4"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not LILRB4 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "LTK"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not LTK addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "LYPD3"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not LYPD3 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "MLANA"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not MLANA addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "MS4A1"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not MS4A1 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "OCA2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not OCA2 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "PCDH11Y"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not PCDH11Y addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "PKHD1L1"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not PKHD1L1 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "PLN"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not PLN addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "SCIMP"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not SCIMP addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "SERPINB13"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not SERPINB13 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    },
+    {
+      "required": [
+        "ZACN"
+      ],
+      "excluded": [
+        "SIT1"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "lines": 26,
+      "coverage": 0.962,
+      "healthy_burden_ntpm": 0.0,
+      "worst_essential_tissue": null,
+      "score": 0.9615,
+      "evidence": {
+        "source": "GenomeOS marker-selectivity screen (DepMap cell-line RNA against the packaged HPA atlas)",
+        "source_type": "prediction",
+        "claim": "ZACN and not SIT1 addresses 96% of Liver lines while the worst essential healthy tissue carries 0 nTPM",
+        "level": "computational",
+        "confidence": 0.5,
+        "patient_derived": false,
+        "retrieved_at": "2026-09-16"
+      },
+      "confidence": 0.5
+    }
+  ],
+  "combinations_that_beat_their_best_single_marker": 37,
+  "gains_by_logic": {
+    "A and not C": 37
+  },
+  "biggest_gains_over_a_single_marker": [
+    {
+      "required": [
+        "ITGAE"
+      ],
+      "excluded": [
+        "CD33"
+      ],
+      "logic": "A and not C",
+      "lineage": "Ovary/Fallopian Tube",
+      "coverage": 1.0,
+      "score": 0.9901,
+      "best_single_marker_score": 0.6173,
+      "gain": 0.3728
+    },
+    {
+      "required": [
+        "ITGAE"
+      ],
+      "excluded": [
+        "RPGR"
+      ],
+      "logic": "A and not C",
+      "lineage": "Kidney",
+      "coverage": 1.0,
+      "score": 0.9901,
+      "best_single_marker_score": 0.6173,
+      "gain": 0.3728
+    },
+    {
+      "required": [
+        "ITGAE"
+      ],
+      "excluded": [
+        "TACSTD2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 1.0,
+      "score": 0.9901,
+      "best_single_marker_score": 0.6173,
+      "gain": 0.3728
+    },
+    {
+      "required": [
+        "ESPL1"
+      ],
+      "excluded": [
+        "TACSTD2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 1.0,
+      "score": 0.9434,
+      "best_single_marker_score": 0.5556,
+      "gain": 0.3878
+    },
+    {
+      "required": [
+        "MELK"
+      ],
+      "excluded": [
+        "CD33"
+      ],
+      "logic": "A and not C",
+      "lineage": "Ovary/Fallopian Tube",
+      "coverage": 1.0,
+      "score": 0.9434,
+      "best_single_marker_score": 0.5102,
+      "gain": 0.4332
+    },
+    {
+      "required": [
+        "MELK"
+      ],
+      "excluded": [
+        "TACSTD2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 1.0,
+      "score": 0.9434,
+      "best_single_marker_score": 0.5102,
+      "gain": 0.4332
+    },
+    {
+      "required": [
+        "MELK"
+      ],
+      "excluded": [
+        "RPGR"
+      ],
+      "logic": "A and not C",
+      "lineage": "Kidney",
+      "coverage": 0.98,
+      "score": 0.9241,
+      "best_single_marker_score": 0.5102,
+      "gain": 0.4139
+    },
+    {
+      "required": [
+        "ESPL1"
+      ],
+      "excluded": [
+        "CD38"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5556,
+      "gain": 0.3618
+    },
+    {
+      "required": [
+        "ESPL1"
+      ],
+      "excluded": [
+        "CD96"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5556,
+      "gain": 0.3618
+    },
+    {
+      "required": [
+        "ESPL1"
+      ],
+      "excluded": [
+        "MS4A1"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5556,
+      "gain": 0.3618
+    },
+    {
+      "required": [
+        "ESPL1"
+      ],
+      "excluded": [
+        "TNFSF8"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5556,
+      "gain": 0.3618
+    },
+    {
+      "required": [
+        "MELK"
+      ],
+      "excluded": [
+        "CD22"
+      ],
+      "logic": "A and not C",
+      "lineage": "Bladder/Urinary Tract",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5102,
+      "gain": 0.4072
+    },
+    {
+      "required": [
+        "MELK"
+      ],
+      "excluded": [
+        "CD38"
+      ],
+      "logic": "A and not C",
+      "lineage": "Cervix",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5102,
+      "gain": 0.4072
+    },
+    {
+      "required": [
+        "MELK"
+      ],
+      "excluded": [
+        "CD96"
+      ],
+      "logic": "A and not C",
+      "lineage": "Cervix",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5102,
+      "gain": 0.4072
+    },
+    {
+      "required": [
+        "MELK"
+      ],
+      "excluded": [
+        "MS4A1"
+      ],
+      "logic": "A and not C",
+      "lineage": "Cervix",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5102,
+      "gain": 0.4072
+    },
+    {
+      "required": [
+        "MELK"
+      ],
+      "excluded": [
+        "TNFSF8"
+      ],
+      "logic": "A and not C",
+      "lineage": "Cervix",
+      "coverage": 1.0,
+      "score": 0.9174,
+      "best_single_marker_score": 0.5102,
+      "gain": 0.4072
+    },
+    {
+      "required": [
+        "BMPR1A"
+      ],
+      "excluded": [
+        "SLC25A27"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pleura",
+      "coverage": 0.909,
+      "score": 0.9091,
+      "best_single_marker_score": 0.5747,
+      "gain": 0.3344
+    },
+    {
+      "required": [
+        "EGFR"
+      ],
+      "excluded": [
+        "SLC25A27"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pleura",
+      "coverage": 0.909,
+      "score": 0.9091,
+      "best_single_marker_score": 0.237,
+      "gain": 0.6721
+    },
+    {
+      "required": [
+        "CDCP1"
+      ],
+      "excluded": [
+        "PLN"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pancreas",
+      "coverage": 0.981,
+      "score": 0.9088,
+      "best_single_marker_score": 0.5545,
+      "gain": 0.3543
+    },
+    {
+      "required": [
+        "OSMR"
+      ],
+      "excluded": [
+        "SLC25A27"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pleura",
+      "coverage": 0.909,
+      "score": 0.9001,
+      "best_single_marker_score": 0.1848,
+      "gain": 0.7153
+    },
+    {
+      "required": [
+        "MYEOV"
+      ],
+      "excluded": [
+        "FOLH1"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pancreas",
+      "coverage": 0.907,
+      "score": 0.8984,
+      "best_single_marker_score": 0.8102,
+      "gain": 0.0882
+    },
+    {
+      "required": [
+        "MYEOV"
+      ],
+      "excluded": [
+        "KLB"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pancreas",
+      "coverage": 0.907,
+      "score": 0.8984,
+      "best_single_marker_score": 0.8102,
+      "gain": 0.0882
+    },
+    {
+      "required": [
+        "MYEOV"
+      ],
+      "excluded": [
+        "TNFSF14"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pancreas",
+      "coverage": 0.907,
+      "score": 0.8984,
+      "best_single_marker_score": 0.8102,
+      "gain": 0.0882
+    },
+    {
+      "required": [
+        "MST1R"
+      ],
+      "excluded": [
+        "PLN"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pancreas",
+      "coverage": 0.944,
+      "score": 0.891,
+      "best_single_marker_score": 0.6213,
+      "gain": 0.2697
+    },
+    {
+      "required": [
+        "CIP2A"
+      ],
+      "excluded": [
+        "CD38"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 0.962,
+      "score": 0.8821,
+      "best_single_marker_score": 0.7019,
+      "gain": 0.1802
+    },
+    {
+      "required": [
+        "ESPL1"
+      ],
+      "excluded": [
+        "CD22"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 0.962,
+      "score": 0.8821,
+      "best_single_marker_score": 0.5556,
+      "gain": 0.3265
+    },
+    {
+      "required": [
+        "GPR87"
+      ],
+      "excluded": [
+        "CLDN18"
+      ],
+      "logic": "A and not C",
+      "lineage": "Head and Neck",
+      "coverage": 0.878,
+      "score": 0.8784,
+      "best_single_marker_score": 0.8528,
+      "gain": 0.0256
+    },
+    {
+      "required": [
+        "GPR87"
+      ],
+      "excluded": [
+        "GPR34"
+      ],
+      "logic": "A and not C",
+      "lineage": "Head and Neck",
+      "coverage": 0.878,
+      "score": 0.8784,
+      "best_single_marker_score": 0.8528,
+      "gain": 0.0256
+    },
+    {
+      "required": [
+        "GPR87"
+      ],
+      "excluded": [
+        "LILRB4"
+      ],
+      "logic": "A and not C",
+      "lineage": "Head and Neck",
+      "coverage": 0.878,
+      "score": 0.8784,
+      "best_single_marker_score": 0.8528,
+      "gain": 0.0256
+    },
+    {
+      "required": [
+        "GPR87"
+      ],
+      "excluded": [
+        "LTK"
+      ],
+      "logic": "A and not C",
+      "lineage": "Head and Neck",
+      "coverage": 0.878,
+      "score": 0.8784,
+      "best_single_marker_score": 0.8528,
+      "gain": 0.0256
+    },
+    {
+      "required": [
+        "GPR87"
+      ],
+      "excluded": [
+        "PLN"
+      ],
+      "logic": "A and not C",
+      "lineage": "Head and Neck",
+      "coverage": 0.878,
+      "score": 0.8784,
+      "best_single_marker_score": 0.8528,
+      "gain": 0.0256
+    },
+    {
+      "required": [
+        "GPR87"
+      ],
+      "excluded": [
+        "SCIMP"
+      ],
+      "logic": "A and not C",
+      "lineage": "Head and Neck",
+      "coverage": 0.878,
+      "score": 0.8784,
+      "best_single_marker_score": 0.8528,
+      "gain": 0.0256
+    },
+    {
+      "required": [
+        "CDCP1"
+      ],
+      "excluded": [
+        "GPC3"
+      ],
+      "logic": "A and not C",
+      "lineage": "Pancreas",
+      "coverage": 0.944,
+      "score": 0.8745,
+      "best_single_marker_score": 0.5545,
+      "gain": 0.32
+    },
+    {
+      "required": [
+        "CIP2A"
+      ],
+      "excluded": [
+        "CD96"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 0.962,
+      "score": 0.8741,
+      "best_single_marker_score": 0.7019,
+      "gain": 0.1722
+    },
+    {
+      "required": [
+        "CIP2A"
+      ],
+      "excluded": [
+        "MS4A1"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 0.962,
+      "score": 0.8741,
+      "best_single_marker_score": 0.7019,
+      "gain": 0.1722
+    },
+    {
+      "required": [
+        "CIP2A"
+      ],
+      "excluded": [
+        "TACSTD2"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 0.962,
+      "score": 0.8741,
+      "best_single_marker_score": 0.7019,
+      "gain": 0.1722
+    },
+    {
+      "required": [
+        "CIP2A"
+      ],
+      "excluded": [
+        "TNFSF8"
+      ],
+      "logic": "A and not C",
+      "lineage": "Liver",
+      "coverage": 0.962,
+      "score": 0.8741,
+      "best_single_marker_score": 0.7019,
+      "gain": 0.1722
+    }
+  ],
+  "benchmark": {
+    "claim": "Marker combinations containing at least one approved or clinical surface target (the BENCHMARK set of 16 genes) score above random combinations drawn from the same pool of surface proteins. Declared in advance: supported only if the one-sided rank-test p is at or below 0.05, Cliff's delta is at least 0.1, and that delta is above the 95th percentile of a placebo null in which gene sets of the same size are drawn at random from the same pool. A comparison set is not neutral because it was called random: the null says what the comparison reads when the labels carry no information, and the result is read against that number rather than against zero.",
+    "best_gate_per_gene": {
+      "post_hoc": true,
+      "what": "one gate per gene, the best one, benchmark markers against the placebo markers that entered the pool the same way",
+      "benchmark_genes": 16,
+      "placebo_genes": 64,
+      "median_best_percentile_benchmark": 84.3,
+      "median_best_percentile_placebo": 71.4,
+      "p_one_sided": 0.20842484693503052,
+      "cliffs_delta": 0.133
+    },
+    "delta_against_the_null": 0.078,
+    "delta_percentile_in_null": 87.0,
+    "combinations_with_a_benchmark_target": 9778,
+    "random_comparison_combinations": 2000,
+    "seed": 20260916,
+    "median_percentile_benchmark": 25.1,
+    "median_percentile_random": 51.5,
+    "median_score_benchmark": 0.1065,
+    "median_score_random": 0.3305,
+    "p_one_sided": 1.0,
+    "cliffs_delta": -0.417,
+    "minimum_delta_declared": 0.1,
+    "test": "Mann-Whitney rank sum, one-sided, on the negated score so that the alternative is benchmark combinations scoring higher",
+    "placebo_null": {
+      "gene_sets_drawn": 200,
+      "set_size": 16,
+      "deltas": [
+        -0.6574,
+        -0.6414,
+        -0.6278,
+        -0.6195,
+        -0.6187,
+        -0.6149,
+        -0.6147,
+        -0.6141,
+        -0.6067,
+        -0.6025,
+        -0.6017,
+        -0.6007,
+        -0.5988,
+        -0.5978,
+        -0.5952,
+        -0.593,
+        -0.5924,
+        -0.5913,
+        -0.5874,
+        -0.5811,
+        -0.5802,
+        -0.5802,
+        -0.5792,
+        -0.5767,
+        -0.5755,
+        -0.5753,
+        -0.5753,
+        -0.5743,
+        -0.5713,
+        -0.5688,
+        -0.5687,
+        -0.5665,
+        -0.566,
+        -0.564,
+        -0.5623,
+        -0.5606,
+        -0.5606,
+        -0.5601,
+        -0.5597,
+        -0.5564,
+        -0.5562,
+        -0.5558,
+        -0.5553,
+        -0.5537,
+        -0.552,
+        -0.5498,
+        -0.5484,
+        -0.5479,
+        -0.5454,
+        -0.544,
+        -0.543,
+        -0.5425,
+        -0.5389,
+        -0.5376,
+        -0.5361,
+        -0.5327,
+        -0.5326,
+        -0.5322,
+        -0.5321,
+        -0.5312,
+        -0.5299,
+        -0.5296,
+        -0.5287,
+        -0.5286,
+        -0.5284,
+        -0.5266,
+        -0.5247,
+        -0.5243,
+        -0.5234,
+        -0.5218,
+        -0.5206,
+        -0.5205,
+        -0.5189,
+        -0.5181,
+        -0.5168,
+        -0.516,
+        -0.5135,
+        -0.5128,
+        -0.5127,
+        -0.512,
+        -0.5112,
+        -0.5099,
+        -0.5062,
+        -0.5034,
+        -0.502,
+        -0.5008,
+        -0.5003,
+        -0.5003,
+        -0.5001,
+        -0.5,
+        -0.4989,
+        -0.4988,
+        -0.4981,
+        -0.4962,
+        -0.4962,
+        -0.4936,
+        -0.4934,
+        -0.4925,
+        -0.4918,
+        -0.4916,
+        -0.4914,
+        -0.4903,
+        -0.4892,
+        -0.4876,
+        -0.4875,
+        -0.4874,
+        -0.4868,
+        -0.4849,
+        -0.4849,
+        -0.4843,
+        -0.4841,
+        -0.4834,
+        -0.4829,
+        -0.4824,
+        -0.4816,
+        -0.4813,
+        -0.4811,
+        -0.4808,
+        -0.4804,
+        -0.4799,
+        -0.4797,
+        -0.4788,
+        -0.4782,
+        -0.4775,
+        -0.477,
+        -0.4758,
+        -0.4758,
+        -0.4753,
+        -0.4752,
+        -0.4731,
+        -0.4725,
+        -0.4711,
+        -0.469,
+        -0.4672,
+        -0.4657,
+        -0.465,
+        -0.4641,
+        -0.4635,
+        -0.463,
+        -0.4627,
+        -0.4597,
+        -0.4577,
+        -0.4571,
+        -0.4568,
+        -0.4562,
+        -0.4555,
+        -0.4553,
+        -0.4544,
+        -0.4543,
+        -0.4533,
+        -0.4533,
+        -0.4526,
+        -0.4508,
+        -0.4503,
+        -0.4501,
+        -0.4487,
+        -0.4484,
+        -0.4458,
+        -0.4443,
+        -0.4402,
+        -0.4378,
+        -0.4376,
+        -0.4369,
+        -0.4361,
+        -0.435,
+        -0.4335,
+        -0.4308,
+        -0.4291,
+        -0.426,
+        -0.4245,
+        -0.4231,
+        -0.4228,
+        -0.4216,
+        -0.4216,
+        -0.417,
+        -0.4134,
+        -0.4132,
+        -0.4108,
+        -0.4066,
+        -0.4059,
+        -0.4016,
+        -0.4013,
+        -0.3987,
+        -0.3979,
+        -0.3962,
+        -0.3952,
+        -0.3952,
+        -0.3942,
+        -0.3934,
+        -0.3923,
+        -0.3875,
+        -0.3859,
+        -0.381,
+        -0.381,
+        -0.3798,
+        -0.3715,
+        -0.3711,
+        -0.3633,
+        -0.3596,
+        -0.339
+      ],
+      "mean_delta": -0.4958,
+      "median_delta": -0.4915,
+      "p95_delta": -0.39227112533008324,
+      "max_delta": -0.3389855221275284,
+      "flat": false,
+      "what_it_controls": "the comparison itself: how much advantage a gene set of the same size gets from the structure of the gate space alone"
+    },
+    "placebo_markers": 64,
+    "delta_above_null_p95": false,
+    "supported": false,
+    "best_per_benchmark_gene": {
+      "CD19": {
+        "required": [
+          "CD19"
+        ],
+        "excluded": [
+          "TACSTD2"
+        ],
+        "logic": "A and not C",
+        "lineage": "Lymphoid",
+        "coverage": 0.535,
+        "healthy_burden_ntpm": 0.3,
+        "worst_essential_tissue": "liver",
+        "score": 0.5195,
+        "rank": 24914,
+        "percentile": 83.9,
+        "own_worst_essential_tissue": {
+          "tissue": "bone marrow",
+          "nTPM": 5.9
+        }
+      },
+      "CD22": {
+        "required": [
+          "CD22"
+        ],
+        "excluded": [
+          "MGST1"
+        ],
+        "logic": "A and not C",
+        "lineage": "Lymphoid",
+        "coverage": 0.422,
+        "healthy_burden_ntpm": 0.0,
+        "worst_essential_tissue": null,
+        "score": 0.4216,
+        "rank": 57805,
+        "percentile": 62.7,
+        "own_worst_essential_tissue": {
+          "tissue": "hypothalamus",
+          "nTPM": 16.4
+        }
+      },
+      "CD33": {
+        "required": [
+          "CD33"
+        ],
+        "excluded": [
+          "TACSTD2"
+        ],
+        "logic": "A and not C",
+        "lineage": "Myeloid",
+        "coverage": 0.892,
+        "healthy_burden_ntpm": 5.1,
+        "worst_essential_tissue": "liver",
+        "score": 0.5907,
+        "rank": 12284,
+        "percentile": 92.1,
+        "own_worst_essential_tissue": {
+          "tissue": "bone marrow",
+          "nTPM": 30.6
+        }
+      },
+      "CD38": {
+        "required": [
+          "CD38"
+        ],
+        "excluded": [
+          "MGST1"
+        ],
+        "logic": "A and not C",
+        "lineage": "Lymphoid",
+        "coverage": 0.524,
+        "healthy_burden_ntpm": 0.0,
+        "worst_essential_tissue": null,
+        "score": 0.5243,
+        "rank": 23873,
+        "percentile": 84.6,
+        "own_worst_essential_tissue": {
+          "tissue": "cerebral cortex",
+          "nTPM": 13.3
+        }
+      },
+      "CD70": {
+        "required": [
+          "CD70"
+        ],
+        "excluded": [
+          "TACSTD2"
+        ],
+        "logic": "A and not C",
+        "lineage": "Lymphoid",
+        "coverage": 0.805,
+        "healthy_burden_ntpm": 0.3,
+        "worst_essential_tissue": "cerebellum",
+        "score": 0.7819,
+        "rank": 1125,
+        "percentile": 99.3,
+        "own_worst_essential_tissue": {
+          "tissue": "bone marrow",
+          "nTPM": 0.8
+        }
+      },
+      "CEACAM5": {
+        "required": [
+          "CEACAM5"
+        ],
+        "excluded": [
+          "PLN"
+        ],
+        "logic": "A and not C",
+        "lineage": "Bowel",
+        "coverage": 0.651,
+        "healthy_burden_ntpm": 0.6,
+        "worst_essential_tissue": "cerebral cortex",
+        "score": 0.6143,
+        "rank": 9422,
+        "percentile": 93.9,
+        "own_worst_essential_tissue": {
+          "tissue": "lung",
+          "nTPM": 28.5
+        }
+      },
+      "CLDN18": {
+        "required": [
+          "CLDN18"
+        ],
+        "excluded": [
+          "PLN"
+        ],
+        "logic": "A and not C",
+        "lineage": "Esophagus/Stomach",
+        "coverage": 0.156,
+        "healthy_burden_ntpm": 0.2,
+        "worst_essential_tissue": "cerebellum",
+        "score": 0.1528,
+        "rank": 106058,
+        "percentile": 31.6,
+        "own_worst_essential_tissue": {
+          "tissue": "lung",
+          "nTPM": 237.8
+        }
+      },
+      "DLL3": {
+        "required": [
+          "DLL3"
+        ],
+        "excluded": [
+          "SLC25A27"
+        ],
+        "logic": "A and not C",
+        "lineage": "Peripheral Nervous System",
+        "coverage": 0.4,
+        "healthy_burden_ntpm": 0.0,
+        "worst_essential_tissue": null,
+        "score": 0.4,
+        "rank": 62362,
+        "percentile": 59.8,
+        "own_worst_essential_tissue": {
+          "tissue": "cerebral cortex",
+          "nTPM": 27.1
+        }
+      },
+      "EGFR": {
+        "required": [
+          "EGFR"
+        ],
+        "excluded": [
+          "SLC25A27"
+        ],
+        "logic": "A and not C",
+        "lineage": "Pleura",
+        "coverage": 0.909,
+        "healthy_burden_ntpm": 0.0,
+        "worst_essential_tissue": null,
+        "score": 0.9091,
+        "rank": 107,
+        "percentile": 99.9,
+        "own_worst_essential_tissue": {
+          "tissue": "liver",
+          "nTPM": 32.2
+        }
+      },
+      "ERBB2": {
+        "required": [
+          "ERBB2"
+        ],
+        "excluded": [
+          "SLC25A27"
+        ],
+        "logic": "A and not C",
+        "lineage": "Pleura",
+        "coverage": 0.909,
+        "healthy_burden_ntpm": 1.3,
+        "worst_essential_tissue": "bone marrow",
+        "score": 0.8045,
+        "rank": 788,
+        "percentile": 99.5,
+        "own_worst_essential_tissue": {
+          "tissue": "kidney",
+          "nTPM": 83.9
+        }
+      },
+      "FOLH1": {
+        "required": [
+          "FOLH1"
+        ],
+        "excluded": [
+          "SLC25A27"
+        ],
+        "logic": "A and not C",
+        "lineage": "Skin",
+        "coverage": 0.142,
+        "healthy_burden_ntpm": 0.6,
+        "worst_essential_tissue": "bone marrow",
+        "score": 0.1336,
+        "rank": 109649,
+        "percentile": 29.3,
+        "own_worst_essential_tissue": {
+          "tissue": "liver",
+          "nTPM": 31.2
+        }
+      },
+      "GPC3": {
+        "required": [
+          "GPC3"
+        ],
+        "excluded": [
+          "SLC25A27"
+        ],
+        "logic": "A and not C",
+        "lineage": "Liver",
+        "coverage": 0.346,
+        "healthy_burden_ntpm": 0.2,
+        "worst_essential_tissue": "bone marrow",
+        "score": 0.3394,
+        "rank": 73368,
+        "percentile": 52.7,
+        "own_worst_essential_tissue": {
+          "tissue": "lung",
+          "nTPM": 141.1
+        }
+      },
+      "MS4A1": {
+        "required": [
+          "MS4A1"
+        ],
+        "excluded": [
+          "TACSTD2"
+        ],
+        "logic": "A and not C",
+        "lineage": "Lymphoid",
+        "coverage": 0.476,
+        "healthy_burden_ntpm": 2.3,
+        "worst_essential_tissue": "liver",
+        "score": 0.3867,
+        "rank": 64940,
+        "percentile": 58.1,
+        "own_worst_essential_tissue": {
+          "tissue": "bone marrow",
+          "nTPM": 18.0
+        }
+      },
+      "MSLN": {
+        "required": [
+          "MSLN"
+        ],
+        "excluded": [
+          "PLN"
+        ],
+        "logic": "A and not C",
+        "lineage": "Pleura",
+        "coverage": 0.864,
+        "healthy_burden_ntpm": 3.0,
+        "worst_essential_tissue": "bone marrow",
+        "score": 0.6643,
+        "rank": 5392,
+        "percentile": 96.5,
+        "own_worst_essential_tissue": {
+          "tissue": "lung",
+          "nTPM": 67.6
+        }
+      },
+      "TACSTD2": {
+        "required": [
+          "TACSTD2"
+        ],
+        "excluded": [
+          "MGST1"
+        ],
+        "logic": "A and not C",
+        "lineage": "Head and Neck",
+        "coverage": 0.581,
+        "healthy_burden_ntpm": 0.0,
+        "worst_essential_tissue": null,
+        "score": 0.5811,
+        "rank": 13712,
+        "percentile": 91.2,
+        "own_worst_essential_tissue": {
+          "tissue": "kidney",
+          "nTPM": 185.9
+        }
+      },
+      "TNFRSF17": {
+        "required": [
+          "TNFRSF17"
+        ],
+        "excluded": [
+          "TACSTD2"
+        ],
+        "logic": "A and not C",
+        "lineage": "Lymphoid",
+        "coverage": 0.568,
+        "healthy_burden_ntpm": 0.9,
+        "worst_essential_tissue": "liver",
+        "score": 0.5207,
+        "rank": 24662,
+        "percentile": 84.1,
+        "own_worst_essential_tissue": {
+          "tissue": "bone marrow",
+          "nTPM": 1.8
+        }
+      }
+    },
+    "benchmark_genes_not_in_the_pool": []
+  },
+  "threshold_sensitivity": {
+    "post_hoc": true,
+    "why": "the pre-registered verdict is the one at the declared threshold; this says how far that verdict depends on where 'present' was drawn",
+    "rows": [
+      {
+        "present_log2_tpm_plus_1": 4.0,
+        "markers_expressed_anywhere": 4569,
+        "combinations_scored": 73701,
+        "cliffs_delta": -0.359,
+        "p_one_sided": 1.0,
+        "median_percentile_benchmark": 28.9,
+        "placebo_null_mean_delta": -0.5249,
+        "placebo_null_p95_delta": -0.4269426217339667,
+        "supported": false,
+        "top_gate": {
+          "required": [
+            "ITGAE"
+          ],
+          "excluded": [
+            "CD33"
+          ],
+          "lineage": "Kidney",
+          "coverage": 1.0,
+          "healthy_burden_ntpm": 0.1,
+          "score": 0.9901
+        }
+      },
+      {
+        "present_log2_tpm_plus_1": 5.0,
+        "markers_expressed_anywhere": 4233,
+        "combinations_scored": 72402,
+        "cliffs_delta": -0.276,
+        "p_one_sided": 1.0,
+        "median_percentile_benchmark": 31.2,
+        "placebo_null_mean_delta": -0.5841,
+        "placebo_null_p95_delta": -0.505575698820488,
+        "supported": false,
+        "top_gate": {
+          "required": [
+            "ATP5MG"
+          ],
+          "excluded": [
+            "ENG"
+          ],
+          "lineage": "Bowel",
+          "coverage": 0.988,
+          "healthy_burden_ntpm": 0.0,
+          "score": 0.9884
+        }
+      },
+      {
+        "present_log2_tpm_plus_1": 6.0,
+        "markers_expressed_anywhere": 3578,
+        "combinations_scored": 66426,
+        "cliffs_delta": -0.191,
+        "p_one_sided": 1.0,
+        "median_percentile_benchmark": 35.2,
+        "placebo_null_mean_delta": -0.5926,
+        "placebo_null_p95_delta": -0.5190671371697431,
+        "supported": false,
+        "top_gate": {
+          "required": [
+            "ADAM9"
+          ],
+          "excluded": [
+            "CLCN7"
+          ],
+          "lineage": "Pleura",
+          "coverage": 1.0,
+          "healthy_burden_ntpm": 0.0,
+          "score": 1.0
+        }
+      }
+    ]
+  },
+  "limits": [
+    "tumour coverage is measured in cancer cell lines, which have no stroma, no immune infiltrate and no tissue architecture, and are a growth-selected subset of the disease",
+    "both sides are RNA: a transcript is not a protein and a protein is not a protein on the outward-facing surface",
+    "the two sides are different measurements on different scales - log2(TPM+1) in cell lines against consensus nTPM in healthy tissue - so coverage and burden are reported separately and never subtracted from one another",
+    "an AND gate's healthy burden is floored at a quarter of its highest marker in each tissue: bulk tissue RNA cannot say whether two markers sit on the same healthy cell, so requiring a second marker is credited with reducing exposure and never with abolishing it",
+    "the atlas covers 20 tissues and 8 of them are weighed as essential here: a tissue not queried is not a tissue where the marker is absent"
+  ],
+  "not_a_design": "The output names marker logic only. No binder, format, construct, cargo or protocol follows from it here.",
+  "seconds": 47.1
+}
