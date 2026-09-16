@@ -133,6 +133,16 @@ CATALOG["budget_genome_wide"] = {
     "auto_heal": True,
 }
 
+CATALOG["human_panel_sweep"] = {
+    "argv": [sys.executable, "scripts/human_panel_sweep.py"],
+    "describe": "The HPRC panel of 90 human genomes, one unread chromosome at a time (no model key).",
+    "total": 24,
+    "result": None,
+    "count": None,
+    "progress": lambda root: len(list((root / "data" / "results").glob("human_panel_chr*.json"))),
+    "complete": lambda root: len(list((root / "data" / "results").glob("human_panel_chr*.json"))) >= 24,
+}
+
 CATALOG["fetch_hg002"] = {
     "argv": [sys.executable, "-m", "genomeos.cli", "data", "fetch", "--individual", "--chrom", "chr22"],
     "describe": "Stream the GIAB HG002 benchmark once; keep each chromosome's variants for twins/lookups.",
@@ -432,6 +442,30 @@ def supervise(root: Path = Path("."), interval: int = 60) -> None:
         with contextlib.suppress(Exception):  # the supervisor itself must never die
             supervise_once(root)
         time.sleep(interval)
+
+
+def adopt(name: str, pid: int, root: Path = Path(".")) -> JobStatus:
+    """Record a job that is already running, started outside the registry (a shell, nohup, a driver).
+
+    The Progress tab shows what the registry has a record of, so a job started by hand is invisible
+    while it runs and its work looks like nothing happening — which is exactly what it looked like on
+    2026-09-16, with the panel reading chr2 and the tab showing an idle lane. Adopting writes the same
+    record `start` writes, so the job is shown, stall detection applies to it, and nothing starts a
+    twin of it. It refuses a pid that is not running, and one the registry already has alive under
+    this name.
+    """
+    if name not in CATALOG:
+        raise KeyError(f"unknown job {name!r}; known: {sorted(CATALOG)}")
+    if not _alive(pid):
+        raise RuntimeError(f"pid {pid} is not running, so there is nothing to adopt")
+    current = _recorded_pid(name)
+    if current is not None and current != pid and _alive(current):
+        raise RuntimeError(f"{name} already has a live process, pid {current}: two would race")
+    JOBS_DIR.mkdir(parents=True, exist_ok=True)
+    _meta_path(name).write_text(
+        json.dumps({"pid": pid, "started": time.time(), "finished": None, "code": None, "adopted": True})
+    )
+    return status(name, root)
 
 
 def _recorded_pid(name: str) -> int | None:
