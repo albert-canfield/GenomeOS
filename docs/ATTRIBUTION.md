@@ -1574,6 +1574,55 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## E1's extension ran: a weak positive by its own bar, carried by one cell line, with its declared secondary passing (2026-09-17)
+
+The 2,260 pairs were scored as the pre-registration below declares them — a fresh sample, the first
+1,000 skipped and verified to be the same 1,000, one futility look at 1,130 and no interim success
+look. 4,518 requests, 71 minutes, no look fired.
+
+**The result, against the three outcomes named before it ran:**
+
+| | units | controls | difference | one-sided p | upper 95% |
+|---|---|---|---|---|---|
+| **extension, 2,260 pairs** | 637/1,096 = 0.581 | 490/968 = 0.506 | **+0.075** | **0.00037** | 0.111 |
+| first run, 1,000 pairs (`cbff5f6`) | 205/398 = 0.515 | 191/381 = 0.501 | +0.014 | 0.38 | 0.073 |
+
+**+0.075 is the weak band: 0.05 to 0.10, "settles nothing on its own".** It is not the declared
+success, which required 0.10 *in size* at p 0.01 — and the p of 0.0004 does not convert it into one,
+because the bar was set on size for exactly this reason. Nor is it the declared failure. The
+registration's own words stand: a weak positive.
+
+**The declared secondary passed, and this is the first prediction in this series to be met rather than
+missed.** Agreement should be higher where DAP-G fine-maps the variant than where it does not. In the
+first run it failed, -0.152 on 57 fine-mapped pairs at power too low to mean much. Here, at three
+times that power: **fine-mapped +0.198 (132 units, 90 controls, p 0.0018) against +0.057 for the rest
+(p 0.008)**. The split E2 and E3 found in the model, and the two-instruments reading found in two
+measurements, appears again in the endpoint built to be independent of the first.
+
+**And one cell line carries it, exactly as the two-instruments reading was carried by one cell line.**
+GM12878 reads **+0.089 on 1,895 pairs (p 0.0001)**; Jurkat reads **-0.001 on 365 pairs**. So the
+ENCODE objection to E2 and E3 is **narrowed, not closed**: in lymphoblastoid cells the model tracks a
+reporter assay's measured direction weakly and detectably, and outside them this endpoint has 365
+pairs in one line and nothing to say.
+
+**Two things stated because they are uncomfortable.**
+- **The extension's pairs are weaker by construction** — the order was by measured effect size, so
+  these are the 2,260 after the strongest 1,000 — and yet they give the larger difference (+0.075
+  against +0.014). That is the opposite of what the ordering predicts. The two samples' intervals are
+  not inconsistent (the first run's upper bound was 0.073), so the honest reading is that the first
+  1,000 were an unlucky draw rather than that weak effects are easier to detect; it is recorded as a
+  surprise, not explained away.
+- **The pooled figure over all 3,260 pairs is +0.059** (842/1,494 against 681/1,349). The
+  pre-registration allows that to be described and forbids it as a test, because the decision to run
+  the second sample was taken after seeing the first. It is written here once, as a description.
+
+**What this leaves.** The executor claim's external endpoint is no longer silent: it is weakly
+positive, significantly so, in one cell type, with its causality secondary met. E2's +0.268 remains far
+outside this endpoint's interval, so whatever the model does at a fine-mapped eQTL it does not do at
+that size against a reporter assay. The next thing that would move this is not more pairs of the same
+kind — 3,260 is the database — but a second cell type with enough fine-mapped variants to test, and
+MPRAVarDB does not currently hold one.
+
 ## Pre-registration: E1's remaining 2,260 pairs, read as a replication and not as a continuation (2026-09-16)
 
 Written before any request of the extension and before any of its pairs were scored. The run it
