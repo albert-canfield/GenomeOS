@@ -29,6 +29,11 @@ not a lock. What it removes is the case where nobody looked at all.
 A staged deletion of a file that exists in HEAD is always reported: an accidental one is unrecoverable
 by the author who lost it, and a deliberate one costs a flag.
 
+**Do not pipe it.** `check_staged.py | tail -2` reports the refusal and then exits 0, because a shell
+pipeline's status is the last command's, so the `&&` that was meant to stop the commit runs it instead.
+This session did exactly that on 2026-09-16 and committed through a refusal it had printed and read.
+Run it bare, or redirect to a file and grep that.
+
 Exit 0 clean, 2 on a finding, 1 on a usage error.
 """
 
