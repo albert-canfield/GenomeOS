@@ -2434,11 +2434,17 @@ hold-out are done, `share:`, `commitment`, `competence` and the integrated reads
 engine, and the worm's fate rules read what a cell could know (522 of 555 in sample, 483
 held out). Nothing is running. What is next, in order of what it decides:
 
-1. **E1 genome-wide: the MPRA allele endpoint for the executor test.** The one objection
-   the executor result carries is that AlphaGenome's ENCODE training is kin to GTEx; E1
-   answers it with measured allele effects instead, and was held at 20 pairs on chr21 and
-   chr22 only because the chromosomes had not landed. They have. Needs the model key, and
-   the key is free. Area I.
+1. **The executor claim's external endpoint is inconclusive, and extending it costs a
+   pre-registration.** E1 was widened genome-wide and run on 2026-09-14 (`cbff5f6`): 1,000
+   of 3,260 allele pairs, strongest measured effect first, units agreeing 0.515 against
+   matched nulls at 0.501, **+0.014, one-sided p 0.38, upper 95% bound 0.073**. Its own
+   pre-registration named that band as deciding nothing, and its declared secondary failed
+   (agreement did not rise where DAP-G fine-maps the variant: -0.152 on 57 pairs). So the
+   ENCODE objection to E2 and E3 is still open. The 2,260 remaining pairs would tighten the
+   bound, but spending them *because* the first 1,000 came out at p 0.38 is optional
+   stopping run backwards: it needs a new pre-registration, written first, naming the
+   budget, the looks and what each outcome would mean. That document is the next step here,
+   not the run. Area I.
 2. **The panel's chr2, then the 24-chromosome rollup.** Decides the constrained-unknown
    depletion at full size (13 of 16 clean chromosomes today). No key; about 20 GB free to
    start. Area I.
