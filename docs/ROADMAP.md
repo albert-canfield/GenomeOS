@@ -2539,7 +2539,24 @@ entire sweep. What is next, in order of what it decides:
      percentile 25.1 against 51.5), and because the placebo null is not flat (delta -0.496) the
      benchmark read against its null sits at the 87th percentile, short of its declared bar. The flaw
      is located: a 7-TPM threshold crossing mistaken for surface density.
-7. **Disk.** The project is 7.3 GB of a 460 GB disk; the four disk stops of 2026-09-15 came
+7. **Two lanes opened 2026-09-17 by genomeos-79, both following from the day's findings rather than
+   opening new ground.** Each reports a pre-registration before scoring.
+   - **Area I, calibration.** Turn the CRISPRi benchmark into a calibration curve, so every predicted
+     target in the finished sweep carries a confidence backed by measured precision rather than by the
+     model's own effect size. `attribution/calibration.py`, `scripts/calibrate_targets.py`. It is the
+     direct consequence of the structure-against-perturbation lesson: if perturbation is the
+     discriminating variable, its output is what deserves calibrating. **The denominator to watch is
+     the one the locus benchmark and the CRISPRi lane have each already been caught by** — a
+     calibration curve conditioned on "was this element scored" inherits the coverage of both arms.
+   - **Area J, transfer.** The one positive in the grammar lane was strict family-collapsed motif
+     counts (+0.234 Spearman on lentiMPRA); the lane tests whether it transfers to VISTA in-vivo
+     positives against their negatives and to the 882 blocks of the real unknown.
+     `attribution/motif_transfer.py`. **Two traps are already known here**: VISTA as an endpoint is
+     weak by construction in this project (its negatives are not matched to its positives), and the
+     882 blocks were read with the model's own deletion predictions as the outcome, so a motif reading
+     that uses the same elements is not independent evidence about the same blocks. If it disagrees
+     with the 0.248-against-0.293 reading, that disagreement is the result.
+8. **Disk.** The project is 7.3 GB of a 460 GB disk; the four disk stops of 2026-09-15 came
    from outside it (80 GB of stale Chrome code-sign clones in the system temp tree, among
    others). Freeing that is Albert's call and unblocks item 2 and area I's compression of
    chr1 and chr2.
