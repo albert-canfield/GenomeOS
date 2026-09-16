@@ -1,0 +1,242 @@
+{
+  "result": "panel_tier_baseline",
+  "date": "2026-09-16",
+  "chromosomes": [
+    "chr1",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chrX"
+  ],
+  "excluded": [
+    "chrY"
+  ],
+  "against_matched_background": {
+    "cds": {
+      "median": 0.387,
+      "chromosomes": 22,
+      "above_one": 0,
+      "one_sided_p": 1.0
+    },
+    "fossil": {
+      "median": 1.058,
+      "chromosomes": 22,
+      "above_one": 21,
+      "one_sided_p": 5e-06
+    },
+    "regulatory": {
+      "median": 1.078,
+      "chromosomes": 22,
+      "above_one": 22,
+      "one_sided_p": 0.0
+    },
+    "constrained_unknown": {
+      "median": 0.917,
+      "chromosomes": 22,
+      "above_one": 6,
+      "one_sided_p": 0.99155
+    },
+    "neutral": {
+      "median": 1.107,
+      "chromosomes": 22,
+      "above_one": 20,
+      "one_sided_p": 6.1e-05
+    }
+  },
+  "against_the_neutral_tier": {
+    "cds": {
+      "median": 0.356,
+      "below_neutral": 22,
+      "chromosomes": 22
+    },
+    "fossil": {
+      "median": 0.974,
+      "below_neutral": 17,
+      "chromosomes": 22
+    },
+    "regulatory": {
+      "median": 0.983,
+      "below_neutral": 12,
+      "chromosomes": 22
+    },
+    "constrained_unknown": {
+      "median": 0.827,
+      "below_neutral": 18,
+      "chromosomes": 22
+    }
+  },
+  "per_chromosome": {
+    "chr1": {
+      "cds": 0.464,
+      "fossil": 1.133,
+      "regulatory": 1.086,
+      "constrained_unknown": 1.026,
+      "neutral": 1.203
+    },
+    "chr10": {
+      "cds": 0.351,
+      "fossil": 1.054,
+      "regulatory": 1.037,
+      "constrained_unknown": 0.919,
+      "neutral": 1.105
+    },
+    "chr11": {
+      "cds": 0.444,
+      "fossil": 1.118,
+      "regulatory": 1.054,
+      "constrained_unknown": 0.77,
+      "neutral": 1.126
+    },
+    "chr12": {
+      "cds": 0.361,
+      "fossil": 1.071,
+      "regulatory": 1.13,
+      "constrained_unknown": 0.844,
+      "neutral": 1.163
+    },
+    "chr13": {
+      "cds": 0.292,
+      "fossil": 1.04,
+      "regulatory": 1.058,
+      "constrained_unknown": 0.986,
+      "neutral": 1.046
+    },
+    "chr14": {
+      "cds": 0.395,
+      "fossil": 1.038,
+      "regulatory": 1.154,
+      "constrained_unknown": 0.995,
+      "neutral": 1.057
+    },
+    "chr15": {
+      "cds": 0.433,
+      "fossil": 1.086,
+      "regulatory": 1.077,
+      "constrained_unknown": 0.973,
+      "neutral": 1.202
+    },
+    "chr16": {
+      "cds": 0.371,
+      "fossil": 1.006,
+      "regulatory": 1.041,
+      "constrained_unknown": 0.877,
+      "neutral": 0.848
+    },
+    "chr17": {
+      "cds": 0.379,
+      "fossil": 1.117,
+      "regulatory": 1.083,
+      "constrained_unknown": 1.121,
+      "neutral": 1.347
+    },
+    "chr18": {
+      "cds": 0.325,
+      "fossil": 1.047,
+      "regulatory": 1.088,
+      "constrained_unknown": 0.934,
+      "neutral": 1.131
+    },
+    "chr19": {
+      "cds": 0.435,
+      "fossil": 1.101,
+      "regulatory": 1.07,
+      "constrained_unknown": 0.809,
+      "neutral": 1.121
+    },
+    "chr20": {
+      "cds": 0.378,
+      "fossil": 1.062,
+      "regulatory": 1.079,
+      "constrained_unknown": 1.019,
+      "neutral": 1.327
+    },
+    "chr21": {
+      "cds": 0.411,
+      "fossil": 0.988,
+      "regulatory": 1.087,
+      "constrained_unknown": 0.649,
+      "neutral": 0.907
+    },
+    "chr22": {
+      "cds": 0.423,
+      "fossil": 1.22,
+      "regulatory": 1.058,
+      "constrained_unknown": 1.742,
+      "neutral": 1.045
+    },
+    "chr3": {
+      "cds": 0.378,
+      "fossil": 1.078,
+      "regulatory": 1.085,
+      "constrained_unknown": 0.898,
+      "neutral": 1.083
+    },
+    "chr4": {
+      "cds": 0.403,
+      "fossil": 1.041,
+      "regulatory": 1.085,
+      "constrained_unknown": 1.127,
+      "neutral": 1.073
+    },
+    "chr5": {
+      "cds": 0.371,
+      "fossil": 1.068,
+      "regulatory": 1.117,
+      "constrained_unknown": 0.855,
+      "neutral": 1.057
+    },
+    "chr6": {
+      "cds": 0.406,
+      "fossil": 1.127,
+      "regulatory": 1.063,
+      "constrained_unknown": 0.916,
+      "neutral": 1.044
+    },
+    "chr7": {
+      "cds": 0.36,
+      "fossil": 1.039,
+      "regulatory": 1.062,
+      "constrained_unknown": 1.111,
+      "neutral": 1.108
+    },
+    "chr8": {
+      "cds": 0.4,
+      "fossil": 1.042,
+      "regulatory": 1.02,
+      "constrained_unknown": 0.855,
+      "neutral": 1.261
+    },
+    "chr9": {
+      "cds": 0.415,
+      "fossil": 1.022,
+      "regulatory": 1.04,
+      "constrained_unknown": 0.856,
+      "neutral": 1.046
+    },
+    "chrX": {
+      "cds": 0.342,
+      "fossil": 1.037,
+      "regulatory": 1.292,
+      "constrained_unknown": 0.811,
+      "neutral": 1.281
+    }
+  },
+  "reading": "every non-coding tier reads above the matched background on almost every chromosome, so the background is not a neutral baseline: it fixes more than the sequence it is the control for. A tier's distance from 1 therefore carries that offset, and the comparison that does not is a tier against the neutral tier of the same chromosome."
+}

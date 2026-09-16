@@ -1574,6 +1574,54 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## The matched background is not a neutral baseline, and that is why the controls fail (2026-09-16)
+
+Seven of the 23 chromosomes the panel has read fail one of its six controls, and on all six autosomes
+and X the failing check is the same one: the neutral tier's fixed rate missing the GC- and
+replication-timing-matched background it is measured against. Six special chromosomes would be one
+explanation. `scripts/panel_tier_baseline.py` asks the committed results whether it is instead one
+thing happening everywhere, and it is.
+
+| tier against the matched background | above 1 on | one-sided p | median ratio |
+|---|---|---|---|
+| regulatory | **22 of 22** | 2e-7 | 1.078 |
+| fossil | **21 of 22** | 5e-6 | 1.058 |
+| neutral | **20 of 22** | 6e-5 | 1.107 |
+| constrained unknown | 6 of 22 | 0.99 | 0.917 |
+| coding exons | 0 of 22 | 1.0 | 0.387 |
+
+**Every non-coding tier fixes less than its own control.** The background windows are matched on GC
+and on replication timing, and on those two axes they match; what they are not is neutral sequence.
+They carry coding exons, conserved elements and everything else that falls in a window of the right
+composition, so they fix more than the unknown sequence they are the control for, by about 6 to 11%.
+A tier's distance from 1 therefore contains that offset, and the six control failures are the tail of
+it rather than six chromosomes with something wrong: the deviation shrinks as the tier gets bigger
+(median 0.163 on the eleven chromosomes with the least neutral sequence, 0.083 on the eleven with the
+most, Spearman -0.33), so the tier crosses the 0.05 band wherever it is both offset and small.
+
+**What survives, and it is the reading the panel lane had already arrived at.** Against the neutral
+tier of the same chromosome, rather than against the background:
+
+- **constrained unknown 0.827, below the neutral tier on 18 of 22** — the only unknown tier that is
+  depleted, and it stays depleted under either baseline (below the background on 16 of 22, p 0.026).
+- **fossil 0.974 (17 of 22) and regulatory 0.983 (12 of 22)** — indistinguishable from neutral, which
+  against the background both appeared to exceed.
+- **coding exons 0.356, below it on 22 of 22** — the positive control, unchanged by the choice.
+
+So the offset changes no conclusion about the constrained-unknown tier and removes two that were
+never claimed but were visible in the table: fossil and regulatory sequence is not *more* variable
+than neutral, it only looked so beside a background that is not neutral. The honest form of every
+tier statement is against the neutral tier, with the background offset stated; quoting "x% above the
+matched rate" for a non-coding tier carries a systematic +6 to +11 points that belongs to the control,
+not to the tier.
+
+**What it does not say.** It does not say the matched background is badly built for what it was built
+for -- matching GC and timing is what makes the coding ratio (0.387) meaningful, and coding is the
+one tier the offset does not touch, because a real depletion of that size swamps it. It does not
+measure what the background carries; that is the next step, and the candidates are the obvious ones
+(coding bases, conserved elements, segmental duplication). And it rests on 22 chromosomes of one
+panel, with chr2 still unread.
+
 ## Compression: what each piece of knowledge is worth in bits, chr21, chr22 and chr18 (2026-09-14)
 
 Albert's probe: try different ways of classifying the genome and find which buys the most
