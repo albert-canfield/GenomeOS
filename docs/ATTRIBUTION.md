@@ -1574,6 +1574,54 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## The syntax observation dissolves under matching, the tiling run is cancelled, and yesterday's headline needs a correction (2026-09-17)
+
+Assembling the pre-registered tiling run found its own reason not to spend the budget, before a single
+request: **the arms do not overlap in the covariate that dominates the outcome.** On chr22 the syntax
+windows sit a median **2.6 kb** from a coding transcription start; the relaxed arm sits at 51 kb and
+the neutral arm at 62 kb. Genome-wide, over elements the sweep already scored, the medians are
+**81 kb (syntax), 240 kb (relaxed), 418 kb (neutral)** — against **42 kb for the genome's scored
+elements as a whole.** Matching arms that differ by an order of magnitude means matching on their thin
+tails, so the cheaper question was asked first, over elements already scored and with no request
+spent (`scripts/syntax_blocks_matched.py`).
+
+**Against the genome's own elements, the 40 syntax elements are ordinary.**
+
+| comparison | raw | matched on length, GC and TSS distance |
+|---|---|---|
+| syntax (40) against every other scored element | 0.575 vs 0.640, **-0.065** | **-0.033, p 0.67** |
+| syntax (40) against the neutral tier | +0.283 | **+0.284, p 0.00014** |
+| relaxed (1,430) against the neutral tier | -0.038 | **+0.025, p 0.014** |
+
+So the observation that prompted the registration is real only against one yardstick. The 0.575 is
+what an ordinary element does — the genome's scored elements move a gene 0.640 of the time — and it
+looked remarkable only because the neutral tier was the comparison, and the neutral tier's elements
+sit ten times further from a promoter than the genome's.
+
+**The registered run is therefore not run, and that decision is part of the record.** Its neutral arm
+is the yardstick that has just been shown to be the wrong one; it would most likely have returned
+"success" against that arm and measured promoter distance more precisely. The pre-registration stays
+in this document and in `attribution/syntax_tiling.PRE_REGISTRATION` as written, marked unrun, with
+this as the reason. Cancelling a registered run because a cheaper analysis answered its question is
+allowed; changing its bars after seeing data is not, and neither happened here.
+
+**The correction to yesterday's reading.** The 882-block section says the real unknown is the least
+active tier in the genome, from 0.248 per element against the neutral tier's 0.293. That comparison is
+unmatched, and matching reverses part of it: **the relaxed case, which is 1,430 of the tier's 3,280
+elements, reads +0.025 ABOVE the neutral tier once length, GC and TSS distance are held fixed**, not
+below it. What survives matching is the larger and cruder statement: every unknown tier sits far below
+the genome's scored elements — neutral -0.247 and relaxed -0.284, matched — so the unknown space is
+much less active than the genome's elements, and the ordering *within* it is not established. The
+tolerant and recent cases hold the remaining 1,850 elements and have not been matched; until they are,
+"the least active tier" should be read as "far below the genome's elements, with the ordering against
+neutral unsettled".
+
+**The lesson, which is the third of its kind this week.** A tier average is not a control. The neutral
+tier was built to be the background for *constraint*, and it is a background for nothing else: its
+elements differ from the genome's in distance to a promoter by a factor of ten, and that is the
+variable the outcome tracks. Every tier-against-tier number in this document is now suspect in the
+same way, and the ones that matter should be re-read with the strata applied.
+
 ## Pre-registration: the 69 syntax blocks, tiled and deleted against two matched arms (2026-09-17)
 
 Written before the instrument existed and before any window was scored; the machine-readable copy is

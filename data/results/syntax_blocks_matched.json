@@ -1,0 +1,148 @@
+{
+  "result": "syntax_blocks_matched",
+  "date": "2026-09-17",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX"
+  ],
+  "elements": 960320,
+  "syntax": {
+    "elements": 40,
+    "elements_in_a_shared_stratum": 40,
+    "median_tss_distance": 80962.0,
+    "median_tss_distance_of_the_pool": 42255,
+    "raw": {
+      "a": 0.575,
+      "b": 0.6397,
+      "difference": -0.0647,
+      "p_one_sided": 0.796005,
+      "upper_95": 0.0885
+    },
+    "matched_on_length_gc_and_tss_distance": {
+      "a": 0.575,
+      "b": 0.6084,
+      "difference": -0.0334,
+      "p_one_sided": 0.66544,
+      "upper_95": 0.1198
+    },
+    "controls_used": 2143952
+  },
+  "relaxed": {
+    "elements": 1430,
+    "elements_in_a_shared_stratum": 1430,
+    "median_tss_distance": 239622.0,
+    "median_tss_distance_of_the_pool": 42255,
+    "raw": {
+      "a": 0.2545,
+      "b": 0.6397,
+      "difference": -0.3851,
+      "p_one_sided": 1.0,
+      "upper_95": -0.3625
+    },
+    "matched_on_length_gc_and_tss_distance": {
+      "a": 0.2545,
+      "b": 0.5384,
+      "difference": -0.2838,
+      "p_one_sided": 1.0,
+      "upper_95": -0.2613
+    },
+    "controls_used": 115429467
+  },
+  "neutral": {
+    "elements": 5675,
+    "elements_in_a_shared_stratum": 5675,
+    "median_tss_distance": 417764,
+    "median_tss_distance_of_the_pool": 42255,
+    "raw": {
+      "a": 0.2923,
+      "b": 0.6397,
+      "difference": -0.3473,
+      "p_one_sided": 1.0,
+      "upper_95": -0.3355
+    },
+    "matched_on_length_gc_and_tss_distance": {
+      "a": 0.2923,
+      "b": 0.5393,
+      "difference": -0.247,
+      "p_one_sided": 1.0,
+      "upper_95": -0.2351
+    },
+    "controls_used": 440053451
+  },
+  "syntax_against_neutral": {
+    "raw": {
+      "a": 0.575,
+      "b": 0.2923,
+      "difference": 0.2827,
+      "p_one_sided": 0.000156,
+      "upper_95": 0.4363
+    },
+    "matched": {
+      "a": 0.575,
+      "b": 0.2912,
+      "difference": 0.2838,
+      "p_one_sided": 0.000143,
+      "upper_95": 0.4372
+    },
+    "left_in_a_shared_stratum": 40,
+    "controls_used": 15461
+  },
+  "relaxed_against_neutral": {
+    "raw": {
+      "a": 0.2545,
+      "b": 0.2923,
+      "difference": -0.0378,
+      "p_one_sided": 0.998167,
+      "upper_95": -0.0123
+    },
+    "matched": {
+      "a": 0.2545,
+      "b": 0.2291,
+      "difference": 0.0254,
+      "p_one_sided": 0.013724,
+      "upper_95": 0.048
+    },
+    "left_in_a_shared_stratum": 1430,
+    "controls_used": 1851675
+  },
+  "strata": {
+    "length": [
+      200,
+      400
+    ],
+    "gc": [
+      0.35,
+      0.45,
+      0.55
+    ],
+    "tss": [
+      1000,
+      5000,
+      20000,
+      100000
+    ]
+  },
+  "reading": "the raw difference is the comparison that produced the observation; the matched one holds length, GC and distance to the nearest coding TSS fixed. Where they disagree, the raw one was measuring what the strata hold fixed",
+  "seconds": 198.6
+}
