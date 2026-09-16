@@ -169,6 +169,17 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   the time against 21.1% outside. Significance alone is depth-dependent (1%
   of FOXE1's bases, 77% of IRF4's), so report an effect-size definition
   beside it.
+- Motif *arrangement* is not detectable over motif counts in a reporter assay
+  (2026-09-16, `motif_grammar`, pre-registered, held out on chr8, chr9, chr21
+  and chr22 of ENCODE4's lentiMPRA). Strict family-collapsed site counts lift
+  Spearman with measured activity from 0.17-0.35 to 0.40-0.43; adding pairwise
+  spacing bins, relative orientation and helical phase for 55 family pairs moves
+  it by +0.002, -0.006 and +0.002, every interval across zero, and the control
+  that permutes site labels and strands within the element does as well. Which
+  factors have sites matters; where they sit relative to each other does not, at
+  200 bp and off the chromosome. Fix the claim in code and commit it before the
+  held-out fold is read: the honest answer to "is there a grammar" is worth as
+  much as a positive one.
 - Held across mammals and invariant among people does not sort genome units
   into syntax and value slots, even at base resolution (2026-09-14,
   `lexicon_axes_chr21`, `lexicon_axes_chr22`).

@@ -943,3 +943,101 @@ and people places and dates function well, motif sites at a usual threshold
 say nothing about it, and the two marks together are modestly informative
 about individual bases. A readout that would do better is a model trained to
 predict activity, scored the same way against these 9,834 measured bases.
+
+## 17. Grammar as a test that can fail: arrangement against counts (2026-09-16)
+
+Every section before this one used the word "grammar" for something it did not
+test: §8 read a promoter as a list of factors, §13 looked for pairs, §15 asked
+whether sites are held across species, §16 asked which bases matter. None of
+them asked the question the DNA-as-code reading actually rests on — does *word
+order* carry information? If an enhancer is a sentence, then how far apart two
+factor sites sit, on which strand, and in which turn of the helix should predict
+activity beyond which factors are present and how often. That is a claim that
+can fail, and this section fails it.
+
+**The instrument.** ENCODE4's joint lentiMPRA library (`attribution/mpra.py`):
+51,376 elements of 200 bp, each with measured log2(RNA/DNA) in K562, HepG2 and
+WTC11, so the same sequence is read three times in three cells.
+`genomeos/attribution/motif_grammar.py` and `scripts/motif_grammar.py` build
+three nested feature sets per element and compare them out of sample
+(`motif_grammar`, and `motif_grammar_preregistration` for the training-only
+stage):
+
+- **(a) composition**: GC, GC squared, CpG observed over expected.
+- **(b) plus strict counts**: log1p sites per TFClass family unit — JASPAR 2026
+  CORE vertebrates at relative score **0.95**, the threshold §16's measurement
+  calibrated, collapsed to one site per family per position (a GC box read by
+  KLF1, KLF5 and SP2 is one site, not three) — the 40 most frequent units on the
+  training chromosomes, plus total sites and distinct families. Median 34 sites
+  per 200 bp element.
+- **(c) plus grammar**: for each of the 55 unordered pairs of the ten most
+  frequent family units (a family with itself included), six features — the
+  number of non-overlapping site pairs with an edge-to-edge gap under 10, 10–20,
+  20–50 and 50+ bp, the number on the same strand, and the number whose centres
+  sit a whole helical turn apart (10.5 bp, within a quarter turn). 330 grammar
+  columns, 376 in all.
+
+Ridge, standard library only; the penalty is chosen by fold-by-chromosome
+cross-validation *inside* the 45,228 training elements (chr1–7, 10–20, X, Y).
+The falsifier is a **shuffled-grammar control**: the same grammar features after
+the site labels and strands are permuted within each element, which keeps every
+count and every position and destroys only which family sits where and how it is
+turned.
+
+**Pre-registered, in code, and committed before the held-out chromosomes were
+read** (`PREREGISTERED` in the module): *(c) beats (b) in Spearman with measured
+activity on held-out chromosomes in each cell line — the 95% bootstrap interval
+of ρ(c) − ρ(b) over held-out elements lies above 0 in K562, HepG2 and WTC11. The
+arrangement reading additionally requires ρ(c) − ρ(c shuffled) above 0 by the
+same interval.* Held out: chr8, chr9, chr21, chr22 — 6,146 elements, scored once.
+
+| cell line | (a) GC, CpG | (b) + strict counts | (c) + grammar | (c) shuffled | (c) − (b), 95% CI | (c) − shuffled, 95% CI |
+|---|---|---|---|---|---|---|
+| K562 | 0.200 | 0.434 | 0.436 | 0.437 | +0.0021 [−0.0049, +0.0085] | −0.0013 [−0.0081, +0.0051] |
+| HepG2 | 0.167 | 0.402 | 0.397 | 0.400 | −0.0056 [−0.0120, +0.0014] | −0.0036 [−0.0106, +0.0038] |
+| WTC11 | 0.348 | 0.424 | 0.426 | 0.422 | +0.0022 [−0.0050, +0.0097] | +0.0047 [−0.0023, +0.0124] |
+
+Spearman with measured activity on the held-out chromosomes; 1,000 bootstrap
+resamples of elements. The same comparison inside the training folds, where
+nothing was held out, gives the same picture: (b) 0.420, 0.408, 0.424 against
+(c) 0.421, 0.408, 0.425.
+
+**Verdict: the pre-registered claim fails in all three cell lines.** Motif
+arrangement — pairwise spacing, relative orientation, helical phase, as read
+here — adds nothing detectable over strict motif counts. The point estimates
+straddle zero (+0.002, −0.006, +0.002 on a Spearman correlation of 0.4), the
+intervals contain zero in every line, and the shuffled control does as well as
+the real arrangement, twice out of three times better. Where §16 found a
+measured absence at the level of bases, this is a measured absence at the level
+of arrangement.
+
+**What did work, and is worth keeping.** Strict counts are the one large effect
+in the table: they lift Spearman by +0.234 in K562 and +0.235 in HepG2 over
+composition alone (intervals [+0.208, +0.262] and [+0.205, +0.263]), which is
+the first time in area J that JASPAR sites have predicted a measured quantity at
+scale. *Which* factors have sites matters; *how they are arranged* does not, to
+this readout. WTC11 is the exception that says something about the assay: GC and
+CpG alone reach 0.348 there against 0.167 in HepG2, so in the iPSC line much of
+what the reporter measures is promoter-like composition, and counts add only
++0.077.
+
+**What this negative does and does not license.** It does not say enhancer
+grammar is a myth: the literature's clearest cases (the ZRS, the interferon-beta
+enhanceosome) are single loci with resolved structure, and the arrangement they
+depend on may be too rare to lift a genome-wide correlation. Four limits are
+recorded rather than tuned away. A 200 bp element holds few well-separated pairs,
+so the long-range arrangement of a full enhancer is out of the assay's reach. A
+site call is still a matrix score, not a footprint: at 0.95 the median element
+carries 34 of them, more than a 200 bp enhancer plausibly binds, so the pair
+features count mostly unbound sites. Ten families give 55 pairs, and the pair
+that matters for one cell type may sit outside them. And a reporter measures
+episomal activity out of chromatin, where phasing against the nucleosome — the
+one mechanism that would make helical phase matter most — is absent by
+construction.
+
+The honest reading of area J after this section: comparison across species and
+people places and dates function; the presence of strict, family-collapsed motif
+sites predicts measured activity at genome scale; their arrangement, at this
+resolution and in this assay, does not. The next readout that could overturn it
+is not another feature set but a model that reads the sequence itself, scored
+against these same held-out elements.
