@@ -24,6 +24,14 @@ model fitted on the K562 training pairs with activity, distance and the deletion
 model without the deletion in AUPRC on the held-out K562 pairs and on the held-out GM12878 pairs.
 The other held-out cell types have no AlphaGenome line in the table and are refused, with that
 reason. The screens are `experimental` evidence; the deletion stays `predicted`.
+
+The second question of the module is the contact term itself. 1/distance is a power law standing in
+for a measurement that exists: `score_contact` replaces it with the measured contact between the
+element's bin and the TSS's bin, read from a released 4D Nucleome in-situ Hi-C matrix of the screen's
+own cell line at 5 kb (genome/hic_contact.py, by range request, nothing downloaded). Its
+pre-registration is PREREGISTERED_CONTACT, fixed before the held-out pairs were scored: activity x
+measured contact beats activity over distance on held-out K562. Both contact features are
+`experimental`; the deletion stays `predicted`.
 """
 
 from __future__ import annotations
@@ -71,6 +79,39 @@ PREREGISTERED = (
     "'activity + distance' on the held-out K562 pairs and on the held-out GM12878 pairs"
 )
 
+# --- measured contact instead of 1/distance (the same test, a different contact term) --------------
+CONTACT_EVIDENCE = (
+    "experimental: 4D Nucleome in-situ Hi-C contact matrix at 5 kb, the file's own balancing vector, "
+    "read by range request; observed over expected from the file's expected-value vector"
+)
+CONTACT_CELLS = ("K562", "GM12878")  # the cell lines with a matrix; the rest are refused, with reason
+CONTACT_FEATURES = {
+    "distance": ("log_distance",),
+    "contact": ("log_contact",),
+    "activity + distance": ("log_distance", "log_activity", "activity_over_distance"),
+    "activity x contact": ("log_activity", "log_contact", "activity_x_contact"),
+    "activity + distance + deletion": FEATURES["activity + distance + deletion"],
+    "activity + contact + deletion": (
+        "log_activity",
+        "log_contact",
+        "activity_x_contact",
+        "top_target",
+        "deletion_drop",
+    ),
+    "activity + distance + contact": (
+        "log_distance",
+        "log_activity",
+        "activity_over_distance",
+        "log_contact",
+        "log_oe",
+    ),
+}
+PREREGISTERED_CONTACT = (
+    "fitted on the K562 training pairs that have a measured contact, 'activity x contact' (measured "
+    "4DN Hi-C contact at 5 kb in the screen's own cell line, balanced) has a higher AUPRC than "
+    "'activity + distance' (the same activity over 1/distance) on the held-out K562 pairs"
+)
+
 
 @dataclass
 class Pair:
@@ -84,12 +125,18 @@ class Pair:
     dhs: float
     h3k27ac: float
     regulated: bool
+    tss: int | None = None
     features: dict[str, float] = field(default_factory=dict)
     covered: bool = False
+    contact: dict[str, Any] | None = None
 
     @property
     def element(self) -> tuple[str, str, int, int]:
         return (self.cell, self.chrom, self.start, self.end)
+
+    @property
+    def midpoint(self) -> int:
+        return (self.start + self.end) // 2
 
 
 def fetch(name: str, knowledge: Path = KNOWLEDGE) -> Path:
@@ -120,6 +167,7 @@ def parse(lines: Any) -> list[Pair]:
                 dhs=float(r["DHS.RPM"] or 0),
                 h3k27ac=float(r["H3K27ac.RPM"] or 0),
                 regulated=r["Regulated"] == "TRUE",
+                tss=int(r["startTSS"]) if r.get("startTSS") else None,
             )
         )
     return out
@@ -511,5 +559,230 @@ def score(training: list[Pair], heldout: list[Pair], table: DeletionTable) -> di
                 for c in sorted({p.cell for p in heldout})
                 if any(p.regulated for p in heldout if p.cell == c and p.covered)
             },
+        },
+    }
+
+
+def annotate_contact(
+    pairs: list[Pair], source: Any, progress: Any = None, every: int = 1_000
+) -> dict[str, Any]:
+    """Fill each pair's measured-contact features from a Hi-C matrix source; report what was found.
+
+    The pairs are visited in genomic order per cell and chromosome, because the source reads whole
+    compressed blocks of the matrix and one block covers megabases: in that order each block is read
+    once. A pair whose cell line has no matrix, whose gene has no TSS column, or whose bin the
+    balancing leaves undefined gets zeros and `contact` stays None, and is counted here rather than
+    silently scored as a measured contact of zero.
+    """
+    order = sorted(range(len(pairs)), key=lambda i: (pairs[i].cell, pairs[i].chrom, pairs[i].midpoint))
+    counts: dict[str, int] = defaultdict(int)
+    for n, i in enumerate(order, 1):
+        p = pairs[i]
+        c, why = None, ""
+        if p.cell not in getattr(source, "matrices", {}):
+            why = "no_matrix_for_this_cell_line"
+        elif p.tss is None:
+            why = "no_tss_column_for_this_pair"
+        else:
+            c = source.contact(p.cell, p.chrom, p.midpoint, p.tss)
+            why = "" if c is not None else "no_balanced_bin_in_the_matrix"
+        p.contact = c
+        activity = math.log1p(math.sqrt(max(p.dhs, 0.0) * max(p.h3k27ac, 0.0)))
+        if c is None:
+            counts["pairs_without_contact"] += 1
+            counts[f"without_contact_{why}"] += 1
+            p.features.update({"log_contact": 0.0, "log_oe": 0.0, "activity_x_contact": 0.0, "same_bin": 0.0})
+        else:
+            counts["pairs_with_contact"] += 1
+            counts[f"balanced_by_{c['norm']}"] += 1
+            counts["same_bin"] += int(bool(c["same_bin"]))
+            counts["zero_contact"] += int(c["observed"] <= 0)
+            p.features.update(
+                {
+                    "log_contact": math.log1p(max(c["observed"], 0.0)),
+                    "log_oe": math.log1p(max(c["oe"] or 0.0, 0.0)),
+                    "activity_x_contact": activity + math.log1p(max(c["observed"], 0.0)),
+                    "same_bin": float(bool(c["same_bin"])),
+                }
+            )
+        if progress and n % every == 0:
+            progress(f"contacts: {n}/{len(order)} pairs read ({counts['pairs_with_contact']} measured)")
+    return dict(counts)
+
+
+def contact_coverage_by_arm(pairs: list[Pair]) -> dict[str, Any]:
+    """Which arm the measured contact reaches, and whether the subset that has one is the easier one.
+
+    The same denominator discipline as `coverage_by_arm`, for the contact feature. A Hi-C bin can be
+    unmappable, blacklisted or simply one the balancing did not converge on, and if that happened
+    more often on one arm than the other, a rate read on the pairs that have a contact would be a
+    statement about the matrix's coverage rather than about the predictors. Both arms are reported,
+    and both distance baselines are read twice: on every pair of a deleted element and on the subset
+    of those that also have a contact. If the baselines move between the two, the subset is not the
+    same problem, and any lift on it has to be read with that in mind.
+    """
+    covered = [p for p in pairs if p.covered]
+    arms = {}
+    for arm, flag in (("regulated", True), ("not regulated", False)):
+        rows = [p for p in covered if p.regulated is flag]
+        with_contact = sum(p.contact is not None for p in rows)
+        arms[arm] = {
+            "pairs_on_a_deleted_element": len(rows),
+            "with_a_measured_contact": with_contact,
+            "fraction": round(with_contact / len(rows), 4) if rows else None,
+        }
+    baselines = {}
+    for name, rows in (
+        ("on a deleted element", covered),
+        ("and with a measured contact", [p for p in covered if p.contact is not None]),
+    ):
+        lab = [p.regulated for p in rows]
+        baselines[name] = {
+            "distance": metrics([-p.features["log_distance"] for p in rows], lab),
+            "activity over distance": metrics([p.features["activity_over_distance"] for p in rows], lab),
+        }
+    same_bin = [p for p in covered if p.contact is not None and p.features.get("same_bin")]
+    return {
+        "arms": arms,
+        "baselines": baselines,
+        "same_bin_pairs": len(same_bin),
+        "same_bin_regulated": sum(p.regulated for p in same_bin),
+    }
+
+
+def contact_reading(judged: dict[str, Any], training: dict[str, Any]) -> str:
+    """What the intervals say, beside the pass or fail of the pre-registered rule.
+
+    A rule can pass on a point estimate whose interval straddles zero while the same comparison on
+    the larger training sample is clearly negative, which is this measurement's own outcome. The
+    verdict field answers the pre-registration; this field answers the question.
+    """
+    held = (judged.get("contact_gain") or {}).get("ci95")
+    train = (training.get("contact_gain") or {}).get("ci95")
+    parts = []
+    if held and held[0] <= 0 <= held[1]:
+        parts.append("the held-out interval straddles zero, so the held-out comparison settles nothing")
+    elif held:
+        parts.append("the held-out interval is clear of zero")
+    if train and train[1] < 0:
+        parts.append("the same substitution on the larger training sample is clearly negative")
+    elif train and train[0] > 0:
+        parts.append("the training sample agrees")
+    return "; ".join(parts) if parts else "no interval to read"
+
+
+def score_contact(
+    training: list[Pair], heldout: list[Pair], table: DeletionTable, source: Any, progress: Any = None
+) -> dict[str, Any]:
+    """Measured contact in place of 1/distance, on the pairs the deletion comparison already used.
+
+    Every model here is fitted and scored on the same pairs: on a deleted element, so the deletion
+    features exist, and with a measured contact, so the contact features exist. The pre-registered
+    claim is PREREGISTERED_CONTACT, fixed in the code before the held-out pairs were scored.
+    """
+    annotate(training, table)
+    annotate(heldout, table)
+    found = {
+        "training": annotate_contact(training, source, progress),
+        "heldout": annotate_contact(heldout, source, progress),
+    }
+    train = [p for p in training if p.covered and p.contact is not None]
+    labels = [p.regulated for p in train]
+
+    loco: dict[str, list[float]] = {}
+    for name, cols in CONTACT_FEATURES.items():
+        s = [0.0] * len(train)
+        for c in sorted({p.chrom for p in train}):
+            fit_rows = [p for p in train if p.chrom != c]
+            w = logistic_fit(matrix(fit_rows, cols), [p.regulated for p in fit_rows])
+            idx = [i for i, p in enumerate(train) if p.chrom == c]
+            for i, v in zip(idx, logistic_score(w, matrix([train[i] for i in idx], cols)), strict=True):
+                s[i] = v
+        loco[name] = s
+
+    weights = {name: logistic_fit(matrix(train, cols), labels) for name, cols in CONTACT_FEATURES.items()}
+    held: dict[str, Any] = {}
+    for cell in sorted({p.cell for p in heldout}):
+        rows = [p for p in heldout if p.cell == cell and p.covered and p.contact is not None]
+        if cell not in CONTACT_CELLS:
+            held[cell] = {"refused": "no 4DN Hi-C matrix chosen for this cell type"}
+            continue
+        if cell not in MODEL_CELLS:
+            held[cell] = {"refused": "no AlphaGenome line for this cell type in the deletion table"}
+            continue
+        if not any(p.regulated for p in rows):
+            held[cell] = {"refused": "no regulated pair with both a deletion and a measured contact"}
+            continue
+        lab = [p.regulated for p in rows]
+        s = {n: logistic_score(weights[n], matrix(rows, cols)) for n, cols in CONTACT_FEATURES.items()}
+        contact_ap = average_precision(s["activity x contact"], lab) or 0
+        distance_ap = average_precision(s["activity + distance"], lab) or 0
+        held[cell] = {
+            "models": {n: metrics(v, lab) for n, v in s.items()},
+            "contact_gain": gain_interval(s["activity x contact"], s["activity + distance"], rows),
+            "contact_gain_with_deletion": gain_interval(
+                s["activity + contact + deletion"], s["activity + distance + deletion"], rows
+            ),
+            "contact_added_to_distance": gain_interval(
+                s["activity + distance + contact"], s["activity + distance"], rows
+            ),
+            "passes": contact_ap > distance_ap,
+        }
+    loco_summary = {
+        "models": {name: metrics(v, labels) for name, v in loco.items()},
+        "contact_gain": gain_interval(loco["activity x contact"], loco["activity + distance"], train),
+        "contact_gain_with_deletion": gain_interval(
+            loco["activity + contact + deletion"], loco["activity + distance + deletion"], train
+        ),
+        "contact_added_to_distance": gain_interval(
+            loco["activity + distance + contact"], loco["activity + distance"], train
+        ),
+    }
+    judged = held.get("K562", {})  # the pre-registered claim names held-out K562
+    return {
+        "evidence": f"{EVIDENCE}; {CONTACT_EVIDENCE}",
+        "contact_source": source.provenance() if hasattr(source, "provenance") else {},
+        "preregistered": PREREGISTERED_CONTACT,
+        "verdict": (
+            "passed"
+            if judged.get("passes")
+            else ("failed" if "passes" in judged else "refused: no held-out K562 pairs to judge")
+        ),
+        "reading": contact_reading(judged, loco_summary),
+        "coverage": {
+            "training_pairs": len(training),
+            "training_pairs_scored": len(train),
+            "training_positives_scored": sum(labels),
+            "heldout_pairs": len(heldout),
+            "heldout_pairs_scored": sum(bool(p.covered and p.contact is not None) for p in heldout),
+            "contacts_found": found,
+        },
+        "contact_coverage_by_arm": {
+            "K562 training": contact_coverage_by_arm(training),
+            **{
+                f"{cell} held out": contact_coverage_by_arm([p for p in heldout if p.cell == cell])
+                for cell in CONTACT_CELLS
+                if any(p.cell == cell for p in heldout)
+            },
+        },
+        "training_single_predictors": {
+            "distance": metrics([-p.features["log_distance"] for p in train], labels),
+            "activity over distance": metrics([p.features["activity_over_distance"] for p in train], labels),
+            "measured contact": metrics([p.features["log_contact"] for p in train], labels),
+            "measured contact over expected": metrics([p.features["log_oe"] for p in train], labels),
+            "activity x measured contact": metrics([p.features["activity_x_contact"] for p in train], labels),
+        },
+        "training_leave_chromosome_out": loco_summary,
+        "weights": {
+            name: dict(zip(("intercept", *cols), (round(v, 4) for v in weights[name]), strict=True))
+            for name, cols in CONTACT_FEATURES.items()
+        },
+        "heldout": held,
+        "same_bin_pairs": {
+            "training": sum(1 for p in train if p.features.get("same_bin")),
+            "note": (
+                "an element and its TSS inside one 5 kb bin share the diagonal cell of the matrix, which "
+                "is the measured self-contact of that bin, not a contact between two places"
+            ),
         },
     }

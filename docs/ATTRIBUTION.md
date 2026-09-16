@@ -2748,6 +2748,87 @@ elements chosen near expressed genes, mostly in K562.
 4. Area J: motif spacing and orientation against lentiMPRA activity, beyond motif counts, so a
    grammar rule is a test that can fail.
 
+## Measured 3D contact in place of 1/distance: the substitution fails (2026-09-16)
+
+The contact term above was 1/distance, a power law standing in for a measurement that exists. 4DN
+publishes the matrices, so the substitution can be made and the same pre-registration rerun.
+`scripts/crispri_contact.py` (`attribution/crispri.py` with the new `genome/hic_contact.py`, result
+`crispri_contact`, no model request) reads the contact between the element's bin and the TSS's bin
+from a released in-situ Hi-C .hic of the screen's own cell line at 5 kb: K562 4DNFITUOMFUQ (6.7 GB,
+merged replicates, MboI, Aiden lab) and GM12878 4DNFI1UEG1HD (22.6 GB, same protocol). Neither file
+is downloaded. A .hic is an addressable container — header, master index of compressed blocks,
+balancing vectors, expected-value vectors — so the reader asks for the ranges a question needs over
+HTTP, decompresses each block, keeps the cells it came for and drops the rest: the 10,613 distinct
+K562 bin pairs the benchmark asks about lie in the 534 blocks the file's index offers for them,
+132 MB of its 6.7 GB, and what remains on disk is 1.6 MB of answers (data/knowledge/hic_contact,
+local, never committed; the whole first pass over both matrices took 19 minutes).
+The reader is standard library only (struct, zlib, urllib), version 8 and version 9. It was checked
+against the file itself before anything was scored: a 10 kb raw count equals the four 5 kb counts
+inside it, cell by cell, and the file's expected-value vector reproduces the distance decay of its
+own blocks. Normalisation is the file's own balancing vector, the first of SCALE, KR, VC_SQRT and VC
+that defines both bins — KR for 9,127 training pairs, VC_SQRT for 1,139 where KR left a bin
+undefined, and 90 pairs no vector reaches, which are reported, never scored as a contact of zero.
+
+**Coverage, both arms, before any lift is read** (`contact_coverage_by_arm`). The matrix reaches
+451 of 451 regulated training pairs (100%) and 8,714 of 8,786 not regulated (99.2%); held-out K562
+114 of 114 and 1,625 of 1,630. Both baselines are unmoved by the subset (distance 0.4413 on all
+9,237 covered pairs against 0.4424 on the 9,165 that also have a contact; activity over distance
+0.5190 against 0.5195), so this is the same problem as the section above, not an easier one. 1,158
+of the 10,266 measured pairs have a contact of exactly zero at 5 kb — a sparse cell in a deep
+matrix, kept as the zero it is — and 53 training pairs have element and TSS in one bin, where the
+number is the bin's diagonal, its self-contact.
+
+The pre-registration, fixed in `PREREGISTERED_CONTACT` before the held-out pairs were scored: fitted
+on the K562 training pairs that have a measured contact, activity × measured contact has a higher
+AUPRC than activity + distance on held-out K562.
+
+| K562 training, same 9,165 pairs (the logistic rows leave-chromosome-out) | AUPRC | AUROC |
+|---|---|---|
+| distance alone | 0.442 | 0.897 |
+| measured contact alone | 0.379 | 0.891 |
+| measured contact over expected alone | 0.083 | 0.668 |
+| activity × measured contact (unfitted product) | 0.441 | 0.914 |
+| logistic, activity + distance | **0.512** | 0.922 |
+| logistic, activity × contact | 0.431 | 0.910 |
+| logistic, activity + distance + contact | 0.522 | 0.928 |
+| logistic, activity + distance + deletion | **0.675** | 0.934 |
+| logistic, activity + contact + deletion | 0.650 | 0.928 |
+
+On training the substitution loses: −0.081 AUPRC (95% −0.118 to −0.011, chromosomes resampled).
+Replacing distance with measured contact inside the deletion model loses too, −0.025 (−0.048 to
++0.008). Adding contact to distance rather than replacing it gains +0.010 (−0.010 to +0.027).
+
+| held out | pairs (regulated) | activity + distance | activity × contact | gain (95%) |
+|---|---|---|---|---|
+| K562 | 1,739 (114) | 0.550 | 0.563 | +0.012 (−0.024 to +0.046) |
+| GM12878 | 61 (13) | 0.897 | 0.922 | +0.025 (−0.029 to +0.067) |
+| HCT116, Jurkat, WTC11 | | refused: no 4DN matrix chosen for these cell types | | |
+
+**The pre-registered claim passes on the point estimate and means nothing on its own.** Held-out
+K562 gives +0.012 AUPRC with an interval straddling zero, while the same comparison on five times
+as many training pairs is clearly negative. Read together the answer is no: measured contact at
+5 kb does not replace 1/distance, and nothing here resembles what the deletion did (+0.163 on
+training, +0.083 held out, both intervals clear of zero). The closest thing to a positive is contact
+as an extra feature beside distance, +0.023 on held-out K562 (0.000 to +0.063) and +0.010 on
+training (−0.010 to +0.027), and with the deletion 0.633 → 0.644 (+0.010, −0.010 to +0.039). Every
+one of those intervals touches or crosses zero. GM12878 rests on 13 regulated pairs and decides
+nothing either way.
+
+**Why, as far as the numbers say.** Raw contact at these distances is mostly the distance decay
+itself: contact alone (0.379) reads close to distance alone (0.442), and once the decay is divided
+out, observed over expected alone collapses to 0.083 AUPRC at a base rate of 4.9%. The benchmark's
+pairs are close together — that is what CRISPRi can test — and there the power law is already a
+good estimate of contact, while a 5 kb Hi-C cell is a noisy one. The model that fits both terms
+reads it the same way: given distance, it puts weight on observed over expected (+2.46) and a
+negative one on raw contact (−0.61), using the measurement only as a residual.
+
+**Limits.** One matrix per cell line, MboI in situ Hi-C, at 5 kb: a Micro-C matrix, 1 kb bins, or a
+loop-call feature instead of a single cell might each behave differently, and this result does not
+speak for them. The element's midpoint and the benchmark's `startTSS` define the two bins, so a pair
+whose enhancer or promoter straddles a bin edge is read one bin off. GM12878's held-out pairs are too
+few to test anything. What is settled is narrower than the question: this contact, at this
+resolution, does not improve this model.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
