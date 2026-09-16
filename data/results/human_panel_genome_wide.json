@@ -1,7 +1,11 @@
 {
   "result": "human_panel_genome_wide",
-  "date": "2026-09-15",
+  "date": "2026-09-16",
   "chromosomes_read": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
     "chr5",
     "chr6",
     "chr7",
@@ -24,6 +28,10 @@
     "chrY"
   ],
   "pooled_over": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
     "chr5",
     "chr6",
     "chr7",
@@ -51,16 +59,20 @@
   "claims": {
     "cds_pooled_ratio_gc_rt": {
       "claim": "coding exons below 0.6 of the GC- and timing-matched recurring rate",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.292,
         "median": 0.379,
-        "max": 0.444
+        "max": 0.464
       },
-      "holds_on": 19,
+      "holds_on": 23,
       "fails_on": [],
       "verdict": "genome-wide",
       "per_chromosome": {
+        "chr1": 0.464,
+        "chr2": 0.344,
+        "chr3": 0.378,
+        "chr4": 0.403,
         "chr5": 0.371,
         "chr6": 0.406,
         "chr7": 0.36,
@@ -84,13 +96,13 @@
     },
     "neutral_pooled_ratio_gc_rt": {
       "claim": "the neutral tier within a quarter of its matched rate",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.848,
-        "median": 1.108,
+        "median": 1.105,
         "max": 1.347
       },
-      "holds_on": 15,
+      "holds_on": 19,
       "fails_on": [
         "chr17",
         "chr20",
@@ -99,6 +111,10 @@
       ],
       "verdict": "chromosome-specific",
       "per_chromosome": {
+        "chr1": 1.203,
+        "chr2": 1.044,
+        "chr3": 1.083,
+        "chr4": 1.073,
         "chr5": 1.057,
         "chr6": 1.044,
         "chr7": 1.108,
@@ -122,16 +138,20 @@
     },
     "cds_units_fixed_excess": {
       "claim": "coding 200-bp units fixed at least 15 points above their matched expectation",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.2207,
         "median": 0.2623,
         "max": 0.2967
       },
-      "holds_on": 19,
+      "holds_on": 23,
       "fails_on": [],
       "verdict": "genome-wide",
       "per_chromosome": {
+        "chr1": 0.232,
+        "chr2": 0.2615,
+        "chr3": 0.2684,
+        "chr4": 0.2774,
         "chr5": 0.2727,
         "chr6": 0.2718,
         "chr7": 0.2584,
@@ -155,19 +175,24 @@
     },
     "neutral_units_fixed_excess": {
       "claim": "neutral 200-bp units fixed within 5 points of their matched expectation",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": -0.0825,
         "median": -0.0194,
         "max": 0.0804
       },
-      "holds_on": 17,
+      "holds_on": 20,
       "fails_on": [
+        "chr1",
         "chr16",
         "chr8"
       ],
-      "verdict": "mostly",
+      "verdict": "chromosome-specific",
       "per_chromosome": {
+        "chr1": -0.0675,
+        "chr2": 0.0087,
+        "chr3": -0.0114,
+        "chr4": -0.0215,
         "chr5": -0.0158,
         "chr6": -0.0184,
         "chr7": -0.0421,
@@ -191,16 +216,20 @@
     },
     "genes_core_share": {
       "claim": "at least 40% of callable genes called core",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.42,
         "median": 0.59,
         "max": 0.707
       },
-      "holds_on": 19,
+      "holds_on": 23,
       "fails_on": [],
       "verdict": "genome-wide",
       "per_chromosome": {
+        "chr1": 0.526,
+        "chr2": 0.603,
+        "chr3": 0.567,
+        "chr4": 0.591,
         "chr5": 0.659,
         "chr6": 0.579,
         "chr7": 0.605,
@@ -224,16 +253,20 @@
     },
     "genes_core_excess_over_matched": {
       "claim": "callable genes core 30 points more often than their own matched windows",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.343,
         "median": 0.49,
         "max": 0.614
       },
-      "holds_on": 19,
+      "holds_on": 23,
       "fails_on": [],
       "verdict": "genome-wide",
       "per_chromosome": {
+        "chr1": 0.435,
+        "chr2": 0.52,
+        "chr3": 0.486,
+        "chr4": 0.506,
         "chr5": 0.539,
         "chr6": 0.493,
         "chr7": 0.502,
@@ -257,16 +290,20 @@
     },
     "timing_match_survival": {
       "claim": "at least half the coding-neutral gap surviving the replication-timing match",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.712,
-        "median": 0.909,
+        "median": 0.904,
         "max": 0.976
       },
-      "holds_on": 19,
+      "holds_on": 23,
       "fails_on": [],
       "verdict": "genome-wide",
       "per_chromosome": {
+        "chr1": 0.935,
+        "chr2": 0.902,
+        "chr3": 0.904,
+        "chr4": 0.861,
         "chr5": 0.878,
         "chr6": 0.954,
         "chr7": 0.897,
@@ -290,16 +327,20 @@
     },
     "background_storage_share": {
       "claim": "storage the default: between a third and two thirds of placed background units",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.3587,
-        "median": 0.4853,
+        "median": 0.4841,
         "max": 0.5337
       },
-      "holds_on": 19,
+      "holds_on": 23,
       "fails_on": [],
       "verdict": "genome-wide",
       "per_chromosome": {
+        "chr1": 0.463,
+        "chr2": 0.4626,
+        "chr3": 0.4711,
+        "chr4": 0.49,
         "chr5": 0.4718,
         "chr6": 0.4814,
         "chr7": 0.4911,
@@ -323,13 +364,13 @@
     },
     "no_unknown_tier_above_matched": {
       "claim": "no unknown tier more fixed than its matched expectation by more than 5 points",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": -0.0243,
-        "median": 0.0198,
+        "median": 0.0162,
         "max": 0.0804
       },
-      "holds_on": 14,
+      "holds_on": 18,
       "fails_on": [
         "chr11",
         "chr16",
@@ -339,6 +380,10 @@
       ],
       "verdict": "chromosome-specific",
       "per_chromosome": {
+        "chr1": 0.0075,
+        "chr2": 0.0391,
+        "chr3": 0.0147,
+        "chr4": -0.0215,
         "chr5": 0.0331,
         "chr6": 0.0198,
         "chr7": -0.0243,
@@ -362,13 +407,13 @@
     },
     "unit_classes_even_over_timing": {
       "claim": "fixed and storage units within 3 points of each other in the late third",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.004,
         "median": 0.017,
         "max": 0.066
       },
-      "holds_on": 14,
+      "holds_on": 18,
       "fails_on": [
         "chr11",
         "chr15",
@@ -378,6 +423,10 @@
       ],
       "verdict": "chromosome-specific",
       "per_chromosome": {
+        "chr1": 0.017,
+        "chr2": 0.014,
+        "chr3": 0.03,
+        "chr4": 0.024,
         "chr5": 0.016,
         "chr6": 0.013,
         "chr7": 0.028,
@@ -401,18 +450,22 @@
     },
     "gnocchi_panel_spearman": {
       "claim": "Gnocchi and the panel barely agreeing per kilobase",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": -0.2101,
-        "median": -0.0816,
+        "median": -0.0828,
         "max": -0.0237
       },
-      "holds_on": 18,
+      "holds_on": 22,
       "fails_on": [
         "chr16"
       ],
       "verdict": "mostly",
       "per_chromosome": {
+        "chr1": -0.0808,
+        "chr2": -0.0836,
+        "chr3": -0.1026,
+        "chr4": -0.0833,
         "chr5": -0.1013,
         "chr6": -0.0709,
         "chr7": -0.0925,
@@ -436,13 +489,13 @@
     },
     "gnocchi_constrained_early": {
       "claim": "Gnocchi's constrained kilobases mostly early-replicating",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.3619,
-        "median": 0.509,
+        "median": 0.5415,
         "max": 0.6975
       },
-      "holds_on": 10,
+      "holds_on": 14,
       "fails_on": [
         "chr10",
         "chr11",
@@ -456,6 +509,10 @@
       ],
       "verdict": "chromosome-specific",
       "per_chromosome": {
+        "chr1": 0.5177,
+        "chr2": 0.5584,
+        "chr3": 0.6207,
+        "chr4": 0.6694,
         "chr5": 0.6031,
         "chr6": 0.5511,
         "chr7": 0.5415,
@@ -479,13 +536,13 @@
     },
     "gnocchi_unscored_panel_depleted_duplicated": {
       "claim": "Gnocchi's silent, panel-depleted kilobases being copies",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": 0.08,
         "median": 0.252,
         "max": 0.583
       },
-      "holds_on": 7,
+      "holds_on": 9,
       "fails_on": [
         "chr10",
         "chr11",
@@ -494,6 +551,8 @@
         "chr14",
         "chr18",
         "chr19",
+        "chr3",
+        "chr4",
         "chr5",
         "chr6",
         "chr7",
@@ -502,6 +561,10 @@
       ],
       "verdict": "chromosome-specific",
       "per_chromosome": {
+        "chr1": 0.422,
+        "chr2": 0.311,
+        "chr3": 0.114,
+        "chr4": 0.129,
         "chr5": 0.255,
         "chr6": 0.118,
         "chr7": 0.252,
@@ -525,16 +588,20 @@
     },
     "overdispersion": {
       "claim": "recurring counts per kilobase overdispersed well beyond a Poisson",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
-        "min": 7.35,
-        "median": 9.77,
+        "min": 7.32,
+        "median": 9.65,
         "max": 26.21
       },
-      "holds_on": 19,
+      "holds_on": 23,
       "fails_on": [],
       "verdict": "genome-wide",
       "per_chromosome": {
+        "chr1": 7.74,
+        "chr2": 10.54,
+        "chr3": 7.32,
+        "chr4": 9.61,
         "chr5": 8.5,
         "chr6": 9.77,
         "chr7": 9.11,
@@ -558,18 +625,22 @@
     },
     "core_blocks_gnocchi_agreement": {
       "claim": "core blocks Gnocchi-constrained more often than variable blocks",
-      "chromosomes": 19,
+      "chromosomes": 23,
       "spread": {
         "min": -0.0664,
-        "median": 0.1965,
+        "median": 0.1896,
         "max": 0.3082
       },
-      "holds_on": 18,
+      "holds_on": 22,
       "fails_on": [
         "chr21"
       ],
       "verdict": "mostly",
       "per_chromosome": {
+        "chr1": 0.1355,
+        "chr2": 0.1048,
+        "chr3": 0.3047,
+        "chr4": 0.1895,
         "chr5": 0.3082,
         "chr6": 0.0534,
         "chr7": 0.1896,
@@ -593,6 +664,74 @@
     }
   },
   "claim_numbers": {
+    "chr1": {
+      "cds_pooled_ratio_gc_rt": 0.464,
+      "neutral_pooled_ratio_gc_rt": 1.203,
+      "cds_units_fixed_excess": 0.232,
+      "neutral_units_fixed_excess": -0.0675,
+      "genes_core_share": 0.526,
+      "genes_core_excess_over_matched": 0.435,
+      "timing_match_survival": 0.935,
+      "background_storage_share": 0.463,
+      "no_unknown_tier_above_matched": 0.0075,
+      "unit_classes_even_over_timing": 0.017,
+      "gnocchi_panel_spearman": -0.0808,
+      "gnocchi_constrained_early": 0.5177,
+      "gnocchi_unscored_panel_depleted_duplicated": 0.422,
+      "overdispersion": 7.74,
+      "core_blocks_gnocchi_agreement": 0.1355
+    },
+    "chr2": {
+      "cds_pooled_ratio_gc_rt": 0.344,
+      "neutral_pooled_ratio_gc_rt": 1.044,
+      "cds_units_fixed_excess": 0.2615,
+      "neutral_units_fixed_excess": 0.0087,
+      "genes_core_share": 0.603,
+      "genes_core_excess_over_matched": 0.52,
+      "timing_match_survival": 0.902,
+      "background_storage_share": 0.4626,
+      "no_unknown_tier_above_matched": 0.0391,
+      "unit_classes_even_over_timing": 0.014,
+      "gnocchi_panel_spearman": -0.0836,
+      "gnocchi_constrained_early": 0.5584,
+      "gnocchi_unscored_panel_depleted_duplicated": 0.311,
+      "overdispersion": 10.54,
+      "core_blocks_gnocchi_agreement": 0.1048
+    },
+    "chr3": {
+      "cds_pooled_ratio_gc_rt": 0.378,
+      "neutral_pooled_ratio_gc_rt": 1.083,
+      "cds_units_fixed_excess": 0.2684,
+      "neutral_units_fixed_excess": -0.0114,
+      "genes_core_share": 0.567,
+      "genes_core_excess_over_matched": 0.486,
+      "timing_match_survival": 0.904,
+      "background_storage_share": 0.4711,
+      "no_unknown_tier_above_matched": 0.0147,
+      "unit_classes_even_over_timing": 0.03,
+      "gnocchi_panel_spearman": -0.1026,
+      "gnocchi_constrained_early": 0.6207,
+      "gnocchi_unscored_panel_depleted_duplicated": 0.114,
+      "overdispersion": 7.32,
+      "core_blocks_gnocchi_agreement": 0.3047
+    },
+    "chr4": {
+      "cds_pooled_ratio_gc_rt": 0.403,
+      "neutral_pooled_ratio_gc_rt": 1.073,
+      "cds_units_fixed_excess": 0.2774,
+      "neutral_units_fixed_excess": -0.0215,
+      "genes_core_share": 0.591,
+      "genes_core_excess_over_matched": 0.506,
+      "timing_match_survival": 0.861,
+      "background_storage_share": 0.49,
+      "no_unknown_tier_above_matched": -0.0215,
+      "unit_classes_even_over_timing": 0.024,
+      "gnocchi_panel_spearman": -0.0833,
+      "gnocchi_constrained_early": 0.6694,
+      "gnocchi_unscored_panel_depleted_duplicated": 0.129,
+      "overdispersion": 9.61,
+      "core_blocks_gnocchi_agreement": 0.1895
+    },
     "chr5": {
       "cds_pooled_ratio_gc_rt": 0.371,
       "neutral_pooled_ratio_gc_rt": 1.057,
@@ -918,36 +1057,40 @@
     }
   },
   "unknown_space_bp": {
-    "fixed": 268157385,
-    "storage": 274285798,
-    "cannot_place": 61035040
+    "fixed": 376653688,
+    "storage": 385253967,
+    "cannot_place": 71329051
   },
   "background_units": {
-    "units": 9734714,
+    "units": 13883101,
     "classes": {
-      "fixed": 4934583,
-      "storage": 4613565,
-      "hypervariable": 116360,
-      "unplaced": 70206
+      "fixed": 7078617,
+      "storage": 6561193,
+      "hypervariable": 161744,
+      "unplaced": 81547
     },
     "placed_shares": {
-      "fixed": 0.5106,
-      "storage": 0.4774,
-      "hypervariable": 0.012
+      "fixed": 0.5129,
+      "storage": 0.4754,
+      "hypervariable": 0.0117
     }
   },
   "storage": {
-    "storage_units": 1370932,
-    "storage_bp": 274285798,
-    "gnomad_matched_events": 2463712,
-    "panel_events_snv_indel": 3004332,
-    "with_tandem_repeat": 308831,
-    "with_gtex_eqtl": 131891,
-    "with_mpra_allele_pair": 6436,
-    "with_either": 134297,
-    "hypervariable_units": 34022,
-    "hypervariable_with_tandem_repeat": 32996,
+    "storage_units": 1925587,
+    "storage_bp": 385253967,
+    "gnomad_matched_events": 3442635,
+    "panel_events_snv_indel": 4183814,
+    "with_tandem_repeat": 428161,
+    "with_gtex_eqtl": 184604,
+    "with_mpra_allele_pair": 8611,
+    "with_either": 187966,
+    "hypervariable_units": 47157,
+    "hypervariable_with_tandem_repeat": 45878,
     "chromosomes": [
+      "chr1",
+      "chr2",
+      "chr3",
+      "chr4",
       "chr5",
       "chr6",
       "chr7",
@@ -969,41 +1112,41 @@
       "chrX"
     ],
     "by_tier": {
-      "regulatory": 616947,
-      "fossil": 542233,
-      "neutral": 122060,
-      "constrained_unknown": 54135,
-      "structural": 35557
+      "regulatory": 866918,
+      "fossil": 769793,
+      "neutral": 177771,
+      "constrained_unknown": 74109,
+      "structural": 36996
     },
     "recurring_values_histogram": {
-      "1": 144,
-      "2": 607208,
-      "3": 452660,
-      "4": 181827,
-      "5": 69584,
-      "6": 30888,
-      "7": 17355,
-      "8": 11266
+      "1": 183,
+      "2": 858330,
+      "3": 637883,
+      "4": 252382,
+      "5": 95420,
+      "6": 42187,
+      "7": 23685,
+      "8": 15517
     },
     "event_kinds": {
-      "snv": 1016839,
-      "deletion+snv": 92097,
-      "insertion+snv": 84274,
-      "deletion+insertion+snv": 56435,
-      "deletion": 34266,
-      "insertion": 33722,
-      "deletion+insertion": 26217,
-      "snv+structural": 13974
+      "snv": 1432812,
+      "deletion+snv": 129619,
+      "insertion+snv": 116917,
+      "deletion+insertion+snv": 77891,
+      "deletion": 48568,
+      "insertion": 47370,
+      "deletion+insertion": 36191,
+      "snv+structural": 18387
     },
-    "effective_values_median": 1.65,
-    "top_share_median": 0.75,
-    "effective_values_counted": 1370932,
-    "gnomad_matched_share": 0.8201,
+    "effective_values_median": 1.64,
+    "top_share_median": 0.753,
+    "effective_values_counted": 1925587,
+    "gnomad_matched_share": 0.8228,
     "hypervariable_read_by_length": {
-      "hypervariable": 18197,
-      "storage": 15280,
-      "substitutions only": 405,
-      "fixed": 140
+      "hypervariable": 25559,
+      "storage": 20872,
+      "substitutions only": 550,
+      "fixed": 176
     }
   },
   "chrY": {
@@ -1085,6 +1228,63 @@
     }
   },
   "cost": {
+    "chr1": {
+      "seconds": 3123.6,
+      "maf_mb": 21405.8,
+      "maf_seconds": 1357.1,
+      "stages": {
+        "blocks, controls and units": 351.0,
+        "storage catalogue": 1197.7,
+        "against Gnocchi": 82.6,
+        "sensitivity": 14.4,
+        "candidates": 3.9,
+        "this chromosome's real unknown": 1.0,
+        "genome-wide cost": 6.7
+      }
+    },
+    "chr2": {
+      "seconds": 3308.0,
+      "maf_mb": 22589.5,
+      "maf_seconds": 1613.3,
+      "stages": {
+        "blocks, controls and units": 235.9,
+        "storage catalogue": 1245.5,
+        "against Gnocchi": 94.5,
+        "sensitivity": 16.1,
+        "calibration loci": 10.4,
+        "candidates": 3.9,
+        "this chromosome's real unknown": 1.1,
+        "genome-wide cost": 8.0
+      }
+    },
+    "chr3": {
+      "seconds": 2256.5,
+      "maf_mb": 18509.6,
+      "maf_seconds": 1174.1,
+      "stages": {
+        "blocks, controls and units": 263.4,
+        "storage catalogue": 640.2,
+        "against Gnocchi": 68.7,
+        "sensitivity": 11.7,
+        "candidates": 4.1,
+        "this chromosome's real unknown": 1.1,
+        "genome-wide cost": 6.7
+      }
+    },
+    "chr4": {
+      "seconds": 3190.5,
+      "maf_mb": 17769.6,
+      "maf_seconds": 1289.3,
+      "stages": {
+        "blocks, controls and units": 182.0,
+        "storage catalogue": 1382.2,
+        "against Gnocchi": 147.0,
+        "sensitivity": 29.9,
+        "candidates": 4.7,
+        "this chromosome's real unknown": 1.1,
+        "genome-wide cost": 62.7
+      }
+    },
     "chr5": {
       "seconds": 3302.8,
       "maf_mb": 16762.8,

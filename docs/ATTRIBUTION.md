@@ -1619,6 +1619,37 @@ a reporter assay's direction at that size, which is compatible both with the exe
 wrong and with a plasmid fragment being a poor proxy for a gene in its chromosome. The pooled figure
 over all 3,260 pairs may be reported as a description, never as a test.
 
+## Many human genomes, every chromosome: the panel closes at 24 of 24 (2026-09-16)
+
+chr2 was the last one, read in 3,308 s with every control passing, and it moved nothing: coding exons
+at 0.344 of the matched rate, genes core 0.603, the constrained-unknown tier at 0.880. The panel has
+now read **24 of 24 chromosomes**, about 267 GB of Cactus alignment of 90 human assemblies streamed
+and never stored, no model call anywhere in it.
+
+**1,925,587 storage units** over 385.3 Mb, 3,442,635 of their events matched in gnomAD, **187,966
+executor-ready** (184,604 with a fine-mapped GTEx eQTL, 8,611 with an MPRA allele pair), 47,157
+hypervariable of which 45,878 sit on a tandem repeat. By tier: regulatory 866,918, fossil 769,793,
+neutral 177,771, constrained unknown 74,109, structural 36,996.
+
+**Eight claims are genome-wide, holding on all 23 pooled chromosomes** (chrY is read and pooled with
+nothing): coding exons below 0.6 of the matched rate (median 0.379), coding units fixed above matched
+(+26.2 points), callable genes core (59.0%), genes core above their own matched windows (+49.0),
+the coding-neutral gap surviving the timing match (90.4%), the storage share of placed background
+units (48.4%), and overdispersion per kilobase (9.65).
+
+**Five are chromosome-specific, and the rollup names the chromosomes** rather than pooling them away:
+the neutral tier within a quarter of its matched rate fails on chr8, chr17, chr20 and chrX; no unknown
+tier above matched fails on five; unit classes even over replication timing fails on five; Gnocchi's
+constrained kilobases being early-replicating holds on 14 of 23 and is weak wherever it holds; and
+Gnocchi's silent panel-depleted kilobases being copies now fails on **14 of 23**, which is the claim
+that looked strongest on the two acrocentrics and is the one this sweep destroyed.
+
+**What closing the panel settles, and what it does not.** It settles the size of the storage
+catalogue and the executor-ready set, which is what the rest of area I reads from. It does not settle
+the constrained-unknown depletion by itself — that rests on the tier baseline below, and the honest
+form of it is 0.829 of the neutral tier, on 19 of 23 chromosomes. And it leaves the panel's own
+weakest point untouched: a repeat-aware reading of long VNTRs, which the instrument still does not do.
+
 ## The matched background is not a neutral baseline, and that is why the controls fail (2026-09-16)
 
 Seven of the 23 chromosomes the panel has read fail one of its six controls, and on all six autosomes
@@ -1629,11 +1660,11 @@ thing happening everywhere, and it is.
 
 | tier against the matched background | above 1 on | one-sided p | median ratio |
 |---|---|---|---|
-| regulatory | **22 of 22** | 2e-7 | 1.078 |
-| fossil | **21 of 22** | 5e-6 | 1.058 |
-| neutral | **20 of 22** | 6e-5 | 1.107 |
-| constrained unknown | 6 of 22 | 0.99 | 0.917 |
-| coding exons | 0 of 22 | 1.0 | 0.387 |
+| regulatory | **23 of 23** | 1e-7 | 1.077 |
+| fossil | **22 of 23** | 3e-6 | 1.062 |
+| neutral | **21 of 23** | 3e-5 | 1.105 |
+| constrained unknown | 6 of 23 | 0.99 | 0.916 |
+| coding exons | 0 of 23 | 1.0 | 0.379 |
 
 **Every non-coding tier fixes less than its own control.** The background windows are matched on GC
 and on replication timing, and on those two axes they match; what they are not is neutral sequence.
@@ -1647,11 +1678,12 @@ most, Spearman -0.33), so the tier crosses the 0.05 band wherever it is both off
 **What survives, and it is the reading the panel lane had already arrived at.** Against the neutral
 tier of the same chromosome, rather than against the background:
 
-- **constrained unknown 0.827, below the neutral tier on 18 of 22** — the only unknown tier that is
-  depleted, and it stays depleted under either baseline (below the background on 16 of 22, p 0.026).
-- **fossil 0.974 (17 of 22) and regulatory 0.983 (12 of 22)** — indistinguishable from neutral, which
+- **constrained unknown 0.829, below the neutral tier on 19 of 23** (p 0.0013) — the only unknown tier
+  that is depleted, and it stays depleted under either baseline (below the background on 17 of 23,
+  p 0.017; on the 17 chromosomes that pass every control, 14 of 17 either way, p 0.0064).
+- **fossil 0.977 (17 of 23) and regulatory 0.994 (12 of 23)** — indistinguishable from neutral, which
   against the background both appeared to exceed.
-- **coding exons 0.356, below it on 22 of 22** — the positive control, unchanged by the choice.
+- **coding exons 0.351, below it on 23 of 23** — the positive control, unchanged by the choice.
 
 So the offset changes no conclusion about the constrained-unknown tier and removes two that were
 never claimed but were visible in the table: fossil and regulatory sequence is not *more* variable
@@ -1665,7 +1697,8 @@ for -- matching GC and timing is what makes the coding ratio (0.387) meaningful,
 one tier the offset does not touch, because a real depletion of that size swamps it. It does not
 measure what the background carries; that is the next step, and the candidates are the obvious ones
 (coding bases, conserved elements, segmental duplication). And it rests on 22 chromosomes of one
-panel, with chr2 still unread.
+panel. chr2 landed after this was first written and moved nothing: every figure above is the
+23-chromosome reading with it in.
 
 ## Compression: what each piece of knowledge is worth in bits, chr21, chr22 and chr18 (2026-09-14)
 

@@ -13,6 +13,7 @@
     "chr17",
     "chr18",
     "chr19",
+    "chr2",
     "chr20",
     "chr21",
     "chr22",
@@ -30,56 +31,56 @@
   ],
   "against_matched_background": {
     "cds": {
-      "median": 0.387,
-      "chromosomes": 22,
+      "median": 0.379,
+      "chromosomes": 23,
       "above_one": 0,
       "one_sided_p": 1.0
     },
     "fossil": {
-      "median": 1.058,
-      "chromosomes": 22,
-      "above_one": 21,
-      "one_sided_p": 5e-06
+      "median": 1.062,
+      "chromosomes": 23,
+      "above_one": 22,
+      "one_sided_p": 3e-06
     },
     "regulatory": {
-      "median": 1.078,
-      "chromosomes": 22,
-      "above_one": 22,
+      "median": 1.077,
+      "chromosomes": 23,
+      "above_one": 23,
       "one_sided_p": 0.0
     },
     "constrained_unknown": {
-      "median": 0.917,
-      "chromosomes": 22,
+      "median": 0.916,
+      "chromosomes": 23,
       "above_one": 6,
-      "one_sided_p": 0.99155
+      "one_sided_p": 0.994689
     },
     "neutral": {
-      "median": 1.107,
-      "chromosomes": 22,
-      "above_one": 20,
-      "one_sided_p": 6.1e-05
+      "median": 1.105,
+      "chromosomes": 23,
+      "above_one": 21,
+      "one_sided_p": 3.3e-05
     }
   },
   "against_the_neutral_tier": {
     "cds": {
-      "median": 0.356,
-      "below_neutral": 22,
-      "chromosomes": 22
+      "median": 0.351,
+      "below_neutral": 23,
+      "chromosomes": 23
     },
     "fossil": {
-      "median": 0.974,
+      "median": 0.977,
       "below_neutral": 17,
-      "chromosomes": 22
+      "chromosomes": 23
     },
     "regulatory": {
-      "median": 0.983,
+      "median": 0.994,
       "below_neutral": 12,
-      "chromosomes": 22
+      "chromosomes": 23
     },
     "constrained_unknown": {
-      "median": 0.827,
-      "below_neutral": 18,
-      "chromosomes": 22
+      "median": 0.829,
+      "below_neutral": 19,
+      "chromosomes": 23
     }
   },
   "per_chromosome": {
@@ -159,6 +160,13 @@
       "regulatory": 1.07,
       "constrained_unknown": 0.809,
       "neutral": 1.121
+    },
+    "chr2": {
+      "cds": 0.344,
+      "fossil": 1.099,
+      "regulatory": 1.07,
+      "constrained_unknown": 0.88,
+      "neutral": 1.044
     },
     "chr20": {
       "cds": 0.378,
