@@ -138,3 +138,43 @@ What must stay for the code to run: the chr21 and chrM reference (58 MB), the
 GENCODE annotation (153 MB, used by many tests), GO (31 MB + 15 MB), and the
 Cell Ontology (3 MB). Everything else can be re-fetched with
 `scripts/fetch_reference.sh` if a distiller has to be rerun.
+
+## The audit at the end of the sweeps (2026-09-16)
+
+Both genome-wide sweeps finished on this day — every chromosome scored by deletion, every chromosome
+read by the human panel — so this is the high-water mark of what the project holds, and the moment to
+ask whether any of it can be distilled further. **`genomeos data clean` frees 0 B**: every raw input
+with a summary has already been discarded, and what is left is either irreplaceable or a working cache.
+
+**7.9 GB in `data/`, of which 357 MB is committed** (`data/results`, the summaries) and the rest is
+git-ignored and local.
+
+| what | size | cost to rebuild |
+|---|---|---|
+| `knowledge/epigenome` | 2.5 GB | hours of ENCODE streaming; 1,320 float32 arrays, already gzipped |
+| `reference` | 1.4 GB | minutes from UCSC; mostly BGZF since the conversion, and read constantly |
+| `knowledge/alphagenome` | 1.3 GB | **778,780 model requests** — the sweep itself, bounded by a daily quota |
+| `knowledge/human_panel` | 1.1 GB | **267 GB of Cactus alignment streamed**, about 13 hours |
+| `results` | 357 MB | the durable outcome; committed, and the only part that survives a clean checkout |
+| `individuals` + `twins` | 427 MB | derived from the GIAB HG002 benchmark, minutes to hours |
+
+**Why nothing more is compressed.** The two large caches that look compressible are not free to touch.
+The epigenome signal is already `float32` inside gzip, at about 4 MB per cell type, mark and
+chromosome. The per-element deletion tables (594 MB of plain JSON under `alphagenome/all_elements`)
+would gzip to roughly a fifth, but three modules read them with `read_text()` — `attribution/
+element_types.py`, `attribution/crispri.py` and the chain's own reader — so transparent `.gz` support
+belongs in one shared loader, changed with their owners rather than under them. It is worth about
+480 MB and it is not urgent at 7.9 GB.
+
+**The disk pressure was never this repository.** Four separate runs were stopped by the disk floor on
+2026-09-15 and two more on 2026-09-16, on a 460 GB disk holding a 7.9 GB project. The largest single
+consumer measured on this machine was **80 GB of stale Chrome code-sign clones** in the system temp
+tree (`/private/var/folders/.../X/com.google.Chrome.code_sign_clone`, 58 of them dated weeks earlier),
+which macOS recreates on launch and never collects. That is outside the repository and outside what
+this project should delete on its own; it is named here because six runs died of it and the next
+session to lose a chromosome to free space should look there first, not at `data/`.
+
+**The rule that earned its place.** Streaming and discarding is why 267 GB of alignment costs 1.1 GB
+and 778,780 model requests cost 1.3 GB. The one place it was not followed — keeping a per-element
+table rather than a summary — is also the one place a lane later had to pack caches by hand to free
+3.16 GB, losslessly and with SHA-256 proofs.

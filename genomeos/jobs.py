@@ -133,6 +133,23 @@ CATALOG["budget_genome_wide"] = {
     "auto_heal": True,
 }
 
+CATALOG["executor_e1_extension"] = {
+    "argv": [
+        sys.executable,
+        "scripts/executor_test.py",
+        "--wide",
+        "--run",
+        "--quota-handed",
+        "--extension",
+        "--max-pairs",
+        "2260",
+    ],
+    "describe": "E1's remaining 2,260 MPRA allele pairs, their own sample (pre-registered 2026-09-16).",
+    "total": 2260,
+    "result": "executor_mpra_wide_extension",
+    "count": lambda r: r.get("pairs_done", 0) if r else 0,
+}
+
 CATALOG["human_panel_sweep"] = {
     "argv": [sys.executable, "scripts/human_panel_sweep.py"],
     "describe": "The HPRC panel of 90 human genomes, one unread chromosome at a time (no model key).",
