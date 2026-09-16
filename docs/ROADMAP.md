@@ -2504,7 +2504,41 @@ entire sweep. What is next, in order of what it decides:
      dependencies with BRCA1/2 to PARP1 as the control that must be recovered, and marker selectivity
      (A and B and not C) over the healthy-tissue atlas. Target discovery only, inside the non-goals.
    - **Area J, motif spacing and orientation** against lentiMPRA activity, beyond motif counts, so a
-     grammar rule is a test that can fail.
+     grammar rule is a test that can fail. **Landed `fb2d83d`, and it FAILED as registered**: on
+     45,228 elements with chr8, chr9, chr21 and chr22 held out, the grammar's gain over strict motif
+     counts is K562 +0.002, HepG2 -0.006, WTC11 +0.002 Spearman, every interval containing zero and
+     the shuffled-grammar control doing as well. The features were verified real before the null was
+     accepted (83 per element at the median, no empty elements). Its by-product is the largest number
+     in the table: composition to strict family counts is **+0.234** in K562 and +0.235 in HepG2.
+     **Which factors have sites matters; where they sit does not, at 200 bp on episomal DNA.**
+
+   **All four landed on 2026-09-16, and three of them are negatives.** Rows as their lane reported
+   them:
+   - **Area A methylation, `d3c5c52`.** The first chromatin mechanism the VM runs: a CpG state machine
+     over divisions, with `param x = unknown` now in BioLang so the engine refuses to run until a
+     program binds the six unmeasured rates. The solo-WCGW ordering holds on all eight methylomes in
+     points (+0.160) and relative terms (+0.454) but thinly with region held fixed (margin 0.0075),
+     and the coordinating session added the caveat the lane had not: the ordering was already known
+     here, so this is consistency with a fact in hand rather than a prediction. Its own negative is in
+     the section: the dense class erodes too, which context dependence alone cannot produce.
+   - **Area I measured contact, `5a31c39`. Read the `reading` field, not the `verdict`.** Balanced 4DN
+     Hi-C at 5 kb (K562, GM12878) in place of 1/distance **costs 0.081 AUPRC on 9,165 training pairs**
+     (interval -0.118 to -0.011, clear of zero); the held-out gain is +0.012 with the interval
+     straddling zero, so the pre-registered rule reads "passed" while the measurement settles nothing,
+     and the result file now says so in a computed `reading` field beside the verdict. The coverage
+     warning was acted on: the matrix reaches 451 of 451 regulated training pairs and 99.2% of the
+     rest, both baselines unmoved, missing contacts counted by named reason and never as zeros. Why it
+     fails: at CRISPRi distances raw contact is mostly the distance decay (0.379 against 0.442) and
+     observed-over-expected alone collapses to 0.083.
+   - **Area F synthetic lethality and selectivity, `2305bee`.** DepMap 24Q4, 19,749 pairs, **44 hits at
+     q <= 0.10** with a permuted-label null finding nothing in 20 of 20 permutations, and five of seven
+     declared controls recovered (ARID1A-ARID1B, SMARCA4-SMARCA2, MTAP-PRMT5, MTAP-MAT2A, WRN in
+     MSI-high). The two PARP1 rows are significant, negligible (0.047 gene-effect units) and fall to
+     nominal under the sweep's own correction, as the pre-registration said to expect of a knockout
+     screen. **Marker selectivity FAILS its claim**: approved targets rank below random gates (median
+     percentile 25.1 against 51.5), and because the placebo null is not flat (delta -0.496) the
+     benchmark read against its null sits at the 87th percentile, short of its declared bar. The flaw
+     is located: a 7-TPM threshold crossing mistaken for surface density.
 7. **Disk.** The project is 7.3 GB of a 460 GB disk; the four disk stops of 2026-09-15 came
    from outside it (80 GB of stale Chrome code-sign clones in the system temp tree, among
    others). Freeing that is Albert's call and unblocks item 2 and area I's compression of

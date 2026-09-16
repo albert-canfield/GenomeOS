@@ -37,11 +37,22 @@ hla = [
     # installable from here: it needs a DTU licence and a local binary.
     "mhcflurry>=2.1",
 ]
+analysis = [
+    # Two modules import numpy at module level and cannot be imported without it:
+    # attribution/compress.py (the bits-per-base arithmetic) and attribution/lexicon_axes.py.
+    # Everywhere else numpy is imported inside the function that needs it, which is the
+    # pattern to keep: the engine and the CLI must import with no third-party package present.
+    "numpy>=1.26",
+]
 
 [dependency-groups]
 dev = [
     "pytest>=8",
     "ruff>=0.16.6",
+    # tests/test_compress.py, test_contact_maps.py and test_lexicon_axes.py import numpy directly,
+    # so without it a fresh checkout does not fail a test, it fails to COLLECT three files - which
+    # reads as "no such tests" rather than as a missing dependency (genomeos-79, 2026-09-16).
+    "numpy>=1.26",
 ]
 
 [build-system]
