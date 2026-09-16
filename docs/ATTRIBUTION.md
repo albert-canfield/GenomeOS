@@ -2965,6 +2965,192 @@ whose enhancer or promoter straddles a bin edge is read one bin off. GM12878's h
 few to test anything. What is settled is narrower than the question: this contact, at this
 resolution, does not improve this model.
 
+## A measured confidence for a predicted target, and the prevalence that breaks it (2026-09-17)
+
+Three measurements of chromatin structure have now failed to say which element acts on which gene —
+CTCF orientation, measured boundary strength, measured Hi-C contact at 5 kb — while the predicted
+deletion works (LESSONS.md, "Three measurements of chromatin structure, three nulls"). The deletion's
+output is therefore what downstream work will trust, and the number the sweep writes beside it is the
+model's own effect size: `confidence = min(1, |log2 fold change|)`. That is a rescaled effect size,
+not a probability, and nothing measured says what it means. `scripts/target_calibration.py`
+(`attribution/target_calibration.py`, result `target_calibration`, 61 s, no model request, no
+network) asks the CRISPRi screens to supply the missing scale, and then applies it to all 961,227
+deleted elements.
+
+Only features the sweep also has may enter, or the fit cannot be applied to it: the predicted drop in
+K562 (the negated log2 fold change, floored at zero, non-zero only when the pair's gene is the
+element's top predicted target), the top-target flag itself, the log distance from the element's
+midpoint to the gene's **GENCODE v50** TSS — computed the same way on both sides, so the feature
+transfers — whether the gene is the nearest TSS inside the element's CTCF node, and the registry
+class. The benchmark's measured activity (DNase × H3K27ac in the screen's own cell) is deliberately
+left out: the project has cached DNase for one chromosome, so a calibration using it could not be
+applied to the sweep. What leaving it out costs is reported below.
+
+**Coverage of both arms first, then any rate** (genomeos-8a's denominator lesson, and genomeos-79's
+sharper form of it: a calibration bin is a rate conditioned on the pair having been scored at all).
+Of 9,237 covered training pairs, 8,796 carry every feature: 437 of 451 regulated (96.9%) and 8,359 of
+8,786 not regulated (95.1%). The 491 exclusions are one named category — 477 not-regulated and 14
+regulated pairs whose gene has no GENCODE v50 gene entry — counted, never scored as a distance of
+zero. The subset is not an easier problem: distance reads 0.4413 AUPRC on all covered pairs against
+0.4436 on the feature-complete ones, activity over distance 0.5190 against 0.5265, the base rate
+4.88% against 4.97%. On held-out K562 the arms are level — 112 of 114 regulated (98.3%) and 1,603 of
+1,630 not (98.3%) — and the baselines again do not move (distance 0.3753 → 0.3733, activity over
+distance 0.5502 → 0.5540, base rate 6.54% → 6.53%). The GENCODE gene-level TSS differs from the
+benchmark's own `distanceToTSS` by a median 95 bp on those pairs, within 1 kb for 83% of them and
+within 10 kb for 92% (on the training pairs a median 148 bp, 77% and 89%); the rest are genes whose
+screen used another TSS.
+
+Two populations, and the population matters more than the fit:
+
+| population | training | rate | held out (K562) | rate |
+|---|---|---|---|---|
+| a pair a K562 screen tested, on a cCRE inside a node, every feature present | 8,796 | 4.97% | 1,715 | 6.53% |
+| the same, and the tested gene **is** the element's top predicted target (the sweep's own pair) | 245 | 76.7% | 40 | 90.0% |
+
+The pre-registration, fixed in `PREREGISTERED_CALIBRATION` before any held-out pair was scored:
+fitted on the K562 training pairs with only the sweep's features, the calibrated probability is
+reliable on held-out K562 and better calibrated than the effect size read as a confidence — (a) in at
+least 7 of the 10 equal-count bins the bin's mean predicted probability lies inside the 95% Wilson
+interval of the observed rate, and (b) the expected calibration error and the Brier score are both
+lower than those of `min(1, |log2 fc|)` on the same pairs. The Hosmer–Lemeshow statistic is reported
+everywhere but deliberately gates nothing: read on the training pairs before the held-out set was
+touched, it rejects the fit's own in-sample curve (χ² 22.5, 8 df, p 0.004) at an expected calibration
+error of 0.007, so at 8,796 pairs it is answering a question about counts of one and two positives per
+bin (`CRITERION_NOTE`).
+
+| held-out K562, 1,715 pairs (112 regulated) | ECE | MCE | Brier | bins inside | AUPRC |
+|---|---|---|---|---|---|
+| calibrated, the sweep's features | **0.0231** | 0.0843 | **0.04184** | 6/10 | 0.559 |
+| the drop alone, fitted | 0.0256 | 0.0649 | 0.04639 | 7/10 | 0.428 |
+| the effect size as a confidence (today's number) | 0.0575 | 0.1435 | 0.05522 | 0/10 | 0.428 |
+
+| bin | pairs | coverage, regulated | coverage, not | predicted | observed | 95% interval |
+|---|---|---|---|---|---|---|
+| 1 | 171 | 0.974 | 0.983 | 0.0046 | 0.0292 | 0.0126–0.0666 **outside** |
+| 2 | 172 | 0.974 | 0.983 | 0.0059 | 0.0058 | 0.0010–0.0322 |
+| 3 | 171 | 0.974 | 0.983 | 0.0070 | 0.0175 | 0.0060–0.0503 |
+| 4 | 172 | 0.974 | 0.983 | 0.0084 | 0.0058 | 0.0010–0.0322 |
+| 5 | 171 | 0.974 | 0.983 | 0.0103 | 0.0175 | 0.0060–0.0503 |
+| 6 | 172 | 0.974 | 0.983 | 0.0129 | 0.0058 | 0.0010–0.0322 |
+| 7 | 171 | 0.974 | 0.983 | 0.0169 | 0.0234 | 0.0091–0.0586 |
+| 8 | 172 | 0.974 | 0.983 | 0.0249 | 0.0640 | 0.0361–0.1109 **outside** |
+| 9 | 171 | 0.974 | 0.983 | 0.0443 | 0.0936 | 0.0584–0.1466 **outside** |
+| 10 | 172 | 0.983 | 0.983 | 0.3053 | 0.3895 | 0.3198–0.4641 **outside** |
+
+The coverage columns come before the rate columns on purpose, and they are flat: no bin's rate is
+inflated by having collected the better-covered elements. On training the leave-chromosome-out curve
+is reliable by the same rule (9 of 10 bins, ECE 0.0061, Brier 0.02812, AUPRC 0.635).
+
+**The pre-registered claim FAILS,** on clause (a) with 6 of 10 bins: the calibration is better than
+today's number on every error it was compared on, and it is not reliable. The shape of the curve
+transfers and its level does not, and the reason is visible in one line: the calibration's mean
+predicted probability is 0.0441 while the held-out rate is 0.0653, a prevalence 1.31 times the
+training screens'. All four failing bins fail in the same direction — the observed rate above the
+predicted one — and none in the other. Add the single constant that matches the prevalence —
++0.679 in log odds, fitted on the held-out labels themselves, so a description of the failure and not
+a test — and the same curve gives 9 of 10 bins inside their intervals, ECE 0.0100, Brier 0.04065,
+Hosmer–Lemeshow p 0.08. A calibration is a rate conditioned on a population, and the base rate of a
+CRISPRi screen is a property of how that screen chose its pairs. Nothing here was retuned after the
+held-out set was read; the verdict stands as failed.
+
+**The table to quote, with no model between it and the screens.** For the sweep's own population —
+one element, its top predicted target — the drop bands need no feature but the drop, so no pair is
+dropped for a missing value; the coverage columns read 1.00 on both arms everywhere but the zero band,
+where one regulated pair of 26 lacks a GENCODE TSS (0.96). Each band's pairs are distinct elements.
+
+| predicted K562 drop | pairs | regulated | rate | 95% interval |
+|---|---|---|---|---|
+| = 0 | 44 | 26 | 0.591 | 0.444–0.723 |
+| 0 < drop ≤ 0.1 | 92 | 55 | 0.598 | 0.496–0.692 |
+| 0.1 < drop ≤ 0.2 | 45 | 39 | 0.867 | 0.738–0.937 |
+| 0.2 < drop ≤ 0.5 | 46 | 46 | 1.000 | 0.923–1.000 |
+| 0.5 < drop | 59 | 59 | 1.000 | 0.939–1.000 |
+
+Training and held-out pairs pooled, which is legitimate only because the held-out test above was
+scored first. Read it as the conditional it is: *if* a K562 CRISPRi screen tests an element's top
+predicted target, a drop above 0.2 was called regulated 105 times out of 105, and a drop at or below
+0.1 about three times in five. The fitted version of the same population (`deletion_drop`,
+`log_tss_distance`, `node_target`, 245 training pairs) is reliable in 3 of 3 bins in sample (ECE
+0.014) and in 3 of 3 on the 40 held-out pairs (ECE 0.066), which decides nothing at that size and is
+excluded from the pre-registration for exactly that reason.
+
+**The sweep, read through the calibration.** 961,227 deleted elements, 612,323 with a predicted
+target; 18,558 of those name a gene GENCODE v50 has no entry for and are refused rather than banded,
+leaving 593,765 (440,377 for the coding target). The registry classes present are only dELS and pELS,
+because the sweep scored those two classes and no others — three of the five fitted class levels are
+empty in both the benchmark and the sweep, and the class term is one contrast (pELS −0.48 against
+dELS).
+
+| confidence band | any gene | coding gene | any gene, dELS | any gene, pELS |
+|---|---|---|---|---|
+| 0.05–0.1 | 45 | 0 | 34 | 11 |
+| 0.1–0.25 | 3,837 | 1 | 2,591 | 1,246 |
+| 0.25–0.5 | 178,387 | 184,256 | 166,181 | 12,206 |
+| 0.5–0.75 | 293,568 | 175,655 | 217,661 | 75,907 |
+| 0.75–0.9 | 61,971 | 42,552 | 39,538 | 22,433 |
+| 0.9–1 | 55,957 | 37,913 | 26,869 | 29,088 |
+
+Every predicted target lands at 0.25 or above, and that is the result, not a bug: the population the
+calibration was measured on — an element's top predicted target, tested by a screen — is regulated
+77% of the time, so a model fitted on it hands every sweep target a high probability. What separates
+the sweep's targets from each other is the drop, and on that axis the genome is thin: 46.7% of coding
+targets have a K562 drop of exactly zero, 39.3% sit at or below 0.1, and only 24,114 (5.5%) clear
+0.2, the band where the screens called 46 of 46 and where no tested pair was ever called unregulated
+(the not-regulated arm of the top two bands is empty, 0 pairs, which is the finding and not a gap in
+coverage). The 0.9–1 band holds 37,913 coding targets. Per
+chromosome the share clearing 0.2 runs from 3.2% (chr18) to 10.1% (chr19), — chr19 highest, chr18 lowest,
+chrX at 7.9% — and chrY contributes 125 coding targets of which 12 clear 0.2. The full per-chromosome and per-class tables are in `data/results/target_calibration.json`;
+the committed sweep summaries were not touched.
+
+**What the missing activity would have bought.** With the benchmark's measured DNase × H3K27ac added,
+the leave-chromosome-out ECE improves from 0.0061 to 0.0041 and AUPRC from 0.635 to 0.667; on held-out
+K562, Brier 0.04184 → 0.03772 and AUPRC 0.559 → 0.640, with the same 6 of 10 bins. The activity is
+worth having and cannot be applied: it exists for the benchmark's pairs and for one chromosome of the
+genome.
+
+**Scope, stated as narrowly as it holds.** The calibration is measured in one cell line on one kind of
+element: K562 CRISPRi pairs whose element is an ENCODE cCRE inside a CTCF node and whose gene a screen
+chose to test, which means a gene expressed in K562 within about a megabase. The probability is
+conditional on that test happening. It says how often a K562 screen calls such a pair regulated; it
+does not say how often an element regulates a gene, and for a sweep element whose strongest predicted
+tissue is not K562 the drop entering the calibration is still the K562 drop. The ENCODE-training
+objection is narrowed, not closed: E1's 2,260 fresh pairs (commit 2a07c80) put units at 637 of 1,096
+agreeing (0.581) against matched nulls 490 of 968 (0.506), +0.075 with an upper 95% bound of 0.111 at
+one-sided p 0.00037 — the weak band, since the pre-registration asked for 0.10 in size, and a small p
+does not convert a weak effect into the declared one. One cell line carries it (GM12878 +0.089 on
+1,895 pairs; Jurkat −0.001 on 365). So in lymphoblastoid cells the model weakly and detectably tracks
+a reporter assay's direction, and outside them that endpoint says nothing. E1's declared secondary did
+pass, and it is the first met prediction of that series: agreement is higher where DAP-G fine-maps the
+variant, +0.198 on 132 units against 90 controls (p 0.0018) against +0.057 for the rest — a reason to
+expect the transfer where the causal variant is known, not evidence that it happens.
+
+**What would falsify the transfer** (`FALSIFIES_TRANSFER`). A CRISPRi screen in another cell line with
+an AlphaGenome line in the deletion table (GM12878, HepG2, IMR-90 at this coverage) whose observed
+rate per band falls outside the band in most populated bands, or whose ECE exceeds the effect size
+read as a confidence. A screen that tiles elements without regard to K562 activity finding the top
+band's rate far below the band, which is what the selection on testability would look like from
+outside. The bands holding no better on a new screen's fine-mapped subset than off it, which would
+remove the one reason E1 gives to expect any transfer. And the prevalence failure above, generalised:
+a screen whose base rate differs from these screens' 5% needs its own intercept, so a band quoted
+without its population's rate beside it measures nothing.
+
+**Limits.** Held-out GM12878 has 62 covered pairs and 14 regulated and is refused as too small to
+carry a reliability table; HCT116, Jurkat and WTC11 have no AlphaGenome line in the deletion table and
+are refused with that reason. The sweep keeps one gene per element, so the calibration cannot rank a
+second target. The GENCODE gene-level TSS stands in for the screen's own TSS. The 0.2-and-above band
+rests on 105 pairs and its interval's lower bound is 0.92, not 1.0.
+
+**Next, proposed as roadmap rows** (for the roadmap editor to fold; not written into ROADMAP.md):
+
+1. Area I: the prevalence term. Re-fit the intercept per screen with the screen's own base rate as an
+   offset, and pre-register that a band holds across the three K562 datasets (Gasperini, Schraivogel,
+   Nasser) whose rates differ, before it is quoted for anything.
+2. Area I: the drop above 0.2 as a shortlist. 24,114 coding targets clear it genome-wide; hold that
+   list against an independent perturbation in a second cell line rather than against a model.
+3. Area I: DNase per element genome-wide (one bigWig per cell line, the reader exists), which is the
+   one cheap feature the calibration had to leave out and which improved every error it was allowed
+   to touch.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

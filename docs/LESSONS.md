@@ -331,3 +331,17 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 - **A label that is right on average can carry no information about your calls (2026-09-14).** CTCF orientation is real at measured boundaries (two thirds of sites point away from them in H1, K562 and HepG2), yet splitting our CTCF-only edges by orientation predicts nothing (convergent edges at their strand-shuffle median). The edges were placed without the strand, so the strand cannot rescue them afterwards; used to place boundaries it works (reverse-to-forward flips beat random 1.4 to 1.6 times). Test a mechanism where it acts, not only as a filter on calls made without it. And check a boundary set's density first: GM12878's calls put a random position within 20 kb of one 54% of the time.
 - **Consumers read absence from a list as the other answer (2026-09-14).** The reader saved `silent_genes[:200]`, and the Blocks lane, the gene report and the decompiler all call a gene "read" when it is not in that list, so every silent gene past the 200th on a large chromosome was shown as read. A list that stands for a set must be complete, or its consumers must ask the positive list.
 - **A containment metric needs a placement control, not only a size one (2026-09-14).** "An enhancer acts inside its node" rises when nodes are fewer or bigger, so compare it with as many boundaries placed at random, and compare callers at the same boundary count. Shuffling node lengths along the chromosome is the wrong null: real boundaries sit in gene-dense regions, so shuffled ones cut fewer pairs and the null reads above the observed. On the full deletion archive the CTCF-only nodes beat random placement by 2.6 points, and the orientation-aware nodes, better on Hi-C, fall 14.5 points below it.
+- **A calibration curve's shape can transfer while its level does not (2026-09-17).** The CRISPRi
+  screens were turned into a measured confidence for the sweep's predicted targets. The shape held:
+  leave-chromosome-out the curve is reliable in 9 of 10 bins at an expected calibration error of
+  0.006. The pre-registered claim still failed on held-out pairs, in 4 of 10 bins, and all four
+  failures were under-predictions in the same direction, because the held-out screens call 6.53% of
+  their pairs regulated against 4.97% in the training screens. A single log-odds shift of +0.679,
+  fitted on the held-out labels and therefore a description of the failure rather than a test,
+  restores 9 of 10 bins. The level is a property of how a screen chose which pairs to test, not of
+  the element: **a confidence band quoted without its population's base rate measures nothing**, and a
+  calibration carried to a new assay needs that assay's own intercept before its numbers mean
+  anything. The same reasoning names what the band cannot say genome-wide: every predicted target
+  lands in the top bands because the calibration's population is regulated 77% of the time, so the
+  discriminating axis is the predicted drop, and only 5.5% of coding targets clear the 0.2 where the
+  screens called 105 of 105.
