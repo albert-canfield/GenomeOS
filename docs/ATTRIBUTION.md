@@ -2665,6 +2665,17 @@ model with the deletion has the higher AUPRC on held-out K562 and on held-out GM
 
 **Passed**, with the caveat that GM12878 rests on 14 regulated pairs and its interval touches zero.
 
+**Coverage on both arms, after genomeos-8a's denominator lesson (`coverage_by_arm`).** The sweep
+deleted registry elements inside a CTCF node, so coverage selects on the element, and it is
+all-or-nothing: of 3,941 training elements, 3,472 are covered and none partly. The arms are not
+covered equally — regulated pairs 95.8% against 88.9% not regulated (held out: 95.8% against
+87.6%) — so the covered subset holds a slightly higher share of positives (4.88% against 4.55%).
+It is not, however, an easier subset: both baselines read the same on all valid pairs as on the
+covered ones (distance 0.438 against 0.441, activity over distance 0.517 against 0.519; held out
+0.320 against 0.320 and 0.519 against 0.524). The comparison between predictors is fair whatever
+the coverage, because they are scored on the same pairs; what the coverage governs is what the
+subset is a sample of, which is cCREs inside a node near a tested gene, not enhancers at large.
+
 **What the deletion adds is which elements, not which gene.** Given one call per element, the
 deletion calls only where its top target was tested and the predicted drop clears a threshold. At
 0.1 it makes 124 calls on 3,472 elements and 119 are right (96%); at 0.2, 84 of 84. On those same

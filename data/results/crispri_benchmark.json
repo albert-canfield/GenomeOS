@@ -11,6 +11,110 @@
     "heldout_pairs": 4378,
     "heldout_pairs_on_a_deleted_element": 3849
   },
+  "coverage_by_arm": {
+    "training": {
+      "arms": {
+        "regulated": {
+          "pairs": 471,
+          "covered": 451,
+          "fraction": 0.9575
+        },
+        "not regulated": {
+          "pairs": 9885,
+          "covered": 8786,
+          "fraction": 0.8888
+        }
+      },
+      "elements": 3941,
+      "elements_fully_covered": 3472,
+      "elements_partly_covered": 0,
+      "baselines": {
+        "all valid pairs": {
+          "distance": {
+            "pairs": 10356,
+            "positives": 471,
+            "baseline_precision": 0.0455,
+            "auprc": 0.4377,
+            "auroc": 0.8973
+          },
+          "activity over distance": {
+            "pairs": 10356,
+            "positives": 471,
+            "baseline_precision": 0.0455,
+            "auprc": 0.5173,
+            "auroc": 0.9257
+          }
+        },
+        "on a deleted element": {
+          "distance": {
+            "pairs": 9237,
+            "positives": 451,
+            "baseline_precision": 0.0488,
+            "auprc": 0.4413,
+            "auroc": 0.8963
+          },
+          "activity over distance": {
+            "pairs": 9237,
+            "positives": 451,
+            "baseline_precision": 0.0488,
+            "auprc": 0.519,
+            "auroc": 0.925
+          }
+        }
+      }
+    },
+    "heldout": {
+      "arms": {
+        "regulated": {
+          "pairs": 190,
+          "covered": 182,
+          "fraction": 0.9579
+        },
+        "not regulated": {
+          "pairs": 4188,
+          "covered": 3667,
+          "fraction": 0.8756
+        }
+      },
+      "elements": 1697,
+      "elements_fully_covered": 1489,
+      "elements_partly_covered": 0,
+      "baselines": {
+        "all valid pairs": {
+          "distance": {
+            "pairs": 4378,
+            "positives": 190,
+            "baseline_precision": 0.0434,
+            "auprc": 0.3204,
+            "auroc": 0.8257
+          },
+          "activity over distance": {
+            "pairs": 4378,
+            "positives": 190,
+            "baseline_precision": 0.0434,
+            "auprc": 0.5192,
+            "auroc": 0.9178
+          }
+        },
+        "on a deleted element": {
+          "distance": {
+            "pairs": 3849,
+            "positives": 182,
+            "baseline_precision": 0.0473,
+            "auprc": 0.3195,
+            "auroc": 0.8198
+          },
+          "activity over distance": {
+            "pairs": 3849,
+            "positives": 182,
+            "baseline_precision": 0.0473,
+            "auprc": 0.524,
+            "auroc": 0.9146
+          }
+        }
+      }
+    }
+  },
   "training_single_predictors": {
     "distance": {
       "pairs": 9237,

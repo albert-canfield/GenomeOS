@@ -371,6 +371,47 @@ def element_level(pairs: list[Pair]) -> dict[str, Any]:
     return {name: metrics(v, labels) for name, v in cols.items()}
 
 
+def coverage_by_arm(pairs: list[Pair]) -> dict[str, Any]:
+    """Coverage of each arm, and the two baselines on the whole set beside the covered subset.
+
+    The sweep deleted registry elements lying inside a CTCF node, so coverage is a property of the
+    element and selects on it: every pair of a covered element is covered (partly_covered is the
+    proof). An arm covered better than the other would make any rate read on the covered subset a
+    statement about the selection instead of about the predictors, so both arms and both baselines
+    are reported. The comparison between predictors stays fair whatever the coverage, because they
+    are scored on the same pairs; what coverage governs is what the subset is a sample of.
+    """
+    groups: dict[tuple[str, str, int, int], list[Pair]] = defaultdict(list)
+    for p in pairs:
+        groups[p.element].append(p)
+    arms = {}
+    for arm, flag in (("regulated", True), ("not regulated", False)):
+        rows = [p for p in pairs if p.regulated is flag]
+        covered = sum(p.covered for p in rows)
+        arms[arm] = {
+            "pairs": len(rows),
+            "covered": covered,
+            "fraction": round(covered / len(rows), 4) if rows else None,
+        }
+    covered_pairs = [p for p in pairs if p.covered]
+    baselines = {}
+    for name, rows in (("all valid pairs", pairs), ("on a deleted element", covered_pairs)):
+        lab = [p.regulated for p in rows]
+        baselines[name] = {
+            "distance": metrics([-p.features["log_distance"] for p in rows], lab),
+            "activity over distance": metrics([p.features["activity_over_distance"] for p in rows], lab),
+        }
+    return {
+        "arms": arms,
+        "elements": len(groups),
+        "elements_fully_covered": sum(all(p.covered for p in g) for g in groups.values()),
+        "elements_partly_covered": sum(
+            any(p.covered for p in g) and not all(p.covered for p in g) for g in groups.values()
+        ),
+        "baselines": baselines,
+    }
+
+
 def score(training: list[Pair], heldout: list[Pair], table: DeletionTable) -> dict[str, Any]:
     """The whole comparison: coverage, leave-chromosome-out on training, the pre-registered held-out test."""
     annotate(training, table)
@@ -438,6 +479,10 @@ def score(training: list[Pair], heldout: list[Pair], table: DeletionTable) -> di
             "training_positives_on_a_deleted_element": sum(labels),
             "heldout_pairs": len(heldout),
             "heldout_pairs_on_a_deleted_element": sum(p.covered for p in heldout),
+        },
+        "coverage_by_arm": {
+            "training": coverage_by_arm(training),
+            "heldout": coverage_by_arm(heldout),
         },
         "training_single_predictors": {
             "distance": metrics([-p.features["log_distance"] for p in train], labels),
