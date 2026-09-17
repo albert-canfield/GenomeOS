@@ -76,3 +76,41 @@ def test_the_real_roadmap_parses_and_every_item_carries_a_state() -> None:
     assert steps, "docs/ROADMAP.md section 5 should have items"
     assert all(s["state"] in ("done", "next") for s in steps)
     assert all(s["number"] and s["text"] for s in steps)
+
+
+def test_a_step_that_says_done_in_bold_is_done_wherever_it_says_it() -> None:
+    """The lanes write "PAR polarity rules: **done 2026-09-14**" as often as they start with "Done".
+
+    Reading only the opening word left area E showing nine planned steps of which five were finished,
+    and the Progress tab overstating what is left is worse than understating it: that tab is what gets
+    read to decide what to do next.
+    """
+    assert roadmap.step_state("PAR polarity rules: **done 2026-09-14** (above), and 11 of 11.") == "done"
+    assert roadmap.step_state("Glia from factors: **done 2026-09-14**; the rest waits.") == "done"
+
+
+def test_a_date_is_required_so_prose_about_being_done_does_not_count() -> None:
+    assert roadmap.step_state("Something that is **not done** yet, 2026-09-14") == "planned"
+    assert roadmap.step_state("A measured contact table for the embryo.") == "planned"
+    assert roadmap.step_state("What **would be done** on 2026-09-14 if the data existed") == "planned"
+
+
+def test_the_open_count_excludes_the_steps_it_knows_are_finished() -> None:
+    """It used to count every step in the Next section, finished or not."""
+    text = """# R
+
+## 3. Areas
+
+### E. From one cell to an organism
+
+- **Goal.** A worm.
+- **Next.** 1. PAR polarity rules: **done 2026-09-14** (above). 2. A measured contact table.
+  3. Glia from factors: **done 2026-09-14**.
+
+---
+"""
+    area = next(a for a in roadmap.parse_areas(text) if a["letter"] == "E")
+
+    assert len(area["next"]) == 3
+    assert area["counts"]["next"] == 1
+    assert area["counts"]["steps_done"] == 2

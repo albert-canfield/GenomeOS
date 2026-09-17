@@ -86,10 +86,22 @@ def split_steps(body: str) -> list[str]:
     ]
 
 
+# A step that announces its own completion in bold, anywhere in its body: the lanes write
+# "PAR polarity rules: **done 2026-09-14**" as often as they start with "Done", and reading only the
+# opening word left area E showing nine planned steps of which five were finished. Matched with a date
+# attached so that prose about being not done, or about what would be done next, cannot trip it.
+_DONE_MARKER = re.compile(r"\*\*done\b[^*]{0,40}?\d{4}-\d{2}-\d{2}[^*]{0,20}\*\*", re.I)
+_NOT_DONE = re.compile(r"\bnot done\b|\buntil (?:it is )?done\b|\bwould be done\b", re.I)
+
+
 def step_state(step: str) -> str:
     """done | partial | blocked | planned, from how the roadmap words the step."""
     low = step.lower()
-    if low.startswith("done") or low.startswith("closed"):
+    if (
+        low.startswith("done")
+        or low.startswith("closed")
+        or (_DONE_MARKER.search(step) and not _NOT_DONE.search(step))
+    ):
         return "partial" if re.search(r"\bnext\b|still to|remains", low) else "done"
     if "blocked" in low or "waits for" in low or "waits on" in low:
         return "blocked"
@@ -153,9 +165,15 @@ def parse_areas(text: str) -> list[dict[str, Any]]:
                     "body": m.group(2),
                 },
             )
+        # "next" counts the steps that are still open. It used to count every step in the Next
+        # section, including the ones whose own text says they are done, so area E showed nine
+        # planned steps of which five had been finished days earlier - the Progress tab overstating
+        # what is left is worse than it understating, because it is the thing read to decide what
+        # to do next. Steps recognised as finished are counted separately rather than hidden.
         area["counts"] = {
             "done": len(area["done"]),
-            "next": len(area["next"]),
+            "next": sum(1 for s in area["next"] if s["state"] != "done"),
+            "steps_done": sum(1 for s in area["next"] if s["state"] == "done"),
             "blocked": sum(1 for s in area["next"] if s["state"] == "blocked"),
         }
         areas.append(area)
