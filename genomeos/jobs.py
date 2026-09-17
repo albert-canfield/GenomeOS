@@ -133,6 +133,14 @@ CATALOG["budget_genome_wide"] = {
     "auto_heal": True,
 }
 
+CATALOG["satmut_vista"] = {
+    "argv": [sys.executable, "scripts/satmut_vista.py", "--run", "--quota-handed"],
+    "describe": "VISTA in-silico mutagenesis: 3,200 windows over the panel's two arms (pre-registered).",
+    "total": 3200,
+    "result": "satmut_vista",
+    "count": lambda r: r.get("windows_scored", 0) if r else 0,
+}
+
 CATALOG["executor_e1_extension"] = {
     "argv": [
         sys.executable,
