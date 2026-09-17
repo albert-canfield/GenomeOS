@@ -114,18 +114,27 @@ def gene_report(symbol: str, chrom: str, annotation, genome, root: Path = Path("
             ),
         }
     # the reader: which cell types read this gene (promoter open), from every reader result on this chromosome
-    read_in, silent_in = [], []
+    read_in, silent_in, poised_in = [], [], []
     for f in sorted((root / "data" / "results").glob(f"reader_*_{chrom}.json")):
         rr = _load_json(f)
         if not rr or "silent_genes" not in rr:
             continue
         cell = rr.get("cell_type") or f.name[len("reader_") : -len(f"_{chrom}.json")]
-        (silent_in if symbol in set(rr["silent_genes"]) else read_in).append(cell)
-    if read_in or silent_in:
+        # poised genes sit inside silent_genes on purpose, so ask the narrower list first: a dossier
+        # that says a bivalent gene is silent in a cell has made the opposite claim about its promoter
+        if symbol in set(rr.get("poised_genes") or []):
+            poised_in.append(cell)
+        else:
+            (silent_in if symbol in set(rr["silent_genes"]) else read_in).append(cell)
+    if read_in or silent_in or poised_in:
         sec["reader"] = {
             "read_in": read_in,
             "silent_in": silent_in,
-            "evidence": "experimental: ENCODE DNase peaks; inferred: read = promoter (TSS ± 1 kb) open",
+            "poised_in": poised_in,
+            "evidence": (
+                "experimental: ENCODE DNase peaks and histone ChIP-seq; inferred: read = promoter "
+                "(TSS ± 1 kb) open; poised = H3K27me3 over a promoter that also carries H3K4me3"
+            ),
         }
     gtex = _load_json(root / "data" / "knowledge" / "expression" / f"gtex_{symbol}.json")
     if gtex and gtex.get("tissues"):

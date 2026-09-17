@@ -71,3 +71,41 @@ def test_layers_from_results_and_absence(tmp_path):
     assert "case syntax; inside a segmental duplication" in text
     assert "read in K562; silent in none" in text and "origin: not read for this locus" in text
     assert text.count("{") == text.count("}")
+
+
+def test_a_poised_cell_type_is_named_and_not_dropped(tmp_path):
+    """Before 2026-09-17 a poised cell appeared in neither group and simply vanished from the line.
+
+    That is the worst of the three outcomes: silent would at least be a visible claim, and absent
+    reads as "this cell type was never measured".
+    """
+    import json
+
+    from genomeos.decompile import _reader
+
+    (tmp_path / "reader_K562_chr21.json").write_text(
+        json.dumps(
+            {
+                "cell_type": "K562",
+                "silent_genes": ["TPTE", "BACH1"],  # poised genes are in here by design
+                "poised_genes": ["BACH1"],
+            }
+        )
+    )
+
+    out = _reader("BACH1", "chr21", tmp_path)
+    assert out == {"K562": "poised"}
+    assert _reader("TPTE", "chr21", tmp_path) == {"K562": "silent"}
+    assert _reader("APP", "chr21", tmp_path) == {"K562": "read"}
+
+
+def test_a_result_without_poised_genes_reads_as_it_did(tmp_path):
+    import json
+
+    from genomeos.decompile import _reader
+
+    (tmp_path / "reader_K562_chr21.json").write_text(
+        json.dumps({"cell_type": "K562", "silent_genes": ["TPTE"]})
+    )
+
+    assert _reader("TPTE", "chr21", tmp_path) == {"K562": "silent"}

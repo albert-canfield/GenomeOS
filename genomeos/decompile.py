@@ -101,7 +101,12 @@ def _reader(symbol: str, chrom: str, results_dir: Path) -> dict[str, str]:
         r = load_result(Path(f).stem, results_dir) or {}
         if "silent_genes" not in r or "_vs_" in Path(f).stem:
             continue
-        out[r["cell_type"]] = "silent" if symbol in r["silent_genes"] else "read"
+        # poised is inside silent_genes by design (a consumer reads "absent" as read), so the
+        # narrower list has to be asked first or a gene held ready is reported as shut
+        if symbol in set(r.get("poised_genes") or []):
+            out[r["cell_type"]] = "poised"
+        else:
+            out[r["cell_type"]] = "silent" if symbol in r["silent_genes"] else "read"
     return out
 
 
@@ -230,8 +235,13 @@ def render(d: dict[str, Any]) -> str:
         if lay["reader"]:
             read = ", ".join(sorted(c for c, st in lay["reader"].items() if st == "read")) or "no cell type"
             silent = ", ".join(sorted(c for c, st in lay["reader"].items() if st == "silent")) or "none"
+            # a poised cell type was printed in neither group before 2026-09-17, so a bivalent gene
+            # simply lost the cells that hold it ready - the state the line most needs to show
+            poised = ", ".join(sorted(c for c, st in lay["reader"].items() if st == "poised"))
+            held = f"; poised in {poised}" if poised else ""
             lines.append(
-                f"  # read in {read}; silent in {silent}   [inferred: promoter open in ENCODE DNase]"
+                f"  # read in {read}; silent in {silent}{held}   "
+                "[inferred: promoter open in ENCODE DNase; poised = H3K27me3 with H3K4me3]"
             )
         n = lay["node"]
         if n:

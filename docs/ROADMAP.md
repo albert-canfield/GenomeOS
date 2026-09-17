@@ -607,8 +607,11 @@ in order. "Owner" is the session that holds the files today (see §7).
   gene as expressed; the lane therefore drew all of them as silent. It now reads the
   narrower `poised_genes` first and draws three states: read (filled green), poised (amber)
   and silent (hollow). In one 4 Mb window of chr21 that is 23 genes shown as shut when they
-  are held ready. `decompile` and `report` still collapse the two, which is the same fix in
-  their own files, and the read-by-marks call is still shown nowhere. 3. A neural, gonadal
+  are held ready. `decompile` and `report` carried the same defect and are fixed with it: a gene's
+  dossier now lists `poised_in` beside `read_in` and `silent_in`, and the decompiled line
+  says "poised in K562" where it previously dropped that cell type from BOTH groups, which
+  reads as "never measured" rather than as a claim. The read-by-marks call is still shown
+  nowhere. 3. A neural, gonadal
   or embryonic biosample beyond SK-N-SH and H1. 4. Measured perturbations
   (CRISPRi in K562) for the direction finding.
 - **Owner.** genomeos-e1 holds areas B, C and D since 2026-09-14, when the
