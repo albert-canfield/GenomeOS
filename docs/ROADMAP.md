@@ -1373,7 +1373,13 @@ in order. "Owner" is the session that holds the files today (see §7).
   tag follows the merge to `main`, which only Albert opens. 3. Done
   2026-09-11: `.gitignore` for `data/jobs`, keeping the registry in code.
   4. Nightly CI job that runs the real-data tests against cached reference
-  data. 5. Cell view.
+  data. 5. Cell view: **done 2026-09-17**. The reader has run on eleven cell types over
+  all 24 chromosomes since 2026-09-14 and its numbers lived pooled inside the Progress
+  tab's genome-wide card, where cells could not be compared. `/api/cells` and the Cells
+  view read `reader_genome_wide` per cell: genes read, promoter open, poised, read by
+  marks, enhancers active and nodes silent, with the per-chromosome spread behind each
+  row. The same genome reads 70.3% of its coding genes in hepatocyte and 53.2% in
+  GM12878, which is the claim the reader exists to make checkable.
 - **Owner.** genomeos-9c (views, packaging, CI, the Project progress card, the work board and the Evidence explorer; genomeos-77, genomeos-c6 and genomeos-f7 before the restarts); genomeos-f3 (jobs).
 
 ### H. BioForge (design under constraints)

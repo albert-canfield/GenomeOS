@@ -196,6 +196,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
     <button data-tab="blocks" data-tip="A 2-D map of the blocks of a chromosome, to scale and nested: genes containing transcripts containing exons, the UNKNOWN space between genes, islands, repeats and gaps. Zoom, pan, search, filter, and propose moves in edit mode."><i class="ic">🧩</i>Blocks</button>
     <button data-tab="flow" data-tip="How a gene becomes a protein: DNA locus with exons, the spliced mRNA (UTRs and coding sequence), and the translated residues, linked base to codon to residue. Drop a single-base change on the DNA and see what it does to the protein."><i class="ic">🔁</i>Flow</button>
     <button data-tab="program" data-tip="Write biology as code in BioLang, compile it to BioIR and run the regulatory network through time."><i class="ic">📝</i>Program</button>
+    <button data-tab="cells" data-tip="What each of the eleven cell types reads: the same genome, run differently. Genes read, poised and silent per cell, with the per-chromosome spread behind each one."><i class="ic">🧫</i>Cells</button>
     <button data-tab="evidence" data-tip="Every fact the BioLang programs state, with its evidence kind and confidence. Filter to the weak ones and export them as a review list."><i class="ic">🧾</i>Evidence</button>
     <button data-tab="age" data-tip="Simulate a population of cells ageing: telomeres, mutations, epigenetic age and senescence, with every parameter's evidence."><i class="ic">⏳</i>Ageing</button>
     <button data-tab="twin" data-tip="A digital twin: one genome plus measured state. Fork it with a variant or an environment change and compare the two futures."><i class="ic">👥</i>Twin</button>
@@ -384,6 +385,22 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
 </section>
 
 <!-- ================= EVIDENCE ================= -->
+<section id="cells">
+  <div class="card" style="margin-bottom:16px">
+    <h2><i class="ic">🧫</i>The same genome, eleven ways<span class="help" data-tip="ENCODE DNase-seq and histone ChIP-seq peaks per cell type, read as: a gene is read when its promoter is open and not poised, or closed with H3K4me3 and H3K27ac where the marks were read. Experimental peaks, inferred call.">?</span>
+      <span class="muted" id="cl-status" style="font-weight:400;font-size:12px;margin-left:auto;text-transform:none;letter-spacing:0"></span></h2>
+    <div id="cl-kpi" class="kpi"></div>
+    <div class="muted" id="cl-evidence" style="font-size:12px;margin-top:6px"></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <h2><i class="ic">📊</i>By cell type</h2>
+    <div id="cl-table"></div>
+  </div>
+  <div class="card">
+    <h2><i class="ic">🧬</i>Per chromosome <span class="muted" id="cl-pick" style="font-weight:400;font-size:12px"></span></h2>
+    <div id="cl-chroms" class="scroll" style="max-height:520px"></div>
+  </div>
+</section>
 <section id="evidence">
   <div class="card" style="margin-bottom:16px">
     <h2><i class="ic">🧾</i>Evidence explorer<span class="help" data-tip="Every BioLang program (demos, organism programs, the bio.std prelude) read into one row per stated fact. A program is credited only with the facts it declares itself, not those it imports. Confidence at or below 0.5 counts as weak.">?</span>
@@ -919,6 +936,7 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   document.querySelectorAll('nav button').forEach(x => x.blur());
   b.scrollIntoView({block: 'nearest', inline: 'nearest'});
   if (b.dataset.tab === 'progress') { loadJobs(); loadGenomeWide(); loadUnknownWide(); loadIndividualWide(); loadBudgetWide(); loadProjectProgress(); loadFeatures(); }
+  if (b.dataset.tab === 'cells') setTimeout(loadCells);
   if (b.dataset.tab === 'evidence') setTimeout(loadEvidence);  // a deep link clicks this tab before the script has finished defining it
   if (b.dataset.tab === 'blocks' && window.blocksResize) window.blocksResize();
   if (b.dataset.tab === 'flow' && window.flowResize) window.flowResize();
@@ -1768,6 +1786,44 @@ function evBars(el, counts, total) {
   const bar = entries.map(([k, n]) => `<i style="width:${(n / (total || 1)) * 100}%;background:${evVar(k)}" title="${k}: ${n.toLocaleString()}"></i>`).join('');
   const legend = entries.map(([k, n]) => `<span style="--sw:${evVar(k)}">${k} ${fmt(n)} (${Math.round(n / (total || 1) * 100)}%)</span>`).join('');
   el.innerHTML = `<div class="ev-bar">${bar}</div><div class="ev-legend">${legend}</div>`;
+}
+let clData = null, clCell = '';
+async function loadCells() {
+  try {
+    $('#cl-status').textContent = 'reading the eleven cell types…';
+    const r = clData = await api('/api/cells');
+    const top = r.cells[0], bottom = r.cells[r.cells.length - 1];
+    const genes = top.coding_genes || 0;
+    $('#cl-kpi').innerHTML = `<div><b>${r.cells.length}</b><span>cell types</span></div>
+      <div><b>${fmt(genes)}</b><span>coding genes</span></div>
+      <div><b>${(top.read_fraction * 100).toFixed(1)}%</b><span>most read (${escH(top.cell_type)})</span></div>
+      <div><b>${(bottom.read_fraction * 100).toFixed(1)}%</b><span>least read (${escH(bottom.cell_type)})</span></div>
+      <div><b>${fmt(r.chromosomes.length)}</b><span>chromosomes</span></div>`;
+    $('#cl-evidence').textContent = r.evidence || '';
+    $('#cl-table').innerHTML = `<table><tr><th>cell type</th><th class="num">read</th><th class="num">read %</th><th class="num">promoter open</th><th class="num">poised</th><th class="num">by marks</th><th class="num">enhancers active</th><th class="num">nodes silent</th></tr>` +
+      r.cells.map(c => `<tr class="ev-file${c.cell_type === clCell ? ' on' : ''}" data-cell="${escH(c.cell_type)}">
+        <td>${escH(c.cell_type)}</td><td class="num">${fmt(c.genes_read || 0)}</td>
+        <td class="num"><b>${(c.read_fraction * 100).toFixed(1)}%</b></td>
+        <td class="num">${fmt(c.genes_read_open || 0)}</td><td class="num">${fmt(c.genes_poised || 0)}</td>
+        <td class="num">${fmt(c.genes_read_by_marks || 0)}</td><td class="num">${fmt(c.enhancers_active || 0)}</td>
+        <td class="num">${fmt(c.nodes_silent || 0)}</td></tr>`).join('') + '</table>';
+    $('#cl-table').querySelectorAll('tr[data-cell]').forEach(tr => tr.onclick = () => { clCell = tr.dataset.cell; renderCellChroms(); });
+    if (!clCell) clCell = top.cell_type;
+    renderCellChroms();
+    $('#cl-status').textContent = `reader of ${r.date || 'unknown date'}`;
+  } catch (e) { $('#cl-status').textContent = String(e.message || e); }
+}
+function renderCellChroms() {
+  if (!clData) return;
+  const cell = clData.cells.find(c => c.cell_type === clCell);
+  if (!cell) return;
+  $('#cl-pick').textContent = `— ${clCell}, click another row to change`;
+  const rows = clData.chromosomes.map(ch => [ch, cell.chromosomes[ch]]).filter(([, v]) => v);
+  $('#cl-chroms').innerHTML = `<table><tr><th>chromosome</th><th class="num">coding genes</th><th class="num">read</th><th class="num">read %</th><th class="num">poised</th><th class="num">enhancers active</th><th class="num">nodes open</th><th class="num">nodes silent</th></tr>` +
+    rows.map(([ch, v]) => `<tr><td class="mono">${escH(ch)}</td><td class="num">${fmt(v.coding_genes || 0)}</td><td class="num">${fmt(v.genes_read || 0)}</td>
+      <td class="num">${v.read_fraction != null ? (v.read_fraction * 100).toFixed(1) + '%' : ''}</td>
+      <td class="num">${fmt(v.genes_poised || 0)}</td><td class="num">${fmt(v.enhancers_active || 0)}</td>
+      <td class="num">${fmt(v.nodes_open || 0)}</td><td class="num">${fmt(v.nodes_silent || 0)}</td></tr>`).join('') + '</table>';
 }
 async function loadEvidence() {
   try {

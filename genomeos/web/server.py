@@ -911,6 +911,42 @@ class Api:
             "truncated": len(rows) > limit,
         }
 
+    def cells(self) -> dict:
+        """What each cell type reads: the genome-wide reader, per cell and per chromosome.
+
+        Eleven cell types, each with its own DNase and histone peaks, over 24 chromosomes. The same
+        genome runs differently in each, which is the claim the reader exists to make checkable, and
+        until now it had no view of its own: the numbers were inside the Progress tab's genome-wide
+        card, pooled and hard to compare across cells.
+        """
+        from genomeos.results import RESULTS_DIR, load_result
+
+        rd = self.root / RESULTS_DIR
+        r = load_result("reader_genome_wide", rd)
+        if not r:
+            raise ApiError("reader_genome_wide has not been computed; run `genomeos reader --all`")
+        cells = r.get("cell_types", [])
+        totals = r.get("totals", {})
+        per_chrom = r.get("chromosomes", {})
+        rows = []
+        for cell in cells:
+            t = dict(totals.get(cell) or {})
+            genes = t.get("coding_genes") or 0
+            t["cell_type"] = cell
+            t["read_fraction"] = round((t.get("genes_read") or 0) / genes, 4) if genes else None
+            t["open_fraction"] = round((t.get("genes_read_open") or 0) / genes, 4) if genes else None
+            t["chromosomes"] = {
+                chrom: v[cell] for chrom, v in per_chrom.items() if isinstance(v, dict) and cell in v
+            }
+            rows.append(t)
+        rows.sort(key=lambda x: -(x["read_fraction"] or 0))
+        return {
+            "date": r.get("date"),
+            "evidence": r.get("evidence"),
+            "cells": rows,
+            "chromosomes": sorted(per_chrom),
+        }
+
     def roadmap(self) -> dict:
         """docs/ROADMAP.md as areas with planned steps and finished items, milestones and data jobs."""
         from genomeos import roadmap
@@ -1859,6 +1895,8 @@ class Handler(BaseHTTPRequestHandler):
                         self._q(qs, "compiled", "") == "1",
                     )
                 )
+            if u.path == "/api/cells":
+                return self._json(self.api.cells())
             if u.path == "/api/roadmap":
                 return self._json(self.api.roadmap())
             if u.path == "/api/work":
