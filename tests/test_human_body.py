@@ -23,7 +23,14 @@ def test_human_body_grows_to_adult_counts_and_turns_over():
     alive = {c.cell_type: c.count for c in body.alive_at(body.time)}
     assert alive["Erythrocyte"] >= 2.0e13 and alive["NeuronHuman"] <= 1.5e11 and alive["Myocyte"] <= 4e8
     assert alive["Trophectoderm"] < 100 and alive["Hypoblast"] < 100  # extra-embryonic, not counted in growth
-    assert s["populations"] == 18 and s["cells_born"] == 18 and body.unknown == {}
+    # 21 since 2026-09-17, 18 before. tissues.bio moved from `fraction` to `share`, and the three
+    # populations that appeared - Glia, LungEpithelium, Myocyte - are each the LAST split of their
+    # germ layer. Under `fraction` each took 1.0000 of a remainder that the earlier splits, printed
+    # at four decimals, had already exhausted to nothing, so they held no cells at all. Glia is 24.5%
+    # of the ectoderm in Sender & Milo, so a quarter of a germ layer was being absorbed by its
+    # siblings. The layer totals were conserved throughout, which is exactly why this assertion
+    # passed for weeks: the 20-year count moved by -1.8e-6 when they came back.
+    assert s["populations"] == 21 and s["cells_born"] == 21 and body.unknown == {}
     assert all(c["ok"] for c in body.check_asserts()), body.check_asserts()
     rep = body.uncertainty().to_dict()
     assert rep["organism"]["label"] in ("low", "medium") and rep["cellular"]["label"] == "low"

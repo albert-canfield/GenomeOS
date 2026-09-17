@@ -215,37 +215,46 @@ def to_bio_tissues(table: dict) -> str:
     for layer in LAYER_SHARE:
         members = sorted((g for g in groups if g["layer"] == layer), key=lambda g: -g["cells"])
         total = layer_total[layer]
-        remaining = total
         lines.append(
             f"# {layer}: {total:.3g} adult cells across {len(members)} populations, split in the order"
         )
         lines.append(
-            "# written (largest first). Each `fraction` is the share of what the earlier splits left, "
-            "which is"
+            "# written (largest first). Each `share` is the published share of the whole layer, which is"
         )
         lines.append(
-            "# what the runtime applies; the published share of the whole layer is in every evidence line"
+            "# what Sender & Milo give and what the runtime applies: `share` is taken of the population"
         )
         lines.append(
-            "# beside it, and the two are the same number only for the first split. The last split takes"
+            "# as it stood at the start of this decision point, so the splits do not divide each other's"
         )
-        lines.append("# the rest, so it is always 1.0000 whatever share of the layer it is.")
-        for i, g in enumerate(members):
-            last = i == len(members) - 1
-            frac = 1.0 if last else g["cells"] / remaining
-            share = g["cells"] / total if total else 0.0
-            remaining -= g["cells"]
-            # The number the runtime applies and the number Sender & Milo publish are different numbers
-            # after the first split, because the splits at one decision point run in sequence
-            # (docs/BIOLANG-v0.3.md, populations). Saying only the second would be false; saying only the
-            # first would be uncheckable against the source. So the line carries both.
+        lines.append(
+            "# leftovers and the order they are written in changes nothing. Until 2026-09-17 these were"
+        )
+        lines.append(
+            "# `fraction` lines, a share of the REMAINDER, so every line after the first stated a number"
+        )
+        lines.append("# the source does not contain and the last read 1.0000 whatever its share was.")
+        shares = [(g, (g["cells"] / total if total else 0.0)) for g in members]
+        # rounding can only push the sum above 1, which the engine refuses outright rather than
+        # rescaling, so the last split absorbs the rounding: at six decimals that is under 1e-6 of a
+        # layer, and it is stated in its evidence line rather than left to be discovered
+        rounded = [round(sh, 6) for _, sh in shares[:-1]]
+        tail = max(0.0, round(1.0 - sum(rounded), 6))
+        applied = [*rounded, tail]
+        for i, ((g, share), value) in enumerate(zip(shares, applied, strict=True)):
+            drift = value - share
+            note = (
+                f"; the last split of the layer carries the rounding of the others, {drift:+.2g}"
+                if i == len(shares) - 1 and abs(drift) > 5e-7
+                else ""
+            )
             lines.append(
                 f"decision {layer.lower()}_to_{g['id']} {{ action: differentiate; when: cell_type = {layer}, "
-                f"stage = Organogenesis; to: {g['id']}; fraction: {frac:.4f}; "
+                f"stage = Organogenesis; to: {g['id']}; share: {value:.6g}; "
                 f'evidence: inferred "{g["cells"]:.3g} cells, {share:.4%} of the {layer} layer '
-                f"adult total ({src}); split {i + 1} of {len(members)}, so this fraction is "
-                f"{frac:.4f} of what the earlier splits left and not the {share:.4%} itself "
-                f'(docs/BIOLANG-v0.3.md: a splitting fraction is a share of the remainder)"; '
+                f"adult total ({src}); split {i + 1} of {len(members)}, and `share` states that "
+                f"published number directly because it is taken of the layer at this decision point, "
+                f'not of what the earlier splits left{note}"; '
                 "confidence: 0.4 }"
             )
         lines.append("")

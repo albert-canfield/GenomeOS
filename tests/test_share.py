@@ -120,7 +120,14 @@ def test_the_grammar_refuses_what_it_cannot_mean():
 
 
 def _germ_layer_splits(module) -> int:
-    """Restate each germ-layer split as the share of the layer its fraction was derived from."""
+    """Restate each germ-layer split the other way round: its share as the fraction of the remainder.
+
+    The direction flipped on 2026-09-17, when tissues.bio started stating `share` because that is the
+    number Sender & Milo publish. The property under test did not: a partition written as absolute
+    shares and the same partition written as sequential fractions of the remainder must leave the
+    steady state where it is. Restating shares AS fractions tests exactly that, and it tests it on the
+    encoding the program actually uses rather than on one it has stopped using.
+    """
     groups: dict[str, list] = defaultdict(list)
     for d in module.decisions:
         if d.action == "differentiate" and "_to_" in d.id:
@@ -129,9 +136,10 @@ def _germ_layer_splits(module) -> int:
     for members in groups.values():
         left = 1.0
         for d in members:
-            share = left * d.fraction
+            share = d.share if d.share is not None else 0.0
+            d.fraction = (share / left) if left > 1e-12 else 0.0
+            d.share = None
             left -= share
-            d.share, d.fraction = share, 1.0
             restated += 1
     return restated
 
@@ -152,4 +160,8 @@ def test_restating_the_body_as_shares_does_not_move_it():
     assert sum(new.values()) == pytest.approx(sum(old.values()), rel=1e-12)
     assert sum(old.values()) == pytest.approx(2.83e13, rel=5e-3)  # the count the program is solved to
     for kind in set(old) | set(new):
-        assert new[kind] == pytest.approx(old[kind], rel=1e-9), kind
+        # abs= as well as rel=: restating a partition as sequential fractions leaves a floating-point
+        # residue in the PARENT layer that shares consume exactly - 4.6e-6 of a cell in Mesoderm, nine
+        # orders of magnitude below one cell and six below the smallest real population. A relative
+        # tolerance cannot express "smaller than a cell" when the expected value is 0.
+        assert new[kind] == pytest.approx(old[kind], rel=1e-9, abs=1e-3), kind

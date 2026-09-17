@@ -5,7 +5,13 @@
 # their measured rates. Mechanism is not claimed anywhere below; the report says so.
 # Run: genomeos grow data/organisms/human/body.bio --until "20 yr" --depth 0
 module organism.human.body
-# test: cells == 18
+# test: cells == 21
+# 18 until 2026-09-17, when tissues.bio moved from `fraction` to `share`. The three that appeared -
+# Glia, LungEpithelium, Myocyte - are each the LAST split of their germ layer, and under `fraction`
+# each took 1.0000 of a remainder that the earlier splits, printed at four decimals, had already
+# exhausted to nothing. Glia is 24.5% of the ectoderm in Sender & Milo: a quarter of a germ layer was
+# being absorbed by its siblings and the population did not exist. The layer totals were conserved
+# throughout, which is why nothing caught it: the 20-year count moved by -1.8e-6.
 # test: deaths == 0
 import bio.std.development
 import tissues.bio
