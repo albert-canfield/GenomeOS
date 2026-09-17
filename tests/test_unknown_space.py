@@ -127,6 +127,32 @@ def test_the_shuffle_keeps_every_dinucleotide() -> None:
     }
 
 
+def test_the_shuffle_cannot_change_gc() -> None:
+    """The scrambled arm is a composition control, so its GC must equal its source's exactly."""
+    import random
+
+    rng = random.Random(11)
+    for _ in range(50):
+        seq = "".join(rng.choice("ACGT") for _ in range(300))
+        out = library.dinucleotide_shuffle(seq, rng)
+        assert seq.count("G") + seq.count("C") == out.count("G") + out.count("C")
+
+
+def test_both_low_complexity_rules_are_charged_as_a_union() -> None:
+    """One rule reads the sequence and the other reads an annotation; an oligo failing either is out.
+
+    genomeos-79's rule fires on what RepeatMasker saw, mine on the sequence itself, so an unannotated
+    simple repeat passes theirs and fails mine - which is why the union is taken rather than a choice.
+    """
+    clean = "ACGTTGCAACGGTTACGGATCCGTAAGCTTAGCGATCGATTCAGGCATCAG" * 6
+    annotated_only = library.family_a(clean, 0.5, {"Simple_repeat": 200})
+    neither = library.family_a(clean, 0.5, {"LINE": 300})
+
+    assert annotated_only == ["low_complexity_by_annotation"]
+    assert neither == []
+    assert library.family_a("A" * 300, 0.0, None)[:2] == ["homopolymer", "gc_outside_25_75"]
+
+
 def test_a_block_is_tiled_end_to_end_without_running_past_it() -> None:
     windows = library.oligos_of_block({"start": 1_000, "end": 1_950}, library.OLIGO)
 

@@ -1584,17 +1584,24 @@ check each other:
 |---|---|---|
 | homopolymer ≥ 10 | 3,421 | 3,394 |
 | GC outside 25–75% | 749 | 751 |
-| low complexity / tandem | 220 | 105 |
+| low complexity, by sequence (a 6-mer covering half the window) | 220 | — |
+| low complexity, by annotation (half the window simple/low-complexity/satellite) | 163 | 105 |
 | not unique within its own block | not implemented | 23 |
-| **total** | **4,188** | **4,273** |
-| **orderable** | **41,113** | **41,297 (90.6%)** |
+| **total** | **4,264** | **4,273** |
+| **orderable** | **41,037** | **41,297 (90.6%)** |
 
-Two independent implementations, **0.4% apart on the number a synthesis quote would use**. The gap is
-in the low-complexity rule, where their tandem test and this 6-mer coverage test disagree on about a
-hundred windows, and in the within-block uniqueness test this build does not do.
+Two independent implementations, **nine windows apart** on the number a synthesis quote would use.
 
-**The library is now 284,598 oligos**: 92,118 test (41,113 of them from untouched blocks), 92,117
-matched genomic negatives, 8,245 positives, 92,118 scrambles.
+**Both low-complexity rules are charged, as a union, and neither lane's is the one to keep.** The
+annotation rule inherits whatever RepeatMasker did or did not annotate, so an unannotated simple repeat
+passes it — and on unannotated sequence that is exactly the failure mode to assume. The sequence rule
+fires on the oligo itself, which is closer to what a synthesiser fails on, and misses what a curator
+saw in a diverged repeat. The union costs about 0.2% of the library and removes the need for either
+side to defend an arbitrary threshold. The within-block uniqueness test is a **lower bound** on
+mappability and is not presented as a mappability arm by either build.
+
+**The library is now 284,001 oligos**: 91,919 test (41,037 of them from untouched blocks, 2,277 in the
+seven bridge blocks), 91,918 matched genomic negatives, 8,245 positives, 91,919 scrambles.
 
 **Judgement one: the repeat flag is not an exclusion.** Interspersed repeat (17,112 windows) and
 segmental duplication (210) are carried **flagged and kept**. The reason is measured, not argued:

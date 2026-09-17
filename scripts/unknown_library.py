@@ -38,6 +38,7 @@ from typing import Any
 
 from genomeos.attribution import mpra, organise
 from genomeos.coords import Locus
+from genomeos.genome.repeats import repeat_index
 from genomeos.predict.enhancer_target import Context
 from genomeos.results import save_result
 from scripts.unknown_coverage import label_of, measured_spans, overlap_bp  # noqa: E402
@@ -145,11 +146,26 @@ def low_complexity(seq: str, unit: int = 6, fraction: float = 0.5) -> bool:
     return top * unit >= len(seq) * fraction
 
 
-def family_a(seq: str, gc: float) -> list[str]:
-    """Reasons this oligo cannot be ORDERED or read at all - genomeos-79's Family A, recomputed here.
+SIMPLE_CLASSES = ("Simple_repeat", "Low_complexity", "Satellite")
 
-    Recomputed rather than imported so the two counts are an independent check on each other: that
-    lane reports 4,273 of 45,570 untouched-block windows unorderable, 90.6% surviving.
+
+def annotated_simple(coverage: dict[str, int], length: int, fraction: float = 0.5) -> bool:
+    """Is half the window annotated as simple repeat, low complexity or satellite?
+
+    genomeos-79's rule. It inherits whatever RepeatMasker did or did not annotate, so an unannotated
+    simple repeat passes it - which is why it is taken in UNION with the sequence rule rather than
+    instead of it. That lane's own reading of the two: the sequence rule is closer to what a
+    synthesiser fails on, the annotation rule catches what a curator saw, and the union is 0.2% of the
+    library, which is cheaper than either of us defending an arbitrary choice.
+    """
+    return sum(coverage.get(cls, 0) for cls in SIMPLE_CLASSES) >= length * fraction
+
+
+def family_a(seq: str, gc: float, repeat_coverage: dict[str, int] | None = None) -> list[str]:
+    """Reasons this oligo cannot be ORDERED or read at all - Family A, by the union of both rules.
+
+    Recomputed rather than imported so the two lanes' counts check each other: genomeos-79 reports
+    4,273 of 45,570 untouched-block windows unorderable by its rules, 90.6% surviving.
     """
     out = []
     if homopolymer_run(seq) >= HOMOPOLYMER:
@@ -157,7 +173,9 @@ def family_a(seq: str, gc: float) -> list[str]:
     if not (GC_LOW <= gc <= GC_HIGH):
         out.append("gc_outside_25_75")
     if low_complexity(seq):
-        out.append("low_complexity")
+        out.append("low_complexity_by_sequence")
+    if repeat_coverage is not None and annotated_simple(repeat_coverage, len(seq)):
+        out.append("low_complexity_by_annotation")
     return out
 
 
@@ -190,6 +208,10 @@ def build(chroms: list[str], step: int, max_oligos: int) -> dict[str, Any]:
             continue
         coding_tss = tss_of(ctx, chrom)
         spans = measured_spans(chrom)
+        try:
+            repeats = repeat_index(chrom)
+        except (OSError, ValueError):  # a chromosome whose RepeatMasker rows are not distilled here
+            repeats = None
         active = {(e.start, e.end) for e in mpra.load(chrom) if max(e.activity.values(), default=0) >= 1.0}
 
         def feature(
@@ -232,7 +254,9 @@ def build(chroms: list[str], step: int, max_oligos: int) -> dict[str, Any]:
                                 "block": f"{chrom}:{b['start']}-{b['end']}",
                                 "case": b.get("case"),
                                 "untouched_block": untouched,
-                                "unorderable": family_a(f["seq"], f["gc"]),
+                                "unorderable": family_a(
+                                    f["seq"], f["gc"], repeats.coverage(start, end) if repeats else None
+                                ),
                                 "bridge": f"{chrom}:{b['start']}-{b['end']}" in BRIDGE_BLOCKS,
                             }
                         )
