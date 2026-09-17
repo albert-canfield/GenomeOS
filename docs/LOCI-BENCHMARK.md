@@ -594,8 +594,13 @@ and standardised it sits *below* its controls. It is not element length: on elem
 less the panel reads 4 of 7 and the candidates 1 of 9. Nine loci cannot refute 9 of 17, so the row
 above is not struck — but the one claim that ever separated this panel from its controls can no
 longer be quoted as established, and the honest form of it is that it failed the first test it was
-given. Section 19 also finds that the coverage artefact section 8 retracted **survives standardising
-on GC, distance and constraint**, so that retraction was itself too strong.
+given. Section 19 also reproduces section 8's retraction on these
+independent loci and sharpens it: the apparent separation **survives standardising on GC, distance
+and constraint** — none of which says whether anybody ever spent a request on the window — and dies
+only when coverage enters as a stratum, taking the direction claim from +0.41 (p 0.026) to −0.11,
+with the controls producing a direction more often than the loci. Section 8 was right, and
+**standardising on covariates is not a substitute for conditioning on coverage**, which is the part
+that generalises past this benchmark.
 
 **A value on constrained sequence is the only claim left standing: 53% at the panel against 16% at
 matched windows with the same data behind them.** Every other claim the benchmark scores has now
