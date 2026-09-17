@@ -856,7 +856,13 @@ class Chromosome:
         ]
         self.coding.sort()
         self._coding_tss = [t for t, _ in self.coding]
-        self._ccre_starts = [c.start for c in self.ccres]
+        # `load_ccres` returns the registry in FILE order, which is several sorted runs concatenated
+        # (one per class group), not one sorted list: every chromosome checked has three descending
+        # steps in it. `ccres_in` bisects, and a bisect over an unsorted list silently returns a
+        # plausible index, so this keeps its own sorted copy. `self.ccres` is left exactly as it came
+        # because the domain model is handed it and must see the registry's own order.
+        self._ccre_sorted = sorted(self.ccres, key=lambda c: c.start)
+        self._ccre_starts = [c.start for c in self._ccre_sorted]
         self._peaks: dict[str, Any] = {}
 
     def close(self) -> None:
@@ -912,8 +918,20 @@ class Chromosome:
 
     # -- layers
     def ccres_in(self, start: int, end: int) -> list:
+        """Every registry element overlapping [start, end), over the sorted copy.
+
+        The 10 kb rewind covers an element that starts before the window and reaches into it. The
+        longest cCRE measured across chr1, 2, 7, 11, 16, 19 and X is 350 bp, so the slack is about
+        28 times what it needs to be; it is kept wide because being wrong here is silent.
+        """
         i = bisect.bisect_left(self._ccre_starts, start - 10_000)
-        return [c for c in self.ccres[i:] if c.start < end and c.end > start]
+        out = []
+        for c in self._ccre_sorted[i:]:
+            if c.start >= end:
+                break
+            if c.end > start:
+                out.append(c)
+        return out
 
     def peaks(self, cell: str):
         from genomeos.genome.reader import PeakIndex, load_peaks

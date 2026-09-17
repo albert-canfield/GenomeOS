@@ -421,3 +421,49 @@ def test_reach_is_gene_body_overlap_not_tss_distance():
 
     assert element_to_tss > half, "the TSS is well outside half the window"
     assert runx1_length > element_to_tss, "yet the body spans far enough to be inside it"
+
+
+# ------------------------------------------------------------------ the registry lookup
+def test_ccres_in_is_correct_when_the_registry_arrives_out_of_order():
+    """`load_ccres` returns several sorted runs concatenated, and a bisect over that lies quietly.
+
+    Every chromosome checked has three descending steps in the file order, one per class group. The
+    old index was built straight from that list, so the bisect returned a plausible index and
+    everything before it was dropped: 12 cCREs at MC1R read as 1, and the ZRS, MYC and ABO read as
+    zero when they have 1, 2 and 4. That put three loci into section 10's "no cCRE over the
+    published element" list which do not belong there.
+
+    Built here as a unit so it stays offline: the method needs only the three attributes set below.
+    """
+    import bisect as _b
+
+    from genomeos.benchmark.loci import Chromosome
+
+    class E:
+        def __init__(self, start, end):
+            self.start, self.end = start, end
+
+    # two sorted runs concatenated, exactly the shape the registry file has
+    ccres = [E(100, 200), E(5_000, 5_100), E(9_000, 9_100)] + [E(150, 250), E(5_050, 5_150)]
+    ch = object.__new__(Chromosome)
+    ch.ccres = ccres
+    ch._ccre_sorted = sorted(ccres, key=lambda c: c.start)
+    ch._ccre_starts = [c.start for c in ch._ccre_sorted]
+
+    got = ch.ccres_in(120, 260)
+    truth = [c for c in ccres if c.start < 260 and c.end > 120]
+
+    assert len(got) == len(truth) == 2, "both elements over the window, whichever run they came from"
+    assert ch.ccres_in(5_000, 5_200) and len(ch.ccres_in(5_000, 5_200)) == 2
+    assert ch.ccres_in(20_000, 21_000) == []
+    # the index must be sorted, or the bisect above is meaningless
+    assert ch._ccre_starts == sorted(ch._ccre_starts)
+    assert _b.bisect_left(ch._ccre_starts, 0) == 0
+
+
+@needs_result
+def test_section_ten_counts_match_the_registry_the_code_actually_reads():
+    """The count that section 10 quotes has to be the count the fixed lookup produces."""
+    zero = {r["locus"] for r in RESULT["loci"] if r.get("ccres_over_element") == 0}
+
+    assert zero == {"APP", "TP53", "SOX9_PierreRobin", "H19_ICR1"}

@@ -249,7 +249,7 @@
     "published_element_coverage": {
       "per_locus": {
         "SHH_ZRS": {
-          "ccres_over_element": 0,
+          "ccres_over_element": 1,
           "elements_scored": 2,
           "runs": [
             "loci_windows",
@@ -292,14 +292,14 @@
           ]
         },
         "MYC_8q24": {
-          "ccres_over_element": 0,
+          "ccres_over_element": 2,
           "elements_scored": 2,
           "runs": [
             "loci_windows"
           ]
         },
         "ABO": {
-          "ccres_over_element": 0,
+          "ccres_over_element": 4,
           "elements_scored": 4,
           "runs": [
             "loci_windows"
@@ -356,7 +356,7 @@
           ]
         },
         "MC1R": {
-          "ccres_over_element": 1,
+          "ccres_over_element": 12,
           "elements_scored": 8,
           "runs": [
             "enhancer_targets_all"
@@ -364,9 +364,6 @@
         }
       },
       "no_ccre_over_the_published_element": [
-        "SHH_ZRS",
-        "MYC_8q24",
-        "ABO",
         "APP",
         "TP53",
         "SOX9_PierreRobin",
@@ -1019,9 +1016,13 @@
         "registry": {
           "layer": "registry",
           "provenance": "looked_up",
-          "elements": 0,
-          "classes": [],
-          "ids": [],
+          "elements": 1,
+          "classes": [
+            "dELS"
+          ],
+          "ids": [
+            "EH38E2604086"
+          ],
           "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
         },
         "node": {
@@ -1461,7 +1462,7 @@
       },
       "gc": 0.3929,
       "distance_to_coding_tss": 101702,
-      "ccres_over_element": 0,
+      "ccres_over_element": 1,
       "coding_genes_in_window": 4,
       "constrained_fraction": 0.5463,
       "score": {
@@ -4397,11 +4398,11 @@
             "pELS"
           ],
           "ids": [
-            "EH38E2001353",
             "EH38E2001346",
             "EH38E3346277",
             "EH38E3346278",
-            "EH38E2001351"
+            "EH38E2001351",
+            "EH38E2001353"
           ],
           "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
         },
@@ -5070,9 +5071,14 @@
         "registry": {
           "layer": "registry",
           "provenance": "looked_up",
-          "elements": 0,
-          "classes": [],
-          "ids": [],
+          "elements": 2,
+          "classes": [
+            "pELS"
+          ],
+          "ids": [
+            "EH38E3858446",
+            "EH38E3858447"
+          ],
           "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
         },
         "node": {
@@ -5461,7 +5467,7 @@
       },
       "gc": 0.465,
       "distance_to_coding_tss": 14806,
-      "ccres_over_element": 0,
+      "ccres_over_element": 2,
       "coding_genes_in_window": 2,
       "constrained_fraction": 0.5975,
       "score": {
@@ -5725,9 +5731,16 @@
         "registry": {
           "layer": "registry",
           "provenance": "looked_up",
-          "elements": 0,
-          "classes": [],
-          "ids": [],
+          "elements": 4,
+          "classes": [
+            "dELS"
+          ],
+          "ids": [
+            "EH38E2733853",
+            "EH38E3915753",
+            "EH38E2733854",
+            "EH38E2733855"
+          ],
           "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
         },
         "node": {
@@ -6178,7 +6191,7 @@
       },
       "gc": 0.6013,
       "distance_to_coding_tss": 18718,
-      "ccres_over_element": 0,
+      "ccres_over_element": 4,
       "coding_genes_in_window": 2,
       "constrained_fraction": 0.0737,
       "score": {
@@ -8438,10 +8451,10 @@
             "EH38E3386342",
             "EH38E3386343",
             "EH38E3386344",
+            "EH38E3386345",
             "EH38E3386346",
-            "EH38E3386349",
-            "EH38E3386350",
-            "EH38E3386351"
+            "EH38E3386347",
+            "EH38E3386348"
           ],
           "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
         },
@@ -10343,12 +10356,12 @@
           "ids": [
             "EH38E1848657",
             "EH38E3210484",
+            "EH38E3210485",
             "EH38E3210486",
             "EH38E3210487",
             "EH38E3210488",
-            "EH38E3210489",
-            "EH38E1848671",
-            "EH38E3210494"
+            "EH38E1848667",
+            "EH38E3210489"
           ],
           "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
         },
@@ -11101,11 +11114,11 @@
           ],
           "ids": [
             "EH38E2166907",
+            "EH38E3484167",
             "EH38E3484169",
             "EH38E3484171",
             "EH38E3484172",
-            "EH38E3484173",
-            "EH38E3484167"
+            "EH38E3484173"
           ],
           "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
         },
@@ -11967,12 +11980,20 @@
         "registry": {
           "layer": "registry",
           "provenance": "looked_up",
-          "elements": 1,
+          "elements": 12,
           "classes": [
-            "PLS"
+            "PLS",
+            "pELS"
           ],
           "ids": [
-            "EH38E3201370"
+            "EH38E3201370",
+            "EH38E3201373",
+            "EH38E3201374",
+            "EH38E3201377",
+            "EH38E3201378",
+            "EH38E3201379",
+            "EH38E3201380",
+            "EH38E3201381"
           ],
           "evidence": "curated: ENCODE cCRE registry v3 (a chromatin class, never a target)"
         },
@@ -12655,7 +12676,7 @@
       },
       "gc": 0.5816,
       "distance_to_coding_tss": 2314,
-      "ccres_over_element": 1,
+      "ccres_over_element": 12,
       "coding_genes_in_window": 13,
       "constrained_fraction": 0.0573,
       "score": {
@@ -13019,7 +13040,9 @@
       "deletion_target": null,
       "eqtl_target": null,
       "cells_open": [],
-      "registry_classes": [],
+      "registry_classes": [
+        "dELS"
+      ],
       "common_variants_per_kb": 1.27,
       "values_in_syntax": 0,
       "mammal_fraction": 0.0887
@@ -13349,7 +13372,11 @@
         "hepatocyte",
         "keratinocyte"
       ],
-      "registry_classes": [],
+      "registry_classes": [
+        "PLS",
+        "dELS",
+        "pELS"
+      ],
       "common_variants_per_kb": 3.65,
       "values_in_syntax": 0,
       "mammal_fraction": 0.0287
@@ -13387,6 +13414,7 @@
         "keratinocyte"
       ],
       "registry_classes": [
+        "dELS",
         "pELS"
       ],
       "common_variants_per_kb": 5.35,
@@ -13700,7 +13728,9 @@
         "cardiac muscle cell",
         "hepatocyte"
       ],
-      "registry_classes": [],
+      "registry_classes": [
+        "dELS"
+      ],
       "common_variants_per_kb": 1.5,
       "values_in_syntax": 0,
       "mammal_fraction": 0.043
@@ -13810,7 +13840,9 @@
       "cells_open": [
         "GM12878"
       ],
-      "registry_classes": [],
+      "registry_classes": [
+        "dELS"
+      ],
       "common_variants_per_kb": 0.0,
       "values_in_syntax": 0,
       "mammal_fraction": 0.2
@@ -13927,7 +13959,10 @@
       "deletion_target": "ADAMTSL2",
       "eqtl_target": "ADAMTSL2",
       "cells_open": [],
-      "registry_classes": [],
+      "registry_classes": [
+        "CTCF-only",
+        "dELS"
+      ],
       "common_variants_per_kb": 15.33,
       "values_in_syntax": 0,
       "mammal_fraction": 0.0697
@@ -13962,6 +13997,7 @@
         "hepatocyte"
       ],
       "registry_classes": [
+        "dELS",
         "pELS"
       ],
       "common_variants_per_kb": 2.0,
@@ -13996,7 +14032,9 @@
         "cardiac muscle cell",
         "hepatocyte"
       ],
-      "registry_classes": [],
+      "registry_classes": [
+        "pELS"
+      ],
       "common_variants_per_kb": 2.0,
       "values_in_syntax": 0,
       "mammal_fraction": 0.0517
@@ -14146,7 +14184,9 @@
         "keratinocyte"
       ],
       "registry_classes": [
-        "dELS"
+        "PLS",
+        "dELS",
+        "pELS"
       ],
       "common_variants_per_kb": 2.43,
       "values_in_syntax": 0,
@@ -14576,6 +14616,7 @@
       ],
       "registry_classes": [
         "DNase-H3K4me3",
+        "PLS",
         "dELS",
         "pELS"
       ],
@@ -14661,6 +14702,7 @@
       "registry_classes": [
         "CTCF-only",
         "DNase-H3K4me3",
+        "PLS",
         "dELS",
         "pELS"
       ],
@@ -14943,7 +14985,9 @@
       "cells_open": [
         "SK-N-SH"
       ],
-      "registry_classes": [],
+      "registry_classes": [
+        "dELS"
+      ],
       "common_variants_per_kb": 2.38,
       "values_in_syntax": 0,
       "mammal_fraction": 0.0138
@@ -15650,58 +15694,58 @@
   "variant_positions": {
     "rs12913832": {
       "panel": 28120472,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 28120472,
+      "agrees": true
     },
     "rs4988235": {
       "panel": 135851076,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 135851076,
+      "agrees": true
     },
     "rs1421085": {
       "panel": 53767042,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 53767042,
+      "agrees": true
     },
     "rs1558902": {
       "panel": 53769662,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 53769662,
+      "agrees": true
     },
     "rs1427407": {
       "panel": 60490908,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 60490908,
+      "agrees": true
     },
     "rs6983267": {
       "panel": 127401060,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 127401060,
+      "agrees": true
     },
     "rs11986220": {
       "panel": 127519444,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 127519444,
+      "agrees": true
     },
     "rs8176719": {
       "panel": 133257521,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 133257522,
+      "agrees": true
     },
     "rs8176746": {
       "panel": 133255935,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 133255935,
+      "agrees": true
     },
     "rs63750847": {
       "panel": 25897620,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 25897620,
+      "agrees": true
     },
     "rs1042522": {
       "panel": 7676154,
-      "ensembl": null,
-      "agrees": null
+      "ensembl": 7676154,
+      "agrees": true
     },
     "rs3892097": {
       "panel": null,
@@ -15761,6 +15805,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 428.0
+    "seconds": 492.0
   }
 }

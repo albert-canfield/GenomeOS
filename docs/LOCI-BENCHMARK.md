@@ -594,6 +594,33 @@ been shown, on its own controls, to carry no information on its own.
 
 ## 10. The element-level reading is bounded by the annotation, not by the sweep (2026-09-15)
 
+> **CORRECTED 2026-09-17, and one sentence below is struck rather than edited.** The counts in this
+> section came from `Chromosome.ccres_in`, which bisected an index built straight from `load_ccres`.
+> The registry does not arrive in start order: it is several sorted runs concatenated, one per class
+> group, with three descending steps on every chromosome checked. A bisect over that returns a
+> plausible index and silently drops everything before it. Measured against a brute-force scan, four
+> of the panel's seventeen loci were wrong — **MC1R read 1 cCRE where it has 12, and the ZRS, MYC and
+> ABO read 0 where they have 1, 2 and 4** — as were 14 of the 85 negative windows, one of them 21
+> where the truth is 108.
+>
+> **"No cCRE over the published element" is 4 of 17, not 7.** SHH_ZRS, MYC_8q24 and ABO leave that
+> list; APP, TP53, SOX9_PierreRobin and H19_ICR1 remain, and they are the loci the section's argument
+> actually rests on. **The sentence "The flagship long-range element is not an ENCODE cCRE" is
+> false** — there is one over the ZRS and the lookup was failing to see it. It is left in place below,
+> struck, because a claim this section leaned on should be readable next to its correction.
+>
+> **What survives, and it is the thesis.** SOX9's element and the H19 ICR still hold zero elements in
+> every universe the scorer can ask about, so the section's central point stands: no quota can produce
+> an element-level verdict where no annotation drew an interval. The panel-wide count was wrong; the
+> reason the two loci could not be scored was not. §18 later found a second and independent reason
+> SOX9 cannot be scored — its target is outside the model's 1 Mb input — so that locus is now doubly
+> unanswerable.
+>
+> Found by genomeos-79's more-loci lane and verified here against a brute-force scan before anything
+> was changed. Fix and regression test in `benchmark/loci.py` and `tests/test_loci_benchmark.py`;
+> `loci_benchmark.json` re-run, and the headline `target_derived` is unmoved at 15/17.
+
+
 Asked to spend a handful of AlphaGenome requests on the two loci with no element-level reading
 (SOX9's element and the H19 ICR), the first thing to check was what there was to spend them on.
 The answer is nothing, and it is worth more than the requests would have been.
@@ -607,12 +634,13 @@ Measured across the panel (`aggregate.published_element_coverage` in the result)
 
 | | loci |
 |---|---|
-| no cCRE over the published element | **7 of 17**: SHH_ZRS, MYC_8q24, ABO, APP, TP53, SOX9_PierreRobin, H19_ICR1 |
+| no cCRE over the published element | ~~7 of 17: SHH_ZRS, MYC_8q24, ABO, APP, TP53, SOX9_PierreRobin, H19_ICR1~~ → **4 of 17**: APP, TP53, SOX9_PierreRobin, H19_ICR1 (corrected 2026-09-17) |
 | no element-level reading of any kind | **4 of 17**: APP, TP53 (coding loci, scored by translation instead), SOX9_PierreRobin, H19_ICR1 |
 
 And the ZRS's element-level answer - the LMBR1 miss pinned in the CI gate, the single sharpest
 result the project has - **does not come from the registry at all**. It comes from the VISTA run.
-The flagship long-range element is not an ENCODE cCRE.
+~~The flagship long-range element is not an ENCODE cCRE.~~ **Struck 2026-09-17: it is one. See the
+correction at the head of this section.**
 
 So: **the element-level reading is bounded by which intervals ENCODE and VISTA happened to call,
 not by how much of the genome the model has covered.** Sweeping harder cannot fix it. Every rate
