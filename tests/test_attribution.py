@@ -61,6 +61,40 @@ def test_accumulate_counts_only_inside_intervals_and_above_threshold():
     assert stats[0].as_dict()["fraction_above"] == 0.6
 
 
+def test_accumulate_on_a_binned_track_counts_touched_bins_and_exact_overlap_apart():
+    """A 1 kb track answers "which kilobases" and "how many bases" differently, and both are kept.
+
+    Gnocchi is one value per kilobase. An interval of 1,500 bases straddling two bins touches
+    2,000 bases of track and covers 1,500 of its own, so `bases` is 2,000 while `overlap_bases` is
+    1,500; a 300 bp element inside one bin touches a whole kilobase and covers 300. Absolute
+    figures about the interval must read the overlap fields, and a fraction reads the same either
+    way when one bin dominates.
+    """
+    ivs = [(500, 2000), (3200, 3500)]  # straddles bins 0 and 1; sits inside bin 3
+    stats = [IntervalStats(*iv) for iv in ivs]
+    vals = array("f", [3.0, 1.0, 0.0, 5.0])  # bins at 0, 1000, 2000, 3000
+    BigWig._accumulate(0, 1000, vals, ivs, [e for _, e in ivs], stats, 2.27)
+    a, b = stats
+    assert (a.bases, a.above) == (2000, 1000)  # two bins touched, one of them above
+    assert (a.overlap_bases, a.overlap_above) == (1500, 500)  # 500 of bin 0, 1,000 of bin 1
+    assert a.mean == pytest.approx((3.0 * 1000 + 1.0 * 1000) / 2000)
+    assert a.overlap_mean == pytest.approx((3.0 * 500 + 1.0 * 1000) / 1500)
+    assert a.fraction_above == 0.5 and a.overlap_fraction_above == pytest.approx(1 / 3)
+    assert (b.bases, b.overlap_bases) == (1000, 300)  # a 300 bp element credited a whole kilobase
+    assert b.overlap_bases <= b.end - b.start  # never more than the interval's own length
+    assert b.as_dict()["overlap_fraction_above"] == 1.0
+
+
+def test_accumulate_per_base_track_keeps_both_readings_identical():
+    ivs = [(10, 15)]
+    stats = [IntervalStats(*ivs[0])]
+    vals = array("f", [1.0, 9.0, 9.0, 0.0, 9.0])
+    BigWig._accumulate(10, 1, vals, ivs, [15], stats, 2.27)
+    st = stats[0]
+    assert (st.bases, st.above) == (st.overlap_bases, st.overlap_above)
+    assert st.mean == st.overlap_mean
+
+
 def test_coalesce_joins_neighbours_and_splits_far_blocks():
     items = [LeafItem(0, 0, 0, 0, off, 100) for off in (0, 100, 250, 10_000_000)]
     groups = coalesce(items, max_gap=100, max_size=1000)

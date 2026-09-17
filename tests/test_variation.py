@@ -25,9 +25,26 @@ from genomeos.attribution.variation import (
 )
 
 
-def _st(start, end, bases, above, maximum, total=None):
+def _st(start, end, bases, above, maximum, total=None, overlap_bases=None, overlap_above=None):
+    """Stats as the reader returns them; by default the two readings agree, as on a per-base track.
+
+    Pass `overlap_bases`/`overlap_above` to build the binned case, where the touched kilobases
+    exceed the interval's own bases.
+    """
     total = total if total is not None else maximum * bases
-    return IntervalStats(start=start, end=end, bases=bases, total=total, maximum=maximum, above=above)
+    ob = bases if overlap_bases is None else overlap_bases
+    oa = above if overlap_above is None else overlap_above
+    return IntervalStats(
+        start=start,
+        end=end,
+        bases=bases,
+        total=total,
+        maximum=maximum,
+        above=above,
+        overlap_bases=ob,
+        overlap_total=total,
+        overlap_above=oa,
+    )
 
 
 def test_merge_and_non_overlapping():
@@ -93,6 +110,25 @@ def test_classify_and_tally_blocks():
     assert t["neutral"]["human_constrained_fraction"] == 1.0
     assert t["neutral"]["cases"]["recent"] == {"blocks": 1, "bp": 4000}
     assert set(t["neutral"]["cases"]) == set(CASE_ORDER)
+
+
+def test_tally_counts_the_intervals_own_bases_not_the_kilobases_it_touches():
+    """An element shorter than a Gnocchi bin touches a whole kilobase; the absolute must not."""
+    blocks = [
+        {
+            "start": 0,
+            "end": 350,
+            "length": 350,
+            "class": "unique_intergenic",
+            "phylop": {"fraction_above": 0.3},
+            "guess": {"tier": "constrained_unknown"},
+        }
+    ]
+    stats = [_st(0, 350, 1000, 1000, 3.0, overlap_bases=350, overlap_above=350)]
+    t = tally_blocks(classify_blocks(blocks, stats))["constrained_unknown"]
+    assert t["measured_bp"] == 350 and t["human_constrained_bp"] == 350
+    assert t["touched_bin_bp"] == 1000  # the kilobase it touched, under its own name
+    assert t["human_constrained_fraction"] == 1.0  # the ratio is the same either way
 
 
 def test_elements_loaded_and_classified(tmp_path):

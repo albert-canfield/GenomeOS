@@ -89,10 +89,12 @@ def stats_dict(s: IntervalStats | None) -> dict | None:
     if s is None or not s.bases:
         return None
     return {
-        "bases": s.bases,
+        "touched_bin_bases": s.bases,  # kilobases the interval touches, the track's own resolution
+        "bases": s.overlap_bases,  # the interval's own bases, what an absolute figure needs
         "mean": round(s.mean, 3) if s.mean is not None else None,
         "maximum": round(s.maximum, 3),
         "fraction_above": round(s.above / s.bases, 4),
+        "constrained_bases": s.overlap_above,
         "strong": bool(s.maximum >= GNOCCHI_STRONG),
     }
 
@@ -219,7 +221,14 @@ def classify_elements(elements: list[dict], stats: list[IntervalStats | None]) -
 
 
 def tally_blocks(rows: list[dict]) -> dict:
-    """Blocks and bases per tier and case, and the bp-weighted human-constrained fraction per tier."""
+    """Blocks and bases per tier and case, and the bp-weighted human-constrained fraction per tier.
+
+    `measured_bp` and `human_constrained_bp` count the intervals' own bases (the reader's overlap
+    fields). Before 2026-09-17 they counted every kilobase a block touched, which overstated a
+    block by 3.3% and an element by 4.6 times, since a cCRE is shorter than a Gnocchi bin;
+    `touched_bin_bp` keeps that quantity under its own name. Ratios were unaffected then and are
+    unchanged now.
+    """
     out: dict[str, dict] = {}
     for r in rows:
         t = out.setdefault(
@@ -232,7 +241,8 @@ def tally_blocks(rows: list[dict]) -> dict:
         if g:
             t["measured_blocks"] += 1
             t["measured_bp"] += g["bases"]
-            t["human_constrained_bp"] += round(g["fraction_above"] * g["bases"])
+            t["human_constrained_bp"] += g["constrained_bases"]
+            t["touched_bin_bp"] = t.get("touched_bin_bp", 0) + g["touched_bin_bases"]
         if r["case"]:
             c = t.setdefault("cases", {k: {"blocks": 0, "bp": 0} for k in CASE_ORDER})[r["case"]["case"]]
             c["blocks"] += 1
@@ -270,11 +280,16 @@ def aggregate(stats: list[IntervalStats]) -> dict:
     """
     bases = sum(s.bases for s in stats)
     above = sum(s.above for s in stats)
+    overlap_bases = sum(s.overlap_bases for s in stats)
+    overlap_above = sum(s.overlap_above for s in stats)
     maxima = [s.maximum for s in stats if s.bases]
     return {
         "intervals": len(stats),
         "track_bases": bases,
+        "interval_bases": overlap_bases,
+        "constrained_bases": overlap_above,
         "fraction_above": round(above / bases, 4) if bases else None,
+        "fraction_above_interval_bases": round(overlap_above / overlap_bases, 4) if overlap_bases else None,
         "share_intervals_constrained": (
             round(sum(m >= GNOCCHI_THRESHOLD for m in maxima) / len(maxima), 3) if maxima else None
         ),

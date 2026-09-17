@@ -233,8 +233,19 @@ class LeafItem:
 
 @dataclass
 class IntervalStats:
-    """What the track says over one interval: bases with a value, their sum, max, and how
-    many reach the threshold."""
+    """What the track says over one interval, counted two ways because a binned track answers
+    two different questions.
+
+    `bases`, `total` and `above` count every base of every bin the interval touches: for a track
+    of one value per kilobase, that is the share of touched kilobases, which is the honest reading
+    of a measurement that has no finer resolution. They overstate the interval's own length, and
+    for an interval shorter than a bin a single kilobase is credited in full.
+
+    `overlap_bases`, `overlap_total` and `overlap_above` count only the bases inside the interval,
+    crediting each bin the part of it the interval actually covers. They are what an absolute
+    figure about the interval needs ("constrained bases in this block"), and they never exceed the
+    interval's length. On a per-base track (step 1) the two are identical.
+    """
 
     start: int
     end: int
@@ -242,6 +253,9 @@ class IntervalStats:
     total: float = 0.0
     maximum: float = float("-inf")
     above: int = 0
+    overlap_bases: int = 0
+    overlap_total: float = 0.0
+    overlap_above: int = 0
 
     @property
     def mean(self) -> float | None:
@@ -251,6 +265,14 @@ class IntervalStats:
     def fraction_above(self) -> float | None:
         return self.above / self.bases if self.bases else None
 
+    @property
+    def overlap_mean(self) -> float | None:
+        return self.overlap_total / self.overlap_bases if self.overlap_bases else None
+
+    @property
+    def overlap_fraction_above(self) -> float | None:
+        return self.overlap_above / self.overlap_bases if self.overlap_bases else None
+
     def as_dict(self) -> dict:
         return {
             "bases": self.bases,
@@ -258,6 +280,9 @@ class IntervalStats:
             "max": round(self.maximum, 3) if self.bases else None,
             "above": self.above,
             "fraction_above": round(self.fraction_above, 4) if self.bases else None,
+            "overlap_bases": self.overlap_bases,
+            "overlap_above": self.overlap_above,
+            "overlap_fraction_above": (round(self.overlap_fraction_above, 4) if self.overlap_bases else None),
         }
 
 
@@ -458,16 +483,32 @@ class BigWig:
             s, e = ivs[i]
             lo, hi = max(s, start), min(e, run_end)
             if lo < hi:
+                st = stats[i]
                 if step == 1:
                     part = vals[lo - start : hi - start]
+                    hits = sum(map(ge, part))
+                    st.bases += hi - lo
+                    st.total += sum(part)
+                    st.above += hits
+                    st.overlap_bases += hi - lo
+                    st.overlap_total += sum(part)
+                    st.overlap_above += hits
+                    m = max(part)
                 else:
-                    part = vals[(lo - start) // step : (hi - start + step - 1) // step]
-                st = stats[i]
-                covered = (hi - lo) if step == 1 else len(part) * step
-                st.bases += covered
-                st.total += sum(part) * (1 if step == 1 else step)
-                m = max(part)
+                    first, last = (lo - start) // step, (hi - 1 - start) // step
+                    part = vals[first : last + 1]
+                    st.bases += len(part) * step
+                    st.total += sum(part) * step
+                    st.above += sum(map(ge, part)) * step
+                    m = max(part)
+                    for b in range(first, last + 1):
+                        bin_start = start + b * step
+                        width = min(bin_start + step, hi) - max(bin_start, lo)
+                        v = vals[b]
+                        st.overlap_bases += width
+                        st.overlap_total += v * width
+                        if ge(v):
+                            st.overlap_above += width
                 if m > st.maximum:
                     st.maximum = m
-                st.above += sum(map(ge, part)) * (1 if step == 1 else step)
             i += 1

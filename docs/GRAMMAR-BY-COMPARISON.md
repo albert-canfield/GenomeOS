@@ -1292,3 +1292,57 @@ built as a background for constraint and is a background for nothing else. The p
 reading is to print the median TSS distance of every group it compares: that one number, absent
 here and absent in the withdrawn headline, would have caught the confound a day earlier in both.
 
+## The kilobase that was called a base: both readings of a binned track (2026-09-17)
+
+The bigWig reader counted every base of every bin an interval touches. On Zoonomia phyloP, one value
+per base, that is exact, and the budget and every constraint figure taken from it are unaffected. On
+gnomAD Gnocchi, one value per kilobase, it is the share of touched kilobases — a defensible reading
+of a measurement with no finer resolution, and the one `aggregate()` documented — but it was also
+being summed into absolute fields, and there it is wrong. A 350 bp element reported `"bases": 1000`,
+because a cCRE is shorter than a Gnocchi bin: the field was measuring bins and calling them bases.
+genomeos-9c found it while reading this lane's results and quantified it from the committed files
+without spending a range read; the fix, the test and the measurement below are this lane's.
+
+`IntervalStats` now carries both readings from one pass. `bases`, `total` and `above` count touched
+bins, unchanged. `overlap_bases`, `overlap_total` and `overlap_above` count only the bases inside the
+interval, crediting each bin the part of it the interval covers, so they can never exceed the
+interval's own length. On a per-base track the two are identical, which is asserted rather than
+assumed (`tests/test_attribution.py`), as is the binned case where they diverge.
+
+**The size of it, on the chromosome named before the numbers were read** (chr21,
+`scripts/bigwig_bin_shift.py`, `bigwig_bin_shift`, one read of the track for both columns):
+
+| intervals | n | own length | touched bins | own bases | overstated | constrained, touched | constrained, own | fraction, touched → own |
+|---|---|---|---|---|---|---|---|---|
+| UNKNOWN blocks | 310 | 9,514,145 | 7,444,000 | 7,205,452 | ×1.033 | 557,000 | 508,189 | 0.0748 → 0.0705 |
+| registry elements | 9,758 | 2,678,600 | 11,645,000 | 2,520,003 | **×4.62** | 3,202,000 | 683,878 | 0.275 → 0.2714 |
+
+Every element is shorter than a bin, so every element-level base count was inflated about fourfold.
+Ratios survive, as the arithmetic says they must: both numerator and denominator were scaled by the
+same bin width, so `fraction_above` moves only where an edge bin is weighted differently, 0.0748 to
+0.0705 and 0.275 to 0.2714.
+
+**What moved in `variation_chr21` when the absolutes were repointed** (`measured_bp` and
+`human_constrained_bp` now count the interval's own bases; the old quantity is kept as
+`touched_bin_bp` under its own name):
+
+| tier | measured_bp before → after | human_constrained_bp before → after | fraction before → after |
+|---|---|---|---|
+| regulatory | 2,654,000 → 2,531,725 | 448,989 → 409,940 | 0.1692 → 0.1619 |
+| fossil | 2,661,000 → 2,610,966 | 43,999 → 39,671 | 0.0165 → 0.0152 |
+| constrained_unknown | 121,000 → 116,760 | 1,999 → 2,000 | 0.0165 → 0.0171 |
+| neutral | 1,980,000 → 1,919,278 | 40,990 → 36,270 | 0.0207 → 0.0189 |
+| structural | 4,000 → 3,401 | 2,000 → 1,986 | 0.5 → 0.5839 |
+
+No case, no mammal fraction, no mean and no `fraction_above` changed by more than the edge-bin
+weighting, so nothing this lane concluded rests on the corrected fields; what was wrong is exactly
+the set of figures nobody had drawn a conclusion from. **The other 23 chromosomes' `variation_chr*`
+results still carry the old semantics in those two fields** until the lane is re-run; the fields are
+named differently now, so a reader can tell which is which, and the re-run is a range-read cost to
+schedule rather than a correction to hide.
+
+The lesson, which is the fourth this week of the same family: a quantity measured at one resolution
+and reported at another needs two names, not one. The reader had documented the behaviour in a
+docstring and summed it into a field anyway, so the documentation was true and the number was still
+wrong — a name is enforceable where a docstring is not.
+

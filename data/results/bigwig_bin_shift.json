@@ -1,0 +1,82 @@
+{
+  "result": "bigwig_bin_shift",
+  "date": "2026-09-17",
+  "chromosome_named_in_advance": "chr21",
+  "track": "https://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/mutConstraint/mutConstraint.bw",
+  "track_resolution_bp": 1000,
+  "threshold": 2.18,
+  "reading": "touched-bin counting is the share of kilobases an interval touches and is what variation.py documents; overlap counting is the interval's own bases and is what an absolute figure needs. Ratios are almost unchanged, absolute counts are not.",
+  "unknown_blocks": {
+    "cost": {
+      "requests": 7,
+      "mb_fetched": 0.22,
+      "seconds": 1.1
+    },
+    "all": {
+      "intervals": 310,
+      "interval_bp": 9514145,
+      "touched_bin_bases": 7444000,
+      "overlap_bases": 7205452,
+      "overstatement": 1.033,
+      "constrained_bp_touched_bins": 557000,
+      "constrained_bp_overlap": 508189,
+      "constrained_bp_overstatement": 1.096,
+      "fraction_above_touched_bins": 0.0748,
+      "fraction_above_overlap": 0.0705,
+      "overlap_bases_never_exceed_length": true
+    },
+    "shorter_than_one_bin": {
+      "intervals": 0
+    },
+    "at_least_one_bin": {
+      "intervals": 310,
+      "interval_bp": 9514145,
+      "touched_bin_bases": 7444000,
+      "overlap_bases": 7205452,
+      "overstatement": 1.033,
+      "constrained_bp_touched_bins": 557000,
+      "constrained_bp_overlap": 508189,
+      "constrained_bp_overstatement": 1.096,
+      "fraction_above_touched_bins": 0.0748,
+      "fraction_above_overlap": 0.0705,
+      "overlap_bases_never_exceed_length": true
+    }
+  },
+  "registry_elements": {
+    "cost": {
+      "requests": 7,
+      "mb_fetched": 0.22,
+      "seconds": 0.6
+    },
+    "all": {
+      "intervals": 9758,
+      "interval_bp": 2678600,
+      "touched_bin_bases": 11645000,
+      "overlap_bases": 2520003,
+      "overstatement": 4.621,
+      "constrained_bp_touched_bins": 3202000,
+      "constrained_bp_overlap": 683878,
+      "constrained_bp_overstatement": 4.682,
+      "fraction_above_touched_bins": 0.275,
+      "fraction_above_overlap": 0.2714,
+      "overlap_bases_never_exceed_length": true
+    },
+    "shorter_than_one_bin": {
+      "intervals": 9758,
+      "interval_bp": 2678600,
+      "touched_bin_bases": 11645000,
+      "overlap_bases": 2520003,
+      "overstatement": 4.621,
+      "constrained_bp_touched_bins": 3202000,
+      "constrained_bp_overlap": 683878,
+      "constrained_bp_overstatement": 4.682,
+      "fraction_above_touched_bins": 0.275,
+      "fraction_above_overlap": 0.2714,
+      "overlap_bases_never_exceed_length": true
+    },
+    "at_least_one_bin": {
+      "intervals": 0
+    }
+  },
+  "seconds": 3.8
+}
