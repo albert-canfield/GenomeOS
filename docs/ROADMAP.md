@@ -1373,7 +1373,16 @@ in order. "Owner" is the session that holds the files today (see §7).
   tag follows the merge to `main`, which only Albert opens. 3. Done
   2026-09-11: `.gitignore` for `data/jobs`, keeping the registry in code.
   4. Nightly CI job that runs the real-data tests against cached reference
-  data. 5. Cell view: **done 2026-09-17**. The reader has run on eleven cell types over
+  data: **done 2026-09-17, and it was mostly already there.** The daily run has cached
+  chr21, chrM, GO, GOA and CL since the cadence change and runs the whole suite against
+  them, so "real data" was covered; what ran nowhere were the readers that reach the
+  outside world, gated behind `GENOMEOS_LIVE` and `GENOMEOS_NET`. A second job in the
+  same daily workflow sets both and runs the three that read Zoonomia and gnomAD Gnocchi
+  by HTTP range and UniProt/AlphaFold by API — 26 assertions, 3.6 s locally. It is
+  `continue-on-error`: an outage at UCSC is not a defect here, and a scheduled job that
+  reddens on someone else's downtime trains everyone to ignore it. The AlphaGenome live
+  test stays out because it needs a paid key as a repository secret, which is Albert's
+  decision. Still one scheduled run a day. 5. Cell view: **done 2026-09-17**. The reader has run on eleven cell types over
   all 24 chromosomes since 2026-09-14 and its numbers lived pooled inside the Progress
   tab's genome-wide card, where cells could not be compared. `/api/cells` and the Cells
   view read `reader_genome_wide` per cell: genes read, promoter open, poised, read by
