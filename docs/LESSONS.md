@@ -371,6 +371,31 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   quantity, the check cannot see the defect — so ask what a wrong version would *not* conserve, and
   assert that instead.
 
+- **The fifth instance of that class, and it is a search: a grep that returns nothing looks
+  identical to a thing that is not there (2026-09-17).** Asked what was left to build, I ran
+  `ls genomeos/biovm/*methyl*`, got no matches, concluded "no module at all", told the user that the
+  methylation state machine was the one unbuilt lane, and began building it. It has been running
+  since 2026-09-16 as `genomeos/runtime/methylation.py` — U/H/M dyad states, replication, maintenance
+  at fidelity below 1, de novo, TET erasure, every rate cited, with the solo-WCGW falsifier already
+  run on eight methylomes. The directory I searched has never existed. **The empty result preserved
+  every quantity anyone would have checked**: the command succeeded, the exit status was ordinary,
+  the output was consistent with the conclusion, and nothing in it mentioned the path I had guessed.
+  That is the same defect shape as the other four, wearing a search instead of an arithmetic.
+
+  The general form: **a negative search result is a statement about the search, not about the world**,
+  and the two are reported in the same shape — silence. So a search that informs a decision has to
+  carry its own denominator. Say what space was searched and how big it was, not only what came back;
+  when the answer is "none", show that the space was non-empty and correctly addressed. In a result
+  file the rule is that **"measured and came back empty" and "never looked for" must never be the
+  same output** — report the number assessed beside the number that had the property, and assert the
+  assessed count is non-zero.
+
+  Memory is not a defence against this, and the timing is the proof: this arrived about twenty
+  minutes after I had explained the same principle to another session and been thanked for it. Four
+  of the five corrections this week needed an outside reading to catch; so did the fifth. The only
+  thing that has worked all week is checking a statement against the artefact rather than against a
+  recollection of it, **because the artefact does not round in our favour.**
+
 
 
 - **A backtick in a double-quoted commit message is a command, and the word disappears
