@@ -1703,10 +1703,41 @@ denominator scale together.
 documents quote from Gnocchi are means, fractions, and kilobase counts from the human panel, which is
 a different reader. The conclusions of area J and of the tier readings rest on ratios and do not move.
 
-**Status.** The fix belongs to the lane that owns the file and is to land with both columns — the same
-chromosome before and after, the chromosome chosen before the shift is seen — so the correction is
-auditable rather than a silent replacement. This section is the "before" column and will carry the
-deltas when it lands.
+**Fixed and measured the same day (`aee3569`), and it is half a bug rather than a bug.** The
+touched-bin quantity is legitimate and documented — for a 1 kb track, "bases in every bin this
+interval touches" is a real thing to count. The defect was that **one field served two questions** and
+the absolute one was summed. So the fix is a name, not a comment: `IntervalStats` now carries both
+readings from one pass, `bases`/`above` unchanged, and `overlap_bases`/`overlap_above` counting only
+the bases inside the interval, which can never exceed its own length. The phyloP-derived numbers were
+exact throughout and "the reader was wrong" would have made them look suspect.
+
+**The after column, chr21, one read of the track for both (7 requests, 0.22 MB):**
+
+| | own length | touched bins | own bases | overstated |
+|---|---|---|---|---|
+| UNKNOWN blocks (310) | 9,514,145 | 7,444,000 | 7,205,452 | **×1.033** |
+| registry elements (9,758) | 2,678,600 | 11,645,000 | 2,520,003 | **×4.62** |
+
+The 4.4× lower bound measured here was ×4.62 in fact. **Every registry element is shorter than a
+Gnocchi bin**, so the 350 bp element reporting 1,000 bases was the general case rather than an
+example. Constrained bases at element level fall from 3,202,000 to 683,878; the *fraction* moves only
+0.275 → 0.2714, which is the ratio surviving as predicted.
+
+**Deltas in `variation_chr21`** (`measured_bp` and `human_constrained_bp` now count the interval's own
+bases; the old quantity survives as `touched_bin_bp` under its own name): regulatory 2,654,000 →
+2,531,725 with the constrained fraction 0.1692 → 0.1619; fossil 2,661,000 → 2,610,966, 0.0165 →
+0.0152; neutral 1,980,000 → 1,919,278, 0.0207 → 0.0189; constrained unknown 121,000 → 116,760, 0.0165
+→ 0.0171. No case, no mammal fraction, no mean and no `fraction_above` moved beyond edge-bin
+weighting.
+
+**The uncomfortable half of the good news.** The corrected fields are exactly the set nobody had drawn
+a conclusion from — which is why no document had to be struck, and also why the number could stay
+wrong for weeks. *A figure nothing depends on is a figure nothing checks.*
+
+**Still old:** the other 23 `variation_chr*` results carry the pre-fix semantics in those two fields
+until the lane is re-run, and the fields are named differently now so a reader can tell which file is
+which. The re-run is scheduled rather than skipped: 23 files disagreeing with chr21 is a worse state
+than a stated range-read cost.
 
 ## The compiled genome states 940,803 facts and not one of them is experimental (2026-09-17)
 
