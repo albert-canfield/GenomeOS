@@ -2425,6 +2425,19 @@ measure what the background carries; that is the next step, and the candidates a
 panel. chr2 landed after this was first written and moved nothing: every figure above is the
 23-chromosome reading with it in.
 
+> **The next step was taken the following day (2026-09-17, the section below), and two of those three
+> candidates were wrong — one of them backwards.** Coding bases account for **none** of the offset in
+> any tier (0.6%, 1.3%, 0.3%), and I could have ruled them out here without measuring anything: the
+> panel cuts canonical CDS out of the background by construction, so what is left is 1.0% coding. I
+> named a candidate the construction had already excluded, which is this week's recurring mistake —
+> read how a thing is built before theorising about what it contains. Segmental duplication is the
+> worse one: I listed it as an ingredient of the offset and it **masks about a third of it**, because
+> the background's duplicated kilobases are noisy (9.94 recurrent events per kb against 6.44
+> elsewhere), so removing them *widens* the gap by 29 to 34%. Only conserved elements survived, and
+> they are the largest single contributor at 31%, 25% and 18%. Everything measured together accounts
+> for 41%, 56% and 25%, leaving **44% to 75% unexplained**. The finding above stands untouched; the
+> mechanism I guessed for it did not.
+
 ## What the matched background is made of, and why composition is at most half of its offset (2026-09-17)
 
 The section above established that the panel's GC- and replication-timing-matched background is not a
