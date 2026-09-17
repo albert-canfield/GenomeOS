@@ -268,6 +268,28 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   on coverage changed nothing" without saying that the input was universal, because on a free claim
   it was never going to.
 
+- **The number was never wrong; the population it describes was never stated (2026-09-17).** Three
+  instruments found the same defect on one day, and it is not an arithmetic error in any of them:
+
+  - a project-wide `mean_confidence` of **0.617**, pooling predicted facts at 0.242 with experimental
+    ones at 0.872 — a figure lying strictly between two populations half a point apart and describing
+    neither;
+  - one stated confidence tested against four measured populations, reading **+0.472, −0.291, −0.137
+    and +0.518** against them. No constant fixes four disagreeing signs, because a level is a
+    property of a population;
+  - every per-block `core` call in the human panel, which is a depletion measured against a baseline
+    that turned out to be **71% gene body** — no value changed when that was discovered, only the
+    reading.
+
+  Each number is computed correctly and each is unreadable on its own. That is what makes the class
+  hard: there is nothing to catch, because nothing is broken. The defect is a missing sentence, not a
+  wrong value, and a test asserting the value would pass.
+
+  **So before a number is quoted, name the population it is over in the same breath, and if that
+  cannot be done in one clause the number is not ready to be quoted.** This is why the answer all
+  week was "report both and name each" rather than "pick the right one": where two populations exist,
+  a single figure is not a summary of them but a fact about neither.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory
