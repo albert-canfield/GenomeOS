@@ -1856,6 +1856,7 @@ class Handler(BaseHTTPRequestHandler):
                         self._q(qs, "module", ""),
                         int(self._q(qs, "limit", 400)),
                         self._q(qs, "csv", "") == "1",
+                        self._q(qs, "compiled", "") == "1",
                     )
                 )
             if u.path == "/api/roadmap":

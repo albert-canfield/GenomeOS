@@ -397,6 +397,7 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       <label>confidence ≤ <input id="ev-max" type="range" min="0" max="1" step="0.05" value="1" style="width:150px"> <b id="ev-maxv" class="mono">1.00</b></label>
       <label>program <select id="ev-module" style="max-width:260px"><option value="">every program</option></select></label>
       <label>search <input id="ev-q" placeholder="SOX2, Sulston, AlphaGenome…" style="width:200px"></label>
+      <label class="ev-kind" data-tip="The 24 generated chromosome programs: 940,803 of the project's 967,426 stated facts, 93.6% predicted and none experimental. Off by default because reading them takes about twenty seconds."><input type="checkbox" id="ev-compiled">include the compiled chromosomes</label>
       <button class="ghost" id="ev-weak"><i class="ic">⚠️</i>Weak only</button>
       <button class="ghost" id="ev-reset"><i class="ic">↺</i>Reset</button>
       <button class="primary" id="ev-csv"><i class="ic">📤</i>Export CSV</button>
@@ -1758,6 +1759,7 @@ function evQuery(extra) {
   if (max < 1) p.set('max_confidence', max.toFixed(2));
   if ($('#ev-q').value.trim()) p.set('q', $('#ev-q').value.trim());
   if (evFile) p.set('module', evFile);
+  if ($('#ev-compiled') && $('#ev-compiled').checked) p.set('compiled', '1');
   for (const [k, v] of Object.entries(extra || {})) p.set(k, v);
   return p.toString();
 }
@@ -1769,7 +1771,10 @@ function evBars(el, counts, total) {
 }
 async function loadEvidence() {
   try {
-    $('#ev-status').textContent = 'reading the programs…';
+    const slow = $('#ev-compiled') && $('#ev-compiled').checked;
+    $('#ev-status').textContent = slow
+      ? 'reading the compiled chromosomes too — about twenty seconds…'
+      : 'reading the programs…';
     const r = await api('/api/evidence?' + evQuery({limit: 300}));
     const w = r.whole, s = r.summary;
     $('#ev-whole').innerHTML = `<div><b>${fmt(w.facts)}</b><span>facts stated</span></div>
@@ -1805,7 +1810,10 @@ $('#ev-max').oninput = () => { $('#ev-maxv').textContent = parseFloat($('#ev-max
 $('#ev-q').oninput = () => { clearTimeout(evTimer); evTimer = setTimeout(loadEvidence, 350); };
 $('#ev-module').onchange = () => { evFile = $('#ev-module').value; loadEvidence(); };
 $('#ev-weak').onclick = () => { $('#ev-max').value = '0.5'; $('#ev-maxv').textContent = '0.50'; loadEvidence(); };
-$('#ev-reset').onclick = () => { evPicked.clear(); evFile = ''; $('#ev-max').value = '1'; $('#ev-maxv').textContent = '1.00'; $('#ev-q').value = ''; $('#ev-module').value = ''; $('#ev-kinds').querySelectorAll('input[data-kind]').forEach(b => b.checked = false); loadEvidence(); };
+$('#ev-reset').onclick = () => { evPicked.clear(); evFile = ''; $('#ev-max').value = '1'; $('#ev-maxv').textContent = '1.00'; $('#ev-q').value = ''; $('#ev-module').value = ''; $('#ev-compiled').checked = false; $('#ev-kinds').querySelectorAll('input[data-kind]').forEach(b => b.checked = false); loadEvidence(); };
+// the compiled chromosomes are a different order of magnitude, so the program list is rebuilt rather
+// than appended to: switching the toggle changes which programs exist, not just which rows match
+$('#ev-compiled').onchange = () => { evFile = ''; $('#ev-module').innerHTML = '<option value="">every program</option>'; $('#ev-kinds').innerHTML = ''; loadEvidence(); };
 $('#ev-csv').onclick = async () => {
   const r = await api('/api/evidence?' + evQuery({csv: 1}));
   const a = document.createElement('a');
