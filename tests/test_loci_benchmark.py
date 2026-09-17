@@ -401,3 +401,23 @@ def test_a_locus_whose_second_target_is_out_of_reach_is_still_askable():
     assert reach["askable"]
     assert reach["targets_in_reach"] == ["IRX3"]
     assert [x["target"] for x in reach["targets_out_of_reach"]] == ["IRX5"]
+
+
+def test_reach_is_gene_body_overlap_not_tss_distance():
+    """A long gene reaches into the window its promoter is nowhere near, and the sweep proves it.
+
+    Tempting shorthand: "the reach is 524 kb, so a target further than that cannot be named." It is
+    wrong, and chr21 says how wrong. Of 5,174 elements with a coding target, 79 name a gene whose
+    TSS is 524 kb or more away — up to 986 kb — and every one of the 79 is a gene whose BODY
+    overlaps the window. They are almost all RUNX1, which is 1.22 Mb long. So the test has to be
+    body overlap, which is what `read_reach` does; measuring to the TSS would call RUNX1 unreachable
+    from elements that in fact name it.
+    """
+    from genomeos.benchmark.loci import MODEL_WINDOW
+
+    half = MODEL_WINDOW // 2
+    runx1_length = 1_216_867
+    element_to_tss = 985_879  # the furthest chr21 case, from data/knowledge/.../all_elements/chr21.json
+
+    assert element_to_tss > half, "the TSS is well outside half the window"
+    assert runx1_length > element_to_tss, "yet the body spans far enough to be inside it"

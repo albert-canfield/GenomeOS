@@ -343,8 +343,13 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   whether or not the question reached the instrument. **A wrong answer and an unasked question
   arrive in the same shape**, and only the second one is free to detect. So for any instrument with
   a window, a detection limit, a vocabulary or a dynamic range, assert that the expected answer is
-  *inside* it before scoring the result — and when it is not, say unaskable rather than pending, so
-  nobody prices the requests that cannot buy it. The correction made the model look slightly worse
+  *inside* it before scoring the result, and when it is not, say unaskable rather than pending, so
+  nobody prices the requests that cannot buy it. **State that range in the units the instrument
+  actually uses**, which is the part that is easy to get wrong: here it is gene-body overlap with
+  the window, not distance to a promoter. On chr21, 79 of 5,174 predicted targets have a TSS beyond
+  524 kb and every one is a long gene — mostly RUNX1, 1.22 Mb — whose body reaches in. A reach test
+  written in the convenient units would have been wrong in the safe-looking direction, calling
+  answerable questions unanswerable. The correction made the model look slightly worse
   here (0.882 to 0.867, because the out-of-reach loci were hits through other layers), which is the
   direction that should raise least suspicion.
 

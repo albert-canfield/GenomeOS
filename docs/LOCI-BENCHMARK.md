@@ -1111,11 +1111,21 @@ driver did was refuse to spend most of it.
 The deletion scorer resizes its input to **1 Mb centred on the element** (`SEQUENCE_LENGTH_1MB`), so
 its reach is 524 kb each way. Against GENCODE gene bodies, three published targets fall outside it:
 
-| locus | target | distance from the element | in the model's input |
+| locus | target | TSS distance from the element | gene body in the model's input |
 |---|---|---|---|
 | SHH_ZRS | SHH | 979 kb | **no** |
 | SOX9_PierreRobin | SOX9 | 1,450 kb | **no** |
 | FTO_IRX3 | IRX5 | 1,164 kb | **no** (IRX3 at 520 kb is in, by 4 kb) |
+
+**The test is gene-body overlap, not TSS distance, and the difference is not academic.** The
+tempting shorthand — "the reach is 524 kb, so a target further than that cannot be named" — is
+wrong, and the finished sweep says how wrong. On chr21, of 5,174 elements with a coding target,
+**79 name a gene whose TSS is 524 kb or more away, up to 986 kb**, and **all 79** are genes whose
+body overlaps the window. They are almost all **RUNX1**, which is 1.22 Mb long: its promoter is far
+outside the window of elements that nonetheless name it, because its body runs right through them.
+`read_reach` uses bodies for this reason. The three rows above fail the body test too, which is why
+they are listed; the distances are given as TSS distances only because that is what the panel's
+expectations record.
 
 **This retires a result the benchmark has been carrying since section 1.** The ZRS's own deletion
 names LMBR1, the gene the ZRS sits inside, and that was read as the flagship long-range miss — the
