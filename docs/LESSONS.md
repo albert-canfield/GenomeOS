@@ -360,7 +360,10 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   the thing being damaged, and it is damaged silently. Write commit bodies through a quoted heredoc
   (`<<'EOF'`), or a file, or without backticks; the same applies to `$(` and `!` in double quotes. The
   general form is the one this project keeps rediscovering: a shell will quietly reinterpret text you
-  believed you were merely passing along.
+  believed you were merely passing along. The same tool can be defeated two ways by how it is
+  invoked: piping it keeps the reason and loses the exit code, redirecting it to /dev/null keeps the
+  exit code and loses the reason, and this session did both to `scripts/check_staged.py` on
+  consecutive days.
 
 
 

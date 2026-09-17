@@ -29,10 +29,17 @@ not a lock. What it removes is the case where nobody looked at all.
 A staged deletion of a file that exists in HEAD is always reported: an accidental one is unrecoverable
 by the author who lost it, and a deliberate one costs a flag.
 
-**Do not pipe it.** `check_staged.py | tail -2` reports the refusal and then exits 0, because a shell
-pipeline's status is the last command's, so the `&&` that was meant to stop the commit runs it instead.
-This session did exactly that on 2026-09-16 and committed through a refusal it had printed and read.
-Run it bare, or redirect to a file and grep that.
+**Do not pipe it, and do not silence it.** Two ways to defeat this tool, both used by the session that
+wrote it, on consecutive days:
+
+- `check_staged.py | tail -2` reports the refusal and exits 0, because a pipeline's status is the last
+  command's, so the `&&` that was meant to stop the commit runs it instead (2026-09-16: a commit went
+  through a refusal that had been printed and read);
+- `check_staged.py >/dev/null` keeps the exit code and throws away the reason, so an honest `&&` chain
+  stops with nothing on screen and the refusal looks like a silent failure of something else
+  (2026-09-17: a commit was written twice because its author could not see why the first died).
+
+Run it bare. If output must be captured, send it to a file and read the file.
 
 Exit 0 clean, 2 on a finding, 1 on a usage error.
 """
