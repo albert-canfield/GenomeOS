@@ -2106,6 +2106,137 @@ gzipped, parsed once per process and cached. `uv run python scripts/measured_lay
 --write-programs`; `uv run genomeos evidence --measured` prints the census with the fourth assay's
 counters and the sentence that explains its zero.
 
+## Are the project's own confidences calibrated? The stated level sits outside its own interval in 10 of 12 bands, and the ordering holds in 1 of the 4 reliability tables (2026-09-17)
+
+Every compiled fact carries a confidence and the Evidence explorer counts them. Nobody had asked whether a fact stated at 0.4 is right about 40% of the time. The measured layer made the question askable, and the answer is reported per assay because *agreement* is a different event in each of the four.
+
+**What the number is.** `round(min(PREDICTED_CAP, max(0.05, |log2 fold change|)), 2), as attribution/compile.py writes it on the element block and on the rule beside it; PREDICTED_CAP = 0.7, so no compiled element can state more than that however large the predicted effect`
+
+**What a failure would look like, written down before the rates were computed.** The four patterns are named constants in `genomeos/attribution/confidence_calibration.py` and the bands are imported unchanged from `target_calibration`, where another lane fixed them on the same day for a different quantity. A band holds a verdict only at 30 measured elements or more, an assay gets a verdict only at 3 judged bands or more, and the level clears the bar at 70% of judged bands consistent.
+
+- **`uninformative`** — the observed agreement rate does not rise with the stated confidence: the highest judged band's rate is at or below the lowest judged band's, or their 95% Wilson intervals overlap. If this is the pattern, the number on a compiled fact orders nothing, and a reader who preferred a 0.6 fact to a 0.2 one gained nothing by it.
+- **`ordered_but_miscalibrated`** — the rate rises - the highest judged band is above the lowest and their intervals are disjoint - but the band's mean stated confidence lies outside the 95% Wilson interval of its observed rate in more than 30% of the judged bands. The number ranks and its level is wrong. This is the ordinary outcome for a scoring system read as a probability, and it is a useful result: a rank is worth having. The offset is reported as the median signed gap, and a level is a property of the population and not of the scorer - target_calibration's curve transferred while its level did not, because the base rate of the new population differed.
+- **`calibrated`** — the rate rises AND the band's mean stated confidence lies inside the 95% Wilson interval of its observed rate in at least 70% of the judged bands. Then the number may be read as a probability, within the scope below and nowhere else.
+- **`level_withheld_ordering_only`** — the assay's agreement is not the compiled claim's own event, so the ordering may be read and the level may not: a rate of 0.19 against a stated 0.25 is not a miscalibration when the rate being measured is 'a 200 bp sequence drives a reporter' and the claim is 'deleting the element in its own chromosome moves this gene'. The level verdict is withheld rather than computed and ignored.
+
+**The answer, per assay and never pooled.** The rate rises with the stated confidence in `lentimpra:where_the_predicted_gene_was_tested`; it does not in `crispri:over_all_matched_elements`; the pre-registered rule refuses a verdict in `crispri:where_the_predicted_gene_was_tested`, `vista:where_the_predicted_gene_was_tested`, `satmut`.
+
+| table | n | mean stated | observed | median offset | ECE | pattern |
+|---|---|---|---|---|---|---|
+| `crispri:where_the_predicted_gene_was_tested` | 128 | 0.347 | 0.7578 | **+0.4724** | 0.4108 | `refused` |
+| `crispri:over_all_matched_elements` | 1,505 | 0.3268 | 0.0645 | **-0.2913** | 0.2623 | `uninformative` |
+| `lentimpra:where_the_predicted_gene_was_tested` | 17,869 | 0.2786 | 0.1881 | **-0.1371** | 0.0905 | `level_withheld_ordering_only` |
+| `vista:where_the_predicted_gene_was_tested` | 98 | 0.3262 | 0.7041 | **+0.5179** | 0.3779 | `refused` |
+
+**The offsets have opposite signs, and that is the result of record.** `crispri:where_the_predicted_gene_was_tested` +0.4724, `crispri:over_all_matched_elements` -0.2913, `lentimpra:where_the_predicted_gene_was_tested` -0.1371, `vista:where_the_predicted_gene_was_tested` +0.5179. The same stated number, measured against two populations, is off in OPPOSITE DIRECTIONS. That is not an inconsistency in the tables; it is what a level is. target_calibration found the same thing for a different quantity - the curve transferred and the level did not, because the base rate of the new population differed - and it is the reason no single offset can be added to the compiler's formula to fix it. An offset quoted without the population it was measured on is not a number.
+
+**Three denominators, in order.** Of **440,377** compiled elements that state a confidence, **19,072** are measured by any assay (**4.33%**) and **421,305** are not. 0 have no covariates and enter no comparison.
+
+**The measured slice against the rest, on the covariates and on the confidence itself:**
+
+| | measured | never measured | ratio |
+|---|---|---|---|
+| length (bp) | 340.0 | 293.0 | 1.16 |
+| GC | 0.5014 | 0.4793 | 1.046 |
+| distance to a coding TSS (bp) | 27826.0 | 22717.0 | 1.225 |
+| **stated confidence** | 0.21 | 0.19 | 1.105 |
+
+**Coverage by band — the selection this lane cannot undo, as a number:**
+
+| band | measured | never measured | coverage |
+|---|---|---|---|
+| 0.1-0.25 | 11,227 | 281,434 | 3.84% |
+| 0.25-0.5 | 4,879 | 93,399 | 4.96% |
+| 0.5-0.75 | 2,966 | 46,472 | 6.00% |
+
+### crispri
+
+*silencing this element in its own chromosome, does the predicted gene fall?* — the screen perturbs the element where it lives and measures the very gene the deletion named, which is the compiled claim asked directly. A negative here is a strong contradiction and the rate may be read as a probability.
+
+3,908 compiled elements in this assay's footprint and 1,505 measured; 128 of them are ones where the screen tested the very gene the deletion named.
+
+**where_the_predicted_gene_was_tested** — n = 128, observed 0.7578, mean stated 0.347, expected calibration error 0.4108.
+
+| band | compiled | in footprint | measured | coverage | mean stated | agrees | observed | 95% CI | inside | length | GC | TSS |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.1-0.25 | 292,661 | 2,142 | 62 | 0.02% | 0.1566 | 39 | **0.629** | 0.505–0.738 | no | 347.0 | 0.5215 | 22951.5 |
+| 0.25-0.5 | 98,278 | 992 | 29 | 0.03% | 0.3486 | 25 | **0.8621** | 0.694–0.945 | no *(not judged)* | 348.0 | 0.4942 | 21183.0 |
+| 0.5-0.75 | 49,438 | 774 | 37 | 0.07% | 0.6649 | 33 | **0.8919** | 0.753–0.957 | no | 349.0 | 0.5 | 12723.0 |
+
+**Verdict: refused.** 2 bands hold at least 30 measured elements, below the 3 this lane fixed before computing anything. The table is printed and no verdict is drawn from it: a curve through fewer than three points is a line by construction. The bands that are populated and below the bar are named with the size of the shortfall, because a bar missed by one is still a bar and moving it after seeing the counts is how a pre-registration stops being one. Short of the bar: band 0.25-0.5 holds 29, 1 below 30. The gaps are still described: 0.1-0.25 +0.4724, 0.25-0.5 +0.5134, 0.5-0.75 +0.227, median +0.4724.
+
+Is the band reading the confidence or the covariate? Bought or free first: A stated confidence on the compiled fact is **free** (128/128 of the measured arm, 438,872/438,872 of the unmeasured); A verdict from crispri over this element is **bought** (128/128 of the measured arm, 0/438,872 of the unmeasured).
+
+Standardised on length, GC and distance to a coding TSS: 37 high-confidence elements against 91 low, 34 matched and 3 dropped for want of a control; raw +0.1886, matched **+0.1374** at one-sided p 0.06975.
+
+**over_all_matched_elements** — n = 1,505, observed 0.0645, mean stated 0.3268, expected calibration error 0.2623.
+
+| band | compiled | in footprint | measured | coverage | mean stated | agrees | observed | 95% CI | inside | length | GC | TSS |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.1-0.25 | 292,661 | 2,142 | 739 | 0.25% | 0.1587 | 39 | **0.0528** | 0.039–0.071 | no | 346.0 | 0.5059 | 21583.0 |
+| 0.25-0.5 | 98,278 | 992 | 417 | 0.42% | 0.3512 | 25 | **0.06** | 0.041–0.087 | no | 346.0 | 0.5115 | 12146.0 |
+| 0.5-0.75 | 49,438 | 774 | 349 | 0.71% | 0.6533 | 33 | **0.0946** | 0.068–0.130 | no | 347.0 | 0.5447 | 6227.0 |
+
+**Verdict: `uninformative`.** Ordering: the point estimates rise but the intervals overlap — 0.1-0.25 at 0.0528 to 0.5-0.75 at 0.0946, intervals overlapping. Level: the stated confidence lies inside its band's interval in 0 of 3 judged bands (0%, bar 70%); median signed offset -0.2913, range -0.5587 to -0.106.
+
+Is the band reading the confidence or the covariate? Bought or free first: A stated confidence on the compiled fact is **free** (1,505/1,505 of the measured arm, 438,872/438,872 of the unmeasured); A verdict from crispri over this element is **bought** (1,505/1,505 of the measured arm, 0/438,872 of the unmeasured).
+
+Standardised on length, GC and distance to a coding TSS: 349 high-confidence elements against 1,156 low, 349 matched and 0 dropped for want of a control; raw +0.0392, matched **+0.0364** at one-sided p 0.034782.
+
+### lentimpra
+
+*out of its chromosome, does a 200 bp copy of this sequence drive a reporter?* — episomal: it measures the sequence and not the locus, and it never sees the predicted gene. A silence is a weak contradiction, and the base rate of 'active in a reporter' has no reason to equal the base rate of 'deleting this moves that gene'. Ordering only.
+
+21,133 compiled elements in this assay's footprint and 17,869 measured; 17,869 of them are tested by it, which is every one, so the two denominators coincide - this assay never asks about the predicted gene at all, and the wide rate is kept as a named key so the narrow one is never the only rate on the page.
+
+**where_the_predicted_gene_was_tested** — n = 17,869, observed 0.1881, mean stated 0.2786, expected calibration error 0.0905.
+
+| band | compiled | in footprint | measured | coverage | mean stated | agrees | observed | 95% CI | inside | length | GC | TSS |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.1-0.25 | 292,661 | 12,621 | 10,627 | 3.63% | 0.1584 | 1,618 | **0.1523** | 0.145–0.159 | yes | 334.0 | 0.4957 | 37713.0 |
+| 0.25-0.5 | 98,278 | 5,377 | 4,570 | 4.65% | 0.3421 | 937 | **0.205** | 0.194–0.217 | no | 342.0 | 0.5029 | 23825.5 |
+| 0.5-0.75 | 49,438 | 3,135 | 2,672 | 5.41% | 0.6483 | 806 | **0.3016** | 0.284–0.319 | no | 344.0 | 0.5171 | 14798.0 |
+
+**Verdict: `level_withheld_ordering_only`.** Ordering: rises with the stated confidence — 0.1-0.25 at 0.1523 to 0.5-0.75 at 0.3016, intervals disjoint. Level: the stated confidence lies inside its band's interval in 1 of 3 judged bands (33%, bar 70%); median signed offset -0.1371, range -0.3467 to -0.0061.
+
+Is the band reading the confidence or the covariate? Bought or free first: A stated confidence on the compiled fact is **free** (17,869/17,869 of the measured arm, 422,508/422,508 of the unmeasured); A verdict from lentimpra over this element is **bought** (17,869/17,869 of the measured arm, 0/422,508 of the unmeasured).
+
+Standardised on length, GC and distance to a coding TSS: 2,672 high-confidence elements against 15,197 low, 2,672 matched and 0 dropped for want of a control; raw +0.1335, matched **+0.1293** at one-sided p 0.0.
+
+### vista
+
+*in a transgenic mouse embryo at e11.5, is this sequence an enhancer?* — a different organism, one developmental stage and a reporter construct. A negative is a negative in a mouse embryo, which is not a measurement of a human cell's transcription, and the assay's own positives are enriched by how its sequences were chosen. Ordering only.
+
+2,375 compiled elements in this assay's footprint and 98 measured; 98 of them are tested by it, which is every one, so the two denominators coincide - this assay never asks about the predicted gene at all, and the wide rate is kept as a named key so the narrow one is never the only rate on the page.
+
+**where_the_predicted_gene_was_tested** — n = 98, observed 0.7041, mean stated 0.3262, expected calibration error 0.3779.
+
+| band | compiled | in footprint | measured | coverage | mean stated | agrees | observed | 95% CI | inside | length | GC | TSS |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.1-0.25 | 292,661 | 1,644 | 55 | 0.02% | 0.1676 | 39 | **0.7091** | 0.579–0.812 | no | 346.0 | 0.4711 | 63594.0 |
+| 0.25-0.5 | 98,278 | 491 | 14 | 0.01% | 0.3393 | 12 | **0.8571** | 0.601–0.960 | no *(not judged)* | 347.5 | 0.5602 | 39688.5 |
+| 0.5-0.75 | 49,438 | 240 | 29 | 0.06% | 0.6207 | 18 | **0.6207** | 0.440–0.773 | yes *(not judged)* | 347.0 | 0.5536 | 21559.0 |
+
+**Verdict: refused.** 1 band holds at least 30 measured elements, below the 3 this lane fixed before computing anything. The table is printed and no verdict is drawn from it: a curve through fewer than three points is a line by construction. The bands that are populated and below the bar are named with the size of the shortfall, because a bar missed by one is still a bar and moving it after seeing the counts is how a pre-registration stops being one. Short of the bar: band 0.25-0.5 holds 14, 16 below 30; band 0.5-0.75 holds 29, 1 below 30. The gaps are still described: 0.1-0.25 +0.5415, 0.25-0.5 +0.5179, 0.5-0.75 +0.0, median +0.5179.
+
+Is the band reading the confidence or the covariate? Bought or free first: A stated confidence on the compiled fact is **free** (98/98 of the measured arm, 440,279/440,279 of the unmeasured); A verdict from vista over this element is **bought** (98/98 of the measured arm, 0/440,279 of the unmeasured).
+
+Standardised on length, GC and distance to a coding TSS: 29 high-confidence elements against 69 low, 27 matched and 2 dropped for want of a control; raw -0.1184, matched **-0.1395** at one-sided p 0.871033.
+
+### satmut
+
+*which single bases inside this element change a reporter's activity?* — it cannot disagree at all: substituting one base at a time never deletes the element and never measures the predicted gene, so its agreement rate is 1.0 by construction wherever any base is functional. A reliability table over it would measure nothing twice over, and at four matched elements it would not measure it. See measured.SATMUT_CANNOT_DISAGREE.
+
+**No table.** 15 elements in the footprint, 4 measured, 4 agreeing. 4 matched elements, and the assay cannot disagree: zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only. A reliability table needs an event that can come out false, and this one cannot, so no table is computed. The group is described in `the_measured_slice` with the rest.
+
+**Why there is no pooled number.** One agreement rate over all four assays would be a rate whose event changes with the denominator. A CRISPRi negative on the named gene contradicts the compiled claim; a lentiMPRA silence says a 200 bp copy does not drive a reporter out of its chromosome; a VISTA negative says a mouse embryo did not stain at e11.5; saturation mutagenesis cannot disagree at all and so contributes agreements and never disagreements. Pooling them would also pool their sizes - lentiMPRA's 17,869 matched elements against CRISPRi's 128 tested pairs is 140 to 1 - so the pooled number would be the reporter's number wearing the perturbation's name. Every table here is per assay and the result holds no pooled rate.
+
+**What this cannot say.** This is a reliability table over MEASURED compiled elements, and that is not a random sample of the compiled genome. 4.33% of compiled elements are measured at all (19,072 of 440,377) and only 5.98% were ever eligible, because an assay's footprint had to reach them. The measured slice is longer, more GC-rich and closer to a coding TSS than the rest - the assays chose candidate regulatory sequence, which is the same property the deletion scores highly - so the bands' rates are conditional on an element having been chosen for an assay. The table says how often the project's confidence is borne out ON MEASURED ELEMENTS. It says nothing directly about the 414,053 elements no assay ever covered, and the imbalance between the two arms is printed in the result rather than described here, so the size of the extrapolation is a number.
+
+**What would falsify the transfer.** The transfer from measured elements to the compiled genome fails if any of these is observed. (a) A screen that tiles a region without choosing candidate sequence - an unbiased tiling rather than a cCRE list - finds the top band's rate far below what it is here, which is what selection on testability looks like from outside. (b) The agreement rate moves with the measured slice's own covariates once they are held fixed: if the standardised difference between the high and low confidence arms collapses toward zero when length, GC and distance to a coding TSS are matched, then the band was reading the covariate and not the confidence, and on unmeasured elements the covariate distribution is different. (c) A new assay extends the footprint into elements that look unlike the measured ones - far from a promoter, AT-rich, short - and the bands do not hold there. (d) The prevalence shift target_calibration already found: a population whose base rate of agreement differs from this one's needs its own intercept, so a band quoted without its population's rate beside it has stopped being a measurement of anything.
+
+**Cost.** 24 chromosomes read, binned and compared in **70.6 seconds**, no requests and no model. `uv run python scripts/confidence_calibration.py`; `--markdown` prints this section back out of `data/results/confidence_calibration_genome.json`, which is how every figure above got here rather than being typed beside a computed one.
+
 ## 99.5% of the unknown space has never been measured, and the part that matters would fit in one library (2026-09-17)
 
 Three lanes hit the same wall today from different directions: the deletion sweep's per-tier readings
