@@ -332,6 +332,22 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 
 ## Engineering
 
+- **Before grading an instrument's answer, check that it could have given the right one
+  (2026-09-17).** The known-locus benchmark asked whether deleting a published enhancer names its
+  published target, and recorded the ZRS as a miss: deleting it names LMBR1, the gene it sits
+  inside, not SHH. That stood as the flagship long-range failure for weeks. The scorer resizes its
+  input to 1 Mb around the element, so its reach is 524 kb each way, and **SHH is 979 kb away**. It
+  was never in the model's input. Two more of the panel's targets are in the same position, SOX9 at
+  1,450 kb and IRX5 at 1,164 kb. The check costs nothing — GENCODE gene bodies against arithmetic,
+  no request — and it had never been written, because a reading that comes back looks like an answer
+  whether or not the question reached the instrument. **A wrong answer and an unasked question
+  arrive in the same shape**, and only the second one is free to detect. So for any instrument with
+  a window, a detection limit, a vocabulary or a dynamic range, assert that the expected answer is
+  *inside* it before scoring the result — and when it is not, say unaskable rather than pending, so
+  nobody prices the requests that cannot buy it. The correction made the model look slightly worse
+  here (0.882 to 0.867, because the out-of-reach loci were hits through other layers), which is the
+  direction that should raise least suspicion.
+
 - **A defect that preserves the quantity it is checked against is invisible to that check
   (2026-09-17).** Found twice in one day, in unrelated code, by two sessions.
   1. The bigWig summariser credited whole bins to an interval, so every absolute base count from a
