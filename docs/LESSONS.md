@@ -344,6 +344,18 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   checked against a summary of the record instead of the record; the only thing that ever caught one
   was opening the file.
 
+  **The same mechanism hides a false PREMISE better than a false finding, because a premise is
+  inherited rather than asserted.** One session proposed a length-matched control set, a second wrote
+  it into a brief, a third registered a test around it — and the controls had been matched on element
+  length exactly, zero tolerance, all 85 of them, since before any of it. `candidate_windows` says so
+  in its first docstring line and the committed result agrees for every window. Nobody checked,
+  because each of the three could reasonably assume an earlier one had; a premise arrives already
+  believed, with no claimant to interrogate. Worse, one of the three had printed those very lengths
+  on screen hours before while checking something else and had not read them: **evidence that answers
+  a question nobody has asked yet passes unnoticed.** So when a piece of work exists to settle a
+  question, read the construction of the thing it is about before running it — the cost here was two
+  commands against a file committed for days, and it retired the whole exercise.
+
 - **The staging guard earns its keep on your OWN lines, which is the case that feels like friction
   (2026-09-17).** A session correcting its own published sentence had `check_staged.py` refuse the
   commit, because the correction removed two lines the same session had added an hour earlier. That
