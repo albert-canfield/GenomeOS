@@ -2420,8 +2420,16 @@ in order. "Owner" is the session that holds the files today (see §7).
   as species counts per clade on the graph nodes. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
   and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done, with families and a GC-by-repeat null: promoters carry family
   enrichments per library and no pair logic; the pair search moves to
-  enhancers (GATA plus T-box in heart). 5. Done at library level; next a gene-level profile with a shuffled-library
-  null before any pair is called a dependency.
+  enhancers (GATA plus T-box in heart). 5. Done at library level, and **the gene-level profile with a
+  shuffled-library null is done 2026-09-17** — it is a negative about the method. Against a
+  prevalence-preserving shuffle all 42 libraries look coherent (median excess +0.307 mean pair
+  Jaccard, not one draw above observed). Against a shuffled-library null built from **real genes
+  matched on prevalence**, 21 are clear, 7 marginal and **14 at or below it** — and the fourteen are
+  the ancient core (translation, energy, transcription, splicing, DNA repair, chromatin), whose genes
+  sit in nearly every species and so co-occur with any other such gene. The survivors are patchy and
+  lineage-restricted: developmental timing, ECM adhesion, segmentation. The prevalence shuffle
+  measures phylogenetic non-independence and calls it co-evolution. Nothing is called a dependency; a
+  species-tree null would settle a pair and this project holds none. GRAMMAR-BY-COMPARISON.md §19.
   6. Done: `genomeos decompile GENE --chrom C`, and **the Blocks-tab card is done 2026-09-17**: a
   Decompile button on any gene block reads `/api/decompile` and shows the program beside the map, with
   the layers that carry nothing named above it — a decompiler that hid its empty layers would read as
