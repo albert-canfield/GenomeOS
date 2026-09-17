@@ -352,6 +352,24 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   indistinguishable from the inside**, and the flag costs one look and one `--force` that prints what
   it takes out. A guard that only stopped other people's mistakes would be a guard nobody needed.
 
+- **A blind must be a boundary, not a list of places (2026-09-17).** A lane was set up to test a
+  claim without seeing the previous set's answer, and was forbidden the new section and the new
+  result files. The answer was also in the *old* section, put there deliberately an hour earlier so
+  that a correction would sit beside the claim it corrected — `1 of 9` appears six times in that
+  file, twice outside the forbidden section. A lane told to test a claim reads the claim, and the
+  claim lives in the old section, so the blind forbade where the answer was written for the new
+  section and permitted where it was written for honesty. **A list of places is a promise that a
+  section will not be scrolled; a boundary is a file nobody may open, and anyone can check it with
+  one grep.** The fix is never to unwrite the true sentence to protect a test — that trades a real
+  result for a clean one — but to move the boundary and hand the lane a written brief carrying only
+  what it is allowed to know.
+
+  The general form is worth more than the instance: **two good record-keeping rules can pull opposite
+  ways on the same paragraph, and the one already in the file wins silently.** "Put the correction
+  next to the claim it corrects" was written an hour before "blind the lane that will test the claim"
+  existed, so nothing announced the conflict. When a new rule arrives, the question to ask is not
+  whether it is right but which existing rule it now contradicts.
+
 ## Engineering
 
 - **Before grading an instrument's answer, check that it could have given the right one
