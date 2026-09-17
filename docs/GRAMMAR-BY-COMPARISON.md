@@ -1341,6 +1341,16 @@ results still carry the old semantics in those two fields** until the lane is re
 named differently now, so a reader can tell which is which, and the re-run is a range-read cost to
 schedule rather than a correction to hide.
 
+**The blast radius, swept rather than asserted (2026-09-17, later).** Claiming a bounded radius is
+the same kind of claim as any other, so it was checked: every call site of the binned track was read.
+Twelve of them exist (`gnocchi_over`, `gnocchi_ranges`). `variation.py`, `knowledge/across.py` and
+`benchmark/loci.py` all report it through `stats_dict`, which now names the two quantities apart;
+`human_panel.py` reads only `mean`, a ratio, over its background bins. Everything else that takes an
+absolute from a bigWig — `syntax.py`'s `syntax_bases`, the phyloP halves of `variation.py`,
+`across.py` and `loci.py` — reads Zoonomia phyloP, which is one value per base, where touched-bin and
+overlap counting are identical by construction. So the corrected fields were the whole of it, and the
+re-run list was the right length rather than luckily so.
+
 The lesson, which is the fourth this week of the same family: a quantity measured at one resolution
 and reported at another needs two names, not one. The reader had documented the behaviour in a
 docstring and summed it into a field anyway, so the documentation was true and the number was still
