@@ -2425,6 +2425,134 @@ measure what the background carries; that is the next step, and the candidates a
 panel. chr2 landed after this was first written and moved nothing: every figure above is the
 23-chromosome reading with it in.
 
+## What the matched background is made of, and why composition is at most half of its offset (2026-09-17)
+
+The section above established that the panel's GC- and replication-timing-matched background is not a
+neutral baseline and named three candidates for what it carries: coding bases, conserved elements,
+segmental duplication. It did not measure them. `genomeos/attribution/panel_background.py` and
+`scripts/panel_background_composition.py` do, on 24 chromosomes, from local data only.
+
+The background is rebuilt exactly as `human_panel.build_background` builds it -- the kilobases of the
+hg38 grid inside the panel's alignment blocks, with canonical CDS bases and the events inside them
+cut out, binned by GC and by replication timing. The rebuild is checked against the committed result
+before anything is read from it: on all 24 chromosomes every rebuilt `ratio_gc_rt` matches the
+committed one to within **0.0005**. Every kilobase is then annotated from GENCODE 50, phastCons
+100-way, RepeatMasker, genomicSuperDups, ENCODE cCREs and the panel's own replication timing, and the
+offset is decomposed by rebuilding the background with each candidate taken out of it and recomputing
+the tier ratios through the panel's own code.
+
+**What the background holds.** Medians across the 23 chromosomes the panel's medians rest on; the
+last five columns are shares of the group's bases. "Coverage" is the share of the panel's assemblies
+informing the group, which is effort and not composition, and is reported beside the covariates
+because it has to be held separately from them.
+
+| group | bases | unit | GC | median distance to a coding TSS | coverage | recurring/kb | coding (any transcript) | exons (any gene) | conserved elements | segmental duplication | repeat |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| **the background** | 2,808 Mb | kilobase | 0.399 | 87 kb | 1.000 | 6.63 | 1.0% | 7.0% | 5.3% | 4.7% | 51.1% |
+| the background outside every block | 2,006 Mb | kilobase | 0.402 | 76 kb | 1.000 | 6.39 | 1.3% | 8.6% | 5.9% | 3.9% | 49.0% |
+| coding exons (the positive control) | 34 Mb | 124 bp | 0.470 | 16 kb | 0.995 | 2.93 | 100% | 100% | 75.5% | 7.1% | 3.4% |
+| structural | 198 Mb | 72.7 kb | 0.418 | 213 kb | 0.740 | 10.41 | 0.0% | 0.0% | 0.2% | 4.0% | 82.4% |
+| fossil | 316 Mb | 19.4 kb | 0.390 | 56 kb | 0.996 | 7.07 | 0.0% | 0.2% | 2.8% | 7.0% | 62.4% |
+| regulatory | 345 Mb | 14.3 kb | 0.440 | 24 kb | 0.998 | 7.20 | 0.0% | 0.4% | 3.9% | 2.8% | 55.9% |
+| constrained unknown | 32 Mb | 7.7 kb | 0.390 | 80 kb | 0.999 | 6.26 | 0.0% | 0.4% | 8.4% | 4.0% | 44.5% |
+| neutral | 72 Mb | 7.9 kb | 0.405 | 58 kb | 0.987 | 7.40 | 0.0% | 0.4% | 3.1% | 10.2% | 45.4% |
+
+Every cell above was assessed on every chromosome: all 24 carry GENCODE, phastCons, RepeatMasker,
+genomicSuperDups and cCREs, so no share in this table is a zero that means "never looked". Sampled
+phyloP (300 kilobases per chromosome, 7,200 in all, read by range and never downloaded) puts the
+background at **3.5% constrained bases** (standard error 0.4 points over kilobases) against the
+neutral tier's 1.52%, fossil's 1.40%, regulatory's 2.41% and constrained unknown's 5.23%, the last
+four taken from the budget's block-by-block phyloP with the blocks it never measured counted, not
+zeroed (fossil 6,756 of 7,302; regulatory 15,155 of 15,536; neutral 2,431 of 2,632).
+
+So the background is a little coding, a little conserved, half repeat, and 71% of it lies outside
+every unknown block. Within the background, the kilobases that hold a conserved element are the
+quietest thing in it -- 5.33 recurring events per kilobase against 6.73 where there is none -- and
+cCREs (6.18 against 6.73), exons (6.37 against 6.66) and promoters (6.37 against 6.62) are quieter
+too. Segmental duplication and satellite go the other way, hard: 9.94 against 6.44 and 10.70 against
+6.57.
+
+**What each covariate accounts for.** Each row is the tier's median ratio when that thing is taken
+out of the background, and what that move is as a share of the tier's distance from 1.
+
+| taken out of the background | fossil (1.062) | regulatory (1.077) | neutral (1.105) |
+|---|---|---|---|
+| CDS of any transcript | 1.062, accounts for none | 1.076, accounts for none | 1.104, accounts for none |
+| exons of any gene | 1.054, **13%** | 1.052, **33%** | 1.093, **11%** |
+| conserved elements | 1.043, **31%** | 1.058, **25%** | 1.086, **18%** |
+| within 2 kb of a coding TSS | 1.062, accounts for none | 1.073, 6% | 1.102, 3% |
+| all three of those together | 1.037, **41%** | 1.034, **56%** | 1.079, **25%** |
+| segmental duplication | 1.080, *widens by 29%* | 1.104, *widens by 34%* | 1.139, *widens by 33%* |
+| low-coverage kilobases (not a covariate) | 1.075, *widens by 15%* | 1.083, *widens by 12%* | 1.123, *widens by 31%* |
+
+Read down the table: the coding bases the earlier section led with account for **none** of the offset
+through other transcripts' CDS and 11% to 33% through exons at large; conserved elements account for
+18% to 31%; promoter proximity for 0% to 6%. Taking all three out together closes **25% (neutral),
+41% (fossil) and 56% (regulatory)** of the offset and leaves **44% to 75% of it standing**. Segmental
+duplication -- the third candidate the earlier section named -- moves it the *other way*: the
+background's duplicated kilobases are noisy, so they were masking about a third of the offset, and a
+duplication-free control reads further from the tiers, not nearer. The three exclusions are assessed
+on 23 of 23 chromosomes; the coverage row on 22, because on chrX the cut leaves under half the
+background's kilobases and the arm reports that rather than a ratio built from the scraps.
+
+**Coverage, held separately.** A covariate describes the sequence; coverage describes what was done
+to it, and standardising on the first while the arms differ in the second manufactures a difference
+out of effort. This lane has one effort axis and it is named as a constant: `COVERAGE_MEASURE`, the
+share of the panel's 89 assemblies informing a window, since a recurring event needs two assemblies
+carrying the minority state and a window half the panel reached cannot show what a whole-panel window
+can. It is conditioned two ways. First by rebuilding the background without the kilobases below 0.95
+(the row above, 22 chromosomes). Second inside the two-group comparison: 100-base windows, the hit
+being "does this window carry a recurring event", each tier against the panel's own control -- every
+non-coding window -- through `compare.standardised`, stratified three ways.
+
+| tier | windows | GC + timing | + distance to a coding TSS | + coverage | median TSS, target vs control |
+|---|---|---|---|---|---|
+| fossil | 265,454 | +0.0231 | +0.0223 | **+0.0198** | 248 kb vs 89 kb |
+| regulatory | 317,835 | +0.0184 | +0.0187 | **+0.0206** | 55 kb vs 89 kb |
+| neutral | 66,203 | +0.0150 | +0.0152 | **+0.0195** | 291 kb vs 89 kb |
+| constrained unknown | 29,696 | -0.0182 | -0.0142 | **-0.0114** | 262 kb vs 89 kb |
+| structural | 20,077 | +0.0154 | +0.0149 | **+0.0338** | 545 kb vs 89 kb |
+
+No target window was dropped for want of a control in any of the three, on any chromosome. The
+difference does not die on coverage; on three of the five tiers it grows. That is what licenses the
+stronger of the two sentences the result file carries as data rather than as prose, and the file
+carries the one that is available and not the one that sounds better:
+**"nothing I measured explains it, including coverage"**. Had the coverage stratum not been run, the
+only sentence available would have been "the covariates I measured do not explain it", which is a
+different and weaker claim; the two are separate string constants so that neither can be upgraded to
+the other by paraphrase.
+
+**What this changes.** Nothing about any tier, and one thing about the explanation offered for the
+offset. The section above wrote that the background windows "carry coding exons, conserved elements
+and everything else that falls in a window of the right composition, so they fix more than the
+unknown sequence they are the control for". That is the right direction and the wrong magnitude, and
+it leads with the wrong term: canonical coding bases are already cut out of the background by
+construction, what remains is 1.0% coding and 7.0% exonic, and the three named candidates account for
+between a quarter and a half of the offset with duplication pulling the other way. The honest form is
+that composition explains part of the offset and not most of it. Every tier statement still reads
+against the neutral tier, the +6 to +11 points still belong to the control rather than to the tier,
+and the constrained-unknown depletion is untouched: it is the one tier below the background in the
+ratio (0.916, 6 of 23 above 1) and the one tier below the control in the window comparison (-0.0114
+with coverage held), as it was.
+
+**Coverage of the measurement itself.** 2,870,132 kilobases lie inside the panel's alignment blocks
+over the 24 chromosomes; 2,856,365 were measured. The 13,767 that were not are two named categories:
+10,503 held under half a kilobase once the canonical-CDS cut was applied, which is
+`build_background`'s own rule, and 3,264 have no GC value in the store. A further 35,876 were
+measured but carry no replication timing and are matched on GC alone, exactly as the panel matches
+them. No track was absent on any chromosome and GENCODE was read for all 24, so every "0%" in the
+composition table is a measurement. The window comparison subsamples long chromosomes by a fixed step
+between 2 and 20, which is recorded per chromosome. phyloP was sampled, not read whole: 300
+kilobases of each chromosome's background, with the unsampled kilobases counted.
+
+**What is left undone.** The largest single part of the background by bases is not any of the
+covariates above: 2,006 Mb of 2,808 Mb lies outside every unknown block, and it reads 6.39 recurring
+events per kilobase against the tiers' 7.07 to 7.40. What that sequence *is* -- gene bodies and
+introns against intergenic sequence the budget never called a block -- was not measured here, and it
+is the next covariate rather than a zero in the table above. It is also the last one worth trying
+before concluding that the offset is a property of how the budget cuts blocks rather than of what the
+background contains. Written to `data/results/panel_background_composition.json`.
+
 ## Compression: what each piece of knowledge is worth in bits, chr21, chr22 and chr18 (2026-09-14)
 
 Albert's probe: try different ways of classifying the genome and find which buys the most
