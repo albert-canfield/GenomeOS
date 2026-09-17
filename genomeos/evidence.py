@@ -207,9 +207,27 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
             else "0.9–1.0"
         )
         bands[key] += 1
+    # The pooled mean is a mixture and must say so. 2026-09-17's calibration lane tested the
+    # predicted band against four measured populations and found the stated level outside its own
+    # 95% interval in 10 of 12 bands, with the four offsets pointing in OPPOSITE directions
+    # (+0.472, -0.291, -0.137, +0.518). A level is a property of a population, so averaging a
+    # curated 0.9, an inferred 0.4 and a predicted effect size into one number produces a figure
+    # that is on no scale at all. The pooled mean is kept because callers read it, and the mean per
+    # kind is printed beside it so nobody has to take the mixture on trust.
+    by_kind: dict[str, list[float]] = {}
+    for r in rows:
+        by_kind.setdefault(r["evidence"], []).append(r["confidence"])
     return {
         "facts": len(rows),
         "mean_confidence": round(sum(conf) / len(conf), 3) if conf else 0.0,
+        "mean_confidence_by_evidence": {
+            k: {"facts": len(v), "mean": round(sum(v) / len(v), 3)}
+            for k, v in sorted(by_kind.items(), key=lambda kv: -len(kv[1]))
+        },
+        "mean_confidence_is_a_mixture": (
+            "the pooled mean averages curated, inferred and predicted confidences, which the"
+            " calibration lane showed are not on one scale: read it with the per-kind means beside it"
+        ),
         "weak": sum(1 for c in conf if c <= WEAK),
         "unknown_evidence": by_evidence.get("none", 0),
         "by_evidence": dict(sorted(by_evidence.items(), key=lambda kv: -kv[1])),

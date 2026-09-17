@@ -143,3 +143,41 @@ def test_a_missing_compiled_directory_is_not_an_error(tmp_path) -> None:
     (tmp_path / "data" / "demo").mkdir(parents=True)
 
     assert ev.programs(tmp_path, compiled=True) == []
+
+
+def test_the_pooled_mean_confidence_is_reported_as_the_mixture_it_is() -> None:
+    """A level is a property of a population, so one mean over four kinds is on no scale at all.
+
+    2026-09-17's calibration lane tested the predicted band against four measured populations and
+    found the stated confidence outside its own 95% interval in 10 of 12 bands, with the four offsets
+    in OPPOSITE directions: +0.472, -0.291, -0.137, +0.518. No constant fixes four disagreeing signs.
+
+    The same applies one level up to `mean_confidence`, which averages curated, inferred, predicted
+    and experimental facts. On this repository the pooled figure sits between two populations more
+    than half a point apart and describes neither, so the per-kind means are printed beside it.
+    """
+    rows = [
+        {"evidence": "predicted", "confidence": 0.2, "block": "b", "label": "x", "source": ""},
+        {"evidence": "predicted", "confidence": 0.3, "block": "b", "label": "y", "source": ""},
+        {"evidence": "curated", "confidence": 0.9, "block": "b", "label": "z", "source": "s"},
+    ]
+
+    out = evidence.summarise(rows)
+
+    assert out["mean_confidence"] == round((0.2 + 0.3 + 0.9) / 3, 3)
+    by = out["mean_confidence_by_evidence"]
+    assert by["predicted"] == {"facts": 2, "mean": 0.25}
+    assert by["curated"] == {"facts": 1, "mean": 0.9}
+    # the pooled figure lies between the two and equals neither: that is the whole point
+    assert by["predicted"]["mean"] < out["mean_confidence"] < by["curated"]["mean"]
+    assert "not on one scale" in out["mean_confidence_is_a_mixture"]
+
+
+def test_a_single_kind_still_reports_its_own_mean() -> None:
+    """The mixture warning must not imply a mixture where there is none."""
+    rows = [{"evidence": "curated", "confidence": 0.9, "block": "b", "label": "z", "source": "s"}]
+
+    out = evidence.summarise(rows)
+
+    assert out["mean_confidence_by_evidence"] == {"curated": {"facts": 1, "mean": 0.9}}
+    assert out["mean_confidence"] == 0.9
