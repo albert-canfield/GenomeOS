@@ -2422,7 +2422,10 @@ in order. "Owner" is the session that holds the files today (see §7).
   enrichments per library and no pair logic; the pair search moves to
   enhancers (GATA plus T-box in heart). 5. Done at library level; next a gene-level profile with a shuffled-library
   null before any pair is called a dependency.
-  6. Done: `genomeos decompile GENE --chrom C`; next a Blocks-tab card. 7. Done, and tested on a VISTA panel with matched negatives: motif sites held
+  6. Done: `genomeos decompile GENE --chrom C`, and **the Blocks-tab card is done 2026-09-17**: a
+  Decompile button on any gene block reads `/api/decompile` and shows the program beside the map, with
+  the layers that carry nothing named above it — a decompiler that hid its empty layers would read as
+  completeness, which is the opposite of what the view is for. 7. Done, and tested on a VISTA panel with matched negatives: motif sites held
   across species do not separate enhancers from inactive conserved sequence;
   next a different readout, AlphaGenome in-silico mutagenesis per element on
   the same panel (are the bases that matter the ones that are kept).

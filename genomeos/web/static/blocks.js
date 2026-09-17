@@ -311,8 +311,23 @@
       ${Object.keys(b.attrs).length ? `<div class="muted" style="font-size:12px">${Object.entries(b.attrs).map(([k, v]) => `${k}=${v}`).join(' · ')}</div>` : ''}
       ${b.type === 'unknown' && b.attrs.class ? `<div class="hint">Investigated: <b>${b.attrs.class}</b> (${b.evidence}, conf ${b.confidence}). ${b.attrs.patterns ? 'patterns: ' + b.attrs.patterns + '. ' : ''}${b.attrs.similar_to ? 'similar to ' + b.attrs.similar_to : ''}</div>` : ''}
       ${b.type === 'unknown' && !b.attrs.class ? '<div class="hint">UNKNOWN: no annotated gene here. In a human chromosome this space carries most of the regulation (enhancers, insulators) that we cannot yet read from sequence alone.</div>' : ''}
-      <div class="row" style="margin-top:6px"><button class="ghost" id="b-zoomto"><i class="ic">🔍</i>Zoom to</button><button class="ghost" id="b-hl"><i class="ic">💡</i>${st.highlight === classOf(b) ? 'Clear highlight' : 'Highlight all ' + (b.type === 'unknown' && b.attrs.class ? b.attrs.class : b.type)}</button>${(b.type === 'gene' || par) ? `<button class="ghost" id="b-flow" data-tip="Open this gene in Flow: DNA → RNA → protein with its regulation"><i class="ic">🔁</i>Flow</button><button class="ghost" id="b-mol" data-tip="Open this gene in Molecules: isoforms, expression, protein definition, structure, graph"><i class="ic">🧫</i>Molecules</button>` : ''}</div>`;
+      <div class="row" style="margin-top:6px"><button class="ghost" id="b-zoomto"><i class="ic">🔍</i>Zoom to</button><button class="ghost" id="b-hl"><i class="ic">💡</i>${st.highlight === classOf(b) ? 'Clear highlight' : 'Highlight all ' + (b.type === 'unknown' && b.attrs.class ? b.attrs.class : b.type)}</button>${(b.type === 'gene' || par) ? `<button class="ghost" id="b-flow" data-tip="Open this gene in Flow: DNA → RNA → protein with its regulation"><i class="ic">🔁</i>Flow</button><button class="ghost" id="b-mol" data-tip="Open this gene in Molecules: isoforms, expression, protein definition, structure, graph"><i class="ic">🧫</i>Molecules</button><button class="ghost" id="b-decomp" data-tip="Read this gene back as a program: every layer GenomeOS holds for it, and the layers it does not"><i class="ic">🧾</i>Decompile</button>` : ''}</div>
+      <div id="b-decomp-out"></div>`;
     $('#b-zoomto').onclick = () => { const pad = (b.end - b.start) * 0.15; st.view = [Math.max(0, b.start - pad), Math.min(st.length, b.end + pad)]; scheduleLoad(); };
+    // the decompiled gene, in the tab where the gene is: what every layer says, and which layers are
+    // empty. The empty ones are the point - a decompiler that hid them would read as completeness.
+    const dbtn = $('#b-decomp');
+    if (dbtn) dbtn.onclick = async () => {
+      const name = b.type === 'gene' ? b.name : (par && par.type === 'gene' ? par.name : b.name);
+      const out = $('#b-decomp-out');
+      out.innerHTML = '<span class="muted">reading every layer…</span>';
+      try {
+        const r = await fetch(`/api/decompile?symbol=${encodeURIComponent(name)}&chrom=${st.chrom}`).then(x => x.json());
+        if (r.error) { out.innerHTML = `<span class="muted">${r.error}</span>`; return; }
+        out.innerHTML = `<div class="hint" style="margin-top:6px">${r.unknown.length ? 'no layer for: <b>' + r.unknown.join(', ') + '</b>' : 'every layer carries something'}</div>
+          <pre class="scroll" style="max-height:320px;font-size:11.5px">${r.program.replace(/[&<>]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c]))}</pre>`;
+      } catch (e) { out.innerHTML = `<span class="muted">${String(e)}</span>`; }
+    };
     const geneName = b.type === 'gene' ? b.name : (par && par.type === 'gene' ? par.name : (par && par.parent && st.byId[par.parent] ? st.byId[par.parent].name : null));
     const go = (tab, fill) => { fill(); const t = document.querySelector(`nav button[data-tab="${tab}"]`); if (t) t.click(); };
     if ($('#b-flow') && geneName) $('#b-flow').onclick = () => go('flow', () => { $('#f-gene').value = geneName; $('#f-chrom').value = st.chrom; setTimeout(() => $('#f-load').click(), 200); });

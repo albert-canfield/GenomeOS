@@ -911,6 +911,23 @@ class Api:
             "truncated": len(rows) > limit,
         }
 
+    def decompile(self, symbol: str, chrom: str) -> dict:
+        """One gene read back as a program: every layer this project holds, and the ones it does not.
+
+        `genomeos decompile` has produced this since 2026-09-13 and the web had no way to ask, so the
+        Blocks tab could show a gene without showing what is known about it. The unknown list is part
+        of the answer rather than an omission: a layer the project cannot fill is the interesting half.
+        """
+        from genomeos.decompile import decompile as run
+        from genomeos.decompile import render
+
+        if not symbol:
+            raise ApiError("name a gene, for example ?symbol=APP&chrom=chr21")
+        out = run(symbol.strip().upper(), chrom or "chr21", self.root / "data" / "results")
+        if not out["layers"].get("gene"):
+            raise ApiError(f"no gene {symbol!r} on {chrom or 'chr21'}", 404)
+        return {**out, "program": render(out)}
+
     def cells(self) -> dict:
         """What each cell type reads: the genome-wide reader, per cell and per chromosome.
 
@@ -1895,6 +1912,8 @@ class Handler(BaseHTTPRequestHandler):
                         self._q(qs, "compiled", "") == "1",
                     )
                 )
+            if u.path == "/api/decompile":
+                return self._json(self.api.decompile(self._q(qs, "symbol", ""), self._q(qs, "chrom", "")))
             if u.path == "/api/cells":
                 return self._json(self.api.cells())
             if u.path == "/api/roadmap":
