@@ -1391,3 +1391,33 @@ between the drawn genes is whatever the genome supplies rather than what a model
 say. Felsenstein contrasts or a birth-death model along a species tree is what would settle a pair,
 and this project holds no tree. **Nothing here calls a pair a dependency**; it says which libraries
 would survive the weakest honest test, and half of them do not.
+
+## 20. Pre-registration: in-silico mutagenesis over the VISTA panel (2026-09-17)
+
+Written before the instrument existed and before any window was scored; the machine-readable copy is
+`PRE_REGISTRATION` in `attribution/satmut_vista.py`, committed in that state.
+
+**The question has to be a comparison, and that is the whole design.** "The model is sensitive where
+the sequence is conserved" cannot fail on this panel: VISTA elements are *selected* for conservation,
+so a positive correlation is guaranteed by the sampling and would tell us nothing. §15 found that
+motif sites held across species do not separate a positive from an inactive conserved negative. So
+the quantity under test is the **difference between the arms**, not either arm's value.
+
+**Design.** 60 positives in the panel's committed order, each with its matched negative from the same
+result — the pairing is the panel's, not this run's. Each element is tiled with **20 windows of 25 bp**,
+evenly spaced, so a long element does not outvote a short one. One request per window: **2,400
+requests**. Per window, the model's predicted effect of substituting it and the window's mean Zoonomia
+phyloP; per element, the Spearman between the two; per arm, the mean of those correlations.
+
+**Primary:** positives minus negatives in mean within-element Spearman, with a one-sided p from a
+**within-element shuffle of the constraint values** (200 draws), which preserves both distributions
+and destroys only the pairing. **Success** is ≥ +0.10 at p 0.01 — the first thing on this panel to
+separate the arms. **Weak** is 0.05–0.10. **Failure is below 0.05, and it is the outcome to expect**:
+that would be §15's finding arriving by a second route. One futility look at half the budget, no
+success look.
+
+**What it cannot do, stated first.** One model, and predicted effects rather than measured ones: this
+says where AlphaGenome is sensitive, not which bases matter in an embryo. A 25 bp window averages a
+decisive base with 24 neighbours. And VISTA's negatives are sequence that failed to drive expression
+in the assay — a measured class, but not a sequence-matched control, which is the caveat this panel
+has carried since §15.
