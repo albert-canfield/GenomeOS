@@ -290,6 +290,25 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   week was "report both and name each" rather than "pick the right one": where two populations exist,
   a single figure is not a summary of them but a fact about neither.
 
+- **Base overlap does not predict effect overlap, so a union of covariates is not bracketed by its
+  own singles (2026-09-17).** Four covariates were removed from a background one at a time, and I
+  twice described the combined answer as lying "somewhere between the largest single and the sum".
+  Measured, it does not: on **three of five tiers the union falls outside that interval**, and in
+  both directions — the sum overstates on two tiers and understates on two others.
+
+  The tempting shortcut is the one the base counts invite. The four overlap by only **11.5%**
+  (168.4 Mb double-counted, sum over union 1.1148), so "they barely overlap, therefore the sum is
+  about right" looks safe and is wrong on four of the five tiers. **Removing a set of covariates does
+  not subtract their effects; it changes the population the comparison is against**, so the union is
+  a different comparison rather than a combination of the singles. Overlap in bases and overlap in
+  effect are separate quantities and the first says nothing about the second.
+
+  The extreme case is worth its own flag, and the lane gave it one (`union_overshoots_the_offset`):
+  one tier "explained" **141%** of its offset, which is not more than fully explained — the ratio
+  crosses 1, so with all four covariates gone the tier reads *below* the background the exclusion
+  leaves. A share above 100% there is a statement that the comparison has moved to a different
+  population, wearing the costume of progress.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory
