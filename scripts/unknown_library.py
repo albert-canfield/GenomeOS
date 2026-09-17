@@ -47,29 +47,64 @@ OLIGO = 300
 SEED = 17
 
 
-def dinucleotide_shuffle(seq: str, rng: random.Random) -> str:
-    """Altschul-Erikson: keep every dinucleotide count, destroy the arrangement.
+def dinucleotide_shuffle(seq: str, rng: random.Random, tries: int = 40) -> str:
+    """Altschul-Erikson: keep every dinucleotide count, destroy the arrangement, keep the length.
 
-    A mononucleotide shuffle would leave CpG content free to change, and CpG is what several of this
-    project's readings turned on, so the shuffle has to hold pairs rather than bases.
+    A mononucleotide shuffle would leave CpG free to change, and CpG is what several of this project's
+    readings turned on, so the shuffle holds pairs rather than bases.
+
+    The naive version - shuffle each vertex's out-edges and walk - dead-ends and returns a SHORT
+    sequence: a test caught it at 121 bases of 128. The walk only consumes every edge if, for each
+    vertex, the edge kept for last leads through a tree rooted at the final base (Altschul & Erikson
+    1985). So a last edge is drawn per vertex, the tree condition is checked, and the draw is retried;
+    after `tries` failures the sequence is returned unshuffled rather than returned truncated, and the
+    caller can see that because it equals its input.
     """
     if len(seq) < 3:
         return seq
-    edges: dict[str, list[str]] = defaultdict(list)
+    last_base = seq[-1]
+    out_edges: dict[str, list[str]] = defaultdict(list)
     for a, b in zip(seq, seq[1:], strict=False):
-        edges[a].append(b)
-    for v in edges.values():
-        rng.shuffle(v)
-    out = [seq[0]]
-    cursor = dict.fromkeys(edges, 0)
-    for _ in range(len(seq) - 1):
-        here = out[-1]
-        i = cursor.get(here, 0)
-        if here not in edges or i >= len(edges[here]):
-            break
-        cursor[here] = i + 1
-        out.append(edges[here][i])
-    return "".join(out)
+        out_edges[a].append(b)
+    vertices = sorted(out_edges)
+
+    for _ in range(tries):
+        last: dict[str, str] = {}
+        for v in vertices:
+            if v != last_base:
+                last[v] = rng.choice(out_edges[v])
+        # every vertex must reach the final base by following its last edges: otherwise the walk
+        # strands the edges of whatever cycle it entered
+        if all(_reaches(v, last_base, last) for v in last):
+            rest: dict[str, list[str]] = {}
+            for v in vertices:
+                edges = list(out_edges[v])
+                if v in last:
+                    edges.remove(last[v])
+                rng.shuffle(edges)
+                if v in last:
+                    edges.append(last[v])
+                rest[v] = edges
+            walk = [seq[0]]
+            cursor = dict.fromkeys(vertices, 0)
+            for _ in range(len(seq) - 1):
+                here = walk[-1]
+                i = cursor[here]
+                cursor[here] = i + 1
+                walk.append(rest[here][i])
+            return "".join(walk)
+    return seq
+
+
+def _reaches(start: str, target: str, last: dict[str, str], limit: int = 8) -> bool:
+    """Does following one last edge per vertex arrive at the final base without cycling?"""
+    seen, here = set(), start
+    while here != target:
+        if here in seen or here not in last or len(seen) > limit:
+            return False
+        seen.add(here)
+        here = last[here]
+    return True
 
 
 def tss_of(ctx: Context, chrom: str) -> list[int]:
