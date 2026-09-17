@@ -3039,6 +3039,201 @@ redone from the committed result with `--from-result` without reading a store ag
 
 Written to `data/results/panel_leftover_classes.json`.
 
+## All four covariates out at once: 99% of the fossil offset, 141% of the regulatory, which is an overshoot rather than an explanation (2026-09-17, later still)
+
+The two sections above each took a piece out of the offset by which every non-coding tier reads
+above the panel's matched background, and neither took the other's. Exons of any gene, conserved
+elements and promoter proximity account for 41% / 56% / 25% (fossil / regulatory / neutral)
+together; coding-gene introns alone account for 56% / 66% / 30%. Nobody had taken all four out of
+the background at once, and the last section named that as the first thing left undone.
+`genomeos/attribution/panel_union.py` and `scripts/panel_union_arms.py` do it on 24 chromosomes from
+local data only, by the same method, through the same `build_background`, with the same degeneracy
+flag and the same two permitted sentences.
+
+**What was eligible.** Over the 23 chromosomes the panel's medians rest on: 3,031 Mb of sequence,
+2,846,945 kilobases inside the panel's alignment blocks, 28,468,458 100-base cells inside those, 5
+tiers and 4 declared covariates, of which 4 have bases somewhere. Nothing below would mean anything
+if the rebuilt background were not the panel's own, so before anything is read from it the rebuilt
+ratios are checked against the committed panel's: 144 tier ratios on 24 chromosomes, largest
+absolute difference 0.0005.
+
+**The cheap half first: how much the four share.** The union has to sit between the largest single
+arm and the sum of the singles, and where in that interval is decided by how much sequence the
+covariates hold in common. Over the 23 chromosomes the four cover 1,466.9 Mb between them and
+1,635.3 Mb when each is counted on its own: 168.4 Mb counted more than once, a sum 1.1148 times the
+union.
+
+| pair | bases in common | share of the first | share of the second |
+|---|---|---|---|
+| coding-gene introns and exons of any gene | 15.9 Mb | 1.3% | 7.6% |
+| coding-gene introns and conserved elements | 55.4 Mb | 4.7% | 35.5% |
+| coding-gene introns and within 2 kb of a coding TSS | 23.5 Mb | 2.0% | 30.3% |
+| exons of any gene and conserved elements | 46.2 Mb | 21.9% | 29.6% |
+| exons of any gene and within 2 kb of a coding TSS | 29.8 Mb | 14.1% | 38.5% |
+| conserved elements and within 2 kb of a coding TSS | 8.4 Mb | 5.4% | 10.9% |
+
+**Every group, with the covariates it has to be compared on.** Coverage is assemblies informing the
+window, as a fraction of the panel's assemblies, which is effort and not composition. The unit of a
+background row is the kilobase the panel bins by; the unit of a tier row is its block. The tier rows
+are here to be described, not to be used: no tier average is a control anywhere in this section.
+
+| group | units | bases | median length | GC | median distance to a coding TSS | coverage | recurring/kb |
+|---|---|---|---|---|---|---|---|
+| the background | 2,833,407 | 2,807.6 Mb | 1,000 | 0.399 | 87 kb | 1.0 | 6.626 |
+| **the background free of all four** | 1,307,462 | 1,307.4 Mb | 1,000 | 0.391 | 145 kb | 1.0 | 7.117 |
+| kilobases holding any of the four | 1,525,945 | 1,500.2 Mb | 1,000 | 0.407 | 55 kb | 1.0 | 6.23 |
+| kilobases holding coding-gene introns | 1,244,198 | 1,222.6 Mb | 1,000 | 0.406 | 55 kb | 1.0 | 6.154 |
+| kilobases holding exons of any gene | 297,246 | 280.1 Mb | 1,000 | 0.436 | 24 kb | 1.0 | 6.372 |
+| kilobases holding conserved elements | 226,332 | 215.5 Mb | 1,000 | 0.39 | 85 kb | 1.0 | 5.34 |
+| kilobases holding within 2 kb of a coding TSS | 86,116 | 82.6 Mb | 1,000 | 0.456 | 1 kb | 1.0 | 6.398 |
+| tier: fossil | 7,085 | 316.0 Mb | 19,422 | 0.3897 | 56 kb | 0.9963 | 7.072 |
+| tier: regulatory | 15,516 | 344.5 Mb | 14,279 | 0.44 | 24 kb | 0.9984 | 7.195 |
+| tier: neutral | 2,543 | 71.7 Mb | 7,874 | 0.4048 | 58 kb | 0.9872 | 7.4 |
+| tier: constrained unknown | 1,068 | 31.7 Mb | 7,676 | 0.3902 | 80 kb | 0.9987 | 6.261 |
+| tier: structural | 219 | 198.1 Mb | 72,680 | 0.4181 | 213 kb | 0.7395 | 10.41 |
+
+**The arms.** The background is rebuilt with each covariate taken out of it and then with all four
+taken out, through the panel's own `build_background`, and the tier ratios recomputed. The ratio the
+panel itself builds is in each column heading; the cell is the ratio after the exclusion, and what
+share of its distance from 1 that closed. Every row is assessed on 23 of 23 chromosomes.
+
+| taken out of the background | fossil (1.062) | regulatory (1.0774) | neutral (1.1045) | constrained unknown (0.9163) | structural (1.1627) |
+|---|---|---|---|---|---|
+| coding-gene introns | 1.027, **56%** | 1.0266, **66%** | 1.0731, accounts for 30% of the offset | 0.8891, widens the offset by 32% | 1.1695, widens the offset by 4% |
+| exons of any gene | 1.0538, accounts for 13% of the offset | 1.0519, accounts for 33% of the offset | 1.0931, accounts for 11% of the offset | 0.912, widens the offset by 5% | 1.1498, accounts for 8% of the offset |
+| conserved elements | 1.0425, accounts for 31% of the offset | 1.0582, accounts for 25% of the offset | 1.0862, accounts for 18% of the offset | 0.9008, widens the offset by 19% | 1.1457, accounts for 10% of the offset |
+| within 2 kb of a coding TSS | 1.0616, accounts for none | 1.0726, accounts for 6% of the offset | 1.1015, accounts for 3% of the offset | 0.9158, accounts for none | 1.187, widens the offset by 15% |
+| **all four at once** | 1.0008, **99%** | 0.9683, **141%** | 1.0465, **56%** | 0.866, widens the offset by 60% | 1.1405, accounts for 14% of the offset |
+
+**Where the union sits, which is the number this lane exists to produce.**
+
+| tier | largest single arm | sum of the singles | **the union** | where in that interval | what that reads as |
+|---|---|---|---|---|---|
+| fossil | 56.5% | 101.8% | **98.7%** | 0.9323 | the union is near the sum of the singles |
+| regulatory | 65.6% | 129.6% | **141.0%** | 1.1778 | the union explains MORE than the sum of its singles |
+| neutral | 30.0% | 61.3% | **55.5%** | 0.8134 | the union sits between the largest single arm and the sum, as overlapping covariates do |
+| constrained unknown | -0.6% | -56.8% | **-60.1%** | - | the union explains LESS than its largest single arm |
+| structural | 10.4% | -0.7% | **13.6%** | - | the union explains MORE than the sum of its singles |
+
+**Neither end of the interval was the answer, and on 3 of the 5 tiers the union fell outside the
+interval altogether (regulatory, constrained unknown, structural).** The fossil union is 98.7%
+against a largest single of 56.5% and a sum of 101.8%: quoting the largest single would have
+understated it by 42.3%, and the sum happens to land within 3.1% of it. The neutral union is 55.5%
+against 30.0% and 61.3%, sitting 0.8134 of the way from the first to the second, which is the shape
+an ordinary set of overlapping covariates makes.
+
+**The regulatory tier is the exception, and it is the one figure in this section that must not be
+quoted as good news.** Its union reads 141.0%, and a share above 100% is not an offset more than
+explained. It is the ratio carried past 1 and out the other side: the tier reads 1.0774 against the
+background as the panel builds it and 0.9683 against the background with all four gone, so the
+exclusion did not land on 1, it went through it. The result carries that as a flag and a sentence
+rather than leaving it to a reader: *the union does not close this tier's offset, it crosses it:
+with all four covariates gone the tier reads BELOW the background the exclusion leaves, so the share
+above 100% is over-correction and not explanation, and the covariates removed were quieter than the
+tier rather than merely as quiet*. It is true of regulatory and of no other tier. Over-correction on
+1 of 5 tiers is also why the arithmetic below stops at what the arms did and does not go on to call
+the offset accounted for.
+
+**The degeneracy check, which is what both earlier lanes hit and what could have made this
+unanswerable.** Take every gene body out of this background and the remainder is 99.8% block
+sequence, which is a tier average standing in for a control; two arms of the last section are
+reported without being counted for exactly that reason. The question here was whether the union arm
+goes the same way. It does not. Each arm carries the share of the background it leaves that is block
+sequence, against the same line the last section drew (0.95), and the union arm leaves a background
+that is 0.5261 block sequence at the median and 0.7093 on its worst chromosome. It is degenerate on
+0 of 23, so the question can be answered this way and the table above is evidence rather than a
+reported artefact.
+
+| arm | bases taken out of the background | block share of what it leaves, median | worst chromosome | degenerate on |
+|---|---|---|---|---|
+| coding-gene introns | 1,224.9 Mb | 0.457 | 0.6606 | 0 of 23 |
+| exons of any gene | 210.8 Mb | 0.2836 | 0.4659 | 0 of 23 |
+| conserved elements | 166.1 Mb | 0.2711 | 0.4553 | 0 of 23 |
+| within 2 kb of a coding TSS | 106.2 Mb | 0.2677 | 0.4476 | 0 of 23 |
+| **all four at once** | 1,466.9 Mb | 0.5261 | 0.7093 | 0 of 23 |
+
+**The comparison that carries the weight, run both ways round one control.** 100-base windows, the
+hit being "does this window carry a recurring event", through `compare.standardised`, stratified
+three ways, with canonical-CDS windows out of both arms. The control is the same in every row and it
+is sequence, never a tier average: the windows that carry not one base of any of the four and lie in
+no block. The first row asks whether the covariates are quieter than what removing them leaves,
+which is what an exclusion arm needs to be true; the rest ask what each tier reads against a
+background with the four already gone. Medians over 23 chromosomes.
+
+| target | targets | controls | GC + timing | + distance to a coding TSS | + coverage | above 0 on | p | dropped |
+|---|---|---|---|---|---|---|---|---|
+| **the four covariates, against the rest** | 1,331,006 | 500,729 | -0.0411 | -0.0397 | **-0.0386** | 0 of 23 | 1 | 30,738 |
+| tier: fossil | 265,472 | 500,729 | +0.0092 | +0.0091 | **+0.0097** | 16 of 23 | 0.0466 | 2,975 |
+| tier: regulatory | 317,851 | 500,729 | -0.0045 | -0.0036 | **-0.0014** | 11 of 23 | 0.661 | 7,272 |
+| tier: neutral | 66,202 | 500,729 | +0.0125 | +0.0131 | **+0.0132** | 16 of 23 | 0.0466 | 995 |
+| tier: constrained unknown | 29,705 | 500,729 | -0.0227 | -0.0239 | **-0.0216** | 4 of 23 | 1 | 247 |
+| tier: structural | 20,079 | 500,729 | +0.0049 | +0.0029 | **+0.0216** | 14 of 23 | 0.202 | 2,301 |
+
+`input_presence` was run on every one of those rows *before* the coverage stratum, which is the
+order that stops "conditioning changed nothing" from reading as a test passed when no test was
+administered. On the first row: the panel's alignment over the window is **free** on 23 of 23; the
+local annotation of the window is **free** on 23 of 23. Free presence is not a constant level, and
+the level does vary -- 77,351 of the 1,331,006 covariate windows and 44,594 of the 500,729
+covariate-free windows are below full panel coverage -- so the stratum had something to bite, and
+the difference survives it on all three rungs.
+
+**The sentence this result carries, as data rather than as prose:** *"nothing I measured explains
+it, including coverage"*. It is one of two constants and there is no third: without a coverage
+stratum the strongest available sentence is "the covariates I measured do not explain it", and
+"nothing explains it" is not available at any sample size, because the next covariate nobody has
+measured is always still there.
+
+**What this changes.** One number, and one reading:
+
+1. **The last section's "44% to 75% unexplained" and its successor.** With all four out at once, per
+   tier, in the result's own words: fossil accounts for 99% of the offset; regulatory accounts for
+   141% of the offset; neutral accounts for 56% of the offset. That is the number to quote, and it
+   is neither the largest single arm nor the sum.
+2. **The sum was never the number.** For the regulatory tier the sum of the singles is 129.6% --
+   more than the whole offset, which is what adding overlapping covariates buys, and 168.4 Mb of the
+   sequence behind it is counted twice. Adding the two sections' numbers would have been wrong on
+   this tier by 11.4% too low, and the direction it is wrong in is not fixed: the sum overstates the
+   union on fossil, neutral, constrained unknown and understates it on regulatory, structural.
+3. **No tier conclusion moves.** The constrained-unknown tier is still the one tier below the
+   background (0.9163), and with all four out it reads 0.866: the arm widens the offset by 60%,
+   which is the same shape the last two sections found and the opposite of an explanation.
+
+**Coverage of the measurement.** Eligibility is above; this is what was done with it. 2,833,407
+kilobases measured over the 23 chromosomes, 1,307,462 of them free of all four covariates, and
+2,583,687 windows after a fixed subsampling step between 4 and 20 per chromosome. The kilobases not
+measured are the two named categories: 10,472 below half a kilobase after the coding cut, 3,066 no
+gc in the store. Every covariate that exists exists on all 23, so no cell in the tables above is a
+zero that means "never looked"; where one would have been, the cell says `not assessed` and carries
+the reason. chrY is measured and reported and kept out of every median, as everywhere else in this
+panel, and its numbers sit in `per_chromosome`. Nothing was fetched: the stores, the committed panel
+results and GENCODE were all on disk, and the top-level distillation can be redone with
+`--from-result` without reading a store again.
+
+**What is left undone.**
+
+- **Segmental duplication, the fifth covariate, which runs the other way.** The first section
+  measured it and it *widens* the offset when removed -- fossil 29%, regulatory 34%, neutral 33%. It
+  is not in this union, so the union above is a union of the four that close the offset and says
+  nothing about what a fifth that opens it would do to the total. A five-way arm is the obvious next
+  exclusion and it is one `COVARIATES` entry away.
+- **The union arm is not degenerate, but it is not neutral either.** What it leaves is 0.5261 block
+  sequence at the median against 0.7093 at the worst. That is far below the line, and it is also far
+  above where a background that shared nothing with the tiers would sit. Nobody has asked what a
+  background enriched for blocks does to a ratio short of degeneracy.
+- **Why an intron is quiet.** Carried forward unchanged from the last section: nothing here
+  separates transcription-coupled repair, alignment quality inside genes, and the correlation
+  between gene bodies and early replication that survives a three-tertile stratum. This lane
+  measured how much the four covariates overlap, not why any of them is quiet.
+- **The remainder has no name, and on one tier it is not a remainder.** What all four together
+  leave: fossil 1.3% still standing, regulatory over-corrected by 41.0%, neutral 44.5% still
+  standing. This lane adds no candidate for what is left, and none for why the regulatory arm goes
+  past the mark. The honest form of both is the sentence the result carries, not a fifth covariate
+  chosen because it was to hand.
+- **chrY.** Measured and excluded from the medians by the panel's own convention; its numbers sit in
+  `per_chromosome` and nobody has read them.
+
+Written to `data/results/panel_union_arms.json`.
+
 ## Compression: what each piece of knowledge is worth in bits, chr21, chr22 and chr18 (2026-09-14)
 
 Albert's probe: try different ways of classifying the genome and find which buys the most
