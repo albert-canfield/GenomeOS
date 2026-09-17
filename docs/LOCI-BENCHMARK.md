@@ -1447,3 +1447,218 @@ is the benchmark owner's call, and `data/results/loci_benchmark.json` still hold
 - Every candidate here is an **activator**. Published repressive elements with a perturbation behind
   them were looked for and none was clean enough to state, so the direction axis is only ever tested
   in one direction, at both panels.
+
+---
+
+## 20. The length artefact that the design had already ruled out, and the arm that answers the other question (2026-09-17)
+
+`genomeos/benchmark/loci_length.py`, `scripts/loci_length_controls.py`,
+`tests/test_loci_length_controls.py`, result `data/results/loci_length_controls.json`.
+**Zero model requests.** 183 seconds, all of it range reads over public tracks.
+
+**This lane is not blinded, and a reader meets that before the numbers rather than after them.** It
+was set up as a blinded registration against the value-on-syntax claim, and the blind failed on
+timing, not on scope: a paragraph of section 9 above quotes section 19's results, so the lane had a
+second lane's figures for this claim, and that lane's own remark about element length, before the
+blind was widened to the whole file. No widening can un-read that. What survives is worth stating
+plainly and is not nothing: the registration was committed before any number in it existed
+(`dbef7b0`), its decision rule is mechanical and symmetric between the outcomes, and its control
+selection is seeded and executes rather than being described. That is a **pre-registered unblinded
+test** — a weaker instrument than a blinded one and a much stronger one than an unregistered read.
+
+### The result, ahead of every number: the question was already answered by the construction
+
+The suspicion was that "a value sits on constrained sequence" separates the panel from its controls
+only because published elements are longer than matched windows, and a longer window is likelier to
+overlap constrained sequence for reasons that have nothing to do with being a regulatory element.
+
+`loci.candidate_windows` computes `length = expect.element[1] - expect.element[0]` and draws its
+window as `s .. s + length`. **The existing 85 controls are matched to their locus's element length
+exactly, window by window: 85 of 85, worst difference 0 bp.** Verified here from the committed
+coordinates rather than from a reading of the code (`length_match_check`), and independently by the
+coordinating session. Every arm's length distribution is therefore the same five numbers:
+
+| arm | n | min | q1 | median | q3 | max |
+|---|---|---|---|---|---|---|
+| A panel | 17 | 400 | 400 | 3,000 | 10,766 | 98,237 |
+| B existing controls | 85 | 400 | 400 | 3,000 | 10,766 | 98,237 |
+| C length-only controls | 85 | 400 | 400 | 3,000 | 10,766 | 98,237 |
+
+So 9 of 17 against 15 of 85 **cannot be a naive length artefact** — not because a test looked and
+failed to find one, but because the design makes one impossible. The check was two commands. A
+premise nobody had checked survived a brief, a peer's suggestion and a registration before anyone
+ran it, which is the transferable part of this section.
+
+### What arm C is for, then: the complement question
+
+Not "does length explain the excess" but **what does matching on length alone buy?** Arm C is five
+windows per locus of exactly the element's length, on the same chromosome, outside every panel locus
+with 200 kb of flank and outside VISTA elements and GWAS hits with 5 kb — and matched on **nothing
+else**: no GC, no distance, no constraint. Seed 4703, 5 of 5 drawn at every one of the seventeen
+loci. Nobody should read it as the original test.
+
+### The three arms, with their covariates and their coverage
+
+| | A panel | B existing | C length-only |
+|---|---|---|---|
+| n | 17 | 85 | 85 |
+| **a value on constrained sequence** | **9/17 = 0.529** | **15/85 = 0.176** | **13/85 = 0.153** |
+| the same, where the window holds a value at all | 9/13 = 0.692 | 15/62 = 0.242 | 13/60 = 0.217 |
+| length median | 3,000 | 3,000 | 3,000 |
+| GC median | 0.455 | 0.460 | **0.393** |
+| distance to a coding TSS, median | 18,718 | 19,204 | **135,634** |
+| constrained fraction, median | 0.0737 | 0.0653 | **0.0159** |
+| an element inside was deleted | 14 | 60 | 38 |
+| **never looked** (no element scored) | 3 | 25 | 47 |
+
+Arm A reproduces the published 9/17 and arm B the published 15/85 exactly, which is the check that
+this lane is reading the same thing the benchmark reads. Arm C is badly unbalanced on distance — its
+windows sit 7.2 times further from a coding TSS than the panel's — which is what dropping the
+matching costs and why its verdict is taken on the standardised reading, not the raw one.
+
+**The two zeros are counted apart, because one of them is not a measurement.**
+
+| category | A panel | B existing | C length-only |
+|---|---|---|---|
+| `never_looked_syntax` (no reading came back) | 0 | 0 | 0 |
+| `no_variable_position` (looked; nobody in the trio differs here) | 4 | 23 | 25 |
+| `values_none_constrained` (looked; values present, none constrained) | 4 | 47 | 47 |
+| `values_in_syntax` (the hit) | 9 | 15 | 13 |
+
+A quarter of arm B's zeros and nearly a third of arm C's are windows where the claim had nothing to
+be true **of**. That is why the row "where the window holds a value at all" is printed beside the
+headline: on that denominator the panel reads 9/13 against 15/62 and 13/60.
+
+### The comparison both ways, covariates only and coverage held fixed
+
+`genomeos.compare.standardised`, direct standardisation, the control arm carrying the matched n.
+Arm B decides on `P1_length`; arm C decides on `S1_covariates`, because arm C is matched on nothing
+but length and a low rate there could be its distance to a TSS rather than its length. Both
+deciding rules were fixed before scoring; the change of deciding stratification for arm C was a
+registration revision made in the open and committed (`88d6033`) ahead of the run.
+
+| stratification | panel against B | panel against C |
+|---|---|---|
+| raw, unstandardised | 0.3529 | 0.3765 |
+| `P1_length` (length) | **0.3529**, p 0.010, n 17, dropped 0 | 0.3765, p 0.006, n 17, dropped 0 |
+| `P2_length_coverage` (**+ coverage**) | **0.3578**, p 0.009, n 17, dropped 0 | 0.3381, p 0.014, n 17, dropped 0 |
+| `P3_length_has_values` (+ the claim's own denominator) | 0.3657, p 0.008, n 17, dropped 0 | 0.3873, p 0.004, n 17, dropped 0 |
+| `S1_covariates` (length, GC, distance) | 0.3557, p 0.010, n 17, dropped 0 | **0.2556**, p 0.062, n 14, dropped 3 |
+| `S2_covariates_coverage` (**+ coverage**) | 0.3669, p 0.007, n 17, dropped 0 | **0.1421**, p 0.244, n 11, dropped 6 |
+
+**Against the existing controls, coverage does not touch this claim.** 0.3529 without the coverage
+stratum, 0.3578 with it; 0.3557 on the full covariate set, 0.3669 with coverage added. That is the
+opposite of what coverage did to the direction claim in sections 8, 17 and 19, and it is worth
+saying why: a deletion has to be *spent* on a window before that window can produce a direction,
+while a value on constrained sequence is read from the trio's own variants and a public phyloP
+track, which cover every window whether or not anybody chose it. The coverage denominator that has
+withdrawn three readings here is a denominator this one does not have.
+
+**Against the length-only controls it is a different story, and that is the finding of arm C.** The
+gap is 0.3765 when only length is held fixed, 0.2556 once GC and distance are standardised back in,
+and 0.1421 with coverage beside them — two thirds of it gone, and the matched n falls from 17 to 14
+to 11 as strata empty. Matching on length alone buys a control arm that *looks* well separated and
+is not: most of that separation is its distance to a coding TSS.
+
+### The verdict, in its registered words
+
+> **undecided at this n**
+
+which is the outcome the registration named in advance as the expected one. It fails "the claim
+survives" at arm C on two counts — p 0.062 against the registered 0.05, and 0.1421 with coverage
+held fixed against the registered 0.15 — and it does not reach "the claim is an artefact of length"
+at either arm, which would have needed a raw excess of 0.25 or more collapsing to 0.10 or less.
+
+The two branches are **not equally hard, on purpose**. Survives needs both arms, two
+stratifications, a p-value and a matched-n floor; artefact needs one arm and two point estimates.
+The strong form of the negative — bounding the difference below 0.10 with 95% confidence — needs a
+standard error near 0.05, which is about 100 published loci. The panel has 17, and at 17 the
+standard error of the standardised difference is about 0.13, so nothing below about 0.21 separates
+from zero. A durable "survives" at an attenuated effect of 0.20 would need about 35 loci. Those
+numbers were in the registration before the run, not fitted to it afterwards.
+
+### The combination rule, fixed before the number existed
+
+There are now three figures about this claim: the panel's own 9/17, section 19's on nine independent
+loci, and this section's arms. **They are never pooled, and no "two of the three agree" reading is
+to be taken.** The binding reason is arithmetic rather than judgement: **this section's arm A *is*
+the panel's seventeen positives**, so pooling it with 9/17 counts the same seventeen observations
+twice. Section 19's loci come from a different sampling frame chosen by a different rule, and arms B
+and C are control arms, which are not estimates of the claim's rate at published loci at all. They
+are reported side by side with their frames named, and a disagreement between them stays a
+disagreement.
+
+### What this section does and does not change
+
+It does **not** rehabilitate the value-on-syntax row and it does not retire it. Section 19's reading
+stands where it is, on its own loci, and this one stands here, on the panel's. What is settled is
+narrower and firmer than either: the **length** explanation is off the table by construction, the
+**coverage** explanation — which has taken down every other claim this benchmark scores — does not
+touch this one, and what is left at n = 17 is undecided and will stay undecided until the panel is
+about twice its present size.
+
+### Read after scoring: where this agrees with section 19 and where it does not
+
+Section 19 was read only after the verdict above was committed. Three things came out of the
+comparison and they are kept apart rather than reconciled.
+
+**1. Agreement, by a stronger route.** Section 19 says "the obvious explanation is element length,
+and it is wrong", and argues it from a sub-reading: restricted to elements of a kilobase or less the
+panel reads 4 of 7 and the candidates 1 of 9. That is two positive arms of seven and nine compared
+with each other. This section reaches the same conclusion from the construction — the panel's
+controls are length-matched exactly, 85 of 85 at 0 bp — which does not depend on a sample size at
+all. Same answer, much better warrant, and the warrant is a property of the code rather than of a
+number.
+
+**2. A disagreement about the remedy, and it matters for what gets built next.** Section 19's closing
+recommendation is "a third set with element lengths matched to the panel's". Read as *control*
+windows, that set already exists and always did, and this section built a second one; neither
+settles anything. Read as *loci*, the recommendation is sound but it is a statement about
+comparability **between the two panels**, not about the panel-versus-control comparison that produced
+9/17 against 15/85. The two must not be run together: nothing about matching will settle this, only n
+will. About 35 loci for a durable "survives", about 100 for the strong negative.
+
+**3. A genuine disagreement about coverage, and this one is a finding.** Section 19's heading is
+"every claim falls over once coverage is a stratum", and at the candidate panel that holds for all
+four claims it scores. **At the seventeen-locus panel it does not hold for this claim.** Holding
+`deletion_scored` fixed moves the value-on-syntax difference from 0.3529 to 0.3578, and from 0.3557
+to 0.3669 on the full covariate set — no movement at all, where the direction claim went from +0.41
+to −0.11 on the same manoeuvre. The mechanism is the reason, and it generalises: **a coverage
+stratum only bites a claim that has to be bought.** A direction needs a deletion spent on that
+window; a value on constrained sequence is read from the trio's own variants and a public phyloP
+track, which cover every window whether or not anyone chose it. Section 19's generalisation —
+standardising on covariates is not a substitute for conditioning on coverage — stands, and the
+corollary this section adds is that the coverage stratum is not a universal solvent: it is the right
+test for a bought claim and a null manoeuvre for a free one, and reporting it both ways is how you
+tell which kind you have.
+
+**A post-hoc reading, labelled as post-hoc because it was not registered, that reconciles the two
+panels' numbers.** Length does not confound the panel-versus-control comparison, but it is
+overwhelmingly the strongest thing in this claim. Over the 170 control windows of arms B and C
+pooled:
+
+| window length | a value on constrained sequence | holds a value at all | mean values per window |
+|---|---|---|---|
+| under 1 kb | **1/70 = 0.014** | 32/70 | 1.0 |
+| 1 to 5 kb | 1/30 = 0.033 | 24/30 | 3.6 |
+| 5 kb and over | **26/70 = 0.371** | 66/70 | 60.3 |
+
+A 26-fold gradient, and it is arithmetic: a 60-fold longer window holds 60 times as many variable
+positions and needs only one of them to land on a constrained base. That is why **the two panels'
+figures are not on the same scale.** Section 19's candidate elements are almost all 400 to 1,000 bp,
+so its 1/9 and its controls' 3/45 = 0.067 both sit in the regime where the control rate here is
+0.014; the panel's 15/85 = 0.176 is lifted by its long elements. Comparing 9/17 with 1/9 directly
+compares two different length regimes, which is section 19's own point about matching, arrived at
+from the control side. Within the short regime the panel reads 4 of 7 against its own length-matched
+controls at 1 of 70 — a wide separation at n = 7, which is offered as a reading and not as a verdict,
+because it was computed after the number was known and the registration says what that is worth.
+
+### Left undone
+
+- The registered question needs **loci**, not arms: about 35 for a durable positive, about 100 for a
+  negative that bounds the difference below 0.10. No amount of control construction substitutes.
+- The "value" half of the reading still rests on three genomes. The length gradient above is partly a
+  statement about how few variants the GIAB trio contributes to a short window, and the HPRC panel is
+  the recorded cost of fixing that.
+- The post-hoc length gradient is unregistered and should be re-run as a registered reading if anyone
+  wants to quote it.
