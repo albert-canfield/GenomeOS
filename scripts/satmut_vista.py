@@ -240,6 +240,12 @@ def run(args) -> dict:
             if len(done) == budget // 2:
                 mid = read(done)["difference_positive_minus_negative"]
                 say(f"futility look at {len(done)}: difference {mid}")
+                # DEVIATION from the registration, recorded rather than quietly matched: the
+                # registered rule stops when the 95% upper bound of the difference is below 0.05, and
+                # this stops only when the difference itself is below zero. It is STRICTER - it fires
+                # less often - so it can spend quota the registration would have saved but cannot end
+                # a run early that should have continued, which is the direction that could bias a
+                # result. On 2026-09-17 it did not fire: the look read +0.0047.
                 if mid is not None and mid < 0.0:
                     stopped = f"futility at {len(done)} windows: difference {mid} below zero"
         for c in list(ctx_of):
