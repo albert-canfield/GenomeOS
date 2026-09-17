@@ -1,6 +1,6 @@
 {
   "result": "variation_chrY",
-  "date": "2026-09-12",
+  "date": "2026-09-17",
   "chrom": "chrY",
   "thresholds": {
     "phylop": 2.27,
@@ -6056,14 +6056,20 @@
     "canonical_cds": {
       "intervals": 551,
       "track_bases": 0,
+      "interval_bases": 0,
+      "constrained_bases": 0,
       "fraction_above": null,
+      "fraction_above_interval_bases": null,
       "share_intervals_constrained": null,
       "share_intervals_strong": null
     },
     "canonical_introns": {
       "intervals": 535,
       "track_bases": 0,
+      "interval_bases": 0,
+      "constrained_bases": 0,
       "fraction_above": null,
+      "fraction_above_interval_bases": null,
       "share_intervals_constrained": null,
       "share_intervals_strong": null
     },
@@ -6085,7 +6091,7 @@
     "elements_phylop": {
       "requests": 54,
       "mb_fetched": 2.0,
-      "seconds": 31.0
+      "seconds": 8.9
     },
     "elements": {
       "requests": 4,
@@ -6102,6 +6108,6 @@
       "mb_fetched": 0.0,
       "seconds": 0.0
     },
-    "seconds": 41.1
+    "seconds": 12.3
   }
 }
