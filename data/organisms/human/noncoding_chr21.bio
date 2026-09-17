@@ -14,6 +14,11 @@ module human.noncoding.chr21
 # Neither overwrites the other, and a measured negative - no effect on this gene in this
 # screen - is stated in the measured block, because that is a measurement and not an unknown.
 #
+# One of the four assays is base-level: saturation mutagenesis says which BASES inside an
+# element matter. It can support the compiled claim and cannot contradict it, so an element
+# whose measured bases are all inert is stated as a fact about those bases and never as a
+# verdict on the element, and it raises no rule, because it names no gene.
+#
 # test: entities >= 6172
 # test: unknowns == 20
 # test: rules == 5176

@@ -5,8 +5,9 @@
 
 The compiled per-chromosome programs state 940,803 facts and not one of them is `experimental`.
 This attaches the measurements the project already holds - CRISPRi enhancer-gene screens, ENCODE4
-lentiMPRA, VISTA transgenic assays - to the compiled elements they were made over, under the overlap
-rule in `attribution/measured.py`, and reports:
+lentiMPRA, VISTA transgenic assays and Kircher et al.'s saturation mutagenesis, which is base-level
+and can support a compiled claim without being able to contradict it - to the compiled elements they
+were made over, under the overlap rule in `attribution/measured.py`, and reports:
 
 - the **census**: how many compiled facts a measurement now sits beside, per chromosome and pooled,
   as a count and a share, with `coverage_elements_measured` as the named coverage number;
@@ -31,7 +32,7 @@ from typing import Any
 from genomeos.attribution import measured
 from genomeos.attribution.compile import write_program
 from genomeos.attribution.targets import attributed
-from genomeos.compare import Strata, standardised
+from genomeos.compare import Strata, imbalance, input_presence, standardised
 from genomeos.evidence import COMPILED_DIR, KINDS, WEAK, collect
 from genomeos.results import save_result
 
@@ -39,6 +40,9 @@ CHROMS = [f"chr{c}" for c in [*range(1, 23), "X", "Y"]]
 # a prediction "moves a gene" at this magnitude; the bar both arms of every comparison are scored on
 MOVES = 0.2
 STRATA = Strata(length=(200.0, 400.0), gc=(0.35, 0.45, 0.55), nearest_coding_tss=(1e3, 5e3, 2e4, 1e5))
+# below this the base-level assay's arm is described and not compared: a stratified difference over a
+# handful of elements is noise with a p-value attached, and the refusal is a result rather than a gap
+SATMUT_MIN_FOR_A_COMPARISON = 20
 
 
 def covariates(chrom: str, elements: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -68,6 +72,63 @@ def arm(elements: list[dict[str, Any]], cov: dict[str, dict[str, Any]]) -> list[
     return out
 
 
+def satmut_groups(
+    elements: list[dict[str, Any]], rows: list[dict[str, Any]], cov: dict[str, dict[str, Any]]
+) -> dict[str, Any]:
+    """The base-level assay's two groups, each described with its covariates and its coverage.
+
+    Both groups print length, GC and median distance to a coding TSS through `compare.imbalance`, and
+    `compare.input_presence` says whether the claim is bought or free before any stratum is discussed:
+    the input here is "bases of this element were measured one at a time", which is present on a
+    handful of elements and missing everywhere else, so it is bought and a coverage artefact is
+    possible in principle. It is not conditioned away, because with this many targets no stratified
+    difference means anything - and that refusal, with its reason, is in the result instead.
+    """
+    inputs = {"bases of this element measured one at a time": "satmut_bases_measured"}
+    by_id = {r["id"]: r for r in rows}
+    targets: list[dict[str, Any]] = []
+    controls: list[dict[str, Any]] = []
+    for e in elements:
+        c = cov.get(e["id"])
+        if not c or c.get("gc") is None or c.get("nearest_coding_tss") is None:
+            continue
+        s = ((by_id.get(e["id"]) or {}).get("measured") or {}).get("satmut")
+        pc = e.get("predicted_coding") or {}
+        row = {
+            "id": e["id"],
+            "length": float(c["length"]),
+            "gc": float(c["gc"]),
+            "nearest_coding_tss": float(c["nearest_coding_tss"]),
+            "predicted_moves": abs(float(pc.get("log2_fold_change") or 0.0)) >= MOVES,
+            "satmut_bases_measured": s["bases_measured"] if s else None,
+            "element_share_measured": s["share_of_the_element_measured"] if s else None,
+        }
+        (targets if s else controls).append(row)
+    measured_share = [r["element_share_measured"] for r in targets if r["element_share_measured"]]
+    out: dict[str, Any] = {
+        "targets_measured_base_by_base": len(targets),
+        "controls_never_base_measured": len(controls),
+        "input_presence": input_presence(targets, controls, inputs),
+        "imbalance": imbalance(targets, controls, STRATA),
+        "coverage": {
+            "targets_with_the_input": f"{len(targets)} of {len(targets)}",
+            "controls_with_the_input": f"0 of {len(controls)}",
+            "median_share_of_a_target_element_measured": (
+                round(sorted(measured_share)[len(measured_share) // 2], 4) if measured_share else None
+            ),
+        },
+    }
+    if len(targets) < SATMUT_MIN_FOR_A_COMPARISON:
+        out["comparison_refused"] = (
+            f"{len(targets)} targets is below {SATMUT_MIN_FOR_A_COMPARISON}: the groups are described "
+            "above and not compared, because a standardised difference over this many elements is "
+            "noise carrying a p-value. The footprint is the finding"
+        )
+    else:
+        out["standardised"] = standardised(targets, controls, STRATA, hit="predicted_moves")
+    return out
+
+
 def comparisons(chrom: str, elements: list[dict[str, Any]], rows: list[dict[str, Any]]) -> dict[str, Any]:
     """Is the measured slice a biased sample, and are the disagreements where the model shouts?"""
     cov = covariates(chrom, elements)
@@ -87,6 +148,7 @@ def comparisons(chrom: str, elements: list[dict[str, Any]], rows: list[dict[str,
         STRATA,
         hit="predicted_moves",
     )
+    out["satmut"] = satmut_groups(elements, rows, cov)
     return out
 
 
@@ -150,6 +212,17 @@ def print_chromosome(chrom: str, got: dict[str, Any]) -> None:
         f"agree {c['agrees']}, disagree {c['disagrees']}",
         flush=True,
     )
+    s = c.get("satmut") or {}
+    if s.get("elements_in_the_footprint_never_raised") or s.get("elements_measured_base_by_base"):
+        # eligible before raised, here too: the footprint is named before anything found inside it
+        print(
+            f"  satmut: {s['elements_measured_base_by_base'] + s['elements_in_the_footprint_never_raised']}"
+            f" elements in its footprint, {s['elements_measured_base_by_base']} raised, "
+            f"{s['bases_measured']:,} bases measured of which {s['bases_functional']:,} functional "
+            f"({s['bases_strong']:,} strongly); {s['elements_with_a_functional_base']} hold a "
+            f"functional base, {s['elements_measured_and_every_base_inert']} were measured and inert",
+            flush=True,
+        )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -222,7 +295,9 @@ def main(argv: list[str] | None = None) -> int:
             "only where an assay happened to be pointed, and the assays cover a few per cent of what "
             "the genome is compiled from. lentiMPRA measures the sequence in a reporter and not the "
             "locus, so its disagreements are weaker evidence against a prediction than a CRISPRi "
-            "negative on the predicted gene itself"
+            "negative on the predicted gene itself. Saturation mutagenesis is thinner still by three "
+            "orders of magnitude - 21 elements exist in the whole assay - and it measures bases, so "
+            "it enters the census under its own counters and can never enter the disagreements"
         ),
         "seconds": round(time.time() - t0, 1),
     }
@@ -239,6 +314,18 @@ def main(argv: list[str] | None = None) -> int:
         f"{(pooled['raised_share_of_the_eligible'] or 0) * 100:.1f}% of the eligible), "
         f"{pooled['experimental_facts_added']:,} experimental facts beside "
         f"{pooled['facts_with_a_measured_counterpart']:,} predicted ones"
+    )
+    sat = pooled.get("satmut") or {}
+    raised = sat.get("elements_measured_base_by_base", 0)
+    print(
+        f"satmut, the base-level assay: {raised} elements raised of "
+        f"{raised + sat.get('elements_in_the_footprint_never_raised', 0)} in its footprint, over "
+        f"{len(sat.get('experiments_matched') or [])} of its experiments; "
+        f"{sat.get('bases_measured', 0):,} bases measured, {sat.get('bases_functional', 0):,} functional"
+    )
+    print(
+        f"  disagrees is {pooled['disagrees'].get('satmut', 0)} and that is "
+        f"{sat.get('why_it_can_never_disagree', '')}"
     )
     print(
         f"agreement: {pooled['agrees']} agree, {pooled['disagrees']} disagree; "

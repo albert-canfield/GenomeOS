@@ -26,28 +26,31 @@
           "by_assay": {
             "crispri": 386,
             "lentimpra": 2388,
-            "vista": 284
+            "vista": 284,
+            "satmut": 4
           }
         },
         "elements_in_an_assay_footprint": 2923,
         "elements_no_assay_ever_covered": 40758,
-        "elements_with_any_measurement": 2123,
-        "coverage_elements_measured": 0.0486,
-        "raised_share_of_the_eligible": 0.72631,
+        "elements_with_any_measurement": 2124,
+        "coverage_elements_measured": 0.04863,
+        "raised_share_of_the_eligible": 0.72665,
         "elements_by_assay": {
           "crispri": 134,
           "lentimpra": 2022,
-          "vista": 12
+          "vista": 12,
+          "satmut": 2
         },
         "measurements_available": {
           "crispri": 1251,
           "lentimpra": 5325,
-          "vista": 219
+          "vista": 219,
+          "satmut": 3
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
-        "facts_with_a_measured_counterpart": 4246,
-        "experimental_facts_added": 2142,
-        "experimental_element_blocks": 2123,
+        "facts_with_a_measured_counterpart": 4248,
+        "experimental_facts_added": 2143,
+        "experimental_element_blocks": 2124,
         "experimental_rule_blocks": 19,
         "genes_named_by_a_measurement": [
           "AGTRAP",
@@ -71,12 +74,14 @@
         "agrees": {
           "crispri": 7,
           "lentimpra": 392,
-          "vista": 9
+          "vista": 9,
+          "satmut": 2
         },
         "disagrees": {
           "crispri": 1,
           "lentimpra": 1630,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 126,
         "agreement_rate_over_all_matched_elements": 0.0522,
@@ -84,7 +89,22 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.875,
         "agreement_denominator_predicted_gene_tested": 8,
         "crispri_pairs_regulated": 19,
-        "crispri_pairs_measured_as_not_regulated": 351
+        "crispri_pairs_measured_as_not_regulated": 351,
+        "satmut": {
+          "elements_measured_base_by_base": 2,
+          "elements_with_a_functional_base": 2,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 2,
+          "bases_measured": 699,
+          "bases_functional": 393,
+          "bases_strong": 325,
+          "experiments_matched": [
+            "IRF6",
+            "SORT1.2"
+          ],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -94,33 +114,37 @@
             "any": 2461,
             "crispri": 277,
             "lentimpra": 2240,
-            "vista": 26
+            "vista": 26,
+            "satmut": 2
           },
           "0.5": {
-            "any": 2123,
+            "any": 2124,
             "crispri": 134,
             "lentimpra": 2022,
-            "vista": 12
+            "vista": 12,
+            "satmut": 2
           },
           "0.75": {
             "any": 311,
             "crispri": 0,
             "lentimpra": 305,
-            "vista": 6
+            "vista": 6,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 177,
           "lentimpra": 0,
-          "vista": 240
+          "vista": 240,
+          "satmut": 0
         }
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
-          "targets": 2123,
-          "controls": 41558,
-          "targets_matched": 2123,
+          "targets": 2124,
+          "controls": 41557,
+          "targets_matched": 2124,
           "dropped_for_want_of_a_control": 0,
           "strata": {
             "length": [
@@ -140,18 +164,18 @@
             ]
           },
           "raw": {
-            "a": 0.5846,
+            "a": 0.5847,
             "b": 0.4866,
-            "difference": 0.098,
+            "difference": 0.0982,
             "p_one_sided": 0.0,
-            "upper_95": 0.1195
+            "upper_95": 0.1197
           },
           "matched": {
-            "a": 0.5846,
+            "a": 0.5847,
             "b": 0.4744,
-            "difference": 0.1102,
+            "difference": 0.1104,
             "p_one_sided": 0.0,
-            "upper_95": 0.14
+            "upper_95": 0.1402
           },
           "imbalance": {
             "length": {
@@ -165,16 +189,16 @@
               "ratio": 1.05
             },
             "nearest_coding_tss": {
-              "target_median": 23865.0,
+              "target_median": 23856.5,
               "control_median": 17686.0,
               "ratio": 1.349
             }
           }
         },
         "disagrees_vs_agrees": {
-          "targets": 1631,
-          "controls": 404,
-          "targets_matched": 1581,
+          "targets": 1630,
+          "controls": 405,
+          "targets_matched": 1580,
           "dropped_for_want_of_a_control": 50,
           "strata": {
             "length": [
@@ -194,18 +218,18 @@
             ]
           },
           "raw": {
-            "a": 0.5518,
-            "b": 0.7079,
-            "difference": -0.1561,
+            "a": 0.5515,
+            "b": 0.7086,
+            "difference": -0.1571,
             "p_one_sided": 1.0,
-            "upper_95": -0.1056
+            "upper_95": -0.1067
           },
           "matched": {
-            "a": 0.5534,
-            "b": 0.6989,
-            "difference": -0.1455,
+            "a": 0.5532,
+            "b": 0.6994,
+            "difference": -0.1462,
             "p_one_sided": 1.0,
-            "upper_95": -0.1121
+            "upper_95": -0.1129
           },
           "imbalance": {
             "length": {
@@ -214,16 +238,55 @@
               "ratio": 0.971
             },
             "gc": {
-              "target_median": 0.5059,
-              "control_median": 0.5328,
-              "ratio": 0.95
+              "target_median": 0.5058,
+              "control_median": 0.533,
+              "ratio": 0.949
             },
             "nearest_coding_tss": {
-              "target_median": 24650.0,
-              "control_median": 23922.5,
-              "ratio": 1.03
+              "target_median": 24651.5,
+              "control_median": 23893.0,
+              "ratio": 1.032
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 2,
+          "controls_never_base_measured": 43679,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 2,
+              "targets": 2,
+              "controls_with_the_input": 0,
+              "controls": 43679,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 2/2, controls 0/43679"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 349.5,
+              "control_median": 297.0,
+              "ratio": 1.177
+            },
+            "gc": {
+              "target_median": 0.5622,
+              "control_median": 0.4885,
+              "ratio": 1.151
+            },
+            "nearest_coding_tss": {
+              "target_median": 9506.0,
+              "control_median": 18018.0,
+              "ratio": 0.528
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "2 of 2",
+            "controls_with_the_input": "0 of 43679",
+            "median_share_of_a_target_element_measured": 1.0
+          },
+          "comparison_refused": "2 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -234,29 +297,32 @@
         "eligibility": {
           "rule": "an assay's tested interval shares at least one base with the element",
           "compiled_elements": 32917,
-          "elements_in_an_assay_footprint": 1922,
-          "elements_no_assay_ever_covered": 30995,
-          "share_eligible": 0.05839,
+          "elements_in_an_assay_footprint": 1923,
+          "elements_no_assay_ever_covered": 30994,
+          "share_eligible": 0.05842,
           "by_assay": {
             "crispri": 182,
             "lentimpra": 1592,
-            "vista": 208
+            "vista": 208,
+            "satmut": 2
           }
         },
-        "elements_in_an_assay_footprint": 1922,
-        "elements_no_assay_ever_covered": 30995,
+        "elements_in_an_assay_footprint": 1923,
+        "elements_no_assay_ever_covered": 30994,
         "elements_with_any_measurement": 1397,
         "coverage_elements_measured": 0.04244,
-        "raised_share_of_the_eligible": 0.72685,
+        "raised_share_of_the_eligible": 0.72647,
         "elements_by_assay": {
           "crispri": 73,
           "lentimpra": 1340,
-          "vista": 6
+          "vista": 6,
+          "satmut": 1
         },
         "measurements_available": {
           "crispri": 644,
           "lentimpra": 4461,
-          "vista": 261
+          "vista": 261,
+          "satmut": 2
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 2794,
@@ -279,12 +345,14 @@
         "agrees": {
           "crispri": 8,
           "lentimpra": 215,
-          "vista": 5
+          "vista": 5,
+          "satmut": 1
         },
         "disagrees": {
           "crispri": 1,
           "lentimpra": 1125,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 64,
         "agreement_rate_over_all_matched_elements": 0.1096,
@@ -292,35 +360,53 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.8889,
         "agreement_denominator_predicted_gene_tested": 9,
         "crispri_pairs_regulated": 12,
-        "crispri_pairs_measured_as_not_regulated": 160
+        "crispri_pairs_measured_as_not_regulated": 160,
+        "satmut": {
+          "elements_measured_base_by_base": 1,
+          "elements_with_a_functional_base": 1,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 1,
+          "bases_measured": 350,
+          "bases_functional": 48,
+          "bases_strong": 27,
+          "experiments_matched": [
+            "UC88"
+          ],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
         "used": 0.5,
         "at": {
           "0.25": {
-            "any": 1615,
+            "any": 1616,
             "crispri": 137,
             "lentimpra": 1500,
-            "vista": 20
+            "vista": 20,
+            "satmut": 2
           },
           "0.5": {
             "any": 1397,
             "crispri": 73,
             "lentimpra": 1340,
-            "vista": 6
+            "vista": 6,
+            "satmut": 1
           },
           "0.75": {
             "any": 230,
             "crispri": 0,
             "lentimpra": 229,
-            "vista": 1
+            "vista": 1,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 73,
           "lentimpra": 0,
-          "vista": 177
+          "vista": 177,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -432,6 +518,45 @@
               "ratio": 0.768
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 1,
+          "controls_never_base_measured": 32916,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 1,
+              "targets": 1,
+              "controls_with_the_input": 0,
+              "controls": 32916,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 1/1, controls 0/32916"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 350.0,
+              "control_median": 298.0,
+              "ratio": 1.174
+            },
+            "gc": {
+              "target_median": 0.6343,
+              "control_median": 0.4674,
+              "ratio": 1.357
+            },
+            "nearest_coding_tss": {
+              "target_median": 69667.0,
+              "control_median": 30541.5,
+              "ratio": 2.281
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "1 of 1",
+            "controls_with_the_input": "0 of 32916",
+            "median_share_of_a_target_element_measured": 1.0
+          },
+          "comparison_refused": "1 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -448,7 +573,8 @@
           "by_assay": {
             "crispri": 181,
             "lentimpra": 1225,
-            "vista": 141
+            "vista": 141,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 1502,
@@ -459,12 +585,14 @@
         "elements_by_assay": {
           "crispri": 79,
           "lentimpra": 1056,
-          "vista": 2
+          "vista": 2,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 900,
           "lentimpra": 3328,
-          "vista": 160
+          "vista": 160,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 2238,
@@ -484,12 +612,14 @@
         "agrees": {
           "crispri": 4,
           "lentimpra": 205,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 2,
           "lentimpra": 851,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 73,
         "agreement_rate_over_all_matched_elements": 0.0506,
@@ -497,7 +627,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
         "agreement_denominator_predicted_gene_tested": 6,
         "crispri_pairs_regulated": 10,
-        "crispri_pairs_measured_as_not_regulated": 261
+        "crispri_pairs_measured_as_not_regulated": 261,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -507,25 +649,29 @@
             "any": 1257,
             "crispri": 124,
             "lentimpra": 1154,
-            "vista": 9
+            "vista": 9,
+            "satmut": 0
           },
           "0.5": {
             "any": 1119,
             "crispri": 79,
             "lentimpra": 1056,
-            "vista": 2
+            "vista": 2,
+            "satmut": 0
           },
           "0.75": {
             "any": 185,
             "crispri": 0,
             "lentimpra": 185,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 58,
           "lentimpra": 0,
-          "vista": 122
+          "vista": 122,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -637,6 +783,45 @@
               "ratio": 0.976
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 27682,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 27682,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/27682"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 302.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4562,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 32068.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 27682",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -653,7 +838,8 @@
           "by_assay": {
             "crispri": 47,
             "lentimpra": 877,
-            "vista": 107
+            "vista": 107,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 1007,
@@ -664,12 +850,14 @@
         "elements_by_assay": {
           "crispri": 15,
           "lentimpra": 763,
-          "vista": 5
+          "vista": 5,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 114,
           "lentimpra": 2560,
-          "vista": 102
+          "vista": 102,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1548,
@@ -688,12 +876,14 @@
         "agrees": {
           "crispri": 4,
           "lentimpra": 120,
-          "vista": 2
+          "vista": 2,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 1,
           "lentimpra": 643,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 10,
         "agreement_rate_over_all_matched_elements": 0.2667,
@@ -701,7 +891,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.8,
         "agreement_denominator_predicted_gene_tested": 5,
         "crispri_pairs_regulated": 7,
-        "crispri_pairs_measured_as_not_regulated": 18
+        "crispri_pairs_measured_as_not_regulated": 18,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -711,25 +913,29 @@
             "any": 855,
             "crispri": 32,
             "lentimpra": 826,
-            "vista": 12
+            "vista": 12,
+            "satmut": 0
           },
           "0.5": {
             "any": 774,
             "crispri": 15,
             "lentimpra": 763,
-            "vista": 5
+            "vista": 5,
+            "satmut": 0
           },
           "0.75": {
             "any": 125,
             "crispri": 0,
             "lentimpra": 121,
-            "vista": 4
+            "vista": 4,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 22,
           "lentimpra": 0,
-          "vista": 89
+          "vista": 89,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -841,6 +1047,45 @@
               "ratio": 0.883
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 20646,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 20646,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/20646"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 297.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4357,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 35817.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 20646",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -857,7 +1102,8 @@
           "by_assay": {
             "crispri": 96,
             "lentimpra": 994,
-            "vista": 98
+            "vista": 98,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 1151,
@@ -868,12 +1114,14 @@
         "elements_by_assay": {
           "crispri": 36,
           "lentimpra": 818,
-          "vista": 5
+          "vista": 5,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 327,
           "lentimpra": 2718,
-          "vista": 156
+          "vista": 156,
+          "satmut": 1
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1690,
@@ -892,12 +1140,14 @@
         "agrees": {
           "crispri": 3,
           "lentimpra": 142,
-          "vista": 4
+          "vista": 4,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 1,
           "lentimpra": 676,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 32,
         "agreement_rate_over_all_matched_elements": 0.0833,
@@ -905,7 +1155,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.75,
         "agreement_denominator_predicted_gene_tested": 4,
         "crispri_pairs_regulated": 7,
-        "crispri_pairs_measured_as_not_regulated": 52
+        "crispri_pairs_measured_as_not_regulated": 52,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -915,25 +1177,29 @@
             "any": 995,
             "crispri": 71,
             "lentimpra": 931,
-            "vista": 15
+            "vista": 15,
+            "satmut": 0
           },
           "0.5": {
             "any": 845,
             "crispri": 36,
             "lentimpra": 818,
-            "vista": 5
+            "vista": 5,
+            "satmut": 0
           },
           "0.75": {
             "any": 130,
             "crispri": 0,
             "lentimpra": 128,
-            "vista": 2
+            "vista": 2,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 34,
           "lentimpra": 0,
-          "vista": 77
+          "vista": 77,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -1045,6 +1311,45 @@
               "ratio": 0.999
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 22772,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 22772,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/22772"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 299.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.462,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 31570.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 22772",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -1055,34 +1360,37 @@
         "eligibility": {
           "rule": "an assay's tested interval shares at least one base with the element",
           "compiled_elements": 23769,
-          "elements_in_an_assay_footprint": 1522,
-          "elements_no_assay_ever_covered": 22247,
-          "share_eligible": 0.06403,
+          "elements_in_an_assay_footprint": 1524,
+          "elements_no_assay_ever_covered": 22245,
+          "share_eligible": 0.06412,
           "by_assay": {
             "crispri": 212,
             "lentimpra": 1239,
-            "vista": 134
+            "vista": 134,
+            "satmut": 2
           }
         },
-        "elements_in_an_assay_footprint": 1522,
-        "elements_no_assay_ever_covered": 22247,
-        "elements_with_any_measurement": 1124,
-        "coverage_elements_measured": 0.04729,
-        "raised_share_of_the_eligible": 0.7385,
+        "elements_in_an_assay_footprint": 1524,
+        "elements_no_assay_ever_covered": 22245,
+        "elements_with_any_measurement": 1125,
+        "coverage_elements_measured": 0.04733,
+        "raised_share_of_the_eligible": 0.73819,
         "elements_by_assay": {
           "crispri": 73,
           "lentimpra": 1062,
-          "vista": 6
+          "vista": 6,
+          "satmut": 1
         },
         "measurements_available": {
           "crispri": 714,
           "lentimpra": 3576,
-          "vista": 135
+          "vista": 135,
+          "satmut": 2
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
-        "facts_with_a_measured_counterpart": 2248,
-        "experimental_facts_added": 1135,
-        "experimental_element_blocks": 1124,
+        "facts_with_a_measured_counterpart": 2250,
+        "experimental_facts_added": 1136,
+        "experimental_element_blocks": 1125,
         "experimental_rule_blocks": 11,
         "genes_named_by_a_measurement": [
           "CD164",
@@ -1100,12 +1408,14 @@
         "agrees": {
           "crispri": 7,
           "lentimpra": 165,
-          "vista": 6
+          "vista": 6,
+          "satmut": 1
         },
         "disagrees": {
           "crispri": 3,
           "lentimpra": 897,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 63,
         "agreement_rate_over_all_matched_elements": 0.0959,
@@ -1113,43 +1423,61 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.7,
         "agreement_denominator_predicted_gene_tested": 10,
         "crispri_pairs_regulated": 11,
-        "crispri_pairs_measured_as_not_regulated": 168
+        "crispri_pairs_measured_as_not_regulated": 168,
+        "satmut": {
+          "elements_measured_base_by_base": 1,
+          "elements_with_a_functional_base": 1,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 1,
+          "bases_measured": 350,
+          "bases_functional": 305,
+          "bases_strong": 235,
+          "experiments_matched": [
+            "IRF4"
+          ],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
         "used": 0.5,
         "at": {
           "0.25": {
-            "any": 1298,
+            "any": 1299,
             "crispri": 146,
             "lentimpra": 1176,
-            "vista": 13
+            "vista": 13,
+            "satmut": 1
           },
           "0.5": {
-            "any": 1124,
+            "any": 1125,
             "crispri": 73,
             "lentimpra": 1062,
-            "vista": 6
+            "vista": 6,
+            "satmut": 1
           },
           "0.75": {
-            "any": 200,
+            "any": 201,
             "crispri": 0,
             "lentimpra": 197,
-            "vista": 3
+            "vista": 3,
+            "satmut": 1
           }
         },
         "containment_not_upgraded": {
           "crispri": 93,
           "lentimpra": 0,
-          "vista": 110
+          "vista": 110,
+          "satmut": 0
         }
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
-          "targets": 1124,
-          "controls": 22645,
-          "targets_matched": 1124,
+          "targets": 1125,
+          "controls": 22644,
+          "targets_matched": 1125,
           "dropped_for_want_of_a_control": 0,
           "strata": {
             "length": [
@@ -1169,24 +1497,24 @@
             ]
           },
           "raw": {
-            "a": 0.4956,
+            "a": 0.496,
             "b": 0.4419,
-            "difference": 0.0536,
-            "p_one_sided": 0.000222,
-            "upper_95": 0.0836
+            "difference": 0.0541,
+            "p_one_sided": 0.000197,
+            "upper_95": 0.084
           },
           "matched": {
-            "a": 0.4956,
+            "a": 0.496,
             "b": 0.4221,
-            "difference": 0.0735,
-            "p_one_sided": 0.000227,
-            "upper_95": 0.1146
+            "difference": 0.0739,
+            "p_one_sided": 0.000211,
+            "upper_95": 0.1149
           },
           "imbalance": {
             "length": {
-              "target_median": 338.5,
+              "target_median": 339.0,
               "control_median": 294.0,
-              "ratio": 1.151
+              "ratio": 1.153
             },
             "gc": {
               "target_median": 0.4785,
@@ -1194,15 +1522,15 @@
               "ratio": 1.056
             },
             "nearest_coding_tss": {
-              "target_median": 33744.5,
-              "control_median": 27424.0,
-              "ratio": 1.23
+              "target_median": 33717.0,
+              "control_median": 27426.5,
+              "ratio": 1.229
             }
           }
         },
         "disagrees_vs_agrees": {
           "targets": 899,
-          "controls": 176,
+          "controls": 177,
           "targets_matched": 827,
           "dropped_for_want_of_a_control": 72,
           "strata": {
@@ -1224,10 +1552,10 @@
           },
           "raw": {
             "a": 0.4683,
-            "b": 0.6307,
-            "difference": -0.1624,
-            "p_one_sided": 0.999975,
-            "upper_95": -0.084
+            "b": 0.6328,
+            "difference": -0.1645,
+            "p_one_sided": 0.999981,
+            "upper_95": -0.0863
           },
           "matched": {
             "a": 0.4704,
@@ -1244,15 +1572,54 @@
             },
             "gc": {
               "target_median": 0.475,
-              "control_median": 0.4927,
+              "control_median": 0.4926,
               "ratio": 0.964
             },
             "nearest_coding_tss": {
               "target_median": 33458.0,
-              "control_median": 38890.5,
-              "ratio": 0.86
+              "control_median": 38754.0,
+              "ratio": 0.863
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 1,
+          "controls_never_base_measured": 23768,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 1,
+              "targets": 1,
+              "controls_with_the_input": 0,
+              "controls": 23768,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 1/1, controls 0/23768"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 350.0,
+              "control_median": 297.0,
+              "ratio": 1.178
+            },
+            "gc": {
+              "target_median": 0.4257,
+              "control_median": 0.4543,
+              "ratio": 0.937
+            },
+            "nearest_coding_tss": {
+              "target_median": 4600.0,
+              "control_median": 27819.0,
+              "ratio": 0.165
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "1 of 1",
+            "controls_with_the_input": "0 of 23768",
+            "median_share_of_a_target_element_measured": 1.0
+          },
+          "comparison_refused": "1 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -1269,7 +1636,8 @@
           "by_assay": {
             "crispri": 141,
             "lentimpra": 1107,
-            "vista": 188
+            "vista": 188,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 1391,
@@ -1280,12 +1648,14 @@
         "elements_by_assay": {
           "crispri": 49,
           "lentimpra": 941,
-          "vista": 7
+          "vista": 7,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 478,
           "lentimpra": 2970,
-          "vista": 180
+          "vista": 180,
+          "satmut": 1
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1964,
@@ -1305,12 +1675,14 @@
         "agrees": {
           "crispri": 4,
           "lentimpra": 160,
-          "vista": 4
+          "vista": 4,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 2,
           "lentimpra": 781,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 43,
         "agreement_rate_over_all_matched_elements": 0.0816,
@@ -1318,7 +1690,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
         "agreement_denominator_predicted_gene_tested": 6,
         "crispri_pairs_regulated": 8,
-        "crispri_pairs_measured_as_not_regulated": 151
+        "crispri_pairs_measured_as_not_regulated": 151,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -1328,25 +1712,29 @@
             "any": 1135,
             "crispri": 98,
             "lentimpra": 1040,
-            "vista": 25
+            "vista": 25,
+            "satmut": 0
           },
           "0.5": {
             "any": 982,
             "crispri": 49,
             "lentimpra": 941,
-            "vista": 7
+            "vista": 7,
+            "satmut": 0
           },
           "0.75": {
             "any": 135,
             "crispri": 0,
             "lentimpra": 134,
-            "vista": 1
+            "vista": 1,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 68,
           "lentimpra": 0,
-          "vista": 151
+          "vista": 151,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -1458,6 +1846,45 @@
               "ratio": 1.205
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 22596,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 22596,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/22596"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 298.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4647,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 29382.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 22596",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -1468,29 +1895,32 @@
         "eligibility": {
           "rule": "an assay's tested interval shares at least one base with the element",
           "compiled_elements": 18552,
-          "elements_in_an_assay_footprint": 1220,
-          "elements_no_assay_ever_covered": 17332,
-          "share_eligible": 0.06576,
+          "elements_in_an_assay_footprint": 1223,
+          "elements_no_assay_ever_covered": 17329,
+          "share_eligible": 0.06592,
           "by_assay": {
             "crispri": 308,
             "lentimpra": 847,
-            "vista": 137
+            "vista": 137,
+            "satmut": 3
           }
         },
-        "elements_in_an_assay_footprint": 1220,
-        "elements_no_assay_ever_covered": 17332,
+        "elements_in_an_assay_footprint": 1223,
+        "elements_no_assay_ever_covered": 17329,
         "elements_with_any_measurement": 778,
         "coverage_elements_measured": 0.04194,
-        "raised_share_of_the_eligible": 0.6377,
+        "raised_share_of_the_eligible": 0.63614,
         "elements_by_assay": {
           "crispri": 103,
           "lentimpra": 689,
-          "vista": 7
+          "vista": 7,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 1223,
           "lentimpra": 2483,
-          "vista": 100
+          "vista": 100,
+          "satmut": 2
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1556,
@@ -1509,12 +1939,14 @@
         "agrees": {
           "crispri": 2,
           "lentimpra": 125,
-          "vista": 6
+          "vista": 6,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 1,
           "lentimpra": 564,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 100,
         "agreement_rate_over_all_matched_elements": 0.0194,
@@ -1522,35 +1954,51 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
         "agreement_denominator_predicted_gene_tested": 3,
         "crispri_pairs_regulated": 9,
-        "crispri_pairs_measured_as_not_regulated": 192
+        "crispri_pairs_measured_as_not_regulated": 192,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 3,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
         "used": 0.5,
         "at": {
           "0.25": {
-            "any": 968,
+            "any": 970,
             "crispri": 215,
             "lentimpra": 784,
-            "vista": 18
+            "vista": 18,
+            "satmut": 2
           },
           "0.5": {
             "any": 778,
             "crispri": 103,
             "lentimpra": 689,
-            "vista": 7
+            "vista": 7,
+            "satmut": 0
           },
           "0.75": {
             "any": 122,
             "crispri": 22,
             "lentimpra": 96,
-            "vista": 4
+            "vista": 4,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 139,
           "lentimpra": 0,
-          "vista": 105
+          "vista": 105,
+          "satmut": 1
         }
       },
       "comparison": {
@@ -1662,6 +2110,45 @@
               "ratio": 0.99
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 18552,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 18552,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/18552"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 300.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.46,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 32476.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 18552",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -1672,29 +2159,32 @@
         "eligibility": {
           "rule": "an assay's tested interval shares at least one base with the element",
           "compiled_elements": 19272,
-          "elements_in_an_assay_footprint": 1046,
-          "elements_no_assay_ever_covered": 18226,
-          "share_eligible": 0.05428,
+          "elements_in_an_assay_footprint": 1048,
+          "elements_no_assay_ever_covered": 18224,
+          "share_eligible": 0.05438,
           "by_assay": {
             "crispri": 54,
             "lentimpra": 930,
-            "vista": 87
+            "vista": 87,
+            "satmut": 2
           }
         },
-        "elements_in_an_assay_footprint": 1046,
-        "elements_no_assay_ever_covered": 18226,
+        "elements_in_an_assay_footprint": 1048,
+        "elements_no_assay_ever_covered": 18224,
         "elements_with_any_measurement": 778,
         "coverage_elements_measured": 0.04037,
-        "raised_share_of_the_eligible": 0.74379,
+        "raised_share_of_the_eligible": 0.74237,
         "elements_by_assay": {
           "crispri": 15,
           "lentimpra": 765,
-          "vista": 5
+          "vista": 5,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 110,
           "lentimpra": 2255,
-          "vista": 109
+          "vista": 109,
+          "satmut": 1
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1556,
@@ -1712,12 +2202,14 @@
         "agrees": {
           "crispri": 4,
           "lentimpra": 146,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 619,
-          "vista": 4
+          "vista": 4,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 11,
         "agreement_rate_over_all_matched_elements": 0.2667,
@@ -1725,35 +2217,51 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 4,
         "crispri_pairs_regulated": 6,
-        "crispri_pairs_measured_as_not_regulated": 17
+        "crispri_pairs_measured_as_not_regulated": 17,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 2,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
         "used": 0.5,
         "at": {
           "0.25": {
-            "any": 896,
+            "any": 898,
             "crispri": 39,
             "lentimpra": 860,
-            "vista": 10
+            "vista": 10,
+            "satmut": 2
           },
           "0.5": {
             "any": 778,
             "crispri": 15,
             "lentimpra": 765,
-            "vista": 5
+            "vista": 5,
+            "satmut": 0
           },
           "0.75": {
             "any": 137,
             "crispri": 0,
             "lentimpra": 136,
-            "vista": 1
+            "vista": 1,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 31,
           "lentimpra": 0,
-          "vista": 68
+          "vista": 68,
+          "satmut": 1
         }
       },
       "comparison": {
@@ -1865,6 +2373,45 @@
               "ratio": 1.047
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 19272,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 19272,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/19272"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 297.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4884,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 26027.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 19272",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -1881,7 +2428,8 @@
           "by_assay": {
             "crispri": 134,
             "lentimpra": 1051,
-            "vista": 120
+            "vista": 120,
+            "satmut": 2
           }
         },
         "elements_in_an_assay_footprint": 1269,
@@ -1892,12 +2440,14 @@
         "elements_by_assay": {
           "crispri": 46,
           "lentimpra": 883,
-          "vista": 4
+          "vista": 4,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 260,
           "lentimpra": 2622,
-          "vista": 119
+          "vista": 119,
+          "satmut": 3
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1846,
@@ -1918,12 +2468,14 @@
         "agrees": {
           "crispri": 8,
           "lentimpra": 146,
-          "vista": 4
+          "vista": 4,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 737,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 38,
         "agreement_rate_over_all_matched_elements": 0.1739,
@@ -1931,35 +2483,51 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 8,
         "crispri_pairs_regulated": 10,
-        "crispri_pairs_measured_as_not_regulated": 52
+        "crispri_pairs_measured_as_not_regulated": 52,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 2,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
         "used": 0.5,
         "at": {
           "0.25": {
-            "any": 1074,
+            "any": 1075,
             "crispri": 94,
             "lentimpra": 984,
-            "vista": 15
+            "vista": 15,
+            "satmut": 2
           },
           "0.5": {
             "any": 923,
             "crispri": 46,
             "lentimpra": 883,
-            "vista": 4
+            "vista": 4,
+            "satmut": 0
           },
           "0.75": {
             "any": 143,
             "crispri": 0,
             "lentimpra": 141,
-            "vista": 2
+            "vista": 2,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 54,
           "lentimpra": 0,
-          "vista": 98
+          "vista": 98,
+          "satmut": 1
         }
       },
       "comparison": {
@@ -2071,6 +2639,45 @@
               "ratio": 1.156
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 21023,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 21023,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/21023"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 299.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4776,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 32448.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 21023",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -2087,7 +2694,8 @@
           "by_assay": {
             "crispri": 585,
             "lentimpra": 1150,
-            "vista": 145
+            "vista": 145,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 1740,
@@ -2098,12 +2706,14 @@
         "elements_by_assay": {
           "crispri": 224,
           "lentimpra": 980,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 1894,
           "lentimpra": 2570,
-          "vista": 93
+          "vista": 93,
+          "satmut": 2
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 2298,
@@ -2134,12 +2744,14 @@
         "agrees": {
           "crispri": 13,
           "lentimpra": 171,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 8,
           "lentimpra": 809,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 203,
         "agreement_rate_over_all_matched_elements": 0.058,
@@ -2147,7 +2759,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.619,
         "agreement_denominator_predicted_gene_tested": 21,
         "crispri_pairs_regulated": 37,
-        "crispri_pairs_measured_as_not_regulated": 601
+        "crispri_pairs_measured_as_not_regulated": 601,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -2157,25 +2781,29 @@
             "any": 1406,
             "crispri": 399,
             "lentimpra": 1096,
-            "vista": 9
+            "vista": 9,
+            "satmut": 0
           },
           "0.5": {
             "any": 1149,
             "crispri": 224,
             "lentimpra": 980,
-            "vista": 3
+            "vista": 3,
+            "satmut": 0
           },
           "0.75": {
             "any": 189,
             "crispri": 39,
             "lentimpra": 148,
-            "vista": 2
+            "vista": 2,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 225,
           "lentimpra": 0,
-          "vista": 125
+          "vista": 125,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -2287,6 +2915,45 @@
               "ratio": 1.106
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 25731,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 25731,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/25731"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 294.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4968,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 19203.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 25731",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -2303,7 +2970,8 @@
           "by_assay": {
             "crispri": 178,
             "lentimpra": 965,
-            "vista": 88
+            "vista": 88,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 1178,
@@ -2314,12 +2982,14 @@
         "elements_by_assay": {
           "crispri": 72,
           "lentimpra": 826,
-          "vista": 6
+          "vista": 6,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 762,
           "lentimpra": 2395,
-          "vista": 79
+          "vista": 79,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1776,
@@ -2337,12 +3007,14 @@
         "agrees": {
           "crispri": 5,
           "lentimpra": 129,
-          "vista": 5
+          "vista": 5,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 1,
           "lentimpra": 697,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 66,
         "agreement_rate_over_all_matched_elements": 0.0694,
@@ -2350,7 +3022,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.8333,
         "agreement_denominator_predicted_gene_tested": 6,
         "crispri_pairs_regulated": 9,
-        "crispri_pairs_measured_as_not_regulated": 240
+        "crispri_pairs_measured_as_not_regulated": 240,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -2360,25 +3044,29 @@
             "any": 1027,
             "crispri": 134,
             "lentimpra": 915,
-            "vista": 12
+            "vista": 12,
+            "satmut": 0
           },
           "0.5": {
             "any": 888,
             "crispri": 72,
             "lentimpra": 826,
-            "vista": 6
+            "vista": 6,
+            "satmut": 0
           },
           "0.75": {
             "any": 129,
             "crispri": 0,
             "lentimpra": 125,
-            "vista": 4
+            "vista": 4,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 61,
           "lentimpra": 0,
-          "vista": 69
+          "vista": 69,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -2490,6 +3178,45 @@
               "ratio": 1.013
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 22814,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 22814,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/22814"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 296.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4693,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 23167.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 22814",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -2506,7 +3233,8 @@
           "by_assay": {
             "crispri": 2,
             "lentimpra": 380,
-            "vista": 38
+            "vista": 38,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 417,
@@ -2517,12 +3245,14 @@
         "elements_by_assay": {
           "crispri": 0,
           "lentimpra": 341,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 11,
           "lentimpra": 1245,
-          "vista": 60
+          "vista": 60,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 684,
@@ -2533,12 +3263,14 @@
         "agrees": {
           "crispri": 0,
           "lentimpra": 62,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 279,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 0,
         "agreement_rate_over_all_matched_elements": null,
@@ -2546,7 +3278,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": null,
         "agreement_denominator_predicted_gene_tested": 0,
         "crispri_pairs_regulated": 0,
-        "crispri_pairs_measured_as_not_regulated": 0
+        "crispri_pairs_measured_as_not_regulated": 0,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -2556,25 +3300,29 @@
             "any": 368,
             "crispri": 2,
             "lentimpra": 366,
-            "vista": 1
+            "vista": 1,
+            "satmut": 0
           },
           "0.5": {
             "any": 342,
             "crispri": 0,
             "lentimpra": 341,
-            "vista": 1
+            "vista": 1,
+            "satmut": 0
           },
           "0.75": {
             "any": 49,
             "crispri": 0,
             "lentimpra": 49,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 1,
           "lentimpra": 0,
-          "vista": 30
+          "vista": 30,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -2686,6 +3434,45 @@
               "ratio": 1.138
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 9711,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 9711,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/9711"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 301.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4502,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 38260.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 9711",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -2702,7 +3489,8 @@
           "by_assay": {
             "crispri": 61,
             "lentimpra": 560,
-            "vista": 90
+            "vista": 90,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 689,
@@ -2713,12 +3501,14 @@
         "elements_by_assay": {
           "crispri": 22,
           "lentimpra": 487,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 147,
           "lentimpra": 1599,
-          "vista": 96
+          "vista": 96,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1006,
@@ -2732,12 +3522,14 @@
         "agrees": {
           "crispri": 2,
           "lentimpra": 100,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 387,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 20,
         "agreement_rate_over_all_matched_elements": 0.0909,
@@ -2745,7 +3537,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 2,
-        "crispri_pairs_measured_as_not_regulated": 39
+        "crispri_pairs_measured_as_not_regulated": 39,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -2755,25 +3559,29 @@
             "any": 572,
             "crispri": 46,
             "lentimpra": 530,
-            "vista": 9
+            "vista": 9,
+            "satmut": 0
           },
           "0.5": {
             "any": 503,
             "crispri": 22,
             "lentimpra": 487,
-            "vista": 3
+            "vista": 3,
+            "satmut": 0
           },
           "0.75": {
             "any": 85,
             "crispri": 0,
             "lentimpra": 82,
-            "vista": 3
+            "vista": 3,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 26,
           "lentimpra": 0,
-          "vista": 76
+          "vista": 76,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -2885,6 +3693,45 @@
               "ratio": 1.083
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 13385,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 13385,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/13385"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 295.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4826,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 21805.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 13385",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -2901,7 +3748,8 @@
           "by_assay": {
             "crispri": 31,
             "lentimpra": 663,
-            "vista": 82
+            "vista": 82,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 762,
@@ -2912,12 +3760,14 @@
         "elements_by_assay": {
           "crispri": 16,
           "lentimpra": 566,
-          "vista": 5
+          "vista": 5,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 67,
           "lentimpra": 1675,
-          "vista": 67
+          "vista": 67,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1162,
@@ -2933,12 +3783,14 @@
         "agrees": {
           "crispri": 3,
           "lentimpra": 95,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 471,
-          "vista": 2
+          "vista": 2,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 13,
         "agreement_rate_over_all_matched_elements": 0.1875,
@@ -2946,7 +3798,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 3,
         "crispri_pairs_regulated": 4,
-        "crispri_pairs_measured_as_not_regulated": 20
+        "crispri_pairs_measured_as_not_regulated": 20,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -2956,25 +3820,29 @@
             "any": 645,
             "crispri": 26,
             "lentimpra": 619,
-            "vista": 9
+            "vista": 9,
+            "satmut": 0
           },
           "0.5": {
             "any": 581,
             "crispri": 16,
             "lentimpra": 566,
-            "vista": 5
+            "vista": 5,
+            "satmut": 0
           },
           "0.75": {
             "any": 81,
             "crispri": 0,
             "lentimpra": 78,
-            "vista": 3
+            "vista": 3,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 12,
           "lentimpra": 0,
-          "vista": 68
+          "vista": 68,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -3086,6 +3954,45 @@
               "ratio": 1.007
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 14474,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 14474,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/14474"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 298.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4848,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 26482.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 14474",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -3102,7 +4009,8 @@
           "by_assay": {
             "crispri": 134,
             "lentimpra": 750,
-            "vista": 66
+            "vista": 66,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 911,
@@ -3113,12 +4021,14 @@
         "elements_by_assay": {
           "crispri": 55,
           "lentimpra": 625,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 539,
           "lentimpra": 2032,
-          "vista": 163
+          "vista": 163,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1338,
@@ -3136,12 +4046,14 @@
         "agrees": {
           "crispri": 5,
           "lentimpra": 132,
-          "vista": 2
+          "vista": 2,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 2,
           "lentimpra": 493,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 48,
         "agreement_rate_over_all_matched_elements": 0.0909,
@@ -3149,7 +4061,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.7143,
         "agreement_denominator_predicted_gene_tested": 7,
         "crispri_pairs_regulated": 8,
-        "crispri_pairs_measured_as_not_regulated": 212
+        "crispri_pairs_measured_as_not_regulated": 212,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -3159,25 +4083,29 @@
             "any": 777,
             "crispri": 84,
             "lentimpra": 706,
-            "vista": 9
+            "vista": 9,
+            "satmut": 0
           },
           "0.5": {
             "any": 669,
             "crispri": 55,
             "lentimpra": 625,
-            "vista": 3
+            "vista": 3,
+            "satmut": 0
           },
           "0.75": {
             "any": 96,
             "crispri": 0,
             "lentimpra": 96,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 40,
           "lentimpra": 0,
-          "vista": 47
+          "vista": 47,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -3289,6 +4217,45 @@
               "ratio": 1.189
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 14799,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 14799,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/14799"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 295.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.5259,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 13336.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 14799",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -3305,7 +4272,8 @@
           "by_assay": {
             "crispri": 227,
             "lentimpra": 1132,
-            "vista": 113
+            "vista": 113,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 1407,
@@ -3316,12 +4284,14 @@
         "elements_by_assay": {
           "crispri": 88,
           "lentimpra": 947,
-          "vista": 5
+          "vista": 5,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 830,
           "lentimpra": 2383,
-          "vista": 77
+          "vista": 77,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 2038,
@@ -3342,12 +4312,14 @@
         "agrees": {
           "crispri": 4,
           "lentimpra": 181,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 766,
-          "vista": 4
+          "vista": 4,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 84,
         "agreement_rate_over_all_matched_elements": 0.0455,
@@ -3355,7 +4327,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 4,
         "crispri_pairs_regulated": 11,
-        "crispri_pairs_measured_as_not_regulated": 342
+        "crispri_pairs_measured_as_not_regulated": 342,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -3365,25 +4349,29 @@
             "any": 1198,
             "crispri": 157,
             "lentimpra": 1068,
-            "vista": 12
+            "vista": 12,
+            "satmut": 0
           },
           "0.5": {
             "any": 1019,
             "crispri": 88,
             "lentimpra": 947,
-            "vista": 5
+            "vista": 5,
+            "satmut": 0
           },
           "0.75": {
             "any": 155,
             "crispri": 0,
             "lentimpra": 153,
-            "vista": 2
+            "vista": 2,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 72,
           "lentimpra": 0,
-          "vista": 92
+          "vista": 92,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -3495,6 +4483,45 @@
               "ratio": 0.825
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 21608,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 21608,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/21608"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 290.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.5318,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 11543.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 21608",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -3511,7 +4538,8 @@
           "by_assay": {
             "crispri": 125,
             "lentimpra": 407,
-            "vista": 50
+            "vista": 50,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 550,
@@ -3522,12 +4550,14 @@
         "elements_by_assay": {
           "crispri": 28,
           "lentimpra": 334,
-          "vista": 5
+          "vista": 5,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 253,
           "lentimpra": 1183,
-          "vista": 91
+          "vista": 91,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 716,
@@ -3540,12 +4570,14 @@
         "agrees": {
           "crispri": 1,
           "lentimpra": 62,
-          "vista": 5
+          "vista": 5,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 272,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 27,
         "agreement_rate_over_all_matched_elements": 0.0357,
@@ -3553,7 +4585,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 1,
         "crispri_pairs_regulated": 1,
-        "crispri_pairs_measured_as_not_regulated": 42
+        "crispri_pairs_measured_as_not_regulated": 42,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -3563,25 +4607,29 @@
             "any": 436,
             "crispri": 68,
             "lentimpra": 378,
-            "vista": 6
+            "vista": 6,
+            "satmut": 0
           },
           "0.5": {
             "any": 358,
             "crispri": 28,
             "lentimpra": 334,
-            "vista": 5
+            "vista": 5,
+            "satmut": 0
           },
           "0.75": {
             "any": 66,
             "crispri": 0,
             "lentimpra": 66,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 70,
           "lentimpra": 0,
-          "vista": 41
+          "vista": 41,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -3693,6 +4741,45 @@
               "ratio": 1.097
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 9250,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 9250,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/9250"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 299.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4564,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 48908.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 9250",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -3709,7 +4796,8 @@
           "by_assay": {
             "crispri": 479,
             "lentimpra": 912,
-            "vista": 28
+            "vista": 28,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 1328,
@@ -3720,12 +4808,14 @@
         "elements_by_assay": {
           "crispri": 211,
           "lentimpra": 777,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 2795,
           "lentimpra": 1759,
-          "vista": 25
+          "vista": 25,
+          "satmut": 1
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1884,
@@ -3752,12 +4842,14 @@
         "agrees": {
           "crispri": 5,
           "lentimpra": 238,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 3,
           "lentimpra": 539,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 203,
         "agreement_rate_over_all_matched_elements": 0.0237,
@@ -3765,7 +4857,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.625,
         "agreement_denominator_predicted_gene_tested": 8,
         "crispri_pairs_regulated": 17,
-        "crispri_pairs_measured_as_not_regulated": 1266
+        "crispri_pairs_measured_as_not_regulated": 1266,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -3775,25 +4879,29 @@
             "any": 1129,
             "crispri": 338,
             "lentimpra": 861,
-            "vista": 2
+            "vista": 2,
+            "satmut": 0
           },
           "0.5": {
             "any": 942,
             "crispri": 211,
             "lentimpra": 777,
-            "vista": 1
+            "vista": 1,
+            "satmut": 0
           },
           "0.75": {
             "any": 139,
             "crispri": 0,
             "lentimpra": 139,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 136,
           "lentimpra": 0,
-          "vista": 21
+          "vista": 21,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -3905,6 +5013,45 @@
               "ratio": 1.024
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 17265,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 17265,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/17265"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 282.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.5647,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 6260.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 17265",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -3921,7 +5068,8 @@
           "by_assay": {
             "crispri": 102,
             "lentimpra": 684,
-            "vista": 72
+            "vista": 72,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 819,
@@ -3932,12 +5080,14 @@
         "elements_by_assay": {
           "crispri": 50,
           "lentimpra": 569,
-          "vista": 4
+          "vista": 4,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 246,
           "lentimpra": 1666,
-          "vista": 60
+          "vista": 60,
+          "satmut": 1
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1214,
@@ -3953,12 +5103,14 @@
         "agrees": {
           "crispri": 4,
           "lentimpra": 97,
-          "vista": 2
+          "vista": 2,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 4,
           "lentimpra": 472,
-          "vista": 2
+          "vista": 2,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 42,
         "agreement_rate_over_all_matched_elements": 0.08,
@@ -3966,7 +5118,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.5,
         "agreement_denominator_predicted_gene_tested": 8,
         "crispri_pairs_regulated": 6,
-        "crispri_pairs_measured_as_not_regulated": 103
+        "crispri_pairs_measured_as_not_regulated": 103,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -3976,25 +5140,29 @@
             "any": 689,
             "crispri": 73,
             "lentimpra": 637,
-            "vista": 7
+            "vista": 7,
+            "satmut": 0
           },
           "0.5": {
             "any": 607,
             "crispri": 50,
             "lentimpra": 569,
-            "vista": 4
+            "vista": 4,
+            "satmut": 0
           },
           "0.75": {
             "any": 86,
             "crispri": 0,
             "lentimpra": 85,
-            "vista": 1
+            "vista": 1,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 30,
           "lentimpra": 0,
-          "vista": 59
+          "vista": 59,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -4106,6 +5274,45 @@
               "ratio": 1.044
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 12702,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 12702,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/12702"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 301.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.5087,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 19976.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 12702",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -4122,7 +5329,8 @@
           "by_assay": {
             "crispri": 32,
             "lentimpra": 223,
-            "vista": 15
+            "vista": 15,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 259,
@@ -4133,12 +5341,14 @@
         "elements_by_assay": {
           "crispri": 18,
           "lentimpra": 188,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 98,
           "lentimpra": 630,
-          "vista": 20
+          "vista": 20,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 400,
@@ -4152,12 +5362,14 @@
         "agrees": {
           "crispri": 2,
           "lentimpra": 42,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 146,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 16,
         "agreement_rate_over_all_matched_elements": 0.1111,
@@ -4165,7 +5377,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 2,
-        "crispri_pairs_measured_as_not_regulated": 32
+        "crispri_pairs_measured_as_not_regulated": 32,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -4175,25 +5399,29 @@
             "any": 225,
             "crispri": 26,
             "lentimpra": 207,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           },
           "0.5": {
             "any": 200,
             "crispri": 18,
             "lentimpra": 188,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           },
           "0.75": {
             "any": 28,
             "crispri": 0,
             "lentimpra": 28,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 5,
           "lentimpra": 0,
-          "vista": 13
+          "vista": 13,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -4305,6 +5533,45 @@
               "ratio": 0.978
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 5174,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 5174,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/5174"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 299.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4884,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 29088.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 5174",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -4321,7 +5588,8 @@
           "by_assay": {
             "crispri": 35,
             "lentimpra": 490,
-            "vista": 61
+            "vista": 61,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 571,
@@ -4332,12 +5600,14 @@
         "elements_by_assay": {
           "crispri": 14,
           "lentimpra": 409,
-          "vista": 3
+          "vista": 3,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 105,
           "lentimpra": 1091,
-          "vista": 33
+          "vista": 33,
+          "satmut": 1
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 842,
@@ -4350,12 +5620,14 @@
         "agrees": {
           "crispri": 0,
           "lentimpra": 102,
-          "vista": 1
+          "vista": 1,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 1,
           "lentimpra": 307,
-          "vista": 2
+          "vista": 2,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 13,
         "agreement_rate_over_all_matched_elements": 0.0,
@@ -4363,7 +5635,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 0.0,
         "agreement_denominator_predicted_gene_tested": 1,
         "crispri_pairs_regulated": 1,
-        "crispri_pairs_measured_as_not_regulated": 28
+        "crispri_pairs_measured_as_not_regulated": 28,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -4373,25 +5657,29 @@
             "any": 484,
             "crispri": 25,
             "lentimpra": 458,
-            "vista": 10
+            "vista": 10,
+            "satmut": 0
           },
           "0.5": {
             "any": 421,
             "crispri": 14,
             "lentimpra": 409,
-            "vista": 3
+            "vista": 3,
+            "satmut": 0
           },
           "0.75": {
             "any": 64,
             "crispri": 0,
             "lentimpra": 63,
-            "vista": 1
+            "vista": 1,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 17,
           "lentimpra": 0,
-          "vista": 44
+          "vista": 44,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -4503,6 +5791,45 @@
               "ratio": 1.331
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 9612,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 9612,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/9612"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 293.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.5493,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 13636.5,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 9612",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -4519,7 +5846,8 @@
           "by_assay": {
             "crispri": 176,
             "lentimpra": 558,
-            "vista": 23
+            "vista": 23,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 723,
@@ -4530,12 +5858,14 @@
         "elements_by_assay": {
           "crispri": 84,
           "lentimpra": 475,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 966,
           "lentimpra": 1425,
-          "vista": 37
+          "vista": 37,
+          "satmut": 1
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 1084,
@@ -4556,12 +5886,14 @@
         "agrees": {
           "crispri": 2,
           "lentimpra": 134,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 341,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 82,
         "agreement_rate_over_all_matched_elements": 0.0238,
@@ -4569,7 +5901,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
         "agreement_denominator_predicted_gene_tested": 2,
         "crispri_pairs_regulated": 15,
-        "crispri_pairs_measured_as_not_regulated": 266
+        "crispri_pairs_measured_as_not_regulated": 266,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -4579,25 +5923,29 @@
             "any": 652,
             "crispri": 143,
             "lentimpra": 532,
-            "vista": 3
+            "vista": 3,
+            "satmut": 0
           },
           "0.5": {
             "any": 542,
             "crispri": 84,
             "lentimpra": 475,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           },
           "0.75": {
             "any": 79,
             "crispri": 0,
             "lentimpra": 79,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 51,
           "lentimpra": 0,
-          "vista": 19
+          "vista": 19,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -4709,6 +6057,45 @@
               "ratio": 0.864
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 10817,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 10817,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/10817"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 296.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4618,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 21620.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 10817",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     },
@@ -4725,7 +6112,8 @@
           "by_assay": {
             "crispri": 0,
             "lentimpra": 9,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "elements_in_an_assay_footprint": 9,
@@ -4736,12 +6124,14 @@
         "elements_by_assay": {
           "crispri": 0,
           "lentimpra": 6,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "measurements_available": {
           "crispri": 0,
           "lentimpra": 35,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_pairs_the_benchmark_calls_invalid": 0,
         "facts_with_a_measured_counterpart": 12,
@@ -4752,12 +6142,14 @@
         "agrees": {
           "crispri": 0,
           "lentimpra": 0,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "disagrees": {
           "crispri": 0,
           "lentimpra": 6,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         },
         "crispri_predicted_gene_not_tested": 0,
         "agreement_rate_over_all_matched_elements": null,
@@ -4765,7 +6157,19 @@
         "agreement_rate_where_the_predicted_gene_was_tested": null,
         "agreement_denominator_predicted_gene_tested": 0,
         "crispri_pairs_regulated": 0,
-        "crispri_pairs_measured_as_not_regulated": 0
+        "crispri_pairs_measured_as_not_regulated": 0,
+        "satmut": {
+          "elements_measured_base_by_base": 0,
+          "elements_with_a_functional_base": 0,
+          "elements_measured_and_every_base_inert": 0,
+          "elements_matched_but_no_base_of_theirs_measured": 0,
+          "elements_in_the_footprint_never_raised": 0,
+          "bases_measured": 0,
+          "bases_functional": 0,
+          "bases_strong": 0,
+          "experiments_matched": [],
+          "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+        }
       },
       "sensitivity": {
         "rule": "reciprocal overlap",
@@ -4775,25 +6179,29 @@
             "any": 8,
             "crispri": 0,
             "lentimpra": 8,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           },
           "0.5": {
             "any": 6,
             "crispri": 0,
             "lentimpra": 6,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           },
           "0.75": {
             "any": 0,
             "crispri": 0,
             "lentimpra": 0,
-            "vista": 0
+            "vista": 0,
+            "satmut": 0
           }
         },
         "containment_not_upgraded": {
           "crispri": 0,
           "lentimpra": 0,
-          "vista": 0
+          "vista": 0,
+          "satmut": 0
         }
       },
       "comparison": {
@@ -4905,6 +6313,45 @@
               "ratio": null
             }
           }
+        },
+        "satmut": {
+          "targets_measured_base_by_base": 0,
+          "controls_never_base_measured": 125,
+          "input_presence": {
+            "bases of this element measured one at a time": {
+              "key": "satmut_bases_measured",
+              "targets_with_the_input": 0,
+              "targets": 0,
+              "controls_with_the_input": 0,
+              "controls": 125,
+              "universal": false,
+              "kind": "bought",
+              "reading": "bought: the input is missing on some rows, which is where a coverage artefact lives \u2014 targets 0/0, controls 0/125"
+            }
+          },
+          "imbalance": {
+            "length": {
+              "target_median": null,
+              "control_median": 325.0,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": null,
+              "control_median": 0.4481,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": null,
+              "control_median": 65128.0,
+              "ratio": null
+            }
+          },
+          "coverage": {
+            "targets_with_the_input": "0 of 0",
+            "controls_with_the_input": "0 of 125",
+            "median_share_of_a_target_element_measured": null
+          },
+          "comparison_refused": "0 targets is below 20: the groups are described above and not compared, because a standardised difference over this many elements is noise carrying a p-value. The footprint is the finding"
         }
       }
     }
@@ -4912,12 +6359,12 @@
   "pooled": {
     "chromosomes": 24,
     "compiled_elements": 440377,
-    "elements_in_an_assay_footprint": 26316,
-    "elements_no_assay_ever_covered": 414061,
-    "elements_with_any_measurement": 19070,
-    "facts_with_a_measured_counterpart": 38140,
-    "experimental_facts_added": 19282,
-    "experimental_element_blocks": 19070,
+    "elements_in_an_assay_footprint": 26324,
+    "elements_no_assay_ever_covered": 414053,
+    "elements_with_any_measurement": 19072,
+    "facts_with_a_measured_counterpart": 38144,
+    "experimental_facts_added": 19284,
+    "experimental_element_blocks": 19072,
     "experimental_rule_blocks": 212,
     "crispri_predicted_gene_not_tested": 1377,
     "crispri_pairs_regulated": 212,
@@ -4926,44 +6373,66 @@
     "eligibility": {
       "rule": "an assay's tested interval shares at least one base with the element",
       "compiled_elements": 440377,
-      "elements_in_an_assay_footprint": 26316,
-      "elements_no_assay_ever_covered": 414061,
-      "share_eligible": 0.05976,
+      "elements_in_an_assay_footprint": 26324,
+      "elements_no_assay_ever_covered": 414053,
+      "share_eligible": 0.05978,
       "by_assay": {
         "crispri": 3908,
         "lentimpra": 21133,
-        "vista": 2375
+        "vista": 2375,
+        "satmut": 15
       }
     },
-    "coverage_elements_measured": 0.0433,
-    "raised_share_of_the_eligible": 0.72465,
+    "coverage_elements_measured": 0.04331,
+    "raised_share_of_the_eligible": 0.72451,
     "elements_by_assay": {
       "crispri": 1505,
       "lentimpra": 17869,
-      "vista": 98
+      "vista": 98,
+      "satmut": 4
     },
     "measurements_available": {
       "crispri": 14734,
       "lentimpra": 53986,
-      "vista": 2442
+      "vista": 2442,
+      "satmut": 21
     },
     "agrees": {
       "crispri": 97,
       "lentimpra": 3361,
-      "vista": 69
+      "vista": 69,
+      "satmut": 4
     },
     "disagrees": {
       "crispri": 31,
       "lentimpra": 14508,
-      "vista": 29
+      "vista": 29,
+      "satmut": 0
     },
     "agreement_rate_over_all_matched_elements": 0.0645,
     "agreement_denominator_all_matched_elements": 1505,
     "agreement_rate_where_the_predicted_gene_was_tested": 0.7578,
-    "agreement_denominator_predicted_gene_tested": 128
+    "agreement_denominator_predicted_gene_tested": 128,
+    "satmut": {
+      "elements_measured_base_by_base": 4,
+      "elements_with_a_functional_base": 4,
+      "elements_measured_and_every_base_inert": 0,
+      "elements_matched_but_no_base_of_theirs_measured": 0,
+      "elements_in_the_footprint_never_raised": 11,
+      "bases_measured": 1399,
+      "bases_functional": 746,
+      "bases_strong": 587,
+      "experiments_matched": [
+        "IRF4",
+        "IRF6",
+        "SORT1.2",
+        "UC88"
+      ],
+      "why_it_can_never_disagree": "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a reporter and never deletes the element or measures the predicted gene, so it can support the compiled claim and cannot contradict it. An element whose measured bases are all inert is counted under bases_measured_none_functional, which is evidence about those bases only"
+    }
   },
   "evidence": {
-    "compiled_facts_read": 960094,
+    "compiled_facts_read": 960096,
     "programs_read": [
       "chr1",
       "chr10",
@@ -4992,9 +6461,9 @@
     ],
     "per_chromosome": {
       "chr6": {
-        "facts": 51918,
+        "facts": 51919,
         "weak": 44151,
-        "experimental": 1135,
+        "experimental": 1136,
         "curated": 2227,
         "predicted": 47538,
         "inferred": 1018,
@@ -5010,9 +6479,9 @@
         "none": 0
       },
       "chr1": {
-        "facts": 95150,
+        "facts": 95151,
         "weak": 79100,
-        "experimental": 2142,
+        "experimental": 2143,
         "curated": 4138,
         "predicted": 87362,
         "inferred": 1508,
@@ -5209,15 +6678,15 @@
       }
     },
     "pooled": {
-      "facts": 960094,
+      "facts": 960096,
       "weak": 812921,
-      "experimental": 19282,
+      "experimental": 19284,
       "curated": 42049,
       "predicted": 880754,
       "inferred": 18009,
       "none": 0
     },
-    "experimental_share": 0.02008
+    "experimental_share": 0.02009
   },
   "chromosomes_not_read": {},
   "programs_written": {
@@ -5247,6 +6716,6 @@
     "chrX": "data/knowledge/compiled/noncoding_chrX.bio",
     "chrY": "data/knowledge/compiled/noncoding_chrY.bio"
   },
-  "reading": "the experimental layer is thin and that is the finding: a compiled element is measured only where an assay happened to be pointed, and the assays cover a few per cent of what the genome is compiled from. lentiMPRA measures the sequence in a reporter and not the locus, so its disagreements are weaker evidence against a prediction than a CRISPRi negative on the predicted gene itself",
-  "seconds": 105.7
+  "reading": "the experimental layer is thin and that is the finding: a compiled element is measured only where an assay happened to be pointed, and the assays cover a few per cent of what the genome is compiled from. lentiMPRA measures the sequence in a reporter and not the locus, so its disagreements are weaker evidence against a prediction than a CRISPRi negative on the predicted gene itself. Saturation mutagenesis is thinner still by three orders of magnitude - 21 elements exist in the whole assay - and it measures bases, so it enters the census under its own counters and can never enter the disagreements",
+  "seconds": 158.6
 }

@@ -44,6 +44,26 @@ def mpra_element(start, end, name, **activity):
     return e
 
 
+def satmut_element(start, end, experiment, functional=(), strong=(), repeats=1, bases_from=None):
+    """A synthetic saturation-mutagenesis experiment: one base table over (start, end), 0-based.
+
+    `bases_from` measures only part of the span, which is how the "matched but none of this element's
+    own bases were measured" case is built - a real experiment's flanks can fall outside the element.
+    """
+    functional, strong = set(functional), set(strong)
+    table = {
+        p + 1: {
+            "ref": "A",
+            "measured": 3,
+            "functional": p in functional,
+            "strong": p in strong,
+            "effect": 0.9 if p in strong else (0.1 if p in functional else 0.0),
+        }
+        for p in range(bases_from if bases_from is not None else start, end)
+    }
+    return measured.SatmutElement(CHROM, start, end, experiment, repeats, table)
+
+
 # --- the rule ---------------------------------------------------------------------------------
 def test_reciprocal_overlap_is_the_smaller_of_the_two_fractions():
     assert measured.reciprocal_overlap(1000, 1300, 1000, 1300) == 1.0
@@ -207,6 +227,106 @@ def test_sensitivity_reports_the_rule_at_three_values_and_the_refused_containmen
     counts = [s["at"][k]["any"] for k in ("0.25", "0.5", "0.75")]
     assert counts == sorted(counts, reverse=True)  # a stricter rule never matches more
     assert s["containment_not_upgraded"]["vista"] == 1  # E3 inside hs9001, and left predicted
+
+
+# --- the base-level assay: which bases matter, which is not which elements do something ----------
+@pytest.fixture
+def base_elements():
+    """Four elements against saturation mutagenesis: functional, inert, in the footprint, unmeasured."""
+
+    def el(eid, start, end, gene):
+        return {
+            "id": eid,
+            "start": start,
+            "end": end,
+            "domain": "D1",
+            "predicted_coding": {"gene": gene, "log2_fold_change": -0.5, "action": "activates"},
+        }
+
+    return [
+        el("S1", 1000, 1300, "AAA"),  # measured, and 50 of its bases matter
+        el("S2", 5000, 5300, "CCC"),  # measured base by base, every one of them inert
+        el("S3", 9100, 9200, "DDD"),  # inside the footprint, below the overlap rule
+        el("S4", 6000, 6150, "EEE"),  # meets the rule, but its own bases were never measured
+        el("S5", 80_000, 80_300, "FFF"),  # no assay ever looked here
+    ]
+
+
+@pytest.fixture
+def base_layer():
+    return measured.Layer(
+        chrom=CHROM,
+        satmut=[
+            satmut_element(1000, 1300, "SYN1", functional=range(1100, 1150), strong=range(1100, 1110)),
+            satmut_element(5000, 5300, "SYN2"),
+            satmut_element(9180, 9480, "SYN3", functional=range(9180, 9280)),
+            satmut_element(6000, 6300, "SYN4", functional=range(6200, 6300), bases_from=6200),
+        ],
+    )
+
+
+def test_a_base_level_assay_can_agree_and_cannot_disagree(base_layer, base_elements):
+    rows = measured.rows(CHROM, base_elements, base_layer)
+    by_id = {r["id"]: r for r in rows}
+    assert set(by_id) == {"S1", "S2", "S4"}  # S3 is only in the footprint, S5 was never looked at
+    assert by_id["S1"]["agreement"]["satmut"] == measured.AGREES
+    # every measured base inert: a measurement of those bases, and not a verdict on the element
+    assert by_id["S2"]["agreement"]["satmut"] == measured.BASES_INERT
+    assert by_id["S2"]["agreement"]["assays_disagreeing"] == 0
+    assert by_id["S2"]["agreement"]["verdict"] == measured.NOT_TESTED
+    # matched, but the experiment's measured bases lie outside this element: the never-looked zero
+    assert by_id["S4"]["agreement"]["satmut"] == measured.BASES_NOT_MEASURED
+    assert by_id["S4"]["measured"]["satmut"]["bases_measured"] == 0
+    assert "measured none of its bases" in measured.basis_text(by_id["S4"])
+    # and it is a reporter, so it carries the reporter's confidence and no rule
+    assert by_id["S1"]["confidence"] == measured.REPORTER_CONFIDENCE
+    assert measured.rule_lines(by_id["S1"]) == []
+
+
+def test_what_is_said_is_said_over_the_elements_own_bases(base_layer, base_elements):
+    s = base_layer.for_element(1000, 1300)["satmut"]
+    assert (s["bases_in_element"], s["bases_measured"]) == (300, 300)
+    assert (s["bases_functional"], s["bases_strong"]) == (50, 10)
+    assert s["share_functional_of_measured"] == round(50 / 300, 4)
+    assert s["share_of_the_element_measured"] == 1.0
+    # a shorter element inside the same experiment is told only about its own bases
+    half = base_layer.for_element(1000, 1150)["satmut"]
+    assert (half["bases_measured"], half["bases_functional"]) == (150, 50)
+
+
+def test_the_census_names_the_inert_and_the_never_raised_apart(base_layer, base_elements):
+    rows = measured.rows(CHROM, base_elements, base_layer)
+    c = measured.census(CHROM, rows, base_elements, base_layer)
+    s = c["satmut"]
+    assert c["eligibility"]["by_assay"]["satmut"] == 4  # S1, S2, S3, S4 - S5 is in nobody's footprint
+    assert s["elements_measured_base_by_base"] == 3
+    assert s["elements_with_a_functional_base"] == 1
+    assert s["elements_measured_and_every_base_inert"] == 1  # measured and absent
+    assert s["elements_matched_but_no_base_of_theirs_measured"] == 1  # never looked, same element
+    assert s["elements_in_the_footprint_never_raised"] == 1  # S3, never looked, whole element
+    assert (s["bases_measured"], s["bases_functional"], s["bases_strong"]) == (600, 50, 10)
+    # the assay's zero in `disagrees` is a property of the assay, and the census says so in words
+    assert c["disagrees"]["satmut"] == 0
+    assert s["why_it_can_never_disagree"] == measured.SATMUT_CANNOT_DISAGREE
+    assert measured.pool([c, c])["satmut"]["bases_functional"] == 100
+
+
+def test_a_missing_satmut_cache_is_no_measurement_and_never_a_fetch(tmp_path):
+    """The layer must be readable where no satmut cache is, and must then measure nothing."""
+    assert measured.load_satmut(CHROM, tmp_path / "absent" / "elements.tsv.gz") == []
+
+
+def test_the_program_states_the_base_level_fact_and_raises_no_rule(tmp_path, base_layer, base_elements):
+    text = compile_chromosome(CHROM, _results_dir(tmp_path, base_elements), layer=base_layer)
+    module = parse(text)
+    assert module.entities["S1_measured"].evidence.kind == "experimental"
+    # the inert element keeps `experimental` too: no effect on these bases is a measurement
+    assert module.entities["S2_measured"].evidence.kind == "experimental"
+    assert "no base measured here matters" in text
+    assert not [r for r in module.rules if r.evidence.kind == "experimental"]
+    # the header states the base-level count, and says which bucket the inert element is not in
+    assert "neither the agreements nor the disagreements" in text
+    assert all(r["ok"] for r in evaluate(module, parse_tests(text)))
 
 
 # --- the compiled program ----------------------------------------------------------------------

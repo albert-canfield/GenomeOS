@@ -20,13 +20,15 @@ program carries `# test:` lines so `bio test` checks that what was compiled is w
 was meant. Generated files say so in their header and are not edited by hand.
 
 Since 2026-09-17 the program also carries an **experimental layer**
-(`attribution/measured.py`): where a CRISPRi screen, a lentiMPRA library or a VISTA
-transgenic assay measured the same piece of DNA as a compiled element, a second block
-`<id>_measured` is written beside it, carrying `evidence: experimental` and the source.
+(`attribution/measured.py`): where a CRISPRi screen, a lentiMPRA library, a VISTA
+transgenic assay or a saturation-mutagenesis experiment measured the same piece of DNA as
+a compiled element, a second block `<id>_measured` is written beside it, carrying
+`evidence: experimental` and the source.
 Two names, never one: the predicted block is not touched, and a measured negative - "the
-screen found no effect on this gene" - is stated in the measured block rather than
-dropped or turned back into UNKNOWN. The layer is thin on purpose; the census in
-`measured_layer_genome` says how thin.
+screen found no effect on this gene", "none of the bases measured here matters" - is
+stated in the measured block rather than dropped or turned back into UNKNOWN. The
+base-level assay is stated as a fact about bases and never as a verdict on the element.
+The layer is thin on purpose; the census in `measured_layer_genome` says how thin.
 """
 
 from __future__ import annotations
@@ -212,6 +214,11 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         "# `<id>_measured` is what an assay measured over the same DNA, with evidence: experimental.",
         "# Neither overwrites the other, and a measured negative - no effect on this gene in this",
         "# screen - is stated in the measured block, because that is a measurement and not an unknown.",
+        "#",
+        "# One of the four assays is base-level: saturation mutagenesis says which BASES inside an",
+        "# element matter. It can support the compiled claim and cannot contradict it, so an element",
+        "# whose measured bases are all inert is stated as a fact about those bases and never as a",
+        "# verdict on the element, and it raises no rule, because it names no gene.",
     ]
     regions = [b for b in sorted(budget["blocks"], key=lambda b: b["start"])]
     n_unknown = sum(1 for b in regions if b["guess"]["tier"] == "constrained_unknown")
@@ -317,6 +324,15 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any =
         f"# Eligible first, raised second: {n_eligible} of {len(elements)} elements lie in some "
         f"assay's footprint at all, {len(elements) - n_eligible} were never covered by one."
     )
+    sat = [r["measured"]["satmut"] for r in measured_rows if "satmut" in r["measured"]]
+    if sat:
+        inert = sum(1 for s in sat if s["bases_measured"] and not s["bases_functional"])
+        lines.append(
+            f"# Base level: saturation mutagenesis measured {sum(s['bases_measured'] for s in sat)} "
+            f"bases of {len(sat)} of these elements, {sum(s['bases_functional'] for s in sat)} of them "
+            f"functional; {inert} elements had every measured base inert, which is a fact about those "
+            "bases and is counted in neither the agreements nor the disagreements."
+        )
     if not measured_rows:
         lines.append(
             "# No assay in data/knowledge measured any of these elements under the rule, so this "

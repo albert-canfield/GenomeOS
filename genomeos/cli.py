@@ -4461,6 +4461,7 @@ def _fmt(v: float | None) -> str:
 def _print_measured_layer() -> int:
     """The experimental layer of the compiled genome: how much of it rests on a measurement."""
     from genomeos.attribution.measured import (
+        ASSAYS,
         ELIGIBILITY_RULE,
         OVERLAP_SENSITIVITY,
         RECIPROCAL_OVERLAP,
@@ -4497,10 +4498,22 @@ def _print_measured_layer() -> int:
         f"({p['experimental_element_blocks']:,} element blocks + {p['experimental_rule_blocks']:,} rules), "
         f"beside {p['facts_with_a_measured_counterpart']:,} predicted facts they do not overwrite"
     )
-    for assay in ("crispri", "lentimpra", "vista"):
+    for assay in ASSAYS:  # every assay the layer wires, so a new one cannot be printed out of existence
         print(
             f"  {assay:<10} {p['elements_by_assay'].get(assay, 0):>7,} elements   "
             f"agree {p['agrees'].get(assay, 0):>5,}   disagree {p['disagrees'].get(assay, 0):>6,}"
+        )
+    sat = p.get("satmut") or {}
+    if sat:
+        # the base-level assay's zero in `disagrees` is a property of the assay, and says so here
+        print(
+            f"  satmut is base level: {sat.get('bases_measured', 0):,} bases measured over "
+            f"{sat.get('elements_measured_base_by_base', 0):,} elements, "
+            f"{sat.get('bases_functional', 0):,} functional; "
+            f"{sat.get('elements_measured_and_every_base_inert', 0):,} elements had every measured "
+            f"base inert (a fact about those bases), "
+            f"{sat.get('elements_in_the_footprint_never_raised', 0):,} in its footprint were never "
+            f"raised. disagrees: {sat.get('why_it_can_never_disagree', '')}"
         )
     print(
         f"  CRISPRi agreement {p['agreement_rate_over_all_matched_elements']} over all "

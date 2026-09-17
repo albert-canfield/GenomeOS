@@ -1982,6 +1982,130 @@ statement that **94.02% of them were never eligible to be asked**. The layer is 
 assays' footprint is thin, not because the matching is strict: 72.5% of everything that was eligible
 was raised. The number to argue about is 5.98%, and 4.33% and 2.01% follow from it.
 
+## The fourth assay measures bases, not elements: saturation mutagenesis covers 15 compiled elements and measures 4 (2026-09-17, later)
+
+The section above wired three assays and said what it had left undone: saturation mutagenesis
+(`genomeos/knowledge/satmut.py`) was not wired in and was the obvious fourth. It is now, and the
+reason it was worth adding is the reason its census is so small. The other three ask whether an
+ELEMENT does something. Kircher et al. 2019 (GSE126550) asked which BASES inside one matter —
+44,658 single-base substitutions over **21 regulatory elements**, which is the entire assay. Twenty-one.
+
+**Three denominators, in the order the layer always states them:**
+
+| | | |
+|---|---|---|
+| **1. read** | compiled facts parsed at all (`compiled=True`) | **960,096** in 24 programs |
+| **2. eligible** | compiled elements inside satmut's footprint, at one shared base | **15 of 440,377** |
+| **3. raised** | elements a satmut experiment is a measurement *of*, under the overlap rule | **4** |
+
+**The footprint, beside the three assays already wired.** This is the result of the lane, and the
+lane stops here rather than being padded out:
+
+| assay | measurements available | elements eligible | elements raised | share of the compiled genome raised |
+|---|---|---|---|---|
+| lentiMPRA | 53,986 elements | 21,133 | 17,869 | 4.058% |
+| CRISPRi | 14,734 pairs | 3,908 | 1,505 | 0.342% |
+| VISTA | 2,442 elements | 2,375 | 98 | 0.022% |
+| **saturation mutagenesis** | **21 elements** | **15** | **4** | **0.0009%** |
+
+satmut's footprint is **158 times smaller than VISTA's** and 1,409 times smaller than lentiMPRA's,
+measured in eligible elements. Adding it moved the genome-wide eligible count from 26,316 to 26,324
+(+8; seven of its fifteen were already eligible through another assay) and the raised count from
+19,070 to 19,072 (+2; two of its four were already raised by lentiMPRA or VISTA). The experimental
+layer grew from 19,282 facts to 19,284, and its share of the compiled genome from 2.0083% to 2.0085%.
+**Two facts is the whole of it, and the honest reading is the eligible count, not the raised one.**
+
+Its 21 experiments sit on 13 chromosomes (chr1 and chr10 three each; chr2, chr6, chr8 and chr11 two
+each; one each on chr5, chr7, chr9, chr19, chr20, chr22 and chrX). **chr21 holds no satmut experiment at all**, and
+chr22 holds one (GP1BA) whose interval contains no compiled element — so on the two chromosomes this
+project usually reads first, the fourth assay's honest output is zero, of the never-looked kind.
+
+**What "agrees" and "disagrees" mean for a base-level assay against an element-level prediction.**
+The compiled claim is that deleting the element moves a gene. Saturation mutagenesis never deletes
+the element and never measures that gene, so its verdicts are asymmetric by construction:
+
+- **agrees** — at least one measured base inside the element is functional (some substitution at it is
+  significant at the data portal's own defaults: p < 1e-5 with ≥ 10 barcodes). The element contains
+  bases whose identity changes activity, which is measured support of the same weak kind lentiMPRA's
+  "active" is.
+- **it cannot disagree.** `disagrees["satmut"]` is **zero by construction, not by result**, and the
+  census carries that sentence as a string (`SATMUT_CANNOT_DISAGREE`) so the zero can never be read as
+  "never contradicted". An element every one of whose measured bases is inert is counted under its own
+  name, `bases_measured_none_functional`. **An element whose bases mostly do not matter is not an
+  element that does nothing.** Single-base substitution cannot see a function carried redundantly
+  across a site; a null is depth-dependent besides (the functional share of these same 21 elements
+  runs from 1% in FOXE1 to 77% in IRF4 with barcode depth); and none of it touches the deletion or
+  the gene. A base-level null is evidence about those bases and about nothing larger. It keeps
+  `experimental` as its evidence kind and is written into the measured block by name, exactly as a
+  CRISPRi negative is.
+- **`bases_not_measured`** is the fourth outcome and the never-looked one: the experiment met the
+  overlap rule but covers none of the element's own bases. Measured-and-inert and never-looked are
+  two zeros with two names, and `elements_in_the_footprint_never_raised` is a third.
+
+It raises **no rule**, and not for CRISPRi's reason. A CRISPRi negative raises none because a rule
+would state a relation the assay says is absent; satmut raises none because it names no relation at
+all. Its experiments carry gene names given by their authors (SORT1, IRF4), and that name is curation,
+not a measured target — three of the four matched elements happen to predict the gene their experiment
+is named for, and this lane does not count that as agreement, because the name is not a measurement.
+
+**The four elements, each one named, because a median over four elements is a worse summary than the
+four rows.** Every one of them is covered end to end (100% of the element's bases measured):
+
+| element | chrom | length | GC | TSS | experiment | overlap | bases measured | functional | strong | predicted target | other assays |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| EH38E1374646 | chr1 | 349 | 0.547 | 9.1 kb | SORT1.2 | 0.582 | 349 (100%) | 266 (76%) | 232 | PSRC1 −0.41 | lentiMPRA |
+| EH38E2863563 | chr1 | 350 | 0.577 | 9.9 kb | IRF6 | 0.583 | 350 (100%) | 127 (36%) | 93 | IRF6 −0.54 | — |
+| EH38E2046168 | chr2 | 350 | 0.634 | 69.7 kb | UC88 | 0.593 | 350 (100%) | 48 (14%) | 27 | TBR1 −0.12 | lentiMPRA, VISTA |
+| EH38E2438393 | chr6 | 350 | 0.426 | 4.6 kb | IRF4 | 0.776 | 350 (100%) | 305 (87%) | 235 | IRF4 −0.22 | — |
+
+1,399 bases measured, 746 functional (53.3%), 587 strongly so (42.0%). All four agree, none is inert,
+and none is a disagreement — nor could any of them have been.
+
+**The one element three assays and a base-level assay all reached, which is the whole distinction in a
+single row.** EH38E2046168 is VISTA-positive in forebrain in two transgenic experiments, active in
+lentiMPRA in WTC11 (log2 1.49, silent in K562 and HepG2), and **86% of its bases individually do not
+matter** — 48 functional of 350, 27 strongly. An element can be a demonstrated in-vivo enhancer while
+almost none of its single bases is load-bearing. Had the two questions been collapsed into one verdict,
+this row would have read "14% functional, therefore mostly dead", which the embryo contradicts.
+
+**The rule at three values, for satmut alone**, with the containments it refuses:
+
+| reciprocal overlap | elements matched |
+|---|---|
+| ≥ 0.25 | 11 |
+| **≥ 0.50 (the rule)** | **4** |
+| ≥ 0.75 | 1 |
+| *contained only, not upgraded* | *3* |
+
+The fall from 11 to 4 is the same shape the other assays show: a satmut experiment is 187–601 bp and a
+compiled element 293–350 bp, so the two are commensurable, and the eleven at 0.25 are mostly elements
+sitting half in and half out of the tested interval. One element (chr9, FOXE1) misses the rule at
+0.488 and is not raised, which is the rule doing its job rather than an unlucky rounding.
+
+**Was the comparison run? No, and the refusal is in the result.** Both groups are described through
+`genomeos/compare.py` — `input_presence` first, which says the claim is **bought** (the input, "bases
+of this element measured one at a time", is present on 4 rows and missing on 440,373), and then
+`imbalance`, which prints length, GC and median distance to a coding TSS for both arms per chromosome
+along with the coverage of each. On chr1 the two targets are longer (349.5 against 297 bp), more GC
+(0.562 against 0.489) and half as far from a coding TSS (9.5 kb against 18.0 kb) as the chromosome's
+other 43,679 elements. The standardised difference is **not** computed and
+`comparison_refused` says why in the result: four targets is below the lane's bar of twenty, and a
+stratified difference over four elements is noise carrying a p-value. The footprint is the finding.
+
+**What could not be assessed.** Whether these elements' bases behave the same way in their own
+chromosome: the assay is episomal, so it lands at `REPORTER_CONFIDENCE` 0.75 with lentiMPRA and not
+with CRISPRi, however fine its resolution. Whether an inert element exists: none of the four is inert,
+so the `bases_measured_none_functional` branch is exercised by tests and not yet by data — the
+element that would most likely have shown it (chr1, 68 bases measured, none functional) sits at
+overlap 0.113 and is not raised. And nothing at all about the 99.9991% of compiled elements this
+assay has never been pointed at.
+
+**Cost.** 24 chromosomes read, matched, compared and recompiled, plus the 960,096-fact evidence read:
+**159 seconds** and no requests, against 106 before the fourth assay. The satmut table is 2.6 MB
+gzipped, parsed once per process and cached. `uv run python scripts/measured_layer.py
+--write-programs`; `uv run genomeos evidence --measured` prints the census with the fourth assay's
+counters and the sentence that explains its zero.
+
 ## 99.5% of the unknown space has never been measured, and the part that matters would fit in one library (2026-09-17)
 
 Three lanes hit the same wall today from different directions: the deletion sweep's per-tier readings

@@ -6,7 +6,7 @@ a region's role comes from its budget tier (`inferred`) and an element's target 
 AlphaGenome (`predicted`). Meanwhile the project holds real measurements over some of that same
 sequence. This module attaches them, element by element, and counts honestly how thin the layer is.
 
-Three assays, each kept under its own name:
+Four assays, each kept under its own name:
 
 - **CRISPRi** (ENCODE enhancer-gene benchmark, Gschwind et al. 2025): an element was silenced in its
   own chromosome and nearby genes were measured. A pair is `regulated` or not, and **a pair measured
@@ -16,6 +16,33 @@ Three assays, each kept under its own name:
   drives transcription from a reporter. Episomal, so it measures the sequence and not the locus.
 - **VISTA** (LBNL, transgenic mouse e11.5): whether a sequence is an enhancer in a living embryo,
   positive or negative.
+- **saturation mutagenesis** (Kircher et al. 2019, GSE126550, read through `knowledge/satmut.py`):
+  nearly every single-base substitution of 21 regulatory elements, in an MPRA. It is different in
+  kind from the other three, which ask whether an ELEMENT does something: this one asks which BASES
+  inside it matter, and the two questions do not have the same answers.
+
+**A base-level assay against an element-level prediction, and what may be concluded from it.** The
+compiled claim is that deleting the element moves a gene. Saturation mutagenesis never deletes the
+element and never measures that gene, so its verdicts are asymmetric on purpose:
+
+- *agrees* — at least one measured base inside the element is **functional** (some substitution at it
+  is significant at the portal's own defaults). The element demonstrably contains bases whose identity
+  changes activity, which is measured support of the same weak kind lentiMPRA's "active" is: the
+  sequence does something.
+- *it cannot disagree*, and `disagrees["satmut"]` is therefore **always zero, by construction rather
+  than by result** (`SATMUT_CANNOT_DISAGREE` says so in the census, so the zero cannot be read as
+  "never contradicted"). An element every one of whose measured bases is inert is recorded under its
+  own name, `bases_measured_none_functional` — **an element whose bases mostly do not matter is not an
+  element that does nothing**. Single-base substitution cannot see a function carried redundantly
+  across a site, and a null is depth-dependent besides (the functional share of the same 21 elements
+  runs from 1% to 77% with barcode depth), so a base-level null is evidence about THOSE BASES and
+  about nothing larger. It keeps `experimental` as its evidence kind and is stated in the measured
+  block by name, exactly as a CRISPRi negative is.
+- `bases_not_measured` is the fourth outcome and the never-looked one: the experiment's interval met
+  the overlap rule but covers none of the element's own bases.
+
+No `rule` comes from it either: the experiment is named for a gene by its authors, and that name is
+curation, not a measurement of a target, so it is carried as provenance and never as a target.
 
 **The overlap rule, stated as a constant.** A measurement is *of* a compiled element only when the
 tested interval and the element are largely the same piece of DNA: `RECIPROCAL_OVERLAP = 0.5`, that
@@ -44,11 +71,13 @@ import csv
 import gzip
 from collections import defaultdict
 from dataclasses import dataclass, field
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 from genomeos.attribution import mpra, vista
 from genomeos.attribution.crispri import KNOWLEDGE as CRISPRI_KNOWLEDGE
+from genomeos.knowledge import satmut as satmut_knowledge
 from genomeos.results import RESULTS_DIR
 
 # --- the rule -------------------------------------------------------------------------------------
@@ -75,8 +104,19 @@ SOURCES = {
     ),
     "lentimpra": "ENCODE4 lentiMPRA, joint library ENCSR106SZM (Ahituv lab), log2(RNA/DNA) per 200 bp",
     "vista": "VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL), hg38 coordinates",
+    "satmut": (
+        "saturation mutagenesis MPRA, Kircher et al. 2019 (GSE126550), single-base substitutions of "
+        "21 regulatory elements, GRCh38"
+    ),
 }
 ASSAYS = tuple(SOURCES)
+BASE_LEVEL = ("satmut",)  # assays that measure bases inside an element rather than the element
+SATMUT_CANNOT_DISAGREE = (
+    "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a "
+    "reporter and never deletes the element or measures the predicted gene, so it can support the "
+    "compiled claim and cannot contradict it. An element whose measured bases are all inert is "
+    "counted under bases_measured_none_functional, which is evidence about those bases only"
+)
 
 
 def reciprocal_overlap(a_start: int, a_end: int, b_start: int, b_end: int) -> float:
@@ -190,6 +230,61 @@ def load_vista(chrom: str, knowledge: Path = vista.KNOWLEDGE) -> list[vista.Vist
         return vista.parse_loci(fh, chrom)
 
 
+@dataclass(frozen=True, slots=True)
+class SatmutElement:
+    """One saturation-mutagenesis experiment: nearly every substitution of one regulatory element.
+
+    `bases` is the position table of `knowledge/satmut.py`, 1-based genome position to whether some
+    substitution there was significant (`functional`), whether it also moved activity by the strong
+    bar, and the largest effect. The table is kept per base rather than summarised per element because
+    the whole point of this assay is that it answers a question about bases: a compiled element that
+    meets the overlap rule usually covers only part of the tested interval, and what is said about it
+    must be said over the bases inside it and not over the experiment as a whole.
+    """
+
+    chrom: str
+    start: int  # 0-based half-open, from the measured positions themselves
+    end: int
+    experiment: str  # the primary experiment of the locus, as satmut.loci chooses it
+    repeats: int  # experiments of the same locus, this one included; the others are not counted twice
+    bases: dict[int, dict]
+
+
+@lru_cache(maxsize=2)
+def _satmut_primaries(path: Path) -> tuple[SatmutElement, ...]:
+    """Every locus's primary experiment, parsed once. A missing cache is no measurement, not a fetch.
+
+    `knowledge.satmut.load` downloads when its file is absent; this checks first, because the layer
+    must be readable on a machine that holds no satmut cache and must then say it measured nothing.
+    Several experiments of one locus (TERT has four) are the same DNA measured again, so only the
+    primary is carried and `repeats` records the rest, exactly as satmut's own pooled statistics do.
+    """
+    if not path.exists():
+        return ()
+    experiments = satmut_knowledge.by_element(satmut_knowledge.load(path))
+    out: list[SatmutElement] = []
+    for lead, group in satmut_knowledge.loci(experiments).items():
+        table = satmut_knowledge.base_table(experiments[lead])
+        if not table:
+            continue
+        out.append(
+            SatmutElement(
+                chrom=experiments[lead][0]["chrom"],
+                start=min(table) - 1,
+                end=max(table),
+                experiment=lead,
+                repeats=len(group),
+                bases=table,
+            )
+        )
+    return tuple(sorted(out, key=lambda e: (e.chrom, e.start)))
+
+
+def load_satmut(chrom: str, path: Path = satmut_knowledge.DATA_PATH) -> list[SatmutElement]:
+    """The saturation-mutagenesis experiments of one chromosome from the local cache, without fetching."""
+    return [e for e in _satmut_primaries(path) if e.chrom == chrom]
+
+
 # --- the layer ------------------------------------------------------------------------------------
 @dataclass
 class Layer:
@@ -199,6 +294,7 @@ class Layer:
     crispri: list[CrispriPair] = field(default_factory=list)
     lentimpra: list[mpra.Element] = field(default_factory=list)
     vista: list[vista.VistaElement] = field(default_factory=list)
+    satmut: list[SatmutElement] = field(default_factory=list)
     crispri_invalid: int = 0
     _starts: dict[str, list[int]] = field(default_factory=dict, repr=False)
 
@@ -206,6 +302,7 @@ class Layer:
         self.crispri = sorted(self.crispri, key=lambda p: p.start)
         self.lentimpra = sorted(self.lentimpra, key=lambda e: e.start)
         self.vista = sorted(self.vista, key=lambda e: e.start)
+        self.satmut = sorted(self.satmut, key=lambda e: e.start)
         self._starts = {name: [x.start for x in getattr(self, name)] for name in ASSAYS}
 
     @classmethod
@@ -216,12 +313,13 @@ class Layer:
             crispri=pairs,
             lentimpra=load_mpra(chrom),
             vista=load_vista(chrom),
+            satmut=load_satmut(chrom),
             crispri_invalid=invalid,
         )
 
     @property
     def empty(self) -> bool:
-        return not (self.crispri or self.lentimpra or self.vista)
+        return not (self.crispri or self.lentimpra or self.vista or self.satmut)
 
     def counts(self) -> dict[str, int]:
         return {name: len(getattr(self, name)) for name in ASSAYS}
@@ -306,11 +404,56 @@ class Layer:
                 "tissues": sorted({t for e, _ in vs for t in e.tissues}),
                 "overlap": round(max(f for _, f in vs), 3),
             }
+
+        sm = [
+            (e, reciprocal_overlap(start, end, e.start, e.end))
+            for e in self.near("satmut", start, end, reach)
+        ]
+        sm = [(e, f) for e, f in sm if f >= fraction]
+        if sm:
+            out["satmut"] = self._satmut_of(start, end, sm)
         return out
+
+    @staticmethod
+    def _satmut_of(start: int, end: int, hits: list[tuple[SatmutElement, float]]) -> dict[str, Any]:
+        """What a base-level assay says about one element: its own bases, never the whole experiment.
+
+        Only the positions inside (start, end) are counted. `bases_measured` and `bases_functional` are
+        two different zeros and are named apart for that reason: the first can be zero because the
+        overlap fell on the unmeasured flank of the experiment, the second because every base that was
+        looked at turned out not to matter.
+        """
+        inside: dict[int, dict] = {}
+        for e, _ in hits:
+            for pos, b in e.bases.items():
+                if start <= pos - 1 < end:
+                    inside.setdefault(pos, b)
+        functional = [b for b in inside.values() if b["functional"]]
+        strong = [b for b in inside.values() if b["strong"]]
+        n = len(inside)
+        return {
+            "experiments": sorted(e.experiment for e, _ in hits),
+            "repeat_experiments": sum(e.repeats - 1 for e, _ in hits),
+            "bases_in_element": end - start,
+            "bases_measured": n,
+            "bases_functional": len(functional),
+            "bases_strong": len(strong),
+            "share_of_the_element_measured": round(n / (end - start), 4) if end > start else None,
+            "share_functional_of_measured": round(len(functional) / n, 4) if n else None,
+            "share_strong_of_measured": round(len(strong) / n, 4) if n else None,
+            "strongest_effect": (
+                round(max((abs(b["effect"]) for b in functional), default=0.0), 4) if functional else None
+            ),
+            "overlap": round(max(f for _, f in hits), 3),
+        }
 
 
 # --- prediction against measurement ---------------------------------------------------------------
 AGREES, DISAGREES, NOT_TESTED = "agrees", "disagrees", "predicted_gene_not_tested"
+# the two outcomes a base-level assay has that an element-level one does not, neither of them a verdict
+# on the element: the first is measured-and-inert, the second is never-looked
+BASES_INERT = "bases_measured_none_functional"
+BASES_NOT_MEASURED = "bases_not_measured"
 
 
 def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
@@ -320,6 +463,12 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
     exactly that question and can answer it three ways. lentiMPRA and VISTA ask the weaker question
     of whether the sequence acts at all, so their verdicts are recorded under their own names and the
     pooled verdict says how many assays fell each way rather than hiding the mixture.
+
+    Saturation mutagenesis asks a fourth question - which bases inside the element matter - and only
+    one of its answers is a verdict on the element. A functional base is support; an element whose
+    measured bases are all inert is `BASES_INERT`, which is a measurement of those bases and not a
+    contradiction of the element, and it is therefore kept out of `assays_disagreeing` rather than
+    folded into it. See `SATMUT_CANNOT_DISAGREE`.
     """
     out: dict[str, Any] = {}
     c = measured.get("crispri")
@@ -339,6 +488,26 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
     v = measured.get("vista")
     if v:
         out["vista"] = AGREES if v["positive"] else DISAGREES
+    s = measured.get("satmut")
+    if s:
+        if not s["bases_measured"]:
+            out["satmut"] = BASES_NOT_MEASURED
+            out["satmut_detail"] = (
+                "the experiment met the overlap rule but measured none of this element's own bases"
+            )
+        elif s["bases_functional"]:
+            out["satmut"] = AGREES
+            out["satmut_detail"] = (
+                f"{s['bases_functional']} of {s['bases_measured']} measured bases are functional "
+                f"({s['bases_strong']} strongly): the element contains bases whose identity changes "
+                "activity in a reporter"
+            )
+        else:
+            out["satmut"] = BASES_INERT
+            out["satmut_detail"] = (
+                f"all {s['bases_measured']} measured bases are inert, which is a measurement of those "
+                "bases; it is not a measurement of the element and not a disagreement"
+            )
     verdicts = [out[a] for a in ASSAYS if out.get(a) in (AGREES, DISAGREES)]
     out["assays_agreeing"] = sum(1 for x in verdicts if x == AGREES)
     out["assays_disagreeing"] = sum(1 for x in verdicts if x == DISAGREES)
@@ -355,7 +524,11 @@ def agreement(predicted_gene: str, measured: dict[str, Any]) -> dict[str, Any]:
 
 
 def confidence_of(measured: dict[str, Any]) -> float:
-    """The strongest assay present decides: a perturbation or an embryo outranks a reporter."""
+    """The strongest assay present decides: a perturbation or an embryo outranks a reporter.
+
+    Saturation mutagenesis is a reporter assay - the element is read out episomally, one substitution
+    at a time - so it lands with lentiMPRA and not with CRISPRi, however fine its resolution.
+    """
     if measured.get("crispri") or measured.get("vista"):
         return PERTURBATION_CONFIDENCE
     return REPORTER_CONFIDENCE
@@ -501,6 +674,36 @@ def census(
         "agreement_denominator_predicted_gene_tested": tested,
         "crispri_pairs_regulated": regulated_pairs,
         "crispri_pairs_measured_as_not_regulated": negative_pairs,
+        # the base-level assay, under its own name: its zero in `disagrees` is a property of the assay
+        "satmut": satmut_counts(measured_rows, eligible),
+    }
+
+
+def satmut_counts(measured_rows: list[dict[str, Any]], eligible: dict[str, Any]) -> dict[str, Any]:
+    """The base-level assay's own counters, kept apart from the element-level ones.
+
+    Four numbers that must not be added together: how many elements a base-level measurement was made
+    over; how many of those hold a functional base; how many were measured base by base and found
+    inert (measured-and-absent); and how many were inside the footprint but never raised at all
+    (never-looked). The last is the difference between the eligibility count and the raised one, and it
+    is named here so that neither zero can be mistaken for the other.
+    """
+    verdicts = [r["agreement"].get("satmut") for r in measured_rows if "satmut" in r["measured"]]
+    sat = [r["measured"]["satmut"] for r in measured_rows if "satmut" in r["measured"]]
+    footprint = eligible["by_assay"].get("satmut", 0)
+    return {
+        "elements_measured_base_by_base": len(sat),
+        "elements_with_a_functional_base": sum(1 for v in verdicts if v == AGREES),
+        "elements_measured_and_every_base_inert": sum(1 for v in verdicts if v == BASES_INERT),
+        "elements_matched_but_no_base_of_theirs_measured": sum(
+            1 for v in verdicts if v == BASES_NOT_MEASURED
+        ),
+        "elements_in_the_footprint_never_raised": footprint - len(sat),
+        "bases_measured": sum(s["bases_measured"] for s in sat),
+        "bases_functional": sum(s["bases_functional"] for s in sat),
+        "bases_strong": sum(s["bases_strong"] for s in sat),
+        "experiments_matched": sorted({x for s in sat for x in s["experiments"]}),
+        "why_it_can_never_disagree": SATMUT_CANNOT_DISAGREE,
     }
 
 
@@ -531,9 +734,25 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
         "crispri_pairs_measured_as_not_regulated",
         "crispri_pairs_the_benchmark_calls_invalid",
     )
+    satmut_keys = (
+        "elements_measured_base_by_base",
+        "elements_with_a_functional_base",
+        "elements_measured_and_every_base_inert",
+        "elements_matched_but_no_base_of_theirs_measured",
+        "elements_in_the_footprint_never_raised",
+        "bases_measured",
+        "bases_functional",
+        "bases_strong",
+    )
+    satmut: dict[str, Any] = dict.fromkeys(satmut_keys, 0)
+    experiments: set[str] = set()
     for c in censuses:
         for k in keys:
             sums[k] += c.get(k) or 0
+        s = c.get("satmut") or {}
+        for k in satmut_keys:
+            satmut[k] += s.get(k) or 0
+        experiments |= set(s.get("experiments_matched") or ())
         for a in ASSAYS:
             by_assay[a] += c["elements_by_assay"].get(a, 0)
             agree[a] += c["agrees"].get(a, 0)
@@ -568,6 +787,11 @@ def pool(censuses: list[dict[str, Any]]) -> dict[str, Any]:
             round(agree["crispri"] / tested, 4) if tested else None
         ),
         "agreement_denominator_predicted_gene_tested": tested,
+        "satmut": {
+            **satmut,
+            "experiments_matched": sorted(experiments),
+            "why_it_can_never_disagree": SATMUT_CANNOT_DISAGREE,
+        },
     }
 
 
@@ -629,6 +853,26 @@ def basis_text(row: dict[str, Any]) -> str:
             f"VISTA {len(v['positive'])} positive, {len(v['negative'])} negative"
             + (f" in {', '.join(v['tissues'])}" if v["tissues"] else "")
         )
+    s = row["measured"].get("satmut")
+    if s:
+        # the negative case is named as loudly as the positive one, and neither is stated as a verdict
+        # on the element: this assay measures bases
+        parts.append(
+            f"saturation mutagenesis ({', '.join(s['experiments'])}) measured "
+            f"{s['bases_measured']} of the element's {s['bases_in_element']} bases, "
+            f"{s['bases_functional']} of them functional and {s['bases_strong']} strongly so"
+            + (
+                ", so no base measured here matters and that is evidence about those bases only"
+                if s["bases_measured"] and not s["bases_functional"]
+                else ""
+            )
+            + (
+                " - the experiment overlaps this element but measured none of its bases, which is a "
+                "gap in the assay and not a finding about the element"
+                if not s["bases_measured"]
+                else ""
+            )
+        )
     a = row["agreement"]
     n_a, n_d = a["assays_agreeing"], a["assays_disagreeing"]
     parts.append(
@@ -644,6 +888,10 @@ def rule_lines(row: dict[str, Any]) -> list[tuple[str, str, float, str]]:
 
     A measured negative gets no rule: a rule would state a relation the assay says is not there. It
     is kept as an experimental fact on the measured element block instead, named gene by gene.
+
+    Saturation mutagenesis makes no rule either, and for a different reason: it measures a reporter's
+    activity, not a gene's, so it names no relation at all. Its experiments carry gene names given by
+    their authors (SORT1, IRF4), which is curation and not a measured target.
     """
     c = row["measured"].get("crispri")
     if not c:
