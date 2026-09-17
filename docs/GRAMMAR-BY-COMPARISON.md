@@ -1403,8 +1403,16 @@ so a positive correlation is guaranteed by the sampling and would tell us nothin
 motif sites held across species do not separate a positive from an inactive conserved negative. So
 the quantity under test is the **difference between the arms**, not either arm's value.
 
-**Design.** 60 positives in the panel's committed order, each with its matched negative from the same
-result — the pairing is the panel's, not this run's. Each element is tiled with **20 windows of 25 bp**,
+**Amended the same day, before any window was scored and before the instrument existed.** The design
+below assumed the panel pairs each positive with a matched negative one to one. It does not:
+`across_panel_vista` matches at GROUP level — 40 limb, 40 neural, 80 negatives, matched on length, GC,
+constrained fraction and distance with the medians reported per group — so a 1:1 pairing would be this
+run's invention rather than the panel's. The arms are therefore the panel's own groups, every element
+of them, and the budget rises from 2,400 requests to **3,200**. Nothing else changes: same windows,
+same outcome, same bars, same null. *An amendment before the first request is a design decision; the
+same words after the first number would be a different thing.*
+
+**Design.** The panel's own arms — 80 positives (40 limb, 40 neural) and 80 negatives. Each element is tiled with **20 windows of 25 bp**,
 evenly spaced, so a long element does not outvote a short one. One request per window: **2,400
 requests**. Per window, the model's predicted effect of substituting it and the window's mean Zoonomia
 phyloP; per element, the Spearman between the two; per arm, the mean of those correlations.

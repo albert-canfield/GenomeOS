@@ -19,8 +19,21 @@ from typing import Any
 
 WINDOW = 25  # bp per perturbed window: finer than a motif, coarser than a base
 WINDOWS_PER_ELEMENT = 20  # evenly spaced across the element, so length does not decide the sample
-ELEMENTS_PER_ARM = 60  # 60 positives and their 60 matched negatives
+ELEMENTS_PER_ARM = 80  # the panel's own arms: 40 limb + 40 neural positives, 80 negatives
 DRAWS = 200  # within-element shuffles of the constraint values
+
+# AMENDED 2026-09-17, before any window was scored and before the instrument was written, with the
+# reason: the registration below assumed the panel pairs each positive with a matched negative one to
+# one. It does not. `across_panel_vista` matches as GROUPS - 40 limb, 40 neural, 80 negatives, matched
+# on length, GC, constrained fraction and distance, with the medians reported per group - so a 1:1
+# pairing would be this run's invention rather than the panel's. The arms are therefore the panel's
+# own groups, every element of them, and the budget rises from 2,400 requests to 3,200. Nothing else
+# changes: the same windows, the same outcome, the same bars, the same null. An amendment before the
+# first request is a design decision; the same words after the first number would be a different thing.
+AMENDMENT = (
+    "arms are the panel's groups (80 positives across limb and neural, 80 negatives), not 1:1 pairs, "
+    "because the panel matches at group level; 3,200 requests rather than 2,400"
+)
 
 PRE_REGISTRATION: dict[str, Any] = {
     "written": (
@@ -41,10 +54,10 @@ PRE_REGISTRATION: dict[str, Any] = {
         "the quantity under test is the DIFFERENCE between the arms, not either arm's value"
     ),
     "sampling": (
-        f"{ELEMENTS_PER_ARM} positives drawn in the panel's committed order, each with its matched "
-        f"negative from the same result, so the pairing is the panel's and not this run's. Each "
-        f"element is tiled with {WINDOWS_PER_ELEMENT} windows of {WINDOW} bp, evenly spaced across it "
-        "so a long element does not outvote a short one. One request per window"
+        "every element of the panel's own arms, as amended above: 80 positives (40 limb, 40 neural) "
+        f"and 80 negatives from `across_panel_vista`, each tiled with {WINDOWS_PER_ELEMENT} windows of "
+        f"{WINDOW} bp, evenly spaced across it so a long element does not outvote a short one. One "
+        "request per window"
     ),
     "outcome": (
         "per window: the model's predicted effect of substituting that window, and the window's mean "
@@ -68,7 +81,7 @@ PRE_REGISTRATION: dict[str, Any] = {
             "arms, which is §15's finding arriving by a second route and is the outcome to expect"
         ),
     },
-    "budget": f"{2 * ELEMENTS_PER_ARM * WINDOWS_PER_ELEMENT} requests, one per window",
+    "budget": f"{2 * ELEMENTS_PER_ARM * WINDOWS_PER_ELEMENT} requests, one per window (amended)",
     "stopping": (
         "one look at half the budget, futility only: if the 95% upper bound of the difference is below "
         "0.05 the run stops. No interim success look"
