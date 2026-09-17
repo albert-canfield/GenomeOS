@@ -39,6 +39,12 @@ wrote it, on consecutive days:
   stops with nothing on screen and the refusal looks like a silent failure of something else
   (2026-09-17: a commit was written twice because its author could not see why the first died).
 
+The first of those happened a third time on 2026-09-17, to the same session, in a compound command
+that staged, checked and committed in one line to save a round trip. The warning above was read that
+morning and did not survive being in a hurry. **If you must pipe it, run the shell with
+`set -o pipefail`** — a refusal then exits 2 through the pipe instead of 0, which is one word between
+a guard that works and a guard that watches. Better still, give it its own line and read it.
+
 Run it bare. If output must be captured, send it to a file and read the file.
 
 Exit 0 clean, 2 on a finding, 1 on a usage error.

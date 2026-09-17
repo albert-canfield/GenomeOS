@@ -351,6 +351,18 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   costs a second and it replays the real accident correctly. A rule nobody
   can follow perfectly under concurrency belongs in a program.
 
+- **A warning you read this morning does not survive being in a hurry; `set -o pipefail` does
+  (2026-09-17).** `check_staged.py | tail -2 && git commit-tree ...` reports the refusal and exits 0,
+  because a pipeline's status is its last command's, so the `&&` meant to stop the commit runs it.
+  This is written in the tool's own docstring in bold, by the session that wrote the tool, after it
+  had happened twice — and it happened a third time the same day, to that session, in a compound
+  command that staged, checked and committed in one line to save a round trip. The commit was
+  harmless and that was luck, not care. **If the guard must be piped, run the shell with
+  `set -o pipefail`**, which turns the refusal back into exit 2; verified both ways. The general
+  form is the one this file keeps arriving at from different directions: a rule that depends on
+  remembering it under pressure is not a rule, it is a hope, and the fix is a mechanism — here one
+  shell option, one word long.
+
 - **A claim relayed between sessions loses its evidence and keeps its confidence, so the check
   belongs at the reader (2026-09-17).** One session wrote a summary of a finding; a second session
   half-drafted an edit to a shared document from that summary. The claim was wrong — it inverted a
