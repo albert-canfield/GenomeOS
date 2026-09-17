@@ -2509,12 +2509,17 @@ read what a cell could know.
 them wrong.** Not one was found by a failing test — every one preserved the quantity its test
 watched.
 
-| what was wrong | how it survived | what it cost to find |
-|---|---|---|
-| the 882-block tier reading | compared against a tier average, unmatched | withdrawn after two corrections |
-| the bigWig summariser | preserved every ratio; only absolutes were wrong (×4.62 at element level) | a peer reading the loop by eye |
-| the body program's germ-layer splits | preserved every layer total; three populations held zero cells, one of them 24.5% of the ectoderm | using `share:` for the first time |
-| the Blocks lane and `decompile` | poised genes arrive inside `silent_genes` by design | reading what the lane actually drew |
+| what was wrong | how it survived | what it cost to find | where the correction landed |
+|---|---|---|---|
+| the 882-block tier reading | compared against a tier average, unmatched | withdrawn after two corrections | **withdrawn in place**: ATTRIBUTION.md carries the section headed "the section below overstated in both directions", and +0.284 at p 0.00014 is still legible above +0.100 at p 0.18 |
+| the bigWig summariser | preserved every ratio; only absolutes were wrong (×4.62 at element level) | a peer reading the loop by eye | **re-run**, 23 chromosomes against a stop rule fixed first: measured_bp 552.0 → 535.0 Mb, constrained_bp 38.46 → 35.46 Mb, both numbers in the record |
+| the body program's germ-layer splits | preserved every layer total; three populations held zero cells, one of them 24.5% of the ectoderm | using `share:` for the first time | **restated in place** with `share:`, the last split absorbing the rounding and saying so in its own evidence line |
+| the Blocks lane and `decompile` | poised genes arrive inside `silent_genes` by design | reading what the lane actually drew | **fixed**: poised is a third state the reader emits first, and `decompile` prints the cell instead of dropping it |
+
+**Two of these had reached a conclusion before they were caught, and both conclusions were withdrawn
+in the open rather than quietly edited.** That is the claim worth making about this record, and it is
+checkable in the files: the wrong number is still printed beside the right one. "Nothing propagated"
+would be a claim about luck, and it fails on the first file a reader opens.
 
 Two more that were never wrong, only unsaid: **0.45% of the unknown space has ever been measured by
 any assay held here**, and the compiled genome states **940,803 facts of which none is experimental**.
@@ -2601,12 +2606,23 @@ entire sweep. What is next, in order of what it decides:
    and both groups' covariate medians in the same result, with nine tests each of a mistake that was
    published this week. Any lane doing a two-group comparison should import it rather than write one.
    **What remains here is not ours to compute:** the library is an experiment, and until one is run
-   the honest description of the 98% is that it is unmeasured rather than unknown. Two pieces do
-   remain: genomeos-79's lane on which oligos cannot be measured even in principle (unmappable
-   repeats, duplications, synthesis-hostile windows), after which the manifest is rebuilt with those
-   excluded and counted; and the intersection of the CRISPRi shortlist with the real-unknown blocks,
-   which would give the library a positive set whose expectation comes from a screen rather than from
-   the model. Area I.
+   the honest description of the 98% is that it is unmeasured rather than unknown.
+   **Both of the pieces that did remain have landed (2026-09-17), and this row was still calling them
+   open until it was audited against the results:**
+   - **Which oligos cannot be measured even in principle** — `measurability_real_unknown`. Family A
+     (assembly gap, GC extreme, homopolymer, tandem low complexity, non-unique in block) and family B
+     (segmental duplication, interspersed repeat) with a stated precedence, and an independent
+     reproduction of the peer's reading that matched it exactly: 680 untouched blocks, 13.77 Mb,
+     45,900 oligos.
+   - **Mappability measured rather than proxied** — `mappability_real_unknown`. Umap multi-read
+     mappability (Karimzadeh et al. 2018) in place of the repeat proxy, the two arms reported
+     separately, and the four k columns kept **beside** the synthesis filter and never added into it.
+   - **The CRISPRi shortlist against the real unknown** — `shortlist_in_real_unknown`, and it is thin,
+     which is the point: of the **882** real-unknown blocks, 163 hold any scored element and only
+     **7 hold a shortlist element** (coding drop above 0.2, the band where the screens called 105 of
+     105). A positive set whose expectation comes from a screen rather than from the model exists, and
+     it is seven blocks.
+   Area I.
 4. **The known-locus benchmark with more loci**, not more readings of the one it has.
    **Stated-interval scoring is done (2026-09-17), and it cost one request rather than a
    handful.** The scorer's input is 1 Mb centred on the element, so its reach is 524 kb each
