@@ -738,6 +738,9 @@ version = "0.9.0"
 source = { editable = "." }
 
 [package.optional-dependencies]
+analysis = [
+    { name = "numpy" },
+]
 clocks = [
     { name = "biolearn" },
 ]
@@ -753,6 +756,7 @@ predict = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "numpy" },
     { name = "pytest" },
     { name = "ruff" },
 ]
@@ -762,12 +766,14 @@ requires-dist = [
     { name = "alphagenome", marker = "extra == 'predict'", specifier = ">=0.9.0" },
     { name = "biolearn", marker = "extra == 'clocks'", specifier = ">=0.9.1" },
     { name = "mhcflurry", marker = "extra == 'hla'", specifier = ">=2.1" },
+    { name = "numpy", marker = "extra == 'analysis'", specifier = ">=1.26" },
     { name = "process-bigraph", marker = "extra == 'compose'", specifier = ">=1.8.4" },
 ]
-provides-extras = ["compose", "clocks", "predict", "hla"]
+provides-extras = ["compose", "clocks", "predict", "hla", "analysis"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "numpy", specifier = ">=1.26" },
     { name = "pytest", specifier = ">=8" },
     { name = "ruff", specifier = ">=0.16.6" },
 ]
