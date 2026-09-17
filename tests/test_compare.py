@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from genomeos.compare import Strata, difference, imbalance, standardised, stratum_rates
+from genomeos.compare import Strata, difference, imbalance, input_presence, standardised, stratum_rates
 
 STRATA = Strata(gc=(0.35, 0.45, 0.55), tss=(1_000, 5_000, 20_000, 100_000))
 
@@ -97,3 +97,67 @@ def test_imbalance_tolerates_a_missing_covariate() -> None:
 
     assert out["tss"]["target_median"] is None
     assert out["gc"]["ratio"] == 1.0
+
+
+# ------------------------------------------------------- bought or free, before the stratum is run
+def test_an_input_present_on_every_row_is_free_and_a_stratum_on_it_cannot_bite() -> None:
+    """The 0.3529 -> 0.3578 result: no movement, because the input was never missing anywhere.
+
+    A value on constrained sequence is read from a genome-wide phyloP track and a trio's variants, so
+    every window has it. Reporting that as "conditioning on coverage changed nothing" would read as a
+    claim passing a test when no test was administered.
+    """
+    targets = [{"phylop": 1.0} for _ in range(17)]
+    controls = [{"phylop": 0.5} for _ in range(85)]
+
+    out = input_presence(targets, controls, {"constraint": "phylop"})
+
+    assert out["constraint"]["kind"] == "free"
+    assert out["constraint"]["universal"]
+    assert "arithmetic rather than evidence" in out["constraint"]["reading"]
+
+
+def test_an_input_missing_on_some_rows_is_bought_and_names_the_shortfall() -> None:
+    """60 of 85 control windows had a deletion spent on them; that gap is where the artefact lived."""
+    targets = [{"scored": True} for _ in range(17)]
+    controls = [{"scored": True} for _ in range(60)] + [{"scored": None} for _ in range(25)]
+
+    out = input_presence(targets, controls, {"deletion": "scored"})
+
+    assert out["deletion"]["kind"] == "bought"
+    assert out["deletion"]["controls_with_the_input"] == 60
+    assert "60/85" in out["deletion"]["reading"]
+
+
+def test_the_arms_are_reported_apart_because_a_one_sided_gap_is_its_own_failure() -> None:
+    """An input universal in the controls and missing in the targets is not the symmetric case.
+
+    Pooling would read 95 of 102 and look like mild patchiness; apart, it reads 10 of 17 against
+    85 of 85, which is a different and worse thing.
+    """
+    targets = [{"x": 1} for _ in range(10)] + [{"x": None} for _ in range(7)]
+    controls = [{"x": 1} for _ in range(85)]
+
+    out = input_presence(targets, controls, {"thing": "x"})["thing"]
+
+    assert (out["targets_with_the_input"], out["controls_with_the_input"]) == (10, 85)
+    assert out["kind"] == "bought"
+
+
+def test_naming_the_outcome_instead_of_the_input_is_the_same_substitution_one_level_down() -> None:
+    """`deletion_scored` is 60 of 85 and `deletion_target` is 54: the input, and what it produced.
+
+    Passing the outcome measures how often the claim succeeded rather than how often it could be
+    attempted. Both read "bought" here, so the function cannot catch it — the docstring has to, and
+    this test pins the two numbers so the distinction stays visible.
+    """
+    controls_input = [{"k": True} for _ in range(60)] + [{"k": None} for _ in range(25)]
+    controls_outcome = [{"k": True} for _ in range(54)] + [{"k": None} for _ in range(31)]
+    targets = [{"k": True} for _ in range(17)]
+
+    got_input = input_presence(targets, controls_input, {"d": "k"})["d"]
+    got_outcome = input_presence(targets, controls_outcome, {"d": "k"})["d"]
+
+    assert got_input["controls_with_the_input"] == 60
+    assert got_outcome["controls_with_the_input"] == 54
+    assert got_input["kind"] == got_outcome["kind"] == "bought"

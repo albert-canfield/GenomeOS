@@ -146,3 +146,53 @@ def standardised(
         "matched": difference(sum(1 for r in kept if r[hit]), len(kept), round(control_hits, 6), len(kept)),
         "imbalance": imbalance(targets, controls, strata),
     }
+
+
+def input_presence(targets: list[Row], controls: list[Row], inputs: dict[str, str]) -> dict[str, Any]:
+    """Which of a claim's inputs is present on every row, and which is not: bought or free.
+
+    A coverage stratum only bites a claim that had to be BOUGHT. A direction needs a deletion spent on
+    that window, so windows differ in whether anyone paid; a value on constrained sequence is read
+    from a trio's variants and a genome-wide phyloP track, which cover every window whether or not
+    anyone chose it. Adding coverage as a stratum moved the first from +0.41 to -0.11 and the second
+    from 0.3529 to 0.3578 — and the second result is arithmetic, not evidence, because the input was
+    never missing anywhere.
+
+    That is the trap this answers. "Conditioning on coverage changed nothing" reads as a claim passing
+    a test, when on a free claim no test was administered. Counting presence says which you have
+    BEFORE the stratum is run, and costs nothing.
+
+    `inputs` maps a name to the row key carrying it. **Name the INPUT, not the outcome.** In the locus
+    benchmark `deletion_scored` (was a deletion spent here: 60 of 85 controls) is the input and
+    `deletion_target` (did it name a gene: 54 of 85) is what the input produced. Passing the outcome
+    measures how often the claim succeeded rather than how often it could be attempted, which is the
+    same substitution this function exists to catch, one level down.
+
+    Both arms are reported apart rather than pooled: an input universal in the controls and missing in
+    the targets is a different failure from the symmetric one, and pooling hides exactly that.
+    """
+    out: dict[str, Any] = {}
+    for name, key in inputs.items():
+        t_have = sum(1 for r in targets if r.get(key) is not None)
+        c_have = sum(1 for r in controls if r.get(key) is not None)
+        universal = t_have == len(targets) and c_have == len(controls)
+        out[name] = {
+            "key": key,
+            "targets_with_the_input": t_have,
+            "targets": len(targets),
+            "controls_with_the_input": c_have,
+            "controls": len(controls),
+            "universal": universal,
+            "kind": "free" if universal else "bought",
+            # a string in the result, not a convention in prose: a later reader cannot upgrade it
+            "reading": (
+                "free: the input covers every row in both arms, so a stratum on it cannot bite and a"
+                " null result is arithmetic rather than evidence"
+                if universal
+                else (
+                    "bought: the input is missing on some rows, which is where a coverage artefact"
+                    f" lives — targets {t_have}/{len(targets)}, controls {c_have}/{len(controls)}"
+                )
+            ),
+        }
+    return out
