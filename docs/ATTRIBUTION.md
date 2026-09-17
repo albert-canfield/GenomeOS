@@ -1670,6 +1670,43 @@ sequence does anything. Its value is that it converts "the 98% is unmeasured" fr
 file with 312,129 rows in it, and that the arithmetic behind every arm is in the script rather than in
 a sentence.
 
+## The compiled genome states 940,803 facts and not one of them is experimental (2026-09-17)
+
+Area I compiles a chromosome's non-coding space into a BioLang program where every region carries a
+role, an evidence kind and a confidence. Only chr21 had ever been compiled, because the inputs for the
+rest were unfinished; both sweeps closed this week, so `scripts/compile_genome_programs.py` compiles
+all 24 — **227.7 MB of generated program, in under a minute** — and reads the Evidence explorer over
+them.
+
+| evidence kind | facts | share |
+|---|---|---|
+| experimental | **0** | **0.0%** |
+| curated | 42,040 | 4.5% |
+| predicted | **880,754** | **93.6%** |
+| inferred | 18,009 | 1.9% |
+| **weak (confidence ≤ 0.5)** | **812,921** | **86.4%** |
+
+**940,803 facts, and the strongest evidence kind is absent entirely.** Per chromosome the weak share
+runs from 0.777 (chr19, the most gene-dense) to 0.898 (chr18), with chrY at 0.383 because most of it
+is structural and curated rather than attributed.
+
+This is the Evidence explorer's own promise turned on the project's largest artefact, and it agrees
+with the coverage reading from the opposite direction: that one measured how little of the unknown
+space any assay has touched (0.45%), this one measures how little of what the project *states* about
+it rests on measurement (none of it). The two are the same fact seen from the data and from the model.
+
+**A performance decision with a number behind it.** The compiled programs hold 940,803 of the
+project's 967,426 stated facts and cost 21 seconds to parse, against 1.8 seconds for everything
+hand-written. `evidence.collect` therefore excludes them unless asked (`compiled=1` on the API), and
+the exclusion happens before parsing rather than after, because filtering afterwards would have cost
+the same twenty seconds. A default nobody waits for is not a default.
+
+**What it does not say.** Nothing here is a claim that the attributions are wrong. `predicted` is an
+honest label on a model's output and the project has spent two days measuring how far those outputs
+carry — the node's +2.88 points, the calibration's failure on prevalence, E1's +0.075. It says that
+the compiled genome is a hypothesis in the shape of a program, and that it says so itself, fact by
+fact, which is what the evidence field was built for.
+
 ## 99.5% of the unknown space has never been measured, and the part that matters would fit in one library (2026-09-17)
 
 Three lanes hit the same wall today from different directions: the deletion sweep's per-tier readings

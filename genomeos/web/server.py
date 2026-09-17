@@ -882,8 +882,14 @@ class Api:
         module: str = "",
         limit: int = 400,
         csv: bool = False,
+        compiled: bool = False,
     ) -> dict:
-        """Every fact stated by every BioLang program, filtered by evidence kind and confidence."""
+        """Every fact stated by every BioLang program, filtered by evidence kind and confidence.
+
+        `compiled=1` adds the generated chromosome programs: 940,803 of the project's 967,426 facts,
+        93.6% of them predicted and none experimental. They are off by default because reading them
+        costs 21 seconds, and a default nobody waits for is not a default.
+        """
         from genomeos import evidence as ev
 
         try:
@@ -894,7 +900,7 @@ class Api:
         if picked and picked - set(ev.KINDS):
             bad = sorted(picked - set(ev.KINDS))
             raise ApiError(f"unknown evidence kind {bad}; use {', '.join(ev.KINDS)}")
-        out = ev.collect(self.root, picked, ceiling, query, module)
+        out = ev.collect(self.root, picked, ceiling, query, module, compiled=bool(compiled))
         rows = out["rows"]
         if csv:
             return {"csv": ev.to_csv(rows), "matched": len(rows)}

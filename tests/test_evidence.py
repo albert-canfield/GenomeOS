@@ -117,3 +117,29 @@ def test_api_evidence():
         api.evidence(kinds="bogus")
     with pytest.raises(ApiError):
         api.evidence(max_confidence="soon")
+
+
+def test_the_compiled_chromosomes_are_off_by_default_and_on_by_request(tmp_path, monkeypatch) -> None:
+    """They hold 940,803 of the project's 967,426 facts and cost twenty seconds to parse.
+
+    A page that loaded them by default would be a page nobody opens, so `programs` takes the flag and
+    the parse itself is skipped - filtering them out after parsing would have cost the same time.
+    """
+    from genomeos import evidence as ev
+
+    (tmp_path / "data" / "demo").mkdir(parents=True)
+    (tmp_path / "data" / "demo" / "hand.bio").write_text("module demo.hand\n")
+    (tmp_path / ev.COMPILED_DIR).mkdir(parents=True)
+    (tmp_path / ev.COMPILED_DIR / "noncoding_chr21.bio").write_text("module human.noncoding.chr21\n")
+
+    assert ev.programs(tmp_path) == ["data/demo/hand.bio"]
+    assert str(ev.COMPILED_DIR) in " ".join(ev.programs(tmp_path, compiled=True))
+
+
+def test_a_missing_compiled_directory_is_not_an_error(tmp_path) -> None:
+    """The programs are generated and git-ignored, so a fresh checkout has none."""
+    from genomeos import evidence as ev
+
+    (tmp_path / "data" / "demo").mkdir(parents=True)
+
+    assert ev.programs(tmp_path, compiled=True) == []
