@@ -3455,6 +3455,205 @@ a block as scored only when its element has a coding target with a GENCODE TSS, 
 than the 531 tested blocks and 331 leads counted for the tier reading; the two numbers answer
 different questions and are not in conflict.)
 
+## The proxy replaced by a measurement: mappability read at four read lengths, and the 8,131 oligos the repeat flag passes that a 24-mer cannot place (2026-09-17, later)
+
+The section below charged 17,112 of the untouched blocks' windows to `interspersed_repeat` and 210 to
+`segmental_duplication`, and called the remainder **attributable to one locus**. Both rules were a
+**proxy**. They ask how much of a window is annotated repeat, not whether the window's sequence can
+be told apart from the rest of the genome, and the difference showed in two places: the attributable
+count swung **19,084 to 28,563 oligos** as `INTERSPERSED_MAX` moved from 0.25 to 0.75, a 50% swing on
+a number nothing measures; and `non_unique_in_block`, the one rule that did ask about uniqueness,
+compared each window only against its own block and so fired on **23 windows** — a lower bound with
+no relation to the genome.
+
+`genomeos/attribution/mappability.py` and `scripts/mappability.py` read the quantity itself.
+
+### The track, and what reading it cost
+
+**Umap multi-read mappability**, GRCh38 (UCSC hg38): for each base, the share of the length-*k* reads
+overlapping it that align to exactly one place in the assembly. Karimzadeh, Ernst, Kundaje and
+Hoffman 2018, *Nucleic Acids Research* 46:e120, doi:10.1093/nar/gky677; read from UCSC's copies at
+`https://hgdownload.soe.ucsc.edu/gbdb/hg38/hoffmanMappability/k{k}.Umap.MultiTrackMappability.bw`.
+
+**k is part of every number below and the four columns are never pooled.** A 24-mer and a 100-mer
+answer different questions about a 300 bp oligo, and the answers here differ by 31,170 oligos.
+
+| track | *k* | file bytes | bytes read | range requests | wall time |
+|---|---|---|---|---|---|
+| Umap k24 | 24 | 2,028,863,031 | 21,038,867 | 1,903 | 331 s |
+| Umap k36 | 36 | 1,647,208,796 | 18,134,671 | 1,747 | 306 s |
+| Umap k50 | 50 | 1,331,314,604 | 16,234,544 | 1,687 | 295 s |
+| Umap k100 | 100 | 864,604,710 | 15,971,162 | 1,567 | 268 s |
+| **total** | — | **5,871,991,141** | **71,379,244** | **6,904** | **1,199 s** |
+
+Nothing was downloaded: the four files weigh 5.87 GB and **1.22% of their bytes were fetched**,
+through `genomeos/attribution/bigwig.py`, the same range reader Zoonomia and Gnocchi use — header,
+chromosome tree and R-tree first, then only the data sections overlapping the oligos. `BYTE_CAP` is
+96 MB per track and was not reached. The kept cache is the per-oligo summaries only,
+**11.3 MB in `data/knowledge/mappability/`** against a `CACHE_CAP` of 100 MB; no track bytes are
+stored. The whole set was read twice, once cold and once with `--refresh`, and every count in this
+section is identical between the two runs.
+
+### The rule, with its one justification
+
+    a base is uniquely readable when its multi-read mappability is at least BASE_CUT = 1.0, and an
+    oligo is mappable when at least MAPPABLE_FRACTION of its 300 bases are uniquely readable.
+
+`BASE_CUT` is 1.0 rather than a fraction because anything under 1.0 already means some read covering
+that base has a second home in the genome, which is exactly the failure being avoided; the tolerance
+the design really has is over *how much of the oligo* may fail, and that is `MAPPABLE_FRACTION`,
+reported at **0.50, 0.90 and 0.99** and not tuned. The universe is the library's **test arm as
+written: 91,919 oligos of 300 bp over 878 blocks**, which is already the set that passed the
+synthesis rules.
+
+### The two arms, reported separately
+
+The repeat proxy does not depend on *k*, so it is one number in every row. Nothing here adds the two
+arms together.
+
+| *k* | oligos | attributable by the **repeat proxy** | attributable by the **mappability track** | both arms | arms agree |
+|---|---|---|---|---|---|
+| 24 | 91,919 | 51,789 | 57,346 | 43,658 | 76.3% |
+| 36 | 91,919 | 51,789 | 70,276 | 48,112 | 71.9% |
+| 50 | 91,919 | 51,789 | 78,276 | 49,960 | 67.2% |
+| 100 | 91,919 | 51,789 | 88,516 | 51,603 | 59.6% |
+
+And over the **680 untouched blocks alone** — the published proxy's own universe, which contributes
+41,037 of the test arm's oligos across 676 blocks:
+
+| *k* | oligos | repeat proxy | mappability track | both arms | proxy passes, track says no |
+|---|---|---|---|---|---|
+| 24 | 41,037 | 23,863 | 26,081 | 20,028 | **3,835** |
+| 36 | 41,037 | 23,863 | 31,806 | 22,120 | **1,743** |
+| 50 | 41,037 | 23,863 | 35,145 | 22,980 | **883** |
+| 100 | 41,037 | 23,863 | 39,541 | 23,776 | **87** |
+
+### The cross-tabulation, which is the result
+
+Over the whole test arm at `MAPPABLE_FRACTION` 0.90. The disagreement is not a problem to reconcile;
+it is what the measurement had to say.
+
+| *k* | both flag | proxy flags, **track says mappable** | **proxy passes, track says unmappable** | neither flags |
+|---|---|---|---|---|
+| 24 | 26,442 | 13,688 | **8,131** | 43,658 |
+| 36 | 17,966 | 22,164 | **3,677** | 48,112 |
+| 50 | 11,814 | 28,316 | **1,829** | 49,960 |
+| 100 | 3,217 | 36,913 | **186** | 51,603 |
+
+Both directions are large, and they move opposite ways with *k*.
+
+- **The dangerous direction.** 8,131 oligos at k24, 3,677 at k36, 1,829 at k50 and 186 at k100 pass
+  the repeat proxy and fail the measurement. As a share of the 51,789 the proxy calls attributable
+  that is **15.7%, 7.1%, 3.5% and 0.36%**. These are oligos the design would order believing a
+  positive could be placed. They are not an annotation artefact: the within-block rule found 23 of
+  them and the genome-wide track at k24 calls 34,573 of the 91,919 test oligos unmappable, so the old
+  lower bound was low by three orders of magnitude.
+- **The other direction, which is larger.** 13,688 oligos at k24 rising to 36,913 at k100 are flagged
+  by the proxy and fully mappable. At k100 that is 36,913 of the 40,130 proxy-flagged oligos: **92% of
+  the repeat flag is not an attribution problem at all** once the read is 100 bp (70.6% at k50, 34.1%
+  at k24). This is the same conclusion the lentiMPRA calibration reached from the other side, now
+  measured: interspersed repeat is a caveat about annotation, not about whether a locus can be found.
+
+### Does the flag carry information once the covariates are held fixed?
+
+`genomeos/compare.py`, direct standardisation on block length, GC and distance to a coding TSS.
+Targets are the 40,130 proxy-flagged oligos, controls the 51,789 it passes, outcome "the track calls
+this unmappable". **40,128 targets matched, 2 dropped for want of a control, 0 excluded for a missing
+covariate.** Imbalance before matching, identical for every *k*: block length 101,366 against 87,393
+(ratio 1.16), GC 0.3867 against 0.3667 (1.055), TSS distance 296,976 against 313,568 (0.947).
+
+| *k* | flagged unmappable | passed unmappable | raw difference | **matched difference** | 95% upper |
+|---|---|---|---|---|---|
+| 24 | 0.6589 | 0.1581 | +0.5019 | **+0.5009** | 0.5067 |
+| 36 | 0.4477 | 0.0769 | +0.3767 | **+0.3708** | 0.3763 |
+| 50 | 0.2944 | 0.0401 | +0.2591 | **+0.2543** | 0.2591 |
+| 100 | 0.0802 | 0.0039 | +0.0766 | **+0.0763** | 0.0790 |
+
+So the proxy is informative and never sufficient: at k24 a flagged oligo is 50 percentage points more
+likely to be unmappable at equal block length, GC and TSS distance, and by k100 the gap is 7.6
+points. The matched difference barely moves off the raw one, which is the honest reading of an
+imbalance of 1.16 and 1.055 — small, and reported rather than assumed away.
+
+### Sensitivity: the rule at three values
+
+| *k* | mappable at 0.50 | at **0.90** | at 0.99 | dangerous cell at 0.50 / **0.90** / 0.99 |
+|---|---|---|---|---|
+| 24 | 75,782 | **57,346** | 45,969 | 439 / **8,131** / 15,352 |
+| 36 | 82,496 | **70,276** | 68,559 | 142 / **3,677** / 4,523 |
+| 50 | 86,163 | **78,276** | 77,090 | 71 / **1,829** / 2,315 |
+| 100 | 89,884 | **88,516** | 88,302 | 25 / **186** / 251 |
+
+k24 is the column that is sensitive to the cut-off (75,782 to 45,969, a factor of 1.65); at k50 and
+above the rule barely matters (86,163 to 77,090; 89,884 to 88,302). The proxy's own swing is reported
+in the same result and the track does not follow it: as `INTERSPERSED_MAX` moves 0.25 → 0.50 → 0.75
+the proxy's count goes 41,013 → 51,789 → 62,177 while every track column stays exactly where it is,
+and the dangerous cell grows 4,421 → 8,131 → 12,943 at k24.
+
+### Every group, with its covariates
+
+Oligo length is 300 bp by construction, so the length distribution reported is that of the blocks the
+oligos were tiled from (quartiles, oligo-weighted). No tier is used as a control anywhere in this
+section: the groups are cut by the two rules themselves.
+
+| group | *k* | oligos | block length q25 / med / q75 | GC | median TSS distance | no TSS |
+|---|---|---|---|---|---|---|
+| both flag | 24 | 26,442 | 50,739 / 102,355 / 181,805 | 0.393 | 290.5 kb | 0 |
+| proxy flags, track mappable | 24 | 13,688 | 48,767 / 97,001 / 178,533 | 0.377 | 309.6 kb | 0 |
+| proxy passes, track unmappable | 24 | 8,131 | 40,858 / 83,723 / 158,892 | 0.370 | 296.0 kb | 0 |
+| neither flags | 24 | 43,658 | 43,799 / 89,270 / 164,906 | 0.367 | 316.4 kb | 0 |
+| both flag | 100 | 3,217 | 50,375 / 115,335 / 178,533 | 0.400 | 275.1 kb | 0 |
+| proxy flags, track mappable | 100 | 36,913 | 49,944 / 101,277 / 181,805 | 0.383 | 300.5 kb | 0 |
+| proxy passes, track unmappable | 100 | 186 | 31,699 / 83,650 / 164,641 | 0.393 | 261.9 kb | 0 |
+| neither flags | 100 | 51,603 | 43,673 / 87,393 / 164,641 | 0.367 | 313.8 kb | 0 |
+
+The dangerous cell comes from the **shortest** blocks at every *k* (median 83.7 kb against 89.3 kb at
+k24, 83.7 against 87.4 at k100) and, at k24, is the group second-closest to a gene. Dropping it would
+repeat the bias the thin-block decision was taken to avoid, so it is reported as a flag and not as a
+deletion. All eight groups, and the four cut over the untouched blocks alone, are in the result with
+these three covariates.
+
+### Coverage: what could not be assessed, by name
+
+- **0 oligos unassessed at every *k*.** All 91,919 have a mappability reading and a proxy reading; no
+  chromosome of the arm is absent from a track and `BYTE_CAP` was never reached.
+- **Oligos with no track value anywhere: 691 (k24), 405 (k36), 251 (k50), 83 (k100).** These are
+  measured as unmappable, not as unassessed: Umap writes nothing where mappability is zero. That
+  reading is licensed by a check in the output rather than by assumption — the test arm contains
+  **not one N base** and no oligo is other than 300 bp, so a missing value cannot be an assembly gap.
+- **4 of the 680 untouched blocks have no test oligo to assess**, all on chrY
+  (`chrY:12920478-12930164`, `chrY:18650279-18655519`, `chrY:56954169-57015104`,
+  `chrY:57062405-57067746`): the library's test arm stops at chrX. They are named, not zeroed, and
+  they are why this lane's untouched-block universe is 676 blocks and 41,037 oligos where the section
+  below reports 680 blocks and 45,570 windows — the rest of the difference being the 4,264 windows
+  the synthesis rules had already removed before the manifest was written.
+- **50,882 of the 91,919 test oligos come from blocks an assay has already touched** and are outside
+  the published proxy's universe; they are counted separately, never pooled with the 41,037.
+- **No proxy layer was missing**: RepeatMasker and genomicSuperDups are cached for all 23
+  chromosomes of the arm, so no oligo is silently repeat-free.
+
+### What changes for the library's quotable numbers, and what does not
+
+- **The orderable count does not move. 41,297 of the untouched blocks' 45,570 windows can be
+  synthesised and read back, and the test arm is 91,919 oligos.** Mappability is not a synthesis
+  rule; it changes nothing a vendor quotes, and no number in the section below is withdrawn.
+- **"Attributable to one locus" can no longer be quoted without a *k*.** Over the untouched blocks it
+  is 26,081 oligos at k24, 31,806 at k36, 35,145 at k50 and 39,541 at k100, against the proxy's
+  23,863. The proxy's 19,084–28,563 swing on an arbitrary repeat cut-off is gone; what replaces it is
+  a spread that is a property of the follow-up assay's read length, which the design can choose and
+  state.
+- **Which *k* to quote is a question about the follow-up, not about the reporter.** An MPRA reads its
+  members back by barcode, so mappability does not decide whether a number comes out; it decides
+  whether a positive can be pinned to this locus afterwards. A CRISPRi follow-up places ~20 bp
+  guides, so k24 is its column; a 100 bp resequencing or allele-specific read is k100's. The library
+  should carry all four values per oligo and quote the one belonging to the experiment it promises.
+- **The repeat flag stays a flag.** 92% of the proxy's flagged oligos are fully mappable at k100 and
+  70.6% at k50, so dropping them for want of attribution would throw away sequence that can in fact
+  be placed. The 8,131 oligos at k24 that the proxy passes and the track cannot place are the other
+  half of the same correction, and they are the reason this arm exists.
+
+Result: `data/results/mappability_real_unknown.json`. Tests: `tests/test_mappability.py`, on a bigWig
+built in memory, no network.
+
 ## What the library cannot measure: 45,570 oligos really tile the 13.77 Mb, 41,297 can be ordered, and the repeat flag is not a reason to drop them (2026-09-17)
 
 The section below established that 680 of the 882 real-unknown blocks — 13.77 Mb — have never been

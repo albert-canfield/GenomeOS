@@ -1,0 +1,3284 @@
+{
+  "result": "mappability_real_unknown",
+  "date": "2026-09-17",
+  "question": "the library's 'attributable to one locus' figure rested on a repeat proxy; this measures mappability itself and reports the two arms separately",
+  "assembly": "GRCh38 (UCSC hg38)",
+  "track_kind": "Umap multi-read mappability (single-read mappability averaged over the k-mers covering a base)",
+  "citation": "Karimzadeh M, Ernst C, Kundaje A, Hoffman MM 2018, Umap and Bismap: quantifying genome and methylome mappability, Nucleic Acids Research 46:e120, doi:10.1093/nar/gky677",
+  "manifest": "data/knowledge/library/unknown_library.tsv",
+  "manifest_checks": {
+    "arm": "test",
+    "oligos": 91919,
+    "n_bases_in_arm": 0,
+    "oligos_not_one_oligo_long": 0,
+    "reading": "with no N base in the arm, a base the track carries no value for is unmappable and not an assembly gap; that is what licenses counting missing values as zeros"
+  },
+  "chromosomes": [
+    "chr1",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr2",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chrX"
+  ],
+  "chromosomes_absent_from_the_arm": [
+    "chrY"
+  ],
+  "oligo_bp": 300,
+  "rule": "a base is uniquely readable at multi-read mappability >= BASE_CUT 1.0; an oligo is mappable when at least MAPPABLE_FRACTION of its 300 bases are, reported at [0.5, 0.9, 0.99]",
+  "proxy_definition": "measurability Family B: interspersed_fraction >= 0.5 or segdup_fraction >= 0.5",
+  "byte_cap_per_track": 100663296,
+  "cache_dir": "data/knowledge/mappability",
+  "cache_bytes": 11302640,
+  "cache_cap": 104857600,
+  "tracks": {
+    "k24": {
+      "track": "Umap k24",
+      "k": 24,
+      "kind": "Umap multi-read mappability (single-read mappability averaged over the k-mers covering a base)",
+      "assembly": "GRCh38 (UCSC hg38)",
+      "url": "https://hgdownload.soe.ucsc.edu/gbdb/hg38/hoffmanMappability/k24.Umap.MultiTrackMappability.bw",
+      "file_bytes": 2028863031,
+      "read": {
+        "bytes_fetched": 21038867,
+        "range_requests": 1903,
+        "seconds": 330.7,
+        "oligos_from_cache": 0,
+        "per_chromosome": {
+          "chr1": {
+            "oligos_read": 5836,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1492341,
+            "range_requests": 152,
+            "seconds": 27.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr2": {
+            "oligos_read": 9595,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 2008617,
+            "range_requests": 188,
+            "seconds": 33.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr3": {
+            "oligos_read": 4842,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1142395,
+            "range_requests": 116,
+            "seconds": 19.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr4": {
+            "oligos_read": 5175,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1063812,
+            "range_requests": 109,
+            "seconds": 18.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr5": {
+            "oligos_read": 7138,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1362479,
+            "range_requests": 105,
+            "seconds": 18.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr6": {
+            "oligos_read": 7499,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1718745,
+            "range_requests": 125,
+            "seconds": 21.3,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr7": {
+            "oligos_read": 2995,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 890888,
+            "range_requests": 79,
+            "seconds": 13.4,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr8": {
+            "oligos_read": 5428,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1140326,
+            "range_requests": 110,
+            "seconds": 19.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr9": {
+            "oligos_read": 3934,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 985885,
+            "range_requests": 88,
+            "seconds": 14.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr10": {
+            "oligos_read": 2440,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 758440,
+            "range_requests": 84,
+            "seconds": 14.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr11": {
+            "oligos_read": 2903,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 797980,
+            "range_requests": 79,
+            "seconds": 14.3,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr12": {
+            "oligos_read": 804,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 408360,
+            "range_requests": 64,
+            "seconds": 11.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr13": {
+            "oligos_read": 6588,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1201187,
+            "range_requests": 81,
+            "seconds": 13.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr14": {
+            "oligos_read": 4265,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 924395,
+            "range_requests": 77,
+            "seconds": 12.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr15": {
+            "oligos_read": 2653,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 589684,
+            "range_requests": 45,
+            "seconds": 7.4,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr16": {
+            "oligos_read": 5482,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1195075,
+            "range_requests": 80,
+            "seconds": 14.5,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr17": {
+            "oligos_read": 1831,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 505326,
+            "range_requests": 55,
+            "seconds": 9.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr18": {
+            "oligos_read": 8561,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1274208,
+            "range_requests": 75,
+            "seconds": 12.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr19": {
+            "oligos_read": 472,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 277797,
+            "range_requests": 35,
+            "seconds": 6.1,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr20": {
+            "oligos_read": 2347,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 656414,
+            "range_requests": 51,
+            "seconds": 8.5,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr21": {
+            "oligos_read": 343,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 78879,
+            "range_requests": 16,
+            "seconds": 2.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr22": {
+            "oligos_read": 99,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 163853,
+            "range_requests": 24,
+            "seconds": 5.1,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chrX": {
+            "oligos_read": 689,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 401781,
+            "range_requests": 65,
+            "seconds": 11.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          }
+        }
+      },
+      "base_cut": 1.0,
+      "min_fraction": 0.9,
+      "arms": {
+        "oligos_assessed": 91919,
+        "attributable_by_repeat_proxy": 51789,
+        "attributable_by_mappability_track": 57346,
+        "attributable_by_both_arms": 43658,
+        "share_by_repeat_proxy": 0.5634,
+        "share_by_mappability_track": 0.6239,
+        "share_by_both_arms": 0.475
+      },
+      "crosstab": {
+        "oligos": 91919,
+        "min_fraction": 0.9,
+        "interspersed_max": 0.5,
+        "segdup_max": 0.5,
+        "both_flag": 26442,
+        "proxy_flags_track_mappable": 13688,
+        "proxy_passes_track_unmappable": 8131,
+        "neither_flags": 43658,
+        "agreement": 0.7626,
+        "proxy_flags_track_mappable_share": 0.1489,
+        "proxy_passes_track_unmappable_share": 0.0885
+      },
+      "sensitivity": [
+        {
+          "min_fraction": 0.5,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 75782,
+          "attributable_by_both_arms": 51350,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.8244,
+          "share_by_both_arms": 0.5586,
+          "crosstab": {
+            "both_flag": 15698,
+            "proxy_flags_track_mappable": 24432,
+            "proxy_passes_track_unmappable": 439,
+            "neither_flags": 51350
+          },
+          "agreement": 0.7294
+        },
+        {
+          "min_fraction": 0.9,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 57346,
+          "attributable_by_both_arms": 43658,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.6239,
+          "share_by_both_arms": 0.475,
+          "crosstab": {
+            "both_flag": 26442,
+            "proxy_flags_track_mappable": 13688,
+            "proxy_passes_track_unmappable": 8131,
+            "neither_flags": 43658
+          },
+          "agreement": 0.7626
+        },
+        {
+          "min_fraction": 0.99,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 45969,
+          "attributable_by_both_arms": 36437,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.5001,
+          "share_by_both_arms": 0.3964,
+          "crosstab": {
+            "both_flag": 30598,
+            "proxy_flags_track_mappable": 9532,
+            "proxy_passes_track_unmappable": 15352,
+            "neither_flags": 36437
+          },
+          "agreement": 0.7293
+        }
+      ],
+      "proxy_sensitivity": [
+        {
+          "interspersed_max": 0.25,
+          "attributable_by_repeat_proxy": 41013,
+          "attributable_by_mappability_track": 57346,
+          "crosstab": {
+            "both_flag": 30152,
+            "proxy_flags_track_mappable": 20754,
+            "proxy_passes_track_unmappable": 4421,
+            "neither_flags": 36592
+          }
+        },
+        {
+          "interspersed_max": 0.5,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 57346,
+          "crosstab": {
+            "both_flag": 26442,
+            "proxy_flags_track_mappable": 13688,
+            "proxy_passes_track_unmappable": 8131,
+            "neither_flags": 43658
+          }
+        },
+        {
+          "interspersed_max": 0.75,
+          "attributable_by_repeat_proxy": 62177,
+          "attributable_by_mappability_track": 57346,
+          "crosstab": {
+            "both_flag": 21630,
+            "proxy_flags_track_mappable": 8112,
+            "proxy_passes_track_unmappable": 12943,
+            "neither_flags": 49234
+          }
+        }
+      ],
+      "groups": {
+        "both_flag": {
+          "oligos": 26442,
+          "oligo_bp": 300,
+          "median_block_length": 102355.0,
+          "block_length_quartiles": [
+            50739,
+            102355,
+            181805
+          ],
+          "median_gc": 0.3933,
+          "median_tss_distance": 290514.5,
+          "tss_distance_quartiles": [
+            147613,
+            290509,
+            570152
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_flags_track_mappable": {
+          "oligos": 13688,
+          "oligo_bp": 300,
+          "median_block_length": 97001.0,
+          "block_length_quartiles": [
+            48767,
+            97001,
+            178533
+          ],
+          "median_gc": 0.3767,
+          "median_tss_distance": 309566.0,
+          "tss_distance_quartiles": [
+            151225,
+            309552,
+            600120
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_passes_track_unmappable": {
+          "oligos": 8131,
+          "oligo_bp": 300,
+          "median_block_length": 83723,
+          "block_length_quartiles": [
+            40858,
+            83723,
+            158892
+          ],
+          "median_gc": 0.37,
+          "median_tss_distance": 295967,
+          "tss_distance_quartiles": [
+            137249,
+            295967,
+            603936
+          ],
+          "without_tss_distance": 0
+        },
+        "neither_flags": {
+          "oligos": 43658,
+          "oligo_bp": 300,
+          "median_block_length": 89270.0,
+          "block_length_quartiles": [
+            43799,
+            89270,
+            164906
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 316351.0,
+          "tss_distance_quartiles": [
+            149632,
+            316344,
+            621845
+          ],
+          "without_tss_distance": 0
+        },
+        "track_mappable": {
+          "oligos": 57346,
+          "oligo_bp": 300,
+          "median_block_length": 90586.0,
+          "block_length_quartiles": [
+            45080,
+            90586,
+            167900
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 314269.0,
+          "tss_distance_quartiles": [
+            150019,
+            314261,
+            616538
+          ],
+          "without_tss_distance": 0
+        },
+        "track_unmappable": {
+          "oligos": 34573,
+          "oligo_bp": 300,
+          "median_block_length": 100425,
+          "block_length_quartiles": [
+            47186,
+            100425,
+            173216
+          ],
+          "median_gc": 0.3867,
+          "median_tss_distance": 291501,
+          "tss_distance_quartiles": [
+            145349,
+            291501,
+            579325
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_flagged": {
+          "oligos": 40130,
+          "oligo_bp": 300,
+          "median_block_length": 101366.0,
+          "block_length_quartiles": [
+            49944,
+            101366,
+            181805
+          ],
+          "median_gc": 0.3867,
+          "median_tss_distance": 296976.0,
+          "tss_distance_quartiles": [
+            148593,
+            296972,
+            581071
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_passed": {
+          "oligos": 51789,
+          "oligo_bp": 300,
+          "median_block_length": 87393,
+          "block_length_quartiles": [
+            43673,
+            87393,
+            164641
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 313568,
+          "tss_distance_quartiles": [
+            147767,
+            313568,
+            619020
+          ],
+          "without_tss_distance": 0
+        }
+      },
+      "matched_proxy_against_track": {
+        "targets": 40130,
+        "controls": 51789,
+        "targets_matched": 40128,
+        "dropped_for_want_of_a_control": 2,
+        "strata": {
+          "length": [
+            1000,
+            3000,
+            10000,
+            30000
+          ],
+          "gc": [
+            0.3,
+            0.35,
+            0.4,
+            0.45,
+            0.55
+          ],
+          "tss_distance": [
+            1000,
+            10000,
+            50000,
+            200000,
+            1000000
+          ]
+        },
+        "raw": {
+          "a": 0.6589,
+          "b": 0.157,
+          "difference": 0.5019,
+          "p_one_sided": 0.0,
+          "upper_95": 0.5075
+        },
+        "matched": {
+          "a": 0.6589,
+          "b": 0.1581,
+          "difference": 0.5009,
+          "p_one_sided": 0.0,
+          "upper_95": 0.5067
+        },
+        "imbalance": {
+          "length": {
+            "target_median": 101366.0,
+            "control_median": 87393,
+            "ratio": 1.16
+          },
+          "gc": {
+            "target_median": 0.3867,
+            "control_median": 0.3667,
+            "ratio": 1.055
+          },
+          "tss_distance": {
+            "target_median": 296976.0,
+            "control_median": 313568,
+            "ratio": 0.947
+          }
+        },
+        "excluded_without_a_covariate": 0,
+        "reading": "a positive matched difference means the proxy's flag does carry information about measured mappability at equal block length, GC and TSS distance; it does not make the two the same quantity, and the cross-tabulation is what says how far apart they are"
+      },
+      "untouched_680_blocks": {
+        "oligos": 41037,
+        "blocks": 676,
+        "blocks_expected": 680,
+        "blocks_without_a_test_oligo": [
+          "chrY:12920478-12930164",
+          "chrY:18650279-18655519",
+          "chrY:56954169-57015104",
+          "chrY:57062405-57067746"
+        ],
+        "blocks_without_a_test_oligo_reason": "the library's test arm stops at chrX, so a chrY block of the 680 has no oligo to assess; it is named here rather than counted as mappable or unmappable",
+        "arms": {
+          "oligos_assessed": 41037,
+          "attributable_by_repeat_proxy": 23863,
+          "attributable_by_mappability_track": 26081,
+          "attributable_by_both_arms": 20028,
+          "share_by_repeat_proxy": 0.5815,
+          "share_by_mappability_track": 0.6355,
+          "share_by_both_arms": 0.488
+        },
+        "crosstab": {
+          "oligos": 41037,
+          "min_fraction": 0.9,
+          "interspersed_max": 0.5,
+          "segdup_max": 0.5,
+          "both_flag": 11121,
+          "proxy_flags_track_mappable": 6053,
+          "proxy_passes_track_unmappable": 3835,
+          "neither_flags": 20028,
+          "agreement": 0.759,
+          "proxy_flags_track_mappable_share": 0.1475,
+          "proxy_passes_track_unmappable_share": 0.0935
+        },
+        "sensitivity": [
+          {
+            "min_fraction": 0.5,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 34317,
+            "attributable_by_both_arms": 23643,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.8362,
+            "share_by_both_arms": 0.5761,
+            "crosstab": {
+              "both_flag": 6500,
+              "proxy_flags_track_mappable": 10674,
+              "proxy_passes_track_unmappable": 220,
+              "neither_flags": 23643
+            },
+            "agreement": 0.7345
+          },
+          {
+            "min_fraction": 0.9,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 26081,
+            "attributable_by_both_arms": 20028,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.6355,
+            "share_by_both_arms": 0.488,
+            "crosstab": {
+              "both_flag": 11121,
+              "proxy_flags_track_mappable": 6053,
+              "proxy_passes_track_unmappable": 3835,
+              "neither_flags": 20028
+            },
+            "agreement": 0.759
+          },
+          {
+            "min_fraction": 0.99,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 20968,
+            "attributable_by_both_arms": 16706,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.511,
+            "share_by_both_arms": 0.4071,
+            "crosstab": {
+              "both_flag": 12912,
+              "proxy_flags_track_mappable": 4262,
+              "proxy_passes_track_unmappable": 7157,
+              "neither_flags": 16706
+            },
+            "agreement": 0.7217
+          }
+        ],
+        "groups": {
+          "both_flag": {
+            "oligos": 11121,
+            "oligo_bp": 300,
+            "median_block_length": 56912,
+            "block_length_quartiles": [
+              27996,
+              56912,
+              115789
+            ],
+            "median_gc": 0.3933,
+            "median_tss_distance": 269330,
+            "tss_distance_quartiles": [
+              92056,
+              269330,
+              570152
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_flags_track_mappable": {
+            "oligos": 6053,
+            "oligo_bp": 300,
+            "median_block_length": 56699,
+            "block_length_quartiles": [
+              26317,
+              56699,
+              113188
+            ],
+            "median_gc": 0.3767,
+            "median_tss_distance": 307234,
+            "tss_distance_quartiles": [
+              104444,
+              307234,
+              616212
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_passes_track_unmappable": {
+            "oligos": 3835,
+            "oligo_bp": 300,
+            "median_block_length": 46036,
+            "block_length_quartiles": [
+              19753,
+              46036,
+              100425
+            ],
+            "median_gc": 0.3667,
+            "median_tss_distance": 256985,
+            "tss_distance_quartiles": [
+              76524,
+              256985,
+              585494
+            ],
+            "without_tss_distance": 0
+          },
+          "neither_flags": {
+            "oligos": 20028,
+            "oligo_bp": 300,
+            "median_block_length": 50739.0,
+            "block_length_quartiles": [
+              23133,
+              50739,
+              107139
+            ],
+            "median_gc": 0.3633,
+            "median_tss_distance": 296628.0,
+            "tss_distance_quartiles": [
+              102568,
+              296606,
+              620820
+            ],
+            "without_tss_distance": 0
+          },
+          "track_mappable": {
+            "oligos": 26081,
+            "oligo_bp": 300,
+            "median_block_length": 51450,
+            "block_length_quartiles": [
+              24103,
+              51450,
+              107139
+            ],
+            "median_gc": 0.3667,
+            "median_tss_distance": 299906,
+            "tss_distance_quartiles": [
+              102946,
+              299906,
+              619145
+            ],
+            "without_tss_distance": 0
+          },
+          "track_unmappable": {
+            "oligos": 14956,
+            "oligo_bp": 300,
+            "median_block_length": 55369.0,
+            "block_length_quartiles": [
+              26125,
+              55369,
+              115030
+            ],
+            "median_gc": 0.3867,
+            "median_tss_distance": 267134.5,
+            "tss_distance_quartiles": [
+              89101,
+              267120,
+              575301
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_flagged": {
+            "oligos": 17174,
+            "oligo_bp": 300,
+            "median_block_length": 56906.0,
+            "block_length_quartiles": [
+              27637,
+              56906,
+              115030
+            ],
+            "median_gc": 0.3867,
+            "median_tss_distance": 278275.0,
+            "tss_distance_quartiles": [
+              96397,
+              278249,
+              587971
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_passed": {
+            "oligos": 23863,
+            "oligo_bp": 300,
+            "median_block_length": 49761,
+            "block_length_quartiles": [
+              22010,
+              49761,
+              101587
+            ],
+            "median_gc": 0.3633,
+            "median_tss_distance": 287796,
+            "tss_distance_quartiles": [
+              98923,
+              287796,
+              614779
+            ],
+            "without_tss_distance": 0
+          }
+        }
+      },
+      "coverage": {
+        "oligos_assessed": 91919,
+        "oligos_unassessed": 0,
+        "unassessed_by_category": {},
+        "oligos_in_the_680_untouched_blocks": 41037,
+        "oligos_in_previously_assayed_blocks": 50882,
+        "oligos_with_no_value_anywhere": 691,
+        "oligos_with_no_value_reading": "counted as unmappable, not unassessed: Umap writes nothing where mappability is zero and the arm has no N base"
+      }
+    },
+    "k36": {
+      "track": "Umap k36",
+      "k": 36,
+      "kind": "Umap multi-read mappability (single-read mappability averaged over the k-mers covering a base)",
+      "assembly": "GRCh38 (UCSC hg38)",
+      "url": "https://hgdownload.soe.ucsc.edu/gbdb/hg38/hoffmanMappability/k36.Umap.MultiTrackMappability.bw",
+      "file_bytes": 1647208796,
+      "read": {
+        "bytes_fetched": 18134671,
+        "range_requests": 1747,
+        "seconds": 305.6,
+        "oligos_from_cache": 0,
+        "per_chromosome": {
+          "chr1": {
+            "oligos_read": 5836,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1304664,
+            "range_requests": 146,
+            "seconds": 26.4,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr2": {
+            "oligos_read": 9595,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 2042604,
+            "range_requests": 177,
+            "seconds": 30.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr3": {
+            "oligos_read": 4842,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 886760,
+            "range_requests": 105,
+            "seconds": 17.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr4": {
+            "oligos_read": 5175,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 850843,
+            "range_requests": 100,
+            "seconds": 18.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr5": {
+            "oligos_read": 7138,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1132734,
+            "range_requests": 92,
+            "seconds": 16.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr6": {
+            "oligos_read": 7499,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1500281,
+            "range_requests": 107,
+            "seconds": 18.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr7": {
+            "oligos_read": 2995,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 723182,
+            "range_requests": 73,
+            "seconds": 12.9,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr8": {
+            "oligos_read": 5428,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 969470,
+            "range_requests": 101,
+            "seconds": 17.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr9": {
+            "oligos_read": 3934,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 827608,
+            "range_requests": 84,
+            "seconds": 14.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr10": {
+            "oligos_read": 2440,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 609390,
+            "range_requests": 76,
+            "seconds": 13.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr11": {
+            "oligos_read": 2903,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 642722,
+            "range_requests": 74,
+            "seconds": 12.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr12": {
+            "oligos_read": 804,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 426294,
+            "range_requests": 60,
+            "seconds": 10.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr13": {
+            "oligos_read": 6588,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 920855,
+            "range_requests": 74,
+            "seconds": 13.4,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr14": {
+            "oligos_read": 4265,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 737547,
+            "range_requests": 72,
+            "seconds": 12.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr15": {
+            "oligos_read": 2653,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 466737,
+            "range_requests": 40,
+            "seconds": 6.3,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr16": {
+            "oligos_read": 5482,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 942633,
+            "range_requests": 75,
+            "seconds": 12.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr17": {
+            "oligos_read": 1831,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 470247,
+            "range_requests": 49,
+            "seconds": 8.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr18": {
+            "oligos_read": 8561,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1128641,
+            "range_requests": 62,
+            "seconds": 11.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr19": {
+            "oligos_read": 472,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 284979,
+            "range_requests": 33,
+            "seconds": 5.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr20": {
+            "oligos_read": 2347,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 628947,
+            "range_requests": 45,
+            "seconds": 8.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr21": {
+            "oligos_read": 343,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 95953,
+            "range_requests": 19,
+            "seconds": 3.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr22": {
+            "oligos_read": 99,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 145208,
+            "range_requests": 24,
+            "seconds": 4.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chrX": {
+            "oligos_read": 689,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 396372,
+            "range_requests": 59,
+            "seconds": 10.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          }
+        }
+      },
+      "base_cut": 1.0,
+      "min_fraction": 0.9,
+      "arms": {
+        "oligos_assessed": 91919,
+        "attributable_by_repeat_proxy": 51789,
+        "attributable_by_mappability_track": 70276,
+        "attributable_by_both_arms": 48112,
+        "share_by_repeat_proxy": 0.5634,
+        "share_by_mappability_track": 0.7645,
+        "share_by_both_arms": 0.5234
+      },
+      "crosstab": {
+        "oligos": 91919,
+        "min_fraction": 0.9,
+        "interspersed_max": 0.5,
+        "segdup_max": 0.5,
+        "both_flag": 17966,
+        "proxy_flags_track_mappable": 22164,
+        "proxy_passes_track_unmappable": 3677,
+        "neither_flags": 48112,
+        "agreement": 0.7189,
+        "proxy_flags_track_mappable_share": 0.2411,
+        "proxy_passes_track_unmappable_share": 0.04
+      },
+      "sensitivity": [
+        {
+          "min_fraction": 0.5,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 82496,
+          "attributable_by_both_arms": 51647,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.8975,
+          "share_by_both_arms": 0.5619,
+          "crosstab": {
+            "both_flag": 9281,
+            "proxy_flags_track_mappable": 30849,
+            "proxy_passes_track_unmappable": 142,
+            "neither_flags": 51647
+          },
+          "agreement": 0.6628
+        },
+        {
+          "min_fraction": 0.9,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 70276,
+          "attributable_by_both_arms": 48112,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.7645,
+          "share_by_both_arms": 0.5234,
+          "crosstab": {
+            "both_flag": 17966,
+            "proxy_flags_track_mappable": 22164,
+            "proxy_passes_track_unmappable": 3677,
+            "neither_flags": 48112
+          },
+          "agreement": 0.7189
+        },
+        {
+          "min_fraction": 0.99,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 68559,
+          "attributable_by_both_arms": 47266,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.7459,
+          "share_by_both_arms": 0.5142,
+          "crosstab": {
+            "both_flag": 18837,
+            "proxy_flags_track_mappable": 21293,
+            "proxy_passes_track_unmappable": 4523,
+            "neither_flags": 47266
+          },
+          "agreement": 0.7191
+        }
+      ],
+      "proxy_sensitivity": [
+        {
+          "interspersed_max": 0.25,
+          "attributable_by_repeat_proxy": 41013,
+          "attributable_by_mappability_track": 70276,
+          "crosstab": {
+            "both_flag": 19975,
+            "proxy_flags_track_mappable": 30931,
+            "proxy_passes_track_unmappable": 1668,
+            "neither_flags": 39345
+          }
+        },
+        {
+          "interspersed_max": 0.5,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 70276,
+          "crosstab": {
+            "both_flag": 17966,
+            "proxy_flags_track_mappable": 22164,
+            "proxy_passes_track_unmappable": 3677,
+            "neither_flags": 48112
+          }
+        },
+        {
+          "interspersed_max": 0.75,
+          "attributable_by_repeat_proxy": 62177,
+          "attributable_by_mappability_track": 70276,
+          "crosstab": {
+            "both_flag": 15189,
+            "proxy_flags_track_mappable": 14553,
+            "proxy_passes_track_unmappable": 6454,
+            "neither_flags": 55723
+          }
+        }
+      ],
+      "groups": {
+        "both_flag": {
+          "oligos": 17966,
+          "oligo_bp": 300,
+          "median_block_length": 105448.0,
+          "block_length_quartiles": [
+            49982,
+            105448,
+            181805
+          ],
+          "median_gc": 0.4067,
+          "median_tss_distance": 283138.5,
+          "tss_distance_quartiles": [
+            144970,
+            283127,
+            544619
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_flags_track_mappable": {
+          "oligos": 22164,
+          "oligo_bp": 300,
+          "median_block_length": 99955.0,
+          "block_length_quartiles": [
+            49898,
+            99955,
+            181805
+          ],
+          "median_gc": 0.37,
+          "median_tss_distance": 310181.0,
+          "tss_distance_quartiles": [
+            151853,
+            310159,
+            602346
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_passes_track_unmappable": {
+          "oligos": 3677,
+          "oligo_bp": 300,
+          "median_block_length": 83723,
+          "block_length_quartiles": [
+            39783,
+            83723,
+            158892
+          ],
+          "median_gc": 0.3867,
+          "median_tss_distance": 275337,
+          "tss_distance_quartiles": [
+            126237,
+            275337,
+            573369
+          ],
+          "without_tss_distance": 0
+        },
+        "neither_flags": {
+          "oligos": 48112,
+          "oligo_bp": 300,
+          "median_block_length": 87393.0,
+          "block_length_quartiles": [
+            43702,
+            87393,
+            164641
+          ],
+          "median_gc": 0.3633,
+          "median_tss_distance": 316070.5,
+          "tss_distance_quartiles": [
+            149380,
+            316058,
+            622483
+          ],
+          "without_tss_distance": 0
+        },
+        "track_mappable": {
+          "oligos": 70276,
+          "oligo_bp": 300,
+          "median_block_length": 91595.0,
+          "block_length_quartiles": [
+            45316,
+            91595,
+            167900
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 313893.5,
+          "tss_distance_quartiles": [
+            150286,
+            313885,
+            615720
+          ],
+          "without_tss_distance": 0
+        },
+        "track_unmappable": {
+          "oligos": 21643,
+          "oligo_bp": 300,
+          "median_block_length": 101366,
+          "block_length_quartiles": [
+            47186,
+            101366,
+            173216
+          ],
+          "median_gc": 0.4033,
+          "median_tss_distance": 281409,
+          "tss_distance_quartiles": [
+            142319,
+            281409,
+            550098
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_flagged": {
+          "oligos": 40130,
+          "oligo_bp": 300,
+          "median_block_length": 101366.0,
+          "block_length_quartiles": [
+            49944,
+            101366,
+            181805
+          ],
+          "median_gc": 0.3867,
+          "median_tss_distance": 296976.0,
+          "tss_distance_quartiles": [
+            148593,
+            296972,
+            581071
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_passed": {
+          "oligos": 51789,
+          "oligo_bp": 300,
+          "median_block_length": 87393,
+          "block_length_quartiles": [
+            43673,
+            87393,
+            164641
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 313568,
+          "tss_distance_quartiles": [
+            147767,
+            313568,
+            619020
+          ],
+          "without_tss_distance": 0
+        }
+      },
+      "matched_proxy_against_track": {
+        "targets": 40130,
+        "controls": 51789,
+        "targets_matched": 40128,
+        "dropped_for_want_of_a_control": 2,
+        "strata": {
+          "length": [
+            1000,
+            3000,
+            10000,
+            30000
+          ],
+          "gc": [
+            0.3,
+            0.35,
+            0.4,
+            0.45,
+            0.55
+          ],
+          "tss_distance": [
+            1000,
+            10000,
+            50000,
+            200000,
+            1000000
+          ]
+        },
+        "raw": {
+          "a": 0.4477,
+          "b": 0.071,
+          "difference": 0.3767,
+          "p_one_sided": 0.0,
+          "upper_95": 0.382
+        },
+        "matched": {
+          "a": 0.4477,
+          "b": 0.0769,
+          "difference": 0.3708,
+          "p_one_sided": 0.0,
+          "upper_95": 0.3763
+        },
+        "imbalance": {
+          "length": {
+            "target_median": 101366.0,
+            "control_median": 87393,
+            "ratio": 1.16
+          },
+          "gc": {
+            "target_median": 0.3867,
+            "control_median": 0.3667,
+            "ratio": 1.055
+          },
+          "tss_distance": {
+            "target_median": 296976.0,
+            "control_median": 313568,
+            "ratio": 0.947
+          }
+        },
+        "excluded_without_a_covariate": 0,
+        "reading": "a positive matched difference means the proxy's flag does carry information about measured mappability at equal block length, GC and TSS distance; it does not make the two the same quantity, and the cross-tabulation is what says how far apart they are"
+      },
+      "untouched_680_blocks": {
+        "oligos": 41037,
+        "blocks": 676,
+        "blocks_expected": 680,
+        "blocks_without_a_test_oligo": [
+          "chrY:12920478-12930164",
+          "chrY:18650279-18655519",
+          "chrY:56954169-57015104",
+          "chrY:57062405-57067746"
+        ],
+        "blocks_without_a_test_oligo_reason": "the library's test arm stops at chrX, so a chrY block of the 680 has no oligo to assess; it is named here rather than counted as mappable or unmappable",
+        "arms": {
+          "oligos_assessed": 41037,
+          "attributable_by_repeat_proxy": 23863,
+          "attributable_by_mappability_track": 31806,
+          "attributable_by_both_arms": 22120,
+          "share_by_repeat_proxy": 0.5815,
+          "share_by_mappability_track": 0.7751,
+          "share_by_both_arms": 0.539
+        },
+        "crosstab": {
+          "oligos": 41037,
+          "min_fraction": 0.9,
+          "interspersed_max": 0.5,
+          "segdup_max": 0.5,
+          "both_flag": 7488,
+          "proxy_flags_track_mappable": 9686,
+          "proxy_passes_track_unmappable": 1743,
+          "neither_flags": 22120,
+          "agreement": 0.7215,
+          "proxy_flags_track_mappable_share": 0.236,
+          "proxy_passes_track_unmappable_share": 0.0425
+        },
+        "sensitivity": [
+          {
+            "min_fraction": 0.5,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 37063,
+            "attributable_by_both_arms": 23787,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.9032,
+            "share_by_both_arms": 0.5796,
+            "crosstab": {
+              "both_flag": 3898,
+              "proxy_flags_track_mappable": 13276,
+              "proxy_passes_track_unmappable": 76,
+              "neither_flags": 23787
+            },
+            "agreement": 0.6746
+          },
+          {
+            "min_fraction": 0.9,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 31806,
+            "attributable_by_both_arms": 22120,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.7751,
+            "share_by_both_arms": 0.539,
+            "crosstab": {
+              "both_flag": 7488,
+              "proxy_flags_track_mappable": 9686,
+              "proxy_passes_track_unmappable": 1743,
+              "neither_flags": 22120
+            },
+            "agreement": 0.7215
+          },
+          {
+            "min_fraction": 0.99,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 31041,
+            "attributable_by_both_arms": 21721,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.7564,
+            "share_by_both_arms": 0.5293,
+            "crosstab": {
+              "both_flag": 7854,
+              "proxy_flags_track_mappable": 9320,
+              "proxy_passes_track_unmappable": 2142,
+              "neither_flags": 21721
+            },
+            "agreement": 0.7207
+          }
+        ],
+        "groups": {
+          "both_flag": {
+            "oligos": 7488,
+            "oligo_bp": 300,
+            "median_block_length": 56906.0,
+            "block_length_quartiles": [
+              27996,
+              56906,
+              115789
+            ],
+            "median_gc": 0.4067,
+            "median_tss_distance": 264955.5,
+            "tss_distance_quartiles": [
+              88487,
+              264909,
+              545379
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_flags_track_mappable": {
+            "oligos": 9686,
+            "oligo_bp": 300,
+            "median_block_length": 56912.0,
+            "block_length_quartiles": [
+              27004,
+              56912,
+              115030
+            ],
+            "median_gc": 0.3733,
+            "median_tss_distance": 300921.5,
+            "tss_distance_quartiles": [
+              104444,
+              300909,
+              611956
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_passes_track_unmappable": {
+            "oligos": 1743,
+            "oligo_bp": 300,
+            "median_block_length": 45728,
+            "block_length_quartiles": [
+              17780,
+              45728,
+              100095
+            ],
+            "median_gc": 0.39,
+            "median_tss_distance": 246562,
+            "tss_distance_quartiles": [
+              63803,
+              246562,
+              561720
+            ],
+            "without_tss_distance": 0
+          },
+          "neither_flags": {
+            "oligos": 22120,
+            "oligo_bp": 300,
+            "median_block_length": 50739.0,
+            "block_length_quartiles": [
+              22785,
+              50739,
+              107139
+            ],
+            "median_gc": 0.3633,
+            "median_tss_distance": 294242.0,
+            "tss_distance_quartiles": [
+              101322,
+              294234,
+              618720
+            ],
+            "without_tss_distance": 0
+          },
+          "track_mappable": {
+            "oligos": 31806,
+            "oligo_bp": 300,
+            "median_block_length": 53405.0,
+            "block_length_quartiles": [
+              24280,
+              53405,
+              107139
+            ],
+            "median_gc": 0.3667,
+            "median_tss_distance": 296811.0,
+            "tss_distance_quartiles": [
+              101978,
+              296802,
+              616145
+            ],
+            "without_tss_distance": 0
+          },
+          "track_unmappable": {
+            "oligos": 9231,
+            "oligo_bp": 300,
+            "median_block_length": 54206,
+            "block_length_quartiles": [
+              26189,
+              54206,
+              115030
+            ],
+            "median_gc": 0.4033,
+            "median_tss_distance": 259649,
+            "tss_distance_quartiles": [
+              84587,
+              259649,
+              548628
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_flagged": {
+            "oligos": 17174,
+            "oligo_bp": 300,
+            "median_block_length": 56906.0,
+            "block_length_quartiles": [
+              27637,
+              56906,
+              115030
+            ],
+            "median_gc": 0.3867,
+            "median_tss_distance": 278275.0,
+            "tss_distance_quartiles": [
+              96397,
+              278249,
+              587971
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_passed": {
+            "oligos": 23863,
+            "oligo_bp": 300,
+            "median_block_length": 49761,
+            "block_length_quartiles": [
+              22010,
+              49761,
+              101587
+            ],
+            "median_gc": 0.3633,
+            "median_tss_distance": 287796,
+            "tss_distance_quartiles": [
+              98923,
+              287796,
+              614779
+            ],
+            "without_tss_distance": 0
+          }
+        }
+      },
+      "coverage": {
+        "oligos_assessed": 91919,
+        "oligos_unassessed": 0,
+        "unassessed_by_category": {},
+        "oligos_in_the_680_untouched_blocks": 41037,
+        "oligos_in_previously_assayed_blocks": 50882,
+        "oligos_with_no_value_anywhere": 405,
+        "oligos_with_no_value_reading": "counted as unmappable, not unassessed: Umap writes nothing where mappability is zero and the arm has no N base"
+      }
+    },
+    "k50": {
+      "track": "Umap k50",
+      "k": 50,
+      "kind": "Umap multi-read mappability (single-read mappability averaged over the k-mers covering a base)",
+      "assembly": "GRCh38 (UCSC hg38)",
+      "url": "https://hgdownload.soe.ucsc.edu/gbdb/hg38/hoffmanMappability/k50.Umap.MultiTrackMappability.bw",
+      "file_bytes": 1331314604,
+      "read": {
+        "bytes_fetched": 16234544,
+        "range_requests": 1687,
+        "seconds": 294.5,
+        "oligos_from_cache": 0,
+        "per_chromosome": {
+          "chr1": {
+            "oligos_read": 5836,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1158040,
+            "range_requests": 140,
+            "seconds": 23.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr2": {
+            "oligos_read": 9595,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1793869,
+            "range_requests": 175,
+            "seconds": 30.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr3": {
+            "oligos_read": 4842,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 733482,
+            "range_requests": 100,
+            "seconds": 17.1,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr4": {
+            "oligos_read": 5175,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 812530,
+            "range_requests": 98,
+            "seconds": 16.4,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr5": {
+            "oligos_read": 7138,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 974383,
+            "range_requests": 93,
+            "seconds": 16.9,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr6": {
+            "oligos_read": 7499,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1282630,
+            "range_requests": 103,
+            "seconds": 17.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr7": {
+            "oligos_read": 2995,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 615796,
+            "range_requests": 73,
+            "seconds": 11.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr8": {
+            "oligos_read": 5428,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 914037,
+            "range_requests": 101,
+            "seconds": 17.9,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr9": {
+            "oligos_read": 3934,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 817171,
+            "range_requests": 80,
+            "seconds": 14.1,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr10": {
+            "oligos_read": 2440,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 568903,
+            "range_requests": 73,
+            "seconds": 12.9,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr11": {
+            "oligos_read": 2903,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 675140,
+            "range_requests": 72,
+            "seconds": 12.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr12": {
+            "oligos_read": 804,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 488455,
+            "range_requests": 57,
+            "seconds": 9.8,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr13": {
+            "oligos_read": 6588,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 731847,
+            "range_requests": 69,
+            "seconds": 12.5,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr14": {
+            "oligos_read": 4265,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 668939,
+            "range_requests": 68,
+            "seconds": 12.4,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr15": {
+            "oligos_read": 2653,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 397032,
+            "range_requests": 40,
+            "seconds": 7.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr16": {
+            "oligos_read": 5482,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 764928,
+            "range_requests": 67,
+            "seconds": 12.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr17": {
+            "oligos_read": 1831,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 404425,
+            "range_requests": 50,
+            "seconds": 9.1,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr18": {
+            "oligos_read": 8561,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 921444,
+            "range_requests": 61,
+            "seconds": 11.1,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr19": {
+            "oligos_read": 472,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 279143,
+            "range_requests": 31,
+            "seconds": 5.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr20": {
+            "oligos_read": 2347,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 562640,
+            "range_requests": 41,
+            "seconds": 6.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr21": {
+            "oligos_read": 343,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 67596,
+            "range_requests": 16,
+            "seconds": 3.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr22": {
+            "oligos_read": 99,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 191656,
+            "range_requests": 23,
+            "seconds": 4.3,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chrX": {
+            "oligos_read": 689,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 410458,
+            "range_requests": 56,
+            "seconds": 9.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          }
+        }
+      },
+      "base_cut": 1.0,
+      "min_fraction": 0.9,
+      "arms": {
+        "oligos_assessed": 91919,
+        "attributable_by_repeat_proxy": 51789,
+        "attributable_by_mappability_track": 78276,
+        "attributable_by_both_arms": 49960,
+        "share_by_repeat_proxy": 0.5634,
+        "share_by_mappability_track": 0.8516,
+        "share_by_both_arms": 0.5435
+      },
+      "crosstab": {
+        "oligos": 91919,
+        "min_fraction": 0.9,
+        "interspersed_max": 0.5,
+        "segdup_max": 0.5,
+        "both_flag": 11814,
+        "proxy_flags_track_mappable": 28316,
+        "proxy_passes_track_unmappable": 1829,
+        "neither_flags": 49960,
+        "agreement": 0.672,
+        "proxy_flags_track_mappable_share": 0.3081,
+        "proxy_passes_track_unmappable_share": 0.0199
+      },
+      "sensitivity": [
+        {
+          "min_fraction": 0.5,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 86163,
+          "attributable_by_both_arms": 51718,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.9374,
+          "share_by_both_arms": 0.5626,
+          "crosstab": {
+            "both_flag": 5685,
+            "proxy_flags_track_mappable": 34445,
+            "proxy_passes_track_unmappable": 71,
+            "neither_flags": 51718
+          },
+          "agreement": 0.6245
+        },
+        {
+          "min_fraction": 0.9,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 78276,
+          "attributable_by_both_arms": 49960,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.8516,
+          "share_by_both_arms": 0.5435,
+          "crosstab": {
+            "both_flag": 11814,
+            "proxy_flags_track_mappable": 28316,
+            "proxy_passes_track_unmappable": 1829,
+            "neither_flags": 49960
+          },
+          "agreement": 0.672
+        },
+        {
+          "min_fraction": 0.99,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 77090,
+          "attributable_by_both_arms": 49474,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.8387,
+          "share_by_both_arms": 0.5382,
+          "crosstab": {
+            "both_flag": 12514,
+            "proxy_flags_track_mappable": 27616,
+            "proxy_passes_track_unmappable": 2315,
+            "neither_flags": 49474
+          },
+          "agreement": 0.6744
+        }
+      ],
+      "proxy_sensitivity": [
+        {
+          "interspersed_max": 0.25,
+          "attributable_by_repeat_proxy": 41013,
+          "attributable_by_mappability_track": 78276,
+          "crosstab": {
+            "both_flag": 12920,
+            "proxy_flags_track_mappable": 37986,
+            "proxy_passes_track_unmappable": 723,
+            "neither_flags": 40290
+          }
+        },
+        {
+          "interspersed_max": 0.5,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 78276,
+          "crosstab": {
+            "both_flag": 11814,
+            "proxy_flags_track_mappable": 28316,
+            "proxy_passes_track_unmappable": 1829,
+            "neither_flags": 49960
+          }
+        },
+        {
+          "interspersed_max": 0.75,
+          "attributable_by_repeat_proxy": 62177,
+          "attributable_by_mappability_track": 78276,
+          "crosstab": {
+            "both_flag": 10148,
+            "proxy_flags_track_mappable": 19594,
+            "proxy_passes_track_unmappable": 3495,
+            "neither_flags": 58682
+          }
+        }
+      ],
+      "groups": {
+        "both_flag": {
+          "oligos": 11814,
+          "oligo_bp": 300,
+          "median_block_length": 103994.0,
+          "block_length_quartiles": [
+            49078,
+            103994,
+            178533
+          ],
+          "median_gc": 0.4167,
+          "median_tss_distance": 275096.5,
+          "tss_distance_quartiles": [
+            139437,
+            275084,
+            529127
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_flags_track_mappable": {
+          "oligos": 28316,
+          "oligo_bp": 300,
+          "median_block_length": 101277.0,
+          "block_length_quartiles": [
+            50375,
+            101277,
+            181805
+          ],
+          "median_gc": 0.3733,
+          "median_tss_distance": 308841.5,
+          "tss_distance_quartiles": [
+            152905,
+            308839,
+            596852
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_passes_track_unmappable": {
+          "oligos": 1829,
+          "oligo_bp": 300,
+          "median_block_length": 80768,
+          "block_length_quartiles": [
+            37463,
+            80768,
+            156610
+          ],
+          "median_gc": 0.3933,
+          "median_tss_distance": 268113,
+          "tss_distance_quartiles": [
+            122883,
+            268113,
+            558615
+          ],
+          "without_tss_distance": 0
+        },
+        "neither_flags": {
+          "oligos": 49960,
+          "oligo_bp": 300,
+          "median_block_length": 87393.0,
+          "block_length_quartiles": [
+            43673,
+            87393,
+            164641
+          ],
+          "median_gc": 0.3633,
+          "median_tss_distance": 314990.0,
+          "tss_distance_quartiles": [
+            148519,
+            314984,
+            621271
+          ],
+          "without_tss_distance": 0
+        },
+        "track_mappable": {
+          "oligos": 78276,
+          "oligo_bp": 300,
+          "median_block_length": 92253.0,
+          "block_length_quartiles": [
+            45591,
+            92253,
+            167900
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 312223.5,
+          "tss_distance_quartiles": [
+            150319,
+            312220,
+            612119
+          ],
+          "without_tss_distance": 0
+        },
+        "track_unmappable": {
+          "oligos": 13643,
+          "oligo_bp": 300,
+          "median_block_length": 101277,
+          "block_length_quartiles": [
+            46538,
+            101277,
+            167900
+          ],
+          "median_gc": 0.4133,
+          "median_tss_distance": 274684,
+          "tss_distance_quartiles": [
+            137434,
+            274684,
+            531757
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_flagged": {
+          "oligos": 40130,
+          "oligo_bp": 300,
+          "median_block_length": 101366.0,
+          "block_length_quartiles": [
+            49944,
+            101366,
+            181805
+          ],
+          "median_gc": 0.3867,
+          "median_tss_distance": 296976.0,
+          "tss_distance_quartiles": [
+            148593,
+            296972,
+            581071
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_passed": {
+          "oligos": 51789,
+          "oligo_bp": 300,
+          "median_block_length": 87393,
+          "block_length_quartiles": [
+            43673,
+            87393,
+            164641
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 313568,
+          "tss_distance_quartiles": [
+            147767,
+            313568,
+            619020
+          ],
+          "without_tss_distance": 0
+        }
+      },
+      "matched_proxy_against_track": {
+        "targets": 40130,
+        "controls": 51789,
+        "targets_matched": 40128,
+        "dropped_for_want_of_a_control": 2,
+        "strata": {
+          "length": [
+            1000,
+            3000,
+            10000,
+            30000
+          ],
+          "gc": [
+            0.3,
+            0.35,
+            0.4,
+            0.45,
+            0.55
+          ],
+          "tss_distance": [
+            1000,
+            10000,
+            50000,
+            200000,
+            1000000
+          ]
+        },
+        "raw": {
+          "a": 0.2944,
+          "b": 0.0353,
+          "difference": 0.2591,
+          "p_one_sided": 0.0,
+          "upper_95": 0.2638
+        },
+        "matched": {
+          "a": 0.2944,
+          "b": 0.0401,
+          "difference": 0.2543,
+          "p_one_sided": 0.0,
+          "upper_95": 0.2591
+        },
+        "imbalance": {
+          "length": {
+            "target_median": 101366.0,
+            "control_median": 87393,
+            "ratio": 1.16
+          },
+          "gc": {
+            "target_median": 0.3867,
+            "control_median": 0.3667,
+            "ratio": 1.055
+          },
+          "tss_distance": {
+            "target_median": 296976.0,
+            "control_median": 313568,
+            "ratio": 0.947
+          }
+        },
+        "excluded_without_a_covariate": 0,
+        "reading": "a positive matched difference means the proxy's flag does carry information about measured mappability at equal block length, GC and TSS distance; it does not make the two the same quantity, and the cross-tabulation is what says how far apart they are"
+      },
+      "untouched_680_blocks": {
+        "oligos": 41037,
+        "blocks": 676,
+        "blocks_expected": 680,
+        "blocks_without_a_test_oligo": [
+          "chrY:12920478-12930164",
+          "chrY:18650279-18655519",
+          "chrY:56954169-57015104",
+          "chrY:57062405-57067746"
+        ],
+        "blocks_without_a_test_oligo_reason": "the library's test arm stops at chrX, so a chrY block of the 680 has no oligo to assess; it is named here rather than counted as mappable or unmappable",
+        "arms": {
+          "oligos_assessed": 41037,
+          "attributable_by_repeat_proxy": 23863,
+          "attributable_by_mappability_track": 35145,
+          "attributable_by_both_arms": 22980,
+          "share_by_repeat_proxy": 0.5815,
+          "share_by_mappability_track": 0.8564,
+          "share_by_both_arms": 0.56
+        },
+        "crosstab": {
+          "oligos": 41037,
+          "min_fraction": 0.9,
+          "interspersed_max": 0.5,
+          "segdup_max": 0.5,
+          "both_flag": 5009,
+          "proxy_flags_track_mappable": 12165,
+          "proxy_passes_track_unmappable": 883,
+          "neither_flags": 22980,
+          "agreement": 0.682,
+          "proxy_flags_track_mappable_share": 0.2964,
+          "proxy_passes_track_unmappable_share": 0.0215
+        },
+        "sensitivity": [
+          {
+            "min_fraction": 0.5,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 38518,
+            "attributable_by_both_arms": 23823,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.9386,
+            "share_by_both_arms": 0.5805,
+            "crosstab": {
+              "both_flag": 2479,
+              "proxy_flags_track_mappable": 14695,
+              "proxy_passes_track_unmappable": 40,
+              "neither_flags": 23823
+            },
+            "agreement": 0.6409
+          },
+          {
+            "min_fraction": 0.9,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 35145,
+            "attributable_by_both_arms": 22980,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.8564,
+            "share_by_both_arms": 0.56,
+            "crosstab": {
+              "both_flag": 5009,
+              "proxy_flags_track_mappable": 12165,
+              "proxy_passes_track_unmappable": 883,
+              "neither_flags": 22980
+            },
+            "agreement": 0.682
+          },
+          {
+            "min_fraction": 0.99,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 34627,
+            "attributable_by_both_arms": 22766,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.8438,
+            "share_by_both_arms": 0.5548,
+            "crosstab": {
+              "both_flag": 5313,
+              "proxy_flags_track_mappable": 11861,
+              "proxy_passes_track_unmappable": 1097,
+              "neither_flags": 22766
+            },
+            "agreement": 0.6842
+          }
+        ],
+        "groups": {
+          "both_flag": {
+            "oligos": 5009,
+            "oligo_bp": 300,
+            "median_block_length": 55369,
+            "block_length_quartiles": [
+              28258,
+              55369,
+              115789
+            ],
+            "median_gc": 0.4167,
+            "median_tss_distance": 261485,
+            "tss_distance_quartiles": [
+              82787,
+              261485,
+              531808
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_flags_track_mappable": {
+            "oligos": 12165,
+            "oligo_bp": 300,
+            "median_block_length": 56912,
+            "block_length_quartiles": [
+              27202,
+              56912,
+              115030
+            ],
+            "median_gc": 0.3733,
+            "median_tss_distance": 293487,
+            "tss_distance_quartiles": [
+              101978,
+              293487,
+              604620
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_passes_track_unmappable": {
+            "oligos": 883,
+            "oligo_bp": 300,
+            "median_block_length": 45716,
+            "block_length_quartiles": [
+              18087,
+              45716,
+              97001
+            ],
+            "median_gc": 0.3933,
+            "median_tss_distance": 236962,
+            "tss_distance_quartiles": [
+              65237,
+              236962,
+              531157
+            ],
+            "without_tss_distance": 0
+          },
+          "neither_flags": {
+            "oligos": 22980,
+            "oligo_bp": 300,
+            "median_block_length": 49761.0,
+            "block_length_quartiles": [
+              22600,
+              49761,
+              101587
+            ],
+            "median_gc": 0.3633,
+            "median_tss_distance": 291298.5,
+            "tss_distance_quartiles": [
+              100297,
+              291201,
+              617371
+            ],
+            "without_tss_distance": 0
+          },
+          "track_mappable": {
+            "oligos": 35145,
+            "oligo_bp": 300,
+            "median_block_length": 53405,
+            "block_length_quartiles": [
+              24600,
+              53405,
+              109184
+            ],
+            "median_gc": 0.3667,
+            "median_tss_distance": 292302,
+            "tss_distance_quartiles": [
+              100801,
+              292302,
+              612092
+            ],
+            "without_tss_distance": 0
+          },
+          "track_unmappable": {
+            "oligos": 5892,
+            "oligo_bp": 300,
+            "median_block_length": 53776.0,
+            "block_length_quartiles": [
+              26909,
+              53776,
+              115030
+            ],
+            "median_gc": 0.4133,
+            "median_tss_distance": 254949.0,
+            "tss_distance_quartiles": [
+              80850,
+              254936,
+              531808
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_flagged": {
+            "oligos": 17174,
+            "oligo_bp": 300,
+            "median_block_length": 56906.0,
+            "block_length_quartiles": [
+              27637,
+              56906,
+              115030
+            ],
+            "median_gc": 0.3867,
+            "median_tss_distance": 278275.0,
+            "tss_distance_quartiles": [
+              96397,
+              278249,
+              587971
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_passed": {
+            "oligos": 23863,
+            "oligo_bp": 300,
+            "median_block_length": 49761,
+            "block_length_quartiles": [
+              22010,
+              49761,
+              101587
+            ],
+            "median_gc": 0.3633,
+            "median_tss_distance": 287796,
+            "tss_distance_quartiles": [
+              98923,
+              287796,
+              614779
+            ],
+            "without_tss_distance": 0
+          }
+        }
+      },
+      "coverage": {
+        "oligos_assessed": 91919,
+        "oligos_unassessed": 0,
+        "unassessed_by_category": {},
+        "oligos_in_the_680_untouched_blocks": 41037,
+        "oligos_in_previously_assayed_blocks": 50882,
+        "oligos_with_no_value_anywhere": 251,
+        "oligos_with_no_value_reading": "counted as unmappable, not unassessed: Umap writes nothing where mappability is zero and the arm has no N base"
+      }
+    },
+    "k100": {
+      "track": "Umap k100",
+      "k": 100,
+      "kind": "Umap multi-read mappability (single-read mappability averaged over the k-mers covering a base)",
+      "assembly": "GRCh38 (UCSC hg38)",
+      "url": "https://hgdownload.soe.ucsc.edu/gbdb/hg38/hoffmanMappability/k100.Umap.MultiTrackMappability.bw",
+      "file_bytes": 864604710,
+      "read": {
+        "bytes_fetched": 15971162,
+        "range_requests": 1567,
+        "seconds": 268.2,
+        "oligos_from_cache": 0,
+        "per_chromosome": {
+          "chr1": {
+            "oligos_read": 5836,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1264404,
+            "range_requests": 133,
+            "seconds": 22.9,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr2": {
+            "oligos_read": 9595,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1860818,
+            "range_requests": 158,
+            "seconds": 26.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr3": {
+            "oligos_read": 4842,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 992099,
+            "range_requests": 91,
+            "seconds": 16.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr4": {
+            "oligos_read": 5175,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 849265,
+            "range_requests": 91,
+            "seconds": 16.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr5": {
+            "oligos_read": 7138,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 944080,
+            "range_requests": 81,
+            "seconds": 14.4,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr6": {
+            "oligos_read": 7499,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 1259268,
+            "range_requests": 96,
+            "seconds": 15.5,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr7": {
+            "oligos_read": 2995,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 558562,
+            "range_requests": 71,
+            "seconds": 11.1,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr8": {
+            "oligos_read": 5428,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 982049,
+            "range_requests": 92,
+            "seconds": 15.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr9": {
+            "oligos_read": 3934,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 831968,
+            "range_requests": 72,
+            "seconds": 11.9,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr10": {
+            "oligos_read": 2440,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 645371,
+            "range_requests": 69,
+            "seconds": 11.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr11": {
+            "oligos_read": 2903,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 600755,
+            "range_requests": 68,
+            "seconds": 10.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr12": {
+            "oligos_read": 804,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 536634,
+            "range_requests": 51,
+            "seconds": 9.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr13": {
+            "oligos_read": 6588,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 626387,
+            "range_requests": 65,
+            "seconds": 11.3,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr14": {
+            "oligos_read": 4265,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 641278,
+            "range_requests": 64,
+            "seconds": 10.3,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr15": {
+            "oligos_read": 2653,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 355037,
+            "range_requests": 34,
+            "seconds": 6.0,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr16": {
+            "oligos_read": 5482,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 678105,
+            "range_requests": 63,
+            "seconds": 10.7,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr17": {
+            "oligos_read": 1831,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 299513,
+            "range_requests": 45,
+            "seconds": 8.9,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr18": {
+            "oligos_read": 8561,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 728843,
+            "range_requests": 61,
+            "seconds": 10.4,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr19": {
+            "oligos_read": 472,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 201439,
+            "range_requests": 30,
+            "seconds": 5.5,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr20": {
+            "oligos_read": 2347,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 477173,
+            "range_requests": 41,
+            "seconds": 7.2,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr21": {
+            "oligos_read": 343,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 63530,
+            "range_requests": 16,
+            "seconds": 2.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chr22": {
+            "oligos_read": 99,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 144235,
+            "range_requests": 23,
+            "seconds": 3.9,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          },
+          "chrX": {
+            "oligos_read": 689,
+            "oligos_from_cache": 0,
+            "oligos_unread": 0,
+            "bytes_fetched": 430349,
+            "range_requests": 52,
+            "seconds": 9.6,
+            "chromosome_in_track": true,
+            "byte_cap_reached": false
+          }
+        }
+      },
+      "base_cut": 1.0,
+      "min_fraction": 0.9,
+      "arms": {
+        "oligos_assessed": 91919,
+        "attributable_by_repeat_proxy": 51789,
+        "attributable_by_mappability_track": 88516,
+        "attributable_by_both_arms": 51603,
+        "share_by_repeat_proxy": 0.5634,
+        "share_by_mappability_track": 0.963,
+        "share_by_both_arms": 0.5614
+      },
+      "crosstab": {
+        "oligos": 91919,
+        "min_fraction": 0.9,
+        "interspersed_max": 0.5,
+        "segdup_max": 0.5,
+        "both_flag": 3217,
+        "proxy_flags_track_mappable": 36913,
+        "proxy_passes_track_unmappable": 186,
+        "neither_flags": 51603,
+        "agreement": 0.5964,
+        "proxy_flags_track_mappable_share": 0.4016,
+        "proxy_passes_track_unmappable_share": 0.002
+      },
+      "sensitivity": [
+        {
+          "min_fraction": 0.5,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 89884,
+          "attributable_by_both_arms": 51764,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.9779,
+          "share_by_both_arms": 0.5631,
+          "crosstab": {
+            "both_flag": 2010,
+            "proxy_flags_track_mappable": 38120,
+            "proxy_passes_track_unmappable": 25,
+            "neither_flags": 51764
+          },
+          "agreement": 0.585
+        },
+        {
+          "min_fraction": 0.9,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 88516,
+          "attributable_by_both_arms": 51603,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.963,
+          "share_by_both_arms": 0.5614,
+          "crosstab": {
+            "both_flag": 3217,
+            "proxy_flags_track_mappable": 36913,
+            "proxy_passes_track_unmappable": 186,
+            "neither_flags": 51603
+          },
+          "agreement": 0.5964
+        },
+        {
+          "min_fraction": 0.99,
+          "oligos_assessed": 91919,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 88302,
+          "attributable_by_both_arms": 51538,
+          "share_by_repeat_proxy": 0.5634,
+          "share_by_mappability_track": 0.9607,
+          "share_by_both_arms": 0.5607,
+          "crosstab": {
+            "both_flag": 3366,
+            "proxy_flags_track_mappable": 36764,
+            "proxy_passes_track_unmappable": 251,
+            "neither_flags": 51538
+          },
+          "agreement": 0.5973
+        }
+      ],
+      "proxy_sensitivity": [
+        {
+          "interspersed_max": 0.25,
+          "attributable_by_repeat_proxy": 41013,
+          "attributable_by_mappability_track": 88516,
+          "crosstab": {
+            "both_flag": 3323,
+            "proxy_flags_track_mappable": 47583,
+            "proxy_passes_track_unmappable": 80,
+            "neither_flags": 40933
+          }
+        },
+        {
+          "interspersed_max": 0.5,
+          "attributable_by_repeat_proxy": 51789,
+          "attributable_by_mappability_track": 88516,
+          "crosstab": {
+            "both_flag": 3217,
+            "proxy_flags_track_mappable": 36913,
+            "proxy_passes_track_unmappable": 186,
+            "neither_flags": 51603
+          }
+        },
+        {
+          "interspersed_max": 0.75,
+          "attributable_by_repeat_proxy": 62177,
+          "attributable_by_mappability_track": 88516,
+          "crosstab": {
+            "both_flag": 3039,
+            "proxy_flags_track_mappable": 26703,
+            "proxy_passes_track_unmappable": 364,
+            "neither_flags": 61813
+          }
+        }
+      ],
+      "groups": {
+        "both_flag": {
+          "oligos": 3217,
+          "oligo_bp": 300,
+          "median_block_length": 115335,
+          "block_length_quartiles": [
+            50375,
+            115335,
+            178533
+          ],
+          "median_gc": 0.4,
+          "median_tss_distance": 275084,
+          "tss_distance_quartiles": [
+            148363,
+            275084,
+            471277
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_flags_track_mappable": {
+          "oligos": 36913,
+          "oligo_bp": 300,
+          "median_block_length": 101277,
+          "block_length_quartiles": [
+            49944,
+            101277,
+            181805
+          ],
+          "median_gc": 0.3833,
+          "median_tss_distance": 300506,
+          "tss_distance_quartiles": [
+            148604,
+            300506,
+            587298
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_passes_track_unmappable": {
+          "oligos": 186,
+          "oligo_bp": 300,
+          "median_block_length": 83650.0,
+          "block_length_quartiles": [
+            31699,
+            83650,
+            164641
+          ],
+          "median_gc": 0.3933,
+          "median_tss_distance": 261928.0,
+          "tss_distance_quartiles": [
+            124406,
+            261812,
+            433830
+          ],
+          "without_tss_distance": 0
+        },
+        "neither_flags": {
+          "oligos": 51603,
+          "oligo_bp": 300,
+          "median_block_length": 87393,
+          "block_length_quartiles": [
+            43673,
+            87393,
+            164641
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 313803,
+          "tss_distance_quartiles": [
+            147827,
+            313803,
+            619446
+          ],
+          "without_tss_distance": 0
+        },
+        "track_mappable": {
+          "oligos": 88516,
+          "oligo_bp": 300,
+          "median_block_length": 92253.0,
+          "block_length_quartiles": [
+            45591,
+            92253,
+            167900
+          ],
+          "median_gc": 0.3733,
+          "median_tss_distance": 307924.0,
+          "tss_distance_quartiles": [
+            148186,
+            307916,
+            606871
+          ],
+          "without_tss_distance": 0
+        },
+        "track_unmappable": {
+          "oligos": 3403,
+          "oligo_bp": 300,
+          "median_block_length": 114041,
+          "block_length_quartiles": [
+            49944,
+            114041,
+            178533
+          ],
+          "median_gc": 0.3967,
+          "median_tss_distance": 274484,
+          "tss_distance_quartiles": [
+            147716,
+            274484,
+            468719
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_flagged": {
+          "oligos": 40130,
+          "oligo_bp": 300,
+          "median_block_length": 101366.0,
+          "block_length_quartiles": [
+            49944,
+            101366,
+            181805
+          ],
+          "median_gc": 0.3867,
+          "median_tss_distance": 296976.0,
+          "tss_distance_quartiles": [
+            148593,
+            296972,
+            581071
+          ],
+          "without_tss_distance": 0
+        },
+        "proxy_passed": {
+          "oligos": 51789,
+          "oligo_bp": 300,
+          "median_block_length": 87393,
+          "block_length_quartiles": [
+            43673,
+            87393,
+            164641
+          ],
+          "median_gc": 0.3667,
+          "median_tss_distance": 313568,
+          "tss_distance_quartiles": [
+            147767,
+            313568,
+            619020
+          ],
+          "without_tss_distance": 0
+        }
+      },
+      "matched_proxy_against_track": {
+        "targets": 40130,
+        "controls": 51789,
+        "targets_matched": 40128,
+        "dropped_for_want_of_a_control": 2,
+        "strata": {
+          "length": [
+            1000,
+            3000,
+            10000,
+            30000
+          ],
+          "gc": [
+            0.3,
+            0.35,
+            0.4,
+            0.45,
+            0.55
+          ],
+          "tss_distance": [
+            1000,
+            10000,
+            50000,
+            200000,
+            1000000
+          ]
+        },
+        "raw": {
+          "a": 0.0802,
+          "b": 0.0036,
+          "difference": 0.0766,
+          "p_one_sided": 0.0,
+          "upper_95": 0.0793
+        },
+        "matched": {
+          "a": 0.0802,
+          "b": 0.0039,
+          "difference": 0.0763,
+          "p_one_sided": 0.0,
+          "upper_95": 0.079
+        },
+        "imbalance": {
+          "length": {
+            "target_median": 101366.0,
+            "control_median": 87393,
+            "ratio": 1.16
+          },
+          "gc": {
+            "target_median": 0.3867,
+            "control_median": 0.3667,
+            "ratio": 1.055
+          },
+          "tss_distance": {
+            "target_median": 296976.0,
+            "control_median": 313568,
+            "ratio": 0.947
+          }
+        },
+        "excluded_without_a_covariate": 0,
+        "reading": "a positive matched difference means the proxy's flag does carry information about measured mappability at equal block length, GC and TSS distance; it does not make the two the same quantity, and the cross-tabulation is what says how far apart they are"
+      },
+      "untouched_680_blocks": {
+        "oligos": 41037,
+        "blocks": 676,
+        "blocks_expected": 680,
+        "blocks_without_a_test_oligo": [
+          "chrY:12920478-12930164",
+          "chrY:18650279-18655519",
+          "chrY:56954169-57015104",
+          "chrY:57062405-57067746"
+        ],
+        "blocks_without_a_test_oligo_reason": "the library's test arm stops at chrX, so a chrY block of the 680 has no oligo to assess; it is named here rather than counted as mappable or unmappable",
+        "arms": {
+          "oligos_assessed": 41037,
+          "attributable_by_repeat_proxy": 23863,
+          "attributable_by_mappability_track": 39541,
+          "attributable_by_both_arms": 23776,
+          "share_by_repeat_proxy": 0.5815,
+          "share_by_mappability_track": 0.9635,
+          "share_by_both_arms": 0.5794
+        },
+        "crosstab": {
+          "oligos": 41037,
+          "min_fraction": 0.9,
+          "interspersed_max": 0.5,
+          "segdup_max": 0.5,
+          "both_flag": 1409,
+          "proxy_flags_track_mappable": 15765,
+          "proxy_passes_track_unmappable": 87,
+          "neither_flags": 23776,
+          "agreement": 0.6137,
+          "proxy_flags_track_mappable_share": 0.3842,
+          "proxy_passes_track_unmappable_share": 0.0021
+        },
+        "sensitivity": [
+          {
+            "min_fraction": 0.5,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 40164,
+            "attributable_by_both_arms": 23850,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.9787,
+            "share_by_both_arms": 0.5812,
+            "crosstab": {
+              "both_flag": 860,
+              "proxy_flags_track_mappable": 16314,
+              "proxy_passes_track_unmappable": 13,
+              "neither_flags": 23850
+            },
+            "agreement": 0.6021
+          },
+          {
+            "min_fraction": 0.9,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 39541,
+            "attributable_by_both_arms": 23776,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.9635,
+            "share_by_both_arms": 0.5794,
+            "crosstab": {
+              "both_flag": 1409,
+              "proxy_flags_track_mappable": 15765,
+              "proxy_passes_track_unmappable": 87,
+              "neither_flags": 23776
+            },
+            "agreement": 0.6137
+          },
+          {
+            "min_fraction": 0.99,
+            "oligos_assessed": 41037,
+            "attributable_by_repeat_proxy": 23863,
+            "attributable_by_mappability_track": 39444,
+            "attributable_by_both_arms": 23746,
+            "share_by_repeat_proxy": 0.5815,
+            "share_by_mappability_track": 0.9612,
+            "share_by_both_arms": 0.5786,
+            "crosstab": {
+              "both_flag": 1476,
+              "proxy_flags_track_mappable": 15698,
+              "proxy_passes_track_unmappable": 117,
+              "neither_flags": 23746
+            },
+            "agreement": 0.6146
+          }
+        ],
+        "groups": {
+          "both_flag": {
+            "oligos": 1409,
+            "oligo_bp": 300,
+            "median_block_length": 61771,
+            "block_length_quartiles": [
+              34126,
+              61771,
+              116296
+            ],
+            "median_gc": 0.4,
+            "median_tss_distance": 284350,
+            "tss_distance_quartiles": [
+              142234,
+              284350,
+              497484
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_flags_track_mappable": {
+            "oligos": 15765,
+            "oligo_bp": 300,
+            "median_block_length": 56906,
+            "block_length_quartiles": [
+              27004,
+              56906,
+              115030
+            ],
+            "median_gc": 0.3867,
+            "median_tss_distance": 278006,
+            "tss_distance_quartiles": [
+              93438,
+              278006,
+              593712
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_passes_track_unmappable": {
+            "oligos": 87,
+            "oligo_bp": 300,
+            "median_block_length": 34126,
+            "block_length_quartiles": [
+              16043,
+              34126,
+              100095
+            ],
+            "median_gc": 0.39,
+            "median_tss_distance": 250765,
+            "tss_distance_quartiles": [
+              54437,
+              250765,
+              403224
+            ],
+            "without_tss_distance": 0
+          },
+          "neither_flags": {
+            "oligos": 23776,
+            "oligo_bp": 300,
+            "median_block_length": 49761.0,
+            "block_length_quartiles": [
+              22010,
+              49761,
+              101587
+            ],
+            "median_gc": 0.3633,
+            "median_tss_distance": 287986.0,
+            "tss_distance_quartiles": [
+              99187,
+              287934,
+              615172
+            ],
+            "without_tss_distance": 0
+          },
+          "track_mappable": {
+            "oligos": 39541,
+            "oligo_bp": 300,
+            "median_block_length": 53405,
+            "block_length_quartiles": [
+              24280,
+              53405,
+              109184
+            ],
+            "median_gc": 0.3733,
+            "median_tss_distance": 284330,
+            "tss_distance_quartiles": [
+              96997,
+              284330,
+              605736
+            ],
+            "without_tss_distance": 0
+          },
+          "track_unmappable": {
+            "oligos": 1496,
+            "oligo_bp": 300,
+            "median_block_length": 58308.0,
+            "block_length_quartiles": [
+              32039,
+              56912,
+              116296
+            ],
+            "median_gc": 0.4,
+            "median_tss_distance": 278298.0,
+            "tss_distance_quartiles": [
+              139534,
+              278187,
+              493920
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_flagged": {
+            "oligos": 17174,
+            "oligo_bp": 300,
+            "median_block_length": 56906.0,
+            "block_length_quartiles": [
+              27637,
+              56906,
+              115030
+            ],
+            "median_gc": 0.3867,
+            "median_tss_distance": 278275.0,
+            "tss_distance_quartiles": [
+              96397,
+              278249,
+              587971
+            ],
+            "without_tss_distance": 0
+          },
+          "proxy_passed": {
+            "oligos": 23863,
+            "oligo_bp": 300,
+            "median_block_length": 49761,
+            "block_length_quartiles": [
+              22010,
+              49761,
+              101587
+            ],
+            "median_gc": 0.3633,
+            "median_tss_distance": 287796,
+            "tss_distance_quartiles": [
+              98923,
+              287796,
+              614779
+            ],
+            "without_tss_distance": 0
+          }
+        }
+      },
+      "coverage": {
+        "oligos_assessed": 91919,
+        "oligos_unassessed": 0,
+        "unassessed_by_category": {},
+        "oligos_in_the_680_untouched_blocks": 41037,
+        "oligos_in_previously_assayed_blocks": 50882,
+        "oligos_with_no_value_anywhere": 83,
+        "oligos_with_no_value_reading": "counted as unmappable, not unassessed: Umap writes nothing where mappability is zero and the arm has no N base"
+      }
+    }
+  },
+  "proxy_layer_missing": {},
+  "not_merged": "the mappability arm is never added to or averaged with the repeat proxy, and no number here pools two values of k",
+  "seconds": 1210.0
+}
