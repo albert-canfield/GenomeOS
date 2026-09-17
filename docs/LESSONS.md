@@ -430,6 +430,14 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   same output** — report the number assessed beside the number that had the property, and assert the
   assessed count is non-zero.
 
+  **The same holds for a count, which is the commoner case:** a peer reported seven occurrences of a
+  string from `grep -c 'A\|B'`, and the true count of A was six. `grep -c` counts *lines that match*,
+  not occurrences, and the alternation folded a `B` line into the total; `grep -o A | wc -l` gives
+  six. Nothing looked wrong — the command succeeded and returned a plausible integer. **A count is a
+  statement about the query, not about the file**, so when a number will be quoted, check that the
+  command counts the thing being claimed: occurrences or lines, one pattern or several, and whether
+  two on a line collapse into one.
+
   Memory is not a defence against this, and the timing is the proof: this arrived about twenty
   minutes after I had explained the same principle to another session and been thanked for it. Four
   of the five corrections this week needed an outside reading to catch; so did the fifth. The only
