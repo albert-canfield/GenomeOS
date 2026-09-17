@@ -1670,6 +1670,44 @@ sequence does anything. Its value is that it converts "the 98% is unmeasured" fr
 file with 312,129 rows in it, and that the arithmetic behind every arm is in the script rather than in
 a sentence.
 
+## Known defect: every element-level Gnocchi base count in the committed results is about 4.4x too high (2026-09-17)
+
+Recorded before the fix rather than after it, because the wrong numbers are committed and readable now.
+
+genomeos-79 found that `attribution/bigwig.py` credits a whole bin whenever a track's step is greater
+than 1. For a step-1 track — Zoonomia phyloP, the Umap mappability tracks — it is exact and nothing
+here is affected. For gnomAD Gnocchi, which is one value per kilobase, an interval is credited every
+bin it touches in full.
+
+**Measured from the committed results, capping each interval's claimed bases at its own length, which
+is an upper bound on the truth — so these are lower bounds on the over-credit:**
+
+| | intervals | claimed | capped at length | at least | claiming more than their own length |
+|---|---|---|---|---|---|
+| chr21 blocks | 309 | 7,420,000 bp | 7,383,606 | 0.5% over | 50 |
+| **chr21 elements** | 231 | **282,000 bp** | **63,912** | **77.3% over** | **231 of 231** |
+| chr22 elements | 186 | 219,000 | 49,707 | 77.3% | 186 of 186 |
+| chr19 elements | 191 | 218,000 | 49,828 | 77.1% | 191 of 191 |
+
+A 350 bp element in `variation_chr21` reports `"bases": 1000`. A cCRE is shorter than a Gnocchi bin,
+so at element level the field is not slightly wrong: it counts bins and calls them bases.
+
+**What is affected, exactly.** In every `variation_chr*.json`: `gnocchi.bases` per block and per
+element, and the two fields `attribution/variation.py` derives from it — `by_tier.measured_bp`, and
+`by_tier.human_constrained_bp`, which is `fraction_above × bases` and therefore inherits the inflation
+although `fraction_above` itself is sound. **Ratios survive**: every mean Z, every `fraction_above`,
+every case assignment and every mammalian-constraint figure is untouched, because the numerator and
+denominator scale together.
+
+**What is not affected.** No document quotes `measured_bp` or `human_constrained_bp`. What the
+documents quote from Gnocchi are means, fractions, and kilobase counts from the human panel, which is
+a different reader. The conclusions of area J and of the tier readings rest on ratios and do not move.
+
+**Status.** The fix belongs to the lane that owns the file and is to land with both columns — the same
+chromosome before and after, the chromosome chosen before the shift is seen — so the correction is
+auditable rather than a silent replacement. This section is the "before" column and will carry the
+deltas when it lands.
+
 ## The compiled genome states 940,803 facts and not one of them is experimental (2026-09-17)
 
 Area I compiles a chromosome's non-coding space into a BioLang program where every region carries a
