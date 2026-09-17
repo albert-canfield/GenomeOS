@@ -3361,6 +3361,180 @@ a block as scored only when its element has a coding target with a GENCODE TSS, 
 than the 531 tested blocks and 331 leads counted for the tier reading; the two numbers answer
 different questions and are not in conflict.)
 
+## What the library cannot measure: 45,570 oligos really tile the 13.77 Mb, 41,297 can be ordered, and the repeat flag is not a reason to drop them (2026-09-17)
+
+The section below established that 680 of the 882 real-unknown blocks — 13.77 Mb — have never been
+touched by lentiMPRA, VISTA or the CRISPRi benchmark, and that at 300 bp this is **45,900 oligos**.
+45,900 is arithmetic: 13,770,000 divided by 300. `scripts/measurability.py` asks the opposite of every
+other question this project has asked about the unknown space. Not *what is in it* — no model, no
+extrapolation — but **which parts of it a reporter assay could not measure even in principle**, so the
+design excludes or flags them before oligos are paid for. It sharpens an artefact of the instrument.
+
+`genomeos/attribution/measurability.py` fixes what "cannot be measured" means, in code, as named
+constants with their reasons, in two families that are reported separately and never added together:
+
+- **Family A, not synthesisable or not resolvable.** `assembly_gap` (more than `N_MAX` = 10% of the
+  window is N: there is no sequence to order), `gc_extreme` (GC outside `GC_LOW` 0.25 – `GC_HIGH` 0.75:
+  array synthesis and pool PCR drop out at the extremes), `homopolymer` (a run of one base at least
+  `HOMOPOLYMER` = 10 long: coupling slips and the read-back miscounts the run), `tandem_low_complexity`
+  (at least `TANDEM_MAX` = 50% RepeatMasker Simple_repeat, Low_complexity or Satellite),
+  `non_unique_in_block` (at least `DUP_KMER_MAX` = 50% of the window's 40-mers recur inside its own
+  block, so two windows of the tiling are the same molecule).
+- **Family B, synthesisable but not attributable to one locus.** `segmental_duplication` (at least
+  `SEGDUP_MAX` = 50% of the window inside a curated genomicSuperDups pair) and `interspersed_repeat`
+  (at least `INTERSPERSED_MAX` = 50% LINE, SINE, LTR, DNA, Retroposon or RC). The assay returns a
+  number; the number belongs to a sequence rather than to a place.
+
+Two more categories are arithmetic, named so the base accounting closes to the last base:
+`shorter_than_one_oligo` and `tiling_remainder`. **The set of 680 blocks and 13.77 Mb is reproduced
+independently by this lane before anything is measured on it**, which is the check that the two
+readings are about the same sequence.
+
+### Excluded by reason, pooled over 680 blocks and 13,772,419 bp
+
+Windows are 300 bp at step 300 — **no overlap**, the tiling whose arithmetic gave 45,900. Each window
+is charged to exactly one reason in the precedence order above; the raw column is how many windows
+fail that rule at all, so the two differ where a window fails several.
+
+| reason | family | windows charged | raw | Mb | share of tiled |
+|---|---|---|---|---|---|
+| `assembly_gap` | A | **0** | 0 | 0.000 | 0.00% |
+| `gc_extreme` | A | 751 | 751 | 0.225 | 1.65% |
+| `homopolymer` | A | 3,394 | 3,438 | 1.018 | 7.45% |
+| `tandem_low_complexity` | A | 105 | 162 | 0.032 | 0.23% |
+| `non_unique_in_block` | A | 23 | 35 | 0.007 | 0.05% |
+| `segmental_duplication` | B | 210 | 245 | 0.063 | 0.46% |
+| `interspersed_repeat` | B | 17,112 | 19,111 | 5.134 | 37.55% |
+| `shorter_than_one_oligo` | arithmetic | — | — | 0.000 | 0.00% |
+| `tiling_remainder` | arithmetic | — | — | 0.101 | 0.74% |
+| **usable, both families** | — | **23,975** | — | **7.192** | 52.61% |
+
+**Base accounting: 13,772,419 of 13,772,419 bp, 0 unaccounted.** No silent zeros: `assembly_gap` and
+`shorter_than_one_oligo` are genuinely zero and are printed as zero. There is **not one N base in the
+whole 13.77 Mb**, because the budget's blocks were cut from called sequence; and no block is shorter
+than one oligo, so nothing is lost to being too small to tile.
+
+### The number the design needs, beside 45,900
+
+- **45,570 oligos actually tile**, not 45,900. Exactly 13,772,419 / 300 = 45,908 windows would fit if
+  blocks divided evenly, and 338 are lost to block tails shorter than 300 bp (101,419 bp of remainder).
+  The arithmetic over-counted by 0.7%.
+- **41,297 oligos can be ordered and read back** — everything Family A does not exclude. That is
+  **90.6% of the tiling**, a 9.4% haircut, and it is the number a synthesis quote should be based on.
+- **23,975 oligos are also attributable to one locus** — 52.6%. The gap between 41,297 and 23,975 is
+  almost entirely `interspersed_repeat`.
+- **53 of 680 blocks fall below three attributable oligos**, so they cannot carry a tiling as opposed
+  to a sample. They are not a random 53: median length 1,402 bp against 7,996 for the rest, GC 0.440
+  against 0.386, and **median distance to a coding TSS 23.6 kb against 100.9 kb**. Dropping them
+  therefore drops the blocks closest to genes, which is a choice the design has to make knowingly.
+
+### The repeat flag calibrated against sequence that was already measured
+
+Family B is where the loss looks catastrophic, so it is the one that had to be checked against reality
+rather than against another tier. The same rules were run over 18,991 300 bp windows centred on
+**lentiMPRA elements — sequence an episomal reporter has already ordered and got numbers out of**
+(both columns are charged, mutually-exclusive counts, so Family B is counted after Family A):
+
+| | untouched real unknown | lentiMPRA, already measured |
+|---|---|---|
+| windows | 45,570 | 18,991 |
+| Family A excludes | 9.38% | **4.67%** (homopolymer 825, GC 30, tandem 31, N 1) |
+| Family B flags | 38.01% | **31.31%** (interspersed 5,336, segdup 610) |
+| median GC | 0.386 (blocks) | 0.497 |
+| median distance to a coding TSS | 100.9 kb | 45.9 kb |
+
+**A third of the elements a real MPRA library measured successfully are themselves more than half
+interspersed repeat.** So `interspersed_repeat` is not a measurability exclusion at all: it is an
+attribution caveat, and a library that dropped it would be dropping sequence of exactly the kind
+lentiMPRA already reads. The recommendation is to **carry the 17,112 repeat-derived oligos flagged,
+not excluded**, and to exclude only Family A. Family A's 4.67% false-exclusion rate on already-measured
+sequence also says the Family A cut-offs are in roughly the right place rather than punitive.
+
+This is not a matched comparison and is not offered as one: the lentiMPRA elements are ENCODE cCREs
+and differ from the untouched blocks in GC (0.497 against 0.386) and in distance to a coding TSS
+(45.9 kb against 100.9 kb), which is why both covariates are in the table. It is a plausibility check
+on the cut-offs, not a test of a hypothesis, and no tier average is used as a control anywhere here.
+
+### Per case, with the covariates that decide every comparison in this project
+
+| case | blocks | Mb | oligos tiled | orderable (A) | attributable (A+B) | blocks < 3 | median length | GC | median TSS |
+|---|---|---|---|---|---|---|---|---|---|
+| tolerant | 237 | 7.60 | 25,211 | 22,850 | 13,396 | 4 | 16,104 | 0.374 | 176.1 kb |
+| relaxed | 338 | 5.70 | 18,837 | 17,078 | 9,769 | 27 | 6,322 | 0.388 | 97.6 kb |
+| syntax | 61 | 0.22 | 687 | 612 | 403 | 11 | 2,679 | 0.440 | 18.1 kb |
+| recent | 26 | 0.15 | 496 | 447 | 271 | 3 | 2,890 | 0.448 | 14.9 kb |
+| unmeasured | 18 | 0.10 | 339 | 310 | 136 | 8 | 1,701 | 0.407 | 41.8 kb |
+
+The cases are listed, not compared: they differ by an order of magnitude in length and by more than
+ten-fold in distance to a coding TSS, so no ratio between two of these rows means anything. What the
+table is for is budgeting — **the 61 untouched blocks of the 69 the project cares most about are 687
+oligos, about 1.5% of the library, and 403 of them are attributable** — and for seeing that 11 of those
+61 and 8 of the 18 unmeasured blocks cannot carry a tiling at all.
+
+Each excluded group also carries its own covariates, because a reason that selects on GC or on
+distance to a gene biases what the library measures:
+
+| charged reason | windows | blocks | median GC | median TSS |
+|---|---|---|---|---|
+| usable | 23,975 | 673 | 0.363 | 278.0 kb |
+| `gc_extreme` | 751 | 212 | 0.237 | 511.9 kb |
+| `homopolymer` | 3,394 | 516 | 0.377 | 248.0 kb |
+| `tandem_low_complexity` | 105 | 66 | 0.377 | 310.3 kb |
+| `non_unique_in_block` | 23 | 10 | 0.393 | 282.1 kb |
+| `segmental_duplication` | 210 | 52 | 0.370 | 91.7 kb |
+| `interspersed_repeat` | 17,112 | 601 | 0.387 | 273.5 kb |
+
+(Window length is 300 bp by construction, so the length reported per group is the length of the blocks
+the windows came from; those medians are window-weighted and therefore larger than the per-block ones.)
+`gc_extreme` is the one reason that selects hard: the windows it removes sit at GC 0.237 and a median
+half-megabase from any coding gene. The exclusion is AT-rich, gene-poor sequence, and saying so is the
+point of printing the column.
+
+### Composition of the 13.77 Mb, per block
+
+Repeat-derived fraction per block: quartiles **0.265 / 0.392 / 0.473** — the untouched real unknown is
+about 39% repeat by base, of which almost all is interspersed (median 0.373) and very little tandem
+(median 0.012). Segmental duplication is negligible: **63 of 680 blocks touch a curated duplication at
+all, 0.078 Mb in total, and only 6 blocks touch one at ≥ 0.98 identity** — unsurprising, since the
+organiser already set aside any block half-duplicated as a copy before the real unknown was defined.
+
+### Every arbitrary threshold at three values, so no number rests on a choice
+
+| threshold moved | orderable (A) | attributable (A+B) | blocks < 3 usable |
+|---|---|---|---|
+| `n_max` 0.0 / 0.10 / 0.50 | 41,297 / 41,297 / 41,297 | 23,975 / 23,975 / 23,975 | 53 / 53 / 53 |
+| GC 0.20–0.80 / 0.25–0.75 / 0.30–0.70 | 41,901 / 41,297 / 36,838 | 24,369 / 23,975 / 21,044 | 53 / 53 / 67 |
+| `homopolymer` 8 / 10 / 12 | 37,807 / 41,297 / 42,622 | 21,909 / 23,975 / 24,756 | 63 / 53 / 48 |
+| `tandem_max` 0.25 / 0.50 / 0.75 | 40,897 / 41,297 / 41,367 | 23,650 / 23,975 / 24,044 | 55 / 53 / 53 |
+| `dup_kmer_max` 0.25 / 0.50 / 0.90 | 41,218 / 41,297 / 41,319 | 23,963 / 23,975 / 23,984 | 53 / 53 / 53 |
+| `segdup_max` 0.01 / 0.50 / 1.00 | 41,297 / 41,297 / 41,297 | 23,961 / 23,975 / 23,999 | 54 / 53 / 51 |
+| `interspersed_max` 0.25 / 0.50 / 0.75 | 41,297 / 41,297 / 41,297 | 19,084 / 23,975 / 28,563 | 94 / 53 / 32 |
+
+`n_max` does nothing at any value, because there are no N bases. The orderable count moves by at most
+13% across every Family A threshold, so **"about 41,000 orderable oligos" survives the choice of
+cut-off**; the attributable count swings from 19,084 to 28,563 on the interspersed threshold alone,
+which is one more reason to carry that flag rather than act on it.
+
+### What this lane could not assess, and what it is not
+
+- **Genome-wide mappability was not measured.** `non_unique_in_block` compares a window only against
+  its own block, which is a lower bound on non-uniqueness and is why it fires on just 23 windows. A
+  real mappability read needs a 36-mer or 50-mer uniqueness track (Umap/Bismap) or a whole-genome
+  k-mer index, neither of which this project holds, and the disk could not take one. `segmental
+  duplication` and `interspersed_repeat` are the proxies standing in for it, and they are proxies.
+- **Coverage is complete otherwise: 680 of 680 blocks assessed, 0 unassessed, 0 without a distance to
+  a coding TSS.** Every layer needed — the organiser's blocks, RepeatMasker, genomicSuperDups, the
+  bgzip-indexed reference, GENCODE — was cached for all 24 chromosomes.
+- **The thresholds were fixed in the module before any block was read and were not moved afterwards.**
+  Where a threshold is arbitrary it is reported at three values rather than chosen.
+- **This says nothing about whether any of the 13.77 Mb is functional**, and nothing about whether an
+  MPRA is the right assay for it. It says how much of it an MPRA could physically ask about: about
+  41,000 oligos of the 45,900 the arithmetic promised, of which about 24,000 would also point at one
+  place in the genome.
+
+`data/results/measurability_real_unknown.json`; `uv run python scripts/measurability.py`. No network.
+
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
