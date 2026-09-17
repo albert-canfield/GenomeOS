@@ -332,6 +332,26 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 
 ## Engineering
 
+- **A defect that preserves the quantity it is checked against is invisible to that check
+  (2026-09-17).** Found twice in one day, in unrelated code, by two sessions.
+  1. The bigWig summariser credited whole bins to an interval, so every absolute base count from a
+     1 kb track was overstated — 4.62x at element level, where a cCRE is shorter than a bin. It
+     survived because it **preserved every ratio**: numerator and denominator scaled together, so the
+     means and fractions everything was concluded from were exact.
+  2. The human body program stated germ-layer splits as fractions of the remainder, printed at four
+     decimals, so the last split of each layer took 1.0000 of nothing and three populations held zero
+     cells — one of them Glia, 24.5% of the ectoderm. It survived because it **preserved the layer
+     totals**: the twenty-year count moved by 1.8e-6 when the three came back, and every assert the
+     program carries passed before and after.
+  In both cases the wrong number was the one nothing depended on, which is exactly why nothing caught
+  it, and in both cases the fix was the same: **give the two quantities two names**. `bases` and
+  `overlap_bases`; `fraction` and `share`. A field that answers two questions will be right for one of
+  them and summed for the other. When a check and a defect are both conservative in the same
+  quantity, the check cannot see the defect — so ask what a wrong version would *not* conserve, and
+  assert that instead.
+
+
+
 - **A backtick in a double-quoted commit message is a command, and the word disappears
   (2026-09-17).** `git commit-tree -m "the method took ` + "`" + `compiled` + "`" + ` and the dispatcher never sent it"` runs
   `compiled` as a command; the shell prints "command not found" among the git output, where it reads as

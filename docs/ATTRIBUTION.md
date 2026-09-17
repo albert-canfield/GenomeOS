@@ -1734,10 +1734,16 @@ weighting.
 a conclusion from — which is why no document had to be struck, and also why the number could stay
 wrong for weeks. *A figure nothing depends on is a figure nothing checks.*
 
-**Still old:** the other 23 `variation_chr*` results carry the pre-fix semantics in those two fields
-until the lane is re-run, and the fields are named differently now so a reader can tell which file is
-which. The re-run is scheduled rather than skipped: 23 files disagreeing with chr21 is a worse state
-than a stated range-read cost.
+**Re-run complete, all 24 files agree (2026-09-17).** 9,105 range requests, 134.11 MB, 27.8 minutes,
+and `touched_bin_bp` is populated in every file so an old reading and a new one can be compared with
+both quantities present. **Genome-wide: `measured_bp` 552.0 Mb → 535.0 Mb (3.2% overstated),
+`constrained_bp` 38.46 Mb → 35.46 Mb (8.4%).**
+
+The stop rule — halt the chain if any tier's constrained *fraction* moves more than edge-bin weighting
+can explain — was not tripped, and the distribution is the prediction rather than a pass by luck: the
+largest move in any tier above 100 kb is **0.0153** (chr19 regulatory), then 0.0109, 0.0106, 0.0102,
+0.0095, with chr22 and chrY moving exactly 0. The observed maximum is three quarters of the bar the
+rule allowed, which is the argument against loosening it if this runs again.
 
 ## The compiled genome states 940,803 facts and not one of them is experimental (2026-09-17)
 
