@@ -332,6 +332,18 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
 
 ## Engineering
 
+- **A backtick in a double-quoted commit message is a command, and the word disappears
+  (2026-09-17).** `git commit-tree -m "the method took ` + "`" + `compiled` + "`" + ` and the dispatcher never sent it"` runs
+  `compiled` as a command; the shell prints "command not found" among the git output, where it reads as
+  noise, and the message lands with a hole where the word was. One of 56 messages that day lost a word
+  this way, and it was only caught because the stray error line was noticed. The repository's record is
+  the thing being damaged, and it is damaged silently. Write commit bodies through a quoted heredoc
+  (`<<'EOF'`), or a file, or without backticks; the same applies to `$(` and `!` in double quotes. The
+  general form is the one this project keeps rediscovering: a shell will quietly reinterpret text you
+  believed you were merely passing along.
+
+
+
 - SBML species given as `initialAmount` inside a compartment of size ≠ 1 are concentrations in the maths, and a kinetic law's value is substance per time: integrate rate/volume. Skipping that ran a 100-species model into zeros within a second and looked like instability; it was units.
 - process-bigraph registers processes with `core.register_link` and applies float updates additively; the composite ran our two engines on one clock.
 - libRoadRunner, MaBoSS, CompuCell3D and biolearn (torch) have no Python 3.14 wheels yet; the in-house engines keep their interfaces so adapters can replace them.
