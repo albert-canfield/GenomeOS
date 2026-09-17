@@ -185,6 +185,15 @@
         ctx.globalAlpha = m ? 0.15 : 0.95; ctx.fillStyle = '#56d364'; ctx.fillRect(x0, y, w, Math.max(1, Math.min(1, f / 0.05) * h));
         if (b.attrs[st.reader + '_node'] === 'silent') { ctx.strokeStyle = '#f85149'; ctx.lineWidth = 1.5; ctx.strokeRect(x0 + 0.5, y + 0.5, w - 1, h - 1); }
       } else ctx.fillRect(x0, y + (b.type === 'unknown' ? h * 0.3 : 0), w, b.type === 'unknown' ? h * 0.4 : h);
+      // area J's two axes, as a bar under the block: held across mammals AND constrained among people
+      // (syntax) is the sharpest thing this project can say about a block without a model, and it was
+      // computed and committed for weeks while appearing nowhere. Drawn only where it was measured.
+      if (b.type === 'unknown' && b.attrs.case) {
+        const CASE = {syntax: '#d29922', relaxed: '#a371f7', recent: '#2f81f7', tolerant: '#484f58'};
+        ctx.globalAlpha = m ? 0.2 : 0.95;
+        ctx.fillStyle = CASE[b.attrs.case] || '#484f58';
+        ctx.fillRect(x0, y + h * 0.78, w, Math.max(2, h * 0.09));
+      }
       if (b.id === st.sel) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(x0, y, w, h); }
       if (w > 40 && h >= 20) { ctx.fillStyle = m ? muted() : '#fff'; ctx.font = '10px system-ui'; ctx.fillText(b.name, x0 + 3, y + 13); }
     }

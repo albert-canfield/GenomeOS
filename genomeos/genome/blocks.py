@@ -343,6 +343,7 @@ def blocks_for_window(
                     )
                 )
     _apply_unknown_classes(blocks, chrom)
+    _apply_variation_case(blocks, chrom)
     reader_cells = _apply_reader(blocks, chrom)
     return {
         "chrom": chrom,
@@ -420,6 +421,44 @@ def _apply_unknown_classes(blocks: list[Block], chrom: str) -> None:
             )
             if hit.get("similar_to"):
                 b.attrs["similar_to"] = "; ".join(hit["similar_to"][:3])
+
+
+def _apply_variation_case(blocks: list[Block], chrom: str, results_dir: Path | None = None) -> None:
+    """Area J's two axes per UNKNOWN block: held across mammals, and constrained among people.
+
+    The case is the pair read together - `syntax` held on both, `relaxed` held across mammals and
+    variable among people, `recent` the other way round, `tolerant` neither - and until 2026-09-17 it
+    was computed, committed and shown nowhere. A block's case is the sharpest thing this project can
+    say about it without a model, so it belongs on the block.
+    """
+    from genomeos.results import RESULTS_DIR, load_result
+
+    r = load_result(f"variation_{chrom}", results_dir or RESULTS_DIR)
+    if not r:
+        return
+    by_span = {(b["start"], b["end"]): b for b in r.get("blocks", [])}
+    for b in blocks:
+        if b.type != "unknown":
+            continue
+        hit = by_span.get((b.start, b.end)) or next(
+            (c for c in r.get("blocks", []) if c["start"] <= b.start and b.end <= c["end"]), None
+        )
+        case = hit.get("case") if hit else None
+        if isinstance(case, dict):  # the result carries the pair and its confidence, not a bare label
+            b.attrs["case_mammals"] = case.get("mammals")
+            b.attrs["case_humans"] = case.get("humans")
+            b.attrs["case_confidence"] = case.get("confidence")
+            case = case.get("case")
+        if not case:
+            continue
+        b.attrs["case"] = case
+        if hit.get("mammal_fraction") is not None:
+            b.attrs["mammal_fraction"] = hit["mammal_fraction"]
+        g = hit.get("gnocchi") or {}
+        # the mean is a ratio and survives the 2026-09-17 bin-crediting fix; the base COUNT does not,
+        # so it is deliberately not carried onto the block
+        if g.get("mean") is not None:
+            b.attrs["gnocchi_mean"] = g["mean"]
 
 
 def _counts(blocks: list[Block]) -> dict[str, int]:
