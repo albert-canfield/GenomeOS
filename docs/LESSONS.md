@@ -493,6 +493,24 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   command counts the thing being claimed: occurrences or lines, one pattern or several, and whether
   two on a line collapse into one.
 
+  **A figure typed beside a computed one will be wrong eventually, and the same change gave us the
+  control arm (2026-09-17).** A lane reported a range as "0.014 to 0.871". The document in that very
+  commit reads **0.0000 to 0.8714**, and is right, because that paragraph interpolates its bounds
+  from the result file. The wrong number existed only in the commit message and a peer message —
+  prose that was typed. *Same change, same minute, same session: the computed path was correct and
+  the remembered path was wrong, and they diverged exactly where one of them stopped touching the
+  data.*
+
+  The typed figure was wrong twice over, which is the instructive part. The true minimum is **0.0** —
+  the inert element, the row the whole change existed to surface — so quoting a non-zero floor
+  silently asserts that zero is not a value, when here zero was the finding. And 0.014 was not the
+  non-zero minimum either; that is **0.0064**. It was the smallest number visible in a twelve-row
+  listing printed earlier: not a minimum over the data, nor over the non-zero data, but **over what
+  happened to be on screen**. An extremum quoted from a screenful is a statement about the screen,
+  which is the search lesson above wearing its third costume. So interpolate figures from the
+  artefact wherever they are repeated — including in the commit message, which is three inches to the
+  left of the paragraph that already does it.
+
   Memory is not a defence against this, and the timing is the proof: this arrived about twenty
   minutes after I had explained the same principle to another session and been thanked for it. Four
   of the five corrections this week needed an outside reading to catch; so did the fifth. The only
