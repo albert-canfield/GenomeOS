@@ -247,6 +247,27 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   the standardised version answers in 3.7 seconds. A matched estimate that gets slower as the arms
   grow is doing something other than standardising.
 
+- **Standardising on covariates is not a substitute for conditioning on coverage — and a coverage
+  stratum only bites a claim that had to be BOUGHT (2026-09-17).** Two halves, found a day apart on
+  two panels. First: an apparent separation survived standardising on GC, distance and constraint
+  (+0.41, p 0.026) and died only when "has anything been measured inside this window" entered as a
+  stratum (−0.11, the controls scoring *more* often than the targets). None of the usual covariates
+  says whether anybody ever spent a measurement on a window, so no amount of matching on them
+  substitutes for asking. Second, the corollary: the same manoeuvre on a different claim moved it
+  0.3529 → 0.3578, which is nothing. The mechanism is what generalises — **a direction had to be
+  bought** (it needs a deletion spent on that window, so windows differ in whether anyone paid),
+  **a value on constrained sequence is free** (read from a trio's variants and a public phyloP track,
+  which cover every window whether or not anyone chose it).
+
+  **You can tell which kind you have before running anything: count how many windows carry the
+  input at all.** In the same result the bought input is present at 60 of 85 control windows and the
+  two free inputs at 85 of 85. A claim whose input is missing nowhere cannot have a coverage
+  artefact, and the stratum is a null manoeuvre on it; a claim whose input is missing anywhere is
+  where the artefact lives. So report the difference both ways as a matter of course — that is what
+  tells a reader which kind of claim they are being shown — and never quote the phrase "conditioning
+  on coverage changed nothing" without saying that the input was universal, because on a free claim
+  it was never going to.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory
