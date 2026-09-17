@@ -1782,6 +1782,206 @@ carry — the node's +2.88 points, the calibration's failure on prevalence, E1's
 the compiled genome is a hypothesis in the shape of a program, and that it says so itself, fact by
 fact, which is what the evidence field was built for.
 
+## The experimental layer: 5.98% of the compiled elements were ever eligible, and 19,282 facts were raised (2026-09-17, later)
+
+The section above ends on a count of zero: the compiled genome stated 940,803 facts and not one of them
+was `experimental`. That zero was true of the compiler, not of the project, which already holds real
+measurements over some of the same sequence. `genomeos/attribution/measured.py` attaches them, and
+`scripts/measured_layer.py` counts what that buys. **It buys 2.01% of the program** — but that number
+on its own invites the wrong conclusion, so it is stated third, behind two denominators.
+
+**Three denominators, in order, because a small census is a statement about the search and not about
+the genome:**
+
+| | | |
+|---|---|---|
+| **1. read** | compiled facts parsed at all | **960,094** in 24 programs |
+| **2. eligible** | compiled elements inside *any* assay's footprint, at one shared base | **26,316 of 440,377 — 5.98%** |
+| **3. raised** | elements a measurement is *of*, under the overlap rule | **19,070 — 4.33% of all, 72.5% of the eligible** |
+
+**414,061 compiled elements have never been covered by a CRISPRi screen, a lentiMPRA library or a
+VISTA test at all.** They are not elements the assays contradicted; they are elements nothing asked
+about, and they sit in their own bucket (`elements_no_assay_ever_covered`) rather than with the ones
+that were measured and disagreed. Of what *was* eligible, **72.5% was raised** — so the overlap rule
+is not the bottleneck and neither is the matching: the footprint is. The result of this lane is a
+statement about coverage, and only within that 5.98% is it a statement about the predictions.
+
+| evidence kind | before | after | share after |
+|---|---|---|---|
+| **experimental** | **0** | **19,282** | **2.01%** |
+| curated | 42,040 | 42,049 | 4.38% |
+| predicted | 880,754 | 880,754 | 91.74% |
+| inferred | 18,009 | 18,009 | 1.88% |
+| **facts** | **940,803** | **960,094** | |
+
+Nothing moved between kinds. **The predicted fact is never overwritten, because two names answer the
+two questions:** `<id>` is what AlphaGenome's deletion predicts and `<id>_measured` is what an assay
+measured over the same DNA, each with its own evidence, confidence and source, side by side in the same
+program. The 9 new `curated` facts are gene stubs a screen named and the model had not.
+
+**The overlap rule, and it is a constant.** A measurement counts as a measurement *of* a compiled
+element only at `RECIPROCAL_OVERLAP = 0.5` — the overlap covers at least half the element **and** at
+least half the tested interval. Proximity, similarity and containment never raise a fact. Reported at
+three values, genome-wide, with the containments the rule refuses:
+
+| reciprocal overlap | elements matched | CRISPRi | lentiMPRA | VISTA |
+|---|---|---|---|---|
+| ≥ 0.25 | 22,170 | 2,754 | 19,876 | 252 |
+| **≥ 0.50 (the rule)** | **19,070** | **1,505** | **17,869** | **98** |
+| ≥ 0.75 | 2,964 | 61 | 2,863 | 40 |
+| *contained only, not upgraded* | | *1,495* | *0* | *1,941* |
+
+The last row is the rule doing its job. A VISTA sequence has a median length of 1.4–2.3 kb and a
+compiled element 293–299 bp, so **1,941 elements sit inside a VISTA test and are not measured by it**:
+a positive over 2 kb says the 2 kb drives expression, not that this 300 bp does. The same refusal costs
+CRISPRi 1,495 elements. Between 0.5 and 0.75 the count falls sevenfold, which says the matches are real
+overlaps of similar intervals rather than near-identities; below 0.5 it rises by a sixth, mostly VISTA.
+
+**Coverage, as a named number.** `coverage_elements_measured` = **19,070 of 440,377 compiled elements,
+4.33%**. Per chromosome it runs from 3.52% (chr13) to 5.46% (chr19), and it is flat: no chromosome is
+measured and none is blind. That flatness matters, because it means the floor is a property of the
+assays and not of one chromosome's luck. The eligible share is flat for the same reason — 4.29%
+(chr13) to 7.69% (chr19) — and the share of the eligible that was raised is flatter still, 63.8%
+(chr8) to 82.0% (chr13).
+
+| chromosome | compiled | eligible | share eligible | raised | of all | of eligible |
+|---|---|---|---|---|---|---|
+| chr1 | 43,681 | 2,923 | 6.69% | 2,123 | 4.86% | 72.6% |
+| chr2 | 32,917 | 1,922 | 5.84% | 1,397 | 4.24% | 72.7% |
+| chr3 | 27,682 | 1,502 | 5.43% | 1,119 | 4.04% | 74.5% |
+| chr4 | 20,646 | 1,007 | 4.88% | 774 | 3.75% | 76.9% |
+| chr5 | 22,772 | 1,151 | 5.05% | 845 | 3.71% | 73.4% |
+| chr6 | 23,769 | 1,522 | 6.40% | 1,124 | 4.73% | 73.9% |
+| chr7 | 22,596 | 1,391 | 6.16% | 982 | 4.35% | 70.6% |
+| chr8 | 18,552 | 1,220 | 6.58% | 778 | 4.19% | 63.8% |
+| chr9 | 19,272 | 1,046 | 5.43% | 778 | 4.04% | 74.4% |
+| chr10 | 21,023 | 1,269 | 6.04% | 923 | 4.39% | 72.7% |
+| chr11 | 25,731 | 1,740 | 6.76% | 1,149 | 4.46% | 66.0% |
+| chr12 | 22,814 | 1,178 | 5.16% | 888 | 3.89% | 75.4% |
+| chr13 | 9,711 | 417 | 4.29% | 342 | 3.52% | 82.0% |
+| chr14 | 13,385 | 689 | 5.15% | 503 | 3.76% | 73.0% |
+| chr15 | 14,474 | 762 | 5.27% | 581 | 4.01% | 76.2% |
+| chr16 | 14,799 | 911 | 6.16% | 669 | 4.52% | 73.4% |
+| chr17 | 21,608 | 1,407 | 6.51% | 1,019 | 4.72% | 72.4% |
+| chr18 | 9,250 | 550 | 5.95% | 358 | 3.87% | 65.1% |
+| chr19 | 17,265 | 1,328 | **7.69%** | 942 | 5.46% | 70.9% |
+| chr20 | 12,702 | 819 | 6.45% | 607 | 4.78% | 74.1% |
+| chr21 | 5,174 | 259 | 5.01% | 200 | 3.86% | 77.2% |
+| chr22 | 9,612 | 571 | 5.94% | 421 | 4.38% | 73.7% |
+| chrX | 10,817 | 723 | 6.68% | 542 | 5.01% | 75.0% |
+| chrY | 125 | 9 | 7.20% | 6 | 4.80% | 66.7% |
+| **pooled** | **440,377** | **26,316** | **5.98%** | **19,070** | **4.33%** | **72.5%** |
+
+Eligible by assay, pooled: lentiMPRA 21,133 elements, CRISPRi 3,908, VISTA 2,375. VISTA is the assay
+the overlap rule costs most — 2,375 elements eligible, 98 raised — because its sequences are long.
+
+| chromosome | compiled elements | measured | coverage | CRISPRi | lentiMPRA | VISTA | agree | disagree |
+|---|---|---|---|---|---|---|---|---|
+| chr1 | 43,681 | 2,123 | 4.86% | 134 | 2,022 | 12 | 408 | 1,634 |
+| chr2 | 32,917 | 1,397 | 4.24% | 73 | 1,340 | 6 | 228 | 1,127 |
+| chr3 | 27,682 | 1,119 | 4.04% | 79 | 1,056 | 2 | 210 | 854 |
+| chr4 | 20,646 | 774 | 3.75% | 15 | 763 | 5 | 126 | 647 |
+| chr5 | 22,772 | 845 | 3.71% | 36 | 818 | 5 | 149 | 678 |
+| chr6 | 23,769 | 1,124 | 4.73% | 73 | 1,062 | 6 | 178 | 900 |
+| chr7 | 22,596 | 982 | 4.35% | 49 | 941 | 7 | 168 | 786 |
+| chr8 | 18,552 | 778 | 4.19% | 103 | 689 | 7 | 133 | 566 |
+| chr9 | 19,272 | 778 | 4.04% | 15 | 765 | 5 | 151 | 623 |
+| chr10 | 21,023 | 923 | 4.39% | 46 | 883 | 4 | 158 | 737 |
+| chr11 | 25,731 | 1,149 | 4.46% | 224 | 980 | 3 | 187 | 817 |
+| chr12 | 22,814 | 888 | 3.89% | 72 | 826 | 6 | 139 | 699 |
+| chr13 | 9,711 | 342 | 3.52% | 0 | 341 | 1 | 63 | 279 |
+| chr14 | 13,385 | 503 | 3.76% | 22 | 487 | 3 | 105 | 387 |
+| chr15 | 14,474 | 581 | 4.01% | 16 | 566 | 5 | 101 | 473 |
+| chr16 | 14,799 | 669 | 4.52% | 55 | 625 | 3 | 139 | 496 |
+| chr17 | 21,608 | 1,019 | 4.72% | 88 | 947 | 5 | 186 | 770 |
+| chr18 | 9,250 | 358 | 3.87% | 28 | 334 | 5 | 68 | 272 |
+| chr19 | 17,265 | 942 | **5.46%** | 211 | 777 | 1 | 244 | 542 |
+| chr20 | 12,702 | 607 | 4.78% | 50 | 569 | 4 | 103 | 478 |
+| chr21 | 5,174 | 200 | 3.86% | 18 | 188 | 0 | 44 | 146 |
+| chr22 | 9,612 | 421 | 4.38% | 14 | 409 | 3 | 103 | 310 |
+| chrX | 10,817 | 542 | 5.01% | 84 | 475 | 0 | 136 | 341 |
+| chrY | 125 | 6 | 4.80% | 0 | 6 | 0 | 0 | 6 |
+| **pooled** | **440,377** | **19,070** | **4.33%** | **1,505** | **17,869** | **98** | **3,527** | **14,568** |
+
+**The disagreement is the number worth reading, and it is reported per assay.**
+
+| assay | elements | agrees | disagrees | not asked |
+|---|---|---|---|---|
+| CRISPRi | 1,505 | 97 | 31 | 1,377 |
+| lentiMPRA | 17,869 | 3,361 | 14,508 | — |
+| VISTA | 98 | 69 | 29 | — |
+
+**Two agreement rates, with two names, because one of them is a trap.** Over the 128 elements where a
+CRISPRi screen tested the very gene the model named, **75.8% agree**. Over all 1,505 elements a screen
+touched, **6.45% agree**. The gap is not noise: in 1,377 of them the screen measured nearby genes and
+never measured the one the deletion predicted. The first number is the one a reader quotes and it is
+computed over a subset the prediction itself selected; the result stores both under
+`agreement_rate_where_the_predicted_gene_was_tested` and
+`agreement_rate_over_all_matched_elements`, with the denominator beside each, so the narrow one cannot
+be mistaken for the wide one.
+
+**4,613 element-gene pairs were measured as not regulated, and every one is kept.** "No effect in this
+screen" is experimental evidence about the absence of an effect, so it is written into the measured
+block by name (`measured no effect on SOD1`) rather than dropped or turned back into UNKNOWN. It gets
+no `rule`, because a rule would state a relation the assay says is not there — the absence lives on the
+element, the relation lives on the rule, and neither field answers the other's question. The 212
+regulated pairs do become experimental rules, with the direction read from the sign of the effect: the
+screen silences the element, so a gene that falls was being activated by it.
+
+**What lentiMPRA's 14,508 disagreements do and do not mean.** An episomal reporter measures whether a
+200 bp sequence drives transcription out of its chromosome; the compiled claim is that deleting the
+element in its chromosome moves a gene. Only 18.8% of the compiled elements the library tested are
+active in any of K562, HepG2 or WTC11 at log2(RNA/DNA) ≥ 1.0. That is a weaker contradiction than a
+CRISPRi negative on the named gene, and it is reported under its own assay name for exactly that
+reason. It is also consistent with what the lentiMPRA lane already found: the reporter and the locus
+are different questions.
+
+**Is the measured 4.33% a fair sample?** Both comparisons go through `genomeos/compare.py`, standardised
+on length, GC and distance to the nearest coding TSS, with the medians of both arms printed:
+
+| comparison (chr21) | targets | controls | matched difference | p | length (t/c) | GC (t/c) | TSS (t/c) |
+|---|---|---|---|---|---|---|---|
+| measured vs unmeasured | 200 | 4,974 | +0.040 | 0.21 | 339 / 296 | 0.506 / 0.488 | 30.1 kb / 29.0 kb |
+| disagrees vs agrees | 146 (15 unmatched) | 44 | **−0.255** | 1.00 | 337 / 342 | 0.499 / 0.545 | 31.5 kb / 32.2 kb |
+
+| comparison (chr22) | targets | controls | matched difference | p | length (t/c) | GC (t/c) | TSS (t/c) |
+|---|---|---|---|---|---|---|---|
+| measured vs unmeasured | 421 | 9,191 | +0.082 | 0.009 | 338 / 290 | 0.556 / 0.549 | 17.3 kb / 13.5 kb |
+| disagrees vs agrees | 310 (27 unmatched) | 103 | −0.047 | 0.87 | 333 / 341 | 0.549 / 0.568 | 18.4 kb / 13.8 kb |
+
+The hit both arms are scored on is "the deletion moves the target by at least 0.2 log2", and `p` is
+`compare.py`'s one-sided p for *targets above controls*, so a value near 1 is a difference in the other
+direction rather than a null. The measured
+elements are **slightly** more often ones the model predicts strongly (+0.040 on chr21, not significant;
++0.082 on chr22, p 0.009), and the imbalance columns say why to be careful: the measured arm is longer
+(338 against 290 bp) and sits further from a coding TSS on chr22 (17.3 kb against 13.5 kb), which is the
+assays' own design showing through. On chr21 the elements an assay **disagrees** with are 25 points
+*less* often ones the model predicts strongly, and their GC is lower (0.499 against 0.545); on chr22 the
+same difference is −0.047 and does not hold. One chromosome is not a finding, which is why both are
+printed.
+
+**A defect this section was built to avoid.** `evidence.collect` skips the compiled tree *before*
+parsing it, for speed, so a census that forgets `compiled=True` reports zero experimental facts and the
+zero reads as a finding rather than as a bug. The result therefore records `compiled_facts_read`
+(960,094, from 24 programs) beside every count, `genomeos evidence --measured` prints it first of the
+three denominators, and a test pins the distinction: a census that read nothing and a census that
+measured nothing must never look the same. The compiled programs also carry the empty case in words — a
+chromosome with no measurement says "this program states no experimental fact" rather than falling
+silent, and every program's header states its eligible count before its raised count. This is the same
+move the locus benchmark made in separating "outside the model's input" from "the model got it wrong",
+and the general form is the lesson written the same day: *a negative search result is a statement about
+the search, not about the world*.
+
+**Cost.** The whole genome — 24 chromosomes read, matched, compared and recompiled, plus the 960,094-fact
+evidence read — is **106 seconds** and no requests. `uv run python scripts/measured_layer.py
+--write-programs`; `uv run genomeos evidence --measured` prints the census, and `--compiled` gives the
+Evidence explorer the rows behind it.
+
+**What this is not.** It is not a claim that 95.7% of the compiled elements are wrong; it is the
+statement that **94.02% of them were never eligible to be asked**. The layer is thin because the
+assays' footprint is thin, not because the matching is strict: 72.5% of everything that was eligible
+was raised. The number to argue about is 5.98%, and 4.33% and 2.01% follow from it.
+
 ## 99.5% of the unknown space has never been measured, and the part that matters would fit in one library (2026-09-17)
 
 Three lanes hit the same wall today from different directions: the deletion sweep's per-tier readings

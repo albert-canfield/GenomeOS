@@ -18,6 +18,15 @@ Everything is labelled with the evidence kind it has (curated, inferred, predict
 and a confidence; predicted evidence is capped at 0.7 as everywhere in GenomeOS. The
 program carries `# test:` lines so `bio test` checks that what was compiled is what
 was meant. Generated files say so in their header and are not edited by hand.
+
+Since 2026-09-17 the program also carries an **experimental layer**
+(`attribution/measured.py`): where a CRISPRi screen, a lentiMPRA library or a VISTA
+transgenic assay measured the same piece of DNA as a compiled element, a second block
+`<id>_measured` is written beside it, carrying `evidence: experimental` and the source.
+Two names, never one: the predicted block is not touched, and a measured negative - "the
+screen found no effect on this gene" - is stated in the measured block rather than
+dropped or turned back into UNKNOWN. The layer is thin on purpose; the census in
+`measured_layer_genome` says how thin.
 """
 
 from __future__ import annotations
@@ -25,6 +34,7 @@ from __future__ import annotations
 import re
 import time
 from pathlib import Path
+from typing import Any
 
 from genomeos.results import RESULTS_DIR, load_result
 
@@ -125,7 +135,49 @@ def _open_in(chrom: str, domain_id: str, readers: list[dict]) -> str:
     return "; ".join(parts)
 
 
-def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR) -> str:
+def _measured_rows(
+    chrom: str, elements: list[dict], results_dir: Path, layer: Any = None
+) -> tuple[Any, list[dict]]:
+    """The layer and its rows, or an empty layer if no assay cache is on this machine.
+
+    A missing cache must read as "no measurement was available", never as "nothing was measured":
+    the caller gets an empty list and the program then says, in its own header, that it carries no
+    experimental facts.
+    """
+    from genomeos.attribution.measured import Layer, rows
+
+    layer = layer if layer is not None else Layer.load(chrom)
+    return layer, ([] if layer.empty else rows(chrom, elements, layer, results_dir=results_dir))
+
+
+def _measured_blocks(chrom: str, row: dict, domains: dict, ident_of: dict) -> list[str]:
+    """One `<id>_measured` element and one rule per measured regulated link, all experimental."""
+    from genomeos.attribution import measured as ms
+
+    props = [f"class: {row.get('class') or 'enhancer'}", f"locus: {chrom}:{row['start']}-{row['end']}"]
+    if row.get("domain") in domains:
+        props.append(f"domain: {ident(row['domain'])}")
+    regulated = row["measured"].get("crispri", {}).get("genes_regulated", [])
+    if regulated:
+        props.append("targets: " + ", ".join(ident_of[g] for g in regulated))
+    props += [
+        f"basis: {_text(ms.basis_text(row))}",
+        f'evidence: experimental "{_text(ms.sources_of(row["measured"]))}"',
+        f"confidence: {row['confidence']:.2f}",
+    ]
+    lines = [f"element {row['id']}_measured {{}}".replace("{}", "{")]
+    lines += [f"  {p}" for p in props]
+    lines.append("}")
+    for gene, action, strength, cell in ms.rule_lines(row):
+        lines.append(
+            f"rule {row['id']}_measured {action} {ident_of[gene]} {{ strength: {strength}; "
+            f'evidence: experimental "{_text(ms.SOURCES["crispri"])}, silenced in {_text(cell)}"; '
+            f"confidence: {row['confidence']:.2f} }}"
+        )
+    return lines
+
+
+def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR, layer: Any = None) -> str:
     budget = load_result(f"budget_{chrom}", results_dir)
     human = _human_axis(chrom, results_dir)
     copies = _copies(chrom, results_dir)
@@ -139,6 +191,10 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR) -> str:
     ]
     readers = [r for r in readers if r and r.get("node_table")]
     elements = _attributed(chrom, results_dir)
+    layer, measured_rows = _measured_rows(chrom, elements, results_dir, layer)
+    n_measured_rules = sum(
+        len(r["measured"].get("crispri", {}).get("genes_regulated", [])) for r in measured_rows
+    )
 
     lines = [
         f"module human.noncoding.{chrom}",
@@ -151,17 +207,26 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR) -> str:
         "# A region's role is its budget tier; the constrained_unknown tier keeps role unknown, so this",
         "# program's own count of unknowns is the chromosome's real unknown. An element carries the gene",
         "# AlphaGenome says it reaches when deleted, the tissue and the magnitude, as predicted evidence.",
+        "#",
+        "# Two blocks per measured element, never one: `<id>` is what the model predicts and",
+        "# `<id>_measured` is what an assay measured over the same DNA, with evidence: experimental.",
+        "# Neither overwrites the other, and a measured negative - no effect on this gene in this",
+        "# screen - is stated in the measured block, because that is a measurement and not an unknown.",
     ]
     regions = [b for b in sorted(budget["blocks"], key=lambda b: b["start"])]
     n_unknown = sum(1 for b in regions if b["guess"]["tier"] == "constrained_unknown")
-    genes = sorted({e["predicted_coding"]["gene"] for e in elements})
+    measured_genes = {
+        g for r in measured_rows for g in r["measured"].get("crispri", {}).get("genes_regulated", [])
+    }
+    genes = sorted({e["predicted_coding"]["gene"] for e in elements} | measured_genes)
+    ident_of = {g: ident(g) for g in genes}
     used_domains = sorted({e["domain"] for e in elements if e.get("domain") in domains})
-    n_entities = len(regions) + len(genes) + len(elements) + len(used_domains)
+    n_entities = len(regions) + len(genes) + len(elements) + len(used_domains) + len(measured_rows)
     lines += [
         "#",
         f"# test: entities >= {n_entities}",
         f"# test: unknowns == {n_unknown}",
-        f"# test: rules == {len(elements)}",
+        f"# test: rules == {len(elements) + n_measured_rules}",
         "",
         f"# ---- the budget: {len(regions)} UNKNOWN blocks, {budget['unknown_bp'] / 1e6:.1f} Mb, "
         f"constrained {((budget.get('constrained_fraction') or 0) * 100):.2f}% of measured bases",
@@ -227,11 +292,45 @@ def compile_chromosome(chrom: str, results_dir: Path = RESULTS_DIR) -> str:
                 " "
                 f"confidence: {conf:.2f} }}"
             )
+    from genomeos.attribution.measured import AGREES, DISAGREES, RECIPROCAL_OVERLAP, eligibility
+
+    agree = sum(1 for r in measured_rows if r["agreement"]["verdict"] == AGREES)
+    disagree = sum(1 for r in measured_rows if r["agreement"]["verdict"] == DISAGREES)
+    negatives = sum(
+        len(r["measured"].get("crispri", {}).get("genes_not_regulated", [])) for r in measured_rows
+    )
+    share = len(measured_rows) / len(elements) if elements else 0.0
+    n_eligible = eligibility(elements, layer)["elements_in_an_assay_footprint"]
+    # the section is written even when it is empty: a program that says nothing about the experimental
+    # layer cannot be told apart from one whose assays were never read, and this project has been
+    # bitten twice by a zero that came from not looking
+    lines += [
+        "",
+        f"# ---- the experimental layer ({len(measured_rows)} of {len(elements)} elements, "
+        f"{share * 100:.2f}%): what an assay measured over the same DNA",
+        f"# The rule is reciprocal overlap >= {RECIPROCAL_OVERLAP}; nothing is raised on proximity or",
+        f"# on an interval that merely contains the element. {agree} elements agree with the",
+        f"# prediction, {disagree} disagree, and {negatives} element-gene pairs were measured as not",
+        "# regulated - those are experimental facts about the absence of an effect, kept as such.",
+    ]
+    lines.append(
+        f"# Eligible first, raised second: {n_eligible} of {len(elements)} elements lie in some "
+        f"assay's footprint at all, {len(elements) - n_eligible} were never covered by one."
+    )
+    if not measured_rows:
+        lines.append(
+            "# No assay in data/knowledge measured any of these elements under the rule, so this "
+            "program states no experimental fact."
+        )
+    for r in measured_rows:
+        lines += _measured_blocks(chrom, r, domains, ident_of)
     return "\n".join(lines) + "\n"
 
 
-def write_program(chrom: str, out: Path | None = None, results_dir: Path = RESULTS_DIR) -> Path:
+def write_program(
+    chrom: str, out: Path | None = None, results_dir: Path = RESULTS_DIR, layer: Any = None
+) -> Path:
     out = out or Path("data/organisms/human") / f"noncoding_{chrom}.bio"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(compile_chromosome(chrom, results_dir))
+    out.write_text(compile_chromosome(chrom, results_dir, layer))
     return out

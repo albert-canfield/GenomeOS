@@ -1,0 +1,5252 @@
+{
+  "result": "measured_layer_genome",
+  "date": "2026-09-17",
+  "rule": {
+    "name": "reciprocal overlap",
+    "value": 0.5,
+    "reported_at": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "statement": "a measurement counts as a measurement of a compiled element only when the overlap covers at least this fraction of the element and of the tested interval; proximity, similarity and mere containment never raise a fact"
+  },
+  "denominators": "read in this order, because a small census is a statement about the search and not about the genome: compiled_facts_read (what was parsed at all), eligibility.elements_in_an_assay_footprint (what any assay could have measured, at one shared base), then elements_with_any_measurement, agrees and disagrees",
+  "per_chromosome": {
+    "chr1": {
+      "census": {
+        "chrom": "chr1",
+        "compiled_elements": 43681,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 43681,
+          "elements_in_an_assay_footprint": 2923,
+          "elements_no_assay_ever_covered": 40758,
+          "share_eligible": 0.06692,
+          "by_assay": {
+            "crispri": 386,
+            "lentimpra": 2388,
+            "vista": 284
+          }
+        },
+        "elements_in_an_assay_footprint": 2923,
+        "elements_no_assay_ever_covered": 40758,
+        "elements_with_any_measurement": 2123,
+        "coverage_elements_measured": 0.0486,
+        "raised_share_of_the_eligible": 0.72631,
+        "elements_by_assay": {
+          "crispri": 134,
+          "lentimpra": 2022,
+          "vista": 12
+        },
+        "measurements_available": {
+          "crispri": 1251,
+          "lentimpra": 5325,
+          "vista": 219
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 4246,
+        "experimental_facts_added": 2142,
+        "experimental_element_blocks": 2123,
+        "experimental_rule_blocks": 19,
+        "genes_named_by_a_measurement": [
+          "AGTRAP",
+          "CEP104",
+          "ELF3",
+          "EPB41",
+          "FAM89A",
+          "FCGR2A",
+          "LRRC47",
+          "PYCR2",
+          "SDHB",
+          "SMIM1",
+          "SPTA1",
+          "TMEM54",
+          "TMEM56",
+          "TRIM58",
+          "TSEN15",
+          "WDR3",
+          "ZNF672"
+        ],
+        "agrees": {
+          "crispri": 7,
+          "lentimpra": 392,
+          "vista": 9
+        },
+        "disagrees": {
+          "crispri": 1,
+          "lentimpra": 1630,
+          "vista": 3
+        },
+        "crispri_predicted_gene_not_tested": 126,
+        "agreement_rate_over_all_matched_elements": 0.0522,
+        "agreement_denominator_all_matched_elements": 134,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.875,
+        "agreement_denominator_predicted_gene_tested": 8,
+        "crispri_pairs_regulated": 19,
+        "crispri_pairs_measured_as_not_regulated": 351
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 2461,
+            "crispri": 277,
+            "lentimpra": 2240,
+            "vista": 26
+          },
+          "0.5": {
+            "any": 2123,
+            "crispri": 134,
+            "lentimpra": 2022,
+            "vista": 12
+          },
+          "0.75": {
+            "any": 311,
+            "crispri": 0,
+            "lentimpra": 305,
+            "vista": 6
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 177,
+          "lentimpra": 0,
+          "vista": 240
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 2123,
+          "controls": 41558,
+          "targets_matched": 2123,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5846,
+            "b": 0.4866,
+            "difference": 0.098,
+            "p_one_sided": 0.0,
+            "upper_95": 0.1195
+          },
+          "matched": {
+            "a": 0.5846,
+            "b": 0.4744,
+            "difference": 0.1102,
+            "p_one_sided": 0.0,
+            "upper_95": 0.14
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 339.0,
+              "control_median": 294.0,
+              "ratio": 1.153
+            },
+            "gc": {
+              "target_median": 0.5115,
+              "control_median": 0.4871,
+              "ratio": 1.05
+            },
+            "nearest_coding_tss": {
+              "target_median": 23865.0,
+              "control_median": 17686.0,
+              "ratio": 1.349
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 1631,
+          "controls": 404,
+          "targets_matched": 1581,
+          "dropped_for_want_of_a_control": 50,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5518,
+            "b": 0.7079,
+            "difference": -0.1561,
+            "p_one_sided": 1.0,
+            "upper_95": -0.1056
+          },
+          "matched": {
+            "a": 0.5534,
+            "b": 0.6989,
+            "difference": -0.1455,
+            "p_one_sided": 1.0,
+            "upper_95": -0.1121
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 336.0,
+              "control_median": 346.0,
+              "ratio": 0.971
+            },
+            "gc": {
+              "target_median": 0.5059,
+              "control_median": 0.5328,
+              "ratio": 0.95
+            },
+            "nearest_coding_tss": {
+              "target_median": 24650.0,
+              "control_median": 23922.5,
+              "ratio": 1.03
+            }
+          }
+        }
+      }
+    },
+    "chr2": {
+      "census": {
+        "chrom": "chr2",
+        "compiled_elements": 32917,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 32917,
+          "elements_in_an_assay_footprint": 1922,
+          "elements_no_assay_ever_covered": 30995,
+          "share_eligible": 0.05839,
+          "by_assay": {
+            "crispri": 182,
+            "lentimpra": 1592,
+            "vista": 208
+          }
+        },
+        "elements_in_an_assay_footprint": 1922,
+        "elements_no_assay_ever_covered": 30995,
+        "elements_with_any_measurement": 1397,
+        "coverage_elements_measured": 0.04244,
+        "raised_share_of_the_eligible": 0.72685,
+        "elements_by_assay": {
+          "crispri": 73,
+          "lentimpra": 1340,
+          "vista": 6
+        },
+        "measurements_available": {
+          "crispri": 644,
+          "lentimpra": 4461,
+          "vista": 261
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 2794,
+        "experimental_facts_added": 1409,
+        "experimental_element_blocks": 1397,
+        "experimental_rule_blocks": 12,
+        "genes_named_by_a_measurement": [
+          "AGAP1",
+          "CAB39",
+          "GALM",
+          "GYPC",
+          "ID2",
+          "PDIA6",
+          "SLC20A1",
+          "SSFA2",
+          "ST3GAL5",
+          "UBE2F",
+          "ZFP36L2"
+        ],
+        "agrees": {
+          "crispri": 8,
+          "lentimpra": 215,
+          "vista": 5
+        },
+        "disagrees": {
+          "crispri": 1,
+          "lentimpra": 1125,
+          "vista": 1
+        },
+        "crispri_predicted_gene_not_tested": 64,
+        "agreement_rate_over_all_matched_elements": 0.1096,
+        "agreement_denominator_all_matched_elements": 73,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.8889,
+        "agreement_denominator_predicted_gene_tested": 9,
+        "crispri_pairs_regulated": 12,
+        "crispri_pairs_measured_as_not_regulated": 160
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1615,
+            "crispri": 137,
+            "lentimpra": 1500,
+            "vista": 20
+          },
+          "0.5": {
+            "any": 1397,
+            "crispri": 73,
+            "lentimpra": 1340,
+            "vista": 6
+          },
+          "0.75": {
+            "any": 230,
+            "crispri": 0,
+            "lentimpra": 229,
+            "vista": 1
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 73,
+          "lentimpra": 0,
+          "vista": 177
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 1397,
+          "controls": 31520,
+          "targets_matched": 1397,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4968,
+            "b": 0.4304,
+            "difference": 0.0664,
+            "p_one_sided": 1e-06,
+            "upper_95": 0.0932
+          },
+          "matched": {
+            "a": 0.4968,
+            "b": 0.4103,
+            "difference": 0.0865,
+            "p_one_sided": 2e-06,
+            "upper_95": 0.1233
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 339.0,
+              "control_median": 295.0,
+              "ratio": 1.149
+            },
+            "gc": {
+              "target_median": 0.4837,
+              "control_median": 0.4667,
+              "ratio": 1.036
+            },
+            "nearest_coding_tss": {
+              "target_median": 37282.0,
+              "control_median": 30218.5,
+              "ratio": 1.234
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 1125,
+          "controls": 223,
+          "targets_matched": 1029,
+          "dropped_for_want_of_a_control": 96,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4818,
+            "b": 0.5426,
+            "difference": -0.0608,
+            "p_one_sided": 0.952019,
+            "upper_95": 0.0108
+          },
+          "matched": {
+            "a": 0.4917,
+            "b": 0.5736,
+            "difference": -0.0818,
+            "p_one_sided": 0.999905,
+            "upper_95": -0.0389
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 333.0,
+              "control_median": 346.0,
+              "ratio": 0.962
+            },
+            "gc": {
+              "target_median": 0.4797,
+              "control_median": 0.4871,
+              "ratio": 0.985
+            },
+            "nearest_coding_tss": {
+              "target_median": 36440.0,
+              "control_median": 47457.0,
+              "ratio": 0.768
+            }
+          }
+        }
+      }
+    },
+    "chr3": {
+      "census": {
+        "chrom": "chr3",
+        "compiled_elements": 27682,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 27682,
+          "elements_in_an_assay_footprint": 1502,
+          "elements_no_assay_ever_covered": 26180,
+          "share_eligible": 0.05426,
+          "by_assay": {
+            "crispri": 181,
+            "lentimpra": 1225,
+            "vista": 141
+          }
+        },
+        "elements_in_an_assay_footprint": 1502,
+        "elements_no_assay_ever_covered": 26180,
+        "elements_with_any_measurement": 1119,
+        "coverage_elements_measured": 0.04042,
+        "raised_share_of_the_eligible": 0.74501,
+        "elements_by_assay": {
+          "crispri": 79,
+          "lentimpra": 1056,
+          "vista": 2
+        },
+        "measurements_available": {
+          "crispri": 900,
+          "lentimpra": 3328,
+          "vista": 160
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 2238,
+        "experimental_facts_added": 1129,
+        "experimental_element_blocks": 1119,
+        "experimental_rule_blocks": 10,
+        "genes_named_by_a_measurement": [
+          "CD47",
+          "CHST2",
+          "GATA2",
+          "H1FX",
+          "LINC00885",
+          "SIAH2",
+          "TFRC",
+          "ZDHHC19"
+        ],
+        "agrees": {
+          "crispri": 4,
+          "lentimpra": 205,
+          "vista": 1
+        },
+        "disagrees": {
+          "crispri": 2,
+          "lentimpra": 851,
+          "vista": 1
+        },
+        "crispri_predicted_gene_not_tested": 73,
+        "agreement_rate_over_all_matched_elements": 0.0506,
+        "agreement_denominator_all_matched_elements": 79,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
+        "agreement_denominator_predicted_gene_tested": 6,
+        "crispri_pairs_regulated": 10,
+        "crispri_pairs_measured_as_not_regulated": 261
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1257,
+            "crispri": 124,
+            "lentimpra": 1154,
+            "vista": 9
+          },
+          "0.5": {
+            "any": 1119,
+            "crispri": 79,
+            "lentimpra": 1056,
+            "vista": 2
+          },
+          "0.75": {
+            "any": 185,
+            "crispri": 0,
+            "lentimpra": 185,
+            "vista": 0
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 58,
+          "lentimpra": 0,
+          "vista": 122
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 1119,
+          "controls": 26563,
+          "targets_matched": 1119,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4987,
+            "b": 0.4275,
+            "difference": 0.0711,
+            "p_one_sided": 2e-06,
+            "upper_95": 0.101
+          },
+          "matched": {
+            "a": 0.4987,
+            "b": 0.4172,
+            "difference": 0.0814,
+            "p_one_sided": 5.3e-05,
+            "upper_95": 0.1226
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 341.0,
+              "control_median": 299.0,
+              "ratio": 1.14
+            },
+            "gc": {
+              "target_median": 0.4808,
+              "control_median": 0.4551,
+              "ratio": 1.056
+            },
+            "nearest_coding_tss": {
+              "target_median": 35623.0,
+              "control_median": 31915.0,
+              "ratio": 1.116
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 853,
+          "controls": 209,
+          "targets_matched": 800,
+          "dropped_for_want_of_a_control": 53,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4619,
+            "b": 0.6411,
+            "difference": -0.1792,
+            "p_one_sided": 0.999999,
+            "upper_95": -0.1061
+          },
+          "matched": {
+            "a": 0.4637,
+            "b": 0.6325,
+            "difference": -0.1688,
+            "p_one_sided": 1.0,
+            "upper_95": -0.1207
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 336.0,
+              "control_median": 346.0,
+              "ratio": 0.971
+            },
+            "gc": {
+              "target_median": 0.4776,
+              "control_median": 0.4971,
+              "ratio": 0.961
+            },
+            "nearest_coding_tss": {
+              "target_median": 36958.0,
+              "control_median": 37854.0,
+              "ratio": 0.976
+            }
+          }
+        }
+      }
+    },
+    "chr4": {
+      "census": {
+        "chrom": "chr4",
+        "compiled_elements": 20646,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 20646,
+          "elements_in_an_assay_footprint": 1007,
+          "elements_no_assay_ever_covered": 19639,
+          "share_eligible": 0.04877,
+          "by_assay": {
+            "crispri": 47,
+            "lentimpra": 877,
+            "vista": 107
+          }
+        },
+        "elements_in_an_assay_footprint": 1007,
+        "elements_no_assay_ever_covered": 19639,
+        "elements_with_any_measurement": 774,
+        "coverage_elements_measured": 0.03749,
+        "raised_share_of_the_eligible": 0.76862,
+        "elements_by_assay": {
+          "crispri": 15,
+          "lentimpra": 763,
+          "vista": 5
+        },
+        "measurements_available": {
+          "crispri": 114,
+          "lentimpra": 2560,
+          "vista": 102
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1548,
+        "experimental_facts_added": 781,
+        "experimental_element_blocks": 774,
+        "experimental_rule_blocks": 7,
+        "genes_named_by_a_measurement": [
+          "ANTXR2",
+          "BMP2K",
+          "ELOVL6",
+          "FGFR3",
+          "KIT",
+          "NMU",
+          "SPCS3"
+        ],
+        "agrees": {
+          "crispri": 4,
+          "lentimpra": 120,
+          "vista": 2
+        },
+        "disagrees": {
+          "crispri": 1,
+          "lentimpra": 643,
+          "vista": 3
+        },
+        "crispri_predicted_gene_not_tested": 10,
+        "agreement_rate_over_all_matched_elements": 0.2667,
+        "agreement_denominator_all_matched_elements": 15,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.8,
+        "agreement_denominator_predicted_gene_tested": 5,
+        "crispri_pairs_regulated": 7,
+        "crispri_pairs_measured_as_not_regulated": 18
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 855,
+            "crispri": 32,
+            "lentimpra": 826,
+            "vista": 12
+          },
+          "0.5": {
+            "any": 774,
+            "crispri": 15,
+            "lentimpra": 763,
+            "vista": 5
+          },
+          "0.75": {
+            "any": 125,
+            "crispri": 0,
+            "lentimpra": 121,
+            "vista": 4
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 22,
+          "lentimpra": 0,
+          "vista": 89
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 774,
+          "controls": 19872,
+          "targets_matched": 774,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5065,
+            "b": 0.4366,
+            "difference": 0.0699,
+            "p_one_sided": 6.8e-05,
+            "upper_95": 0.1058
+          },
+          "matched": {
+            "a": 0.5065,
+            "b": 0.4135,
+            "difference": 0.0929,
+            "p_one_sided": 0.000115,
+            "upper_95": 0.1424
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 340.0,
+              "control_median": 294.0,
+              "ratio": 1.156
+            },
+            "gc": {
+              "target_median": 0.4598,
+              "control_median": 0.4346,
+              "ratio": 1.058
+            },
+            "nearest_coding_tss": {
+              "target_median": 44574.0,
+              "control_median": 35383.0,
+              "ratio": 1.26
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 645,
+          "controls": 122,
+          "targets_matched": 568,
+          "dropped_for_want_of_a_control": 77,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4713,
+            "b": 0.6803,
+            "difference": -0.209,
+            "p_one_sided": 0.999996,
+            "upper_95": -0.1177
+          },
+          "matched": {
+            "a": 0.4718,
+            "b": 0.6824,
+            "difference": -0.2106,
+            "p_one_sided": 1.0,
+            "upper_95": -0.1544
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 337.0,
+              "control_median": 347.0,
+              "ratio": 0.971
+            },
+            "gc": {
+              "target_median": 0.4539,
+              "control_median": 0.4955,
+              "ratio": 0.916
+            },
+            "nearest_coding_tss": {
+              "target_median": 44045.0,
+              "control_median": 49875.0,
+              "ratio": 0.883
+            }
+          }
+        }
+      }
+    },
+    "chr5": {
+      "census": {
+        "chrom": "chr5",
+        "compiled_elements": 22772,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 22772,
+          "elements_in_an_assay_footprint": 1151,
+          "elements_no_assay_ever_covered": 21621,
+          "share_eligible": 0.05054,
+          "by_assay": {
+            "crispri": 96,
+            "lentimpra": 994,
+            "vista": 98
+          }
+        },
+        "elements_in_an_assay_footprint": 1151,
+        "elements_no_assay_ever_covered": 21621,
+        "elements_with_any_measurement": 845,
+        "coverage_elements_measured": 0.03711,
+        "raised_share_of_the_eligible": 0.73414,
+        "elements_by_assay": {
+          "crispri": 36,
+          "lentimpra": 818,
+          "vista": 5
+        },
+        "measurements_available": {
+          "crispri": 327,
+          "lentimpra": 2718,
+          "vista": 156
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1690,
+        "experimental_facts_added": 852,
+        "experimental_element_blocks": 845,
+        "experimental_rule_blocks": 7,
+        "genes_named_by_a_measurement": [
+          "CMBL",
+          "CPEB4",
+          "IL6ST",
+          "LARP1",
+          "PRKAA1",
+          "RGS14",
+          "SSBP2"
+        ],
+        "agrees": {
+          "crispri": 3,
+          "lentimpra": 142,
+          "vista": 4
+        },
+        "disagrees": {
+          "crispri": 1,
+          "lentimpra": 676,
+          "vista": 1
+        },
+        "crispri_predicted_gene_not_tested": 32,
+        "agreement_rate_over_all_matched_elements": 0.0833,
+        "agreement_denominator_all_matched_elements": 36,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.75,
+        "agreement_denominator_predicted_gene_tested": 4,
+        "crispri_pairs_regulated": 7,
+        "crispri_pairs_measured_as_not_regulated": 52
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 995,
+            "crispri": 71,
+            "lentimpra": 931,
+            "vista": 15
+          },
+          "0.5": {
+            "any": 845,
+            "crispri": 36,
+            "lentimpra": 818,
+            "vista": 5
+          },
+          "0.75": {
+            "any": 130,
+            "crispri": 0,
+            "lentimpra": 128,
+            "vista": 2
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 34,
+          "lentimpra": 0,
+          "vista": 77
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 845,
+          "controls": 21927,
+          "targets_matched": 845,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5077,
+            "b": 0.4292,
+            "difference": 0.0785,
+            "p_one_sided": 4e-06,
+            "upper_95": 0.1129
+          },
+          "matched": {
+            "a": 0.5077,
+            "b": 0.4279,
+            "difference": 0.0798,
+            "p_one_sided": 0.000484,
+            "upper_95": 0.1273
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 339.0,
+              "control_median": 297.0,
+              "ratio": 1.141
+            },
+            "gc": {
+              "target_median": 0.4927,
+              "control_median": 0.4608,
+              "ratio": 1.069
+            },
+            "nearest_coding_tss": {
+              "target_median": 35039.0,
+              "control_median": 31451.0,
+              "ratio": 1.114
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 678,
+          "controls": 147,
+          "targets_matched": 632,
+          "dropped_for_want_of_a_control": 46,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4808,
+            "b": 0.6122,
+            "difference": -0.1314,
+            "p_one_sided": 0.998417,
+            "upper_95": -0.0441
+          },
+          "matched": {
+            "a": 0.4763,
+            "b": 0.601,
+            "difference": -0.1247,
+            "p_one_sided": 0.999996,
+            "upper_95": -0.0702
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 335.5,
+              "control_median": 345.0,
+              "ratio": 0.972
+            },
+            "gc": {
+              "target_median": 0.4883,
+              "control_median": 0.5086,
+              "ratio": 0.96
+            },
+            "nearest_coding_tss": {
+              "target_median": 35871.0,
+              "control_median": 35890.0,
+              "ratio": 0.999
+            }
+          }
+        }
+      }
+    },
+    "chr6": {
+      "census": {
+        "chrom": "chr6",
+        "compiled_elements": 23769,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 23769,
+          "elements_in_an_assay_footprint": 1522,
+          "elements_no_assay_ever_covered": 22247,
+          "share_eligible": 0.06403,
+          "by_assay": {
+            "crispri": 212,
+            "lentimpra": 1239,
+            "vista": 134
+          }
+        },
+        "elements_in_an_assay_footprint": 1522,
+        "elements_no_assay_ever_covered": 22247,
+        "elements_with_any_measurement": 1124,
+        "coverage_elements_measured": 0.04729,
+        "raised_share_of_the_eligible": 0.7385,
+        "elements_by_assay": {
+          "crispri": 73,
+          "lentimpra": 1062,
+          "vista": 6
+        },
+        "measurements_available": {
+          "crispri": 714,
+          "lentimpra": 3576,
+          "vista": 135
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 2248,
+        "experimental_facts_added": 1135,
+        "experimental_element_blocks": 1124,
+        "experimental_rule_blocks": 11,
+        "genes_named_by_a_measurement": [
+          "CD164",
+          "CD83",
+          "CITED2",
+          "CNKSR3",
+          "FIG4",
+          "FKBPL",
+          "GMPR",
+          "MRAP2",
+          "MRPS10",
+          "PIM1",
+          "STXBP5"
+        ],
+        "agrees": {
+          "crispri": 7,
+          "lentimpra": 165,
+          "vista": 6
+        },
+        "disagrees": {
+          "crispri": 3,
+          "lentimpra": 897,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 63,
+        "agreement_rate_over_all_matched_elements": 0.0959,
+        "agreement_denominator_all_matched_elements": 73,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.7,
+        "agreement_denominator_predicted_gene_tested": 10,
+        "crispri_pairs_regulated": 11,
+        "crispri_pairs_measured_as_not_regulated": 168
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1298,
+            "crispri": 146,
+            "lentimpra": 1176,
+            "vista": 13
+          },
+          "0.5": {
+            "any": 1124,
+            "crispri": 73,
+            "lentimpra": 1062,
+            "vista": 6
+          },
+          "0.75": {
+            "any": 200,
+            "crispri": 0,
+            "lentimpra": 197,
+            "vista": 3
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 93,
+          "lentimpra": 0,
+          "vista": 110
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 1124,
+          "controls": 22645,
+          "targets_matched": 1124,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4956,
+            "b": 0.4419,
+            "difference": 0.0536,
+            "p_one_sided": 0.000222,
+            "upper_95": 0.0836
+          },
+          "matched": {
+            "a": 0.4956,
+            "b": 0.4221,
+            "difference": 0.0735,
+            "p_one_sided": 0.000227,
+            "upper_95": 0.1146
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.5,
+              "control_median": 294.0,
+              "ratio": 1.151
+            },
+            "gc": {
+              "target_median": 0.4785,
+              "control_median": 0.453,
+              "ratio": 1.056
+            },
+            "nearest_coding_tss": {
+              "target_median": 33744.5,
+              "control_median": 27424.0,
+              "ratio": 1.23
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 899,
+          "controls": 176,
+          "targets_matched": 827,
+          "dropped_for_want_of_a_control": 72,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4683,
+            "b": 0.6307,
+            "difference": -0.1624,
+            "p_one_sided": 0.999975,
+            "upper_95": -0.084
+          },
+          "matched": {
+            "a": 0.4704,
+            "b": 0.6408,
+            "difference": -0.1704,
+            "p_one_sided": 1.0,
+            "upper_95": -0.1232
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 332.0,
+              "control_median": 347.0,
+              "ratio": 0.957
+            },
+            "gc": {
+              "target_median": 0.475,
+              "control_median": 0.4927,
+              "ratio": 0.964
+            },
+            "nearest_coding_tss": {
+              "target_median": 33458.0,
+              "control_median": 38890.5,
+              "ratio": 0.86
+            }
+          }
+        }
+      }
+    },
+    "chr7": {
+      "census": {
+        "chrom": "chr7",
+        "compiled_elements": 22596,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 22596,
+          "elements_in_an_assay_footprint": 1391,
+          "elements_no_assay_ever_covered": 21205,
+          "share_eligible": 0.06156,
+          "by_assay": {
+            "crispri": 141,
+            "lentimpra": 1107,
+            "vista": 188
+          }
+        },
+        "elements_in_an_assay_footprint": 1391,
+        "elements_no_assay_ever_covered": 21205,
+        "elements_with_any_measurement": 982,
+        "coverage_elements_measured": 0.04346,
+        "raised_share_of_the_eligible": 0.70597,
+        "elements_by_assay": {
+          "crispri": 49,
+          "lentimpra": 941,
+          "vista": 7
+        },
+        "measurements_available": {
+          "crispri": 478,
+          "lentimpra": 2970,
+          "vista": 180
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1964,
+        "experimental_facts_added": 990,
+        "experimental_element_blocks": 982,
+        "experimental_rule_blocks": 8,
+        "genes_named_by_a_measurement": [
+          "AP1S1",
+          "ARL4A",
+          "CCM2",
+          "LRRC61",
+          "PRKAR2B",
+          "RELN",
+          "SNHG15",
+          "WIPF3"
+        ],
+        "agrees": {
+          "crispri": 4,
+          "lentimpra": 160,
+          "vista": 4
+        },
+        "disagrees": {
+          "crispri": 2,
+          "lentimpra": 781,
+          "vista": 3
+        },
+        "crispri_predicted_gene_not_tested": 43,
+        "agreement_rate_over_all_matched_elements": 0.0816,
+        "agreement_denominator_all_matched_elements": 49,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
+        "agreement_denominator_predicted_gene_tested": 6,
+        "crispri_pairs_regulated": 8,
+        "crispri_pairs_measured_as_not_regulated": 151
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1135,
+            "crispri": 98,
+            "lentimpra": 1040,
+            "vista": 25
+          },
+          "0.5": {
+            "any": 982,
+            "crispri": 49,
+            "lentimpra": 941,
+            "vista": 7
+          },
+          "0.75": {
+            "any": 135,
+            "crispri": 0,
+            "lentimpra": 134,
+            "vista": 1
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 68,
+          "lentimpra": 0,
+          "vista": 151
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 982,
+          "controls": 21614,
+          "targets_matched": 982,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5081,
+            "b": 0.4301,
+            "difference": 0.078,
+            "p_one_sided": 1e-06,
+            "upper_95": 0.11
+          },
+          "matched": {
+            "a": 0.5081,
+            "b": 0.4203,
+            "difference": 0.0879,
+            "p_one_sided": 4.4e-05,
+            "upper_95": 0.1318
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 341.0,
+              "control_median": 295.0,
+              "ratio": 1.156
+            },
+            "gc": {
+              "target_median": 0.49,
+              "control_median": 0.4632,
+              "ratio": 1.058
+            },
+            "nearest_coding_tss": {
+              "target_median": 35938.0,
+              "control_median": 28908.0,
+              "ratio": 1.243
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 783,
+          "controls": 166,
+          "targets_matched": 734,
+          "dropped_for_want_of_a_control": 49,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4738,
+            "b": 0.6205,
+            "difference": -0.1467,
+            "p_one_sided": 0.999783,
+            "upper_95": -0.065
+          },
+          "matched": {
+            "a": 0.4728,
+            "b": 0.6045,
+            "difference": -0.1317,
+            "p_one_sided": 1.0,
+            "upper_95": -0.0811
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.0,
+              "control_median": 345.0,
+              "ratio": 0.98
+            },
+            "gc": {
+              "target_median": 0.4886,
+              "control_median": 0.5174,
+              "ratio": 0.944
+            },
+            "nearest_coding_tss": {
+              "target_median": 38285.0,
+              "control_median": 31775.0,
+              "ratio": 1.205
+            }
+          }
+        }
+      }
+    },
+    "chr8": {
+      "census": {
+        "chrom": "chr8",
+        "compiled_elements": 18552,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 18552,
+          "elements_in_an_assay_footprint": 1220,
+          "elements_no_assay_ever_covered": 17332,
+          "share_eligible": 0.06576,
+          "by_assay": {
+            "crispri": 308,
+            "lentimpra": 847,
+            "vista": 137
+          }
+        },
+        "elements_in_an_assay_footprint": 1220,
+        "elements_no_assay_ever_covered": 17332,
+        "elements_with_any_measurement": 778,
+        "coverage_elements_measured": 0.04194,
+        "raised_share_of_the_eligible": 0.6377,
+        "elements_by_assay": {
+          "crispri": 103,
+          "lentimpra": 689,
+          "vista": 7
+        },
+        "measurements_available": {
+          "crispri": 1223,
+          "lentimpra": 2483,
+          "vista": 100
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1556,
+        "experimental_facts_added": 787,
+        "experimental_element_blocks": 778,
+        "experimental_rule_blocks": 9,
+        "genes_named_by_a_measurement": [
+          "ASAH1",
+          "CCDC26",
+          "EXOSC4",
+          "FAM83A",
+          "LINC00534",
+          "MYC",
+          "NSMCE2"
+        ],
+        "agrees": {
+          "crispri": 2,
+          "lentimpra": 125,
+          "vista": 6
+        },
+        "disagrees": {
+          "crispri": 1,
+          "lentimpra": 564,
+          "vista": 1
+        },
+        "crispri_predicted_gene_not_tested": 100,
+        "agreement_rate_over_all_matched_elements": 0.0194,
+        "agreement_denominator_all_matched_elements": 103,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.6667,
+        "agreement_denominator_predicted_gene_tested": 3,
+        "crispri_pairs_regulated": 9,
+        "crispri_pairs_measured_as_not_regulated": 192
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 968,
+            "crispri": 215,
+            "lentimpra": 784,
+            "vista": 18
+          },
+          "0.5": {
+            "any": 778,
+            "crispri": 103,
+            "lentimpra": 689,
+            "vista": 7
+          },
+          "0.75": {
+            "any": 122,
+            "crispri": 22,
+            "lentimpra": 96,
+            "vista": 4
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 139,
+          "lentimpra": 0,
+          "vista": 105
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 778,
+          "controls": 17774,
+          "targets_matched": 778,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5039,
+            "b": 0.415,
+            "difference": 0.0888,
+            "p_one_sided": 1e-06,
+            "upper_95": 0.1247
+          },
+          "matched": {
+            "a": 0.5039,
+            "b": 0.4007,
+            "difference": 0.1031,
+            "p_one_sided": 2e-05,
+            "upper_95": 0.1523
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 341.0,
+              "control_median": 296.0,
+              "ratio": 1.152
+            },
+            "gc": {
+              "target_median": 0.4831,
+              "control_median": 0.4586,
+              "ratio": 1.054
+            },
+            "nearest_coding_tss": {
+              "target_median": 38769.5,
+              "control_median": 32136.0,
+              "ratio": 1.206
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 566,
+          "controls": 132,
+          "targets_matched": 525,
+          "dropped_for_want_of_a_control": 41,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4894,
+            "b": 0.5909,
+            "difference": -0.1015,
+            "p_one_sided": 0.983383,
+            "upper_95": -0.0081
+          },
+          "matched": {
+            "a": 0.4857,
+            "b": 0.5748,
+            "difference": -0.0891,
+            "p_one_sided": 0.998163,
+            "upper_95": -0.029
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.0,
+              "control_median": 347.0,
+              "ratio": 0.974
+            },
+            "gc": {
+              "target_median": 0.4841,
+              "control_median": 0.5002,
+              "ratio": 0.968
+            },
+            "nearest_coding_tss": {
+              "target_median": 38964.0,
+              "control_median": 39339.0,
+              "ratio": 0.99
+            }
+          }
+        }
+      }
+    },
+    "chr9": {
+      "census": {
+        "chrom": "chr9",
+        "compiled_elements": 19272,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 19272,
+          "elements_in_an_assay_footprint": 1046,
+          "elements_no_assay_ever_covered": 18226,
+          "share_eligible": 0.05428,
+          "by_assay": {
+            "crispri": 54,
+            "lentimpra": 930,
+            "vista": 87
+          }
+        },
+        "elements_in_an_assay_footprint": 1046,
+        "elements_no_assay_ever_covered": 18226,
+        "elements_with_any_measurement": 778,
+        "coverage_elements_measured": 0.04037,
+        "raised_share_of_the_eligible": 0.74379,
+        "elements_by_assay": {
+          "crispri": 15,
+          "lentimpra": 765,
+          "vista": 5
+        },
+        "measurements_available": {
+          "crispri": 110,
+          "lentimpra": 2255,
+          "vista": 109
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1556,
+        "experimental_facts_added": 784,
+        "experimental_element_blocks": 778,
+        "experimental_rule_blocks": 6,
+        "genes_named_by_a_measurement": [
+          "ANP32B",
+          "ANXA1",
+          "CTSL",
+          "DOLPP1",
+          "GFI1B",
+          "HEMGN"
+        ],
+        "agrees": {
+          "crispri": 4,
+          "lentimpra": 146,
+          "vista": 1
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 619,
+          "vista": 4
+        },
+        "crispri_predicted_gene_not_tested": 11,
+        "agreement_rate_over_all_matched_elements": 0.2667,
+        "agreement_denominator_all_matched_elements": 15,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 4,
+        "crispri_pairs_regulated": 6,
+        "crispri_pairs_measured_as_not_regulated": 17
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 896,
+            "crispri": 39,
+            "lentimpra": 860,
+            "vista": 10
+          },
+          "0.5": {
+            "any": 778,
+            "crispri": 15,
+            "lentimpra": 765,
+            "vista": 5
+          },
+          "0.75": {
+            "any": 137,
+            "crispri": 0,
+            "lentimpra": 136,
+            "vista": 1
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 31,
+          "lentimpra": 0,
+          "vista": 68
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 778,
+          "controls": 18494,
+          "targets_matched": 778,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5064,
+            "b": 0.4282,
+            "difference": 0.0782,
+            "p_one_sided": 1e-05,
+            "upper_95": 0.114
+          },
+          "matched": {
+            "a": 0.5064,
+            "b": 0.4119,
+            "difference": 0.0946,
+            "p_one_sided": 8.5e-05,
+            "upper_95": 0.1439
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 337.0,
+              "control_median": 294.0,
+              "ratio": 1.146
+            },
+            "gc": {
+              "target_median": 0.5103,
+              "control_median": 0.4874,
+              "ratio": 1.047
+            },
+            "nearest_coding_tss": {
+              "target_median": 27664.5,
+              "control_median": 25890.5,
+              "ratio": 1.069
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 621,
+          "controls": 148,
+          "targets_matched": 571,
+          "dropped_for_want_of_a_control": 50,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4863,
+            "b": 0.5608,
+            "difference": -0.0745,
+            "p_one_sided": 0.949375,
+            "upper_95": 0.0146
+          },
+          "matched": {
+            "a": 0.4869,
+            "b": 0.5387,
+            "difference": -0.0518,
+            "p_one_sided": 0.960379,
+            "upper_95": 0.0061
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 331.0,
+              "control_median": 345.0,
+              "ratio": 0.959
+            },
+            "gc": {
+              "target_median": 0.5058,
+              "control_median": 0.523,
+              "ratio": 0.967
+            },
+            "nearest_coding_tss": {
+              "target_median": 27870.0,
+              "control_median": 26622.5,
+              "ratio": 1.047
+            }
+          }
+        }
+      }
+    },
+    "chr10": {
+      "census": {
+        "chrom": "chr10",
+        "compiled_elements": 21023,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 21023,
+          "elements_in_an_assay_footprint": 1269,
+          "elements_no_assay_ever_covered": 19754,
+          "share_eligible": 0.06036,
+          "by_assay": {
+            "crispri": 134,
+            "lentimpra": 1051,
+            "vista": 120
+          }
+        },
+        "elements_in_an_assay_footprint": 1269,
+        "elements_no_assay_ever_covered": 19754,
+        "elements_with_any_measurement": 923,
+        "coverage_elements_measured": 0.0439,
+        "raised_share_of_the_eligible": 0.72734,
+        "elements_by_assay": {
+          "crispri": 46,
+          "lentimpra": 883,
+          "vista": 4
+        },
+        "measurements_available": {
+          "crispri": 260,
+          "lentimpra": 2622,
+          "vista": 119
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1846,
+        "experimental_facts_added": 933,
+        "experimental_element_blocks": 923,
+        "experimental_rule_blocks": 10,
+        "genes_named_by_a_measurement": [
+          "ADAMTS14",
+          "AKR1C1",
+          "HHEX",
+          "MINPP1",
+          "PDLIM1",
+          "PFKFB3",
+          "PPIF",
+          "SEC61A2",
+          "VCL"
+        ],
+        "agrees": {
+          "crispri": 8,
+          "lentimpra": 146,
+          "vista": 4
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 737,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 38,
+        "agreement_rate_over_all_matched_elements": 0.1739,
+        "agreement_denominator_all_matched_elements": 46,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 8,
+        "crispri_pairs_regulated": 10,
+        "crispri_pairs_measured_as_not_regulated": 52
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1074,
+            "crispri": 94,
+            "lentimpra": 984,
+            "vista": 15
+          },
+          "0.5": {
+            "any": 923,
+            "crispri": 46,
+            "lentimpra": 883,
+            "vista": 4
+          },
+          "0.75": {
+            "any": 143,
+            "crispri": 0,
+            "lentimpra": 141,
+            "vista": 2
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 54,
+          "lentimpra": 0,
+          "vista": 98
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 923,
+          "controls": 20100,
+          "targets_matched": 923,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4886,
+            "b": 0.4178,
+            "difference": 0.0709,
+            "p_one_sided": 1.3e-05,
+            "upper_95": 0.1038
+          },
+          "matched": {
+            "a": 0.4886,
+            "b": 0.4129,
+            "difference": 0.0758,
+            "p_one_sided": 0.000517,
+            "upper_95": 0.121
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 339.0,
+              "control_median": 296.0,
+              "ratio": 1.145
+            },
+            "gc": {
+              "target_median": 0.4914,
+              "control_median": 0.4769,
+              "ratio": 1.03
+            },
+            "nearest_coding_tss": {
+              "target_median": 33235.0,
+              "control_median": 32407.5,
+              "ratio": 1.026
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 736,
+          "controls": 156,
+          "targets_matched": 695,
+          "dropped_for_want_of_a_control": 41,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4715,
+            "b": 0.5833,
+            "difference": -0.1119,
+            "p_one_sided": 0.994896,
+            "upper_95": -0.0265
+          },
+          "matched": {
+            "a": 0.4734,
+            "b": 0.5619,
+            "difference": -0.0885,
+            "p_one_sided": 0.999541,
+            "upper_95": -0.0362
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 334.5,
+              "control_median": 344.5,
+              "ratio": 0.971
+            },
+            "gc": {
+              "target_median": 0.4871,
+              "control_median": 0.4993,
+              "ratio": 0.976
+            },
+            "nearest_coding_tss": {
+              "target_median": 33946.5,
+              "control_median": 29360.0,
+              "ratio": 1.156
+            }
+          }
+        }
+      }
+    },
+    "chr11": {
+      "census": {
+        "chrom": "chr11",
+        "compiled_elements": 25731,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 25731,
+          "elements_in_an_assay_footprint": 1740,
+          "elements_no_assay_ever_covered": 23991,
+          "share_eligible": 0.06762,
+          "by_assay": {
+            "crispri": 585,
+            "lentimpra": 1150,
+            "vista": 145
+          }
+        },
+        "elements_in_an_assay_footprint": 1740,
+        "elements_no_assay_ever_covered": 23991,
+        "elements_with_any_measurement": 1149,
+        "coverage_elements_measured": 0.04465,
+        "raised_share_of_the_eligible": 0.66034,
+        "elements_by_assay": {
+          "crispri": 224,
+          "lentimpra": 980,
+          "vista": 3
+        },
+        "measurements_available": {
+          "crispri": 1894,
+          "lentimpra": 2570,
+          "vista": 93
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 2298,
+        "experimental_facts_added": 1186,
+        "experimental_element_blocks": 1149,
+        "experimental_rule_blocks": 37,
+        "genes_named_by_a_measurement": [
+          "APIP",
+          "CAT",
+          "CCND1",
+          "DRAP1",
+          "ENDOD1",
+          "ETS1",
+          "FADS1",
+          "FEZ1",
+          "FIBP",
+          "HBB",
+          "HBD",
+          "HBE1",
+          "HBG1",
+          "HBG2",
+          "IFITM1",
+          "IFITM2",
+          "LMO2",
+          "NAT10",
+          "SLC43A3"
+        ],
+        "agrees": {
+          "crispri": 13,
+          "lentimpra": 171,
+          "vista": 3
+        },
+        "disagrees": {
+          "crispri": 8,
+          "lentimpra": 809,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 203,
+        "agreement_rate_over_all_matched_elements": 0.058,
+        "agreement_denominator_all_matched_elements": 224,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.619,
+        "agreement_denominator_predicted_gene_tested": 21,
+        "crispri_pairs_regulated": 37,
+        "crispri_pairs_measured_as_not_regulated": 601
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1406,
+            "crispri": 399,
+            "lentimpra": 1096,
+            "vista": 9
+          },
+          "0.5": {
+            "any": 1149,
+            "crispri": 224,
+            "lentimpra": 980,
+            "vista": 3
+          },
+          "0.75": {
+            "any": 189,
+            "crispri": 39,
+            "lentimpra": 148,
+            "vista": 2
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 225,
+          "lentimpra": 0,
+          "vista": 125
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 1149,
+          "controls": 24582,
+          "targets_matched": 1149,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5466,
+            "b": 0.462,
+            "difference": 0.0846,
+            "p_one_sided": 0.0,
+            "upper_95": 0.1141
+          },
+          "matched": {
+            "a": 0.5466,
+            "b": 0.4497,
+            "difference": 0.0969,
+            "p_one_sided": 2e-06,
+            "upper_95": 0.1376
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 340.0,
+              "control_median": 290.0,
+              "ratio": 1.172
+            },
+            "gc": {
+              "target_median": 0.5172,
+              "control_median": 0.4953,
+              "ratio": 1.044
+            },
+            "nearest_coding_tss": {
+              "target_median": 23432.0,
+              "control_median": 18991.0,
+              "ratio": 1.234
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 811,
+          "controls": 183,
+          "targets_matched": 770,
+          "dropped_for_want_of_a_control": 41,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.524,
+            "b": 0.623,
+            "difference": -0.0989,
+            "p_one_sided": 0.993423,
+            "upper_95": -0.0207
+          },
+          "matched": {
+            "a": 0.5325,
+            "b": 0.6355,
+            "difference": -0.1031,
+            "p_one_sided": 0.999982,
+            "upper_95": -0.0541
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 337.0,
+              "control_median": 345.0,
+              "ratio": 0.977
+            },
+            "gc": {
+              "target_median": 0.5144,
+              "control_median": 0.533,
+              "ratio": 0.965
+            },
+            "nearest_coding_tss": {
+              "target_median": 25213.0,
+              "control_median": 22788.0,
+              "ratio": 1.106
+            }
+          }
+        }
+      }
+    },
+    "chr12": {
+      "census": {
+        "chrom": "chr12",
+        "compiled_elements": 22814,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 22814,
+          "elements_in_an_assay_footprint": 1178,
+          "elements_no_assay_ever_covered": 21636,
+          "share_eligible": 0.05163,
+          "by_assay": {
+            "crispri": 178,
+            "lentimpra": 965,
+            "vista": 88
+          }
+        },
+        "elements_in_an_assay_footprint": 1178,
+        "elements_no_assay_ever_covered": 21636,
+        "elements_with_any_measurement": 888,
+        "coverage_elements_measured": 0.03892,
+        "raised_share_of_the_eligible": 0.75382,
+        "elements_by_assay": {
+          "crispri": 72,
+          "lentimpra": 826,
+          "vista": 6
+        },
+        "measurements_available": {
+          "crispri": 762,
+          "lentimpra": 2395,
+          "vista": 79
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1776,
+        "experimental_facts_added": 897,
+        "experimental_element_blocks": 888,
+        "experimental_rule_blocks": 9,
+        "genes_named_by_a_measurement": [
+          "CD9",
+          "HNRNPA1",
+          "NFE2",
+          "PCBP2",
+          "SLC2A3",
+          "SYT10"
+        ],
+        "agrees": {
+          "crispri": 5,
+          "lentimpra": 129,
+          "vista": 5
+        },
+        "disagrees": {
+          "crispri": 1,
+          "lentimpra": 697,
+          "vista": 1
+        },
+        "crispri_predicted_gene_not_tested": 66,
+        "agreement_rate_over_all_matched_elements": 0.0694,
+        "agreement_denominator_all_matched_elements": 72,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.8333,
+        "agreement_denominator_predicted_gene_tested": 6,
+        "crispri_pairs_regulated": 9,
+        "crispri_pairs_measured_as_not_regulated": 240
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1027,
+            "crispri": 134,
+            "lentimpra": 915,
+            "vista": 12
+          },
+          "0.5": {
+            "any": 888,
+            "crispri": 72,
+            "lentimpra": 826,
+            "vista": 6
+          },
+          "0.75": {
+            "any": 129,
+            "crispri": 0,
+            "lentimpra": 125,
+            "vista": 4
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 61,
+          "lentimpra": 0,
+          "vista": 69
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 888,
+          "controls": 21926,
+          "targets_matched": 888,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5405,
+            "b": 0.4541,
+            "difference": 0.0864,
+            "p_one_sided": 0.0,
+            "upper_95": 0.1199
+          },
+          "matched": {
+            "a": 0.5405,
+            "b": 0.4466,
+            "difference": 0.0939,
+            "p_one_sided": 3.5e-05,
+            "upper_95": 0.1402
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 341.0,
+              "control_median": 293.0,
+              "ratio": 1.164
+            },
+            "gc": {
+              "target_median": 0.4937,
+              "control_median": 0.468,
+              "ratio": 1.055
+            },
+            "nearest_coding_tss": {
+              "target_median": 27707.0,
+              "control_median": 22902.5,
+              "ratio": 1.21
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 697,
+          "controls": 135,
+          "targets_matched": 650,
+          "dropped_for_want_of_a_control": 47,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.505,
+            "b": 0.6296,
+            "difference": -0.1246,
+            "p_one_sided": 0.996817,
+            "upper_95": -0.0351
+          },
+          "matched": {
+            "a": 0.5077,
+            "b": 0.6164,
+            "difference": -0.1087,
+            "p_one_sided": 0.999964,
+            "upper_95": -0.055
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.0,
+              "control_median": 346.0,
+              "ratio": 0.977
+            },
+            "gc": {
+              "target_median": 0.4858,
+              "control_median": 0.5211,
+              "ratio": 0.932
+            },
+            "nearest_coding_tss": {
+              "target_median": 30102.0,
+              "control_median": 29726.0,
+              "ratio": 1.013
+            }
+          }
+        }
+      }
+    },
+    "chr13": {
+      "census": {
+        "chrom": "chr13",
+        "compiled_elements": 9711,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 9711,
+          "elements_in_an_assay_footprint": 417,
+          "elements_no_assay_ever_covered": 9294,
+          "share_eligible": 0.04294,
+          "by_assay": {
+            "crispri": 2,
+            "lentimpra": 380,
+            "vista": 38
+          }
+        },
+        "elements_in_an_assay_footprint": 417,
+        "elements_no_assay_ever_covered": 9294,
+        "elements_with_any_measurement": 342,
+        "coverage_elements_measured": 0.03522,
+        "raised_share_of_the_eligible": 0.82014,
+        "elements_by_assay": {
+          "crispri": 0,
+          "lentimpra": 341,
+          "vista": 1
+        },
+        "measurements_available": {
+          "crispri": 11,
+          "lentimpra": 1245,
+          "vista": 60
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 684,
+        "experimental_facts_added": 342,
+        "experimental_element_blocks": 342,
+        "experimental_rule_blocks": 0,
+        "genes_named_by_a_measurement": [],
+        "agrees": {
+          "crispri": 0,
+          "lentimpra": 62,
+          "vista": 1
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 279,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 0,
+        "agreement_rate_over_all_matched_elements": null,
+        "agreement_denominator_all_matched_elements": 0,
+        "agreement_rate_where_the_predicted_gene_was_tested": null,
+        "agreement_denominator_predicted_gene_tested": 0,
+        "crispri_pairs_regulated": 0,
+        "crispri_pairs_measured_as_not_regulated": 0
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 368,
+            "crispri": 2,
+            "lentimpra": 366,
+            "vista": 1
+          },
+          "0.5": {
+            "any": 342,
+            "crispri": 0,
+            "lentimpra": 341,
+            "vista": 1
+          },
+          "0.75": {
+            "any": 49,
+            "crispri": 0,
+            "lentimpra": 49,
+            "vista": 0
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 1,
+          "lentimpra": 0,
+          "vista": 30
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 342,
+          "controls": 9369,
+          "targets_matched": 342,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4532,
+            "b": 0.3805,
+            "difference": 0.0727,
+            "p_one_sided": 0.003962,
+            "upper_95": 0.1264
+          },
+          "matched": {
+            "a": 0.4532,
+            "b": 0.3525,
+            "difference": 0.1007,
+            "p_one_sided": 0.003477,
+            "upper_95": 0.1738
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 339.0,
+              "control_median": 298.0,
+              "ratio": 1.138
+            },
+            "gc": {
+              "target_median": 0.4782,
+              "control_median": 0.449,
+              "ratio": 1.065
+            },
+            "nearest_coding_tss": {
+              "target_median": 45571.5,
+              "control_median": 37912.0,
+              "ratio": 1.202
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 279,
+          "controls": 63,
+          "targets_matched": 257,
+          "dropped_for_want_of_a_control": 22,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4444,
+            "b": 0.4921,
+            "difference": -0.0476,
+            "p_one_sided": 0.75289,
+            "upper_95": 0.0889
+          },
+          "matched": {
+            "a": 0.4436,
+            "b": 0.4389,
+            "difference": 0.0047,
+            "p_one_sided": 0.457527,
+            "upper_95": 0.0905
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 335.0,
+              "control_median": 345.0,
+              "ratio": 0.971
+            },
+            "gc": {
+              "target_median": 0.4759,
+              "control_median": 0.4826,
+              "ratio": 0.986
+            },
+            "nearest_coding_tss": {
+              "target_median": 46112.0,
+              "control_median": 40535.0,
+              "ratio": 1.138
+            }
+          }
+        }
+      }
+    },
+    "chr14": {
+      "census": {
+        "chrom": "chr14",
+        "compiled_elements": 13385,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 13385,
+          "elements_in_an_assay_footprint": 689,
+          "elements_no_assay_ever_covered": 12696,
+          "share_eligible": 0.05148,
+          "by_assay": {
+            "crispri": 61,
+            "lentimpra": 560,
+            "vista": 90
+          }
+        },
+        "elements_in_an_assay_footprint": 689,
+        "elements_no_assay_ever_covered": 12696,
+        "elements_with_any_measurement": 503,
+        "coverage_elements_measured": 0.03758,
+        "raised_share_of_the_eligible": 0.73004,
+        "elements_by_assay": {
+          "crispri": 22,
+          "lentimpra": 487,
+          "vista": 3
+        },
+        "measurements_available": {
+          "crispri": 147,
+          "lentimpra": 1599,
+          "vista": 96
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1006,
+        "experimental_facts_added": 505,
+        "experimental_element_blocks": 503,
+        "experimental_rule_blocks": 2,
+        "genes_named_by_a_measurement": [
+          "GPR68",
+          "RNASE1"
+        ],
+        "agrees": {
+          "crispri": 2,
+          "lentimpra": 100,
+          "vista": 3
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 387,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 20,
+        "agreement_rate_over_all_matched_elements": 0.0909,
+        "agreement_denominator_all_matched_elements": 22,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 2,
+        "crispri_pairs_regulated": 2,
+        "crispri_pairs_measured_as_not_regulated": 39
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 572,
+            "crispri": 46,
+            "lentimpra": 530,
+            "vista": 9
+          },
+          "0.5": {
+            "any": 503,
+            "crispri": 22,
+            "lentimpra": 487,
+            "vista": 3
+          },
+          "0.75": {
+            "any": 85,
+            "crispri": 0,
+            "lentimpra": 82,
+            "vista": 3
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 26,
+          "lentimpra": 0,
+          "vista": 76
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 503,
+          "controls": 12882,
+          "targets_matched": 503,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4672,
+            "b": 0.4356,
+            "difference": 0.0316,
+            "p_one_sided": 0.081494,
+            "upper_95": 0.0761
+          },
+          "matched": {
+            "a": 0.4672,
+            "b": 0.412,
+            "difference": 0.0552,
+            "p_one_sided": 0.038593,
+            "upper_95": 0.1165
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.0,
+              "control_median": 293.0,
+              "ratio": 1.154
+            },
+            "gc": {
+              "target_median": 0.4898,
+              "control_median": 0.4822,
+              "ratio": 1.016
+            },
+            "nearest_coding_tss": {
+              "target_median": 28842.0,
+              "control_median": 21542.0,
+              "ratio": 1.339
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 387,
+          "controls": 105,
+          "targets_matched": 342,
+          "dropped_for_want_of_a_control": 45,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4367,
+            "b": 0.6,
+            "difference": -0.1633,
+            "p_one_sided": 0.998742,
+            "upper_95": -0.0574
+          },
+          "matched": {
+            "a": 0.4327,
+            "b": 0.5829,
+            "difference": -0.1501,
+            "p_one_sided": 0.999964,
+            "upper_95": -0.0761
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 331.0,
+              "control_median": 344.0,
+              "ratio": 0.962
+            },
+            "gc": {
+              "target_median": 0.4884,
+              "control_median": 0.4971,
+              "ratio": 0.982
+            },
+            "nearest_coding_tss": {
+              "target_median": 29174.0,
+              "control_median": 26939.0,
+              "ratio": 1.083
+            }
+          }
+        }
+      }
+    },
+    "chr15": {
+      "census": {
+        "chrom": "chr15",
+        "compiled_elements": 14474,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 14474,
+          "elements_in_an_assay_footprint": 762,
+          "elements_no_assay_ever_covered": 13712,
+          "share_eligible": 0.05265,
+          "by_assay": {
+            "crispri": 31,
+            "lentimpra": 663,
+            "vista": 82
+          }
+        },
+        "elements_in_an_assay_footprint": 762,
+        "elements_no_assay_ever_covered": 13712,
+        "elements_with_any_measurement": 581,
+        "coverage_elements_measured": 0.04014,
+        "raised_share_of_the_eligible": 0.76247,
+        "elements_by_assay": {
+          "crispri": 16,
+          "lentimpra": 566,
+          "vista": 5
+        },
+        "measurements_available": {
+          "crispri": 67,
+          "lentimpra": 1675,
+          "vista": 67
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1162,
+        "experimental_facts_added": 585,
+        "experimental_element_blocks": 581,
+        "experimental_rule_blocks": 4,
+        "genes_named_by_a_measurement": [
+          "MEX3B",
+          "PKM",
+          "SCG3",
+          "WDR61"
+        ],
+        "agrees": {
+          "crispri": 3,
+          "lentimpra": 95,
+          "vista": 3
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 471,
+          "vista": 2
+        },
+        "crispri_predicted_gene_not_tested": 13,
+        "agreement_rate_over_all_matched_elements": 0.1875,
+        "agreement_denominator_all_matched_elements": 16,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 3,
+        "crispri_pairs_regulated": 4,
+        "crispri_pairs_measured_as_not_regulated": 20
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 645,
+            "crispri": 26,
+            "lentimpra": 619,
+            "vista": 9
+          },
+          "0.5": {
+            "any": 581,
+            "crispri": 16,
+            "lentimpra": 566,
+            "vista": 5
+          },
+          "0.75": {
+            "any": 81,
+            "crispri": 0,
+            "lentimpra": 78,
+            "vista": 3
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 12,
+          "lentimpra": 0,
+          "vista": 68
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 581,
+          "controls": 13893,
+          "targets_matched": 581,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5077,
+            "b": 0.4501,
+            "difference": 0.0577,
+            "p_one_sided": 0.003222,
+            "upper_95": 0.0991
+          },
+          "matched": {
+            "a": 0.5077,
+            "b": 0.4347,
+            "difference": 0.0731,
+            "p_one_sided": 0.006186,
+            "upper_95": 0.1303
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 342.0,
+              "control_median": 294.0,
+              "ratio": 1.163
+            },
+            "gc": {
+              "target_median": 0.503,
+              "control_median": 0.4839,
+              "ratio": 1.039
+            },
+            "nearest_coding_tss": {
+              "target_median": 32726.0,
+              "control_median": 26010.0,
+              "ratio": 1.258
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 472,
+          "controls": 99,
+          "targets_matched": 440,
+          "dropped_for_want_of_a_control": 32,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4831,
+            "b": 0.6061,
+            "difference": -0.123,
+            "p_one_sided": 0.988347,
+            "upper_95": -0.0167
+          },
+          "matched": {
+            "a": 0.4841,
+            "b": 0.6609,
+            "difference": -0.1768,
+            "p_one_sided": 1.0,
+            "upper_95": -0.1125
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 339.0,
+              "control_median": 346.0,
+              "ratio": 0.98
+            },
+            "gc": {
+              "target_median": 0.5029,
+              "control_median": 0.5115,
+              "ratio": 0.983
+            },
+            "nearest_coding_tss": {
+              "target_median": 32965.5,
+              "control_median": 32749.0,
+              "ratio": 1.007
+            }
+          }
+        }
+      }
+    },
+    "chr16": {
+      "census": {
+        "chrom": "chr16",
+        "compiled_elements": 14799,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 14799,
+          "elements_in_an_assay_footprint": 911,
+          "elements_no_assay_ever_covered": 13888,
+          "share_eligible": 0.06156,
+          "by_assay": {
+            "crispri": 134,
+            "lentimpra": 750,
+            "vista": 66
+          }
+        },
+        "elements_in_an_assay_footprint": 911,
+        "elements_no_assay_ever_covered": 13888,
+        "elements_with_any_measurement": 669,
+        "coverage_elements_measured": 0.04521,
+        "raised_share_of_the_eligible": 0.73436,
+        "elements_by_assay": {
+          "crispri": 55,
+          "lentimpra": 625,
+          "vista": 3
+        },
+        "measurements_available": {
+          "crispri": 539,
+          "lentimpra": 2032,
+          "vista": 163
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1338,
+        "experimental_facts_added": 677,
+        "experimental_element_blocks": 669,
+        "experimental_rule_blocks": 8,
+        "genes_named_by_a_measurement": [
+          "ECI1",
+          "HBZ",
+          "ITGAL",
+          "PRSS8",
+          "SEPHS2",
+          "SOCS1"
+        ],
+        "agrees": {
+          "crispri": 5,
+          "lentimpra": 132,
+          "vista": 2
+        },
+        "disagrees": {
+          "crispri": 2,
+          "lentimpra": 493,
+          "vista": 1
+        },
+        "crispri_predicted_gene_not_tested": 48,
+        "agreement_rate_over_all_matched_elements": 0.0909,
+        "agreement_denominator_all_matched_elements": 55,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.7143,
+        "agreement_denominator_predicted_gene_tested": 7,
+        "crispri_pairs_regulated": 8,
+        "crispri_pairs_measured_as_not_regulated": 212
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 777,
+            "crispri": 84,
+            "lentimpra": 706,
+            "vista": 9
+          },
+          "0.5": {
+            "any": 669,
+            "crispri": 55,
+            "lentimpra": 625,
+            "vista": 3
+          },
+          "0.75": {
+            "any": 96,
+            "crispri": 0,
+            "lentimpra": 96,
+            "vista": 0
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 40,
+          "lentimpra": 0,
+          "vista": 47
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 669,
+          "controls": 14130,
+          "targets_matched": 669,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5501,
+            "b": 0.4801,
+            "difference": 0.07,
+            "p_one_sided": 0.00019,
+            "upper_95": 0.1085
+          },
+          "matched": {
+            "a": 0.5501,
+            "b": 0.4551,
+            "difference": 0.095,
+            "p_one_sided": 0.000241,
+            "upper_95": 0.1483
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 342.0,
+              "control_median": 292.0,
+              "ratio": 1.171
+            },
+            "gc": {
+              "target_median": 0.5261,
+              "control_median": 0.5259,
+              "ratio": 1.0
+            },
+            "nearest_coding_tss": {
+              "target_median": 19013.0,
+              "control_median": 12897.0,
+              "ratio": 1.474
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 496,
+          "controls": 139,
+          "targets_matched": 472,
+          "dropped_for_want_of_a_control": 24,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5302,
+            "b": 0.5827,
+            "difference": -0.0525,
+            "p_one_sided": 0.865692,
+            "upper_95": 0.0405
+          },
+          "matched": {
+            "a": 0.5318,
+            "b": 0.5773,
+            "difference": -0.0455,
+            "p_one_sided": 0.920347,
+            "upper_95": 0.0179
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 341.0,
+              "control_median": 343.0,
+              "ratio": 0.994
+            },
+            "gc": {
+              "target_median": 0.5216,
+              "control_median": 0.5436,
+              "ratio": 0.96
+            },
+            "nearest_coding_tss": {
+              "target_median": 19775.0,
+              "control_median": 16630.0,
+              "ratio": 1.189
+            }
+          }
+        }
+      }
+    },
+    "chr17": {
+      "census": {
+        "chrom": "chr17",
+        "compiled_elements": 21608,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 21608,
+          "elements_in_an_assay_footprint": 1407,
+          "elements_no_assay_ever_covered": 20201,
+          "share_eligible": 0.06511,
+          "by_assay": {
+            "crispri": 227,
+            "lentimpra": 1132,
+            "vista": 113
+          }
+        },
+        "elements_in_an_assay_footprint": 1407,
+        "elements_no_assay_ever_covered": 20201,
+        "elements_with_any_measurement": 1019,
+        "coverage_elements_measured": 0.04716,
+        "raised_share_of_the_eligible": 0.72424,
+        "elements_by_assay": {
+          "crispri": 88,
+          "lentimpra": 947,
+          "vista": 5
+        },
+        "measurements_available": {
+          "crispri": 830,
+          "lentimpra": 2383,
+          "vista": 77
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 2038,
+        "experimental_facts_added": 1030,
+        "experimental_element_blocks": 1019,
+        "experimental_rule_blocks": 11,
+        "genes_named_by_a_measurement": [
+          "ICAM2",
+          "RNF213",
+          "SAT2",
+          "SLC25A39",
+          "SOCS3",
+          "TMEM97",
+          "TP53",
+          "TUBG1",
+          "UBTF"
+        ],
+        "agrees": {
+          "crispri": 4,
+          "lentimpra": 181,
+          "vista": 1
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 766,
+          "vista": 4
+        },
+        "crispri_predicted_gene_not_tested": 84,
+        "agreement_rate_over_all_matched_elements": 0.0455,
+        "agreement_denominator_all_matched_elements": 88,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 4,
+        "crispri_pairs_regulated": 11,
+        "crispri_pairs_measured_as_not_regulated": 342
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1198,
+            "crispri": 157,
+            "lentimpra": 1068,
+            "vista": 12
+          },
+          "0.5": {
+            "any": 1019,
+            "crispri": 88,
+            "lentimpra": 947,
+            "vista": 5
+          },
+          "0.75": {
+            "any": 155,
+            "crispri": 0,
+            "lentimpra": 153,
+            "vista": 2
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 72,
+          "lentimpra": 0,
+          "vista": 92
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 1019,
+          "controls": 20589,
+          "targets_matched": 1019,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5584,
+            "b": 0.4962,
+            "difference": 0.0622,
+            "p_one_sided": 4.8e-05,
+            "upper_95": 0.0934
+          },
+          "matched": {
+            "a": 0.5584,
+            "b": 0.4678,
+            "difference": 0.0906,
+            "p_one_sided": 2e-05,
+            "upper_95": 0.1338
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.0,
+              "control_median": 286.0,
+              "ratio": 1.182
+            },
+            "gc": {
+              "target_median": 0.5314,
+              "control_median": 0.5318,
+              "ratio": 0.999
+            },
+            "nearest_coding_tss": {
+              "target_median": 17857.0,
+              "control_median": 11138.0,
+              "ratio": 1.603
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 768,
+          "controls": 185,
+          "targets_matched": 708,
+          "dropped_for_want_of_a_control": 60,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5195,
+            "b": 0.6649,
+            "difference": -0.1453,
+            "p_one_sided": 0.999899,
+            "upper_95": -0.0687
+          },
+          "matched": {
+            "a": 0.5226,
+            "b": 0.6973,
+            "difference": -0.1747,
+            "p_one_sided": 1.0,
+            "upper_95": -0.1247
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 335.0,
+              "control_median": 346.0,
+              "ratio": 0.968
+            },
+            "gc": {
+              "target_median": 0.5277,
+              "control_median": 0.5371,
+              "ratio": 0.982
+            },
+            "nearest_coding_tss": {
+              "target_median": 18207.0,
+              "control_median": 22069.0,
+              "ratio": 0.825
+            }
+          }
+        }
+      }
+    },
+    "chr18": {
+      "census": {
+        "chrom": "chr18",
+        "compiled_elements": 9250,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 9250,
+          "elements_in_an_assay_footprint": 550,
+          "elements_no_assay_ever_covered": 8700,
+          "share_eligible": 0.05946,
+          "by_assay": {
+            "crispri": 125,
+            "lentimpra": 407,
+            "vista": 50
+          }
+        },
+        "elements_in_an_assay_footprint": 550,
+        "elements_no_assay_ever_covered": 8700,
+        "elements_with_any_measurement": 358,
+        "coverage_elements_measured": 0.0387,
+        "raised_share_of_the_eligible": 0.65091,
+        "elements_by_assay": {
+          "crispri": 28,
+          "lentimpra": 334,
+          "vista": 5
+        },
+        "measurements_available": {
+          "crispri": 253,
+          "lentimpra": 1183,
+          "vista": 91
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 716,
+        "experimental_facts_added": 359,
+        "experimental_element_blocks": 358,
+        "experimental_rule_blocks": 1,
+        "genes_named_by_a_measurement": [
+          "SKA1"
+        ],
+        "agrees": {
+          "crispri": 1,
+          "lentimpra": 62,
+          "vista": 5
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 272,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 27,
+        "agreement_rate_over_all_matched_elements": 0.0357,
+        "agreement_denominator_all_matched_elements": 28,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 1,
+        "crispri_pairs_regulated": 1,
+        "crispri_pairs_measured_as_not_regulated": 42
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 436,
+            "crispri": 68,
+            "lentimpra": 378,
+            "vista": 6
+          },
+          "0.5": {
+            "any": 358,
+            "crispri": 28,
+            "lentimpra": 334,
+            "vista": 5
+          },
+          "0.75": {
+            "any": 66,
+            "crispri": 0,
+            "lentimpra": 66,
+            "vista": 0
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 70,
+          "lentimpra": 0,
+          "vista": 41
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 358,
+          "controls": 8892,
+          "targets_matched": 358,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4749,
+            "b": 0.3944,
+            "difference": 0.0805,
+            "p_one_sided": 0.001388,
+            "upper_95": 0.1332
+          },
+          "matched": {
+            "a": 0.4749,
+            "b": 0.3733,
+            "difference": 0.1015,
+            "p_one_sided": 0.002858,
+            "upper_95": 0.1736
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 337.5,
+              "control_median": 297.0,
+              "ratio": 1.136
+            },
+            "gc": {
+              "target_median": 0.4725,
+              "control_median": 0.4556,
+              "ratio": 1.037
+            },
+            "nearest_coding_tss": {
+              "target_median": 54443.5,
+              "control_median": 48669.0,
+              "ratio": 1.119
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 272,
+          "controls": 67,
+          "targets_matched": 240,
+          "dropped_for_want_of_a_control": 32,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4632,
+            "b": 0.5373,
+            "difference": -0.0741,
+            "p_one_sided": 0.861989,
+            "upper_95": 0.0592
+          },
+          "matched": {
+            "a": 0.4625,
+            "b": 0.5462,
+            "difference": -0.0837,
+            "p_one_sided": 0.967215,
+            "upper_95": 0.0054
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 330.5,
+              "control_median": 345.0,
+              "ratio": 0.958
+            },
+            "gc": {
+              "target_median": 0.4692,
+              "control_median": 0.484,
+              "ratio": 0.969
+            },
+            "nearest_coding_tss": {
+              "target_median": 55202.5,
+              "control_median": 50309.0,
+              "ratio": 1.097
+            }
+          }
+        }
+      }
+    },
+    "chr19": {
+      "census": {
+        "chrom": "chr19",
+        "compiled_elements": 17265,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 17265,
+          "elements_in_an_assay_footprint": 1328,
+          "elements_no_assay_ever_covered": 15937,
+          "share_eligible": 0.07692,
+          "by_assay": {
+            "crispri": 479,
+            "lentimpra": 912,
+            "vista": 28
+          }
+        },
+        "elements_in_an_assay_footprint": 1328,
+        "elements_no_assay_ever_covered": 15937,
+        "elements_with_any_measurement": 942,
+        "coverage_elements_measured": 0.05456,
+        "raised_share_of_the_eligible": 0.70934,
+        "elements_by_assay": {
+          "crispri": 211,
+          "lentimpra": 777,
+          "vista": 1
+        },
+        "measurements_available": {
+          "crispri": 2795,
+          "lentimpra": 1759,
+          "vista": 25
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1884,
+        "experimental_facts_added": 959,
+        "experimental_element_blocks": 942,
+        "experimental_rule_blocks": 17,
+        "genes_named_by_a_measurement": [
+          "BSG",
+          "CLEC11A",
+          "DNASE2",
+          "EIF3K",
+          "FTL",
+          "FUT1",
+          "JUNB",
+          "KLF1",
+          "LYL1",
+          "NRTN",
+          "PLIN3",
+          "PRDX2",
+          "RAD23A",
+          "TIMM13",
+          "ZNF431"
+        ],
+        "agrees": {
+          "crispri": 5,
+          "lentimpra": 238,
+          "vista": 1
+        },
+        "disagrees": {
+          "crispri": 3,
+          "lentimpra": 539,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 203,
+        "agreement_rate_over_all_matched_elements": 0.0237,
+        "agreement_denominator_all_matched_elements": 211,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.625,
+        "agreement_denominator_predicted_gene_tested": 8,
+        "crispri_pairs_regulated": 17,
+        "crispri_pairs_measured_as_not_regulated": 1266
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 1129,
+            "crispri": 338,
+            "lentimpra": 861,
+            "vista": 2
+          },
+          "0.5": {
+            "any": 942,
+            "crispri": 211,
+            "lentimpra": 777,
+            "vista": 1
+          },
+          "0.75": {
+            "any": 139,
+            "crispri": 0,
+            "lentimpra": 139,
+            "vista": 0
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 136,
+          "lentimpra": 0,
+          "vista": 21
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 942,
+          "controls": 16323,
+          "targets_matched": 942,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.6369,
+            "b": 0.5508,
+            "difference": 0.0862,
+            "p_one_sided": 0.0,
+            "upper_95": 0.1178
+          },
+          "matched": {
+            "a": 0.6369,
+            "b": 0.5192,
+            "difference": 0.1177,
+            "p_one_sided": 0.0,
+            "upper_95": 0.162
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.0,
+              "control_median": 277.0,
+              "ratio": 1.22
+            },
+            "gc": {
+              "target_median": 0.5764,
+              "control_median": 0.5643,
+              "ratio": 1.021
+            },
+            "nearest_coding_tss": {
+              "target_median": 10448.0,
+              "control_median": 5986.0,
+              "ratio": 1.745
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 542,
+          "controls": 244,
+          "targets_matched": 531,
+          "dropped_for_want_of_a_control": 11,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5996,
+            "b": 0.6885,
+            "difference": -0.0889,
+            "p_one_sided": 0.992757,
+            "upper_95": -0.0176
+          },
+          "matched": {
+            "a": 0.5989,
+            "b": 0.6582,
+            "difference": -0.0593,
+            "p_one_sided": 0.97749,
+            "upper_95": -0.0013
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 328.0,
+              "control_median": 344.0,
+              "ratio": 0.953
+            },
+            "gc": {
+              "target_median": 0.5645,
+              "control_median": 0.6099,
+              "ratio": 0.926
+            },
+            "nearest_coding_tss": {
+              "target_median": 11210.0,
+              "control_median": 10943.0,
+              "ratio": 1.024
+            }
+          }
+        }
+      }
+    },
+    "chr20": {
+      "census": {
+        "chrom": "chr20",
+        "compiled_elements": 12702,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 12702,
+          "elements_in_an_assay_footprint": 819,
+          "elements_no_assay_ever_covered": 11883,
+          "share_eligible": 0.06448,
+          "by_assay": {
+            "crispri": 102,
+            "lentimpra": 684,
+            "vista": 72
+          }
+        },
+        "elements_in_an_assay_footprint": 819,
+        "elements_no_assay_ever_covered": 11883,
+        "elements_with_any_measurement": 607,
+        "coverage_elements_measured": 0.04779,
+        "raised_share_of_the_eligible": 0.74115,
+        "elements_by_assay": {
+          "crispri": 50,
+          "lentimpra": 569,
+          "vista": 4
+        },
+        "measurements_available": {
+          "crispri": 246,
+          "lentimpra": 1666,
+          "vista": 60
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1214,
+        "experimental_facts_added": 613,
+        "experimental_element_blocks": 607,
+        "experimental_rule_blocks": 6,
+        "genes_named_by_a_measurement": [
+          "C20orf27",
+          "CEBPB",
+          "ID1",
+          "ZMYND8"
+        ],
+        "agrees": {
+          "crispri": 4,
+          "lentimpra": 97,
+          "vista": 2
+        },
+        "disagrees": {
+          "crispri": 4,
+          "lentimpra": 472,
+          "vista": 2
+        },
+        "crispri_predicted_gene_not_tested": 42,
+        "agreement_rate_over_all_matched_elements": 0.08,
+        "agreement_denominator_all_matched_elements": 50,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.5,
+        "agreement_denominator_predicted_gene_tested": 8,
+        "crispri_pairs_regulated": 6,
+        "crispri_pairs_measured_as_not_regulated": 103
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 689,
+            "crispri": 73,
+            "lentimpra": 637,
+            "vista": 7
+          },
+          "0.5": {
+            "any": 607,
+            "crispri": 50,
+            "lentimpra": 569,
+            "vista": 4
+          },
+          "0.75": {
+            "any": 86,
+            "crispri": 0,
+            "lentimpra": 85,
+            "vista": 1
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 30,
+          "lentimpra": 0,
+          "vista": 59
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 607,
+          "controls": 12095,
+          "targets_matched": 607,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.547,
+            "b": 0.4647,
+            "difference": 0.0822,
+            "p_one_sided": 3.6e-05,
+            "upper_95": 0.1228
+          },
+          "matched": {
+            "a": 0.547,
+            "b": 0.4414,
+            "difference": 0.1056,
+            "p_one_sided": 0.000108,
+            "upper_95": 0.1615
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 341.0,
+              "control_median": 297.0,
+              "ratio": 1.148
+            },
+            "gc": {
+              "target_median": 0.5201,
+              "control_median": 0.5076,
+              "ratio": 1.025
+            },
+            "nearest_coding_tss": {
+              "target_median": 26556.0,
+              "control_median": 19323.0,
+              "ratio": 1.374
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 476,
+          "controls": 101,
+          "targets_matched": 433,
+          "dropped_for_want_of_a_control": 43,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5231,
+            "b": 0.6832,
+            "difference": -0.1601,
+            "p_one_sided": 0.99903,
+            "upper_95": -0.0588
+          },
+          "matched": {
+            "a": 0.5219,
+            "b": 0.6907,
+            "difference": -0.1687,
+            "p_one_sided": 1.0,
+            "upper_95": -0.1046
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 336.0,
+              "control_median": 347.0,
+              "ratio": 0.968
+            },
+            "gc": {
+              "target_median": 0.5167,
+              "control_median": 0.5387,
+              "ratio": 0.959
+            },
+            "nearest_coding_tss": {
+              "target_median": 27354.5,
+              "control_median": 26207.0,
+              "ratio": 1.044
+            }
+          }
+        }
+      }
+    },
+    "chr21": {
+      "census": {
+        "chrom": "chr21",
+        "compiled_elements": 5174,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 5174,
+          "elements_in_an_assay_footprint": 259,
+          "elements_no_assay_ever_covered": 4915,
+          "share_eligible": 0.05006,
+          "by_assay": {
+            "crispri": 32,
+            "lentimpra": 223,
+            "vista": 15
+          }
+        },
+        "elements_in_an_assay_footprint": 259,
+        "elements_no_assay_ever_covered": 4915,
+        "elements_with_any_measurement": 200,
+        "coverage_elements_measured": 0.03865,
+        "raised_share_of_the_eligible": 0.7722,
+        "elements_by_assay": {
+          "crispri": 18,
+          "lentimpra": 188,
+          "vista": 0
+        },
+        "measurements_available": {
+          "crispri": 98,
+          "lentimpra": 630,
+          "vista": 20
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 400,
+        "experimental_facts_added": 202,
+        "experimental_element_blocks": 200,
+        "experimental_rule_blocks": 2,
+        "genes_named_by_a_measurement": [
+          "COL18A1",
+          "ICOSLG"
+        ],
+        "agrees": {
+          "crispri": 2,
+          "lentimpra": 42,
+          "vista": 0
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 146,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 16,
+        "agreement_rate_over_all_matched_elements": 0.1111,
+        "agreement_denominator_all_matched_elements": 18,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 2,
+        "crispri_pairs_regulated": 2,
+        "crispri_pairs_measured_as_not_regulated": 32
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 225,
+            "crispri": 26,
+            "lentimpra": 207,
+            "vista": 0
+          },
+          "0.5": {
+            "any": 200,
+            "crispri": 18,
+            "lentimpra": 188,
+            "vista": 0
+          },
+          "0.75": {
+            "any": 28,
+            "crispri": 0,
+            "lentimpra": 28,
+            "vista": 0
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 5,
+          "lentimpra": 0,
+          "vista": 13
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 200,
+          "controls": 4974,
+          "targets_matched": 200,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.475,
+            "b": 0.4411,
+            "difference": 0.0339,
+            "p_one_sided": 0.173178,
+            "upper_95": 0.1045
+          },
+          "matched": {
+            "a": 0.475,
+            "b": 0.4355,
+            "difference": 0.0395,
+            "p_one_sided": 0.21367,
+            "upper_95": 0.137
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 339.0,
+              "control_median": 296.0,
+              "ratio": 1.145
+            },
+            "gc": {
+              "target_median": 0.5062,
+              "control_median": 0.4875,
+              "ratio": 1.038
+            },
+            "nearest_coding_tss": {
+              "target_median": 30118.5,
+              "control_median": 29039.0,
+              "ratio": 1.037
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 146,
+          "controls": 44,
+          "targets_matched": 131,
+          "dropped_for_want_of_a_control": 15,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.4384,
+            "b": 0.6136,
+            "difference": -0.1753,
+            "p_one_sided": 0.981416,
+            "upper_95": -0.0104
+          },
+          "matched": {
+            "a": 0.458,
+            "b": 0.7128,
+            "difference": -0.2548,
+            "p_one_sided": 0.999993,
+            "upper_95": -0.1395
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 337.0,
+              "control_median": 341.5,
+              "ratio": 0.987
+            },
+            "gc": {
+              "target_median": 0.4993,
+              "control_median": 0.5445,
+              "ratio": 0.917
+            },
+            "nearest_coding_tss": {
+              "target_median": 31487.0,
+              "control_median": 32207.0,
+              "ratio": 0.978
+            }
+          }
+        }
+      }
+    },
+    "chr22": {
+      "census": {
+        "chrom": "chr22",
+        "compiled_elements": 9612,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 9612,
+          "elements_in_an_assay_footprint": 571,
+          "elements_no_assay_ever_covered": 9041,
+          "share_eligible": 0.0594,
+          "by_assay": {
+            "crispri": 35,
+            "lentimpra": 490,
+            "vista": 61
+          }
+        },
+        "elements_in_an_assay_footprint": 571,
+        "elements_no_assay_ever_covered": 9041,
+        "elements_with_any_measurement": 421,
+        "coverage_elements_measured": 0.0438,
+        "raised_share_of_the_eligible": 0.7373,
+        "elements_by_assay": {
+          "crispri": 14,
+          "lentimpra": 409,
+          "vista": 3
+        },
+        "measurements_available": {
+          "crispri": 105,
+          "lentimpra": 1091,
+          "vista": 33
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 842,
+        "experimental_facts_added": 422,
+        "experimental_element_blocks": 421,
+        "experimental_rule_blocks": 1,
+        "genes_named_by_a_measurement": [
+          "LIMK2"
+        ],
+        "agrees": {
+          "crispri": 0,
+          "lentimpra": 102,
+          "vista": 1
+        },
+        "disagrees": {
+          "crispri": 1,
+          "lentimpra": 307,
+          "vista": 2
+        },
+        "crispri_predicted_gene_not_tested": 13,
+        "agreement_rate_over_all_matched_elements": 0.0,
+        "agreement_denominator_all_matched_elements": 14,
+        "agreement_rate_where_the_predicted_gene_was_tested": 0.0,
+        "agreement_denominator_predicted_gene_tested": 1,
+        "crispri_pairs_regulated": 1,
+        "crispri_pairs_measured_as_not_regulated": 28
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 484,
+            "crispri": 25,
+            "lentimpra": 458,
+            "vista": 10
+          },
+          "0.5": {
+            "any": 421,
+            "crispri": 14,
+            "lentimpra": 409,
+            "vista": 3
+          },
+          "0.75": {
+            "any": 64,
+            "crispri": 0,
+            "lentimpra": 63,
+            "vista": 1
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 17,
+          "lentimpra": 0,
+          "vista": 44
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 421,
+          "controls": 9191,
+          "targets_matched": 421,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5321,
+            "b": 0.4712,
+            "difference": 0.0608,
+            "p_one_sided": 0.007211,
+            "upper_95": 0.1096
+          },
+          "matched": {
+            "a": 0.5321,
+            "b": 0.4505,
+            "difference": 0.0815,
+            "p_one_sided": 0.008792,
+            "upper_95": 0.1488
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.0,
+              "control_median": 290.0,
+              "ratio": 1.166
+            },
+            "gc": {
+              "target_median": 0.5556,
+              "control_median": 0.549,
+              "ratio": 1.012
+            },
+            "nearest_coding_tss": {
+              "target_median": 17297.0,
+              "control_median": 13466.0,
+              "ratio": 1.284
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 310,
+          "controls": 103,
+          "targets_matched": 283,
+          "dropped_for_want_of_a_control": 27,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5194,
+            "b": 0.5922,
+            "difference": -0.0729,
+            "p_one_sided": 0.902948,
+            "upper_95": 0.0371
+          },
+          "matched": {
+            "a": 0.5336,
+            "b": 0.5804,
+            "difference": -0.0468,
+            "p_one_sided": 0.869225,
+            "upper_95": 0.0349
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 332.5,
+              "control_median": 341.0,
+              "ratio": 0.975
+            },
+            "gc": {
+              "target_median": 0.5489,
+              "control_median": 0.5676,
+              "ratio": 0.967
+            },
+            "nearest_coding_tss": {
+              "target_median": 18350.5,
+              "control_median": 13786.0,
+              "ratio": 1.331
+            }
+          }
+        }
+      }
+    },
+    "chrX": {
+      "census": {
+        "chrom": "chrX",
+        "compiled_elements": 10817,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 10817,
+          "elements_in_an_assay_footprint": 723,
+          "elements_no_assay_ever_covered": 10094,
+          "share_eligible": 0.06684,
+          "by_assay": {
+            "crispri": 176,
+            "lentimpra": 558,
+            "vista": 23
+          }
+        },
+        "elements_in_an_assay_footprint": 723,
+        "elements_no_assay_ever_covered": 10094,
+        "elements_with_any_measurement": 542,
+        "coverage_elements_measured": 0.05011,
+        "raised_share_of_the_eligible": 0.74965,
+        "elements_by_assay": {
+          "crispri": 84,
+          "lentimpra": 475,
+          "vista": 0
+        },
+        "measurements_available": {
+          "crispri": 966,
+          "lentimpra": 1425,
+          "vista": 37
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 1084,
+        "experimental_facts_added": 557,
+        "experimental_element_blocks": 542,
+        "experimental_rule_blocks": 15,
+        "genes_named_by_a_measurement": [
+          "ABCD1",
+          "BEX4",
+          "HDAC6",
+          "IRAK1",
+          "MSN",
+          "PLP2",
+          "PQBP1",
+          "TCEAL8",
+          "TMSB4X"
+        ],
+        "agrees": {
+          "crispri": 2,
+          "lentimpra": 134,
+          "vista": 0
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 341,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 82,
+        "agreement_rate_over_all_matched_elements": 0.0238,
+        "agreement_denominator_all_matched_elements": 84,
+        "agreement_rate_where_the_predicted_gene_was_tested": 1.0,
+        "agreement_denominator_predicted_gene_tested": 2,
+        "crispri_pairs_regulated": 15,
+        "crispri_pairs_measured_as_not_regulated": 266
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 652,
+            "crispri": 143,
+            "lentimpra": 532,
+            "vista": 3
+          },
+          "0.5": {
+            "any": 542,
+            "crispri": 84,
+            "lentimpra": 475,
+            "vista": 0
+          },
+          "0.75": {
+            "any": 79,
+            "crispri": 0,
+            "lentimpra": 79,
+            "vista": 0
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 51,
+          "lentimpra": 0,
+          "vista": 19
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 542,
+          "controls": 10275,
+          "targets_matched": 542,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.6052,
+            "b": 0.5091,
+            "difference": 0.0961,
+            "p_one_sided": 4e-06,
+            "upper_95": 0.1383
+          },
+          "matched": {
+            "a": 0.6052,
+            "b": 0.4995,
+            "difference": 0.1057,
+            "p_one_sided": 0.000217,
+            "upper_95": 0.1646
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 338.0,
+              "control_median": 292.0,
+              "ratio": 1.158
+            },
+            "gc": {
+              "target_median": 0.4904,
+              "control_median": 0.4598,
+              "ratio": 1.067
+            },
+            "nearest_coding_tss": {
+              "target_median": 24170.5,
+              "control_median": 21457.0,
+              "ratio": 1.126
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 341,
+          "controls": 136,
+          "targets_matched": 317,
+          "dropped_for_want_of_a_control": 24,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 0.5513,
+            "b": 0.6838,
+            "difference": -0.1325,
+            "p_one_sided": 0.997055,
+            "upper_95": -0.0382
+          },
+          "matched": {
+            "a": 0.5615,
+            "b": 0.6975,
+            "difference": -0.1359,
+            "p_one_sided": 0.999828,
+            "upper_95": -0.0615
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 328.0,
+              "control_median": 344.0,
+              "ratio": 0.953
+            },
+            "gc": {
+              "target_median": 0.4829,
+              "control_median": 0.4961,
+              "ratio": 0.973
+            },
+            "nearest_coding_tss": {
+              "target_median": 27408.0,
+              "control_median": 31734.5,
+              "ratio": 0.864
+            }
+          }
+        }
+      }
+    },
+    "chrY": {
+      "census": {
+        "chrom": "chrY",
+        "compiled_elements": 125,
+        "eligibility": {
+          "rule": "an assay's tested interval shares at least one base with the element",
+          "compiled_elements": 125,
+          "elements_in_an_assay_footprint": 9,
+          "elements_no_assay_ever_covered": 116,
+          "share_eligible": 0.072,
+          "by_assay": {
+            "crispri": 0,
+            "lentimpra": 9,
+            "vista": 0
+          }
+        },
+        "elements_in_an_assay_footprint": 9,
+        "elements_no_assay_ever_covered": 116,
+        "elements_with_any_measurement": 6,
+        "coverage_elements_measured": 0.048,
+        "raised_share_of_the_eligible": 0.66667,
+        "elements_by_assay": {
+          "crispri": 0,
+          "lentimpra": 6,
+          "vista": 0
+        },
+        "measurements_available": {
+          "crispri": 0,
+          "lentimpra": 35,
+          "vista": 0
+        },
+        "crispri_pairs_the_benchmark_calls_invalid": 0,
+        "facts_with_a_measured_counterpart": 12,
+        "experimental_facts_added": 6,
+        "experimental_element_blocks": 6,
+        "experimental_rule_blocks": 0,
+        "genes_named_by_a_measurement": [],
+        "agrees": {
+          "crispri": 0,
+          "lentimpra": 0,
+          "vista": 0
+        },
+        "disagrees": {
+          "crispri": 0,
+          "lentimpra": 6,
+          "vista": 0
+        },
+        "crispri_predicted_gene_not_tested": 0,
+        "agreement_rate_over_all_matched_elements": null,
+        "agreement_denominator_all_matched_elements": 0,
+        "agreement_rate_where_the_predicted_gene_was_tested": null,
+        "agreement_denominator_predicted_gene_tested": 0,
+        "crispri_pairs_regulated": 0,
+        "crispri_pairs_measured_as_not_regulated": 0
+      },
+      "sensitivity": {
+        "rule": "reciprocal overlap",
+        "used": 0.5,
+        "at": {
+          "0.25": {
+            "any": 8,
+            "crispri": 0,
+            "lentimpra": 8,
+            "vista": 0
+          },
+          "0.5": {
+            "any": 6,
+            "crispri": 0,
+            "lentimpra": 6,
+            "vista": 0
+          },
+          "0.75": {
+            "any": 0,
+            "crispri": 0,
+            "lentimpra": 0,
+            "vista": 0
+          }
+        },
+        "containment_not_upgraded": {
+          "crispri": 0,
+          "lentimpra": 0,
+          "vista": 0
+        }
+      },
+      "comparison": {
+        "hit": "the deletion moves the target by at least 0.2 log2",
+        "measured_vs_unmeasured": {
+          "targets": 6,
+          "controls": 119,
+          "targets_matched": 6,
+          "dropped_for_want_of_a_control": 0,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": 1.0,
+            "b": 0.5294,
+            "difference": 0.4706,
+            "p_one_sided": 0.0,
+            "upper_95": 0.5603
+          },
+          "matched": {
+            "a": 1.0,
+            "b": 0.6432,
+            "difference": 0.3568,
+            "p_one_sided": 0.034051,
+            "upper_95": 0.7401
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 349.0,
+              "control_median": 324.0,
+              "ratio": 1.077
+            },
+            "gc": {
+              "target_median": 0.4912,
+              "control_median": 0.4449,
+              "ratio": 1.104
+            },
+            "nearest_coding_tss": {
+              "target_median": 85217.5,
+              "control_median": 65059.0,
+              "ratio": 1.31
+            }
+          }
+        },
+        "disagrees_vs_agrees": {
+          "targets": 6,
+          "controls": 0,
+          "targets_matched": 0,
+          "dropped_for_want_of_a_control": 6,
+          "strata": {
+            "length": [
+              200.0,
+              400.0
+            ],
+            "gc": [
+              0.35,
+              0.45,
+              0.55
+            ],
+            "nearest_coding_tss": [
+              1000.0,
+              5000.0,
+              20000.0,
+              100000.0
+            ]
+          },
+          "raw": {
+            "a": null,
+            "b": null,
+            "difference": null,
+            "p_one_sided": null,
+            "upper_95": null
+          },
+          "matched": {
+            "a": null,
+            "b": null,
+            "difference": null,
+            "p_one_sided": null,
+            "upper_95": null
+          },
+          "imbalance": {
+            "length": {
+              "target_median": 349.0,
+              "control_median": null,
+              "ratio": null
+            },
+            "gc": {
+              "target_median": 0.4912,
+              "control_median": null,
+              "ratio": null
+            },
+            "nearest_coding_tss": {
+              "target_median": 85217.5,
+              "control_median": null,
+              "ratio": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "pooled": {
+    "chromosomes": 24,
+    "compiled_elements": 440377,
+    "elements_in_an_assay_footprint": 26316,
+    "elements_no_assay_ever_covered": 414061,
+    "elements_with_any_measurement": 19070,
+    "facts_with_a_measured_counterpart": 38140,
+    "experimental_facts_added": 19282,
+    "experimental_element_blocks": 19070,
+    "experimental_rule_blocks": 212,
+    "crispri_predicted_gene_not_tested": 1377,
+    "crispri_pairs_regulated": 212,
+    "crispri_pairs_measured_as_not_regulated": 4613,
+    "crispri_pairs_the_benchmark_calls_invalid": 0,
+    "eligibility": {
+      "rule": "an assay's tested interval shares at least one base with the element",
+      "compiled_elements": 440377,
+      "elements_in_an_assay_footprint": 26316,
+      "elements_no_assay_ever_covered": 414061,
+      "share_eligible": 0.05976,
+      "by_assay": {
+        "crispri": 3908,
+        "lentimpra": 21133,
+        "vista": 2375
+      }
+    },
+    "coverage_elements_measured": 0.0433,
+    "raised_share_of_the_eligible": 0.72465,
+    "elements_by_assay": {
+      "crispri": 1505,
+      "lentimpra": 17869,
+      "vista": 98
+    },
+    "measurements_available": {
+      "crispri": 14734,
+      "lentimpra": 53986,
+      "vista": 2442
+    },
+    "agrees": {
+      "crispri": 97,
+      "lentimpra": 3361,
+      "vista": 69
+    },
+    "disagrees": {
+      "crispri": 31,
+      "lentimpra": 14508,
+      "vista": 29
+    },
+    "agreement_rate_over_all_matched_elements": 0.0645,
+    "agreement_denominator_all_matched_elements": 1505,
+    "agreement_rate_where_the_predicted_gene_was_tested": 0.7578,
+    "agreement_denominator_predicted_gene_tested": 128
+  },
+  "evidence": {
+    "compiled_facts_read": 960094,
+    "programs_read": [
+      "chr1",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr13",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr18",
+      "chr19",
+      "chr2",
+      "chr20",
+      "chr21",
+      "chr22",
+      "chr3",
+      "chr4",
+      "chr5",
+      "chr6",
+      "chr7",
+      "chr8",
+      "chr9",
+      "chrX",
+      "chrY"
+    ],
+    "per_chromosome": {
+      "chr6": {
+        "facts": 51918,
+        "weak": 44151,
+        "experimental": 1135,
+        "curated": 2227,
+        "predicted": 47538,
+        "inferred": 1018,
+        "none": 0
+      },
+      "chrY": {
+        "facts": 664,
+        "weak": 252,
+        "experimental": 6,
+        "curated": 274,
+        "predicted": 250,
+        "inferred": 134,
+        "none": 0
+      },
+      "chr1": {
+        "facts": 95150,
+        "weak": 79100,
+        "experimental": 2142,
+        "curated": 4138,
+        "predicted": 87362,
+        "inferred": 1508,
+        "none": 0
+      },
+      "chr10": {
+        "facts": 45540,
+        "weak": 39320,
+        "experimental": 933,
+        "curated": 1748,
+        "predicted": 42046,
+        "inferred": 813,
+        "none": 0
+      },
+      "chr11": {
+        "facts": 55986,
+        "weak": 46815,
+        "experimental": 1186,
+        "curated": 2386,
+        "predicted": 51462,
+        "inferred": 952,
+        "none": 0
+      },
+      "chr12": {
+        "facts": 49397,
+        "weak": 41971,
+        "experimental": 897,
+        "curated": 2038,
+        "predicted": 45628,
+        "inferred": 834,
+        "none": 0
+      },
+      "chr13": {
+        "facts": 21253,
+        "weak": 18566,
+        "experimental": 342,
+        "curated": 918,
+        "predicted": 19422,
+        "inferred": 571,
+        "none": 0
+      },
+      "chr14": {
+        "facts": 29230,
+        "weak": 24933,
+        "experimental": 505,
+        "curated": 1378,
+        "predicted": 26770,
+        "inferred": 577,
+        "none": 0
+      },
+      "chr15": {
+        "facts": 31225,
+        "weak": 27027,
+        "experimental": 585,
+        "curated": 1148,
+        "predicted": 28948,
+        "inferred": 544,
+        "none": 0
+      },
+      "chr16": {
+        "facts": 32356,
+        "weak": 26638,
+        "experimental": 677,
+        "curated": 1562,
+        "predicted": 29598,
+        "inferred": 519,
+        "none": 0
+      },
+      "chr17": {
+        "facts": 46875,
+        "weak": 38294,
+        "experimental": 1030,
+        "curated": 2070,
+        "predicted": 43216,
+        "inferred": 559,
+        "none": 0
+      },
+      "chr18": {
+        "facts": 20068,
+        "weak": 17695,
+        "experimental": 359,
+        "curated": 740,
+        "predicted": 18500,
+        "inferred": 469,
+        "none": 0
+      },
+      "chr19": {
+        "facts": 38277,
+        "weak": 28986,
+        "experimental": 959,
+        "curated": 2416,
+        "predicted": 34530,
+        "inferred": 372,
+        "none": 0
+      },
+      "chr2": {
+        "facts": 71524,
+        "weak": 61793,
+        "experimental": 1409,
+        "curated": 2859,
+        "predicted": 65834,
+        "inferred": 1422,
+        "none": 0
+      },
+      "chr20": {
+        "facts": 27694,
+        "weak": 23303,
+        "experimental": 613,
+        "curated": 1216,
+        "predicted": 25404,
+        "inferred": 461,
+        "none": 0
+      },
+      "chr21": {
+        "facts": 11348,
+        "weak": 9782,
+        "experimental": 202,
+        "curated": 518,
+        "predicted": 10348,
+        "inferred": 280,
+        "none": 0
+      },
+      "chr22": {
+        "facts": 20912,
+        "weak": 17613,
+        "experimental": 422,
+        "curated": 1002,
+        "predicted": 19224,
+        "inferred": 264,
+        "none": 0
+      },
+      "chr3": {
+        "facts": 59859,
+        "weak": 52028,
+        "experimental": 1129,
+        "curated": 2211,
+        "predicted": 55364,
+        "inferred": 1155,
+        "none": 0
+      },
+      "chr4": {
+        "facts": 45013,
+        "weak": 38876,
+        "experimental": 781,
+        "curated": 1870,
+        "predicted": 41292,
+        "inferred": 1070,
+        "none": 0
+      },
+      "chr5": {
+        "facts": 49430,
+        "weak": 42854,
+        "experimental": 852,
+        "curated": 1979,
+        "predicted": 45544,
+        "inferred": 1055,
+        "none": 0
+      },
+      "chr7": {
+        "facts": 49314,
+        "weak": 42348,
+        "experimental": 990,
+        "curated": 2096,
+        "predicted": 45192,
+        "inferred": 1036,
+        "none": 0
+      },
+      "chr8": {
+        "facts": 40476,
+        "weak": 35075,
+        "experimental": 787,
+        "curated": 1650,
+        "predicted": 37104,
+        "inferred": 935,
+        "none": 0
+      },
+      "chr9": {
+        "facts": 41706,
+        "weak": 35865,
+        "experimental": 784,
+        "curated": 1673,
+        "predicted": 38544,
+        "inferred": 705,
+        "none": 0
+      },
+      "chrX": {
+        "facts": 24879,
+        "weak": 19636,
+        "experimental": 557,
+        "curated": 1932,
+        "predicted": 21634,
+        "inferred": 756,
+        "none": 0
+      }
+    },
+    "pooled": {
+      "facts": 960094,
+      "weak": 812921,
+      "experimental": 19282,
+      "curated": 42049,
+      "predicted": 880754,
+      "inferred": 18009,
+      "none": 0
+    },
+    "experimental_share": 0.02008
+  },
+  "chromosomes_not_read": {},
+  "programs_written": {
+    "chr1": "data/knowledge/compiled/noncoding_chr1.bio",
+    "chr2": "data/knowledge/compiled/noncoding_chr2.bio",
+    "chr3": "data/knowledge/compiled/noncoding_chr3.bio",
+    "chr4": "data/knowledge/compiled/noncoding_chr4.bio",
+    "chr5": "data/knowledge/compiled/noncoding_chr5.bio",
+    "chr6": "data/knowledge/compiled/noncoding_chr6.bio",
+    "chr7": "data/knowledge/compiled/noncoding_chr7.bio",
+    "chr8": "data/knowledge/compiled/noncoding_chr8.bio",
+    "chr9": "data/knowledge/compiled/noncoding_chr9.bio",
+    "chr10": "data/knowledge/compiled/noncoding_chr10.bio",
+    "chr11": "data/knowledge/compiled/noncoding_chr11.bio",
+    "chr12": "data/knowledge/compiled/noncoding_chr12.bio",
+    "chr13": "data/knowledge/compiled/noncoding_chr13.bio",
+    "chr14": "data/knowledge/compiled/noncoding_chr14.bio",
+    "chr15": "data/knowledge/compiled/noncoding_chr15.bio",
+    "chr16": "data/knowledge/compiled/noncoding_chr16.bio",
+    "chr17": "data/knowledge/compiled/noncoding_chr17.bio",
+    "chr18": "data/knowledge/compiled/noncoding_chr18.bio",
+    "chr19": "data/knowledge/compiled/noncoding_chr19.bio",
+    "chr20": "data/knowledge/compiled/noncoding_chr20.bio",
+    "chr21": "data/knowledge/compiled/noncoding_chr21.bio",
+    "chr21_committed": "data/organisms/human/noncoding_chr21.bio",
+    "chr22": "data/knowledge/compiled/noncoding_chr22.bio",
+    "chrX": "data/knowledge/compiled/noncoding_chrX.bio",
+    "chrY": "data/knowledge/compiled/noncoding_chrY.bio"
+  },
+  "reading": "the experimental layer is thin and that is the finding: a compiled element is measured only where an assay happened to be pointed, and the assays cover a few per cent of what the genome is compiled from. lentiMPRA measures the sequence in a reporter and not the locus, so its disagreements are weaker evidence against a prediction than a CRISPRi negative on the predicted gene itself",
+  "seconds": 105.7
+}

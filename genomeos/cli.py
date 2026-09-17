@@ -4458,11 +4458,79 @@ def _fmt(v: float | None) -> str:
     return "-" if v is None else f"{v:.2f}"
 
 
+def _print_measured_layer() -> int:
+    """The experimental layer of the compiled genome: how much of it rests on a measurement."""
+    from genomeos.attribution.measured import (
+        ELIGIBILITY_RULE,
+        OVERLAP_SENSITIVITY,
+        RECIPROCAL_OVERLAP,
+    )
+    from genomeos.evidence import KINDS
+    from genomeos.results import load_result
+
+    r = load_result("measured_layer_genome")
+    if not r:
+        print("no measured_layer_genome result; run scripts/measured_layer.py", file=sys.stderr)
+        return 2
+    p, ev = r["pooled"], r.get("evidence") or {}
+    read, el = ev.get("compiled_facts_read"), p.get("eligibility") or {}
+    # three denominators, in order, because a small census is a statement about the search
+    if read is not None:  # a zero from reading nothing must never look like a zero from measuring nothing
+        pool = ev.get("pooled", {})
+        print(
+            f"read: {read:,} compiled facts in {len(ev.get('programs_read') or [])} programs — "
+            + ", ".join(f"{k} {pool.get(k, 0):,}" for k in KINDS if k != "none")
+        )
+    print(
+        f"eligible: {el.get('elements_in_an_assay_footprint', 0):,} of {p['compiled_elements']:,} "
+        f"compiled elements lie in some assay's footprint ({el.get('share_eligible', 0) * 100:.2f}%); "
+        f"{el.get('elements_no_assay_ever_covered', 0):,} were never covered by any assay"
+    )
+    print(
+        f"raised: {p['elements_with_any_measurement']:,} carry a measurement OF that element "
+        f"({p['coverage_elements_measured'] * 100:.2f}% of all, "
+        f"{(p.get('raised_share_of_the_eligible') or 0) * 100:.1f}% of the eligible), "
+        f"over {p['chromosomes']} chromosomes"
+    )
+    print(
+        f"  {p['experimental_facts_added']:,} experimental facts "
+        f"({p['experimental_element_blocks']:,} element blocks + {p['experimental_rule_blocks']:,} rules), "
+        f"beside {p['facts_with_a_measured_counterpart']:,} predicted facts they do not overwrite"
+    )
+    for assay in ("crispri", "lentimpra", "vista"):
+        print(
+            f"  {assay:<10} {p['elements_by_assay'].get(assay, 0):>7,} elements   "
+            f"agree {p['agrees'].get(assay, 0):>5,}   disagree {p['disagrees'].get(assay, 0):>6,}"
+        )
+    print(
+        f"  CRISPRi agreement {p['agreement_rate_over_all_matched_elements']} over all "
+        f"{p['agreement_denominator_all_matched_elements']:,} matched elements, "
+        f"{p['agreement_rate_where_the_predicted_gene_was_tested']} over the "
+        f"{p['agreement_denominator_predicted_gene_tested']:,} where the predicted gene was tested"
+    )
+    print(
+        f"  {p['crispri_pairs_measured_as_not_regulated']:,} element-gene pairs measured as NOT "
+        f"regulated: experimental evidence of absence of effect, kept as such"
+    )
+    print(f"  rule: reciprocal overlap >= {RECIPROCAL_OVERLAP}, reported at {list(OVERLAP_SENSITIVITY)}")
+    print(f"  eligibility: {el.get('rule', ELIGIBILITY_RULE)}")
+    return 0
+
+
 def cmd_evidence(args: argparse.Namespace) -> int:
     from genomeos import evidence
 
+    if getattr(args, "measured", False):
+        return _print_measured_layer()
     kinds = {k for k in (args.kind or []) if k} or None
-    out = evidence.collect(Path.cwd(), kinds, args.max_confidence, args.query or "", args.module or "")
+    out = evidence.collect(
+        Path.cwd(),
+        kinds,
+        args.max_confidence,
+        args.query or "",
+        args.module or "",
+        compiled=getattr(args, "compiled", False),
+    )
     rows, whole = out["rows"], out["whole"]
     if args.csv:
         Path(args.csv).write_text(evidence.to_csv(rows))
@@ -5414,6 +5482,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--top", type=int, default=30, help="rows to print, weakest first")
     p.add_argument("--by-program", action="store_true", help="one line per program instead of facts")
     p.add_argument("--csv", help="write every selected fact to this CSV file (the review list)")
+    p.add_argument(
+        "--compiled",
+        action="store_true",
+        help="include the generated per-chromosome programs (940k facts, about 30 s to parse)",
+    )
+    p.add_argument(
+        "--measured",
+        action="store_true",
+        help="the experimental layer instead: what an assay measured over the compiled elements",
+    )
     p.set_defaults(fn=cmd_evidence)
 
     p = sub.add_parser("work", help="the work board: say what you are working on, shown on the Progress tab")
