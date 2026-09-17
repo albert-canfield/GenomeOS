@@ -2821,6 +2821,224 @@ is the next covariate rather than a zero in the table above. It is also the last
 before concluding that the offset is a property of how the budget cuts blocks rather than of what the
 background contains. Written to `data/results/panel_background_composition.json`.
 
+## The 71% of the background nobody had looked at: it is gene bodies, and the cut is the class (2026-09-17, later)
+
+The section above measured what the panel's matched background holds, found that composition explains
+at most half of the offset every non-coding tier reads above it, and named its own leftover: **2,006
+Mb of the 2,808 Mb background -- 71% -- lies outside every unknown block**, reading 6.39 recurring
+events per kilobase against the tiers' 7.07 to 7.40, and nobody had measured what that sequence is.
+`genomeos/attribution/panel_leftover.py` and `scripts/panel_leftover_classes.py` measure it on 24
+chromosomes from local data only. It was the last covariate the lane had left before concluding that
+the offset is a property of how the budget cuts blocks rather than of what the background contains,
+and the answer is that the question, put that way, cannot be answered -- for a reason worth more than
+the answer would have been.
+
+**What was eligible.** Over the 23 chromosomes the panel's medians rest on: 3,031 Mb of sequence,
+2,846,945 kilobases inside the panel's alignment blocks, 28,468,458 100-base cells inside those, five
+tiers and eight declared classes. Counting chrY as well -- measured and reported, excluded from every
+median as everywhere in this panel -- 2,870,132 kilobases lie inside the alignment blocks and
+2,856,365 were measured, which are the section above's two numbers to the kilobase, because the
+background is rebuilt through the same `build_background`. The leftover comes back at **2,005,628,435
+bases**, the figure that section committed, to the base. The 13,767 kilobases not measured are its two
+named categories: 10,503 hold under half a kilobase after the canonical-CDS cut and 3,264 have no GC
+in the store. GENCODE was read on all 24. Six of the eight classes have bases somewhere; the other two
+are measured zeroes and say so rather than being absent.
+
+**How a block is cut, read rather than inferred.** `genome/unknown.unknown_blocks` has one rule:
+
+    cursor = 0
+    for every gene in the annotation, by start:
+        if gene.start - cursor >= min_size:  cut a block from cursor to gene.start
+        cursor = max(cursor, gene.end)
+    if length - cursor >= min_size:          cut a last block
+
+So a base is never cut into a block for exactly one of three reasons, and they are exhaustive: it is
+inside the span of an annotated gene; it is in an inter-gene gap shorter than `min_size` (1,000
+bases); or it is in a tail shorter than that after the last gene. The first reason is wider than it
+looks, because `Annotation` loads `gene`, `ncRNA_gene` and `pseudogene` alike, so lncRNA bodies and
+pseudogene bodies are skipped along with the coding exons the rule is aimed at. `replay_the_cut` walks
+that loop keeping the bookkeeping it throws away, and before anything is read from it the blocks it
+recovers are checked against the committed budget: **26,806 blocks for 26,806, identical on 24 of 24
+chromosomes**, none in the replay only and none in the budget only.
+
+**What the 2,006 Mb is.** Over the 23 chromosomes. The classes are made disjoint by subtraction in
+the order shown, and the bases a nesting sent to a higher-priority class are counted rather than left
+to the reader: 175.8 Mb of non-coding gene body and 29.6 Mb of pseudogene body lie inside a coding
+gene's span and are counted there. No base is in a block and in a class.
+
+| what it is | bases | share of the never-cut | why the budget did not cut it |
+|---|---|---|---|
+| **coding-gene introns** | **1,187.3 Mb** | **58.5%** | inside an annotated gene span |
+| **non-coding gene bodies** | **713.6 Mb** | **35.1%** | inside an annotated gene span: `ncRNA_gene` is a gene |
+| UTR and the non-coding exons of coding genes | 92.6 Mb | 4.6% | inside an annotated gene span |
+| CDS of a non-canonical transcript | 29.7 Mb | 1.5% | inside an annotated gene span |
+| pseudogene bodies | 6.3 Mb | 0.31% | inside an annotated gene span: `pseudogene` is a gene |
+| inter-gene gaps under 1,000 bases | 1.33 Mb | **0.066%** | the length rule, and nothing else |
+| a tail under 1,000 bases | 0, measured | 0% | the length rule, and nothing else |
+| in none of the eight classes | 0, measured | 0% | the cut and the annotation would have to disagree |
+
+**99.93% of the never-cut sequence is declined for being inside an annotated gene span.** That line
+is the finding, and it decides what can be asked. "The budget did not cut it" and "it is a gene body"
+are not two hypotheses about those bases; they are one predicate written twice. No sample size
+separates them, because it is a property of the cutting rule and not of the sample. Only 1.33 Mb --
+sequence declined for its length alone -- is ordinary intergenic sequence where the two come apart,
+and that is 0.066% of the mass.
+
+Every group prints the covariates it has to be compared on. Coverage is the share of the panel's 89
+assemblies informing the group, which is effort and not composition; the unit is the kilobase the
+panel bins by, and a kilobase belongs to the class holding at least half of it.
+
+| group | kilobases | bases | GC | median distance to a coding TSS | coverage | recurring/kb |
+|---|---|---|---|---|---|---|
+| the background | 2,833,407 | 2,807.6 Mb | 0.399 | 87 kb | 1.000 | 6.63 |
+| the never-cut background | 2,030,746 | 2,005.6 Mb | 0.402 | 76 kb | 1.000 | 6.39 |
+| coding-gene introns | 1,210,315 | 1,192.4 Mb | 0.405 | 57 kb | 1.000 | **6.16** |
+| non-coding gene bodies | 713,606 | 713.5 Mb | 0.392 | 143 kb | 1.000 | **6.90** |
+| UTR and non-coding exons | 82,698 | 79.2 Mb | 0.421 | 10 kb | 1.000 | **5.43** |
+| mixed: no class holds half | 15,865 | 12.7 Mb | 0.494 | 8 kb | 1.000 | 5.97 |
+| pseudogene bodies | 6,264 | 6.3 Mb | 0.421 | 68 kb | 1.000 | 8.04 |
+| CDS of a non-canonical transcript | 1,161 | 0.8 Mb | 0.581 | 5 kb | 1.000 | 6.20 |
+| inter-gene gaps under 1,000 bases | 837 | 0.8 Mb | 0.487 | 4 kb | 1.000 | 6.85 |
+
+**What each class accounts for.** The background is rebuilt with each class taken out of it through
+the panel's own `build_background` and the tier ratios recomputed, exactly as the section above did
+for exons, conserved elements and promoter proximity. Every row is assessed on 23 of 23 chromosomes.
+
+| taken out of the background | fossil (1.062) | regulatory (1.077) | neutral (1.105) | constrained unknown (0.916) | structural (1.163) |
+|---|---|---|---|---|---|
+| **coding-gene introns** | 1.027, **56%** | 1.027, **66%** | 1.073, **30%** | 0.889, *widens by 32%* | 1.170, *widens by 4%* |
+| UTR and non-coding exons | 1.057, **8%** | 1.060, **23%** | 1.100, 4% | 0.914, *widens by 3%* | 1.150, **8%** |
+| non-coding gene bodies | 1.062, accounts for none | 1.091, *widens by 18%* | 1.106, accounts for none | 0.918, accounts for none | 1.181, *widens by 11%* |
+| CDS of a non-canonical transcript | 1.062, none | 1.076, none | 1.104, none | 0.916, none | 1.162, none |
+| pseudogene bodies | 1.061, none | 1.079, none | 1.104, none | 0.916, none | 1.160, none |
+| inter-gene gaps under 1,000 bases | 1.062, none | 1.077, none | 1.105, none | 0.916, none | 1.163, none |
+
+**Coding-gene introns are the largest single covariate anyone has found for this offset**: 56%
+(fossil), 66% (regulatory) and 30% (neutral), against 41%, 56% and 25% for the three of the section
+above *together*. They are also 58.5% of the leftover by bases and the quietest large class in the
+background after the UTRs. Non-coding gene bodies run the other way for the regulatory tier -- they
+are noisier than the leftover around them (6.90 against 6.39) and removing them *widens* the offset by
+18% -- which is the same shape as segmental duplication in the section above and the same warning: a
+class large enough to move an average can move it either way, and "it is in the background" is not an
+argument about direction.
+
+**Two arms of that decomposition are degenerate, and the result says so rather than this paragraph.**
+Take *every* gene body out of the background and what is left is 99.8% block sequence (median over 23
+chromosomes, never below 99.2%); take every never-cut base out and it is 100%. That is a tier average
+standing in for a control, which this project does not accept, so both arms keep their numbers, carry
+`"degenerate": true` beside the share of the remaining background that is blocks, and are excluded
+from every explained share on all 23 chromosomes. They are reported because the fact that *you cannot
+take the gene bodies out of this background and still have a background* is the same finding as the
+99.93% above, reached from the other end.
+
+**The comparison that carries the weight.** 100-base windows, the hit being "does this window carry a
+recurring event", through `compare.standardised`, stratified three ways, with canonical-CDS windows
+out of both arms. Neither arm of any row is a tier average: the first row sets block sequence against
+the sequence the cut declined, and every other sets one class against the *rest* of the never-cut, so
+no tier appears in either arm anywhere in this table. Medians over 23 chromosomes.
+
+| target | targets | controls | GC + timing | + distance to a coding TSS | + coverage | above 0 on | p | dropped |
+|---|---|---|---|---|---|---|---|---|
+| **every block, against the never-cut** | 699,309 | 1,844,353 | +0.0272 | +0.0269 | **+0.0255** | **22 of 23** | 3e-6 | 3,012 |
+| CDS of a non-canonical transcript | 3,561 | 1,840,792 | -0.0434 | -0.0445 | **-0.0421** | 4 of 23 | 1.0 | 3 |
+| UTR and non-coding exons | 92,164 | 1,752,189 | -0.0406 | -0.0373 | **-0.0362** | 0 of 23 | 1.0 | 187 |
+| coding-gene introns | 1,075,024 | 769,329 | -0.0155 | -0.0182 | **-0.0167** | 1 of 23 | 1.0 | 1,293 |
+| non-coding gene bodies | 649,872 | 1,194,481 | +0.0229 | +0.0243 | **+0.0230** | 21 of 23 | 3.3e-5 | 8,676 |
+| pseudogene bodies | 9,298 | 1,835,055 | +0.0396 | +0.0386 | **+0.0365** | 17 of 23 | 0.017 | 48 |
+| inter-gene gaps under 1,000 bases | 14,434 | 1,829,919 | +0.0111 | +0.0188 | **+0.0140** | 18 of 23 | 0.0053 | 79 |
+
+`input_presence` was run on every one of those rows *before* the coverage stratum, and on all 23
+chromosomes both inputs come back **free**: no window lacked a coverage value and none lacked a local
+annotation, so no coverage artefact can live in the assignment to an arm. Free presence is not a
+constant level, which is what a stratum bites on, and the level does vary -- 82,673 of the 699,309
+block windows and 123,381 of the 1,844,353 never-cut windows are below full panel coverage -- so the
+stratum had something to bite. The difference survives it on all three rungs, which is what licenses
+the stronger of the two sentences the result carries as data rather than as prose: **"nothing I
+measured explains it, including coverage"**.
+
+**The verdict, which is about mass.** The result carries one of four sentences and it carries this
+one: *the cutting rule and the biological class are the same predicate on all but a fraction of the
+never-cut bases, so these data cannot assign the offset to one rather than the other; what they do say
+is that the panel's background is mostly gene-body sequence and that gene-body sequence carries fewer
+recurring events than block sequence at matched GC, timing, distance to a coding TSS and coverage.*
+The brief that opened this lane asked whether the offset tracks "sequence the budget declined to cut
+into a block" rather than any biological class. It tracks both, because on 99.93% of the bases those
+are one predicate. That is not a dodge; it is the strongest true thing here, and the two shorter
+readings -- "the tier comparison is an artefact of block-cutting", "the offset is introns" -- are both
+quotable from it and both wrong as stated.
+
+**The mechanism, a different question on a different sample, and it is on the line.** On the 0.066%
+where the two readings do come apart -- ordinary intergenic sequence declined for its length alone --
+the sequence is *not* quiet: it reads +0.0140 above the rest of the never-cut where the blocks read
++0.0255, which puts it 55% of the way from the never-cut sequence to the blocks. The reading is that
+the quietness travels with the gene body rather than with the decision not to cut. It is decided by a
+margin of **0.00125 points** against a threshold chosen by hand, so the result carries
+`mechanism_on_the_line: true` and the sentence that goes with it: this is the direction the numbers
+point, not a result that survives its own threshold. Those windows are also gene-proximal by
+construction (median 4.8 kb to a coding TSS against 77 kb) and GC-rich (0.51 against 0.40), and while
+the comparison holds both, a 14,434-window arm carrying a 0.066% class is not where this gets settled.
+
+**What this changes.** No tier conclusion, and the reading of five claims:
+
+1. **Every "x% above the matched background" for a non-coding tier.** The +6 to +11 points were
+   assigned to the control on 2026-09-16; this says what the control is. That comparison is, on 71%
+   of its bases, block sequence against gene bodies, and coding-gene introns alone carry 56% to 66%
+   of the gap for fossil and regulatory. The honest form of a tier statement is still against the
+   neutral tier, as it has been since that section.
+2. **Every per-block `core` call in `human_panel`.** `block_class` calls a block core at half its
+   expected rate or less and the expectation comes from this background through `bg_rt.expected`, so
+   a core block is depleted relative to a baseline that is 71% gene body, not relative to intergenic
+   sequence. That is the "core of callable" column in the chr21 and chr22 tables.
+3. **The 200-bp unit expectations** (`expected_gc_rt_matched`). The reference units are every piece
+   of the grid that is not canonical CDS, which is the same 71%.
+4. **The matched control windows** drawn per block. `forbidden` is canonical CDS plus the structural
+   tier, so a control window may land inside a gene body, and most of the chromosome it can land in
+   is one.
+5. **The section above's "44% to 75% unexplained".** Most of it now has a name. Exons, conserved
+   elements and promoter proximity account for 41%/56%/25%; coding-gene introns alone account for
+   56%/66%/30%. The two sets overlap and are not additive, and their union was not measured here,
+   which is the first thing left undone below.
+
+The constrained-unknown tier is untouched, as through every correction this week: still the one tier
+below the background (0.916, above 1 on 6 of 23), and taking the introns out pushes it *further*
+below (0.889), which is the opposite of an explanation.
+
+**Coverage of the measurement.** Eligibility is above; this is what was done with it. 2,833,407
+kilobases measured over the 23 chromosomes, 2,030,746 of them outside every block, and 2,596,722
+windows after a fixed subsampling step between 4 and 20 per chromosome. 13,035 windows were taken
+outside that step because they carry one of the two length-rule classes, which are the discriminator
+and would otherwise have had almost no power; they are 0.5% of the windows, and being the noisy ones
+they make the block-against-never-cut difference *smaller* rather than larger. 52,677 windows holding
+canonical CDS were excluded from both arms. 738 windows were measured and placed in neither arm,
+being split between a block and a class with neither holding half, and are counted rather than pushed
+into one. No window lacked a coverage value on any chromosome. Every class that exists exists on all
+23, so no share in the tables above is a zero that means "never looked". Nothing was fetched: the
+stores, the committed budgets and GENCODE were all on disk, and the top-level distillation can be
+redone from the committed result with `--from-result` without reading a store again.
+
+**What is left undone.**
+
+- **The union of the covariates, which is the number a reader will want and this lane does not have.**
+  Coding-gene introns account for 56%/66%/30% and the section above's three for 41%/56%/25%, and
+  nobody has taken all four out of the background at once. They overlap heavily -- conserved elements
+  and exons sit inside gene bodies -- so the union is somewhere between the larger of the two and
+  their sum, and quoting either end as "the offset is explained" would be wrong. It is one more
+  exclusion arm and it is the first thing to do here.
+- **Whether an intron is quiet for being an intron.** Nothing here separates transcription-coupled
+  repair, alignment quality inside genes, and the correlation between gene bodies and early
+  replication that survives a three-tertile stratum. This lane measured *where* the quiet sequence
+  is, not why it is quiet.
+- **The mechanism arm.** Decided by 0.00125 points. A purpose-built comparison -- intergenic sequence
+  matched to gene-body sequence on distance to a TSS rather than stratified on it, which is what the
+  GC 0.51-against-0.40 imbalance is really saying -- would settle it or show that it cannot be.
+- **The `mixed` kilobases.** 15,865 of them, 12.7 Mb, the quietest group in the covariate table at
+  5.97 per kb, and excluded from every class comparison by the half-a-kilobase rule. Too small to
+  move a share and too large for anyone to call them nothing.
+- **chrY.** Measured and excluded from the medians by the panel's own convention; its numbers sit in
+  `per_chromosome` and nobody has read them.
+
+Written to `data/results/panel_leftover_classes.json`.
+
 ## Compression: what each piece of knowledge is worth in bits, chr21, chr22 and chr18 (2026-09-14)
 
 Albert's probe: try different ways of classifying the genome and find which buys the most
