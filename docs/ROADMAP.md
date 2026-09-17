@@ -2559,9 +2559,20 @@ entire sweep. What is next, in order of what it decides:
      discriminating variable, its output is what deserves calibrating. **The denominator to watch is
      the one the locus benchmark and the CRISPRi lane have each already been caught by** — a
      calibration curve conditioned on "was this element scored" inherits the coverage of both arms.
-   - **Area J, transfer.** The one positive in the grammar lane was strict family-collapsed motif
-     counts (+0.234 Spearman on lentiMPRA); the lane tests whether it transfers to VISTA in-vivo
-     positives against their negatives and to the 882 blocks of the real unknown.
+   - **Area J, transfer. Landed `b7e1405`: the motif-count positive transfers off the reporter, and
+     the unknown space's binding constraint turns out to be coverage.** On VISTA's in-vivo assay with
+     nine chromosomes held out, strict family counts add **+0.060 AUROC over conservation** (interval
+     clear of zero, dinucleotide-shuffled null at 0.562, 0 of 1,000 label permutations reaching the
+     observed value): conservation plus counts 0.655 against conservation alone 0.596 — weak, on an
+     unmatched comparison, and the lane says so. Two negatives beside it: the tissue-group gains (heart
+     0.846, neural 0.763) **vanish against a length-plus-composition control** (0.839, 0.744; counts
+     add +0.006 and +0.019 with intervals containing zero), and swept blind over 30.6 Mb of whole
+     blocks the model **cannot separate real sequence from its own dinucleotide shuffle** — a model
+     fitted on selected candidate cCREs is not a genome-wide activity track. **The number that sets
+     area I's next question: 161 of the 882 blocks hold a measured element and 721 hold none.** What
+     the real unknown needs is an assay over it, not another model.
+     The lane's original brief: whether the +0.234 Spearman on lentiMPRA transfers to VISTA and to the
+     882 blocks.
      `attribution/motif_transfer.py`. **Two traps are already known here**: VISTA as an endpoint is
      weak by construction in this project (its negatives are not matched to its positives), and the
      882 blocks were read with the model's own deletion predictions as the outcome, so a motif reading
