@@ -64,10 +64,23 @@
     "gc_outside_25_75": 749
   },
   "bridge_oligos": 2277,
+  "mappable_test_oligos": {
+    "k24": 45550,
+    "k36": 68351,
+    "k50": 76945,
+    "k100": 88282
+  },
+  "test_oligos_with_a_mappability_reading": {
+    "k24": 91228,
+    "k36": 91514,
+    "k50": 91668,
+    "k100": 91836
+  },
+  "mappability_not_folded": "the four k columns sit beside the synthesis filter and are never added to it: an unmappable oligo can still be synthesised and read by its barcode, and whether a hit can be pinned to a locus afterwards is a question about the follow-up. genomeos-79 measured them (2e08aba): over the untouched blocks the attributable count is 26,081 at k24 and 39,541 at k100, and 8,131 oligos the repeat proxy PASSES are unmappable at k24",
   "cross_check": "genomeos-79 measured Family A over the same 680 untouched blocks independently and got 4,273 unorderable of 45,570 windows, 90.6% surviving; this count is recomputed here from the sequence alone, so the two are a check on each other rather than one copying the other",
   "family_b_not_excluded": "interspersed repeat (17,112 windows) and segmental duplication (210) are carried FLAGGED and not dropped: 31.3% of the lentiMPRA windows a reporter already measured successfully are themselves majority interspersed repeat, so excluding them would drop a class the assay demonstrably reads. They are an attribution caveat, not a measurability exclusion",
   "thin_blocks_kept": "53 of 680 untouched blocks fall below three attributable oligos and are KEPT: their median length is 1,402 bp against 7,996 and their median distance to a coding TSS is 23.6 kb against 100.9 kb, so dropping them would systematically remove the blocks nearest genes - the covariate that confounded every comparison this project corrected this week",
   "manifest": "data/knowledge/library/unknown_library.tsv",
   "design": "four arms: the real unknown tiled end to end with its untouched blocks first; neutral-tier oligos matched on GC and order of magnitude of TSS distance as genomic negatives; lentiMPRA actives as in-batch positives; and each test oligo's own dinucleotide-preserving shuffle. A design, not an order: no synthesis, no vendor, and no claim that any of this sequence is functional",
-  "seconds": 269.5
+  "seconds": 279.9
 }

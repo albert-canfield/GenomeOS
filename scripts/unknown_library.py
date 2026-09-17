@@ -44,6 +44,13 @@ from genomeos.results import save_result
 from scripts.unknown_coverage import label_of, measured_spans, overlap_bp  # noqa: E402
 
 OUT = Path("data/knowledge/library")
+MAPPABILITY = Path("data/knowledge/mappability")
+# Four read lengths, never pooled and never merged into the synthesis filter. genomeos-79 measured
+# them with Umap tracks (2e08aba) and the attributable count cannot be quoted without a k: 26,081
+# oligos at k24 against 39,541 at k100 over the untouched blocks. Which column a follow-up reads is a
+# question about that follow-up - roughly k24 if a CRISPRi guide has to find the locus again, k100 for
+# a 100 bp read - so the manifest carries all four and decides nothing.
+KS = (24, 36, 50, 100)
 # The seven blocks where the sweep's CRISPRi-calibrated shortlist reaches the real unknown at all
 # (genomeos-79, b8afb8a): eight elements, three relaxed and four tolerant, none syntax and none recent.
 # They are a bridge to measured evidence, not a positive set, and they are tiled deliberately so the
@@ -179,6 +186,33 @@ def family_a(seq: str, gc: float, repeat_coverage: dict[str, int] | None = None)
     return out
 
 
+def mappability_of(chrom: str) -> dict[int, dict[tuple[int, int], float]]:
+    """Per k, the mappable fraction of each oligo window on this chromosome, from the Umap cache.
+
+    Absent is absent: a window with no row gets no value and the manifest leaves the column empty,
+    rather than a 0 that would read as "measured and unmappable".
+    """
+    out: dict[int, dict[tuple[int, int], float]] = {}
+    for k in KS:
+        path = MAPPABILITY / f"umap_k{k}_{chrom}.tsv"
+        if not path.exists():
+            continue
+        rows: dict[tuple[int, int], float] = {}
+        with open(path) as fh:
+            header = fh.readline().rstrip("\n").split("\t")
+            try:
+                si, ei, ai, ti = (header.index(c) for c in ("start", "end", "above", "total"))
+            except ValueError:
+                continue
+            for line in fh:
+                f = line.rstrip("\n").split("\t")
+                total = float(f[ti] or 0)
+                if total:
+                    rows[(int(f[si]), int(f[ei]))] = round(float(f[ai] or 0) / total, 4)
+        out[k] = rows
+    return out
+
+
 def tss_of(ctx: Context, chrom: str) -> list[int]:
     return sorted(
         (g.locus.end - 1 if g.locus.strand.value == "-" else g.locus.start)
@@ -212,6 +246,7 @@ def build(chroms: list[str], step: int, max_oligos: int) -> dict[str, Any]:
             repeats = repeat_index(chrom)
         except (OSError, ValueError):  # a chromosome whose RepeatMasker rows are not distilled here
             repeats = None
+        mappable = mappability_of(chrom)
         active = {(e.start, e.end) for e in mpra.load(chrom) if max(e.activity.values(), default=0) >= 1.0}
 
         def feature(
@@ -258,6 +293,11 @@ def build(chroms: list[str], step: int, max_oligos: int) -> dict[str, Any]:
                                     f["seq"], f["gc"], repeats.coverage(start, end) if repeats else None
                                 ),
                                 "bridge": f"{chrom}:{b['start']}-{b['end']}" in BRIDGE_BLOCKS,
+                                "mappable": {
+                                    k: rows[(start, end)]
+                                    for k, rows in mappable.items()
+                                    if (start, end) in rows
+                                },
                             }
                         )
             elif label == "neutral":
@@ -319,14 +359,18 @@ def write_manifest(arms: dict[str, list[dict]]) -> Path:
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / "unknown_library.tsv"
     with open(path, "w") as fh:
-        fh.write("id\tarm\tchrom\tstart\tend\tblock\tgc\ttss_distance\tsequence\n")
+        ks = "\t".join(f"map_k{k}" for k in KS)
+        fh.write(f"id\tarm\tchrom\tstart\tend\tblock\tgc\ttss_distance\t{ks}\tsequence\n")
         n = 0
         for arm in ("test", "genomic_negative", "positive", "scrambled"):
             for r in arms.get(arm, []):
                 n += 1
+                # an oligo with no row for a k leaves that column EMPTY: a 0 would read as
+                # "measured and unmappable", which is a different claim from "not measured"
+                maps = "\t".join(str((r.get("mappable") or {}).get(k, "")) for k in KS)
                 fh.write(
                     f"olig{n:06d}\t{arm}\t{r['chrom']}\t{r['start']}\t{r['end']}\t{r.get('block', '')}\t"
-                    f"{r['gc']}\t{r['tss']}\t{r['seq']}\n"
+                    f"{r['gc']}\t{r['tss']}\t{maps}\t{r['seq']}\n"
                 )
     return path
 
@@ -368,6 +412,19 @@ def main(argv: list[str] | None = None) -> int:
         "unorderable_untouched_windows": len(untouched_unorderable),
         "unorderable_by_reason": reasons,
         "bridge_oligos": sum(1 for r in test if r.get("bridge")),
+        "mappable_test_oligos": {
+            f"k{k}": sum(1 for r in test if (r.get("mappable") or {}).get(k) == 1.0) for k in KS
+        },
+        "test_oligos_with_a_mappability_reading": {
+            f"k{k}": sum(1 for r in test if k in (r.get("mappable") or {})) for k in KS
+        },
+        "mappability_not_folded": (
+            "the four k columns sit beside the synthesis filter and are never added to it: an "
+            "unmappable oligo can still be synthesised and read by its barcode, and whether a hit can "
+            "be pinned to a locus afterwards is a question about the follow-up. genomeos-79 measured "
+            "them (2e08aba): over the untouched blocks the attributable count is 26,081 at k24 and "
+            "39,541 at k100, and 8,131 oligos the repeat proxy PASSES are unmappable at k24"
+        ),
         "cross_check": (
             "genomeos-79 measured Family A over the same 680 untouched blocks independently and got "
             "4,273 unorderable of 45,570 windows, 90.6% surviving; this count is recomputed here from "
