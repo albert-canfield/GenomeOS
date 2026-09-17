@@ -1,21 +1,32 @@
 # GenomeOS: scope, architecture, areas, plan
 
-Reviewed and reorganised on 2026-09-11 against the code, the tests, the
-result files and the running jobs. This is the one document that says what
+Reviewed and reorganised on 2026-09-17 against the code, the tests, the
+result files and the running jobs (first written 2026-09-11). This is the one document that says what
 GenomeOS is, how it is built, what each area is for, what is done, what is
 missing and what comes next. Evidence per finished task stays in
 [PROGRESS.md](PROGRESS.md); the original phased plan is kept as history in
 [ACTION-PLAN.md](ACTION-PLAN.md); lessons the code carries are in
 [LESSONS.md](LESSONS.md).
 
-Measured state on 2026-09-11 (evening): 85 commits in two days, 44 `genomeos`
-commands plus the `bio` toolchain, 16 web views, 255 tests passing and 4
-skipped, lint clean, three `bio.std` modules, seven organism programs, every
-human chromosome fetched and analysed, the whole human proteome compiled and
-verified against UniProt, a genome-wide knowledge graph, the whole worm grown
-from one cell, a human body grown as populations, haematopoiesis as mechanism,
-a therapeutic design dataset with optional peptide/HLA binding, and the engine
-separable from the application under its own licence.
+Measured state on 2026-09-17: **536 commits**, 63 `genomeos` commands plus the
+`bio` toolchain, **1,050 tests** collected and green with 212/212 `.bio` checks,
+lint clean, every human chromosome fetched and analysed, the whole human proteome
+compiled and verified against UniProt, a genome-wide knowledge graph, the whole
+worm grown from one cell, a human body grown as populations, haematopoiesis as
+mechanism, and the engine separable from the application under its own licence.
+
+Both genome-wide sweeps are finished: **961,227 enhancer elements deleted** in
+AlphaGenome across 24 chromosomes, and the **HPRC panel of 90 human genomes read on
+all 24** (1,925,587 storage units, 187,966 executor-ready). What those two sweeps
+established is smaller than what they were expected to: the node beats random
+boundaries by +2.88 points, no unknown tier can be ordered against another once the
+comparison is standardised, and **0.45% of the unknown space has ever been measured
+by any assay this project holds**. The experiment that would change that is designed
+and unrun: 284,001 oligos, controls matched in advance (§5 item 3b).
+
+The four corrections of 2026-09-16 and 2026-09-17 are in the record rather than
+edited out, and the arithmetic behind them now lives in `genomeos/compare.py` so the
+next one is caught by a test instead of by a reader.
 
 ---
 
@@ -108,9 +119,9 @@ attached. "Missing for complete" is what separates it from the ambition.
 | **BioForge** (design) | search only | random-restart search under constraints with predicted labels; minimal-cell design estimate | experiments as input; published perturbations reproduced; constraint language |
 | **Genome decoding** (GenomeOS) | 0.9 reached | every chromosome fetched and analysed (2026-09-11): inventory, UNKNOWN classified genome-wide with curated repeats (98.5%), domains on 24, curated repeats and ENCODE elements on 25, reader on 25 with eleven cell types; the node model tested genome-wide (90.2% of enhancers act inside their node) and on two mouse chromosomes; the segment parser on chr21 at 92.7% gene precision once RNA over the exons counts as evidence | the parser on every chromosome with measured RNA; enhancer targets and boundaries from Hi-C |
 | **Molecules** (GenomeOS) | 0.9 reached | the whole human proteome compiled from seven public databases (19,478 coding genes, 25 chromosomes) and packaged as a 2.3 MB offline library, translation verified on 19,249 of them, genome-wide knowledge graph, RNA layer with GTEx, pathways as reachability and as kinetics where a curated ODE model exists; 96,362 modifiable sites with their 352 writers as `modifies` edges in the graph; the dominant isoform per tissue from GTEx (APP695 in the cerebellum) | measured modification state; isoform expression per cell type or stage; an engine that handles 100-species models |
-| **The 98%** (GenomeOS) | genome budgeted | every UNKNOWN block of the 24 chromosomes tiered with Zoonomia constraint read per base (1,009 Mb): structural 23%, fossil 33%, regulatory 34%, neutral 7%, constrained-unknown 3.2% (1,098 blocks, 32 Mb, 1% of the genome); `genomeos budget`, the Progress tab card; the attributions compiled to a BioLang program per chromosome (`--bio`); scored against VISTA, eQTL, lentiMPRA, GWAS and ClinVar; the organiser reads copies first and leaves a real unknown of 882 blocks, 69 of them constrained on both axes | AlphaGenome chromatin tracks on the 15,536 regulatory blocks; closure at gene, cell and organism level |
+| **The 98%** (GenomeOS) | genome budgeted | every UNKNOWN block of the 24 chromosomes tiered with Zoonomia constraint read per base (1,009 Mb): structural 23%, fossil 33%, regulatory 34%, neutral 7%, constrained-unknown 3.2% (1,098 blocks, 32 Mb, 1% of the genome); `genomeos budget`, the Progress tab card; the attributions compiled to a BioLang program **on all 24 chromosomes** (2026-09-17, 940,803 stated facts, 93.6% predicted, none experimental); scored against VISTA, eQTL, lentiMPRA, GWAS and ClinVar; the organiser reads copies first and leaves a real unknown of 882 blocks, 69 of them constrained on both axes; **0.45% of the unknown space has ever been measured by any assay held here, and the experiment that would change it is designed and unrun (284,001 oligos)** | measurement over the real unknown, which is the binding constraint; closure at cell and organism level |
 | **Cancer and therapeutics** (GenomeOS) | 1.0 of the design dataset | tumour-only pipeline, cohort expression, altered-protein reconstruction, 15 mechanisms, design dataset with negative set | CNA/SV profiles; benchmark against approved targets; peptide/HLA predictor |
-| **Web UI and CLI** (GenomeOS) | 17 views, 45 commands | every layer visible with evidence pills; jobs with progress; gene dossier; the Progress tab says what is going on and what is planned; the Evidence explorer reads the project's own confidence (22,419 facts, mean 0.57) | Cell view; release tags; nightly CI |
+| **Web UI and CLI** (GenomeOS) | 17 views, 63 commands | every layer visible with evidence pills; jobs with progress; gene dossier; the Progress tab says what is going on, what is planned and, since 2026-09-17, the ordered next steps of §5; the Evidence explorer reads the project's own confidence (26,623 facts in the hand-written programs, and 967,426 with the 24 compiled chromosomes switched on, where 93.6% is predicted and none is experimental) | Cell view; release tags; nightly CI |
 
 Data architecture: `data/reference` and `data/knowledge` are caches (git
 ignored, rebuilt by `genomeos data fetch` and the compilers); `data/results`
