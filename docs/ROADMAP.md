@@ -2479,13 +2479,26 @@ entire sweep. What is next, in order of what it decides:
    it: the 40 elements read **-0.100 against the genome's own elements and +0.100 against neutral,
    neither distinguishable from zero**. The registration stands in ATTRIBUTION.md marked unrun, with
    the reason; 2,400 requests were not spent. Nothing is claimed for those blocks.
-3b. **Measurement over the real unknown, which is now the binding constraint.** The transfer lane's
-   number says it plainly: **161 of the 882 blocks hold a measured element and 721 hold none**. A
-   finished deletion sweep, a calibration that failed on prevalence and a motif model that transfers
-   weakly all read the same way — what the unknown space is short of is measurement, not modelling.
-   The next step here is a coverage map: for each block, which measured assay touches it (lentiMPRA,
-   VISTA, saturation mutagenesis, the CRISPRi screens, GTEx, MPRAVarDB) and what an assay would have
-   to target to cover the rest. No key. Area I.
+3b. **Measurement over the real unknown is the binding constraint, and it is now measured and
+   designed for.** The coverage map is done (`3124bb4`): counting a block as measured if lentiMPRA,
+   VISTA or the CRISPRi benchmark overlaps it by a single base, **the whole unknown space is 1,008.8 Mb
+   of which 4.554 Mb has been measured — 0.45%**; the real unknown is 30.6 Mb with 0.52% measured, in
+   202 of its 882 blocks; the best-covered tier, regulatory, is at 1.07% and structural at 0.005%.
+   Every model built over that space has been extrapolating from half a percent of it, which is what
+   the four corrections of 2026-09-16 and 2026-09-17 look like from inside.
+   The library that would fix it is written out rather than proposed (`30b2e77`, `a4df8fe`):
+   **312,129 oligos** — 101,295 tiling all 30.6 Mb at 300 bp with the untouched blocks first (45,301),
+   101,294 genomic negatives matched one to one on GC and promoter distance, 8,245 lentiMPRA actives
+   as in-batch positives, and 101,295 dinucleotide-preserving shuffles. A routine-sized variant (the
+   untouched blocks with all four arms) is about 110,000. Manifest under `data/knowledge/library/`,
+   local and git-ignored; a design, not an order.
+   **What remains here is not ours to compute:** the library is an experiment, and until one is run
+   the honest description of the 98% is that it is unmeasured rather than unknown. Two pieces do
+   remain: genomeos-79's lane on which oligos cannot be measured even in principle (unmappable
+   repeats, duplications, synthesis-hostile windows), after which the manifest is rebuilt with those
+   excluded and counted; and the intersection of the CRISPRi shortlist with the real-unknown blocks,
+   which would give the library a positive set whose expectation comes from a screen rather than from
+   the model. Area I.
 4. **The known-locus benchmark with more loci**, not more readings of the one it has:
    SOX9 and H19 stated-interval scoring is a handful of requests. Needs the key briefly.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). Decision 2, amounts or
@@ -2665,7 +2678,7 @@ session that holds it. Items 1–4 run in parallel today.
 | **1.0 experiments** | `experiment` block; C. elegans mutants reproduced; three published perturbations as tests; BioForge takes experiments as input; Evidence explorer | `bio test` passes the mutant programs; benchmark tests in CI |
 | **1.1 human mechanism** | haematopoiesis as a mechanism module inside the human body program; reader v1 (open nodes per cell type) | lineage choices and counts reproduced with confidence above "low" |
 | **1.2 therapeutics benchmark** ◐ | approved targets recovered from public tumours; CNA and SV; `cancer.*` libraries | benchmark built and in CI 2026-09-11: 6/6 targets recovered, 6/6 routes correct, 4/6 top mechanisms defensible after three fixes it prompted. Outstanding: the two remaining ranking defects, CNA and SV, the library layer |
-| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
+| **1.3 the 98%** ◑ | every UNKNOWN block with a tier and a confidence; the constrained-unknown blocks attributed to a gene and a tissue; the attributions scored against measured elements. **The third clause cannot be met as written and the milestone says so since 2026-09-17: only 0.45% of the unknown space has ever been measured by any assay this project holds, so "scored against measured elements" can be satisfied for a sliver and not for the space. The exit criterion is therefore split: the attribution and its scoring where measurement exists, and a designed experiment for the rest, which is built (312,129 oligos) and unrun.** | the genome budgeted 2026-09-12: every block tiered with a confidence of 0.5 or above; attribution and scoring outstanding, scoring needs VISTA and MPRA as ground truth. The attribution was read on 2026-09-16, corrected twice and withdrawn on 2026-09-17: standardised on length, GC and promoter distance, no tier differs from the neutral tier, and what holds is only that elements inside UNKNOWN blocks act less than the genome's elements. 331 of 882 carry a lead from the sweep; 721 of 882 hold no measured element at all, which is what now blocks this milestone. Since 2026-09-16: every enhancer element scored by deletion genome-wide (node +2.88 points over random boundaries), scored against VISTA, GTEx and lentiMPRA, and the executor test passed its hold-out; outstanding: E1 genome-wide and the constrained-unknown blocks read by deletion |
 | **2.0 BioLang standalone** | `biolang` package: lang, ir, runtime, std, `bio`; GenomeOS depends on it | a `.bio` program runs with GenomeOS uninstalled; two test suites |
 
 ---
