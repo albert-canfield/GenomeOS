@@ -2416,7 +2416,7 @@ in order. "Owner" is the session that holds the files today (see §7).
   carries its case, both axes and the confidence, and the lane draws a bar beneath it — amber
   `syntax`, purple `relaxed`, blue `recent`, grey `tolerant`, and nothing where the block was not
   measured on both axes. The case had been computed and committed for weeks while appearing
-  nowhere. 2. Done: origin per gene and age per library, `orthologue_of` still to add
+  nowhere. 2. Done: origin per gene and age per library, and **`orthologue_of` as species counts per clade is done 2026-09-17**: every protein node carries `orthologues_by_clade` from the presence bitmasks, one number per clade rather than one over 355 species — TP53 and APP sit in all 65 Euteleostomi, while OR5H1 is Boreoeutheria-restricted, a distinction a single total cannot make. A clade a gene has no reading in is absent rather than 0. `paralogue_of` edges were already there. Formerly: `orthologue_of` still to add
   as species counts per clade on the graph nodes. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
   and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done, with families and a GC-by-repeat null: promoters carry family
   enrichments per library and no pair logic; the pair search moves to

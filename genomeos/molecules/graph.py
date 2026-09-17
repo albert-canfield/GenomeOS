@@ -140,10 +140,19 @@ def _add_origins(g: Graph) -> None:
     from genomeos.results import load_result
 
     origin = load_result("origin_genome_wide") or {}
+    by_clade = _orthologues_by_clade()
     for sym, o in (origin.get("genes") or {}).items():
         if sym not in g.nodes:
             continue
         g.nodes[sym].update(origin=o["origin"], origin_ladder=o["ladder"], orthologue_species=o["species"])
+        # one number per clade rather than one number over 355 species: "in 240 species" cannot tell a
+        # gene held across all vertebrates from one duplicated through the primates, and the ladder
+        # names only where a gene STARTS. Absent clades are absent, not zero: a clade this gene has no
+        # reading in is a different statement from a clade it is missing from.
+        counts = by_clade.get(sym)
+        if counts:
+            g.nodes[sym]["orthologues_by_clade"] = counts
+
         for other in o.get("paralogues", []):
             if other in g.nodes and sym < other:
                 g.add_edge(
@@ -154,6 +163,35 @@ def _add_origins(g: Graph) -> None:
                     0.9,
                     source="Ensembl Compara",
                 )
+
+
+def _orthologues_by_clade(results_dir: Path | None = None) -> dict[str, dict[str, int]]:
+    """Per gene, how many species of each clade carry an orthologue, from the presence bitmasks.
+
+    `origin_presence_genome_wide` stores a hex mask per gene over the species list, bit i from the
+    left; `strata` says which clade each species belongs to. A no-op when it has not been computed.
+    """
+    from genomeos.results import RESULTS_DIR, load_result
+
+    presence = load_result("origin_presence_genome_wide", results_dir or RESULTS_DIR) or {}
+    species: list[str] = presence.get("species") or []
+    strata: dict[str, str] = presence.get("strata") or {}
+    if not species or not strata:
+        return {}
+    clade_of = [strata.get(name) for name in species]
+    out: dict[str, dict[str, int]] = {}
+    for sym, hexmask in (presence.get("genes") or {}).items():
+        if not hexmask:
+            continue
+        mask = int(hexmask, 16)
+        width = len(species)
+        counts: dict[str, int] = {}
+        for i, clade in enumerate(clade_of):
+            if clade and mask >> (width - 1 - i) & 1:
+                counts[clade] = counts.get(clade, 0) + 1
+        if counts:
+            out[sym] = counts
+    return out
 
 
 def summarise(g: Graph) -> dict[str, Any]:

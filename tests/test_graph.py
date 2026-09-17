@@ -47,3 +47,37 @@ def test_graph_from_cached_definitions(tmp_path):
     assert s["compiled_proteins"] == 2 and s["physical_associations"] == 1
     assert s["hubs"][0]["gene"] == "A" and s["largest_component"] == 2
     assert s["biggest_pathways"][0] == ("R-1 pathway", 2)
+
+
+def test_orthologue_counts_are_per_clade_and_absent_where_unread(tmp_path):
+    """One total over 355 species cannot tell a vertebrate-wide gene from a primate expansion.
+
+    TP53 and APP sit in all 65 Euteleostomi; OR5H1, an olfactory receptor, is Boreoeutheria-restricted
+    and absent from the deeper clades. A clade a gene has no reading in is left out rather than set to
+    0, because "not read there" and "missing there" are different statements.
+    """
+    import json
+
+    from genomeos.molecules import graph as gmod
+
+    (tmp_path / "origin_presence_genome_wide.json").write_text(
+        json.dumps(
+            {
+                "species": ["a", "b", "c", "d"],
+                "strata": {"a": "Deep", "b": "Deep", "c": "Shallow", "d": "Shallow"},
+                # bit i from the LEFT: 1100 means present in a and b only
+                "genes": {"DEEPGENE": "c", "SHALLOWGENE": "3", "NOWHERE": "0"},
+            }
+        )
+    )
+    out = gmod._orthologues_by_clade(tmp_path)
+
+    assert out["DEEPGENE"] == {"Deep": 2}
+    assert out["SHALLOWGENE"] == {"Shallow": 2}
+    assert "NOWHERE" not in out  # no species at all is no counts, not a row of zeros
+
+
+def test_a_missing_presence_result_is_a_no_op(tmp_path):
+    from genomeos.molecules import graph as gmod
+
+    assert gmod._orthologues_by_clade(tmp_path) == {}
