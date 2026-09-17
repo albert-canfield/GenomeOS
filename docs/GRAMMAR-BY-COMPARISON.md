@@ -1041,3 +1041,254 @@ sites predicts measured activity at genome scale; their arrangement, at this
 resolution and in this assay, does not. The next readout that could overturn it
 is not another feature set but a model that reads the sequence itself, scored
 against these same held-out elements.
+
+## 18. The count positive, tested for transfer: an assay and a question (2026-09-17)
+
+Section 17 failed the arrangement claim and left one thing standing: strict,
+family-collapsed JASPAR site counts lift Spearman with lentiMPRA activity by
++0.234 (K562) and +0.235 (HepG2) over GC and CpG composition. That was measured
+on 200 bp fragments carried on a reporter integrated out of their own
+chromosome, and §17 said so. This section asks whether the positive is about
+enhancers or about the construct, by moving it twice: to a **different assay**
+(VISTA, transgenic mouse embryos) and to a **different question** (the 882
+constrained-unknown blocks area I calls the real unknown).
+`genomeos/attribution/motif_transfer.py`, `scripts/motif_transfer.py`; results
+`motif_transfer_preregistration` (written and committed first) and
+`motif_transfer`.
+
+### Reading 1: VISTA, in vivo
+
+2,223 human sequences with a curated in-vivo verdict (1,133 positive in named
+tissues, 1,090 negative), each with Zoonomia phyloP already measured over it
+(`attribution/vista.py`, `attribution/constraint.py`). Six nested ridge models,
+counts read **per kb** because a VISTA element runs from 44 bp to 8 kb:
+
+length | + composition | + conservation | + counts | conservation + counts | + shuffled counts
+
+**Pre-registered in `PREREGISTERED_VISTA` and committed before the held-out
+chromosomes were read**: counts separate the classes, counts add over
+composition, **conservation + counts beats conservation alone** — the transfer
+claim, and the central one because VISTA elements were *chosen* for conservation
+— and counts beat their own dinucleotide-shuffled control. Held out before
+anything was scored: chr4, chr5, chr8, chr9, chr13, chr18, chr21, chr22, chrX —
+643 elements, 351 positive, a superset of §17's four chromosomes because VISTA
+is 23 times smaller than the lentiMPRA library. Coverage: 2,223 of 2,223
+elements scanned, 0 without sequence or sites, 2 without conservation (the
+training mean stands in for those two, recorded), 0 with a status other than
+positive or negative.
+
+**What is unmatched.** VISTA negatives are sequences that *failed to drive
+expression*, not a background drawn to match anything, so the positive-negative
+gap below is not an effect size. On the held-out 643, positives sit above
+negatives at AUROC 0.566 on length, 0.556 on GC, 0.509 on CpG o/e, 0.550 on
+phyloP mean, 0.553 on constrained fraction — and **0.517 on total sites per kb**
+(median 182.7 against 182.7). Whatever counts contribute, it is not that
+positives carry more sites.
+
+| model | AUROC | 95% CI | AUPRC |
+|---|---|---|---|
+| length | 0.566 | [0.522, 0.608] | 0.570 |
+| + composition | 0.561 | [0.516, 0.606] | 0.589 |
+| + conservation | 0.596 | [0.554, 0.638] | 0.626 |
+| + counts | 0.630 | [0.584, 0.671] | 0.662 |
+| conservation + counts | **0.655** | [0.612, 0.699] | 0.689 |
+| + shuffled counts (null) | 0.562 | [0.516, 0.606] | 0.590 |
+
+| difference | point | 95% CI |
+|---|---|---|
+| counts − composition | +0.069 | [+0.033, +0.104] |
+| counts − shuffled counts | +0.067 | [+0.029, +0.111] |
+| **(conservation + counts) − conservation** | **+0.060** | **[+0.022, +0.099]** |
+| (conservation + counts) − counts | +0.026 | [+0.008, +0.044] |
+
+Label-permutation null for the counts model: mean AUROC 0.4985, 95% interval
+[0.454, 0.545], and 0 of 1,000 permutations reached the observed value.
+
+**Verdict: the pre-registered claim holds in all four parts.** Strict
+family-collapsed motif counts separate VISTA positives from negatives in
+transgenic mouse embryos; they add over composition, they add over conservation,
+and they beat a dinucleotide shuffle of the same element that preserves GC, CpG
+and every dinucleotide count. §17's positive is not a property of the episomal
+reporter. Conservation and counts also add to *each other* in both directions,
+which is §16's base-level finding (conservation plus a strict site beats either
+alone, enrichment 1.7) reappearing at the level of whole elements.
+
+The size is the thing to keep honest about: AUROC 0.655 on an unmatched
+comparison is a weak discriminator, and the whole effect of counts over
+conservation is six points of AUROC.
+
+### Reading 1b: the tissue group, where counts add nothing
+
+Among positives only, one-vs-rest on the same nested sets. The group is
+predictable — and then the control says by what:
+
+| tissue group | held-out positives | length | + composition | + counts | counts − composition |
+|---|---|---|---|---|---|
+| neural | 258 | 0.619 | 0.744 | 0.763 | +0.019 [−0.017, +0.056] |
+| heart | 43 | 0.716 | 0.839 | 0.846 | +0.006 [−0.032, +0.046] |
+| limb and mesenchyme | 98 | 0.575 | 0.545 | 0.584 | +0.039 [−0.010, +0.089] |
+| liver | 1 | — | — | — | too few positives |
+| pancreas | 5 | — | — | — | too few positives |
+
+60 of the 1,133 positives drive only tissues outside the five groups and carry
+no group label. Label-permutation nulls sit at 0.498, 0.498 and 0.499.
+
+**Which tissue a VISTA positive drives is predictable from its sequence — heart
+at 0.846, neural at 0.763 — and motif counts add nothing detectable to it.**
+Length and GC-CpG composition get there alone. This is the reading the
+count-based grammar story would most want, and it fails: the factors whose sites
+are present do not say which tissue the element works in, at this resolution.
+(The nested comparison for tissue was added as a control after the first
+scoring; the pre-registered tissue statement was only that *some* group would be
+predicted above a permutation null, and it is. The control is what makes the
+number readable, and it is reported whichever way it came out.)
+
+### Reading 2: the real unknown, decided on measurement
+
+The 882 constrained-unknown blocks that are not copies were measured on
+2026-09-16 by an AlphaGenome deletion sweep and came out **below** the neutral
+tier per element, 0.248 against 0.293, z −5.7 (`docs/ATTRIBUTION.md`,
+`constrained_unknown_targets`). The obvious test — do motif counts rank the 331
+blocks that carry a lead above the 551 that do not — **was not run as the
+primary reading, because that lead is itself an AlphaGenome output**: a motif
+model agreeing with it would be two model readings agreeing with each other, not
+evidence. So the primary reading is measured, and coverage comes first:
+
+| | real unknown | neutral tier |
+|---|---|---|
+| blocks | 882 | 2,632 |
+| blocks holding at least one lentiMPRA element | **161** | 298 |
+| blocks holding none | **721** | 2,334 |
+| measured elements | **227** | 387 |
+| blocks with an element the sweep tested | 531 | 1,181 |
+| blocks with a sweep lead | 331 | 768 |
+| median block length | 11.7 kb | 7.9 kb |
+
+The 531 and 331 reproduce the sweep's own arithmetic exactly, which is the check
+that both readings are looking at the same blocks. Every one of the 614
+lentiMPRA elements inside a real-unknown or neutral block was held out of the
+count model's fit **by location**, leaving 50,760 training elements.
+
+**(1) The measured level.** lentiMPRA log2(RNA/DNA) of the 227 elements inside
+real-unknown blocks against the 387 inside neutral-tier blocks:
+
+| cell line | AUROC | z | median, real unknown | median, neutral |
+|---|---|---|---|---|
+| K562 | 0.462 | −1.59 | −0.504 | −0.421 |
+| HepG2 | 0.489 | −0.45 | −0.424 | −0.411 |
+| WTC11 | 0.472 | −1.18 | −0.857 | −0.758 |
+
+**The measured reporter puts the real unknown at the same level as the neutral
+tier, leaning below it in all three cell lines and reaching significance in
+none.** It does not contradict the sweep; it points the same way with a tenth of
+the evidence. There is no contradiction to report, and 227 measured elements
+over 161 of 882 blocks is why: the measured instrument that exists for this
+sequence covers 18% of the blocks.
+
+**(2) The measured transfer.** Spearman of the count model (b) with measured
+activity on those same 227 held-out-by-location elements, against composition
+(a):
+
+| cell line | (a) composition | (b) + counts | (b) − (a) | 95% CI |
+|---|---|---|---|---|
+| K562 | 0.131 | 0.369 | **+0.238** | [+0.097, +0.378] |
+| HepG2 | 0.021 | 0.410 | **+0.389** | [+0.234, +0.528] |
+| WTC11 | 0.290 | 0.336 | +0.046 | [−0.056, +0.142] |
+
++0.238 in K562 against §17's +0.234 over the whole 6,146-element held-out set:
+the count positive reproduces inside the real unknown, on sequence chosen for
+being constrained and unexplained, to two decimal places. WTC11 behaves as it
+did in §17 (composition alone already carries the iPSC line). The same
+comparison on the 387 neutral-tier elements gives +0.081 [−0.014, +0.165],
++0.015 and +0.033 — no cell line significant, and the intervals overlap the real
+unknown's, so "counts work better here than in neutral sequence" is a
+possibility this cannot resolve, not a finding.
+
+**(3) The predicted level** — a prediction, not a measurement. The same model
+over every non-overlapping 200 bp window of all 882 blocks (152,556 windows, 68
+dropped for N bases, 0 blocks left without a window) against 882 length-matched
+neutral blocks (151,810 windows), mean per window per block:
+
+| cell line | real unknown vs matched neutral | vs its own dinucleotide shuffle |
+|---|---|---|
+| K562 | 0.497 (z −0.25) | 0.514 (z +1.03) |
+| HepG2 | 0.499 (z −0.10) | 0.491 (z −0.64) |
+| WTC11 | 0.498 (z −0.12) | 0.519 (z +1.35) |
+
+Two flat readings, and the second is the more interesting: **applied blind
+across 30.6 Mb of genome, the count model cannot tell real sequence from a
+dinucleotide shuffle of the same sequence.** The model that reproduces §17's
++0.238 on 227 assayed elements carries no signal at all when swept over whole
+blocks. A lentiMPRA element is a *selected* 200 bp — a candidate cCRE — and the
+model inherits that selection; a uniform tiling of a 12 kb block is mostly
+sequence the library would never have contained.
+
+**(4) Agreement with the sweep**, reported last and **not validation**: both
+sides are model outputs. On the 531 blocks with a tested element the predicted
+mean scores AUROC 0.542 [0.494, 0.593] against carrying a lead, permutation null
+0.500, and the interval contains 0.5. Over all 882 the mean gives 0.484 while
+*block length alone* gives 0.718 and *the number of tested elements alone* gives
+0.837 — the label is mostly a statement about how much of a block was tested,
+which is exactly why the maximum-over-windows score (0.679) is not evidence
+either. Two model readings of these blocks do not agree, and nothing follows
+from that in either direction.
+
+One observation, not a claim: the 69 blocks of the syntax case — constrained
+across mammals and among people, the slice the sweep also read the other way on
+40 elements — carry the highest predicted mean of the five cases (−0.42 against
+−0.55 relaxed and −0.60 tolerant), and so do the 29 recent-constraint blocks
+(−0.42). Those two cases are also the shortest (2.7 and 3.2 kb median against 11
+kb), 5 and 3 of them hold a measured element, and nothing here was
+pre-registered on cases. The number to grow, again.
+
+### What section 18 changes
+
+- §17's count positive **transfers to a different assay**. It is not a property
+  of the episomal reporter: the same feature set separates in-vivo VISTA
+  verdicts, adds over composition, adds over conservation on elements *chosen*
+  for conservation, and beats a dinucleotide shuffle. Area J now has one
+  sequence-to-function statement that has survived being moved.
+- It transfers to **this sequence** too: +0.238 on the 227 measured elements
+  inside the real unknown, against +0.234 over the whole library.
+- It does **not** transfer to two things it was asked about. It says nothing
+  about *which tissue* a positive drives beyond what length and GC say. And
+  swept blind over whole blocks it cannot separate real sequence from its own
+  dinucleotide shuffle, so it cannot be used as a genome-wide activity track,
+  which is what "score the unknown with it" would have meant.
+- On the real unknown the honest statement is a **measured tie**: at 227
+  elements the reporter puts these blocks level with the neutral tier, leaning
+  below it in all three cell lines. The peer's per-element sweep result stands
+  unchallenged, and the reason it cannot be challenged here is coverage — 161 of
+  882 blocks have any measured element at all. The next thing this reading needs
+  is not a better model but an assay over those 721 blocks.
+
+### Correction received after this section was written: the neutral tier is not a control
+
+Reading 2 above compares the real unknown with the neutral tier, and on 2026-09-17 genomeos-9c
+withdrew the headline that comparison was built to test (4a2c199). The arms do not overlap in the
+covariate that decides the outcome: the median distance to a coding TSS is 81 kb for the 69 syntax
+blocks, 240 kb for the relaxed case and 418 kb for the neutral tier, against 42 kb for the genome's
+scored elements. Matched on length, GC and TSS distance, the syntax elements are ordinary (−0.033,
+p 0.67) and the relaxed case reads *above* neutral rather than below (+0.025 matched, p 0.014,
+against −0.038 raw). What survives is only that every unknown tier sits far below the genome's own
+elements; the ordering inside the unknown space is not established.
+
+What that does to the three readings here, stated rather than rerun:
+
+- **Reading 2(2), the transfer (counts over composition on the same 227 elements), is unaffected.**
+  It compares two feature sets on one set of elements, so a difference between groups cannot
+  produce it. The +0.238 (K562) and +0.389 (HepG2) stand.
+- **Reading 2(1), the measured level against the neutral tier, inherits the confound.** Its numbers
+  (0.462, 0.489, 0.472) were already inside their nulls, so nothing was claimed from them, and they
+  should not now be read as agreement with a withdrawn headline either. The comparison to make is
+  against the genome's own scored elements with length, GC and TSS distance held fixed.
+- **Reading 2(3), the predicted level over whole blocks, was matched on length only.** It is a null
+  (0.497, and 0.514 against its own shuffle), and a null measured against a control that does not
+  hold is weak evidence, not strong: it says the count model finds nothing when swept blind, which
+  is the claim made, and it cannot say the blocks are like or unlike the neutral tier.
+
+The lesson is the peer's and it is general: a tier average is not a control. The neutral tier was
+built as a background for constraint and is a background for nothing else. The practice this section owes the next
+reading is to print the median TSS distance of every group it compares: that one number, absent
+here and absent in the withdrawn headline, would have caught the confound a day earlier in both.
+

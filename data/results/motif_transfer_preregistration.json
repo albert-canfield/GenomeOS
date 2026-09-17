@@ -1,0 +1,309 @@
+{
+  "result": "motif_transfer_preregistration",
+  "date": "2026-09-17",
+  "preregistered": {
+    "vista": "Strict family-collapsed JASPAR site counts per kb, the feature set \u00a717 found predictive on lentiMPRA, are tested on VISTA's in-vivo transgenic assay. Decided on the held-out chromosomes (VISTA_HELD_OUT), by AUROC with 95% bootstrap intervals over elements: (1) AUROC(counts) above 0.5 with its interval above 0.5; (2) AUROC(counts) - AUROC(composition) above 0 with its interval above 0; (3) AUROC(conservation + counts) - AUROC(conservation) above 0 with its interval above 0 -- this is the transfer claim, that counts add over conservation on an in-vivo assay, and it is the central one because VISTA elements were chosen for conservation; (4) the null: AUROC(counts) - AUROC(shuffled counts) above 0 with its interval above 0, without which any count signal is composition under another name. The claim holds only if (1), (3) and (4) all hold. VISTA negatives are not matched to the positives on length, GC or constraint, so (1) is not an effect size and the covariates of both classes are reported beside it. Tissue group, reported separately and not part of the claim: among held-out positives a one-vs-rest count model ranks the elements of at least one tissue group above the other positives, interval above 0.5, against a label-permutation null.",
+    "real_unknown": "Reading 2 is decided on MEASURED activity, not on the deletion sweep's own call, because that call is an AlphaGenome output and scoring a motif model against it would be two readings of one model. Coverage is reported first and nothing is invented for the blocks that have none: of the 882 real-unknown blocks, how many hold at least one ENCODE4 lentiMPRA element, and how many elements. (1) PRIMARY, measured level: lentiMPRA log2(RNA/DNA) of the elements inside real-unknown blocks against the elements inside neutral-tier blocks, per cell line, as an AUROC with a rank-sum z. The deletion sweep puts the real unknown BELOW the neutral tier per element (0.248 against 0.293, z -5.7); if the measured reporter puts it above, the two readings contradict each other and the contradiction is the finding, not split and not tuned away. (2) PRIMARY, measured transfer: Spearman of \u00a717's (b) count model with measured activity on those same in-block elements against the (a) composition model, with every element inside a real-unknown or neutral-tier block held out of the fit BY LOCATION. The claim is that rho(b) - rho(a) is above 0 by its 95% bootstrap interval inside the real unknown, as it is +0.234 over the whole library. (3) SECONDARY, predicted level: the same count model's mean prediction over every 200 bp window of all 882 blocks against 882 length-matched neutral-tier blocks, each beside a dinucleotide-shuffled null of its own windows. This is a prediction and is reported as one. (4) SECONDARY and NOT VALIDATION: the AUROC of that predicted score against whether the sweep's AlphaGenome deletion moved a gene in the block. Both sides are model outputs, so agreement here is agreement between two model readings and is never read as either confirming the other."
+  },
+  "site_threshold": 0.95,
+  "evidence": {
+    "vista": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates",
+    "conservation": "experimental: Zoonomia phyloP over 241 placental mammals, per element mean and fraction of bases at or above 2.27",
+    "activity": "experimental: ENCODE4 lentiMPRA (ENCSR106SZM), log2(RNA/DNA) per 200 bp element",
+    "sites": "predicted: JASPAR 2026 CORE vertebrates at relative score >= 0.95, collapsed to one site per TFClass family unit per position",
+    "sweep_lead": "predicted: an AlphaGenome deletion moved a gene by at least 0.1 log2; the same model names a target at 87% of matched random windows, so a lead is a lead and not a measurement",
+    "comparison": "inferred: ridge fitted on training chromosomes or on locations held out, AUROC and Spearman on the held-out ones, bootstrap over elements or blocks"
+  },
+  "vista": {
+    "preregistered": "Strict family-collapsed JASPAR site counts per kb, the feature set \u00a717 found predictive on lentiMPRA, are tested on VISTA's in-vivo transgenic assay. Decided on the held-out chromosomes (VISTA_HELD_OUT), by AUROC with 95% bootstrap intervals over elements: (1) AUROC(counts) above 0.5 with its interval above 0.5; (2) AUROC(counts) - AUROC(composition) above 0 with its interval above 0; (3) AUROC(conservation + counts) - AUROC(conservation) above 0 with its interval above 0 -- this is the transfer claim, that counts add over conservation on an in-vivo assay, and it is the central one because VISTA elements were chosen for conservation; (4) the null: AUROC(counts) - AUROC(shuffled counts) above 0 with its interval above 0, without which any count signal is composition under another name. The claim holds only if (1), (3) and (4) all hold. VISTA negatives are not matched to the positives on length, GC or constraint, so (1) is not an effect size and the covariates of both classes are reported beside it. Tissue group, reported separately and not part of the claim: among held-out positives a one-vs-rest count model ranks the elements of at least one tissue group above the other positives, interval above 0.5, against a label-permutation null.",
+    "site_threshold": 0.95,
+    "family_units": [
+      "RXR-related receptors (NR2)",
+      "Paired-related HD factors",
+      "NK",
+      "TALE-type homeo domain factors",
+      "HOX",
+      "FOX",
+      "HIC2",
+      "ZNF70",
+      "NFAT-related factors",
+      "Tal-related",
+      "TALE-type HD",
+      "SOX-related factors",
+      "C4-GATA-related",
+      "Nuclear factor 1",
+      "Thyroid hormone receptor-related factors (NR1)",
+      "NACC2",
+      "DMRT factors",
+      "HD-LIM",
+      "ZNF536",
+      "KLF5",
+      "SP5",
+      "PAS domain factors",
+      "ZNF354C",
+      "STAT factors",
+      "ZBTB48",
+      "IKZF2",
+      "HD-ZF",
+      "MYT",
+      "ZNF827",
+      "bHLH-ZIP",
+      "E2A",
+      "VEZF1",
+      "POU domain factors",
+      "ARID-related",
+      "TEF-1-related factors",
+      "ZNF66",
+      "HD-ZF factors",
+      "ZNF800",
+      "CSL-related factors",
+      "Fos-related"
+    ],
+    "counts_per_kb": true,
+    "training_chromosomes": [
+      "chr1",
+      "chr2",
+      "chr3",
+      "chr6",
+      "chr7",
+      "chr10",
+      "chr11",
+      "chr12",
+      "chr14",
+      "chr15",
+      "chr16",
+      "chr17",
+      "chr19",
+      "chr20"
+    ],
+    "held_out_chromosomes": [
+      "chr4",
+      "chr5",
+      "chr8",
+      "chr9",
+      "chr13",
+      "chr18",
+      "chr21",
+      "chr22",
+      "chrX"
+    ],
+    "training_elements": 1580,
+    "held_out_elements": 643,
+    "coverage": {
+      "chromosomes_with_a_vista_table": 23,
+      "chromosomes_scanned": 23,
+      "elements_in_table": 2223,
+      "without_sequence_or_sites": 0,
+      "without_conservation": 2,
+      "status_not_positive_or_negative": 0,
+      "used": 2223
+    },
+    "conservation_fallback": {
+      "phylop_mean": 1.9563,
+      "constrained_fraction": 0.3445
+    },
+    "models": {
+      "length": [
+        "intercept",
+        "length"
+      ],
+      "composition": [
+        "intercept",
+        "length",
+        "composition"
+      ],
+      "conservation": [
+        "intercept",
+        "length",
+        "conservation"
+      ],
+      "counts": [
+        "intercept",
+        "length",
+        "composition",
+        "counts"
+      ],
+      "both": [
+        "intercept",
+        "length",
+        "conservation",
+        "composition",
+        "counts"
+      ],
+      "counts_shuffled": [
+        "intercept",
+        "length",
+        "composition",
+        "counts_shuffled"
+      ]
+    },
+    "columns": {
+      "length": 2,
+      "composition": 5,
+      "conservation": 4,
+      "counts": 47,
+      "both": 49,
+      "counts_shuffled": 47
+    },
+    "positives": {
+      "train": 782,
+      "held_out": 351
+    },
+    "covariates_all": {
+      "positive": {
+        "elements": 1133,
+        "median_length": 1705.0,
+        "median_gc": 0.4167,
+        "median_cpg_oe": 0.2381,
+        "median_phylop_mean": 1.815,
+        "median_constrained_fraction": 0.335,
+        "median_sites_per_kb": 182.202
+      },
+      "negative": {
+        "elements": 1090,
+        "median_length": 1440.0,
+        "median_gc": 0.4029,
+        "median_cpg_oe": 0.2292,
+        "median_phylop_mean": 1.707,
+        "median_constrained_fraction": 0.318,
+        "median_sites_per_kb": 181.738
+      },
+      "positives_above_negatives_auroc": {
+        "length": 0.5815,
+        "gc": 0.5475,
+        "cpg_oe": 0.5321,
+        "sites_per_kb": 0.5174
+      },
+      "reading": "VISTA negatives are sequences that failed to drive expression in the assay, not a background matched to the positives on any of these, so a separation between the classes is not an effect size; the column that matters is whether counts add over conservation"
+    },
+    "covariates_held_out": {
+      "positive": {
+        "elements": 351,
+        "median_length": 1688.0,
+        "median_gc": 0.3989,
+        "median_cpg_oe": 0.2267,
+        "median_phylop_mean": 2.075,
+        "median_constrained_fraction": 0.382,
+        "median_sites_per_kb": 182.673
+      },
+      "negative": {
+        "elements": 292,
+        "median_length": 1473.0,
+        "median_gc": 0.3878,
+        "median_cpg_oe": 0.2295,
+        "median_phylop_mean": 1.625,
+        "median_constrained_fraction": 0.301,
+        "median_sites_per_kb": 182.724
+      },
+      "positives_above_negatives_auroc": {
+        "length": 0.5657,
+        "gc": 0.5555,
+        "cpg_oe": 0.5087,
+        "phylop_mean": 0.5498,
+        "constrained_fraction": 0.5532,
+        "sites_per_kb": 0.5173
+      },
+      "reading": "VISTA negatives are sequences that failed to drive expression in the assay, not a background matched to the positives on any of these, so a separation between the classes is not an effect size; the column that matters is whether counts add over conservation"
+    },
+    "evidence": {
+      "vista": "experimental: VISTA Enhancer Browser, transgenic mouse e11.5 (LBNL); hg38 coordinates",
+      "conservation": "experimental: Zoonomia phyloP over 241 placental mammals, per element mean and fraction of bases at or above 2.27",
+      "activity": "experimental: ENCODE4 lentiMPRA (ENCSR106SZM), log2(RNA/DNA) per 200 bp element",
+      "sites": "predicted: JASPAR 2026 CORE vertebrates at relative score >= 0.95, collapsed to one site per TFClass family unit per position",
+      "sweep_lead": "predicted: an AlphaGenome deletion moved a gene by at least 0.1 log2; the same model names a target at 87% of matched random windows, so a lead is a lead and not a measurement",
+      "comparison": "inferred: ridge fitted on training chromosomes or on locations held out, AUROC and Spearman on the held-out ones, bootstrap over elements or blocks"
+    },
+    "inner_cross_validation": {
+      "length": {
+        "lambda": 1.0,
+        "inner_auroc": 0.5888,
+        "by_lambda": {
+          "1.0": 0.5888,
+          "10.0": 0.5888,
+          "100.0": 0.5888,
+          "1000.0": 0.5888,
+          "10000.0": 0.5888
+        }
+      },
+      "composition": {
+        "lambda": 10.0,
+        "inner_auroc": 0.6016,
+        "by_lambda": {
+          "1.0": 0.5995,
+          "10.0": 0.6016,
+          "100.0": 0.6013,
+          "1000.0": 0.5966,
+          "10000.0": 0.5881
+        }
+      },
+      "conservation": {
+        "lambda": 100.0,
+        "inner_auroc": 0.6205,
+        "by_lambda": {
+          "1.0": 0.6171,
+          "10.0": 0.6194,
+          "100.0": 0.6205,
+          "1000.0": 0.6202,
+          "10000.0": 0.6191
+        }
+      },
+      "counts": {
+        "lambda": 1000.0,
+        "inner_auroc": 0.6149,
+        "by_lambda": {
+          "1.0": 0.6077,
+          "10.0": 0.6066,
+          "100.0": 0.6091,
+          "1000.0": 0.6149,
+          "10000.0": 0.5978
+        }
+      },
+      "both": {
+        "lambda": 1000.0,
+        "inner_auroc": 0.6262,
+        "by_lambda": {
+          "1.0": 0.6221,
+          "10.0": 0.6206,
+          "100.0": 0.6228,
+          "1000.0": 0.6262,
+          "10000.0": 0.6088
+        }
+      },
+      "counts_shuffled": {
+        "lambda": 1000.0,
+        "inner_auroc": 0.576,
+        "by_lambda": {
+          "1.0": 0.5732,
+          "10.0": 0.5698,
+          "100.0": 0.57,
+          "1000.0": 0.576,
+          "10000.0": 0.5715
+        }
+      }
+    },
+    "held_out": null
+  },
+  "real_unknown": {
+    "preregistered": "Reading 2 is decided on MEASURED activity, not on the deletion sweep's own call, because that call is an AlphaGenome output and scoring a motif model against it would be two readings of one model. Coverage is reported first and nothing is invented for the blocks that have none: of the 882 real-unknown blocks, how many hold at least one ENCODE4 lentiMPRA element, and how many elements. (1) PRIMARY, measured level: lentiMPRA log2(RNA/DNA) of the elements inside real-unknown blocks against the elements inside neutral-tier blocks, per cell line, as an AUROC with a rank-sum z. The deletion sweep puts the real unknown BELOW the neutral tier per element (0.248 against 0.293, z -5.7); if the measured reporter puts it above, the two readings contradict each other and the contradiction is the finding, not split and not tuned away. (2) PRIMARY, measured transfer: Spearman of \u00a717's (b) count model with measured activity on those same in-block elements against the (a) composition model, with every element inside a real-unknown or neutral-tier block held out of the fit BY LOCATION. The claim is that rho(b) - rho(a) is above 0 by its 95% bootstrap interval inside the real unknown, as it is +0.234 over the whole library. (3) SECONDARY, predicted level: the same count model's mean prediction over every 200 bp window of all 882 blocks against 882 length-matched neutral-tier blocks, each beside a dinucleotide-shuffled null of its own windows. This is a prediction and is reported as one. (4) SECONDARY and NOT VALIDATION: the AUROC of that predicted score against whether the sweep's AlphaGenome deletion moved a gene in the block. Both sides are model outputs, so agreement here is agreement between two model readings and is never read as either confirming the other.",
+    "coverage": {
+      "real_unknown": {
+        "blocks": 882,
+        "blocks_with_a_measured_element": 161,
+        "blocks_without_any_measured_element": 721,
+        "measured_elements": 227,
+        "blocks_with_an_element_the_sweep_tested": 531,
+        "blocks_with_a_sweep_lead": 331,
+        "median_length_kb": 11.7
+      },
+      "neutral": {
+        "blocks": 2632,
+        "blocks_with_a_measured_element": 298,
+        "blocks_without_any_measured_element": 2334,
+        "measured_elements": 387,
+        "blocks_with_an_element_the_sweep_tested": 1181,
+        "blocks_with_a_sweep_lead": 768,
+        "median_length_kb": 7.9
+      }
+    }
+  }
+}
