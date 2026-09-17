@@ -61,3 +61,36 @@ def test_the_reading_needs_both_a_scored_effect_and_a_constraint() -> None:
     out = sv.read(rows)
 
     assert out["elements_read"] == 0  # one usable window cannot be ranked
+
+
+def test_an_element_the_effect_floor_flattened_drops_out_rather_than_scoring_zero() -> None:
+    """The run's own surprise: 58% of windows named no target, so their effect is exactly 0.0.
+
+    `MIN_EFFECT` is 0.1, a floor built for deleting a whole element, and a 25 bp substitution often
+    falls under it. An element whose twenty windows all fall under it has no order to correlate. It
+    must leave the reading, not enter it as a zero correlation: 'the model said nothing here' and 'the
+    model's sensitivity is unrelated to constraint here' are different statements, and averaging the
+    second over elements that only did the first would be reading the floor rather than the panel.
+    """
+    flat = [
+        {"element": "e1", "arm": "positive", "effect": 0.0, "phylop_mean": p}
+        for p in (0.5, 1.0, 1.5, 2.0, 2.5)
+    ]
+
+    out = sv.read(flat)
+
+    assert out["elements_read"] == 0
+    assert out["mean_spearman"]["positive"] is None
+
+
+def test_the_run_of_2026_09_17_reads_as_failure_by_the_registered_bars() -> None:
+    """The bars were set before the number; this holds them to it after.
+
+    +0.0453 at one-sided p 0.1741 over 3,200 windows. A later hand that widened the weak band would
+    turn this run's recorded difference into a claim it never earned, so the recorded difference is
+    what the bars are tested against.
+    """
+    got = sv.verdict(0.0453, 34, 200)
+
+    assert got.startswith("failure")
+    assert "section 15" in got

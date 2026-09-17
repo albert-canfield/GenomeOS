@@ -1429,3 +1429,58 @@ says where AlphaGenome is sensitive, not which bases matter in an embryo. A 25 b
 decisive base with 24 neighbours. And VISTA's negatives are sequence that failed to drive expression
 in the assay — a measured class, but not a sequence-matched control, which is the caveat this panel
 has carried since §15.
+
+---
+
+## 21. The registered run read: the arms are not separated (2026-09-17)
+
+3,200 windows, 3,200 model requests, 62 minutes, no interim stop. Read against the bars §20 fixed
+before the first request: **+0.0453 in mean within-element Spearman, positives minus negatives, at
+one-sided p 0.1741** (200 within-element shuffles, 34 at or above observed).
+
+**That is failure, and failure was the registered expectation.** The bar for weak was +0.05 and this
+is below it; the bar for success was +0.10 at p 0.01 and this is neither. Positives mean +0.0598,
+negatives mean +0.0145. The arms are related to constraint the same way, which is §15's finding
+arriving by a second route: the readout changed from motif sites to a model's own sensitivity, and
+the panel still does not separate.
+
+**The medians say it more plainly than the means.** Positive median +0.0199, negative median
+**+0.0333** — by the median the negatives are the arm whose model sensitivity tracks constraint more
+closely. Per-element spread is 0.24 (positives) and 0.27 (negatives) against a difference of 0.045,
+and single elements run from −0.55 to +0.85. The mean difference is a tail, not a separation.
+
+**What the run found that the registration did not anticipate: the measurement censored itself.**
+The window effect comes from the sweep's deletion-target path, whose `MIN_EFFECT` is 0.1 — a floor
+built for deleting a whole element. A 25 bp substitution often falls under it, and when it does the
+window's effect is recorded as exactly 0.0 rather than as a small number. **1,864 of the 3,200
+windows, 58.2%, named no target.** Forty-seven elements had all twenty windows under the floor, had
+no order to correlate, and left the reading: **the primary was read on 113 of 160 elements** — 59
+positive, 54 negative — not the 160 the registration planned.
+
+**The floor is not symmetric, and it leans the way that matters.** It censored 61.4% of negative
+windows against 55.1% of positive ones. Censoring flattens a profile toward noise, so the more
+heavily censored arm is pushed toward zero correlation — which *widens* positives minus negatives.
+The observed +0.045 is therefore an over-estimate of the difference, and the failure verdict is
+robust in the direction that counts: the flaw works against the conclusion being reported, not for it.
+
+**A post-hoc sensitivity check, labelled as post-hoc and not replacing the primary.** Every window's
+per-gene effects are in the request cache, so the same reading with the floor removed costs nothing
+and spends no quota. With no floor, all 160 elements are readable and the answer does not move:
+**+0.0480 at p 0.1045**, positives +0.0615, negatives +0.0135, medians +0.0158 and +0.0241. Same
+verdict, same side of the same bar. The censoring did not manufacture the result and did not hide one.
+
+**The deviation from the registered stopping rule, recorded mid-run rather than quietly matched.**
+The registration stops at the half-budget look when the 95% upper bound of the difference is below
+0.05; the instrument stops only when the difference itself is below zero. That is stricter — it fires
+less often — so it can spend quota the registration would have saved but cannot end early a run that
+should have continued, which is the direction that could bias a result. At 1,600 windows the look
+read **+0.0047** and did not fire.
+
+**What this does not say.** One model, predicted effects rather than measured ones, 25 bp windows
+that average a decisive base with 24 neighbours, and VISTA's own negatives — a measured class, not a
+sequence-matched control. It does not say the model is insensitive to constraint: both arms correlate
+positively, faintly. It says the model's sensitivity does not track constraint *more* in sequence
+that drives expression in an embryo than in sequence that does not, which is the only question the
+panel can answer and the question that was registered.
+
+Result `satmut_vista`; instrument `scripts/satmut_vista.py`; registration `attribution/satmut_vista.py`.

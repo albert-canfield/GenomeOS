@@ -2434,9 +2434,23 @@ in order. "Owner" is the session that holds the files today (see §7).
   Decompile button on any gene block reads `/api/decompile` and shows the program beside the map, with
   the layers that carry nothing named above it — a decompiler that hid its empty layers would read as
   completeness, which is the opposite of what the view is for. 7. Done, and tested on a VISTA panel with matched negatives: motif sites held
-  across species do not separate enhancers from inactive conserved sequence;
-  next a different readout, AlphaGenome in-silico mutagenesis per element on
-  the same panel (are the bases that matter the ones that are kept).
+  across species do not separate enhancers from inactive conserved sequence.
+  **The second readout is now done too and agrees (2026-09-17).** AlphaGenome
+  in-silico mutagenesis, pre-registered before the instrument existed
+  (`attribution/satmut_vista.py`, §20) and run to its full budget: 3,200
+  windows of 25 bp over the panel's own arms, each window's predicted effect
+  against its Zoonomia phyloP, read as the difference in mean within-element
+  Spearman. **+0.0453 at one-sided p 0.1741 — below the registered weak bar of
+  +0.05, which is failure and was the registered expectation.** By the median
+  the negatives are the closer-tracking arm (+0.0333 against +0.0199). The run
+  also censored itself and said so: `MIN_EFFECT` 0.1 is a whole-element floor,
+  58.2% of 25 bp windows fell under it and scored exactly 0.0, and 47 elements
+  went flat and left the reading (113 of 160 read). The floor cut negatives
+  harder (61.4% against 55.1%), which widens the difference rather than
+  narrowing it, so the failure is robust; a post-hoc no-floor recomputation off
+  the request cache, costing no quota, reads +0.0480 at p 0.1045 on all 160.
+  Two readouts, two routes, one answer: this panel does not separate.
+  GRAMMAR-BY-COMPARISON.md §21.
 - **Owner.** genomeos-bb (this lane's files: `attribution/variation.py`,
   `knowledge/homology.py`, GRAMMAR-BY-COMPARISON.md); the compiled output
   stays with genomeos-f7's `attribution/compile.py` and takes isolated hunks.
