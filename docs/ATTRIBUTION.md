@@ -3500,6 +3500,15 @@ rests on 105 pairs and its interval's lower bound is 0.92, not 1.0.
 
 ## The library's bridge to the screens: seven blocks of 882 (2026-09-17)
 
+**The library's positive set whose expectation comes from a measurement rather than from a model is
+seven blocks.** Of the 882 blocks of the real unknown, 163 hold an element the sweep scored at all
+and 7 hold one in the band where the CRISPRi screens called 105 of 105 — 2,283 oligos of 284,598.
+Anyone who reads 882 should read 7 in the same breath, and the reason they are not in conflict is
+that a thin positive set is what 0.45% coverage predicts: the screens tested annotated elements near
+expressed genes, and a real-unknown block is unannotated by construction, so most of its sequence was
+never eligible for the measurement that would have given it a prior. The library is not weakened by
+this; it is the instrument that would change it.
+
 The calibration leaves 24,114 coding targets in the band where the CRISPRi screens called 105 of
 105. genomeos-9c's MPRA library tiles the 882 blocks of the real unknown. If the two overlap, those
 oligos carry a prior from a measurement that is not the model's own effect size, and the library
