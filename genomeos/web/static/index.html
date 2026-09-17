@@ -765,6 +765,8 @@ button.primary,button.ghost{display:inline-flex;align-items:center;gap:6px}
       </div>
       <h3 class="pp-h">Landed in the last 24 hours</h3>
       <div id="pp-commits"></div>
+      <h3 class="pp-h" style="margin-top:18px">What happens next, in order (roadmap §5)</h3>
+      <div id="pp-next" class="pp-areas"></div>
       <h3 class="pp-h" style="margin-top:18px">Planned, by roadmap area</h3>
       <div id="pp-milestones" class="pp-chips"></div>
       <div id="pp-areas" class="pp-areas"></div>
@@ -1690,6 +1692,13 @@ async function loadWork() {
 }
 function renderPlanned(r) {
   const board = (window.ppBoard || []).filter(e => e.state !== 'done');
+  // section 5 is the one ordered list across every area: what a person opening this tab is asking for.
+  // Done items stay, struck through, because the order only reads as a plan if its history is visible.
+  const steps = r.next_steps || [];
+  $('#pp-next').innerHTML = steps.length ? steps.map(s => `<div class="pp-area" style="${s.state === 'done' ? 'opacity:.55' : ''}">
+      <h4><span class="pp-letter">${escH(s.number)}</span><span style="${s.state === 'done' ? 'text-decoration:line-through' : ''}">${mdInline(s.title)}</span> <span class="st ${s.state}">${s.state}</span></h4>
+      <details><summary class="muted" style="cursor:pointer;font-size:12px">why, and what it decides</summary><div class="pp-md">${md(s.text)}</div></details>
+    </div>`).join('') : '<div class="muted">roadmap §5 has no items</div>';
   $('#pp-milestones').innerHTML = r.milestones.map(m => `<span class="pill" data-tip="${escH(m.goal)} — ${escH(m.proof)}"><span class="st ${m.state}" style="border:0;padding:0">${m.state === 'done' ? '✓' : m.state === 'partial' ? '◐' : '○'}</span>${escH(m.milestone)}</span>`).join('');
   $('#pp-areas').innerHTML = r.areas.map(a => {
     const open = a.next.filter(s => s.state !== 'done');

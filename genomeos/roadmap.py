@@ -231,6 +231,55 @@ def parse_data_jobs(text: str) -> list[dict[str, Any]]:
     return out
 
 
+def parse_next_steps(text: str) -> list[dict[str, Any]]:
+    """Section 5's consolidated list: the ordered next steps, with the done ones marked.
+
+    The areas say what each part of the project is for; this list says what happens next across all of
+    them, and it is the thing a person actually wants when they open the Progress tab and ask what is
+    going on. It was not surfaced anywhere until 2026-09-17.
+
+    An item struck through (`~~...~~`) or opening with "Done" is finished; the rest are open. The text
+    is kept whole rather than summarised, because the reasons in these entries are the point.
+    """
+    section = _sections(text).get("5") or []
+    # section 5 keeps the older consolidated order below a marker line, as history; the tab wants the
+    # live list, so parsing stops there rather than showing two numbering schemes at once
+    for i, line in enumerate(section):
+        if "kept as history" in line:
+            section = section[:i]
+            break
+    items: list[dict[str, Any]] = []
+    current: list[str] = []
+    number = ""
+    for line in section:
+        head = re.match(r"^(\d+[a-z]?)\.\s+(.*)$", line)
+        if head:
+            if current:
+                items.append(_next_step(number, current))
+            number, current = head.group(1), [head.group(2)]
+        elif current and line.strip():
+            current.append(line.strip())
+        elif current and not line.strip():
+            items.append(_next_step(number, current))
+            current, number = [], ""
+    if current:
+        items.append(_next_step(number, current))
+    return items
+
+
+def _next_step(number: str, lines: list[str]) -> dict[str, Any]:
+    body = " ".join(lines).strip()
+    done = body.startswith("~~") or body.lstrip("*_ ").lower().startswith("done")
+    title = re.sub(r"[*_~]", "", body)
+    title = re.split(r"(?<=[.:])\s", title, maxsplit=1)[0]
+    return {
+        "number": number,
+        "title": title[:160],
+        "text": body,
+        "state": "done" if done else "next",
+    }
+
+
 def load(root: Path) -> dict[str, Any]:
     p = root / "docs" / "ROADMAP.md"
     if not p.exists():
@@ -244,6 +293,7 @@ def load(root: Path) -> dict[str, Any]:
         "areas": areas,
         "milestones": parse_milestones(text),
         "data_jobs": parse_data_jobs(text),
+        "next_steps": parse_next_steps(text),
         "totals": {
             "done": sum(a["counts"]["done"] for a in areas),
             "next": sum(a["counts"]["next"] for a in areas),

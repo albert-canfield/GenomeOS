@@ -2447,8 +2447,12 @@ its tiers cannot be ordered against each other by this instrument. The same day,
 a negative on both chromosomes, and 44 of the 69 syntax candidates gained nothing from the
 entire sweep. What is next, in order of what it decides:
 
-1. **The executor claim's external endpoint is inconclusive, and extending it costs a
-   pre-registration.** E1 was widened genome-wide and run on 2026-09-14 (`cbff5f6`): 1,000
+1. ~~The executor claim's external endpoint is inconclusive, and extending it costs a
+   pre-registration.~~ **Done 2026-09-17 (`2a07c80`): the extension ran on its 2,260 unspent pairs
+   and returned +0.075, one-sided p 0.00037 — the WEAK band by its own bar, not the declared success,
+   carried by GM12878 (+0.089 on 1,895 pairs) with Jurkat flat, and with its declared causality
+   secondary passing for the first time in the series (+0.198 where DAP-G fine-maps against +0.057
+   elsewhere). The ENCODE objection is narrowed, not closed.** E1 was widened genome-wide and run on 2026-09-14 (`cbff5f6`): 1,000
    of 3,260 allele pairs, strongest measured effect first, units agreeing 0.515 against
    matched nulls at 0.501, **+0.014, one-sided p 0.38, upper 95% bound 0.073**. Its own
    pre-registration named that band as deciding nothing, and its declared secondary failed
