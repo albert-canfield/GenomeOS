@@ -330,6 +330,28 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   costs a second and it replays the real accident correctly. A rule nobody
   can follow perfectly under concurrency belongs in a program.
 
+- **A claim relayed between sessions loses its evidence and keeps its confidence, so the check
+  belongs at the reader (2026-09-17).** One session wrote a summary of a finding; a second session
+  half-drafted an edit to a shared document from that summary. The claim was wrong — it inverted a
+  table three hundred lines below it in the same file — and it would have entered the record through
+  the second session's hands with the first session's name nowhere near it. **A correct claim and a
+  confidently phrased one are indistinguishable at the receiving end**, because everything that would
+  distinguish them, the table and the file and the line, is exactly what the summary replaced.
+  Writers checking their own work is necessary and cannot be sufficient: the failure mode is that the
+  writer already believes it. So **before acting on a peer's claim about the record, open the file it
+  describes** — and when sending one, relay the commit, path and line rather than the conclusion, so
+  the reader can do that cheaply. Of the six instances of this class in one day, four were a claim
+  checked against a summary of the record instead of the record; the only thing that ever caught one
+  was opening the file.
+
+- **The staging guard earns its keep on your OWN lines, which is the case that feels like friction
+  (2026-09-17).** A session correcting its own published sentence had `check_staged.py` refuse the
+  commit, because the correction removed two lines the same session had added an hour earlier. That
+  is the moment the guard looks like bureaucracy — the author knows why the line is going. It is also
+  precisely the moment worth the friction: **a self-correction and a self-serving revert are
+  indistinguishable from the inside**, and the flag costs one look and one `--force` that prints what
+  it takes out. A guard that only stopped other people's mistakes would be a guard nobody needed.
+
 ## Engineering
 
 - **Before grading an instrument's answer, check that it could have given the right one
