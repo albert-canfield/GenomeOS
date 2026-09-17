@@ -2747,10 +2747,16 @@ entire sweep. What is next, in order of what it decides:
      882 blocks were read with the model's own deletion predictions as the outcome, so a motif reading
      that uses the same elements is not independent evidence about the same blocks. If it disagrees
      with the 0.248-against-0.293 reading, that disagreement is the result.
-8. **Disk.** The project is 7.3 GB of a 460 GB disk; the four disk stops of 2026-09-15 came
-   from outside it (80 GB of stale Chrome code-sign clones in the system temp tree, among
-   others). Freeing that is Albert's call and unblocks item 2 and area I's compression of
-   chr1 and chr2.
+8. **Disk. Re-measured 2026-09-17, and both halves of this row were stale.** The Chrome
+   code-sign clones are **gone**: 63 of those directories remain in the system temp tree and
+   every one is 0 bytes, with the whole temp tree at 1.0 GB. Nothing here is Albert's call any
+   more. The project is **12 GB, not 7.3** — `data/knowledge` 6.2 GB, `data/reference` 1.4 GB,
+   `.git` 129 MB — so it nearly doubled while this row said otherwise. The disk is at **92%,
+   36 GB free of 460 GB**, and the weight is outside the repository: `~/Library` 165 GB,
+   `~/Documents` 50 GB, `~/SITES DEV` 32 GB. Inside the repository the recoverable item is
+   `.claude/worktrees` at 2.8 GB across 8 agent worktrees, 4 of them locked, clearable when
+   their lanes are idle. What remains a real question is whether distilling `data/knowledge`
+   is worth it, and that is inside the project rather than Albert's.
 
 The list below is the consolidated order as it stood on 2026-09-11, kept as history.
 

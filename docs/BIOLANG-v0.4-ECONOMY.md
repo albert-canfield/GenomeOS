@@ -1182,6 +1182,27 @@ it there, and for an imported protein that link is the transport at 0.3.
 2. **Amounts or concentrations** (stage 2 is held on this one: pools and costs would bake it in). Stage 1 keeps amounts per compartment, so
    Hill thresholds are amounts. Concentration needs volumes, which vary per cell
    type; the choice changes what every threshold in the project means.
+   **Priced 2026-09-17** (`scripts/amounts_or_concentrations.py`,
+   `data/results/amounts_or_concentrations.json`), and the first finding is that §9's
+   proposed test cannot be run. It says to run the burden gate "both ways on cells of
+   different volume". `volume` on a compartment is documented in two places — the
+   compartment table above and BIOLANG-GRAMMAR.md — as **a fraction of the cell's
+   volume**, and a fraction cannot express cells of different volume. A concentration
+   is molecules over an *absolute* volume and no v0.4 construct carries one, so the
+   concentration arm of the gate has nothing to divide by. **The blocker is a language
+   field, not data.**
+   What that field would cost is countable, and it is smaller than the objection above
+   suggests. Of **39 committed programs, 2 declare a compartment** — `human.erythrocyte`
+   (Cytosol at 1.0) and `human.oxphos` (four fractions from Alberts Table 12-1). Both
+   stand for cell types whose **absolute** volume is published, so neither author would
+   invent one and §2's penalty for an uncited fact does not apply. "Volumes vary per
+   cell type" is true in general and costs **two citations** at today's scale.
+   **And the price only rises.** It is this small *because* stage 2 is not built: **0
+   pools and 0 costs** are committed, so almost nothing is denominated in either unit
+   yet. Every program stage 2 adds raises the cost of changing the answer. That is an
+   argument about *when* to decide, not about which unit is right — and this decision
+   does not say which unit is right, because the gate still cannot separate them until
+   the language can express an absolute volume.
 3. **Membranes as compartments.** A membrane is a node of the tree facing both
    sides. The alternative (a membrane as the edge between two spaces) is closer
    to a bigraph link but makes receptors harder to place.
