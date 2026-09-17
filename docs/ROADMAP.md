@@ -2485,11 +2485,34 @@ One-off jobs, each needing a decision or a resource:
 
 ## 5. Next steps, consolidated
 
-**Where things stand at the end of 2026-09-16.** Both genome-wide sweeps are finished: every
+**Where things stand at the end of 2026-09-17.** Both genome-wide sweeps are finished: every
 chromosome scored by deletion (961,227 elements) and every chromosome read by the human panel
 (24 of 24, 187,966 executor-ready units). The executor test and its hold-out are done, `share:`,
 `commitment`, `competence` and the integrated reads are in the engine, and the worm's fate rules
-read what a cell could know. Four lanes run in worktrees under genomeos-79 (item 6).
+read what a cell could know.
+
+**What 2026-09-17 was, in one line: the day the project checked its own numbers and found four of
+them wrong.** Not one was found by a failing test — every one preserved the quantity its test
+watched.
+
+| what was wrong | how it survived | what it cost to find |
+|---|---|---|
+| the 882-block tier reading | compared against a tier average, unmatched | withdrawn after two corrections |
+| the bigWig summariser | preserved every ratio; only absolutes were wrong (×4.62 at element level) | a peer reading the loop by eye |
+| the body program's germ-layer splits | preserved every layer total; three populations held zero cells, one of them 24.5% of the ectoderm | using `share:` for the first time |
+| the Blocks lane and `decompile` | poised genes arrive inside `silent_genes` by design | reading what the lane actually drew |
+
+Two more that were never wrong, only unsaid: **0.45% of the unknown space has ever been measured by
+any assay held here**, and the compiled genome states **940,803 facts of which none is experimental**.
+The experiment that would change the first is designed and unrun (284,001 oligos with mappability at
+four read lengths). Area J's gene-level profiling closed as a negative about its own method: 14 of 42
+libraries do not beat a null made of real genes.
+
+The transferable lesson is in LESSONS.md and it is the day's only general one: **a defect that
+preserves the quantity it is checked against is invisible to that check.** Both fixes were the same
+shape — give the two quantities two names.
+
+Two lanes run in worktrees under genomeos-79 (items 6 and 7); area G is closed.
 
 **The result of the day is a negative, and it points area I somewhere else.** With the sweep
 complete, the 882 blocks of the real unknown were read against every scored element
