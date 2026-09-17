@@ -78,6 +78,9 @@ READER_CELLS = (
     "astrocyte",
     "CD14-positive monocyte",
 )
+#: the deletion scorer's whole input, resized around the element (dna_client.SEQUENCE_LENGTH_1MB).
+#: A published target whose gene body falls outside it cannot be named however the element is scored.
+MODEL_WINDOW = 1_048_576
 GTEX_DIR = Path("data/knowledge/loci_benchmark")
 NEGATIVES_PER_LOCUS = 5
 CANDIDATES_PER_LOCUS = 40  # sampled, then narrowed to the best matches on four covariates
@@ -1010,6 +1013,54 @@ def _deletion_rows(chrom: str, start: int, end: int, results_dir: Path) -> list[
     return rows
 
 
+def read_reach(ch: Chromosome, expect: Expect) -> dict[str, Any]:
+    """Whether the deletion layer could name this locus's published target *at all*.
+
+    The scorer resizes its input to `MODEL_WINDOW` centred on the element, so a gene whose body
+    lies wholly outside that window is not in the model's input and cannot be returned however the
+    element is scored. Asking anyway buys a guaranteed negative, and reading one as a miss is the
+    benchmark grading a question it never put.
+
+    This is why the ZRS's own deletion named LMBR1, the gene it sits inside, rather than SHH: SHH is
+    979 kb from the element and the reach is 524 kb, so SHH was never a candidate. The benchmark
+    recorded that as a miss for months. It is not a miss; it is out of range, and the two have to be
+    counted apart or the model is blamed for a limit the panel chose.
+
+    Free: no request, no network, GENCODE bodies against arithmetic.
+    """
+    mid = (expect.element[0] + expect.element[1]) // 2
+    half = MODEL_WINDOW // 2
+    w0, w1 = mid - half, mid + half
+    out: list[dict[str, Any]] = []
+    inside: list[str] = []
+    for symbol in expect.targets:
+        g = ch.annotation.genes.get(symbol) or next(
+            (x for x in ch.annotation.genes.values() if x.symbol == symbol), None
+        )
+        if g is None:
+            out.append({"target": symbol, "reason": "no GENCODE record for this symbol"})
+            continue
+        if g.locus.start < w1 and g.locus.end > w0:
+            inside.append(symbol)
+            continue
+        edge = min(abs(g.locus.start - mid), abs(g.locus.end - mid))
+        out.append({"target": symbol, "distance_bp": edge, "reason": "gene body outside the model's input"})
+    return {
+        "layer": "reach",
+        "provenance": "derived",
+        "model_window": MODEL_WINDOW,
+        "reach_each_way": half,
+        "element_midpoint": mid,
+        "targets_in_reach": inside,
+        "targets_out_of_reach": out,
+        "askable": bool(inside),
+        "evidence": (
+            "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the"
+            " element. No request"
+        ),
+    }
+
+
 def read_deletion(ch: Chromosome, start: int, end: int, results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     """The model layer: which gene moves when an element here is deleted, from runs already made.
 
@@ -1825,12 +1876,17 @@ def score_target(expect: Expect, readings: dict[str, Any]) -> dict[str, Any]:
             "among": bool(want & set(named)),
             "first_hit": next((n for n in named if n in want), None),
             "pending": r.get("pending"),
+            # a layer that could not have named the target is reported apart from one that failed to.
+            # The headline rates are left alone deliberately: changing a shared benchmark's
+            # denominator is the owner's call, and this makes the split visible so it can be made.
+            **({"unaskable": r["unaskable"]} if r.get("unaskable") else {}),
         }
     derived = {k: v for k, v in by_layer.items() if v["provenance"] == "derived"}
     return {
         "field": "target",
         "expected": sorted(want),
         "by_layer": by_layer,
+        "derived_unaskable": [k for k, v in derived.items() if v.get("unaskable")],
         "hit_derived": any(v["hit"] for v in derived.values()),
         "hit_derived_by": [k for k, v in derived.items() if v["hit"]],
         "hit_derived_among": any(v["among"] for v in derived.values()),
@@ -2139,6 +2195,11 @@ def score_locus(expect: Expect, ch: Chromosome, readings: dict[str, Any]) -> dic
             (readings.get("deletion") or {}).get("elements_scored")
             or (readings.get("eqtl") or {}).get("eqtls")
         ),
+        # a different sense of reach from the line above, and the names are kept apart on purpose:
+        # that one asks whether any data exists at this window, this one whether the published target
+        # is inside the model's 1 Mb input at all. A locus can have plenty of data and still be a
+        # question the deletion layer could not have answered.
+        "deletion_unaskable": (readings.get("deletion") or {}).get("unaskable") or None,
         "pending": pending,
     }
 
@@ -2179,6 +2240,16 @@ def aggregate(loci: list[dict[str, Any]]) -> dict[str, Any]:
             ),
         },
         "target_derived_where_reachable": hits("target_hit_derived", reachable),
+        "target_derived_where_the_model_could_answer": {
+            **hits("target_hit_derived", [r for r in loci if not r["score"]["deletion_unaskable"]]),
+            "held_out": [r["locus"] for r in loci if r["score"]["deletion_unaskable"]],
+            "reading": (
+                "the same rate with the loci whose published target lies outside the scorer's 1 Mb"
+                " input held out. It is reported beside the headline and does not replace it: the"
+                " headline counts every locus the panel chose, and choosing a target the model"
+                " cannot see is the panel's decision to own, not the model's failure"
+            ),
+        },
         "target_heuristic": hits("target_hit_heuristic"),
         "target_looked_up": hits("target_hit_looked_up"),
         "target_only_looked_up": [
@@ -2364,6 +2435,24 @@ def build(
             ch = chroms.get(e.chrom) or chroms.setdefault(e.chrom, Chromosome(e.chrom, results_dir))
             s, en = e.element
             readings = local_readings(ch, s, en, results_dir)
+            readings["reach"] = read_reach(ch, e)
+            # an out-of-reach target is not a pending request: spending one would buy a certain
+            # negative, so the deletion layer says unaskable and the cost line is withdrawn. This
+            # applies whether or not the layer has a reading: the ZRS HAS one (LMBR1) and it is
+            # still an answer to a question the model was never in a position to be asked.
+            if not readings["reach"]["askable"]:
+                far = readings["reach"]["targets_out_of_reach"]
+                why = (
+                    "unaskable rather than unasked: "
+                    + "; ".join(
+                        f"{x['target']} is {x.get('distance_bp', 0) // 1000} kb from the element" for x in far
+                    )
+                    + f", and the model's input reaches {MODEL_WINDOW // 2 // 1000} kb each way."
+                    " No number of requests can name it"
+                )
+                readings["deletion"]["unaskable"] = why
+                if readings["deletion"].get("pending"):
+                    readings["deletion"]["pending"] = why
             readings["satmut"] = read_satmut(ch, s, en, e)
             readings["gene_input"] = read_gene_input(ch, e, results_dir)
             readings["beyond_sequence"] = read_beyond_sequence(e)

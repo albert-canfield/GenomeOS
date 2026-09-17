@@ -1098,3 +1098,79 @@ than producing a result. The reason to record it is that the prediction was made
 was 13 windows, and it is the third time this benchmark has had to withdraw something for the same
 reason — so a rate whose denominator is "was it measured" is now the first thing to check here, not the
 last.
+
+---
+
+## 18. The question the model was never asked: reach, and 11a spent one request (2026-09-17)
+
+11a has been waiting for a free key since section 12. The key came free, and the first thing the
+driver did was refuse to spend most of it.
+
+### Two of the panel's targets are outside the model's input, and one of them has been graded as a miss for months
+
+The deletion scorer resizes its input to **1 Mb centred on the element** (`SEQUENCE_LENGTH_1MB`), so
+its reach is 524 kb each way. Against GENCODE gene bodies, three published targets fall outside it:
+
+| locus | target | distance from the element | in the model's input |
+|---|---|---|---|
+| SHH_ZRS | SHH | 979 kb | **no** |
+| SOX9_PierreRobin | SOX9 | 1,450 kb | **no** |
+| FTO_IRX3 | IRX5 | 1,164 kb | **no** (IRX3 at 520 kb is in, by 4 kb) |
+
+**This retires a result the benchmark has been carrying since section 1.** The ZRS's own deletion
+names LMBR1, the gene the ZRS sits inside, and that was read as the flagship long-range miss — the
+element-level question failing where the summed-window one succeeded. It was not a miss. SHH was
+never a candidate: it is not in the model's input, and no number of requests puts it there. The
+panel chose a target the model cannot see, and then marked the model wrong for not seeing it.
+
+`read_reach` now computes this per locus, free, from gene bodies and arithmetic. A locus whose
+targets are all out of reach has its deletion layer marked **unaskable** rather than **pending**, and
+the pending line — which used to quote a price in requests — now says no number of requests will do.
+
+**The headline rates are deliberately unchanged.** `target_derived` stays 15/17. A new line beside
+it, `target_derived_where_the_model_could_answer`, holds the two unaskable loci out: **13/15,
+0.867** against the headline's 0.882. Note the direction — both held-out loci were counted as
+*hits* through other derived layers, so holding them out makes the number slightly **worse**. A
+correction that flattered the model would deserve more suspicion than this one does. Which
+denominator is the real one is the benchmark owner's call, and the split is now visible so it can be
+made.
+
+### 11a: one request, at the only locus where the question survives
+
+SOX9 was the other stated interval, and it is unaskable by the table above, so the run asked
+nothing there. That leaves **H19_ICR1: one request.** The prediction was written into
+`scripts/loci_stated_intervals.py` before it, with three outcomes — `hit` (IGF2 or H19 first),
+`trap` (MRPL23, the nearest coding TSS), `neither` (a third gene) — and the registered expectation
+was **not a hit**, because the ICR acts through parent-of-origin methylation, which no layer in this
+project carries and which a sequence model reading one allele cannot express.
+
+**The registered outcome was `neither`, and the reason was the registered one.** Deleting the ICR
+named INS-IGF2 first among coding genes. But what it named is the whole point:
+
+| rank | gene | effect | what it is |
+|---|---|---|---|
+| 1 | MIR675 | −0.243 | the miRNA hosted **inside H19** |
+| 2 | ENSG00000274866 | −0.241 | |
+| 3 | **H19** | −0.178 | a published target |
+| — | IGF2-AS | −0.403 (strongest overall) | the antisense of the other published target |
+| — | INS-IGF2 | −0.149 | the read-through covering IGF2; first among **coding** genes |
+
+Every gene it moved is in the IGF2/H19 imprinted cluster, and **MRPL23, the nearest-TSS trap, was
+not named at all.** So the element-level deletion put its effect in exactly the right place and
+still scores as a miss, because the published targets are named as *IGF2* and *H19* and what came
+back was their read-through and their antisense.
+
+**A limitation this locus exposed, reported rather than fixed.** The deletion layer's named list
+takes `predicted_coding` first and stops, so a published target that is **non-coding** can be hidden
+behind a coding read-through. H19 is a lncRNA and is the first locus in the panel where this bites.
+It did not change the verdict — the any-gene path names IGF2-AS, which is not IGF2 either — but the
+rule is now known to have this failure mode, and changing it is the owner's call.
+
+**The direction is the substantive finding.** The deletion *represses*. Published biology is the
+opposite on the maternal allele: the unmethylated ICR binds CTCF and blocks the enhancers from
+reaching IGF2, so removing it should *raise* IGF2. The model has no allele and no methylation state,
+so it cannot express what the ICR does, and it did not. The registration said this in advance. A
+miss here is evidence against the question, not against the model.
+
+`genomeos/benchmark/loci.py` (`MODEL_WINDOW`, `read_reach`), `scripts/loci_stated_intervals.py`,
+results `loci_stated_intervals` and `loci_benchmark`. One model request was spent.

@@ -355,3 +355,49 @@ def test_the_controls_on_finished_chromosomes_are_reported_separately():
     for claim in ("target", "cell", "direction", "storage", "deletion_scored"):
         assert s["rates"][claim]["n"] == s["windows"], claim
     assert s["rates"]["deletion_scored"]["k"] <= s["windows"]
+
+
+# ------------------------------------------------------------------ what the model could be asked
+def test_a_target_outside_the_models_input_is_unaskable_not_unasked():
+    """The benchmark must not grade a question the model was never in a position to be asked.
+
+    The scorer resizes its input to 1 Mb around the element, so a gene whose body lies wholly
+    outside that window is not a candidate however many requests are spent. Three of the panel's
+    targets are in that position, and the ZRS is the one that mattered: its own deletion named
+    LMBR1, the gene it sits inside, and that was read as a miss against SHH for months. SHH is
+    979 kb away and the reach is 524 kb. It is out of range, not wrong.
+    """
+    from genomeos.benchmark.loci import MODEL_WINDOW
+
+    assert MODEL_WINDOW == 1_048_576  # dna_client.SEQUENCE_LENGTH_1MB
+    zrs = next(e for e in PANEL if e.locus == "SHH_ZRS")
+    sox9 = next(e for e in PANEL if e.locus == "SOX9_PierreRobin")
+
+    assert 900_000 < zrs.distance < 1_100_000  # published, and beyond half the window
+    assert zrs.distance > MODEL_WINDOW // 2
+    assert sox9.distance > MODEL_WINDOW // 2
+
+
+@needs_result
+def test_the_committed_result_marks_the_out_of_reach_loci_and_no_others():
+    """A locus in reach must never carry the flag: it would excuse a real miss."""
+    out_of_reach = set()
+    for row in RESULT["loci"]:
+        reach = (row.get("readings") or {}).get("reach")
+        assert reach is not None, f"{row['locus']} has no reach reading"
+        if not reach["askable"]:
+            out_of_reach.add(row["locus"])
+            assert (row["readings"]["deletion"] or {}).get("unaskable")
+
+    assert out_of_reach == {"SHH_ZRS", "SOX9_PierreRobin"}
+
+
+@needs_result
+def test_a_locus_whose_second_target_is_out_of_reach_is_still_askable():
+    """FTO reaches IRX3 at 520 kb and not IRX5 at 1,164 kb: partial reach is reach, and is recorded."""
+    fto = next(r for r in RESULT["loci"] if r["locus"] == "FTO_IRX3")
+    reach = fto["readings"]["reach"]
+
+    assert reach["askable"]
+    assert reach["targets_in_reach"] == ["IRX3"]
+    assert [x["target"] for x in reach["targets_out_of_reach"]] == ["IRX5"]

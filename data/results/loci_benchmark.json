@@ -1,6 +1,6 @@
 {
   "result": "loci_benchmark",
-  "date": "2026-09-16",
+  "date": "2026-09-17",
   "panel": 17,
   "classes": [
     "syntax",
@@ -49,8 +49,8 @@
     },
     "target_derived_where_reachable": {
       "k": 13,
-      "n": 14,
-      "rate": 0.929,
+      "n": 15,
+      "rate": 0.867,
       "hits": [
         "SHH_ZRS",
         "HERC2_OCA2",
@@ -67,8 +67,38 @@
         "MC1R"
       ],
       "misses": [
-        "MYC_8q24"
+        "MYC_8q24",
+        "H19_ICR1"
       ]
+    },
+    "target_derived_where_the_model_could_answer": {
+      "k": 13,
+      "n": 15,
+      "rate": 0.867,
+      "hits": [
+        "HERC2_OCA2",
+        "MCM6_LCT",
+        "HBB_LCR",
+        "FTO_IRX3",
+        "BCL11A_enhancer",
+        "ABO",
+        "HLA_DRB1",
+        "APP",
+        "TP53",
+        "HOXD",
+        "PMP22_CMT1A",
+        "CYP2D6",
+        "MC1R"
+      ],
+      "misses": [
+        "MYC_8q24",
+        "H19_ICR1"
+      ],
+      "held_out": [
+        "SHH_ZRS",
+        "SOX9_PierreRobin"
+      ],
+      "reading": "the same rate with the loci whose published target lies outside the scorer's 1 Mb input held out. It is reported beside the headline and does not replace it: the headline counts every locus the panel chose, and choosing a target the model cannot see is the panel's decision to own, not the model's failure"
     },
     "target_heuristic": {
       "k": 11,
@@ -187,9 +217,9 @@
       "H19_ICR1"
     ],
     "class_derived": {
-      "k": 13,
+      "k": 14,
       "n": 17,
-      "rate": 0.765,
+      "rate": 0.824,
       "hits": [
         "SHH_ZRS",
         "HERC2_OCA2",
@@ -201,6 +231,7 @@
         "APP",
         "TP53",
         "HOXD",
+        "H19_ICR1",
         "PMP22_CMT1A",
         "CYP2D6",
         "MC1R"
@@ -208,14 +239,12 @@
       "misses": [
         "ABO",
         "HLA_DRB1",
-        "SOX9_PierreRobin",
-        "H19_ICR1"
+        "SOX9_PierreRobin"
       ]
     },
     "unreachable_target": [
       "APP",
-      "SOX9_PierreRobin",
-      "H19_ICR1"
+      "SOX9_PierreRobin"
     ],
     "published_element_coverage": {
       "per_locus": {
@@ -307,8 +336,10 @@
         },
         "H19_ICR1": {
           "ccres_over_element": 0,
-          "elements_scored": 0,
-          "runs": []
+          "elements_scored": 1,
+          "runs": [
+            "stated_interval"
+          ]
         },
         "PMP22_CMT1A": {
           "ccres_over_element": 52,
@@ -344,8 +375,7 @@
       "no_element_level_reading_at_all": [
         "APP",
         "TP53",
-        "SOX9_PierreRobin",
-        "H19_ICR1"
+        "SOX9_PierreRobin"
       ],
       "reading": "a locus in the second list cannot get an element-level verdict by sweeping harder: no annotation drew an interval over its published element, so there is nothing to delete. The fix is a project-defined interval, not more requests"
     },
@@ -415,7 +445,9 @@
         "hits": [
           "SOX9_PierreRobin"
         ],
-        "scored_at_the_element": []
+        "scored_at_the_element": [
+          "H19_ICR1"
+        ]
       }
     }
   },
@@ -431,9 +463,9 @@
     "excluded": "every panel locus with 200 kb of flank, VISTA elements and GWAS Catalog hits (5 kb)",
     "positives": {
       "target": {
-        "k": 14,
+        "k": 15,
         "n": 17,
-        "rate": 0.824
+        "rate": 0.882
       },
       "cell": {
         "k": 14,
@@ -441,9 +473,9 @@
         "rate": 0.824
       },
       "direction": {
-        "k": 11,
+        "k": 12,
         "n": 17,
-        "rate": 0.647
+        "rate": 0.706
       },
       "storage": {
         "k": 9,
@@ -451,9 +483,9 @@
         "rate": 0.529
       },
       "deletion_scored": {
-        "k": 13,
+        "k": 14,
         "n": 17,
-        "rate": 0.765
+        "rate": 0.824
       },
       "eqtl_present": {
         "k": 14,
@@ -498,46 +530,46 @@
       "positives": {
         "with_deletion_data": {
           "target": {
-            "k": 13,
-            "n": 13,
+            "k": 14,
+            "n": 14,
             "rate": 1.0
           },
           "cell": {
             "k": 12,
-            "n": 13,
-            "rate": 0.923
+            "n": 14,
+            "rate": 0.857
           },
           "direction": {
-            "k": 11,
-            "n": 13,
-            "rate": 0.846
+            "k": 12,
+            "n": 14,
+            "rate": 0.857
           },
           "storage": {
             "k": 8,
-            "n": 13,
-            "rate": 0.615
+            "n": 14,
+            "rate": 0.571
           }
         },
         "without_deletion_data": {
           "target": {
             "k": 1,
-            "n": 4,
-            "rate": 0.25
+            "n": 3,
+            "rate": 0.333
           },
           "cell": {
             "k": 2,
-            "n": 4,
-            "rate": 0.5
+            "n": 3,
+            "rate": 0.667
           },
           "direction": {
             "k": 0,
-            "n": 4,
+            "n": 3,
             "rate": 0.0
           },
           "storage": {
             "k": 1,
-            "n": 4,
-            "rate": 0.25
+            "n": 3,
+            "rate": 0.333
           }
         }
       },
@@ -861,11 +893,11 @@
       },
       "H19_ICR1": {
         "positive": {
-          "target": false,
+          "target": true,
           "cell": false,
-          "direction": false,
+          "direction": true,
           "storage": false,
-          "deletion_scored": false,
+          "deletion_scored": true,
           "eqtl_present": false
         },
         "negatives": 5,
@@ -1031,7 +1063,8 @@
           "tissue": "heart left ventricle",
           "summed_by_cell": null,
           "pending": null,
-          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed",
+          "unaskable": "unaskable rather than unasked: SHH is 979 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it"
         },
         "reader": {
           "layer": "reader",
@@ -1079,6 +1112,23 @@
             "SHH"
           ],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 156791480,
+          "targets_in_reach": [],
+          "targets_out_of_reach": [
+            {
+              "target": "SHH",
+              "distance_bp": 979017,
+              "reason": "gene body outside the model's input"
+            }
+          ],
+          "askable": false,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
         },
         "satmut": {
           "layer": "satmut",
@@ -1279,10 +1329,12 @@
             "fraction_above": 0.5463
           },
           "humans": {
-            "bases": 1000,
+            "touched_bin_bases": 1000,
+            "bases": 789,
             "mean": 1.967,
             "maximum": 1.967,
             "fraction_above": 0.0,
+            "constrained_bases": 0,
             "strong": false
           },
           "case": {
@@ -1428,7 +1480,8 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": null
+                "pending": null,
+                "unaskable": "unaskable rather than unasked: SHH is 979 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it"
               },
               "eqtl": {
                 "provenance": "derived",
@@ -1479,6 +1532,9 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [
+              "deletion"
+            ],
             "hit_derived": true,
             "hit_derived_by": [
               "gene_input"
@@ -1573,6 +1629,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": "unaskable rather than unasked: SHH is 979 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it",
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window"
         ]
@@ -1717,6 +1774,19 @@
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 28120584,
+          "targets_in_reach": [
+            "OCA2"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -1776,10 +1846,12 @@
             "fraction_above": 0.0773
           },
           "humans": {
-            "bases": 1000,
+            "touched_bin_bases": 1000,
+            "bases": 63,
             "mean": 3.455,
             "maximum": 3.455,
             "fraction_above": 1.0,
+            "constrained_bases": 63,
             "strong": false
           },
           "case": {
@@ -1995,6 +2067,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "gene_input"
@@ -2118,6 +2191,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -2282,6 +2356,19 @@
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 135851076,
+          "targets_in_reach": [
+            "LCT"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -2359,10 +2446,12 @@
             "fraction_above": 0.0225
           },
           "humans": {
-            "bases": 2000,
+            "touched_bin_bases": 2000,
+            "bases": 400,
             "mean": 0.93,
             "maximum": 2.536,
             "fraction_above": 0.5,
+            "constrained_bases": 276,
             "strong": false
           },
           "case": {
@@ -2615,6 +2704,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion",
@@ -2742,6 +2832,7 @@
         "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -3038,6 +3129,23 @@
           ],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 5282000,
+          "targets_in_reach": [
+            "HBB",
+            "HBD",
+            "HBG1",
+            "HBG2",
+            "HBE1"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -3242,10 +3350,12 @@
             "fraction_above": 0.025
           },
           "humans": {
+            "touched_bin_bases": 23000,
             "bases": 23000,
             "mean": -0.116,
             "maximum": 2.565,
             "fraction_above": 0.0435,
+            "constrained_bases": 1000,
             "strong": false
           },
           "case": {
@@ -3486,6 +3596,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion",
@@ -3609,6 +3720,7 @@
         "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "beyond_sequence: developmental stage: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -3802,6 +3914,25 @@
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 53767042,
+          "targets_in_reach": [
+            "IRX3"
+          ],
+          "targets_out_of_reach": [
+            {
+              "target": "IRX5",
+              "distance_bp": 1163736,
+              "reason": "gene body outside the model's input"
+            }
+          ],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -3867,10 +3998,12 @@
             "fraction_above": 0.525
           },
           "humans": {
-            "bases": 2000,
+            "touched_bin_bases": 2000,
+            "bases": 400,
             "mean": 0.794,
             "maximum": 0.902,
             "fraction_above": 0.0,
+            "constrained_bases": 0,
             "strong": false
           },
           "case": {
@@ -4052,6 +4185,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "gene_input"
@@ -4188,6 +4322,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -4367,6 +4502,19 @@
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 60493000,
+          "targets_in_reach": [
+            "BCL11A"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -4485,10 +4633,12 @@
             "fraction_above": 0.0578
           },
           "humans": {
+            "touched_bin_bases": 5000,
             "bases": 5000,
             "mean": 0.459,
             "maximum": 1.537,
             "fraction_above": 0.0,
+            "constrained_bases": 0,
             "strong": false
           },
           "case": {
@@ -4719,6 +4869,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion",
@@ -4846,6 +4997,7 @@
         "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window"
         ]
@@ -5026,6 +5178,19 @@
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 127401060,
+          "targets_in_reach": [
+            "MYC"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -5152,10 +5317,12 @@
             "fraction_above": 0.5975
           },
           "humans": {
-            "bases": 2000,
+            "touched_bin_bases": 2000,
+            "bases": 400,
             "mean": 0.4,
             "maximum": 1.015,
             "fraction_above": 0.0,
+            "constrained_bases": 0,
             "strong": false
           },
           "case": {
@@ -5354,6 +5521,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": false,
             "hit_derived_by": [],
             "hit_derived_among": true,
@@ -5489,6 +5657,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window"
         ]
@@ -5646,6 +5815,19 @@
           "gwas_genes": [],
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 133256500,
+          "targets_in_reach": [
+            "ABO"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
         },
         "satmut": {
           "layer": "satmut",
@@ -6072,6 +6254,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion",
@@ -6218,6 +6401,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": false,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -6426,6 +6610,19 @@
             "HLA-DRB1"
           ],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 32583874,
+          "targets_in_reach": [
+            "HLA-DRB1"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
         },
         "satmut": {
           "layer": "satmut",
@@ -6783,6 +6980,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion"
@@ -6898,6 +7096,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": false,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -7039,6 +7238,19 @@
           ],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 25897620,
+          "targets_in_reach": [
+            "APP"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -7152,10 +7364,12 @@
             "fraction_above": 0.21
           },
           "humans": {
-            "bases": 1000,
+            "touched_bin_bases": 1000,
+            "bases": 400,
             "mean": -5.28,
             "maximum": -5.28,
             "fraction_above": 0.0,
+            "constrained_bases": 0,
             "strong": false
           },
           "case": {
@@ -7303,6 +7517,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "gene_input",
@@ -7431,6 +7646,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": false,
+        "deletion_unaskable": null,
         "pending": [
           "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
@@ -7595,6 +7811,19 @@
             "TP53"
           ],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 7676154,
+          "targets_in_reach": [
+            "TP53"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
         },
         "satmut": {
           "layer": "satmut",
@@ -7995,6 +8224,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "coding"
@@ -8127,6 +8357,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
@@ -8478,6 +8709,27 @@
           ],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 176141807,
+          "targets_in_reach": [
+            "HOXD13",
+            "HOXD12",
+            "HOXD11",
+            "HOXD10",
+            "HOXD9",
+            "HOXD8",
+            "HOXD4",
+            "HOXD3",
+            "HOXD1"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -8674,10 +8926,12 @@
             "fraction_above": 0.3107
           },
           "humans": {
-            "bases": 65000,
+            "touched_bin_bases": 65000,
+            "bases": 64926,
             "mean": 1.37,
             "maximum": 5.181,
             "fraction_above": 0.2923,
+            "constrained_bases": 19000,
             "strong": true
           },
           "case": {
@@ -8950,6 +9204,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion",
@@ -9073,6 +9328,7 @@
         "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "order: no measurement in the project carries developmental time or position along the body axis: the ordered activation of the cluster cannot be tested with the layers we hold, and the language has no construct for order",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -9172,8 +9428,9 @@
           "action": null,
           "tissue": null,
           "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
-          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
+          "pending": "unaskable rather than unasked: SOX9 is 1450 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it",
+          "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed",
+          "unaskable": "unaskable rather than unasked: SOX9 is 1450 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it"
         },
         "reader": {
           "layer": "reader",
@@ -9208,6 +9465,23 @@
           "gwas_genes": [],
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
+        },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 70670500,
+          "targets_in_reach": [],
+          "targets_out_of_reach": [
+            {
+              "target": "SOX9",
+              "distance_bp": 1450512,
+              "reason": "gene body outside the model's input"
+            }
+          ],
+          "askable": false,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
         },
         "satmut": {
           "layer": "satmut",
@@ -9268,10 +9542,12 @@
             "fraction_above": 0.0013
           },
           "humans": {
+            "touched_bin_bases": 1000,
             "bases": 1000,
             "mean": 1.814,
             "maximum": 1.814,
             "fraction_above": 0.0,
+            "constrained_bases": 0,
             "strong": false
           },
           "case": {
@@ -9386,7 +9662,8 @@
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests"
+                "pending": "unaskable rather than unasked: SOX9 is 1450 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it",
+                "unaskable": "unaskable rather than unasked: SOX9 is 1450 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it"
               },
               "eqtl": {
                 "provenance": "derived",
@@ -9424,6 +9701,9 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [
+              "deletion"
+            ],
             "hit_derived": true,
             "hit_derived_by": [
               "gene_input"
@@ -9514,8 +9794,9 @@
         "direction_hit_derived": false,
         "class_hit_derived": false,
         "reachable_by_a_derived_target_layer": false,
+        "deletion_unaskable": "unaskable rather than unasked: SOX9 is 1450 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it",
         "pending": [
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
+          "deletion: unaskable rather than unasked: SOX9 is 1450 kb from the element, and the model's input reaches 524 kb each way. No number of requests can name it",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -9615,15 +9896,30 @@
         "deletion": {
           "layer": "deletion",
           "provenance": "derived",
-          "elements_scored": 0,
-          "runs": [],
-          "from_stated_interval": false,
-          "targets": [],
-          "target": null,
-          "action": null,
-          "tissue": null,
-          "summed_by_cell": null,
-          "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
+          "elements_scored": 1,
+          "runs": [
+            "stated_interval"
+          ],
+          "from_stated_interval": true,
+          "targets": [
+            {
+              "gene": "INS-IGF2",
+              "elements": 1,
+              "best": 0.1492,
+              "action": "represses",
+              "tissue": "gastrocnemius medialis"
+            }
+          ],
+          "target": "INS-IGF2",
+          "action": "represses",
+          "tissue": "gastrocnemius medialis",
+          "summed_by_cell": {
+            "HepG2": 0.0031,
+            "IMR-90": 0.0343,
+            "K562": 0.0537,
+            "GM12878": 0.0074
+          },
+          "pending": null,
           "evidence": "predicted: expression change on deleting an element (AlphaGenome), already computed"
         },
         "reader": {
@@ -9656,6 +9952,20 @@
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 2000850,
+          "targets_in_reach": [
+            "IGF2",
+            "H19"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -9668,8 +9978,8 @@
             1900000,
             2250000
           ],
-          "elements_scored": 171,
-          "naming_a_coding_gene": 128,
+          "elements_scored": 172,
+          "naming_a_coding_gene": 129,
           "genes": [
             {
               "gene": "TNNT3",
@@ -9685,9 +9995,9 @@
             },
             {
               "gene": "INS-IGF2",
-              "elements": 28,
+              "elements": 29,
               "activating": 15,
-              "summed": 9.316
+              "summed": 9.464
             },
             {
               "gene": "INS",
@@ -9815,11 +10125,13 @@
             "by_layer": {
               "deletion": {
                 "provenance": "derived",
-                "named": [],
+                "named": [
+                  "INS-IGF2"
+                ],
                 "hit": false,
                 "among": false,
                 "first_hit": null,
-                "pending": "no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests"
+                "pending": null
               },
               "eqtl": {
                 "provenance": "derived",
@@ -9861,6 +10173,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": false,
             "hit_derived_by": [],
             "hit_derived_among": false,
@@ -9879,8 +10192,8 @@
             "promoter_cells_open": null,
             "eqtl_tissues_for_target": [],
             "eqtl_hit": null,
-            "model_tissue": null,
-            "model_hit": null,
+            "model_tissue": "gastrocnemius medialis",
+            "model_hit": false,
             "hit_derived": false,
             "specific": null,
             "unreachable": "the published tissue has no counterpart in the eleven reader cells or the GTEx panel"
@@ -9918,10 +10231,13 @@
               "program",
               "syntax"
             ],
-            "read": [],
-            "agrees_on": [],
+            "read": [
+              "program"
+            ],
+            "agrees_on": [
+              "program"
+            ],
             "missed": [
-              "program",
               "syntax"
             ],
             "mammal_fraction": 0.0162,
@@ -9935,7 +10251,7 @@
             "value_domain_read": "two",
             "common_variable_positions_per_kb": 0.0,
             "value_domain_hit": null,
-            "hit_derived": false,
+            "hit_derived": true,
             "hit_derived_all": false
           }
         },
@@ -9946,11 +10262,11 @@
         "heuristic_fell_in_trap": false,
         "cell_hit_derived": false,
         "direction_hit_derived": false,
-        "class_hit_derived": false,
-        "reachable_by_a_derived_target_layer": false,
+        "class_hit_derived": true,
+        "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "beyond_sequence: parent of origin: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
-          "deletion: no AlphaGenome deletion has been scored inside this window; the all-element sweep has finished chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chrX, chrY. One element is about 0.76 requests",
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
         ]
@@ -10243,6 +10559,19 @@
           ],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 15224303,
+          "targets_in_reach": [
+            "PMP22"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -10342,10 +10671,12 @@
             "fraction_above": 0.0342
           },
           "humans": {
-            "bases": 83000,
+            "touched_bin_bases": 83000,
+            "bases": 82292,
             "mean": 1.094,
             "maximum": 5.184,
             "fraction_above": 0.241,
+            "constrained_bases": 20000,
             "strong": true
           },
           "case": {
@@ -10583,6 +10914,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion"
@@ -10688,6 +11020,7 @@
         "direction_hit_derived": true,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "beyond_sequence: copy number: published here and carried by no layer in the project, so this locus is scored on its target and its class only",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -10908,6 +11241,19 @@
           "clinvar_genes": [],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 42126344,
+          "targets_in_reach": [
+            "CYP2D6"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -11042,10 +11388,12 @@
             "fraction_above": 0.1133
           },
           "humans": {
-            "bases": 5000,
+            "touched_bin_bases": 5000,
+            "bases": 4039,
             "mean": -0.933,
             "maximum": 2.318,
             "fraction_above": 0.2,
+            "constrained_bases": 1000,
             "strong": false
           },
           "case": {
@@ -11377,6 +11725,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion"
@@ -11536,6 +11885,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -11819,6 +12169,19 @@
           ],
           "evidence": "curated: VISTA tissues, GWAS Catalog mapped gene, ClinVar gene, the ENCODE cCRE class"
         },
+        "reach": {
+          "layer": "reach",
+          "provenance": "derived",
+          "model_window": 1048576,
+          "reach_each_way": 524288,
+          "element_midpoint": 89916547,
+          "targets_in_reach": [
+            "MC1R"
+          ],
+          "targets_out_of_reach": [],
+          "askable": true,
+          "evidence": "derived: GENCODE gene bodies against the scorer's 1 Mb input window, centred on the element. No request"
+        },
         "satmut": {
           "layer": "satmut",
           "provenance": "targeted",
@@ -12013,10 +12376,12 @@
             "fraction_above": 0.0573
           },
           "humans": {
-            "bases": 3000,
+            "touched_bin_bases": 3000,
+            "bases": 2859,
             "mean": 1.473,
             "maximum": 3.956,
             "fraction_above": 0.3333,
+            "constrained_bases": 977,
             "strong": false
           },
           "case": {
@@ -12374,6 +12739,7 @@
                 "pending": null
               }
             },
+            "derived_unaskable": [],
             "hit_derived": true,
             "hit_derived_by": [
               "deletion",
@@ -12543,6 +12909,7 @@
         "direction_hit_derived": false,
         "class_hit_derived": true,
         "reachable_by_a_derived_target_layer": true,
+        "deletion_unaskable": null,
         "pending": [
           "mpra: no lentiMPRA element was tested inside this window",
           "satmut: no saturation-mutagenesis element covers this window"
@@ -15283,58 +15650,58 @@
   "variant_positions": {
     "rs12913832": {
       "panel": 28120472,
-      "ensembl": 28120472,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs4988235": {
       "panel": 135851076,
-      "ensembl": 135851076,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1421085": {
       "panel": 53767042,
-      "ensembl": 53767042,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1558902": {
       "panel": 53769662,
-      "ensembl": 53769662,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1427407": {
       "panel": 60490908,
-      "ensembl": 60490908,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs6983267": {
       "panel": 127401060,
-      "ensembl": 127401060,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs11986220": {
       "panel": 127519444,
-      "ensembl": 127519444,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs8176719": {
       "panel": 133257521,
-      "ensembl": 133257522,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs8176746": {
       "panel": 133255935,
-      "ensembl": 133255935,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs63750847": {
       "panel": 25897620,
-      "ensembl": 25897620,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs1042522": {
       "panel": 7676154,
-      "ensembl": 7676154,
-      "agrees": true
+      "ensembl": null,
+      "agrees": null
     },
     "rs3892097": {
       "panel": null,
@@ -15394,6 +15761,6 @@
   "network": true,
   "note": "A coherence check, not a discovery claim. Hits are split by provenance: derived (a genome-wide measurement or model read blind), targeted (saturation mutagenesis made at these loci because they were known), heuristic (nearest coding TSS in the node) and looked_up (an annotation that already carries the answer). Negative controls are matched windows scored through the same readers. No AlphaGenome request was made: loci without an already computed deletion are pending, not dropped.",
   "cost": {
-    "seconds": 513.0
+    "seconds": 428.0
   }
 }

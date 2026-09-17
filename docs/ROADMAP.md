@@ -2607,8 +2607,27 @@ entire sweep. What is next, in order of what it decides:
    excluded and counted; and the intersection of the CRISPRi shortlist with the real-unknown blocks,
    which would give the library a positive set whose expectation comes from a screen rather than from
    the model. Area I.
-4. **The known-locus benchmark with more loci**, not more readings of the one it has:
-   SOX9 and H19 stated-interval scoring is a handful of requests. Needs the key briefly.
+4. **The known-locus benchmark with more loci**, not more readings of the one it has.
+   **Stated-interval scoring is done (2026-09-17), and it cost one request rather than a
+   handful.** The scorer's input is 1 Mb centred on the element, so its reach is 524 kb each
+   way, and `read_reach` now checks every published target against it for free: **SOX9 is
+   1,450 kb from its element, SHH 979 kb, IRX5 1,164 kb — all three outside the model's input.**
+   That retires a standing result: the ZRS's own deletion names LMBR1 and was graded a miss
+   against SHH, which was never a candidate. Those loci are now **unaskable** rather than
+   pending, and the pending line no longer quotes a price. The headline `target_derived` stays
+   **15/17**; a new line beside it holding the two unaskable loci out reads **13/15 (0.867)** —
+   slightly *worse*, because both were hits through other layers, which is the direction an
+   honest correction goes. H19 was the one locus left askable and was scored: deleting the ICR
+   names MIR675 (the miRNA inside H19), H19 itself at rank 3 and IGF2-AS strongest overall, all
+   inside the imprinted cluster, and **never MRPL23, the nearest-TSS trap** — yet it scores a
+   miss, because the published targets are IGF2 and H19 and what came back was their
+   read-through and their antisense. The direction is *represses* where the published mechanism
+   raises IGF2; the model carries no allele and no methylation state, which the registration
+   said in advance. **Two things are reported rather than changed, both the owner's call:**
+   which denominator is the real one, and that the deletion layer takes `predicted_coding`
+   first and so can hide a non-coding published target behind a coding read-through (H19 is the
+   first locus where that bites; it did not change this verdict). LOCI-BENCHMARK.md §18.
+   What remains under this item is what it always was: more loci, not more readings.
 5. **Albert's language decisions** (BIOLANG-v0.4-ECONOMY.md §10). Decision 2, amounts or
    concentrations, holds stage 2 (pools and costs) and is the one blocking code; decision
    9 (refusal or rate) waits on Fukushige & Krause's per-stage conversion tables; 3 and 7
