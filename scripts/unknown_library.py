@@ -43,6 +43,19 @@ from genomeos.results import save_result
 from scripts.unknown_coverage import label_of, measured_spans, overlap_bp  # noqa: E402
 
 OUT = Path("data/knowledge/library")
+# The seven blocks where the sweep's CRISPRi-calibrated shortlist reaches the real unknown at all
+# (genomeos-79, b8afb8a): eight elements, three relaxed and four tolerant, none syntax and none recent.
+# They are a bridge to measured evidence, not a positive set, and they are tiled deliberately so the
+# drop band can be tested off the screens' own population.
+BRIDGE_BLOCKS = {
+    "chr7:8752961-8938786",
+    "chr10:73783652-73785548",
+    "chr1:153205120-153217583",
+    "chr16:8180769-8252085",
+    "chr4:82044244-82128534",
+    "chr6:50913256-51302209",
+    "chr1:69563715-69567490",
+}
 OLIGO = 300
 SEED = 17
 
@@ -105,6 +118,47 @@ def _reaches(start: str, target: str, last: dict[str, str], limit: int = 8) -> b
         seen.add(here)
         here = last[here]
     return True
+
+
+HOMOPOLYMER = 10
+GC_LOW, GC_HIGH = 0.25, 0.75
+
+
+def homopolymer_run(seq: str) -> int:
+    """The longest single-base run, which is what a synthesiser fails on."""
+    best = run = 1
+    for a, b in zip(seq, seq[1:], strict=False):
+        run = run + 1 if a == b else 1
+        best = max(best, run)
+    return best
+
+
+def low_complexity(seq: str, unit: int = 6, fraction: float = 0.5) -> bool:
+    """Is half the window one short repeating unit? A tandem repeat cannot be attributed within itself."""
+    counts: dict[str, int] = {}
+    for i in range(len(seq) - unit + 1):
+        k = seq[i : i + unit]
+        counts[k] = counts.get(k, 0) + 1
+    if not counts:
+        return False
+    top = max(counts.values())
+    return top * unit >= len(seq) * fraction
+
+
+def family_a(seq: str, gc: float) -> list[str]:
+    """Reasons this oligo cannot be ORDERED or read at all - genomeos-79's Family A, recomputed here.
+
+    Recomputed rather than imported so the two counts are an independent check on each other: that
+    lane reports 4,273 of 45,570 untouched-block windows unorderable, 90.6% surviving.
+    """
+    out = []
+    if homopolymer_run(seq) >= HOMOPOLYMER:
+        out.append("homopolymer")
+    if not (GC_LOW <= gc <= GC_HIGH):
+        out.append("gc_outside_25_75")
+    if low_complexity(seq):
+        out.append("low_complexity")
+    return out
 
 
 def tss_of(ctx: Context, chrom: str) -> list[int]:
@@ -178,6 +232,8 @@ def build(chroms: list[str], step: int, max_oligos: int) -> dict[str, Any]:
                                 "block": f"{chrom}:{b['start']}-{b['end']}",
                                 "case": b.get("case"),
                                 "untouched_block": untouched,
+                                "unorderable": family_a(f["seq"], f["gc"]),
+                                "bridge": f"{chrom}:{b['start']}-{b['end']}" in BRIDGE_BLOCKS,
                             }
                         )
             elif label == "neutral":
@@ -195,8 +251,14 @@ def build(chroms: list[str], step: int, max_oligos: int) -> dict[str, Any]:
                 positives.append({**f, "arm": "positive", "block": "lentimpra_active"})
         ctx.close()
 
-    # untouched blocks first: the library's purpose is the sequence nothing has measured
-    test.sort(key=lambda r: (not r["untouched_block"], r["chrom"], r["start"]))
+    # Family A is dropped before anything else is decided: an oligo that cannot be synthesised or read
+    # is not a design choice. Family B (interspersed repeat, segmental duplication) is NOT dropped -
+    # see BRIDGE_BLOCKS' note and the section in ATTRIBUTION.md.
+    unorderable = [r for r in test if r["unorderable"]]
+    test = [r for r in test if not r["unorderable"]]
+    # untouched blocks first, then the seven bridge blocks, then the rest: the purpose is the sequence
+    # nothing has measured, and the bridge blocks are the only ones a CRISPRi screen speaks to
+    test.sort(key=lambda r: (not r["untouched_block"], not r["bridge"], r["chrom"], r["start"]))
     test = test[:max_oligos]
 
     by_key: dict[tuple, list[dict]] = defaultdict(list)
@@ -221,6 +283,7 @@ def build(chroms: list[str], step: int, max_oligos: int) -> dict[str, Any]:
     ]
     return {
         "test": test,
+        "unorderable": unorderable,
         "genomic_negative": negatives,
         "positive": positives[: len(test) // 10],
         "scrambled": scrambled,
@@ -255,6 +318,12 @@ def main(argv: list[str] | None = None) -> int:
 
     arms = build(chroms, args.step, args.max_oligos)
     seconds = arms.pop("seconds")
+    unorderable = arms.pop("unorderable")
+    untouched_unorderable = [r for r in unorderable if r["untouched_block"]]
+    reasons: dict[str, int] = {}
+    for r in untouched_unorderable:
+        for why in r["unorderable"]:
+            reasons[why] = reasons.get(why, 0) + 1
     path = None if args.no_save else write_manifest(arms)
     test = arms["test"]
     out = {
@@ -272,6 +341,26 @@ def main(argv: list[str] | None = None) -> int:
         },
         "median_gc": {arm: round(median([r["gc"] for r in v]), 4) for arm, v in arms.items() if v},
         "median_tss_distance": {arm: round(median([r["tss"] for r in v]), 1) for arm, v in arms.items() if v},
+        "unorderable_untouched_windows": len(untouched_unorderable),
+        "unorderable_by_reason": reasons,
+        "bridge_oligos": sum(1 for r in test if r.get("bridge")),
+        "cross_check": (
+            "genomeos-79 measured Family A over the same 680 untouched blocks independently and got "
+            "4,273 unorderable of 45,570 windows, 90.6% surviving; this count is recomputed here from "
+            "the sequence alone, so the two are a check on each other rather than one copying the other"
+        ),
+        "family_b_not_excluded": (
+            "interspersed repeat (17,112 windows) and segmental duplication (210) are carried FLAGGED "
+            "and not dropped: 31.3% of the lentiMPRA windows a reporter already measured successfully "
+            "are themselves majority interspersed repeat, so excluding them would drop a class the "
+            "assay demonstrably reads. They are an attribution caveat, not a measurability exclusion"
+        ),
+        "thin_blocks_kept": (
+            "53 of 680 untouched blocks fall below three attributable oligos and are KEPT: their median "
+            "length is 1,402 bp against 7,996 and their median distance to a coding TSS is 23.6 kb "
+            "against 100.9 kb, so dropping them would systematically remove the blocks nearest genes - "
+            "the covariate that confounded every comparison this project corrected this week"
+        ),
         "manifest": str(path) if path else None,
         "design": (
             "four arms: the real unknown tiled end to end with its untouched blocks first; neutral-tier "

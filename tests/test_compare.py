@@ -1,0 +1,99 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+"""Standardisation with a memory: the four mistakes of 2026-09-16 and 2026-09-17, as tests."""
+
+from __future__ import annotations
+
+from genomeos.compare import Strata, difference, imbalance, standardised, stratum_rates
+
+STRATA = Strata(gc=(0.35, 0.45, 0.55), tss=(1_000, 5_000, 20_000, 100_000))
+
+
+def row(hit: bool, gc: float = 0.5, tss: int = 10_000) -> dict:
+    return {"moved": hit, "gc": gc, "tss": tss}
+
+
+def test_a_large_stratum_cannot_outvote_a_small_one() -> None:
+    """The published defect: pooling every control once per target let one big stratum decide."""
+    targets = [row(True, tss=500), row(True, tss=1_000_000)]
+    controls = [row(False, tss=500) for _ in range(2)] + [row(True, tss=1_000_000) for _ in range(200)]
+
+    out = standardised(targets, controls, STRATA)
+
+    assert out["matched"]["b"] == 0.5  # mean of the two strata's rates
+    assert out["raw"]["b"] > 0.98  # what pooling would have said
+    assert out["targets_matched"] == 2
+
+
+def test_the_control_arm_is_not_given_more_precision_than_it_has() -> None:
+    """A standardised control rate has the n of the matched targets, not of the control rows.
+
+    With the pooled n of 202 the p-value was 0.0001-scale; with the honest n of 2 it cannot be, and
+    0.079 on two targets is what an arm this thin is allowed to say.
+    """
+    targets = [row(True, tss=500), row(True, tss=1_000_000)]
+    controls = [row(False, tss=500) for _ in range(2)] + [row(True, tss=1_000_000) for _ in range(200)]
+
+    out = standardised(targets, controls, STRATA)
+
+    assert out["matched"]["p_one_sided"] > 0.05
+
+
+def test_the_imbalance_is_in_the_result_and_not_left_to_the_reader() -> None:
+    """The 882-block reading died of an arm imbalance nothing reported: a tenfold gap in TSS distance."""
+    targets = [row(True, tss=80_000) for _ in range(10)]
+    controls = [row(True, tss=420_000) for _ in range(10)]
+
+    out = standardised(targets, controls, STRATA)
+
+    assert out["imbalance"]["tss"]["target_median"] == 80_000
+    assert out["imbalance"]["tss"]["control_median"] == 420_000
+    assert out["imbalance"]["tss"]["ratio"] < 0.2
+
+
+def test_targets_with_no_control_are_counted_not_hidden() -> None:
+    """A comparison that keeps a tenth of its targets is not the comparison it looks like."""
+    targets = [row(True, tss=500)] + [row(True, tss=50_000_000) for _ in range(9)]
+    controls = [row(False, tss=500)]
+
+    out = standardised(targets, controls, STRATA)
+
+    assert out["targets_matched"] == 1
+    assert out["dropped_for_want_of_a_control"] == 9
+
+
+def test_stratum_rates_are_computed_once_over_the_pool() -> None:
+    rates = stratum_rates([row(True), row(False), row(True)], STRATA)
+
+    assert list(rates.values()) == [2 / 3]
+
+
+def test_an_empty_arm_gives_no_difference_rather_than_a_crash() -> None:
+    assert difference(0, 0, 3, 10)["difference"] is None
+    out = standardised([], [row(True)], STRATA)
+    assert out["raw"]["difference"] is None
+    assert out["matched"]["difference"] is None
+
+
+def test_equal_groups_read_as_no_difference() -> None:
+    same = [row(True), row(False), row(True), row(False)]
+
+    out = standardised(list(same), list(same), STRATA)
+
+    assert out["raw"]["difference"] == 0.0
+    assert out["matched"]["difference"] == 0.0
+    assert out["imbalance"]["gc"]["ratio"] == 1.0
+
+
+def test_strata_split_on_every_covariate_given() -> None:
+    strata = Strata(gc=(0.5,), tss=(1_000,))
+
+    assert strata.key({"gc": 0.4, "tss": 500}) == (0, 0)
+    assert strata.key({"gc": 0.6, "tss": 5_000}) == (1, 1)
+    assert strata.covariates == ("gc", "tss")
+
+
+def test_imbalance_tolerates_a_missing_covariate() -> None:
+    out = imbalance([{"gc": 0.5, "tss": None}], [{"gc": 0.5, "tss": 10}], Strata(gc=(0.5,), tss=(10,)))
+
+    assert out["tss"]["target_median"] is None
+    assert out["gc"]["ratio"] == 1.0

@@ -25,13 +25,12 @@ import argparse
 import bisect
 import json
 import time
-from collections import defaultdict
 from pathlib import Path
-from statistics import median
 from typing import Any
 
 from genomeos.attribution import organise
 from genomeos.attribution import syntax_tiling as st
+from genomeos.compare import Strata, standardised
 from genomeos.results import save_result
 
 ELEMENTS = Path("data/knowledge/alphagenome/all_elements")
@@ -55,25 +54,6 @@ def label_of(block: dict[str, Any]) -> str:
             return "constrained_unknown_copy"
         return f"real_unknown_{block.get('case') or 'uncased'}"
     return str(tier)
-
-
-def _bin(value: float, cuts: tuple) -> int:
-    return bisect.bisect_right(cuts, value)
-
-
-def stratum_rates(pool: list[dict]) -> dict[tuple, float]:
-    """The share of each stratum's elements that move a gene, computed once for the whole pool."""
-    hits: dict[tuple, int] = defaultdict(int)
-    seen: dict[tuple, int] = defaultdict(int)
-    for r in pool:
-        key = stratum(r)
-        seen[key] += 1
-        hits[key] += bool(r["moved"])
-    return {k: hits[k] / n for k, n in seen.items() if n}
-
-
-def stratum(row: dict) -> tuple[int, int, int]:
-    return (_bin(row["length"], LEN_BINS), _bin(row["gc"], GC_BINS), _bin(row["tss"], TSS_BINS))
 
 
 def elements_with_features(chrom: str) -> list[dict[str, Any]]:
@@ -133,44 +113,24 @@ def elements_with_features(chrom: str) -> list[dict[str, Any]]:
 
 
 def matched_reading(rows: list[dict], arm: str) -> dict[str, Any]:
-    """The arm against every other scored element, inside shared strata of length, GC and TSS distance."""
+    """The arm against every other scored element, standardised by genomeos.compare."""
     target = [r for r in rows if r["arm"] == arm]
     pool = [r for r in rows if r["arm"] == "other"]
-    rates = stratum_rates(pool)
-    paired_t, shared = [], 0
-    control_hits = control_n = 0.0
-    for r in target:
-        rate = rates.get(stratum(r))
-        if rate is None:
-            continue
-        shared += 1
-        paired_t.append(r)
-        # the stratum's rate, precomputed once for the whole pool: summing over a stratum's controls
-        # per target made the arm with 145,000 elements quadratic twice over, and both versions had to
-        # be stopped mid-run before the arithmetic was written this way
-        control_hits += rate
-        control_n += 1
-    raw = st.difference(
-        sum(1 for r in target if r["moved"]),
-        len(target),
-        sum(1 for r in pool if r["moved"]),
-        len(pool),
-    )
-    matched = st.difference(
-        sum(1 for r in paired_t if r["moved"]),
-        len(paired_t),
-        round(control_hits),
-        round(control_n),
-    )
+    out = standardised(target, pool, strata_spec())
     return {
         "elements": len(target),
-        "elements_in_a_shared_stratum": shared,
-        "median_tss_distance": round(median([r["tss"] for r in target]), 1) if target else None,
-        "median_tss_distance_of_the_pool": round(median([r["tss"] for r in pool]), 1) if pool else None,
-        "raw": raw,
-        "matched_on_length_gc_and_tss_distance": matched,
-        "controls_weighted": round(control_n),
+        "elements_in_a_shared_stratum": out["targets_matched"],
+        "median_tss_distance": out["imbalance"]["tss"]["target_median"],
+        "median_tss_distance_of_the_pool": out["imbalance"]["tss"]["control_median"],
+        "raw": out["raw"],
+        "matched_on_length_gc_and_tss_distance": out["matched"],
+        "imbalance": out["imbalance"],
     }
+
+
+def strata_spec() -> Strata:
+    """This script's strata, as the shared comparator understands them."""
+    return Strata(length=LEN_BINS, gc=GC_BINS, tss=TSS_BINS)
 
 
 def matched_pair(rows: list[dict], a: str, b: str) -> dict[str, Any]:
@@ -180,29 +140,13 @@ def matched_pair(rows: list[dict], a: str, b: str) -> dict[str, Any]:
     nothing held fixed, and the tiers differ in distance to a promoter by an order of magnitude. This
     is the same comparison with length, GC and that distance held fixed.
     """
-    left = [r for r in rows if r["arm"] == a]
-    right = [r for r in rows if r["arm"] == b]
-    rates = stratum_rates(right)
-    paired_l = []
-    control_hits = control_n = 0.0
-    for r in left:
-        rate = rates.get(stratum(r))
-        if rate is not None:
-            paired_l.append(r)
-            control_hits += rate
-            control_n += 1
+    out = standardised([r for r in rows if r["arm"] == a], [r for r in rows if r["arm"] == b], strata_spec())
     return {
-        "raw": st.difference(
-            sum(1 for r in left if r["moved"]), len(left), sum(1 for r in right if r["moved"]), len(right)
-        ),
-        "matched": st.difference(
-            sum(1 for r in paired_l if r["moved"]),
-            len(paired_l),
-            round(control_hits),
-            round(control_n),
-        ),
-        "left_in_a_shared_stratum": len(paired_l),
-        "controls_weighted": round(control_n),
+        "raw": out["raw"],
+        "matched": out["matched"],
+        "left_in_a_shared_stratum": out["targets_matched"],
+        "dropped_for_want_of_a_control": out["dropped_for_want_of_a_control"],
+        "imbalance": out["imbalance"],
     }
 
 

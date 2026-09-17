@@ -1574,6 +1574,56 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## The library after the exclusions: 284,598 oligos, and two judgements that are design and not measurement (2026-09-17, later)
+
+genomeos-79's lane measured which oligos cannot be read even in principle, and the manifest is rebuilt
+on it. The filter is **recomputed here from sequence alone rather than imported**, so the two counts
+check each other:
+
+| unorderable, over the untouched blocks | this build | genomeos-79 |
+|---|---|---|
+| homopolymer ≥ 10 | 3,421 | 3,394 |
+| GC outside 25–75% | 749 | 751 |
+| low complexity / tandem | 220 | 105 |
+| not unique within its own block | not implemented | 23 |
+| **total** | **4,188** | **4,273** |
+| **orderable** | **41,113** | **41,297 (90.6%)** |
+
+Two independent implementations, **0.4% apart on the number a synthesis quote would use**. The gap is
+in the low-complexity rule, where their tandem test and this 6-mer coverage test disagree on about a
+hundred windows, and in the within-block uniqueness test this build does not do.
+
+**The library is now 284,598 oligos**: 92,118 test (41,113 of them from untouched blocks), 92,117
+matched genomic negatives, 8,245 positives, 92,118 scrambles.
+
+**Judgement one: the repeat flag is not an exclusion.** Interspersed repeat (17,112 windows) and
+segmental duplication (210) are carried **flagged and kept**. The reason is measured, not argued:
+**31.3% of the lentiMPRA windows a reporter already measured successfully are themselves majority
+interspersed repeat.** Dropping them would drop a class the assay demonstrably reads. It is an
+attribution caveat — a hit inside a recent duplication cannot be assigned to one locus — and the
+manifest carries the flag so the analysis can condition on it rather than the design pre-empting it.
+
+**Judgement two: the thin blocks stay, and this one is the more dangerous.** 53 of the 680 untouched
+blocks fall below three attributable oligos, and they are not a random 53: **median length 1,402 bp
+against 7,996, and median distance to a coding TSS 23.6 kb against 100.9 kb.** Dropping them would
+systematically remove the blocks nearest genes — which is the covariate that confounded every
+comparison this project corrected this week. A library that quietly drops its promoter-proximal
+sequence would reproduce the artefact in its own design, and no amount of standardising afterwards
+recovers sequence that was never ordered.
+
+**The bridge, and it is thin.** The CRISPRi-calibrated shortlist reaches the real unknown in **seven
+blocks and eight elements** — three relaxed, four tolerant, none of the 69 syntax and none of the 29
+recent. The strongest moves NXPH1 by 1.15. The library tiles those seven deliberately (2,283 oligos)
+and labels them, so the screens' drop band can be tested off their own population; for the other 875
+blocks the honest expectation is that no CRISPRi evidence speaks to them at all. The near-absence is
+structural rather than biological: the sweep scored registry elements inside a node, and a
+real-unknown block is unannotated by construction, so most of its sequence was never eligible.
+
+**Still unmeasured and worth stating before anyone quotes the attributable figure:** genome-wide
+mappability. The uniqueness test compares a window only against its own block, so it is a lower bound;
+a real read needs a Umap or Bismap track or a whole-genome k-mer index, and neither is held locally.
+Repeat and segdup content stand in as proxies, and they are proxies.
+
 ## The library, written out: 312,129 oligos that would measure the real unknown (2026-09-17)
 
 The coverage reading below says the sequence this project most wants measured is small enough to

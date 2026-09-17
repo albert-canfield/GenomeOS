@@ -68,12 +68,8 @@ def test_a_target_with_no_control_in_its_stratum_is_dropped_and_counted() -> Non
     assert out["left_in_a_shared_stratum"] == 1
 
 
-def test_stratum_rates_are_computed_once_per_stratum() -> None:
-    pool = [_row("c", True), _row("c", False), _row("c", True)]
-
-    rates = matched.stratum_rates(pool)
-
-    assert list(rates.values()) == [2 / 3]
+# `stratum_rates` moved to genomeos.compare on 2026-09-17 and is tested in tests/test_compare.py,
+# with the large-stratum regression beside it; the script keeps only its reporting shape.
 
 
 # --- coverage: what counts as measured -------------------------------------------------------------

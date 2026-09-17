@@ -29,34 +29,44 @@
   "oligo_bp": 300,
   "step": 300,
   "arms": {
-    "test": 101295,
-    "genomic_negative": 101294,
+    "test": 92118,
+    "genomic_negative": 92117,
     "positive": 8245,
-    "scrambled": 101295
+    "scrambled": 92118
   },
-  "total_oligos": 312129,
-  "test_from_untouched_blocks": 45301,
+  "total_oligos": 284598,
+  "test_from_untouched_blocks": 41113,
   "blocks_tiled": 878,
   "by_case": {
-    "recent": 797,
-    "relaxed": 44588,
-    "syntax": 1250,
-    "tolerant": 54590,
-    "unmeasured": 70
+    "recent": 708,
+    "relaxed": 40634,
+    "syntax": 1125,
+    "tolerant": 49591,
+    "unmeasured": 60
   },
   "median_gc": {
-    "test": 0.3733,
+    "test": 0.3767,
     "genomic_negative": 0.3733,
     "positive": 0.52,
-    "scrambled": 0.3733
+    "scrambled": 0.3767
   },
   "median_tss_distance": {
-    "test": 306702,
-    "genomic_negative": 354986.0,
+    "test": 305859.5,
+    "genomic_negative": 357234,
     "positive": 43945,
-    "scrambled": 306702
+    "scrambled": 305859.5
   },
+  "unorderable_untouched_windows": 4188,
+  "unorderable_by_reason": {
+    "homopolymer": 3421,
+    "low_complexity": 220,
+    "gc_outside_25_75": 749
+  },
+  "bridge_oligos": 2283,
+  "cross_check": "genomeos-79 measured Family A over the same 680 untouched blocks independently and got 4,273 unorderable of 45,570 windows, 90.6% surviving; this count is recomputed here from the sequence alone, so the two are a check on each other rather than one copying the other",
+  "family_b_not_excluded": "interspersed repeat (17,112 windows) and segmental duplication (210) are carried FLAGGED and not dropped: 31.3% of the lentiMPRA windows a reporter already measured successfully are themselves majority interspersed repeat, so excluding them would drop a class the assay demonstrably reads. They are an attribution caveat, not a measurability exclusion",
+  "thin_blocks_kept": "53 of 680 untouched blocks fall below three attributable oligos and are KEPT: their median length is 1,402 bp against 7,996 and their median distance to a coding TSS is 23.6 kb against 100.9 kb, so dropping them would systematically remove the blocks nearest genes - the covariate that confounded every comparison this project corrected this week",
   "manifest": "data/knowledge/library/unknown_library.tsv",
   "design": "four arms: the real unknown tiled end to end with its untouched blocks first; neutral-tier oligos matched on GC and order of magnitude of TSS distance as genomic negatives; lentiMPRA actives as in-batch positives; and each test oligo's own dinucleotide-preserving shuffle. A design, not an order: no synthesis, no vendor, and no claim that any of this sequence is functional",
-  "seconds": 238.2
+  "seconds": 224.3
 }
