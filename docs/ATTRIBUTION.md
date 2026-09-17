@@ -1574,6 +1574,49 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## 99.5% of the unknown space has never been measured, and the part that matters would fit in one library (2026-09-17)
+
+Three lanes hit the same wall today from different directions: the deletion sweep's per-tier readings
+did not survive standardisation, a calibration of those predictions failed on the prevalence of the
+screens that measured it, and a motif model that transfers to VISTA cannot beat its own shuffle when
+swept blind. The transfer lane put a number on the wall — 161 of the 882 blocks hold a measured
+element. `scripts/unknown_coverage.py` puts it on every tier, for no requests, counting a block as
+measured if **any** of lentiMPRA, VISTA or the CRISPRi benchmark overlaps it by a single base.
+
+| tier | Mb | measured Mb | share of bases | blocks measured | lentiMPRA / VISTA / CRISPRi |
+|---|---|---|---|---|---|
+| regulatory | 345.2 | 3.698 | **1.07%** | 6,422 of 15,536 | 5,857 / 343 / 1,241 |
+| fossil | 328.5 | 0.561 | 0.17% | 1,541 of 7,302 | 1,455 / 71 / 93 |
+| structural | 229.7 | 0.012 | **0.005%** | 39 of 238 | 39 / 0 / 0 |
+| neutral | 73.3 | 0.122 | 0.17% | 332 of 2,632 | 314 / 17 / 13 |
+| real unknown, tolerant | 16.4 | 0.053 | 0.32% | 92 of 329 | 82 / 16 / 1 |
+| real unknown, relaxed | 13.4 | 0.105 | 0.78% | 99 of 437 | 75 / 38 / 2 |
+| real unknown, syntax | 0.39 | 0.002 | 0.54% | 8 of 69 | 7 / 1 / 0 |
+| real unknown, recent | 0.24 | 0.001 | 0.33% | 3 of 29 | 3 / 0 / 0 |
+| constrained unknown, copies | 1.42 | 0.001 | 0.09% | 6 of 216 | 5 / 0 / 1 |
+
+**The whole unknown space is 1,008.8 Mb and 4.554 Mb of it has been measured: 0.45%.** The real
+unknown is 30.6 Mb with 0.16 Mb measured, **0.52%**, in 202 of its 882 blocks. Every model this
+project has built over that space — the deletion sweep, the calibration, the motif counts, the tier
+readings — has been extrapolating from half a percent of it, and the corrections of the last two days
+are what that extrapolation looks like when it is finally checked.
+
+**One number is actionable, and it is the reason to state the rest.** Tiled at 300 bp:
+
+- the **untouched part of the real unknown, 13.77 Mb, is 45,900 oligos** — one MPRA library, at a size
+  that is routine;
+- **all 30.6 Mb of the real unknown is 102,000 oligos** — one large library;
+- the whole unknown space is **3.4 million oligos**, which is not a library but a programme.
+
+So the asymmetry that matters is not between tiers, which this project can no longer rank, but between
+the real unknown and everything else: **the sequence we most want measured is small enough to measure
+in one experiment.** The median untouched block is 2.7 kb in the syntax case and 6.3 kb in the relaxed
+case, so an oligo library tiles whole blocks rather than sampling them.
+
+**What this section is not.** It is not a claim that anything in those 13.77 Mb is functional; it is
+the statement that we do not know, that no assay this project holds has asked, and that asking is
+affordable. Coverage is the precondition for a claim, not a claim.
+
 ## The matched table, computed correctly: no tier differs from the neutral tier, and the section below overstated in both directions (2026-09-17, later)
 
 The section below reported two matched numbers — syntax against neutral at **+0.284, p 0.00014**, and
