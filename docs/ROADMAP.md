@@ -2408,11 +2408,15 @@ in order. "Owner" is the session that holds the files today (see §7).
   family survives correction, and the ZRS has 6 strongly functional bases of
   485, so §12's reading is unsupported by measurement. Uses no AlphaGenome
   quota, so it runs beside the deletion chain. GRAMMAR-BY-COMPARISON.md §16.
-- **Missing.** The human axis as a Blocks-tab lane; the motif scan and
+- **Missing.** The motif scan and
   operator patterns; phylogenetic profiling between libraries; the
   decompiled locus view; one developmental locus run end to end.
 - **Next.** 1. Done: the human axis over the genome and the case in the
-  compiled `region` note; next a Blocks-tab lane. 2. Done: origin per gene and age per library, `orthologue_of` still to add
+  compiled `region` note, and **the Blocks-tab lane is done 2026-09-17**: every UNKNOWN block
+  carries its case, both axes and the confidence, and the lane draws a bar beneath it — amber
+  `syntax`, purple `relaxed`, blue `recent`, grey `tolerant`, and nothing where the block was not
+  measured on both axes. The case had been computed and committed for weeks while appearing
+  nowhere. 2. Done: origin per gene and age per library, `orthologue_of` still to add
   as species counts per clade on the graph nodes. 3. `genomicSuperDups` done; paralogues from the Compara stream; `paralogue_of`
   and `orthologue_of` edges in the knowledge graph (genomeos-fe's `molecules/graph.py`, hunk announced first). 4. Done, with families and a GC-by-repeat null: promoters carry family
   enrichments per library and no pair logic; the pair search moves to
