@@ -146,6 +146,12 @@ def reverted_by(path: str, removed: set[str], since: str) -> list[dict[str, obje
 def check(index: str | None, since: str) -> list[str]:
     """Every reason to refuse this commit, in the words its author needs to act on."""
     problems = []
+    if not staged_paths(index):
+        # an empty commit is what happens when a push that looked like it failed had actually landed
+        # and the work was committed again on top: 49edf1e on 2026-09-17, an exact duplicate of
+        # 4fc7b71 with the same message and no diff. Harmless, untidy, and invisible until someone
+        # reads the log.
+        return ["the staged tree is identical to HEAD: this commit would be empty"]
     if index:
         # every read below is against this index; the per-commit diffs ignore it, so one setting serves
         os.environ["GIT_INDEX_FILE"] = index

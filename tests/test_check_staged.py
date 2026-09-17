@@ -137,6 +137,16 @@ def test_a_staged_deletion_of_a_tracked_file_is_reported(repo: Path, tmp_path: P
     assert "staged as DELETED" in done.stdout
 
 
+def test_an_empty_commit_is_refused(repo: Path, tmp_path: Path) -> None:
+    """A push that looks like it failed may have landed; committing again produces an empty commit."""
+    index = private_index(repo, tmp_path)
+
+    done = run_check(repo, index)
+
+    assert done.returncode == 2
+    assert "would be empty" in done.stdout
+
+
 def test_a_new_file_reverts_nothing(repo: Path, tmp_path: Path) -> None:
     """A path HEAD does not have cannot take anything back out, whatever it contains."""
     index = private_index(repo, tmp_path)
