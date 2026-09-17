@@ -588,6 +588,15 @@ with 50 windows, two thirds *do* hold one, and the observed 60% is what that rev
 **Naming a target is now worse than worthless: the matched windows do it more often than the panel
 does (90% against 82%).**
 
+**The value-on-syntax row has since failed its first independent test (2026-09-17, section 19).** On
+nine published loci the project had never seen, it reads **1 of 9 against 3 of 45 matched controls**,
+and standardised it sits *below* its controls. It is not element length: on elements of a kilobase or
+less the panel reads 4 of 7 and the candidates 1 of 9. Nine loci cannot refute 9 of 17, so the row
+above is not struck — but the one claim that ever separated this panel from its controls can no
+longer be quoted as established, and the honest form of it is that it failed the first test it was
+given. Section 19 also finds that the coverage artefact section 8 retracted **survives standardising
+on GC, distance and constraint**, so that retraction was itself too strong.
+
 **A value on constrained sequence is the only claim left standing: 53% at the panel against 16% at
 matched windows with the same data behind them.** Every other claim the benchmark scores has now
 been shown, on its own controls, to carry no information on its own.
@@ -1212,3 +1221,224 @@ miss here is evidence against the question, not against the model.
 
 `genomeos/benchmark/loci.py` (`MODEL_WINDOW`, `read_reach`), `scripts/loci_stated_intervals.py`,
 results `loci_stated_intervals` and `loci_benchmark`. One model request was spent.
+
+---
+
+## 19. Nine more loci, one request, and the last claim standing falls over (2026-09-17)
+
+The roadmap item was "the known-locus benchmark with more loci, not more readings of the one it
+has" - the conclusion sections 8 and 16 both reached. Eleven candidates were assembled from
+published **perturbation** experiments (mouse or human enhancer deletion, CRISPR interference,
+transgenic reporter, or a disease-causing point mutation in the element), never from association
+alone; none repeats a panel locus. They are a **separate, separately registered panel**, scored by
+`genomeos/benchmark/loci.py` with no change to any scorer or hit rule, and their rates are reported
+beside the seventeen and never pooled with them.
+
+`genomeos/benchmark/loci_candidates.py` (the expectations and `PREREGISTRATION`),
+`scripts/loci_candidates.py`, `tests/test_loci_candidates.py`, results `loci_candidates` and
+`loci_candidate_intervals`. **One model request was spent.**
+
+### The candidates, and what the free filter did to them first
+
+| locus | element | published target | tissue | distance | perturbation |
+|---|---|---|---|---|---|
+| RET_MCS97 | chr10:43,086,358-43,086,858 (rs2435357) | RET | enteric neural crest | 9.5 kb | mouse enhancer deletion (Chatterjee 2016) |
+| IRF6_MCS97 | chr1:209,815,675-209,816,175 (rs642961) | IRF6 | oral periderm | 9.8 kb | transgenic reporter (Fakhouri 2014) |
+| MYB_HMIP2 | chr6:135,097,000-135,098,000 (rs66650371) | MYB | erythroid | 83.8 kb | element deletion in erythroid cells (Stadhouders 2014) |
+| SORT1_1p13 | chr1:109,274,718-109,275,218 (rs12740374) | SORT1 | liver | 123 kb | AAV in mouse liver (Musunuru 2010) |
+| IL2RA_CaRE4 | chr10:6,052,484-6,052,984 (rs61839660) | IL2RA | stimulated T cell | 9.6 kb | CRISPRa tiling and deletion (Simeonov 2017) |
+| GDF5_GROW1 | chr20:35,319,108-35,319,608 (rs6060369) | GDF5 | growth plate | 118.9 kb | humanised mouse allele (Capellini 2017) |
+| PTF1A_enhancer | chr10:23,219,045-23,219,445 (**stated**) | PTF1A | embryonic pancreas | 26.9 kb | human recessive mutations (Weedon 2014) |
+| PAX6_SIMO | chr11:31,664,197-31,664,597 | PAX6 | eye | 146.9 kb | de novo mutation, reporters (Bhatia 2013) |
+| HBA_HS40 | chr16:113,381-113,908 | HBA1, HBA2 | erythroid | 63.0 kb | human and mouse deletions (Higgs 1990, Hay 2016) |
+| POU3F4_DFN3 | anchored at -900 kb | POU3F4 | inner ear | 900 kb | human microdeletions (de Kok 1996) |
+| MYC_BENC | anchored at +1.7 Mb | MYC | haematopoietic | 1,700 kb | CRISPRi tiling, module deletion (Fulco 2016, Bahr 2018) |
+
+Every published direction in the table is *activates*. Six elements are placed on an rsID resolved
+from Ensembl GRCh38 and re-checked against Ensembl on every run; two (HBA_HS40, PAX6_SIMO) are
+Ensembl assembly-map liftovers of a published GRCh37 interval; PTF1A's is anchored on the published
+25 kb offset from GENCODE's gene end, and that anchor lands within 500 bp of a liftover of the
+published mutation positions.
+
+**Two candidates died at the reach filter, and the number that matters is the other nine.**
+`loci.read_reach` was called - not reimplemented - and it is a gene-**body** test: POU3F4 (900 kb)
+and MYC's blood enhancer cluster (1,693 kb measured) have no body anywhere in the model's input, so
+they are unaskable and no request was spent on them. Both are also **exhibits only**: their
+elements are placed on a published offset with no citable coordinate, which section 13 withdrew a
+case for, so they are excluded from every scored rate whatever the filter says.
+
+**Nine of eleven published enhancer-gene links sit well inside the model's 524 kb reach.** The
+panel's three megabase cases (SHH, SOX9, IRX5) are not what a published enhancer usually looks like;
+they were chosen for being remarkable. A filter that is worth having at the panel costs almost
+nothing here, which is itself the measurement.
+
+### What the requests were, and why there was only one
+
+Every chromosome is swept, so an element some annotation already drew has **already been deleted and
+the answer is cached**. The plan checks that before anything is spent:
+
+| loci | cCREs over the published element | already deleted | requests |
+|---|---|---|---|
+| RET, IRF6, SORT1, IL2RA, GDF5, HBA (2 each), MYB, PAX6 (1 each) | 1 to 2 | 1 to 3 | **0** |
+| PTF1A_enhancer | **0** | 0 | **1** |
+| POU3F4_DFN3, MYC_BENC | - | - | **0** (unaskable) |
+
+**One request, for the whole widening.** Section 6 spent 2,283 on twelve loci; section 18 spent one.
+Once the sweep is finished, the cost of a new locus is the cost of the intervals nobody annotated,
+and that is 1 of 9 here against 4 of 17 at the panel - because the panel's uncovered elements are
+its megabase and coding loci, and ordinary published enhancers are cCREs.
+
+### The scores, beside the panel's
+
+| field | candidates | the panel |
+|---|---|---|
+| right target, derived | **8/9 (0.889)** | 15/17 (0.882) |
+| right target, where the model could answer | **8/9 (0.889)** | 13/15 (0.867) |
+| right target, nearest TSS in node | **3/9 (0.333)** | 11/17 (0.647) |
+| right target, annotation lookup | **1/9 (0.111)** | 8/17 (0.471) |
+| chance floor (random coding gene in the window) | 1.06/9 (0.118) | 7.12/17 (0.419) |
+| direction, where a deletion names the target | **3/5 (0.600)** | 5/5 |
+| right cell or tissue, where judged | 4/6 (0.667) | - |
+| a published class read | 9/9 | 13/17 |
+
+The floors are not comparable: the candidate windows are a uniform 1 Mb and hold more coding genes,
+so drawing one at random hits less often. Within each set the derived rate clears its own floor.
+
+**Which layer does the work is not the same here.** The element's own deletion names the published
+target first at **5 of 9** (RET, IRF6, IL2RA, GDF5, HBA2); the summed window input at 5 of 9; and
+**GTEx eQTLs at 1 of 9**, against the panel where eQTLs carried several loci. The reason is the
+tissue list: enteric neural crest, oral periderm, growth plate, embryonic pancreas and a stimulated
+T cell are not GTEx tissues. A benchmark built on loci GTEx can see will overrate eQTLs.
+
+**The nearest-TSS heuristic falls from 0.647 to 0.333, and it falls into every trap it was set: 5 of
+5** (IRF6 to a novel GENCODE gene 37 bp closer than IRF6, MYB to HBS1L, SORT1 to PSRC1, GDF5 to
+FAM83C, HBA to NPRL3). The traps were written down before scoring, and they are geometry, not
+results. So a set of ordinary published enhancers is *harder* for the nearest-gene rule than the
+panel is, not easier - which was the opposite of what was registered.
+
+### Per locus
+
+| locus | derived hit, by | the element's own deletion | heuristic | direction | notes |
+|---|---|---|---|---|---|
+| RET_MCS97 | deletion, gene_input | **RET**, -0.45 | RET | right | the enhancer is in RET's own first intron: nothing is at stake |
+| IRF6_MCS97 | deletion, eqtl | **IRF6**, -0.57 | trap | right | the only eQTL hit in the set |
+| MYB_HMIP2 | gene_input | names nothing | trap (HBS1L) | not judged | one element scored and it moved no gene; the summed window names MYB over HBS1L |
+| SORT1_1p13 | **miss** | CELSR2, -2.53 | trap (PSRC1) | not judged | see below |
+| IL2RA_CaRE4 | deletion, gene_input | **IL2RA**, +0.24 | IL2RA | **wrong** | deleting the enhancer *raises* IL2RA in the model |
+| GDF5_GROW1 | deletion | **GDF5**, +0.15 | trap (FAM83C) | **wrong** | the same sign error at a 119 kb reach |
+| PTF1A_enhancer | gene_input | C10orf67, -0.13 | PTF1A | not judged | the one stated interval and the one request; see below |
+| PAX6_SIMO | gene_input | names nothing | node names nothing | not judged | a 147 kb reach recovered by summing, not at the element |
+| HBA_HS40 | deletion | **HBA2**, -0.77 | trap (NPRL3) | right | the sharpest result of the set |
+
+**HBA_HS40 is the result this widening was for.** Deleting the alpha-globin enhancer names HBA2
+first and HBA1 second, 60 kb away, across NPRL3 - the gene the enhancer sits inside and the
+nearest-TSS trap. It is the same shape as the ZRS at a twentieth of the distance, and it is the
+first time in this benchmark that an element-level deletion has reached a distant published target
+past the gene it lives in. The ZRS could never have done it: SHH is not in the model's input.
+
+**The direction is right at 3 of 5, not 5 of 5.** IL2RA and GDF5 both move the *wrong way*: deleting
+a published activator raises its target in the model, weakly (+0.24 and +0.15). The panel's 5 of 5
+was five loci; this is five more, and pooled the direction reading is 8 of 10. The sign is not
+settled.
+
+**SORT1 is the one target miss, and it is the FTO pattern exactly.** SORT1 is second in every
+derived layer - second in the eQTLs behind CELSR2, second in the summed window behind ELAPOR1 - so
+the lenient reading is right and the strict one is wrong, as at FTO. The element's own deletion
+names **CELSR2 at -2.53**, by far the largest effect anywhere in this set, and CELSR2 is the gene
+the element sits inside. The published paper reports coordinated changes at SORT1, CELSR2 and PSRC1
+and concludes SORT1 is causal for LDL; the expectation named SORT1 alone, before scoring, and the
+miss stands.
+
+**The element-level deletion names what it sits inside. This is now three for three.** The ZRS named
+LMBR1, the H19 ICR named MIR675 and the IGF2 read-through, and the SORT1 enhancer names CELSR2. Each
+time the containing or overlapping transcript takes the top rank and the published target sits below
+it. That is not a coincidence of three loci; it is what deleting a piece of a transcript does to that
+transcript's own read counts, and it is the same mechanism as the `predicted_coding`-first defect
+one level up.
+
+### PTF1A: the one request, and it went to the gene next door
+
+The prediction was registered before the request. The deletion named **C10orf67** first among coding
+genes at -0.13, with **PTF1A second** at a mean of +0.003 and its largest drop in cardiac muscle
+cell. Every effect is at the noise floor (confidence 0.126). The published tissue is an embryonic
+pancreatic progenitor; the model's four cell tracks are K562, HepG2, GM12878 and IMR-90, and its
+strongest tissue here was right cardiac atrium. **A miss, and the honest reading is that the question
+was asked in the wrong cell**, not that the element does nothing. The summed window names PTF1A
+first, so the locus scores as a derived hit through `gene_input` and as an element-level miss.
+
+The `predicted_coding`-first defect that H19 exposed (a non-coding published target hidden behind a
+coding read-through) **is not exercised by this set at all**: every candidate target is protein
+coding. It is untested here, not absent.
+
+### The controls, standardised - and every claim falls over once coverage is a stratum
+
+45 matched windows, five per graded locus, the same four covariates and the same keep-outs (extended
+to keep out the candidate loci too). `genomeos/compare.py` does the standardising; nothing here
+reimplements it.
+
+| claim | candidates | controls, covariates only | p | controls, **coverage held fixed** | p |
+|---|---|---|---|---|---|
+| a derived layer names *some* target | 1.000 | 0.984 | 0.35 | **1.000** | 0.50 |
+| the reader has it open in some cell | 0.778 | 0.426 | **0.051** | **0.722** | 0.39 |
+| a direction is produced | 0.778 | 0.366 | **0.026** | **0.889** | 0.74 |
+| a value sits on constrained sequence | 0.111 | 0.132 | 0.55 | **0.167** | 0.63 |
+
+**Standardising on GC, distance and constraint does not remove the coverage artefact**, because none
+of those covariates says whether anybody ever spent a request on the window. Add "has an element
+inside it been deleted" as a fifth stratum and the direction claim goes from +0.41 (p=0.026) to
+**-0.11**: the matched windows produce a direction *more* often than the candidates do. Section 8
+retracted that claim at the panel on 2026-09-15; it is reproduced here on an independent set of
+loci, and this time it survived a standardisation, which is the new part. No target was dropped for
+want of a control in either reading, and `imbalance` is reported beside both: the constrained
+fraction is the one covariate that differs materially between the arms (1.69x).
+
+**The cell claim is a coverage artefact too, and that is new.** At p=0.051 on the matched covariates
+it looked like the second real discriminator; holding coverage fixed takes it to +0.06 (p=0.39).
+Nobody had conditioned the cell claim before.
+
+### The one claim that survived the panel does not survive this panel
+
+**A value on constrained sequence: 1 of 9 candidates (0.111) against 3 of 45 controls (0.067), and
+below the controls once standardised (-0.02, and -0.06 holding coverage fixed).** The registration
+predicted about half against about a sixth, on the strength of the panel's 9/17 against 15/85. It
+did not happen.
+
+The obvious explanation is element length, and it is wrong. Restricted to elements of 1 kb or less,
+the panel reads a value on syntax at **4 of 7** and the candidates at **1 of 9**, and six of the nine
+candidate elements are centred on a famous common variant exactly as the panel's short ones are. What
+differs is only which variants the three people we hold happen to carry on mammal-constrained bases.
+
+**So the benchmark's last surviving discriminator does not reproduce on a second set of loci.** With
+n=9 this is not proof that the panel's 9/17 was noise, and it is not offered as one. It is enough
+that the claim can no longer be quoted as established. What would settle it is a third set with
+element lengths matched to the panel's, and more than three genomes behind the "value" half of the
+reading - the HPRC panel, which was already the recorded cost of the value-domain gap.
+
+### A defect found in this benchmark's own lookup, and what it changes
+
+`Chromosome.ccres_in` bisects the cCRE list, and `load_ccres` **does not return it in start order**,
+so the bisect silently missed elements that begin before the window. Measured over the seventeen: it
+reported 1 of the 12 cCREs over the MC1R window, 0 of the 1 over the ZRS, 0 of 2 at MYC and 0 of 4 at
+ABO. The lookup now sorts its own copy; the domain model is still handed the list exactly as it came,
+so nothing about the nodes moves.
+
+**This changes a published count in section 10.** "No cCRE over the published element" is **4 of 17**
+(APP, TP53, SOX9_PierreRobin, H19_ICR1), not 7 of 17: ABO, MYC_8q24 and **SHH_ZRS** all have one. So
+the sentence "the flagship long-range element is not an ENCODE cCRE" is wrong - the ZRS is covered by
+one, and the VISTA run simply reached it first. The conclusion of section 10 is unchanged in
+direction (the element-level reading is still bounded by which intervals somebody else drew) and
+smaller in size. The panel's committed result was not rerun for this: which of its numbers to refresh
+is the benchmark owner's call, and `data/results/loci_benchmark.json` still holds the old count.
+
+### What is left undone
+
+- The candidates are **not** in `loci.PANEL` and the headline stays 15/17. Whether they should be
+  merged, and on what denominator, is the owner's call; everything needed to merge them is in
+  `loci_candidates.CANDIDATES`.
+- The panel has not been rerun since the `ccres_in` fix, so section 10's 7 of 17 is still what the
+  committed result says.
+- Nine loci is the same size as the evidence that produced the claim it failed to reproduce. A third
+  set, length-matched, is the next thing worth a day.
+- Every candidate here is an **activator**. Published repressive elements with a perturbation behind
+  them were looked for and none was clean enough to state, so the direction axis is only ever tested
+  in one direction, at both panels.

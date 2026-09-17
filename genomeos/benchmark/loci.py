@@ -82,6 +82,10 @@ READER_CELLS = (
 #: A published target whose gene body falls outside it cannot be named however the element is scored.
 MODEL_WINDOW = 1_048_576
 GTEX_DIR = Path("data/knowledge/loci_benchmark")
+#: results holding deletions of intervals a panel STATED from a publication because no registry drew
+#: one. Read first by `_deletion_rows` and labelled `stated_interval`, so a hit on one is never
+#: pooled with a hit on somebody else's annotation. One per panel: the seventeen, then the candidates.
+STATED_INTERVAL_RESULTS = ("loci_stated_intervals", "loci_candidate_intervals")
 NEGATIVES_PER_LOCUS = 5
 CANDIDATES_PER_LOCUS = 40  # sampled, then narrowed to the best matches on four covariates
 MATCH_GC = 0.04  # matched window: GC within this of the positive's
@@ -1002,10 +1006,11 @@ def _deletion_rows(chrom: str, start: int, end: int, results_dir: Path) -> list[
     # intervals the panel stated itself, because no registry drew one over the published element
     # (docs/LOCI-BENCHMARK.md 11a). Kept first and labelled, so a rate built on one is never pooled
     # with the registry-derived rates without the split showing.
-    for e in (load_result("loci_stated_intervals", results_dir) or {}).get("elements", []):
-        if e.get("chrom") == chrom and e["start"] < end and e["end"] > start:
-            seen.add(e["id"])
-            rows.append({**e, "run": "stated_interval"})
+    for name in STATED_INTERVAL_RESULTS:
+        for e in (load_result(name, results_dir) or {}).get("elements", []):
+            if e.get("chrom") == chrom and e["start"] < end and e["end"] > start:
+                seen.add(e["id"])
+                rows.append({**e, "run": "stated_interval"})
     # the panel's own deletions first (scripts/loci_score.py: the windows, not whole chromosomes)
     for e in (load_result("loci_deletions", results_dir) or {}).get("elements", []):
         if e.get("chrom") == chrom and e["start"] < end and e["end"] > start:
