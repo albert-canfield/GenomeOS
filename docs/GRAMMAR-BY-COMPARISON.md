@@ -1346,3 +1346,48 @@ and reported at another needs two names, not one. The reader had documented the 
 docstring and summed it into a field anyway, so the documentation was true and the number was still
 wrong — a name is enforceable where a docstring is not.
 
+## 19. Phylogenetic profiling at the gene level: the null decides everything (2026-09-17)
+
+The library-level profiling of 2026-09-12 left the gene level open with a condition attached — a
+shuffled null before any pair is called a dependency. `scripts/profiling_genes.py` runs it over the
+computed membership of all 42 libraries, 19,391 genes with a 355-species presence bitmask, no requests
+and no network. It reports **two** nulls, and they disagree so completely that the result is about the
+nulls rather than about the libraries.
+
+**Null one, prevalence-preserving shuffle.** Each gene keeps the *number* of species it is present in
+and loses *which* ones. Every library beats it, median excess **+0.3067** mean pair Jaccard, not one of
+42 with a single draw above the observed value.
+
+**Null two, shuffled library membership.** Draw a random gene set of the same size, each drawn gene
+matched on prevalence to one of the members — **real genes, with real phylogenetic profiles**, so the
+tree structure that makes species non-independent is present in the null as well as in the library.
+
+| against matched gene sets (20 draws) | libraries |
+|---|---|
+| clear of the null (0 draws at or above) | **21** |
+| marginal (1–9 draws above) | 7 |
+| **at or below the null (≥10 draws above)** | **14** |
+
+**The fourteen that fail are the ancient core**: `core.translation`, `core.energy`,
+`core.transcription`, `core.splicing`, `core.dna_repair`, `core.chromatin_epigenome`,
+`core.folding_proteostasis`, `core.membrane_transport`, `systems.immune`, `systems.endocrine`,
+`systems.metabolic_homeostasis`, `timer.circadian`, `timer.telomere`,
+`timer.senescence_checkpoint`. Their genes are in nearly every species, and a gene in nearly every
+species co-occurs with any other such gene. Nothing about the library produces that.
+
+**The ones that survive are patchy and lineage-restricted**: `timer.developmental_timing` (+0.0413),
+`systems.extracellular_matrix_adhesion` (+0.0393), `blueprint.segmentation` and
+`timer.segmentation_clock` (+0.0381 each). Co-occurrence carries information exactly where presence
+varies, which is the only place it can.
+
+**So the prevalence shuffle measures phylogenetic non-independence and calls it co-evolution.** It is
+kept in the result beside the other because the contrast is the lesson: a null that holds the obvious
+covariate fixed can still be beaten by an artefact, and the way to tell is to build the null out of
+the same kind of thing you are testing. Real genes, not shuffled bits.
+
+**What this still cannot do.** Even the matched-gene null draws genes independently of the tree, so a
+clade-wide loss counts once in the library and once in each draw but the *correlation structure*
+between the drawn genes is whatever the genome supplies rather than what a model of the tree would
+say. Felsenstein contrasts or a birth-death model along a species tree is what would settle a pair,
+and this project holds no tree. **Nothing here calls a pair a dependency**; it says which libraries
+would survive the weakest honest test, and half of them do not.
