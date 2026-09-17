@@ -133,12 +133,33 @@ CATALOG["budget_genome_wide"] = {
     "auto_heal": True,
 }
 
+
+def _windows_scored(root: Path) -> float:
+    """How far the VISTA run has got, from its own log rather than from a result it writes at the end.
+
+    A job that takes an hour and reports nothing until it finishes is a job the Progress tab cannot
+    speak about, which is the whole reason it is in this catalogue.
+    """
+    result = _result_count(root, "satmut_vista", "windows_scored")
+    if result:
+        return float(result)
+    log = root / "data" / "jobs" / "satmut_vista_run.log"
+    if not log.exists():
+        return 0.0
+    best = 0
+    for m in re.finditer(r"(\d+)/\d+ windows scored", log.read_text(errors="replace")):
+        best = max(best, int(m.group(1)))
+    return float(best)
+
+
 CATALOG["satmut_vista"] = {
     "argv": [sys.executable, "scripts/satmut_vista.py", "--run", "--quota-handed"],
     "describe": "VISTA in-silico mutagenesis: 3,200 windows over the panel's two arms (pre-registered).",
     "total": 3200,
-    "result": "satmut_vista",
-    "count": lambda r: r.get("windows_scored", 0) if r else 0,
+    "result": None,
+    "count": None,
+    "progress": _windows_scored,
+    "complete": lambda root: _windows_scored(root) >= 3200,
 }
 
 CATALOG["executor_e1_extension"] = {

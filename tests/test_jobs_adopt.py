@@ -85,3 +85,28 @@ def test_the_panel_sweep_is_in_the_catalogue() -> None:
 
     assert spec["total"] == 24
     assert spec["argv"][-1].endswith("human_panel_sweep.py")
+
+
+def test_a_long_run_reports_progress_from_its_log_not_only_at_the_end(tmp_path) -> None:
+    """A job that says nothing for an hour is a job the Progress tab cannot speak about.
+
+    The VISTA run writes its result when it finishes, so until then the only honest source of progress
+    is its own log. The result wins once it exists, because the log is the estimate and the result is
+    the count.
+    """
+    from genomeos import jobs
+
+    logs = tmp_path / "data" / "jobs"
+    logs.mkdir(parents=True)
+    (logs / "satmut_vista_run.log").write_text(
+        "[06:11] 100/3200 windows scored\n[06:19] 500/3200 windows scored\n[06:25] 800/3200 windows scored\n"
+    )
+
+    assert jobs._windows_scored(tmp_path) == 800.0
+    assert not jobs.CATALOG["satmut_vista"]["complete"](tmp_path)
+
+
+def test_progress_is_zero_before_the_run_writes_anything(tmp_path) -> None:
+    from genomeos import jobs
+
+    assert jobs._windows_scored(tmp_path) == 0.0
