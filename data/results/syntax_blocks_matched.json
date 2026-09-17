@@ -31,100 +31,401 @@
     "elements": 40,
     "elements_in_a_shared_stratum": 40,
     "median_tss_distance": 80962.0,
-    "median_tss_distance_of_the_pool": 42255,
+    "median_tss_distance_of_the_pool": 41557.0,
     "raw": {
       "a": 0.575,
-      "b": 0.6397,
-      "difference": -0.0647,
-      "p_one_sided": 0.796005,
-      "upper_95": 0.0885
+      "b": 0.6838,
+      "difference": -0.1088,
+      "p_one_sided": 0.918051,
+      "upper_95": 0.0444
     },
     "matched_on_length_gc_and_tss_distance": {
       "a": 0.575,
-      "b": 0.6084,
-      "difference": -0.0334,
-      "p_one_sided": 0.66544,
-      "upper_95": 0.1198
+      "b": 0.675,
+      "difference": -0.1,
+      "p_one_sided": 0.823485,
+      "upper_95": 0.111
     },
-    "controls_used": 2143952
+    "controls_weighted": 40
   },
   "relaxed": {
     "elements": 1430,
     "elements_in_a_shared_stratum": 1430,
     "median_tss_distance": 239622.0,
-    "median_tss_distance_of_the_pool": 42255,
+    "median_tss_distance_of_the_pool": 41557.0,
     "raw": {
       "a": 0.2545,
-      "b": 0.6397,
-      "difference": -0.3851,
+      "b": 0.6838,
+      "difference": -0.4293,
       "p_one_sided": 1.0,
-      "upper_95": -0.3625
+      "upper_95": -0.4067
     },
     "matched_on_length_gc_and_tss_distance": {
       "a": 0.2545,
-      "b": 0.5384,
-      "difference": -0.2838,
+      "b": 0.5916,
+      "difference": -0.3371,
       "p_one_sided": 1.0,
-      "upper_95": -0.2613
+      "upper_95": -0.303
     },
-    "controls_used": 115429467
+    "controls_weighted": 1430
   },
   "neutral": {
     "elements": 5675,
     "elements_in_a_shared_stratum": 5675,
     "median_tss_distance": 417764,
-    "median_tss_distance_of_the_pool": 42255,
+    "median_tss_distance_of_the_pool": 41557.0,
     "raw": {
       "a": 0.2923,
-      "b": 0.6397,
-      "difference": -0.3473,
+      "b": 0.6838,
+      "difference": -0.3915,
       "p_one_sided": 1.0,
-      "upper_95": -0.3355
+      "upper_95": -0.3796
     },
     "matched_on_length_gc_and_tss_distance": {
       "a": 0.2923,
-      "b": 0.5393,
-      "difference": -0.247,
+      "b": 0.5945,
+      "difference": -0.3022,
       "p_one_sided": 1.0,
-      "upper_95": -0.2351
+      "upper_95": -0.2848
     },
-    "controls_used": 440053451
+    "controls_weighted": 5675
   },
-  "syntax_against_neutral": {
-    "raw": {
-      "a": 0.575,
-      "b": 0.2923,
-      "difference": 0.2827,
-      "p_one_sided": 0.000156,
-      "upper_95": 0.4363
+  "by_label": {
+    "constrained_unknown_copy": {
+      "elements": 38,
+      "elements_in_a_shared_stratum": 38,
+      "median_tss_distance": 98080.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.5526,
+        "b": 0.6838,
+        "difference": -0.1312,
+        "p_one_sided": 0.948056,
+        "upper_95": 0.0269
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.5526,
+        "b": 0.6579,
+        "difference": -0.1053,
+        "p_one_sided": 0.827464,
+        "upper_95": 0.1132
+      },
+      "controls_weighted": 38
     },
-    "matched": {
-      "a": 0.575,
-      "b": 0.2912,
-      "difference": 0.2838,
-      "p_one_sided": 0.000143,
-      "upper_95": 0.4372
+    "fossil": {
+      "elements": 23248,
+      "elements_in_a_shared_stratum": 23248,
+      "median_tss_distance": 246525.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.3032,
+        "b": 0.6838,
+        "difference": -0.3806,
+        "p_one_sided": 1.0,
+        "upper_95": -0.3746
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.3032,
+        "b": 0.6073,
+        "difference": -0.3041,
+        "p_one_sided": 1.0,
+        "upper_95": -0.2955
+      },
+      "controls_weighted": 23248
     },
-    "left_in_a_shared_stratum": 40,
-    "controls_used": 15461
+    "neutral": {
+      "elements": 5675,
+      "elements_in_a_shared_stratum": 5675,
+      "median_tss_distance": 417764,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.2923,
+        "b": 0.6838,
+        "difference": -0.3915,
+        "p_one_sided": 1.0,
+        "upper_95": -0.3796
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.2923,
+        "b": 0.5945,
+        "difference": -0.3022,
+        "p_one_sided": 1.0,
+        "upper_95": -0.2848
+      },
+      "controls_weighted": 5675
+    },
+    "real_unknown_recent": {
+      "elements": 22,
+      "elements_in_a_shared_stratum": 22,
+      "median_tss_distance": 43319.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.6364,
+        "b": 0.6838,
+        "difference": -0.0474,
+        "p_one_sided": 0.678184,
+        "upper_95": 0.1536
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.6364,
+        "b": 0.6818,
+        "difference": -0.0455,
+        "p_one_sided": 0.624912,
+        "upper_95": 0.2343
+      },
+      "controls_weighted": 22
+    },
+    "real_unknown_relaxed": {
+      "elements": 1430,
+      "elements_in_a_shared_stratum": 1430,
+      "median_tss_distance": 239622.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.2545,
+        "b": 0.6838,
+        "difference": -0.4293,
+        "p_one_sided": 1.0,
+        "upper_95": -0.4067
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.2545,
+        "b": 0.5916,
+        "difference": -0.3371,
+        "p_one_sided": 1.0,
+        "upper_95": -0.303
+      },
+      "controls_weighted": 1430
+    },
+    "real_unknown_syntax": {
+      "elements": 40,
+      "elements_in_a_shared_stratum": 40,
+      "median_tss_distance": 80962.0,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.575,
+        "b": 0.6838,
+        "difference": -0.1088,
+        "p_one_sided": 0.918051,
+        "upper_95": 0.0444
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.575,
+        "b": 0.675,
+        "difference": -0.1,
+        "p_one_sided": 0.823485,
+        "upper_95": 0.111
+      },
+      "controls_weighted": 40
+    },
+    "real_unknown_tolerant": {
+      "elements": 1784,
+      "elements_in_a_shared_stratum": 1784,
+      "median_tss_distance": 391495.5,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.2287,
+        "b": 0.6838,
+        "difference": -0.4551,
+        "p_one_sided": 1.0,
+        "upper_95": -0.4356
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.2287,
+        "b": 0.5852,
+        "difference": -0.3565,
+        "p_one_sided": 1.0,
+        "upper_95": -0.3265
+      },
+      "controls_weighted": 1784
+    },
+    "regulatory": {
+      "elements": 144977,
+      "elements_in_a_shared_stratum": 144977,
+      "median_tss_distance": 36181,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.4615,
+        "b": 0.6838,
+        "difference": -0.2223,
+        "p_one_sided": 1.0,
+        "upper_95": -0.2196
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.4615,
+        "b": 0.6861,
+        "difference": -0.2246,
+        "p_one_sided": 1.0,
+        "upper_95": -0.2211
+      },
+      "controls_weighted": 144977
+    },
+    "structural": {
+      "elements": 337,
+      "elements_in_a_shared_stratum": 337,
+      "median_tss_distance": 354818,
+      "median_tss_distance_of_the_pool": 41557.0,
+      "raw": {
+        "a": 0.181,
+        "b": 0.6838,
+        "difference": -0.5028,
+        "p_one_sided": 1.0,
+        "upper_95": -0.4617
+      },
+      "matched_on_length_gc_and_tss_distance": {
+        "a": 0.181,
+        "b": 0.6142,
+        "difference": -0.4332,
+        "p_one_sided": 1.0,
+        "upper_95": -0.367
+      },
+      "controls_weighted": 337
+    }
   },
-  "relaxed_against_neutral": {
-    "raw": {
-      "a": 0.2545,
-      "b": 0.2923,
-      "difference": -0.0378,
-      "p_one_sided": 0.998167,
-      "upper_95": -0.0123
+  "against_neutral": {
+    "constrained_unknown_copy": {
+      "raw": {
+        "a": 0.5526,
+        "b": 0.2923,
+        "difference": 0.2603,
+        "p_one_sided": 0.000645,
+        "upper_95": 0.4188
+      },
+      "matched": {
+        "a": 0.5526,
+        "b": 0.4474,
+        "difference": 0.1053,
+        "p_one_sided": 0.178058,
+        "upper_95": 0.3288
+      },
+      "left_in_a_shared_stratum": 38,
+      "controls_weighted": 38
     },
-    "matched": {
-      "a": 0.2545,
-      "b": 0.2291,
-      "difference": 0.0254,
-      "p_one_sided": 0.013724,
-      "upper_95": 0.048
+    "fossil": {
+      "raw": {
+        "a": 0.3032,
+        "b": 0.2923,
+        "difference": 0.0109,
+        "p_one_sided": 0.053552,
+        "upper_95": 0.0241
+      },
+      "matched": {
+        "a": 0.3032,
+        "b": 0.3261,
+        "difference": -0.0229,
+        "p_one_sided": 1.0,
+        "upper_95": -0.0145
+      },
+      "left_in_a_shared_stratum": 23242,
+      "controls_weighted": 23242
     },
-    "left_in_a_shared_stratum": 1430,
-    "controls_used": 1851675
+    "real_unknown_recent": {
+      "raw": {
+        "a": 0.6364,
+        "b": 0.2923,
+        "difference": 0.344,
+        "p_one_sided": 0.000406,
+        "upper_95": 0.5454
+      },
+      "matched": {
+        "a": 0.6364,
+        "b": 0.5,
+        "difference": 0.1364,
+        "p_one_sided": 0.178307,
+        "upper_95": 0.4263
+      },
+      "left_in_a_shared_stratum": 22,
+      "controls_weighted": 22
+    },
+    "real_unknown_relaxed": {
+      "raw": {
+        "a": 0.2545,
+        "b": 0.2923,
+        "difference": -0.0378,
+        "p_one_sided": 0.998167,
+        "upper_95": -0.0123
+      },
+      "matched": {
+        "a": 0.2545,
+        "b": 0.2853,
+        "difference": -0.0308,
+        "p_one_sided": 0.968165,
+        "upper_95": 0.0018
+      },
+      "left_in_a_shared_stratum": 1430,
+      "controls_weighted": 1430
+    },
+    "real_unknown_syntax": {
+      "raw": {
+        "a": 0.575,
+        "b": 0.2923,
+        "difference": 0.2827,
+        "p_one_sided": 0.000156,
+        "upper_95": 0.4363
+      },
+      "matched": {
+        "a": 0.575,
+        "b": 0.475,
+        "difference": 0.1,
+        "p_one_sided": 0.184041,
+        "upper_95": 0.3178
+      },
+      "left_in_a_shared_stratum": 40,
+      "controls_weighted": 40
+    },
+    "real_unknown_tolerant": {
+      "raw": {
+        "a": 0.2287,
+        "b": 0.2923,
+        "difference": -0.0636,
+        "p_one_sided": 1.0,
+        "upper_95": -0.0408
+      },
+      "matched": {
+        "a": 0.2287,
+        "b": 0.2691,
+        "difference": -0.0404,
+        "p_one_sided": 0.997372,
+        "upper_95": -0.012
+      },
+      "left_in_a_shared_stratum": 1784,
+      "controls_weighted": 1784
+    },
+    "regulatory": {
+      "raw": {
+        "a": 0.4615,
+        "b": 0.2923,
+        "difference": 0.1691,
+        "p_one_sided": 0.0,
+        "upper_95": 0.1812
+      },
+      "matched": {
+        "a": 0.4615,
+        "b": 0.5112,
+        "difference": -0.0497,
+        "p_one_sided": 1.0,
+        "upper_95": -0.0461
+      },
+      "left_in_a_shared_stratum": 144875,
+      "controls_weighted": 144875
+    },
+    "structural": {
+      "raw": {
+        "a": 0.181,
+        "b": 0.2923,
+        "difference": -0.1113,
+        "p_one_sided": 1.0,
+        "upper_95": -0.0685
+      },
+      "matched": {
+        "a": 0.181,
+        "b": 0.3294,
+        "difference": -0.1484,
+        "p_one_sided": 0.999996,
+        "upper_95": -0.0835
+      },
+      "left_in_a_shared_stratum": 337,
+      "controls_weighted": 337
+    }
   },
   "strata": {
     "length": [
@@ -144,5 +445,5 @@
     ]
   },
   "reading": "the raw difference is the comparison that produced the observation; the matched one holds length, GC and distance to the nearest coding TSS fixed. Where they disagree, the raw one was measuring what the strata hold fixed",
-  "seconds": 198.6
+  "seconds": 166.7
 }

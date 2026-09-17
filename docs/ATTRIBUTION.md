@@ -1574,6 +1574,54 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## The matched table, computed correctly: no tier differs from the neutral tier, and the section below overstated in both directions (2026-09-17, later)
+
+The section below reported two matched numbers — syntax against neutral at **+0.284, p 0.00014**, and
+relaxed against neutral at **+0.025, p 0.014** — and both were wrong, from the same defect in how the
+matching was implemented. The control arm was built by copying every control of a stratum into a list
+once per target, so a stratum with many controls counted many times over, and the standard error was
+computed from that inflated list. Large strata dominated the estimate and the p-values were
+manufactured by an n that did not exist.
+
+Written the standard way — each stratum's rate computed once, averaged over the targets that fall in
+it, with the error taken on the number of matched targets — the whole table changes, and the
+run that produced it takes 3.7 seconds instead of the thirteen minutes that first exposed the defect.
+
+**Against the neutral tier, matched on length, GC and distance to the nearest coding TSS:**
+
+| label | elements | raw | matched | p |
+|---|---|---|---|---|
+| real unknown, syntax | 40 | +0.283 | **+0.100** | 0.18 |
+| real unknown, recent | 22 | +0.344 | +0.136 | 0.18 |
+| constrained unknown, copies | 38 | +0.260 | +0.105 | 0.18 |
+| fossil | 23,248 | +0.011 | -0.023 | 1.0 |
+| real unknown, relaxed | 1,430 | -0.038 | -0.031 | 0.97 |
+| real unknown, tolerant | 1,784 | -0.064 | -0.040 | 1.0 |
+| regulatory | 144,977 | +0.169 | -0.050 | 1.0 |
+
+**Not one of them differs from the neutral tier once standardised.** Every raw gap, in either
+direction, is within noise of zero after length, GC and promoter distance are held fixed. The
+regulatory tier's +0.169 — the largest and most obvious of the raw gaps — becomes -0.050.
+
+**What does survive, and it is the one statement this table supports:** every element inside an
+UNKNOWN block acts less than the genome's scored elements, whatever tier it sits in. Matched, the
+deficits run from **-0.046 (recent) and -0.100 (syntax)** through **-0.225 (regulatory)**, **-0.302
+(neutral)**, **-0.304 (fossil)**, **-0.337 (relaxed)**, **-0.357 (tolerant)** to **-0.433
+(structural)**. The unknown space is quieter than the rest of the genome under deletion; how its
+tiers rank inside it is not measurable this way.
+
+**So both readings of 2026-09-16 and 2026-09-17 are withdrawn.** "The real unknown is the least active
+tier" was measured against an unmatched control. "The relaxed case reads above neutral once matched"
+was measured with a broken matcher. The third statement is the one to carry: **the tiers cannot be
+ordered against each other by this instrument at all.** The 69 syntax blocks read +0.100 above neutral
+and -0.100 below the genome's elements, on 40 elements, neither of them distinguishable from zero.
+
+**The engineering lesson is worth more than the reading.** A matched comparison written by pooling
+repeated controls inflates its own sample size and manufactures significance; the same code was also
+quadratic, which is how it was caught — it ran for thirteen minutes and was stopped, twice, before the
+arithmetic was written properly. A matched estimate that gets slower as the arms grow is doing
+something other than standardising.
+
 ## The syntax observation dissolves under matching, the tiling run is cancelled, and yesterday's headline needs a correction (2026-09-17)
 
 Assembling the pre-registered tiling run found its own reason not to spend the budget, before a single

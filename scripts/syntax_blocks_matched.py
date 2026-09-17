@@ -30,6 +30,7 @@ from pathlib import Path
 from statistics import median
 from typing import Any
 
+from genomeos.attribution import organise
 from genomeos.attribution import syntax_tiling as st
 from genomeos.results import save_result
 
@@ -39,8 +40,36 @@ LEN_BINS = (200, 400)
 TSS_BINS = (1_000, 5_000, 20_000, 100_000)
 
 
+def label_of(block: dict[str, Any]) -> str:
+    """Every UNKNOWN block labelled the way a comparison needs: tier, and for the real unknown its case.
+
+    The 882-block reading compared "constrained unknown, copies removed" with the neutral tier as one
+    number each. Matching showed the ordering between them is not what the raw rates said, so the label
+    here is finer: each case of the real unknown separately, the copies apart, and the other tiers by
+    name. `arm_blocks` in the tiling module keeps the three arms that registration named; this is the
+    whole space.
+    """
+    tier = block.get("tier")
+    if tier == "constrained_unknown":
+        if block.get("copy"):
+            return "constrained_unknown_copy"
+        return f"real_unknown_{block.get('case') or 'uncased'}"
+    return str(tier)
+
+
 def _bin(value: float, cuts: tuple) -> int:
     return bisect.bisect_right(cuts, value)
+
+
+def stratum_rates(pool: list[dict]) -> dict[tuple, float]:
+    """The share of each stratum's elements that move a gene, computed once for the whole pool."""
+    hits: dict[tuple, int] = defaultdict(int)
+    seen: dict[tuple, int] = defaultdict(int)
+    for r in pool:
+        key = stratum(r)
+        seen[key] += 1
+        hits[key] += bool(r["moved"])
+    return {k: hits[k] / n for k, n in seen.items() if n}
 
 
 def stratum(row: dict) -> tuple[int, int, int]:
@@ -65,8 +94,8 @@ def elements_with_features(chrom: str) -> list[dict[str, Any]]:
         if g.locus.chrom == chrom
     )
     cases: list[tuple[int, int, str]] = []
-    for arm, blocks in st.arm_blocks(chrom).items():
-        cases.extend((b["start"], b["end"], arm) for b in blocks)
+    for b in organise.blocks(chrom):
+        cases.append((b["start"], b["end"], label_of(b)))
     cases.sort()
     starts = [c[0] for c in cases]
 
@@ -107,17 +136,20 @@ def matched_reading(rows: list[dict], arm: str) -> dict[str, Any]:
     """The arm against every other scored element, inside shared strata of length, GC and TSS distance."""
     target = [r for r in rows if r["arm"] == arm]
     pool = [r for r in rows if r["arm"] == "other"]
-    by_stratum: dict[tuple, list[dict]] = defaultdict(list)
-    for r in pool:
-        by_stratum[stratum(r)].append(r)
-    paired_t, paired_c, shared = [], [], 0
+    rates = stratum_rates(pool)
+    paired_t, shared = [], 0
+    control_hits = control_n = 0.0
     for r in target:
-        controls = by_stratum.get(stratum(r))
-        if not controls:
+        rate = rates.get(stratum(r))
+        if rate is None:
             continue
         shared += 1
         paired_t.append(r)
-        paired_c.extend(controls)
+        # the stratum's rate, precomputed once for the whole pool: summing over a stratum's controls
+        # per target made the arm with 145,000 elements quadratic twice over, and both versions had to
+        # be stopped mid-run before the arithmetic was written this way
+        control_hits += rate
+        control_n += 1
     raw = st.difference(
         sum(1 for r in target if r["moved"]),
         len(target),
@@ -127,8 +159,8 @@ def matched_reading(rows: list[dict], arm: str) -> dict[str, Any]:
     matched = st.difference(
         sum(1 for r in paired_t if r["moved"]),
         len(paired_t),
-        sum(1 for r in paired_c if r["moved"]),
-        len(paired_c),
+        round(control_hits),
+        round(control_n),
     )
     return {
         "elements": len(target),
@@ -137,7 +169,7 @@ def matched_reading(rows: list[dict], arm: str) -> dict[str, Any]:
         "median_tss_distance_of_the_pool": round(median([r["tss"] for r in pool]), 1) if pool else None,
         "raw": raw,
         "matched_on_length_gc_and_tss_distance": matched,
-        "controls_used": len(paired_c),
+        "controls_weighted": round(control_n),
     }
 
 
@@ -150,15 +182,15 @@ def matched_pair(rows: list[dict], a: str, b: str) -> dict[str, Any]:
     """
     left = [r for r in rows if r["arm"] == a]
     right = [r for r in rows if r["arm"] == b]
-    by_stratum: dict[tuple, list[dict]] = defaultdict(list)
-    for r in right:
-        by_stratum[stratum(r)].append(r)
-    paired_l, paired_r = [], []
+    rates = stratum_rates(right)
+    paired_l = []
+    control_hits = control_n = 0.0
     for r in left:
-        controls = by_stratum.get(stratum(r))
-        if controls:
+        rate = rates.get(stratum(r))
+        if rate is not None:
             paired_l.append(r)
-            paired_r.extend(controls)
+            control_hits += rate
+            control_n += 1
     return {
         "raw": st.difference(
             sum(1 for r in left if r["moved"]), len(left), sum(1 for r in right if r["moved"]), len(right)
@@ -166,11 +198,11 @@ def matched_pair(rows: list[dict], a: str, b: str) -> dict[str, Any]:
         "matched": st.difference(
             sum(1 for r in paired_l if r["moved"]),
             len(paired_l),
-            sum(1 for r in paired_r if r["moved"]),
-            len(paired_r),
+            round(control_hits),
+            round(control_n),
         ),
         "left_in_a_shared_stratum": len(paired_l),
-        "controls_used": len(paired_r),
+        "controls_weighted": round(control_n),
     }
 
 
@@ -192,11 +224,19 @@ def main(argv: list[str] | None = None) -> int:
         "result": "syntax_blocks_matched",
         "chromosomes": chroms,
         "elements": len(rows),
-        "syntax": matched_reading(rows, "syntax"),
-        "relaxed": matched_reading(rows, "relaxed"),
+        "syntax": matched_reading(rows, "real_unknown_syntax"),
+        "relaxed": matched_reading(rows, "real_unknown_relaxed"),
         "neutral": matched_reading(rows, "neutral"),
-        "syntax_against_neutral": matched_pair(rows, "syntax", "neutral"),
-        "relaxed_against_neutral": matched_pair(rows, "relaxed", "neutral"),
+        "by_label": {
+            lab: matched_reading(rows, lab)
+            for lab in sorted({r["arm"] for r in rows} - {"other"})
+            if sum(1 for r in rows if r["arm"] == lab) >= 20
+        },
+        "against_neutral": {
+            lab: matched_pair(rows, lab, "neutral")
+            for lab in sorted({r["arm"] for r in rows} - {"other", "neutral"})
+            if sum(1 for r in rows if r["arm"] == lab) >= 20
+        },
         "strata": {"length": LEN_BINS, "gc": GC_BINS, "tss": TSS_BINS},
         "reading": (
             "the raw difference is the comparison that produced the observation; the matched one holds "
@@ -217,11 +257,18 @@ def main(argv: list[str] | None = None) -> int:
             f"matched {a['matched_on_length_gc_and_tss_distance']['difference']} "
             f"p {a['matched_on_length_gc_and_tss_distance']['p_one_sided']}"
         )
-    for name in ("syntax_against_neutral", "relaxed_against_neutral"):
-        pair = out[name]
+    print("\nevery label with 20 or more scored elements, against the genome's other elements:")
+    for lab, a in out["by_label"].items():
+        m = a["matched_on_length_gc_and_tss_distance"]
         print(
-            f"{name}: raw {pair['raw']['difference']} -> matched {pair['matched']['difference']} "
-            f"(p {pair['matched']['p_one_sided']}, {pair['left_in_a_shared_stratum']} elements matched)"
+            f"  {lab:28} n={a['elements']:5} TSS {a['median_tss_distance']:>10,}  "
+            f"raw {a['raw']['difference']:+.4f}  matched {m['difference']:+.4f} (p {m['p_one_sided']})"
+        )
+    print("\nthe same labels against the neutral tier, raw and matched:")
+    for lab, pair in out["against_neutral"].items():
+        print(
+            f"  {lab:28} raw {pair['raw']['difference']:+.4f} -> matched "
+            f"{pair['matched']['difference']:+.4f} (p {pair['matched']['p_one_sided']})"
         )
     return 0
 

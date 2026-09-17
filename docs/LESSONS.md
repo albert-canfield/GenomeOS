@@ -234,6 +234,19 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   distances structure is not the discriminating variable and perturbation is**. A fourth structural
   reading needs a reason why it would differ from these three, stated before it is run.
 
+- **A matched comparison that pools repeated controls invents its own sample size (2026-09-17).**
+  Written the obvious way — for each target, append every control in its stratum to a list, then
+  compare the two lists — a stratum with 50,000 controls is counted once per target that lands in it.
+  Large strata dominate the estimate, and the standard error is taken on a list far longer than the
+  data, so the p-value is manufactured: this produced "+0.284 at p 0.00014" where the standardised
+  answer is +0.100 at p 0.18, and "+0.025 at p 0.014" where it is -0.031 at p 0.97. Both were
+  committed before the defect was found. The correct form is direct standardisation: compute each
+  stratum's rate once over the pool, average it over the targets that fall in those strata, and take
+  the error on the number of matched targets. **The tell was speed, not statistics** — the pooling
+  version is quadratic and ran for thirteen minutes on 961,227 elements before it was stopped, twice;
+  the standardised version answers in 3.7 seconds. A matched estimate that gets slower as the arms
+  grow is doing something other than standardising.
+
 ## The reference is one haplotype
 
 - hg38 carries loss-of-function alleles at dozens of loci (olfactory
