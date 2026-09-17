@@ -97,6 +97,33 @@ def test_sibling_flows_at_one_instant_draw_from_one_base():
     assert with_shares["Blastomere"] == pytest.approx(1.0 - 0.1 - 0.1)
 
 
+def test_a_fraction_of_the_remainder_can_annihilate_a_sibling_while_the_total_survives():
+    """The defect `share:` was introduced to make impossible, on a program of its own.
+
+    tissues.bio stated sixteen germ-layer splits as fractions of what earlier splits had left. Where
+    a fraction reached 1.0000 - because the share it encoded was the whole remainder at four decimals
+    - every later sibling drew from nothing, and Glia, LungEpithelium and Myocyte held zero cells for
+    as long as the program existed (found 2026-09-17 by genomeos-9c; commits e362ef2 and 40fe9a7).
+
+    What made it invisible is asserted here rather than described: the layer's total is conserved
+    either way, because the cells are not lost, they are credited to whichever sibling absorbed the
+    remainder. A test that checks the total cannot see this, which is why the falsifier below checks
+    the population and why the same partition as shares brings the sibling back. This program keeps
+    its own fractions instead of restating the body's, so it goes on testing the failure mode after
+    no program in the tree is written that way.
+    """
+    annihilated = census(POOL, 20, HOW_A="fraction: 0.25", HOW_B="fraction: 1.0", HOW_C="fraction: 1.0")
+    assert "C" not in annihilated  # drew from a remainder of nothing
+    assert annihilated["A"] == pytest.approx(0.25) and annihilated["B"] == pytest.approx(0.75)
+
+    restated = census(POOL, 20, HOW_A="share: 0.25", HOW_B="share: 0.375", HOW_C="share: 0.375")
+    assert set(restated) == {"A", "B", "C"}  # the sibling is back
+    assert restated["C"] == pytest.approx(0.375)
+
+    # and the reason it survived every check the program carried: the totals agree exactly
+    assert sum(annihilated.values()) == pytest.approx(sum(restated.values()), rel=1e-12)
+
+
 def test_shares_that_ask_for_more_than_there_is_are_refused():
     """Absolute shares can over-subscribe, which is a program stating impossible facts. Refused with
     the numbers, never rescaled into something that runs."""
