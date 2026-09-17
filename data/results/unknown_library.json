@@ -1,0 +1,62 @@
+{
+  "result": "unknown_library",
+  "date": "2026-09-17",
+  "chromosomes": [
+    "chr1",
+    "chr2",
+    "chr3",
+    "chr4",
+    "chr5",
+    "chr6",
+    "chr7",
+    "chr8",
+    "chr9",
+    "chr10",
+    "chr11",
+    "chr12",
+    "chr13",
+    "chr14",
+    "chr15",
+    "chr16",
+    "chr17",
+    "chr18",
+    "chr19",
+    "chr20",
+    "chr21",
+    "chr22",
+    "chrX"
+  ],
+  "oligo_bp": 300,
+  "step": 300,
+  "arms": {
+    "test": 101295,
+    "genomic_negative": 101294,
+    "positive": 8245,
+    "scrambled": 101295
+  },
+  "total_oligos": 312129,
+  "test_from_untouched_blocks": 45301,
+  "blocks_tiled": 878,
+  "by_case": {
+    "recent": 797,
+    "relaxed": 44588,
+    "syntax": 1250,
+    "tolerant": 54590,
+    "unmeasured": 70
+  },
+  "median_gc": {
+    "test": 0.3733,
+    "genomic_negative": 0.3733,
+    "positive": 0.52,
+    "scrambled": 0.3733
+  },
+  "median_tss_distance": {
+    "test": 306702,
+    "genomic_negative": 354986.0,
+    "positive": 43945,
+    "scrambled": 306702
+  },
+  "manifest": "data/knowledge/library/unknown_library.tsv",
+  "design": "four arms: the real unknown tiled end to end with its untouched blocks first; neutral-tier oligos matched on GC and order of magnitude of TSS distance as genomic negatives; lentiMPRA actives as in-batch positives; and each test oligo's own dinucleotide-preserving shuffle. A design, not an order: no synthesis, no vendor, and no claim that any of this sequence is functional",
+  "seconds": 234.3
+}

@@ -1574,6 +1574,45 @@ result.
   do not depend on which chromosome is being swept, but they have not been re-measured since.
 - **chrY's 19 haplotypes** mean the panel has no reading at all for 57 Mb of the genome.
 
+## The library, written out: 312,129 oligos that would measure the real unknown (2026-09-17)
+
+The coverage reading below says the sequence this project most wants measured is small enough to
+measure. `scripts/unknown_library.py` emits that library rather than proposing it — every oligo with
+its coordinates, sequence, block and arm, into a manifest under `data/knowledge/library/` (101 MB,
+local, git-ignored). It takes 3.5 minutes and sends nothing anywhere.
+
+| arm | oligos | median GC | median TSS distance | what it is for |
+|---|---|---|---|---|
+| test | **101,295** | 0.373 | 307 kb | all 30.6 Mb of the real unknown, tiled end to end at 300 bp, **untouched blocks first (45,301)** |
+| genomic negative | **101,294** | 0.373 | 355 kb | neutral-tier oligos matched to each test oligo on GC and order of magnitude of TSS distance |
+| positive | 8,245 | 0.520 | 44 kb | lentiMPRA elements already measured active, so the batch calibrates against a known answer |
+| scrambled | 101,295 | 0.373 | — | each test oligo's own dinucleotide-preserving shuffle: composition held, arrangement destroyed |
+
+**312,129 oligos over 878 blocks**, by case: tolerant 54,590, relaxed 44,588, syntax 1,250, recent
+797, unmeasured 70.
+
+**Three things about the design that are the point of writing it out.**
+
+1. **The negatives are matched one to one**, 101,294 against 101,295, with the same median GC to four
+   decimal places. The first build sampled the neutral pool four times too coarsely and matched only
+   54% of the test arm — a library with a hole where its control should be, and invisible until the
+   counts were printed side by side. Every comparison this project got wrong this week was a control
+   that was not matched on GC and promoter distance; a designed library is the one place those can be
+   fixed in advance rather than standardised afterwards.
+2. **The scrambled arm doubles the cost and earns it.** Composition is the one thing the motif lane
+   found that transfers (+0.234 to strict family counts, +0.060 AUROC on VISTA), so a test oligo that
+   reads active must be read against its own composition, not against the library average. A cheaper
+   design scrambles a fifth of the test arm and comes to about 232,000; tiling only the untouched
+   blocks with all four arms comes to about 110,000.
+3. **The untouched-first ordering is the budget.** If only part of the library can be built, the first
+   45,301 test oligos are the sequence that no assay this project holds has ever touched, and the
+   design spends down from there.
+
+**What it is not.** A design, not an order: no synthesis, no vendor, and no claim that any of this
+sequence does anything. Its value is that it converts "the 98% is unmeasured" from a complaint into a
+file with 312,129 rows in it, and that the arithmetic behind every arm is in the script rather than in
+a sentence.
+
 ## 99.5% of the unknown space has never been measured, and the part that matters would fit in one library (2026-09-17)
 
 Three lanes hit the same wall today from different directions: the deletion sweep's per-tier readings
