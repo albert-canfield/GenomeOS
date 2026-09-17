@@ -3329,6 +3329,38 @@ rests on 105 pairs and its interval's lower bound is 0.92, not 1.0.
    one cheap feature the calibration had to leave out and which improved every error it was allowed
    to touch.
 
+## The library's bridge to the screens: seven blocks of 882 (2026-09-17)
+
+The calibration leaves 24,114 coding targets in the band where the CRISPRi screens called 105 of
+105. genomeos-9c's MPRA library tiles the 882 blocks of the real unknown. If the two overlap, those
+oligos carry a prior from a measurement that is not the model's own effect size, and the library
+tests directly whether the band holds off the population the screens chose.
+`scripts/shortlist_in_real_unknown.py` (`shortlist_in_real_unknown`, committed results and the local
+element tables only, no network) intersects them. It reproduces the 24,114 exactly, which is the
+cross-check that it is the same shortlist.
+
+**Seven blocks of 882, eight elements.** Three relaxed, four tolerant; none of the 69 syntax blocks
+and none of the 29 recent ones. The strongest is chr7:8,752,961-8,938,786 (tolerant), whose element
+moves NXPH1 by 1.15; then chr10:73,783,652-73,785,548 → ZSWIM8 (0.67), chr1:153,205,120-153,217,583
+→ PRR9 (0.63), chr16:8,180,769-8,252,085 → RBFOX1 (0.53), chr4 → RASGEF1B (0.41), chr6 → TFAP2B
+(0.40, two elements) and chr1:69,563,715-69,567,490 → LRRC7 (0.22).
+
+**The context that makes seven readable.** 163 of the 882 blocks hold a scored element with a coding
+target at all (relaxed 81, tolerant 62, syntax 11, recent 7, unmeasured 2); of those, 7 hold one
+that clears the band. The best element in the next block down reads 0.17. So the shortlist and the
+real unknown barely overlap, and the reason is structural rather than biological: the sweep scored
+registry elements lying inside a CTCF node, and a real-unknown block is unannotated by construction,
+so most of its sequence was never eligible for a deletion. 520,850 elements genome-wide have no
+coding target at all and 416,263 sit below the band.
+
+**What this means for the library.** It carries an internal bridge, but a thin one: eight oligo
+positions with an independent prior, not a positive set. A library that wants the drop band tested
+off the screens' population has to tile those seven blocks and say so, and the honest expectation
+for the other 875 is that nothing in the CRISPRi evidence speaks to them. (This intersection counts
+a block as scored only when its element has a coding target with a GENCODE TSS, which is stricter
+than the 531 tested blocks and 331 leads counted for the tier reading; the two numbers answer
+different questions and are not in conflict.)
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,
