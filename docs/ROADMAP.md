@@ -241,9 +241,17 @@ in order. "Owner" is the session that holds the files today (see §7).
   can state the published number rather than a derived one. Specified here rather
   than built, because a construct no program uses is what this area has spent the
   day refusing to ship — it should land with the generator that will use it.
-- **Next.** 1. `share:` for a partition, with the owner of
-  `genomeos/organism/human.py`, so the body program's numbers mean what their
-  evidence says. 2. Splitting the repository, which is a
+- **Next.** 1. `share:` for a partition, so the body program's numbers mean what their
+  evidence says: **done 2026-09-17, and its first real use found an error.** The sixteen
+  germ-layer splits of `tissues.bio` now state the published share of the layer instead of a
+  fraction of what earlier splits left. Three populations came back from nothing — Glia,
+  LungEpithelium and Myocyte, each the LAST split of its layer, which under `fraction` took
+  1.0000 of a remainder that the earlier splits, printed at four decimals, had already
+  exhausted. **Glia is 24.5% of the ectoderm**, so a quarter of a germ layer was being
+  absorbed by its siblings and the population held no cells in a twenty-year run. Nothing
+  caught it because the layer totals were conserved: the 20-year count moves by -1.8e-6 and
+  every assert passed before and after. Two committed numbers were wrong and are corrected
+  with their reason (`body.bio` cells, and the same figure in `test_human_body`). 2. Splitting the repository, which is a
   release decision rather than an engineering one now that the package builds.
   *Closed since this list was written:* the precursor-level `commitment` (measured
   closed — 0 of 12, §7.2a decision 3), `bio` packaged (above), and PAR polarity,
