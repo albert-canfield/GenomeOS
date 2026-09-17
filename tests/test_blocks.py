@@ -82,3 +82,56 @@ def test_reader_marks_nodes_and_genes(tmp_path):
     assert blocks[2].attrs["K562_read"] == "read" and blocks[3].attrs["K562_read"] == "silent"
     assert "K562_read" not in blocks[4].attrs  # the reader speaks about coding genes only
     assert _apply_reader(blocks, "chr22", tmp_path) == []
+
+
+def test_a_poised_gene_is_not_drawn_as_silent(tmp_path):
+    """Poised arrives INSIDE silent_genes and must still be told apart from silent.
+
+    The reader puts poised genes in silent_genes on purpose: every consumer reads "absent from this
+    list" as read, so leaving them out would report a held gene as expressed. But poised is H3K27me3
+    over a promoter that also carries H3K4me3 - a gene held ready, not one shut - and the Blocks lane
+    drew all of them as silent until 2026-09-17. In one 4 Mb window of chr21 that was 23 genes.
+    """
+    import json
+
+    from genomeos.genome.blocks import Block, _apply_reader
+
+    (tmp_path / "reader_K562_chr21.json").write_text(
+        json.dumps(
+            {
+                "node_table": [{"id": "chr21:D1", "open_fraction": 0.5, "peaks": 10}],
+                "silent_node_ids": [],
+                "silent_genes": ["TPTE", "BACH1"],  # the poised one is in here too, by design
+                "poised_genes": ["BACH1"],
+            }
+        )
+    )
+    blocks = [
+        Block("g1", "gene", 10, 500, "+", "APP", None, "curated", 0.9, {"gene_type": "protein_coding"}),
+        Block("g2", "gene", 600, 900, "-", "TPTE", None, "curated", 0.9, {"gene_type": "protein_coding"}),
+        Block("g3", "gene", 950, 990, "+", "BACH1", None, "curated", 0.9, {"gene_type": "protein_coding"}),
+    ]
+
+    _apply_reader(blocks, "chr21", tmp_path)
+
+    assert blocks[0].attrs["K562_read"] == "read"
+    assert blocks[1].attrs["K562_read"] == "silent"
+    assert blocks[2].attrs["K562_read"] == "poised"
+
+
+def test_a_reader_result_without_poised_genes_still_works(tmp_path):
+    """Results written before poised_genes existed must not start reporting genes as read."""
+    import json
+
+    from genomeos.genome.blocks import Block, _apply_reader
+
+    (tmp_path / "reader_K562_chr21.json").write_text(
+        json.dumps({"node_table": [], "silent_node_ids": [], "silent_genes": ["TPTE"]})
+    )
+    blocks = [
+        Block("g2", "gene", 600, 900, "-", "TPTE", None, "curated", 0.9, {"gene_type": "protein_coding"})
+    ]
+
+    _apply_reader(blocks, "chr21", tmp_path)
+
+    assert blocks[0].attrs["K562_read"] == "silent"

@@ -601,9 +601,14 @@ in order. "Owner" is the session that holds the files today (see §7).
 - **Next (epigenome and nodes).** 1. Done as an alternative; the next test is a
   stricter site call (best-hit strand, stronger motifs) judged on all four
   measurements at once, and whether Hi-C questions and enhancer-to-gene
-  questions need two node sets. 2. The poised and read-by-marks calls in the
-  Blocks lane, whose file belongs to area B: today it shows poised genes as
-  silent through `silent_genes` but has no poised colour. 3. A neural, gonadal
+  questions need two node sets. 2. The poised call in the Blocks lane:
+  **done 2026-09-17**. Poised genes arrive inside `silent_genes` on purpose, because every
+  consumer reads "absent from that list" as read and leaving them out would report a held
+  gene as expressed; the lane therefore drew all of them as silent. It now reads the
+  narrower `poised_genes` first and draws three states: read (filled green), poised (amber)
+  and silent (hollow). In one 4 Mb window of chr21 that is 23 genes shown as shut when they
+  are held ready. `decompile` and `report` still collapse the two, which is the same fix in
+  their own files, and the read-by-marks call is still shown nowhere. 3. A neural, gonadal
   or embryonic biosample beyond SK-N-SH and H1. 4. Measured perturbations
   (CRISPRi in K562) for the direction finding.
 - **Owner.** genomeos-e1 holds areas B, C and D since 2026-09-14, when the

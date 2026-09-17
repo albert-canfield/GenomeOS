@@ -373,6 +373,11 @@ def _apply_reader(blocks: list[Block], chrom: str, results_dir: Path | None = No
         nodes = {n["id"]: n for n in r["node_table"]}
         silent_nodes = set(r.get("silent_node_ids", []))
         silent_genes = set(r.get("silent_genes", []))
+        # poised genes are inside silent_genes on purpose - a consumer reads "absent" as read, so a
+        # poised gene left out of that list would be reported as expressed - but poised is not silent:
+        # it is H3K27me3 over a promoter that also carries H3K4me3, a gene held ready rather than shut.
+        # Reading the narrower list first is what tells the two apart, and until 2026-09-17 nothing did.
+        poised_genes = set(r.get("poised_genes") or [])
         for b in blocks:
             if b.type == "domain":
                 n = nodes.get(b.id)
@@ -381,7 +386,9 @@ def _apply_reader(blocks: list[Block], chrom: str, results_dir: Path | None = No
                     b.attrs[f"{cell}_peaks"] = n["peaks"]
                     b.attrs[f"{cell}_node"] = "silent" if b.id in silent_nodes else "open"
             elif b.type == "gene" and b.attrs.get("gene_type") == "protein_coding":
-                b.attrs[f"{cell}_read"] = "silent" if b.name in silent_genes else "read"
+                b.attrs[f"{cell}_read"] = (
+                    "poised" if b.name in poised_genes else "silent" if b.name in silent_genes else "read"
+                )
     return cells
 
 

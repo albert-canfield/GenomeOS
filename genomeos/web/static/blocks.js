@@ -139,7 +139,15 @@
     if (b.type === 'gene') {
       ctx.fillStyle = col; ctx.globalAlpha = m ? 0.12 : 0.22; ctx.fillRect(x0, y, w, h); ctx.globalAlpha = m ? 0.18 : 1;
       const rd = st.reader && b.attrs[st.reader + '_read'];
-      if (rd) { ctx.beginPath(); ctx.arc(x0 + Math.min(6, w / 2), y + h - 6, 3.2, 0, Math.PI * 2); ctx.fillStyle = rd === 'read' ? '#56d364' : 'transparent'; ctx.fill(); ctx.strokeStyle = rd === 'read' ? '#56d364' : '#8b949e'; ctx.lineWidth = 1.2; ctx.stroke(); }
+      // three states, not two: read (filled green), poised (filled amber - H3K27me3 over a promoter
+      // that also carries H3K4me3, a gene held ready rather than shut) and silent (hollow grey).
+      // Poised genes were drawn as silent until 2026-09-17 because they arrive inside silent_genes.
+      if (rd) {
+        const fill = rd === 'read' ? '#56d364' : rd === 'poised' ? '#d29922' : 'transparent';
+        const line = rd === 'read' ? '#56d364' : rd === 'poised' ? '#d29922' : '#8b949e';
+        ctx.beginPath(); ctx.arc(x0 + Math.min(6, w / 2), y + h - 6, 3.2, 0, Math.PI * 2);
+        ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = line; ctx.lineWidth = 1.2; ctx.stroke();
+      }
       ctx.strokeStyle = b.id === st.sel ? '#fff' : col; ctx.lineWidth = b.id === st.sel ? 2 : 1; ctx.strokeRect(x0 + 0.5, y + 0.5, w - 1, h - 1);
       if (w > 30) { ctx.fillStyle = m ? muted() : '#fff'; ctx.font = 'bold 11px system-ui'; ctx.fillText(b.name + (b.attrs.gene_type !== 'protein_coding' ? ' · ' + b.attrs.gene_type : ''), x0 + 4, y + 11); }
       // transcripts inside when zoomed
