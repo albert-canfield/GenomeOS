@@ -12,6 +12,224 @@
     "statement": "a measurement counts as a measurement of a compiled element only when the overlap covers at least this fraction of the element and of the tested interval; proximity, similarity and mere containment never raise a fact"
   },
   "denominators": "read in this order, because a small census is a statement about the search and not about the genome: compiled_facts_read (what was parsed at all), eligibility.elements_in_an_assay_footprint (what any assay could have measured, at one shared base), then elements_with_any_measurement, agrees and disagrees",
+  "base_level_beside_the_census": {
+    "elements_with_measured_bases": 15,
+    "raised_by_the_element_rule": 4,
+    "never_added_to_the_raised_total": true,
+    "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+    "rows": [
+      {
+        "id": "EH38E2863563",
+        "start": 209815914,
+        "end": 209816264,
+        "bases_in_element": 350,
+        "bases_measured": 350,
+        "measured_fraction": 1.0,
+        "bases_functional": 127,
+        "functional_fraction_of_measured": 0.3629,
+        "experiments": [
+          "IRF6"
+        ],
+        "raised_by_the_element_rule": true
+      },
+      {
+        "id": "EH38E1374646",
+        "start": 109274793,
+        "end": 109275142,
+        "bases_in_element": 349,
+        "bases_measured": 349,
+        "measured_fraction": 1.0,
+        "bases_functional": 266,
+        "functional_fraction_of_measured": 0.7622,
+        "experiments": [
+          "SORT1.2"
+        ],
+        "raised_by_the_element_rule": true
+      },
+      {
+        "id": "EH38E2829474",
+        "start": 109274522,
+        "end": 109274719,
+        "bases_in_element": 197,
+        "bases_measured": 68,
+        "measured_fraction": 0.3452,
+        "bases_functional": 0,
+        "functional_fraction_of_measured": 0.0,
+        "experiments": [
+          "SORT1.2"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E2863562",
+        "start": 209815503,
+        "end": 209815835,
+        "bases_in_element": 332,
+        "bases_measured": 46,
+        "measured_fraction": 0.1386,
+        "bases_functional": 14,
+        "functional_fraction_of_measured": 0.3043,
+        "experiments": [
+          "IRF6"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E2046168",
+        "start": 161238565,
+        "end": 161238915,
+        "bases_in_element": 350,
+        "bases_measured": 350,
+        "measured_fraction": 1.0,
+        "bases_functional": 48,
+        "functional_fraction_of_measured": 0.1371,
+        "experiments": [
+          "UC88"
+        ],
+        "raised_by_the_element_rule": true
+      },
+      {
+        "id": "EH38E2001353",
+        "start": 60495301,
+        "end": 60495562,
+        "bases_in_element": 261,
+        "bases_measured": 238,
+        "measured_fraction": 0.9119,
+        "bases_functional": 18,
+        "functional_fraction_of_measured": 0.0756,
+        "experiments": [
+          "BCL11A"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E2438393",
+        "start": 396163,
+        "end": 396513,
+        "bases_in_element": 350,
+        "bases_measured": 350,
+        "measured_fraction": 1.0,
+        "bases_functional": 305,
+        "functional_fraction_of_measured": 0.8714,
+        "experiments": [
+          "IRF4"
+        ],
+        "raised_by_the_element_rule": true
+      },
+      {
+        "id": "EH38E2438392",
+        "start": 395920,
+        "end": 396157,
+        "bases_in_element": 237,
+        "bases_measured": 15,
+        "measured_fraction": 0.0633,
+        "bases_functional": 6,
+        "functional_fraction_of_measured": 0.4,
+        "experiments": [
+          "IRF4"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E3858447",
+        "start": 127401052,
+        "end": 127401303,
+        "bases_in_element": 251,
+        "bases_measured": 251,
+        "measured_fraction": 1.0,
+        "bases_functional": 12,
+        "functional_fraction_of_measured": 0.0478,
+        "experiments": [
+          "MYCrs6983267"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E3858446",
+        "start": 127400782,
+        "end": 127401030,
+        "bases_in_element": 248,
+        "bases_measured": 202,
+        "measured_fraction": 0.8145,
+        "bases_functional": 41,
+        "functional_fraction_of_measured": 0.203,
+        "experiments": [
+          "MYCrs6983267"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E3858448",
+        "start": 127401374,
+        "end": 127401609,
+        "bases_in_element": 235,
+        "bases_measured": 54,
+        "measured_fraction": 0.2298,
+        "bases_functional": 1,
+        "functional_fraction_of_measured": 0.0185,
+        "experiments": [
+          "MYCrs6983267"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E3896617",
+        "start": 97853561,
+        "end": 97853891,
+        "bases_in_element": 330,
+        "bases_measured": 293,
+        "measured_fraction": 0.8879,
+        "bases_functional": 4,
+        "functional_fraction_of_measured": 0.0137,
+        "experiments": [
+          "FOXE1"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E3896616",
+        "start": 97853400,
+        "end": 97853556,
+        "bases_in_element": 156,
+        "bases_measured": 156,
+        "measured_fraction": 1.0,
+        "bases_functional": 1,
+        "functional_fraction_of_measured": 0.0064,
+        "experiments": [
+          "FOXE1"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E2897037",
+        "start": 43086382,
+        "end": 43086662,
+        "bases_in_element": 280,
+        "bases_measured": 184,
+        "measured_fraction": 0.6571,
+        "bases_functional": 14,
+        "functional_fraction_of_measured": 0.0761,
+        "experiments": [
+          "RET"
+        ],
+        "raised_by_the_element_rule": false
+      },
+      {
+        "id": "EH38E2897038",
+        "start": 43086666,
+        "end": 43086842,
+        "bases_in_element": 176,
+        "bases_measured": 176,
+        "measured_fraction": 1.0,
+        "bases_functional": 48,
+        "functional_fraction_of_measured": 0.2727,
+        "experiments": [
+          "RET"
+        ],
+        "raised_by_the_element_rule": false
+      }
+    ]
+  },
   "per_chromosome": {
     "chr1": {
       "census": {
@@ -138,6 +356,69 @@
           "vista": 240,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 4,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": [
+          {
+            "id": "EH38E2863563",
+            "start": 209815914,
+            "end": 209816264,
+            "bases_in_element": 350,
+            "bases_measured": 350,
+            "measured_fraction": 1.0,
+            "bases_functional": 127,
+            "functional_fraction_of_measured": 0.3629,
+            "experiments": [
+              "IRF6"
+            ],
+            "raised_by_the_element_rule": true
+          },
+          {
+            "id": "EH38E1374646",
+            "start": 109274793,
+            "end": 109275142,
+            "bases_in_element": 349,
+            "bases_measured": 349,
+            "measured_fraction": 1.0,
+            "bases_functional": 266,
+            "functional_fraction_of_measured": 0.7622,
+            "experiments": [
+              "SORT1.2"
+            ],
+            "raised_by_the_element_rule": true
+          },
+          {
+            "id": "EH38E2829474",
+            "start": 109274522,
+            "end": 109274719,
+            "bases_in_element": 197,
+            "bases_measured": 68,
+            "measured_fraction": 0.3452,
+            "bases_functional": 0,
+            "functional_fraction_of_measured": 0.0,
+            "experiments": [
+              "SORT1.2"
+            ],
+            "raised_by_the_element_rule": false
+          },
+          {
+            "id": "EH38E2863562",
+            "start": 209815503,
+            "end": 209815835,
+            "bases_in_element": 332,
+            "bases_measured": 46,
+            "measured_fraction": 0.1386,
+            "bases_functional": 14,
+            "functional_fraction_of_measured": 0.3043,
+            "experiments": [
+              "IRF6"
+            ],
+            "raised_by_the_element_rule": false
+          }
+        ]
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -409,6 +690,41 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 2,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": [
+          {
+            "id": "EH38E2046168",
+            "start": 161238565,
+            "end": 161238915,
+            "bases_in_element": 350,
+            "bases_measured": 350,
+            "measured_fraction": 1.0,
+            "bases_functional": 48,
+            "functional_fraction_of_measured": 0.1371,
+            "experiments": [
+              "UC88"
+            ],
+            "raised_by_the_element_rule": true
+          },
+          {
+            "id": "EH38E2001353",
+            "start": 60495301,
+            "end": 60495562,
+            "bases_in_element": 261,
+            "bases_measured": 238,
+            "measured_fraction": 0.9119,
+            "bases_functional": 18,
+            "functional_fraction_of_measured": 0.0756,
+            "experiments": [
+              "BCL11A"
+            ],
+            "raised_by_the_element_rule": false
+          }
+        ]
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -674,6 +990,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -938,6 +1260,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -1201,6 +1529,12 @@
           "vista": 77,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -1472,6 +1806,41 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 2,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": [
+          {
+            "id": "EH38E2438393",
+            "start": 396163,
+            "end": 396513,
+            "bases_in_element": 350,
+            "bases_measured": 350,
+            "measured_fraction": 1.0,
+            "bases_functional": 305,
+            "functional_fraction_of_measured": 0.8714,
+            "experiments": [
+              "IRF4"
+            ],
+            "raised_by_the_element_rule": true
+          },
+          {
+            "id": "EH38E2438392",
+            "start": 395920,
+            "end": 396157,
+            "bases_in_element": 237,
+            "bases_measured": 15,
+            "measured_fraction": 0.0633,
+            "bases_functional": 6,
+            "functional_fraction_of_measured": 0.4,
+            "experiments": [
+              "IRF4"
+            ],
+            "raised_by_the_element_rule": false
+          }
+        ]
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -1737,6 +2106,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -2001,6 +2376,55 @@
           "satmut": 1
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 3,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": [
+          {
+            "id": "EH38E3858447",
+            "start": 127401052,
+            "end": 127401303,
+            "bases_in_element": 251,
+            "bases_measured": 251,
+            "measured_fraction": 1.0,
+            "bases_functional": 12,
+            "functional_fraction_of_measured": 0.0478,
+            "experiments": [
+              "MYCrs6983267"
+            ],
+            "raised_by_the_element_rule": false
+          },
+          {
+            "id": "EH38E3858446",
+            "start": 127400782,
+            "end": 127401030,
+            "bases_in_element": 248,
+            "bases_measured": 202,
+            "measured_fraction": 0.8145,
+            "bases_functional": 41,
+            "functional_fraction_of_measured": 0.203,
+            "experiments": [
+              "MYCrs6983267"
+            ],
+            "raised_by_the_element_rule": false
+          },
+          {
+            "id": "EH38E3858448",
+            "start": 127401374,
+            "end": 127401609,
+            "bases_in_element": 235,
+            "bases_measured": 54,
+            "measured_fraction": 0.2298,
+            "bases_functional": 1,
+            "functional_fraction_of_measured": 0.0185,
+            "experiments": [
+              "MYCrs6983267"
+            ],
+            "raised_by_the_element_rule": false
+          }
+        ]
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -2263,6 +2687,41 @@
           "vista": 68,
           "satmut": 1
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 2,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": [
+          {
+            "id": "EH38E3896617",
+            "start": 97853561,
+            "end": 97853891,
+            "bases_in_element": 330,
+            "bases_measured": 293,
+            "measured_fraction": 0.8879,
+            "bases_functional": 4,
+            "functional_fraction_of_measured": 0.0137,
+            "experiments": [
+              "FOXE1"
+            ],
+            "raised_by_the_element_rule": false
+          },
+          {
+            "id": "EH38E3896616",
+            "start": 97853400,
+            "end": 97853556,
+            "bases_in_element": 156,
+            "bases_measured": 156,
+            "measured_fraction": 1.0,
+            "bases_functional": 1,
+            "functional_fraction_of_measured": 0.0064,
+            "experiments": [
+              "FOXE1"
+            ],
+            "raised_by_the_element_rule": false
+          }
+        ]
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -2529,6 +2988,41 @@
           "vista": 98,
           "satmut": 1
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 2,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": [
+          {
+            "id": "EH38E2897037",
+            "start": 43086382,
+            "end": 43086662,
+            "bases_in_element": 280,
+            "bases_measured": 184,
+            "measured_fraction": 0.6571,
+            "bases_functional": 14,
+            "functional_fraction_of_measured": 0.0761,
+            "experiments": [
+              "RET"
+            ],
+            "raised_by_the_element_rule": false
+          },
+          {
+            "id": "EH38E2897038",
+            "start": 43086666,
+            "end": 43086842,
+            "bases_in_element": 176,
+            "bases_measured": 176,
+            "measured_fraction": 1.0,
+            "bases_functional": 48,
+            "functional_fraction_of_measured": 0.2727,
+            "experiments": [
+              "RET"
+            ],
+            "raised_by_the_element_rule": false
+          }
+        ]
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -2806,6 +3300,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -3069,6 +3569,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -3324,6 +3830,12 @@
           "vista": 30,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -3583,6 +4095,12 @@
           "vista": 76,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -3844,6 +4362,12 @@
           "vista": 68,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -4107,6 +4631,12 @@
           "vista": 47,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -4374,6 +4904,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -4631,6 +5167,12 @@
           "vista": 41,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -4904,6 +5446,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -5165,6 +5713,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -5424,6 +5978,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -5681,6 +6241,12 @@
           "vista": 44,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -5948,6 +6514,12 @@
           "satmut": 0
         }
       },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
+      },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
         "measured_vs_unmeasured": {
@@ -6203,6 +6775,12 @@
           "vista": 0,
           "satmut": 0
         }
+      },
+      "base_level": {
+        "elements_with_measured_bases": 0,
+        "never_added_to_the_raised_total": true,
+        "reading": "elements a base-level assay measured at least one base of, whatever the interval geometry; the cross-assay census stays on reciprocal overlap and this count sits beside it, never summed into it. Quote a row only with its measured_fraction: the measured share of an element and the functional share of its measured bases both vary by more than an order of magnitude across the same experiments",
+        "rows": []
       },
       "comparison": {
         "hit": "the deletion moves the target by at least 0.2 log2",
@@ -6717,5 +7295,5 @@
     "chrY": "data/knowledge/compiled/noncoding_chrY.bio"
   },
   "reading": "the experimental layer is thin and that is the finding: a compiled element is measured only where an assay happened to be pointed, and the assays cover a few per cent of what the genome is compiled from. lentiMPRA measures the sequence in a reporter and not the locus, so its disagreements are weaker evidence against a prediction than a CRISPRi negative on the predicted gene itself. Saturation mutagenesis is thinner still by three orders of magnitude - 21 elements exist in the whole assay - and it measures bases, so it enters the census under its own counters and can never enter the disagreements",
-  "seconds": 158.6
+  "seconds": 158.8
 }

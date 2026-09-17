@@ -159,6 +159,9 @@ def read_chromosome(chrom: str, with_comparison: bool = True) -> dict[str, Any]:
     out: dict[str, Any] = {
         "census": measured.census(chrom, rows, elements, layer),
         "sensitivity": measured.sensitivity(elements, layer),
+        # beside the census, never inside it: the element rule asks whether the tested interval IS
+        # the element, which a base-level assay cannot answer and does not need to
+        "base_level": measured.base_level_rows(elements, layer),
     }
     if with_comparison and rows:
         try:
@@ -248,6 +251,17 @@ def main(argv: list[str] | None = None) -> int:
         print_chromosome(chrom, per[chrom])
 
     pooled = measured.pool([v["census"] for v in per.values()])
+    base_level = {
+        "elements_with_measured_bases": sum(
+            v["base_level"]["elements_with_measured_bases"] for v in per.values()
+        ),
+        "raised_by_the_element_rule": sum(
+            1 for v in per.values() for r in v["base_level"]["rows"] if r["raised_by_the_element_rule"]
+        ),
+        "never_added_to_the_raised_total": True,
+        "reading": next(iter(per.values()))["base_level"]["reading"] if per else "",
+        "rows": [r for v in per.values() for r in v["base_level"]["rows"]],
+    }
     written: dict[str, str] = {}
     if args.write_programs:
         (Path(".") / COMPILED_DIR).mkdir(parents=True, exist_ok=True)
@@ -285,6 +299,7 @@ def main(argv: list[str] | None = None) -> int:
             "eligibility.elements_in_an_assay_footprint (what any assay could have measured, at one "
             "shared base), then elements_with_any_measurement, agrees and disagrees"
         ),
+        "base_level_beside_the_census": base_level,
         "per_chromosome": per,
         "pooled": pooled,
         "evidence": evidence,

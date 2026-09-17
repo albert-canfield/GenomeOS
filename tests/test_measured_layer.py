@@ -252,6 +252,35 @@ def base_elements():
     ]
 
 
+def test_base_level_rows_keep_what_the_element_rule_discards_and_print_the_fraction(base_layer):
+    """A base-level assay speaks about bases, so a reading it makes is not void because the interval
+    is the wrong shape. The count lives under its own name, never added to the raised total, and
+    every row carries the share of the element actually substituted: a measurement of a twentieth of
+    an element and a measurement of all of it are not the same evidence and must not print alike."""
+    elements = [
+        {"id": "E_whole", "start": 1000, "end": 1300},  # the experiment IS this element
+        {"id": "E_sliver", "start": 1000, "end": 6000},  # 600 measured bases of a 5 kb element
+        {"id": "E_untouched", "start": 80_000, "end": 80_300},
+    ]
+    out = measured.base_level_rows(elements, base_layer)
+    assert out["never_added_to_the_raised_total"] is True
+    by = {r["id"]: r for r in out["rows"]}
+    assert set(by) == {"E_whole", "E_sliver"}  # the untouched one is absent, not a zero row
+    assert by["E_whole"]["measured_fraction"] == 1.0 and by["E_whole"]["raised_by_the_element_rule"]
+    # kept by this count, discarded by the element rule, and its thinness is visible in the row
+    assert by["E_sliver"]["raised_by_the_element_rule"] is False
+    assert by["E_sliver"]["bases_measured"] == 600  # two experiments of 300 fall inside it
+    assert by["E_sliver"]["measured_fraction"] == 0.12  # of a 5 kb element, and the row says so
+
+
+def test_an_element_whose_measured_bases_are_all_inert_is_kept_with_its_fraction(base_layer):
+    """The reading the element rule throws away most often: bases looked at, none of them mattering."""
+    out = measured.base_level_rows([{"id": "E_inert", "start": 5000, "end": 5300}], base_layer)
+    row = out["rows"][0]
+    assert row["bases_measured"] == 300 and row["bases_functional"] == 0
+    assert row["functional_fraction_of_measured"] == 0.0  # measured and empty, not never looked
+
+
 @pytest.fixture
 def base_layer():
     return measured.Layer(

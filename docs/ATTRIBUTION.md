@@ -4377,6 +4377,32 @@ which is one more reason to carry that flag rather than act on it.
 `data/results/measurability_real_unknown.json`; `uv run python scripts/measurability.py`. No network.
 
 
+### Beside the census, not inside it: the elements whose bases were measured (2026-09-17, later)
+
+The cross-assay census asks reciprocal overlap — is the tested interval *this* element — and that is
+the right question for an assay that perturbs an element and the wrong one for an assay that perturbs
+bases. The layer had already accepted that satmut speaks about bases: a base-level null is evidence
+about *those bases*, it keeps `experimental` as its kind, and it stays out of `assays_disagreeing`.
+Then interval geometry decided which elements were allowed to hear it, which is where the seam showed
+(genomeos-0e's ruling, 2026-09-17).
+
+So the count now exists under its own name, `base_level_beside_the_census`, and is **never added to
+the raised total**: 15 compiled elements have at least one of their
+own bases substituted, of which 4 are the ones the element rule
+raises. The other 11 are readings the census discards on interval shape rather than on what
+was perturbed — including 1 whose measured bases are all inert, the first genuinely inert
+elements the layer has, and the reading a base-level assay is best placed to make.
+
+**Every row carries the share of the element actually substituted, and that is the whole guard.** The
+measured fraction runs from 0.063 to
+1.000, and the functional share of the measured bases from
+0.0000 to
+0.8714 across the same twenty-one experiments.
+A count with no fraction beside it would let a thin measurement upgrade a fact, which is the trap the
+reciprocal rule was built to stop: 15 bases of a 237 bp element and 350 of a 350 bp one are not the
+same evidence and must not print as the same row. No threshold is imposed; the fraction is printed
+instead, because a cut chosen after looking at twenty-one experiments is a cut chosen to fit them.
+
 ## What comes next, in order
 
 1. Done 2026-09-13: the whole-input closure passing on chromosomes 21 and 22,

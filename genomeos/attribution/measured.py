@@ -707,6 +707,69 @@ def satmut_counts(measured_rows: list[dict[str, Any]], eligible: dict[str, Any])
     }
 
 
+def base_level_rows(elements: list[dict[str, Any]], layer: Layer) -> dict[str, Any]:
+    """Elements whose BASES a base-level assay measured, whatever the interval geometry.
+
+    The cross-assay census uses reciprocal overlap, which asks whether the tested interval *is* this
+    element. That is the right question for an assay that perturbs an element and the wrong one for
+    an assay that perturbs bases: satmut can say something true about any element whose bases it
+    substituted, and the element-rule census discards those readings on a fact about interval shape
+    rather than about what was perturbed. So this count exists under its own name and is NEVER added
+    to the raised total: two counts, two names, as `input_presence` insists one level down.
+
+    It is quotable only beside each element's measured fraction, and that is why every row carries
+    one. The measured share of an element runs from a few per cent to all of it, and the functional
+    share of measured bases runs from 1% to 77% across the same twenty-one experiments, so a count
+    with no fraction beside it would let a thin measurement upgrade a fact — the trap the reciprocal
+    rule was built to stop (genomeos-0e, 2026-09-17).
+    """
+    out = []
+    for el in elements:
+        start, end = el["start"], el["end"]
+        hits = [(e, 1.0) for e in layer.near("satmut", start, end, REACH)]
+        if not hits:
+            continue
+        detail = Layer._satmut_of(start, end, hits)
+        if not detail["bases_measured"]:
+            continue
+        length = max(1, end - start)
+        out.append(
+            {
+                "id": el.get("id", ""),
+                "start": start,
+                "end": end,
+                "bases_in_element": length,
+                "bases_measured": detail["bases_measured"],
+                "measured_fraction": round(detail["bases_measured"] / length, 4),
+                "bases_functional": detail["bases_functional"],
+                "functional_fraction_of_measured": (
+                    round(detail["bases_functional"] / detail["bases_measured"], 4)
+                    if detail["bases_measured"]
+                    else None
+                ),
+                "experiments": detail["experiments"],
+                # the element rule asks it of each experiment separately, exactly as `for_element`
+                # does; the union of two experiments' spans is not an interval anybody tested
+                "raised_by_the_element_rule": any(
+                    reciprocal_overlap(start, end, e.start, e.end) >= RECIPROCAL_OVERLAP for e, _ in hits
+                ),
+            }
+        )
+    out.sort(key=lambda r: -r["bases_measured"])
+    return {
+        "elements_with_measured_bases": len(out),
+        "never_added_to_the_raised_total": True,
+        "reading": (
+            "elements a base-level assay measured at least one base of, whatever the interval "
+            "geometry; the cross-assay census stays on reciprocal overlap and this count sits "
+            "beside it, never summed into it. Quote a row only with its measured_fraction: the "
+            "measured share of an element and the functional share of its measured bases both vary "
+            "by more than an order of magnitude across the same experiments"
+        ),
+        "rows": out,
+    }
+
+
 def regulated_pairs_blocks(measured_rows: list[dict[str, Any]]) -> int:
     """One experimental rule per (element, gene) a screen measured as regulated, deduplicated."""
     return sum(len(r["measured"].get("crispri", {}).get("genes_regulated", [])) for r in measured_rows)
