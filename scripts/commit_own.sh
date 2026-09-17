@@ -64,4 +64,12 @@ commit=$(git commit-tree "$tree" -p "$parent" -F "$msg_file")
 # the old value is pinned: if a peer moved the branch since `rev-parse HEAD`, this fails rather than
 # dropping their commit. Re-run after rebasing your paths onto the new tip.
 git update-ref "refs/heads/$branch" "$commit" "$parent"
+
+# Clean up the trap this script would otherwise leave. Committing through a private index leaves the
+# SHARED index still describing the old state, so `git status` shows the paths just committed as
+# staged deletions and untracked files at once. They are neither — the working copies match HEAD —
+# but a peer running `git add -A` would stage those deletions for real. Resetting only the paths this
+# run touched fixes it without disturbing anything anyone else has staged.
+unset GIT_INDEX_FILE
+git reset -q HEAD -- "${paths[@]}"
 echo "commit_own: $(git log --oneline -1 "$branch")"
