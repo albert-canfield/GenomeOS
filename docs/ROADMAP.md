@@ -2486,12 +2486,22 @@ entire sweep. What is next, in order of what it decides:
    202 of its 882 blocks; the best-covered tier, regulatory, is at 1.07% and structural at 0.005%.
    Every model built over that space has been extrapolating from half a percent of it, which is what
    the four corrections of 2026-09-16 and 2026-09-17 look like from inside.
-   The library that would fix it is written out rather than proposed (`30b2e77`, `a4df8fe`):
-   **312,129 oligos** — 101,295 tiling all 30.6 Mb at 300 bp with the untouched blocks first (45,301),
-   101,294 genomic negatives matched one to one on GC and promoter distance, 8,245 lentiMPRA actives
-   as in-batch positives, and 101,295 dinucleotide-preserving shuffles. A routine-sized variant (the
-   untouched blocks with all four arms) is about 110,000. Manifest under `data/knowledge/library/`,
-   local and git-ignored; a design, not an order.
+   The library that would fix it is written out rather than proposed (`30b2e77`, `a4df8fe`,
+   `e08edf9`): **284,598 oligos** after the unorderable ones are dropped — 92,118 tiling the real
+   unknown at 300 bp with the untouched blocks first (41,113 of them) and the seven CRISPRi-bridge
+   blocks next, 92,117 genomic negatives matched one to one on GC and promoter distance, 8,245
+   lentiMPRA actives as in-batch positives, and 92,118 dinucleotide-preserving shuffles. The synthesis
+   filter was recomputed independently of genomeos-79's lane and the two agree to **0.4%** (41,113
+   orderable against 41,297). Two judgements are recorded as design, not measurement: the repeat flag
+   is **not** an exclusion (31.3% of the lentiMPRA windows a reporter already read are majority
+   interspersed repeat), and the 53 thin blocks are **kept** (median TSS distance 23.6 kb against
+   100.9 kb, so dropping them would remove the blocks nearest genes — the covariate that confounded
+   everything corrected this week). Manifest under `data/knowledge/library/`, local and git-ignored;
+   a design, not an order.
+   **The comparison itself is now a library function**, `genomeos/compare.py` (`e08edf9`): direct
+   standardisation, the control arm carrying the n of the matched targets, the dropped targets counted,
+   and both groups' covariate medians in the same result, with nine tests each of a mistake that was
+   published this week. Any lane doing a two-group comparison should import it rather than write one.
    **What remains here is not ours to compute:** the library is an experiment, and until one is run
    the honest description of the 98% is that it is unmeasured rather than unknown. Two pieces do
    remain: genomeos-79's lane on which oligos cannot be measured even in principle (unmappable
