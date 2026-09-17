@@ -397,6 +397,16 @@ the code cites it. Numbers are from the 2026-09-10 runs; see data/results/.
   indistinguishable from the inside**, and the flag costs one look and one `--force` that prints what
   it takes out. A guard that only stopped other people's mistakes would be a guard nobody needed.
 
+  **And later the same day it caught what no test could have.** A lane re-ran a layer without
+  `--write-programs`, so `programs_written` came back empty; the guard refused the commit because it
+  removed 25 lines. Nothing about the result's findings was wrong, and **no test covered that field** —
+  no test ever would have, because a test asserts what somebody thought to assert, and nobody had
+  thought about a record of which programs a run wrote. **A diff guard asserts on removal itself**,
+  which is the one property that does not require knowing in advance what matters. That is why it
+  belongs beside the test suite rather than inside it: tests cover the fields with owners, the guard
+  covers the fields without. Of three refusals that day, two were legitimate rewrites and one was a
+  silent degradation — a ratio that argues for the flag costing a look rather than a confirmation.
+
 - **A blind must be a boundary, not a list of places (2026-09-17).** A lane was set up to test a
   claim without seeing the previous set's answer, and was forbidden the new section and the new
   result files. The answer was also in the *old* section, put there deliberately an hour earlier so
