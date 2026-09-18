@@ -49,7 +49,13 @@ PHYLOP_MISSING = -128
 # a byte per base: q = floor((p - 2.27) * 10) + 23, so q >= 23 is exactly p >= 2.27
 PHYLOP_SCALE = 10
 PHYLOP_ANCHOR = 23
-PHYLOP_BINS = (-128, -9, 0, 10, 23, 40, 128)  # edges on q: missing | < -1.1 | < 1.3 | < 2.27 | < 4 | >= 4
+# edges on q, with the phyloP each one actually means computed rather than typed:
+# missing | < -0.93 | < -0.03 | < +0.97 | < +2.27 | < +3.97 | >= +3.97. The comment here used to
+# read -1.1 / 1.3 / 4, which is three labels wrong by up to 0.33 - the q values were right and
+# the floats beside them were remembered. tests/test_lexicon_axes_bins.py pins every edge to
+# (q - PHYLOP_ANCHOR) / PHYLOP_SCALE + PHYLOP_THRESHOLD, so moving the threshold cannot leave a
+# stale label behind it.
+PHYLOP_BINS = (-128, -9, 0, 10, 23, 40, 128)
 MOTIF_RELATIVE = 0.95
 SCAN_BLOCK = 4_000_000  # candidate windows scored per numpy block
 CODE = np.full(256, 4, dtype=np.uint8)
