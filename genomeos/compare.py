@@ -76,7 +76,14 @@ def difference(a_hits: float, a_n: float, b_hits: float, b_n: float) -> dict[str
         "b": round(pb, 4),
         "difference": round(pa - pb, 4),
         "p_one_sided": round(0.5 * math.erfc(z / math.sqrt(2)), 6),
-        "upper_95": round(pa - pb + 1.96 * se, 4),
+        # z is 1.645, the ONE-SIDED 95% constant, because the p beside it is one-sided. Until
+        # 2026-09-18 this used 1.96, which is the two-sided 95% / one-sided 97.5% value, so the field
+        # named upper_95 was a 97.5% bound. Nothing had to be re-decided: no gate anywhere read it -
+        # `executor.difference_upper` had always used 1.645 for its own futility rule, and the one
+        # other consumer (`scripts/syntax_tiling.py`) was cancelled unrun. Only reported values move,
+        # and they move DOWN, because a 97.5% bound is wider than a 95% one. `attribution/executor.py`
+        # is now the agreeing implementation rather than the odd one out; a test pins them equal.
+        "upper_95": round(pa - pb + 1.645 * se, 4),
     }
 
 

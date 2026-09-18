@@ -161,3 +161,35 @@ def test_naming_the_outcome_instead_of_the_input_is_the_same_substitution_one_le
     assert got_input["controls_with_the_input"] == 60
     assert got_outcome["controls_with_the_input"] == 54
     assert got_input["kind"] == got_outcome["kind"] == "bought"
+
+
+def test_the_upper_bound_is_one_sided_because_the_p_beside_it_is() -> None:
+    """A one-sided p with a two-sided z is two confidence levels under one name.
+
+    Until 2026-09-18 `upper_95` used 1.96, the two-sided 95% constant, which makes it a one-sided
+    97.5% bound. `attribution/executor.py`'s own `difference_upper` had always used 1.645 and had
+    always been right, so the shared helper was the odd one out while nine lanes imported it. No
+    verdict moved: no gate read this field, executor gated on its own, and the only other consumer
+    was cancelled before it ran.
+    """
+    import math
+
+    out = difference(60, 100, 40, 100)
+    pa, pb = 0.6, 0.4
+    se = math.sqrt(pa * (1 - pa) / 100 + pb * (1 - pb) / 100)
+
+    assert out["upper_95"] == round(pa - pb + 1.645 * se, 4)
+    assert out["upper_95"] < round(pa - pb + 1.96 * se, 4), "one-sided is tighter than two-sided"
+
+
+def test_the_shared_helper_and_the_executor_lane_now_agree() -> None:
+    """Two implementations of one bound must not disagree on which 95% they mean."""
+    import importlib
+
+    ex = importlib.import_module("genomeos.attribution.executor")
+
+    mine = difference(60, 100, 40, 100)["upper_95"]
+    theirs = ex.difference_upper(60, 100, 40, 100)
+
+    assert theirs is not None
+    assert abs(mine - theirs) < 1e-4
