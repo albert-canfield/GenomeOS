@@ -31,6 +31,7 @@ from typing import Any
 
 from genomeos.attribution import measured
 from genomeos.attribution.compile import write_program
+from genomeos.attribution.panel_background import TSS_EDGES
 from genomeos.attribution.targets import attributed
 from genomeos.compare import Strata, imbalance, input_presence, standardised
 from genomeos.evidence import COMPILED_DIR, KINDS, WEAK, collect
@@ -39,10 +40,10 @@ from genomeos.results import save_result
 CHROMS = [f"chr{c}" for c in [*range(1, 23), "X", "Y"]]
 # a prediction "moves a gene" at this magnitude; the bar both arms of every comparison are scored on
 MOVES = 0.2
-STRATA = Strata(length=(200.0, 400.0), gc=(0.35, 0.45, 0.55), nearest_coding_tss=(1e3, 5e3, 2e4, 1e5))
-# below this the base-level assay's arm is described and not compared: a stratified difference over a
-# handful of elements is noise with a p-value attached, and the refusal is a result rather than a gap
-SATMUT_MIN_FOR_A_COMPARISON = 20
+# the edges come from the lane that declared them; see attribution/panel_background.TSS_EDGES
+STRATA = Strata(length=(200.0, 400.0), gc=(0.35, 0.45, 0.55), nearest_coding_tss=TSS_EDGES)
+# the bar lives in the module this script drives, so the two cannot drift apart
+SATMUT_MIN_FOR_A_COMPARISON = measured.MIN_FOR_A_COMPARISON
 
 
 def covariates(chrom: str, elements: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:

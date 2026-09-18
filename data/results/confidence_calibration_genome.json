@@ -1,6 +1,6 @@
 {
   "result": "confidence_calibration_genome",
-  "date": "2026-09-17",
+  "date": "2026-09-18",
   "question": "GenomeOS states a confidence on every fact. Is it a probability? For the compiled facts a measurement touches, the observed agreement rate is binned by the stated confidence and reported per assay, with an interval",
   "claim_under_test": "the compiled element block and its rule say that deleting this element moves this gene, and the number beside them is read by every reader of the Evidence explorer as the probability that it does. The question here is whether that reading survives contact with a measurement",
   "stated_confidence_formula": "round(min(PREDICTED_CAP, max(0.05, |log2 fold change|)), 2), as attribution/compile.py writes it on the element block and on the rule beside it; PREDICTED_CAP = 0.7, so no compiled element can state more than that however large the predicted effect",
@@ -732,10 +732,10 @@
                 0.55
               ],
               "nearest_coding_tss": [
-                1000.0,
-                5000.0,
-                20000.0,
-                100000.0
+                1000,
+                5000,
+                20000,
+                100000
               ]
             },
             "raw": {
@@ -743,14 +743,14 @@
               "b": 0.7033,
               "difference": 0.1886,
               "p_one_sided": 0.003525,
-              "upper_95": 0.3258
+              "upper_95": 0.3037
             },
             "matched": {
               "a": 0.8824,
               "b": 0.745,
               "difference": 0.1374,
               "p_one_sided": 0.06975,
-              "upper_95": 0.3195
+              "upper_95": 0.2903
             },
             "imbalance": {
               "length": {
@@ -1071,10 +1071,10 @@
                 0.55
               ],
               "nearest_coding_tss": [
-                1000.0,
-                5000.0,
-                20000.0,
-                100000.0
+                1000,
+                5000,
+                20000,
+                100000
               ]
             },
             "raw": {
@@ -1082,14 +1082,14 @@
               "b": 0.0554,
               "difference": 0.0392,
               "p_one_sided": 0.010745,
-              "upper_95": 0.0726
+              "upper_95": 0.0672
             },
             "matched": {
               "a": 0.0946,
               "b": 0.0582,
               "difference": 0.0364,
               "p_one_sided": 0.034782,
-              "upper_95": 0.0757
+              "upper_95": 0.0694
             },
             "imbalance": {
               "length": {
@@ -1426,10 +1426,10 @@
                 0.55
               ],
               "nearest_coding_tss": [
-                1000.0,
-                5000.0,
-                20000.0,
-                100000.0
+                1000,
+                5000,
+                20000,
+                100000
               ]
             },
             "raw": {
@@ -1437,14 +1437,14 @@
               "b": 0.1681,
               "difference": 0.1335,
               "p_one_sided": 0.0,
-              "upper_95": 0.1519
+              "upper_95": 0.149
             },
             "matched": {
               "a": 0.3016,
               "b": 0.1724,
               "difference": 0.1293,
               "p_one_sided": 0.0,
-              "upper_95": 0.1518
+              "upper_95": 0.1482
             },
             "imbalance": {
               "length": {
@@ -1779,10 +1779,10 @@
                 0.55
               ],
               "nearest_coding_tss": [
-                1000.0,
-                5000.0,
-                20000.0,
-                100000.0
+                1000,
+                5000,
+                20000,
+                100000
               ]
             },
             "raw": {
@@ -1790,14 +1790,14 @@
               "b": 0.7391,
               "difference": -0.1184,
               "p_one_sided": 0.871558,
-              "upper_95": 0.0863
+              "upper_95": 0.0534
             },
             "matched": {
               "a": 0.6296,
               "b": 0.7692,
               "difference": -0.1395,
               "p_one_sided": 0.871033,
-              "upper_95": 0.1022
+              "upper_95": 0.0634
             },
             "imbalance": {
               "length": {
@@ -1959,5 +1959,5 @@
   "scope": "This is a reliability table over MEASURED compiled elements, and that is not a random sample of the compiled genome. 4.33% of compiled elements are measured at all (19,072 of 440,377) and only 5.98% were ever eligible, because an assay's footprint had to reach them. The measured slice is longer, more GC-rich and closer to a coding TSS than the rest - the assays chose candidate regulatory sequence, which is the same property the deletion scores highly - so the bands' rates are conditional on an element having been chosen for an assay. The table says how often the project's confidence is borne out ON MEASURED ELEMENTS. It says nothing directly about the 414,053 elements no assay ever covered, and the imbalance between the two arms is printed in the result rather than described here, so the size of the extrapolation is a number",
   "falsifies_transfer": "The transfer from measured elements to the compiled genome fails if any of these is observed. (a) A screen that tiles a region without choosing candidate sequence - an unbiased tiling rather than a cCRE list - finds the top band's rate far below what it is here, which is what selection on testability looks like from outside. (b) The agreement rate moves with the measured slice's own covariates once they are held fixed: if the standardised difference between the high and low confidence arms collapses toward zero when length, GC and distance to a coding TSS are matched, then the band was reading the covariate and not the confidence, and on unmeasured elements the covariate distribution is different. (c) A new assay extends the footprint into elements that look unlike the measured ones - far from a promoter, AT-rich, short - and the bands do not hold there. (d) The prevalence shift target_calibration already found: a population whose base rate of agreement differs from this one's needs its own intercept, so a band quoted without its population's rate beside it has stopped being a measurement of anything",
   "chromosomes_not_read": {},
-  "seconds": 70.6
+  "seconds": 70.2
 }

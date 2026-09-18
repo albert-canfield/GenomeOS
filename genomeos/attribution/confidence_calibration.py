@@ -52,6 +52,7 @@ from typing import Any
 from genomeos.attribution import measured
 from genomeos.attribution.compile import PREDICTED_CAP
 from genomeos.attribution.measured import AGREES, ASSAYS, DISAGREES
+from genomeos.attribution.panel_background import TSS_EDGES
 from genomeos.attribution.target_calibration import CONFIDENCE_BANDS, wilson
 from genomeos.compare import Strata, imbalance, input_presence, standardised
 from genomeos.evidence import WEAK
@@ -75,7 +76,9 @@ BANDS = CONFIDENCE_BANDS
 MIN_FOR_A_BAND = 30  # below this a band is printed and described, never judged
 MIN_BANDS_FOR_A_VERDICT = 3  # fewer judged bands than this and the assay gets no verdict at all
 MIN_SHARE_CONSISTENT = 0.7  # target_calibration's 7-of-10, as a share because the band count varies
-MIN_FOR_A_COMPARISON = 20  # the satmut lane's bar, reused: below it the groups are described, not compared
+# the satmut lane's bar, imported from the lane that set it rather than restated: two copies of a
+# number that cite each other are folklore, and this one cited a home that did not exist
+MIN_FOR_A_COMPARISON = measured.MIN_FOR_A_COMPARISON
 HIGH_CONFIDENCE = WEAK  # 0.5, the line the Program tab and the Evidence explorer already draw
 
 # --- the failure patterns, stated before the rates were computed -------------------------------------
@@ -513,7 +516,8 @@ def _row(e: Element, assay: str) -> dict[str, Any]:
     }
 
 
-STRATA = Strata(length=(200.0, 400.0), gc=(0.35, 0.45, 0.55), nearest_coding_tss=(1e3, 5e3, 2e4, 1e5))
+# the edges come from the lane that declared them rather than a fifth copy of the same tuple
+STRATA = Strata(length=(200.0, 400.0), gc=(0.35, 0.45, 0.55), nearest_coding_tss=TSS_EDGES)
 
 
 def carries_information(population: list[Element], assay: str, narrow: bool) -> dict[str, Any]:
@@ -570,7 +574,7 @@ def carries_information(population: list[Element], assay: str, narrow: bool) -> 
 SCOPE_STRATA = Strata(
     length=(200.0, 400.0),
     gc=(0.35, 0.45, 0.55),
-    nearest_coding_tss=(1e3, 5e3, 2e4, 1e5),
+    nearest_coding_tss=TSS_EDGES,
     stated_confidence=(0.15, 0.25, 0.5),
 )
 

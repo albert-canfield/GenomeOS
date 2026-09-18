@@ -111,6 +111,13 @@ SOURCES = {
 }
 ASSAYS = tuple(SOURCES)
 BASE_LEVEL = ("satmut",)  # assays that measure bases inside an element rather than the element
+#: below this many targets a two-group comparison is described and not computed: a stratified
+#: difference over a handful of rows is noise with a p-value attached, and the refusal is a result
+#: rather than a gap. Declared here because this is the lane that first refused on it (the satmut
+#: arm, at four targets); `scripts/measured_layer.py` and `attribution/confidence_calibration.py`
+#: import it rather than restating it, after a sweep found two copies citing a home that did not
+#: exist (genomeos-0e, 2026-09-18).
+MIN_FOR_A_COMPARISON = 20
 SATMUT_CANNOT_DISAGREE = (
     "zero by construction, not by result: saturation mutagenesis substitutes one base at a time in a "
     "reporter and never deletes the element or measures the predicted gene, so it can support the "
