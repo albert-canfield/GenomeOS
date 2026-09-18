@@ -290,11 +290,19 @@ def _next_step(number: str, lines: list[str]) -> dict[str, Any]:
     done = body.startswith("~~") or body.lstrip("*_ ").lower().startswith("done")
     title = re.sub(r"[*_~]", "", body)
     title = re.split(r"(?<=[.:])\s", title, maxsplit=1)[0]
+    # `state` stays two-valued because the tab strikes through on it and the API is read elsewhere.
+    # `progress` is the finer reading, and it exists because the two-valued one lies: on 2026-09-17
+    # four items whose own bodies said "landed" or "all four landed" were shown as "next", which is
+    # the same overstatement of remaining work that efd0e46 fixed for the area steps a day earlier.
+    # An item is only `done` when it SAYS so at the front, because an item that buried its completion
+    # in the middle is a reader's problem either way; `progress` reads the whole body with the same
+    # vocabulary `step_state` gives the area steps, so the roadmap has one state language, not two.
     return {
         "number": number,
         "title": title[:160],
         "text": body,
         "state": "done" if done else "next",
+        "progress": "done" if done else step_state(body),
     }
 
 

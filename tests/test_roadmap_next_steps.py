@@ -114,3 +114,46 @@ def test_the_open_count_excludes_the_steps_it_knows_are_finished() -> None:
     assert len(area["next"]) == 3
     assert area["counts"]["next"] == 1
     assert area["counts"]["steps_done"] == 2
+
+
+def test_a_landed_item_is_partial_rather_than_next() -> None:
+    """The two-valued state lies about work that landed, so `progress` reads the whole body.
+
+    On 2026-09-17 four items whose own bodies said "landed" or "all four landed" were shown as
+    "next" by the Progress tab — the same overstatement of remaining work that had just been fixed
+    for the area steps. `state` stays two-valued because the tab strikes through on it; `progress`
+    uses the vocabulary the area steps already use, so the roadmap has one state language.
+    """
+    text = """# GenomeOS
+
+## 5. Next steps, consolidated
+
+1. **A lane that landed.** Landed `abc1234` and its remainder is named.
+2. **Something nobody has started.** It needs a decision first.
+3. **Waits for Albert.** This one blocked on a language decision.
+4. ~~An item struck through.~~ **Done 2026-09-17.**
+
+## 6. Milestones
+"""
+    by_number = {s["number"]: s for s in roadmap.parse_next_steps(text)}
+
+    assert by_number["1"]["state"] == "next" and by_number["1"]["progress"] == "partial"
+    assert by_number["2"]["state"] == "next" and by_number["2"]["progress"] == "planned"
+    assert by_number["3"]["state"] == "next" and by_number["3"]["progress"] == "blocked"
+    assert by_number["4"]["state"] == "done" and by_number["4"]["progress"] == "done"
+
+
+def test_progress_never_contradicts_a_struck_through_item() -> None:
+    """An item that says Done at the front must read done whatever its body goes on to say."""
+    text = """# GenomeOS
+
+## 5. Next steps, consolidated
+
+1. ~~The endpoint.~~ **Done 2026-09-17**, and what remains is somebody else's lane.
+
+## 6. Milestones
+"""
+    step = roadmap.parse_next_steps(text)[0]
+
+    assert step["state"] == "done"
+    assert step["progress"] == "done"

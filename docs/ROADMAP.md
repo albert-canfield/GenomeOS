@@ -2624,8 +2624,8 @@ entire sweep. What is next, in order of what it decides:
      it is seven blocks.
    Area I.
 4. **The known-locus benchmark with more loci**, not more readings of the one it has.
-   **Stated-interval scoring is done (2026-09-17), and it cost one request rather than a
-   handful.** The scorer's input is 1 Mb centred on the element, so its reach is 524 kb each
+   **Stated-interval scoring landed 2026-09-17 and cost one request rather than a
+   handful; more loci remains.** The scorer's input is 1 Mb centred on the element, so its reach is 524 kb each
    way, and `read_reach` now checks every published target against it for free: **SOX9 is
    1,450 kb from its element, SHH 979 kb, IRX5 1,164 kb — all three outside the model's input.**
    That retires a standing result: the ZRS's own deletion names LMBR1 and was graded a miss
