@@ -83,7 +83,7 @@ May contain `transcript` blocks.
 | property | form | meaning |
 |---|---|---|
 | `strength` | `0..1` |  |
-| `threshold` | `number` | source level giving half-maximal effect |
+| `threshold` | `number [M|mM|uM|nM|pM|fM]` | source level giving half-maximal effect: an amount, or v0.4 a concentration with a molar unit, divided by the absolute_volume of the compartment where the rule acts |
 | `hill` | `number` | cooperativity |
 | `when` | `k = v, k = v` | context in which the rule applies |
 | `id` | `text` | explicit rule id |
@@ -299,6 +299,7 @@ May contain `transcript` blocks.
 | `parent` | `Id` | the compartment that contains this one; one root |
 | `membrane` | `yes | no` | a membrane faces its parent and its children |
 | `volume` | `number` | fraction of the cell's volume |
+| `absolute_volume` | `number fL|pL|nL|uL|mL|L|um3 | unknown` | v0.4: this compartment's own volume (1 um3 = 1 fL); what a concentration divides by |
 | `genome` | `chrM, ... | nuclear` | chromosomes read here |
 | `translation` | `yes | no` | ribosomes are present |
 | `copies` | `integer` | copies per cell |
@@ -338,7 +339,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 
 - **Evidence**: `kind`, `source`, `organism`, `note`
 - **Entity**: `id`, `kind`, `attrs`, `evidence`, `confidence`
-- **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`
+- **Compartment**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `parent`, `membrane`, `volume`, `genome`, `translation`, `copies`, `absolute_volume_fl`
 - **Transport**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `from_compartment`, `to_compartment`, `cargo`, `capacity`, `affinity`, `via`, `via_threshold`
 - **Regime**: `name`, `treatment`, `threshold`, `units`, `update`, `fates`, `recheck`, `allocation`, `seed`, `evidence`, `confidence`
 - **Region**: `id`, `kind`, `attrs`, `evidence`, `confidence`, `locus`, `role`
@@ -352,7 +353,7 @@ Dataclasses in `genomeos.ir`; `Module.to_dict()` / `from_dict()` round-trip them
 - **Effect**: `target`, `op`, `value`, `unit`
 - **Event**: `id`, `rate`, `rate_unit`, `when`, `effects`, `evidence`, `confidence`
 - **Parameter**: `name`, `value`, `unit`, `evidence`, `confidence`
-- **Rule**: `id`, `source`, `action`, `target`, `strength`, `threshold`, `hill`, `when`, `evidence`, `confidence`
+- **Rule**: `id`, `source`, `action`, `target`, `strength`, `threshold`, `hill`, `when`, `evidence`, `confidence`, `threshold_unit`
 - **Field**: `name`, `diffusion`, `decay`, `sources`, `evidence`, `confidence`
 - **Timer**: `name`, `duration`, `unit`, `sd`, `lengthening`, `when`, `evidence`, `confidence`
 - **Stage**: `name`, `start`, `end`, `unit`, `evidence`, `confidence`

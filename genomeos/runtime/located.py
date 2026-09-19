@@ -27,7 +27,7 @@ import math
 import random
 from dataclasses import dataclass, field
 
-from genomeos.ir import UNKNOWN, Action, Module, Regime
+from genomeos.ir import UNKNOWN, Action, Module, Regime, molecules_in, to_molar
 from genomeos.lang.located import layout, rule_sites
 
 from .uncertainty import KIND_WEIGHT
@@ -166,6 +166,7 @@ class LocatedRuntime:
             inhs = [r for r in self.rules if r.action is Action.INHIBIT and r.target == g]
             keep = lambda r, site=c: site in rule_sites(self.module, lay, r, self.proteins)  # noqa: E731
             self.transcription.append((g, c, [r for r in acts if keep(r)], [r for r in inhs if keep(r)]))
+        self.thresholds = self._thresholds()
         self.translation = []
         for r in self.rules:
             if r.action is not Action.PRODUCE or r.source not in self.genes or r.target not in self.proteins:
@@ -202,6 +203,34 @@ class LocatedRuntime:
             hl = p.half_life_h if p.half_life_h is not UNKNOWN else self.params["protein_half_life"]
             self.delta_p[p.id] = LN2 / float(hl)
 
+    def _thresholds(self) -> dict[tuple[str, str], float]:
+        """Each regulatory rule's threshold as an amount at each compartment it acts in.
+
+        A threshold with no unit is already an amount and passes through unchanged, which is every
+        program committed before 2026-09-19. A threshold stated as a concentration is divided by the
+        compartment's absolute volume here and nowhere else, so the same rule in a big cell and a
+        small one is a different number of molecules - which is the whole point of the field (§4.1)."""
+        out: dict[tuple[str, str], float] = {}
+        for _g, c, acts, inhs in self.transcription:
+            for r in (*acts, *inhs):
+                if not r.threshold_unit:
+                    out[(r.id, c)] = r.threshold
+                    continue
+                if self.regime.units != "copies":
+                    raise ValueError(
+                        f"rule {r.id!r} states a threshold in {r.threshold_unit}, a concentration, but "
+                        f"the regime declares units {self.regime.units!r}: molecules over a volume are "
+                        "only comparable with a counted amount, so state `regime { units: copies }`"
+                    )
+                volume = self.layout.places.by_id[c].absolute_volume_fl
+                if volume is UNKNOWN:  # also a compile error; here for a module built without the parser
+                    raise ValueError(
+                        f"rule {r.id!r} acts in {c!r}, which declares no absolute_volume, so its "
+                        f"threshold of {r.threshold} {r.threshold_unit} has nothing to divide by"
+                    )
+                out[(r.id, c)] = molecules_in(to_molar(r.threshold, r.threshold_unit), float(volume))
+        return out
+
     # ---- dynamics --------------------------------------------------------------------
 
     def _read(self, state: dict[str, float], molecule: str, site: str) -> float:
@@ -236,12 +265,15 @@ class LocatedRuntime:
                 continue
             gene = self.genes[g]
             a = 1.0
+            k = self.thresholds
             if acts:
-                a = sum(r.strength * _hill(self._read(state, r.source, c), r.threshold, r.hill) for r in acts)
+                a = sum(
+                    r.strength * _hill(self._read(state, r.source, c), k[(r.id, c)], r.hill) for r in acts
+                )
                 a /= len(acts)
             rep = 1.0
             for r in inhs:
-                rep *= 1.0 - r.strength * _hill(self._read(state, r.source, c), r.threshold, r.hill)
+                rep *= 1.0 - r.strength * _hill(self._read(state, r.source, c), k[(r.id, c)], r.hill)
             rate = gene.basal_rate + float(gene.attrs.get("max_rate", 0.0)) * a * rep
             out.append((rate, ((f"{g}.mRNA@{c}", 1),), "transcription"))
         for g, c, p in self.translation:

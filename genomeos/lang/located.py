@@ -10,6 +10,8 @@ being assumed:
    which for a nuclear gene means a transport (the nuclear pore) must carry the mRNA out.
 3. A rule acts at the compartment of its target and can only read a source that is there, or
    sits in a membrane facing it. Anything else is a compile error rather than a silent effect.
+4. A rule whose threshold is a concentration acts only where a compartment declares an absolute
+   volume, because a concentration without a volume is not a number (§4.1, §10 decision 2).
 
 This module is pure analysis over the IR: the parser turns what it returns into compile errors,
 `bio check` prints it, and the located runtime uses the same routes to place its species.
@@ -20,7 +22,7 @@ from __future__ import annotations
 from collections import deque
 from dataclasses import dataclass, field
 
-from genomeos.ir import Compartment, Gene, Module, Protein, Transport
+from genomeos.ir import UNKNOWN, Compartment, Gene, Module, Protein, Transport
 
 MRNA = "mRNA"
 
@@ -217,6 +219,16 @@ def _check_rules(module: Module, out: Layout, proteins: dict[str, Protein]) -> l
     for r in module.rules:
         if r.action.value == "produces":
             continue
+        # a concentration threshold needs something to divide by, and a fraction of a cell is not it
+        if r.threshold_unit:
+            for c in rule_sites(module, out, r, proteins):
+                if out.places.by_id[c].absolute_volume_fl is UNKNOWN:
+                    errors.append(
+                        f"rule {r.id!r} states its threshold as a concentration "
+                        f"({r.threshold} {r.threshold_unit}) but compartment {c!r}, where it acts, "
+                        "declares no absolute_volume; state one with its citation, or state the "
+                        "threshold as an amount (BIOLANG-v0.4-ECONOMY.md §4.1)"
+                    )
         known = (r.source in proteins or r.source in out.gene_site) and (
             r.target in proteins or r.target in out.gene_site
         )

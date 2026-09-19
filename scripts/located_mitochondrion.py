@@ -100,7 +100,12 @@ def signal_of(row: dict) -> tuple[str, str, str, float]:
 CELL = """
 compartment Extracellular { evidence: curated "Alberts et al., Molecular Biology of the Cell 6e"; confidence: 0.9 }
 compartment PlasmaMembrane { parent: Extracellular; membrane: yes; evidence: curated "Alberts MBoC 6e"; confidence: 0.9 }
-compartment Cytosol { parent: PlasmaMembrane; volume: 0.54; translation: yes
+# The fractions below are the hepatocyte's (Alberts Table 12-1, itself rat morphometry), but this
+# program does not declare a cell type, so there is no cell whose absolute volume could be cited for
+# it: `absolute_volume: unknown` is the program saying so rather than saying nothing, and a
+# concentration at this compartment is refused at compile time until one is stated with its citation
+# (§4.1, §10 decision 2). The fraction is untouched and is what the tree uses.
+compartment Cytosol { parent: PlasmaMembrane; volume: 0.54; translation: yes; absolute_volume: unknown
   evidence: experimental "Alberts MBoC 6e Table 12-1, hepatocyte volume fractions"; confidence: 0.6 }
 compartment Nucleus { parent: Cytosol; volume: 0.06; genome: nuclear
   evidence: experimental "Alberts MBoC 6e Table 12-1, hepatocyte volume fractions"; confidence: 0.6 }

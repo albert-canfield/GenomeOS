@@ -73,6 +73,14 @@ class NetworkRuntime:
         self.genes: list[Gene] = module.genes()
         self.proteins: list[Protein] = module.proteins()
         self.active_rules: list[Rule] = [r for r in module.rules if r.applies(self.context)]
+        # this runtime has no places and therefore no volumes; a concentration threshold is only a
+        # number once a compartment divides it, so it belongs to a located program (v0.4 §4.1)
+        molar = [r.id for r in self.active_rules if r.threshold_unit]
+        if molar:
+            raise ValueError(
+                f"rules state their thresholds as concentrations ({', '.join(molar[:3])}), which needs a "
+                "compartment with an absolute_volume: run a located program, or state amounts"
+            )
 
         # index regulators per gene, translation per protein
         self.activators: dict[str, list[Rule]] = {g.id: [] for g in self.genes}

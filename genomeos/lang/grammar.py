@@ -77,7 +77,11 @@ BLOCKS: dict[str, dict] = {
         "header": "rule <Source> activates|inhibits|modifies|produces|binds|degrades <Target> { ... }",
         "props": {
             "strength": ("0..1", ""),
-            "threshold": ("number", "source level giving half-maximal effect"),
+            "threshold": (
+                "number [M|mM|uM|nM|pM|fM]",
+                "source level giving half-maximal effect: an amount, or v0.4 a concentration with a "
+                "molar unit, divided by the absolute_volume of the compartment where the rule acts",
+            ),
             "hill": ("number", "cooperativity"),
             "when": ("k = v, k = v", "context in which the rule applies"),
             "id": ("text", "explicit rule id"),
@@ -251,6 +255,10 @@ BLOCKS: dict[str, dict] = {
             "parent": ("Id", "the compartment that contains this one; one root"),
             "membrane": ("yes | no", "a membrane faces its parent and its children"),
             "volume": ("number", "fraction of the cell's volume"),
+            "absolute_volume": (
+                "number fL|pL|nL|uL|mL|L|um3 | unknown",
+                "v0.4: this compartment's own volume (1 um3 = 1 fL); what a concentration divides by",
+            ),
             "genome": ("chrM, ... | nuclear", "chromosomes read here"),
             "translation": ("yes | no", "ribosomes are present"),
             "copies": ("integer", "copies per cell"),

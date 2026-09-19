@@ -78,6 +78,8 @@ compartment Cytosol       { parent: PlasmaMembrane; volume: 0.54; translation: y
 compartment Nucleus       { parent: Cytosol; volume: 0.06; genome: nuclear }
 compartment Mitochondrion { parent: Cytosol; volume: 0.22; genome: chrM; translation: yes; copies: 1 }
 compartment ER            { parent: Cytosol; volume: 0.09 }
+compartment RedCytosol    { parent: PlasmaMembrane; volume: 1.0; absolute_volume: 94 fL
+                            evidence: experimental "Diez-Silva et al. 2010, MRS Bull 35:382"; confidence: 0.7 }
 ```
 
 | property | form | meaning |
@@ -85,9 +87,44 @@ compartment ER            { parent: Cytosol; volume: 0.09 }
 | `parent` | `Id` | the compartment that contains this one; exactly one root |
 | `membrane` | `yes \| no` | a membrane faces its parent and its children at once |
 | `volume` | `number` | fraction of the cell's volume (recorded in stage 1; used from stage 2) |
+| `absolute_volume` | `number fL\|pL\|nL\|uL\|mL\|L\|um3 \| unknown` | this compartment's own volume, beside the fraction; what a concentration divides by |
 | `genome` | `chrM, ... \| nuclear` | chromosomes read here; `nuclear` = every chromosome except chrM/MT |
 | `translation` | `yes \| no` | ribosomes are present (cytosolic or mitochondrial) |
 | `copies` | `integer` | copies per cell (recorded in stage 1; heteroplasmy in stage 3) |
+
+**Absolute volumes and concentrations** (§10 decision 2, resolved 2026-09-19; implemented
+2026-09-19). `volume` keeps its meaning and its name: a fraction of the cell, which is what the
+containment tree needs and what the committed programs state. `absolute_volume` is a second,
+independent fact — this compartment's own volume — and it is the one a threshold can be divided by,
+because a fraction of a cell cannot tell a big cell from a small one. It is stated per compartment
+and never derived: nothing multiplies a fraction by a cell volume on a program's behalf.
+
+The accepted units are litres and its SI prefixes down to `aL`, plus `um3`, which is exactly `fL`.
+Both spellings are accepted because the literature quotes a red cell in femtolitres and most cells in
+cubic micrometres and means the same unit, so a citation is transcribed rather than converted by
+hand. The unit is **required**: a bare number already means a fraction on this block, so
+`absolute_volume: 94` is a compile error rather than an ambiguity. `absolute_volume: unknown` is a
+statement a program may make, the same one `param x = unknown` makes, and it is what
+`human.oxphos` says — its fractions are a hepatocyte's but it declares no cell type, so no absolute
+volume can be cited for it.
+
+What the field buys is that a rule's `threshold` may now be a concentration: `threshold: 100 nM`
+instead of `threshold: 5661`. A molar unit on the threshold is what says which it is; the located
+runtime converts it once, at each compartment the rule acts in, as `c · V · N_A` (Avogadro is exact
+by the 2019 SI definition of the mole), and everything downstream stays an amount. Three refusals
+come with it, all of them the same refusal — a concentration without a volume is not a number:
+
+- a rule with a concentration threshold acting in a compartment with no `absolute_volume` is a
+  **compile error** (the seventh modelling error refused before a run, §9.1);
+- the same rule in the unlocated network runtime, which has no places at all, is refused;
+- a concentration threshold under `units: au` is refused: arbitrary units have no copy number, so
+  the regime must declare `units: copies`.
+
+**What it does not do.** No rate reads a volume yet, and stage 2 is not built here (§5). The field
+makes the comparison *expressible*, which is what §9's registered gate needed to be runnable at all;
+it does not decide which unit a threshold should be stated in. The demonstration that the two units
+are the same statement in one cell and different statements across two is
+`data/demo/concentration_threshold.bio` and `tests/test_concentration.py`.
 
 **Semantics.** Compartments form a containment tree. Two compartments are
 *adjacent* when one is the other's parent, or when both sit either side of one
@@ -96,7 +133,8 @@ process-bigraph place graph, so a located program maps onto a Composite whose
 stores nest the same way (`runtime/compose.py`).
 
 **BioIR.** `Compartment(Entity)`: `parent`, `membrane`, `volume`, `genome`,
-`translation`, `copies`; `kind = "compartment"`.
+`translation`, `copies`, `absolute_volume_fl`; `kind = "compartment"`. `Rule.threshold_unit` is empty
+for an amount and names a molar unit for a concentration.
 
 ### 4.2 Locations [engine]
 
@@ -1085,7 +1123,7 @@ example Mathieson et al. 2018, Nat Commun 9:689), which is **open** below.
 | Stage | Constructs | Gate | Status |
 |---|---|---|---|
 | 1 | compartment, location, signals, transport, regime record | chrM, MitoCarta import, rho0, red blood cell | **passed 2026-09-14** (below) |
-| 2 | pool, cost, allocation | burden; absolute abundance vs PaxDb | not started (waits for Albert) |
+| 2 | pool, cost, allocation | burden; absolute abundance vs PaxDb | not started; **no longer blocked** — decision 2 was resolved 2026-09-19 and the absolute volume it needed is implemented (§4.1), so the gate's concentration arm is now expressible |
 | 3 | core metabolism, mitochondrial copies, heteroplasmy | ATP budget; oxygen and glucose dependence; red blood cell glycolysis | not started |
 | 4 | partitioning division, checkpoint | dilution vs protein turnover | not started |
 | control | homeostat, role | two homeostats hold and break correctly | specified only |
@@ -1111,11 +1149,12 @@ MitoCarta3.0 genes and runs it on `runtime/located.py`; the result is
 | 3. rho0 (King & Attardi 1989) | without mtDNA complexes I, III, IV and V fall to zero activity and complex II, entirely nuclear-encoded, keeps it; closing import removes all five; removing SDHB's presequence removes complex II alone and names SDHB as the one stranded protein |
 | 4. no genome (red blood cell) | a program with 0 genes, no nucleus and no mitochondrion compiles and runs; haemoglobin assembles from the chains the cell was born with and mass balance holds |
 
-Six modelling errors are refused at compile time rather than run: a gene or a
+Seven modelling errors are refused at compile time rather than run: a gene or a
 protein with no location, a chrM gene declared nuclear, a nuclear gene whose
 mRNA reaches no ribosome, a rule across compartments, a transport between
-compartments that are not adjacent, and a transport gated by an undeclared
-protein.
+compartments that are not adjacent, a transport gated by an undeclared
+protein, and (since 2026-09-19) a rule whose threshold is a concentration acting
+in a compartment that declares no absolute volume.
 
 **How much of the layer is guesswork.** In the OXPHOS program, 419 facts:
 90.2% curated or experimental, 8.8% inferred, 1.0% predicted. Of the 12
@@ -1141,8 +1180,20 @@ it there, and for an imported protein that link is the transport at 0.3.
    complex count is currently the chain count.
 3. **`initial` on a protein** is the bootstrap state S0 the architecture
    already requires; the red blood cell cannot be written without it.
-4. **Amounts, not concentrations** (open decision 2 stands): volumes are
-   declared and recorded but no rate reads them yet.
+4. **~~Amounts, not concentrations~~ (open decision 2 stands): volumes are
+   declared and recorded but no rate reads them yet.** *Superseded 2026-09-19:* decision 2 is
+   resolved and the absolute volume is implemented (§4.1). A threshold may now be stated as a
+   concentration and is converted at the compartment where its rule acts. No *rate* reads a volume
+   yet, which is still stage 2's, so the sentence above is true of rates and no longer true of
+   thresholds. `human.erythrocyte` states `absolute_volume: 94 fL` (Diez-Silva et al. 2010, MRS
+   Bulletin 35:382, "Healthy Red Blood Cell Structure": the cytosol "averages 94 um3 at 300
+   mOsmol/kg"), and `human.oxphos` states `absolute_volume: unknown`, because its fractions are a
+   hepatocyte's while the program declares no cell type — one of the two citations the decision
+   priced exists, the other has no cell to be about. The two units are shown to agree in one cell and
+   to disagree across two of different volume in `tests/test_concentration.py`: 20,000 molecules of a
+   repressor with a threshold of 100 nM and a threshold of 5,661 molecules (the same statement at 94
+   fL) give target levels 1.041 and 1.041 at 94 fL, and 1000.757 against 1.041 at 940 fL, a factor of
+   961. That is the arm of the gate the language could not express.
 5. **What stage 1 deliberately does not model:** mitochondrial translation
    still works with import closed, because ribosomes are not yet a resource;
    in a cell the mitoribosome is imported. That dependence is stage 2's, and

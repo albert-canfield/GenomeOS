@@ -8,9 +8,14 @@ module human.erythrocyte
 compartment Extracellular { evidence: curated "Alberts et al., Molecular Biology of the Cell 6e"; confidence: 0.9 }
 compartment PlasmaMembrane { parent: Extracellular; membrane: yes
   evidence: curated "Alberts MBoC 6e"; confidence: 0.9 }
-compartment Cytosol { parent: PlasmaMembrane; volume: 1.0
-  evidence: experimental "the mature erythrocyte has no nucleus and no mitochondria; its volume is cytosol"
-  confidence: 0.8 }
+# `volume: 1.0` says the cytosol is the whole cell; `absolute_volume` says how big the whole cell is,
+# which is what a concentration divides by (§4.1, §10 decision 2 resolved 2026-09-19). The two numbers
+# are not the same fact and they do not come from the same place: the fraction follows from having no
+# nucleus and no mitochondria, the absolute volume is measured. Note the 4% it differs from the 90 fL
+# MCV the haemoglobin counts below were derived from; they are two sources, not one, and both are cited.
+compartment Cytosol { parent: PlasmaMembrane; volume: 1.0; absolute_volume: 94 fL
+  evidence: experimental "the mature erythrocyte has no nucleus and no mitochondria, so its volume is cytosol; that cytosol 'averages 94 um3 at 300 mOsmol/kg' (Diez-Silva, Dao, Han, Lim & Suresh 2010, MRS Bulletin 35:382, section 'Healthy Red Blood Cell Structure')"
+  confidence: 0.7 }
 
 # haemoglobin: 2.8e8 tetramers per cell, so 5.6e8 chains of each kind
 protein HBA {

@@ -240,6 +240,11 @@ class Rule:
     strength: 0..1 for regulatory rules. For ACTIVATE/INHIBIT the runtime uses a
     Hill function with `threshold` (the source level giving half-maximal effect)
     and `hill` (cooperativity).
+
+    `threshold_unit` is empty when the threshold is an amount, as it always was, and names a molar
+    unit when the program stated a concentration instead (v0.4 §4.1). A concentration is only a
+    number once a volume divides it, so the located runtime converts it at the compartment where the
+    rule acts and refuses if that compartment declares no absolute volume.
     """
 
     id: str
@@ -252,6 +257,7 @@ class Rule:
     when: dict[str, str] = field(default_factory=dict)
     evidence: Evidence = field(default_factory=Evidence)
     confidence: Confidence = 0.0
+    threshold_unit: str = ""  # "" = an amount; "nM", "uM", ... = a concentration
 
     def applies(self, context: dict[str, str]) -> bool:
         for key, wanted in self.when.items():
@@ -328,7 +334,13 @@ class Compartment(Entity):
     Compartments form a containment tree through `parent`; two are adjacent when one contains the
     other. A membrane faces its parent and its children at once. `genome` lists the chromosomes read
     here ("nuclear" stands for every chromosome except chrM/MT); `translation` says ribosomes are
-    present. `volume` (fraction of the cell) and `copies` are recorded for the economy stages."""
+    present. `volume` (fraction of the cell) and `copies` are recorded for the economy stages.
+
+    `absolute_volume_fl` is this compartment's own volume in femtolitres, beside the fraction rather
+    than instead of it (§10 decision 2, resolved 2026-09-19). The fraction is what the tree needs and
+    what the programs state; the absolute volume is what a threshold can be divided by, and a fraction
+    of a cell cannot express cells of different volume. UNKNOWN means the program did not say, and a
+    concentration at this compartment is then refused rather than guessed."""
 
     parent: str = ""
     membrane: bool = False
@@ -336,6 +348,7 @@ class Compartment(Entity):
     genome: list[str] = field(default_factory=list)
     translation: bool = False
     copies: int = 1
+    absolute_volume_fl: float | _Unknown = UNKNOWN
 
     def __post_init__(self) -> None:
         self.kind = "compartment"
@@ -429,6 +442,62 @@ def to_minutes(value: float, unit: str) -> float:
         return value * _UNIT_MIN[unit]
     except KeyError:
         raise ValueError(f"unknown time unit {unit!r}") from None
+
+
+# Absolute volumes are held in femtolitres, and 1 um^3 is exactly 1 fL, which is why the literature
+# quotes a red cell in fL and a hepatocyte in um^3 and means the same unit. Accepting both spellings
+# means a citation is transcribed rather than converted by hand (BIOLANG-v0.4-ECONOMY.md §4.1).
+_UNIT_VOLUME_FL = {
+    "L": 1e15,
+    "l": 1e15,
+    "mL": 1e12,
+    "ml": 1e12,
+    "uL": 1e9,
+    "ul": 1e9,
+    "µL": 1e9,
+    "nL": 1e6,
+    "nl": 1e6,
+    "pL": 1e3,
+    "pl": 1e3,
+    "fL": 1.0,
+    "fl": 1.0,
+    "aL": 1e-3,
+    "um3": 1.0,
+    "µm3": 1.0,
+    "um^3": 1.0,
+    "µm^3": 1.0,
+}
+VOLUME_UNITS = ("L", "mL", "uL", "nL", "pL", "fL", "aL", "um3")
+
+# Avogadro's number, exact by the 2019 SI definition of the mole.
+AVOGADRO = 6.02214076e23
+_UNIT_MOLAR = {"M": 1.0, "mM": 1e-3, "uM": 1e-6, "µM": 1e-6, "nM": 1e-9, "pM": 1e-12, "fM": 1e-15}
+MOLAR_UNITS = ("M", "mM", "uM", "nM", "pM", "fM")
+
+
+def to_femtolitres(value: float, unit: str) -> float:
+    """An absolute volume in femtolitres. A volume with no unit is not a volume, so `unit` is required."""
+    try:
+        return value * _UNIT_VOLUME_FL[unit]
+    except KeyError:
+        raise ValueError(f"unknown volume unit {unit!r}; expected one of {', '.join(VOLUME_UNITS)}") from None
+
+
+def to_molar(value: float, unit: str) -> float:
+    """A concentration in mol/L."""
+    try:
+        return value * _UNIT_MOLAR[unit]
+    except KeyError:
+        raise ValueError(f"unknown molar unit {unit!r}; expected one of {', '.join(MOLAR_UNITS)}") from None
+
+
+def molecules_in(molar: float, volume_fl: float) -> float:
+    """Molecules of a species at `molar` in a compartment of `volume_fl` femtolitres.
+
+    This is the one place a concentration becomes an amount: 1 fL is 1e-15 L, so the count is
+    c * V * N_A. Everything the located runtime holds is an amount, so a threshold stated as a
+    concentration is converted here, once, at the compartment where the rule acts."""
+    return molar * volume_fl * 1e-15 * AVOGADRO
 
 
 @dataclass(slots=True)
@@ -831,7 +900,7 @@ class Module:
                 ed["cds_segments"] = [Locus.parse(x) for x in ed["cds_segments"]]
             if "transcripts" in ed:
                 ed["transcripts"] = []  # transcripts are top-level entities too
-            for key in ("role", "half_life_h", "volume"):
+            for key in ("role", "half_life_h", "volume", "absolute_volume_fl"):
                 if key in ed:
                     ed[key] = unk(ed[key])
             m.add(t(**ed))
@@ -884,13 +953,16 @@ class Module:
 
 
 __all__ = [
+    "AVOGADRO",
     "DECISION_ACTIONS",
+    "MOLAR_UNITS",
     "REGIME_ALLOCATIONS",
     "REGIME_FATES",
     "REGIME_RECHECKS",
     "REGIME_TREATMENTS",
     "REGIME_UPDATES",
     "UNKNOWN",
+    "VOLUME_UNITS",
     "Action",
     "CellType",
     "Commitment",
@@ -924,5 +996,8 @@ __all__ = [
     "Transcript",
     "Transport",
     "matches",
+    "molecules_in",
+    "to_femtolitres",
     "to_minutes",
+    "to_molar",
 ]

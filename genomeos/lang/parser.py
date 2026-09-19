@@ -41,12 +41,14 @@ from pathlib import Path
 from genomeos.coords import Locus
 from genomeos.ir import (
     DECISION_ACTIONS,
+    MOLAR_UNITS,
     REGIME_ALLOCATIONS,
     REGIME_FATES,
     REGIME_RECHECKS,
     REGIME_TREATMENTS,
     REGIME_UPDATES,
     UNKNOWN,
+    VOLUME_UNITS,
     Action,
     CellType,
     Commitment,
@@ -76,7 +78,9 @@ from genomeos.ir import (
     Timer,
     Transcript,
     Transport,
+    to_femtolitres,
     to_minutes,
+    to_molar,
 )
 from genomeos.lang.located import check_locations
 
@@ -266,6 +270,24 @@ def _list(value: str) -> list[str]:
     return [x.strip() for x in value.split(",") if x.strip()]
 
 
+def _volume_fl(value: str, key: str, line_no: int) -> float:
+    """An absolute volume with its unit, in femtolitres. A bare number is refused, because the
+    compartment already has a bare number that means a fraction of the cell (v0.4 §4.1)."""
+    parts = value.split()
+    if len(parts) != 2:
+        raise BioLangError(
+            f"line {line_no}: {key} needs a number and a unit, one of {', '.join(VOLUME_UNITS)} "
+            f"(1 um3 = 1 fL), or `unknown`; got {value!r}. `volume` is the fraction of the cell"
+        )
+    try:
+        fl = to_femtolitres(_float(parts[0], key, line_no), parts[1])
+    except ValueError as e:
+        raise BioLangError(f"line {line_no}: {key}: {e}") from None
+    if fl <= 0.0:
+        raise BioLangError(f"line {line_no}: {key} must be greater than zero, got {value!r}")
+    return fl
+
+
 def _quantity(value: str, key: str, line_no: int, default_unit: str = "min") -> tuple[float, str]:
     parts = value.split()
     return _float(parts[0], key, line_no), (parts[1] if len(parts) > 1 else default_unit)
@@ -446,6 +468,18 @@ def _compile_block(b: Block, module: Module) -> None:
         for key in ("strength", "threshold", "hill"):
             if key in p:
                 setattr(rule, key, _float(p[key], key, b.line))
+        # a threshold may be a concentration instead of an amount; the unit is what says which, and
+        # the located runtime divides by the compartment's absolute volume (v0.4 §4.1)
+        if "threshold" in p and len(p["threshold"].split()) > 1:
+            unit = p["threshold"].split()[1]
+            try:
+                to_molar(1.0, unit)
+            except ValueError:
+                raise BioLangError(
+                    f"line {b.line}: a threshold is an amount (no unit) or a concentration in one of "
+                    f"{', '.join(MOLAR_UNITS)}; got {unit!r}"
+                ) from None
+            rule.threshold_unit = unit
         if "when" in p:
             rule.when = _parse_when(p["when"])
         module.rules.append(rule)
@@ -764,6 +798,13 @@ def _compile_block(b: Block, module: Module) -> None:
             cp.volume = _float(p["volume"], "volume", b.line)
             if not 0.0 < cp.volume <= 1.0:
                 raise BioLangError(f"line {b.line}: volume is a fraction of the cell, within 0..1")
+        if "absolute_volume" in p:
+            # `unknown` is a statement, not a silence: the cell type has no absolute volume we can
+            # cite, so no concentration may be computed at this compartment (§10 decision 2)
+            raw = p["absolute_volume"].strip()
+            cp.absolute_volume_fl = (
+                UNKNOWN if raw.lower() == "unknown" else _volume_fl(raw, "absolute_volume", b.line)
+            )
         cp.genome = _list(p.get("genome", ""))
         if "copies" in p:
             cp.copies = int(_float(p["copies"], "copies", b.line))

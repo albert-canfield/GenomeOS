@@ -1,0 +1,57 @@
+# A threshold stated as a concentration, which BioLang could not express before 2026-09-19.
+#
+# §10 decision 2 asked for amounts or concentrations, and §9 registered the test that would settle
+# it: run the gate "both ways on cells of different volume". That test could not be run at all,
+# because the only volume a compartment carried was a *fraction* of the cell, and a fraction cannot
+# tell a big cell from a small one. `absolute_volume` is the field that makes the comparison
+# expressible; this program is the smallest thing that uses it.
+#
+# The arithmetic the runtime does, once, at the compartment where the rule acts:
+#   100 nM in 94 fL = 100e-9 mol/L * 94e-15 L * 6.02214076e23 /mol = 5661 molecules
+# so in THIS cell "100 nM" and "5661 copies" are the same statement, and the two genes below say the
+# same thing in the two units and must end up at the same level. They do not stay the same statement
+# in a cell of another volume: tests/test_concentration.py runs this pair here and in a cell ten times
+# larger, where they disagree by about a factor of a thousand. That disagreement is what §9's gate
+# needed and had no way to produce.
+#
+# The pair is also what makes this program a check on the conversion rather than on the parser: the
+# repressor sits at 1,000 molecules, which is 17.7 nM, *below* 100 nM but far above 100, so a runtime
+# that read "100 nM" as the bare number 100 would repress T and not U, and the test lines below would
+# fail instead of matching.
+module demo.concentration_threshold
+
+regime red_cell_sized { units: copies
+  evidence: inferred "a concentration is molecules over a volume, so the amounts must be counts"; confidence: 0.5 }
+
+compartment Cytosol { translation: yes; volume: 1.0; absolute_volume: 94 fL
+  evidence: experimental "a cytosol of red-cell volume: it 'averages 94 um3 at 300 mOsmol/kg' (Diez-Silva, Dao, Han, Lim & Suresh 2010, MRS Bulletin 35:382, section 'Healthy Red Blood Cell Structure')"
+  confidence: 0.7 }
+
+# pre-loaded and effectively without turnover, so its amount is the one knob of the demonstration
+protein Rp { location: Cytosol; initial: 1000; half_life: 1e6 h
+  evidence: inferred "a modelling device: a fixed repressor amount, not a measured protein"; confidence: 0.1 }
+
+gene T { location: Cytosol; basal: 1; max: 1000; produces: Tp
+  evidence: inferred "a modelling device: a target whose only regulator is Rp"; confidence: 0.1 }
+protein Tp { location: Cytosol
+  evidence: inferred "a modelling device"; confidence: 0.1 }
+gene U { location: Cytosol; basal: 1; max: 1000; produces: Up
+  evidence: inferred "a modelling device: the same target, regulated in the other unit"; confidence: 0.1 }
+protein Up { location: Cytosol
+  evidence: inferred "a modelling device"; confidence: 0.1 }
+
+# the same rule twice: once in nanomolar, once in molecules of this cell
+rule Rp inhibits T { threshold: 100 nM; hill: 8; strength: 1.0
+  evidence: inferred "a modelling device: a sharp switch, so the two readings are unmistakable"; confidence: 0.1 }
+rule Rp inhibits U { threshold: 5661; hill: 8; strength: 1.0
+  evidence: inferred "the same threshold as an amount: 100 nM * 94 fL * Avogadro"; confidence: 0.1 }
+
+# test: stranded == 0
+# test: ectopic == 0
+# test: Rp@Cytosol final > 990
+# 1,000 molecules is 17.7 nM, below the threshold either way it is written, so neither gene is
+# repressed and both sit at basal + max = 1001
+# test: Tp@Cytosol final > 995
+# test: Tp@Cytosol final < 1005
+# test: Up@Cytosol final > 995
+# test: Up@Cytosol final < 1005
